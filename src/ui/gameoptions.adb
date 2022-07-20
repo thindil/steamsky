@@ -1177,25 +1177,34 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
             Config_Name => To_Unbounded_String(Source => "")),
          8 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Down" else "KP_Down")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.down"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Down" else "KP_Down")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.down"),
+            Config_Name => To_Unbounded_String(Source => "")),
          9 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Next" else "KP_Next")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Next" else "KP_Next")),
             Entry_Name => To_Unbounded_String(Source => ".movement.downright"),
             Config_Name => To_Unbounded_String(Source => "")),
          10 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "slash" else "KP_Divide")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.moveto"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "slash" else "KP_Divide")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.moveto"),
+            Config_Name => To_Unbounded_String(Source => "")),
          11 =>
            (Shortcut => To_Unbounded_String(Source => "Control-a"),
             Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
             Config_Name => To_Unbounded_String(Source => "")),
          12 =>
            (Shortcut => To_Unbounded_String(Source => "Control-b"),
-            Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
+            Entry_Name =>
+              To_Unbounded_String(Source => ".movement.quarterspeed"),
             Config_Name => To_Unbounded_String(Source => "")),
          13 =>
            (Shortcut => To_Unbounded_String(Source => "Control-c"),
@@ -1207,45 +1216,58 @@ package body GameOptions is
             Config_Name => To_Unbounded_String(Source => "")));
       Default_Menu_Accels: constant array(1 .. 12) of Accel_Data :=
         (1 =>
-           (Shortcut => To_Unbounded_String(Source => "s"), Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
+           (Shortcut => To_Unbounded_String(Source => "s"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
             Config_Name => To_Unbounded_String(Source => "")),
          2 =>
-           (Shortcut => To_Unbounded_String(Source => "o"), Entry_Name => To_Unbounded_String(Source => ".menu.orders"),
+           (Shortcut => To_Unbounded_String(Source => "o"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.orders"),
             Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (Shortcut => To_Unbounded_String(Source => "r"), Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
+           (Shortcut => To_Unbounded_String(Source => "r"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
             Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (Shortcut => To_Unbounded_String(Source => "m"), Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
+           (Shortcut => To_Unbounded_String(Source => "m"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
             Config_Name => To_Unbounded_String(Source => "")),
          5 =>
-           (Shortcut => To_Unbounded_String(Source => "k"), Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
+           (Shortcut => To_Unbounded_String(Source => "k"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
             Config_Name => To_Unbounded_String(Source => "")),
          6 =>
-           (Shortcut => To_Unbounded_String(Source => "w"), Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
+           (Shortcut => To_Unbounded_String(Source => "w"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
             Config_Name => To_Unbounded_String(Source => "")),
          7 =>
-           (Shortcut => To_Unbounded_String(Source => "g"), Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
+           (Shortcut => To_Unbounded_String(Source => "g"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
             Config_Name => To_Unbounded_String(Source => "")),
          8 =>
-           (Shortcut => To_Unbounded_String(Source => "F1"), Entry_Name => To_Unbounded_String(Source => ".menu.help"),
+           (Shortcut => To_Unbounded_String(Source => "F1"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.help"),
             Config_Name => To_Unbounded_String(Source => "")),
          9 =>
-           (Shortcut => To_Unbounded_String(Source => "p"), Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
+           (Shortcut => To_Unbounded_String(Source => "p"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
             Config_Name => To_Unbounded_String(Source => "")),
          10 =>
-           (Shortcut => To_Unbounded_String(Source => "q"), Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
+           (Shortcut => To_Unbounded_String(Source => "q"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
             Config_Name => To_Unbounded_String(Source => "")),
          11 =>
-           (Shortcut => To_Unbounded_String(Source => "x"), Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
+           (Shortcut => To_Unbounded_String(Source => "x"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
             Config_Name => To_Unbounded_String(Source => "")),
          12 =>
-           (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu"),
-            To_Unbounded_String("")));
+           (Shortcut => To_Unbounded_String(Source => "e"),
+            Entry_Name => To_Unbounded_String(Source => ".menu.menu"),
+            Config_Name => To_Unbounded_String(Source => "")));
       Default_Map_Accels: constant array(1 .. 23) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String("Shift-Return"),
-            To_Unbounded_String(".map.center"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Shift-Return"),
+            Entry_Name => To_Unbounded_String(Source => ".map.center"),
+            Config_Name => To_Unbounded_String(Source => "")),
          2 =>
            (To_Unbounded_String("Shift-h"),
             To_Unbounded_String(".map.centerhomebase"),
