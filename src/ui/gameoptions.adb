@@ -1190,17 +1190,17 @@ package body GameOptions is
               (Source => (if Dir_Separator = '\' then "slash" else "KP_Divide")),
             Entry_Name => To_Unbounded_String(Source => ".movement.moveto"), Config_Name => To_Unbounded_String(Source => "")),
          11 =>
-           (To_Unbounded_String("Control-a"),
-            To_Unbounded_String(".movement.fullstop"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-a"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
+            Config_Name => To_Unbounded_String(Source => "")),
          12 =>
-           (To_Unbounded_String("Control-b"),
-            To_Unbounded_String(".movement.quarterspeed"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-b"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
+            Config_Name => To_Unbounded_String(Source => "")),
          13 =>
-           (To_Unbounded_String("Control-c"),
-            To_Unbounded_String(".movement.halfspeed"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-c"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
+            Config_Name => To_Unbounded_String(Source => "")),
          14 =>
            (To_Unbounded_String("Control-d"),
             To_Unbounded_String(".movement.fullspeed"),
