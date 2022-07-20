@@ -1213,14 +1213,14 @@ package body GameOptions is
            (Shortcut => To_Unbounded_String(Source => "o"), Entry_Name => To_Unbounded_String(Source => ".menu.orders"),
             Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (To_Unbounded_String("r"), To_Unbounded_String(".menu.crafts"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "r"), Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
+            Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (To_Unbounded_String("m"), To_Unbounded_String(".menu.messages"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "m"), Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
+            Config_Name => To_Unbounded_String(Source => "")),
          5 =>
-           (To_Unbounded_String("k"), To_Unbounded_String(".menu.knowledge"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "k"), Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
+            Config_Name => To_Unbounded_String(Source => "")),
          6 =>
            (To_Unbounded_String("w"), To_Unbounded_String(".menu.waitorders"),
             To_Unbounded_String("")),
