@@ -594,7 +594,7 @@ package body Dialogs is
         Create
           (pathName => Item_Dialog & ".dropbutton",
            options =>
-             "-command {" & Command & "}" &
+             "-command {" & Command & "} -style Dialog.TButton" &
              (if Action = "drop" then " -image dropicon"
               elsif Action = "take" then " -image giveicon"
               elsif Action = "buy" then " -image buyicon"
@@ -726,7 +726,7 @@ package body Dialogs is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-command {CloseDialog " & Item_Dialog & "}" &
-             " -image cancelicon");
+             " -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
       Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
