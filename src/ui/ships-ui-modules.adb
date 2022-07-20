@@ -1229,7 +1229,7 @@ package body Ships.UI.Modules is
         Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog, Column_Span => 2);
+         Command => "CloseDialog " & Module_Dialog, Column_Span => 2, Row => 2);
       Height :=
         Height +
         Positive'Value
