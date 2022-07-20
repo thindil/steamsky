@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Removed Craftable column from crafting recipes list in Crafting screen
 - Updated modding guide
 - Updated look of Show crafting recipe dialog
+- Made dialogs buttons with icons wider
 
 ### Fixed
 - Showing the Close button in the available mission, known base info and
