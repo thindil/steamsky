@@ -1231,14 +1231,14 @@ package body GameOptions is
            (Shortcut => To_Unbounded_String(Source => "F1"), Entry_Name => To_Unbounded_String(Source => ".menu.help"),
             Config_Name => To_Unbounded_String(Source => "")),
          9 =>
-           (To_Unbounded_String("p"), To_Unbounded_String(".menu.gameoptions"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "p"), Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
+            Config_Name => To_Unbounded_String(Source => "")),
          10 =>
-           (To_Unbounded_String("q"), To_Unbounded_String(".menu.quit"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "q"), Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
+            Config_Name => To_Unbounded_String(Source => "")),
          11 =>
-           (To_Unbounded_String("x"), To_Unbounded_String(".menu.resign"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "x"), Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
+            Config_Name => To_Unbounded_String(Source => "")),
          12 =>
            (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu"),
             To_Unbounded_String("")));
