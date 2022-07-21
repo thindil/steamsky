@@ -64,7 +64,7 @@ package Dialogs is
       -- SOURCE
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0; Icon: String := "");
+      Row, Column: Natural := 0; Icon: String := "exiticon");
    -- ****
 
    -- ****f* Dialogs/Dialogs.Show_Dialog

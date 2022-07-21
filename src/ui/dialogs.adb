@@ -97,19 +97,15 @@ package body Dialogs is
 
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0; Icon: String := "") is
+      Row, Column: Natural := 0; Icon: String := "exiticon") is
       Button: constant Ttk_Button :=
         Create
           (pathName => Name,
            options =>
-             "-command {" & Command & "}" &
-             (if Icon'Length > 1 then
-                " -image {" & Icon & "} -style Dialog.TButton"
-              else " -text {" & Text & "}"));
+             "-command {" & Command & "} -image {" & Icon &
+             "} -style Dialog.TButton -text {" & Text & "}");
    begin
-      if Icon'Length > 0 then
-         Add(Widget => Button, Message => Text);
-      end if;
+      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options =>
@@ -532,8 +528,8 @@ package body Dialogs is
             Script => "{" & Buttons_Frame & ".button invoke;break}");
       end if;
       Add_Close_Button
-        (Name => Buttons_Frame & ".button",
-         Text => "Close dialog \[Escape key\]", Command => Close_Command,
+        (Name => Buttons_Frame & ".button", Text => "Close",
+         Command => Close_Command,
          Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Icon => "exiticon");
       Button := Get_Widget(pathName => Buttons_Frame & ".button");
