@@ -1281,17 +1281,17 @@ package body GameOptions is
               (Source => "Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
             Entry_Name => To_Unbounded_String(Source => ".map.mapup"), Config_Name => To_Unbounded_String(Source => "")),
          5 =>
-           (To_Unbounded_String
-              ("Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
-            To_Unbounded_String(".map.mapupright"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapupright"), Config_Name => To_Unbounded_String(Source => "")),
          6 =>
-           (To_Unbounded_String
-              ("Shift-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
-            To_Unbounded_String(".map.mapleft"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Shift-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapleft"), Config_Name => To_Unbounded_String(Source => "")),
          7 =>
-           (To_Unbounded_String
-              ("Shift-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
-            To_Unbounded_String(".map.mapright"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Shift-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapright"), Config_Name => To_Unbounded_String(Source => "")),
          8 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "End" else "KP_1")),
