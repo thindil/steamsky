@@ -1320,20 +1320,20 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
             Config_Name => To_Unbounded_String(Source => "")),
          14 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Left" else "KP_Left")),
-            To_Unbounded_String(".map.cursorleft"), To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"), Config_Name => To_Unbounded_String(Source => "")),
          15 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Right" else "KP_Right")),
-            To_Unbounded_String(".map.cursorright"), To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorright"), Config_Name => To_Unbounded_String(Source => "")),
          16 =>
-           (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "End" else "KP_End")),
-            To_Unbounded_String(".map.cursordownleft"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" & (if Dir_Separator = '\' then "End" else "KP_End")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          17 =>
            (To_Unbounded_String
               ("Control-" &
