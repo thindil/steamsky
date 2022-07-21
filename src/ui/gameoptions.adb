@@ -1269,17 +1269,17 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".map.center"),
             Config_Name => To_Unbounded_String(Source => "")),
          2 =>
-           (To_Unbounded_String("Shift-h"),
-            To_Unbounded_String(".map.centerhomebase"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Shift-h"),
+            Entry_Name => To_Unbounded_String(Source => ".map.centerhomebase"),
+            Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (To_Unbounded_String
-              ("Shift-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
-            To_Unbounded_String(".map.mapupleft"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Shift-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapupleft"), Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (To_Unbounded_String
-              ("Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
-            To_Unbounded_String(".map.mapup"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapup"), Config_Name => To_Unbounded_String(Source => "")),
          5 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
