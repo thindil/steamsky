@@ -1273,91 +1273,149 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".map.centerhomebase"),
             Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapupleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Home" else "KP_7")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapupleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapup"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapup"),
+            Config_Name => To_Unbounded_String(Source => "")),
          5 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapupright"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Prior" else "KP_9")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapupright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          6 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Left" else "KP_4")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          7 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapright"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Right" else "KP_6")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          8 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "End" else "KP_1")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapdownleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" & (if Dir_Separator = '\' then "End" else "KP_1")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapdownleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          9 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapdown"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Down" else "KP_2")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapdown"),
+            Config_Name => To_Unbounded_String(Source => "")),
          10 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Shift-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
-            Entry_Name => To_Unbounded_String(Source => ".map.mapdownright"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Shift-" &
+                   (if Dir_Separator = '\' then "Next" else "KP_3")),
+            Entry_Name => To_Unbounded_String(Source => ".map.mapdownright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          11 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Home" else "KP_Home")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursorupleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Home" else "KP_Home")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorupleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          12 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" & (if Dir_Separator = '\' then "Up" else "KP_Up")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursorup"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Up" else "KP_Up")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorup"),
+            Config_Name => To_Unbounded_String(Source => "")),
          13 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
             Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
             Config_Name => To_Unbounded_String(Source => "")),
          14 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Left" else "KP_Left")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Left" else "KP_Left")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          15 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Right" else "KP_Right")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursorright"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Right" else "KP_Right")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          16 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" & (if Dir_Separator = '\' then "End" else "KP_End")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "End" else "KP_End")),
             Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
             Config_Name => To_Unbounded_String(Source => "")),
          17 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Down" else "KP_Down")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursordown"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Down" else "KP_Down")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
+            Config_Name => To_Unbounded_String(Source => "")),
          18 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Next" else "KP_Next")),
-            Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Next" else "KP_Next")),
+            Entry_Name =>
+              To_Unbounded_String(Source => ".map.cursordownright"),
             Config_Name => To_Unbounded_String(Source => "")),
          19 =>
-           (Shortcut => To_Unbounded_String
-              (Source => "Control-" &
-               (if Dir_Separator = '\' then "Begin" else "Return")),
-            Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   "Control-" &
+                   (if Dir_Separator = '\' then "Begin" else "Return")),
+            Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"),
+            Config_Name => To_Unbounded_String(Source => "")),
          20 =>
-           (To_Unbounded_String("Control-a"),
-            To_Unbounded_String(".movement.fullstop"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-a"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
+            Config_Name => To_Unbounded_String(Source => "")),
          21 =>
-           (To_Unbounded_String("Control-b"),
-            To_Unbounded_String(".movement.quarterspeed"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-b"),
+            Entry_Name =>
+              To_Unbounded_String(Source => ".movement.quarterspeed"),
+            Config_Name => To_Unbounded_String(Source => "")),
          22 =>
            (To_Unbounded_String("Control-c"),
             To_Unbounded_String(".movement.halfspeed"),
