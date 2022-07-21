@@ -1335,21 +1335,21 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
             Config_Name => To_Unbounded_String(Source => "")),
          17 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Down" else "KP_Down")),
-            To_Unbounded_String(".map.cursordown"), To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursordown"), Config_Name => To_Unbounded_String(Source => "")),
          18 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Next" else "KP_Next")),
-            To_Unbounded_String(".map.cursordownright"),
-            To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          19 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Begin" else "Return")),
-            To_Unbounded_String(".map.clickmouse"), To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"), Config_Name => To_Unbounded_String(Source => "")),
          20 =>
            (To_Unbounded_String("Control-a"),
             To_Unbounded_String(".movement.fullstop"),
