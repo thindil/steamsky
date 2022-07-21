@@ -1305,20 +1305,20 @@ package body GameOptions is
               (Source => "Shift-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
             Entry_Name => To_Unbounded_String(Source => ".map.mapdownright"), Config_Name => To_Unbounded_String(Source => "")),
          11 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Home" else "KP_Home")),
-            To_Unbounded_String(".map.cursorupleft"), To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorupleft"), Config_Name => To_Unbounded_String(Source => "")),
          12 =>
-           (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Up" else "KP_Up")),
-            To_Unbounded_String(".map.cursorup"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" & (if Dir_Separator = '\' then "Up" else "KP_Up")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorup"), Config_Name => To_Unbounded_String(Source => "")),
          13 =>
-           (To_Unbounded_String
-              ("Control-" &
+           (Shortcut => To_Unbounded_String
+              (Source => "Control-" &
                (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
-            To_Unbounded_String(".map.cursorupright"),
-            To_Unbounded_String("")),
+            Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          14 =>
            (To_Unbounded_String
               ("Control-" &
