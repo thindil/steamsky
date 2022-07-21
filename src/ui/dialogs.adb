@@ -598,9 +598,9 @@ package body Dialogs is
              (if Action = "drop" then " -image dropicon"
               elsif Action = "take" then " -image giveicon"
               elsif Action = "buy" then " -image buyicon"
-              elsif Action = "sell" then " -image sellicon"
-              else " -text {" & To_Upper(Item => Action(Action'First)) &
-                Action(Action'First + 1 .. Action'Last) & "}"));
+              elsif Action = "sell" then " -image sellicon" else "") &
+             " -text {" & To_Upper(Item => Action(Action'First)) &
+             Action(Action'First + 1 .. Action'Last) & "}");
       Label: Ttk_Label;
       Amount_Box: Ttk_SpinBox;
       Max_Button: Ttk_Button;
@@ -726,7 +726,7 @@ package body Dialogs is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-command {CloseDialog " & Item_Dialog & "}" &
-             " -image cancelicon -style Dialog.TButton");
+             " -image cancelicon -style Dialog.TButton -text {Close}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
       Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
