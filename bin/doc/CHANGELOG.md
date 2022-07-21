@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Updated look of Show crafting recipe dialog
 - Made dialogs buttons with icons wider
+- Show both, text and icon on "Close" button in dialogs
 
 ### Fixed
 - Showing the Close button in the available mission, known base info and
