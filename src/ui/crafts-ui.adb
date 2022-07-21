@@ -1419,7 +1419,7 @@ package body Crafts.UI is
                    "-image " & To_Lower(Item => Recipe_Type) & "icon" &
                    " -command {ShowSetRecipe {" &
                    CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
-                   Recipe_Dialog & "}");
+                   Recipe_Dialog & "} -style Dialog.TButton");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
             Add
               (Widget => Button,
@@ -1432,7 +1432,7 @@ package body Crafts.UI is
                 (pathName => Button_Box & ".close",
                  options =>
                    "-image exiticon -command {CloseDialog " & Recipe_Dialog &
-                   "}");
+                   "} -style Dialog.TButton");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Button, Options => "-row 0 -column 1 -padx {5 0}");
             Add(Widget => Button, Message => "Close dialog \[Escape key\]");
