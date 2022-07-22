@@ -71,7 +71,9 @@ package body Help.UI is
          Value: Unbounded_String;
       end record;
       Variables: constant array(1 .. 11) of Variables_Data :=
-        (1 => (Name => To_Unbounded_String(Source => "MoneyName"), Value => Money_Name),
+        (1 =>
+           (Name => To_Unbounded_String(Source => "MoneyName"),
+            Value => Money_Name),
          2 =>
            (Name => To_Unbounded_String(Source => "FuelName"),
             Value =>
@@ -87,27 +89,35 @@ package body Help.UI is
            (Name => To_Unbounded_String(Source => "StrengthName"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => AttributesData_Container.Element
-                      (Container => Attributes_List, Index => Strength_Index)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        AttributesData_Container.Element
+                          (Container => Attributes_List,
+                           Index => Strength_Index)
+                          .Name))),
          4 =>
            (Name => To_Unbounded_String(Source => "PilotingSkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (SkillsData_Container.Element(Container => Skills_List, Index => Piloting_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (SkillsData_Container.Element
+                        (Container => Skills_List, Index => Piloting_Skill)
+                        .Name))),
          5 =>
            (Name => To_Unbounded_String(Source => "EngineeringSkill"),
             Value =>
               To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element
-                      (Skills_List, Engineering_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List,
+                           Index => Engineering_Skill)
+                          .Name))),
          6 =>
-           (Name => To_Unbounded_String("GunnerySkill"),
+           (Name => To_Unbounded_String(Source => "GunnerySkill"),
             Value =>
               To_Unbounded_String
                 (To_String
@@ -235,8 +245,8 @@ package body Help.UI is
                Start_Index := Index(New_Text, "{", End_Index) - 1;
                Insert
                  (HelpView, "end",
-                  "{" & Slice(New_Text, End_Index + 2, Start_Index) & "} [list " &
-                  To_String(FontTags(I).TextTag) & "]");
+                  "{" & Slice(New_Text, End_Index + 2, Start_Index) &
+                  "} [list " & To_String(FontTags(I).TextTag) & "]");
                End_Index := Index(New_Text, "}", Start_Index) - 1;
                exit Insert_Tags_Loop;
             end if;
