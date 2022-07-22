@@ -1417,17 +1417,17 @@ package body GameOptions is
               To_Unbounded_String(Source => ".movement.quarterspeed"),
             Config_Name => To_Unbounded_String(Source => "")),
          22 =>
-           (To_Unbounded_String("Control-c"),
-            To_Unbounded_String(".movement.halfspeed"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Control-c"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
+            Config_Name => To_Unbounded_String(Source => "")),
          23 =>
-           (To_Unbounded_String("Control-d"),
-            To_Unbounded_String(".movement.fullspeed"),
-            To_Unbounded_String("")));
+           (Shortcut => To_Unbounded_String(Source => "Control-d"),
+            Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
+            Config_Name => To_Unbounded_String(Source => "")));
       Default_General_Accels: constant array(1 .. 4) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String("Alt-a"),
-            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Alt-a"),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"), Config_Name => To_Unbounded_String(Source => "")),
          2 =>
            (To_Unbounded_String("Alt-b"),
             To_Unbounded_String(".ui.resizesecond"), To_Unbounded_String("")),
