@@ -433,11 +433,11 @@ package body Help.UI is
       return TCL_OK;
    end Show_Help_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowTopic", Show_Topic_Command'Access);
       Add_Command("ShowHelp", Show_Help_Command'Access);
       Add_Command("CloseHelp", Close_Help_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Help.UI;
