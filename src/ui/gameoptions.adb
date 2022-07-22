@@ -1458,25 +1458,25 @@ package body GameOptions is
                 (Str => ".gameframe.paned.optionsframe.canvas.options" &
                  To_String(Source => Accel.Entry_Name));
             Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
-            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
+            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Menu_Keys_Loop;
-      elsif CArgv.Arg(Argv, 1) = "map" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "map" then
          Reset_Map_Keys_Loop :
          for Accel of Default_Map_Accels loop
             Key_Entry.Name :=
               New_String
-                (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.Entry_Name));
-            Delete(Key_Entry, "0", "end");
-            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
+                (Str => ".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Source => Accel.Entry_Name));
+            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Map_Keys_Loop;
-      elsif CArgv.Arg(Argv, 1) = "general" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "general" then
          Reset_General_Keys_Loop :
          for Accel of Default_General_Accels loop
             Key_Entry.Name :=
               New_String
-                (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.Entry_Name));
+                (Str => ".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Source => Accel.Entry_Name));
             Delete(Key_Entry, "0", "end");
             Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_General_Keys_Loop;
