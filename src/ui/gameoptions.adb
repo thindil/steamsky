@@ -1427,16 +1427,20 @@ package body GameOptions is
       Default_General_Accels: constant array(1 .. 4) of Accel_Data :=
         (1 =>
            (Shortcut => To_Unbounded_String(Source => "Alt-a"),
-            Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"), Config_Name => To_Unbounded_String(Source => "")),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
+            Config_Name => To_Unbounded_String(Source => "")),
          2 =>
            (Shortcut => To_Unbounded_String(Source => "Alt-b"),
-            Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"), Config_Name => To_Unbounded_String(Source => "")),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"),
+            Config_Name => To_Unbounded_String(Source => "")),
          3 =>
            (Shortcut => To_Unbounded_String(Source => "Alt-c"),
-            Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"), Config_Name => To_Unbounded_String(Source => "")),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"),
+            Config_Name => To_Unbounded_String(Source => "")),
          4 =>
            (Shortcut => To_Unbounded_String(Source => "Alt-d"),
-            Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"), Config_Name => To_Unbounded_String(Source => "")));
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
+            Config_Name => To_Unbounded_String(Source => "")));
       Key_Entry: Ttk_Entry;
    begin
       Key_Entry.Interp := Interp;
@@ -1445,40 +1449,56 @@ package body GameOptions is
          for Accel of Default_Movement_Accels loop
             Key_Entry.Name :=
               New_String
-                (Str => ".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Source => Accel.Entry_Name));
-            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
-            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
+                (Str =>
+                   ".gameframe.paned.optionsframe.canvas.options" &
+                   To_String(Source => Accel.Entry_Name));
+            Delete
+              (TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert
+              (TextEntry => Key_Entry, Index => "0",
+               Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Movement_Keys_Loop;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "menu" then
          Reset_Menu_Keys_Loop :
          for Accel of Default_Menu_Accels loop
             Key_Entry.Name :=
               New_String
-                (Str => ".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Source => Accel.Entry_Name));
-            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
-            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
+                (Str =>
+                   ".gameframe.paned.optionsframe.canvas.options" &
+                   To_String(Source => Accel.Entry_Name));
+            Delete
+              (TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert
+              (TextEntry => Key_Entry, Index => "0",
+               Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Menu_Keys_Loop;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "map" then
          Reset_Map_Keys_Loop :
          for Accel of Default_Map_Accels loop
             Key_Entry.Name :=
               New_String
-                (Str => ".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Source => Accel.Entry_Name));
-            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
-            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
+                (Str =>
+                   ".gameframe.paned.optionsframe.canvas.options" &
+                   To_String(Source => Accel.Entry_Name));
+            Delete
+              (TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert
+              (TextEntry => Key_Entry, Index => "0",
+               Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Map_Keys_Loop;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "general" then
          Reset_General_Keys_Loop :
          for Accel of Default_General_Accels loop
             Key_Entry.Name :=
               New_String
-                (Str => ".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Source => Accel.Entry_Name));
-            Delete(Key_Entry, "0", "end");
-            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
+                (Str =>
+                   ".gameframe.paned.optionsframe.canvas.options" &
+                   To_String(Source => Accel.Entry_Name));
+            Delete
+              (TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert
+              (TextEntry => Key_Entry, Index => "0",
+               Text => To_String(Source => Accel.Shortcut));
          end loop Reset_General_Keys_Loop;
       end if;
       return TCL_OK;
@@ -1486,12 +1506,19 @@ package body GameOptions is
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowOptions", Show_Options_Command'Access);
-      Add_Command("SetFonts", Set_Fonts_Command'Access);
-      Add_Command("SetDefaultFonts", Set_Default_Fonts_Command'Access);
-      Add_Command("CloseOptions", Close_Options_Command'Access);
-      Add_Command("ShowOptionsTab", Show_Options_Tab_Command'Access);
-      Add_Command("ResetKeys", Reset_Keys_Command'Access);
+      Add_Command
+        (Name => "ShowOptions", Ada_Command => Show_Options_Command'Access);
+      Add_Command(Name => "SetFonts", Ada_Command => Set_Fonts_Command'Access);
+      Add_Command
+        (Name => "SetDefaultFonts",
+         Ada_Command => Set_Default_Fonts_Command'Access);
+      Add_Command
+        (Name => "CloseOptions", Ada_Command => Close_Options_Command'Access);
+      Add_Command
+        (Name => "ShowOptionsTab",
+         Ada_Command => Show_Options_Tab_Command'Access);
+      Add_Command
+        (Name => "ResetKeys", Ada_Command => Reset_Keys_Command'Access);
    end Add_Commands;
 
 end GameOptions;
