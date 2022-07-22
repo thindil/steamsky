@@ -1440,24 +1440,24 @@ package body GameOptions is
       Key_Entry: Ttk_Entry;
    begin
       Key_Entry.Interp := Interp;
-      if CArgv.Arg(Argv, 1) = "movement" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "movement" then
          Reset_Movement_Keys_Loop :
          for Accel of Default_Movement_Accels loop
             Key_Entry.Name :=
               New_String
-                (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.Entry_Name));
-            Delete(Key_Entry, "0", "end");
-            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
+                (Str => ".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Source => Accel.Entry_Name));
+            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+            Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
          end loop Reset_Movement_Keys_Loop;
-      elsif CArgv.Arg(Argv, 1) = "menu" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "menu" then
          Reset_Menu_Keys_Loop :
          for Accel of Default_Menu_Accels loop
             Key_Entry.Name :=
               New_String
-                (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.Entry_Name));
-            Delete(Key_Entry, "0", "end");
+                (Str => ".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Source => Accel.Entry_Name));
+            Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
             Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_Menu_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "map" then
