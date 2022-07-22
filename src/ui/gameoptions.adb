@@ -1429,56 +1429,56 @@ package body GameOptions is
            (Shortcut => To_Unbounded_String(Source => "Alt-a"),
             Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"), Config_Name => To_Unbounded_String(Source => "")),
          2 =>
-           (To_Unbounded_String("Alt-b"),
-            To_Unbounded_String(".ui.resizesecond"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Alt-b"),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"), Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (To_Unbounded_String("Alt-c"),
-            To_Unbounded_String(".ui.resizethird"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "Alt-c"),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"), Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (To_Unbounded_String("Alt-d"),
-            To_Unbounded_String(".ui.resizefourth"), To_Unbounded_String("")));
-      KeyEntry: Ttk_Entry;
+           (Shortcut => To_Unbounded_String(Source => "Alt-d"),
+            Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"), Config_Name => To_Unbounded_String(Source => "")));
+      Key_Entry: Ttk_Entry;
    begin
-      KeyEntry.Interp := Interp;
+      Key_Entry.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "movement" then
          Reset_Movement_Keys_Loop :
          for Accel of Default_Movement_Accels loop
-            KeyEntry.Name :=
+            Key_Entry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
                  To_String(Accel.Entry_Name));
-            Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
+            Delete(Key_Entry, "0", "end");
+            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_Movement_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "menu" then
          Reset_Menu_Keys_Loop :
          for Accel of Default_Menu_Accels loop
-            KeyEntry.Name :=
+            Key_Entry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
                  To_String(Accel.Entry_Name));
-            Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
+            Delete(Key_Entry, "0", "end");
+            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_Menu_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "map" then
          Reset_Map_Keys_Loop :
          for Accel of Default_Map_Accels loop
-            KeyEntry.Name :=
+            Key_Entry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
                  To_String(Accel.Entry_Name));
-            Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
+            Delete(Key_Entry, "0", "end");
+            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_Map_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "general" then
          Reset_General_Keys_Loop :
          for Accel of Default_General_Accels loop
-            KeyEntry.Name :=
+            Key_Entry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
                  To_String(Accel.Entry_Name));
-            Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
+            Delete(Key_Entry, "0", "end");
+            Insert(Key_Entry, "0", To_String(Accel.Shortcut));
          end loop Reset_General_Keys_Loop;
       end if;
       return TCL_OK;
