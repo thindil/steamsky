@@ -1182,7 +1182,7 @@ package body Maps.UI is
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
-         Help.UI.AddCommands;
+         Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
          Crafts.UI.Add_Commands;
          Messages.UI.AddCommands;
