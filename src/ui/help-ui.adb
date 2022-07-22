@@ -43,37 +43,37 @@ package body Help.UI is
    -- FUNCTION
    -- Show the content of the selected topic help
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowTopic
    -- SOURCE
    function Show_Topic_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Topic_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      NewText, TagText: Unbounded_String;
-      StartIndex, EndIndex, OldIndex: Natural;
+      New_Text, Tag_Text: Unbounded_String;
+      Start_Index, End_Index, Old_Index: Natural;
       type Variables_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
       end record;
       Variables: constant array(1 .. 11) of Variables_Data :=
-        (1 => (Name => To_Unbounded_String("MoneyName"), Value => Money_Name),
+        (1 => (Name => To_Unbounded_String(Source => "MoneyName"), Value => Money_Name),
          2 =>
-           (Name => To_Unbounded_String("FuelName"),
+           (Name => To_Unbounded_String(Source => "FuelName"),
             Value =>
               To_Unbounded_String
                 (Source =>
@@ -84,22 +84,22 @@ package body Help.UI is
                            Index => Find_Proto_Item(Item_Type => Fuel_Type))
                           .Name))),
          3 =>
-           (Name => To_Unbounded_String("StrengthName"),
+           (Name => To_Unbounded_String(Source => "StrengthName"),
             Value =>
               To_Unbounded_String
-                (To_String
-                   (AttributesData_Container.Element
-                      (Attributes_List, Strength_Index)
+                (Source => To_String
+                   (Source => AttributesData_Container.Element
+                      (Container => Attributes_List, Index => Strength_Index)
                       .Name))),
          4 =>
-           (Name => To_Unbounded_String("PilotingSkill"),
+           (Name => To_Unbounded_String(Source => "PilotingSkill"),
             Value =>
               To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element(Skills_List, Piloting_Skill)
+                (Source => To_String
+                   (SkillsData_Container.Element(Container => Skills_List, Index => Piloting_Skill)
                       .Name))),
          5 =>
-           (Name => To_Unbounded_String("EngineeringSkill"),
+           (Name => To_Unbounded_String(Source => "EngineeringSkill"),
             Value =>
               To_Unbounded_String
                 (To_String
@@ -189,29 +189,29 @@ package body Help.UI is
       Find_Help_Text_Loop :
       for Help of Help_List loop
          if Help.Index = To_Unbounded_String(Selection(TopicsView)) then
-            NewText := Help.Text;
+            New_Text := Help.Text;
             exit Find_Help_Text_Loop;
          end if;
       end loop Find_Help_Text_Loop;
-      OldIndex := 1;
+      Old_Index := 1;
       Replace_Help_Text_Loop :
       loop
-         StartIndex := Index(NewText, "{", OldIndex);
-         if StartIndex > 0 then
+         Start_Index := Index(New_Text, "{", Old_Index);
+         if Start_Index > 0 then
             Insert
               (HelpView, "end",
-               "{" & Slice(NewText, OldIndex, StartIndex - 1) & "}");
+               "{" & Slice(New_Text, Old_Index, Start_Index - 1) & "}");
          else
             Insert
               (HelpView, "end",
-               "{" & Slice(NewText, OldIndex, Length(NewText)) & "}");
+               "{" & Slice(New_Text, Old_Index, Length(New_Text)) & "}");
             exit Replace_Help_Text_Loop;
          end if;
-         EndIndex := Index(NewText, "}", StartIndex) - 1;
-         TagText := Unbounded_Slice(NewText, StartIndex + 1, EndIndex);
+         End_Index := Index(New_Text, "}", Start_Index) - 1;
+         Tag_Text := Unbounded_Slice(New_Text, Start_Index + 1, End_Index);
          Insert_Variables_Loop :
          for I in Variables'Range loop
-            if TagText = Variables(I).Name then
+            if Tag_Text = Variables(I).Name then
                Insert
                  (HelpView, "end",
                   "{" & To_String(Variables(I).Value) & "} [list special]");
@@ -220,7 +220,7 @@ package body Help.UI is
          end loop Insert_Variables_Loop;
          Insert_Keys_Loop :
          for I in AccelNames'Range loop
-            if TagText =
+            if Tag_Text =
               To_Unbounded_String("GameKey") &
                 To_Unbounded_String(Positive'Image(I)) then
                Insert
@@ -231,23 +231,23 @@ package body Help.UI is
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
          for I in FontTags'Range loop
-            if TagText = To_Unbounded_String(FontTags(I).Tag) then
-               StartIndex := Index(NewText, "{", EndIndex) - 1;
+            if Tag_Text = To_Unbounded_String(FontTags(I).Tag) then
+               Start_Index := Index(New_Text, "{", End_Index) - 1;
                Insert
                  (HelpView, "end",
-                  "{" & Slice(NewText, EndIndex + 2, StartIndex) & "} [list " &
+                  "{" & Slice(New_Text, End_Index + 2, Start_Index) & "} [list " &
                   To_String(FontTags(I).TextTag) & "]");
-               EndIndex := Index(NewText, "}", StartIndex) - 1;
+               End_Index := Index(New_Text, "}", Start_Index) - 1;
                exit Insert_Tags_Loop;
             end if;
          end loop Insert_Tags_Loop;
          Insert_Factions_Flags_Loop :
          for I in FlagsTags'Range loop
-            if TagText = FlagsTags(I) then
+            if Tag_Text = FlagsTags(I) then
                FactionsWithFlag := Null_Unbounded_String;
                Create_Factions_List_Loop :
                for Faction of Factions_List loop
-                  if Faction.Flags.Contains(TagText) then
+                  if Faction.Flags.Contains(Tag_Text) then
                      if FactionsWithFlag /= Null_Unbounded_String then
                         Append(FactionsWithFlag, " and ");
                      end if;
@@ -269,13 +269,13 @@ package body Help.UI is
          end loop Insert_Factions_Flags_Loop;
          Insert_Bases_Flags_Loop :
          for BaseFlag of BasesFlags loop
-            if TagText /= BaseFlag then
+            if Tag_Text /= BaseFlag then
                goto Bases_Flags_Loop_End;
             end if;
             BasesWithFlag := Null_Unbounded_String;
             Create_Bases_List_Loop :
             for BaseType of Bases_Types_List loop
-               if BaseType.Flags.Contains(TagText) then
+               if BaseType.Flags.Contains(Tag_Text) then
                   if BasesWithFlag /= Null_Unbounded_String then
                      Append(BasesWithFlag, " and ");
                   end if;
@@ -292,7 +292,7 @@ package body Help.UI is
             exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
          end loop Insert_Bases_Flags_Loop;
-         OldIndex := EndIndex + 2;
+         Old_Index := End_Index + 2;
       end loop Replace_Help_Text_Loop;
       configure(HelpView, "-state disabled");
       return TCL_OK;
