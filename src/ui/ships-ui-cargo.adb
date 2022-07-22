@@ -526,7 +526,7 @@ package body Ships.UI.Cargo is
         Create
           (ItemDialog & ".givebutton",
            "-image giveicon -command {GiveItem " & CArgv.Arg(Argv, 1) &
-           "} -style Dialog.TButton");
+           "} -style Dialog.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
       Add(Button, "Give the item");
@@ -536,7 +536,7 @@ package body Ships.UI.Cargo is
         Create
           (ItemDialog & ".cancelbutton",
            "-image cancelicon -command {CloseDialog " & ItemDialog &
-           "} -style Dialog.TButton");
+           "} -style Dialog.TButton -text Close");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
       Add(Button, "Cancel giving and close dialog. \[Escape key\]");
