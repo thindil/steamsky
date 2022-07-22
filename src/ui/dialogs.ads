@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -25,6 +26,26 @@ with Items; use Items;
 -- SOURCE
 package Dialogs is
 -- ****
+
+   -- ****s* Dialogs/Dialogs.Button_Settings
+   -- FUNCTION
+   -- Data structure for setting various options for a dialog's buttons
+   -- PARAMETERS
+   -- Text    - The text to display on the button. If empty, the button will
+   --           not be displayed. Default value is empty
+   -- Command - The Tcl command to execute when the button pressed. Default
+   --           value is empty
+   -- Icon    - The Tcl icon to display on the button. Default value is empty
+   -- Tooltip - The button's tooltip text. Default value is empty
+   -- HISTORY
+   -- 7.7 - Added
+   -- SOURCE
+   type Button_Settings is record
+      Text: Unbounded_String := Null_Unbounded_String;
+      Command: Unbounded_String := Null_Unbounded_String;
+      Icon: Unbounded_String := Null_Unbounded_String;
+      Tooltip: Unbounded_String := Null_Unbounded_String;
+   end record;
 
    -- ****f* Dialogs/Dialogs.Create_Dialog
    -- FUNCTION
