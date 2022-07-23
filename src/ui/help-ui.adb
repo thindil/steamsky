@@ -190,15 +190,15 @@ package body Help.UI is
          3 => To_Unbounded_String(Source => "blackmarket"), 4 => To_Unbounded_String(Source => "barracks"));
       Bases_With_Flag: Unbounded_String;
       Topics_View: constant Ttk_Tree_View :=
-        Get_Widget(".help.paned.topics.view", Interp);
-      HelpView: constant Tk_Text :=
-        Get_Widget(".help.paned.content.view", Interp);
+        Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
+      Help_View: constant Tk_Text :=
+        Get_Widget(pathName => ".help.paned.content.view", Interp => Interp);
    begin
-      configure(HelpView, "-state normal");
-      Delete(HelpView, "1.0", "end");
+      configure(Widgt => Help_View, options => "-state normal");
+      Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
       Find_Help_Text_Loop :
       for Help of Help_List loop
-         if Help.Index = To_Unbounded_String(Selection(Topics_View)) then
+         if Help.Index = To_Unbounded_String(Source => Selection(TreeViewWidget => Topics_View)) then
             New_Text := Help.Text;
             exit Find_Help_Text_Loop;
          end if;
@@ -206,14 +206,14 @@ package body Help.UI is
       Old_Index := 1;
       Replace_Help_Text_Loop :
       loop
-         Start_Index := Index(New_Text, "{", Old_Index);
+         Start_Index := Index(Source => New_Text, Pattern => "{", From => Old_Index);
          if Start_Index > 0 then
             Insert
-              (HelpView, "end",
+              (Help_View, "end",
                "{" & Slice(New_Text, Old_Index, Start_Index - 1) & "}");
          else
             Insert
-              (HelpView, "end",
+              (Help_View, "end",
                "{" & Slice(New_Text, Old_Index, Length(New_Text)) & "}");
             exit Replace_Help_Text_Loop;
          end if;
@@ -223,7 +223,7 @@ package body Help.UI is
          for I in Variables'Range loop
             if Tag_Text = Variables(I).Name then
                Insert
-                 (HelpView, "end",
+                 (Help_View, "end",
                   "{" & To_String(Variables(I).Value) & "} [list special]");
                exit Insert_Variables_Loop;
             end if;
@@ -234,7 +234,7 @@ package body Help.UI is
               To_Unbounded_String("GameKey") &
                 To_Unbounded_String(Positive'Image(I)) then
                Insert
-                 (HelpView, "end",
+                 (Help_View, "end",
                   "{'" & To_String(Accel_Names(I)) & "'} [list special]");
                exit Insert_Keys_Loop;
             end if;
@@ -244,7 +244,7 @@ package body Help.UI is
             if Tag_Text = To_Unbounded_String(Font_Tags(I).Tag) then
                Start_Index := Index(New_Text, "{", End_Index) - 1;
                Insert
-                 (HelpView, "end",
+                 (Help_View, "end",
                   "{" & Slice(New_Text, End_Index + 2, Start_Index) &
                   "} [list " & To_String(Font_Tags(I).Text_Tag) & "]");
                End_Index := Index(New_Text, "}", Start_Index) - 1;
@@ -273,7 +273,7 @@ package body Help.UI is
                      Index(Factions_With_Flag, " and ") + 4, ", ");
                end loop Insert_Factions_Loop;
                Insert
-                 (HelpView, "end", "{" & To_String(Factions_With_Flag) & "}");
+                 (Help_View, "end", "{" & To_String(Factions_With_Flag) & "}");
                exit Insert_Factions_Flags_Loop;
             end if;
          end loop Insert_Factions_Flags_Loop;
@@ -298,13 +298,13 @@ package body Help.UI is
                  (Bases_With_Flag, Index(Bases_With_Flag, " and "),
                   Index(Bases_With_Flag, " and ") + 4, ", ");
             end loop Insert_Bases_Loop;
-            Insert(HelpView, "end", "{" & To_String(Bases_With_Flag) & "}");
+            Insert(Help_View, "end", "{" & To_String(Bases_With_Flag) & "}");
             exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
          end loop Insert_Bases_Flags_Loop;
          Old_Index := End_Index + 2;
       end loop Replace_Help_Text_Loop;
-      configure(HelpView, "-state disabled");
+      configure(Help_View, "-state disabled");
       return TCL_OK;
    end Show_Topic_Command;
 
