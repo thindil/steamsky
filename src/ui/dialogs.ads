@@ -47,6 +47,15 @@ package Dialogs is
       Tooltip: Unbounded_String := Null_Unbounded_String;
    end record;
 
+   -- ****d* Dialogs/Dialogs.Empty_Button_Settings
+   -- FUNCTION
+   -- Default value of Button_Settings
+   -- SOURCE
+   Empty_Button_Settings: constant Button_Settings :=
+     (Text => Null_Unbounded_String, Command => Null_Unbounded_String,
+      Icon => Null_Unbounded_String, Tooltip => Null_Unbounded_String);
+   -- ****
+
    -- ****f* Dialogs/Dialogs.Create_Dialog
    -- FUNCTION
    -- Create a new dialog with the selected title
@@ -189,8 +198,7 @@ package Dialogs is
       -- SOURCE
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
-      Button_2_Command, Button_2_Icon: String := "") with
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings) with
       Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 

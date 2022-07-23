@@ -481,8 +481,7 @@ package body Dialogs is
 
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
-      Button_2_Command, Button_2_Icon: String := "") is
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
       Info_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".info", Title => Title, Title_Width => 275, Columns => 3,
@@ -500,23 +499,27 @@ package body Dialogs is
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
-      if Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
-         if Button_1_Icon'Length < 2 then
+      if Length(Button_1.Text) > 0 and Length(Button_1.Command) > 0 then
+         if Length(Button_1.Icon) < 2 then
             Button :=
               Create
                 (pathName => Buttons_Frame & ".button1",
                  options =>
-                   "-text {" & Button_1_Text & "} -command {" & Close_Command &
-                   ";" & Button_1_Command & "}");
+                   "-text {" & To_String(Source => Button_1.Text) &
+                   "} -command {" & Close_Command & ";" &
+                   To_String(Source => Button_1.Command) & "}");
          else
             Button :=
               Create
                 (pathName => Buttons_Frame & ".button1",
                  options =>
-                   "-image {" & Button_1_Icon & "} -command {" &
-                   Close_Command & ";" & Button_1_Command &
+                   "-image {" & To_String(Source => Button_1.Icon) &
+                   "} -command {" & Close_Command & ";" &
+                   To_String(Source => Button_1.Command) &
                    "} -style Dialog.TButton");
-            Add(Widget => Button, Message => Button_1_Text);
+            Add
+              (Widget => Button,
+               Message => To_String(Source => Button_1.Tooltip));
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
          Bind
@@ -529,33 +532,38 @@ package body Dialogs is
       Add_Close_Button
         (Name => Buttons_Frame & ".button", Text => "Close",
          Command => Close_Command,
-         Column => (if Button_1_Text'Length > 0 then 1 else 0),
+         Column => (if Length(Source => Button_1.Text) > 0 then 1 else 0),
          Icon => "exiticon");
       Button := Get_Widget(pathName => Buttons_Frame & ".button");
-      if Button_2_Text'Length > 0 and Button_2_Command'Length > 1 then
+      if Length(Source => Button_2.Text) > 0 and
+        Length(Source => Button_2.Command) > 1 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Buttons_Frame & ".button2;break}");
-         if Button_2_Icon'Length < 2 then
+         if Length(Source => Button_2.Icon) < 2 then
             Button :=
               Create
                 (pathName => Buttons_Frame & ".button2",
                  options =>
-                   "-text {" & Button_2_Text & "} -command {" & Close_Command &
-                   ";" & Button_2_Command & "}");
+                   "-text {" & To_String(Source => Button_2.Text) &
+                   "} -command {" & Close_Command & ";" &
+                   To_String(Source => Button_2.Command) & "}");
          else
             Button :=
               Create
                 (pathName => Buttons_Frame & ".button2",
                  options =>
-                   "-image {" & Button_2_Icon & "} -command {" &
-                   Close_Command & ";" & Button_2_Command &
+                   "-image {" & To_String(Source => Button_2.Icon) &
+                   "} -command {" & Close_Command & ";" &
+                   To_String(Source => Button_2.Command) &
                    "} -style Dialog.TButton");
-            Add(Widget => Button, Message => Button_2_Text);
+            Add
+              (Widget => Button,
+               Message => To_String(Source => Button_2.Tooltip));
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button, Options => "-row 0 -column 2 -padx 5");
-         if Button_1_Text'Length > 0 then
+         if Length(Source => Button_1.Text) > 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
                Script => "{focus " & Buttons_Frame & ".button1;break}");
@@ -567,7 +575,8 @@ package body Dialogs is
          Bind
            (Widgt => Button, Sequence => "<Escape>",
             Script => "{" & Buttons_Frame & ".button invoke;break}");
-      elsif Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
+      elsif Length(Source => Button_1.Text) > 0 and
+        Length(Source => Button_1.Command) > 0 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Buttons_Frame & ".button1;break}");
