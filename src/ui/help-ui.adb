@@ -178,18 +178,18 @@ package body Help.UI is
          2 => (Tag => "u", Text_Tag => To_Unbounded_String(Source => "underline")),
          3 => (Tag => "i", Text_Tag => To_Unbounded_String(Source => "italic")));
       Flags_Tags: constant array(1 .. 8) of Unbounded_String :=
-        (1 => To_Unbounded_String("diseaseimmune"),
-         2 => To_Unbounded_String("nofatigue"), 3 => To_Unbounded_String("nomorale"),
-         4 => To_Unbounded_String("naturalarmor"),
-         5 => To_Unbounded_String("toxicattack"),
-         6 => To_Unbounded_String("sentientships"),
-         7 => To_Unbounded_String("fanaticism"), 8 => To_Unbounded_String("loner"));
-      FactionsWithFlag: Unbounded_String;
-      BasesFlags: constant array(1 .. 4) of Unbounded_String :=
-        (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"),
-         To_Unbounded_String("blackmarket"), To_Unbounded_String("barracks"));
-      BasesWithFlag: Unbounded_String;
-      TopicsView: constant Ttk_Tree_View :=
+        (1 => To_Unbounded_String(Source => "diseaseimmune"),
+         2 => To_Unbounded_String(Source => "nofatigue"), 3 => To_Unbounded_String(Source => "nomorale"),
+         4 => To_Unbounded_String(Source => "naturalarmor"),
+         5 => To_Unbounded_String(Source => "toxicattack"),
+         6 => To_Unbounded_String(Source => "sentientships"),
+         7 => To_Unbounded_String(Source => "fanaticism"), 8 => To_Unbounded_String(Source => "loner"));
+      Factions_With_Flag: Unbounded_String;
+      Bases_Flags: constant array(1 .. 4) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "shipyard"), 2 => To_Unbounded_String(Source => "temple"),
+         3 => To_Unbounded_String(Source => "blackmarket"), 4 => To_Unbounded_String(Source => "barracks"));
+      Bases_With_Flag: Unbounded_String;
+      Topics_View: constant Ttk_Tree_View :=
         Get_Widget(".help.paned.topics.view", Interp);
       HelpView: constant Tk_Text :=
         Get_Widget(".help.paned.content.view", Interp);
@@ -198,7 +198,7 @@ package body Help.UI is
       Delete(HelpView, "1.0", "end");
       Find_Help_Text_Loop :
       for Help of Help_List loop
-         if Help.Index = To_Unbounded_String(Selection(TopicsView)) then
+         if Help.Index = To_Unbounded_String(Selection(Topics_View)) then
             New_Text := Help.Text;
             exit Find_Help_Text_Loop;
          end if;
@@ -254,51 +254,51 @@ package body Help.UI is
          Insert_Factions_Flags_Loop :
          for I in Flags_Tags'Range loop
             if Tag_Text = Flags_Tags(I) then
-               FactionsWithFlag := Null_Unbounded_String;
+               Factions_With_Flag := Null_Unbounded_String;
                Create_Factions_List_Loop :
                for Faction of Factions_List loop
                   if Faction.Flags.Contains(Tag_Text) then
-                     if FactionsWithFlag /= Null_Unbounded_String then
-                        Append(FactionsWithFlag, " and ");
+                     if Factions_With_Flag /= Null_Unbounded_String then
+                        Append(Factions_With_Flag, " and ");
                      end if;
                      Append
-                       (FactionsWithFlag, To_String(Source => Faction.Name));
+                       (Factions_With_Flag, To_String(Source => Faction.Name));
                   end if;
                end loop Create_Factions_List_Loop;
                Insert_Factions_Loop :
-               while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
+               while Ada.Strings.Unbounded.Count(Factions_With_Flag, " and ") >
                  1 loop
                   Replace_Slice
-                    (FactionsWithFlag, Index(FactionsWithFlag, " and "),
-                     Index(FactionsWithFlag, " and ") + 4, ", ");
+                    (Factions_With_Flag, Index(Factions_With_Flag, " and "),
+                     Index(Factions_With_Flag, " and ") + 4, ", ");
                end loop Insert_Factions_Loop;
                Insert
-                 (HelpView, "end", "{" & To_String(FactionsWithFlag) & "}");
+                 (HelpView, "end", "{" & To_String(Factions_With_Flag) & "}");
                exit Insert_Factions_Flags_Loop;
             end if;
          end loop Insert_Factions_Flags_Loop;
          Insert_Bases_Flags_Loop :
-         for BaseFlag of BasesFlags loop
+         for BaseFlag of Bases_Flags loop
             if Tag_Text /= BaseFlag then
                goto Bases_Flags_Loop_End;
             end if;
-            BasesWithFlag := Null_Unbounded_String;
+            Bases_With_Flag := Null_Unbounded_String;
             Create_Bases_List_Loop :
             for BaseType of Bases_Types_List loop
                if BaseType.Flags.Contains(Tag_Text) then
-                  if BasesWithFlag /= Null_Unbounded_String then
-                     Append(BasesWithFlag, " and ");
+                  if Bases_With_Flag /= Null_Unbounded_String then
+                     Append(Bases_With_Flag, " and ");
                   end if;
-                  Append(BasesWithFlag, BaseType.Name);
+                  Append(Bases_With_Flag, BaseType.Name);
                end if;
             end loop Create_Bases_List_Loop;
             Insert_Bases_Loop :
-            while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
+            while Ada.Strings.Unbounded.Count(Bases_With_Flag, " and ") > 1 loop
                Replace_Slice
-                 (BasesWithFlag, Index(BasesWithFlag, " and "),
-                  Index(BasesWithFlag, " and ") + 4, ", ");
+                 (Bases_With_Flag, Index(Bases_With_Flag, " and "),
+                  Index(Bases_With_Flag, " and ") + 4, ", ");
             end loop Insert_Bases_Loop;
-            Insert(HelpView, "end", "{" & To_String(BasesWithFlag) & "}");
+            Insert(HelpView, "end", "{" & To_String(Bases_With_Flag) & "}");
             exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
          end loop Insert_Bases_Flags_Loop;
