@@ -176,25 +176,15 @@ package Dialogs is
       -- FUNCTION
       -- Show the selected info to a player
       -- PARAMETERS
-      -- Text             - Text of info to show
-      -- Parent_Name      - Name of the parent widget. If empty, then the main game
-      --                    window will be used as parent for widget. Default value
-      --                    is .gameframe
-      -- Title            - The text show in the dialog header.
-      -- Button_1_Text    - The text displayed on the first optional button. If empty,
-      --                    the button will not show. Default value is empty.
-      -- Button_1_Command - The command for the first optional button. Has meaning
-      --                    only if Button_1_Text is set. Default value is empty.
-      -- Button_1_Icon    - The image to show on the first optional button. If set,
-      --                    Button_1_Text will be used as tooltip. Default value is
-      --                    empty.
-      -- Button_2_Text    - The text displayed on the second optional button. If empty,
-      --                    the button will not show. Default value is empty.
-      -- Button_2_Command - The command for the first optional button. Has meaning
-      --                    only if Button_2_Text is set. Default value is empty.
-      -- Button_2_Icon    - The image to show on the second optional button. If set,
-      --                    Button_2_Text will be used as tooltip. Default value is
-      --                    empty.
+      -- Text        - Text of info to show
+      -- Parent_Name - Name of the parent widget. If empty, then the main game
+      --               window will be used as parent for widget. Default value
+      --               is .gameframe
+      -- Title       - The text show in the dialog header.
+      -- Button_1    - The settings for the first optional button. If empty, the
+      --               button will not show. Default value is empty.
+      -- Button_2    - The setting for the second optional button. If empty,
+      --               the button will not show. Default value is empty.
       -- SOURCE
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
