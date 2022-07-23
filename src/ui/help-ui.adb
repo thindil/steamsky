@@ -169,21 +169,21 @@ package body Help.UI is
          19 => Menu_Accelerators(9), 20 => Menu_Accelerators(10), 21 => Menu_Accelerators(11),
          22 => Map_Accelerators(1), 23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
          25 => Map_Accelerators(4));
-      type FontTag is record
+      type Font_Tag is record
          Tag: String(1 .. 1);
-         TextTag: Unbounded_String;
+         Text_Tag: Unbounded_String;
       end record;
-      FontTags: constant array(1 .. 3) of FontTag :=
-        (1 => (Tag => "b", TextTag => To_Unbounded_String("bold")),
-         2 => (Tag => "u", TextTag => To_Unbounded_String("underline")),
-         3 => (Tag => "i", TextTag => To_Unbounded_String("italic")));
-      FlagsTags: constant array(1 .. 8) of Unbounded_String :=
-        (To_Unbounded_String("diseaseimmune"),
-         To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"),
-         To_Unbounded_String("naturalarmor"),
-         To_Unbounded_String("toxicattack"),
-         To_Unbounded_String("sentientships"),
-         To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
+      Font_Tags: constant array(1 .. 3) of Font_Tag :=
+        (1 => (Tag => "b", Text_Tag => To_Unbounded_String(Source => "bold")),
+         2 => (Tag => "u", Text_Tag => To_Unbounded_String(Source => "underline")),
+         3 => (Tag => "i", Text_Tag => To_Unbounded_String(Source => "italic")));
+      Flags_Tags: constant array(1 .. 8) of Unbounded_String :=
+        (1 => To_Unbounded_String("diseaseimmune"),
+         2 => To_Unbounded_String("nofatigue"), 3 => To_Unbounded_String("nomorale"),
+         4 => To_Unbounded_String("naturalarmor"),
+         5 => To_Unbounded_String("toxicattack"),
+         6 => To_Unbounded_String("sentientships"),
+         7 => To_Unbounded_String("fanaticism"), 8 => To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
       BasesFlags: constant array(1 .. 4) of Unbounded_String :=
         (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"),
@@ -240,20 +240,20 @@ package body Help.UI is
             end if;
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
-         for I in FontTags'Range loop
-            if Tag_Text = To_Unbounded_String(FontTags(I).Tag) then
+         for I in Font_Tags'Range loop
+            if Tag_Text = To_Unbounded_String(Font_Tags(I).Tag) then
                Start_Index := Index(New_Text, "{", End_Index) - 1;
                Insert
                  (HelpView, "end",
                   "{" & Slice(New_Text, End_Index + 2, Start_Index) &
-                  "} [list " & To_String(FontTags(I).TextTag) & "]");
+                  "} [list " & To_String(Font_Tags(I).Text_Tag) & "]");
                End_Index := Index(New_Text, "}", Start_Index) - 1;
                exit Insert_Tags_Loop;
             end if;
          end loop Insert_Tags_Loop;
          Insert_Factions_Flags_Loop :
-         for I in FlagsTags'Range loop
-            if Tag_Text = FlagsTags(I) then
+         for I in Flags_Tags'Range loop
+            if Tag_Text = Flags_Tags(I) then
                FactionsWithFlag := Null_Unbounded_String;
                Create_Factions_List_Loop :
                for Faction of Factions_List loop
