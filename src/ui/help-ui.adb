@@ -146,20 +146,20 @@ package body Help.UI is
                       (Container => Attributes_List, Index => Condition_Index)
                       .Name))),
          10 =>
-           (Name => To_Unbounded_String("DodgeSkill"),
+           (Name => To_Unbounded_String(Source => "DodgeSkill"),
             Value =>
               To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element(Skills_List, Dodge_Skill)
+                (Source => To_String
+                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Dodge_Skill)
                       .Name))),
          11 =>
-           (Name => To_Unbounded_String("UnarmedSkill"),
+           (Name => To_Unbounded_String(Source => "UnarmedSkill"),
             Value =>
               To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element(Skills_List, Unarmed_Skill)
+                (Source => To_String
+                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Unarmed_Skill)
                       .Name))));
-      AccelNames: constant array(1 .. 25) of Unbounded_String :=
+      Accel_Names: constant array(1 .. 25) of Unbounded_String :=
         (Map_Accelerators(5), Map_Accelerators(6), Map_Accelerators(7),
          Map_Accelerators(8), Map_Accelerators(9), Map_Accelerators(10),
          Map_Accelerators(11), Map_Accelerators(12), Map_Accelerators(13),
@@ -229,13 +229,13 @@ package body Help.UI is
             end if;
          end loop Insert_Variables_Loop;
          Insert_Keys_Loop :
-         for I in AccelNames'Range loop
+         for I in Accel_Names'Range loop
             if Tag_Text =
               To_Unbounded_String("GameKey") &
                 To_Unbounded_String(Positive'Image(I)) then
                Insert
                  (HelpView, "end",
-                  "{'" & To_String(AccelNames(I)) & "'} [list special]");
+                  "{'" & To_String(Accel_Names(I)) & "'} [list special]");
                exit Insert_Keys_Loop;
             end if;
          end loop Insert_Keys_Loop;
