@@ -160,15 +160,15 @@ package body Help.UI is
                    (Source => SkillsData_Container.Element(Container => Skills_List, Index => Unarmed_Skill)
                       .Name))));
       Accel_Names: constant array(1 .. 25) of Unbounded_String :=
-        (Map_Accelerators(5), Map_Accelerators(6), Map_Accelerators(7),
-         Map_Accelerators(8), Map_Accelerators(9), Map_Accelerators(10),
-         Map_Accelerators(11), Map_Accelerators(12), Map_Accelerators(13),
-         Map_Accelerators(14), Menu_Accelerators(1), Menu_Accelerators(2),
-         Menu_Accelerators(3), Menu_Accelerators(4), Menu_Accelerators(5),
-         Menu_Accelerators(6), Map_Accelerators(2), Menu_Accelerators(7),
-         Menu_Accelerators(9), Menu_Accelerators(10), Menu_Accelerators(11),
-         Map_Accelerators(1), Menu_Accelerators(8), Map_Accelerators(3),
-         Map_Accelerators(4));
+        (1 => Map_Accelerators(5), 2 => Map_Accelerators(6), 3 => Map_Accelerators(7),
+         4 => Map_Accelerators(8), 5 => Map_Accelerators(9), 6 => Map_Accelerators(10),
+         7 => Map_Accelerators(11), 8 => Map_Accelerators(12), 9 => Map_Accelerators(13),
+         10 => Map_Accelerators(14), 11 => Menu_Accelerators(1), 12 => Menu_Accelerators(2),
+         13 => Menu_Accelerators(3), 14 => Menu_Accelerators(4), 15 => Menu_Accelerators(5),
+         16 => Menu_Accelerators(6), 17 => Map_Accelerators(2), 18 => Menu_Accelerators(7),
+         19 => Menu_Accelerators(9), 20 => Menu_Accelerators(10), 21 => Menu_Accelerators(11),
+         22 => Map_Accelerators(1), 23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
+         25 => Map_Accelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
