@@ -102,9 +102,10 @@ package body Help.UI is
               To_Unbounded_String
                 (Source =>
                    To_String
-                     (Source => SkillsData_Container.Element
-                        (Container => Skills_List, Index => Piloting_Skill)
-                        .Name))),
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Piloting_Skill)
+                          .Name))),
          5 =>
            (Name => To_Unbounded_String(Source => "EngineeringSkill"),
             Value =>
@@ -120,54 +121,76 @@ package body Help.UI is
            (Name => To_Unbounded_String(Source => "GunnerySkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Gunnery_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Gunnery_Skill)
+                          .Name))),
          7 =>
            (Name => To_Unbounded_String(Source => "TalkingSkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Talking_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Talking_Skill)
+                          .Name))),
          8 =>
            (Name => To_Unbounded_String(Source => "PerceptionSkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Perception_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Perception_Skill)
+                          .Name))),
          9 =>
            (Name => To_Unbounded_String(Source => "ConditionName"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => AttributesData_Container.Element
-                      (Container => Attributes_List, Index => Condition_Index)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        AttributesData_Container.Element
+                          (Container => Attributes_List,
+                           Index => Condition_Index)
+                          .Name))),
          10 =>
            (Name => To_Unbounded_String(Source => "DodgeSkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Dodge_Skill)
-                      .Name))),
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Dodge_Skill)
+                          .Name))),
          11 =>
            (Name => To_Unbounded_String(Source => "UnarmedSkill"),
             Value =>
               To_Unbounded_String
-                (Source => To_String
-                   (Source => SkillsData_Container.Element(Container => Skills_List, Index => Unarmed_Skill)
-                      .Name))));
+                (Source =>
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List, Index => Unarmed_Skill)
+                          .Name))));
       Accel_Names: constant array(1 .. 25) of Unbounded_String :=
-        (1 => Map_Accelerators(5), 2 => Map_Accelerators(6), 3 => Map_Accelerators(7),
-         4 => Map_Accelerators(8), 5 => Map_Accelerators(9), 6 => Map_Accelerators(10),
-         7 => Map_Accelerators(11), 8 => Map_Accelerators(12), 9 => Map_Accelerators(13),
-         10 => Map_Accelerators(14), 11 => Menu_Accelerators(1), 12 => Menu_Accelerators(2),
-         13 => Menu_Accelerators(3), 14 => Menu_Accelerators(4), 15 => Menu_Accelerators(5),
-         16 => Menu_Accelerators(6), 17 => Map_Accelerators(2), 18 => Menu_Accelerators(7),
-         19 => Menu_Accelerators(9), 20 => Menu_Accelerators(10), 21 => Menu_Accelerators(11),
-         22 => Map_Accelerators(1), 23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
+        (1 => Map_Accelerators(5), 2 => Map_Accelerators(6),
+         3 => Map_Accelerators(7), 4 => Map_Accelerators(8),
+         5 => Map_Accelerators(9), 6 => Map_Accelerators(10),
+         7 => Map_Accelerators(11), 8 => Map_Accelerators(12),
+         9 => Map_Accelerators(13), 10 => Map_Accelerators(14),
+         11 => Menu_Accelerators(1), 12 => Menu_Accelerators(2),
+         13 => Menu_Accelerators(3), 14 => Menu_Accelerators(4),
+         15 => Menu_Accelerators(5), 16 => Menu_Accelerators(6),
+         17 => Map_Accelerators(2), 18 => Menu_Accelerators(7),
+         19 => Menu_Accelerators(9), 20 => Menu_Accelerators(10),
+         21 => Menu_Accelerators(11), 22 => Map_Accelerators(1),
+         23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
          25 => Map_Accelerators(4));
       type Font_Tag is record
          Tag: String(1 .. 1);
@@ -175,19 +198,26 @@ package body Help.UI is
       end record;
       Font_Tags: constant array(1 .. 3) of Font_Tag :=
         (1 => (Tag => "b", Text_Tag => To_Unbounded_String(Source => "bold")),
-         2 => (Tag => "u", Text_Tag => To_Unbounded_String(Source => "underline")),
-         3 => (Tag => "i", Text_Tag => To_Unbounded_String(Source => "italic")));
+         2 =>
+           (Tag => "u",
+            Text_Tag => To_Unbounded_String(Source => "underline")),
+         3 =>
+           (Tag => "i", Text_Tag => To_Unbounded_String(Source => "italic")));
       Flags_Tags: constant array(1 .. 8) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "diseaseimmune"),
-         2 => To_Unbounded_String(Source => "nofatigue"), 3 => To_Unbounded_String(Source => "nomorale"),
+         2 => To_Unbounded_String(Source => "nofatigue"),
+         3 => To_Unbounded_String(Source => "nomorale"),
          4 => To_Unbounded_String(Source => "naturalarmor"),
          5 => To_Unbounded_String(Source => "toxicattack"),
          6 => To_Unbounded_String(Source => "sentientships"),
-         7 => To_Unbounded_String(Source => "fanaticism"), 8 => To_Unbounded_String(Source => "loner"));
+         7 => To_Unbounded_String(Source => "fanaticism"),
+         8 => To_Unbounded_String(Source => "loner"));
       Factions_With_Flag: Unbounded_String;
       Bases_Flags: constant array(1 .. 4) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "shipyard"), 2 => To_Unbounded_String(Source => "temple"),
-         3 => To_Unbounded_String(Source => "blackmarket"), 4 => To_Unbounded_String(Source => "barracks"));
+        (1 => To_Unbounded_String(Source => "shipyard"),
+         2 => To_Unbounded_String(Source => "temple"),
+         3 => To_Unbounded_String(Source => "blackmarket"),
+         4 => To_Unbounded_String(Source => "barracks"));
       Bases_With_Flag: Unbounded_String;
       Topics_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
@@ -198,7 +228,9 @@ package body Help.UI is
       Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
       Find_Help_Text_Loop :
       for Help of Help_List loop
-         if Help.Index = To_Unbounded_String(Source => Selection(TreeViewWidget => Topics_View)) then
+         if Help.Index =
+           To_Unbounded_String
+             (Source => Selection(TreeViewWidget => Topics_View)) then
             New_Text := Help.Text;
             exit Find_Help_Text_Loop;
          end if;
@@ -206,15 +238,26 @@ package body Help.UI is
       Old_Index := 1;
       Replace_Help_Text_Loop :
       loop
-         Start_Index := Index(Source => New_Text, Pattern => "{", From => Old_Index);
+         Start_Index :=
+           Index(Source => New_Text, Pattern => "{", From => Old_Index);
          if Start_Index > 0 then
             Insert
-              (Help_View, "end",
-               "{" & Slice(New_Text, Old_Index, Start_Index - 1) & "}");
+              (TextWidget => Help_View, Index => "end",
+               Text =>
+                 "{" &
+                 Slice
+                   (Source => New_Text, Low => Old_Index,
+                    High => Start_Index - 1) &
+                 "}");
          else
             Insert
-              (Help_View, "end",
-               "{" & Slice(New_Text, Old_Index, Length(New_Text)) & "}");
+              (TextWidget => Help_View, Index => "end",
+               Text =>
+                 "{" &
+                 Slice
+                   (Source => New_Text, Low => Old_Index,
+                    High => Length(Source => New_Text)) &
+                 "}");
             exit Replace_Help_Text_Loop;
          end if;
          End_Index := Index(New_Text, "}", Start_Index) - 1;
@@ -293,7 +336,8 @@ package body Help.UI is
                end if;
             end loop Create_Bases_List_Loop;
             Insert_Bases_Loop :
-            while Ada.Strings.Unbounded.Count(Bases_With_Flag, " and ") > 1 loop
+            while Ada.Strings.Unbounded.Count(Bases_With_Flag, " and ") >
+              1 loop
                Replace_Slice
                  (Bases_With_Flag, Index(Bases_With_Flag, " and "),
                   Index(Bases_With_Flag, " and ") + 4, ", ");
