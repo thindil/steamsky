@@ -796,12 +796,7 @@ package body Ships.UI.Cargo is
       Show_Inventory_Item_Info
         (Parent => ".",
          Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Member_Index => 0, Button_1_Text => "Give item to a crew member",
-         Button_1_Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1),
-         Button_1_Icon => "giveicon",
-         Button_2_Text => "Drop item from the ship cargo",
-         Button_2_Command => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1),
-         Button_2_Icon => "dropicon");
+         Member_Index => 0, Button_1 => (Tooltip => To_Unbounded_String(Source => "Give item to a crew member"), Command => To_Unbounded_String(Source => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1)), Icon => To_Unbounded_String(Source => "giveicon"), Text => To_Unbounded_String(Source => "Give")), Button_2 => (Tooltip => To_Unbounded_String(Source => "Drop item from the ship cargo"), Command => To_Unbounded_String(Source => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1)), Icon => To_Unbounded_String(Source => "dropicon"), Text => To_Unbounded_String(Source => "Drop")));
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 

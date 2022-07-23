@@ -41,7 +41,6 @@ with Bases; use Bases;
 with Combat.UI; use Combat.UI;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
-with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Items; use Items;
@@ -1062,8 +1061,7 @@ package body Utils.UI is
 
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural;
-      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
-      Button_2_Command, Button_2_Icon: String := "") is
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
       use Short_String;
       use Tiny_String;
 
@@ -1278,11 +1276,8 @@ package body Utils.UI is
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)),
-            Button_1_Text => Button_1_Text,
-            Button_1_Command => Button_1_Command,
-            Button_1_Icon => Button_1_Icon, Button_2_Text => Button_2_Text,
-            Button_2_Command => Button_2_Command,
-            Button_2_Icon => Button_2_Icon);
+            Button_1 => Button_1,
+            Button_2 => Button_2);
       else
          Show_Info
            (Text => To_String(Source => Item_Info), Parent_Name => Parent,
@@ -1299,11 +1294,8 @@ package body Utils.UI is
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)),
-            Button_1_Text => Button_1_Text,
-            Button_1_Command => Button_1_Command,
-            Button_1_Icon => Button_1_Icon, Button_2_Text => Button_2_Text,
-            Button_2_Command => Button_2_Command,
-            Button_2_Icon => Button_2_Icon);
+            Button_1 => Button_1,
+            Button_2 => Button_2);
       end if;
    end Show_Inventory_Item_Info;
 

@@ -1076,18 +1076,8 @@ package body Trades.UI is
              (Objects_Container.Element
                 (Container => Items_List, Index => ProtoIndex)
                 .Name),
-         Button_1_Text =>
-           (if MaxBuyAmount > 0 then "Buy item from the base" else ""),
-         Button_1_Command =>
-           "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
-           Natural'Image(Price),
-         Button_1_Icon => "buyicon",
-         Button_2_Text =>
-           (if MaxSellAmount > 0 then "Sell item from the ship cargo" else ""),
-         Button_2_Command =>
-           "TradeAmount sell" & Natural'Image(MaxSellAmount) &
-           Natural'Image(Price),
-         Button_2_Icon => "sellicon");
+         Button_1 => (if MaxBuyAmount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Buy item from the base"), Command => To_Unbounded_String(Source => "TradeAmount buy" & Natural'Image(MaxBuyAmount) & Natural'Image(Price)), Icon => To_Unbounded_String(Source => "buyicon"), Text => To_Unbounded_String(Source => "Buy"))),
+         Button_2 => (if MaxSellAmount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Sell item from the ship cargo"), Command => To_Unbounded_String(Source => "TradeAmount sell" & Natural'Image(MaxSellAmount) & Natural'Image(Price)), Icon => To_Unbounded_String(Source => "sellicon"), Text => To_Unbounded_String(Source => "Sell"))));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
