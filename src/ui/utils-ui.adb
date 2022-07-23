@@ -1276,8 +1276,7 @@ package body Utils.UI is
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)),
-            Button_1 => Button_1,
-            Button_2 => Button_2);
+            Button_1 => Button_1, Button_2 => Button_2);
       else
          Show_Info
            (Text => To_String(Source => Item_Info), Parent_Name => Parent,
@@ -1294,8 +1293,7 @@ package body Utils.UI is
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)),
-            Button_1 => Button_1,
-            Button_2 => Button_2);
+            Button_1 => Button_1, Button_2 => Button_2);
       end if;
    end Show_Inventory_Item_Info;
 

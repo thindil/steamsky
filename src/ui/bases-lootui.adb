@@ -782,9 +782,29 @@ package body Bases.LootUI is
                    Objects_Container.Element
                      (Container => Items_List, Index => Proto_Index)
                      .Name),
-            Button_1 => (if Max_Amount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Take item from the base"), Command => To_Unbounded_String(Source => "LootAmount take" & Natural'Image(Max_Amount)), Icon => To_Unbounded_String(Source => "giveicon"), Text => To_Unbounded_String(Source => "Take"))),
-            Button_2 => (if Cargo_Max_Amount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Drop item from the ship cargo"), Command => To_Unbounded_String(Source => "LootAmount drop" & Natural'Image(Cargo_Max_Amount)), Icon => To_Unbounded_String(Source => "dropicon"), Text => To_Unbounded_String(Source => "Drop")))
-            );
+            Button_1 =>
+              (if Max_Amount = 0 then Empty_Button_Settings
+               else
+                 (Tooltip =>
+                    To_Unbounded_String(Source => "Take item from the base"),
+                  Command =>
+                    To_Unbounded_String
+                      (Source =>
+                         "LootAmount take" & Natural'Image(Max_Amount)),
+                  Icon => To_Unbounded_String(Source => "giveicon"),
+                  Text => To_Unbounded_String(Source => "Take"))),
+            Button_2 =>
+              (if Cargo_Max_Amount = 0 then Empty_Button_Settings
+               else
+                 (Tooltip =>
+                    To_Unbounded_String
+                      (Source => "Drop item from the ship cargo"),
+                  Command =>
+                    To_Unbounded_String
+                      (Source =>
+                         "LootAmount drop" & Natural'Image(Cargo_Max_Amount)),
+                  Icon => To_Unbounded_String(Source => "dropicon"),
+                  Text => To_Unbounded_String(Source => "Drop"))));
       end Show_Info_Block;
       return TCL_OK;
    end Show_Loot_Item_Info_Command;

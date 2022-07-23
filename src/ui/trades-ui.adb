@@ -481,11 +481,13 @@ package body Trades.UI is
                 .Amount);
          Add_Button
            (TradeTable, To_String(ItemName), "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             1);
          Add_Button
            (TradeTable, To_String(ItemType), "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             2);
          ItemDurability :=
            (if
@@ -506,17 +508,20 @@ package body Trades.UI is
               (Container => BaseCargo, Index => Items_Indexes(I))
               .Durability,
             Default_Item_Durability, To_String(ItemDurability),
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             3);
          Add_Button
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
          Add_Button
            (TradeTable, Integer'Image(-(Price)),
             "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             5, False, "red");
          Add_Button
            (TradeTable,
@@ -526,16 +531,19 @@ package body Trades.UI is
                  .Weight) &
             " kg",
             "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             6);
          Add_Button
            (TradeTable, " 0", "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             7);
          Add_Button
            (TradeTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
             8, True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
@@ -1076,8 +1084,31 @@ package body Trades.UI is
              (Objects_Container.Element
                 (Container => Items_List, Index => ProtoIndex)
                 .Name),
-         Button_1 => (if MaxBuyAmount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Buy item from the base"), Command => To_Unbounded_String(Source => "TradeAmount buy" & Natural'Image(MaxBuyAmount) & Natural'Image(Price)), Icon => To_Unbounded_String(Source => "buyicon"), Text => To_Unbounded_String(Source => "Buy"))),
-         Button_2 => (if MaxSellAmount = 0 then Empty_Button_Settings else (Tooltip => To_Unbounded_String(Source => "Sell item from the ship cargo"), Command => To_Unbounded_String(Source => "TradeAmount sell" & Natural'Image(MaxSellAmount) & Natural'Image(Price)), Icon => To_Unbounded_String(Source => "sellicon"), Text => To_Unbounded_String(Source => "Sell"))));
+         Button_1 =>
+           (if MaxBuyAmount = 0 then Empty_Button_Settings
+            else
+              (Tooltip =>
+                 To_Unbounded_String(Source => "Buy item from the base"),
+               Command =>
+                 To_Unbounded_String
+                   (Source =>
+                      "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
+                      Natural'Image(Price)),
+               Icon => To_Unbounded_String(Source => "buyicon"),
+               Text => To_Unbounded_String(Source => "Buy"))),
+         Button_2 =>
+           (if MaxSellAmount = 0 then Empty_Button_Settings
+            else
+              (Tooltip =>
+                 To_Unbounded_String
+                   (Source => "Sell item from the ship cargo"),
+               Command =>
+                 To_Unbounded_String
+                   (Source =>
+                      "TradeAmount sell" & Natural'Image(MaxSellAmount) &
+                      Natural'Image(Price)),
+               Icon => To_Unbounded_String(Source => "sellicon"),
+               Text => To_Unbounded_String(Source => "Sell"))));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
