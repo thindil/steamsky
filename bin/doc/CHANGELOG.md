@@ -14,8 +14,8 @@ All notable changes to this project will be documented in this file.
   checked radioboxes, cancel action.
 - Removed Craftable column from crafting recipes list in Crafting screen
 - Updated modding guide
-- Updated look of Show crafting recipe dialog
-- Made dialogs buttons with icons wider
+- Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items and
+  Show Inventory dialog
 - Show both, text and icon on "Close" button in dialogs
 
 ### Fixed
