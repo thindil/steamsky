@@ -312,11 +312,11 @@ package body Help.UI is
                while Ada.Strings.Unbounded.Count(Source => Factions_With_Flag, Pattern => " and ") >
                  1 loop
                   Replace_Slice
-                    (Factions_With_Flag, Index(Factions_With_Flag, " and "),
-                     Index(Factions_With_Flag, " and ") + 4, ", ");
+                    (Source => Factions_With_Flag, Low => Index(Source => Factions_With_Flag, Pattern => " and "),
+                     High => Index(Source => Factions_With_Flag, Pattern => " and ") + 4, By => ", ");
                end loop Insert_Factions_Loop;
                Insert
-                 (Help_View, "end", "{" & To_String(Factions_With_Flag) & "}");
+                 (TextWidget => Help_View, Index => "end", Text => "{" & To_String(Source => Factions_With_Flag) & "}");
                exit Insert_Factions_Flags_Loop;
             end if;
          end loop Insert_Factions_Flags_Loop;
@@ -328,15 +328,15 @@ package body Help.UI is
             Bases_With_Flag := Null_Unbounded_String;
             Create_Bases_List_Loop :
             for BaseType of Bases_Types_List loop
-               if BaseType.Flags.Contains(Tag_Text) then
+               if BaseType.Flags.Contains(Item => Tag_Text) then
                   if Bases_With_Flag /= Null_Unbounded_String then
-                     Append(Bases_With_Flag, " and ");
+                     Append(Source => Bases_With_Flag, New_Item => " and ");
                   end if;
-                  Append(Bases_With_Flag, BaseType.Name);
+                  Append(Source => Bases_With_Flag, New_Item => BaseType.Name);
                end if;
             end loop Create_Bases_List_Loop;
             Insert_Bases_Loop :
-            while Ada.Strings.Unbounded.Count(Bases_With_Flag, " and ") >
+            while Ada.Strings.Unbounded.Count(Source => Bases_With_Flag, Pattern => " and ") >
               1 loop
                Replace_Slice
                  (Bases_With_Flag, Index(Bases_With_Flag, " and "),
