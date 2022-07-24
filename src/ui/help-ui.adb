@@ -339,16 +339,16 @@ package body Help.UI is
             while Ada.Strings.Unbounded.Count(Source => Bases_With_Flag, Pattern => " and ") >
               1 loop
                Replace_Slice
-                 (Bases_With_Flag, Index(Bases_With_Flag, " and "),
-                  Index(Bases_With_Flag, " and ") + 4, ", ");
+                 (Source => Bases_With_Flag, Low => Index(Source => Bases_With_Flag, Pattern => " and "),
+                  High => Index(Source => Bases_With_Flag, Pattern => " and ") + 4, By => ", ");
             end loop Insert_Bases_Loop;
-            Insert(Help_View, "end", "{" & To_String(Bases_With_Flag) & "}");
+            Insert(TextWidget => Help_View, Index => "end", Text => "{" & To_String(Source => Bases_With_Flag) & "}");
             exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
          end loop Insert_Bases_Flags_Loop;
          Old_Index := End_Index + 2;
       end loop Replace_Help_Text_Loop;
-      configure(Help_View, "-state disabled");
+      configure(Widgt => Help_View, options => "-state disabled");
       return TCL_OK;
    end Show_Topic_Command;
 
@@ -356,31 +356,31 @@ package body Help.UI is
    -- FUNCTION
    -- Destroy help window and save sash position to the game configuration
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- CloseHelp
    -- SOURCE
    function Close_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Close_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      HelpWindow: Tk_Toplevel := Get_Widget(".help", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Help_Window: Tk_Toplevel := Get_Widget(pathName => ".help", Interp => Interp);
       Paned: constant Ttk_PanedWindow :=
-        Get_Widget(HelpWindow & ".paned", Interp);
+        Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
    begin
       Game_Settings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
-      Destroy(HelpWindow);
+      Destroy(Help_Window);
       return TCL_OK;
    end Close_Help_Command;
 
