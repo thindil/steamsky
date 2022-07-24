@@ -260,32 +260,32 @@ package body Help.UI is
                  "}");
             exit Replace_Help_Text_Loop;
          end if;
-         End_Index := Index(New_Text, "}", Start_Index) - 1;
-         Tag_Text := Unbounded_Slice(New_Text, Start_Index + 1, End_Index);
+         End_Index := Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
+         Tag_Text := Unbounded_Slice(Source => New_Text, Low => Start_Index + 1, High => End_Index);
          Insert_Variables_Loop :
          for I in Variables'Range loop
             if Tag_Text = Variables(I).Name then
                Insert
-                 (Help_View, "end",
-                  "{" & To_String(Variables(I).Value) & "} [list special]");
+                 (TextWidget => Help_View, Index => "end",
+                  Text => "{" & To_String(Source => Variables(I).Value) & "} [list special]");
                exit Insert_Variables_Loop;
             end if;
          end loop Insert_Variables_Loop;
          Insert_Keys_Loop :
          for I in Accel_Names'Range loop
             if Tag_Text =
-              To_Unbounded_String("GameKey") &
-                To_Unbounded_String(Positive'Image(I)) then
+              To_Unbounded_String(Source => "GameKey") &
+                To_Unbounded_String(Source => Positive'Image(I)) then
                Insert
-                 (Help_View, "end",
-                  "{'" & To_String(Accel_Names(I)) & "'} [list special]");
+                 (TextWidget => Help_View, Index => "end",
+                  Text => "{'" & To_String(Source => Accel_Names(I)) & "'} [list special]");
                exit Insert_Keys_Loop;
             end if;
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
          for I in Font_Tags'Range loop
-            if Tag_Text = To_Unbounded_String(Font_Tags(I).Tag) then
-               Start_Index := Index(New_Text, "{", End_Index) - 1;
+            if Tag_Text = To_Unbounded_String(Source => Font_Tags(I).Tag) then
+               Start_Index := Index(Source => New_Text, Pattern => "{", From => End_Index) - 1;
                Insert
                  (Help_View, "end",
                   "{" & Slice(New_Text, End_Index + 2, Start_Index) &
