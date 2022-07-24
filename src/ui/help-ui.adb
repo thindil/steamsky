@@ -260,14 +260,19 @@ package body Help.UI is
                  "}");
             exit Replace_Help_Text_Loop;
          end if;
-         End_Index := Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
-         Tag_Text := Unbounded_Slice(Source => New_Text, Low => Start_Index + 1, High => End_Index);
+         End_Index :=
+           Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
+         Tag_Text :=
+           Unbounded_Slice
+             (Source => New_Text, Low => Start_Index + 1, High => End_Index);
          Insert_Variables_Loop :
          for I in Variables'Range loop
             if Tag_Text = Variables(I).Name then
                Insert
                  (TextWidget => Help_View, Index => "end",
-                  Text => "{" & To_String(Source => Variables(I).Value) & "} [list special]");
+                  Text =>
+                    "{" & To_String(Source => Variables(I).Value) &
+                    "} [list special]");
                exit Insert_Variables_Loop;
             end if;
          end loop Insert_Variables_Loop;
@@ -278,19 +283,31 @@ package body Help.UI is
                 To_Unbounded_String(Source => Positive'Image(I)) then
                Insert
                  (TextWidget => Help_View, Index => "end",
-                  Text => "{'" & To_String(Source => Accel_Names(I)) & "'} [list special]");
+                  Text =>
+                    "{'" & To_String(Source => Accel_Names(I)) &
+                    "'} [list special]");
                exit Insert_Keys_Loop;
             end if;
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
          for I in Font_Tags'Range loop
             if Tag_Text = To_Unbounded_String(Source => Font_Tags(I).Tag) then
-               Start_Index := Index(Source => New_Text, Pattern => "{", From => End_Index) - 1;
+               Start_Index :=
+                 Index(Source => New_Text, Pattern => "{", From => End_Index) -
+                 1;
                Insert
                  (TextWidget => Help_View, Index => "end",
-                  Text => "{" & Slice(Source => New_Text, Low => End_Index + 2, High => Start_Index) &
-                  "} [list " & To_String(Source => Font_Tags(I).Text_Tag) & "]");
-               End_Index := Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
+                  Text =>
+                    "{" &
+                    Slice
+                      (Source => New_Text, Low => End_Index + 2,
+                       High => Start_Index) &
+                    "} [list " & To_String(Source => Font_Tags(I).Text_Tag) &
+                    "]");
+               End_Index :=
+                 Index
+                   (Source => New_Text, Pattern => "}", From => Start_Index) -
+                 1;
                exit Insert_Tags_Loop;
             end if;
          end loop Insert_Tags_Loop;
@@ -302,21 +319,31 @@ package body Help.UI is
                for Faction of Factions_List loop
                   if Faction.Flags.Contains(Item => Tag_Text) then
                      if Factions_With_Flag /= Null_Unbounded_String then
-                        Append(Source => Factions_With_Flag, New_Item => " and ");
+                        Append
+                          (Source => Factions_With_Flag, New_Item => " and ");
                      end if;
                      Append
-                       (Source => Factions_With_Flag, New_Item => To_String(Source => Faction.Name));
+                       (Source => Factions_With_Flag,
+                        New_Item => To_String(Source => Faction.Name));
                   end if;
                end loop Create_Factions_List_Loop;
                Insert_Factions_Loop :
-               while Ada.Strings.Unbounded.Count(Source => Factions_With_Flag, Pattern => " and ") >
+               while Ada.Strings.Unbounded.Count
+                   (Source => Factions_With_Flag, Pattern => " and ") >
                  1 loop
                   Replace_Slice
-                    (Source => Factions_With_Flag, Low => Index(Source => Factions_With_Flag, Pattern => " and "),
-                     High => Index(Source => Factions_With_Flag, Pattern => " and ") + 4, By => ", ");
+                    (Source => Factions_With_Flag,
+                     Low =>
+                       Index(Source => Factions_With_Flag, Pattern => " and "),
+                     High =>
+                       Index
+                         (Source => Factions_With_Flag, Pattern => " and ") +
+                       4,
+                     By => ", ");
                end loop Insert_Factions_Loop;
                Insert
-                 (TextWidget => Help_View, Index => "end", Text => "{" & To_String(Source => Factions_With_Flag) & "}");
+                 (TextWidget => Help_View, Index => "end",
+                  Text => "{" & To_String(Source => Factions_With_Flag) & "}");
                exit Insert_Factions_Flags_Loop;
             end if;
          end loop Insert_Factions_Flags_Loop;
@@ -336,13 +363,19 @@ package body Help.UI is
                end if;
             end loop Create_Bases_List_Loop;
             Insert_Bases_Loop :
-            while Ada.Strings.Unbounded.Count(Source => Bases_With_Flag, Pattern => " and ") >
+            while Ada.Strings.Unbounded.Count
+                (Source => Bases_With_Flag, Pattern => " and ") >
               1 loop
                Replace_Slice
-                 (Source => Bases_With_Flag, Low => Index(Source => Bases_With_Flag, Pattern => " and "),
-                  High => Index(Source => Bases_With_Flag, Pattern => " and ") + 4, By => ", ");
+                 (Source => Bases_With_Flag,
+                  Low => Index(Source => Bases_With_Flag, Pattern => " and "),
+                  High =>
+                    Index(Source => Bases_With_Flag, Pattern => " and ") + 4,
+                  By => ", ");
             end loop Insert_Bases_Loop;
-            Insert(TextWidget => Help_View, Index => "end", Text => "{" & To_String(Source => Bases_With_Flag) & "}");
+            Insert
+              (TextWidget => Help_View, Index => "end",
+               Text => "{" & To_String(Source => Bases_With_Flag) & "}");
             exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
          end loop Insert_Bases_Flags_Loop;
@@ -375,11 +408,13 @@ package body Help.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Help_Window: Tk_Toplevel := Get_Widget(pathName => ".help", Interp => Interp);
+      Help_Window: Tk_Toplevel :=
+        Get_Widget(pathName => ".help", Interp => Interp);
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
    begin
-      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned => Paned, Index => "0"));
+      Game_Settings.Topics_Position :=
+        Natural'Value(SashPos(Paned => Paned, Index => "0"));
       Destroy(Widgt => Help_Window);
       return TCL_OK;
    end Close_Help_Command;
@@ -407,7 +442,8 @@ package body Help.UI is
    function Show_Help_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Help_Window: constant Tk_Toplevel := Get_Widget(pathName => ".help", Interp => Interp);
+      Help_Window: constant Tk_Toplevel :=
+        Get_Widget(pathName => ".help", Interp => Interp);
       X, Y: Integer;
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
@@ -421,31 +457,41 @@ package body Help.UI is
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
-      if Winfo_Get(Help_Window, "exists") = "1" then
-         return Close_Help_Command(Client_Data, Interp, Argc, Argv);
+      if Winfo_Get(Widgt => Help_Window, Info => "exists") = "1" then
+         return
+           Close_Help_Command
+             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+              Argv => Argv);
       end if;
       Tcl_EvalFile
-        (Interp,
-         To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
+        (interp => Interp,
+         fileName =>
+           To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+           "help.tcl");
       Tag_Configure
-        (Help_View, "special",
-         "-foreground {" &
-         To_String(Source => Current_Theme.Special_Help_Color) &
-         "} -font BoldHelpFont");
+        (TextWidget => Help_View, TagName => "special",
+         Options =>
+           "-foreground {" &
+           To_String(Source => Current_Theme.Special_Help_Color) &
+           "} -font BoldHelpFont");
       Tag_Configure
-        (Help_View, "underline",
-         "-foreground {" &
-         To_String(Source => Current_Theme.Underline_Help_Color) &
-         "} -font UnderlineHelpFont");
+        (TextWidget => Help_View, TagName => "underline",
+         Options =>
+           "-foreground {" &
+           To_String(Source => Current_Theme.Underline_Help_Color) &
+           "} -font UnderlineHelpFont");
       Tag_Configure
-        (Help_View, "bold",
-         "-foreground {" & To_String(Source => Current_Theme.Bold_Help_Color) &
-         "} -font BoldHelpFont");
+        (TextWidget => Help_View, TagName => "bold",
+         Options =>
+           "-foreground {" &
+           To_String(Source => Current_Theme.Bold_Help_Color) &
+           "} -font BoldHelpFont");
       Tag_Configure
-        (Help_View, "italic",
-         "-foreground {" &
-         To_String(Source => Current_Theme.Italic_Help_Color) &
-         "} -font ItalicHelpFont");
+        (TextWidget => Help_View, TagName => "italic",
+         Options =>
+           "-foreground {" &
+           To_String(Source => Current_Theme.Italic_Help_Color) &
+           "} -font ItalicHelpFont");
       X :=
         (Positive'Value(Winfo_Get(Help_Window, "vrootwidth")) -
          Game_Settings.Window_Width) /
