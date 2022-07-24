@@ -511,7 +511,8 @@ package body Ships.UI.Crew.Inventory is
       Close_Button: constant Ttk_Button :=
         Create
           (MemberDialog & ".button",
-           "-image exiticon -command {CloseDialog " & MemberDialog & "}");
+           "-image exiticon -command {CloseDialog " & MemberDialog &
+           "} -text {Close} -style Dialog.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Member_Index).Inventory) =
