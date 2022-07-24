@@ -379,8 +379,8 @@ package body Help.UI is
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
    begin
-      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
-      Destroy(Help_Window);
+      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned => Paned, Index => "0"));
+      Destroy(Widgt => Help_Window);
       return TCL_OK;
    end Close_Help_Command;
 
@@ -388,10 +388,10 @@ package body Help.UI is
    -- FUNCTION
    -- Show help window to the player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -399,69 +399,69 @@ package body Help.UI is
    -- Topicindex is the index of the help topic which content will be show
    -- SOURCE
    function Show_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      HelpWindow: constant Tk_Toplevel := Get_Widget(".help", Interp);
+      Help_Window: constant Tk_Toplevel := Get_Widget(pathName => ".help", Interp => Interp);
       X, Y: Integer;
       Paned: constant Ttk_PanedWindow :=
-        Get_Widget(HelpWindow & ".paned", Interp);
-      TopicsView: constant Ttk_Tree_View :=
-        Get_Widget(Paned & ".topics.view", Interp);
-      TopicIndex: constant String :=
-        (if Argc = 1 then Tcl_GetVar(Interp, "gamestate")
-         else CArgv.Arg(Argv, 1));
-      HelpView: constant Tk_Text :=
-        Get_Widget(Paned & ".content.view", Interp);
+        Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
+      Topics_View: constant Ttk_Tree_View :=
+        Get_Widget(pathName => Paned & ".topics.view", Interp => Interp);
+      Topic_Index: constant String :=
+        (if Argc = 1 then Tcl_GetVar(interp => Interp, varName => "gamestate")
+         else CArgv.Arg(Argv => Argv, N => 1));
+      Help_View: constant Tk_Text :=
+        Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
-      if Winfo_Get(HelpWindow, "exists") = "1" then
-         return Close_Help_Command(ClientData, Interp, Argc, Argv);
+      if Winfo_Get(Help_Window, "exists") = "1" then
+         return Close_Help_Command(Client_Data, Interp, Argc, Argv);
       end if;
       Tcl_EvalFile
         (Interp,
          To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
       Tag_Configure
-        (HelpView, "special",
+        (Help_View, "special",
          "-foreground {" &
          To_String(Source => Current_Theme.Special_Help_Color) &
          "} -font BoldHelpFont");
       Tag_Configure
-        (HelpView, "underline",
+        (Help_View, "underline",
          "-foreground {" &
          To_String(Source => Current_Theme.Underline_Help_Color) &
          "} -font UnderlineHelpFont");
       Tag_Configure
-        (HelpView, "bold",
+        (Help_View, "bold",
          "-foreground {" & To_String(Source => Current_Theme.Bold_Help_Color) &
          "} -font BoldHelpFont");
       Tag_Configure
-        (HelpView, "italic",
+        (Help_View, "italic",
          "-foreground {" &
          To_String(Source => Current_Theme.Italic_Help_Color) &
          "} -font ItalicHelpFont");
       X :=
-        (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
+        (Positive'Value(Winfo_Get(Help_Window, "vrootwidth")) -
          Game_Settings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
-        (Positive'Value(Winfo_Get(HelpWindow, "vrootheight")) -
+        (Positive'Value(Winfo_Get(Help_Window, "vrootheight")) -
          Game_Settings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
-        (HelpWindow, "geometry",
+        (Help_Window, "geometry",
          Trim(Positive'Image(Game_Settings.Window_Width), Left) & "x" &
          Trim(Positive'Image(Game_Settings.Window_Height), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
@@ -469,21 +469,21 @@ package body Help.UI is
       SashPos(Paned, "0", Natural'Image(Game_Settings.Topics_Position));
       for I in Help_List.Iterate loop
          Insert
-           (TopicsView,
+           (Topics_View,
             "{} end -id {" & To_String(Help_List(I).Index) & "} -text {" &
             To_String(Help_Container.Key(I)) & "}");
       end loop;
-      Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
-      if Exists(TopicsView, TopicIndex) = "0" then
+      Bind(Topics_View, "<<TreeviewSelect>>", "ShowTopic");
+      if Exists(Topics_View, Topic_Index) = "0" then
          Show_Message
            ("The selected help topic doesn't exist. Showing the first available instead.",
             ".help", "Can't find help topic");
-         Selection_Set(TopicsView, To_String(Help_List.First_Element.Index));
+         Selection_Set(Topics_View, To_String(Help_List.First_Element.Index));
          return TCL_OK;
       end if;
-      Selection_Set(TopicsView, TopicIndex);
+      Selection_Set(Topics_View, Topic_Index);
       Tcl_Eval(Interp, "update");
-      See(TopicsView, TopicIndex);
+      See(Topics_View, Topic_Index);
       return TCL_OK;
    end Show_Help_Command;
 
