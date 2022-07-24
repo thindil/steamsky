@@ -287,10 +287,10 @@ package body Help.UI is
             if Tag_Text = To_Unbounded_String(Source => Font_Tags(I).Tag) then
                Start_Index := Index(Source => New_Text, Pattern => "{", From => End_Index) - 1;
                Insert
-                 (Help_View, "end",
-                  "{" & Slice(New_Text, End_Index + 2, Start_Index) &
-                  "} [list " & To_String(Font_Tags(I).Text_Tag) & "]");
-               End_Index := Index(New_Text, "}", Start_Index) - 1;
+                 (TextWidget => Help_View, Index => "end",
+                  Text => "{" & Slice(Source => New_Text, Low => End_Index + 2, High => Start_Index) &
+                  "} [list " & To_String(Source => Font_Tags(I).Text_Tag) & "]");
+               End_Index := Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
                exit Insert_Tags_Loop;
             end if;
          end loop Insert_Tags_Loop;
@@ -300,16 +300,16 @@ package body Help.UI is
                Factions_With_Flag := Null_Unbounded_String;
                Create_Factions_List_Loop :
                for Faction of Factions_List loop
-                  if Faction.Flags.Contains(Tag_Text) then
+                  if Faction.Flags.Contains(Item => Tag_Text) then
                      if Factions_With_Flag /= Null_Unbounded_String then
-                        Append(Factions_With_Flag, " and ");
+                        Append(Source => Factions_With_Flag, New_Item => " and ");
                      end if;
                      Append
-                       (Factions_With_Flag, To_String(Source => Faction.Name));
+                       (Source => Factions_With_Flag, New_Item => To_String(Source => Faction.Name));
                   end if;
                end loop Create_Factions_List_Loop;
                Insert_Factions_Loop :
-               while Ada.Strings.Unbounded.Count(Factions_With_Flag, " and ") >
+               while Ada.Strings.Unbounded.Count(Source => Factions_With_Flag, Pattern => " and ") >
                  1 loop
                   Replace_Slice
                     (Factions_With_Flag, Index(Factions_With_Flag, " and "),
