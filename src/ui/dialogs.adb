@@ -499,7 +499,8 @@ package body Dialogs is
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
-      if Length(Button_1.Text) > 0 and Length(Button_1.Command) > 0 then
+      if Length(Source => Button_1.Text) > 0 and
+        Length(Source => Button_1.Command) > 0 then
          Button :=
            Create
              (pathName => Buttons_Frame & ".button1",
