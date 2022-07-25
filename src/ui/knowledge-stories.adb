@@ -18,6 +18,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv; use CArgv;
+with Tcl; use Tcl;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
