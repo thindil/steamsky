@@ -493,14 +493,16 @@ package body Help.UI is
            To_String(Source => Current_Theme.Italic_Help_Color) &
            "} -font ItalicHelpFont");
       X :=
-        (Positive'Value(Winfo_Get(Widgt => Help_Window, Info => "vrootwidth")) -
+        (Positive'Value
+           (Winfo_Get(Widgt => Help_Window, Info => "vrootwidth")) -
          Game_Settings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
-        (Positive'Value(Winfo_Get(Widgt => Help_Window, Info => "vrootheight")) -
+        (Positive'Value
+           (Winfo_Get(Widgt => Help_Window, Info => "vrootheight")) -
          Game_Settings.Window_Height) /
         2;
       if Y < 0 then
@@ -508,37 +510,55 @@ package body Help.UI is
       end if;
       Wm_Set
         (Widgt => Help_Window, Action => "geometry",
-         Options => Trim(Source => Positive'Image(Game_Settings.Window_Width), Side => Left) & "x" &
-         Trim(Source => Positive'Image(Game_Settings.Window_Height), Side => Left) & "+" &
-         Trim(Source => Positive'Image(X), Side => Left) & "+" & Trim(Source => Positive'Image(Y), Side => Left));
+         Options =>
+           Trim
+             (Source => Positive'Image(Game_Settings.Window_Width),
+              Side => Left) &
+           "x" &
+           Trim
+             (Source => Positive'Image(Game_Settings.Window_Height),
+              Side => Left) &
+           "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
+           Trim(Source => Positive'Image(Y), Side => Left));
       Tcl_Eval(interp => Interp, strng => "update");
-      SashPos(Paned => Paned, Index => "0", NewPos => Natural'Image(Game_Settings.Topics_Position));
-      Insert_Topics_Loop:
+      SashPos
+        (Paned => Paned, Index => "0",
+         NewPos => Natural'Image(Game_Settings.Topics_Position));
+      Insert_Topics_Loop :
       for I in Help_List.Iterate loop
          Insert
            (TreeViewWidget => Topics_View,
-            Options => "{} end -id {" & To_String(Source => Help_List(I).Index) & "} -text {" &
-            To_String(Source => Help_Container.Key(Position => I)) & "}");
+            Options =>
+              "{} end -id {" & To_String(Source => Help_List(I).Index) &
+              "} -text {" &
+              To_String(Source => Help_Container.Key(Position => I)) & "}");
       end loop Insert_Topics_Loop;
-      Bind(Widgt => Topics_View, Sequence => "<<TreeviewSelect>>", Script => "ShowTopic");
+      Bind
+        (Widgt => Topics_View, Sequence => "<<TreeviewSelect>>",
+         Script => "ShowTopic");
       if Exists(TreeViewWidget => Topics_View, Item => Topic_Index) = "0" then
          Show_Message
-           (Text => "The selected help topic doesn't exist. Showing the first available instead.",
+           (Text =>
+              "The selected help topic doesn't exist. Showing the first available instead.",
             Parent_Frame => ".help", Title => "Can't find help topic");
-         Selection_Set(TreeViewWidget => Topics_View, Items => To_String(Source => Help_List.First_Element.Index));
+         Selection_Set
+           (TreeViewWidget => Topics_View,
+            Items => To_String(Source => Help_List.First_Element.Index));
          return TCL_OK;
       end if;
-      Selection_Set(Topics_View, Topic_Index);
-      Tcl_Eval(Interp, "update");
-      See(Topics_View, Topic_Index);
+      Selection_Set(TreeViewWidget => Topics_View, Items => Topic_Index);
+      Tcl_Eval(interp => Interp, strng => "update");
+      See(TreeViewWidget => Topics_View, Item => Topic_Index);
       return TCL_OK;
    end Show_Help_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowTopic", Show_Topic_Command'Access);
-      Add_Command("ShowHelp", Show_Help_Command'Access);
-      Add_Command("CloseHelp", Close_Help_Command'Access);
+      Add_Command
+        (Name => "ShowTopic", Ada_Command => Show_Topic_Command'Access);
+      Add_Command(Name => "ShowHelp", Ada_Command => Show_Help_Command'Access);
+      Add_Command
+        (Name => "CloseHelp", Ada_Command => Close_Help_Command'Access);
    end Add_Commands;
 
 end Help.UI;
