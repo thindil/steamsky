@@ -512,19 +512,20 @@ package body Help.UI is
          Trim(Source => Positive'Image(Game_Settings.Window_Height), Side => Left) & "+" &
          Trim(Source => Positive'Image(X), Side => Left) & "+" & Trim(Source => Positive'Image(Y), Side => Left));
       Tcl_Eval(interp => Interp, strng => "update");
-      SashPos(Paned, "0", Natural'Image(Game_Settings.Topics_Position));
+      SashPos(Paned => Paned, Index => "0", NewPos => Natural'Image(Game_Settings.Topics_Position));
+      Insert_Topics_Loop:
       for I in Help_List.Iterate loop
          Insert
-           (Topics_View,
-            "{} end -id {" & To_String(Help_List(I).Index) & "} -text {" &
-            To_String(Help_Container.Key(I)) & "}");
-      end loop;
-      Bind(Topics_View, "<<TreeviewSelect>>", "ShowTopic");
-      if Exists(Topics_View, Topic_Index) = "0" then
+           (TreeViewWidget => Topics_View,
+            Options => "{} end -id {" & To_String(Source => Help_List(I).Index) & "} -text {" &
+            To_String(Source => Help_Container.Key(Position => I)) & "}");
+      end loop Insert_Topics_Loop;
+      Bind(Widgt => Topics_View, Sequence => "<<TreeviewSelect>>", Script => "ShowTopic");
+      if Exists(TreeViewWidget => Topics_View, Item => Topic_Index) = "0" then
          Show_Message
-           ("The selected help topic doesn't exist. Showing the first available instead.",
-            ".help", "Can't find help topic");
-         Selection_Set(Topics_View, To_String(Help_List.First_Element.Index));
+           (Text => "The selected help topic doesn't exist. Showing the first available instead.",
+            Parent_Frame => ".help", Title => "Can't find help topic");
+         Selection_Set(TreeViewWidget => Topics_View, Items => To_String(Source => Help_List.First_Element.Index));
          return TCL_OK;
       end if;
       Selection_Set(Topics_View, Topic_Index);
