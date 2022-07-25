@@ -506,7 +506,7 @@ package body Dialogs is
              (pathName => Buttons_Frame & ".button1",
               options =>
                 "-text {" & To_String(Source => Button_1.Text) & "}" &
-                (if Length(Button_1.Icon) > 0 then
+                (if Length(Source => Button_1.Icon) > 0 then
                    " -image {" & To_String(Source => Button_1.Icon) & "}"
                  else "") &
                 " -command {" & Close_Command & ";" &
@@ -539,7 +539,7 @@ package body Dialogs is
              (pathName => Buttons_Frame & ".button2",
               options =>
                 "-text {" & To_String(Source => Button_2.Text) & "}" &
-                (if Length(Button_2.Icon) > 0 then
+                (if Length(Source => Button_2.Icon) > 0 then
                    " -image {" & To_String(Source => Button_2.Icon) & "}"
                  else "") &
                 " -command {" & Close_Command & ";" &
