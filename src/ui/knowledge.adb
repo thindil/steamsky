@@ -49,9 +49,9 @@ with Utils.UI; use Utils.UI;
 package body Knowledge is
 
    function Show_Knowledge_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(Client_Data, Argv);
       use Tiny_String;
 
       KnowledgeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".knowledgeframe");
@@ -262,7 +262,7 @@ package body Knowledge is
       return TCL_OK;
    end Knowledge_Max_Min_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowKnowledge", Show_Knowledge_Command'Access);
       Add_Command("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
@@ -270,6 +270,6 @@ package body Knowledge is
       Knowledge.Events.AddCommands;
       Knowledge.Missions.AddCommands;
       Knowledge.Stories.AddCommands;
-   end AddCommands;
+   end Add_Commands;
 
 end Knowledge;

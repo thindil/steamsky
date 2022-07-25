@@ -1193,7 +1193,7 @@ package body Maps.UI is
          Bases.UI.Add_Commands;
          ShipyardUI.Add_Commands;
          LootUI.Add_Commands;
-         Knowledge.AddCommands;
+         Knowledge.Add_Commands;
          Missions.UI.AddCommands;
          Statistics.UI.Add_Commands;
          Bind
