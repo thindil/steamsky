@@ -76,11 +76,13 @@ package body Knowledge is
       pragma Unreferenced(Client_Data, Argv);
       use Tiny_String;
 
-      Knowledge_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".knowledgeframe");
+      Knowledge_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".knowledgeframe");
       Tokens: Slice_Set;
       Rows: Natural := 0;
       Knowledge_Canvas: Tk_Canvas :=
-        Get_Widget(pathName => Knowledge_Frame & ".bases.canvas", Interp => Interp);
+        Get_Widget
+          (pathName => Knowledge_Frame & ".bases.canvas", Interp => Interp);
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Knowledge_Canvas & ".frame.options.types");
       Combo_Values: Unbounded_String;
@@ -90,44 +92,67 @@ package body Knowledge is
       if Winfo_Get(Widgt => Knowledge_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator &
-            "knowledge.tcl");
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "knowledge.tcl");
          Append(Source => Combo_Values, New_Item => " {Any}");
          Load_Bases_Types_Loop :
          for BaseType of Bases_Types_List loop
-            Append(Source => Combo_Values, New_Item => " {" & BaseType.Name & "}");
+            Append
+              (Source => Combo_Values, New_Item => " {" & BaseType.Name & "}");
          end loop Load_Bases_Types_Loop;
-         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_Values) & "]");
+         configure
+           (Widgt => Combo_Box,
+            options =>
+              "-values [list" & To_String(Source => Combo_Values) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
          Combo_Values := To_Unbounded_String(Source => " {Any}");
-         Combo_Box.Name := New_String(Str => Knowledge_Canvas & ".frame.options.owner");
+         Combo_Box.Name :=
+           New_String(Str => Knowledge_Canvas & ".frame.options.owner");
          Load_Bases_Owners_Loop :
          for I in Factions_List.Iterate loop
             Append
               (Source => Combo_Values,
-               New_Item => " {" & To_String(Source => Factions_List(I).Name) & "}");
+               New_Item =>
+                 " {" & To_String(Source => Factions_List(I).Name) & "}");
          end loop Load_Bases_Owners_Loop;
-         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_Values) & "]");
+         configure
+           (Widgt => Combo_Box,
+            options =>
+              "-values [list" & To_String(Source => Combo_Values) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
-      elsif Winfo_Get(Widgt => Knowledge_Frame, Info => "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(Widgt => Knowledge_Frame, Info => "ismapped") = "1" and
+        Argc = 1 then
          Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Unbind_From_Main_Window
-           (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(2)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(2)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(3)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(3)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(4)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(4)) & ">");
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & Knowledge_Canvas & ".frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Script => "{InvokeButton " & Knowledge_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(3)) & ">",
-         "{InvokeButton " & Knowledge_Frame & ".missions.canvas.frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Script =>
+           "{InvokeButton " & Knowledge_Frame &
+           ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(2)) & ">",
          "{InvokeButton " & Knowledge_Frame & ".events.canvas.frame.maxmin}");
