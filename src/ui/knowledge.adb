@@ -76,40 +76,40 @@ package body Knowledge is
       pragma Unreferenced(Client_Data, Argv);
       use Tiny_String;
 
-      KnowledgeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".knowledgeframe");
+      Knowledge_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".knowledgeframe");
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      KnowledgeCanvas: Tk_Canvas :=
-        Get_Widget(KnowledgeFrame & ".bases.canvas", Interp);
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(KnowledgeCanvas & ".frame.options.types");
-      ComboValues: Unbounded_String;
+      Knowledge_Canvas: Tk_Canvas :=
+        Get_Widget(pathName => Knowledge_Frame & ".bases.canvas", Interp => Interp);
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Knowledge_Canvas & ".frame.options.types");
+      Combo_Values: Unbounded_String;
       Label: Ttk_Label;
       Button: Ttk_Button;
    begin
-      if Winfo_Get(KnowledgeFrame, "exists") = "0" then
+      if Winfo_Get(Widgt => Knowledge_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator &
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator &
             "knowledge.tcl");
-         Append(ComboValues, " {Any}");
+         Append(Source => Combo_Values, New_Item => " {Any}");
          Load_Bases_Types_Loop :
          for BaseType of Bases_Types_List loop
-            Append(ComboValues, " {" & BaseType.Name & "}");
+            Append(Source => Combo_Values, New_Item => " {" & BaseType.Name & "}");
          end loop Load_Bases_Types_Loop;
-         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
-         Current(ComboBox, "0");
-         ComboValues := To_Unbounded_String(" {Any}");
-         ComboBox.Name := New_String(KnowledgeCanvas & ".frame.options.owner");
+         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_Values) & "]");
+         Current(Combo_Box, "0");
+         Combo_Values := To_Unbounded_String(" {Any}");
+         Combo_Box.Name := New_String(Knowledge_Canvas & ".frame.options.owner");
          Load_Bases_Owners_Loop :
          for I in Factions_List.Iterate loop
             Append
-              (ComboValues,
+              (Combo_Values,
                " {" & To_String(Source => Factions_List(I).Name) & "}");
          end loop Load_Bases_Owners_Loop;
-         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
-         Current(ComboBox, "0");
-      elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
+         configure(Combo_Box, "-values [list" & To_String(Combo_Values) & "]");
+         Current(Combo_Box, "0");
+      elsif Winfo_Get(Knowledge_Frame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Unbind_From_Main_Window
@@ -124,16 +124,16 @@ package body Knowledge is
       end if;
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & KnowledgeCanvas & ".frame.maxmin}");
+         "{InvokeButton " & Knowledge_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(3)) & ">",
-         "{InvokeButton " & KnowledgeFrame & ".missions.canvas.frame.maxmin}");
+         "{InvokeButton " & Knowledge_Frame & ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & KnowledgeFrame & ".events.canvas.frame.maxmin}");
+         "{InvokeButton " & Knowledge_Frame & ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(4)) & ">",
-         "{InvokeButton " & KnowledgeFrame & ".stories.canvas.frame.maxmin}");
+         "{InvokeButton " & Knowledge_Frame & ".stories.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
@@ -142,26 +142,26 @@ package body Knowledge is
       -- Setting the known events list
       Knowledge.Events.UpdateEventsList;
       -- Setting the known stories list
-      KnowledgeFrame.Name :=
+      Knowledge_Frame.Name :=
         New_String(Main_Paned & ".knowledgeframe.stories.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Knowledge_Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
+      Delete_Widgets(1, Rows - 1, Knowledge_Frame);
       if Finished_Stories.Length = 0 then
          Label :=
            Create
-             (KnowledgeFrame & ".nostories",
+             (Knowledge_Frame & ".nostories",
               "-text {You didn't discover any story yet.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
       else
          declare
             OptionsFrame: constant Ttk_Frame :=
-              Create(KnowledgeFrame & ".options");
+              Create(Knowledge_Frame & ".options");
             StoriesBox: constant Ttk_ComboBox :=
               Create(OptionsFrame & ".titles", "-state readonly");
             StoriesList: Unbounded_String;
             StoriesView: constant Tk_Text :=
-              Create(KnowledgeFrame & ".view", "-wrap word");
+              Create(Knowledge_Frame & ".view", "-wrap word");
          begin
             Load_Finished_Stories_Loop :
             for FinishedStory of Finished_Stories loop
@@ -192,13 +192,13 @@ package body Knowledge is
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
-      KnowledgeCanvas.Name :=
+      Knowledge_Canvas.Name :=
         New_String(Main_Paned & ".knowledgeframe.stories.canvas");
       configure
-        (KnowledgeCanvas,
-         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
-      Xview_Move_To(KnowledgeCanvas, "0.0");
-      Yview_Move_To(KnowledgeCanvas, "0.0");
+        (Knowledge_Canvas,
+         "-scrollregion [list " & BBox(Knowledge_Canvas, "all") & "]");
+      Xview_Move_To(Knowledge_Canvas, "0.0");
+      Yview_Move_To(Knowledge_Canvas, "0.0");
       -- Show knowledge
       Show_Screen("knowledgeframe");
       return TCL_OK;
