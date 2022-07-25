@@ -98,22 +98,22 @@ package body Knowledge is
             Append(Source => Combo_Values, New_Item => " {" & BaseType.Name & "}");
          end loop Load_Bases_Types_Loop;
          configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_Values) & "]");
-         Current(Combo_Box, "0");
-         Combo_Values := To_Unbounded_String(" {Any}");
-         Combo_Box.Name := New_String(Knowledge_Canvas & ".frame.options.owner");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
+         Combo_Values := To_Unbounded_String(Source => " {Any}");
+         Combo_Box.Name := New_String(Str => Knowledge_Canvas & ".frame.options.owner");
          Load_Bases_Owners_Loop :
          for I in Factions_List.Iterate loop
             Append
-              (Combo_Values,
-               " {" & To_String(Source => Factions_List(I).Name) & "}");
+              (Source => Combo_Values,
+               New_Item => " {" & To_String(Source => Factions_List(I).Name) & "}");
          end loop Load_Bases_Owners_Loop;
-         configure(Combo_Box, "-values [list" & To_String(Combo_Values) & "]");
-         Current(Combo_Box, "0");
-      elsif Winfo_Get(Knowledge_Frame, "ismapped") = "1" and Argc = 1 then
-         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_Values) & "]");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
+      elsif Winfo_Get(Widgt => Knowledge_Frame, Info => "ismapped") = "1" and Argc = 1 then
+         Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(1)) & ">");
+           (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
            (Interp, "<" & To_String(General_Accelerators(2)) & ">");
          Unbind_From_Main_Window
