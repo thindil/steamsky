@@ -19,6 +19,9 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
+with Interfaces.C; use Interfaces.C;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
@@ -47,6 +50,25 @@ with Knowledge.Stories;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge is
+
+   -- ****o* Knowledge/Knowledge.Show_Knowledge_Command
+   -- FUNCTION
+   -- Show information about known by player things
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowKnowledge
+   -- SOURCE
+   function Show_Knowledge_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    function Show_Knowledge_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;

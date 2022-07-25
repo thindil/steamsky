@@ -13,10 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C; use Interfaces.C;
-with CArgv;
-with Tcl; use Tcl;
-
 -- ****h* Knowledge/Knowledge
 -- FUNCTION
 -- Provide code to show the knowledge (bases, events, missions, stories) to
@@ -24,25 +20,6 @@ with Tcl; use Tcl;
 -- SOURCE
 package Knowledge is
 -- ****
-
-   -- ****o* Knowledge/Knowledge.Show_Knowledge_Command
-   -- FUNCTION
-   -- Show information about known by player things
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowKnowledge
-   -- SOURCE
-   function Show_Knowledge_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
 
    -- ****f* Knowledge/Knowledge.Add_Commands
    -- FUNCTION
