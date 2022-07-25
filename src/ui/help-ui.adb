@@ -493,25 +493,25 @@ package body Help.UI is
            To_String(Source => Current_Theme.Italic_Help_Color) &
            "} -font ItalicHelpFont");
       X :=
-        (Positive'Value(Winfo_Get(Help_Window, "vrootwidth")) -
+        (Positive'Value(Winfo_Get(Widgt => Help_Window, Info => "vrootwidth")) -
          Game_Settings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
-        (Positive'Value(Winfo_Get(Help_Window, "vrootheight")) -
+        (Positive'Value(Winfo_Get(Widgt => Help_Window, Info => "vrootheight")) -
          Game_Settings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
-        (Help_Window, "geometry",
-         Trim(Positive'Image(Game_Settings.Window_Width), Left) & "x" &
-         Trim(Positive'Image(Game_Settings.Window_Height), Left) & "+" &
-         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
-      Tcl_Eval(Interp, "update");
+        (Widgt => Help_Window, Action => "geometry",
+         Options => Trim(Source => Positive'Image(Game_Settings.Window_Width), Side => Left) & "x" &
+         Trim(Source => Positive'Image(Game_Settings.Window_Height), Side => Left) & "+" &
+         Trim(Source => Positive'Image(X), Side => Left) & "+" & Trim(Source => Positive'Image(Y), Side => Left));
+      Tcl_Eval(interp => Interp, strng => "update");
       SashPos(Paned, "0", Natural'Image(Game_Settings.Topics_Position));
       for I in Help_List.Iterate loop
          Insert
