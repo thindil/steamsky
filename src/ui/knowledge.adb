@@ -264,24 +264,24 @@ package body Knowledge is
          2 => (Name => To_Unbounded_String(Source => "missions"), Column => 0, Row => 1),
          3 => (Name => To_Unbounded_String(Source => "events"), Column => 1, Row => 0),
          4 => (Name => To_Unbounded_String(Source => "stories"), Column => 1, Row => 1));
-      FrameName: constant String := Main_Paned & ".knowledgeframe";
-      Frame: Ttk_Frame := Get_Widget(FrameName, Interp);
+      Frame_Name: constant String := Main_Paned & ".knowledgeframe";
+      Frame: Ttk_Frame := Get_Widget(pathName => Frame_Name, Interp => Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (FrameName & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin",
-           Interp);
+          (pathName => Frame_Name & "." & CArgv.Arg(Argv => Argv, N => 1) & ".canvas.frame.maxmin",
+           Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 2) /= "show" then
+      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
          Hide_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(FrameName & "." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid(Frame);
+              New_String(Str => Frame_Name & "." & To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /= CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame,
-                  "-columnspan 1 -rowspan 1 -column" &
+                 (Slave => Frame,
+                  Options => "-columnspan 1 -rowspan 1 -column" &
                   Natural'Image(FrameInfo.Column) & " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
@@ -294,7 +294,7 @@ package body Knowledge is
          Show_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(FrameName & "." & To_String(FrameInfo.Name));
+              New_String(Frame_Name & "." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else
