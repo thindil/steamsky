@@ -154,12 +154,12 @@ package body Knowledge is
            "{InvokeButton " & Knowledge_Frame &
            ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & Knowledge_Frame & ".events.canvas.frame.maxmin}");
+        (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script => "{InvokeButton " & Knowledge_Frame & ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(4)) & ">",
-         "{InvokeButton " & Knowledge_Frame & ".stories.canvas.frame.maxmin}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+        (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Script => "{InvokeButton " & Knowledge_Frame & ".stories.canvas.frame.maxmin}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
       -- Setting accepted missions info
@@ -168,10 +168,10 @@ package body Knowledge is
       Knowledge.Events.UpdateEventsList;
       -- Setting the known stories list
       Knowledge_Frame.Name :=
-        New_String(Main_Paned & ".knowledgeframe.stories.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Knowledge_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Knowledge_Frame);
+        New_String(Str => Main_Paned & ".knowledgeframe.stories.canvas.frame");
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Knowledge_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Knowledge_Frame);
       if Finished_Stories.Length = 0 then
          Label :=
            Create
