@@ -217,16 +217,16 @@ package body Knowledge is
             Generate(Window => Stories_Box, EventName => "<<ComboboxSelected>>");
          end Load_Finished_Stories_Block;
       end if;
-      Tcl_Eval(Get_Context, "update");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Knowledge_Canvas.Name :=
-        New_String(Main_Paned & ".knowledgeframe.stories.canvas");
+        New_String(Str => Main_Paned & ".knowledgeframe.stories.canvas");
       configure
-        (Knowledge_Canvas,
-         "-scrollregion [list " & BBox(Knowledge_Canvas, "all") & "]");
-      Xview_Move_To(Knowledge_Canvas, "0.0");
-      Yview_Move_To(Knowledge_Canvas, "0.0");
+        (Widgt => Knowledge_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Knowledge_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Knowledge_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Knowledge_Canvas, Fraction => "0.0");
       -- Show knowledge
-      Show_Screen("knowledgeframe");
+      Show_Screen(New_Screen_Name => "knowledgeframe");
       return TCL_OK;
    end Show_Knowledge_Command;
 
@@ -234,10 +234,10 @@ package body Knowledge is
    -- FUNCTION
    -- Maximize or minimize the selected section of knowledge info
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -245,15 +245,15 @@ package body Knowledge is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Knowledge_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Knowledge_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
