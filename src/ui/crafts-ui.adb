@@ -430,28 +430,28 @@ package body Crafts.UI is
                      .Name),
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 3);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Materials, Column => 4, New_Row => True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
@@ -508,7 +508,7 @@ package body Crafts.UI is
                      .Name),
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Study " &
+              "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Column => 1);
@@ -516,7 +516,7 @@ package body Crafts.UI is
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Study " &
+              "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
@@ -524,7 +524,7 @@ package body Crafts.UI is
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Study " &
+              "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 3, New_Row => True);
@@ -576,7 +576,7 @@ package body Crafts.UI is
                      .Name),
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Deconstruct " &
+              "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Column => 1);
@@ -584,7 +584,7 @@ package body Crafts.UI is
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Deconstruct " &
+              "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
@@ -592,7 +592,7 @@ package body Crafts.UI is
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
-              "ShowRecipeMenu {Deconstruct " &
+              "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 3, New_Row => True);
