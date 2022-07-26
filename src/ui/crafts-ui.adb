@@ -1003,7 +1003,8 @@ package body Crafts.UI is
            options =>
              "-text {" & Recipe_Type & "} -command {SetCrafting {" &
              CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
-             Craft_Dialog & "}");
+             Craft_Dialog & "} -image " & To_Lower(Item => Recipe_Type) &
+             "icon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5 -padx 5");
       Add(Widget => Button, Message => "Set the crafting order.");
       Bind
@@ -1013,14 +1014,16 @@ package body Crafts.UI is
         Create
           (pathName => Craft_Dialog & ".cancel",
            options =>
-             "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
+             "-text {Cancel} -command {CloseDialog " & Craft_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options =>
            "-pady 5 -padx 5 -column 1 -row" & Positive'Image(Button_Row));
       Add
         (Widget => Button,
-         Message => "Cancel setting the order and close dialog.");
+         Message =>
+           "Cancel setting the order and close dialog. \[Escape key\]");
       Bind
         (Widgt => Button, Sequence => "<Tab>",
          Script =>
@@ -1448,8 +1451,7 @@ package body Crafts.UI is
          end Add_Buttons_Block;
       else
          Add_Close_Button
-           (Name => Recipe_Dialog & ".close",
-            Text => "Close",
+           (Name => Recipe_Dialog & ".close", Text => "Close",
             Command => "CloseDialog " & Recipe_Dialog, Row => 2,
             Icon => "exiticon");
       end if;
