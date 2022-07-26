@@ -175,46 +175,47 @@ package body Knowledge is
       if Finished_Stories.Length = 0 then
          Label :=
            Create
-             (Knowledge_Frame & ".nostories",
-              "-text {You didn't discover any story yet.} -wraplength 400");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
+             (pathName => Knowledge_Frame & ".nostories",
+              options => "-text {You didn't discover any story yet.} -wraplength 400");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
       else
+         Load_Finished_Stories_Block:
          declare
-            OptionsFrame: constant Ttk_Frame :=
-              Create(Knowledge_Frame & ".options");
-            StoriesBox: constant Ttk_ComboBox :=
-              Create(OptionsFrame & ".titles", "-state readonly");
-            StoriesList: Unbounded_String;
-            StoriesView: constant Tk_Text :=
-              Create(Knowledge_Frame & ".view", "-wrap word");
+            Options_Frame: constant Ttk_Frame :=
+              Create(pathName => Knowledge_Frame & ".options");
+            Stories_Box: constant Ttk_ComboBox :=
+              Create(pathName => Options_Frame & ".titles", options => "-state readonly");
+            Finished_Stories_List: Unbounded_String;
+            Stories_View: constant Tk_Text :=
+              Create(pathName => Knowledge_Frame & ".view", options => "-wrap word");
          begin
             Load_Finished_Stories_Loop :
             for FinishedStory of Finished_Stories loop
                Append
-                 (StoriesList,
-                  " {" & Stories_List(FinishedStory.Index).Name & "}");
+                 (Source => Finished_Stories_List,
+                  New_Item => " {" & Stories_List(FinishedStory.Index).Name & "}");
             end loop Load_Finished_Stories_Loop;
             configure
-              (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
-            Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
+              (Widgt => Stories_Box, options => "-values [list " & To_String(Source => Finished_Stories_List) & "]");
+            Bind(Stories_Box, "<<ComboboxSelected>>", "ShowStory");
             Current
-              (StoriesBox,
+              (Stories_Box,
                Natural'Image(Natural(Finished_Stories.Length) - 1));
-            Tcl.Tk.Ada.Grid.Grid(StoriesBox);
+            Tcl.Tk.Ada.Grid.Grid(Stories_Box);
             Button :=
               Create
-                (OptionsFrame & ".show",
+                (Options_Frame & ".show",
                  "-text {Show on map} -command ShowStoryLocation");
             Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 0");
             Button :=
               Create
-                (OptionsFrame & ".set",
+                (Options_Frame & ".set",
                  "-text {Set as destintion for ship} -command SetStory");
             Tcl.Tk.Ada.Grid.Grid(Button, "-column 2 -row 0");
-            Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky w");
-            Tcl.Tk.Ada.Grid.Grid(StoriesView, "-sticky w");
-            Generate(StoriesBox, "<<ComboboxSelected>>");
-         end;
+            Tcl.Tk.Ada.Grid.Grid(Options_Frame, "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid(Stories_View, "-sticky w");
+            Generate(Stories_Box, "<<ComboboxSelected>>");
+         end Load_Finished_Stories_Block;
       end if;
       Tcl_Eval(Get_Context, "update");
       Knowledge_Canvas.Name :=
