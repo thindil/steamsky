@@ -428,28 +428,25 @@ package body Crafts.UI is
                                 To_String(Source => Recipes_Indexes(I))))
                           .Result_Index)
                      .Name),
-            Tooltip => "Show available recipe's options",
+            Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 3);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
@@ -506,23 +503,21 @@ package body Crafts.UI is
                         Positive'Value
                           (To_String(Source => Recipes_Indexes(I))))
                      .Name),
-            Tooltip => "Show available recipe's options",
+            Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
@@ -574,23 +569,21 @@ package body Crafts.UI is
                         Positive'Value
                           (To_String(Source => Recipes_Indexes(I))))
                      .Name),
-            Tooltip => "Show available recipe's options",
+            Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 2);
          Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
+           (Table => Recipes_Table, Tooltip => "Show recipe's details",
             Command =>
               "ShowRecipeInfo {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
