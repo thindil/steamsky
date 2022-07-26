@@ -154,12 +154,19 @@ package body Knowledge is
            "{InvokeButton " & Knowledge_Frame &
            ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
-         Script => "{InvokeButton " & Knowledge_Frame & ".events.canvas.frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script =>
+           "{InvokeButton " & Knowledge_Frame &
+           ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
-         Script => "{InvokeButton " & Knowledge_Frame & ".stories.canvas.frame.maxmin}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Script =>
+           "{InvokeButton " & Knowledge_Frame &
+           ".stories.canvas.frame.maxmin}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
       -- Setting accepted missions info
@@ -169,52 +176,74 @@ package body Knowledge is
       -- Setting the known stories list
       Knowledge_Frame.Name :=
         New_String(Str => Main_Paned & ".knowledgeframe.stories.canvas.frame");
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Knowledge_Frame), Separators => " ");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Knowledge_Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Knowledge_Frame);
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Knowledge_Frame);
       if Finished_Stories.Length = 0 then
          Label :=
            Create
              (pathName => Knowledge_Frame & ".nostories",
-              options => "-text {You didn't discover any story yet.} -wraplength 400");
+              options =>
+                "-text {You didn't discover any story yet.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
       else
-         Load_Finished_Stories_Block:
+         Load_Finished_Stories_Block :
          declare
             Options_Frame: constant Ttk_Frame :=
               Create(pathName => Knowledge_Frame & ".options");
             Stories_Box: constant Ttk_ComboBox :=
-              Create(pathName => Options_Frame & ".titles", options => "-state readonly");
+              Create
+                (pathName => Options_Frame & ".titles",
+                 options => "-state readonly");
             Finished_Stories_List: Unbounded_String;
             Stories_View: constant Tk_Text :=
-              Create(pathName => Knowledge_Frame & ".view", options => "-wrap word");
+              Create
+                (pathName => Knowledge_Frame & ".view",
+                 options => "-wrap word");
          begin
             Load_Finished_Stories_Loop :
             for FinishedStory of Finished_Stories loop
                Append
                  (Source => Finished_Stories_List,
-                  New_Item => " {" & Stories_List(FinishedStory.Index).Name & "}");
+                  New_Item =>
+                    " {" & Stories_List(FinishedStory.Index).Name & "}");
             end loop Load_Finished_Stories_Loop;
             configure
-              (Widgt => Stories_Box, options => "-values [list " & To_String(Source => Finished_Stories_List) & "]");
-            Bind(Widgt => Stories_Box, Sequence => "<<ComboboxSelected>>", Script => "ShowStory");
+              (Widgt => Stories_Box,
+               options =>
+                 "-values [list " &
+                 To_String(Source => Finished_Stories_List) & "]");
+            Bind
+              (Widgt => Stories_Box, Sequence => "<<ComboboxSelected>>",
+               Script => "ShowStory");
             Current
               (ComboBox => Stories_Box,
-               NewIndex => Natural'Image(Natural(Finished_Stories.Length) - 1));
+               NewIndex =>
+                 Natural'Image(Natural(Finished_Stories.Length) - 1));
             Tcl.Tk.Ada.Grid.Grid(Slave => Stories_Box);
             Button :=
               Create
                 (pathName => Options_Frame & ".show",
                  options => "-text {Show on map} -command ShowStoryLocation");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 1 -row 0");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-column 1 -row 0");
             Button :=
               Create
                 (pathName => Options_Frame & ".set",
-                 options => "-text {Set as destintion for ship} -command SetStory");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 2 -row 0");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Options_Frame, Options => "-sticky w");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Stories_View, Options => "-sticky w");
-            Generate(Window => Stories_Box, EventName => "<<ComboboxSelected>>");
+                 options =>
+                   "-text {Set as destintion for ship} -command SetStory");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-column 2 -row 0");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Options_Frame, Options => "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Stories_View, Options => "-sticky w");
+            Generate
+              (Window => Stories_Box, EventName => "<<ComboboxSelected>>");
          end Load_Finished_Stories_Block;
       end if;
       Tcl_Eval(interp => Get_Context, strng => "update");
@@ -222,7 +251,9 @@ package body Knowledge is
         New_String(Str => Main_Paned & ".knowledgeframe.stories.canvas");
       configure
         (Widgt => Knowledge_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Knowledge_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Knowledge_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Knowledge_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Knowledge_Canvas, Fraction => "0.0");
       -- Show knowledge
@@ -260,43 +291,61 @@ package body Knowledge is
          Row: Natural range 0 .. 1;
       end record;
       Frames: constant array(1 .. 4) of Frame_Info :=
-        (1 => (Name => To_Unbounded_String(Source => "bases"), Column => 0, Row => 0),
-         2 => (Name => To_Unbounded_String(Source => "missions"), Column => 0, Row => 1),
-         3 => (Name => To_Unbounded_String(Source => "events"), Column => 1, Row => 0),
-         4 => (Name => To_Unbounded_String(Source => "stories"), Column => 1, Row => 1));
+        (1 =>
+           (Name => To_Unbounded_String(Source => "bases"), Column => 0,
+            Row => 0),
+         2 =>
+           (Name => To_Unbounded_String(Source => "missions"), Column => 0,
+            Row => 1),
+         3 =>
+           (Name => To_Unbounded_String(Source => "events"), Column => 1,
+            Row => 0),
+         4 =>
+           (Name => To_Unbounded_String(Source => "stories"), Column => 1,
+            Row => 1));
       Frame_Name: constant String := Main_Paned & ".knowledgeframe";
       Frame: Ttk_Frame := Get_Widget(pathName => Frame_Name, Interp => Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (pathName => Frame_Name & "." & CArgv.Arg(Argv => Argv, N => 1) & ".canvas.frame.maxmin",
+          (pathName =>
+             Frame_Name & "." & CArgv.Arg(Argv => Argv, N => 1) &
+             ".canvas.frame.maxmin",
            Interp => Interp);
    begin
       if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
          Hide_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(Str => Frame_Name & "." & To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /= CArgv.Arg(Argv => Argv, N => 1) then
+              New_String
+                (Str =>
+                   Frame_Name & "." & To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
                Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
-                  Options => "-columnspan 1 -rowspan 1 -column" &
-                  Natural'Image(FrameInfo.Column) & " -row" &
-                  Natural'Image(FrameInfo.Row));
+                  Options =>
+                    "-columnspan 1 -rowspan 1 -column" &
+                    Natural'Image(FrameInfo.Column) & " -row" &
+                    Natural'Image(FrameInfo.Row));
             end if;
          end loop Hide_Manipulate_Frames_Loop;
          configure
-           (Button,
-            "-image movemapupicon -command {KnowledgeMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
+           (Widgt => Button,
+            options =>
+              "-image movemapupicon -command {KnowledgeMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " show}");
       else
          Show_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(Frame_Name & "." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+              New_String
+                (Str =>
+                   Frame_Name & "." & To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
