@@ -12,11 +12,13 @@ All notable changes to this project will be documented in this file.
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
 - Updated images for checked checkboxes and values in tables, unchecked and
   checked radioboxes, cancel action.
-- Removed Craftable column from crafting recipes list in Crafting screen
 - Updated modding guide
-- Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items and
-  Show Inventory dialog
+- Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items,
+  Show Inventory and Set Crafting Recipe dialog
 - Show both, text and icon on "Close" button in dialogs
+
+### Removed
+- Craftable column from crafting recipes list in Crafting screen
 
 ### Fixed
 - Showing the Close button in the available mission, known base info and
