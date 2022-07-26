@@ -260,10 +260,10 @@ package body Knowledge is
          Row: Natural range 0 .. 1;
       end record;
       Frames: constant array(1 .. 4) of Frame_Info :=
-        ((To_Unbounded_String("bases"), 0, 0),
-         (To_Unbounded_String("missions"), 0, 1),
-         (To_Unbounded_String("events"), 1, 0),
-         (To_Unbounded_String("stories"), 1, 1));
+        (1 => (Name => To_Unbounded_String(Source => "bases"), Column => 0, Row => 0),
+         2 => (Name => To_Unbounded_String(Source => "missions"), Column => 0, Row => 1),
+         3 => (Name => To_Unbounded_String(Source => "events"), Column => 1, Row => 0),
+         4 => (Name => To_Unbounded_String(Source => "stories"), Column => 1, Row => 1));
       FrameName: constant String := Main_Paned & ".knowledgeframe";
       Frame: Ttk_Frame := Get_Widget(FrameName, Interp);
       Button: constant Ttk_Button :=
