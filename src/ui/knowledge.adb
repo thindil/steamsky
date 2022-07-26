@@ -197,24 +197,24 @@ package body Knowledge is
             end loop Load_Finished_Stories_Loop;
             configure
               (Widgt => Stories_Box, options => "-values [list " & To_String(Source => Finished_Stories_List) & "]");
-            Bind(Stories_Box, "<<ComboboxSelected>>", "ShowStory");
+            Bind(Widgt => Stories_Box, Sequence => "<<ComboboxSelected>>", Script => "ShowStory");
             Current
-              (Stories_Box,
-               Natural'Image(Natural(Finished_Stories.Length) - 1));
-            Tcl.Tk.Ada.Grid.Grid(Stories_Box);
+              (ComboBox => Stories_Box,
+               NewIndex => Natural'Image(Natural(Finished_Stories.Length) - 1));
+            Tcl.Tk.Ada.Grid.Grid(Slave => Stories_Box);
             Button :=
               Create
-                (Options_Frame & ".show",
-                 "-text {Show on map} -command ShowStoryLocation");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 0");
+                (pathName => Options_Frame & ".show",
+                 options => "-text {Show on map} -command ShowStoryLocation");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 1 -row 0");
             Button :=
               Create
-                (Options_Frame & ".set",
-                 "-text {Set as destintion for ship} -command SetStory");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-column 2 -row 0");
-            Tcl.Tk.Ada.Grid.Grid(Options_Frame, "-sticky w");
-            Tcl.Tk.Ada.Grid.Grid(Stories_View, "-sticky w");
-            Generate(Stories_Box, "<<ComboboxSelected>>");
+                (pathName => Options_Frame & ".set",
+                 options => "-text {Set as destintion for ship} -command SetStory");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 2 -row 0");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Options_Frame, Options => "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Stories_View, Options => "-sticky w");
+            Generate(Window => Stories_Box, EventName => "<<ComboboxSelected>>");
          end Load_Finished_Stories_Block;
       end if;
       Tcl_Eval(Get_Context, "update");
