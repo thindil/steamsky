@@ -656,78 +656,6 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Crafting_Command;
 
-   -- ****o* CUI4/CUI4.Show_Recipe_Menu_Command
-   -- FUNCTION
-   -- Show menu with available actions for the selected recipe
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowRecipeMenu index craftable
-   -- Index is the index of the recipe to craft. If craftable is TRUE,
-   -- then the recipe can be crafted, otherwise FALSE
-   -- SOURCE
-   function Show_Recipe_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Recipe_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Recipe_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".recipemenu", Title => "Actions", Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Recipe_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Recipe_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Recipe_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script =>
-                 "{focus " & Recipe_Menu & "." &
-                 (if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then "set"
-                  else "info") &
-                 ";break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
-         Add_Button
-           (Name => ".set", Label => "Set crafting order",
-            Command =>
-              "ShowSetRecipe {" & CArgv.Arg(Argv => Argv, N => 1) & "}");
-      end if;
-      Add_Button
-        (Name => ".info", Label => "Show more info about the recipe",
-         Command =>
-           "ShowRecipeInfo {" & CArgv.Arg(Argv => Argv, N => 1) & "} " &
-           CArgv.Arg(Argv => Argv, N => 2));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Recipe_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Recipe_Menu_Command;
-
    -- ****o* CUI4/CUI4.Show_Set_Recipe_Command
    -- FUNCTION
    -- Show dialog to set the selected recipe as crafting order
@@ -1822,9 +1750,6 @@ package body Crafts.UI is
    begin
       Add_Command
         (Name => "ShowCrafting", Ada_Command => Show_Crafting_Command'Access);
-      Add_Command
-        (Name => "ShowRecipeMenu",
-         Ada_Command => Show_Recipe_Menu_Command'Access);
       Add_Command
         (Name => "ShowSetRecipe",
          Ada_Command => Show_Set_Recipe_Command'Access);
