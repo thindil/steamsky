@@ -181,10 +181,10 @@ package body Maps.UI.Commands is
          Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".right");
          Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Buttons_Box, Options => "-sticky sw");
       else
-         Button.Name := New_String(Widget_Image(Buttons_Box) & ".left");
-         Tcl.Tk.Ada.Grid.Grid_Configure(Buttons_Box, "-sticky se");
+         Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".left");
+         Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Buttons_Box, Options => "-sticky se");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       return TCL_OK;
    end Move_Map_Buttons_Command;
 
@@ -192,65 +192,65 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Draw the sky map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DrawMap
    -- SOURCE
    function Draw_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Draw_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      MapView: constant Tk_Text :=
-        Get_Widget(Main_Paned & ".mapframe.map", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Map_View: constant Tk_Text :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
    begin
       configure
-        (MapView,
-         "-width [expr [winfo width $mapview] / [font measure MapFont {" &
+        (Widgt => Map_View,
+         options => "-width [expr [winfo width $mapview] / [font measure MapFont {" &
          Encode
-           ("" &
-            Themes_List(To_String(Game_Settings.Interface_Theme))
+           (Item => "" &
+            Themes_List(To_String(Source => Game_Settings.Interface_Theme))
               .Empty_Map_Icon) &
          "}]]");
       configure
-        (MapView,
-         "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
+        (Widgt => Map_View,
+         options => "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
       Draw_Map;
       return TCL_OK;
    end Draw_Map_Command;
 
-   -- ****iv* MapCommands/MapCommands.MapX
+   -- ****iv* MapCommands/MapCommands.Map_X
    -- FUNCTION
    -- Current map cell X coordinate (where mouse is hovering)
    -- SOURCE
-   MapX: Natural := 0;
+   Map_X: Natural := 0;
    -- ****
 
-   -- ****iv* MapCommands/MapCommands.MapY
+   -- ****iv* MapCommands/MapCommands.Map_Y
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE
-   MapY: Natural := 0;
+   Map_Y: Natural := 0;
    -- ****
 
    -- ****o* MapCommands/MapCommands.Update_Map_Info_Command
    -- FUNCTION
    -- Update map cell info
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -258,32 +258,32 @@ package body Maps.UI.Commands is
    -- X and Y are coordinates of the map cell which info will be show
    -- SOURCE
    function Update_Map_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Map_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MapView: constant Tk_Text :=
+      pragma Unreferenced(Client_Data, Argc);
+      Map_View: constant Tk_Text :=
         Get_Widget(Main_Paned & ".mapframe.map", Interp);
       MapIndex: Unbounded_String;
    begin
       MapIndex :=
         To_Unbounded_String
           (Index
-             (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
+             (Map_View, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
       if Start_Y +
         Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) - 1 <
         1 then
          return TCL_OK;
       end if;
-      MapY :=
+      Map_Y :=
         Start_Y + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
-      if MapY > 1_024 then
+      if Map_Y > 1_024 then
          return TCL_OK;
       end if;
       if Start_X +
@@ -292,14 +292,14 @@ package body Maps.UI.Commands is
         1 then
          return TCL_OK;
       end if;
-      MapX :=
+      Map_X :=
         Start_X +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
-      if MapX > 1_024 then
+      if Map_X > 1_024 then
          return TCL_OK;
       end if;
-      Update_Map_Info(MapX, MapY);
+      Update_Map_Info(Map_X, Map_Y);
       return TCL_OK;
    end Update_Map_Info_Command;
 
@@ -375,13 +375,13 @@ package body Maps.UI.Commands is
           (DestinationDialog & ".button",
            "-text Close -command {CloseDialog " & DestinationDialog & "}");
    begin
-      if (MapX = 0 or MapY = 0)
+      if (Map_X = 0 or Map_Y = 0)
         and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
           TCL_OK then
          Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
          return TCL_ERROR;
       end if;
-      if Player_Ship.Sky_X = MapX and Player_Ship.Sky_Y = MapY then
+      if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
          Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
@@ -449,8 +449,8 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      Player_Ship.Destination_X := MapX;
-      Player_Ship.Destination_Y := MapY;
+      Player_Ship.Destination_X := Map_X;
+      Player_Ship.Destination_Y := Map_Y;
       Add_Message
         ("You set the travel destination for your ship.", ORDERMESSAGE);
       if Game_Settings.Auto_Center then
