@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items,
   Show Inventory and Set Crafting Recipe dialog
 - Show both, text and icon on "Close" button in dialogs
+- Show crafting recipe info instead of actions menu in crafting recipes list
 
 ### Removed
 - Craftable column from crafting recipes list in Crafting screen
