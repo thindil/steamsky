@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Option to show all, craftable or non-craftable recipes in Crafting screen
 - Icon for craft, study and deconstruct buttons. Authors: Lorc, Delapouite
   (https://game-icons.net), license CC BY 3.0
+- Information where the selected recruit wears its equipment
 
 ### Changed
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
