@@ -1275,7 +1275,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Invoke_Menu_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("HideMapButtons", Hide_Map_Buttons_Command'Access);
       Add_Command("ShowMapButtons", Show_Map_Buttons_Command'Access);
@@ -1297,6 +1297,6 @@ package body Maps.UI.Commands is
       Add_Command("ResizeLastMessages", Resize_Last_Messages_Command'Access);
       Add_Command("ShowGameMenu", Show_Game_Menu_Command'Access);
       Add_Command("InvokeMenu", Invoke_Menu_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Maps.UI.Commands;

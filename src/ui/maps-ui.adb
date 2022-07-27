@@ -1180,7 +1180,7 @@ package body Maps.UI is
          Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
          Set_Theme;
          OrdersMenu.AddCommands;
-         Maps.UI.Commands.AddCommands;
+         Maps.UI.Commands.Add_Commands;
          WaitMenu.AddCommands;
          Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
