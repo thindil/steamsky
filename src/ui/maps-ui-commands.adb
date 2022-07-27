@@ -56,12 +56,18 @@ with Utils.UI; use Utils.UI;
 package body Maps.UI.Commands is
 
    Button_Names: constant array(1 .. 13) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "show"), 2 => To_Unbounded_String(Source => "nw"),
-      3 => To_Unbounded_String(Source => "n"), 4 => To_Unbounded_String(Source => "ne"),
-      5 => To_Unbounded_String(Source => "w"), 6 => To_Unbounded_String(Source => "wait"),
-      7 => To_Unbounded_String(Source => "e"), 8 => To_Unbounded_String(Source => "sw"),
-      9 => To_Unbounded_String(Source => "s"), 10 => To_Unbounded_String(Source => "se"),
-      11 => To_Unbounded_String(Source => "hide"), 12 => To_Unbounded_String(Source => "left"),
+     (1 => To_Unbounded_String(Source => "show"),
+      2 => To_Unbounded_String(Source => "nw"),
+      3 => To_Unbounded_String(Source => "n"),
+      4 => To_Unbounded_String(Source => "ne"),
+      5 => To_Unbounded_String(Source => "w"),
+      6 => To_Unbounded_String(Source => "wait"),
+      7 => To_Unbounded_String(Source => "e"),
+      8 => To_Unbounded_String(Source => "sw"),
+      9 => To_Unbounded_String(Source => "s"),
+      10 => To_Unbounded_String(Source => "se"),
+      11 => To_Unbounded_String(Source => "hide"),
+      12 => To_Unbounded_String(Source => "left"),
       13 => To_Unbounded_String(Source => "right"));
 
    -- ****o* MapCommands/MapCommands.Hide_Map_Buttons_Command
@@ -94,7 +100,9 @@ package body Maps.UI.Commands is
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
-             (Str => Main_Paned & ".mapframe.buttons." & To_String(Source => Button_Names(I)));
+             (Str =>
+                Main_Paned & ".mapframe.buttons." &
+                To_String(Source => Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end loop Hide_Buttons_Loop;
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
@@ -127,21 +135,29 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Button: Ttk_Button;
       Buttons_Box: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
    begin
       Button.Interp := Interp;
       Show_Buttons_Loop :
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
-             (Str => Widget_Image(Win => Buttons_Box) & "." & To_String(Source => Button_Names(I)));
+             (Str =>
+                Widget_Image(Win => Buttons_Box) & "." &
+                To_String(Source => Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       end loop Show_Buttons_Loop;
-      Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
+      Button.Name :=
+        New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       Button.Name :=
-        (if Index(Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Buttons_Box), Pattern => "-sticky es") = 0 then
-           New_String(Str => Widget_Image(Win => Buttons_Box) & ".right")
+        (if
+           Index
+             (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Buttons_Box),
+              Pattern => "-sticky es") =
+           0
+         then New_String(Str => Widget_Image(Win => Buttons_Box) & ".right")
          else New_String(Str => Widget_Image(Win => Buttons_Box) & ".left"));
       Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       return TCL_OK;
@@ -172,17 +188,24 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Buttons_Box: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
       Button: Ttk_Button :=
-        Get_Widget(pathName => Buttons_Box & "." & CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+        Get_Widget
+          (pathName => Buttons_Box & "." & CArgv.Arg(Argv => Argv, N => 1),
+           Interp => Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       if CArgv.Arg(Argv => Argv, N => 1) = "left" then
-         Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".right");
-         Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Buttons_Box, Options => "-sticky sw");
+         Button.Name :=
+           New_String(Str => Widget_Image(Win => Buttons_Box) & ".right");
+         Tcl.Tk.Ada.Grid.Grid_Configure
+           (Slave => Buttons_Box, Options => "-sticky sw");
       else
-         Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".left");
-         Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Buttons_Box, Options => "-sticky se");
+         Button.Name :=
+           New_String(Str => Widget_Image(Win => Buttons_Box) & ".left");
+         Tcl.Tk.Ada.Grid.Grid_Configure
+           (Slave => Buttons_Box, Options => "-sticky se");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       return TCL_OK;
@@ -216,15 +239,18 @@ package body Maps.UI.Commands is
    begin
       configure
         (Widgt => Map_View,
-         options => "-width [expr [winfo width $mapview] / [font measure MapFont {" &
-         Encode
-           (Item => "" &
-            Themes_List(To_String(Source => Game_Settings.Interface_Theme))
-              .Empty_Map_Icon) &
-         "}]]");
+         options =>
+           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
+           Encode
+             (Item =>
+                "" &
+                Themes_List(To_String(Source => Game_Settings.Interface_Theme))
+                  .Empty_Map_Icon) &
+           "}]]");
       configure
         (Widgt => Map_View,
-         options => "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
+         options =>
+           "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
       Draw_Map;
       return TCL_OK;
    end Draw_Map_Command;
@@ -268,34 +294,46 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Map_View: constant Tk_Text :=
-        Get_Widget(Main_Paned & ".mapframe.map", Interp);
-      MapIndex: Unbounded_String;
+        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
+      Map_Index: Unbounded_String;
    begin
-      MapIndex :=
+      Map_Index :=
         To_Unbounded_String
-          (Index
-             (Map_View, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
+          (Source =>
+             Index
+               (TextWidget => Map_View,
+                TextIndex =>
+                  "@" & CArgv.Arg(Argv => Argv, N => 1) & "," &
+                  CArgv.Arg(Argv => Argv, N => 2)));
       if Start_Y +
-        Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) - 1 <
+        Integer'Value
+          (Slice
+             (Source => Map_Index, Low => 1,
+              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
+        1 <
         1 then
          return TCL_OK;
       end if;
       Map_Y :=
-        Start_Y + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        Start_Y +
+        Integer'Value
+          (Slice
+             (Source => Map_Index, Low => 1,
+              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
         1;
       if Map_Y > 1_024 then
          return TCL_OK;
       end if;
       if Start_X +
         Integer'Value
-          (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex))) <
+          (Slice(Map_Index, Index(Map_Index, ".") + 1, Length(Map_Index))) <
         1 then
          return TCL_OK;
       end if;
       Map_X :=
         Start_X +
         Integer'Value
-          (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
+          (Slice(Map_Index, Index(Map_Index, ".") + 1, Length(Map_Index)));
       if Map_X > 1_024 then
          return TCL_OK;
       end if;
