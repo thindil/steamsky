@@ -726,16 +726,29 @@ package body Bases.RecruitUI is
       New_Height := 1;
       Recruit_Info := Null_Unbounded_String;
       Show_Recruit_Equipment_Loop :
-      for Item of Recruit.Inventory loop
-         Append
-           (Source => Recruit_Info,
-            New_Item =>
-              To_String
-                (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Item)
-                     .Name) &
-              LF);
+      for I in Recruit.Equipment'Range loop
+         if Recruit.Equipment(I) > 0 then
+            Append
+              (Source => Recruit_Info,
+               New_Item =>
+                 Equipment_Locations'Image(I)(1) &
+                 To_Lower
+                   (Item =>
+                      Equipment_Locations'Image(I)
+                        (Equipment_Locations'Image(I)'First + 1 ..
+                             Equipment_Locations'Image(I)'Last)) &
+                 ": " &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index =>
+                           Positive_Formal_Container.Element
+                             (Container => Recruit.Inventory,
+                              Index => Recruit.Equipment(I)))
+                        .Name) &
+                 LF);
+         end if;
       end loop Show_Recruit_Equipment_Loop;
       Recruit_Label :=
         Create
