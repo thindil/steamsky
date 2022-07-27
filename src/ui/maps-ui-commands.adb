@@ -68,25 +68,25 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Hide map movement buttons
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- HideMapButtons
    -- SOURCE
    function Hide_Map_Buttons_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Hide_Map_Buttons_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       Button: Ttk_Button;
    begin
       Button.Interp := Interp;
@@ -94,11 +94,11 @@ package body Maps.UI.Commands is
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
-             (Main_Paned & ".mapframe.buttons." & To_String(Button_Names(I)));
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+             (Str => Main_Paned & ".mapframe.buttons." & To_String(Source => Button_Names(I)));
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end loop Hide_Buttons_Loop;
-      Button.Name := New_String(Main_Paned & ".mapframe.buttons.show");
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       return TCL_OK;
    end Hide_Map_Buttons_Command;
 
@@ -106,43 +106,43 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Show map movement buttons
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowMapButtons
    -- SOURCE
    function Show_Map_Buttons_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Map_Buttons_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       Button: Ttk_Button;
-      ButtonsBox: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".mapframe.buttons", Interp);
+      Buttons_Box: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
    begin
       Button.Interp := Interp;
       Show_Buttons_Loop :
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
-             (Widget_Image(ButtonsBox) & "." & To_String(Button_Names(I)));
-         Tcl.Tk.Ada.Grid.Grid(Button);
+             (Str => Widget_Image(Win => Buttons_Box) & "." & To_String(Source => Button_Names(I)));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       end loop Show_Buttons_Loop;
-      Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      Button.Name := New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       Button.Name :=
-        (if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0 then
-           New_String(Widget_Image(ButtonsBox) & ".right")
-         else New_String(Widget_Image(ButtonsBox) & ".left"));
+        (if Index(Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Buttons_Box), Pattern => "-sticky es") = 0 then
+           New_String(Widget_Image(Buttons_Box) & ".right")
+         else New_String(Widget_Image(Buttons_Box) & ".left"));
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Show_Map_Buttons_Command;
