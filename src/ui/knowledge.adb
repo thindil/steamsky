@@ -348,21 +348,27 @@ package body Knowledge is
                Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+                 (Slave => Frame,
+                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop Show_Manipulate_Frames_Loop;
          configure
-           (Button,
-            "-image movemapdownicon -command {KnowledgeMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
+           (Widgt => Button,
+            options =>
+              "-image movemapdownicon -command {KnowledgeMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " hide}");
       end if;
       return TCL_OK;
    end Knowledge_Max_Min_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowKnowledge", Show_Knowledge_Command'Access);
-      Add_Command("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
+      Add_Command
+        (Name => "ShowKnowledge",
+         Ada_Command => Show_Knowledge_Command'Access);
+      Add_Command
+        (Name => "KnowledgeMaxMin",
+         Ada_Command => Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.AddCommands;
       Knowledge.Events.AddCommands;
       Knowledge.Missions.AddCommands;
