@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 package Maps.UI.Commands is
 -- ****
 
-   -- ****f* MapCommands/MapCommands.AddCommands
+   -- ****f* MapCommands/MapCommands.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to map to the game
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end Maps.UI.Commands;
