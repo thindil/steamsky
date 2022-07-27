@@ -55,14 +55,14 @@ with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
 
-   ButtonNames: constant array(1 .. 13) of Unbounded_String :=
-     (To_Unbounded_String("show"), To_Unbounded_String("nw"),
-      To_Unbounded_String("n"), To_Unbounded_String("ne"),
-      To_Unbounded_String("w"), To_Unbounded_String("wait"),
-      To_Unbounded_String("e"), To_Unbounded_String("sw"),
-      To_Unbounded_String("s"), To_Unbounded_String("se"),
-      To_Unbounded_String("hide"), To_Unbounded_String("left"),
-      To_Unbounded_String("right"));
+   Button_Names: constant array(1 .. 13) of Unbounded_String :=
+     (1 => To_Unbounded_String("show"), 2 => To_Unbounded_String("nw"),
+      3 => To_Unbounded_String("n"), 4 => To_Unbounded_String("ne"),
+      5 => To_Unbounded_String("w"), 6 => To_Unbounded_String("wait"),
+      7 => To_Unbounded_String("e"), 8 => To_Unbounded_String("sw"),
+      9 => To_Unbounded_String("s"), 10 => To_Unbounded_String("se"),
+      11 => To_Unbounded_String("hide"), 12 => To_Unbounded_String("left"),
+      13 => To_Unbounded_String("right"));
 
    -- ****o* MapCommands/MapCommands.Hide_Map_Buttons_Command
    -- FUNCTION
@@ -94,7 +94,7 @@ package body Maps.UI.Commands is
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
-             (Main_Paned & ".mapframe.buttons." & To_String(ButtonNames(I)));
+             (Main_Paned & ".mapframe.buttons." & To_String(Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end loop Hide_Buttons_Loop;
       Button.Name := New_String(Main_Paned & ".mapframe.buttons.show");
@@ -134,7 +134,7 @@ package body Maps.UI.Commands is
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
-             (Widget_Image(ButtonsBox) & "." & To_String(ButtonNames(I)));
+             (Widget_Image(ButtonsBox) & "." & To_String(Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid(Button);
       end loop Show_Buttons_Loop;
       Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
