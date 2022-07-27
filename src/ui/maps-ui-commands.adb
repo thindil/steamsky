@@ -56,13 +56,13 @@ with Utils.UI; use Utils.UI;
 package body Maps.UI.Commands is
 
    Button_Names: constant array(1 .. 13) of Unbounded_String :=
-     (1 => To_Unbounded_String("show"), 2 => To_Unbounded_String("nw"),
-      3 => To_Unbounded_String("n"), 4 => To_Unbounded_String("ne"),
-      5 => To_Unbounded_String("w"), 6 => To_Unbounded_String("wait"),
-      7 => To_Unbounded_String("e"), 8 => To_Unbounded_String("sw"),
-      9 => To_Unbounded_String("s"), 10 => To_Unbounded_String("se"),
-      11 => To_Unbounded_String("hide"), 12 => To_Unbounded_String("left"),
-      13 => To_Unbounded_String("right"));
+     (1 => To_Unbounded_String(Source => "show"), 2 => To_Unbounded_String(Source => "nw"),
+      3 => To_Unbounded_String(Source => "n"), 4 => To_Unbounded_String(Source => "ne"),
+      5 => To_Unbounded_String(Source => "w"), 6 => To_Unbounded_String(Source => "wait"),
+      7 => To_Unbounded_String(Source => "e"), 8 => To_Unbounded_String(Source => "sw"),
+      9 => To_Unbounded_String(Source => "s"), 10 => To_Unbounded_String(Source => "se"),
+      11 => To_Unbounded_String(Source => "hide"), 12 => To_Unbounded_String(Source => "left"),
+      13 => To_Unbounded_String(Source => "right"));
 
    -- ****o* MapCommands/MapCommands.Hide_Map_Buttons_Command
    -- FUNCTION
