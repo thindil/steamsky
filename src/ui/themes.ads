@@ -136,6 +136,7 @@ package Themes is
    -- Craft_Icon            - Icon used for set crafting order button
    -- Study_Icon            - Icon used for set study order button
    -- Deconstruct_Icon      - Icon used for set deconstruct order button
+   -- Negotiate_Icon        - Icon used for negotiation button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -215,6 +216,7 @@ package Themes is
       Craft_Icon: Unbounded_String;
       Study_Icon: Unbounded_String;
       Deconstruct_Icon: Unbounded_String;
+      Negotiate_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -299,7 +301,8 @@ package Themes is
       Sell_Icon => Default_Theme_Icons_Path & "sell.svg",
       Craft_Icon => Default_Theme_Icons_Path & "craft-order.svg",
       Study_Icon => Default_Theme_Icons_Path & "study.svg",
-      Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg");
+      Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg",
+      Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

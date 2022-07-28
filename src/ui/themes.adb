@@ -382,6 +382,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "DeconstructIcon") then
                   Temp_Record.Deconstruct_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "NegotiateIcon") then
+                  Temp_Record.Negotiate_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -551,7 +554,8 @@ package body Themes is
          50 => To_Unbounded_String(Source => "sellicon"),
          51 => To_Unbounded_String(Source => "crafticon"),
          52 => To_Unbounded_String(Source => "studyicon"),
-         53 => To_Unbounded_String(Source => "deconstructicon"));
+         53 => To_Unbounded_String(Source => "deconstructicon"),
+         54 => To_Unbounded_String(Source => "negotiateicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
