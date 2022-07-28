@@ -370,7 +370,7 @@ package body Maps.UI.Commands is
       Tcl.Tk.Ada.Grid.Grid_Configure
         (Slave => Map_Info_Frame,
          Options => "-sticky " &
-         (if Index(Tcl.Tk.Ada.Grid.Grid_Info(Map_Info_Frame), "-sticky ne") = 0
+         (if Index(Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Map_Info_Frame), Pattern => "-sticky ne") = 0
           then "ne"
           else "wn"));
       return TCL_OK;
@@ -380,10 +380,10 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Create and show destination menu
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -391,74 +391,74 @@ package body Maps.UI.Commands is
    -- X and Y are mouse coordinates on which the destination menu will be show
    -- SOURCE
    function Show_Destination_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Destination_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      DestinationDialog: constant Ttk_Frame :=
+      Destination_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".gameframe.destinationmenu", Title => "Set destination",
            Parent_Name => ".gameframe");
       Button: Ttk_Button :=
         Create
-          (DestinationDialog & ".set",
-           "-text {Set destination} -command {SetDestination;CloseDialog " &
-           DestinationDialog & "}");
-      CloseButton: constant Ttk_Button :=
+          (pathName => Destination_Dialog & ".set",
+           options => "-text {Set destination} -command {SetDestination;CloseDialog " &
+           Destination_Dialog & "}");
+      Dialog_Close_Button: constant Ttk_Button :=
         Create
-          (DestinationDialog & ".button",
-           "-text Close -command {CloseDialog " & DestinationDialog & "}");
+          (pathName => Destination_Dialog & ".button",
+           options => "-text Close -command {CloseDialog " & Destination_Dialog & "}");
    begin
       if (Map_X = 0 or Map_Y = 0)
-        and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
+        and then Update_Map_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /=
           TCL_OK then
-         Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
+         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Destination_Dialog);
          return TCL_ERROR;
       end if;
       if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
-         Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
-         return Show_Orders_Command(ClientData, Interp, Argc, Argv);
+         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Destination_Dialog);
+         return Show_Orders_Command(Client_Data, Interp, Argc, Argv);
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-      Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
       if Player_Ship.Speed /= DOCKED then
          Bind
            (Button, "<Tab>",
-            "{focus " & DestinationDialog & ".setandmove;break}");
+            "{focus " & Destination_Dialog & ".setandmove;break}");
          Button :=
            Create
-             (DestinationDialog & ".setandmove",
+             (Destination_Dialog & ".setandmove",
               "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
-              DestinationDialog & "}");
+              Destination_Dialog & "}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-         Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
             Bind
               (Button, "<Tab>",
-               "{focus " & DestinationDialog & ".move;break}");
+               "{focus " & Destination_Dialog & ".move;break}");
             Button :=
               Create
-                (DestinationDialog & ".move",
+                (Destination_Dialog & ".move",
                  "-text {Move to} -command {MoveShip moveto;CloseDialog " &
-                 DestinationDialog & "}");
+                 Destination_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-            Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+            Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
             Bind
               (Button, "<Tab>",
-               "{focus " & DestinationDialog & ".button;break}");
+               "{focus " & Destination_Dialog & ".button;break}");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
       Bind
-        (CloseButton, "<Tab>", "{focus " & DestinationDialog & ".set;break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+        (Dialog_Close_Button, "<Tab>", "{focus " & Destination_Dialog & ".set;break}");
+      Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog
-        (Dialog => DestinationDialog, Parent_Frame => ".gameframe",
+        (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
          Relative_X => 0.4);
       return TCL_OK;
    end Show_Destination_Menu_Command;
