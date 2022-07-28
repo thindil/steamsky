@@ -534,31 +534,31 @@ package body Maps.UI.Commands is
          return TCL_OK;
       end if;
       Map_Height := Positive'Value(cget(Widgt => Map_View, option => "-height"));
-      Map_Width := Positive'Value(cget(Map_View, "-width"));
-      if CArgv.Arg(Argv, 1) = "centeronship" then
+      Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
+      if CArgv.Arg(Argv => Argv, N => 1) = "centeronship" then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
-      elsif CArgv.Arg(Argv, 1) = "movemapto" then
-         Center_X := Positive'Value(Get(Spin_Box));
-         Spin_Box.Name := New_String(Dialog_Name & ".y");
-         Center_Y := Positive'Value(Get(Spin_Box));
-      elsif CArgv.Arg(Argv, 1) = "n" then
+      elsif CArgv.Arg(Argv => Argv, N =>  1) = "movemapto" then
+         Center_X := Positive'Value(Get(Widgt => Spin_Box));
+         Spin_Box.Name := New_String(Str => Dialog_Name & ".y");
+         Center_Y := Positive'Value(Get(Widgt => Spin_Box));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "n" then
          Center_Y :=
            (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
             else Center_Y - (Map_Height / 3));
-      elsif CArgv.Arg(Argv, 1) = "s" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
          Center_Y :=
            (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
             else Center_Y + (Map_Height / 3));
-      elsif CArgv.Arg(Argv, 1) = "w" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
          Center_X :=
            (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
             else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "e" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
          Center_X :=
            (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
             else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "nw" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
          Center_Y :=
            (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
             else Center_Y - (Map_Height / 3));
