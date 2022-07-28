@@ -326,14 +326,20 @@ package body Maps.UI.Commands is
       end if;
       if Start_X +
         Integer'Value
-          (Slice(Source => Map_Index, Low => Index(Source => Map_Index, Pattern => ".") + 1, High => Length(Source => Map_Index))) <
+          (Slice
+             (Source => Map_Index,
+              Low => Index(Source => Map_Index, Pattern => ".") + 1,
+              High => Length(Source => Map_Index))) <
         1 then
          return TCL_OK;
       end if;
       Map_X :=
         Start_X +
         Integer'Value
-          (Slice(Source => Map_Index, Low => Index(Source => Map_Index, Pattern => ".") + 1, High => Length(Source => Map_Index)));
+          (Slice
+             (Source => Map_Index,
+              Low => Index(Source => Map_Index, Pattern => ".") + 1,
+              High => Length(Source => Map_Index)));
       if Map_X > 1_024 then
          return TCL_OK;
       end if;
@@ -365,14 +371,20 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Map_Info_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.info", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".mapframe.info", Interp => Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid_Configure
         (Slave => Map_Info_Frame,
-         Options => "-sticky " &
-         (if Index(Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Map_Info_Frame), Pattern => "-sticky ne") = 0
-          then "ne"
-          else "wn"));
+         Options =>
+           "-sticky " &
+           (if
+              Index
+                (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Map_Info_Frame),
+                 Pattern => "-sticky ne") =
+              0
+            then "ne"
+            else "wn"));
       return TCL_OK;
    end Move_Map_Info_Command;
 
@@ -406,25 +418,37 @@ package body Maps.UI.Commands is
       Button: Ttk_Button :=
         Create
           (pathName => Destination_Dialog & ".set",
-           options => "-text {Set destination} -command {SetDestination;CloseDialog " &
-           Destination_Dialog & "}");
+           options =>
+             "-text {Set destination} -command {SetDestination;CloseDialog " &
+             Destination_Dialog & "}");
       Dialog_Close_Button: constant Ttk_Button :=
         Create
           (pathName => Destination_Dialog & ".button",
-           options => "-text Close -command {CloseDialog " & Destination_Dialog & "}");
+           options =>
+             "-text Close -command {CloseDialog " & Destination_Dialog & "}");
    begin
       if (Map_X = 0 or Map_Y = 0)
-        and then Update_Map_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /=
+        and then
+          Update_Map_Info_Command
+            (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+             Argv => Argv) /=
           TCL_OK then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Destination_Dialog);
+         Tcl_Eval
+           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
          return TCL_ERROR;
       end if;
       if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Destination_Dialog);
-         return Show_Orders_Command(ClientData => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+         Tcl_Eval
+           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
+         return
+           Show_Orders_Command
+             (ClientData => Client_Data, Interp => Interp, Argc => Argc,
+              Argv => Argv);
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       if Player_Ship.Speed /= DOCKED then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
@@ -432,10 +456,14 @@ package body Maps.UI.Commands is
          Button :=
            Create
              (pathName => Destination_Dialog & ".setandmove",
-              options => "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
-              Destination_Dialog & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
-         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+              options =>
+                "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
+                Destination_Dialog & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-sticky we -padx 5");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Dialog_Close_Button & " invoke;break}");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
             Bind
@@ -444,19 +472,28 @@ package body Maps.UI.Commands is
             Button :=
               Create
                 (pathName => Destination_Dialog & ".move",
-                 options => "-text {Move to} -command {MoveShip moveto;CloseDialog " &
-                 Destination_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
-            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+                 options =>
+                   "-text {Move to} -command {MoveShip moveto;CloseDialog " &
+                   Destination_Dialog & "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-sticky we -padx 5");
+            Bind
+              (Widgt => Button, Sequence => "<Escape>",
+               Script => "{" & Dialog_Close_Button & " invoke;break}");
             Bind
               (Widgt => Button, Sequence => "<Tab>",
                Script => "{focus " & Destination_Dialog & ".button;break}");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-sticky we -padx 5 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Dialog_Close_Button,
+         Options => "-sticky we -padx 5 -pady {0 5}");
       Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Tab>", Script => "{focus " & Destination_Dialog & ".set;break}");
-      Bind(Widgt => Dialog_Close_Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Destination_Dialog & ".set;break}");
+      Bind
+        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog
         (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
          Relative_X => 0.4);
@@ -490,7 +527,8 @@ package body Maps.UI.Commands is
       Player_Ship.Destination_X := Map_X;
       Player_Ship.Destination_Y := Map_Y;
       Add_Message
-        (Message => "You set the travel destination for your ship.", M_Type => ORDERMESSAGE);
+        (Message => "You set the travel destination for your ship.",
+         M_Type => ORDERMESSAGE);
       if Game_Settings.Auto_Center then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
@@ -528,17 +566,19 @@ package body Maps.UI.Commands is
         Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
       Map_Height, Map_Width: Positive;
       Dialog_Name: constant String := ".gameframe.movemapdialog";
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
    begin
       if Winfo_Get(Widgt => Map_View, Info => "ismapped") = "0" then
          return TCL_OK;
       end if;
-      Map_Height := Positive'Value(cget(Widgt => Map_View, option => "-height"));
+      Map_Height :=
+        Positive'Value(cget(Widgt => Map_View, option => "-height"));
       Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
       if CArgv.Arg(Argv => Argv, N => 1) = "centeronship" then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
-      elsif CArgv.Arg(Argv => Argv, N =>  1) = "movemapto" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "movemapto" then
          Center_X := Positive'Value(Get(Widgt => Spin_Box));
          Spin_Box.Name := New_String(Str => Dialog_Name & ".y");
          Center_Y := Positive'Value(Get(Widgt => Spin_Box));
@@ -548,7 +588,8 @@ package body Maps.UI.Commands is
             else Center_Y - (Map_Height / 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
          Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+           (if Center_Y + (Map_Height / 3) > 1_024 then
+              1_024 - (Map_Height / 3)
             else Center_Y + (Map_Height / 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
          Center_X :=
@@ -565,23 +606,25 @@ package body Maps.UI.Commands is
          Center_X :=
            (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
             else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "ne" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
          Center_Y :=
            (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
             else Center_Y - (Map_Height / 3));
          Center_X :=
            (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
             else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "sw" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
          Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+           (if Center_Y + (Map_Height / 3) > 1_024 then
+              1_024 - (Map_Height / 3)
             else Center_Y + (Map_Height / 3));
          Center_X :=
            (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
             else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "se" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
          Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+           (if Center_Y + (Map_Height / 3) > 1_024 then
+              1_024 - (Map_Height / 3)
             else Center_Y + (Map_Height / 3));
          Center_X :=
            (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
