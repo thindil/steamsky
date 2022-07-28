@@ -439,23 +439,23 @@ package body Maps.UI.Commands is
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
             Bind
-              (Button, "<Tab>",
-               "{focus " & Destination_Dialog & ".move;break}");
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Destination_Dialog & ".move;break}");
             Button :=
               Create
-                (Destination_Dialog & ".move",
-                 "-text {Move to} -command {MoveShip moveto;CloseDialog " &
+                (pathName => Destination_Dialog & ".move",
+                 options => "-text {Move to} -command {MoveShip moveto;CloseDialog " &
                  Destination_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-            Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
+            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
             Bind
-              (Button, "<Tab>",
-               "{focus " & Destination_Dialog & ".button;break}");
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Destination_Dialog & ".button;break}");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-sticky we -padx 5 -pady {0 5}");
       Bind
-        (Dialog_Close_Button, "<Tab>", "{focus " & Destination_Dialog & ".set;break}");
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>", Script => "{focus " & Destination_Dialog & ".set;break}");
       Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog
         (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
