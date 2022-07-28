@@ -528,7 +528,8 @@ package body Bases.RecruitUI is
         Create
           (pathName => Recruit_Dialog & ".buttonbox2.button",
            options =>
-             "-text Close -command {CloseDialog " & Recruit_Dialog & "}");
+             "-text Close -command {CloseDialog " & Recruit_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
