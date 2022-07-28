@@ -326,18 +326,18 @@ package body Maps.UI.Commands is
       end if;
       if Start_X +
         Integer'Value
-          (Slice(Map_Index, Index(Map_Index, ".") + 1, Length(Map_Index))) <
+          (Slice(Source => Map_Index, Low => Index(Source => Map_Index, Pattern => ".") + 1, High => Length(Source => Map_Index))) <
         1 then
          return TCL_OK;
       end if;
       Map_X :=
         Start_X +
         Integer'Value
-          (Slice(Map_Index, Index(Map_Index, ".") + 1, Length(Map_Index)));
+          (Slice(Source => Map_Index, Low => Index(Source => Map_Index, Pattern => ".") + 1, High => Length(Source => Map_Index)));
       if Map_X > 1_024 then
          return TCL_OK;
       end if;
-      Update_Map_Info(Map_X, Map_Y);
+      Update_Map_Info(X => Map_X, Y => Map_Y);
       return TCL_OK;
    end Update_Map_Info_Command;
 
@@ -345,32 +345,32 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Move map info frame when mouse enter it
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- MoveMapInfo
    -- SOURCE
    function Move_Map_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Map_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      MapInfoFrame: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".mapframe.info", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Map_Info_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.info", Interp => Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid_Configure
-        (MapInfoFrame,
-         "-sticky " &
-         (if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0
+        (Slave => Map_Info_Frame,
+         Options => "-sticky " &
+         (if Index(Tcl.Tk.Ada.Grid.Grid_Info(Map_Info_Frame), "-sticky ne") = 0
           then "ne"
           else "wn"));
       return TCL_OK;
