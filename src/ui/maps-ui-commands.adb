@@ -456,7 +456,7 @@ package body Maps.UI.Commands is
       Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-sticky we -padx 5 -pady {0 5}");
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>", Script => "{focus " & Destination_Dialog & ".set;break}");
-      Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+      Bind(Widgt => Dialog_Close_Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog
         (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
          Relative_X => 0.4);
@@ -467,30 +467,30 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Set current map cell as destination for the player's ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SetDestination
    -- SOURCE
    function Set_Ship_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Ship_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
       Player_Ship.Destination_X := Map_X;
       Player_Ship.Destination_Y := Map_Y;
       Add_Message
-        ("You set the travel destination for your ship.", ORDERMESSAGE);
+        (Message => "You set the travel destination for your ship.", M_Type => ORDERMESSAGE);
       if Game_Settings.Auto_Center then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
@@ -504,10 +504,10 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Move map in the selected direction
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -515,77 +515,77 @@ package body Maps.UI.Commands is
    -- Direction in which the map will be moved
    -- SOURCE
    function Move_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      MapView: constant Tk_Text :=
-        Get_Widget(Main_Paned & ".mapframe.map", Interp);
-      MapHeight, MapWidth: Positive;
-      DialogName: constant String := ".gameframe.movemapdialog";
-      SpinBox: Ttk_SpinBox := Get_Widget(DialogName & ".x", Interp);
+      Map_View: constant Tk_Text :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
+      Map_Height, Map_Width: Positive;
+      Dialog_Name: constant String := ".gameframe.movemapdialog";
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
    begin
-      if Winfo_Get(MapView, "ismapped") = "0" then
+      if Winfo_Get(Widgt => Map_View, Info => "ismapped") = "0" then
          return TCL_OK;
       end if;
-      MapHeight := Positive'Value(cget(MapView, "-height"));
-      MapWidth := Positive'Value(cget(MapView, "-width"));
+      Map_Height := Positive'Value(cget(Widgt => Map_View, option => "-height"));
+      Map_Width := Positive'Value(cget(Map_View, "-width"));
       if CArgv.Arg(Argv, 1) = "centeronship" then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
-         Center_X := Positive'Value(Get(SpinBox));
-         SpinBox.Name := New_String(DialogName & ".y");
-         Center_Y := Positive'Value(Get(SpinBox));
+         Center_X := Positive'Value(Get(Spin_Box));
+         Spin_Box.Name := New_String(Dialog_Name & ".y");
+         Center_Y := Positive'Value(Get(Spin_Box));
       elsif CArgv.Arg(Argv, 1) = "n" then
          Center_Y :=
-           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
-            else Center_Y - (MapHeight / 3));
+           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+            else Center_Y - (Map_Height / 3));
       elsif CArgv.Arg(Argv, 1) = "s" then
          Center_Y :=
-           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else Center_Y + (MapHeight / 3));
+           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+            else Center_Y + (Map_Height / 3));
       elsif CArgv.Arg(Argv, 1) = "w" then
          Center_X :=
-           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
-            else Center_X - (MapWidth / 3));
+           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+            else Center_X - (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          Center_X :=
-           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else Center_X + (MapWidth / 3));
+           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+            else Center_X + (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
          Center_Y :=
-           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
-            else Center_Y - (MapHeight / 3));
+           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+            else Center_Y - (Map_Height / 3));
          Center_X :=
-           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
-            else Center_X - (MapWidth / 3));
+           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+            else Center_X - (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "ne" then
          Center_Y :=
-           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
-            else Center_Y - (MapHeight / 3));
+           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+            else Center_Y - (Map_Height / 3));
          Center_X :=
-           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else Center_X + (MapWidth / 3));
+           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+            else Center_X + (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          Center_Y :=
-           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else Center_Y + (MapHeight / 3));
+           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+            else Center_Y + (Map_Height / 3));
          Center_X :=
-           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
-            else Center_X - (MapWidth / 3));
+           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+            else Center_X - (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "se" then
          Center_Y :=
-           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else Center_Y + (MapHeight / 3));
+           (if Center_Y + (Map_Height / 3) > 1_024 then 1_024 - (Map_Height / 3)
+            else Center_Y + (Map_Height / 3));
          Center_X :=
-           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else Center_X + (MapWidth / 3));
+           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+            else Center_X + (Map_Width / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
          Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
          Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
@@ -593,7 +593,7 @@ package body Maps.UI.Commands is
       Draw_Map;
       return
         Close_Dialog_Command
-          (ClientData, Interp, 2, Empty & "CloseDialog" & DialogName);
+          (Client_Data, Interp, 2, Empty & "CloseDialog" & Dialog_Name);
    end Move_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Zoom_Map_Command
