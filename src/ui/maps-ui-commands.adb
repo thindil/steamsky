@@ -421,21 +421,21 @@ package body Maps.UI.Commands is
       end if;
       if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
          Tcl_Eval(interp => Interp, strng => "CloseDialog " & Destination_Dialog);
-         return Show_Orders_Command(Client_Data, Interp, Argc, Argv);
+         return Show_Orders_Command(ClientData => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-      Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
       if Player_Ship.Speed /= DOCKED then
          Bind
-           (Button, "<Tab>",
-            "{focus " & Destination_Dialog & ".setandmove;break}");
+           (Widgt => Button, Sequence => "<Tab>",
+            Script => "{focus " & Destination_Dialog & ".setandmove;break}");
          Button :=
            Create
-             (Destination_Dialog & ".setandmove",
-              "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
+             (pathName => Destination_Dialog & ".setandmove",
+              options => "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
               Destination_Dialog & "}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-         Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
+         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
             Bind
