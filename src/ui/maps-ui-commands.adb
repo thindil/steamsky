@@ -636,7 +636,8 @@ package body Maps.UI.Commands is
       Draw_Map;
       return
         Close_Dialog_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Empty & "CloseDialog" & Dialog_Name);
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => Empty & "CloseDialog" & Dialog_Name);
    end Move_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Zoom_Map_Command
@@ -663,7 +664,8 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       Game_Settings.Map_Font_Size :=
-        (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then Game_Settings.Map_Font_Size + 1
+        (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
+           Game_Settings.Map_Font_Size + 1
          else Game_Settings.Map_Font_Size - 1);
       if Game_Settings.Map_Font_Size < 3 then
          Game_Settings.Map_Font_Size := 3;
@@ -672,9 +674,13 @@ package body Maps.UI.Commands is
       end if;
       Tcl_Eval
         (interp => Interp,
-         strng => "font configure MapFont -size" &
-         Positive'Image(Game_Settings.Map_Font_Size));
-      return Draw_Map_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+         strng =>
+           "font configure MapFont -size" &
+           Positive'Image(Game_Settings.Map_Font_Size));
+      return
+        Draw_Map_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Zoom_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Command
@@ -748,16 +754,19 @@ package body Maps.UI.Commands is
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
-                 (Message => "You reached your travel destination.", M_Type => ORDERMESSAGE);
+                 (Message => "You reached your travel destination.",
+                  M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(Source => Auto_Finish_Missions);
+                  Message :=
+                    To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
                Result := 4;
             end if;
          end if;
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "moveto" then -- Move to destination
+      elsif CArgv.Arg(Argv => Argv, N => 1) =
+        "moveto" then -- Move to destination
          Move_Loop :
          loop
             New_X := 0;
@@ -775,7 +784,8 @@ package body Maps.UI.Commands is
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
-                 (Find_Member(Order => PILOT) = 0 or Find_Member(Order => ENGINEER) = 0) then
+                 (Find_Member(Order => PILOT) = 0 or
+                  Find_Member(Order => ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
                Result := 1;
@@ -788,7 +798,7 @@ package body Maps.UI.Commands is
             if Game_Settings.Auto_Move_Stop /= NEVER and
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index >
                 0 then
-               Get_Event_Block:
+               Get_Event_Block :
                declare
                   Event_Index: constant Positive :=
                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
@@ -817,19 +827,22 @@ package body Maps.UI.Commands is
                   end case;
                end Get_Event_Block;
             end if;
-            Set_Low_Amount_Info_Block:
+            Set_Low_Amount_Info_Block :
             declare
                Message_Dialog: constant Ttk_Frame :=
                  Get_Widget(pathName => ".message", Interp => Interp);
             begin
-               if Winfo_Get(Widgt => Message_Dialog, Info => "exists") = "0" then
-                  if Get_Item_Amount(Item_Type => Fuel_Type) <= Game_Settings.Low_Fuel then
+               if Winfo_Get(Widgt => Message_Dialog, Info => "exists") =
+                 "0" then
+                  if Get_Item_Amount(Item_Type => Fuel_Type) <=
+                    Game_Settings.Low_Fuel then
                      Show_Message
                        (Text => "Your fuel level is dangerously low.",
                         Title => "Low fuel level");
                      Result := 4;
                      exit Move_Loop;
-                  elsif Get_Items_Amount(I_Type => "Food") <= Game_Settings.Low_Food then
+                  elsif Get_Items_Amount(I_Type => "Food") <=
+                    Game_Settings.Low_Food then
                      Show_Message
                        (Text => "Your food level is dangerously low.",
                         Title => "Low amount of food");
@@ -848,11 +861,13 @@ package body Maps.UI.Commands is
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
-                 (Message => "You reached your travel destination.", M_Type => ORDERMESSAGE);
+                 (Message => "You reached your travel destination.",
+                  M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(Source => Auto_Finish_Missions);
+                  Message :=
+                    To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
                Result := 4;
                exit Move_Loop;
@@ -868,12 +883,14 @@ package body Maps.UI.Commands is
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             Show_Question
-              (Question => "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+              (Question =>
+                 "You don't have pilot on duty. Do you want to wait until your pilot rest?",
                Result => "nopilot");
             return TCL_OK;
          when 7 => -- Ship moved, but engineer needs rest, confirm
             Show_Question
-              (Question => "You don't have engineer on duty. Do you want to wait until your engineer rest?",
+              (Question =>
+                 "You don't have engineer on duty. Do you want to wait until your engineer rest?",
                Result => "nopilot");
             return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
@@ -883,19 +900,21 @@ package body Maps.UI.Commands is
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
-                 (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
+                 (Find_Member(Order => PILOT) = 0 or
+                  Find_Member(Order => ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
                Starts_Combat := Check_For_Event;
             end if;
             if not Starts_Combat and Game_Settings.Auto_Finish then
-               Message := To_Unbounded_String(Auto_Finish_Missions);
+               Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
          when others =>
             null;
       end case;
       if Message /= Null_Unbounded_String then
-         Show_Message(Text => To_String(Message), Title => "Message");
+         Show_Message
+           (Text => To_String(Source => Message), Title => "Message");
       end if;
       Center_X := Player_Ship.Sky_X;
       Center_Y := Player_Ship.Sky_Y;
@@ -912,27 +931,28 @@ package body Maps.UI.Commands is
    -- Ask player if he/she wants to quit from the game and if yes, save it and
    -- show main menu
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- QuitGame
    -- SOURCE
    function Quit_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Quit_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Show_Question("Are you sure want to quit?", "quit");
+      Show_Question
+        (Question => "Are you sure want to quit?", Result => "quit");
       return TCL_OK;
    end Quit_Game_Command;
 
@@ -941,27 +961,29 @@ package body Maps.UI.Commands is
    -- Resing from the game - if player resigned, kill he/she character and
    -- follow as for death of the player's character
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ResignGame
    -- SOURCE
    function Resign_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resign_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Show_Question("Are you sure want to resign from game?", "resign");
+      Show_Question
+        (Question => "Are you sure want to resign from game?",
+         Result => "resign");
       return TCL_OK;
    end Resign_Game_Command;
 
@@ -969,27 +991,28 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Show the player's game statistics
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowStats
    -- SOURCE
    function Show_Stats_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Stats_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       Show_Statistics;
       return TCL_OK;
    end Show_Stats_Command;
@@ -998,10 +1021,10 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Show sky map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1010,21 +1033,21 @@ package body Maps.UI.Commands is
    -- to do special actions when closing them
    -- SOURCE
    function Show_Sky_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Sky_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
    begin
       if Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
       else
-         Tcl_Eval(Interp, CArgv.Arg(Argv, 1));
+         Tcl_Eval(interp => Interp, strng => CArgv.Arg(Argv => Argv, N => 1));
       end if;
       Focus(Get_Main_Window(Interp));
       return TCL_OK;
