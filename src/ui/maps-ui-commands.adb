@@ -790,24 +790,24 @@ package body Maps.UI.Commands is
                 0 then
                Get_Event_Block:
                declare
-                  EventIndex: constant Positive :=
+                  Event_Index: constant Positive :=
                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
-                        if Events_List(EventIndex).E_Type in ENEMYSHIP |
+                        if Events_List(Event_Index).E_Type in ENEMYSHIP |
                               TRADER | FRIENDLYSHIP | ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when FRIENDLY =>
-                        if Events_List(EventIndex).E_Type in TRADER |
+                        if Events_List(Event_Index).E_Type in TRADER |
                               FRIENDLYSHIP then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when Config.ENEMY =>
-                        if Events_List(EventIndex).E_Type in ENEMYSHIP |
+                        if Events_List(Event_Index).E_Type in ENEMYSHIP |
                               ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;
@@ -817,24 +817,25 @@ package body Maps.UI.Commands is
                   end case;
                end Get_Event_Block;
             end if;
+            Set_Low_Amount_Info_Block:
             declare
-               MessageDialog: constant Ttk_Frame :=
-                 Get_Widget(".message", Interp);
+               Message_Dialog: constant Ttk_Frame :=
+                 Get_Widget(pathName => ".message", Interp => Interp);
             begin
-               if Winfo_Get(MessageDialog, "exists") = "0" then
-                  if Get_Item_Amount(Fuel_Type) <= Game_Settings.Low_Fuel then
+               if Winfo_Get(Widgt => Message_Dialog, Info => "exists") = "0" then
+                  if Get_Item_Amount(Item_Type => Fuel_Type) <= Game_Settings.Low_Fuel then
                      Show_Message
                        (Text => "Your fuel level is dangerously low.",
                         Title => "Low fuel level");
                      Result := 4;
                      exit Move_Loop;
-                  elsif Get_Items_Amount("Food") <= Game_Settings.Low_Food then
+                  elsif Get_Items_Amount(I_Type => "Food") <= Game_Settings.Low_Food then
                      Show_Message
                        (Text => "Your food level is dangerously low.",
                         Title => "Low amount of food");
                      Result := 4;
                      exit Move_Loop;
-                  elsif Get_Items_Amount("Drinks") <=
+                  elsif Get_Items_Amount(I_Type => "Drinks") <=
                     Game_Settings.Low_Drinks then
                      Show_Message
                        (Text => "Your drinks level is dangerously low.",
@@ -843,15 +844,15 @@ package body Maps.UI.Commands is
                      exit Move_Loop;
                   end if;
                end if;
-            end;
+            end Set_Low_Amount_Info_Block;
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
-                 ("You reached your travel destination.", ORDERMESSAGE);
+                 (Message => "You reached your travel destination.", M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(Auto_Finish_Missions);
+                  Message := To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
                Result := 4;
                exit Move_Loop;
@@ -863,24 +864,24 @@ package body Maps.UI.Commands is
          when 1 => -- Ship moved, check for events
             Starts_Combat := Check_For_Event;
             if not Starts_Combat and Game_Settings.Auto_Finish then
-               Message := To_Unbounded_String(Auto_Finish_Missions);
+               Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             Show_Question
-              ("You don't have pilot on duty. Do you want to wait until your pilot rest?",
-               "nopilot");
+              (Question => "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+               Result => "nopilot");
             return TCL_OK;
          when 7 => -- Ship moved, but engineer needs rest, confirm
             Show_Question
-              ("You don't have engineer on duty. Do you want to wait until your engineer rest?",
-               "nopilot");
+              (Question => "You don't have engineer on duty. Do you want to wait until your engineer rest?",
+               Result => "nopilot");
             return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
             Starts_Combat := Check_For_Event;
             if not Starts_Combat then
                Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-                   (To_Unbounded_String("sentientships"))
+                   (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
                  (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
                   Wait_For_Rest;
