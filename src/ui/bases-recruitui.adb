@@ -812,7 +812,7 @@ package body Bases.RecruitUI is
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command
    -- FUNCTION
-   -- Show dialog for negotiate hiring of the selected recruit
+   -- Update information about hiring of the selected recruit
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
@@ -1165,7 +1165,8 @@ package body Bases.RecruitUI is
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.button",
            options =>
-             "-text Close -command {CloseDialog " & Negotiate_Dialog & "}");
+             "-text Close -command {CloseDialog " & Negotiate_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
