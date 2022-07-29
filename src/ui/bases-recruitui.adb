@@ -1123,7 +1123,8 @@ package body Bases.RecruitUI is
       Hire_Button :=
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.hirebutton",
-           options => "-text Hire -command {Hire}");
+           options =>
+             "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
       Label := Create(pathName => Negotiate_Dialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Cost := Recruit.Price;
