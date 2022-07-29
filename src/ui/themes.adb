@@ -585,7 +585,7 @@ package body Themes is
          45 => Theme.Remove_Icon, 46 => Theme.Help_Icon, 47 => Theme.Give_Icon,
          48 => Theme.Drop_Icon, 49 => Theme.Buy_Icon, 50 => Theme.Sell_Icon,
          51 => Theme.Craft_Icon, 52 => Theme.Study_Icon,
-         53 => Theme.Deconstruct_Icon);
+         53 => Theme.Deconstruct_Icon, 54 => Theme.Negotiate_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
