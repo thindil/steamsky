@@ -812,7 +812,7 @@ package body Bases.RecruitUI is
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command
    -- FUNCTION
-   -- Show information about the selected recruit
+   -- Show dialog for negotiate hiring of the selected recruit
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
