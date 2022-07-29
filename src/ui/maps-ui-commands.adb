@@ -735,35 +735,35 @@ package body Maps.UI.Commands is
          Result := Move_Ship(X => -1, Y => -1, Message => Message);
       elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then -- Move up/right
          Result := Move_Ship(X => 1, Y => -1, Message => Message);
-      elsif CArgv.Arg(Argv, 1) =
+      elsif CArgv.Arg(Argv => Argv, N => 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
          if Player_Ship.Destination_X = 0 and
            Player_Ship.Destination_Y = 0 then
             Result := 1;
-            Update_Game(1);
-            Wait_In_Place(1);
+            Update_Game(Minutes => 1);
+            Wait_In_Place(Minutes => 1);
          else
             Update_Coordinates;
-            Result := Move_Ship(New_X, New_Y, Message);
+            Result := Move_Ship(X => New_X, Y => New_Y, Message => Message);
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
-                 ("You reached your travel destination.", ORDERMESSAGE);
+                 (Message => "You reached your travel destination.", M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(Auto_Finish_Missions);
+                  Message := To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
                Result := 4;
             end if;
          end if;
-      elsif CArgv.Arg(Argv, 1) = "moveto" then -- Move to destination
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "moveto" then -- Move to destination
          Move_Loop :
          loop
             New_X := 0;
             New_Y := 0;
             Update_Coordinates;
-            Result := Move_Ship(New_X, New_Y, Message);
+            Result := Move_Ship(X => New_X, Y => New_Y, Message => Message);
             exit Move_Loop when Result = 0;
             Starts_Combat := Check_For_Event;
             if Starts_Combat then
@@ -773,9 +773,9 @@ package body Maps.UI.Commands is
             if Result = 8 then
                Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-                   (To_Unbounded_String("sentientships"))
+                   (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
-                 (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
+                 (Find_Member(Order => PILOT) = 0 or Find_Member(Order => ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
                Result := 1;
@@ -788,6 +788,7 @@ package body Maps.UI.Commands is
             if Game_Settings.Auto_Move_Stop /= NEVER and
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index >
                 0 then
+               Get_Event_Block:
                declare
                   EventIndex: constant Positive :=
                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
@@ -814,7 +815,7 @@ package body Maps.UI.Commands is
                      when NEVER =>
                         null;
                   end case;
-               end;
+               end Get_Event_Block;
             end if;
             declare
                MessageDialog: constant Ttk_Frame :=
