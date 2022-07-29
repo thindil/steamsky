@@ -727,14 +727,14 @@ package body Maps.UI.Commands is
          Result := Move_Ship(X => 1, Y => 0, Message => Message);
       elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then -- Move left
          Result := Move_Ship(X => -1, Y => 0, Message => Message);
-      elsif CArgv.Arg(Argv, 1) = "sw" then -- Move down/left
-         Result := Move_Ship(-1, 1, Message);
-      elsif CArgv.Arg(Argv, 1) = "se" then -- Move down/right
-         Result := Move_Ship(1, 1, Message);
-      elsif CArgv.Arg(Argv, 1) = "nw" then -- Move up/left
-         Result := Move_Ship(-1, -1, Message);
-      elsif CArgv.Arg(Argv, 1) = "ne" then -- Move up/right
-         Result := Move_Ship(1, -1, Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then -- Move down/left
+         Result := Move_Ship(X => -1, Y => 1, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then -- Move down/right
+         Result := Move_Ship(X => 1, Y => 1, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then -- Move up/left
+         Result := Move_Ship(X => -1, Y => -1, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then -- Move up/right
+         Result := Move_Ship(X => 1, Y => -1, Message => Message);
       elsif CArgv.Arg(Argv, 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
          if Player_Ship.Destination_X = 0 and
