@@ -629,41 +629,41 @@ package body Maps.UI.Commands is
          Center_X :=
            (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
             else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv, 1) = "centeronhome" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "centeronhome" then
          Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
          Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
       end if;
       Draw_Map;
       return
         Close_Dialog_Command
-          (Client_Data, Interp, 2, Empty & "CloseDialog" & Dialog_Name);
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Empty & "CloseDialog" & Dialog_Name);
    end Move_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Zoom_Map_Command
    -- FUNCTION
    -- Zoom the sky map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ZoomMap
    -- SOURCE
    function Zoom_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Zoom_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       Game_Settings.Map_Font_Size :=
-        (if CArgv.Arg(Argv, 1) = "raise" then Game_Settings.Map_Font_Size + 1
+        (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then Game_Settings.Map_Font_Size + 1
          else Game_Settings.Map_Font_Size - 1);
       if Game_Settings.Map_Font_Size < 3 then
          Game_Settings.Map_Font_Size := 3;
@@ -671,20 +671,20 @@ package body Maps.UI.Commands is
          Game_Settings.Map_Font_Size := 50;
       end if;
       Tcl_Eval
-        (Interp,
-         "font configure MapFont -size" &
+        (interp => Interp,
+         strng => "font configure MapFont -size" &
          Positive'Image(Game_Settings.Map_Font_Size));
-      return Draw_Map_Command(ClientData, Interp, Argc, Argv);
+      return Draw_Map_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Zoom_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Command
    -- FUNCTION
    -- Move the player ship in the selected location and check what happens
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -692,30 +692,30 @@ package body Maps.UI.Commands is
    -- Direction in which the player's ship will be moved
    -- SOURCE
    function Move_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Message: Unbounded_String;
       Result: Natural;
-      StartsCombat: Boolean := False;
-      NewX, NewY: Integer := 0;
+      Starts_Combat: Boolean := False;
+      New_X, New_Y: Integer := 0;
       procedure Update_Coordinates is
       begin
          if Player_Ship.Destination_X > Player_Ship.Sky_X then
-            NewX := 1;
+            New_X := 1;
          elsif Player_Ship.Destination_X < Player_Ship.Sky_X then
-            NewX := -1;
+            New_X := -1;
          end if;
          if Player_Ship.Destination_Y > Player_Ship.Sky_Y then
-            NewY := 1;
+            New_Y := 1;
          elsif Player_Ship.Destination_Y < Player_Ship.Sky_Y then
-            NewY := -1;
+            New_Y := -1;
          end if;
       end Update_Coordinates;
    begin
@@ -744,7 +744,7 @@ package body Maps.UI.Commands is
             Wait_In_Place(1);
          else
             Update_Coordinates;
-            Result := Move_Ship(NewX, NewY, Message);
+            Result := Move_Ship(New_X, New_Y, Message);
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
@@ -760,13 +760,13 @@ package body Maps.UI.Commands is
       elsif CArgv.Arg(Argv, 1) = "moveto" then -- Move to destination
          Move_Loop :
          loop
-            NewX := 0;
-            NewY := 0;
+            New_X := 0;
+            New_Y := 0;
             Update_Coordinates;
-            Result := Move_Ship(NewX, NewY, Message);
+            Result := Move_Ship(New_X, New_Y, Message);
             exit Move_Loop when Result = 0;
-            StartsCombat := Check_For_Event;
-            if StartsCombat then
+            Starts_Combat := Check_For_Event;
+            if Starts_Combat then
                Result := 4;
                exit Move_Loop;
             end if;
@@ -779,8 +779,8 @@ package body Maps.UI.Commands is
                   Wait_For_Rest;
                end if;
                Result := 1;
-               StartsCombat := Check_For_Event;
-               if StartsCombat then
+               Starts_Combat := Check_For_Event;
+               if Starts_Combat then
                   Result := 4;
                   exit Move_Loop;
                end if;
@@ -860,8 +860,8 @@ package body Maps.UI.Commands is
       end if;
       case Result is
          when 1 => -- Ship moved, check for events
-            StartsCombat := Check_For_Event;
-            if not StartsCombat and Game_Settings.Auto_Finish then
+            Starts_Combat := Check_For_Event;
+            if not Starts_Combat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(Auto_Finish_Missions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
@@ -875,8 +875,8 @@ package body Maps.UI.Commands is
                "nopilot");
             return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
-            StartsCombat := Check_For_Event;
-            if not StartsCombat then
+            Starts_Combat := Check_For_Event;
+            if not Starts_Combat then
                Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
@@ -884,9 +884,9 @@ package body Maps.UI.Commands is
                  (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
-               StartsCombat := Check_For_Event;
+               Starts_Combat := Check_For_Event;
             end if;
-            if not StartsCombat and Game_Settings.Auto_Finish then
+            if not Starts_Combat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(Auto_Finish_Missions);
             end if;
          when others =>
@@ -897,7 +897,7 @@ package body Maps.UI.Commands is
       end if;
       Center_X := Player_Ship.Sky_X;
       Center_Y := Player_Ship.Sky_Y;
-      if StartsCombat then
+      if Starts_Combat then
          Show_Combat_Ui;
       else
          Show_Sky_Map;
