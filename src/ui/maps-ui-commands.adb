@@ -719,14 +719,14 @@ package body Maps.UI.Commands is
          end if;
       end Update_Coordinates;
    begin
-      if CArgv.Arg(Argv, 1) = "n" then -- Move up
-         Result := Move_Ship(0, -1, Message);
-      elsif CArgv.Arg(Argv, 1) = "s" then -- Move down
-         Result := Move_Ship(0, 1, Message);
-      elsif CArgv.Arg(Argv, 1) = "e" then -- Move right
-         Result := Move_Ship(1, 0, Message);
-      elsif CArgv.Arg(Argv, 1) = "w" then -- Move left
-         Result := Move_Ship(-1, 0, Message);
+      if CArgv.Arg(Argv => Argv, N => 1) = "n" then -- Move up
+         Result := Move_Ship(X => 0, Y => -1, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then -- Move down
+         Result := Move_Ship(X => 0, Y => 1, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then -- Move right
+         Result := Move_Ship(X => 1, Y => 0, Message => Message);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then -- Move left
+         Result := Move_Ship(X => -1, Y => 0, Message => Message);
       elsif CArgv.Arg(Argv, 1) = "sw" then -- Move down/left
          Result := Move_Ship(-1, 1, Message);
       elsif CArgv.Arg(Argv, 1) = "se" then -- Move down/right
