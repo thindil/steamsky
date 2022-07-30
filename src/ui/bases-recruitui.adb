@@ -253,8 +253,8 @@ package body Bases.RecruitUI is
                    Recruit_Container.Element
                      (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                      .Name),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 1);
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 1);
          Add_Button
            (Table => Recruit_Table,
             Text =>
@@ -265,8 +265,8 @@ package body Bases.RecruitUI is
                  'F'
                then "Female"
                else "Male"),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 2);
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 2);
          Add_Button
            (Table => Recruit_Table,
             Text =>
@@ -278,8 +278,8 @@ package body Bases.RecruitUI is
                          Index => I)
                         .Faction)
                      .Name),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 3);
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 3);
          Add_Button
            (Table => Recruit_Table,
             Text =>
@@ -287,8 +287,8 @@ package body Bases.RecruitUI is
                 (Recruit_Container.Element
                    (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                    .Price),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 4);
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 4);
          Add_Button
            (Table => Recruit_Table,
             Text =>
@@ -296,8 +296,8 @@ package body Bases.RecruitUI is
                 (Source =>
                    Get_Highest_Attribute
                      (Base_Index => Base_Index, Member_Index => I)),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 5);
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 5);
          Add_Button
            (Table => Recruit_Table,
             Text =>
@@ -305,8 +305,8 @@ package body Bases.RecruitUI is
                 (Source =>
                    Get_Highest_Skill
                      (Base_Index => Base_Index, Member_Index => I)),
-            Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 6,
+            Tooltip => "Show recruit's details",
+            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 6,
             New_Row => True);
          exit Load_Recruits_Loop when Recruit_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -427,11 +427,12 @@ package body Bases.RecruitUI is
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowRecruitInfoCommand
+   -- ShowRecruitInfo recruitindex
+   -- RecruitIndex is a index of the recruit which menu will be shown
    -- SOURCE
    function Show_Recruit_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -442,20 +443,17 @@ package body Bases.RecruitUI is
    function Show_Recruit_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
       Recruit_Info: Unbounded_String;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit: constant Recruit_Data :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
+      Recruit: Recruit_Data
+        (Amount_Of_Attributes => Attributes_Amount,
+         Amount_Of_Skills => Skills_Amount);
       Recruit_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".recruitdialog",
-           Title => To_String(Source => Recruit.Name));
+        Create_Dialog(Name => ".recruitdialog", Title => "");
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
           (pathName => Recruit_Dialog & ".yscroll",
@@ -480,6 +478,14 @@ package body Bases.RecruitUI is
          3 => To_Unbounded_String(Source => "Skills"),
          4 => To_Unbounded_String(Source => "Inventory"));
    begin
+      Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Recruit :=
+        Recruit_Container.Element
+          (Container => Sky_Bases(Base_Index).Recruits,
+           Index => Recruit_Index);
+      Change_Title
+        (Dialog => Recruit_Dialog,
+         New_Title => To_String(Source => Recruit.Name));
       Tcl_SetVar
         (interp => Interp, varName => "newtab",
          newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
