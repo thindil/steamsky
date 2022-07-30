@@ -390,7 +390,7 @@ package body Bases.RecruitUI is
         Create
           (pathName => Recruit_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Close_Button, Info_Button, Button: Ttk_Button;
+      Dialog_Close_Button, Info_Button, Button: Ttk_Button;
       Height, New_Height: Positive := 1;
       Width, New_Width: Positive := 1;
       Progress_Bar: Ttk_ProgressBar;
@@ -456,16 +456,20 @@ package body Bases.RecruitUI is
              "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
              ";Negotiate} -image negotiateicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      Close_Button :=
+      Add(Widget => Button, Message => "Start hiring negotiating.");
+      Dialog_Close_Button :=
         Create
           (pathName => Recruit_Dialog & ".buttonbox2.button",
            options =>
              "-text Close -command {CloseDialog " & Recruit_Dialog &
              "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1");
+        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
+      Add
+        (Widget => Dialog_Close_Button,
+         Message => "Close dialog \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Widgt => Close_Button);
+      Focus(Widgt => Dialog_Close_Button);
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected recruit
       Frame := Create(pathName => Recruit_Canvas & ".general");
@@ -730,14 +734,14 @@ package body Bases.RecruitUI is
            "] -width" & Positive'Image(Width) & " -height" &
            Positive'Image(Height));
       Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
       Bind
         (Widgt => Recruit_Dialog, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Bind
-        (Widgt => Close_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
+        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Recruit_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Recruit_Info_Command;
@@ -1001,7 +1005,7 @@ package body Bases.RecruitUI is
            Title =>
              "Negotiate with " &
              Tiny_String.To_String(Source => Recruit.Name));
-      Close_Button, Hire_Button: Ttk_Button;
+      Dialog_Close_Button, Hire_Button: Ttk_Button;
       Frame: constant Ttk_Frame :=
         Create(pathName => Negotiate_Dialog & ".buttonbox");
       Label: Ttk_Label;
@@ -1057,6 +1061,7 @@ package body Bases.RecruitUI is
           (pathName => Negotiate_Dialog & ".buttonbox.hirebutton",
            options =>
              "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
+      Add(Widget => Hire_Button, Message => "Hire the selected recruit.");
       Label := Create(pathName => Negotiate_Dialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Cost := Recruit.Price;
@@ -1094,28 +1099,31 @@ package body Bases.RecruitUI is
            "-text {Hire for" & Positive'Image(Cost) & " " &
            To_String(Source => Money_Name) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
-      Close_Button :=
+      Dialog_Close_Button :=
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.button",
            options =>
              "-text Close -command {CloseDialog " & Negotiate_Dialog &
              "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1");
+        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
+      Add
+        (Widget => Dialog_Close_Button,
+         Message => "Cancel negotiation \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Widgt => Close_Button);
+      Focus(Widgt => Dialog_Close_Button);
       Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Hire_Button & ";break}");
       Bind
         (Widgt => Hire_Button, Sequence => "<Tab>",
-         Script => "{focus " & Close_Button & ";break}");
+         Script => "{focus " & Dialog_Close_Button & ";break}");
       Bind
         (Widgt => Negotiate_Dialog, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Bind
-        (Widgt => Close_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
+        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Negotiate_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Negotiate_Command;
