@@ -1123,14 +1123,14 @@ package body Maps.UI.Commands is
             CArgv.Arg(Argv => Argv, N => 3) & "+5]");
       elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
-            CArgv.Arg(Argv, 3) & "+5]");
-      elsif CArgv.Arg(Argv, 1) = "se" then
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
+            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y [expr " &
-            CArgv.Arg(Argv, 3) & "+5]");
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y [expr " &
+            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
       end if;
       return TCL_OK;
    end Move_Mouse_Command;
@@ -1139,28 +1139,28 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Toggle the game full screen mode
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ToggleFullScreen
    -- SOURCE
    function Toggle_Full_Screen_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Toggle_Full_Screen_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
    begin
-      Tcl_Eval(Interp, "wm attributes . -fullscreen");
-      if Tcl_GetResult(Interp) = "0" then
+      Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
+      if Tcl_GetResult(interp => Interp) = "0" then
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
          Game_Settings.Full_Screen := True;
       else
