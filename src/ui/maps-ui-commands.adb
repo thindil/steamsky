@@ -1093,14 +1093,14 @@ package body Maps.UI.Commands is
             Options => "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " & CArgv.Arg(Argv => Argv, N => 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
-            CArgv.Arg(Argv, 3) & "-5]");
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y [expr " &
+            CArgv.Arg(Argv => Argv, N => 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "n" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
-            CArgv.Arg(Argv, 3) & "-5]");
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
+            CArgv.Arg(Argv => Argv, N => 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "ne" then
          Generate
            (Map_View, "<Motion>",
