@@ -346,80 +346,6 @@ package body Bases.RecruitUI is
    Recruit_Index: Positive;
    -- ****
 
-   -- ****o* RecruitUI/RecruitUI.Show_Recruit_Menu_Command
-   -- FUNCTION
-   -- Show menu with actions for the selected recruit
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowRecruitMenu recruitindex
-   -- RecruitIndex is a index of the recruit which menu will be shown
-   -- SOURCE
-   function Show_Recruit_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Recruit_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Base_Index: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".recruitmenu",
-           Title =>
-             Tiny_String.To_String
-               (Source =>
-                  Recruit_Container.Element
-                    (Container => Sky_Bases(Base_Index).Recruits,
-                     Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
-                    .Name) &
-             " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Recruit_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Recruit_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Recruit_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Recruit_Menu & ".show;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".show", Label => "Show recruit details",
-         Command => "ShowRecruitInfo");
-      Add_Button
-        (Name => ".negotiate", Label => "Start negotiations",
-         Command => "Negotiate");
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Recruit_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Recruit_Menu_Command;
-
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
    -- Show information about the selected recruit
@@ -1429,9 +1355,6 @@ package body Bases.RecruitUI is
    begin
       Add_Command
         (Name => "ShowRecruit", Ada_Command => Show_Recruit_Command'Access);
-      Add_Command
-        (Name => "ShowRecruitMenu",
-         Ada_Command => Show_Recruit_Menu_Command'Access);
       Add_Command
         (Name => "ShowRecruitInfo",
          Ada_Command => Show_Recruit_Info_Command'Access);
