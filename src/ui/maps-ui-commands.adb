@@ -1088,49 +1088,60 @@ package body Maps.UI.Commands is
       if CArgv.Arg(Argv => Argv, N => 1) = "click" then
          Generate
            (Window => Map_View,
-            EventName => "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-            ">",
-            Options => "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " & CArgv.Arg(Argv => Argv, N => 3));
+            EventName =>
+              "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+              ">",
+            Options =>
+              "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " &
+              CArgv.Arg(Argv => Argv, N => 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "-5]");
-      elsif CArgv.Arg(Argv => Argv, N =>  1) = "n" then
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "-5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "-5]");
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "n" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "-5]");
+            Options =>
+              "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
+              CArgv.Arg(Argv => Argv, N => 3) & "-5]");
       elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "-5]");
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "+5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "-5]");
       elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y " &
-            CArgv.Arg(Argv => Argv, N => 3));
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "-5] -y " & CArgv.Arg(Argv => Argv, N => 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y " &
-            CArgv.Arg(Argv => Argv, N => 3));
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "+5] -y " & CArgv.Arg(Argv => Argv, N => 3));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "-5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "+5]");
       elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
+            Options =>
+              "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
+              CArgv.Arg(Argv => Argv, N => 3) & "+5]");
       elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
-            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y [expr " &
-            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
+            Options =>
+              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
+              "+5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "+5]");
       end if;
       return TCL_OK;
    end Move_Mouse_Command;
@@ -1161,10 +1172,14 @@ package body Maps.UI.Commands is
    begin
       Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
       if Tcl_GetResult(interp => Interp) = "0" then
-         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 1");
+         Wm_Set
+           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+            Options => "-fullscreen 1");
          Game_Settings.Full_Screen := True;
       else
-         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 0");
+         Wm_Set
+           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+            Options => "-fullscreen 0");
          Game_Settings.Full_Screen := False;
       end if;
       return TCL_OK;
@@ -1195,12 +1210,16 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Paned_Position: Positive;
       Sash_Position: constant Natural :=
-        Natural'Value(SashPos(Main_Paned, "0"));
+        Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
    begin
       Game_Settings.Window_Width :=
-        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
+        Positive'Value
+          (Winfo_Get
+             (Widgt => Get_Main_Window(Interp => Interp), Info => "width"));
       Game_Settings.Window_Height :=
-        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
+        Positive'Value
+          (Winfo_Get
+             (Widgt => Get_Main_Window(Interp => Interp), Info => "height"));
       Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
          then Game_Settings.Window_Height
@@ -1219,63 +1238,64 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Show the main menu of the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowGameMenu
    -- SOURCE
    function Show_Game_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Game_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       Row: Positive := 1;
-      State: constant String := Tcl_GetVar(Interp, "gamestate");
+      State: constant String :=
+        Tcl_GetVar(interp => Interp, varName => "gamestate");
       type Menu_Shortcut is record
-         ButtonName: Unbounded_String;
+         Button_Name: Unbounded_String;
          Shortcut: Unbounded_String;
       end record;
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Menu_Shortcut);
       Shortcuts: Shortcuts_Container.Vector;
-      GameMenu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
+      Game_Menu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
       procedure Add_Button
         (Name, Label, Command: String; Shortcut: Unbounded_String;
          Last: Boolean := False) is
          Button: constant Ttk_Button :=
            Create
-             (GameMenu & Name,
+             (Game_Menu & Name,
               "-text {" & Label & " [" & To_String(Shortcut) &
-              "]} -command {CloseDialog " & GameMenu & ";" & Command & "}");
+              "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
       begin
          if not Last then
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          else
             Bind
               (Button, "<Tab>",
-               "{focus " & To_String(Shortcuts.First_Element.ButtonName) &
+               "{focus " & To_String(Shortcuts.First_Element.Button_Name) &
                ";break}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady {0 3}");
             Focus(Button);
          end if;
-         Shortcuts.Append((To_Unbounded_String(GameMenu & Name), Shortcut));
+         Shortcuts.Append((To_Unbounded_String(Game_Menu & Name), Shortcut));
          Row := Row + 1;
       end Add_Button;
    begin
-      if Winfo_Get(GameMenu, "exists") = "1" then
-         Tcl_Eval(Interp, "CloseDialog " & GameMenu);
+      if Winfo_Get(Game_Menu, "exists") = "1" then
+         Tcl_Eval(Interp, "CloseDialog " & Game_Menu);
          return TCL_OK;
       end if;
-      GameMenu :=
+      Game_Menu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
         (".shipinfo", "Ship information", "ShowShipInfo",
@@ -1311,25 +1331,25 @@ package body Maps.UI.Commands is
             Menu_Accelerators(11));
       end if;
       Add_Button
-        (".close", "Close", "CloseDialog " & GameMenu,
+        (".close", "Close", "CloseDialog " & Game_Menu,
          To_Unbounded_String("Escape"), True);
       declare
          MenuButton: Ttk_Button;
       begin
          for Button of Shortcuts loop
-            MenuButton := Get_Widget(To_String(Button.ButtonName));
+            MenuButton := Get_Widget(To_String(Button.Button_Name));
             for Shortcut of Shortcuts loop
                Bind
                  (MenuButton,
                   "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
-                  "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
+                  "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
             end loop;
             Bind
               (MenuButton, "<KeyPress-" & To_String(Map_Accelerators(1)) & ">",
                "{ShowGameMenu;break}");
          end loop;
       end;
-      Show_Dialog(Dialog => GameMenu, Relative_X => 0.4, Relative_Y => 0.1);
+      Show_Dialog(Dialog => Game_Menu, Relative_X => 0.4, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Game_Menu_Command;
 
