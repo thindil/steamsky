@@ -1161,10 +1161,10 @@ package body Maps.UI.Commands is
    begin
       Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
       if Tcl_GetResult(interp => Interp) = "0" then
-         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
+         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 1");
          Game_Settings.Full_Screen := True;
       else
-         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
+         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 0");
          Game_Settings.Full_Screen := False;
       end if;
       return TCL_OK;
@@ -1174,43 +1174,43 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Resize the last messages window
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ResizeLastMessages
    -- SOURCE
    function Resize_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resize_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      PanedPosition: Positive;
-      SashPosition: constant Natural :=
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Paned_Position: Positive;
+      Sash_Position: constant Natural :=
         Natural'Value(SashPos(Main_Paned, "0"));
    begin
       Game_Settings.Window_Width :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
       Game_Settings.Window_Height :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
-      PanedPosition :=
+      Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
          then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
-      if SashPosition > 0 and then SashPosition /= PanedPosition then
-         if Game_Settings.Window_Height - SashPosition > -1 then
+      if Sash_Position > 0 and then Sash_Position /= Paned_Position then
+         if Game_Settings.Window_Height - Sash_Position > -1 then
             Game_Settings.Messages_Position :=
-              Game_Settings.Window_Height - SashPosition;
+              Game_Settings.Window_Height - Sash_Position;
          end if;
-         PanedPosition := SashPosition;
+         Paned_Position := Sash_Position;
       end if;
       return TCL_OK;
    end Resize_Last_Messages_Command;
