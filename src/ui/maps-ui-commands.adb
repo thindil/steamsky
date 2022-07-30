@@ -1049,7 +1049,7 @@ package body Maps.UI.Commands is
       else
          Tcl_Eval(interp => Interp, strng => CArgv.Arg(Argv => Argv, N => 1));
       end if;
-      Focus(Get_Main_Window(Interp));
+      Focus(Widgt => Get_Main_Window(Interp => Interp));
       return TCL_OK;
    end Show_Sky_Map_Command;
 
@@ -1057,10 +1057,10 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Move mouse cursor with keyboard
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1069,66 +1069,66 @@ package body Maps.UI.Commands is
    -- click if emulate clicking with the left or right button
    -- SOURCE
    function Move_Mouse_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Mouse_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MapView: constant Tk_Text :=
-        Get_Widget(Main_Paned & ".mapframe.map", Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Map_View: constant Tk_Text :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
    begin
-      if Focus /= Widget_Image(MapView) then
-         Focus(MapView, "-force");
+      if Focus /= Widget_Image(Win => Map_View) then
+         Focus(Widgt => Map_View, Option => "-force");
          return TCL_OK;
       end if;
-      if CArgv.Arg(Argv, 1) = "click" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "click" then
          Generate
-           (MapView,
-            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+           (Window => Map_View,
+            EventName => "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
             ">",
-            "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
-      elsif CArgv.Arg(Argv, 1) = "nw" then
+            Options => "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " & CArgv.Arg(Argv => Argv, N => 3));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
             CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "n" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
             CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "ne" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y [expr " &
             CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "w" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
             CArgv.Arg(Argv, 3) & "+5]");
       elsif CArgv.Arg(Argv, 1) = "s" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
             CArgv.Arg(Argv, 3) & "+5]");
       elsif CArgv.Arg(Argv, 1) = "se" then
          Generate
-           (MapView, "<Motion>",
+           (Map_View, "<Motion>",
             "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y [expr " &
             CArgv.Arg(Argv, 3) & "+5]");
       end if;
