@@ -1096,32 +1096,32 @@ package body Maps.UI.Commands is
            (Window => Map_View, EventName => "<Motion>",
             Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y [expr " &
             CArgv.Arg(Argv => Argv, N => 3) & "-5]");
-      elsif CArgv.Arg(Argv, 1) = "n" then
+      elsif CArgv.Arg(Argv => Argv, N =>  1) = "n" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
             Options => "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
             CArgv.Arg(Argv => Argv, N => 3) & "-5]");
-      elsif CArgv.Arg(Argv, 1) = "ne" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
             Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y [expr " &
             CArgv.Arg(Argv => Argv, N => 3) & "-5]");
-      elsif CArgv.Arg(Argv, 1) = "w" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
          Generate
            (Window => Map_View, EventName => "<Motion>",
             Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y " &
             CArgv.Arg(Argv => Argv, N => 3));
-      elsif CArgv.Arg(Argv, 1) = "e" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y " &
-            CArgv.Arg(Argv, 3));
-      elsif CArgv.Arg(Argv, 1) = "sw" then
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "+5] -y " &
+            CArgv.Arg(Argv => Argv, N => 3));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
          Generate
-           (Map_View, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
-            CArgv.Arg(Argv, 3) & "+5]");
-      elsif CArgv.Arg(Argv, 1) = "s" then
+           (Window => Map_View, EventName => "<Motion>",
+            Options => "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) & "-5] -y [expr " &
+            CArgv.Arg(Argv => Argv, N => 3) & "+5]");
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
          Generate
            (Map_View, "<Motion>",
             "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
