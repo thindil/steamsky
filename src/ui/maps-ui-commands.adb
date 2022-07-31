@@ -1274,20 +1274,28 @@ package body Maps.UI.Commands is
          Button: constant Ttk_Button :=
            Create
              (pathName => Game_Menu & Name,
-              options => "-text {" & Label & " [" & To_String(Source => Shortcut) &
-              "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
+              options =>
+                "-text {" & Label & " [" & To_String(Source => Shortcut) &
+                "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
       begin
          if not Last then
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-sticky we -padx 5");
          else
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & To_String(Source => Shortcuts.First_Element.Button_Name) &
-               ";break}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
+               Script =>
+                 "{focus " &
+                 To_String(Source => Shortcuts.First_Element.Button_Name) &
+                 ";break}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
             Focus(Widgt => Button);
          end if;
-         Shortcuts.Append(New_Item => (Button_Name => To_Unbounded_String(Source => Game_Menu & Name), Shortcut => Shortcut));
+         Shortcuts.Append
+           (New_Item =>
+              (Button_Name => To_Unbounded_String(Source => Game_Menu & Name),
+               Shortcut => Shortcut));
          Row := Row + 1;
       end Add_Button;
    begin
@@ -1298,57 +1306,73 @@ package body Maps.UI.Commands is
       Game_Menu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
-        (Name => ".shipinfo", Label => "Ship information", Command => "ShowShipInfo",
-         Shortcut => Menu_Accelerators(1));
+        (Name => ".shipinfo", Label => "Ship information",
+         Command => "ShowShipInfo", Shortcut => Menu_Accelerators(1));
       if State not in "combat" | "dead" then
          Add_Button
-           (Name => ".shiporders", Label => "Ship orders", Command => "ShowOrders", Shortcut => Menu_Accelerators(2));
+           (Name => ".shiporders", Label => "Ship orders",
+            Command => "ShowOrders", Shortcut => Menu_Accelerators(2));
       end if;
       if State /= "dead" then
          Add_Button
-           (Name => ".crafting", Label => "Crafting", Command => "ShowCrafting", Shortcut => Menu_Accelerators(3));
+           (Name => ".crafting", Label => "Crafting",
+            Command => "ShowCrafting", Shortcut => Menu_Accelerators(3));
       end if;
       Add_Button
-        (Name => ".messages", Label => "Last messages", Command => "ShowLastMessages",
-         Shortcut => Menu_Accelerators(4));
+        (Name => ".messages", Label => "Last messages",
+         Command => "ShowLastMessages", Shortcut => Menu_Accelerators(4));
       Add_Button
-        (Name => ".knowledge", Label => "Knowledge lists", Command => "ShowKnowledge",
-         Shortcut => Menu_Accelerators(5));
+        (Name => ".knowledge", Label => "Knowledge lists",
+         Command => "ShowKnowledge", Shortcut => Menu_Accelerators(5));
       if State not in "combat" | "dead" then
-         Add_Button(Name => ".wait", Label => "Wait orders", Command => "ShowWait", Shortcut => Menu_Accelerators(6));
+         Add_Button
+           (Name => ".wait", Label => "Wait orders", Command => "ShowWait",
+            Shortcut => Menu_Accelerators(6));
       end if;
       Add_Button
-        (Name => ".stats", Label => "Game statistics", Command => "ShowStats", Shortcut => Menu_Accelerators(7));
+        (Name => ".stats", Label => "Game statistics", Command => "ShowStats",
+         Shortcut => Menu_Accelerators(7));
       if State /= "dead" then
          Add_Button
-           (Name => ".help", Label => "Help", Command => "ShowHelp " & State, Shortcut => Menu_Accelerators(8));
+           (Name => ".help", Label => "Help", Command => "ShowHelp " & State,
+            Shortcut => Menu_Accelerators(8));
          Add_Button
-           (Name => ".options", Label => "Game options", Command => "ShowOptions", Shortcut => Menu_Accelerators(9));
+           (Name => ".options", Label => "Game options",
+            Command => "ShowOptions", Shortcut => Menu_Accelerators(9));
          Add_Button
-           (Name => ".quit", Label => "Quit from game", Command => "QuitGame", Shortcut => Menu_Accelerators(10));
+           (Name => ".quit", Label => "Quit from game", Command => "QuitGame",
+            Shortcut => Menu_Accelerators(10));
          Add_Button
-           (Name => ".resign", Label => "Resign from game", Command => "ResignGame",
-            Shortcut => Menu_Accelerators(11));
+           (Name => ".resign", Label => "Resign from game",
+            Command => "ResignGame", Shortcut => Menu_Accelerators(11));
       end if;
       Add_Button
-        (Name => ".close", Label => "Close", Command => "CloseDialog " & Game_Menu,
+        (Name => ".close", Label => "Close",
+         Command => "CloseDialog " & Game_Menu,
          Shortcut => To_Unbounded_String(Source => "Escape"), Last => True);
-      Add_Bindings_Block:
+      Add_Bindings_Block :
       declare
          Menu_Button: Ttk_Button;
       begin
-         Buttons_Loop:
+         Buttons_Loop :
          for Button of Shortcuts loop
-            Menu_Button := Get_Widget(pathName => To_String(Source => Button.Button_Name));
-            Add_Bindings_Loop:
+            Menu_Button :=
+              Get_Widget(pathName => To_String(Source => Button.Button_Name));
+            Add_Bindings_Loop :
             for Shortcut of Shortcuts loop
                Bind
                  (Widgt => Menu_Button,
-                  Sequence => "<KeyPress-" & To_String(Source => Shortcut.Shortcut) & ">",
-                  Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
+                  Sequence =>
+                    "<KeyPress-" & To_String(Source => Shortcut.Shortcut) &
+                    ">",
+                  Script =>
+                    "{" & To_String(Source => Shortcut.Button_Name) &
+                    " invoke;break}");
             end loop Add_Bindings_Loop;
             Bind
-              (Widgt => Menu_Button, Sequence => "<KeyPress-" & To_String(Source => Map_Accelerators(1)) & ">",
+              (Widgt => Menu_Button,
+               Sequence =>
+                 "<KeyPress-" & To_String(Source => Map_Accelerators(1)) & ">",
                Script => "{ShowGameMenu;break}");
          end loop Buttons_Loop;
       end Add_Bindings_Block;
@@ -1380,27 +1404,33 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Focused_Widget: constant Ttk_Frame := Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
+      Focused_Widget: constant Ttk_Frame :=
+        Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
       Commands: constant array(Menu_Accelerators'Range) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "ShowShipInfo"),
          2 => To_Unbounded_String(Source => "ShowOrders"),
          3 => To_Unbounded_String(Source => "ShowCrafting"),
          4 => To_Unbounded_String(Source => "ShowLastMessages"),
-         5 => To_Unbounded_String(Source => "ShowKnowledge"), 6 => To_Unbounded_String(Source => "ShowWait"),
-         7 => To_Unbounded_String(Source => "ShowStats"), 8 => To_Unbounded_String(Source => "ShowHelp"),
-         9 => To_Unbounded_String(Source => "ShowOptions"), 10 => To_Unbounded_String(Source => "QuitGame"),
+         5 => To_Unbounded_String(Source => "ShowKnowledge"),
+         6 => To_Unbounded_String(Source => "ShowWait"),
+         7 => To_Unbounded_String(Source => "ShowStats"),
+         8 => To_Unbounded_String(Source => "ShowHelp"),
+         9 => To_Unbounded_String(Source => "ShowOptions"),
+         10 => To_Unbounded_String(Source => "QuitGame"),
          11 => To_Unbounded_String(Source => "ResignGame"));
    begin
-      if Winfo_Get(Focused_Widget, "class") = "TEntry" or
-        Tcl.Tk.Ada.Busy.Status(Game_Header) = "1" then
+      if Winfo_Get(Widgt => Focused_Widget, Info => "class") = "TEntry" or
+        Tcl.Tk.Ada.Busy.Status(Window => Game_Header) = "1" then
          return TCL_OK;
       end if;
+      Invoke_Button_Loop :
       for I in Menu_Accelerators'Range loop
-         if To_String(Menu_Accelerators(I)) = CArgv.Arg(Argv, 1) then
+         if To_String(Source => Menu_Accelerators(I)) =
+           CArgv.Arg(Argv => Argv, N => 1) then
             Tcl_Eval(Interp, To_String(Commands(I)));
             return TCL_OK;
          end if;
-      end loop;
+      end loop Invoke_Button_Loop;
       return TCL_OK;
    end Invoke_Menu_Command;
 
