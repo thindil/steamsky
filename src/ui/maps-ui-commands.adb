@@ -1382,14 +1382,14 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Argc);
       Focused_Widget: constant Ttk_Frame := Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
       Commands: constant array(Menu_Accelerators'Range) of Unbounded_String :=
-        (1 => To_Unbounded_String("ShowShipInfo"),
-         2 => To_Unbounded_String("ShowOrders"),
-         3 => To_Unbounded_String("ShowCrafting"),
-         4 => To_Unbounded_String("ShowLastMessages"),
-         5 => To_Unbounded_String("ShowKnowledge"), 6 => To_Unbounded_String("ShowWait"),
-         7 => To_Unbounded_String("ShowStats"), 8 => To_Unbounded_String("ShowHelp"),
-         9 => To_Unbounded_String("ShowOptions"), 10 => To_Unbounded_String("QuitGame"),
-         11 => To_Unbounded_String("ResignGame"));
+        (1 => To_Unbounded_String(Source => "ShowShipInfo"),
+         2 => To_Unbounded_String(Source => "ShowOrders"),
+         3 => To_Unbounded_String(Source => "ShowCrafting"),
+         4 => To_Unbounded_String(Source => "ShowLastMessages"),
+         5 => To_Unbounded_String(Source => "ShowKnowledge"), 6 => To_Unbounded_String(Source => "ShowWait"),
+         7 => To_Unbounded_String(Source => "ShowStats"), 8 => To_Unbounded_String(Source => "ShowHelp"),
+         9 => To_Unbounded_String(Source => "ShowOptions"), 10 => To_Unbounded_String(Source => "QuitGame"),
+         11 => To_Unbounded_String(Source => "ResignGame"));
    begin
       if Winfo_Get(Focused_Widget, "class") = "TEntry" or
         Tcl.Tk.Ada.Busy.Status(Game_Header) = "1" then
