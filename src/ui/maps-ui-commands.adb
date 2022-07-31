@@ -1298,22 +1298,22 @@ package body Maps.UI.Commands is
       Game_Menu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
-        (".shipinfo", "Ship information", "ShowShipInfo",
-         Menu_Accelerators(1));
+        (Name => ".shipinfo", Label => "Ship information", Command => "ShowShipInfo",
+         Shortcut => Menu_Accelerators(1));
       if State not in "combat" | "dead" then
          Add_Button
-           (".shiporders", "Ship orders", "ShowOrders", Menu_Accelerators(2));
+           (Name => ".shiporders", Label => "Ship orders", Command => "ShowOrders", Shortcut => Menu_Accelerators(2));
       end if;
       if State /= "dead" then
          Add_Button
-           (".crafting", "Crafting", "ShowCrafting", Menu_Accelerators(3));
+           (Name => ".crafting", Label => "Crafting", Command => "ShowCrafting", Shortcut => Menu_Accelerators(3));
       end if;
       Add_Button
-        (".messages", "Last messages", "ShowLastMessages",
-         Menu_Accelerators(4));
+        (Name => ".messages", Label => "Last messages", Command => "ShowLastMessages",
+         Shortcut => Menu_Accelerators(4));
       Add_Button
-        (".knowledge", "Knowledge lists", "ShowKnowledge",
-         Menu_Accelerators(5));
+        (Name => ".knowledge", Label => "Knowledge lists", Command => "ShowKnowledge",
+         Shortcut => Menu_Accelerators(5));
       if State not in "combat" | "dead" then
          Add_Button(".wait", "Wait orders", "ShowWait", Menu_Accelerators(6));
       end if;
