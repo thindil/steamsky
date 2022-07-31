@@ -1343,13 +1343,13 @@ package body Maps.UI.Commands is
             Add_Bindings_Loop:
             for Shortcut of Shortcuts loop
                Bind
-                 (Menu_Button,
-                  "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
-                  "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
+                 (Widgt => Menu_Button,
+                  Sequence => "<KeyPress-" & To_String(Source => Shortcut.Shortcut) & ">",
+                  Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
             end loop Add_Bindings_Loop;
             Bind
-              (Menu_Button, "<KeyPress-" & To_String(Map_Accelerators(1)) & ">",
-               "{ShowGameMenu;break}");
+              (Widgt => Menu_Button, Sequence => "<KeyPress-" & To_String(Source => Map_Accelerators(1)) & ">",
+               Script => "{ShowGameMenu;break}");
          end loop Buttons_Loop;
       end Add_Bindings_Block;
       Show_Dialog(Dialog => Game_Menu, Relative_X => 0.4, Relative_Y => 0.1);
@@ -1360,10 +1360,10 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Invoke the selected game menu option with the selected keyboard shortcut
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1371,16 +1371,16 @@ package body Maps.UI.Commands is
    -- Shortcut, the keyboard shortcut which was pressed
    -- SOURCE
    function Invoke_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Invoke_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Focused_Widget: constant Ttk_Frame := Get_Widget(Focus(Interp), Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Focused_Widget: constant Ttk_Frame := Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
       Commands: constant array(Menu_Accelerators'Range) of Unbounded_String :=
         (To_Unbounded_String("ShowShipInfo"),
          To_Unbounded_String("ShowOrders"),
