@@ -1327,28 +1327,31 @@ package body Maps.UI.Commands is
          Add_Button
            (Name => ".quit", Label => "Quit from game", Command => "QuitGame", Shortcut => Menu_Accelerators(10));
          Add_Button
-           (".resign", "Resign from game", "ResignGame",
-            Menu_Accelerators(11));
+           (Name => ".resign", Label => "Resign from game", Command => "ResignGame",
+            Shortcut => Menu_Accelerators(11));
       end if;
       Add_Button
-        (".close", "Close", "CloseDialog " & Game_Menu,
-         To_Unbounded_String("Escape"), True);
+        (Name => ".close", Label => "Close", Command => "CloseDialog " & Game_Menu,
+         Shortcut => To_Unbounded_String(Source => "Escape"), Last => True);
+      Add_Bindings_Block:
       declare
-         MenuButton: Ttk_Button;
+         Menu_Button: Ttk_Button;
       begin
+         Buttons_Loop:
          for Button of Shortcuts loop
-            MenuButton := Get_Widget(To_String(Button.Button_Name));
+            Menu_Button := Get_Widget(pathName => To_String(Source => Button.Button_Name));
+            Add_Bindings_Loop:
             for Shortcut of Shortcuts loop
                Bind
-                 (MenuButton,
+                 (Menu_Button,
                   "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
                   "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
-            end loop;
+            end loop Add_Bindings_Loop;
             Bind
-              (MenuButton, "<KeyPress-" & To_String(Map_Accelerators(1)) & ">",
+              (Menu_Button, "<KeyPress-" & To_String(Map_Accelerators(1)) & ">",
                "{ShowGameMenu;break}");
-         end loop;
-      end;
+         end loop Buttons_Loop;
+      end Add_Bindings_Block;
       Show_Dialog(Dialog => Game_Menu, Relative_X => 0.4, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Game_Menu_Command;
