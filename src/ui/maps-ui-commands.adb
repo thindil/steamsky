@@ -1273,26 +1273,26 @@ package body Maps.UI.Commands is
          Last: Boolean := False) is
          Button: constant Ttk_Button :=
            Create
-             (Game_Menu & Name,
-              "-text {" & Label & " [" & To_String(Shortcut) &
+             (pathName => Game_Menu & Name,
+              options => "-text {" & Label & " [" & To_String(Source => Shortcut) &
               "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
       begin
          if not Last then
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
          else
             Bind
-              (Button, "<Tab>",
-               "{focus " & To_String(Shortcuts.First_Element.Button_Name) &
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & To_String(Source => Shortcuts.First_Element.Button_Name) &
                ";break}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady {0 3}");
-            Focus(Button);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
+            Focus(Widgt => Button);
          end if;
-         Shortcuts.Append((To_Unbounded_String(Game_Menu & Name), Shortcut));
+         Shortcuts.Append(New_Item => (Button_Name => To_Unbounded_String(Source => Game_Menu & Name), Shortcut => Shortcut));
          Row := Row + 1;
       end Add_Button;
    begin
-      if Winfo_Get(Game_Menu, "exists") = "1" then
-         Tcl_Eval(Interp, "CloseDialog " & Game_Menu);
+      if Winfo_Get(Widgt => Game_Menu, Info => "exists") = "1" then
+         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Game_Menu);
          return TCL_OK;
       end if;
       Game_Menu :=
