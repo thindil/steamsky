@@ -1315,17 +1315,17 @@ package body Maps.UI.Commands is
         (Name => ".knowledge", Label => "Knowledge lists", Command => "ShowKnowledge",
          Shortcut => Menu_Accelerators(5));
       if State not in "combat" | "dead" then
-         Add_Button(".wait", "Wait orders", "ShowWait", Menu_Accelerators(6));
+         Add_Button(Name => ".wait", Label => "Wait orders", Command => "ShowWait", Shortcut => Menu_Accelerators(6));
       end if;
       Add_Button
-        (".stats", "Game statistics", "ShowStats", Menu_Accelerators(7));
+        (Name => ".stats", Label => "Game statistics", Command => "ShowStats", Shortcut => Menu_Accelerators(7));
       if State /= "dead" then
          Add_Button
-           (".help", "Help", "ShowHelp " & State, Menu_Accelerators(8));
+           (Name => ".help", Label => "Help", Command => "ShowHelp " & State, Shortcut => Menu_Accelerators(8));
          Add_Button
-           (".options", "Game options", "ShowOptions", Menu_Accelerators(9));
+           (Name => ".options", Label => "Game options", Command => "ShowOptions", Shortcut => Menu_Accelerators(9));
          Add_Button
-           (".quit", "Quit from game", "QuitGame", Menu_Accelerators(10));
+           (Name => ".quit", Label => "Quit from game", Command => "QuitGame", Shortcut => Menu_Accelerators(10));
          Add_Button
            (".resign", "Resign from game", "ResignGame",
             Menu_Accelerators(11));
