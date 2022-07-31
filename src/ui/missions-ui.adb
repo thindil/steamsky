@@ -584,6 +584,9 @@ package body Missions.UI is
       Label: constant Ttk_Label :=
         Create(MissionDialog & ".infolabel", "-wraplength 400");
       MissionInfo: Unbounded_String := Null_Unbounded_String;
+      Buttons_Frame: constant Ttk_Frame :=
+        Create(pathName => MissionDialog & ".buttons");
+      Button: Ttk_Button;
    begin
       Travel_Info
         (MissionInfo,
@@ -660,9 +663,30 @@ package body Missions.UI is
                To_String(MissionInfo) & "}");
       end case;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".button1",
+           options =>
+             "-text Show -image showicon -command {CloseDialog " &
+             MissionDialog & ";ShowOnMap " &
+             Map_X_Range'Image
+               (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_X) &
+             Map_Y_Range'Image
+               (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_Y) &
+             "} -style Dialog.TButton");
+      Add(Widget => Button, Message => "Show the mission on the map");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus " & Buttons_Frame & ".button;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Buttons_Frame & ".button invoke;break}");
       Add_Close_Button
-        (Name => MissionDialog & ".button", Text => "Close",
-         Command => "CloseDialog " & MissionDialog, Row => 2);
+        (Name => Buttons_Frame & ".button", Text => "Close",
+         Command => "CloseDialog " & MissionDialog, Column => 1);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog(MissionDialog);
       return TCL_OK;
    end Mission_More_Info_Command;
