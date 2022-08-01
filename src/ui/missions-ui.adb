@@ -685,6 +685,30 @@ package body Missions.UI is
       Add_Close_Button
         (Name => Buttons_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & MissionDialog, Column => 1);
+      if CanAccept then
+         Button := Get_Widget(pathName => Buttons_Frame & ".button");
+         Bind
+           (Widgt => Button, Sequence => "<Tab>",
+            Script => "{focus " & Buttons_Frame & ".button2;break}");
+         Button :=
+           Create
+             (pathName => Buttons_Frame & ".button2",
+              options =>
+                "-text Accept -image negotiateicon -command {CloseDialog " &
+                MissionDialog & ";AcceptMission " &
+                CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
+         Add
+           (Widget => Button,
+            Message => "Start negiotiating accepting the mission");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-row 0 -column 2 -padx 5");
+         Bind
+           (Widgt => Button, Sequence => "<Tab>",
+            Script => "{focus " & Buttons_Frame & ".button1;break}");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Buttons_Frame & ".button invoke;break}");
+      end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog(MissionDialog);
