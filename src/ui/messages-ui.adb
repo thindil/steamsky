@@ -97,26 +97,26 @@ package body Messages.UI is
         (if Argc = 1 then DEFAULT
          else Message_Type'Val(Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       Messages_View: constant Tk_Text :=
-        Get_Widget(Messages_Canvas & ".messages.list.view", Interp);
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(Messages_Canvas & ".messages.options.types", Interp);
-      SearchEntry: constant Ttk_Entry :=
-        Get_Widget(Messages_Canvas & ".messages.options.search", Interp);
+        Get_Widget(pathName => Messages_Canvas & ".messages.list.view", Interp => Interp);
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Messages_Canvas & ".messages.options.types", Interp => Interp);
+      Search_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Messages_Canvas & ".messages.options.search", Interp => Interp);
    begin
-      if Winfo_Get(Messages_Canvas, "exists") = "0" then
+      if Winfo_Get(Widgt => Messages_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
-         Bind(Messages_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Messages_Canvas, "ismapped") = "1" and Argc = 1 then
-         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
+         Bind(Widgt => Messages_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Messages_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+         Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       if Argc = 1 then
-         Current(TypeBox, "0");
+         Current(Type_Box, "0");
       end if;
-      Delete(SearchEntry, "0", "end");
+      Delete(Search_Entry, "0", "end");
       configure(Messages_View, "-state normal");
       Delete(Messages_View, "1.0", "end");
       if Messages_Amount(Messages_Type) = 0 then
