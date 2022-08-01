@@ -54,15 +54,18 @@ package body Messages.UI is
       -- ****
       Message_Tag: constant String :=
         (if Message.Color /= WHITE then
-           " [list " & To_Lower(Item => Message_Color'Image(Message.Color)) & "]"
+           " [list " & To_Lower(Item => Message_Color'Image(Message.Color)) &
+           "]"
          else "");
    begin
       if Message.M_Type /= Messages_Type and Messages_Type /= DEFAULT then
          return;
       end if;
       Insert
-        (TextWidget => Messages_View, Index =>  "end",
-         Text => "{" & To_String(Source => Message.Message) & LF & "}" & Message_Tag);
+        (TextWidget => Messages_View, Index => "end",
+         Text =>
+           "{" & To_String(Source => Message.Message) & LF & "}" &
+           Message_Tag);
    end Show_Message;
 
    -- ****o* MUI2/MUI2.Show_Last_Messages_Command
@@ -90,25 +93,38 @@ package body Messages.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
       Messages_Frame: Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".messagesframe", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".messagesframe", Interp => Interp);
       Messages_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Messages_Frame & ".canvas", Interp => Interp);
       Messages_Type: constant Message_Type :=
         (if Argc = 1 then DEFAULT
-         else Message_Type'Val(Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+         else Message_Type'Val
+             (Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       Messages_View: constant Tk_Text :=
-        Get_Widget(pathName => Messages_Canvas & ".messages.list.view", Interp => Interp);
+        Get_Widget
+          (pathName => Messages_Canvas & ".messages.list.view",
+           Interp => Interp);
       Type_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Messages_Canvas & ".messages.options.types", Interp => Interp);
+        Get_Widget
+          (pathName => Messages_Canvas & ".messages.options.types",
+           Interp => Interp);
       Search_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Messages_Canvas & ".messages.options.search", Interp => Interp);
+        Get_Widget
+          (pathName => Messages_Canvas & ".messages.options.search",
+           Interp => Interp);
    begin
       if Winfo_Get(Widgt => Messages_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
-         Bind(Widgt => Messages_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Widgt => Messages_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "messages.tcl");
+         Bind
+           (Widgt => Messages_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Messages_Canvas, Info => "ismapped") = "1" and
+        Argc = 1 then
          Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          return TCL_OK;
@@ -118,31 +134,40 @@ package body Messages.UI is
       end if;
       Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
       configure(Widgt => Messages_View, options => "-state normal");
-      Delete(TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
+      Delete
+        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Messages_Amount(M_Type => Messages_Type) = 0 then
-         Insert(TextWidget => Messages_View, Index => "end", Text => "{There are no messages of that type.}");
+         Insert
+           (TextWidget => Messages_View, Index => "end",
+            Text => "{There are no messages of that type.}");
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
       end if;
-      configure(Messages_View, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      configure(Widgt => Messages_View, options => "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       Messages_Frame.Name :=
-        New_String(Widget_Image(Messages_Canvas) & ".messages");
+        New_String(Str => Widget_Image(Win => Messages_Canvas) & ".messages");
       configure
-        (Messages_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Messages_Canvas,
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
         (Messages_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(Messages_Frame));
