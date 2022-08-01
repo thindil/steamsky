@@ -40,39 +40,39 @@ with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
-   -- ****if* MUI2/MUI2.ShowMessage
+   -- ****if* MUI2/MUI2.Show_Message
    -- FUNCTION
    -- Show the selected message to a player
    -- PARAMETERS
-   -- Message      - The message to show
-   -- MessagesView - The treeview in which the message will be shown
-   -- MessagesType - The selected type of messages to show
+   -- Message       - The message to show
+   -- Messages_View - The treeview in which the message will be shown
+   -- Messages_Type - The selected type of messages to show
    -- SOURCE
-   procedure ShowMessage
-     (Message: Message_Data; MessagesView: Tk_Text;
-      MessagesType: Message_Type) is
+   procedure Show_Message
+     (Message: Message_Data; Messages_View: Tk_Text;
+      Messages_Type: Message_Type) is
       -- ****
-      MessageTag: constant String :=
+      Message_Tag: constant String :=
         (if Message.Color /= WHITE then
-           " [list " & To_Lower(Message_Color'Image(Message.Color)) & "]"
+           " [list " & To_Lower(Item => Message_Color'Image(Message.Color)) & "]"
          else "");
    begin
-      if Message.M_Type /= MessagesType and MessagesType /= DEFAULT then
+      if Message.M_Type /= Messages_Type and Messages_Type /= DEFAULT then
          return;
       end if;
       Insert
-        (MessagesView, "end",
-         "{" & To_String(Message.Message) & LF & "}" & MessageTag);
-   end ShowMessage;
+        (TextWidget => Messages_View, Index =>  "end",
+         Text => "{" & To_String(Source => Message.Message) & LF & "}" & Message_Tag);
+   end Show_Message;
 
    -- ****o* MUI2/MUI2.Show_Last_Messages_Command
    -- FUNCTION
    -- Show the list of last messages to a player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -80,35 +80,35 @@ package body Messages.UI is
    -- MessagesType is the type of messages to show, default all
    -- SOURCE
    function Show_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
-      MessagesFrame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".messagesframe", Interp);
-      MessagesCanvas: constant Tk_Canvas :=
-        Get_Widget(MessagesFrame & ".canvas", Interp);
-      MessagesType: constant Message_Type :=
+      pragma Unreferenced(Client_Data);
+      Messages_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".messagesframe", Interp => Interp);
+      Messages_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Messages_Frame & ".canvas", Interp => Interp);
+      Messages_Type: constant Message_Type :=
         (if Argc = 1 then DEFAULT
-         else Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1))));
-      MessagesView: constant Tk_Text :=
-        Get_Widget(MessagesCanvas & ".messages.list.view", Interp);
+         else Message_Type'Val(Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+      Messages_View: constant Tk_Text :=
+        Get_Widget(Messages_Canvas & ".messages.list.view", Interp);
       TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(MessagesCanvas & ".messages.options.types", Interp);
+        Get_Widget(Messages_Canvas & ".messages.options.types", Interp);
       SearchEntry: constant Ttk_Entry :=
-        Get_Widget(MessagesCanvas & ".messages.options.search", Interp);
+        Get_Widget(Messages_Canvas & ".messages.options.search", Interp);
    begin
-      if Winfo_Get(MessagesCanvas, "exists") = "0" then
+      if Winfo_Get(Messages_Canvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
-         Bind(MessagesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(MessagesCanvas, "ismapped") = "1" and Argc = 1 then
+         Bind(Messages_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Messages_Canvas, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
@@ -117,39 +117,39 @@ package body Messages.UI is
          Current(TypeBox, "0");
       end if;
       Delete(SearchEntry, "0", "end");
-      configure(MessagesView, "-state normal");
-      Delete(MessagesView, "1.0", "end");
-      if Messages_Amount(MessagesType) = 0 then
-         Insert(MessagesView, "end", "{There are no messages of that type.}");
+      configure(Messages_View, "-state normal");
+      Delete(Messages_View, "1.0", "end");
+      if Messages_Amount(Messages_Type) = 0 then
+         Insert(Messages_View, "end", "{There are no messages of that type.}");
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
       end if;
-      configure(MessagesView, "-state disabled");
+      configure(Messages_View, "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      MessagesFrame.Name :=
-        New_String(Widget_Image(MessagesCanvas) & ".messages");
+      Messages_Frame.Name :=
+        New_String(Widget_Image(Messages_Canvas) & ".messages");
       configure
-        (MessagesCanvas,
+        (Messages_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (MessagesCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(MessagesFrame));
+        (Messages_Canvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(Messages_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (MessagesCanvas,
-         "-scrollregion [list " & BBox(MessagesCanvas, "all") & "]");
+        (Messages_Canvas,
+         "-scrollregion [list " & BBox(Messages_Canvas, "all") & "]");
       Show_Screen("messagesframe");
       return TCL_OK;
    end Show_Last_Messages_Command;
@@ -256,12 +256,12 @@ package body Messages.UI is
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, MessagesView, MessagesType);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, MessagesView, MessagesType);
             end loop Show_Newer_First_Loop;
          end if;
          Tcl_SetResult(Interp, "1");
@@ -274,7 +274,7 @@ package body Messages.UI is
                 (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
                  1) >
               0 then
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, MessagesView, MessagesType);
             end if;
          end loop Search_Older_First_Loop;
       else
@@ -284,7 +284,7 @@ package body Messages.UI is
                 (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
                  1) >
               0 then
-               ShowMessage(Message, MessagesView, MessagesType);
+               Show_Message(Message, MessagesView, MessagesType);
             end if;
          end loop Search_Newer_First_Loop;
       end if;
