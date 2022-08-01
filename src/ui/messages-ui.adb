@@ -293,12 +293,12 @@ package body Messages.UI is
       return TCL_OK;
    end Search_Messages_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowLastMessages", Show_Last_Messages_Command'Access);
       Add_Command("SelectMessages", Select_Messages_Command'Access);
       Add_Command("DeleteMessages", Delete_Messages_Command'Access);
       Add_Command("SearchMessages", Search_Messages_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Messages.UI;
