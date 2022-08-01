@@ -1427,7 +1427,8 @@ package body Maps.UI.Commands is
       for I in Menu_Accelerators'Range loop
          if To_String(Source => Menu_Accelerators(I)) =
            CArgv.Arg(Argv => Argv, N => 1) then
-            Tcl_Eval(interp => Interp, strng => To_String(Source => Commands(I)));
+            Tcl_Eval
+              (interp => Interp, strng => To_String(Source => Commands(I)));
             return TCL_OK;
          end if;
       end loop Invoke_Button_Loop;
@@ -1436,26 +1437,49 @@ package body Maps.UI.Commands is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "HideMapButtons", Ada_Command => Hide_Map_Buttons_Command'Access);
-      Add_Command(Name => "ShowMapButtons", Ada_Command => Show_Map_Buttons_Command'Access);
-      Add_Command(Name => "MoveMapButtons", Ada_Command => Move_Map_Buttons_Command'Access);
+      Add_Command
+        (Name => "HideMapButtons",
+         Ada_Command => Hide_Map_Buttons_Command'Access);
+      Add_Command
+        (Name => "ShowMapButtons",
+         Ada_Command => Show_Map_Buttons_Command'Access);
+      Add_Command
+        (Name => "MoveMapButtons",
+         Ada_Command => Move_Map_Buttons_Command'Access);
       Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
-      Add_Command(Name => "UpdateMapInfo", Ada_Command => Update_Map_Info_Command'Access);
-      Add_Command(Name => "MoveMapInfo", Ada_Command => Move_Map_Info_Command'Access);
-      Add_Command(Name => "ShowDestinationMenu", Ada_Command => Show_Destination_Menu_Command'Access);
-      Add_Command(Name => "SetDestination", Ada_Command => Set_Ship_Destination_Command'Access);
+      Add_Command
+        (Name => "UpdateMapInfo",
+         Ada_Command => Update_Map_Info_Command'Access);
+      Add_Command
+        (Name => "MoveMapInfo", Ada_Command => Move_Map_Info_Command'Access);
+      Add_Command
+        (Name => "ShowDestinationMenu",
+         Ada_Command => Show_Destination_Menu_Command'Access);
+      Add_Command
+        (Name => "SetDestination",
+         Ada_Command => Set_Ship_Destination_Command'Access);
       Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
       Add_Command(Name => "ZoomMap", Ada_Command => Zoom_Map_Command'Access);
       Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
       Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
-      Add_Command(Name => "ResignGame", Ada_Command => Resign_Game_Command'Access);
-      Add_Command(Name => "ShowStats", Ada_Command => Show_Stats_Command'Access);
-      Add_Command(Name => "ShowSkyMap", Ada_Command => Show_Sky_Map_Command'Access);
-      Add_Command(Name => "MoveCursor", Ada_Command => Move_Mouse_Command'Access);
-      Add_Command(Name => "ToggleFullScreen", Ada_Command => Toggle_Full_Screen_Command'Access);
-      Add_Command(Name => "ResizeLastMessages", Ada_Command => Resize_Last_Messages_Command'Access);
-      Add_Command("ShowGameMenu", Show_Game_Menu_Command'Access);
-      Add_Command("InvokeMenu", Invoke_Menu_Command'Access);
+      Add_Command
+        (Name => "ResignGame", Ada_Command => Resign_Game_Command'Access);
+      Add_Command
+        (Name => "ShowStats", Ada_Command => Show_Stats_Command'Access);
+      Add_Command
+        (Name => "ShowSkyMap", Ada_Command => Show_Sky_Map_Command'Access);
+      Add_Command
+        (Name => "MoveCursor", Ada_Command => Move_Mouse_Command'Access);
+      Add_Command
+        (Name => "ToggleFullScreen",
+         Ada_Command => Toggle_Full_Screen_Command'Access);
+      Add_Command
+        (Name => "ResizeLastMessages",
+         Ada_Command => Resize_Last_Messages_Command'Access);
+      Add_Command
+        (Name => "ShowGameMenu", Ada_Command => Show_Game_Menu_Command'Access);
+      Add_Command
+        (Name => "InvokeMenu", Ada_Command => Invoke_Menu_Command'Access);
    end Add_Commands;
 
 end Maps.UI.Commands;
