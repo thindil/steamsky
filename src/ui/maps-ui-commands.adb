@@ -1427,7 +1427,7 @@ package body Maps.UI.Commands is
       for I in Menu_Accelerators'Range loop
          if To_String(Source => Menu_Accelerators(I)) =
            CArgv.Arg(Argv => Argv, N => 1) then
-            Tcl_Eval(Interp, To_String(Commands(I)));
+            Tcl_Eval(interp => Interp, strng => To_String(Source => Commands(I)));
             return TCL_OK;
          end if;
       end loop Invoke_Button_Loop;
@@ -1436,14 +1436,14 @@ package body Maps.UI.Commands is
 
    procedure Add_Commands is
    begin
-      Add_Command("HideMapButtons", Hide_Map_Buttons_Command'Access);
-      Add_Command("ShowMapButtons", Show_Map_Buttons_Command'Access);
-      Add_Command("MoveMapButtons", Move_Map_Buttons_Command'Access);
-      Add_Command("DrawMap", Draw_Map_Command'Access);
-      Add_Command("UpdateMapInfo", Update_Map_Info_Command'Access);
-      Add_Command("MoveMapInfo", Move_Map_Info_Command'Access);
-      Add_Command("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
-      Add_Command("SetDestination", Set_Ship_Destination_Command'Access);
+      Add_Command(Name => "HideMapButtons", Ada_Command => Hide_Map_Buttons_Command'Access);
+      Add_Command(Name => "ShowMapButtons", Ada_Command => Show_Map_Buttons_Command'Access);
+      Add_Command(Name => "MoveMapButtons", Ada_Command => Move_Map_Buttons_Command'Access);
+      Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
+      Add_Command(Name => "UpdateMapInfo", Ada_Command => Update_Map_Info_Command'Access);
+      Add_Command(Name => "MoveMapInfo", Ada_Command => Move_Map_Info_Command'Access);
+      Add_Command(Name => "ShowDestinationMenu", Ada_Command => Show_Destination_Menu_Command'Access);
+      Add_Command(Name => "SetDestination", Ada_Command => Set_Ship_Destination_Command'Access);
       Add_Command("MoveMap", Move_Map_Command'Access);
       Add_Command("ZoomMap", Zoom_Map_Command'Access);
       Add_Command("MoveShip", Move_Ship_Command'Access);
