@@ -110,22 +110,22 @@ package body Messages.UI is
          Bind(Widgt => Messages_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Widgt => Messages_Canvas, Info => "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          return TCL_OK;
       end if;
       if Argc = 1 then
-         Current(Type_Box, "0");
+         Current(ComboBox => Type_Box, NewIndex => "0");
       end if;
-      Delete(Search_Entry, "0", "end");
-      configure(Messages_View, "-state normal");
-      Delete(Messages_View, "1.0", "end");
-      if Messages_Amount(Messages_Type) = 0 then
-         Insert(Messages_View, "end", "{There are no messages of that type.}");
+      Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+      configure(Widgt => Messages_View, options => "-state normal");
+      Delete(TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
+      if Messages_Amount(M_Type => Messages_Type) = 0 then
+         Insert(TextWidget => Messages_View, Index => "end", Text => "{There are no messages of that type.}");
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
