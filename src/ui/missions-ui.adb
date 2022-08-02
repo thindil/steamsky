@@ -77,16 +77,18 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       return
         Show_On_Map_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
-           Map_X_Range'Image
-             (Sky_Bases(Base_Index).Missions(Mission_Index).Target_X) &
-           Map_Y_Range'Image
-             (Sky_Bases(Base_Index).Missions(Mission_Index).Target_Y));
+           Argv =>
+             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+             Map_X_Range'Image
+               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_X) &
+             Map_Y_Range'Image
+               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_Y));
    end Show_Mission_Command;
 
    -- ****iv* MUI3/MUI3.Missions_Table
@@ -158,7 +160,8 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missionlistmenu",
@@ -211,7 +214,7 @@ package body Missions.UI is
               and then Module.Quality >=
                 Sky_Bases(Base_Index).Missions(Mission_Index).Data then
                Can_Accept := False;
-               Can_Accept_Loop:
+               Can_Accept_Loop :
                for Owner of Module.Owner loop
                   if Owner = 0 then
                      Can_Accept := True;
@@ -238,7 +241,7 @@ package body Missions.UI is
       return TCL_OK;
    end Show_Base_Missions_Menu_Command;
 
-   -- ****if* MUI3/MUI3.RefreshMissionsList
+   -- ****if* MUI3/MUI3.Refresh_Missions_List
    -- FUNCTION
    -- Refresh the list of available missions
    -- PARAMETERS
@@ -246,7 +249,7 @@ package body Missions.UI is
    -- Page - The current page of the list to show. Can be empty. Default value
    --        is 1.
    -- SOURCE
-   procedure RefreshMissionsList
+   procedure Refresh_Missions_List
      (List: in out Mission_Container.Vector; Page: Positive := 1) is
       -- ****
       use Tiny_String;
@@ -256,39 +259,45 @@ package body Missions.UI is
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
-      CanAccept: Boolean := True;
-      CabinTaken: Boolean := False;
+      Can_Accept: Boolean := True;
+      Cabin_Taken: Boolean := False;
    begin
       if List.Length = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return;
       end if;
+      Show_Missions_Limit_Block :
       declare
-         MissionsLimit: constant Natural := Count_Missions_Amount;
-         MissionLabel: constant Ttk_Label :=
+         Missions_Limit: constant Natural := Count_Missions_Amount;
+         Mission_Label: constant Ttk_Label :=
            Get_Widget
-             (Main_Paned & ".missionsframe.canvas.missions.missionslabel");
+             (pathName =>
+                Main_Paned & ".missionsframe.canvas.missions.missionslabel");
       begin
-         if MissionsLimit > 0 then
+         if Missions_Limit > 0 then
             configure
-              (MissionLabel,
-               "-text {You can take" & Natural'Image(MissionsLimit) &
-               " more missions in from base.}");
+              (Widgt => Mission_Label,
+               options =>
+                 "-text {You can take" & Natural'Image(Missions_Limit) &
+                 " more missions in from base.}");
          else
             configure
-              (MissionLabel,
-               "-text {You can't take any more missions from this base.}");
+              (Widgt => Mission_Label,
+               options =>
+                 "-text {You can't take any more missions from this base.}");
          end if;
-      end;
+      end Show_Missions_Limit_Block;
       if Missions_Table.Row > 1 then
-         Clear_Table(Missions_Table);
+         Clear_Table(Table => Missions_Table);
       end if;
       if Missions_Indexes.Length /= List.Length then
          Missions_Indexes.Clear;
+         Set_Missions_Indexes_Loop :
          for I in List.Iterate loop
-            Missions_Indexes.Append(Mission_Container.To_Index(I));
-         end loop;
+            Missions_Indexes.Append
+              (New_Item => Mission_Container.To_Index(Position => I));
+         end loop Set_Missions_Indexes_Loop;
       end if;
       Show_Missions_List_Loop :
       for I of Missions_Indexes loop
@@ -297,33 +306,35 @@ package body Missions.UI is
             goto End_Of_Loop;
          end if;
          if List(I).M_Type = PASSENGER then
-            CanAccept := False;
+            Can_Accept := False;
             Modules_Loop :
             for Module of Player_Ship.Modules loop
-               if (Module.M_Type = CABIN and not CanAccept)
+               if (Module.M_Type = CABIN and not Can_Accept)
                  and then Module.Quality >= List(I).Data then
-                  CanAccept := False;
-                  CabinTaken := True;
+                  Can_Accept := False;
+                  Cabin_Taken := True;
+                  Can_Accept_Loop :
                   for Owner of Module.Owner loop
                      if Owner = 0 then
-                        CabinTaken := False;
-                        CanAccept := True;
-                        exit;
+                        Cabin_Taken := False;
+                        Can_Accept := True;
+                        exit Can_Accept_Loop;
                      end if;
-                  end loop;
-                  exit Modules_Loop when CanAccept;
+                  end loop Can_Accept_Loop;
+                  exit Modules_Loop when Can_Accept;
                end if;
             end loop Modules_Loop;
          end if;
          Add_Button
-           (Table => Missions_Table, Text => Get_Mission_Type(List(I).M_Type),
+           (Table => Missions_Table,
+            Text => Get_Mission_Type(M_Type => List(I).M_Type),
             Tooltip => "Show available mission's options",
             Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 1,
             Color =>
-              (if CanAccept then "" elsif CabinTaken then "yellow"
+              (if Can_Accept then "" elsif Cabin_Taken then "yellow"
                else "red"));
-         CanAccept := True;
-         CabinTaken := False;
+         Can_Accept := True;
+         Cabin_Taken := False;
          case List(I).M_Type is
             when DELIVER =>
                Add_Button
@@ -420,7 +431,7 @@ package body Missions.UI is
          Add_Pagination
            (Missions_Table, "", "ShowBaseMissions" & Positive'Image(Page + 1));
       end if;
-   end RefreshMissionsList;
+   end Refresh_Missions_List;
 
    -- ****o* MUI3/MIU3.Set_Mission_Command
    -- FUNCTION
@@ -451,7 +462,7 @@ package body Missions.UI is
       Sky_Bases(Base_Index).Missions(MissionIndex).Multiplier :=
         Reward_Multiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       Accept_Mission(MissionIndex);
-      RefreshMissionsList(Sky_Bases(Base_Index).Missions);
+      Refresh_Missions_List(Sky_Bases(Base_Index).Missions);
       Update_Table(Missions_Table);
       Update_Messages;
       return TCL_OK;
@@ -525,7 +536,7 @@ package body Missions.UI is
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
-      RefreshMissionsList
+      Refresh_Missions_List
         (Sky_Bases(Base_Index).Missions,
          (if Argc > 1 then Positive'Value(CArgv.Arg(Argv, 1)) else 1));
       Update_Table(Missions_Table);
@@ -1062,7 +1073,7 @@ package body Missions.UI is
       for Mission of Local_Missions loop
          Missions_Indexes.Append(Mission.Id);
       end loop;
-      RefreshMissionsList(Sky_Bases(Base_Index).Missions, 1);
+      Refresh_Missions_List(Sky_Bases(Base_Index).Missions, 1);
       Update_Table(Missions_Table);
       return TCL_OK;
    end Sort_Available_Missions_Command;
