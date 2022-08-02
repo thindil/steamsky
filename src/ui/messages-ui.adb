@@ -306,23 +306,23 @@ package body Messages.UI is
          Search_Newer_First_Loop :
          for Message of reverse Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(Search_Text),
-                 1) >
+                (Source => To_Lower(Item => To_String(Source => Message.Message)), Pattern => To_Lower(Item => Search_Text),
+                 From => 1) >
               0 then
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
             end if;
          end loop Search_Newer_First_Loop;
       end if;
-      configure(Messages_View, "-state disable");
-      Tcl_SetResult(Interp, "1");
+      configure(Widgt => Messages_View, options => "-state disable");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Search_Messages_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowLastMessages", Show_Last_Messages_Command'Access);
-      Add_Command("SelectMessages", Select_Messages_Command'Access);
-      Add_Command("DeleteMessages", Delete_Messages_Command'Access);
+      Add_Command(Name => "ShowLastMessages", Ada_Command => Show_Last_Messages_Command'Access);
+      Add_Command(Name => "SelectMessages", Ada_Command => Select_Messages_Command'Access);
+      Add_Command(Name => "DeleteMessages", Ada_Command => Delete_Messages_Command'Access);
       Add_Command("SearchMessages", Search_Messages_Command'Access);
    end Add_Commands;
 
