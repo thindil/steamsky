@@ -775,7 +775,8 @@ package body Missions.UI is
       Button :=
         Create
           (MissionDialog & ".cancel",
-           "-text {Cancel} -command {CloseDialog " & MissionDialog & "}");
+           "-text Cancel -command {CloseDialog " & MissionDialog &
+           "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 3 -column 1 -pady 5");
       Bind(Button, "<Tab>", "{focus .missiondialog.accept;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
