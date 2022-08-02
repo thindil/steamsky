@@ -276,30 +276,30 @@ package body Messages.UI is
    begin
       Messages_Type := Message_Type'Val(Natural'Value(Current(ComboBox => Type_Box)));
       configure(Widgt => Messages_View, options => "-state normal");
-      Delete(Messages_View, "1.0", "end");
+      Delete(TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Search_Text'Length = 0 then
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
-         Tcl_SetResult(Interp, "1");
+         Tcl_SetResult(interp => Interp, str => "1");
          return TCL_OK;
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Search_Older_First_Loop :
          for Message of Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(Search_Text),
-                 1) >
+                (Source => To_Lower(Item => To_String(Source => Message.Message)), Pattern => To_Lower(Item => Search_Text),
+                 From => 1) >
               0 then
-               Show_Message(Message, Messages_View, Messages_Type);
+               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
             end if;
          end loop Search_Older_First_Loop;
       else
