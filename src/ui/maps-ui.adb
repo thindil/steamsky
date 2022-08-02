@@ -1194,7 +1194,7 @@ package body Maps.UI is
          ShipyardUI.Add_Commands;
          LootUI.Add_Commands;
          Knowledge.Add_Commands;
-         Missions.UI.AddCommands;
+         Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;
          Bind
            (Widgt => Messages_Frame, Sequence => "<Configure>",

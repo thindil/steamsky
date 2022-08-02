@@ -1066,7 +1066,7 @@ package body Missions.UI is
       return TCL_OK;
    end Sort_Available_Missions_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowBaseMissions", Show_Base_Missions_Command'Access);
       Add_Command
@@ -1076,6 +1076,6 @@ package body Missions.UI is
       Add_Command("UpdateMissionReward", Update_Mission_Reward_Command'Access);
       Add_Command
         ("SortAvailableMissions", Sort_Available_Missions_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Missions.UI;
