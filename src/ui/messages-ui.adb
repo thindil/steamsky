@@ -216,28 +216,28 @@ package body Messages.UI is
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DeleteMessages
    -- SOURCE
    function Delete_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
       Show_Question
-        ("Are you sure you want to clear all messages?", "messages");
+        (Question => "Are you sure you want to clear all messages?", Result => "messages");
       return TCL_OK;
    end Delete_Messages_Command;
 
@@ -245,10 +245,10 @@ package body Messages.UI is
    -- FUNCTION
    -- Show only this messages which contains the selected sequence
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -256,37 +256,37 @@ package body Messages.UI is
    -- Text is the string to search in the messages
    -- SOURCE
    function Search_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Search_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      FrameName: constant String :=
+      pragma Unreferenced(Client_Data, Argc);
+      Frame_Name: constant String :=
         Main_Paned & ".messagesframe.canvas.messages";
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".options.types", Interp);
-      MessagesType: Message_Type;
-      MessagesView: constant Tk_Text :=
-        Get_Widget(FrameName & ".list.view", Interp);
-      SearchText: constant String := CArgv.Arg(Argv, 1);
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".options.types", Interp => Interp);
+      Messages_Type: Message_Type;
+      Messages_View: constant Tk_Text :=
+        Get_Widget(pathName => Frame_Name & ".list.view", Interp => Interp);
+      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));
-      configure(MessagesView, "-state normal");
-      Delete(MessagesView, "1.0", "end");
-      if SearchText'Length = 0 then
+      Messages_Type := Message_Type'Val(Natural'Value(Current(ComboBox => Type_Box)));
+      configure(Widgt => Messages_View, options => "-state normal");
+      Delete(Messages_View, "1.0", "end");
+      if Search_Text'Length = 0 then
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               Show_Message(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               Show_Message(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
          Tcl_SetResult(Interp, "1");
@@ -296,24 +296,24 @@ package body Messages.UI is
          Search_Older_First_Loop :
          for Message of Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                (To_Lower(To_String(Message.Message)), To_Lower(Search_Text),
                  1) >
               0 then
-               Show_Message(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end if;
          end loop Search_Older_First_Loop;
       else
          Search_Newer_First_Loop :
          for Message of reverse Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                (To_Lower(To_String(Message.Message)), To_Lower(Search_Text),
                  1) >
               0 then
-               Show_Message(Message, MessagesView, MessagesType);
+               Show_Message(Message, Messages_View, Messages_Type);
             end if;
          end loop Search_Newer_First_Loop;
       end if;
-      configure(MessagesView, "-state disable");
+      configure(Messages_View, "-state disable");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Search_Messages_Command;
