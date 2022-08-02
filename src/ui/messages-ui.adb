@@ -170,11 +170,14 @@ package body Messages.UI is
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
         (Parent => Messages_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Messages_Frame));
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Messages_Frame));
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Messages_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Messages_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Messages_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "messagesframe");
       return TCL_OK;
    end Show_Last_Messages_Command;
@@ -204,12 +207,14 @@ package body Messages.UI is
       pragma Unreferenced(Argc);
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Main_Paned & ".messagesframe.canvas.messages.options.types",
+          (pathName =>
+             Main_Paned & ".messagesframe.canvas.messages.options.types",
            Interp => Interp);
    begin
       return
         Show_Last_Messages_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv & Current(ComboBox => Type_Box));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => Argv & Current(ComboBox => Type_Box));
    end Select_Messages_Command;
 
    -- ****o* MUI2/MUI2.Delete_Messages_Command
@@ -237,7 +242,8 @@ package body Messages.UI is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
       Show_Question
-        (Question => "Are you sure you want to clear all messages?", Result => "messages");
+        (Question => "Are you sure you want to clear all messages?",
+         Result => "messages");
       return TCL_OK;
    end Delete_Messages_Command;
 
@@ -268,25 +274,32 @@ package body Messages.UI is
       Frame_Name: constant String :=
         Main_Paned & ".messagesframe.canvas.messages";
       Type_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".options.types", Interp => Interp);
+        Get_Widget
+          (pathName => Frame_Name & ".options.types", Interp => Interp);
       Messages_Type: Message_Type;
       Messages_View: constant Tk_Text :=
         Get_Widget(pathName => Frame_Name & ".list.view", Interp => Interp);
       Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      Messages_Type := Message_Type'Val(Natural'Value(Current(ComboBox => Type_Box)));
+      Messages_Type :=
+        Message_Type'Val(Natural'Value(Current(ComboBox => Type_Box)));
       configure(Widgt => Messages_View, options => "-state normal");
-      Delete(TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
+      Delete
+        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Search_Text'Length = 0 then
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
-               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
-               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
          Tcl_SetResult(interp => Interp, str => "1");
@@ -296,20 +309,26 @@ package body Messages.UI is
          Search_Older_First_Loop :
          for Message of Messages_List loop
             if Index
-                (Source => To_Lower(Item => To_String(Source => Message.Message)), Pattern => To_Lower(Item => Search_Text),
-                 From => 1) >
+                (Source =>
+                   To_Lower(Item => To_String(Source => Message.Message)),
+                 Pattern => To_Lower(Item => Search_Text), From => 1) >
               0 then
-               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end if;
          end loop Search_Older_First_Loop;
       else
          Search_Newer_First_Loop :
          for Message of reverse Messages_List loop
             if Index
-                (Source => To_Lower(Item => To_String(Source => Message.Message)), Pattern => To_Lower(Item => Search_Text),
-                 From => 1) >
+                (Source =>
+                   To_Lower(Item => To_String(Source => Message.Message)),
+                 Pattern => To_Lower(Item => Search_Text), From => 1) >
               0 then
-               Show_Message(Message => Message, Messages_View => Messages_View, Messages_Type => Messages_Type);
+               Show_Message
+                 (Message => Message, Messages_View => Messages_View,
+                  Messages_Type => Messages_Type);
             end if;
          end loop Search_Newer_First_Loop;
       end if;
@@ -320,10 +339,18 @@ package body Messages.UI is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowLastMessages", Ada_Command => Show_Last_Messages_Command'Access);
-      Add_Command(Name => "SelectMessages", Ada_Command => Select_Messages_Command'Access);
-      Add_Command(Name => "DeleteMessages", Ada_Command => Delete_Messages_Command'Access);
-      Add_Command("SearchMessages", Search_Messages_Command'Access);
+      Add_Command
+        (Name => "ShowLastMessages",
+         Ada_Command => Show_Last_Messages_Command'Access);
+      Add_Command
+        (Name => "SelectMessages",
+         Ada_Command => Select_Messages_Command'Access);
+      Add_Command
+        (Name => "DeleteMessages",
+         Ada_Command => Delete_Messages_Command'Access);
+      Add_Command
+        (Name => "SearchMessages",
+         Ada_Command => Search_Messages_Command'Access);
    end Add_Commands;
 
 end Messages.UI;
