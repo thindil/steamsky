@@ -169,13 +169,13 @@ package body Messages.UI is
            " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Messages_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Messages_Frame));
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Messages_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Messages_Frame));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Messages_Canvas,
-         "-scrollregion [list " & BBox(Messages_Canvas, "all") & "]");
-      Show_Screen("messagesframe");
+        (Widgt => Messages_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Messages_Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "messagesframe");
       return TCL_OK;
    end Show_Last_Messages_Command;
 
@@ -183,33 +183,33 @@ package body Messages.UI is
    -- FUNCTION
    -- Show only messages of the selected type
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SelectMessages
    -- SOURCE
    function Select_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Select_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      TypeBox: constant Ttk_ComboBox :=
+      Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (Main_Paned & ".messagesframe.canvas.messages.options.types",
-           Interp);
+          (pathName => Main_Paned & ".messagesframe.canvas.messages.options.types",
+           Interp => Interp);
    begin
       return
         Show_Last_Messages_Command
-          (ClientData, Interp, 2, Argv & Current(TypeBox));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv & Current(ComboBox => Type_Box));
    end Select_Messages_Command;
 
    -- ****o* MUI2/MUI2.Delete_Messages_Command
