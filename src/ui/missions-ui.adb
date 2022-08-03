@@ -504,21 +504,21 @@ package body Missions.UI is
 
       Missions_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".missionsframe", Interp => Interp);
-      MissionsCanvas: constant Tk_Canvas :=
-        Get_Widget(Missions_Frame & ".canvas", Interp);
+      Missions_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Missions_Frame & ".canvas", Interp => Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(MissionsCanvas & ".missions.missionslabel", Interp);
+        Get_Widget(pathName => Missions_Canvas & ".missions.missionslabel", Interp => Interp);
    begin
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
-         Bind(Missions_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Add_Command("ShowMission", Show_Mission_Command'Access);
-         Add_Command("SetMission", Set_Mission_Command'Access);
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
+         Bind(Widgt => Missions_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+         Add_Command(Name => "ShowMission", Ada_Command => Show_Mission_Command'Access);
+         Add_Command(Name => "SetMission", Ada_Command => Set_Mission_Command'Access);
          Missions_Table :=
            Create_Table
-             (MissionsCanvas & ".missions",
+             (Missions_Canvas & ".missions",
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details"),
                To_Unbounded_String("Time limit"),
@@ -542,19 +542,19 @@ package body Missions.UI is
          (if Argc > 1 then Positive'Value(CArgv.Arg(Argv, 1)) else 1));
       Update_Table(Missions_Table);
       configure
-        (MissionsCanvas,
+        (Missions_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Missions_Frame.Name :=
-        New_String(Widget_Image(MissionsCanvas) & ".missions");
+        New_String(Widget_Image(Missions_Canvas) & ".missions");
       Canvas_Create
-        (MissionsCanvas, "window",
+        (Missions_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(Missions_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (MissionsCanvas,
-         "-scrollregion [list " & BBox(MissionsCanvas, "all") & "]");
+        (Missions_Canvas,
+         "-scrollregion [list " & BBox(Missions_Canvas, "all") & "]");
       Show_Screen("missionsframe");
       return TCL_OK;
    end Show_Base_Missions_Command;
