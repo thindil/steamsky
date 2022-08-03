@@ -1055,6 +1055,9 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>",
          Script => "{NegotiateHire}");
+      Bind
+        (Widgt => Scale, Sequence => "<Tab>",
+         Script => "{focus " & Contract_Box & ";break}");
       Current(ComboBox => Contract_Box, NewIndex => "0");
       Hire_Button :=
         Create
@@ -1062,6 +1065,9 @@ package body Bases.RecruitUI is
            options =>
              "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
       Add(Widget => Hire_Button, Message => "Hire the selected recruit.");
+      Bind
+        (Widgt => Contract_Box, Sequence => "<Tab>",
+         Script => "{focus " & Hire_Button & ";break}");
       Label := Create(pathName => Negotiate_Dialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Cost := Recruit.Price;
@@ -1114,7 +1120,7 @@ package body Bases.RecruitUI is
       Focus(Widgt => Dialog_Close_Button);
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Hire_Button & ";break}");
+         Script => "{focus " & Negotiate_Dialog & ".daily;break}");
       Bind
         (Widgt => Hire_Button, Sequence => "<Tab>",
          Script => "{focus " & Dialog_Close_Button & ";break}");
