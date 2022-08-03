@@ -425,12 +425,12 @@ package body Missions.UI is
                Next_Command => "");
          else
             Add_Pagination
-              (Missions_Table, "ShowBaseMissions" & Positive'Image(Page - 1),
-               "ShowBaseMissions" & Positive'Image(Page + 1));
+              (Table => Missions_Table, Previous_Command => "ShowBaseMissions" & Positive'Image(Page - 1),
+               Next_Command => "ShowBaseMissions" & Positive'Image(Page + 1));
          end if;
       elsif Rows > 24 then
          Add_Pagination
-           (Missions_Table, "", "ShowBaseMissions" & Positive'Image(Page + 1));
+           (Table => Missions_Table, Previous_Command => "", Next_Command => "ShowBaseMissions" & Positive'Image(Page + 1));
       end if;
    end Refresh_Missions_List;
 
@@ -438,10 +438,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Accept the mission in a base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -449,28 +449,28 @@ package body Missions.UI is
    -- MissionIndex is the index of the mission to accept
    -- SOURCE
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      Sky_Bases(Base_Index).Missions(MissionIndex).Multiplier :=
-        Reward_Multiplier'Value(Tcl_GetVar(Get_Context, "reward"));
-      Accept_Mission(MissionIndex);
-      Refresh_Missions_List(Sky_Bases(Base_Index).Missions);
-      Update_Table(Missions_Table);
+      Sky_Bases(Base_Index).Missions(Mission_Index).Multiplier :=
+        Reward_Multiplier'Value(Tcl_GetVar(interp => Get_Context, varName => "reward"));
+      Accept_Mission(Mission_Index => Mission_Index);
+      Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions);
+      Update_Table(Table => Missions_Table);
       Update_Messages;
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
          Show_Message
-           (Text => Exception_Message(An_Exception),
+           (Text => Exception_Message(X => An_Exception),
             Title => "Can't accept mission");
          return TCL_OK;
    end Set_Mission_Command;
@@ -479,10 +479,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Show the list of available missions in the base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -491,21 +491,21 @@ package body Missions.UI is
    -- set then it is 1
    -- SOURCE
    function Show_Base_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       use Interfaces.C;
 
-      MissionsFrame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".missionsframe", Interp);
+      Missions_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".missionsframe", Interp => Interp);
       MissionsCanvas: constant Tk_Canvas :=
-        Get_Widget(MissionsFrame & ".canvas", Interp);
+        Get_Widget(Missions_Frame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(MissionsCanvas & ".missions.missionslabel", Interp);
    begin
@@ -513,7 +513,7 @@ package body Missions.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
-         Bind(MissionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         Bind(Missions_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          Add_Command("ShowMission", Show_Mission_Command'Access);
          Add_Command("SetMission", Set_Mission_Command'Access);
          Missions_Table :=
@@ -546,11 +546,11 @@ package body Missions.UI is
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      MissionsFrame.Name :=
+      Missions_Frame.Name :=
         New_String(Widget_Image(MissionsCanvas) & ".missions");
       Canvas_Create
         (MissionsCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(MissionsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(Missions_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
         (MissionsCanvas,
