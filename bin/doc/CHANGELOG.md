@@ -15,8 +15,8 @@ All notable changes to this project will be documented in this file.
   checked radioboxes, cancel action.
 - Updated modding guide
 - Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items,
-  Show inventory, Set crafting recipe, Recruit info, Hire recruit and Show
-  mission info dialogs
+  Show inventory, Set crafting recipe, Recruit info, Hire recruit, Show
+  mission info and Accept mission dialogs
 - Show both, text and icon on "Close" button in dialogs
 - Show crafting recipe info instead of actions menu in crafting recipes list
 - Show recruit info instead of actions menu in recruits lists in bases
