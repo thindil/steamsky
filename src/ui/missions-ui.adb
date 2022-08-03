@@ -379,27 +379,27 @@ package body Missions.UI is
                   Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 3);
             when EXPLORE =>
                Add_Button
-                 (Missions_Table,
-                  "X:" & Natural'Image(List(I).Target_X) & " Y:" &
+                 (Table => Missions_Table,
+                  Text => "X:" & Natural'Image(List(I).Target_X) & " Y:" &
                   Natural'Image(List(I).Target_Y),
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
+                  Tooltip => "Show available mission's options",
+                  Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 3);
             when PASSENGER =>
                Add_Button
-                 (Missions_Table,
-                  "To " &
+                 (Table => Missions_Table,
+                  Text => "To " &
                   To_String
-                    (Sky_Bases
+                    (Source => Sky_Bases
                        (Sky_Map(List(I).Target_X, List(I).Target_Y).Base_Index)
                        .Name),
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
+                  Tooltip => "Show available mission's options",
+                  Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 3);
          end case;
          Add_Button
-           (Missions_Table,
-            Natural'Image(Count_Distance(List(I).Target_X, List(I).Target_Y)),
-            "The distance to the mission",
-            "ShowBaseMissionMenu" & Positive'Image(I), 2);
+           (Table => Missions_Table,
+            Text => Natural'Image(Count_Distance(Destination_X => List(I).Target_X, Destination_Y => List(I).Target_Y)),
+            Tooltip => "The distance to the mission",
+            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 2);
          Mission_Time := Null_Unbounded_String;
          Minutes_To_Date(List(I).Time, Mission_Time);
          Add_Button
