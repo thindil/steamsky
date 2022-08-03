@@ -401,18 +401,18 @@ package body Missions.UI is
             Tooltip => "The distance to the mission",
             Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 2);
          Mission_Time := Null_Unbounded_String;
-         Minutes_To_Date(List(I).Time, Mission_Time);
+         Minutes_To_Date(Minutes => List(I).Time, Info_Text => Mission_Time);
          Add_Button
-           (Missions_Table, To_String(Mission_Time),
-            "The time limit for finish and return the mission",
-            "ShowBaseMissionMenu" & Positive'Image(I), 4);
+           (Table => Missions_Table, Text => To_String(Source => Mission_Time),
+            Tooltip => "The time limit for finish and return the mission",
+            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 4);
          Add_Button
-           (Missions_Table,
-            Natural'Image
+           (Table => Missions_Table,
+            Text => Natural'Image
               (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
-            " " & To_String(Money_Name),
-            "The base money reward for the mission",
-            "ShowBaseMissionMenu" & Positive'Image(I), 5, True);
+            " " & To_String(Source => Money_Name),
+            Tooltip => "The base money reward for the mission",
+            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 5, New_Row => True);
          Row := Row + 1;
          Rows := Rows + 1;
          exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
@@ -421,8 +421,8 @@ package body Missions.UI is
       if Page > 1 then
          if Rows < 25 then
             Add_Pagination
-              (Missions_Table, "ShowBaseMissions" & Positive'Image(Page - 1),
-               "");
+              (Table => Missions_Table, Previous_Command => "ShowBaseMissions" & Positive'Image(Page - 1),
+               Next_Command => "");
          else
             Add_Pagination
               (Missions_Table, "ShowBaseMissions" & Positive'Image(Page - 1),
