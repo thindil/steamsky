@@ -328,8 +328,8 @@ package body Missions.UI is
          Add_Button
            (Table => Missions_Table,
             Text => Get_Mission_Type(M_Type => List(I).M_Type),
-            Tooltip => "Show available mission's options",
-            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 1,
+            Tooltip => "Show more info about the mission",
+            Command => "MissionMoreInfo" & Positive'Image(I), Column => 1,
             Color =>
               (if Can_Accept then "" elsif Cabin_Taken then "yellow"
                else "red"));
@@ -353,8 +353,8 @@ package body Missions.UI is
                            (Sky_Map(List(I).Target_X, List(I).Target_Y)
                               .Base_Index)
                            .Name),
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(I),
+                  Tooltip => "Show more info about the mission",
+                  Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 3);
             when PATROL =>
                Add_Button
@@ -362,8 +362,8 @@ package body Missions.UI is
                   Text =>
                     "X:" & Natural'Image(List(I).Target_X) & " Y:" &
                     Natural'Image(List(I).Target_Y),
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(I),
+                  Tooltip => "Show more info about the mission",
+                  Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 3);
             when DESTROY =>
                if List(I).Ship_Index = 0 then
@@ -385,8 +385,8 @@ package body Missions.UI is
                   Text =>
                     To_String
                       (Source => Proto_Ships_List(List(I).Ship_Index).Name),
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(I),
+                  Tooltip => "Show more info about the mission",
+                  Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 3);
             when EXPLORE =>
                Add_Button
@@ -394,8 +394,8 @@ package body Missions.UI is
                   Text =>
                     "X:" & Natural'Image(List(I).Target_X) & " Y:" &
                     Natural'Image(List(I).Target_Y),
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(I),
+                  Tooltip => "Show more info about the mission",
+                  Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 3);
             when PASSENGER =>
                Add_Button
@@ -408,8 +408,8 @@ package body Missions.UI is
                            (Sky_Map(List(I).Target_X, List(I).Target_Y)
                               .Base_Index)
                            .Name),
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(I),
+                  Tooltip => "Show more info about the mission",
+                  Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 3);
          end case;
          Add_Button
@@ -420,13 +420,13 @@ package body Missions.UI is
                    (Destination_X => List(I).Target_X,
                     Destination_Y => List(I).Target_Y)),
             Tooltip => "The distance to the mission",
-            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 2);
+            Command => "MissionMoreInfo" & Positive'Image(I), Column => 2);
          Mission_Time := Null_Unbounded_String;
          Minutes_To_Date(Minutes => List(I).Time, Info_Text => Mission_Time);
          Add_Button
            (Table => Missions_Table, Text => To_String(Source => Mission_Time),
             Tooltip => "The time limit for finish and return the mission",
-            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 4);
+            Command => "MissionMoreInfo" & Positive'Image(I), Column => 4);
          Add_Button
            (Table => Missions_Table,
             Text =>
@@ -434,7 +434,7 @@ package body Missions.UI is
                 (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
               " " & To_String(Source => Money_Name),
             Tooltip => "The base money reward for the mission",
-            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 5,
+            Command => "MissionMoreInfo" & Positive'Image(I), Column => 5,
             New_Row => True);
          Row := Row + 1;
          Rows := Rows + 1;
