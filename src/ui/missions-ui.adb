@@ -518,16 +518,16 @@ package body Missions.UI is
          Add_Command(Name => "SetMission", Ada_Command => Set_Mission_Command'Access);
          Missions_Table :=
            Create_Table
-             (Missions_Canvas & ".missions",
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-               To_Unbounded_String("Details"),
-               To_Unbounded_String("Time limit"),
-               To_Unbounded_String("Base reward")),
-              Get_Widget(Main_Paned & ".missionsframe.scrolly"),
-              "SortAvailableMissions",
-              "Press mouse button to sort the missions.");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
-         Show_Sky_Map(True);
+             (Parent => Missions_Canvas & ".missions",
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
+               3 => To_Unbounded_String(Source => "Details"),
+               4 => To_Unbounded_String(Source => "Time limit"),
+               5 => To_Unbounded_String(Source => "Base reward")),
+              Scrollbar => Get_Widget(pathName => Main_Paned & ".missionsframe.scrolly"),
+              Command => "SortAvailableMissions",
+              Tooltip => "Press mouse button to sort the missions.");
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and Argc = 1 then
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "missions");
