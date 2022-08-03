@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Tab traverse in negotiate hire recruit dialog
+
 ## [7.0.9] - 2022-06-19
 
 ### Changed
