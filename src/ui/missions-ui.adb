@@ -810,8 +810,9 @@ package body Missions.UI is
       Button: Ttk_Button :=
         Create
           (MissionDialog & ".accept",
-           "-text {Accept} -command {CloseDialog " & MissionDialog &
-           ";SetMission " & CArgv.Arg(Argv, 1) & "}");
+           "-text Accept -command {CloseDialog " & MissionDialog &
+           ";SetMission " & CArgv.Arg(Argv, 1) &
+           "} -image negotiateicon -style Dialog.TButton");
       RewardLabel: constant Ttk_Label :=
         Create
           (MissionDialog & ".rewardlbl",
