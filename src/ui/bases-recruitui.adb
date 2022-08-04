@@ -1035,6 +1035,9 @@ package body Bases.RecruitUI is
          options =>
            "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
            Natural'Image(Recruit.Payment));
+      Bind
+        (Widgt => Scale, Sequence => "<Escape>",
+         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
       Label :=
         Create
           (pathName => Negotiate_Dialog & ".percentlbl",
@@ -1058,6 +1061,9 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => Scale, Sequence => "<Tab>",
          Script => "{focus " & Contract_Box & ";break}");
+      Bind
+        (Widgt => Scale, Sequence => "<Escape>",
+         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
       Current(ComboBox => Contract_Box, NewIndex => "0");
       Hire_Button :=
         Create
@@ -1068,6 +1074,9 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => Contract_Box, Sequence => "<Tab>",
          Script => "{focus " & Hire_Button & ";break}");
+      Bind
+        (Widgt => Contract_Box, Sequence => "<Escape>",
+         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
       Label := Create(pathName => Negotiate_Dialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Cost := Recruit.Price;
