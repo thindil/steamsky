@@ -649,18 +649,18 @@ package body Missions.UI is
       Button: Ttk_Button;
    begin
       Travel_Info
-        (Mission_Info,
-         (if Mission.M_Type in DELIVER | PASSENGER then
-            Count_Distance(Mission.Target_X, Mission.Target_Y)
-          else Count_Distance(Mission.Target_X, Mission.Target_Y) * 2),
-         True);
+        (Info_Text => Mission_Info,
+         Distance => (if Mission.M_Type in DELIVER | PASSENGER then
+            Count_Distance(Destination_X => Mission.Target_X, Destination_Y => Mission.Target_Y)
+          else Count_Distance(Destination_X => Mission.Target_X, Destination_Y => Mission.Target_Y) * 2),
+         Show_Fuel_Name => True);
       case Mission.M_Type is
          when DELIVER =>
             configure
-              (Label,
-               "-text {Item: " &
+              (Widgt => Label,
+               options => "-text {Item: " &
                To_String
-                 (Objects_Container.Element
+                 (Source => Objects_Container.Element
                     (Container => Items_List, Index => Mission.Item_Index)
                     .Name) &
                LF & "Weight:" &
@@ -670,20 +670,20 @@ package body Missions.UI is
                     .Weight) &
                " kg" & LF & "To base: " &
                To_String
-                 (Sky_Bases
+                 (Source => Sky_Bases
                     (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
                     .Name) &
-               To_String(Mission_Info) & "}");
+               To_String(Source => Mission_Info) & "}");
          when PATROL =>
             configure
-              (Label,
-               "-text {Patrol selected area" & To_String(Mission_Info) & "}");
+              (Widgt => Label,
+               options => "-text {Patrol selected area" & To_String(Source => Mission_Info) & "}");
          when DESTROY =>
             configure
-              (Label,
-               "-text {Target: " &
-               To_String(Proto_Ships_List(Mission.Ship_Index).Name) &
-               To_String(Mission_Info) & "}");
+              (Widgt => Label,
+               options => "-text {Target: " &
+               To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+               To_String(Source => Mission_Info) & "}");
          when EXPLORE =>
             configure
               (Label,
