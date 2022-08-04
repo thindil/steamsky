@@ -868,6 +868,9 @@ package body Bases.RecruitUI is
         (Scale,
          "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
          Natural'Image(Recruit.Payment));
+      Bind
+        (Scale, "<Escape>",
+         "{" & NegotiateDialog & ".buttonbox.button invoke;break}");
       Label :=
         Create
           (NegotiateDialog & ".percentlbl",
@@ -887,6 +890,9 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => Scale, Sequence => "<Tab>",
          Script => "{focus " & ContractBox & ";break}");
+      Bind
+        (Scale, "<Escape>",
+         "{" & NegotiateDialog & ".buttonbox.button invoke;break}");
       Current(ContractBox, "0");
       HireButton :=
         Create
@@ -895,6 +901,9 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => ContractBox, Sequence => "<Tab>",
          Script => "{focus " & HireButton & ";break}");
+      Bind
+        (ContractBox, "<Escape>",
+         "{" & NegotiateDialog & ".buttonbox.button invoke;break}");
       Label := Create(NegotiateDialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Cost := Recruit.Price;
@@ -929,7 +938,8 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
-      Bind(CloseButton, "<Tab>", "{focus " & NegotiateDialog & ".daily;break}");
+      Bind
+        (CloseButton, "<Tab>", "{focus " & NegotiateDialog & ".daily;break}");
       Bind(HireButton, "<Tab>", "{focus " & CloseButton & ";break}");
       Bind(NegotiateDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
