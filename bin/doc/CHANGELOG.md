@@ -18,8 +18,12 @@ All notable changes to this project will be documented in this file.
   Show inventory, Set crafting recipe, Recruit info, Hire recruit, Show
   mission info and Accept mission dialogs
 - Show both, text and icon on "Close" button in dialogs
-- Show crafting recipe info instead of actions menu in crafting recipes list
-- Show recruit info instead of actions menu in recruits lists in bases
+- Show the crafting recipe info instead of the actions menu in the crafting
+  recipes list
+- Show the recruit info instead of the actions menu in the recruits lists in
+  bases
+- Show the mission info instead of the actions menu in the lists of available
+  missions in bases
 
 ### Removed
 - Craftable column from crafting recipes list in Crafting screen
