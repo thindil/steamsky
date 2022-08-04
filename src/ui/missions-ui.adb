@@ -810,29 +810,29 @@ package body Missions.UI is
            Columns => 2);
       Button: Ttk_Button :=
         Create
-          (Mission_Dialog & ".accept",
-           "-text Accept -command {CloseDialog " & Mission_Dialog &
-           ";SetMission " & CArgv.Arg(Argv, 1) &
+          (pathName => Mission_Dialog & ".accept",
+           options => "-text Accept -command {CloseDialog " & Mission_Dialog &
+           ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
            "} -image negotiateicon -style Dialog.TButton");
-      RewardLabel: constant Ttk_Label :=
+      Reward_Label: constant Ttk_Label :=
         Create
-          (Mission_Dialog & ".rewardlbl",
-           "-text {Reward:" &
+          (pathName => Mission_Dialog & ".rewardlbl",
+           options => "-text {Reward:" &
            Natural'Image
              (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-           " " & To_String(Money_Name) & "}");
-      RewardScale: constant Ttk_Scale :=
+           " " & To_String(Source => Money_Name) & "}");
+      Reward_Scale: constant Ttk_Scale :=
         Create
-          (Mission_Dialog & ".reward",
-           "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
-           CArgv.Arg(Argv, 1) & "} -length 300");
+          (pathName => Mission_Dialog & ".reward",
+           options => "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
+           CArgv.Arg(Argv => Argv, N => 1) & "} -length 300");
    begin
-      Tcl_SetVar(Interp, "reward", "1.0");
+      Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
       Add
-        (RewardScale,
-         "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
-      Tcl.Tk.Ada.Grid.Grid(RewardLabel, "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid(RewardScale, "-columnspan 2 -padx 5");
+        (Widget => Reward_Scale,
+         Message => "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Label, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Reward_Scale, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Button :=
         Create
