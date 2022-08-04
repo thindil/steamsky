@@ -686,8 +686,8 @@ package body Missions.UI is
                To_String(Source => Mission_Info) & "}");
          when EXPLORE =>
             configure
-              (Label,
-               "-text {Explore selected area" & To_String(Mission_Info) & "}");
+              (Widgt => Label,
+               options => "-text {Explore selected area" & To_String(Source => Mission_Info) & "}");
          when PASSENGER =>
             Can_Accept := False;
             Modules_Loop :
@@ -696,13 +696,14 @@ package body Missions.UI is
                  and then Module.Quality >= Mission.Data then
                   Can_Accept := True;
                   Cabin_Taken := False;
+                  Owners_Loop:
                   for Owner of Module.Owner loop
                      if Owner > 0 then
                         Cabin_Taken := True;
                         Can_Accept := False;
-                        exit;
+                        exit Owners_Loop;
                      end if;
-                  end loop;
+                  end loop Owners_Loop;
                   exit Modules_Loop when Can_Accept;
                end if;
             end loop Modules_Loop;
@@ -710,19 +711,19 @@ package body Missions.UI is
                Can_Accept := True;
             end if;
             configure
-              (Label,
-               "-text {Needed quality of cabin: " &
-               Get_Cabin_Quality(Mission.Data) &
+              (Widgt => Label,
+               options => "-text {Needed quality of cabin: " &
+               Get_Cabin_Quality(Quality => Mission.Data) &
                (if Can_Accept then "" elsif Cabin_Taken then " (taken)"
                 else " (no cabin)") &
                LF & "To base: " &
                To_String
-                 (Sky_Bases
+                 (Source => Sky_Bases
                     (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
                     .Name) &
-               To_String(Mission_Info) & "}");
+               To_String(Source => Mission_Info) & "}");
       end case;
-      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
       Button :=
         Create
           (pathName => Buttons_Frame & ".button1",
@@ -771,7 +772,7 @@ package body Missions.UI is
       end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
-      Show_Dialog(Mission_Dialog);
+      Show_Dialog(Dialog => Mission_Dialog);
       return TCL_OK;
    end Mission_More_Info_Command;
 
@@ -779,10 +780,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Accept the mission in a base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -790,39 +791,39 @@ package body Missions.UI is
    -- MissionIndex is the index of the mission to accept
    -- SOURCE
    function Accept_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Accept_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Argc);
+      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission: constant Mission_Data :=
-        Sky_Bases(Base_Index).Missions(MissionIndex);
-      MissionDialog: constant Ttk_Frame :=
+        Sky_Bases(Base_Index).Missions(Mission_Index);
+      Mission_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
-           Title => "Accept " & Get_Mission_Type(Mission.M_Type),
+           Title => "Accept " & Get_Mission_Type(M_Type => Mission.M_Type),
            Columns => 2);
       Button: Ttk_Button :=
         Create
-          (MissionDialog & ".accept",
-           "-text Accept -command {CloseDialog " & MissionDialog &
+          (Mission_Dialog & ".accept",
+           "-text Accept -command {CloseDialog " & Mission_Dialog &
            ";SetMission " & CArgv.Arg(Argv, 1) &
            "} -image negotiateicon -style Dialog.TButton");
       RewardLabel: constant Ttk_Label :=
         Create
-          (MissionDialog & ".rewardlbl",
+          (Mission_Dialog & ".rewardlbl",
            "-text {Reward:" &
            Natural'Image
              (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
            " " & To_String(Money_Name) & "}");
       RewardScale: constant Ttk_Scale :=
         Create
-          (MissionDialog & ".reward",
+          (Mission_Dialog & ".reward",
            "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
            CArgv.Arg(Argv, 1) & "} -length 300");
    begin
@@ -835,13 +836,13 @@ package body Missions.UI is
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Button :=
         Create
-          (MissionDialog & ".cancel",
-           "-text Cancel -command {CloseDialog " & MissionDialog &
+          (Mission_Dialog & ".cancel",
+           "-text Cancel -command {CloseDialog " & Mission_Dialog &
            "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 3 -column 1 -pady 5");
       Bind(Button, "<Tab>", "{focus .missiondialog.accept;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(MissionDialog);
+      Show_Dialog(Mission_Dialog);
       Focus(Button);
       return TCL_OK;
    end Accept_Mission_Command;
