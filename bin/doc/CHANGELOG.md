@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Tab traverse in negotiate hire recruit dialog
+- Closing the hire dialog with Escape key when another element than buttons is
+  selected
 
 ## [7.0.9] - 2022-06-19
 
