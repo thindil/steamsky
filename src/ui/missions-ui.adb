@@ -587,18 +587,18 @@ package body Missions.UI is
          Page =>
            (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
             else 1));
-      Update_Table(Missions_Table);
+      Update_Table(Table => Missions_Table);
       configure
-        (Missions_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Missions_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Missions_Frame.Name :=
-        New_String(Widget_Image(Missions_Canvas) & ".missions");
+        New_String(Str => Widget_Image(Win => Missions_Canvas) & ".missions");
       Canvas_Create
-        (Missions_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Missions_Frame));
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Missions_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Missions_Frame));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Missions_Canvas,
          "-scrollregion [list " & BBox(Missions_Canvas, "all") & "]");
