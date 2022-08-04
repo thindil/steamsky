@@ -832,18 +832,18 @@ package body Missions.UI is
         (Widget => Reward_Scale,
          Message => "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
       Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Label, Options => "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid(Reward_Scale, "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Scale, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5");
       Button :=
         Create
-          (Mission_Dialog & ".cancel",
-           "-text Cancel -command {CloseDialog " & Mission_Dialog &
+          (pathName => Mission_Dialog & ".cancel",
+           options => "-text Cancel -command {CloseDialog " & Mission_Dialog &
            "} -image cancelicon -style Dialog.TButton");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 3 -column 1 -pady 5");
-      Bind(Button, "<Tab>", "{focus .missiondialog.accept;break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(Mission_Dialog);
-      Focus(Button);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 3 -column 1 -pady 5");
+      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus .missiondialog.accept;break}");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Show_Dialog(Dialog => Mission_Dialog);
+      Focus(Widgt => Button);
       return TCL_OK;
    end Accept_Mission_Command;
 
@@ -851,10 +851,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Update the information about the selected mission reward
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -862,20 +862,20 @@ package body Missions.UI is
    -- MissionIndex is the index of the mission to update info
    -- SOURCE
    function Update_Mission_Reward_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Mission_Reward_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Argc);
+      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       RewardLabel: constant Ttk_Label :=
         Get_Widget(".missiondialog.rewardlbl", Interp);
       Mission: constant Mission_Data :=
-        Sky_Bases(Base_Index).Missions(MissionIndex);
+        Sky_Bases(Base_Index).Missions(Mission_Index);
    begin
       configure
         (RewardLabel,
