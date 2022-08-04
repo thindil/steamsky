@@ -590,18 +590,22 @@ package body Missions.UI is
       Update_Table(Table => Missions_Table);
       configure
         (Widgt => Missions_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Missions_Frame.Name :=
         New_String(Str => Widget_Image(Win => Missions_Canvas) & ".missions");
       Canvas_Create
         (Parent => Missions_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Missions_Frame));
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Missions_Frame));
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Missions_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "missionsframe");
       return TCL_OK;
    end Show_Base_Missions_Command;
@@ -632,17 +636,21 @@ package body Missions.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission: constant Mission_Data :=
         Sky_Bases(Base_Index).Missions(Mission_Index);
       Mission_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
-           Title => "More info about " & Get_Mission_Type(M_Type => Mission.M_Type));
+           Title =>
+             "More info about " & Get_Mission_Type(M_Type => Mission.M_Type));
       Can_Accept: Boolean := True;
       Cabin_Taken: Boolean := False;
       Label: constant Ttk_Label :=
-        Create(pathName => Mission_Dialog & ".infolabel", options => "-wraplength 400");
+        Create
+          (pathName => Mission_Dialog & ".infolabel",
+           options => "-wraplength 400");
       Mission_Info: Unbounded_String := Null_Unbounded_String;
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Mission_Dialog & ".buttons");
@@ -650,44 +658,60 @@ package body Missions.UI is
    begin
       Travel_Info
         (Info_Text => Mission_Info,
-         Distance => (if Mission.M_Type in DELIVER | PASSENGER then
-            Count_Distance(Destination_X => Mission.Target_X, Destination_Y => Mission.Target_Y)
-          else Count_Distance(Destination_X => Mission.Target_X, Destination_Y => Mission.Target_Y) * 2),
+         Distance =>
+           (if Mission.M_Type in DELIVER | PASSENGER then
+              Count_Distance
+                (Destination_X => Mission.Target_X,
+                 Destination_Y => Mission.Target_Y)
+            else Count_Distance
+                (Destination_X => Mission.Target_X,
+                 Destination_Y => Mission.Target_Y) *
+              2),
          Show_Fuel_Name => True);
       case Mission.M_Type is
          when DELIVER =>
             configure
               (Widgt => Label,
-               options => "-text {Item: " &
-               To_String
-                 (Source => Objects_Container.Element
-                    (Container => Items_List, Index => Mission.Item_Index)
-                    .Name) &
-               LF & "Weight:" &
-               Positive'Image
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => Mission.Item_Index)
-                    .Weight) &
-               " kg" & LF & "To base: " &
-               To_String
-                 (Source => Sky_Bases
-                    (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
-                    .Name) &
-               To_String(Source => Mission_Info) & "}");
+               options =>
+                 "-text {Item: " &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List, Index => Mission.Item_Index)
+                        .Name) &
+                 LF & "Weight:" &
+                 Positive'Image
+                   (Objects_Container.Element
+                      (Container => Items_List, Index => Mission.Item_Index)
+                      .Weight) &
+                 " kg" & LF & "To base: " &
+                 To_String
+                   (Source =>
+                      Sky_Bases
+                        (Sky_Map(Mission.Target_X, Mission.Target_Y)
+                           .Base_Index)
+                        .Name) &
+                 To_String(Source => Mission_Info) & "}");
          when PATROL =>
             configure
               (Widgt => Label,
-               options => "-text {Patrol selected area" & To_String(Source => Mission_Info) & "}");
+               options =>
+                 "-text {Patrol selected area" &
+                 To_String(Source => Mission_Info) & "}");
          when DESTROY =>
             configure
               (Widgt => Label,
-               options => "-text {Target: " &
-               To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) &
-               To_String(Source => Mission_Info) & "}");
+               options =>
+                 "-text {Target: " &
+                 To_String
+                   (Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+                 To_String(Source => Mission_Info) & "}");
          when EXPLORE =>
             configure
               (Widgt => Label,
-               options => "-text {Explore selected area" & To_String(Source => Mission_Info) & "}");
+               options =>
+                 "-text {Explore selected area" &
+                 To_String(Source => Mission_Info) & "}");
          when PASSENGER =>
             Can_Accept := False;
             Modules_Loop :
@@ -696,7 +720,7 @@ package body Missions.UI is
                  and then Module.Quality >= Mission.Data then
                   Can_Accept := True;
                   Cabin_Taken := False;
-                  Owners_Loop:
+                  Owners_Loop :
                   for Owner of Module.Owner loop
                      if Owner > 0 then
                         Cabin_Taken := True;
@@ -712,16 +736,19 @@ package body Missions.UI is
             end if;
             configure
               (Widgt => Label,
-               options => "-text {Needed quality of cabin: " &
-               Get_Cabin_Quality(Quality => Mission.Data) &
-               (if Can_Accept then "" elsif Cabin_Taken then " (taken)"
-                else " (no cabin)") &
-               LF & "To base: " &
-               To_String
-                 (Source => Sky_Bases
-                    (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
-                    .Name) &
-               To_String(Source => Mission_Info) & "}");
+               options =>
+                 "-text {Needed quality of cabin: " &
+                 Get_Cabin_Quality(Quality => Mission.Data) &
+                 (if Can_Accept then "" elsif Cabin_Taken then " (taken)"
+                  else " (no cabin)") &
+                 LF & "To base: " &
+                 To_String
+                   (Source =>
+                      Sky_Bases
+                        (Sky_Map(Mission.Target_X, Mission.Target_Y)
+                           .Base_Index)
+                        .Name) &
+                 To_String(Source => Mission_Info) & "}");
       end case;
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
       Button :=
@@ -800,7 +827,8 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission: constant Mission_Data :=
         Sky_Bases(Base_Index).Missions(Mission_Index);
       Mission_Dialog: constant Ttk_Frame :=
@@ -811,37 +839,49 @@ package body Missions.UI is
       Button: Ttk_Button :=
         Create
           (pathName => Mission_Dialog & ".accept",
-           options => "-text Accept -command {CloseDialog " & Mission_Dialog &
-           ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
-           "} -image negotiateicon -style Dialog.TButton");
+           options =>
+             "-text Accept -command {CloseDialog " & Mission_Dialog &
+             ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
+             "} -image negotiateicon -style Dialog.TButton");
       Reward_Label: constant Ttk_Label :=
         Create
           (pathName => Mission_Dialog & ".rewardlbl",
-           options => "-text {Reward:" &
-           Natural'Image
-             (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-           " " & To_String(Source => Money_Name) & "}");
+           options =>
+             "-text {Reward:" &
+             Natural'Image
+               (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
+             " " & To_String(Source => Money_Name) & "}");
       Reward_Scale: constant Ttk_Scale :=
         Create
           (pathName => Mission_Dialog & ".reward",
-           options => "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
-           CArgv.Arg(Argv => Argv, N => 1) & "} -length 300");
+           options =>
+             "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
+             CArgv.Arg(Argv => Argv, N => 1) & "} -length 300");
    begin
       Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
       Add
         (Widget => Reward_Scale,
-         Message => "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Label, Options => "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Scale, Options => "-columnspan 2 -padx 5");
+         Message =>
+           "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Reward_Label, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Reward_Scale, Options => "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5");
       Button :=
         Create
           (pathName => Mission_Dialog & ".cancel",
-           options => "-text Cancel -command {CloseDialog " & Mission_Dialog &
-           "} -image cancelicon -style Dialog.TButton");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 3 -column 1 -pady 5");
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus .missiondialog.accept;break}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+           options =>
+             "-text Cancel -command {CloseDialog " & Mission_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-row 3 -column 1 -pady 5");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus .missiondialog.accept;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       Show_Dialog(Dialog => Mission_Dialog);
       Focus(Widgt => Button);
       return TCL_OK;
@@ -871,20 +911,23 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      RewardLabel: constant Ttk_Label :=
-        Get_Widget(".missiondialog.rewardlbl", Interp);
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Reward_Label: constant Ttk_Label :=
+        Get_Widget(pathName => ".missiondialog.rewardlbl", Interp => Interp);
       Mission: constant Mission_Data :=
         Sky_Bases(Base_Index).Missions(Mission_Index);
    begin
       configure
-        (RewardLabel,
-         "-text {Reward:" &
-         Natural'Image
-           (Natural
-              (Float(Mission.Reward) *
-               Float'Value(Tcl_GetVar(Interp, "reward")))) &
-         " " & To_String(Money_Name) & "}");
+        (Widgt => Reward_Label,
+         options =>
+           "-text {Reward:" &
+           Natural'Image
+             (Natural
+                (Float(Mission.Reward) *
+                 Float'Value
+                   (Tcl_GetVar(interp => Interp, varName => "reward")))) &
+           " " & To_String(Source => Money_Name) & "}");
       return TCL_OK;
    end Update_Mission_Reward_Command;
 
@@ -934,10 +977,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Sort the list of available missions
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- HISTORY
@@ -947,15 +990,15 @@ package body Missions.UI is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Available_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Available_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
