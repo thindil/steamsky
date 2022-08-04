@@ -253,9 +253,11 @@ package body Dialogs is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- GetString caption closeaction title
+   -- GetString caption closeaction title okbutton
    -- Caption is the text showed above entry field in the dialog, variable
-   -- is the variable which will be set and title is the title of the dialog
+   -- is the variable which will be set, title is the title of the dialog and
+   -- okbutton is the text which will be displayed on the confirmation
+   -- button
    -- SOURCE
    function Get_String_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -286,9 +288,9 @@ package body Dialogs is
         Create
           (pathName => String_Dialog & ".okbutton",
            options =>
-             "-text {Ok} -command {SetTextVariable " &
-             CArgv.Arg(Argv => Argv, N => 2) & "; CloseDialog " &
-             String_Dialog & "}");
+             "-text {" & CArgv.Arg(Argv => Argv, N => 4) &
+             "} -command {SetTextVariable " & CArgv.Arg(Argv => Argv, N => 2) &
+             "; CloseDialog " & String_Dialog & "}");
       Cancel_Button: constant Ttk_Button :=
         Create
           (pathName => String_Dialog & ".closebutton",
