@@ -52,7 +52,7 @@ with WaitMenu; use WaitMenu;
 package body OrdersMenu is
 
    function Show_Orders_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
@@ -97,7 +97,7 @@ package body OrdersMenu is
       end Add_Button;
    begin
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
-         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
+         return Close_Dialog_Command(Client_Data, Interp, Argc, Argv);
       end if;
       if Find_Member(TALK) > 0 then
          HaveTrader := True;
@@ -1050,7 +1050,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Deliver_Medicines_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowOrders", Show_Orders_Command'Access);
       Add_Command("Docking", Docking_Command'Access);
@@ -1064,6 +1064,6 @@ package body OrdersMenu is
       Add_Command("CompleteMission", Complete_Mission_Command'Access);
       Add_Command("ExecuteStory", Execute_Story_Command'Access);
       Add_Command("DeliverMedicines", Deliver_Medicines_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end OrdersMenu;

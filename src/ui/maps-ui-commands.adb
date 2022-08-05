@@ -442,7 +442,7 @@ package body Maps.UI.Commands is
            (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
          return
            Show_Orders_Command
-             (ClientData => Client_Data, Interp => Interp, Argc => Argc,
+             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
               Argv => Argv);
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
