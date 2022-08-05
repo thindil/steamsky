@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
   installed module info dialogs
 - Generating equipment for recruits in bases
 - Crash when trying to buy items in bases
-- Tab traverse in negotiate hire recruit dialog
+- Tab traverse in negotiate hire recruit dialog and school in bases
 - Closing the hire dialog with Escape key when another element than buttons is
   selected
 
