@@ -1747,7 +1747,8 @@ package body Ships.UI.Crew is
          Command =>
            "GetString {Enter a new name for the " &
            To_String(Source => Member.Name) & ":} crewname" &
-           CArgv.Arg(Argv => Argv, N => 1) & " {Renaming crew member}");
+           CArgv.Arg(Argv => Argv, N => 1) &
+           " {Renaming crew member} {Rename}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
