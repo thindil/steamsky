@@ -67,7 +67,8 @@ package body OrdersMenu is
       Dialog_Close_Button: constant Ttk_Button :=
         Create
           (pathName => Orders_Menu & ".closebutton",
-           options => "-text Close -command {CloseDialog " & Orders_Menu & "}");
+           options =>
+             "-text Close -command {CloseDialog " & Orders_Menu & "}");
       Last_Button: Ttk_Button := Get_Widget(pathName => ".", Interp => Interp);
       type Order_Shortcut is record
          Button_Name: Unbounded_String;
@@ -82,28 +83,37 @@ package body OrdersMenu is
          Button: constant Ttk_Button :=
            Create
              (pathName => Orders_Menu & Name,
-              options => "-text {" & Label & "} -command {CloseDialog " & Orders_Menu &
-              ";" & Command & "} -underline" & Natural'Image(Underline));
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Orders_Menu &
+                ";" & Command & "} -underline" & Natural'Image(Underline));
       begin
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
-            Options => "-sticky we -padx 5" &
-            (if Row = -1 then "" else " -row" & Integer'Image(Row)));
-         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+            Options =>
+              "-sticky we -padx 5" &
+              (if Row = -1 then "" else " -row" & Integer'Image(Row)));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Dialog_Close_Button & " invoke;break}");
          Last_Button := Button;
          Shortcuts.Append
-           (New_Item => (Button_Name => To_Unbounded_String(Source => Orders_Menu & Name),
-             Shortcut => Shortcut(Shortcut'First)));
+           (New_Item =>
+              (Button_Name =>
+                 To_Unbounded_String(Source => Orders_Menu & Name),
+               Shortcut => Shortcut(Shortcut'First)));
       end Add_Button;
    begin
       if Winfo_Get(Widgt => Orders_Menu, Info => "ismapped") = "1" then
-         return Close_Dialog_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+         return
+           Close_Dialog_Command
+             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+              Argv => Argv);
       end if;
       if Find_Member(Order => TALK) > 0 then
          Have_Trader := True;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
-         Show_Story_Button:
+         Show_Story_Button :
          declare
             Step: constant Step_Data :=
               (if Current_Story.Current_Step = 0 then
@@ -121,52 +131,69 @@ package body OrdersMenu is
                          To_String(Source => Sky_Bases(Base_Index).Name) then
                         Add_Button
                           (Name => ".story",
-                           Label => "Ask for " &
-                           To_String
-                             (Source => Objects_Container.Element
-                                (Container => Items_List,
-                                 Index =>
-                                   Positive'Value
-                                     (To_String
-                                        (Source =>
-                                           Get_Step_Data
-                                             (Finish_Data => Step.Finish_Data, Name =>"item"))))
-                                .Name),
-                           Command => "ExecuteStory", Shortcut => "f", Underline => 4);
+                           Label =>
+                             "Ask for " &
+                             To_String
+                               (Source =>
+                                  Objects_Container.Element
+                                    (Container => Items_List,
+                                     Index =>
+                                       Positive'Value
+                                         (To_String
+                                            (Source =>
+                                               Get_Step_Data
+                                                 (Finish_Data =>
+                                                    Step.Finish_Data,
+                                                  Name => "item"))))
+                                    .Name),
+                           Command => "ExecuteStory", Shortcut => "f",
+                           Underline => 4);
                      end if;
                   end if;
                when DESTROYSHIP =>
-                  Show_Destroy_Ship_Button:
+                  Show_Destroy_Ship_Button :
                   declare
                      Tokens: Slice_Set;
                   begin
-                     Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
+                     Create
+                       (S => Tokens,
+                        From => To_String(Source => Current_Story.Data),
+                        Separators => ";");
                      if Player_Ship.Sky_X =
                        Positive'Value(Slice(S => Tokens, Index => 1)) and
                        Player_Ship.Sky_Y =
                          Positive'Value(Slice(S => Tokens, Index => 2)) then
                         Add_Button
                           (Name => ".story",
-                           Label => "Search for " &
-                           To_String
-                             (Source => Proto_Ships_List
-                                (Positive'Value(Slice(S => Tokens, Index => 3)))
-                                .Name),
-                           Command => "ExecuteStory", Shortcut => "s", Underline => 0);
+                           Label =>
+                             "Search for " &
+                             To_String
+                               (Source =>
+                                  Proto_Ships_List
+                                    (Positive'Value
+                                       (Slice(S => Tokens, Index => 3)))
+                                    .Name),
+                           Command => "ExecuteStory", Shortcut => "s",
+                           Underline => 0);
                      end if;
                   end Show_Destroy_Ship_Button;
                when EXPLORE =>
-                  Show_Explore_Story_Button:
+                  Show_Explore_Story_Button :
                   declare
                      Tokens: Slice_Set;
                   begin
-                     Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
+                     Create
+                       (S => Tokens,
+                        From => To_String(Source => Current_Story.Data),
+                        Separators => ";");
                      if Player_Ship.Sky_X =
                        Positive'Value(Slice(S => Tokens, Index => 1)) and
                        Player_Ship.Sky_Y =
                          Positive'Value(Slice(S => Tokens, Index => 2)) then
                         Add_Button
-                          (".story", "Search area", "ExecuteStory", "s", 0);
+                          (Name => ".story", Label => "Search area",
+                           Command => "ExecuteStory", Shortcut => "s",
+                           Underline => 0);
                      end if;
                   end Show_Explore_Story_Button;
                when ANY | LOOT =>
@@ -175,12 +202,18 @@ package body OrdersMenu is
          end Show_Story_Button;
       end if;
       if Player_Ship.Speed = DOCKED then
-         Add_Button(".undock", "Undock", "Docking", "d", 0);
+         Add_Button
+           (Name => ".undock", Label => "Undock", Command => "Docking",
+            Shortcut => "d", Underline => 0);
          if Sky_Bases(Base_Index).Population > 0 then
-            Add_Button(".escape", "Escape", "Docking escape", "a", 3);
+            Add_Button
+              (Name => ".escape", Label => "Escape",
+               Command => "Docking escape", Shortcut => "a", Underline => 3);
          end if;
          if Have_Trader and Sky_Bases(Base_Index).Population > 0 then
-            Add_Button(".trade", "Trade", "ShowTrade", "t", 0);
+            Add_Button
+              (Name => ".trade", Label => "Trade", Command => "ShowTrade",
+               Shortcut => "t", Underline => 0);
             Add_Button(".school", "School", "ShowSchool", "s", 0);
             if Recruit_Container.Length
                 (Container => Sky_Bases(Base_Index).Recruits) >
@@ -358,7 +391,8 @@ package body OrdersMenu is
                   end if;
                   Complete_Mission_Menu_Loop :
                   for Mission of Accepted_Missions loop
-                     if Have_Trader and Mission.Target_X = Player_Ship.Sky_X and
+                     if Have_Trader and
+                       Mission.Target_X = Player_Ship.Sky_X and
                        Mission.Target_Y = Player_Ship.Sky_Y and
                        Mission.Finished then
                         case Mission.M_Type is
@@ -485,9 +519,13 @@ package body OrdersMenu is
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
-         Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
-         Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
-         Bind(Last_Button, "<Tab>", "{focus " & Dialog_Close_Button & ";break}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
+         Bind
+           (Dialog_Close_Button, "<Escape>",
+            "{" & Dialog_Close_Button & " invoke;break}");
+         Bind
+           (Last_Button, "<Tab>", "{focus " & Dialog_Close_Button & ";break}");
          for Shortcut of Shortcuts loop
             Bind
               (Dialog_Close_Button, "<Alt-" & Shortcut.Shortcut & ">",
