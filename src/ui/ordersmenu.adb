@@ -146,28 +146,29 @@ package body OrdersMenu is
                        Player_Ship.Sky_Y =
                          Positive'Value(Slice(S => Tokens, Index => 2)) then
                         Add_Button
-                          (".story",
-                           "Search for " &
+                          (Name => ".story",
+                           Label => "Search for " &
                            To_String
-                             (Proto_Ships_List
-                                (Positive'Value(Slice(Tokens, 3)))
+                             (Source => Proto_Ships_List
+                                (Positive'Value(Slice(S => Tokens, Index => 3)))
                                 .Name),
-                           "ExecuteStory", "s", 0);
+                           Command => "ExecuteStory", Shortcut => "s", Underline => 0);
                      end if;
                   end Show_Destroy_Ship_Button;
                when EXPLORE =>
+                  Show_Explore_Story_Button:
                   declare
                      Tokens: Slice_Set;
                   begin
-                     Create(Tokens, To_String(Current_Story.Data), ";");
+                     Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
                      if Player_Ship.Sky_X =
-                       Positive'Value(Slice(Tokens, 1)) and
+                       Positive'Value(Slice(S => Tokens, Index => 1)) and
                        Player_Ship.Sky_Y =
-                         Positive'Value(Slice(Tokens, 2)) then
+                         Positive'Value(Slice(S => Tokens, Index => 2)) then
                         Add_Button
                           (".story", "Search area", "ExecuteStory", "s", 0);
                      end if;
-                  end;
+                  end Show_Explore_Story_Button;
                when ANY | LOOT =>
                   null;
             end case;
