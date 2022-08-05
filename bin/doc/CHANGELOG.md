@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Tab traverse in negotiate hire recruit dialog
+- Tab traverse in negotiate hire recruit dialog and school in bases
 - Closing the hire dialog with Escape key when another element than buttons is
   selected
 
