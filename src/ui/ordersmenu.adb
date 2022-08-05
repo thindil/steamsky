@@ -56,51 +56,51 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      HaveTrader: Boolean := False;
-      BaseIndex: constant Natural :=
+      Have_Trader: Boolean := False;
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      MissionsLimit: Integer;
+      Missions_Limit: Integer;
       Event: Events_Types := NONE;
-      ItemIndex: Natural;
-      OrdersMenu: constant Ttk_Frame :=
-        Create_Dialog(".gameframe.orders", "Ship orders");
-      CloseButton: constant Ttk_Button :=
+      Item_Index: Natural;
+      Orders_Menu: constant Ttk_Frame :=
+        Create_Dialog(Name => ".gameframe.orders", Title => "Ship orders");
+      Dialog_Close_Button: constant Ttk_Button :=
         Create
-          (OrdersMenu & ".closebutton",
-           "-text Close -command {CloseDialog " & OrdersMenu & "}");
-      Last_Button: Ttk_Button := Get_Widget(".", Interp);
+          (pathName => Orders_Menu & ".closebutton",
+           options => "-text Close -command {CloseDialog " & Orders_Menu & "}");
+      Last_Button: Ttk_Button := Get_Widget(pathName => ".", Interp => Interp);
       type Order_Shortcut is record
-         ButtonName: Unbounded_String;
+         Button_Name: Unbounded_String;
          Shortcut: Character;
       end record;
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Order_Shortcut);
       Shortcuts: Shortcuts_Container.Vector;
       procedure Add_Button
-        (Name, Label, Command, Shortcut: String; UnderLine: Natural;
+        (Name, Label, Command, Shortcut: String; Underline: Natural;
          Row: Integer := -1) is
          Button: constant Ttk_Button :=
            Create
-             (OrdersMenu & Name,
-              "-text {" & Label & "} -command {CloseDialog " & OrdersMenu &
-              ";" & Command & "} -underline" & Natural'Image(UnderLine));
+             (pathName => Orders_Menu & Name,
+              options => "-text {" & Label & "} -command {CloseDialog " & Orders_Menu &
+              ";" & Command & "} -underline" & Natural'Image(Underline));
       begin
          Tcl.Tk.Ada.Grid.Grid
-           (Button,
-            "-sticky we -padx 5" &
+           (Slave => Button,
+            Options => "-sticky we -padx 5" &
             (if Row = -1 then "" else " -row" & Integer'Image(Row)));
-         Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
          Last_Button := Button;
          Shortcuts.Append
-           ((To_Unbounded_String(OrdersMenu & Name),
+           ((To_Unbounded_String(Orders_Menu & Name),
              Shortcut(Shortcut'First)));
       end Add_Button;
    begin
-      if Winfo_Get(OrdersMenu, "ismapped") = "1" then
+      if Winfo_Get(Orders_Menu, "ismapped") = "1" then
          return Close_Dialog_Command(Client_Data, Interp, Argc, Argv);
       end if;
       if Find_Member(TALK) > 0 then
-         HaveTrader := True;
+         Have_Trader := True;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
          declare
@@ -114,10 +114,10 @@ package body OrdersMenu is
          begin
             case Step.Finish_Condition is
                when ASKINBASE =>
-                  if BaseIndex > 0 then
+                  if Base_Index > 0 then
                      if Current_Story.Data = Null_Unbounded_String or
                        To_String(Source => Current_Story.Data) =
-                         To_String(Source => Sky_Bases(BaseIndex).Name) then
+                         To_String(Source => Sky_Bases(Base_Index).Name) then
                         Add_Button
                           (".story",
                            "Ask for " &
@@ -173,24 +173,24 @@ package body OrdersMenu is
       end if;
       if Player_Ship.Speed = DOCKED then
          Add_Button(".undock", "Undock", "Docking", "d", 0);
-         if Sky_Bases(BaseIndex).Population > 0 then
+         if Sky_Bases(Base_Index).Population > 0 then
             Add_Button(".escape", "Escape", "Docking escape", "a", 3);
          end if;
-         if HaveTrader and Sky_Bases(BaseIndex).Population > 0 then
+         if Have_Trader and Sky_Bases(Base_Index).Population > 0 then
             Add_Button(".trade", "Trade", "ShowTrade", "t", 0);
             Add_Button(".school", "School", "ShowSchool", "s", 0);
             if Recruit_Container.Length
-                (Container => Sky_Bases(BaseIndex).Recruits) >
+                (Container => Sky_Bases(Base_Index).Recruits) >
               0 then
                Add_Button(".recruits", "Recruit", "ShowRecruit", "r", 0);
             end if;
-            if Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events) > 6 then
+            if Days_Difference(Sky_Bases(Base_Index).Asked_For_Events) > 6 then
                Add_Button(".events", "Ask for events", "AskForEvents", "e", 8);
             end if;
-            if not Sky_Bases(BaseIndex).Asked_For_Bases then
+            if not Sky_Bases(Base_Index).Asked_For_Bases then
                Add_Button(".bases", "Ask for bases", "AskForBases", "b", 8);
             end if;
-            if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+            if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
                 (To_Unbounded_String("temple")) then
                Add_Button(".pray", "Pray", "Pray", "p", 0);
             end if;
@@ -210,7 +210,7 @@ package body OrdersMenu is
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
-            if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+            if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
                Add_Button(".shipyard", "Shipyard", "ShowShipyard", "i", 2);
             end if;
@@ -218,26 +218,26 @@ package body OrdersMenu is
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
-                 Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Recipes
+                 Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Recipes
                    .Contains
                    (To_Unbounded_String
                       (Source =>
                          To_String(Source => Recipes_Container.Key(I)))) and
                  Recipes_List(I).Reputation <=
-                   Sky_Bases(BaseIndex).Reputation.Level then
+                   Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button
                     (".recipes", "Buy recipes", "ShowBaseUI recipes", "y", 2);
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
-            if Sky_Bases(BaseIndex).Missions.Length > 0 then
-               MissionsLimit :=
-                 (case Sky_Bases(BaseIndex).Reputation.Level is
+            if Sky_Bases(Base_Index).Missions.Length > 0 then
+               Missions_Limit :=
+                 (case Sky_Bases(Base_Index).Reputation.Level is
                     when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
                for Mission of Accepted_Missions loop
-                  if (Mission.Finished and Mission.Start_Base = BaseIndex) or
+                  if (Mission.Finished and Mission.Start_Base = Base_Index) or
                     (Mission.Target_X = Player_Ship.Sky_X and
                      Mission.Target_Y = Player_Ship.Sky_Y) then
                      case Mission.M_Type is
@@ -281,20 +281,20 @@ package body OrdersMenu is
                            end if;
                      end case;
                   end if;
-                  if Mission.Start_Base = BaseIndex then
-                     MissionsLimit := MissionsLimit - 1;
+                  if Mission.Start_Base = Base_Index then
+                     Missions_Limit := Missions_Limit - 1;
                   end if;
                end loop Add_Mission_Menu_Loop;
-               if MissionsLimit > 0 then
+               if Missions_Limit > 0 then
                   Add_Button
                     (".missions", "Missions", "ShowBaseMissions", "m", 0);
                end if;
             end if;
-            if Player_Ship.Home_Base /= BaseIndex then
+            if Player_Ship.Home_Base /= Base_Index then
                Add_Button(".home", "Set as home", "SetAsHome", "h", 7);
             end if;
          end if;
-         if Sky_Bases(BaseIndex).Population = 0 then
+         if Sky_Bases(Base_Index).Population = 0 then
             Add_Button(".loot", "Loot", "ShowLoot", "l", 0);
          end if;
       else
@@ -312,14 +312,14 @@ package body OrdersMenu is
             when ATTACKONBASE =>
                Add_Button(".event", "Defend", "Attack", "d", 0);
             when DISEASE =>
-               if HaveTrader then
-                  ItemIndex :=
+               if Have_Trader then
+                  Item_Index :=
                     Find_Item
                       (Inventory => Player_Ship.Cargo,
                        Item_Type =>
-                         Factions_List(Sky_Bases(BaseIndex).Owner)
+                         Factions_List(Sky_Bases(Base_Index).Owner)
                            .Healing_Tools);
-                  if ItemIndex > 0 then
+                  if Item_Index > 0 then
                      Add_Button
                        (".deliverfree", "Deliver medicines for free",
                         "DeliverMedicines free", "d", 0);
@@ -329,8 +329,8 @@ package body OrdersMenu is
                   end if;
                end if;
             when NONE | DOUBLEPRICE | BASERECOVERY =>
-               if BaseIndex > 0 then
-                  if Sky_Bases(BaseIndex).Reputation.Level > -25 then
+               if Base_Index > 0 then
+                  if Sky_Bases(Base_Index).Reputation.Level > -25 then
                      declare
                         DockingCost: Positive;
                      begin
@@ -341,7 +341,7 @@ package body OrdersMenu is
                               exit Count_Docking_Cost_Loop;
                            end if;
                         end loop Count_Docking_Cost_Loop;
-                        if Sky_Bases(BaseIndex).Population > 0 then
+                        if Sky_Bases(Base_Index).Population > 0 then
                            Add_Button
                              (".dock",
                               "Dock (" &
@@ -355,7 +355,7 @@ package body OrdersMenu is
                   end if;
                   Complete_Mission_Menu_Loop :
                   for Mission of Accepted_Missions loop
-                     if HaveTrader and Mission.Target_X = Player_Ship.Sky_X and
+                     if Have_Trader and Mission.Target_X = Player_Ship.Sky_X and
                        Mission.Target_Y = Player_Ship.Sky_Y and
                        Mission.Finished then
                         case Mission.M_Type is
@@ -431,7 +431,7 @@ package body OrdersMenu is
                   end loop Progress_Mission_Loop;
                end if;
             when TRADER =>
-               if HaveTrader then
+               if Have_Trader then
                   Add_Button
                     (".trade", "Trade",
                      "ShowTrader " &
@@ -448,7 +448,7 @@ package body OrdersMenu is
                end if;
                Add_Button(".attack", "Attack", "Attack", "a", 0);
             when FRIENDLYSHIP =>
-               if HaveTrader then
+               if Have_Trader then
                   if Index
                       (Proto_Ships_List
                          (Events_List
@@ -482,31 +482,31 @@ package body OrdersMenu is
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
-         Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
-         Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-         Bind(Last_Button, "<Tab>", "{focus " & CloseButton & ";break}");
+         Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
+         Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+         Bind(Last_Button, "<Tab>", "{focus " & Dialog_Close_Button & ";break}");
          for Shortcut of Shortcuts loop
             Bind
-              (CloseButton, "<Alt-" & Shortcut.Shortcut & ">",
-               "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
+              (Dialog_Close_Button, "<Alt-" & Shortcut.Shortcut & ">",
+               "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
          end loop;
          declare
             MenuButton: Ttk_Button;
          begin
             for Button of Shortcuts loop
-               MenuButton := Get_Widget(To_String(Button.ButtonName), Interp);
+               MenuButton := Get_Widget(To_String(Button.Button_Name), Interp);
                for Shortcut of Shortcuts loop
                   Bind
                     (MenuButton, "<Alt-" & Shortcut.Shortcut & ">",
-                     "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
+                     "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
                end loop;
             end loop;
          end;
          Show_Dialog
-           (Dialog => OrdersMenu, Parent_Frame => ".gameframe",
+           (Dialog => Orders_Menu, Parent_Frame => ".gameframe",
             Relative_X => 0.4,
             Relative_Y => (if Player_Ship.Speed = DOCKED then 0.1 else 0.3));
-         Focus(CloseButton);
+         Focus(Dialog_Close_Button);
       end if;
       return TCL_OK;
    end Show_Orders_Command;
