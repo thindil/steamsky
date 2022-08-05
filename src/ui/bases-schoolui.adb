@@ -25,6 +25,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -158,7 +159,7 @@ package body Bases.SchoolUI is
         Get_Widget(pathName => Main_Paned & ".schoolframe", Interp => Interp);
       School_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => School_Frame & ".canvas", Interp => Interp);
-      Combo_Box: constant Ttk_ComboBox :=
+      Combo_Box: Ttk_ComboBox :=
         Get_Widget
           (pathName => School_Canvas & ".school.setting.crew",
            Interp => Interp);
@@ -167,6 +168,10 @@ package body Bases.SchoolUI is
         Get_Widget
           (pathName => School_Canvas & ".school.money", Interp => Interp);
       Money_Index_2: Natural;
+      Train_Button: constant Ttk_Button :=
+        Get_Widget
+          (pathName => School_Canvas & ".school.setting.train",
+           Interp => Interp);
    begin
       if Winfo_Get(Widgt => School_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -240,7 +245,13 @@ package body Bases.SchoolUI is
          options =>
            "-scrollregion [list " &
            BBox(CanvasWidget => School_Canvas, TagOrId => "all") & "]");
+      Combo_Box :=
+        Get_Widget(pathName => School_Canvas & ".school.costbox.amount");
+      Bind
+        (Widgt => Combo_Box, Sequence => "<Tab>",
+         Script => "{focus " & Train_Button & ";break}");
       Show_Screen(New_Screen_Name => "schoolframe");
+      Focus(Widgt => Train_Button, Option => "-force");
       return TCL_OK;
    end Show_School_Command;
 
