@@ -120,30 +120,31 @@ package body OrdersMenu is
                        To_String(Source => Current_Story.Data) =
                          To_String(Source => Sky_Bases(Base_Index).Name) then
                         Add_Button
-                          (".story",
-                           "Ask for " &
+                          (Name => ".story",
+                           Label => "Ask for " &
                            To_String
-                             (Objects_Container.Element
+                             (Source => Objects_Container.Element
                                 (Container => Items_List,
                                  Index =>
                                    Positive'Value
                                      (To_String
                                         (Source =>
                                            Get_Step_Data
-                                             (Step.Finish_Data, "item"))))
+                                             (Finish_Data => Step.Finish_Data, Name =>"item"))))
                                 .Name),
-                           "ExecuteStory", "f", 4);
+                           Command => "ExecuteStory", Shortcut => "f", Underline => 4);
                      end if;
                   end if;
                when DESTROYSHIP =>
+                  Show_Destroy_Ship_Button:
                   declare
                      Tokens: Slice_Set;
                   begin
-                     Create(Tokens, To_String(Current_Story.Data), ";");
+                     Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
                      if Player_Ship.Sky_X =
-                       Positive'Value(Slice(Tokens, 1)) and
+                       Positive'Value(Slice(S => Tokens, Index => 1)) and
                        Player_Ship.Sky_Y =
-                         Positive'Value(Slice(Tokens, 2)) then
+                         Positive'Value(Slice(S => Tokens, Index => 2)) then
                         Add_Button
                           (".story",
                            "Search for " &
@@ -153,7 +154,7 @@ package body OrdersMenu is
                                 .Name),
                            "ExecuteStory", "s", 0);
                      end if;
-                  end;
+                  end Show_Destroy_Ship_Button;
                when EXPLORE =>
                   declare
                      Tokens: Slice_Set;
