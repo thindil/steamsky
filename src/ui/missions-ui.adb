@@ -897,7 +897,9 @@ package body Missions.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Missions_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Missions_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
@@ -992,7 +994,7 @@ package body Missions.UI is
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Missions_Loop:
+      Fill_Local_Missions_Loop :
       for I in Sky_Bases(Base_Index).Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(Position => I)) :=
            (M_Type => Sky_Bases(Base_Index).Missions(I).M_Type,
@@ -1021,12 +1023,13 @@ package body Missions.UI is
                           .Name),
                  when PATROL =>
                    To_Unbounded_String
-                     (Source => "X:" &
-                      Natural'Image
-                        (Sky_Bases(Base_Index).Missions(I).Target_X) &
-                      " Y:" &
-                      Natural'Image
-                        (Sky_Bases(Base_Index).Missions(I).Target_Y)),
+                     (Source =>
+                        "X:" &
+                        Natural'Image
+                          (Sky_Bases(Base_Index).Missions(I).Target_X) &
+                        " Y:" &
+                        Natural'Image
+                          (Sky_Bases(Base_Index).Missions(I).Target_Y)),
                  when DESTROY =>
                    To_Unbounded_String
                      (Source =>
@@ -1037,12 +1040,13 @@ package body Missions.UI is
                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String
-                     (Source => "X:" &
-                      Natural'Image
-                        (Sky_Bases(Base_Index).Missions(I).Target_X) &
-                      " Y:" &
-                      Natural'Image
-                        (Sky_Bases(Base_Index).Missions(I).Target_Y)),
+                     (Source =>
+                        "X:" &
+                        Natural'Image
+                          (Sky_Bases(Base_Index).Missions(I).Target_X) &
+                        " Y:" &
+                        Natural'Image
+                          (Sky_Bases(Base_Index).Missions(I).Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
                    To_String
@@ -1059,7 +1063,7 @@ package body Missions.UI is
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
       Missions_Indexes.Clear;
-      Fill_Missions_Indexes_Loop:
+      Fill_Missions_Indexes_Loop :
       for Mission of Local_Missions loop
          Missions_Indexes.Append(New_Item => Mission.Id);
       end loop Fill_Missions_Indexes_Loop;
@@ -1070,12 +1074,21 @@ package body Missions.UI is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowBaseMissions", Ada_Command => Show_Base_Missions_Command'Access);
-      Add_Command("MissionMoreInfo", Mission_More_Info_Command'Access);
-      Add_Command("AcceptMission", Accept_Mission_Command'Access);
-      Add_Command("UpdateMissionReward", Update_Mission_Reward_Command'Access);
       Add_Command
-        ("SortAvailableMissions", Sort_Available_Missions_Command'Access);
+        (Name => "ShowBaseMissions",
+         Ada_Command => Show_Base_Missions_Command'Access);
+      Add_Command
+        (Name => "MissionMoreInfo",
+         Ada_Command => Mission_More_Info_Command'Access);
+      Add_Command
+        (Name => "AcceptMission",
+         Ada_Command => Accept_Mission_Command'Access);
+      Add_Command
+        (Name => "UpdateMissionReward",
+         Ada_Command => Update_Mission_Reward_Command'Access);
+      Add_Command
+        (Name => "SortAvailableMissions",
+         Ada_Command => Sort_Available_Missions_Command'Access);
    end Add_Commands;
 
 end Missions.UI;
