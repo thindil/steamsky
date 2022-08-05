@@ -89,20 +89,21 @@ package body OrdersMenu is
            (Slave => Button,
             Options => "-sticky we -padx 5" &
             (if Row = -1 then "" else " -row" & Integer'Image(Row)));
-         Bind(Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
          Last_Button := Button;
          Shortcuts.Append
-           ((To_Unbounded_String(Orders_Menu & Name),
-             Shortcut(Shortcut'First)));
+           (New_Item => (Button_Name => To_Unbounded_String(Source => Orders_Menu & Name),
+             Shortcut => Shortcut(Shortcut'First)));
       end Add_Button;
    begin
-      if Winfo_Get(Orders_Menu, "ismapped") = "1" then
-         return Close_Dialog_Command(Client_Data, Interp, Argc, Argv);
+      if Winfo_Get(Widgt => Orders_Menu, Info => "ismapped") = "1" then
+         return Close_Dialog_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
       end if;
-      if Find_Member(TALK) > 0 then
+      if Find_Member(Order => TALK) > 0 then
          Have_Trader := True;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
+         Show_Story_Button:
          declare
             Step: constant Step_Data :=
               (if Current_Story.Current_Step = 0 then
@@ -169,7 +170,7 @@ package body OrdersMenu is
                when ANY | LOOT =>
                   null;
             end case;
-         end;
+         end Show_Story_Button;
       end if;
       if Player_Ship.Speed = DOCKED then
          Add_Button(".undock", "Undock", "Docking", "d", 0);
