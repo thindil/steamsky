@@ -34,8 +34,8 @@ All notable changes to this project will be documented in this file.
 - Generating equipment for recruits in bases
 - Crash when trying to buy items in bases
 - Tab traverse in negotiate hire recruit dialog and school in bases
-- Closing the hire dialog with Escape key when another element than buttons is
-  selected
+- Closing the hire and accept mission dialogs with Escape key when another
+  element than buttons is selected
 
 ## [7.6] - 2022-07-10
 
