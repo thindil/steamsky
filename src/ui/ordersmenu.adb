@@ -327,11 +327,11 @@ package body OrdersMenu is
                end if;
             end if;
             if Player_Ship.Home_Base /= Base_Index then
-               Add_Button(".home", "Set as home", "SetAsHome", "h", 7);
+               Add_Button(Name => ".home", Label => "Set as home", Command => "SetAsHome", Shortcut => "h", Underline => 7);
             end if;
          end if;
          if Sky_Bases(Base_Index).Population = 0 then
-            Add_Button(".loot", "Loot", "ShowLoot", "l", 0);
+            Add_Button(Name => ".loot", Label => "Loot", Command => "ShowLoot", Shortcut => "l", Underline => 0);
          end if;
       else
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
@@ -342,9 +342,9 @@ package body OrdersMenu is
          end if;
          case Event is
             when ENEMYSHIP | ENEMYPATROL =>
-               Add_Button(".event", "Attack", "Attack", "a", 0);
+               Add_Button(Name => ".event", Label => "Attack", Command => "Attack", Shortcut => "a", Underline => 0);
             when FULLDOCKS =>
-               Add_Button(".event", "Wait (full docks)", "ShowWait", "w", 0);
+               Add_Button(Name => ".event", Label => "Wait (full docks)", Command => "ShowWait", Shortcut => "w", Underline => 0);
             when ATTACKONBASE =>
                Add_Button(".event", "Defend", "Attack", "d", 0);
             when DISEASE =>
