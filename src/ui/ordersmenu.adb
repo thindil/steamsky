@@ -113,7 +113,7 @@ package body OrdersMenu is
          Have_Trader := True;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
-         Show_Story_Button :
+         Show_Story_Button_Block :
          declare
             Step: constant Step_Data :=
               (if Current_Story.Current_Step = 0 then
@@ -151,7 +151,7 @@ package body OrdersMenu is
                      end if;
                   end if;
                when DESTROYSHIP =>
-                  Show_Destroy_Ship_Button :
+                  Show_Destroy_Ship_Button_Block :
                   declare
                      Tokens: Slice_Set;
                   begin
@@ -176,9 +176,9 @@ package body OrdersMenu is
                            Command => "ExecuteStory", Shortcut => "s",
                            Underline => 0);
                      end if;
-                  end Show_Destroy_Ship_Button;
+                  end Show_Destroy_Ship_Button_Block;
                when EXPLORE =>
-                  Show_Explore_Story_Button :
+                  Show_Explore_Story_Button_Block :
                   declare
                      Tokens: Slice_Set;
                   begin
@@ -195,11 +195,11 @@ package body OrdersMenu is
                            Command => "ExecuteStory", Shortcut => "s",
                            Underline => 0);
                      end if;
-                  end Show_Explore_Story_Button;
+                  end Show_Explore_Story_Button_Block;
                when ANY | LOOT =>
                   null;
             end case;
-         end Show_Story_Button;
+         end Show_Story_Button_Block;
       end if;
       if Player_Ship.Speed = DOCKED then
          Add_Button
@@ -214,14 +214,14 @@ package body OrdersMenu is
             Add_Button
               (Name => ".trade", Label => "Trade", Command => "ShowTrade",
                Shortcut => "t", Underline => 0);
-            Add_Button(".school", "School", "ShowSchool", "s", 0);
+            Add_Button(Name => ".school", Label => "School", Command => "ShowSchool", Shortcut => "s", Underline => 0);
             if Recruit_Container.Length
                 (Container => Sky_Bases(Base_Index).Recruits) >
               0 then
-               Add_Button(".recruits", "Recruit", "ShowRecruit", "r", 0);
+               Add_Button(Name => ".recruits", Label => "Recruit", Command => "ShowRecruit", Shortcut => "r", Underline => 0);
             end if;
-            if Days_Difference(Sky_Bases(Base_Index).Asked_For_Events) > 6 then
-               Add_Button(".events", "Ask for events", "AskForEvents", "e", 8);
+            if Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) > 6 then
+               Add_Button(Name => ".events", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
             end if;
             if not Sky_Bases(Base_Index).Asked_For_Bases then
                Add_Button(".bases", "Ask for bases", "AskForBases", "b", 8);
