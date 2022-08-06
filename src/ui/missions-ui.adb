@@ -709,6 +709,9 @@ package body Missions.UI is
          "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
       Tcl.Tk.Ada.Grid.Grid(RewardLabel, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(RewardScale, "-columnspan 2 -padx 5");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & MissionDialog & ".cancel invoke;break}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Button :=
         Create
@@ -717,6 +720,9 @@ package body Missions.UI is
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 3 -column 1 -pady 5");
       Bind(Button, "<Tab>", "{focus .missiondialog.accept;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => RewardScale, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       Show_Dialog(MissionDialog);
       Focus(Button);
       return TCL_OK;
