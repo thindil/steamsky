@@ -224,17 +224,17 @@ package body OrdersMenu is
                Add_Button(Name => ".events", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
             end if;
             if not Sky_Bases(Base_Index).Asked_For_Bases then
-               Add_Button(".bases", "Ask for bases", "AskForBases", "b", 8);
+               Add_Button(Name => ".bases", Label => "Ask for bases", Command => "AskForBases", Shortcut => "b", Underline => 8);
             end if;
             if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-                (To_Unbounded_String("temple")) then
-               Add_Button(".pray", "Pray", "Pray", "p", 0);
+                (Item => To_Unbounded_String(Source => "temple")) then
+               Add_Button(Name => ".pray", Label => "Pray", Command => "Pray", Shortcut => "p", Underline => 0);
             end if;
             Add_Heal_Wounded_Menu_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Health < 100 then
                   Add_Button
-                    (".heal", "Heal wounded", "ShowBaseUI heal", "w", 5);
+                    (Name => ".heal", Label => "Heal wounded", Command => "ShowBaseUI heal", Shortcut => "w", Underline => 5);
                   exit Add_Heal_Wounded_Menu_Loop;
                end if;
             end loop Add_Heal_Wounded_Menu_Loop;
