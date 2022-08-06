@@ -214,27 +214,41 @@ package body OrdersMenu is
             Add_Button
               (Name => ".trade", Label => "Trade", Command => "ShowTrade",
                Shortcut => "t", Underline => 0);
-            Add_Button(Name => ".school", Label => "School", Command => "ShowSchool", Shortcut => "s", Underline => 0);
+            Add_Button
+              (Name => ".school", Label => "School", Command => "ShowSchool",
+               Shortcut => "s", Underline => 0);
             if Recruit_Container.Length
                 (Container => Sky_Bases(Base_Index).Recruits) >
               0 then
-               Add_Button(Name => ".recruits", Label => "Recruit", Command => "ShowRecruit", Shortcut => "r", Underline => 0);
+               Add_Button
+                 (Name => ".recruits", Label => "Recruit",
+                  Command => "ShowRecruit", Shortcut => "r", Underline => 0);
             end if;
-            if Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) > 6 then
-               Add_Button(Name => ".events", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
+            if Days_Difference
+                (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) >
+              6 then
+               Add_Button
+                 (Name => ".events", Label => "Ask for events",
+                  Command => "AskForEvents", Shortcut => "e", Underline => 8);
             end if;
             if not Sky_Bases(Base_Index).Asked_For_Bases then
-               Add_Button(Name => ".bases", Label => "Ask for bases", Command => "AskForBases", Shortcut => "b", Underline => 8);
+               Add_Button
+                 (Name => ".bases", Label => "Ask for bases",
+                  Command => "AskForBases", Shortcut => "b", Underline => 8);
             end if;
             if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
                 (Item => To_Unbounded_String(Source => "temple")) then
-               Add_Button(Name => ".pray", Label => "Pray", Command => "Pray", Shortcut => "p", Underline => 0);
+               Add_Button
+                 (Name => ".pray", Label => "Pray", Command => "Pray",
+                  Shortcut => "p", Underline => 0);
             end if;
             Add_Heal_Wounded_Menu_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Health < 100 then
                   Add_Button
-                    (Name => ".heal", Label => "Heal wounded", Command => "ShowBaseUI heal", Shortcut => "w", Underline => 5);
+                    (Name => ".heal", Label => "Heal wounded",
+                     Command => "ShowBaseUI heal", Shortcut => "w",
+                     Underline => 5);
                   exit Add_Heal_Wounded_Menu_Loop;
                end if;
             end loop Add_Heal_Wounded_Menu_Loop;
@@ -242,27 +256,37 @@ package body OrdersMenu is
             for Module of Player_Ship.Modules loop
                if Module.Durability < Module.Max_Durability then
                   Add_Button
-                    (Name => ".repair", Label => "Repair ship", Command => "ShowBaseUI repair", Shortcut => "p", Underline => 2);
+                    (Name => ".repair", Label => "Repair ship",
+                     Command => "ShowBaseUI repair", Shortcut => "p",
+                     Underline => 2);
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
             if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
                 (Item => To_Unbounded_String(Source => "shipyard")) then
-               Add_Button(Name => ".shipyard", Label => "Shipyard", Command => "ShowShipyard", Shortcut => "i", Underline => 2);
+               Add_Button
+                 (Name => ".shipyard", Label => "Shipyard",
+                  Command => "ShowShipyard", Shortcut => "i", Underline => 2);
             end if;
             Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
-               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(Position => I)) =
+               if Known_Recipes.Find_Index
+                   (Item => Recipes_Container.Key(Position => I)) =
                  UnboundedString_Container.No_Index and
                  Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Recipes
                    .Contains
-                   (Item => To_Unbounded_String
-                      (Source =>
-                         To_String(Source => Recipes_Container.Key(Position => I)))) and
+                   (Item =>
+                      To_Unbounded_String
+                        (Source =>
+                           To_String
+                             (Source =>
+                                Recipes_Container.Key(Position => I)))) and
                  Recipes_List(I).Reputation <=
                    Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button
-                    (Name => ".recipes", Label => "Buy recipes", Command => "ShowBaseUI recipes", Shortcut => "y", Underline => 2);
+                    (Name => ".recipes", Label => "Buy recipes",
+                     Command => "ShowBaseUI recipes", Shortcut => "y",
+                     Underline => 2);
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
@@ -280,40 +304,53 @@ package body OrdersMenu is
                         when DELIVER =>
                            Add_Button
                              (Name => ".mission",
-                              Label => "Complete delivery of " &
-                              To_String
-                                (Source => Objects_Container.Element
-                                   (Container => Items_List,
-                                    Index => Mission.Item_Index)
-                                   .Name),
-                              Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
+                              Label =>
+                                "Complete delivery of " &
+                                To_String
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index => Mission.Item_Index)
+                                       .Name),
+                              Command => "CompleteMission", Shortcut => "c",
+                              Underline => 0, Row => 0);
                         when DESTROY =>
                            if Mission.Finished then
                               Add_Button
                                 (Name => ".mission",
-                                 Label => "Complete destroy " &
-                                 To_String
-                                   (Source => Proto_Ships_List(Mission.Ship_Index).Name),
-                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
+                                 Label =>
+                                   "Complete destroy " &
+                                   To_String
+                                     (Source =>
+                                        Proto_Ships_List(Mission.Ship_Index)
+                                          .Name),
+                                 Command => "CompleteMission", Shortcut => "c",
+                                 Underline => 0, Row => 0);
                            end if;
                         when PATROL =>
                            if Mission.Finished then
                               Add_Button
-                                (Name => ".mission", Label => "Complete Patrol area mission",
-                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
+                                (Name => ".mission",
+                                 Label => "Complete Patrol area mission",
+                                 Command => "CompleteMission", Shortcut => "c",
+                                 Underline => 0, Row => 0);
                            end if;
                         when EXPLORE =>
                            if Mission.Finished then
                               Add_Button
-                                (Name => ".mission", Label => "Complete Explore area mission",
-                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
+                                (Name => ".mission",
+                                 Label => "Complete Explore area mission",
+                                 Command => "CompleteMission", Shortcut => "c",
+                                 Underline => 0, Row => 0);
                            end if;
                         when PASSENGER =>
                            if Mission.Finished then
                               Add_Button
                                 (Name => ".mission",
-                                 Label => "Complete Transport passenger mission",
-                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
+                                 Label =>
+                                   "Complete Transport passenger mission",
+                                 Command => "CompleteMission", Shortcut => "c",
+                                 Underline => 0, Row => 0);
                            end if;
                      end case;
                   end if;
@@ -323,15 +360,21 @@ package body OrdersMenu is
                end loop Add_Mission_Menu_Loop;
                if Missions_Limit > 0 then
                   Add_Button
-                    (Name => ".missions", Label => "Missions", Command => "ShowBaseMissions", Shortcut => "m", Underline => 0);
+                    (Name => ".missions", Label => "Missions",
+                     Command => "ShowBaseMissions", Shortcut => "m",
+                     Underline => 0);
                end if;
             end if;
             if Player_Ship.Home_Base /= Base_Index then
-               Add_Button(Name => ".home", Label => "Set as home", Command => "SetAsHome", Shortcut => "h", Underline => 7);
+               Add_Button
+                 (Name => ".home", Label => "Set as home",
+                  Command => "SetAsHome", Shortcut => "h", Underline => 7);
             end if;
          end if;
          if Sky_Bases(Base_Index).Population = 0 then
-            Add_Button(Name => ".loot", Label => "Loot", Command => "ShowLoot", Shortcut => "l", Underline => 0);
+            Add_Button
+              (Name => ".loot", Label => "Loot", Command => "ShowLoot",
+               Shortcut => "l", Underline => 0);
          end if;
       else
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
@@ -342,11 +385,17 @@ package body OrdersMenu is
          end if;
          case Event is
             when ENEMYSHIP | ENEMYPATROL =>
-               Add_Button(Name => ".event", Label => "Attack", Command => "Attack", Shortcut => "a", Underline => 0);
+               Add_Button
+                 (Name => ".event", Label => "Attack", Command => "Attack",
+                  Shortcut => "a", Underline => 0);
             when FULLDOCKS =>
-               Add_Button(Name => ".event", Label => "Wait (full docks)", Command => "ShowWait", Shortcut => "w", Underline => 0);
+               Add_Button
+                 (Name => ".event", Label => "Wait (full docks)",
+                  Command => "ShowWait", Shortcut => "w", Underline => 0);
             when ATTACKONBASE =>
-               Add_Button(".event", "Defend", "Attack", "d", 0);
+               Add_Button
+                 (Name => ".event", Label => "Defend", Command => "Attack",
+                  Shortcut => "d", Underline => 0);
             when DISEASE =>
                if Have_Trader then
                   Item_Index :=
