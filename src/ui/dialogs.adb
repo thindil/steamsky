@@ -295,7 +295,8 @@ package body Dialogs is
         Create
           (pathName => String_Dialog & ".closebutton",
            options =>
-             "-text {Cancel} -command {CloseDialog " & String_Dialog & "}");
+             "-text Cancel -command {CloseDialog " & String_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => String_Label,
