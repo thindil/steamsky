@@ -305,15 +305,15 @@ package body OrdersMenu is
                         when EXPLORE =>
                            if Mission.Finished then
                               Add_Button
-                                (".mission", "Complete Explore area mission",
-                                 "CompleteMission", "c", 0, 0);
+                                (Name => ".mission", Label => "Complete Explore area mission",
+                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
                            end if;
                         when PASSENGER =>
                            if Mission.Finished then
                               Add_Button
-                                (".mission",
-                                 "Complete Transport passenger mission",
-                                 "CompleteMission", "c", 0, 0);
+                                (Name => ".mission",
+                                 Label => "Complete Transport passenger mission",
+                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
                            end if;
                      end case;
                   end if;
@@ -323,7 +323,7 @@ package body OrdersMenu is
                end loop Add_Mission_Menu_Loop;
                if Missions_Limit > 0 then
                   Add_Button
-                    (".missions", "Missions", "ShowBaseMissions", "m", 0);
+                    (Name => ".missions", Label => "Missions", Command => "ShowBaseMissions", Shortcut => "m", Underline => 0);
                end if;
             end if;
             if Player_Ship.Home_Base /= Base_Index then
