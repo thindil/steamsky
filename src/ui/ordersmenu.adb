@@ -242,27 +242,27 @@ package body OrdersMenu is
             for Module of Player_Ship.Modules loop
                if Module.Durability < Module.Max_Durability then
                   Add_Button
-                    (".repair", "Repair ship", "ShowBaseUI repair", "p", 2);
+                    (Name => ".repair", Label => "Repair ship", Command => "ShowBaseUI repair", Shortcut => "p", Underline => 2);
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
             if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-                (To_Unbounded_String("shipyard")) then
-               Add_Button(".shipyard", "Shipyard", "ShowShipyard", "i", 2);
+                (Item => To_Unbounded_String(Source => "shipyard")) then
+               Add_Button(Name => ".shipyard", Label => "Shipyard", Command => "ShowShipyard", Shortcut => "i", Underline => 2);
             end if;
             Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
-               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
+               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(Position => I)) =
                  UnboundedString_Container.No_Index and
                  Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Recipes
                    .Contains
-                   (To_Unbounded_String
+                   (Item => To_Unbounded_String
                       (Source =>
-                         To_String(Source => Recipes_Container.Key(I)))) and
+                         To_String(Source => Recipes_Container.Key(Position => I)))) and
                  Recipes_List(I).Reputation <=
                    Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button
-                    (".recipes", "Buy recipes", "ShowBaseUI recipes", "y", 2);
+                    (Name => ".recipes", Label => "Buy recipes", Command => "ShowBaseUI recipes", Shortcut => "y", Underline => 2);
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
