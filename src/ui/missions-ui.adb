@@ -763,6 +763,9 @@ package body Missions.UI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Reward_Scale, Options => "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Mission_Dialog & ".cancel invoke;break}");
       Button :=
         Create
           (pathName => Mission_Dialog & ".cancel",
@@ -776,6 +779,9 @@ package body Missions.UI is
          Script => "{focus .missiondialog.accept;break}");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => Reward_Scale, Sequence => "<Escape>",
          Script => "{" & Button & " invoke;break}");
       Show_Dialog(Dialog => Mission_Dialog);
       Focus(Widgt => Button);
