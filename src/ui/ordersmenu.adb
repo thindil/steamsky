@@ -279,28 +279,28 @@ package body OrdersMenu is
                      case Mission.M_Type is
                         when DELIVER =>
                            Add_Button
-                             (".mission",
-                              "Complete delivery of " &
+                             (Name => ".mission",
+                              Label => "Complete delivery of " &
                               To_String
-                                (Objects_Container.Element
+                                (Source => Objects_Container.Element
                                    (Container => Items_List,
                                     Index => Mission.Item_Index)
                                    .Name),
-                              "CompleteMission", "c", 0, 0);
+                              Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
                         when DESTROY =>
                            if Mission.Finished then
                               Add_Button
-                                (".mission",
-                                 "Complete destroy " &
+                                (Name => ".mission",
+                                 Label => "Complete destroy " &
                                  To_String
-                                   (Proto_Ships_List(Mission.Ship_Index).Name),
-                                 "CompleteMission", "c", 0, 0);
+                                   (Source => Proto_Ships_List(Mission.Ship_Index).Name),
+                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
                            end if;
                         when PATROL =>
                            if Mission.Finished then
                               Add_Button
-                                (".mission", "Complete Patrol area mission",
-                                 "CompleteMission", "c", 0, 0);
+                                (Name => ".mission", Label => "Complete Patrol area mission",
+                                 Command => "CompleteMission", Shortcut => "c", Underline => 0, Row => 0);
                            end if;
                         when EXPLORE =>
                            if Mission.Finished then
