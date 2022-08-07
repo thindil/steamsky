@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.7] - 2022-08-07
 
 ### Added
 - Option to show all, craftable or non-craftable recipes in Crafting screen
