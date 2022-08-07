@@ -406,17 +406,21 @@ package body OrdersMenu is
                            .Healing_Tools);
                   if Item_Index > 0 then
                      Add_Button
-                       (Name => ".deliverfree", Label => "Deliver medicines for free",
-                        Command => "DeliverMedicines free", Shortcut => "d", Underline => 0);
+                       (Name => ".deliverfree",
+                        Label => "Deliver medicines for free",
+                        Command => "DeliverMedicines free", Shortcut => "d",
+                        Underline => 0);
                      Add_Button
-                       (Name => ".deliverprice", Label => "Deliver medicines for price",
-                        Command => "DeliverMedicines paid", Shortcut => "m", Underline => 8);
+                       (Name => ".deliverprice",
+                        Label => "Deliver medicines for price",
+                        Command => "DeliverMedicines paid", Shortcut => "m",
+                        Underline => 8);
                   end if;
                end if;
             when NONE | DOUBLEPRICE | BASERECOVERY =>
                if Base_Index > 0 then
                   if Sky_Bases(Base_Index).Reputation.Level > -25 then
-                     Show_Docking_Button_Block:
+                     Show_Docking_Button_Block :
                      declare
                         Docking_Cost: Positive;
                      begin
@@ -430,12 +434,19 @@ package body OrdersMenu is
                         if Sky_Bases(Base_Index).Population > 0 then
                            Add_Button
                              (Name => ".dock",
-                              Label => "Dock (" &
-                              Trim(Source => Positive'Image(Docking_Cost), Side => Left) & " " &
-                              To_String(Source => Money_Name) & ")",
-                              Command => "Docking", Shortcut => "d", Underline => 0);
+                              Label =>
+                                "Dock (" &
+                                Trim
+                                  (Source => Positive'Image(Docking_Cost),
+                                   Side => Left) &
+                                " " & To_String(Source => Money_Name) & ")",
+                              Command => "Docking", Shortcut => "d",
+                              Underline => 0);
                         else
-                           Add_Button(Name => ".dock", Label => "Dock", Command => "Docking", Shortcut => "d", Underline => 0);
+                           Add_Button
+                             (Name => ".dock", Label => "Dock",
+                              Command => "Docking", Shortcut => "d",
+                              Underline => 0);
                         end if;
                      end Show_Docking_Button_Block;
                   end if;
@@ -449,42 +460,53 @@ package body OrdersMenu is
                            when DELIVER =>
                               Add_Button
                                 (Name => ".mission",
-                                 Label => "Complete delivery of " &
-                                 To_String
-                                   (Source => Objects_Container.Element
-                                      (Container => Items_List,
-                                       Index => Mission.Item_Index)
-                                      .Name),
-                                 Command => "CompleteMission", Shortcut => "c", Underline => 0);
+                                 Label =>
+                                   "Complete delivery of " &
+                                   To_String
+                                     (Source =>
+                                        Objects_Container.Element
+                                          (Container => Items_List,
+                                           Index => Mission.Item_Index)
+                                          .Name),
+                                 Command => "CompleteMission", Shortcut => "c",
+                                 Underline => 0);
                            when DESTROY =>
                               if Mission.Finished then
                                  Add_Button
                                    (Name => ".mission",
-                                    Label => "Complete destroy " &
-                                    To_String
-                                      (Source => Proto_Ships_List(Mission.Ship_Index)
-                                         .Name),
-                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
+                                    Label =>
+                                      "Complete destroy " &
+                                      To_String
+                                        (Source =>
+                                           Proto_Ships_List(Mission.Ship_Index)
+                                             .Name),
+                                    Command => "CompleteMission",
+                                    Shortcut => "c", Underline => 0);
                               end if;
                            when PATROL =>
                               if Mission.Finished then
                                  Add_Button
-                                   (Name => ".mission", Label => "Complete Patrol area mission",
-                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
+                                   (Name => ".mission",
+                                    Label => "Complete Patrol area mission",
+                                    Command => "CompleteMission",
+                                    Shortcut => "c", Underline => 0);
                               end if;
                            when EXPLORE =>
                               if Mission.Finished then
                                  Add_Button
                                    (Name => ".mission",
                                     Label => "Complete Explore area mission",
-                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
+                                    Command => "CompleteMission",
+                                    Shortcut => "c", Underline => 0);
                               end if;
                            when PASSENGER =>
                               if Mission.Finished then
                                  Add_Button
                                    (Name => ".mission",
-                                    Label => "Complete Transport passenger mission",
-                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
+                                    Label =>
+                                      "Complete Transport passenger mission",
+                                    Command => "CompleteMission",
+                                    Shortcut => "c", Underline => 0);
                               end if;
                         end case;
                      end if;
@@ -501,18 +523,24 @@ package body OrdersMenu is
                            when DESTROY =>
                               Add_Button
                                 (Name => ".mission",
-                                 Label => "Search for " &
-                                 To_String
-                                   (Source => Proto_Ships_List(Mission.Ship_Index).Name),
-                                 Command => "StartMission", Shortcut => "s", Underline => 0);
+                                 Label =>
+                                   "Search for " &
+                                   To_String
+                                     (Source =>
+                                        Proto_Ships_List(Mission.Ship_Index)
+                                          .Name),
+                                 Command => "StartMission", Shortcut => "s",
+                                 Underline => 0);
                            when PATROL =>
                               Add_Button
-                                (Name => ".mission", Label => "Patrol area", Command => "StartMission",
-                                 Shortcut => "p", Underline => 0);
+                                (Name => ".mission", Label => "Patrol area",
+                                 Command => "StartMission", Shortcut => "p",
+                                 Underline => 0);
                            when EXPLORE =>
                               Add_Button
-                                (Name => ".mission", Label => "Explore area", Command => "StartMission",
-                                 Shortcut => "e", Underline => 0);
+                                (Name => ".mission", Label => "Explore area",
+                                 Command => "StartMission", Shortcut => "e",
+                                 Underline => 0);
                         end case;
                      end if;
                   end loop Progress_Mission_Loop;
@@ -521,59 +549,75 @@ package body OrdersMenu is
                if Have_Trader then
                   Add_Button
                     (Name => ".trade", Label => "Trade",
-                     Command => "ShowTrader " &
-                     Positive'Image
-                       (Events_List
-                          (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                             .Event_Index)
-                          .Ship_Index),
-                     Shortcut => "t", Underline => 0);
-                  Add_Button
-                    (Name => ".askevents", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
-                  Add_Button
-                    (Name => ".askbases", Label => "Ask for bases", Command => "AskForBases", Shortcut => "b", Underline => 8);
-               end if;
-               Add_Button(Name => ".attack", Label => "Attack", Command => "Attack", Shortcut => "a", Underline => 0);
-            when FRIENDLYSHIP =>
-               if Have_Trader then
-                  if Index
-                      (Source => Proto_Ships_List
+                     Command =>
+                       "ShowTrader " &
+                       Positive'Image
                          (Events_List
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Event_Index)
-                            .Ship_Index)
-                         .Name,
+                            .Ship_Index),
+                     Shortcut => "t", Underline => 0);
+                  Add_Button
+                    (Name => ".askevents", Label => "Ask for events",
+                     Command => "AskForEvents", Shortcut => "e",
+                     Underline => 8);
+                  Add_Button
+                    (Name => ".askbases", Label => "Ask for bases",
+                     Command => "AskForBases", Shortcut => "b",
+                     Underline => 8);
+               end if;
+               Add_Button
+                 (Name => ".attack", Label => "Attack", Command => "Attack",
+                  Shortcut => "a", Underline => 0);
+            when FRIENDLYSHIP =>
+               if Have_Trader then
+                  if Index
+                      (Source =>
+                         Proto_Ships_List
+                           (Events_List
+                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                 .Event_Index)
+                              .Ship_Index)
+                           .Name,
                        Pattern => To_String(Source => Traders_Name)) >
                     0 then
                      Add_Button
                        (Name => ".trade", Label => "Trade",
-                        Command => "ShowTrader " &
-                        Positive'Image
-                          (Events_List
-                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                .Event_Index)
-                             .Ship_Index),
+                        Command =>
+                          "ShowTrader " &
+                          Positive'Image
+                            (Events_List
+                               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                  .Event_Index)
+                               .Ship_Index),
                         Shortcut => "t", Underline => 0);
                      Add_Button
-                       (Name => ".askbases", Label => "Ask for bases", Command => "AskForBases", Shortcut => "b", Underline => 8);
+                       (Name => ".askbases", Label => "Ask for bases",
+                        Command => "AskForBases", Shortcut => "b",
+                        Underline => 8);
                   end if;
                   Add_Button
-                    (Name => ".askevents", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
+                    (Name => ".askevents", Label => "Ask for events",
+                     Command => "AskForEvents", Shortcut => "e",
+                     Underline => 8);
                end if;
-               Add_Button(".attack", "Attack", "Attack", "a", 0);
+               Add_Button
+                 (Name => ".attack", Label => "Attack", Command => "Attack",
+                  Shortcut => "a", Underline => 0);
          end case;
       end if;
-      if Last_Button = Get_Widget(".", Interp) then
+      if Last_Button = Get_Widget(pathName => ".", Interp => Interp) then
          Show_Message
            (Text =>
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
          Tcl.Tk.Ada.Grid.Grid
-           (Dialog_Close_Button, "-sticky we -padx 5 -pady {0 5}");
+           (Slave => Dialog_Close_Button,
+            Options => "-sticky we -padx 5 -pady {0 5}");
          Bind
-           (Dialog_Close_Button, "<Escape>",
-            "{" & Dialog_Close_Button & " invoke;break}");
+           (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+            Script => "{" & Dialog_Close_Button & " invoke;break}");
          Bind
            (Last_Button, "<Tab>", "{focus " & Dialog_Close_Button & ";break}");
          for Shortcut of Shortcuts loop
