@@ -500,19 +500,19 @@ package body OrdersMenu is
                               null;
                            when DESTROY =>
                               Add_Button
-                                (".mission",
-                                 "Search for " &
+                                (Name => ".mission",
+                                 Label => "Search for " &
                                  To_String
-                                   (Proto_Ships_List(Mission.Ship_Index).Name),
-                                 "StartMission", "s", 0);
+                                   (Source => Proto_Ships_List(Mission.Ship_Index).Name),
+                                 Command => "StartMission", Shortcut => "s", Underline => 0);
                            when PATROL =>
                               Add_Button
-                                (".mission", "Patrol area", "StartMission",
-                                 "p", 0);
+                                (Name => ".mission", Label => "Patrol area", Command => "StartMission",
+                                 Shortcut => "p", Underline => 0);
                            when EXPLORE =>
                               Add_Button
-                                (".mission", "Explore area", "StartMission",
-                                 "e", 0);
+                                (Name => ".mission", Label => "Explore area", Command => "StartMission",
+                                 Shortcut => "e", Underline => 0);
                         end case;
                      end if;
                   end loop Progress_Mission_Loop;
