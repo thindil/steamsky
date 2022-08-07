@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Updated look of Show crafting recipe, Give, Drop, Take, Buy, Sell items,
   Show inventory, Set crafting recipe, Recruit info, Hire recruit, Show
-  mission info and Accept mission dialogs
+  mission info, Accept mission and Rename dialogs
 - Show both, text and icon on "Close" button in dialogs
 - Show the crafting recipe info instead of the actions menu in the crafting
   recipes list
