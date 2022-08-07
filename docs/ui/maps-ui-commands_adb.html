@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -51,31 +51,31 @@
 <li>18. <a href="#robo883">MapCommands/MapCommands.Invoke_Menu_Command</a></li>
 <li>19. <a href="#robo882">MapCommands/MapCommands.Hide_Map_Buttons_Command</a></li>
 <li>20. <a href="#robo881">MapCommands/MapCommands.Draw_Map_Command</a></li>
-<li>21. <a href="#robo424">MapCommands/MapCommands.MapY</a></li>
-<li>22. <a href="#robo423">MapCommands/MapCommands.MapX</a></li>
+<li>21. <a href="#robo426">MapCommands/MapCommands.Map_Y</a></li>
+<li>22. <a href="#robo425">MapCommands/MapCommands.Map_X</a></li>
 </ul>
 <hr />
-<a name="MapCommands2fMapCommands2eMapX"></a>
-<a name="robo423"></a><h2>MapCommands/MapCommands.MapX [ Variables ]</h2>
+<a name="MapCommands2fMapCommands2eMap5fX"></a>
+<a name="robo425"></a><h2>MapCommands/MapCommands.Map_X [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./maps-ui-commands_ads.html#robo49">MapCommands</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Current map cell X coordinate (where mouse is hovering)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   MapX<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+<pre class="source">   Map_X<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="MapCommands2fMapCommands2eMapY"></a>
-<a name="robo424"></a><h2>MapCommands/MapCommands.MapY [ Variables ]</h2>
+<a name="MapCommands2fMapCommands2eMap5fY"></a>
+<a name="robo426"></a><h2>MapCommands/MapCommands.Map_Y [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./maps-ui-commands_ads.html#robo49">MapCommands</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Current map cell Y coordinate (where mouse is hovering)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   MapY<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+<pre class="source">   Map_Y<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -88,15 +88,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Draw_Map_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -115,15 +115,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Hide_Map_Buttons_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -142,15 +142,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Invoke_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -170,15 +170,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Ship_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -198,15 +198,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Map_Buttons_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -226,15 +226,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Map_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -254,15 +254,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Map_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -281,15 +281,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Mouse_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -311,15 +311,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Quit_Game_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -339,15 +339,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Resign_Game_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -366,15 +366,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Resize_Last_Messages_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -393,15 +393,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Set_Ship_Destination_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -420,15 +420,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Destination_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -448,15 +448,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Game_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -475,15 +475,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Map_Buttons_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -502,15 +502,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Sky_Map_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -531,15 +531,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Stats_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -558,15 +558,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Toggle_Full_Screen_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -585,15 +585,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Update_Map_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -613,15 +613,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Zoom_Map_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -632,7 +632,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/maps-ui-commands.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-07-10 03:10:25</p>
+<p>Generated from ./src/ui/maps-ui-commands.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-08-07 03:03:41</p>
 </div> <!-- footer -->
 </body>
 </html>
