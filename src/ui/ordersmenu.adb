@@ -537,28 +537,28 @@ package body OrdersMenu is
             when FRIENDLYSHIP =>
                if Have_Trader then
                   if Index
-                      (Proto_Ships_List
+                      (Source => Proto_Ships_List
                          (Events_List
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Event_Index)
                             .Ship_Index)
                          .Name,
-                       To_String(Traders_Name)) >
+                       Pattern => To_String(Source => Traders_Name)) >
                     0 then
                      Add_Button
-                       (".trade", "Trade",
-                        "ShowTrader " &
+                       (Name => ".trade", Label => "Trade",
+                        Command => "ShowTrader " &
                         Positive'Image
                           (Events_List
                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .Event_Index)
                              .Ship_Index),
-                        "t", 0);
+                        Shortcut => "t", Underline => 0);
                      Add_Button
-                       (".askbases", "Ask for bases", "AskForBases", "b", 8);
+                       (Name => ".askbases", Label => "Ask for bases", Command => "AskForBases", Shortcut => "b", Underline => 8);
                   end if;
                   Add_Button
-                    (".askevents", "Ask for events", "AskForEvents", "e", 8);
+                    (Name => ".askevents", Label => "Ask for events", Command => "AskForEvents", Shortcut => "e", Underline => 8);
                end if;
                Add_Button(".attack", "Attack", "Attack", "a", 0);
          end case;
