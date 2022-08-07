@@ -406,37 +406,38 @@ package body OrdersMenu is
                            .Healing_Tools);
                   if Item_Index > 0 then
                      Add_Button
-                       (".deliverfree", "Deliver medicines for free",
-                        "DeliverMedicines free", "d", 0);
+                       (Name => ".deliverfree", Label => "Deliver medicines for free",
+                        Command => "DeliverMedicines free", Shortcut => "d", Underline => 0);
                      Add_Button
-                       (".deliverprice", "Deliver medicines for price",
-                        "DeliverMedicines paid", "m", 8);
+                       (Name => ".deliverprice", Label => "Deliver medicines for price",
+                        Command => "DeliverMedicines paid", Shortcut => "m", Underline => 8);
                   end if;
                end if;
             when NONE | DOUBLEPRICE | BASERECOVERY =>
                if Base_Index > 0 then
                   if Sky_Bases(Base_Index).Reputation.Level > -25 then
+                     Show_Docking_Button_Block:
                      declare
-                        DockingCost: Positive;
+                        Docking_Cost: Positive;
                      begin
                         Count_Docking_Cost_Loop :
                         for Module of Player_Ship.Modules loop
                            if Module.M_Type = HULL then
-                              DockingCost := Module.Max_Modules;
+                              Docking_Cost := Module.Max_Modules;
                               exit Count_Docking_Cost_Loop;
                            end if;
                         end loop Count_Docking_Cost_Loop;
                         if Sky_Bases(Base_Index).Population > 0 then
                            Add_Button
-                             (".dock",
-                              "Dock (" &
-                              Trim(Positive'Image(DockingCost), Left) & " " &
-                              To_String(Money_Name) & ")",
-                              "Docking", "d", 0);
+                             (Name => ".dock",
+                              Label => "Dock (" &
+                              Trim(Source => Positive'Image(Docking_Cost), Side => Left) & " " &
+                              To_String(Source => Money_Name) & ")",
+                              Command => "Docking", Shortcut => "d", Underline => 0);
                         else
                            Add_Button(".dock", "Dock", "Docking", "d", 0);
                         end if;
-                     end;
+                     end Show_Docking_Button_Block;
                   end if;
                   Complete_Mission_Menu_Loop :
                   for Mission of Accepted_Missions loop
