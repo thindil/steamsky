@@ -435,7 +435,7 @@ package body OrdersMenu is
                               To_String(Source => Money_Name) & ")",
                               Command => "Docking", Shortcut => "d", Underline => 0);
                         else
-                           Add_Button(".dock", "Dock", "Docking", "d", 0);
+                           Add_Button(Name => ".dock", Label => "Dock", Command => "Docking", Shortcut => "d", Underline => 0);
                         end if;
                      end Show_Docking_Button_Block;
                   end if;
@@ -448,23 +448,23 @@ package body OrdersMenu is
                         case Mission.M_Type is
                            when DELIVER =>
                               Add_Button
-                                (".mission",
-                                 "Complete delivery of " &
+                                (Name => ".mission",
+                                 Label => "Complete delivery of " &
                                  To_String
-                                   (Objects_Container.Element
+                                   (Source => Objects_Container.Element
                                       (Container => Items_List,
                                        Index => Mission.Item_Index)
                                       .Name),
-                                 "CompleteMission", "c", 0);
+                                 Command => "CompleteMission", Shortcut => "c", Underline => 0);
                            when DESTROY =>
                               if Mission.Finished then
                                  Add_Button
-                                   (".mission",
-                                    "Complete destroy " &
+                                   (Name => ".mission",
+                                    Label => "Complete destroy " &
                                     To_String
-                                      (Proto_Ships_List(Mission.Ship_Index)
+                                      (Source => Proto_Ships_List(Mission.Ship_Index)
                                          .Name),
-                                    "CompleteMission", "c", 0);
+                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
                               end if;
                            when PATROL =>
                               if Mission.Finished then
