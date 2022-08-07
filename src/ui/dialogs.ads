@@ -46,6 +46,7 @@ package Dialogs is
       Icon: Unbounded_String := Null_Unbounded_String;
       Tooltip: Unbounded_String := Null_Unbounded_String;
    end record;
+   -- ****
 
    -- ****d* Dialogs/Dialogs.Empty_Button_Settings
    -- FUNCTION
