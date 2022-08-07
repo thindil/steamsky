@@ -469,22 +469,22 @@ package body OrdersMenu is
                            when PATROL =>
                               if Mission.Finished then
                                  Add_Button
-                                   (".mission", "Complete Patrol area mission",
-                                    "CompleteMission", "c", 0);
+                                   (Name => ".mission", Label => "Complete Patrol area mission",
+                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
                               end if;
                            when EXPLORE =>
                               if Mission.Finished then
                                  Add_Button
-                                   (".mission",
-                                    "Complete Explore area mission",
-                                    "CompleteMission", "c", 0);
+                                   (Name => ".mission",
+                                    Label => "Complete Explore area mission",
+                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
                               end if;
                            when PASSENGER =>
                               if Mission.Finished then
                                  Add_Button
-                                   (".mission",
-                                    "Complete Transport passenger mission",
-                                    "CompleteMission", "c", 0);
+                                   (Name => ".mission",
+                                    Label => "Complete Transport passenger mission",
+                                    Command => "CompleteMission", Shortcut => "c", Underline => 0);
                               end if;
                         end case;
                      end if;
