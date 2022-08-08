@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Icon for move item to cargo. Author: Lorc (https://game-icons.net), license
   CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ## [7.7] - 2022-08-07
 
 ### Added
