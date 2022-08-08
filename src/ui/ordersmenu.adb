@@ -654,10 +654,10 @@ package body OrdersMenu is
    -- FUNCTION
    -- Dock or undock from the sky base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -666,23 +666,23 @@ package body OrdersMenu is
    -- otherwise normal docking or undocking operation
    -- SOURCE
    function Docking_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Docking_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed = DOCKED then
          Message :=
-           (if Argc = 1 then To_Unbounded_String(Dock_Ship(False))
-            else To_Unbounded_String(Dock_Ship(False, True)));
-         if Length(Message) > 0 then
+           (if Argc = 1 then To_Unbounded_String(Source => Dock_Ship(Docking => False))
+            else To_Unbounded_String(Source => Dock_Ship(Docking => False, Escape => True)));
+         if Length(Source => Message) > 0 then
             Show_Message
-              (Text => To_String(Message), Title => "Can't undock from base");
+              (Text => To_String(Source => Message), Title => "Can't undock from base");
             return TCL_OK;
          end if;
       else
@@ -691,19 +691,19 @@ package body OrdersMenu is
                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               FULLDOCKS then
-               return Show_Wait_Command(ClientData, Interp, Argc, Argv);
+               return Show_Wait_Command(ClientData => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
             end if;
          end if;
-         Message := To_Unbounded_String(Dock_Ship(True));
-         if Length(Message) > 0 then
+         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
+         if Length(Source => Message) > 0 then
             Show_Message
-              (Text => To_String(Message), Title => "Can't dock to base");
+              (Text => To_String(Source => Message), Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
       Show_Sky_Map;
       if Player_Ship.Speed = DOCKED then
-         return Show_Orders_Command(ClientData, Interp, Argc, Argv);
+         return Show_Orders_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
       end if;
       return TCL_OK;
    end Docking_Command;
