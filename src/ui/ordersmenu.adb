@@ -890,8 +890,8 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
-      Generate_Trader_Cargo(Positive'Value(CArgv.Arg(Argv, 1)));
-      Tcl_Eval(Interp, "ShowTrade");
+      Generate_Trader_Cargo(Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Tcl_Eval(interp => Interp, strng => "ShowTrade");
       return TCL_OK;
    end Show_Trader_Command;
 
@@ -899,27 +899,28 @@ package body OrdersMenu is
    -- FUNCTION
    -- Start the selected mission
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- StartMission
    -- SOURCE
    function Start_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Start_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      StartsCombat: Boolean := False;
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      Starts_Combat: Boolean := False;
    begin
+      Check_Missions_Loop:
       for Mission of Accepted_Missions loop
          if Mission.Target_X = Player_Ship.Sky_X and
            Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
@@ -927,38 +928,38 @@ package body OrdersMenu is
                when DELIVER | PASSENGER =>
                   null;
                when DESTROY =>
-                  Update_Game(Get_Random(15, 45));
-                  StartsCombat := Check_For_Event;
-                  if not StartsCombat then
-                     StartsCombat :=
+                  Update_Game(Minutes => Get_Random(Min => 15, Max => 45));
+                  Starts_Combat := Check_For_Event;
+                  if not Starts_Combat then
+                     Starts_Combat :=
                        Start_Combat
-                         (Accepted_Missions
+                         (Enemy_Index => Accepted_Missions
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Mission_Index)
                             .Ship_Index,
-                          False);
+                          New_Combat => False);
                   end if;
                when PATROL =>
-                  Update_Game(Get_Random(45, 75));
-                  StartsCombat := Check_For_Event;
-                  if not StartsCombat then
+                  Update_Game(Minutes => Get_Random(Min => 45, Max => 75));
+                  Starts_Combat := Check_For_Event;
+                  if not Starts_Combat then
                      Update_Mission
-                       (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                       (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Mission_Index);
                   end if;
                when EXPLORE =>
-                  Update_Game(Get_Random(30, 60));
-                  StartsCombat := Check_For_Event;
-                  if not StartsCombat then
+                  Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
+                  Starts_Combat := Check_For_Event;
+                  if not Starts_Combat then
                      Update_Mission
                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Mission_Index);
                   end if;
             end case;
-            exit;
+            exit Check_Missions_Loop;
          end if;
-      end loop;
-      if StartsCombat then
+      end loop Check_Missions_Loop;
+      if Starts_Combat then
          Show_Combat_Ui;
          return TCL_OK;
       end if;
