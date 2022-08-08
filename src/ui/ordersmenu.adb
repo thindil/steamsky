@@ -952,7 +952,7 @@ package body OrdersMenu is
                   Starts_Combat := Check_For_Event;
                   if not Starts_Combat then
                      Update_Mission
-                       (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                       (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Mission_Index);
                   end if;
             end case;
@@ -973,28 +973,28 @@ package body OrdersMenu is
    -- FUNCTION
    -- Complete the selected mission in base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- CompleteMission
    -- SOURCE
    function Complete_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Complete_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
       Finish_Mission
-        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+        (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       Update_Header;
       Update_Messages;
       Show_Sky_Map;
@@ -1005,25 +1005,25 @@ package body OrdersMenu is
    -- FUNCTION
    -- Execute the current step in the current story
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ExecuteStory
    -- SOURCE
    function Execute_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Execute_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Step: Step_Data :=
         (if Current_Story.Current_Step = 0 then
            Stories_List(Current_Story.Index).Starting_Step
@@ -1033,21 +1033,22 @@ package body OrdersMenu is
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
-         Message := To_Unbounded_String(Dock_Ship(True));
+         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
          if Message /= Null_Unbounded_String then
             Show_Info
-              (Text => To_String(Message), Title => "Can't dock to base");
+              (Text => To_String(Source => Message), Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
       if Progress_Story then
+         Progress_Story_Block:
          declare
             Tokens: Slice_Set;
          begin
-            Create(Tokens, To_String(Current_Story.Data), ";");
+            Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
-                  if Start_Combat(Positive'Value(Slice(Tokens, 3)), False) then
+                  if Start_Combat(Enemy_Index => Positive'Value(Slice(S => Tokens, Index => 3)), New_Combat => False) then
                      Show_Combat_Ui;
                      return TCL_OK;
                   end if;
@@ -1060,19 +1061,20 @@ package body OrdersMenu is
                     Stories_List(Current_Story.Index).Steps
                       (Current_Story.Current_Step)
                   else Stories_List(Current_Story.Index).Final_Step);
+               Show_Current_Story_Loop:
                for Text of Step.Texts loop
                   if Current_Story.Finished_Step = Text.Condition then
-                     Show_Info(Text => To_String(Text.Text), Title => "Story");
+                     Show_Info(Text => To_String(Source => Text.Text), Title => "Story");
                      Current_Story.Show_Text := False;
-                     exit;
+                     exit Show_Current_Story_Loop;
                   end if;
-               end loop;
+               end loop Show_Current_Story_Loop;
             else
                Finish_Story;
             end if;
-         end;
+         end Progress_Story_Block;
       else
-         Show_Info(Text => To_String(Step.Fail_Text), Title => "Story");
+         Show_Info(Text => To_String(Source => Step.Fail_Text), Title => "Story");
          Current_Story.Show_Text := False;
       end if;
       Update_Header;
@@ -1085,10 +1087,10 @@ package body OrdersMenu is
    -- FUNCTION
    -- Deliver medicines to the base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1097,15 +1099,15 @@ package body OrdersMenu is
    -- medicines for a price
    -- SOURCE
    function Deliver_Medicines_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Deliver_Medicines_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       BaseIndex: constant Positive :=
