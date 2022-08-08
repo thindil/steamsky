@@ -137,6 +137,7 @@ package Themes is
    -- Study_Icon            - Icon used for set study order button
    -- Deconstruct_Icon      - Icon used for set deconstruct order button
    -- Negotiate_Icon        - Icon used for negotiation button
+   -- Cargo_Icon            - Icon used for represent the player's ship's cargo
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -217,6 +218,7 @@ package Themes is
       Study_Icon: Unbounded_String;
       Deconstruct_Icon: Unbounded_String;
       Negotiate_Icon: Unbounded_String;
+      Cargo_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -302,7 +304,8 @@ package Themes is
       Craft_Icon => Default_Theme_Icons_Path & "craft-order.svg",
       Study_Icon => Default_Theme_Icons_Path & "study.svg",
       Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg",
-      Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg");
+      Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg",
+      Cargo_Icon => Default_Theme_Icons_Path & "cargo.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
