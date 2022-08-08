@@ -619,29 +619,33 @@ package body OrdersMenu is
            (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
             Script => "{" & Dialog_Close_Button & " invoke;break}");
          Bind
-           (Last_Button, "<Tab>", "{focus " & Dialog_Close_Button & ";break}");
+           (Widgt => Last_Button, Sequence => "<Tab>", Script => "{focus " & Dialog_Close_Button & ";break}");
+         Set_Shortcuts_Loop:
          for Shortcut of Shortcuts loop
             Bind
-              (Dialog_Close_Button, "<Alt-" & Shortcut.Shortcut & ">",
-               "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
-         end loop;
+              (Widgt => Dialog_Close_Button, Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+               Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
+         end loop Set_Shortcuts_Loop;
+         Add_Shortcuts_To_Buttons_Block:
          declare
-            MenuButton: Ttk_Button;
+            Menu_Button: Ttk_Button;
          begin
+            Set_Buttons_Loop:
             for Button of Shortcuts loop
-               MenuButton := Get_Widget(To_String(Button.Button_Name), Interp);
+               Menu_Button := Get_Widget(pathName => To_String(Source => Button.Button_Name), Interp => Interp);
+               Set_Button_Shortcuts_Loop:
                for Shortcut of Shortcuts loop
                   Bind
-                    (MenuButton, "<Alt-" & Shortcut.Shortcut & ">",
-                     "{" & To_String(Shortcut.Button_Name) & " invoke;break}");
-               end loop;
-            end loop;
-         end;
+                    (Widgt => Menu_Button, Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+                     Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
+               end loop Set_Button_Shortcuts_Loop;
+            end loop Set_Buttons_Loop;
+         end Add_Shortcuts_To_Buttons_Block;
          Show_Dialog
            (Dialog => Orders_Menu, Parent_Frame => ".gameframe",
             Relative_X => 0.4,
             Relative_Y => (if Player_Ship.Speed = DOCKED then 0.1 else 0.3));
-         Focus(Dialog_Close_Button);
+         Focus(Widgt => Dialog_Close_Button);
       end if;
       return TCL_OK;
    end Show_Orders_Command;
