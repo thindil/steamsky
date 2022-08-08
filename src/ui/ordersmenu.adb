@@ -619,25 +619,35 @@ package body OrdersMenu is
            (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
             Script => "{" & Dialog_Close_Button & " invoke;break}");
          Bind
-           (Widgt => Last_Button, Sequence => "<Tab>", Script => "{focus " & Dialog_Close_Button & ";break}");
-         Set_Shortcuts_Loop:
+           (Widgt => Last_Button, Sequence => "<Tab>",
+            Script => "{focus " & Dialog_Close_Button & ";break}");
+         Set_Shortcuts_Loop :
          for Shortcut of Shortcuts loop
             Bind
-              (Widgt => Dialog_Close_Button, Sequence => "<Alt-" & Shortcut.Shortcut & ">",
-               Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
+              (Widgt => Dialog_Close_Button,
+               Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+               Script =>
+                 "{" & To_String(Source => Shortcut.Button_Name) &
+                 " invoke;break}");
          end loop Set_Shortcuts_Loop;
-         Add_Shortcuts_To_Buttons_Block:
+         Add_Shortcuts_To_Buttons_Block :
          declare
             Menu_Button: Ttk_Button;
          begin
-            Set_Buttons_Loop:
+            Set_Buttons_Loop :
             for Button of Shortcuts loop
-               Menu_Button := Get_Widget(pathName => To_String(Source => Button.Button_Name), Interp => Interp);
-               Set_Button_Shortcuts_Loop:
+               Menu_Button :=
+                 Get_Widget
+                   (pathName => To_String(Source => Button.Button_Name),
+                    Interp => Interp);
+               Set_Button_Shortcuts_Loop :
                for Shortcut of Shortcuts loop
                   Bind
-                    (Widgt => Menu_Button, Sequence => "<Alt-" & Shortcut.Shortcut & ">",
-                     Script => "{" & To_String(Source => Shortcut.Button_Name) & " invoke;break}");
+                    (Widgt => Menu_Button,
+                     Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+                     Script =>
+                       "{" & To_String(Source => Shortcut.Button_Name) &
+                       " invoke;break}");
                end loop Set_Button_Shortcuts_Loop;
             end loop Set_Buttons_Loop;
          end Add_Shortcuts_To_Buttons_Block;
@@ -678,11 +688,14 @@ package body OrdersMenu is
    begin
       if Player_Ship.Speed = DOCKED then
          Message :=
-           (if Argc = 1 then To_Unbounded_String(Source => Dock_Ship(Docking => False))
-            else To_Unbounded_String(Source => Dock_Ship(Docking => False, Escape => True)));
+           (if Argc = 1 then
+              To_Unbounded_String(Source => Dock_Ship(Docking => False))
+            else To_Unbounded_String
+                (Source => Dock_Ship(Docking => False, Escape => True)));
          if Length(Source => Message) > 0 then
             Show_Message
-              (Text => To_String(Source => Message), Title => "Can't undock from base");
+              (Text => To_String(Source => Message),
+               Title => "Can't undock from base");
             return TCL_OK;
          end if;
       else
@@ -691,19 +704,26 @@ package body OrdersMenu is
                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               FULLDOCKS then
-               return Show_Wait_Command(ClientData => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+               return
+                 Show_Wait_Command
+                   (ClientData => Client_Data, Interp => Interp, Argc => Argc,
+                    Argv => Argv);
             end if;
          end if;
          Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
          if Length(Source => Message) > 0 then
             Show_Message
-              (Text => To_String(Source => Message), Title => "Can't dock to base");
+              (Text => To_String(Source => Message),
+               Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
       Show_Sky_Map;
       if Player_Ship.Speed = DOCKED then
-         return Show_Orders_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+         return
+           Show_Orders_Command
+             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+              Argv => Argv);
       end if;
       return TCL_OK;
    end Docking_Command;
@@ -820,10 +840,14 @@ package body OrdersMenu is
    begin
       Update_Morale_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         Update_Morale(Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Value => 10);
+         Update_Morale
+           (Ship => Player_Ship,
+            Member_Index => Crew_Container.To_Index(Position => I),
+            Value => 10);
       end loop Update_Morale_Loop;
       Add_Message
-        (Message => "You and your crew were praying for some time. Now you all feel a bit better.",
+        (Message =>
+           "You and your crew were praying for some time. Now you all feel a bit better.",
          M_Type => ORDERMESSAGE);
       Update_Game(Minutes => 30);
       Show_Sky_Map;
@@ -858,8 +882,10 @@ package body OrdersMenu is
    begin
       Count_Price(Price => Price, Trader_Index => Trader_Index);
       Show_Question
-        (Question => "Are you sure want to change your home base (it cost" &
-         Positive'Image(Price) & " " & To_String(Source => Money_Name) & ")?",
+        (Question =>
+           "Are you sure want to change your home base (it cost" &
+           Positive'Image(Price) & " " & To_String(Source => Money_Name) &
+           ")?",
          Result => "sethomebase");
       return TCL_OK;
    end Set_As_Home_Command;
@@ -890,7 +916,8 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
-      Generate_Trader_Cargo(Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Generate_Trader_Cargo
+        (Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       Tcl_Eval(interp => Interp, strng => "ShowTrade");
       return TCL_OK;
    end Show_Trader_Command;
@@ -920,7 +947,7 @@ package body OrdersMenu is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Starts_Combat: Boolean := False;
    begin
-      Check_Missions_Loop:
+      Check_Missions_Loop :
       for Mission of Accepted_Missions loop
          if Mission.Target_X = Player_Ship.Sky_X and
            Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
@@ -933,10 +960,11 @@ package body OrdersMenu is
                   if not Starts_Combat then
                      Starts_Combat :=
                        Start_Combat
-                         (Enemy_Index => Accepted_Missions
-                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .Mission_Index)
-                            .Ship_Index,
+                         (Enemy_Index =>
+                            Accepted_Missions
+                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                 .Mission_Index)
+                              .Ship_Index,
                           New_Combat => False);
                   end if;
                when PATROL =>
@@ -944,16 +972,18 @@ package body OrdersMenu is
                   Starts_Combat := Check_For_Event;
                   if not Starts_Combat then
                      Update_Mission
-                       (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                          .Mission_Index);
+                       (Mission_Index =>
+                          Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                            .Mission_Index);
                   end if;
                when EXPLORE =>
                   Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
                   Starts_Combat := Check_For_Event;
                   if not Starts_Combat then
                      Update_Mission
-                       (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                          .Mission_Index);
+                       (Mission_Index =>
+                          Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                            .Mission_Index);
                   end if;
             end case;
             exit Check_Missions_Loop;
@@ -994,7 +1024,8 @@ package body OrdersMenu is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
       Finish_Mission
-        (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+        (Mission_Index =>
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       Update_Header;
       Update_Messages;
       Show_Sky_Map;
@@ -1036,19 +1067,25 @@ package body OrdersMenu is
          Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
          if Message /= Null_Unbounded_String then
             Show_Info
-              (Text => To_String(Source => Message), Title => "Can't dock to base");
+              (Text => To_String(Source => Message),
+               Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
       if Progress_Story then
-         Progress_Story_Block:
+         Progress_Story_Block :
          declare
             Tokens: Slice_Set;
          begin
-            Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
+            Create
+              (S => Tokens, From => To_String(Source => Current_Story.Data),
+               Separators => ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
-                  if Start_Combat(Enemy_Index => Positive'Value(Slice(S => Tokens, Index => 3)), New_Combat => False) then
+                  if Start_Combat
+                      (Enemy_Index =>
+                         Positive'Value(Slice(S => Tokens, Index => 3)),
+                       New_Combat => False) then
                      Show_Combat_Ui;
                      return TCL_OK;
                   end if;
@@ -1061,10 +1098,12 @@ package body OrdersMenu is
                     Stories_List(Current_Story.Index).Steps
                       (Current_Story.Current_Step)
                   else Stories_List(Current_Story.Index).Final_Step);
-               Show_Current_Story_Loop:
+               Show_Current_Story_Loop :
                for Text of Step.Texts loop
                   if Current_Story.Finished_Step = Text.Condition then
-                     Show_Info(Text => To_String(Source => Text.Text), Title => "Story");
+                     Show_Info
+                       (Text => To_String(Source => Text.Text),
+                        Title => "Story");
                      Current_Story.Show_Text := False;
                      exit Show_Current_Story_Loop;
                   end if;
@@ -1074,7 +1113,8 @@ package body OrdersMenu is
             end if;
          end Progress_Story_Block;
       else
-         Show_Info(Text => To_String(Source => Step.Fail_Text), Title => "Story");
+         Show_Info
+           (Text => To_String(Source => Step.Fail_Text), Title => "Story");
          Current_Story.Show_Text := False;
       end if;
       Update_Header;
@@ -1110,69 +1150,77 @@ package body OrdersMenu is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      BaseIndex: constant Positive :=
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      EventIndex: constant Natural :=
+      Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
-      ItemIndex: constant Natural :=
+      Item_Index: constant Natural :=
         Find_Item
           (Inventory => Player_Ship.Cargo,
            Item_Type =>
-             Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
-      NewTime: constant Integer :=
-        Events_List(EventIndex).Time -
+             Factions_List(Sky_Bases(Base_Index).Owner).Healing_Tools);
+      New_Time: constant Integer :=
+        Events_List(Event_Index).Time -
         Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => ItemIndex)
+          (Container => Player_Ship.Cargo, Index => Item_Index)
           .Amount;
    begin
-      if NewTime < 1 then
-         Delete_Event(EventIndex);
+      if New_Time < 1 then
+         Delete_Event(Event_Index => Event_Index);
       else
-         Events_List(EventIndex).Time := NewTime;
+         Events_List(Event_Index).Time := New_Time;
       end if;
-      if CArgv.Arg(Argv, 1) = "free" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "free" then
          Gain_Rep
-           (BaseIndex,
-            (Inventory_Container.Element
-               (Container => Player_Ship.Cargo, Index => ItemIndex)
-               .Amount /
-             10));
+           (Base_Index => Base_Index,
+            Points =>
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => Item_Index)
+                 .Amount /
+               10));
          Add_Message
-           ("You gave " &
-            To_String
-              (Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => ItemIndex)
-                      .Proto_Index)
-                 .Name) &
-            " for free to base.",
-            TRADEMESSAGE);
+           (Message =>
+              "You gave " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo, Index => Item_Index)
+                          .Proto_Index)
+                     .Name) &
+              " for free to base.",
+            M_Type => TRADEMESSAGE);
          Update_Cargo
-           (Player_Ship,
-            Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => ItemIndex)
-              .Proto_Index,
-            (0 -
-             Inventory_Container.Element
-               (Container => Player_Ship.Cargo, Index => ItemIndex)
-               .Amount));
+           (Ship => Player_Ship,
+            Proto_Index =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Item_Index)
+                .Proto_Index,
+            Amount =>
+              (0 -
+               Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => Item_Index)
+                 .Amount));
       else
+         Sell_Medicines_Block :
          begin
             Gain_Rep
-              (BaseIndex,
-               ((Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => ItemIndex)
-                   .Amount /
-                 20) *
-                (-1)));
+              (Base_Index => Base_Index,
+               Points =>
+                 ((Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Amount /
+                   20) *
+                  (-1)));
             Sell_Items
-              (ItemIndex,
-               Integer'Image
-                 (Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => ItemIndex)
-                    .Amount));
+              (Item_Index => Item_Index,
+               Amount =>
+                 Integer'Image
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Item_Index)
+                      .Amount));
          exception
             when Trade_No_Free_Cargo =>
                Show_Message
@@ -1184,7 +1232,7 @@ package body OrdersMenu is
                  (Text =>
                     "You can't sell medicines to the base because the base don't have enough money to buy them.",
                   Title => "Can't sell medicines");
-         end;
+         end Sell_Medicines_Block;
       end if;
       Update_Header;
       Update_Messages;
