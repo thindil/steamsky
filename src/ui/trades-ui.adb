@@ -182,21 +182,21 @@ package body Trades.UI is
          elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}" else "All {}");
       Current_Item_Index: Positive := 1;
    begin
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "trade.tcl");
-         Bind(Trade_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Trade_Frame := Get_Widget(Trade_Canvas & ".trade");
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "trade.tcl");
+         Bind(Widgt => Trade_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+         Trade_Frame := Get_Widget(pathName => Trade_Canvas & ".trade");
          Trade_Table :=
            Create_Table
-             (Widget_Image(Trade_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
+             (Parent => Widget_Image(Trade_Frame),
+              Headers => (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
                To_Unbounded_String("Profit"), To_Unbounded_String("Weight"),
                To_Unbounded_String("Owned"), To_Unbounded_String("Available")),
-              Get_Widget(Main_Paned & ".tradeframe.scrolly"), "SortTradeItems",
-              "Press mouse button to sort the items.");
+              Scrollbar => Get_Widget(Main_Paned & ".tradeframe.scrolly"), Command => "SortTradeItems",
+              Tooltip => "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Items_Sort_Order := Default_Items_Sort_Order;
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
