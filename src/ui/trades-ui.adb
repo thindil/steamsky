@@ -191,13 +191,13 @@ package body Trades.UI is
          Trade_Table :=
            Create_Table
              (Parent => Widget_Image(Trade_Frame),
-              Headers => (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
-               To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
-               To_Unbounded_String("Profit"), To_Unbounded_String("Weight"),
-               To_Unbounded_String("Owned"), To_Unbounded_String("Available")),
-              Scrollbar => Get_Widget(Main_Paned & ".tradeframe.scrolly"), Command => "SortTradeItems",
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Type"),
+               3 => To_Unbounded_String(Source => "Durability"), 4 => To_Unbounded_String(Source => "Price"),
+               5 => To_Unbounded_String(Source => "Profit"), 6 => To_Unbounded_String(Source => "Weight"),
+               7 => To_Unbounded_String(Source => "Owned"), 8 => To_Unbounded_String(Source => "Available")),
+              Scrollbar => Get_Widget(pathName => Main_Paned & ".tradeframe.scrolly"), Command => "SortTradeItems",
               Tooltip => "Press mouse button to sort the items.");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and Argc = 1 then
          Items_Sort_Order := Default_Items_Sort_Order;
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          configure(Close_Button, "-command ShowSkyMap");
