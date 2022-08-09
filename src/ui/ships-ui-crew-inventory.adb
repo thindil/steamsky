@@ -948,8 +948,8 @@ package body Ships.UI.Crew.Inventory is
           Command =>
             To_Unbounded_String
               (Source =>
-                 "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 2) & " " &
-                 CArgv.Arg(Argv => Argv, N => 1)),
+                 "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+                 CArgv.Arg(Argv => Argv, N => 2)),
           Icon => To_Unbounded_String(Source => "cargoicon"),
           Tooltip =>
             To_Unbounded_String
