@@ -1723,7 +1723,7 @@ package body Trades.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & "All");
    end Sort_Items_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowTrade", Show_Trade_Command'Access);
       Add_Command("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
@@ -1731,6 +1731,6 @@ package body Trades.UI is
       Add_Command("SearchTrade", Search_Trade_Command'Access);
       Add_Command("TradeAmount", Trade_Amount_Command'Access);
       Add_Command("SortTradeItems", Sort_Items_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Trades.UI;
