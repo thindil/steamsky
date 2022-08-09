@@ -1242,16 +1242,16 @@ package body OrdersMenu is
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowOrders", Show_Orders_Command'Access);
-      Add_Command("Docking", Docking_Command'Access);
-      Add_Command("AskForBases", Ask_For_Bases_Command'Access);
-      Add_Command("AskForEvents", Ask_For_Events_Command'Access);
-      Add_Command("Attack", Attack_Command'Access);
-      Add_Command("Pray", Pray_Command'Access);
-      Add_Command("SetAsHome", Set_As_Home_Command'Access);
-      Add_Command("ShowTrader", Show_Trader_Command'Access);
-      Add_Command("StartMission", Start_Mission_Command'Access);
-      Add_Command("CompleteMission", Complete_Mission_Command'Access);
+      Add_Command(Name => "ShowOrders", Ada_Command => Show_Orders_Command'Access);
+      Add_Command(Name => "Docking", Ada_Command => Docking_Command'Access);
+      Add_Command(Name => "AskForBases", Ada_Command => Ask_For_Bases_Command'Access);
+      Add_Command(Name => "AskForEvents", Ada_Command => Ask_For_Events_Command'Access);
+      Add_Command(Name => "Attack", Ada_Command => Attack_Command'Access);
+      Add_Command(Name => "Pray", Ada_Command => Pray_Command'Access);
+      Add_Command(Name => "SetAsHome", Ada_Command => Set_As_Home_Command'Access);
+      Add_Command(Name => "ShowTrader", Ada_Command => Show_Trader_Command'Access);
+      Add_Command(Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
+      Add_Command(Name => "CompleteMission", Ada_Command => Complete_Mission_Command'Access);
       Add_Command("ExecuteStory", Execute_Story_Command'Access);
       Add_Command("DeliverMedicines", Deliver_Medicines_Command'Access);
    end Add_Commands;
