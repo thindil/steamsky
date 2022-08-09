@@ -925,7 +925,10 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ValidateMoveAmount
+   -- ShowInventoryItemInfo memberindex itemindex
+   -- Memberindex is the index of the crew member in which inventory item
+   -- information will be show, itemindex is the index of the item which will
+   -- be show
    -- SOURCE
    function Show_Inventory_Item_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -950,7 +953,7 @@ package body Ships.UI.Crew.Inventory is
           Icon => To_Unbounded_String(Source => "cargoicon"),
           Tooltip =>
             To_Unbounded_String
-              (Source => "Move the selected item to the ship's cargo.")));
+              (Source => "Move the selected item to the ship's cargo")));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
