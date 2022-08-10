@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Tab traverse in negotiate hire recruit dialog and school in bases
 - Closing the hire and accept mission dialogs with Escape key when another
   element than buttons is selected
+- Showing information about the item damage chance in the items' info dialog
 
 ## [7.0.9] - 2022-06-19
 
