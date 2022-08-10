@@ -399,26 +399,26 @@ package body Trades.UI is
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
          Add_Button
-           (Trade_Table,
-            Positive'Image
+           (Table => Trade_Table,
+            Text => Positive'Image
               (Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Weight) &
             " kg",
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 6);
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 6);
          Add_Button
-           (Trade_Table,
-            Positive'Image
+           (Table => Trade_Table,
+            Text => Positive'Image
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => I)
                  .Amount),
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 7);
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 7);
          Add_Button
-           (Trade_Table, Positive'Image(Base_Amount),
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 8, True);
+           (Table => Trade_Table, Text => Positive'Image(Base_Amount),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 8, New_Row => True);
          exit Show_Cargo_Items_Loop when Trade_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
@@ -458,7 +458,7 @@ package body Trades.UI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index(Items_Types, To_String("{" & Item_Type & "}")) = 0 then
+         if Index(Source => Items_Types, Pattern => To_String(Source => "{" & Item_Type & "}")) = 0 then
             Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
