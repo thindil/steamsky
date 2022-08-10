@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 
+### Fixed
+- Showing information about the item in the player's ship's crew member's
+  inventory
+
 ## [7.7] - 2022-08-07
 
 ### Added
