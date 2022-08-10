@@ -1113,7 +1113,10 @@ package body Utils.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Damage chance: " & LF & "Strength:" &
+                 LF & "Damage chance: " &
+                 Get_Item_Chance_To_Damage
+                   (Item_Data => Items_List(Proto_Index).Value(1)) &
+                 LF & "Strength:" &
                  Integer'Image(Items_List(Proto_Index).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
