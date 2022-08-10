@@ -364,9 +364,9 @@ package body Trades.UI is
             Tooltip => "Show available options for item",
             Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 1);
          Add_Button
-           (Trade_Table, To_String(Item_Type),
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 2);
+           (Table => Trade_Table, Text => To_String(Source => Item_Type),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 2);
          Item_Durability :=
            (if
               Inventory_Container.Element
@@ -375,18 +375,18 @@ package body Trades.UI is
               100
             then
               To_Unbounded_String
-                (Get_Item_Damage
-                   (Inventory_Container.Element
+                (Source => Get_Item_Damage
+                   (Item_Durability => Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Durability))
-            else To_Unbounded_String("Unused"));
+            else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
-           (Trade_Table,
-            Inventory_Container.Element
+           (Table => Trade_Table,
+            Value => Inventory_Container.Element
               (Container => Player_Ship.Cargo, Index => I)
               .Durability,
-            Default_Item_Durability, To_String(Item_Durability),
-            "ShowTradeItemInfo" & Positive'Image(I), 3);
+            Max_Value => Default_Item_Durability, Tooltip => To_String(Source => Item_Durability),
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 3);
          Add_Button
            (Trade_Table, Positive'Image(Price),
             "Show available options for item",
