@@ -202,7 +202,7 @@ package body Trades.UI is
          Trade_Frame := Get_Widget(pathName => Trade_Canvas & ".trade");
          Trade_Table :=
            Create_Table
-             (Parent => Widget_Image(Trade_Frame),
+             (Parent => Widget_Image(Win => Trade_Frame),
               Headers =>
                 (1 => To_Unbounded_String(Source => "Name"),
                  2 => To_Unbounded_String(Source => "Type"),
@@ -259,19 +259,20 @@ package body Trades.UI is
             Items_Indexes.Append(New_Item => I);
          end loop Fill_Item_Indexes_Loop;
          Items_Indexes.Append(New_Item => 0);
+         Add_Cargo_Indexes_Loop:
          for I in
            BaseCargo_Container.First_Index(Container => Base_Cargo) ..
              BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
-            Items_Indexes.Append(I);
-         end loop;
+            Items_Indexes.Append(New_Item => I);
+         end loop Add_Cargo_Indexes_Loop;
       end if;
       Show_Cargo_Items_Loop :
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
          exit Show_Cargo_Items_Loop when I = 0;
          if Get_Price
-             (Base_Type,
-              Inventory_Container.Element
+             (Base_Type => Base_Type,
+              Item_Index => Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Proto_Index) =
            0 then
@@ -283,8 +284,8 @@ package body Trades.UI is
              .Proto_Index;
          Base_Cargo_Index :=
            Find_Base_Cargo
-             (Proto_Index,
-              Inventory_Container.Element
+             (Proto_Index => Proto_Index,
+              Durability => Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Durability);
          if Base_Cargo_Index > 0 then
@@ -303,16 +304,16 @@ package body Trades.UI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index(Items_Types, To_String("{" & Item_Type & "}")) = 0 then
-            Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
+         if Index(Source => Items_Types, Pattern => To_String(Source => "{" & Item_Type & "}")) = 0 then
+            Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
-         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
-           and then To_String(Item_Type) /= CArgv.Arg(Argv, 1) then
+         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
+           and then To_String(Source => Item_Type) /= CArgv.Arg(Argv => Argv, N => 1) then
             goto End_Of_Cargo_Loop;
          end if;
          Item_Name :=
            To_Unbounded_String
-             (Get_Item_Name
+             (Source => Get_Item_Name
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I),
                  False, False));
