@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing information about the item in the player's ship's crew member's
   inventory
+- Showing information about the item damage chance in the items' info dialog
 
 ## [7.7] - 2022-08-07
 
