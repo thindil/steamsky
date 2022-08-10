@@ -314,13 +314,13 @@ package body Trades.UI is
          Item_Name :=
            To_Unbounded_String
              (Source => Get_Item_Name
-                (Inventory_Container.Element
+                (Item => Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I),
-                 False, False));
+                 Damage_Info => False, To_Lower => False));
          if Argc = 3
            and then
              Index
-               (To_Lower(To_String(Item_Name)), To_Lower(CArgv.Arg(Argv, 2))) =
+               (Source => To_Lower(Item => To_String(Source => Item_Name)), Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
              0 then
             goto End_Of_Cargo_Loop;
          end if;
@@ -329,7 +329,7 @@ package body Trades.UI is
             goto End_Of_Cargo_Loop;
          end if;
          if Base_Cargo_Index = 0 then
-            Price := Get_Price(Base_Type, Proto_Index);
+            Price := Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
          else
             Price :=
               (if Base_Index > 0 then
@@ -353,16 +353,16 @@ package body Trades.UI is
              (Container => Player_Ship.Cargo, Index => I)
              .Price;
          Base_Amount := 0;
-         if Base_Cargo_Index > 0 and Is_Buyable(Base_Type, Proto_Index) then
+         if Base_Cargo_Index > 0 and Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index) then
             Base_Amount :=
               BaseCargo_Container.Element
                 (Container => Base_Cargo, Index => Base_Cargo_Index)
                 .Amount;
          end if;
          Add_Button
-           (Trade_Table, To_String(Item_Name),
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 1);
+           (Table => Trade_Table, Text => To_String(Source => Item_Name),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 1);
          Add_Button
            (Trade_Table, To_String(Item_Type),
             "Show available options for item",
