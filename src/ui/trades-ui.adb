@@ -509,17 +509,17 @@ package body Trades.UI is
                  Index => Items_Indexes(I))
                 .Amount);
          Add_Button
-           (Trade_Table, To_String(Item_Name),
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            1);
+           (Table => Trade_Table, Text => To_String(Source => Item_Name),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 1);
          Add_Button
-           (Trade_Table, To_String(Item_Type),
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            2);
+           (Table => Trade_Table, Text => To_String(Source => Item_Type),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 2);
          Item_Durability :=
            (if
               BaseCargo_Container.Element
@@ -528,11 +528,11 @@ package body Trades.UI is
               100
             then
               To_Unbounded_String
-                (Get_Item_Damage
+                (Source => Get_Item_Damage
                    (BaseCargo_Container.Element
                       (Container => Base_Cargo, Index => Items_Indexes(I))
                       .Durability))
-            else To_Unbounded_String("Unused"));
+            else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
            (Trade_Table,
             BaseCargo_Container.Element
