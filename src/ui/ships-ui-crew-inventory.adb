@@ -942,8 +942,8 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
       Show_Inventory_Item_Info
-        (".memberdialog", Positive'Value(CArgv.Arg(Argv, 1)),
-         Positive'Value(CArgv.Arg(Argv, 2)),
+        (".memberdialog", Positive'Value(CArgv.Arg(Argv, 2)),
+         Positive'Value(CArgv.Arg(Argv, 1)),
          (Text => To_Unbounded_String(Source => "Move"),
           Command =>
             To_Unbounded_String
