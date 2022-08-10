@@ -459,10 +459,10 @@ package body Trades.UI is
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
          if Index(Source => Items_Types, Pattern => To_String(Source => "{" & Item_Type & "}")) = 0 then
-            Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
+            Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
-         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
-           and then To_String(Item_Type) /= CArgv.Arg(Argv, 1) then
+         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
+           and then To_String(Source => Item_Type) /= CArgv.Arg(Argv => Argv, N => 1) then
             goto End_Of_Trader_Loop;
          end if;
          Item_Name :=
@@ -476,7 +476,7 @@ package body Trades.UI is
          if Argc = 3
            and then
              Index
-               (To_Lower(To_String(Item_Name)), To_Lower(CArgv.Arg(Argv, 2))) =
+               (Source => To_Lower(Item => To_String(Source => Item_Name)), Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
              0 then
             goto End_Of_Trader_Loop;
          end if;
