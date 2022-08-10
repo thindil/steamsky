@@ -1192,7 +1192,14 @@ package body Utils.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Damage chance: " & LF & "Strength:" &
+                 LF & "Damage chance: " &
+                 Get_Item_Chance_To_Damage
+                   (Item_Data =>
+                      Objects_Container.Element
+                        (Container => Items_List, Index => Proto_Index)
+                        .Value
+                        (1)) &
+                 LF & "Strength:" &
                  Integer'Image
                    (Objects_Container.Element
                       (Container => Items_List, Index => Proto_Index)
