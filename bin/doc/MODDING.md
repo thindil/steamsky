@@ -1088,6 +1088,8 @@ story.
   button. Optional.
 * Key `CargoIcon`: Path to the SVG image which will be used as the player's
   ship's cargo icon. Optional.
+* Key `EquipIcon`: Path to the SVG image which will be used for equip item
+  action. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
