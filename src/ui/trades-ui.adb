@@ -698,20 +698,20 @@ package body Trades.UI is
                  (BaseCargo_Container.Element
                     (Container => Trader_Cargo, Index => 1)
                     .Amount) &
-               " " & To_String(Money_Name) & ".");
+               " " & To_String(Source => Money_Name) & ".");
          end if;
       end if;
-      Label.Name := New_String(Trade_Frame & ".options.baseinfo");
-      configure(Label, "-text {" & To_String(Trade_Info) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Label.Name := New_String(Str => Trade_Frame & ".options.baseinfo");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
-        (Trade_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Trade_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Trade_Canvas, "window", "0 0 -anchor nw -window " & Trade_Frame);
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Trade_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Trade_Frame);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Trade_Canvas,
          "-scrollregion [list " & BBox(Trade_Canvas, "all") & "]");
