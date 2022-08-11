@@ -405,9 +405,9 @@ package body Trades.UI is
             Tooltip => To_String(Source => Item_Durability),
             Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 3);
          Add_Button
-           (Trade_Table, Positive'Image(Price),
-            "Show available options for item",
-            "ShowTradeItemInfo" & Positive'Image(I), 4);
+           (Table => Trade_Table, Text => Positive'Image(Price),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 4);
          Add_Button
            (Table => Trade_Table, Text => Positive'Image(Profit),
             Tooltip => "Show available options for item",
@@ -559,7 +559,7 @@ package body Trades.UI is
               To_Unbounded_String
                 (Source =>
                    Get_Item_Damage
-                     (BaseCargo_Container.Element
+                     (Item_Durability => BaseCargo_Container.Element
                         (Container => Base_Cargo, Index => Items_Indexes(I))
                         .Durability))
             else To_Unbounded_String(Source => "Unused"));
@@ -576,11 +576,11 @@ package body Trades.UI is
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 3);
          Add_Button
-           (Trade_Table, Positive'Image(Price),
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            4);
+           (Table => Trade_Table, Text => Positive'Image(Price),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 4);
          Add_Button
            (Trade_Table, Integer'Image(-(Price)),
             "Show available options for item",
