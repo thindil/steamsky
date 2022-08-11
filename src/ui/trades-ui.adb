@@ -618,35 +618,35 @@ package body Trades.UI is
                Previous_Command => "ShowTrade " & Arguments & Positive'Image(Page - 1), Next_Command => "");
          else
             Add_Pagination
-              (Trade_Table,
-               "ShowTrade " & Arguments & Positive'Image(Page - 1),
-               "ShowTrade " & Arguments & Positive'Image(Page + 1));
+              (Table => Trade_Table,
+               Previous_Command => "ShowTrade " & Arguments & Positive'Image(Page - 1),
+               Next_Command => "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif Trade_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Trade_Table, "",
-            "ShowTrade " & Arguments & Positive'Image(Page + 1));
+           (Table => Trade_Table, Previous_Command => "",
+            Next_Command => "ShowTrade " & Arguments & Positive'Image(Page + 1));
       end if;
       Update_Table
-        (Trade_Table, (if Focus = Widget_Image(Search_Entry) then False));
-      Tcl_Eval(Get_Context, "update");
-      configure(Combo_Box, "-values [list " & To_String(Items_Types) & "]");
+        (Table => Trade_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      configure(Widgt => Combo_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
       if Argc = 1 then
-         Current(Combo_Box, "0");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
       if Money_Index_2 > 0 then
          Trade_Info :=
            To_Unbounded_String
-             ("You have" &
+             (Source => "You have" &
               Natural'Image
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Money_Index_2)
                    .Amount) &
-              " " & To_String(Money_Name) & ".");
+              " " & To_String(Source => Money_Name) & ".");
       else
          Trade_Info :=
            To_Unbounded_String
-             ("You don't have any " & To_String(Money_Name) &
+             (Source => "You don't have any " & To_String(Source => Money_Name) &
               " to buy anything.");
       end if;
       declare
