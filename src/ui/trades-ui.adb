@@ -559,9 +559,10 @@ package body Trades.UI is
               To_Unbounded_String
                 (Source =>
                    Get_Item_Damage
-                     (Item_Durability => BaseCargo_Container.Element
-                        (Container => Base_Cargo, Index => Items_Indexes(I))
-                        .Durability))
+                     (Item_Durability =>
+                        BaseCargo_Container.Element
+                          (Container => Base_Cargo, Index => Items_Indexes(I))
+                          .Durability))
             else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
            (Table => Trade_Table,
@@ -578,36 +579,43 @@ package body Trades.UI is
          Add_Button
            (Table => Trade_Table, Text => Positive'Image(Price),
             Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo -" &
-            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Command =>
+              "ShowTradeItemInfo -" &
+              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 4);
          Add_Button
            (Table => Trade_Table, Text => Integer'Image(-(Price)),
             Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo -" &
-            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Command =>
+              "ShowTradeItemInfo -" &
+              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 5, New_Row => False, Color => "red");
          Add_Button
            (Table => Trade_Table,
-            Text => Positive'Image
-              (Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
-                 .Weight) &
-            " kg",
+            Text =>
+              Positive'Image
+                (Objects_Container.Element
+                   (Container => Items_List, Index => Proto_Index)
+                   .Weight) &
+              " kg",
             Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo -" &
-            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Command =>
+              "ShowTradeItemInfo -" &
+              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 6);
          Add_Button
-           (Table => Trade_Table, Text => " 0", Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo -" &
-            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+           (Table => Trade_Table, Text => " 0",
+            Tooltip => "Show available options for item",
+            Command =>
+              "ShowTradeItemInfo -" &
+              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 7);
          Add_Button
            (Table => Trade_Table, Text => Natural'Image(Base_Amount),
             Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo -" &
-            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Command =>
+              "ShowTradeItemInfo -" &
+              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 8, New_Row => True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
@@ -615,41 +623,52 @@ package body Trades.UI is
          if Trade_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
               (Table => Trade_Table,
-               Previous_Command => "ShowTrade " & Arguments & Positive'Image(Page - 1), Next_Command => "");
+               Previous_Command =>
+                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
+               Next_Command => "");
          else
             Add_Pagination
               (Table => Trade_Table,
-               Previous_Command => "ShowTrade " & Arguments & Positive'Image(Page - 1),
-               Next_Command => "ShowTrade " & Arguments & Positive'Image(Page + 1));
+               Previous_Command =>
+                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
+               Next_Command =>
+                 "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif Trade_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
            (Table => Trade_Table, Previous_Command => "",
-            Next_Command => "ShowTrade " & Arguments & Positive'Image(Page + 1));
+            Next_Command =>
+              "ShowTrade " & Arguments & Positive'Image(Page + 1));
       end if;
       Update_Table
-        (Table => Trade_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+        (Table => Trade_Table,
+         Grab_Focus =>
+           (if Focus = Widget_Image(Win => Search_Entry) then False));
       Tcl_Eval(interp => Get_Context, strng => "update");
-      configure(Widgt => Combo_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list " & To_String(Source => Items_Types) & "]");
       if Argc = 1 then
          Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
       if Money_Index_2 > 0 then
          Trade_Info :=
            To_Unbounded_String
-             (Source => "You have" &
-              Natural'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount) &
-              " " & To_String(Source => Money_Name) & ".");
+             (Source =>
+                "You have" &
+                Natural'Image
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                     .Amount) &
+                " " & To_String(Source => Money_Name) & ".");
       else
          Trade_Info :=
            To_Unbounded_String
-             (Source => "You don't have any " & To_String(Source => Money_Name) &
-              " to buy anything.");
+             (Source =>
+                "You don't have any " & To_String(Source => Money_Name) &
+                " to buy anything.");
       end if;
-      Show_Free_Space_Block:
+      Show_Free_Space_Block :
       declare
          Free_Space: Integer := Free_Cargo(Amount => 0);
       begin
@@ -658,10 +677,13 @@ package body Trades.UI is
          end if;
          Append
            (Source => Trade_Info,
-            New_Item => LF & "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
+            New_Item =>
+              LF & "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
       end Show_Free_Space_Block;
       Label.Name := New_String(Str => Trade_Frame & ".options.playerinfo");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Trade_Info) & "}");
       Trade_Info := Null_Unbounded_String;
       if Base_Index > 0 then
          if BaseCargo_Container.Element
@@ -670,17 +692,19 @@ package body Trades.UI is
            0 then
             Append
               (Source => Trade_Info,
-               New_Item => "Base doesn't have any " & To_String(Source => Money_Name) &
-               "to buy anything.");
+               New_Item =>
+                 "Base doesn't have any " & To_String(Source => Money_Name) &
+                 "to buy anything.");
          else
             Append
               (Source => Trade_Info,
-               New_Item => "Base has" &
-               Positive'Image
-                 (BaseCargo_Container.Element
-                    (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
-                    .Amount) &
-               " " & To_String(Source => Money_Name) & ".");
+               New_Item =>
+                 "Base has" &
+                 Positive'Image
+                   (BaseCargo_Container.Element
+                      (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
+                      .Amount) &
+                 " " & To_String(Source => Money_Name) & ".");
          end if;
       else
          if BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
@@ -688,55 +712,64 @@ package body Trades.UI is
            0 then
             Append
               (Source => Trade_Info,
-               New_Item => "Ship doesn't have any " & To_String(Source => Money_Name) &
-               "to buy anything.");
+               New_Item =>
+                 "Ship doesn't have any " & To_String(Source => Money_Name) &
+                 "to buy anything.");
          else
             Append
               (Source => Trade_Info,
-               New_Item => "Ship has" &
-               Positive'Image
-                 (BaseCargo_Container.Element
-                    (Container => Trader_Cargo, Index => 1)
-                    .Amount) &
-               " " & To_String(Source => Money_Name) & ".");
+               New_Item =>
+                 "Ship has" &
+                 Positive'Image
+                   (BaseCargo_Container.Element
+                      (Container => Trader_Cargo, Index => 1)
+                      .Amount) &
+                 " " & To_String(Source => Money_Name) & ".");
          end if;
       end if;
       Label.Name := New_String(Str => Trade_Frame & ".options.baseinfo");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Trade_Info) & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (Widgt => Trade_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Parent => Trade_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Trade_Frame);
+        (Parent => Trade_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Trade_Frame);
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Trade_Canvas,
-         "-scrollregion [list " & BBox(Trade_Canvas, "all") & "]");
-      Xview_Move_To(Trade_Canvas, "0.0");
-      Yview_Move_To(Trade_Canvas, "0.0");
-      Show_Screen("tradeframe");
-      Tcl_SetResult(Interp, "1");
+        (Widgt => Trade_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Trade_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
+      Show_Screen(New_Screen_Name => "tradeframe");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Trade_Command;
 
-   -- ****if* TUI/TUI.ItemIndex
+   -- ****if* TUI/TUI.Item_Index
    -- FUNCTION
    -- Index of the currently selected item
    -- SOURCE
-   ItemIndex: Integer;
+   Item_Index: Integer;
    -- ****
 
    -- ****o* TUI/TUI.Show_Trade_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -746,15 +779,15 @@ package body Trades.UI is
    -- index in the player ship cargo.
    -- SOURCE
    function Show_Trade_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trade_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
       use Tiny_String;
 
@@ -771,11 +804,11 @@ package body Trades.UI is
         Find_Item(Player_Ship.Cargo, Money_Index);
       BaseType: Tiny_String.Bounded_String;
    begin
-      ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
-      if ItemIndex < 0 then
-         BaseCargoIndex := abs (ItemIndex);
+      Item_Index := Integer'Value(CArgv.Arg(Argv, 1));
+      if Item_Index < 0 then
+         BaseCargoIndex := abs (Item_Index);
       else
-         CargoIndex := ItemIndex;
+         CargoIndex := Item_Index;
       end if;
       if CargoIndex >
         Natural
@@ -951,7 +984,7 @@ package body Trades.UI is
       BaseType :=
         (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
          else To_Bounded_String("0"));
-      if ItemIndex > 0 then
+      if Item_Index > 0 then
          BaseCargoIndex :=
            Find_Base_Cargo
              (ProtoIndex,
@@ -971,7 +1004,7 @@ package body Trades.UI is
             Price := Get_Price(BaseType, ProtoIndex);
          end if;
       else
-         ItemIndex :=
+         Item_Index :=
            Find_Item
              (Inventory => Player_Ship.Cargo, Proto_Index => ProtoIndex,
               Durability =>
@@ -993,10 +1026,10 @@ package body Trades.UI is
                 (Container => Trader_Cargo, Index => BaseCargoIndex)
                 .Price);
       end if;
-      if ItemIndex > 0 then
+      if Item_Index > 0 then
          MaxSellAmount :=
            Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => ItemIndex)
+             (Container => Player_Ship.Cargo, Index => Item_Index)
              .Amount;
          declare
             MaxPrice: Natural := MaxSellAmount * Price;
@@ -1140,8 +1173,8 @@ package body Trades.UI is
                end loop Count_Buy_Amount_Loop;
             end if;
          end;
-         if ItemIndex = 0 then
-            ItemIndex := -(BaseCargoIndex);
+         if Item_Index = 0 then
+            Item_Index := -(BaseCargoIndex);
          end if;
       end if;
       Show_Info
@@ -1213,10 +1246,10 @@ package body Trades.UI is
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
    begin
-      if ItemIndex < 0 then
-         BaseCargoIndex := abs (ItemIndex);
+      if Item_Index < 0 then
+         BaseCargoIndex := abs (Item_Index);
       else
-         CargoIndex := ItemIndex;
+         CargoIndex := Item_Index;
       end if;
       if CargoIndex > 0 then
          ProtoIndex :=
@@ -1412,18 +1445,18 @@ package body Trades.UI is
            ("Sell " &
             Get_Item_Name
               (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => ItemIndex)),
-            "TradeItem sell", "sell", ItemIndex,
+                 (Container => Player_Ship.Cargo, Index => Item_Index)),
+            "TradeItem sell", "sell", Item_Index,
             Natural'Value(CArgv.Arg(Argv, 2)),
             Natural'Value(CArgv.Arg(Argv, 3)));
       else
-         if ItemIndex > 0 then
+         if Item_Index > 0 then
             Show_Manipulate_Item
               ("Buy " &
                Get_Item_Name
                  (Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => ItemIndex)),
-               "TradeItem buy", "buy", ItemIndex,
+                    (Container => Player_Ship.Cargo, Index => Item_Index)),
+               "TradeItem buy", "buy", Item_Index,
                Natural'Value(CArgv.Arg(Argv, 2)),
                Natural'Value(CArgv.Arg(Argv, 3)));
          else
@@ -1436,10 +1469,10 @@ package body Trades.UI is
                         Index =>
                           BaseCargo_Container.Element
                             (Container => Sky_Bases(BaseIndex).Cargo,
-                             Index => abs (ItemIndex))
+                             Index => abs (Item_Index))
                             .Proto_Index)
                        .Name),
-                  "TradeItem buy", "buy", abs (ItemIndex),
+                  "TradeItem buy", "buy", abs (Item_Index),
                   Natural'Value(CArgv.Arg(Argv, 2)),
                   Natural'Value(CArgv.Arg(Argv, 3)));
             else
@@ -1451,10 +1484,10 @@ package body Trades.UI is
                         Index =>
                           BaseCargo_Container.Element
                             (Container => Trader_Cargo,
-                             Index => abs (ItemIndex))
+                             Index => abs (Item_Index))
                             .Proto_Index)
                        .Name),
-                  "TradeItem buy", "buy", abs (ItemIndex),
+                  "TradeItem buy", "buy", abs (Item_Index),
                   Natural'Value(CArgv.Arg(Argv, 2)),
                   Natural'Value(CArgv.Arg(Argv, 3)));
             end if;
