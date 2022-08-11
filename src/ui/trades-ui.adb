@@ -582,22 +582,22 @@ package body Trades.UI is
             Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 4);
          Add_Button
-           (Trade_Table, Integer'Image(-(Price)),
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            5, False, "red");
+           (Table => Trade_Table, Text => Integer'Image(-(Price)),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 5, New_Row => False, Color => "red");
          Add_Button
-           (Trade_Table,
-            Positive'Image
+           (Table => Trade_Table,
+            Text => Positive'Image
               (Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Weight) &
             " kg",
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            6);
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 6);
          Add_Button
            (Trade_Table, " 0", "Show available options for item",
             "ShowTradeItemInfo -" &
