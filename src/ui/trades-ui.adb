@@ -649,18 +649,19 @@ package body Trades.UI is
              (Source => "You don't have any " & To_String(Source => Money_Name) &
               " to buy anything.");
       end if;
+      Show_Free_Space_Block:
       declare
-         FreeSpace: Integer := Free_Cargo(0);
+         Free_Space: Integer := Free_Cargo(Amount => 0);
       begin
-         if FreeSpace < 0 then
-            FreeSpace := 0;
+         if Free_Space < 0 then
+            Free_Space := 0;
          end if;
          Append
-           (Trade_Info,
-            LF & "Free cargo space:" & Integer'Image(FreeSpace) & " kg.");
-      end;
-      Label.Name := New_String(Trade_Frame & ".options.playerinfo");
-      configure(Label, "-text {" & To_String(Trade_Info) & "}");
+           (Source => Trade_Info,
+            New_Item => LF & "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
+      end Show_Free_Space_Block;
+      Label.Name := New_String(Str => Trade_Frame & ".options.playerinfo");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
       Trade_Info := Null_Unbounded_String;
       if Base_Index > 0 then
          if BaseCargo_Container.Element
@@ -668,31 +669,31 @@ package body Trades.UI is
              .Amount =
            0 then
             Append
-              (Trade_Info,
-               "Base doesn't have any " & To_String(Money_Name) &
+              (Source => Trade_Info,
+               New_Item => "Base doesn't have any " & To_String(Source => Money_Name) &
                "to buy anything.");
          else
             Append
-              (Trade_Info,
-               "Base has" &
+              (Source => Trade_Info,
+               New_Item => "Base has" &
                Positive'Image
                  (BaseCargo_Container.Element
                     (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                     .Amount) &
-               " " & To_String(Money_Name) & ".");
+               " " & To_String(Source => Money_Name) & ".");
          end if;
       else
          if BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
              .Amount =
            0 then
             Append
-              (Trade_Info,
-               "Ship doesn't have any " & To_String(Money_Name) &
+              (Source => Trade_Info,
+               New_Item => "Ship doesn't have any " & To_String(Source => Money_Name) &
                "to buy anything.");
          else
             Append
-              (Trade_Info,
-               "Ship has" &
+              (Source => Trade_Info,
+               New_Item => "Ship has" &
                Positive'Image
                  (BaseCargo_Container.Element
                     (Container => Trader_Cargo, Index => 1)
