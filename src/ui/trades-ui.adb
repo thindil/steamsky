@@ -599,23 +599,23 @@ package body Trades.UI is
             Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 6);
          Add_Button
-           (Trade_Table, " 0", "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            7);
+           (Table => Trade_Table, Text => " 0", Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 7);
          Add_Button
-           (Trade_Table, Natural'Image(Base_Amount),
-            "Show available options for item",
-            "ShowTradeItemInfo -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            8, True);
+           (Table => Trade_Table, Text => Natural'Image(Base_Amount),
+            Tooltip => "Show available options for item",
+            Command => "ShowTradeItemInfo -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 8, New_Row => True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
          if Trade_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Trade_Table,
-               "ShowTrade " & Arguments & Positive'Image(Page - 1), "");
+              (Table => Trade_Table,
+               Previous_Command => "ShowTrade " & Arguments & Positive'Image(Page - 1), Next_Command => "");
          else
             Add_Pagination
               (Trade_Table,
