@@ -940,6 +940,10 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      Used: constant Boolean :=
+        Item_Is_Used
+          (Positive'Value(CArgv.Arg(Argv, 1)),
+           Positive'Value(CArgv.Arg(Argv, 2)));
    begin
       Show_Inventory_Item_Info
         (".memberdialog", Positive'Value(CArgv.Arg(Argv, 2)),
@@ -953,7 +957,22 @@ package body Ships.UI.Crew.Inventory is
           Icon => To_Unbounded_String(Source => "cargoicon"),
           Tooltip =>
             To_Unbounded_String
-              (Source => "Move the selected item to the ship's cargo")));
+              (Source => "Move the selected item to the ship's cargo")),
+         (Text =>
+            (if Used then To_Unbounded_String("Unequip")
+             else To_Unbounded_String("Equip")),
+          Command =>
+            To_Unbounded_String
+              (Source =>
+                 "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+                 CArgv.Arg(Argv => Argv, N => 2)),
+          Icon =>
+            (if Used then To_Unbounded_String(Source => "unequipicon")
+             else To_Unbounded_String(Source => "equipicon")),
+          Tooltip =>
+            (if Used then To_Unbounded_String("Stop")
+             else To_Unbounded_String("Start")) &
+            " using the selected item"));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
