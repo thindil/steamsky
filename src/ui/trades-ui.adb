@@ -797,8 +797,8 @@ package body Trades.UI is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
-        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor, 5 => Legs_Armor,
-         6 => Shield_Type);
+        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
+         5 => Legs_Armor, 6 => Shield_Type);
       Max_Sell_Amount, Max_Buy_Amount: Integer := 0;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
@@ -848,38 +848,45 @@ package body Trades.UI is
         Weapon_Type then
          Append
            (Source => Item_Info,
-            New_Item => "Skill: " &
-            To_String
-              (Source => SkillsData_Container.Element
-                 (Container => Skills_List,
-                  Index => Skills_Amount_Range
-                    (Objects_Container.Element
-                       (Container => Items_List, Index => Proto_Index)
-                       .Value
-                       (3)))
-                 .Name) &
-            "/" &
-            To_String
-              (Source => AttributesData_Container.Element
-                 (Container => Attributes_List,
-                  Index => SkillsData_Container.Element
-                    (Container => Skills_List,
-                     Index => Skills_Amount_Range
-                       (Objects_Container.Element
-                          (Container => Items_List, Index => Proto_Index)
-                          .Value
-                          (3)))
-                    .Attribute)
-                 .Name) &
-            (if
-               Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
-                 .Value
-                 (4) =
-               1
-             then LF & "Can be used with shield."
-             else LF & "Can't be used with shield (two-handed weapon).") &
-            LF & "Damage type: ");
+            New_Item =>
+              "Skill: " &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List,
+                      Index =>
+                        Skills_Amount_Range
+                          (Objects_Container.Element
+                             (Container => Items_List, Index => Proto_Index)
+                             .Value
+                             (3)))
+                     .Name) &
+              "/" &
+              To_String
+                (Source =>
+                   AttributesData_Container.Element
+                     (Container => Attributes_List,
+                      Index =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List,
+                           Index =>
+                             Skills_Amount_Range
+                               (Objects_Container.Element
+                                  (Container => Items_List,
+                                   Index => Proto_Index)
+                                  .Value
+                                  (3)))
+                          .Attribute)
+                     .Name) &
+              (if
+                 Objects_Container.Element
+                   (Container => Items_List, Index => Proto_Index)
+                   .Value
+                   (4) =
+                 1
+               then LF & "Can be used with shield."
+               else LF & "Can't be used with shield (two-handed weapon).") &
+              LF & "Damage type: ");
          case Objects_Container.Element
            (Container => Items_List, Index => Proto_Index)
            .Value
@@ -905,18 +912,20 @@ package body Trades.UI is
             end if;
             Append
               (Source => Item_Info,
-               New_Item => "Damage chance: " &
-               Get_Item_Chance_To_Damage
-                 (Item_Data => Objects_Container.Element
-                    (Container => Items_List, Index => Proto_Index)
-                    .Value
-                    (1)) &
-               LF & "Strength:" &
-               Integer'Image
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => Proto_Index)
-                    .Value
-                    (2)));
+               New_Item =>
+                 "Damage chance: " &
+                 Get_Item_Chance_To_Damage
+                   (Item_Data =>
+                      Objects_Container.Element
+                        (Container => Items_List, Index => Proto_Index)
+                        .Value
+                        (1)) &
+                 LF & "Strength:" &
+                 Integer'Image
+                   (Objects_Container.Element
+                      (Container => Items_List, Index => Proto_Index)
+                      .Value
+                      (2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
@@ -931,23 +940,27 @@ package body Trades.UI is
          end if;
          Append
            (Source => Item_Info,
-            New_Item => "Damage chance: " &
-            Get_Item_Chance_To_Damage
-              (Item_Data => Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
-                 .Value
-                 (1)));
+            New_Item =>
+              "Damage chance: " &
+              Get_Item_Chance_To_Damage
+                (Item_Data =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Proto_Index)
+                     .Value
+                     (1)));
       end if;
       if Length
-          (Source => Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
-             .I_Type) >
+          (Source =>
+             Objects_Container.Element
+               (Container => Items_List, Index => Proto_Index)
+               .I_Type) >
         4
         and then
         (Slice
-           (Source => Objects_Container.Element
-              (Container => Items_List, Index => Proto_Index)
-              .I_Type,
+           (Source =>
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type,
             Low => 1, High => 4) =
          "Ammo" or
          Objects_Container.Element
@@ -959,12 +972,13 @@ package body Trades.UI is
          end if;
          Append
            (Source => Item_Info,
-            New_Item => "Strength:" &
-            Integer'Image
-              (Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
-                 .Value
-                 (1)));
+            New_Item =>
+              "Strength:" &
+              Integer'Image
+                (Objects_Container.Element
+                   (Container => Items_List, Index => Proto_Index)
+                   .Value
+                   (1)));
       end if;
       if Objects_Container.Element
           (Container => Items_List, Index => Proto_Index)
@@ -975,11 +989,12 @@ package body Trades.UI is
          end if;
          Append
            (Source => Item_Info,
-            New_Item => To_String
-              (Source =>
-                 Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
-                   .Description));
+            New_Item =>
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Proto_Index)
+                     .Description));
       end if;
       Base_Type :=
         (if Base_Index > 0 then Sky_Bases(Base_Index).Base_Type
@@ -988,8 +1003,10 @@ package body Trades.UI is
          Base_Cargo_Index :=
            Find_Base_Cargo
              (Proto_Index => Proto_Index,
-              Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index)
-                .Durability);
+              Durability =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                  .Durability);
          if Base_Cargo_Index > 0 then
             Price :=
               (if Base_Index > 0 then
@@ -1001,7 +1018,8 @@ package body Trades.UI is
                    (Container => Trader_Cargo, Index => Base_Cargo_Index)
                    .Price);
          else
-            Price := Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
+            Price :=
+              Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
          end if;
       else
          Item_Index :=
@@ -1031,12 +1049,14 @@ package body Trades.UI is
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Item_Index)
              .Amount;
-         Count_Sell_Amount_Block:
+         Count_Sell_Amount_Block :
          declare
             Max_Price: Natural := Max_Sell_Amount * Price;
             Weight: Integer;
          begin
-            Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
+            Count_Price
+              (Price => Max_Price, Trader_Index => Find_Member(Order => TALK),
+               Reduce => False);
             if Base_Index > 0
               and then Max_Price >
                 BaseCargo_Container.Element
@@ -1069,15 +1089,18 @@ package body Trades.UI is
             end if;
             Max_Price := Max_Sell_Amount * Price;
             if Max_Price > 0 then
-               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
+               Count_Price
+                 (Price => Max_Price,
+                  Trader_Index => Find_Member(Order => TALK), Reduce => False);
             end if;
             Weight :=
               Free_Cargo
-                (Amount => (Objects_Container.Element
-                    (Container => Items_List, Index => Proto_Index)
-                    .Weight *
-                  Max_Sell_Amount) -
-                 Max_Price);
+                (Amount =>
+                   (Objects_Container.Element
+                      (Container => Items_List, Index => Proto_Index)
+                      .Weight *
+                    Max_Sell_Amount) -
+                   Max_Price);
             Count_Sell_Amount_Loop :
             while Weight < 0 loop
                Max_Sell_Amount :=
@@ -1087,14 +1110,17 @@ package body Trades.UI is
                        (Float(Max_Price + Weight) / Float(Max_Price))));
                exit Count_Sell_Amount_Loop when Max_Sell_Amount < 1;
                Max_Price := Max_Sell_Amount * Price;
-               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
+               Count_Price
+                 (Price => Max_Price,
+                  Trader_Index => Find_Member(Order => TALK), Reduce => False);
                Weight :=
                  Free_Cargo
-                   (Amount => (Objects_Container.Element
-                       (Container => Items_List, Index => Proto_Index)
-                       .Weight *
-                     Max_Sell_Amount) -
-                    Max_Price);
+                   (Amount =>
+                      (Objects_Container.Element
+                         (Container => Items_List, Index => Proto_Index)
+                         .Weight *
+                       Max_Sell_Amount) -
+                      Max_Price);
             end loop Count_Sell_Amount_Loop;
          end Count_Sell_Amount_Block;
       end if;
@@ -1105,13 +1131,15 @@ package body Trades.UI is
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount /
            Price;
-         Count_Buy_Amount_Block:
+         Count_Buy_Amount_Block :
          declare
             Max_Price: Natural := Max_Buy_Amount * Price;
             Weight: Integer;
          begin
             if Max_Buy_Amount > 0 then
-               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
+               Count_Price
+                 (Price => Max_Price,
+                  Trader_Index => Find_Member(Order => TALK));
                if Max_Price < (Max_Buy_Amount * Price) then
                   Max_Buy_Amount :=
                     Natural
@@ -1142,14 +1170,17 @@ package body Trades.UI is
                       .Amount;
                end if;
                Max_Price := Max_Buy_Amount * Price;
-               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
+               Count_Price
+                 (Price => Max_Price,
+                  Trader_Index => Find_Member(Order => TALK));
                Weight :=
                  Free_Cargo
-                   (Amount => Max_Price -
-                    (Objects_Container.Element
-                       (Container => Items_List, Index => Proto_Index)
-                       .Weight *
-                     Max_Buy_Amount));
+                   (Amount =>
+                      Max_Price -
+                      (Objects_Container.Element
+                         (Container => Items_List, Index => Proto_Index)
+                         .Weight *
+                       Max_Buy_Amount));
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
                   Max_Buy_Amount :=
@@ -1164,14 +1195,17 @@ package body Trades.UI is
                   end if;
                   exit Count_Buy_Amount_Loop when Max_Buy_Amount = 0;
                   Max_Price := Max_Buy_Amount * Price;
-                  Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
+                  Count_Price
+                    (Price => Max_Price,
+                     Trader_Index => Find_Member(Order => TALK));
                   Weight :=
                     Free_Cargo
-                      (Amount => Max_Price -
-                       (Objects_Container.Element
-                          (Container => Items_List, Index => Proto_Index)
-                          .Weight *
-                        Max_Buy_Amount));
+                      (Amount =>
+                         Max_Price -
+                         (Objects_Container.Element
+                            (Container => Items_List, Index => Proto_Index)
+                            .Weight *
+                          Max_Buy_Amount));
                end loop Count_Buy_Amount_Loop;
             end if;
          end Count_Buy_Amount_Block;
@@ -1183,9 +1217,10 @@ package body Trades.UI is
         (Text => To_String(Source => Item_Info),
          Title =>
            To_String
-             (Source => Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
-                .Name),
+             (Source =>
+                Objects_Container.Element
+                  (Container => Items_List, Index => Proto_Index)
+                  .Name),
          Button_1 =>
            (if Max_Buy_Amount = 0 then Empty_Button_Settings
             else
@@ -1244,7 +1279,8 @@ package body Trades.UI is
       Proto_Index: Objects_Container.Extended_Index;
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type", Interp => Interp);
+          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type",
+           Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
    begin
@@ -1275,7 +1311,9 @@ package body Trades.UI is
       Trader := (if Base_Index > 0 then "base" else "ship");
       if Argc > 2 then
          if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
-            Buy_Items(Base_Item_Index => Base_Cargo_Index, Amount => CArgv.Arg(Argv => Argv, N => 2));
+            Buy_Items
+              (Base_Item_Index => Base_Cargo_Index,
+               Amount => CArgv.Arg(Argv => Argv, N => 2));
          else
             Sell_Items(Cargo_Index, CArgv.Arg(Argv, 2));
          end if;
