@@ -1180,10 +1180,10 @@ package body Trades.UI is
          end if;
       end if;
       Show_Info
-        (Text => To_String(Item_Info),
+        (Text => To_String(Source => Item_Info),
          Title =>
            To_String
-             (Objects_Container.Element
+             (Source => Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Name),
          Button_1 =>
@@ -1218,10 +1218,10 @@ package body Trades.UI is
    -- FUNCTION
    -- Buy or sell the selected item
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1229,64 +1229,64 @@ package body Trades.UI is
    -- Tradetype is type of trade action. Can be buy, buymax, sell, sellmax
    -- SOURCE
    function Trade_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Trade_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      BaseIndex: constant Natural :=
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      BaseCargoIndex, CargoIndex: Natural := 0;
+      Base_Cargo_Index, Cargo_Index: Natural := 0;
       Trader: String(1 .. 4);
-      ProtoIndex: Objects_Container.Extended_Index;
-      TypeBox: constant Ttk_ComboBox :=
+      Proto_Index: Objects_Container.Extended_Index;
+      Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".itemdialog.amount", Interp);
+          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type", Interp => Interp);
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
    begin
       if Item_Index < 0 then
-         BaseCargoIndex := abs (Item_Index);
+         Base_Cargo_Index := abs (Item_Index);
       else
-         CargoIndex := Item_Index;
+         Cargo_Index := Item_Index;
       end if;
-      if CargoIndex > 0 then
-         ProtoIndex :=
+      if Cargo_Index > 0 then
+         Proto_Index :=
            Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => CargoIndex)
+             (Container => Player_Ship.Cargo, Index => Cargo_Index)
              .Proto_Index;
-         if BaseCargoIndex = 0 then
-            BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
+         if Base_Cargo_Index = 0 then
+            Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
          end if;
       else
-         ProtoIndex :=
-           (if BaseIndex = 0 then
+         Proto_Index :=
+           (if Base_Index = 0 then
               BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => BaseCargoIndex)
+                (Container => Trader_Cargo, Index => Base_Cargo_Index)
                 .Proto_Index
             else BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
                 .Proto_Index);
       end if;
-      Trader := (if BaseIndex > 0 then "base" else "ship");
+      Trader := (if Base_Index > 0 then "base" else "ship");
       if Argc > 2 then
-         if CArgv.Arg(Argv, 1) in "buy" then
-            Buy_Items(BaseCargoIndex, CArgv.Arg(Argv, 2));
+         if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
+            Buy_Items(Base_Item_Index => Base_Cargo_Index, Amount => CArgv.Arg(Argv => Argv, N => 2));
          else
-            Sell_Items(CargoIndex, CArgv.Arg(Argv, 2));
+            Sell_Items(Cargo_Index, CArgv.Arg(Argv, 2));
          end if;
       else
          if CArgv.Arg(Argv, 1) in "buy" then
-            Buy_Items(BaseCargoIndex, Get(AmountBox));
+            Buy_Items(Base_Cargo_Index, Get(Amount_Box));
          else
-            Sell_Items(CargoIndex, Get(AmountBox));
+            Sell_Items(Cargo_Index, Get(Amount_Box));
          end if;
          if Close_Dialog_Command
-             (ClientData, Interp, 2,
+             (Client_Data, Interp, 2,
               CArgv.Empty & "CloseDialog" & ".itemdialog") =
            TCL_ERROR then
             return TCL_ERROR;
@@ -1296,7 +1296,7 @@ package body Trades.UI is
       Update_Messages;
       return
         Show_Trade_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowTrade" & Get(Type_Box));
    exception
       when An_Exception : Trade_Cant_Buy =>
          Show_Message
