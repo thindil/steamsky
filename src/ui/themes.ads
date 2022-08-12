@@ -139,6 +139,7 @@ package Themes is
    -- Negotiate_Icon        - Icon used for negotiation button
    -- Cargo_Icon            - Icon used for represent the player's ship's cargo
    -- Equip_Icon            - Icon used for equip item action
+   -- Unequip_Icon          - Icon used for unequip item action
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -221,6 +222,7 @@ package Themes is
       Negotiate_Icon: Unbounded_String;
       Cargo_Icon: Unbounded_String;
       Equip_Icon: Unbounded_String;
+      Unequip_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -308,7 +310,8 @@ package Themes is
       Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg",
       Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg",
       Cargo_Icon => Default_Theme_Icons_Path & "cargo.svg",
-      Equip_Icon => Default_Theme_Icons_Path & "equip.svg");
+      Equip_Icon => Default_Theme_Icons_Path & "equip.svg",
+      Unequip_Icon => Default_Theme_Icons_Path & "unequip.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
