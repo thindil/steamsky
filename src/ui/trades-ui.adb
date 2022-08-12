@@ -791,70 +791,70 @@ package body Trades.UI is
       use Short_String;
       use Tiny_String;
 
-      ItemInfo: Unbounded_String;
-      ProtoIndex: Objects_Container.Extended_Index;
-      CargoIndex, BaseCargoIndex, Price: Natural := 0;
-      BaseIndex: constant Natural :=
+      Item_Info: Unbounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
+      Cargo_Index, Base_Cargo_Index, Price: Natural := 0;
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      ItemTypes: constant array(1 .. 6) of Tiny_String.Bounded_String :=
-        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
-         Shield_Type);
-      MaxSellAmount, MaxBuyAmount: Integer := 0;
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
-      BaseType: Tiny_String.Bounded_String;
+      Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
+        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor, 5 => Legs_Armor,
+         6 => Shield_Type);
+      Max_Sell_Amount, Max_Buy_Amount: Integer := 0;
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Base_Type: Tiny_String.Bounded_String;
    begin
-      Item_Index := Integer'Value(CArgv.Arg(Argv, 1));
+      Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
       if Item_Index < 0 then
-         BaseCargoIndex := abs (Item_Index);
+         Base_Cargo_Index := abs (Item_Index);
       else
-         CargoIndex := Item_Index;
+         Cargo_Index := Item_Index;
       end if;
-      if CargoIndex >
+      if Cargo_Index >
         Natural
           (Inventory_Container.Length(Container => Player_Ship.Cargo)) then
          return TCL_OK;
       end if;
-      if BaseIndex = 0 and
-        BaseCargoIndex >
+      if Base_Index = 0 and
+        Base_Cargo_Index >
           Natural(BaseCargo_Container.Length(Container => Trader_Cargo)) then
          return TCL_OK;
-      elsif BaseIndex > 0
-        and then BaseCargoIndex >
+      elsif Base_Index > 0
+        and then Base_Cargo_Index >
           Natural
             (BaseCargo_Container.Length
-               (Container => Sky_Bases(BaseIndex).Cargo)) then
+               (Container => Sky_Bases(Base_Index).Cargo)) then
          return TCL_OK;
       end if;
-      if CargoIndex > 0 then
-         ProtoIndex :=
+      if Cargo_Index > 0 then
+         Proto_Index :=
            Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => CargoIndex)
+             (Container => Player_Ship.Cargo, Index => Cargo_Index)
              .Proto_Index;
       else
-         ProtoIndex :=
-           (if BaseIndex = 0 then
+         Proto_Index :=
+           (if Base_Index = 0 then
               BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => BaseCargoIndex)
+                (Container => Trader_Cargo, Index => Base_Cargo_Index)
                 .Proto_Index
             else BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
                 .Proto_Index);
       end if;
       if Objects_Container.Element
-          (Container => Items_List, Index => ProtoIndex)
+          (Container => Items_List, Index => Proto_Index)
           .I_Type =
         Weapon_Type then
          Append
-           (ItemInfo,
+           (Item_Info,
             "Skill: " &
             To_String
               (SkillsData_Container.Element
                  (Skills_List,
                   Skills_Amount_Range
                     (Objects_Container.Element
-                       (Container => Items_List, Index => ProtoIndex)
+                       (Container => Items_List, Index => Proto_Index)
                        .Value
                        (3)))
                  .Name) &
@@ -866,14 +866,14 @@ package body Trades.UI is
                     (Skills_List,
                      Skills_Amount_Range
                        (Objects_Container.Element
-                          (Container => Items_List, Index => ProtoIndex)
+                          (Container => Items_List, Index => Proto_Index)
                           .Value
                           (3)))
                     .Attribute)
                  .Name) &
             (if
                Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Value
                  (4) =
                1
@@ -881,40 +881,40 @@ package body Trades.UI is
              else LF & "Can't be used with shield (two-handed weapon).") &
             LF & "Damage type: ");
          case Objects_Container.Element
-           (Container => Items_List, Index => ProtoIndex)
+           (Container => Items_List, Index => Proto_Index)
            .Value
            (5) is
             when 1 =>
-               Append(ItemInfo, "cutting");
+               Append(Item_Info, "cutting");
             when 2 =>
-               Append(ItemInfo, "impaling");
+               Append(Item_Info, "impaling");
             when 3 =>
-               Append(ItemInfo, "blunt");
+               Append(Item_Info, "blunt");
             when others =>
                null;
          end case;
       end if;
       Show_More_Info_Loop :
-      for ItemType of ItemTypes loop
+      for ItemType of Item_Types loop
          if Objects_Container.Element
-             (Container => Items_List, Index => ProtoIndex)
+             (Container => Items_List, Index => Proto_Index)
              .I_Type =
            ItemType then
-            if ItemInfo /= Null_Unbounded_String then
-               Append(ItemInfo, LF);
+            if Item_Info /= Null_Unbounded_String then
+               Append(Item_Info, LF);
             end if;
             Append
-              (ItemInfo,
+              (Item_Info,
                "Damage chance: " &
                Get_Item_Chance_To_Damage
                  (Objects_Container.Element
-                    (Container => Items_List, Index => ProtoIndex)
+                    (Container => Items_List, Index => Proto_Index)
                     .Value
                     (1)) &
                LF & "Strength:" &
                Integer'Image
                  (Objects_Container.Element
-                    (Container => Items_List, Index => ProtoIndex)
+                    (Container => Items_List, Index => Proto_Index)
                     .Value
                     (2)));
             exit Show_More_Info_Loop;
@@ -924,280 +924,280 @@ package body Trades.UI is
           (Container => Tools_List,
            Item =>
              Objects_Container.Element
-               (Container => Items_List, Index => ProtoIndex)
+               (Container => Items_List, Index => Proto_Index)
                .I_Type) then
-         if ItemInfo /= Null_Unbounded_String then
-            Append(ItemInfo, LF);
+         if Item_Info /= Null_Unbounded_String then
+            Append(Item_Info, LF);
          end if;
          Append
-           (ItemInfo,
+           (Item_Info,
             "Damage chance: " &
             Get_Item_Chance_To_Damage
               (Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Value
                  (1)));
       end if;
       if Length
           (Objects_Container.Element
-             (Container => Items_List, Index => ProtoIndex)
+             (Container => Items_List, Index => Proto_Index)
              .I_Type) >
         4
         and then
         (Slice
            (Objects_Container.Element
-              (Container => Items_List, Index => ProtoIndex)
+              (Container => Items_List, Index => Proto_Index)
               .I_Type,
             1, 4) =
          "Ammo" or
          Objects_Container.Element
-             (Container => Items_List, Index => ProtoIndex)
+             (Container => Items_List, Index => Proto_Index)
              .I_Type =
            To_Bounded_String("Harpoon")) then
-         if ItemInfo /= Null_Unbounded_String then
-            Append(ItemInfo, LF);
+         if Item_Info /= Null_Unbounded_String then
+            Append(Item_Info, LF);
          end if;
          Append
-           (ItemInfo,
+           (Item_Info,
             "Strength:" &
             Integer'Image
               (Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Value
                  (1)));
       end if;
       if Objects_Container.Element
-          (Container => Items_List, Index => ProtoIndex)
+          (Container => Items_List, Index => Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
-         if ItemInfo /= Null_Unbounded_String then
-            Append(ItemInfo, LF & LF);
+         if Item_Info /= Null_Unbounded_String then
+            Append(Item_Info, LF & LF);
          end if;
          Append
-           (ItemInfo,
+           (Item_Info,
             To_String
               (Source =>
                  Objects_Container.Element
-                   (Container => Items_List, Index => ProtoIndex)
+                   (Container => Items_List, Index => Proto_Index)
                    .Description));
       end if;
-      BaseType :=
-        (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
+      Base_Type :=
+        (if Base_Index > 0 then Sky_Bases(Base_Index).Base_Type
          else To_Bounded_String("0"));
       if Item_Index > 0 then
-         BaseCargoIndex :=
+         Base_Cargo_Index :=
            Find_Base_Cargo
-             (ProtoIndex,
-              Inventory_Container.Element(Player_Ship.Cargo, CargoIndex)
+             (Proto_Index,
+              Inventory_Container.Element(Player_Ship.Cargo, Cargo_Index)
                 .Durability);
-         if BaseCargoIndex > 0 then
+         if Base_Cargo_Index > 0 then
             Price :=
-              (if BaseIndex > 0 then
+              (if Base_Index > 0 then
                  BaseCargo_Container.Element
-                   (Container => Sky_Bases(BaseIndex).Cargo,
-                    Index => BaseCargoIndex)
+                   (Container => Sky_Bases(Base_Index).Cargo,
+                    Index => Base_Cargo_Index)
                    .Price
                else BaseCargo_Container.Element
-                   (Container => Trader_Cargo, Index => BaseCargoIndex)
+                   (Container => Trader_Cargo, Index => Base_Cargo_Index)
                    .Price);
          else
-            Price := Get_Price(BaseType, ProtoIndex);
+            Price := Get_Price(Base_Type, Proto_Index);
          end if;
       else
          Item_Index :=
            Find_Item
-             (Inventory => Player_Ship.Cargo, Proto_Index => ProtoIndex,
+             (Inventory => Player_Ship.Cargo, Proto_Index => Proto_Index,
               Durability =>
-                (if BaseIndex > 0 then
+                (if Base_Index > 0 then
                    BaseCargo_Container.Element
-                     (Container => Sky_Bases(BaseIndex).Cargo,
-                      Index => BaseCargoIndex)
+                     (Container => Sky_Bases(Base_Index).Cargo,
+                      Index => Base_Cargo_Index)
                      .Durability
                  else BaseCargo_Container.Element
-                     (Container => Trader_Cargo, Index => BaseCargoIndex)
+                     (Container => Trader_Cargo, Index => Base_Cargo_Index)
                      .Durability));
          Price :=
-           (if BaseIndex > 0 then
+           (if Base_Index > 0 then
               BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
                 .Price
             else BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => BaseCargoIndex)
+                (Container => Trader_Cargo, Index => Base_Cargo_Index)
                 .Price);
       end if;
       if Item_Index > 0 then
-         MaxSellAmount :=
+         Max_Sell_Amount :=
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Item_Index)
              .Amount;
          declare
-            MaxPrice: Natural := MaxSellAmount * Price;
+            MaxPrice: Natural := Max_Sell_Amount * Price;
             Weight: Integer;
          begin
             Count_Price(MaxPrice, Find_Member(TALK), False);
-            if BaseIndex > 0
+            if Base_Index > 0
               and then MaxPrice >
                 BaseCargo_Container.Element
-                  (Container => Sky_Bases(BaseIndex).Cargo, Index => 1)
+                  (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                   .Amount then
-               MaxSellAmount :=
+               Max_Sell_Amount :=
                  Natural
                    (Float'Floor
-                      (Float(MaxSellAmount) *
+                      (Float(Max_Sell_Amount) *
                        (Float
                           (BaseCargo_Container.Element
-                             (Container => Sky_Bases(BaseIndex).Cargo,
+                             (Container => Sky_Bases(Base_Index).Cargo,
                               Index => 1)
                              .Amount) /
                         Float(MaxPrice))));
-            elsif BaseIndex = 0
+            elsif Base_Index = 0
               and then MaxPrice >
                 BaseCargo_Container.Element
                   (Container => Trader_Cargo, Index => 1)
                   .Amount then
-               MaxSellAmount :=
+               Max_Sell_Amount :=
                  Natural
                    (Float'Floor
-                      (Float(MaxSellAmount) *
+                      (Float(Max_Sell_Amount) *
                        (Float
                           (BaseCargo_Container.Element
                              (Container => Trader_Cargo, Index => 1)
                              .Amount) /
                         Float(MaxPrice))));
             end if;
-            MaxPrice := MaxSellAmount * Price;
+            MaxPrice := Max_Sell_Amount * Price;
             if MaxPrice > 0 then
                Count_Price(MaxPrice, Find_Member(TALK), False);
             end if;
             Weight :=
               Free_Cargo
                 ((Objects_Container.Element
-                    (Container => Items_List, Index => ProtoIndex)
+                    (Container => Items_List, Index => Proto_Index)
                     .Weight *
-                  MaxSellAmount) -
+                  Max_Sell_Amount) -
                  MaxPrice);
             Count_Sell_Amount_loop :
             while Weight < 0 loop
-               MaxSellAmount :=
+               Max_Sell_Amount :=
                  Integer
                    (Float'Floor
-                      (Float(MaxSellAmount) *
+                      (Float(Max_Sell_Amount) *
                        (Float(MaxPrice + Weight) / Float(MaxPrice))));
-               exit Count_Sell_Amount_loop when MaxSellAmount < 1;
-               MaxPrice := MaxSellAmount * Price;
+               exit Count_Sell_Amount_loop when Max_Sell_Amount < 1;
+               MaxPrice := Max_Sell_Amount * Price;
                Count_Price(MaxPrice, Find_Member(TALK), False);
                Weight :=
                  Free_Cargo
                    ((Objects_Container.Element
-                       (Container => Items_List, Index => ProtoIndex)
+                       (Container => Items_List, Index => Proto_Index)
                        .Weight *
-                     MaxSellAmount) -
+                     Max_Sell_Amount) -
                     MaxPrice);
             end loop Count_Sell_Amount_loop;
          end;
       end if;
-      if BaseCargoIndex > 0 and MoneyIndex2 > 0 and
-        Is_Buyable(BaseType, ProtoIndex) then
-         MaxBuyAmount :=
+      if Base_Cargo_Index > 0 and Money_Index_2 > 0 and
+        Is_Buyable(Base_Type, Proto_Index) then
+         Max_Buy_Amount :=
            Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+             (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount /
            Price;
          declare
-            MaxPrice: Natural := MaxBuyAmount * Price;
+            MaxPrice: Natural := Max_Buy_Amount * Price;
             Weight: Integer;
          begin
-            if MaxBuyAmount > 0 then
+            if Max_Buy_Amount > 0 then
                Count_Price(MaxPrice, Find_Member(TALK));
-               if MaxPrice < (MaxBuyAmount * Price) then
-                  MaxBuyAmount :=
+               if MaxPrice < (Max_Buy_Amount * Price) then
+                  Max_Buy_Amount :=
                     Natural
                       (Float'Floor
-                         (Float(MaxBuyAmount) *
-                          ((Float(MaxBuyAmount) * Float(Price)) /
+                         (Float(Max_Buy_Amount) *
+                          ((Float(Max_Buy_Amount) * Float(Price)) /
                            Float(MaxPrice))));
                end if;
-               if BaseIndex > 0
-                 and then MaxBuyAmount >
+               if Base_Index > 0
+                 and then Max_Buy_Amount >
                    BaseCargo_Container.Element
-                     (Container => Sky_Bases(BaseIndex).Cargo,
-                      Index => BaseCargoIndex)
+                     (Container => Sky_Bases(Base_Index).Cargo,
+                      Index => Base_Cargo_Index)
                      .Amount then
-                  MaxBuyAmount :=
+                  Max_Buy_Amount :=
                     BaseCargo_Container.Element
-                      (Container => Sky_Bases(BaseIndex).Cargo,
-                       Index => BaseCargoIndex)
+                      (Container => Sky_Bases(Base_Index).Cargo,
+                       Index => Base_Cargo_Index)
                       .Amount;
-               elsif BaseIndex = 0
-                 and then MaxBuyAmount >
+               elsif Base_Index = 0
+                 and then Max_Buy_Amount >
                    BaseCargo_Container.Element
-                     (Container => Trader_Cargo, Index => BaseCargoIndex)
+                     (Container => Trader_Cargo, Index => Base_Cargo_Index)
                      .Amount then
-                  MaxBuyAmount :=
+                  Max_Buy_Amount :=
                     BaseCargo_Container.Element
-                      (Container => Trader_Cargo, Index => BaseCargoIndex)
+                      (Container => Trader_Cargo, Index => Base_Cargo_Index)
                       .Amount;
                end if;
-               MaxPrice := MaxBuyAmount * Price;
+               MaxPrice := Max_Buy_Amount * Price;
                Count_Price(MaxPrice, Find_Member(TALK));
                Weight :=
                  Free_Cargo
                    (MaxPrice -
                     (Objects_Container.Element
-                       (Container => Items_List, Index => ProtoIndex)
+                       (Container => Items_List, Index => Proto_Index)
                        .Weight *
-                     MaxBuyAmount));
+                     Max_Buy_Amount));
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
-                  MaxBuyAmount :=
-                    MaxBuyAmount +
+                  Max_Buy_Amount :=
+                    Max_Buy_Amount +
                     (Weight /
                      Objects_Container.Element
-                       (Container => Items_List, Index => ProtoIndex)
+                       (Container => Items_List, Index => Proto_Index)
                        .Weight) -
                     1;
-                  if MaxBuyAmount < 0 then
-                     MaxBuyAmount := 0;
+                  if Max_Buy_Amount < 0 then
+                     Max_Buy_Amount := 0;
                   end if;
-                  exit Count_Buy_Amount_Loop when MaxBuyAmount = 0;
-                  MaxPrice := MaxBuyAmount * Price;
+                  exit Count_Buy_Amount_Loop when Max_Buy_Amount = 0;
+                  MaxPrice := Max_Buy_Amount * Price;
                   Count_Price(MaxPrice, Find_Member(TALK));
                   Weight :=
                     Free_Cargo
                       (MaxPrice -
                        (Objects_Container.Element
-                          (Container => Items_List, Index => ProtoIndex)
+                          (Container => Items_List, Index => Proto_Index)
                           .Weight *
-                        MaxBuyAmount));
+                        Max_Buy_Amount));
                end loop Count_Buy_Amount_Loop;
             end if;
          end;
          if Item_Index = 0 then
-            Item_Index := -(BaseCargoIndex);
+            Item_Index := -(Base_Cargo_Index);
          end if;
       end if;
       Show_Info
-        (Text => To_String(ItemInfo),
+        (Text => To_String(Item_Info),
          Title =>
            To_String
              (Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
+                (Container => Items_List, Index => Proto_Index)
                 .Name),
          Button_1 =>
-           (if MaxBuyAmount = 0 then Empty_Button_Settings
+           (if Max_Buy_Amount = 0 then Empty_Button_Settings
             else
               (Tooltip =>
                  To_Unbounded_String(Source => "Buy item from the base"),
                Command =>
                  To_Unbounded_String
                    (Source =>
-                      "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
+                      "TradeAmount buy" & Natural'Image(Max_Buy_Amount) &
                       Natural'Image(Price)),
                Icon => To_Unbounded_String(Source => "buyicon"),
                Text => To_Unbounded_String(Source => "Buy"))),
          Button_2 =>
-           (if MaxSellAmount = 0 then Empty_Button_Settings
+           (if Max_Sell_Amount = 0 then Empty_Button_Settings
             else
               (Tooltip =>
                  To_Unbounded_String
@@ -1205,7 +1205,7 @@ package body Trades.UI is
                Command =>
                  To_Unbounded_String
                    (Source =>
-                      "TradeAmount sell" & Natural'Image(MaxSellAmount) &
+                      "TradeAmount sell" & Natural'Image(Max_Sell_Amount) &
                       Natural'Image(Price)),
                Icon => To_Unbounded_String(Source => "sellicon"),
                Text => To_Unbounded_String(Source => "Sell"))));
