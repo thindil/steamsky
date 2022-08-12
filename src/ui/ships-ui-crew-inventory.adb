@@ -981,90 +981,6 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
-   -- ****if* SUCI/SUCI.Show_Inventory_Menu_Command
-   -- FUNCTION
-   -- Show the menu with available the selected item options
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowInventoryMenu itemindex
-   -- ItemIndex is the index of the item's which actions' menu will be show
-   -- SOURCE
-   function Show_Inventory_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Inventory_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Item_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".inventoryitemmenu",
-           Title =>
-             Get_Item_Name
-               (Inventory_Container.Element
-                  (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                   Index => Positive'Value(CArgv.Arg(Argv, 2))),
-                False, False) &
-             " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Item_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Item_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Item_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Item_Menu & ".equip;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".equip",
-         Label =>
-           (if Item_Is_Used(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2)))
-            then "Unequip"
-            else "Equip"),
-         Command =>
-           "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-           CArgv.Arg(Argv, 2));
-      Add_Button
-        (Name => ".move", Label => "Move the item to the ship cargo",
-         Command =>
-           "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-           CArgv.Arg(Argv, 2));
-      Add_Button
-        (Name => ".info", Label => "Show more info about the item",
-         Command =>
-           "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-           CArgv.Arg(Argv, 2));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Item_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Inventory_Menu_Command;
-
    procedure AddCommands is
    begin
       Add_Command("UpdateInventory", Update_Inventory_Command'Access);
@@ -1075,7 +991,6 @@ package body Ships.UI.Crew.Inventory is
       Add_Command("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
       Add_Command
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
-      Add_Command("ShowInventoryMenu", Show_Inventory_Menu_Command'Access);
       Add_Command("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
    end AddCommands;
 
