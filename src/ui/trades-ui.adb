@@ -987,8 +987,8 @@ package body Trades.UI is
       if Item_Index > 0 then
          Base_Cargo_Index :=
            Find_Base_Cargo
-             (Proto_Index,
-              Inventory_Container.Element(Player_Ship.Cargo, Cargo_Index)
+             (Proto_Index => Proto_Index,
+              Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index)
                 .Durability);
          if Base_Cargo_Index > 0 then
             Price :=
@@ -1001,7 +1001,7 @@ package body Trades.UI is
                    (Container => Trader_Cargo, Index => Base_Cargo_Index)
                    .Price);
          else
-            Price := Get_Price(Base_Type, Proto_Index);
+            Price := Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
          end if;
       else
          Item_Index :=
@@ -1031,13 +1031,14 @@ package body Trades.UI is
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Item_Index)
              .Amount;
+         Count_Sell_Amount_Block:
          declare
-            MaxPrice: Natural := Max_Sell_Amount * Price;
+            Max_Price: Natural := Max_Sell_Amount * Price;
             Weight: Integer;
          begin
-            Count_Price(MaxPrice, Find_Member(TALK), False);
+            Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
             if Base_Index > 0
-              and then MaxPrice >
+              and then Max_Price >
                 BaseCargo_Container.Element
                   (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                   .Amount then
@@ -1050,9 +1051,9 @@ package body Trades.UI is
                              (Container => Sky_Bases(Base_Index).Cargo,
                               Index => 1)
                              .Amount) /
-                        Float(MaxPrice))));
+                        Float(Max_Price))));
             elsif Base_Index = 0
-              and then MaxPrice >
+              and then Max_Price >
                 BaseCargo_Container.Element
                   (Container => Trader_Cargo, Index => 1)
                   .Amount then
@@ -1064,38 +1065,38 @@ package body Trades.UI is
                           (BaseCargo_Container.Element
                              (Container => Trader_Cargo, Index => 1)
                              .Amount) /
-                        Float(MaxPrice))));
+                        Float(Max_Price))));
             end if;
-            MaxPrice := Max_Sell_Amount * Price;
-            if MaxPrice > 0 then
-               Count_Price(MaxPrice, Find_Member(TALK), False);
+            Max_Price := Max_Sell_Amount * Price;
+            if Max_Price > 0 then
+               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
             end if;
             Weight :=
               Free_Cargo
-                ((Objects_Container.Element
+                (Amount => (Objects_Container.Element
                     (Container => Items_List, Index => Proto_Index)
                     .Weight *
                   Max_Sell_Amount) -
-                 MaxPrice);
-            Count_Sell_Amount_loop :
+                 Max_Price);
+            Count_Sell_Amount_Loop :
             while Weight < 0 loop
                Max_Sell_Amount :=
                  Integer
                    (Float'Floor
                       (Float(Max_Sell_Amount) *
-                       (Float(MaxPrice + Weight) / Float(MaxPrice))));
-               exit Count_Sell_Amount_loop when Max_Sell_Amount < 1;
-               MaxPrice := Max_Sell_Amount * Price;
-               Count_Price(MaxPrice, Find_Member(TALK), False);
+                       (Float(Max_Price + Weight) / Float(Max_Price))));
+               exit Count_Sell_Amount_Loop when Max_Sell_Amount < 1;
+               Max_Price := Max_Sell_Amount * Price;
+               Count_Price(Max_Price, Find_Member(TALK), False);
                Weight :=
                  Free_Cargo
                    ((Objects_Container.Element
                        (Container => Items_List, Index => Proto_Index)
                        .Weight *
                      Max_Sell_Amount) -
-                    MaxPrice);
-            end loop Count_Sell_Amount_loop;
-         end;
+                    Max_Price);
+            end loop Count_Sell_Amount_Loop;
+         end Count_Sell_Amount_Block;
       end if;
       if Base_Cargo_Index > 0 and Money_Index_2 > 0 and
         Is_Buyable(Base_Type, Proto_Index) then
