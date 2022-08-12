@@ -907,7 +907,7 @@ package body Trades.UI is
               (Source => Item_Info,
                New_Item => "Damage chance: " &
                Get_Item_Chance_To_Damage
-                 (Objects_Container.Element
+                 (Item_Data => Objects_Container.Element
                     (Container => Items_List, Index => Proto_Index)
                     .Value
                     (1)) &
@@ -927,39 +927,39 @@ package body Trades.UI is
                (Container => Items_List, Index => Proto_Index)
                .I_Type) then
          if Item_Info /= Null_Unbounded_String then
-            Append(Item_Info, LF);
+            Append(Source => Item_Info, New_Item => LF);
          end if;
          Append
-           (Item_Info,
-            "Damage chance: " &
+           (Source => Item_Info,
+            New_Item => "Damage chance: " &
             Get_Item_Chance_To_Damage
-              (Objects_Container.Element
+              (Item_Data => Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Value
                  (1)));
       end if;
       if Length
-          (Objects_Container.Element
+          (Source => Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
              .I_Type) >
         4
         and then
         (Slice
-           (Objects_Container.Element
+           (Source => Objects_Container.Element
               (Container => Items_List, Index => Proto_Index)
               .I_Type,
-            1, 4) =
+            Low => 1, High => 4) =
          "Ammo" or
          Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
              .I_Type =
-           To_Bounded_String("Harpoon")) then
+           To_Bounded_String(Source => "Harpoon")) then
          if Item_Info /= Null_Unbounded_String then
-            Append(Item_Info, LF);
+            Append(Source => Item_Info, New_Item => LF);
          end if;
          Append
-           (Item_Info,
-            "Strength:" &
+           (Source => Item_Info,
+            New_Item => "Strength:" &
             Integer'Image
               (Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
@@ -971,11 +971,11 @@ package body Trades.UI is
           .Description /=
         Short_String.Null_Bounded_String then
          if Item_Info /= Null_Unbounded_String then
-            Append(Item_Info, LF & LF);
+            Append(Source => Item_Info, New_Item => LF & LF);
          end if;
          Append
-           (Item_Info,
-            To_String
+           (Source => Item_Info,
+            New_Item => To_String
               (Source =>
                  Objects_Container.Element
                    (Container => Items_List, Index => Proto_Index)
@@ -983,7 +983,7 @@ package body Trades.UI is
       end if;
       Base_Type :=
         (if Base_Index > 0 then Sky_Bases(Base_Index).Base_Type
-         else To_Bounded_String("0"));
+         else To_Bounded_String(Source => "0"));
       if Item_Index > 0 then
          Base_Cargo_Index :=
            Find_Base_Cargo
