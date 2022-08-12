@@ -1087,10 +1087,10 @@ package body Trades.UI is
                        (Float(Max_Price + Weight) / Float(Max_Price))));
                exit Count_Sell_Amount_Loop when Max_Sell_Amount < 1;
                Max_Price := Max_Sell_Amount * Price;
-               Count_Price(Max_Price, Find_Member(TALK), False);
+               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK), Reduce => False);
                Weight :=
                  Free_Cargo
-                   ((Objects_Container.Element
+                   (Amount => (Objects_Container.Element
                        (Container => Items_List, Index => Proto_Index)
                        .Weight *
                      Max_Sell_Amount) -
@@ -1099,25 +1099,26 @@ package body Trades.UI is
          end Count_Sell_Amount_Block;
       end if;
       if Base_Cargo_Index > 0 and Money_Index_2 > 0 and
-        Is_Buyable(Base_Type, Proto_Index) then
+        Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index) then
          Max_Buy_Amount :=
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount /
            Price;
+         Count_Buy_Amount_Block:
          declare
-            MaxPrice: Natural := Max_Buy_Amount * Price;
+            Max_Price: Natural := Max_Buy_Amount * Price;
             Weight: Integer;
          begin
             if Max_Buy_Amount > 0 then
-               Count_Price(MaxPrice, Find_Member(TALK));
-               if MaxPrice < (Max_Buy_Amount * Price) then
+               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
+               if Max_Price < (Max_Buy_Amount * Price) then
                   Max_Buy_Amount :=
                     Natural
                       (Float'Floor
                          (Float(Max_Buy_Amount) *
                           ((Float(Max_Buy_Amount) * Float(Price)) /
-                           Float(MaxPrice))));
+                           Float(Max_Price))));
                end if;
                if Base_Index > 0
                  and then Max_Buy_Amount >
@@ -1140,11 +1141,11 @@ package body Trades.UI is
                       (Container => Trader_Cargo, Index => Base_Cargo_Index)
                       .Amount;
                end if;
-               MaxPrice := Max_Buy_Amount * Price;
-               Count_Price(MaxPrice, Find_Member(TALK));
+               Max_Price := Max_Buy_Amount * Price;
+               Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
                Weight :=
                  Free_Cargo
-                   (MaxPrice -
+                   (Amount => Max_Price -
                     (Objects_Container.Element
                        (Container => Items_List, Index => Proto_Index)
                        .Weight *
@@ -1162,18 +1163,18 @@ package body Trades.UI is
                      Max_Buy_Amount := 0;
                   end if;
                   exit Count_Buy_Amount_Loop when Max_Buy_Amount = 0;
-                  MaxPrice := Max_Buy_Amount * Price;
-                  Count_Price(MaxPrice, Find_Member(TALK));
+                  Max_Price := Max_Buy_Amount * Price;
+                  Count_Price(Price => Max_Price, Trader_Index => Find_Member(Order => TALK));
                   Weight :=
                     Free_Cargo
-                      (MaxPrice -
+                      (Amount => Max_Price -
                        (Objects_Container.Element
                           (Container => Items_List, Index => Proto_Index)
                           .Weight *
                         Max_Buy_Amount));
                end loop Count_Buy_Amount_Loop;
             end if;
-         end;
+         end Count_Buy_Amount_Block;
          if Item_Index = 0 then
             Item_Index := -(Base_Cargo_Index);
          end if;
