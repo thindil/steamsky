@@ -129,8 +129,9 @@ package body Ships.UI.Crew.Inventory is
               (Inventory_Container.Element
                  (Container => Member.Inventory, Index => I),
                False, False),
-            "Show available item's options",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 1);
+            "Show the selected item's info",
+            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+            1);
          Add_Progress_Bar
            (InventoryTable,
             Inventory_Container.Element
@@ -138,16 +139,19 @@ package body Ships.UI.Crew.Inventory is
               .Durability,
             Default_Item_Durability,
             "The current durability level of the selected item.",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 2);
+            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+            2);
          if Item_Is_Used(MemberIndex, I) then
             Add_Check_Button
               (InventoryTable, "The item is used by the crew member",
-               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+               "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
+               Positive'Image(I),
                True, 3);
          else
             Add_Check_Button
               (InventoryTable, "The item isn't used by the crew member",
-               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+               "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
+               Positive'Image(I),
                False, 3);
          end if;
          Add_Button
@@ -157,7 +161,8 @@ package body Ships.UI.Crew.Inventory is
                  (Container => Member.Inventory, Index => I)
                  .Amount),
             "The amount of the item owned by the crew member",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 4);
+            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+            4);
          Add_Button
            (InventoryTable,
             Positive'Image
@@ -173,8 +178,8 @@ package body Ships.UI.Crew.Inventory is
                  .Weight) &
             " kg",
             "The total weight of the items",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 5,
-            True);
+            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
+            5, True);
          exit Load_Inventory_Loop when InventoryTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
