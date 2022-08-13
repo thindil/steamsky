@@ -1492,13 +1492,13 @@ package body Trades.UI is
       else
          if Item_Index > 0 then
             Show_Manipulate_Item
-              ("Buy " &
+              (Title => "Buy " &
                Get_Item_Name
-                 (Inventory_Container.Element
+                 (Item => Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Item_Index)),
-               "TradeItem buy", "buy", Item_Index,
-               Natural'Value(CArgv.Arg(Argv, 2)),
-               Natural'Value(CArgv.Arg(Argv, 3)));
+               Command => "TradeItem buy", Action => "buy", Item_Index => Item_Index,
+               Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
+               Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
          else
             if Base_Index > 0 then
                Show_Manipulate_Item
