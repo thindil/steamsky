@@ -1334,19 +1334,19 @@ package body Trades.UI is
       Update_Messages;
       return
         Show_Trade_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowTrade" & Get(Type_Box));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
    exception
       when An_Exception : Trade_Cant_Buy =>
          Show_Message
            (Text =>
-              "You can't buy " & Exception_Message(An_Exception) &
+              "You can't buy " & Exception_Message(X => An_Exception) &
               " in this " & Trader & ".",
             Title => "Can't buy items");
          return TCL_OK;
       when An_Exception : Trade_Not_For_Sale_Now =>
          Show_Message
            (Text =>
-              "You can't buy " & Exception_Message(An_Exception) &
+              "You can't buy " & Exception_Message(X => An_Exception) &
               " in this base at this moment.",
             Title => "Can't buy items");
          return TCL_OK;
@@ -1354,7 +1354,7 @@ package body Trades.UI is
          Show_Message
            (Text =>
               Trader & " don't have that much " &
-              Exception_Message(An_Exception) & " for sale.",
+              Exception_Message(X => An_Exception) & " for sale.",
             Title => "Not enough items");
          return TCL_OK;
       when Trade_No_Free_Cargo =>
@@ -1365,19 +1365,19 @@ package body Trades.UI is
       when An_Exception : Trade_No_Money =>
          Show_Message
            (Text =>
-              "You don't have any " & To_String(Money_Name) & " to buy " &
-              Exception_Message(An_Exception) & ".",
+              "You don't have any " & To_String(Source => Money_Name) & " to buy " &
+              Exception_Message(X => An_Exception) & ".",
             Title => "No money to buy items");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          Show_Message
            (Text =>
-              "You don't have enough " & To_String(Money_Name) &
-              " to buy so much " & Exception_Message(An_Exception) & ".",
+              "You don't have enough " & To_String(Source => Money_Name) &
+              " to buy so much " & Exception_Message(X => An_Exception) & ".",
             Title => "Not enough money to buy items");
          return TCL_OK;
       when Trade_Invalid_Amount =>
-         if CArgv.Arg(Argv, 1) = "buy" then
+         if CArgv.Arg(Argv => Argv, N => 1) = "buy" then
             Show_Message
               (Text => "You entered invalid amount to buy.",
                Title => "Invalid amount of items");
@@ -1390,16 +1390,16 @@ package body Trades.UI is
       when An_Exception : Trade_Too_Much_For_Sale =>
          Show_Message
            (Text =>
-              "You dont have that much " & Exception_Message(An_Exception) &
+              "You dont have that much " & Exception_Message(X => An_Exception) &
               " in ship cargo.",
             Title => "Not enough items for sale");
          return TCL_OK;
       when An_Exception : Trade_No_Money_In_Base =>
          Show_Message
            (Text =>
-              "You can't sell so much " & Exception_Message(An_Exception) &
+              "You can't sell so much " & Exception_Message(X => An_Exception) &
               " because " & Trader & " don't have that much " &
-              To_String(Money_Name) & " to buy it.",
+              To_String(Source => Money_Name) & " to buy it.",
             Title => "Too much items for sale");
          return TCL_OK;
       when Trade_No_Trader =>
@@ -1414,26 +1414,26 @@ package body Trades.UI is
    -- FUNCTION
    -- Show only this items which contains the selected sequence
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SearchTrade
    -- SOURCE
    function Search_Trade_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Search_Trade_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      TypeBox: constant Ttk_ComboBox :=
+      Type_Box: constant Ttk_ComboBox :=
         Get_Widget
           (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
@@ -1441,12 +1441,12 @@ package body Trades.UI is
       if SearchText'Length = 0 then
          return
            Show_Trade_Command
-             (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
+             (Client_Data, Interp, 2, CArgv.Empty & "ShowTrade" & Get(Type_Box));
       end if;
       return
         Show_Trade_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & "ShowTrade" & Get(TypeBox) & SearchText);
+          (Client_Data, Interp, 3,
+           CArgv.Empty & "ShowTrade" & Get(Type_Box) & SearchText);
    end Search_Trade_Command;
 
    -- ****o* TUI/TUI.Trade_Amount_Command
