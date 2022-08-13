@@ -1315,17 +1315,17 @@ package body Trades.UI is
               (Base_Item_Index => Base_Cargo_Index,
                Amount => CArgv.Arg(Argv => Argv, N => 2));
          else
-            Sell_Items(Cargo_Index, CArgv.Arg(Argv, 2));
+            Sell_Items(Item_Index => Cargo_Index, Amount => CArgv.Arg(Argv => Argv, N => 2));
          end if;
       else
-         if CArgv.Arg(Argv, 1) in "buy" then
-            Buy_Items(Base_Cargo_Index, Get(Amount_Box));
+         if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
+            Buy_Items(Base_Item_Index => Base_Cargo_Index, Amount => Get(Widgt => Amount_Box));
          else
-            Sell_Items(Cargo_Index, Get(Amount_Box));
+            Sell_Items(Item_Index => Cargo_Index, Amount => Get(Widgt => Amount_Box));
          end if;
          if Close_Dialog_Command
-             (Client_Data, Interp, 2,
-              CArgv.Empty & "CloseDialog" & ".itemdialog") =
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
            TCL_ERROR then
             return TCL_ERROR;
          end if;
