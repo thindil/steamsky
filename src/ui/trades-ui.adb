@@ -1435,28 +1435,28 @@ package body Trades.UI is
       pragma Unreferenced(Argc);
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
-      SearchText: constant String := CArgv.Arg(Argv, 1);
+          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type", Interp => Interp);
+      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      if SearchText'Length = 0 then
+      if Search_Text'Length = 0 then
          return
            Show_Trade_Command
-             (Client_Data, Interp, 2, CArgv.Empty & "ShowTrade" & Get(Type_Box));
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
       end if;
       return
         Show_Trade_Command
-          (Client_Data, Interp, 3,
-           CArgv.Empty & "ShowTrade" & Get(Type_Box) & SearchText);
+          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+           Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box) & Search_Text);
    end Search_Trade_Command;
 
    -- ****o* TUI/TUI.Trade_Amount_Command
    -- FUNCTION
    -- Show dialog to enter amount of items to sell or buy
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1466,21 +1466,21 @@ package body Trades.UI is
    -- trader ship.
    -- SOURCE
    function Trade_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Trade_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      BaseIndex: constant Natural :=
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
-      if CArgv.Arg(Argv, 1) = "sell" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "sell" then
          Show_Manipulate_Item
            ("Sell " &
             Get_Item_Name
@@ -1500,7 +1500,7 @@ package body Trades.UI is
                Natural'Value(CArgv.Arg(Argv, 2)),
                Natural'Value(CArgv.Arg(Argv, 3)));
          else
-            if BaseIndex > 0 then
+            if Base_Index > 0 then
                Show_Manipulate_Item
                  ("Buy " &
                   To_String
@@ -1508,7 +1508,7 @@ package body Trades.UI is
                        (Container => Items_List,
                         Index =>
                           BaseCargo_Container.Element
-                            (Container => Sky_Bases(BaseIndex).Cargo,
+                            (Container => Sky_Bases(Base_Index).Cargo,
                              Index => abs (Item_Index))
                             .Proto_Index)
                        .Name),
