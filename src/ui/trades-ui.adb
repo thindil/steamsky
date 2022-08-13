@@ -1315,13 +1315,18 @@ package body Trades.UI is
               (Base_Item_Index => Base_Cargo_Index,
                Amount => CArgv.Arg(Argv => Argv, N => 2));
          else
-            Sell_Items(Item_Index => Cargo_Index, Amount => CArgv.Arg(Argv => Argv, N => 2));
+            Sell_Items
+              (Item_Index => Cargo_Index,
+               Amount => CArgv.Arg(Argv => Argv, N => 2));
          end if;
       else
          if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
-            Buy_Items(Base_Item_Index => Base_Cargo_Index, Amount => Get(Widgt => Amount_Box));
+            Buy_Items
+              (Base_Item_Index => Base_Cargo_Index,
+               Amount => Get(Widgt => Amount_Box));
          else
-            Sell_Items(Item_Index => Cargo_Index, Amount => Get(Widgt => Amount_Box));
+            Sell_Items
+              (Item_Index => Cargo_Index, Amount => Get(Widgt => Amount_Box));
          end if;
          if Close_Dialog_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => 2,
@@ -1334,7 +1339,8 @@ package body Trades.UI is
       Update_Messages;
       return
         Show_Trade_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
    exception
       when An_Exception : Trade_Cant_Buy =>
          Show_Message
@@ -1365,8 +1371,8 @@ package body Trades.UI is
       when An_Exception : Trade_No_Money =>
          Show_Message
            (Text =>
-              "You don't have any " & To_String(Source => Money_Name) & " to buy " &
-              Exception_Message(X => An_Exception) & ".",
+              "You don't have any " & To_String(Source => Money_Name) &
+              " to buy " & Exception_Message(X => An_Exception) & ".",
             Title => "No money to buy items");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
@@ -1390,16 +1396,17 @@ package body Trades.UI is
       when An_Exception : Trade_Too_Much_For_Sale =>
          Show_Message
            (Text =>
-              "You dont have that much " & Exception_Message(X => An_Exception) &
-              " in ship cargo.",
+              "You dont have that much " &
+              Exception_Message(X => An_Exception) & " in ship cargo.",
             Title => "Not enough items for sale");
          return TCL_OK;
       when An_Exception : Trade_No_Money_In_Base =>
          Show_Message
            (Text =>
-              "You can't sell so much " & Exception_Message(X => An_Exception) &
-              " because " & Trader & " don't have that much " &
-              To_String(Source => Money_Name) & " to buy it.",
+              "You can't sell so much " &
+              Exception_Message(X => An_Exception) & " because " & Trader &
+              " don't have that much " & To_String(Source => Money_Name) &
+              " to buy it.",
             Title => "Too much items for sale");
          return TCL_OK;
       when Trade_No_Trader =>
@@ -1435,18 +1442,21 @@ package body Trades.UI is
       pragma Unreferenced(Argc);
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type", Interp => Interp);
+          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type",
+           Interp => Interp);
       Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
       if Search_Text'Length = 0 then
          return
            Show_Trade_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
       end if;
       return
         Show_Trade_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box) & Search_Text);
+           Argv =>
+             CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box) & Search_Text);
    end Search_Trade_Command;
 
    -- ****o* TUI/TUI.Trade_Amount_Command
@@ -1482,52 +1492,64 @@ package body Trades.UI is
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "sell" then
          Show_Manipulate_Item
-           (Title => "Sell " &
-            Get_Item_Name
-              (Item => Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Item_Index)),
-            Command => "TradeItem sell", Action => "sell", Item_Index => Item_Index,
+           (Title =>
+              "Sell " &
+              Get_Item_Name
+                (Item =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)),
+            Command => "TradeItem sell", Action => "sell",
+            Item_Index => Item_Index,
             Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
             Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
       else
          if Item_Index > 0 then
             Show_Manipulate_Item
-              (Title => "Buy " &
-               Get_Item_Name
-                 (Item => Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => Item_Index)),
-               Command => "TradeItem buy", Action => "buy", Item_Index => Item_Index,
+              (Title =>
+                 "Buy " &
+                 Get_Item_Name
+                   (Item =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index)),
+               Command => "TradeItem buy", Action => "buy",
+               Item_Index => Item_Index,
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
                Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
          else
             if Base_Index > 0 then
                Show_Manipulate_Item
-                 ("Buy " &
-                  To_String
-                    (Objects_Container.Element
-                       (Container => Items_List,
-                        Index =>
-                          BaseCargo_Container.Element
-                            (Container => Sky_Bases(Base_Index).Cargo,
-                             Index => abs (Item_Index))
-                            .Proto_Index)
-                       .Name),
-                  "TradeItem buy", "buy", abs (Item_Index),
-                  Natural'Value(CArgv.Arg(Argv, 2)),
-                  Natural'Value(CArgv.Arg(Argv, 3)));
+                 (Title =>
+                    "Buy " &
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index =>
+                              BaseCargo_Container.Element
+                                (Container => Sky_Bases(Base_Index).Cargo,
+                                 Index => abs (Item_Index))
+                                .Proto_Index)
+                           .Name),
+                  Command => "TradeItem buy", Action => "buy",
+                  Item_Index => abs (Item_Index),
+                  Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
+                  Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
             else
                Show_Manipulate_Item
-                 (Title => "Buy " &
-                  To_String
-                    (Source => Objects_Container.Element
-                       (Container => Items_List,
-                        Index =>
-                          BaseCargo_Container.Element
-                            (Container => Trader_Cargo,
-                             Index => abs (Item_Index))
-                            .Proto_Index)
-                       .Name),
-                  Command => "TradeItem buy", Action => "buy", Item_Index => abs (Item_Index),
+                 (Title =>
+                    "Buy " &
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index =>
+                              BaseCargo_Container.Element
+                                (Container => Trader_Cargo,
+                                 Index => abs (Item_Index))
+                                .Proto_Index)
+                           .Name),
+                  Command => "TradeItem buy", Action => "buy",
+                  Item_Index => abs (Item_Index),
                   Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
                   Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
             end if;
