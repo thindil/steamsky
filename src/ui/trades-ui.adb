@@ -1517,9 +1517,9 @@ package body Trades.UI is
                   Natural'Value(CArgv.Arg(Argv, 3)));
             else
                Show_Manipulate_Item
-                 ("Buy " &
+                 (Title => "Buy " &
                   To_String
-                    (Objects_Container.Element
+                    (Source => Objects_Container.Element
                        (Container => Items_List,
                         Index =>
                           BaseCargo_Container.Element
@@ -1527,9 +1527,9 @@ package body Trades.UI is
                              Index => abs (Item_Index))
                             .Proto_Index)
                        .Name),
-                  "TradeItem buy", "buy", abs (Item_Index),
-                  Natural'Value(CArgv.Arg(Argv, 2)),
-                  Natural'Value(CArgv.Arg(Argv, 3)));
+                  Command => "TradeItem buy", Action => "buy", Item_Index => abs (Item_Index),
+                  Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
+                  Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
             end if;
          end if;
       end if;
