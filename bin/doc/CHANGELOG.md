@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 - Updated look of Show item info dialog in crew inventory
+- Show item info dialog instead of actions menu in the player's ship's crew
+  member inventory list
 
 ### Fixed
 - Showing information about the item in the player's ship's crew member's
