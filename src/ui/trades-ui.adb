@@ -1735,7 +1735,7 @@ package body Trades.UI is
            (Target => Base_Cargo, Source => Trader_Cargo);
          Base_Type := To_Bounded_String(Source => "0");
       end if;
-      Fill_Local_Items_Loop:
+      Add_Cargo_Items_Loop:
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
@@ -1811,14 +1811,16 @@ package body Trades.UI is
                       .Amount
                   else 0),
                Id => I));
-      end loop Fill_Local_Items_Loop;
-      Sort_Items.Sort(Local_Items);
+      end loop Add_Cargo_Items_Loop;
+      Sort_Items.Sort(Container => Local_Items);
       Items_Indexes.Clear;
+      Add_Cargo_Indexes_Loop:
       for Item of Local_Items loop
-         Items_Indexes.Append(Item.Id);
-      end loop;
-      Items_Indexes.Append(0);
+         Items_Indexes.Append(New_Item => Item.Id);
+      end loop Add_Cargo_Indexes_Loop;
+      Items_Indexes.Append(New_Item => 0);
       Local_Items.Clear;
+      Add_Base_Item_Loop:
       for I in
         BaseCargo_Container.First_Index(Container => Base_Cargo) ..
           BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
@@ -1876,22 +1878,23 @@ package body Trades.UI is
                       .Amount,
                   Id => I));
          end if;
-      end loop;
-      Sort_Items.Sort(Local_Items);
+      end loop Add_Base_Item_Loop;
+      Sort_Items.Sort(Container => Local_Items);
+      Add_Base_Indexes_Loop:
       for Item of Local_Items loop
-         Items_Indexes.Append(Item.Id);
-      end loop;
+         Items_Indexes.Append(New_Item => Item.Id);
+      end loop Add_Base_Indexes_Loop;
       return
         Show_Trade_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowTrade" & "All");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & "All");
    end Sort_Items_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowTrade", Show_Trade_Command'Access);
-      Add_Command("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
-      Add_Command("TradeItem", Trade_Item_Command'Access);
-      Add_Command("SearchTrade", Search_Trade_Command'Access);
+      Add_Command(Name => "ShowTrade", Ada_Command => Show_Trade_Command'Access);
+      Add_Command(Name => "ShowTradeItemInfo", Ada_Command => Show_Trade_Item_Info_Command'Access);
+      Add_Command(Name => "TradeItem", Ada_Command => Trade_Item_Command'Access);
+      Add_Command(Name => "SearchTrade", Ada_Command => Search_Trade_Command'Access);
       Add_Command("TradeAmount", Trade_Amount_Command'Access);
       Add_Command("SortTradeItems", Sort_Items_Command'Access);
    end Add_Commands;
