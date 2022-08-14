@@ -66,9 +66,9 @@ package body WaitMenu is
             (if Time > 1 then "s" else ""));
       end Add_Button;
    begin
-      if Winfo_Get(Wait_Dialog, "exists") = "1" then
-         Button := Get_Widget(Wait_Dialog & ".frame.close");
-         if Invoke(Button) /= "" then
+      if Winfo_Get(Widgt => Wait_Dialog, Info => "exists") = "1" then
+         Button := Get_Widget(pathName => Wait_Dialog & ".frame.close");
+         if Invoke(Buttn => Button) /= "" then
             return TCL_ERROR;
          end if;
          return TCL_OK;
@@ -76,19 +76,19 @@ package body WaitMenu is
       Wait_Dialog :=
         Create_Dialog
           (Name => ".gameframe.wait", Title => "Wait in place", Columns => 3);
-      Add_Button(1);
-      Add_Button(5);
-      Add_Button(10);
-      Add_Button(15);
-      Add_Button(30);
+      Add_Button(Time => 1);
+      Add_Button(Time => 5);
+      Add_Button(Time => 10);
+      Add_Button(Time => 15);
+      Add_Button(Time => 30);
       Button :=
         Create
-          (Wait_Dialog & ".wait1h", "-text {Wait 1 hour} -command {Wait 60}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-      Add(Button, "Wait in place for 1 hour");
-      Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
+          (pathName => Wait_Dialog & ".wait1h", options => "-text {Wait 1 hour} -command {Wait 60}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
+      Add(Widget => Button, Message => "Wait in place for 1 hour");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Button :=
-        Create(Wait_Dialog & ".wait", "-text Wait  -command {Wait amount}");
+        Create(pathName => Wait_Dialog & ".wait", options => "-text Wait -command {Wait amount}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
       Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
       Add
