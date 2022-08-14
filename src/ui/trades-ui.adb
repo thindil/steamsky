@@ -1585,7 +1585,9 @@ package body Trades.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Trade_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Trade_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1620,7 +1622,8 @@ package body Trades.UI is
          if Items_Sort_Order = TYPEASC and then Left.I_Type < Right.I_Type then
             return True;
          end if;
-         if Items_Sort_Order = TYPEDESC and then Left.I_Type > Right.I_Type then
+         if Items_Sort_Order = TYPEDESC
+           and then Left.I_Type > Right.I_Type then
             return True;
          end if;
          if Items_Sort_Order = DURABILITYASC
@@ -1735,7 +1738,7 @@ package body Trades.UI is
            (Target => Base_Cargo, Source => Trader_Cargo);
          Base_Type := To_Bounded_String(Source => "0");
       end if;
-      Add_Cargo_Items_Loop:
+      Add_Cargo_Items_Loop :
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
@@ -1746,9 +1749,10 @@ package body Trades.UI is
          Base_Cargo_Index :=
            Find_Base_Cargo
              (Proto_Index => Proto_Index,
-              Durability => Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Durability);
+              Durability =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => I)
+                  .Durability);
          if Base_Cargo_Index > 0 then
             Indexes_List.Append(New_Item => Base_Cargo_Index);
             Price :=
@@ -1756,7 +1760,8 @@ package body Trades.UI is
                 (Container => Base_Cargo, Index => Base_Cargo_Index)
                 .Price;
          else
-            Price := Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
+            Price :=
+              Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
          end if;
          if Event_Index > 0 then
             if Events_List(Event_Index).E_Type = DOUBLEPRICE
@@ -1768,9 +1773,11 @@ package body Trades.UI is
            (New_Item =>
               (Name =>
                  To_Unbounded_String
-                   (Source => Get_Item_Name
-                      (Item => Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => I))),
+                   (Source =>
+                      Get_Item_Name
+                        (Item =>
+                           Inventory_Container.Element
+                             (Container => Player_Ship.Cargo, Index => I))),
                I_Type =>
                  (if
                     Objects_Container.Element
@@ -1814,13 +1821,13 @@ package body Trades.UI is
       end loop Add_Cargo_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
       Items_Indexes.Clear;
-      Add_Cargo_Indexes_Loop:
+      Add_Cargo_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Add_Cargo_Indexes_Loop;
       Items_Indexes.Append(New_Item => 0);
       Local_Items.Clear;
-      Add_Base_Item_Loop:
+      Add_Base_Item_Loop :
       for I in
         BaseCargo_Container.First_Index(Container => Base_Cargo) ..
           BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
@@ -1833,7 +1840,8 @@ package body Trades.UI is
                 .Price;
             if Event_Index > 0 then
                if Events_List(Event_Index).E_Type = DOUBLEPRICE
-                 and then Events_List(Event_Index).Item_Index = Proto_Index then
+                 and then Events_List(Event_Index).Item_Index =
+                   Proto_Index then
                   Price := Price * 2;
                end if;
             end if;
@@ -1880,23 +1888,31 @@ package body Trades.UI is
          end if;
       end loop Add_Base_Item_Loop;
       Sort_Items.Sort(Container => Local_Items);
-      Add_Base_Indexes_Loop:
+      Add_Base_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Add_Base_Indexes_Loop;
       return
         Show_Trade_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowTrade" & "All");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowTrade" & "All");
    end Sort_Items_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowTrade", Ada_Command => Show_Trade_Command'Access);
-      Add_Command(Name => "ShowTradeItemInfo", Ada_Command => Show_Trade_Item_Info_Command'Access);
-      Add_Command(Name => "TradeItem", Ada_Command => Trade_Item_Command'Access);
-      Add_Command(Name => "SearchTrade", Ada_Command => Search_Trade_Command'Access);
-      Add_Command("TradeAmount", Trade_Amount_Command'Access);
-      Add_Command("SortTradeItems", Sort_Items_Command'Access);
+      Add_Command
+        (Name => "ShowTrade", Ada_Command => Show_Trade_Command'Access);
+      Add_Command
+        (Name => "ShowTradeItemInfo",
+         Ada_Command => Show_Trade_Item_Info_Command'Access);
+      Add_Command
+        (Name => "TradeItem", Ada_Command => Trade_Item_Command'Access);
+      Add_Command
+        (Name => "SearchTrade", Ada_Command => Search_Trade_Command'Access);
+      Add_Command
+        (Name => "TradeAmount", Ada_Command => Trade_Amount_Command'Access);
+      Add_Command
+        (Name => "SortTradeItems", Ada_Command => Sort_Items_Command'Access);
    end Add_Commands;
 
 end Trades.UI;
