@@ -1181,7 +1181,7 @@ package body Maps.UI is
          Set_Theme;
          OrdersMenu.Add_Commands;
          Maps.UI.Commands.Add_Commands;
-         WaitMenu.AddCommands;
+         WaitMenu.Add_Commands;
          Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
          Crafts.UI.Add_Commands;

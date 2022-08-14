@@ -39,9 +39,9 @@ with Utils.UI; use Utils.UI;
 package body WaitMenu is
 
    function Show_Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       WaitDialog: Ttk_Frame := Get_Widget(".gameframe.wait", Interp);
       Button: Ttk_Button;
       AmountBox: Ttk_SpinBox;
@@ -268,10 +268,10 @@ package body WaitMenu is
       return TCL_OK;
    end Wait_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowWait", Show_Wait_Command'Access);
       Add_Command("Wait", Wait_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end WaitMenu;

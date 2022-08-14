@@ -706,7 +706,7 @@ package body OrdersMenu is
               FULLDOCKS then
                return
                  Show_Wait_Command
-                   (ClientData => Client_Data, Interp => Interp, Argc => Argc,
+                   (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
                     Argv => Argv);
             end if;
          end if;
