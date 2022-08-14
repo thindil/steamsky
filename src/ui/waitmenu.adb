@@ -42,7 +42,8 @@ package body WaitMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Wait_Dialog: Ttk_Frame := Get_Widget(pathName => ".gameframe.wait", Interp => Interp);
+      Wait_Dialog: Ttk_Frame :=
+        Get_Widget(pathName => ".gameframe.wait", Interp => Interp);
       Button: Ttk_Button;
       Amount_Box: Ttk_SpinBox;
       Amount_Label: Ttk_Label;
@@ -51,19 +52,26 @@ package body WaitMenu is
       begin
          Button :=
            Create
-             (pathName => Wait_Dialog & ".wait" & Trim(Source => Positive'Image(Time), Side => Left),
-              options => "-text {Wait" & Positive'Image(Time) & " minute" &
-              (if Time > 1 then "s" else "") & "} -command {Wait" &
-              Positive'Image(Time) & "}");
+             (pathName =>
+                Wait_Dialog & ".wait" &
+                Trim(Source => Positive'Image(Time), Side => Left),
+              options =>
+                "-text {Wait" & Positive'Image(Time) & " minute" &
+                (if Time > 1 then "s" else "") & "} -command {Wait" &
+                Positive'Image(Time) & "}");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
-            Options => "-sticky we -columnspan 3 -padx 5" &
-            (if Time = 1 then " -pady {5 0}" else ""));
-         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+            Options =>
+              "-sticky we -columnspan 3 -padx 5" &
+              (if Time = 1 then " -pady {5 0}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Wait_Dialog & ";break}");
          Add
            (Widget => Button,
-            Message => "Wait in place for" & Positive'Image(Time) & " minute" &
-            (if Time > 1 then "s" else ""));
+            Message =>
+              "Wait in place for" & Positive'Image(Time) & " minute" &
+              (if Time > 1 then "s" else ""));
       end Add_Button;
    begin
       if Winfo_Get(Widgt => Wait_Dialog, Info => "exists") = "1" then
@@ -83,32 +91,48 @@ package body WaitMenu is
       Add_Button(Time => 30);
       Button :=
         Create
-          (pathName => Wait_Dialog & ".wait1h", options => "-text {Wait 1 hour} -command {Wait 60}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
+          (pathName => Wait_Dialog & ".wait1h",
+           options => "-text {Wait 1 hour} -command {Wait 60}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
       Add(Widget => Button, Message => "Wait in place for 1 hour");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Button :=
-        Create(pathName => Wait_Dialog & ".wait", options => "-text Wait -command {Wait amount}");
+        Create
+          (pathName => Wait_Dialog & ".wait",
+           options => "-text Wait -command {Wait amount}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 0}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Add
         (Widget => Button,
-         Message => "Wait in place for the selected amount of minutes:" & LF &
-         "from 1 to 1440 (the whole day)");
+         Message =>
+           "Wait in place for the selected amount of minutes:" & LF &
+           "from 1 to 1440 (the whole day)");
       Amount_Box :=
         Create
           (pathName => Wait_Dialog & ".amount",
-           options => "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
+           options =>
+             "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-row 7 -column 1");
-      Bind(Widgt => Amount_Box, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+      Bind
+        (Widgt => Amount_Box, Sequence => "<Escape>",
+         Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Set(SpinBox => Amount_Box, Value => "1");
       Add
         (Widget => Amount_Box,
-         Message => "Wait in place for the selected amount of minutes:" & LF &
-         "from 1 to 1440 (the whole day)");
+         Message =>
+           "Wait in place for the selected amount of minutes:" & LF &
+           "from 1 to 1440 (the whole day)");
       Amount_Label :=
-        Create(pathName => Wait_Dialog & ".mins", options => "-text minutes. -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Amount_Label, "-row 7 -column 2 -padx {0 5}");
+        Create
+          (pathName => Wait_Dialog & ".mins",
+           options => "-text minutes. -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Amount_Label, Options => "-row 7 -column 2 -padx {0 5}");
       Check_Crew_Rest_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Tired > 0 and
@@ -120,12 +144,13 @@ package body WaitMenu is
             Modules_Loop :
             for Module of Player_Ship.Modules loop
                if Module.M_Type = CABIN then
+                  Owners_Loop :
                   for Owner of Module.Owner loop
                      if Owner = I then
                         Need_Healing := True;
                         exit Modules_Loop;
                      end if;
-                  end loop;
+                  end loop Owners_Loop;
                end if;
             end loop Modules_Loop;
          end if;
@@ -133,17 +158,24 @@ package body WaitMenu is
       if Need_Rest then
          Button :=
            Create
-             (Wait_Dialog & ".rest",
-              "-text {Wait until crew is rested} -command {Wait rest}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-         Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
-         Add(Button, "Wait in place until the whole ship's crew is rested.");
+             (pathName => Wait_Dialog & ".rest",
+              options =>
+                "-text {Wait until crew is rested} -command {Wait rest}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Wait_Dialog & ";break}");
+         Add
+           (Widget => Button,
+            Message => "Wait in place until the whole ship's crew is rested.");
       end if;
       if Need_Healing then
          Button :=
            Create
-             (Wait_Dialog & ".heal",
-              "-text {Wait until crew is healed} -command {Wait heal}");
+             (pathName => Wait_Dialog & ".heal",
+              options =>
+                "-text {Wait until crew is healed} -command {Wait heal}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
          Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
          Add
