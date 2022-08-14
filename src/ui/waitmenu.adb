@@ -89,25 +89,25 @@ package body WaitMenu is
       Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Button :=
         Create(pathName => Wait_Dialog & ".wait", options => "-text Wait -command {Wait amount}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
-      Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 0}");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Add
-        (Button,
-         "Wait in place for the selected amount of minutes:" & LF &
+        (Widget => Button,
+         Message => "Wait in place for the selected amount of minutes:" & LF &
          "from 1 to 1440 (the whole day)");
       Amount_Box :=
         Create
-          (Wait_Dialog & ".amount",
-           "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
-      Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-row 7 -column 1");
-      Bind(Amount_Box, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
-      Set(Amount_Box, "1");
+          (pathName => Wait_Dialog & ".amount",
+           options => "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-row 7 -column 1");
+      Bind(Widgt => Amount_Box, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+      Set(SpinBox => Amount_Box, Value => "1");
       Add
-        (Amount_Box,
-         "Wait in place for the selected amount of minutes:" & LF &
+        (Widget => Amount_Box,
+         Message => "Wait in place for the selected amount of minutes:" & LF &
          "from 1 to 1440 (the whole day)");
       Amount_Label :=
-        Create(Wait_Dialog & ".mins", "-text minutes. -takefocus 0");
+        Create(pathName => Wait_Dialog & ".mins", options => "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Amount_Label, "-row 7 -column 2 -padx {0 5}");
       Check_Crew_Rest_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
