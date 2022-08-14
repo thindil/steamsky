@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.0.10] - 2022-08-14
 
 ### Fixed
 - Tab traverse in negotiate hire recruit dialog and school in bases
