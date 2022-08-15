@@ -195,21 +195,24 @@ package Table is
       -- FUNCTION
       -- Add check button item to the selected Table_Widget
       -- PARAMETERS
-      -- Table    - The Table_Widget in which button will be added
-      -- Tooltip  - The tooltip show when user hover mouse over button
-      -- Command  - Tcl command which will be executed when button was clicked. If
-      --            empty, the button will be disabled
-      -- Checked  - If True, the button will be checked
-      -- Column   - The column in which the button will be added
-      -- New_Row  - If True, increase current number of row in the Table_Widget.
-      --            Default value is False.
+      -- Table           - The Table_Widget in which button will be added
+      -- Tooltip         - The tooltip show when user hover mouse over button
+      -- Command         - Tcl command which will be executed when button was clicked. If
+      --                   empty, the button will be disabled
+      -- Checked         - If True, the button will be checked
+      -- Column          - The column in which the button will be added
+      -- New_Row         - If True, increase current number of row in the Table_Widget.
+      --                   Default value is False.
+      -- Empty_Unchecked - If True, don't show image when the checkbox is unchecked.
+      --                   Default value is False.
       -- HISTORY
       -- 6.0 - Added
       -- 7.1 - Renamed to Add_Check_Button
+      -- 7.8 - Added Empty_Unchecked parameter
       -- SOURCE
    procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; New_Row: Boolean := False) with
+      Column: Positive; New_Row, Empty_Unchecked: Boolean := False) with
       Pre => Table.Row_Height > 1;
       -- ****
 

@@ -665,7 +665,7 @@ package body Table is
 
    procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; New_Row: Boolean := False) is
+      Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
       X: Natural := 5;
       Item_Id: Unbounded_String;
       Tokens: Slice_Set;
@@ -687,7 +687,10 @@ package body Table is
                 Options =>
                   Trim(Source => Natural'Image(X), Side => Left) &
                   Positive'Image((Table.Row * Table.Row_Height) + 2) &
-                  " -anchor nw -image " & Image_Name & " -tags [list row" &
+                  " -anchor nw" &
+                  (if not Checked and Empty_Unchecked then " "
+                   else " -image " & Image_Name) &
+                  " -tags [list row" &
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
