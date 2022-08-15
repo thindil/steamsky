@@ -47,11 +47,11 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
 
-   -- ****iv* SUCargo/SUCargo.CargoTable
+   -- ****iv* SUCargo/SUCargo.Cargo_Table
    -- FUNCTION
    -- Table with info about the player ship cargo
    -- SOURCE
-   CargoTable: Table_Widget (5);
+   Cargo_Table: Table_Widget (Amount => 5);
    -- ****
 
    -- ****iv* SUCargo/SUCargo.Cargo_Indexes
@@ -65,10 +65,10 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Show the cargo of the player ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -76,42 +76,42 @@ package body Ships.UI.Cargo is
    -- Optional paramater page is the number of the page of cargo list to show
    -- SOURCE
    function Show_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".shipinfoframe.cargo.canvas", Interp);
-      CargoInfoFrame: constant Ttk_Frame :=
-        Get_Widget(ShipCanvas & ".frame", Interp);
+      Ship_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe.cargo.canvas", Interp => Interp);
+      Cargo_Info_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ItemType: Bounded_String;
-      ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
-      ItemsType: constant String := Get(TypeBox);
+      Item_Type: Bounded_String;
+      Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Cargo_Info_Frame & ".selecttype.combo", Interp => Interp);
+      Items_Type: constant String := Get(Widgt => Type_Box);
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Free_Space_Label: constant Ttk_Label :=
-        Get_Widget(CargoInfoFrame & ".freespace", Interp);
+        Get_Widget(Cargo_Info_Frame & ".freespace", Interp);
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Cargo_Info_Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(3, Rows - 1, CargoInfoFrame);
-      CargoTable :=
+      Delete_Widgets(3, Rows - 1, Cargo_Info_Frame);
+      Cargo_Table :=
         Create_Table
-          (Widget_Image(CargoInfoFrame),
+          (Widget_Image(Cargo_Info_Frame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
@@ -145,59 +145,59 @@ package body Ships.UI.Cargo is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
-            ItemType :=
+            Item_Type :=
               (if Proto_Item.Show_Type /= Null_Bounded_String then
                  Proto_Item.Show_Type
                else Proto_Item.I_Type);
-            if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
-               Append(ItemsTypes, " {" & To_String(ItemType) & "}");
+            if Index(Items_Types, "{" & To_String(Item_Type) & "}") = 0 then
+               Append(Items_Types, " {" & To_String(Item_Type) & "}");
             end if;
-            if ItemsType /= "All"
-              and then To_String(ItemType) /= ItemsType then
+            if Items_Type /= "All"
+              and then To_String(Item_Type) /= Items_Type then
                goto End_Of_Loop;
             end if;
             Add_Button
-              (CargoTable, Get_Item_Name(Item),
+              (Cargo_Table, Get_Item_Name(Item),
                "Show item's description and actions",
                "ShowCargoItemInfo" & Positive'Image(I), 1);
             Add_Progress_Bar
-              (CargoTable, Item.Durability, Default_Item_Durability,
+              (Cargo_Table, Item.Durability, Default_Item_Durability,
                "The current durability of the selected crew member",
                "ShowCargoItemInfo" & Positive'Image(I), 2);
             Add_Button
-              (CargoTable, To_String(ItemType),
+              (Cargo_Table, To_String(Item_Type),
                "The type of the selected item",
                "ShowCargoItemInfo" & Positive'Image(I), 3);
             Add_Button
-              (CargoTable, Positive'Image(Item.Amount),
+              (Cargo_Table, Positive'Image(Item.Amount),
                "The amount of the selected item",
                "ShowCargoItemInfo" & Positive'Image(I), 4);
             Add_Button
-              (CargoTable,
+              (Cargo_Table,
                Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
                "The total weight of the selected item",
                "ShowCargoItemInfo" & Positive'Image(I), 5, True);
-            exit Load_Cargo_Loop when CargoTable.Row =
+            exit Load_Cargo_Loop when Cargo_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Loop>>
          end Show_Item_Block;
       end loop Load_Cargo_Loop;
       if Page > 1 then
          Add_Pagination
-           (CargoTable, "ShowCargo" & Positive'Image(Page - 1),
-            (if CargoTable.Row < Game_Settings.Lists_Limit + 1 then ""
+           (Cargo_Table, "ShowCargo" & Positive'Image(Page - 1),
+            (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCargo" & Positive'Image(Page + 1)));
-      elsif CargoTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Cargo_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
+           (Cargo_Table, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
-      Update_Table(CargoTable);
-      configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
+      Update_Table(Cargo_Table);
+      configure(Type_Box, "-values [list " & To_String(Items_Types) & "]");
       Tcl_Eval(Get_Context, "update");
       configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
+      Xview_Move_To(Ship_Canvas, "0.0");
+      Yview_Move_To(Ship_Canvas, "0.0");
       return TCL_OK;
    end Show_Cargo_Command;
 
@@ -270,7 +270,7 @@ package body Ships.UI.Cargo is
       Column: constant Positive :=
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (CargoTable, Natural'Value(CArgv.Arg(Argv, 1))));
+             (Cargo_Table, Natural'Value(CArgv.Arg(Argv, 1))));
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
