@@ -88,7 +88,9 @@ package body Ships.UI.Cargo is
       use Tiny_String;
 
       Ship_Canvas: constant Tk_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".shipinfoframe.cargo.canvas", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe.cargo.canvas",
+           Interp => Interp);
       Cargo_Info_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
       Tokens: Slice_Set;
@@ -96,19 +98,27 @@ package body Ships.UI.Cargo is
       Item_Type: Bounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Type_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Cargo_Info_Frame & ".selecttype.combo", Interp => Interp);
+        Get_Widget
+          (pathName => Cargo_Info_Frame & ".selecttype.combo",
+           Interp => Interp);
       Items_Type: constant String := Get(Widgt => Type_Box);
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Free_Space_Label: constant Ttk_Label :=
-        Get_Widget(Cargo_Info_Frame & ".freespace", Interp);
+        Get_Widget
+          (pathName => Cargo_Info_Frame & ".freespace", Interp => Interp);
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Cargo_Info_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(3, Rows - 1, Cargo_Info_Frame);
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Cargo_Info_Frame),
+         Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets
+        (Start_Index => 3, End_Index => Rows - 1, Frame => Cargo_Info_Frame);
       Cargo_Table :=
         Create_Table
           (Widget_Image(Cargo_Info_Frame),
