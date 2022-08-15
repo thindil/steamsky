@@ -201,39 +201,39 @@ package body WaitMenu is
    -- FUNCTION
    -- Wait the selected amount of time
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- Wait
    -- SOURCE
    function Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      TimeNeeded: Natural := 0;
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.wait.close", Interp);
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".gameframe.wait.amount", Interp);
-      CurrentFrame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".shipinfoframe", Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Time_Needed: Natural := 0;
+      Dialog_Close_Button: constant Ttk_Button :=
+        Get_Widget(pathName => ".gameframe.wait.close", Interp => Interp);
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => ".gameframe.wait.amount", Interp => Interp);
+      Current_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 1) = "1" then
-         Update_Game(1);
-         Wait_In_Place(1);
-      elsif CArgv.Arg(Argv, 1) = "5" then
-         Update_Game(5);
-         Wait_In_Place(5);
+      if CArgv.Arg(Argv => Argv, N => 1) = "1" then
+         Update_Game(Minutes => 1);
+         Wait_In_Place(Minutes => 1);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "5" then
+         Update_Game(Minutes => 5);
+         Wait_In_Place(Minutes => 5);
       elsif CArgv.Arg(Argv, 1) = "10" then
          Update_Game(10);
          Wait_In_Place(10);
@@ -258,9 +258,9 @@ package body WaitMenu is
                   if Module.M_Type = CABIN then
                      for Owner of Module.Owner loop
                         if Owner = Crew_Container.To_Index(I) then
-                           if TimeNeeded <
+                           if Time_Needed <
                              (100 - Player_Ship.Crew(I).Health) * 15 then
-                              TimeNeeded :=
+                              Time_Needed :=
                                 (100 - Player_Ship.Crew(I).Health) * 15;
                            end if;
                            exit Modules_Loop;
@@ -270,31 +270,31 @@ package body WaitMenu is
                end loop Modules_Loop;
             end if;
          end loop Check_Crew_Heal_Loop;
-         if TimeNeeded > 0 then
-            Update_Game(TimeNeeded);
-            Wait_In_Place(TimeNeeded);
+         if Time_Needed > 0 then
+            Update_Game(Time_Needed);
+            Wait_In_Place(Time_Needed);
          else
             return TCL_OK;
          end if;
       elsif CArgv.Arg(Argv, 1) = "amount" then
-         Update_Game(Positive'Value(Get(AmountBox)));
-         Wait_In_Place(Positive'Value(Get(AmountBox)));
+         Update_Game(Positive'Value(Get(Amount_Box)));
+         Wait_In_Place(Positive'Value(Get(Amount_Box)));
       end if;
       Update_Header;
       Update_Messages;
-      if Winfo_Get(CurrentFrame, "exists") = "1"
-        and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
+      if Winfo_Get(Current_Frame, "exists") = "1"
+        and then Winfo_Get(Current_Frame, "ismapped") = "1" then
          Tcl_Eval(Interp, "ShowShipInfo 1");
       else
-         CurrentFrame := Get_Widget(Main_Paned & ".knowledgeframe", Interp);
-         if Winfo_Get(CurrentFrame, "exists") = "1"
-           and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
+         Current_Frame := Get_Widget(Main_Paned & ".knowledgeframe", Interp);
+         if Winfo_Get(Current_Frame, "exists") = "1"
+           and then Winfo_Get(Current_Frame, "ismapped") = "1" then
             Tcl_Eval(Interp, "ShowKnowledge 1");
          else
             Draw_Map;
          end if;
       end if;
-      if Invoke(CloseButton) /= "" then
+      if Invoke(Dialog_Close_Button) /= "" then
          return TCL_ERROR;
       end if;
       return TCL_OK;
