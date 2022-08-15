@@ -256,8 +256,9 @@ package body WaitMenu is
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
+                     Owners_Loop:
                      for Owner of Module.Owner loop
-                        if Owner = Crew_Container.To_Index(I) then
+                        if Owner = Crew_Container.To_Index(Position => I) then
                            if Time_Needed <
                              (100 - Player_Ship.Crew(I).Health) * 15 then
                               Time_Needed :=
@@ -265,29 +266,29 @@ package body WaitMenu is
                            end if;
                            exit Modules_Loop;
                         end if;
-                     end loop;
+                     end loop Owners_Loop;
                   end if;
                end loop Modules_Loop;
             end if;
          end loop Check_Crew_Heal_Loop;
          if Time_Needed > 0 then
-            Update_Game(Time_Needed);
-            Wait_In_Place(Time_Needed);
+            Update_Game(Minutes => Time_Needed);
+            Wait_In_Place(Minutes => Time_Needed);
          else
             return TCL_OK;
          end if;
-      elsif CArgv.Arg(Argv, 1) = "amount" then
-         Update_Game(Positive'Value(Get(Amount_Box)));
-         Wait_In_Place(Positive'Value(Get(Amount_Box)));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "amount" then
+         Update_Game(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
+         Wait_In_Place(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
       end if;
       Update_Header;
       Update_Messages;
-      if Winfo_Get(Current_Frame, "exists") = "1"
-        and then Winfo_Get(Current_Frame, "ismapped") = "1" then
-         Tcl_Eval(Interp, "ShowShipInfo 1");
+      if Winfo_Get(Widgt => Current_Frame, Info => "exists") = "1"
+        and then Winfo_Get(Widgt => Current_Frame, Info => "ismapped") = "1" then
+         Tcl_Eval(interp => Interp, strng => "ShowShipInfo 1");
       else
-         Current_Frame := Get_Widget(Main_Paned & ".knowledgeframe", Interp);
-         if Winfo_Get(Current_Frame, "exists") = "1"
+         Current_Frame := Get_Widget(pathName => Main_Paned & ".knowledgeframe", Interp => Interp);
+         if Winfo_Get(Widgt => Current_Frame, Info => "exists") = "1"
            and then Winfo_Get(Current_Frame, "ismapped") = "1" then
             Tcl_Eval(Interp, "ShowKnowledge 1");
          else
