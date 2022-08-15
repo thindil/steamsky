@@ -176,23 +176,23 @@ package body WaitMenu is
              (pathName => Wait_Dialog & ".heal",
               options =>
                 "-text {Wait until crew is healed} -command {Wait heal}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-         Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
+         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
          Add
-           (Button,
-            "Wait in place until the whole ship's crew is healed." & LF &
+           (Widget => Button,
+            Message => "Wait in place until the whole ship's crew is healed." & LF &
             "Can take a large amount of time.");
       end if;
       Button :=
         Create
-          (Wait_Dialog & ".close",
-           "-text {Close} -command {CloseDialog " & Wait_Dialog & "}");
+          (pathName => Wait_Dialog & ".close",
+           options => "-text {Close} -command {CloseDialog " & Wait_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid
-        (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
-      Bind(Button, "<Escape>", "{CloseDialog " & Wait_Dialog & ";break}");
-      Add(Button, "Close dialog \[Escape\]");
-      Focus(Button);
-      Bind(Button, "<Tab>", "{focus " & Wait_Dialog & ".wait1;break}");
+        (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+      Add(Widget => Button, Message => "Close dialog \[Escape\]");
+      Focus(Widgt => Button);
+      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Wait_Dialog & ".wait1;break}");
       Show_Dialog(Dialog => Wait_Dialog, Relative_Y => 0.15);
       return TCL_OK;
    end Show_Wait_Command;
