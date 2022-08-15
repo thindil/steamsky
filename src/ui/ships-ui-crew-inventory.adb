@@ -52,7 +52,7 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Table with info about the crew member inventory
    -- SOURCE
-   InventoryTable: Table_Widget (5);
+   InventoryTable: Table_Widget (6);
    -- ****
 
    -- ****iv* SUCI/SUCI.MemberIndex
@@ -123,6 +123,9 @@ package body Ships.UI.Crew.Inventory is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
+         Add_Check_Button
+           (InventoryTable, "Select the item for move or equip it.",
+            "ToggleInventoryItem" & Positive'Image(I), False, 1);
          Add_Button
            (InventoryTable,
             Get_Item_Name
@@ -131,7 +134,7 @@ package body Ships.UI.Crew.Inventory is
                False, False),
             "Show the selected item's info",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            1);
+            2);
          Add_Progress_Bar
            (InventoryTable,
             Inventory_Container.Element
@@ -140,19 +143,19 @@ package body Ships.UI.Crew.Inventory is
             Default_Item_Durability,
             "The current durability level of the selected item.",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            2);
+            3);
          if Item_Is_Used(MemberIndex, I) then
             Add_Check_Button
               (InventoryTable, "The item is used by the crew member",
                "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
                Positive'Image(I),
-               True, 3);
+               True, 4);
          else
             Add_Check_Button
               (InventoryTable, "The item isn't used by the crew member",
                "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
                Positive'Image(I),
-               False, 3);
+               False, 4);
          end if;
          Add_Button
            (InventoryTable,
@@ -162,7 +165,7 @@ package body Ships.UI.Crew.Inventory is
                  .Amount),
             "The amount of the item owned by the crew member",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            4);
+            5);
          Add_Button
            (InventoryTable,
             Positive'Image
@@ -179,7 +182,7 @@ package body Ships.UI.Crew.Inventory is
             " kg",
             "The total weight of the items",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            5, True);
+            6, True);
          exit Load_Inventory_Loop when InventoryTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -543,9 +546,9 @@ package body Ships.UI.Crew.Inventory is
       InventoryTable :=
         Create_Table
           (Widget_Image(MemberFrame),
-           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
-            To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
-            To_Unbounded_String("Weight")),
+           (To_Unbounded_String(""), To_Unbounded_String("Name"),
+            To_Unbounded_String("Durability"), To_Unbounded_String("Used"),
+            To_Unbounded_String("Amount"), To_Unbounded_String("Weight")),
            YScroll, "SortCrewInventory",
            "Press mouse button to sort the inventory.");
       if Update_Inventory_Command(ClientData, Interp, Argc, Argv) =
@@ -981,6 +984,34 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
+   -- ****o* SUCI/SUCI.Toggle_Inventory_Item
+   -- FUNCTION
+   -- Select or deselect the selected item in the inventory
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleInventoryItem itemindex
+   -- Itemindex is the index of the item which will toggled
+   -- SOURCE
+   function Toggle_Inventory_Item_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_Inventory_Item_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      return TCL_OK;
+   end Toggle_Inventory_Item_Command;
+
    procedure AddCommands is
    begin
       Add_Command("UpdateInventory", Update_Inventory_Command'Access);
@@ -992,6 +1023,7 @@ package body Ships.UI.Crew.Inventory is
       Add_Command
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
       Add_Command("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
+      Add_Command("ToggleInventoryItem", Toggle_Inventory_Item_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
