@@ -234,21 +234,21 @@ package body WaitMenu is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "5" then
          Update_Game(Minutes => 5);
          Wait_In_Place(Minutes => 5);
-      elsif CArgv.Arg(Argv, 1) = "10" then
-         Update_Game(10);
-         Wait_In_Place(10);
-      elsif CArgv.Arg(Argv, 1) = "15" then
-         Update_Game(15);
-         Wait_In_Place(15);
-      elsif CArgv.Arg(Argv, 1) = "30" then
-         Update_Game(30);
-         Wait_In_Place(30);
-      elsif CArgv.Arg(Argv, 1) = "60" then
-         Update_Game(60);
-         Wait_In_Place(60);
-      elsif CArgv.Arg(Argv, 1) = "rest" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "10" then
+         Update_Game(Minutes => 10);
+         Wait_In_Place(Minutes => 10);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "15" then
+         Update_Game(Minutes => 15);
+         Wait_In_Place(Minutes => 15);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "30" then
+         Update_Game(Minutes => 30);
+         Wait_In_Place(Minutes => 30);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "60" then
+         Update_Game(Minutes => 60);
+         Wait_In_Place(Minutes => 60);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "rest" then
          Wait_For_Rest;
-      elsif CArgv.Arg(Argv, 1) = "heal" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "heal" then
          Check_Crew_Heal_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Health in 1 .. 99 and
