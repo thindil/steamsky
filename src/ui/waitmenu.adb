@@ -176,23 +176,33 @@ package body WaitMenu is
              (pathName => Wait_Dialog & ".heal",
               options =>
                 "-text {Wait until crew is healed} -command {Wait heal}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
-         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Wait_Dialog & ";break}");
          Add
            (Widget => Button,
-            Message => "Wait in place until the whole ship's crew is healed." & LF &
-            "Can take a large amount of time.");
+            Message =>
+              "Wait in place until the whole ship's crew is healed." & LF &
+              "Can take a large amount of time.");
       end if;
       Button :=
         Create
           (pathName => Wait_Dialog & ".close",
-           options => "-text {Close} -command {CloseDialog " & Wait_Dialog & "}");
+           options =>
+             "-text {Close} -command {CloseDialog " & Wait_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Wait_Dialog & ";break}");
+        (Slave => Button,
+         Options => "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{CloseDialog " & Wait_Dialog & ";break}");
       Add(Widget => Button, Message => "Close dialog \[Escape\]");
       Focus(Widgt => Button);
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Wait_Dialog & ".wait1;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus " & Wait_Dialog & ".wait1;break}");
       Show_Dialog(Dialog => Wait_Dialog, Relative_Y => 0.15);
       return TCL_OK;
    end Show_Wait_Command;
@@ -226,7 +236,8 @@ package body WaitMenu is
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".gameframe.wait.amount", Interp => Interp);
       Current_Frame: Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "1" then
          Update_Game(Minutes => 1);
@@ -256,7 +267,7 @@ package body WaitMenu is
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
-                     Owners_Loop:
+                     Owners_Loop :
                      for Owner of Module.Owner loop
                         if Owner = Crew_Container.To_Index(Position => I) then
                            if Time_Needed <
@@ -284,18 +295,22 @@ package body WaitMenu is
       Update_Header;
       Update_Messages;
       if Winfo_Get(Widgt => Current_Frame, Info => "exists") = "1"
-        and then Winfo_Get(Widgt => Current_Frame, Info => "ismapped") = "1" then
+        and then Winfo_Get(Widgt => Current_Frame, Info => "ismapped") =
+          "1" then
          Tcl_Eval(interp => Interp, strng => "ShowShipInfo 1");
       else
-         Current_Frame := Get_Widget(pathName => Main_Paned & ".knowledgeframe", Interp => Interp);
+         Current_Frame :=
+           Get_Widget
+             (pathName => Main_Paned & ".knowledgeframe", Interp => Interp);
          if Winfo_Get(Widgt => Current_Frame, Info => "exists") = "1"
-           and then Winfo_Get(Current_Frame, "ismapped") = "1" then
-            Tcl_Eval(Interp, "ShowKnowledge 1");
+           and then Winfo_Get(Widgt => Current_Frame, Info => "ismapped") =
+             "1" then
+            Tcl_Eval(interp => Interp, strng => "ShowKnowledge 1");
          else
             Draw_Map;
          end if;
       end if;
-      if Invoke(Dialog_Close_Button) /= "" then
+      if Invoke(Buttn => Dialog_Close_Button) /= "" then
          return TCL_ERROR;
       end if;
       return TCL_OK;
@@ -303,8 +318,8 @@ package body WaitMenu is
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowWait", Show_Wait_Command'Access);
-      Add_Command("Wait", Wait_Command'Access);
+      Add_Command(Name => "ShowWait", Ada_Command => Show_Wait_Command'Access);
+      Add_Command(Name => "Wait", Ada_Command => Wait_Command'Access);
    end Add_Commands;
 
 end WaitMenu;
