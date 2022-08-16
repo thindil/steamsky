@@ -139,8 +139,8 @@ package body Ships.UI.Cargo is
          end loop Fill_Cargo_Indexes_Loop;
       end if;
       configure
-        (Free_Space_Label,
-         "-text {Free cargo space:" & Integer'Image(Free_Cargo(0)) & " kg}");
+        (Widgt => Free_Space_Label,
+         options => "-text {Free cargo space:" & Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
       Load_Cargo_Loop :
       for I of Cargo_Indexes loop
          Show_Item_Block :
@@ -160,17 +160,17 @@ package body Ships.UI.Cargo is
               (if Proto_Item.Show_Type /= Null_Bounded_String then
                  Proto_Item.Show_Type
                else Proto_Item.I_Type);
-            if Index(Items_Types, "{" & To_String(Item_Type) & "}") = 0 then
-               Append(Items_Types, " {" & To_String(Item_Type) & "}");
+            if Index(Source => Items_Types, Pattern => "{" & To_String(Source => Item_Type) & "}") = 0 then
+               Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
             end if;
             if Items_Type /= "All"
-              and then To_String(Item_Type) /= Items_Type then
+              and then To_String(Source => Item_Type) /= Items_Type then
                goto End_Of_Loop;
             end if;
             Add_Button
-              (Cargo_Table, Get_Item_Name(Item),
-               "Show item's description and actions",
-               "ShowCargoItemInfo" & Positive'Image(I), 1);
+              (Table => Cargo_Table, Text => Get_Item_Name(Item => Item),
+               Tooltip => "Show item's description and actions",
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 1);
             Add_Progress_Bar
               (Cargo_Table, Item.Durability, Default_Item_Durability,
                "The current durability of the selected crew member",
