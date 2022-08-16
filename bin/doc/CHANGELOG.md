@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Icon for move item to cargo, equip item, unequip item. Author: Lorc,
-  Delapouite (https://game-icons.net), license CC BY 3.0
+- Icon for move item to cargo, equip item, unequip item, unchecked empty
+  checkboxes. Author: Lorc, Delapouite (https://game-icons.net), license
+  CC BY 3.0
 
 ### Changed
 - Updated modding guide
