@@ -387,10 +387,10 @@ package body Ships.UI.Cargo is
          Local_Cargo(I) :=
            (Name =>
               To_Unbounded_String
-                (Get_Item_Name
-                   (Inventory_Container.Element
+                (Source => Get_Item_Name
+                   (Item => Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I),
-                    False, False)),
+                    Damage_Info => False, To_Lower => False)),
             Damage =>
               Float
                 (Inventory_Container.Element
@@ -439,13 +439,14 @@ package body Ships.UI.Cargo is
                 .Weight,
             Id => I);
       end loop Fill_Local_Cargo_Loop;
-      Sort_Cargo(Local_Cargo);
+      Sort_Cargo(Container => Local_Cargo);
       Cargo_Indexes.Clear;
+      Fill_Cargo_Indexes_Loop:
       for Item of Local_Cargo loop
-         Cargo_Indexes.Append(Item.Id);
-      end loop;
+         Cargo_Indexes.Append(New_Item => Item.Id);
+      end loop Fill_Cargo_Indexes_Loop;
       return
-        Show_Cargo_Command(Client_Data, Interp, 1, CArgv.Empty & "ShowCargo");
+        Show_Cargo_Command(Client_Data => Client_Data, Interp => Interp, Argc => 1, Argv => CArgv.Empty & "ShowCargo");
    end Sort_Cargo_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
@@ -453,10 +454,10 @@ package body Ships.UI.Cargo is
    -- Show UI to give the selected item from the ship cargo to the selected
    -- crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -464,45 +465,45 @@ package body Ships.UI.Cargo is
    -- Itemindex is the index of the item which will be set
    -- SOURCE
    function Show_Give_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Give_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ItemDialog: constant Ttk_Frame :=
+      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (".itemdialog",
            "Give " &
            Get_Item_Name
              (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => ItemIndex)) &
+                (Container => Player_Ship.Cargo, Index => Item_Index)) &
            " from the ship's cargo to the selected crew member",
            370, 3);
-      Button: Ttk_Button := Create(ItemDialog & ".maxbutton");
+      Button: Ttk_Button := Create(Item_Dialog & ".maxbutton");
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
-          (ItemDialog & ".giveamount",
+          (Item_Dialog & ".giveamount",
            "-width 14 -from 1 -to" &
            Positive'Image
              (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                (Container => Player_Ship.Cargo, Index => Item_Index)
                 .Amount) &
            " -validate key -validatecommand {CheckAmount %W" &
-           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
-           ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
+           Positive'Image(Item_Index) & " %P} -command {ValidateAmount " &
+           Item_Dialog & ".giveamount" & Positive'Image(Item_Index) & "}");
       CrewBox: constant Ttk_ComboBox :=
-        Create(ItemDialog & ".member", "-state readonly -width 14");
+        Create(Item_Dialog & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
    begin
-      Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
+      Label := Create(Item_Dialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
@@ -513,13 +514,13 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 1");
       Bind
         (CrewBox, "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
+         "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Bind
         (CrewBox, "<<ComboboxSelected>>",
          "{UpdateMaxGiveAmount " & CArgv.Arg(Argv, 1) & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
       Bind
-        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Add
         (Button,
          "Set the max amount as amount to give for the selected crew member.");
@@ -527,27 +528,27 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
       Bind
         (AmountBox, "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
+         "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Label :=
         Create
-          (ItemDialog & ".errorlbl",
+          (Item_Dialog & ".errorlbl",
            "-style Headerred.TLabel -wraplength 350");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Button :=
         Create
-          (ItemDialog & ".givebutton",
+          (Item_Dialog & ".givebutton",
            "-image giveicon -command {GiveItem " & CArgv.Arg(Argv, 1) &
            "} -style Dialog.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
       Add(Button, "Give the item");
       Bind
-        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
-          (ItemDialog & ".cancelbutton",
-           "-image cancelicon -command {CloseDialog " & ItemDialog &
+          (Item_Dialog & ".cancelbutton",
+           "-image cancelicon -command {CloseDialog " & Item_Dialog &
            "} -style Dialog.TButton -text Close");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
@@ -555,7 +556,7 @@ package body Ships.UI.Cargo is
       Focus(Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.maxbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(ItemDialog);
+      Show_Dialog(Item_Dialog);
       Generate(CrewBox, "<<ComboboxSelected>>");
       return TCL_OK;
    end Show_Give_Item_Command;
