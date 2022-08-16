@@ -122,15 +122,21 @@ package body Ships.UI.Cargo is
       Cargo_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Cargo_Info_Frame),
-           Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Durability"),
-            3 => To_Unbounded_String(Source => "Type"), 4 => To_Unbounded_String(Source => "Amount"),
-            5 => To_Unbounded_String(Source => "Weight")),
-           Scrollbar => Get_Widget(pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
-           Command => "SortShipCargo", Tooltip => "Press mouse button to sort the cargo.");
+           Headers =>
+             (1 => To_Unbounded_String(Source => "Name"),
+              2 => To_Unbounded_String(Source => "Durability"),
+              3 => To_Unbounded_String(Source => "Type"),
+              4 => To_Unbounded_String(Source => "Amount"),
+              5 => To_Unbounded_String(Source => "Weight")),
+           Scrollbar =>
+             Get_Widget
+               (pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
+           Command => "SortShipCargo",
+           Tooltip => "Press mouse button to sort the cargo.");
       if Cargo_Indexes.Length /=
         Inventory_Container.Length(Container => Player_Ship.Cargo) then
          Cargo_Indexes.Clear;
-         Fill_Cargo_Indexes_Loop:
+         Fill_Cargo_Indexes_Loop :
          for I in
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
@@ -140,7 +146,9 @@ package body Ships.UI.Cargo is
       end if;
       configure
         (Widgt => Free_Space_Label,
-         options => "-text {Free cargo space:" & Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
+         options =>
+           "-text {Free cargo space:" &
+           Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
       Load_Cargo_Loop :
       for I of Cargo_Indexes loop
          Show_Item_Block :
@@ -160,8 +168,13 @@ package body Ships.UI.Cargo is
               (if Proto_Item.Show_Type /= Null_Bounded_String then
                  Proto_Item.Show_Type
                else Proto_Item.I_Type);
-            if Index(Source => Items_Types, Pattern => "{" & To_String(Source => Item_Type) & "}") = 0 then
-               Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
+            if Index
+                (Source => Items_Types,
+                 Pattern => "{" & To_String(Source => Item_Type) & "}") =
+              0 then
+               Append
+                 (Source => Items_Types,
+                  New_Item => " {" & To_String(Source => Item_Type) & "}");
             end if;
             if Items_Type /= "All"
               and then To_String(Source => Item_Type) /= Items_Type then
@@ -170,24 +183,30 @@ package body Ships.UI.Cargo is
             Add_Button
               (Table => Cargo_Table, Text => Get_Item_Name(Item => Item),
                Tooltip => "Show item's description and actions",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 1);
+               Command => "ShowCargoItemInfo" & Positive'Image(I),
+               Column => 1);
             Add_Progress_Bar
-              (Table => Cargo_Table, Value => Item.Durability, Max_Value => Default_Item_Durability,
+              (Table => Cargo_Table, Value => Item.Durability,
+               Max_Value => Default_Item_Durability,
                Tooltip => "The current durability of the selected crew member",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 2);
+               Command => "ShowCargoItemInfo" & Positive'Image(I),
+               Column => 2);
             Add_Button
               (Table => Cargo_Table, Text => To_String(Source => Item_Type),
                Tooltip => "The type of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 3);
+               Command => "ShowCargoItemInfo" & Positive'Image(I),
+               Column => 3);
             Add_Button
               (Table => Cargo_Table, Text => Positive'Image(Item.Amount),
                Tooltip => "The amount of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 4);
+               Command => "ShowCargoItemInfo" & Positive'Image(I),
+               Column => 4);
             Add_Button
               (Table => Cargo_Table,
                Text => Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
                Tooltip => "The total weight of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5, New_Row => True);
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5,
+               New_Row => True);
             exit Load_Cargo_Loop when Cargo_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Loop>>
@@ -195,18 +214,26 @@ package body Ships.UI.Cargo is
       end loop Load_Cargo_Loop;
       if Page > 1 then
          Add_Pagination
-           (Table => Cargo_Table, Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
-            Next_Command => (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "ShowCargo" & Positive'Image(Page + 1)));
+           (Table => Cargo_Table,
+            Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
+            Next_Command =>
+              (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+               else "ShowCargo" & Positive'Image(Page + 1)));
       elsif Cargo_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Cargo_Table, Previous_Command => "", Next_Command => "ShowCargo" & Positive'Image(Page + 1));
+           (Table => Cargo_Table, Previous_Command => "",
+            Next_Command => "ShowCargo" & Positive'Image(Page + 1));
       end if;
       Update_Table(Table => Cargo_Table);
-      configure(Widgt => Type_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
+      configure
+        (Widgt => Type_Box,
+         options => "-values [list " & To_String(Source => Items_Types) & "]");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Widgt => Ship_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+        (Widgt => Ship_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       return TCL_OK;
@@ -281,7 +308,8 @@ package body Ships.UI.Cargo is
       Column: constant Positive :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (Table => Cargo_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+             (Table => Cargo_Table,
+              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
@@ -378,19 +406,22 @@ package body Ships.UI.Cargo is
       if Cargo_Sort_Order = NONE then
          return
            Show_Cargo_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 1, Argv => CArgv.Empty & "ShowCargo");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 1,
+              Argv => CArgv.Empty & "ShowCargo");
       end if;
-      Fill_Local_Cargo_Loop:
+      Fill_Local_Cargo_Loop :
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
          Local_Cargo(I) :=
            (Name =>
               To_Unbounded_String
-                (Source => Get_Item_Name
-                   (Item => Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => I),
-                    Damage_Info => False, To_Lower => False)),
+                (Source =>
+                   Get_Item_Name
+                     (Item =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo, Index => I),
+                      Damage_Info => False, To_Lower => False)),
             Damage =>
               Float
                 (Inventory_Container.Element
@@ -441,12 +472,14 @@ package body Ships.UI.Cargo is
       end loop Fill_Local_Cargo_Loop;
       Sort_Cargo(Container => Local_Cargo);
       Cargo_Indexes.Clear;
-      Fill_Cargo_Indexes_Loop:
+      Fill_Cargo_Indexes_Loop :
       for Item of Local_Cargo loop
          Cargo_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Cargo_Indexes_Loop;
       return
-        Show_Cargo_Command(Client_Data => Client_Data, Interp => Interp, Argc => 1, Argv => CArgv.Empty & "ShowCargo");
+        Show_Cargo_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 1,
+           Argv => CArgv.Empty & "ShowCargo");
    end Sort_Cargo_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
@@ -476,58 +509,65 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".itemdialog",
-           "Give " &
-           Get_Item_Name
-             (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)) &
-           " from the ship's cargo to the selected crew member",
-           370, 3);
-      Button: Ttk_Button := Create(Item_Dialog & ".maxbutton");
+          (Name => ".itemdialog",
+           Title =>
+             "Give " &
+             Get_Item_Name
+               (Item =>
+                  Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => Item_Index)) &
+             " from the ship's cargo to the selected crew member",
+           Title_Width => 370, Columns => 3);
+      Button: Ttk_Button := Create(pathName => Item_Dialog & ".maxbutton");
       Label: Ttk_Label;
-      AmountBox: constant Ttk_SpinBox :=
+      Amount_Box: constant Ttk_SpinBox :=
         Create
-          (Item_Dialog & ".giveamount",
-           "-width 14 -from 1 -to" &
-           Positive'Image
-             (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)
-                .Amount) &
-           " -validate key -validatecommand {CheckAmount %W" &
-           Positive'Image(Item_Index) & " %P} -command {ValidateAmount " &
-           Item_Dialog & ".giveamount" & Positive'Image(Item_Index) & "}");
-      CrewBox: constant Ttk_ComboBox :=
-        Create(Item_Dialog & ".member", "-state readonly -width 14");
-      MembersNames: Unbounded_String;
+          (pathName => Item_Dialog & ".giveamount",
+           options =>
+             "-width 14 -from 1 -to" &
+             Positive'Image
+               (Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => Item_Index)
+                  .Amount) &
+             " -validate key -validatecommand {CheckAmount %W" &
+             Positive'Image(Item_Index) & " %P} -command {ValidateAmount " &
+             Item_Dialog & ".giveamount" & Positive'Image(Item_Index) & "}");
+      Crew_Box: constant Ttk_ComboBox :=
+        Create
+          (pathName => Item_Dialog & ".member",
+           options => "-state readonly -width 14");
+      Members_Names: Unbounded_String;
    begin
       Label := Create(Item_Dialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
-         Append(MembersNames, " " & To_String(Source => Member.Name));
+         Append(Members_Names, " " & To_String(Source => Member.Name));
       end loop Load_Crew_Names_Loop;
-      configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
-      Current(CrewBox, "0");
-      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 1");
+      configure(Crew_Box, "-values [list" & To_String(Members_Names) & "]");
+      Current(Crew_Box, "0");
+      Tcl.Tk.Ada.Grid.Grid(Crew_Box, "-column 1 -row 1");
       Bind
-        (CrewBox, "<Escape>",
+        (Crew_Box, "<Escape>",
          "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Bind
-        (CrewBox, "<<ComboboxSelected>>",
+        (Crew_Box, "<<ComboboxSelected>>",
          "{UpdateMaxGiveAmount " & CArgv.Arg(Argv, 1) & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
       Bind
-        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>",
+         "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Add
         (Button,
          "Set the max amount as amount to give for the selected crew member.");
-      Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
+      Set(Amount_Box, "1");
+      Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-column 1 -row 2 -pady {0 5}");
       Bind
-        (AmountBox, "<Escape>",
+        (Amount_Box, "<Escape>",
          "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Label :=
         Create
@@ -544,7 +584,8 @@ package body Ships.UI.Cargo is
         (Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
       Add(Button, "Give the item");
       Bind
-        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>",
+         "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (Item_Dialog & ".cancelbutton",
@@ -557,7 +598,7 @@ package body Ships.UI.Cargo is
       Bind(Button, "<Tab>", "{focus .itemdialog.maxbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(Item_Dialog);
-      Generate(CrewBox, "<<ComboboxSelected>>");
+      Generate(Crew_Box, "<<ComboboxSelected>>");
       return TCL_OK;
    end Show_Give_Item_Command;
 
