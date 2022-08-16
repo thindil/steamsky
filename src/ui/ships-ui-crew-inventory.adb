@@ -210,6 +210,8 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Sorting orders for items inside various inventories
    -- OPTIONS
+   -- SELECTEDASC    - Sort items by selected ascending
+   -- SELETEDDESC    - Sort items by selected descending
    -- NAMEASC        - Sort items by name ascending
    -- NAMEDESC       - Sort items by name descending
    -- DURABILITYASC  - Sort items by durability ascending
@@ -225,11 +227,12 @@ package body Ships.UI.Crew.Inventory is
    -- NONE           - No sorting items (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 7.8 - Added SELECTEDASC and SELECTEDDESC values
    -- SOURCE
    type Inventory_Sort_Orders is
-     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
-      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC,
-      NONE) with
+     (SELECTEDASC, SELECTEDDESC, NAMEASC, NAMEDESC, DURABILITYASC,
+      DURABILITYDESC, TYPEASC, TYPEDESC, AMOUNTASC, AMOUNTDESC, WEIGHTASC,
+      WEIGHTDESC, USEDASC, USEDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -280,6 +283,7 @@ package body Ships.UI.Crew.Inventory is
          else Get_Column_Number
              (InventoryTable, Natural'Value(CArgv.Arg(Argv, 1))));
       type Local_Item_Data is record
+         Selected: Boolean;
          Name: Unbounded_String;
          Damage: Float;
          Item_Type: Bounded_String;
@@ -296,6 +300,14 @@ package body Ships.UI.Crew.Inventory is
                   (Container => Player_Ship.Crew(MemberIndex).Inventory)));
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
+         if Inventory_Sort_Order = SELECTEDASC
+           and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Inventory_Sort_Order = SELECTEDDESC
+           and then Left.Name > Right.Name then
+            return True;
+         end if;
          if Inventory_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
@@ -350,30 +362,36 @@ package body Ships.UI.Crew.Inventory is
    begin
       case Column is
          when 1 =>
+            if Inventory_Sort_Order = SELECTEDASC then
+               Inventory_Sort_Order := SELECTEDDESC;
+            else
+               Inventory_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
             if Inventory_Sort_Order = NAMEASC then
                Inventory_Sort_Order := NAMEDESC;
             else
                Inventory_Sort_Order := NAMEASC;
             end if;
-         when 2 =>
+         when 3 =>
             if Inventory_Sort_Order = DURABILITYASC then
                Inventory_Sort_Order := DURABILITYDESC;
             else
                Inventory_Sort_Order := DURABILITYASC;
             end if;
-         when 3 =>
+         when 4 =>
             if Inventory_Sort_Order = USEDASC then
                Inventory_Sort_Order := USEDDESC;
             else
                Inventory_Sort_Order := USEDASC;
             end if;
-         when 4 =>
+         when 5 =>
             if Inventory_Sort_Order = AMOUNTASC then
                Inventory_Sort_Order := AMOUNTDESC;
             else
                Inventory_Sort_Order := AMOUNTASC;
             end if;
-         when 5 =>
+         when 6 =>
             if Inventory_Sort_Order = WEIGHTASC then
                Inventory_Sort_Order := WEIGHTDESC;
             else
@@ -395,7 +413,8 @@ package body Ships.UI.Crew.Inventory is
           Inventory_Container.Last_Index
             (Container => Player_Ship.Crew(MemberIndex).Inventory) loop
          Local_Inventory(I) :=
-           (Name =>
+           (Selected => False,
+            Name =>
               To_Unbounded_String
                 (Get_Item_Name
                    (Inventory_Container.Element
