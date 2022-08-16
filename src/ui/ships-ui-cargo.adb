@@ -184,10 +184,10 @@ package body Ships.UI.Cargo is
                Tooltip => "The amount of the selected item",
                Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 4);
             Add_Button
-              (Cargo_Table,
-               Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
-               "The total weight of the selected item",
-               "ShowCargoItemInfo" & Positive'Image(I), 5, True);
+              (Table => Cargo_Table,
+               Text => Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
+               Tooltip => "The total weight of the selected item",
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5, New_Row => True);
             exit Load_Cargo_Loop when Cargo_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Loop>>
@@ -195,16 +195,16 @@ package body Ships.UI.Cargo is
       end loop Load_Cargo_Loop;
       if Page > 1 then
          Add_Pagination
-           (Cargo_Table, "ShowCargo" & Positive'Image(Page - 1),
-            (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+           (Table => Cargo_Table, Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
+            Next_Command => (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCargo" & Positive'Image(Page + 1)));
       elsif Cargo_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Cargo_Table, "", "ShowCargo" & Positive'Image(Page + 1));
+           (Table => Cargo_Table, Previous_Command => "", Next_Command => "ShowCargo" & Positive'Image(Page + 1));
       end if;
-      Update_Table(Cargo_Table);
-      configure(Type_Box, "-values [list " & To_String(Items_Types) & "]");
-      Tcl_Eval(Get_Context, "update");
+      Update_Table(Table => Cargo_Table);
+      configure(Widgt => Type_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
       Xview_Move_To(Ship_Canvas, "0.0");
