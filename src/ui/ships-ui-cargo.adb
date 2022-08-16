@@ -206,9 +206,9 @@ package body Ships.UI.Cargo is
       configure(Widgt => Type_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
-      Xview_Move_To(Ship_Canvas, "0.0");
-      Yview_Move_To(Ship_Canvas, "0.0");
+        (Widgt => Ship_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       return TCL_OK;
    end Show_Cargo_Command;
 
@@ -256,10 +256,10 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Sort the player's ship's cargo list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -267,21 +267,21 @@ package body Ships.UI.Cargo is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
+        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (Cargo_Table, Natural'Value(CArgv.Arg(Argv, 1))));
+             (Table => Cargo_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
@@ -378,8 +378,9 @@ package body Ships.UI.Cargo is
       if Cargo_Sort_Order = NONE then
          return
            Show_Cargo_Command
-             (ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 1, Argv => CArgv.Empty & "ShowCargo");
       end if;
+      Fill_Local_Cargo_Loop:
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
@@ -437,14 +438,14 @@ package body Ships.UI.Cargo is
                      .Proto_Index)
                 .Weight,
             Id => I);
-      end loop;
+      end loop Fill_Local_Cargo_Loop;
       Sort_Cargo(Local_Cargo);
       Cargo_Indexes.Clear;
       for Item of Local_Cargo loop
          Cargo_Indexes.Append(Item.Id);
       end loop;
       return
-        Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
+        Show_Cargo_Command(Client_Data, Interp, 1, CArgv.Empty & "ShowCargo");
    end Sort_Cargo_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
