@@ -673,7 +673,9 @@ package body Table is
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
       Image_Name: constant String :=
         "${ttk::theme::" & Theme_Use & "::Images(checkbox-" &
-        (if Checked then "checked" else "unchecked") & ")}";
+        (if Checked then "checked"
+         else (if Empty_Unchecked then "unchecked-empty" else "unchecked")) &
+        ")}";
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -687,10 +689,7 @@ package body Table is
                 Options =>
                   Trim(Source => Natural'Image(X), Side => Left) &
                   Positive'Image((Table.Row * Table.Row_Height) + 2) &
-                  " -anchor nw" &
-                  (if not Checked and Empty_Unchecked then " "
-                   else " -image " & Image_Name) &
-                  " -tags [list row" &
+                  " -anchor nw -image " & Image_Name & " -tags [list row" &
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
