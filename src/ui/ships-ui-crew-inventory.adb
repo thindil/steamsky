@@ -124,8 +124,10 @@ package body Ships.UI.Crew.Inventory is
             goto End_Of_Loop;
          end if;
          Add_Check_Button
-           (InventoryTable, "Select the item for move or equip it.",
-            "ToggleInventoryItem" & Positive'Image(I), False, 1);
+           (Table => InventoryTable,
+            Tooltip => "Select the item for move or equip it.",
+            Command => "ToggleInventoryItem" & Positive'Image(I),
+            Checked => False, Column => 1, Empty_Unchecked => True);
          Add_Button
            (InventoryTable,
             Get_Item_Name
