@@ -172,17 +172,17 @@ package body Ships.UI.Cargo is
                Tooltip => "Show item's description and actions",
                Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 1);
             Add_Progress_Bar
-              (Cargo_Table, Item.Durability, Default_Item_Durability,
-               "The current durability of the selected crew member",
-               "ShowCargoItemInfo" & Positive'Image(I), 2);
+              (Table => Cargo_Table, Value => Item.Durability, Max_Value => Default_Item_Durability,
+               Tooltip => "The current durability of the selected crew member",
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 2);
             Add_Button
-              (Cargo_Table, To_String(Item_Type),
-               "The type of the selected item",
-               "ShowCargoItemInfo" & Positive'Image(I), 3);
+              (Table => Cargo_Table, Text => To_String(Source => Item_Type),
+               Tooltip => "The type of the selected item",
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 3);
             Add_Button
-              (Cargo_Table, Positive'Image(Item.Amount),
-               "The amount of the selected item",
-               "ShowCargoItemInfo" & Positive'Image(I), 4);
+              (Table => Cargo_Table, Text => Positive'Image(Item.Amount),
+               Tooltip => "The amount of the selected item",
+               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 4);
             Add_Button
               (Cargo_Table,
                Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
