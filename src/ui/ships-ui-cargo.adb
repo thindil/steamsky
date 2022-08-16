@@ -121,21 +121,22 @@ package body Ships.UI.Cargo is
         (Start_Index => 3, End_Index => Rows - 1, Frame => Cargo_Info_Frame);
       Cargo_Table :=
         Create_Table
-          (Widget_Image(Cargo_Info_Frame),
-           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
-            To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
-            To_Unbounded_String("Weight")),
-           Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"),
-           "SortShipCargo", "Press mouse button to sort the cargo.");
+          (Parent => Widget_Image(Win => Cargo_Info_Frame),
+           Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Durability"),
+            3 => To_Unbounded_String(Source => "Type"), 4 => To_Unbounded_String(Source => "Amount"),
+            5 => To_Unbounded_String(Source => "Weight")),
+           Scrollbar => Get_Widget(pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
+           Command => "SortShipCargo", Tooltip => "Press mouse button to sort the cargo.");
       if Cargo_Indexes.Length /=
         Inventory_Container.Length(Container => Player_Ship.Cargo) then
          Cargo_Indexes.Clear;
+         Fill_Cargo_Indexes_Loop:
          for I in
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
                (Container => Player_Ship.Cargo) loop
-            Cargo_Indexes.Append(I);
-         end loop;
+            Cargo_Indexes.Append(New_Item => I);
+         end loop Fill_Cargo_Indexes_Loop;
       end if;
       configure
         (Free_Space_Label,
