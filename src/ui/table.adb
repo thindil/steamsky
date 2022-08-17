@@ -958,6 +958,13 @@ package body Table is
       return TCL_OK;
    end Hide_Current_Row_Command;
 
+   function Is_Checked
+     (Table: Table_Widget; Row, Column: Natural) return Boolean is
+      pragma Unreferenced(Table, Row, Column);
+   begin
+      return True;
+   end Is_Checked;
+
    procedure Add_Commands is
    begin
       Add_Command

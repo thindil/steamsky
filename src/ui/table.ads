@@ -247,13 +247,29 @@ package Table is
    procedure Update_Headers_Command(Table: Table_Widget; Command: String);
    -- ****
 
-   -- ****f* Table/Tabel.Add_Commands
+   -- ****f* Table/Table.Is_Checked
    -- FUNCTION
-   -- Add Tcl commands related to the Table_Widget
+   -- Check if the selected checkbutton is checked or not
+   -- PARAMETERS
+   -- Table  - The Table_Widget in which the checkbutton will be checked
+   -- Row    - The row number in which the checkbutton will be checked
+   -- Column - The column number in which the checkbutton will be checked
+   -- RESULT
+   -- True if the selected checkbutton is checked, otherwise False
    -- HISTORY
-   -- 6.6 - Added
-   -- 7.1 - Renamed to Add_Commands
+   -- 7.8 - Added
    -- SOURCE
+   function Is_Checked
+     (Table: Table_Widget; Row, Column: Natural) return Boolean;
+     -- ****
+
+     -- ****f* Table/Tabel.Add_Commands
+     -- FUNCTION
+     -- Add Tcl commands related to the Table_Widget
+     -- HISTORY
+     -- 6.6 - Added
+     -- 7.1 - Renamed to Add_Commands
+     -- SOURCE
    procedure Add_Commands;
    -- ****
 
