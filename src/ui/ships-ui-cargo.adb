@@ -595,10 +595,10 @@ package body Ships.UI.Cargo is
         (Slave => Button, Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
       Add(Widget => Button, Message => "Cancel giving and close dialog. \[Escape key\]");
       Focus(Widgt => Button);
-      Bind(Button, "<Tab>", "{focus .itemdialog.maxbutton;break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(Item_Dialog);
-      Generate(Crew_Box, "<<ComboboxSelected>>");
+      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus .itemdialog.maxbutton;break}");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Show_Dialog(Dialog => Item_Dialog);
+      Generate(Window => Crew_Box, EventName => "<<ComboboxSelected>>");
       return TCL_OK;
    end Show_Give_Item_Command;
 
@@ -607,40 +607,40 @@ package body Ships.UI.Cargo is
    -- Give selected amount of the selected item from the ship's cargo to the
    -- selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- GiveItem
    -- SOURCE
    function Give_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Give_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      MemberIndex, Amount: Positive;
-      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Member_Index, Amount: Positive;
+      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item: constant Inventory_Data :=
         Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => ItemIndex);
-      ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
-      SpinBox: constant Ttk_SpinBox := Get_Widget(ItemDialog & ".giveamount");
-      ComboBox: constant Ttk_ComboBox := Get_Widget(ItemDialog & ".member");
+          (Container => Player_Ship.Cargo, Index => Item_Index);
+      Item_Dialog: Tk_Toplevel := Get_Widget(pathName => ".itemdialog", Interp => Interp);
+      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => Item_Dialog & ".giveamount");
+      Combo_Box: constant Ttk_ComboBox := Get_Widget(Item_Dialog & ".member");
    begin
-      Amount := Natural'Value(Get(SpinBox));
-      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      Amount := Natural'Value(Get(Spin_Box));
+      Member_Index := Natural'Value(Current(Combo_Box)) + 1;
       if Free_Inventory
-          (MemberIndex,
+          (Member_Index,
            0 -
            (Objects_Container.Element
               (Container => Items_List, Index => Item.Proto_Index)
@@ -650,7 +650,7 @@ package body Ships.UI.Cargo is
          Show_Message
            (Text =>
               "No free space in " &
-              To_String(Player_Ship.Crew(MemberIndex).Name) &
+              To_String(Player_Ship.Crew(Member_Index).Name) &
               "'s inventory for that amount of " & Get_Item_Name(Item),
             Title => "Can't give item");
          return TCL_OK;
@@ -659,24 +659,24 @@ package body Ships.UI.Cargo is
         ("You gave" & Positive'Image(Amount) & " " &
          Get_Item_Name
            (Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => ItemIndex)) &
-         " to " & To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
+              (Container => Player_Ship.Cargo, Index => Item_Index)) &
+         " to " & To_String(Player_Ship.Crew(Member_Index).Name) & ".",
          OTHERMESSAGE);
       Update_Inventory
-        (Member_Index => MemberIndex, Amount => Amount,
+        (Member_Index => Member_Index, Amount => Amount,
          Proto_Index => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
       Update_Cargo
-        (Ship => Player_Ship, Amount => (0 - Amount), Cargo_Index => ItemIndex,
+        (Ship => Player_Ship, Amount => (0 - Amount), Cargo_Index => Item_Index,
          Price => Item.Price);
-      Destroy(ItemDialog);
+      Destroy(Item_Dialog);
       Tcl.Tk.Ada.Busy.Forget(Main_Paned);
       Tcl.Tk.Ada.Busy.Forget(Game_Header);
       Update_Header;
       Update_Messages;
       return
         Sort_Cargo_Command
-          (ClientData, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
+          (Client_Data, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
    end Give_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Drop_Item_Command
