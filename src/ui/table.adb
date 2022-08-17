@@ -960,9 +960,17 @@ package body Table is
 
    function Is_Checked
      (Table: Table_Widget; Row, Column: Natural) return Boolean is
-      pragma Unreferenced(Table, Row, Column);
    begin
-      return True;
+      if Item_Cget
+          (CanvasWidget => Table.Canvas,
+           TagOrId =>
+             "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+             "col" & Trim(Source => Positive'Image(Column), Side => Left),
+           Option => "-image") =
+        "checkbox-checked" then
+         return True;
+      end if;
+      return False;
    end Is_Checked;
 
    procedure Add_Commands is
