@@ -577,24 +577,24 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Button :=
         Create
-          (Item_Dialog & ".givebutton",
-           "-image giveicon -command {GiveItem " & CArgv.Arg(Argv, 1) &
+          (pathName => Item_Dialog & ".givebutton",
+           options => "-image giveicon -command {GiveItem " & CArgv.Arg(Argv => Argv, N => 1) &
            "} -style Dialog.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
-        (Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
-      Add(Button, "Give the item");
+        (Slave => Button, Options => "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
+      Add(Widget => Button, Message => "Give the item");
       Bind
-        (Button, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
-          (Item_Dialog & ".cancelbutton",
-           "-image cancelicon -command {CloseDialog " & Item_Dialog &
+          (pathName => Item_Dialog & ".cancelbutton",
+           options => "-image cancelicon -command {CloseDialog " & Item_Dialog &
            "} -style Dialog.TButton -text Close");
       Tcl.Tk.Ada.Grid.Grid
-        (Button, "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
-      Add(Button, "Cancel giving and close dialog. \[Escape key\]");
-      Focus(Button);
+        (Slave => Button, Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
+      Add(Widget => Button, Message => "Cancel giving and close dialog. \[Escape key\]");
+      Focus(Widgt => Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.maxbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(Item_Dialog);
