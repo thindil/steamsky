@@ -557,24 +557,24 @@ package body Ships.UI.Cargo is
       Bind
         (Widgt => Crew_Box, Sequence => "<<ComboboxSelected>>",
          Script => "{UpdateMaxGiveAmount " & CArgv.Arg(Argv => Argv, N => 1) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 2 -pady {0 5}");
       Bind
-        (Button, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Add
-        (Button,
-         "Set the max amount as amount to give for the selected crew member.");
-      Set(Amount_Box, "1");
-      Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-column 1 -row 2 -pady {0 5}");
+        (Widget => Button,
+         Message => "Set the max amount as amount to give for the selected crew member.");
+      Set(SpinBox => Amount_Box, Value => "1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 2 -pady {0 5}");
       Bind
-        (Amount_Box, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Amount_Box, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Label :=
         Create
-          (Item_Dialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 350");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+          (pathName => Item_Dialog & ".errorlbl",
+           options => "-style Headerred.TLabel -wraplength 350");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Button :=
         Create
           (Item_Dialog & ".givebutton",
