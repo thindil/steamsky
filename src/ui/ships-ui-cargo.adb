@@ -542,21 +542,21 @@ package body Ships.UI.Cargo is
            options => "-state readonly -width 14");
       Members_Names: Unbounded_String;
    begin
-      Label := Create(Item_Dialog & ".memberlbl", "-text {To:}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Label := Create(pathName => Item_Dialog & ".memberlbl", options => "-text {To:}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
-         Append(Members_Names, " " & To_String(Source => Member.Name));
+         Append(Source => Members_Names, New_Item => " " & To_String(Source => Member.Name));
       end loop Load_Crew_Names_Loop;
-      configure(Crew_Box, "-values [list" & To_String(Members_Names) & "]");
-      Current(Crew_Box, "0");
-      Tcl.Tk.Ada.Grid.Grid(Crew_Box, "-column 1 -row 1");
+      configure(Widgt => Crew_Box, options => "-values [list" & To_String(Source => Members_Names) & "]");
+      Current(ComboBox => Crew_Box, NewIndex => "0");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Box, Options => "-column 1 -row 1");
       Bind
-        (Crew_Box, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Crew_Box, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Bind
-        (Crew_Box, "<<ComboboxSelected>>",
-         "{UpdateMaxGiveAmount " & CArgv.Arg(Argv, 1) & "}");
+        (Widgt => Crew_Box, Sequence => "<<ComboboxSelected>>",
+         Script => "{UpdateMaxGiveAmount " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
       Bind
         (Button, "<Escape>",
