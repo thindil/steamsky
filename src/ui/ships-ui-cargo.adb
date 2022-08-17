@@ -542,13 +542,20 @@ package body Ships.UI.Cargo is
            options => "-state readonly -width 14");
       Members_Names: Unbounded_String;
    begin
-      Label := Create(pathName => Item_Dialog & ".memberlbl", options => "-text {To:}");
+      Label :=
+        Create
+          (pathName => Item_Dialog & ".memberlbl", options => "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
-         Append(Source => Members_Names, New_Item => " " & To_String(Source => Member.Name));
+         Append
+           (Source => Members_Names,
+            New_Item => " " & To_String(Source => Member.Name));
       end loop Load_Crew_Names_Loop;
-      configure(Widgt => Crew_Box, options => "-values [list" & To_String(Source => Members_Names) & "]");
+      configure
+        (Widgt => Crew_Box,
+         options =>
+           "-values [list" & To_String(Source => Members_Names) & "]");
       Current(ComboBox => Crew_Box, NewIndex => "0");
       Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Box, Options => "-column 1 -row 1");
       Bind
@@ -556,16 +563,19 @@ package body Ships.UI.Cargo is
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Bind
         (Widgt => Crew_Box, Sequence => "<<ComboboxSelected>>",
-         Script => "{UpdateMaxGiveAmount " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+         Script =>
+           "{UpdateMaxGiveAmount " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 2 -pady {0 5}");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Add
         (Widget => Button,
-         Message => "Set the max amount as amount to give for the selected crew member.");
+         Message =>
+           "Set the max amount as amount to give for the selected crew member.");
       Set(SpinBox => Amount_Box, Value => "1");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 2 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Amount_Box, Options => "-column 1 -row 2 -pady {0 5}");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
@@ -578,10 +588,13 @@ package body Ships.UI.Cargo is
       Button :=
         Create
           (pathName => Item_Dialog & ".givebutton",
-           options => "-image giveicon -command {GiveItem " & CArgv.Arg(Argv => Argv, N => 1) &
-           "} -style Dialog.TButton -text Give");
+           options =>
+             "-image giveicon -command {GiveItem " &
+             CArgv.Arg(Argv => Argv, N => 1) &
+             "} -style Dialog.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
+        (Slave => Button,
+         Options => "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
       Add(Widget => Button, Message => "Give the item");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
@@ -589,14 +602,22 @@ package body Ships.UI.Cargo is
       Button :=
         Create
           (pathName => Item_Dialog & ".cancelbutton",
-           options => "-image cancelicon -command {CloseDialog " & Item_Dialog &
-           "} -style Dialog.TButton -text Close");
+           options =>
+             "-image cancelicon -command {CloseDialog " & Item_Dialog &
+             "} -style Dialog.TButton -text Close");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
-      Add(Widget => Button, Message => "Cancel giving and close dialog. \[Escape key\]");
+        (Slave => Button,
+         Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
+      Add
+        (Widget => Button,
+         Message => "Cancel giving and close dialog. \[Escape key\]");
       Focus(Widgt => Button);
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus .itemdialog.maxbutton;break}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus .itemdialog.maxbutton;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       Show_Dialog(Dialog => Item_Dialog);
       Generate(Window => Crew_Box, EventName => "<<ComboboxSelected>>");
       return TCL_OK;
@@ -629,23 +650,28 @@ package body Ships.UI.Cargo is
       use Tiny_String;
 
       Member_Index, Amount: Positive;
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item: constant Inventory_Data :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => Item_Index);
-      Item_Dialog: Tk_Toplevel := Get_Widget(pathName => ".itemdialog", Interp => Interp);
-      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => Item_Dialog & ".giveamount");
-      Combo_Box: constant Ttk_ComboBox := Get_Widget(pathName => Item_Dialog & ".member");
+      Item_Dialog: Tk_Toplevel :=
+        Get_Widget(pathName => ".itemdialog", Interp => Interp);
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Item_Dialog & ".giveamount");
+      Combo_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Item_Dialog & ".member");
    begin
       Amount := Natural'Value(Get(Widgt => Spin_Box));
       Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       if Free_Inventory
           (Member_Index => Member_Index,
-           Amount => 0 -
-           (Objects_Container.Element
-              (Container => Items_List, Index => Item.Proto_Index)
-              .Weight *
-            Amount)) <
+           Amount =>
+             0 -
+             (Objects_Container.Element
+                (Container => Items_List, Index => Item.Proto_Index)
+                .Weight *
+              Amount)) <
         0 then
          Show_Message
            (Text =>
@@ -656,19 +682,22 @@ package body Ships.UI.Cargo is
          return TCL_OK;
       end if;
       Add_Message
-        (Message => "You gave" & Positive'Image(Amount) & " " &
-         Get_Item_Name
-           (Item => Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => Item_Index)) &
-         " to " & To_String(Source => Player_Ship.Crew(Member_Index).Name) & ".",
+        (Message =>
+           "You gave" & Positive'Image(Amount) & " " &
+           Get_Item_Name
+             (Item =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => Item_Index)) &
+           " to " & To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+           ".",
          M_Type => OTHERMESSAGE);
       Update_Inventory
         (Member_Index => Member_Index, Amount => Amount,
          Proto_Index => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
       Update_Cargo
-        (Ship => Player_Ship, Amount => (0 - Amount), Cargo_Index => Item_Index,
-         Price => Item.Price);
+        (Ship => Player_Ship, Amount => (0 - Amount),
+         Cargo_Index => Item_Index, Price => Item.Price);
       Destroy(Widgt => Item_Dialog);
       Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
       Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);
@@ -676,7 +705,8 @@ package body Ships.UI.Cargo is
       Update_Messages;
       return
         Sort_Cargo_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortShipCargo" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortShipCargo" & "-1");
    end Give_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Drop_Item_Command
@@ -703,15 +733,19 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Interp);
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       Show_Manipulate_Item
-        (Title => "Drop " &
-         Get_Item_Name
-           (Item => Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => Item_Index)) &
-         " from the ship's cargo",
-         Command => "DropItem " & CArgv.Arg(Argv => Argv, N => 1), Action => "drop", Item_Index => Item_Index);
+        (Title =>
+           "Drop " &
+           Get_Item_Name
+             (Item =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => Item_Index)) &
+           " from the ship's cargo",
+         Command => "DropItem " & CArgv.Arg(Argv => Argv, N => 1),
+         Action => "drop", Item_Index => Item_Index);
       return TCL_OK;
    end Show_Drop_Item_Command;
 
@@ -741,12 +775,14 @@ package body Ships.UI.Cargo is
       use Tiny_String;
 
       Drop_Amount, Drop_Amount_2: Natural;
-      Item_Dialog: constant Ttk_Frame := Get_Widget(pathName => ".itemdialog", Interp => Interp);
+      Item_Dialog: constant Ttk_Frame :=
+        Get_Widget(pathName => ".itemdialog", Interp => Interp);
       Spin_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      Drop_Amount := Natural'Value(Get(Spin_Box));
+      Drop_Amount := Natural'Value(Get(Widgt => Spin_Box));
       Drop_Amount_2 := Drop_Amount;
       if To_String
           (Source =>
