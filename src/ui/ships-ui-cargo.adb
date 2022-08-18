@@ -803,7 +803,9 @@ package body Ships.UI.Cargo is
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Proto_Index then
-                  Delete_Mission(Mission_Index => Mission_Container.To_Index(Position => I));
+                  Delete_Mission
+                    (Mission_Index =>
+                       Mission_Container.To_Index(Position => I));
                   Drop_Amount := Drop_Amount - 1;
                   exit Delete_Missions_Loop;
                end if;
@@ -822,11 +824,13 @@ package body Ships.UI.Cargo is
       end if;
       if Drop_Amount > 0 then
          Add_Message
-           (Message => "You dropped" & Positive'Image(Drop_Amount) & " " &
-            Get_Item_Name
-              (Item => Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Item_Index)) &
-            ".",
+           (Message =>
+              "You dropped" & Positive'Image(Drop_Amount) & " " &
+              Get_Item_Name
+                (Item =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)) &
+              ".",
             M_Type => OTHERMESSAGE);
          Update_Cargo
            (Ship => Player_Ship,
@@ -854,7 +858,8 @@ package body Ships.UI.Cargo is
       Update_Messages;
       return
         Sort_Cargo_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortShipCargo" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortShipCargo" & "-1");
    end Drop_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Item_Info_Command
@@ -934,7 +939,8 @@ package body Ships.UI.Cargo is
         Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".itemdialog.giveamount", Interp => Interp);
-      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Crew_Box)) + 1;
+      Member_Index: constant Positive :=
+        Natural'Value(Current(ComboBox => Crew_Box)) + 1;
       Item: constant Inventory_Data :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo,
@@ -953,25 +959,35 @@ package body Ships.UI.Cargo is
       if Natural'Value(Get(Widgt => Amount_Box)) > Max_Amount then
          Set(SpinBox => Amount_Box, Value => Natural'Image(Max_Amount));
       end if;
-      configure(Widgt => Amount_Box, options => "-to" & Natural'Image(Max_Amount));
+      configure
+        (Widgt => Amount_Box, options => "-to" & Natural'Image(Max_Amount));
       configure
         (Widgt => Max_Button,
-         options => "-text {Amount (max:" & Natural'Image(Max_Amount) & "):} -command {" &
-         Amount_Box & " set" & Natural'Image(Max_Amount) & "}");
+         options =>
+           "-text {Amount (max:" & Natural'Image(Max_Amount) &
+           "):} -command {" & Amount_Box & " set" & Natural'Image(Max_Amount) &
+           "}");
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowCargo", Show_Cargo_Command'Access);
-      Add_Command("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
-      Add_Command("ShowGiveItem", Show_Give_Item_Command'Access);
-      Add_Command("GiveItem", Give_Item_Command'Access);
-      Add_Command("ShowDropItem", Show_Drop_Item_Command'Access);
-      Add_Command("DropItem", Drop_Item_Command'Access);
-      Add_Command("SortShipCargo", Sort_Cargo_Command'Access);
       Add_Command
-        ("UpdateMaxGiveAmount", Update_Max_Give_Amount_Command'Access);
+        (Name => "ShowCargo", Ada_Command => Show_Cargo_Command'Access);
+      Add_Command
+        (Name => "ShowCargoItemInfo",
+         Ada_Command => Show_Cargo_Item_Info_Command'Access);
+      Add_Command
+        (Name => "ShowGiveItem", Ada_Command => Show_Give_Item_Command'Access);
+      Add_Command(Name => "GiveItem", Ada_Command => Give_Item_Command'Access);
+      Add_Command
+        (Name => "ShowDropItem", Ada_Command => Show_Drop_Item_Command'Access);
+      Add_Command(Name => "DropItem", Ada_Command => Drop_Item_Command'Access);
+      Add_Command
+        (Name => "SortShipCargo", Ada_Command => Sort_Cargo_Command'Access);
+      Add_Command
+        (Name => "UpdateMaxGiveAmount",
+         Ada_Command => Update_Max_Give_Amount_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Cargo;
