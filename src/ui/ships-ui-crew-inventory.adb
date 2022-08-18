@@ -130,24 +130,24 @@ package body Ships.UI.Crew.Inventory is
             Command => "ToggleInventoryItem" & Positive'Image(I),
             Checked => False, Column => 1, Empty_Unchecked => True);
          Add_Button
-           (Inventory_Table,
-            Get_Item_Name
-              (Inventory_Container.Element
+           (Table => Inventory_Table,
+            Text => Get_Item_Name
+              (Item => Inventory_Container.Element
                  (Container => Member.Inventory, Index => I),
-               False, False),
-            "Show the selected item's info",
-            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            2);
+               Damage_Info => False, To_Lower => False),
+            Tooltip => "Show the selected item's info",
+            Command => "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) & Positive'Image(I),
+            Column => 2);
          Add_Progress_Bar
-           (Inventory_Table,
-            Inventory_Container.Element
+           (Table => Inventory_Table,
+            Value => Inventory_Container.Element
               (Container => Member.Inventory, Index => I)
               .Durability,
-            Default_Item_Durability,
-            "The current durability level of the selected item.",
-            "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
-            3);
-         if Item_Is_Used(Member_Index, I) then
+            Max_Value => Default_Item_Durability,
+            Tooltip => "The current durability level of the selected item.",
+            Command => "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) & Positive'Image(I),
+            Column => 3);
+         if Item_Is_Used(Member_Index => Member_Index, Item_Index => I) then
             Add_Check_Button
               (Inventory_Table, "The item is used by the crew member",
                "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
