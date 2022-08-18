@@ -1030,7 +1030,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Toggle_Inventory_Item_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("UpdateInventory", Update_Inventory_Command'Access);
       Add_Command("ShowMemberInventory", Show_Member_Inventory_Command'Access);
@@ -1042,6 +1042,6 @@ package body Ships.UI.Crew.Inventory is
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
       Add_Command("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
       Add_Command("ToggleInventoryItem", Toggle_Inventory_Item_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Ships.UI.Crew.Inventory;

@@ -2372,7 +2372,7 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "SelectCrewSkill",
          Ada_Command => Select_Crew_Skill_Command'Access);
-      Ships.UI.Crew.Inventory.AddCommands;
+      Ships.UI.Crew.Inventory.Add_Commands;
    end Add_Commands;
 
 end Ships.UI.Crew;
