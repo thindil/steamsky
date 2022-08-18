@@ -149,16 +149,16 @@ package body Ships.UI.Crew.Inventory is
             Column => 3);
          if Item_Is_Used(Member_Index => Member_Index, Item_Index => I) then
             Add_Check_Button
-              (Inventory_Table, "The item is used by the crew member",
-               "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
+              (Table => Inventory_Table, Tooltip => "The item is used by the crew member",
+               Command => "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
                Positive'Image(I),
-               True, 4);
+               Checked => True, Column => 4);
          else
             Add_Check_Button
-              (Inventory_Table, "The item isn't used by the crew member",
-               "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
+              (Table => Inventory_Table, Tooltip => "The item isn't used by the crew member",
+               Command => "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
                Positive'Image(I),
-               False, 4);
+               Checked => False, Column => 4);
          end if;
          Add_Button
            (Inventory_Table,
