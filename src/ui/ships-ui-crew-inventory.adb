@@ -48,18 +48,18 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
 
-   -- ****iv* SUCI/SUCI.InventoryTable
+   -- ****iv* SUCI/SUCI.Inventory_Table
    -- FUNCTION
    -- Table with info about the crew member inventory
    -- SOURCE
-   InventoryTable: Table_Widget (6);
+   Inventory_Table: Table_Widget (Amount => 6);
    -- ****
 
-   -- ****iv* SUCI/SUCI.MemberIndex
+   -- ****iv* SUCI/SUCI.Member_Index
    -- FUNCTION
    -- The index of the selected crew member
    -- SOURCE
-   MemberIndex: Positive;
+   Member_Index: Positive;
    -- ****
 
    -- ****iv* SUCI/SUCI.Inventory_Indexes
@@ -73,10 +73,10 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Update inventory list of the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -85,37 +85,38 @@ package body Ships.UI.Crew.Inventory is
    -- is a number of the page of inventory list to show
    -- SOURCE
    function Update_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp);
+      pragma Unreferenced(Client_Data, Interp);
       Member: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
       Page: constant Positive :=
-        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
-      Member := Player_Ship.Crew(MemberIndex);
-      if InventoryTable.Row > 1 then
-         Clear_Table(InventoryTable);
+      Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member := Player_Ship.Crew(Member_Index);
+      if Inventory_Table.Row > 1 then
+         Clear_Table(Table => Inventory_Table);
       end if;
       if Inventory_Indexes.Length /=
         Inventory_Container.Length(Container => Member.Inventory) then
          Inventory_Indexes.Clear;
+         Fill_Inventory_Indexes_Loop:
          for I in
            Inventory_Container.First_Index(Container => Member.Inventory) ..
              Inventory_Container.Last_Index(Container => Member.Inventory) loop
-            Inventory_Indexes.Append(I);
-         end loop;
+            Inventory_Indexes.Append(New_Item => I);
+         end loop Fill_Inventory_Indexes_Loop;
       end if;
       Load_Inventory_Loop :
       for I of Inventory_Indexes loop
@@ -124,12 +125,12 @@ package body Ships.UI.Crew.Inventory is
             goto End_Of_Loop;
          end if;
          Add_Check_Button
-           (Table => InventoryTable,
+           (Table => Inventory_Table,
             Tooltip => "Select the item for move or equip it.",
             Command => "ToggleInventoryItem" & Positive'Image(I),
             Checked => False, Column => 1, Empty_Unchecked => True);
          Add_Button
-           (InventoryTable,
+           (Inventory_Table,
             Get_Item_Name
               (Inventory_Container.Element
                  (Container => Member.Inventory, Index => I),
@@ -138,7 +139,7 @@ package body Ships.UI.Crew.Inventory is
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
             2);
          Add_Progress_Bar
-           (InventoryTable,
+           (Inventory_Table,
             Inventory_Container.Element
               (Container => Member.Inventory, Index => I)
               .Durability,
@@ -146,21 +147,21 @@ package body Ships.UI.Crew.Inventory is
             "The current durability level of the selected item.",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
             3);
-         if Item_Is_Used(MemberIndex, I) then
+         if Item_Is_Used(Member_Index, I) then
             Add_Check_Button
-              (InventoryTable, "The item is used by the crew member",
+              (Inventory_Table, "The item is used by the crew member",
                "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
                Positive'Image(I),
                True, 4);
          else
             Add_Check_Button
-              (InventoryTable, "The item isn't used by the crew member",
+              (Inventory_Table, "The item isn't used by the crew member",
                "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) &
                Positive'Image(I),
                False, 4);
          end if;
          Add_Button
-           (InventoryTable,
+           (Inventory_Table,
             Positive'Image
               (Inventory_Container.Element
                  (Container => Member.Inventory, Index => I)
@@ -169,7 +170,7 @@ package body Ships.UI.Crew.Inventory is
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
             5);
          Add_Button
-           (InventoryTable,
+           (Inventory_Table,
             Positive'Image
               (Inventory_Container.Element
                  (Container => Member.Inventory, Index => I)
@@ -185,24 +186,24 @@ package body Ships.UI.Crew.Inventory is
             "The total weight of the items",
             "ShowInventoryItemInfo " & CArgv.Arg(Argv, 1) & Positive'Image(I),
             6, True);
-         exit Load_Inventory_Loop when InventoryTable.Row =
+         exit Load_Inventory_Loop when Inventory_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
       if Page > 1 then
          Add_Pagination
-           (InventoryTable,
+           (Inventory_Table,
             "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
-            (if InventoryTable.Row < Game_Settings.Lists_Limit + 1 then ""
+            (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "UpdateInventory " & CArgv.Arg(Argv, 1) &
                Positive'Image(Page + 1)));
-      elsif InventoryTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Inventory_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (InventoryTable, "",
+           (Inventory_Table, "",
             "UpdateInventory " & CArgv.Arg(Argv, 1) &
             Positive'Image(Page + 1));
       end if;
-      Update_Table(InventoryTable);
+      Update_Table(Inventory_Table);
       return TCL_OK;
    end Update_Inventory_Command;
 
@@ -281,7 +282,7 @@ package body Ships.UI.Crew.Inventory is
       Column: constant Positive :=
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (InventoryTable, Natural'Value(CArgv.Arg(Argv, 1))));
+             (Inventory_Table, Natural'Value(CArgv.Arg(Argv, 1))));
       type Local_Item_Data is record
          Selected: Boolean;
          Name: Unbounded_String;
@@ -297,7 +298,7 @@ package body Ships.UI.Crew.Inventory is
         (1 ..
              Positive
                (Inventory_Container.Length
-                  (Container => Player_Ship.Crew(MemberIndex).Inventory)));
+                  (Container => Player_Ship.Crew(Member_Index).Inventory)));
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Inventory_Sort_Order = SELECTEDASC
@@ -405,23 +406,23 @@ package body Ships.UI.Crew.Inventory is
            Update_Inventory_Command
              (ClientData, Interp, 2,
               CArgv.Empty & "UpdateInventory" &
-              Trim(Positive'Image(MemberIndex), Left));
+              Trim(Positive'Image(Member_Index), Left));
       end if;
       for I in
         Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
          Local_Inventory(I) :=
-           (Selected => Is_Checked(InventoryTable, I, 1),
+           (Selected => Is_Checked(Inventory_Table, I, 1),
             Name =>
               To_Unbounded_String
                 (Get_Item_Name
                    (Inventory_Container.Element
-                      (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                      (Container => Player_Ship.Crew(Member_Index).Inventory,
                        Index => I),
                     False, False)),
             Damage =>
               Float
                 (Inventory_Container.Element
-                   (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                   (Container => Player_Ship.Crew(Member_Index).Inventory,
                     Index => I)
                    .Durability) /
               Float(Default_Item_Durability),
@@ -431,7 +432,7 @@ package body Ships.UI.Crew.Inventory is
                    (Container => Items_List,
                     Index =>
                       Inventory_Container.Element
-                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
                         .Proto_Index)
                    .Show_Type /=
@@ -441,7 +442,7 @@ package body Ships.UI.Crew.Inventory is
                    (Container => Items_List,
                     Index =>
                       Inventory_Container.Element
-                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
                         .Proto_Index)
                    .Show_Type
@@ -449,29 +450,29 @@ package body Ships.UI.Crew.Inventory is
                    (Container => Items_List,
                     Index =>
                       Inventory_Container.Element
-                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
                         .Proto_Index)
                    .I_Type),
             Amount =>
               Inventory_Container.Element
-                (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                (Container => Player_Ship.Crew(Member_Index).Inventory,
                  Index => I)
                 .Amount,
             Weight =>
               Inventory_Container.Element
-                (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                (Container => Player_Ship.Crew(Member_Index).Inventory,
                  Index => I)
                 .Amount *
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
                    Inventory_Container.Element
-                     (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                     (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => I)
                      .Proto_Index)
                 .Weight,
-            Used => Item_Is_Used(MemberIndex, I), Id => I);
+            Used => Item_Is_Used(Member_Index, I), Id => I);
       end loop;
       Sort_Inventory(Local_Inventory);
       Inventory_Indexes.Clear;
@@ -482,7 +483,7 @@ package body Ships.UI.Crew.Inventory is
         Update_Inventory_Command
           (ClientData, Interp, 2,
            CArgv.Empty & "UpdateInventory" &
-           Trim(Positive'Image(MemberIndex), Left));
+           Trim(Positive'Image(Member_Index), Left));
    end Sort_Crew_Inventory_Command;
 
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
@@ -561,7 +562,7 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(FreeSpaceLabel);
       Height :=
         Height + Positive'Value(Winfo_Get(FreeSpaceLabel, "reqheight"));
-      InventoryTable :=
+      Inventory_Table :=
         Create_Table
           (Widget_Image(MemberFrame),
            (To_Unbounded_String(""), To_Unbounded_String("Name"),
@@ -574,15 +575,15 @@ package body Ships.UI.Crew.Inventory is
          return TCL_ERROR;
       end if;
       Height :=
-        Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
-      Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
+        Height + Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqheight"));
+      Width := Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-pady 5");
-      Widgets.Focus(InventoryTable.Canvas);
+      Widgets.Focus(Inventory_Table.Canvas);
       Bind
-        (Close_Button, "<Tab>", "{focus " & InventoryTable.Canvas & ";break}");
+        (Close_Button, "<Tab>", "{focus " & Inventory_Table.Canvas & ";break}");
       Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
       Bind
-        (InventoryTable.Canvas, "<Escape>",
+        (Inventory_Table.Canvas, "<Escape>",
          "{" & Close_Button & " invoke;break}");
       if Height > 500 then
          Height := 500;
