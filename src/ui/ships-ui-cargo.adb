@@ -933,31 +933,31 @@ package body Ships.UI.Cargo is
       Crew_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(".itemdialog.giveamount", Interp);
-      MemberIndex: constant Positive := Natural'Value(Current(Crew_Box)) + 1;
+        Get_Widget(pathName => ".itemdialog.giveamount", Interp => Interp);
+      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Crew_Box)) + 1;
       Item: constant Inventory_Data :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo,
-           Index => Positive'Value(CArgv.Arg(Argv, 1)));
-      MaxAmount: Natural :=
-        Free_Inventory(MemberIndex, 0) /
+           Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Max_Amount: Natural :=
+        Free_Inventory(Member_Index => Member_Index, Amount => 0) /
         Objects_Container.Element
           (Container => Items_List, Index => Item.Proto_Index)
           .Weight;
-      MaxButton: constant Ttk_Button :=
-        Get_Widget(".itemdialog.maxbutton", Interp);
+      Max_Button: constant Ttk_Button :=
+        Get_Widget(pathName => ".itemdialog.maxbutton", Interp => Interp);
    begin
-      if Item.Amount < MaxAmount then
-         MaxAmount := Item.Amount;
+      if Item.Amount < Max_Amount then
+         Max_Amount := Item.Amount;
       end if;
-      if Natural'Value(Get(Amount_Box)) > MaxAmount then
-         Set(Amount_Box, Natural'Image(MaxAmount));
+      if Natural'Value(Get(Widgt => Amount_Box)) > Max_Amount then
+         Set(SpinBox => Amount_Box, Value => Natural'Image(Max_Amount));
       end if;
-      configure(Amount_Box, "-to" & Natural'Image(MaxAmount));
+      configure(Widgt => Amount_Box, options => "-to" & Natural'Image(Max_Amount));
       configure
-        (MaxButton,
-         "-text {Amount (max:" & Natural'Image(MaxAmount) & "):} -command {" &
-         Amount_Box & " set" & Natural'Image(MaxAmount) & "}");
+        (Widgt => Max_Button,
+         options => "-text {Amount (max:" & Natural'Image(Max_Amount) & "):} -command {" &
+         Amount_Box & " set" & Natural'Image(Max_Amount) & "}");
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
