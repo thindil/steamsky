@@ -408,12 +408,9 @@ package body Ships.UI.Crew.Inventory is
               Trim(Positive'Image(MemberIndex), Left));
       end if;
       for I in
-        Inventory_Container.First_Index
-          (Container => Player_Ship.Crew(MemberIndex).Inventory) ..
-          Inventory_Container.Last_Index
-            (Container => Player_Ship.Crew(MemberIndex).Inventory) loop
+        Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
          Local_Inventory(I) :=
-           (Selected => False,
+           (Selected => Is_Checked(InventoryTable, I, 1),
             Name =>
               To_Unbounded_String
                 (Get_Item_Name
