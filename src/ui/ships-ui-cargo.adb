@@ -803,7 +803,7 @@ package body Ships.UI.Cargo is
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Proto_Index then
-                  Delete_Mission(Mission_Container.To_Index(I));
+                  Delete_Mission(Mission_Index => Mission_Container.To_Index(Position => I));
                   Drop_Amount := Drop_Amount - 1;
                   exit Delete_Missions_Loop;
                end if;
@@ -817,17 +817,17 @@ package body Ships.UI.Cargo is
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => Item_Index)
             .Proto_Index then
-         Finished_Stories.Delete(Finished_Stories.Last_Index);
+         Finished_Stories.Delete(Index => Finished_Stories.Last_Index);
          Clear_Current_Story;
       end if;
       if Drop_Amount > 0 then
          Add_Message
-           ("You dropped" & Positive'Image(Drop_Amount) & " " &
+           (Message => "You dropped" & Positive'Image(Drop_Amount) & " " &
             Get_Item_Name
-              (Inventory_Container.Element
+              (Item => Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Item_Index)) &
             ".",
-            OTHERMESSAGE);
+            M_Type => OTHERMESSAGE);
          Update_Cargo
            (Ship => Player_Ship,
             Proto_Index =>
@@ -845,8 +845,8 @@ package body Ships.UI.Cargo is
                 .Price);
       end if;
       if Close_Dialog_Command
-          (Client_Data, Interp, 2,
-           CArgv.Empty & "CloseDialog" & ".itemdialog") =
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
         TCL_ERROR then
          return TCL_ERROR;
       end if;
@@ -854,7 +854,7 @@ package body Ships.UI.Cargo is
       Update_Messages;
       return
         Sort_Cargo_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortShipCargo" & "-1");
    end Drop_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Item_Info_Command
@@ -862,10 +862,10 @@ package body Ships.UI.Cargo is
    -- Show detailed information about the selected item in the player ship
    -- cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -873,15 +873,15 @@ package body Ships.UI.Cargo is
    -- Itemindex is the index of the item which information will be show
    -- SOURCE
    function Show_Cargo_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Cargo_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
    begin
       Show_Inventory_Item_Info
         (Parent => ".",
@@ -910,10 +910,10 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Update max give amount after selecting the crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -921,20 +921,20 @@ package body Ships.UI.Cargo is
    -- ItemIndex is the index of the item to give
    -- SOURCE
    function Update_Max_Give_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Max_Give_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CrewBox: constant Ttk_ComboBox :=
-        Get_Widget(".itemdialog.member", Interp);
-      AmountBox: constant Ttk_SpinBox :=
+      pragma Unreferenced(Client_Data, Argc);
+      Crew_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
+      Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.giveamount", Interp);
-      MemberIndex: constant Positive := Natural'Value(Current(CrewBox)) + 1;
+      MemberIndex: constant Positive := Natural'Value(Current(Crew_Box)) + 1;
       Item: constant Inventory_Data :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo,
@@ -950,14 +950,14 @@ package body Ships.UI.Cargo is
       if Item.Amount < MaxAmount then
          MaxAmount := Item.Amount;
       end if;
-      if Natural'Value(Get(AmountBox)) > MaxAmount then
-         Set(AmountBox, Natural'Image(MaxAmount));
+      if Natural'Value(Get(Amount_Box)) > MaxAmount then
+         Set(Amount_Box, Natural'Image(MaxAmount));
       end if;
-      configure(AmountBox, "-to" & Natural'Image(MaxAmount));
+      configure(Amount_Box, "-to" & Natural'Image(MaxAmount));
       configure
         (MaxButton,
          "-text {Amount (max:" & Natural'Image(MaxAmount) & "):} -command {" &
-         AmountBox & " set" & Natural'Image(MaxAmount) & "}");
+         Amount_Box & " set" & Natural'Image(MaxAmount) & "}");
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
