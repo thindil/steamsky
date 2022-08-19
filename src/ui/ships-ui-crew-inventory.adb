@@ -93,7 +93,7 @@ package body Ships.UI.Crew.Inventory is
    function Update_Inventory_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp);
+      pragma Unreferenced(Client_Data);
       Member: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -130,8 +130,21 @@ package body Ships.UI.Crew.Inventory is
             Tooltip => "Select the item for move or equip it.",
             Command =>
               "ToggleInventoryItem" &
-              Positive'Image(Positive_Container.To_Index(Position => I)),
-            Checked => False, Column => 1, Empty_Unchecked => True);
+              Positive'Image(Positive_Container.To_Index(Position => I)) &
+              Positive'Image(Inventory_Indexes(I)),
+            Checked =>
+              (if
+                 Tcl_GetVar
+                   (interp => Interp,
+                    varName =>
+                      "invindex" &
+                      Trim
+                        (Source => Positive'Image(Inventory_Indexes(I)),
+                         Side => Left)) =
+                 "1"
+               then True
+               else False),
+            Column => 1, Empty_Unchecked => True);
          Add_Button
            (Table => Inventory_Table,
             Text =>
@@ -1084,8 +1097,9 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ToggleInventoryItem rowindex
-   -- Rowindex is the index of the row in which is the selected item
+   -- ToggleInventoryItem rowindex, itemindex
+   -- Rowindex is the index of the row in which is the selected item,
+   -- itemindex is the index of the selected item in crew member inventory.
    -- SOURCE
    function Toggle_Inventory_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -1096,11 +1110,24 @@ package body Ships.UI.Crew.Inventory is
    function Toggle_Inventory_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
    begin
       Toggle_Checked_Button
         (Table => Inventory_Table,
          Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
+      if Is_Checked
+          (Table => Inventory_Table,
+           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
+           Column => 1) then
+         Tcl_SetVar
+           (interp => Interp,
+            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2),
+            newValue => "1");
+      else
+         Tcl_UnsetVar
+           (interp => Interp,
+            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2));
+      end if;
       return TCL_OK;
    end Toggle_Inventory_Item_Command;
 
