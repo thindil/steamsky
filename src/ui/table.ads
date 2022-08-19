@@ -263,13 +263,25 @@ package Table is
      (Table: Table_Widget; Row, Column: Natural) return Boolean;
      -- ****
 
-     -- ****f* Table/Tabel.Add_Commands
+     -- ****f* Table/Table.Toggle_Checked_Button
      -- FUNCTION
-     -- Add Tcl commands related to the Table_Widget
+     -- Toggle the state of the selected checkbutton in the table
+     -- Table  - The Table_Widget in which the checkbutton will be toggled
+     -- Row    - The row number in which the checkbutton will be toggled
+     -- Column - The column number in which the checkbutton will be toggled
      -- HISTORY
-     -- 6.6 - Added
-     -- 7.1 - Renamed to Add_Commands
+     -- 7.8 - Added
      -- SOURCE
+   procedure Toggle_Checked_Button(Table: Table_Widget; Row, Column: Natural);
+   -- ****
+
+   -- ****f* Table/Tabel.Add_Commands
+   -- FUNCTION
+   -- Add Tcl commands related to the Table_Widget
+   -- HISTORY
+   -- 6.6 - Added
+   -- 7.1 - Renamed to Add_Commands
+   -- SOURCE
    procedure Add_Commands;
    -- ****
 

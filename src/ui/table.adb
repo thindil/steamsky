@@ -973,6 +973,26 @@ package body Table is
       return False;
    end Is_Checked;
 
+   procedure Toggle_Checked_Button
+     (Table: Table_Widget; Row, Column: Natural) is
+   begin
+      if Is_Checked(Table => Table, Row => Row, Column => Column) then
+         Item_Configure
+           (CanvasWidget => Table.Canvas,
+            TagOrId =>
+              "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+              "col" & Trim(Source => Positive'Image(Column), Side => Left),
+            Options => "-image checkbox-unchecked-empty");
+      else
+         Item_Configure
+           (CanvasWidget => Table.Canvas,
+            TagOrId =>
+              "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+              "col" & Trim(Source => Positive'Image(Column), Side => Left),
+            Options => "-image checkbox-checked");
+      end if;
+   end Toggle_Checked_Button;
+
    procedure Add_Commands is
    begin
       Add_Command
