@@ -1096,8 +1096,11 @@ package body Ships.UI.Crew.Inventory is
    function Toggle_Inventory_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc);
    begin
+      Toggle_Checked_Button
+        (Table => Inventory_Table,
+         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
       return TCL_OK;
    end Toggle_Inventory_Item_Command;
 
