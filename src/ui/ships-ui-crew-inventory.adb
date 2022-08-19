@@ -590,23 +590,23 @@ package body Ships.UI.Crew.Inventory is
             5 => To_Unbounded_String(Source => "Amount"), 6 => To_Unbounded_String(Source => "Weight")),
            Scrollbar => Y_Scroll, Command => "SortCrewInventory",
            Tooltip => "Press mouse button to sort the inventory.");
-      if Update_Inventory_Command(Client_Data, Interp, Argc, Argv) =
+      if Update_Inventory_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) =
         TCL_ERROR then
          return TCL_ERROR;
       end if;
       Height :=
         Height +
-        Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqheight"));
-      Width := Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqwidth"));
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-pady 5");
-      Widgets.Focus(Inventory_Table.Canvas);
+        Positive'Value(Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqheight"));
+      Width := Positive'Value(Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
+      Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-pady 5");
+      Widgets.Focus(Widgt => Inventory_Table.Canvas);
       Bind
-        (Dialog_Close_Button, "<Tab>",
-         "{focus " & Inventory_Table.Canvas & ";break}");
-      Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Inventory_Table.Canvas & ";break}");
+      Bind(Widgt => Dialog_Close_Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
       Bind
-        (Inventory_Table.Canvas, "<Escape>",
-         "{" & Dialog_Close_Button & " invoke;break}");
+        (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       if Height > 500 then
          Height := 500;
       end if;
