@@ -80,9 +80,10 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- UpdateInventory memberindex page
+   -- UpdateInventory memberindex page selection
    -- MemberIndex is the index of the crew member to show inventory, page
-   -- is a number of the page of inventory list to show
+   -- is a number of the page of inventory list to show, selection is boolean
+   -- option, if true, remember the currently selected items
    -- SOURCE
    function Update_Inventory_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -102,10 +103,19 @@ package body Ships.UI.Crew.Inventory is
          else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
-      Current_Row: Positive := 1;
+      Current_Row, Selection_Row: Positive := 1;
+      Selected_Items: array(1 .. Game_Settings.Lists_Limit) of Boolean :=
+        (others => False);
    begin
       Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member := Player_Ship.Crew(Member_Index);
+      if Argc = 4 and then CArgv.Arg(Argv => Argv, N => 3) = "1" then
+         Remember_Selection_Loop :
+         for I in 1 .. Inventory_Table.Row - 1 loop
+            Selected_Items(I) :=
+              Is_Checked(Table => Inventory_Table, Row => I, Column => 1);
+         end loop Remember_Selection_Loop;
+      end if;
       if Inventory_Table.Row > 1 then
          Clear_Table(Table => Inventory_Table);
       end if;
@@ -131,7 +141,8 @@ package body Ships.UI.Crew.Inventory is
             Command =>
               "ToggleInventoryItem" &
               Positive'Image(Positive_Container.To_Index(Position => I)),
-            Checked => False, Column => 1, Empty_Unchecked => True);
+            Checked => Selected_Items(Selection_Row), Column => 1,
+            Empty_Unchecked => True);
          Add_Button
            (Table => Inventory_Table,
             Text =>
@@ -212,6 +223,7 @@ package body Ships.UI.Crew.Inventory is
               "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
               Positive'Image(Inventory_Indexes(I)),
             Column => 6, New_Row => True);
+         Selection_Row := Selection_Row + 1;
          exit Load_Inventory_Loop when Inventory_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -521,10 +533,11 @@ package body Ships.UI.Crew.Inventory is
       end loop Fill_Inventory_Indexes_Loop;
       return
         Update_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+          (Client_Data => Client_Data, Interp => Interp, Argc => 4,
            Argv =>
              CArgv.Empty & "UpdateInventory" &
-             Trim(Source => Positive'Image(Member_Index), Side => Left));
+             Trim(Source => Positive'Image(Member_Index), Side => Left) & "1" &
+             "1");
    end Sort_Crew_Inventory_Command;
 
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
