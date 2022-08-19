@@ -210,18 +210,18 @@ package body Ships.UI.Crew.Inventory is
       end loop Load_Inventory_Loop;
       if Page > 1 then
          Add_Pagination
-           (Inventory_Table,
-            "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
-            (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "UpdateInventory " & CArgv.Arg(Argv, 1) &
+           (Table => Inventory_Table,
+            Previous_Command => "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
+            Next_Command => (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+             else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
                Positive'Image(Page + 1)));
       elsif Inventory_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Inventory_Table, "",
-            "UpdateInventory " & CArgv.Arg(Argv, 1) &
+           (Table => Inventory_Table, Previous_Command => "",
+            Next_Command => "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
             Positive'Image(Page + 1));
       end if;
-      Update_Table(Inventory_Table);
+      Update_Table(Table => Inventory_Table);
       return TCL_OK;
    end Update_Inventory_Command;
 
@@ -275,10 +275,10 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Sort the selected crew member inventory
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -286,21 +286,21 @@ package body Ships.UI.Crew.Inventory is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Crew_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Crew_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
+        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (Inventory_Table, Natural'Value(CArgv.Arg(Argv, 1))));
+             (Table => Inventory_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       type Local_Item_Data is record
          Selected: Boolean;
          Name: Unbounded_String;
@@ -422,7 +422,7 @@ package body Ships.UI.Crew.Inventory is
       if Inventory_Sort_Order = NONE then
          return
            Update_Inventory_Command
-             (ClientData, Interp, 2,
+             (Client_Data, Interp, 2,
               CArgv.Empty & "UpdateInventory" &
               Trim(Positive'Image(Member_Index), Left));
       end if;
@@ -499,7 +499,7 @@ package body Ships.UI.Crew.Inventory is
       end loop;
       return
         Update_Inventory_Command
-          (ClientData, Interp, 2,
+          (Client_Data, Interp, 2,
            CArgv.Empty & "UpdateInventory" &
            Trim(Positive'Image(Member_Index), Left));
    end Sort_Crew_Inventory_Command;
