@@ -120,7 +120,7 @@ package body Ships.UI.Crew.Inventory is
          end loop Fill_Inventory_Indexes_Loop;
       end if;
       Load_Inventory_Loop :
-      for I of Inventory_Indexes loop
+      for I in Inventory_Indexes.Iterate loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -128,7 +128,9 @@ package body Ships.UI.Crew.Inventory is
          Add_Check_Button
            (Table => Inventory_Table,
             Tooltip => "Select the item for move or equip it.",
-            Command => "ToggleInventoryItem" & Positive'Image(I),
+            Command =>
+              "ToggleInventoryItem" &
+              Positive'Image(Positive_Container.To_Index(Position => I)),
             Checked => False, Column => 1, Empty_Unchecked => True);
          Add_Button
            (Table => Inventory_Table,
@@ -136,32 +138,35 @@ package body Ships.UI.Crew.Inventory is
               Get_Item_Name
                 (Item =>
                    Inventory_Container.Element
-                     (Container => Member.Inventory, Index => I),
+                     (Container => Member.Inventory,
+                      Index => Inventory_Indexes(I)),
                  Damage_Info => False, To_Lower => False),
             Tooltip => "Show the selected item's info",
             Command =>
               "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(I),
+              Positive'Image(Inventory_Indexes(I)),
             Column => 2);
          Add_Progress_Bar
            (Table => Inventory_Table,
             Value =>
               Inventory_Container.Element
-                (Container => Member.Inventory, Index => I)
+                (Container => Member.Inventory, Index => Inventory_Indexes(I))
                 .Durability,
             Max_Value => Default_Item_Durability,
             Tooltip => "The current durability level of the selected item.",
             Command =>
               "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(I),
+              Positive'Image(Inventory_Indexes(I)),
             Column => 3);
-         if Item_Is_Used(Member_Index => Member_Index, Item_Index => I) then
+         if Item_Is_Used
+             (Member_Index => Member_Index,
+              Item_Index => Inventory_Indexes(I)) then
             Add_Check_Button
               (Table => Inventory_Table,
                Tooltip => "The item is used by the crew member",
                Command =>
                  "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-                 Positive'Image(I),
+                 Positive'Image(Inventory_Indexes(I)),
                Checked => True, Column => 4);
          else
             Add_Check_Button
@@ -169,7 +174,7 @@ package body Ships.UI.Crew.Inventory is
                Tooltip => "The item isn't used by the crew member",
                Command =>
                  "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-                 Positive'Image(I),
+                 Positive'Image(Inventory_Indexes(I)),
                Checked => False, Column => 4);
          end if;
          Add_Button
@@ -177,32 +182,35 @@ package body Ships.UI.Crew.Inventory is
             Text =>
               Positive'Image
                 (Inventory_Container.Element
-                   (Container => Member.Inventory, Index => I)
+                   (Container => Member.Inventory,
+                    Index => Inventory_Indexes(I))
                    .Amount),
             Tooltip => "The amount of the item owned by the crew member",
             Command =>
               "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(I),
+              Positive'Image(Inventory_Indexes(I)),
             Column => 5);
          Add_Button
            (Table => Inventory_Table,
             Text =>
               Positive'Image
                 (Inventory_Container.Element
-                   (Container => Member.Inventory, Index => I)
+                   (Container => Member.Inventory,
+                    Index => Inventory_Indexes(I))
                    .Amount *
                  Objects_Container.Element
                    (Container => Items_List,
                     Index =>
                       Inventory_Container.Element
-                        (Container => Member.Inventory, Index => I)
+                        (Container => Member.Inventory,
+                         Index => Inventory_Indexes(I))
                         .Proto_Index)
                    .Weight) &
               " kg",
             Tooltip => "The total weight of the items",
             Command =>
               "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(I),
+              Positive'Image(Inventory_Indexes(I)),
             Column => 6, New_Row => True);
          exit Load_Inventory_Loop when Inventory_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -1076,8 +1084,8 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ToggleInventoryItem itemindex
-   -- Itemindex is the index of the item which will toggled
+   -- ToggleInventoryItem rowindex
+   -- Rowindex is the index of the row in which is the selected item
    -- SOURCE
    function Toggle_Inventory_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
