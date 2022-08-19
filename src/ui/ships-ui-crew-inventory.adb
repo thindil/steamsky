@@ -550,46 +550,46 @@ package body Ships.UI.Crew.Inventory is
       Height, Width: Positive := 10;
       Free_Space_Label: constant Ttk_Label :=
         Create
-          (Member_Frame & ".freespace",
-           "-text {Free inventory space:" &
+          (pathName => Member_Frame & ".freespace",
+           options => "-text {Free inventory space:" &
            Integer'Image
-             (Free_Inventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
+             (Free_Inventory(Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)), Amount => 0)) &
            " kg} -wraplength 400");
-      Close_Button: constant Ttk_Button :=
+      Dialog_Close_Button: constant Ttk_Button :=
         Create
-          (Member_Dialog & ".button",
-           "-image exiticon -command {CloseDialog " & Member_Dialog &
+          (pathName => Member_Dialog & ".button",
+           options => "-image exiticon -command {CloseDialog " & Member_Dialog &
            "} -text {Close} -style Dialog.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Member_Index).Inventory) =
         0 then
-         Tcl_Eval(Interp, "CloseDialog .memberdialog");
+         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
          Show_Message
            (Text =>
-              To_String(Player_Ship.Crew(Member_Index).Name) &
+              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
               " doesn't own any items.",
             Title =>
               "Inventory of " &
-              To_String(Player_Ship.Crew(Member_Index).Name));
+              To_String(Source => Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
-      Add(Widget => Close_Button, Message => "Close inventory \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid(Member_Canvas, "-padx 5 -pady 5");
+      Add(Widget => Dialog_Close_Button, Message => "Close inventory \[Escape key\]");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Canvas, Options => "-padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
-      Autoscroll(Y_Scroll);
-      Tcl.Tk.Ada.Grid.Grid(Free_Space_Label);
+        (Slave => Y_Scroll, Options => "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
+      Autoscroll(Scroll => Y_Scroll);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Free_Space_Label);
       Height :=
-        Height + Positive'Value(Winfo_Get(Free_Space_Label, "reqheight"));
+        Height + Positive'Value(Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
       Inventory_Table :=
         Create_Table
-          (Widget_Image(Member_Frame),
-           (To_Unbounded_String(""), To_Unbounded_String("Name"),
-            To_Unbounded_String("Durability"), To_Unbounded_String("Used"),
-            To_Unbounded_String("Amount"), To_Unbounded_String("Weight")),
-           Y_Scroll, "SortCrewInventory",
-           "Press mouse button to sort the inventory.");
+          (Parent => Widget_Image(Member_Frame),
+           Headers => (1 => To_Unbounded_String(Source => ""), 2 => To_Unbounded_String(Source => "Name"),
+            3 => To_Unbounded_String(Source => "Durability"), 4 => To_Unbounded_String(Source => "Used"),
+            5 => To_Unbounded_String(Source => "Amount"), 6 => To_Unbounded_String(Source => "Weight")),
+           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
+           Tooltip => "Press mouse button to sort the inventory.");
       if Update_Inventory_Command(Client_Data, Interp, Argc, Argv) =
         TCL_ERROR then
          return TCL_ERROR;
@@ -598,15 +598,15 @@ package body Ships.UI.Crew.Inventory is
         Height +
         Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqheight"));
       Width := Positive'Value(Winfo_Get(Inventory_Table.Canvas, "reqwidth"));
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Close_Button, "-pady 5");
       Widgets.Focus(Inventory_Table.Canvas);
       Bind
-        (Close_Button, "<Tab>",
+        (Dialog_Close_Button, "<Tab>",
          "{focus " & Inventory_Table.Canvas & ";break}");
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind(Dialog_Close_Button, "<Escape>", "{" & Dialog_Close_Button & " invoke;break}");
       Bind
         (Inventory_Table.Canvas, "<Escape>",
-         "{" & Close_Button & " invoke;break}");
+         "{" & Dialog_Close_Button & " invoke;break}");
       if Height > 500 then
          Height := 500;
       end if;
