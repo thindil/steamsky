@@ -422,21 +422,22 @@ package body Ships.UI.Crew.Inventory is
       if Inventory_Sort_Order = NONE then
          return
            Update_Inventory_Command
-             (Client_Data, Interp, 2,
-              CArgv.Empty & "UpdateInventory" &
-              Trim(Positive'Image(Member_Index), Left));
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "UpdateInventory" &
+              Trim(Source => Positive'Image(Member_Index), Side => Left));
       end if;
+      Fill_Local_Inventory_Loop:
       for I in
         Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
          Local_Inventory(I) :=
-           (Selected => Is_Checked(Inventory_Table, I, 1),
+           (Selected => Is_Checked(Table => Inventory_Table, Row => I, Column => 1),
             Name =>
               To_Unbounded_String
-                (Get_Item_Name
-                   (Inventory_Container.Element
+                (Source => Get_Item_Name
+                   (Item => Inventory_Container.Element
                       (Container => Player_Ship.Crew(Member_Index).Inventory,
                        Index => I),
-                    False, False)),
+                    Damage_Info => False, To_Lower => False)),
             Damage =>
               Float
                 (Inventory_Container.Element
@@ -490,13 +491,14 @@ package body Ships.UI.Crew.Inventory is
                       Index => I)
                      .Proto_Index)
                 .Weight,
-            Used => Item_Is_Used(Member_Index, I), Id => I);
-      end loop;
-      Sort_Inventory(Local_Inventory);
+            Used => Item_Is_Used(Member_Index => Member_Index, Item_Index => I), Id => I);
+      end loop Fill_Local_Inventory_Loop;
+      Sort_Inventory(Container => Local_Inventory);
       Inventory_Indexes.Clear;
+      Fill_Inventory_Indexes_Loop:
       for Item of Local_Inventory loop
-         Inventory_Indexes.Append(Item.Id);
-      end loop;
+         Inventory_Indexes.Append(New_Item => Item.Id);
+      end loop Fill_Inventory_Indexes_Loop;
       return
         Update_Inventory_Command
           (Client_Data, Interp, 2,
