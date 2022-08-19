@@ -211,15 +211,19 @@ package body Ships.UI.Crew.Inventory is
       if Page > 1 then
          Add_Pagination
            (Table => Inventory_Table,
-            Previous_Command => "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
-            Next_Command => (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
-               Positive'Image(Page + 1)));
+            Previous_Command =>
+              "UpdateInventory " & CArgv.Arg(Argv, 1) &
+              Positive'Image(Page - 1),
+            Next_Command =>
+              (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+               else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
+                 Positive'Image(Page + 1)));
       elsif Inventory_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
            (Table => Inventory_Table, Previous_Command => "",
-            Next_Command => "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
-            Positive'Image(Page + 1));
+            Next_Command =>
+              "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
+              Positive'Image(Page + 1));
       end if;
       Update_Table(Table => Inventory_Table);
       return TCL_OK;
@@ -300,7 +304,8 @@ package body Ships.UI.Crew.Inventory is
       Column: constant Positive :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
-             (Table => Inventory_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+             (Table => Inventory_Table,
+              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       type Local_Item_Data is record
          Selected: Boolean;
          Name: Unbounded_String;
@@ -423,21 +428,26 @@ package body Ships.UI.Crew.Inventory is
          return
            Update_Inventory_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-              Argv => CArgv.Empty & "UpdateInventory" &
-              Trim(Source => Positive'Image(Member_Index), Side => Left));
+              Argv =>
+                CArgv.Empty & "UpdateInventory" &
+                Trim(Source => Positive'Image(Member_Index), Side => Left));
       end if;
-      Fill_Local_Inventory_Loop:
+      Fill_Local_Inventory_Loop :
       for I in
         Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
          Local_Inventory(I) :=
-           (Selected => Is_Checked(Table => Inventory_Table, Row => I, Column => 1),
+           (Selected =>
+              Is_Checked(Table => Inventory_Table, Row => I, Column => 1),
             Name =>
               To_Unbounded_String
-                (Source => Get_Item_Name
-                   (Item => Inventory_Container.Element
-                      (Container => Player_Ship.Crew(Member_Index).Inventory,
-                       Index => I),
-                    Damage_Info => False, To_Lower => False)),
+                (Source =>
+                   Get_Item_Name
+                     (Item =>
+                        Inventory_Container.Element
+                          (Container =>
+                             Player_Ship.Crew(Member_Index).Inventory,
+                           Index => I),
+                      Damage_Info => False, To_Lower => False)),
             Damage =>
               Float
                 (Inventory_Container.Element
@@ -491,19 +501,22 @@ package body Ships.UI.Crew.Inventory is
                       Index => I)
                      .Proto_Index)
                 .Weight,
-            Used => Item_Is_Used(Member_Index => Member_Index, Item_Index => I), Id => I);
+            Used =>
+              Item_Is_Used(Member_Index => Member_Index, Item_Index => I),
+            Id => I);
       end loop Fill_Local_Inventory_Loop;
       Sort_Inventory(Container => Local_Inventory);
       Inventory_Indexes.Clear;
-      Fill_Inventory_Indexes_Loop:
+      Fill_Inventory_Indexes_Loop :
       for Item of Local_Inventory loop
          Inventory_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Inventory_Indexes_Loop;
       return
         Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "UpdateInventory" &
-           Trim(Source => Positive'Image(Member_Index), Side => Left));
+           Argv =>
+             CArgv.Empty & "UpdateInventory" &
+             Trim(Source => Positive'Image(Member_Index), Side => Left));
    end Sort_Crew_Inventory_Command;
 
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
@@ -531,35 +544,44 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
            Title =>
-             "Inventory of " & To_String(Source => Player_Ship.Crew(Member_Index).Name),
+             "Inventory of " &
+             To_String(Source => Player_Ship.Crew(Member_Index).Name),
            Columns => 2);
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
           (pathName => Member_Dialog & ".yscroll",
-           options => "-orient vertical -command [list .memberdialog.canvas yview]");
+           options =>
+             "-orient vertical -command [list .memberdialog.canvas yview]");
       Member_Canvas: constant Tk_Canvas :=
         Create
           (pathName => Member_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Member_Frame: constant Ttk_Frame := Create(pathName => Member_Canvas & ".frame");
+      Member_Frame: constant Ttk_Frame :=
+        Create(pathName => Member_Canvas & ".frame");
       Height, Width: Positive := 10;
       Free_Space_Label: constant Ttk_Label :=
         Create
           (pathName => Member_Frame & ".freespace",
-           options => "-text {Free inventory space:" &
-           Integer'Image
-             (Free_Inventory(Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)), Amount => 0)) &
-           " kg} -wraplength 400");
+           options =>
+             "-text {Free inventory space:" &
+             Integer'Image
+               (Free_Inventory
+                  (Member_Index =>
+                     Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+                   Amount => 0)) &
+             " kg} -wraplength 400");
       Dialog_Close_Button: constant Ttk_Button :=
         Create
           (pathName => Member_Dialog & ".button",
-           options => "-image exiticon -command {CloseDialog " & Member_Dialog &
-           "} -text {Close} -style Dialog.TButton");
+           options =>
+             "-image exiticon -command {CloseDialog " & Member_Dialog &
+             "} -text {Close} -style Dialog.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Member_Index).Inventory) =
@@ -574,36 +596,53 @@ package body Ships.UI.Crew.Inventory is
               To_String(Source => Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
-      Add(Widget => Dialog_Close_Button, Message => "Close inventory \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Canvas, Options => "-padx 5 -pady 5");
+      Add
+        (Widget => Dialog_Close_Button,
+         Message => "Close inventory \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll, Options => "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
+        (Slave => Member_Canvas, Options => "-padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Y_Scroll,
+         Options => "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
       Autoscroll(Scroll => Y_Scroll);
       Tcl.Tk.Ada.Grid.Grid(Slave => Free_Space_Label);
       Height :=
-        Height + Positive'Value(Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
+        Height +
+        Positive'Value
+          (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
       Inventory_Table :=
         Create_Table
           (Parent => Widget_Image(Member_Frame),
-           Headers => (1 => To_Unbounded_String(Source => ""), 2 => To_Unbounded_String(Source => "Name"),
-            3 => To_Unbounded_String(Source => "Durability"), 4 => To_Unbounded_String(Source => "Used"),
-            5 => To_Unbounded_String(Source => "Amount"), 6 => To_Unbounded_String(Source => "Weight")),
+           Headers =>
+             (1 => To_Unbounded_String(Source => ""),
+              2 => To_Unbounded_String(Source => "Name"),
+              3 => To_Unbounded_String(Source => "Durability"),
+              4 => To_Unbounded_String(Source => "Used"),
+              5 => To_Unbounded_String(Source => "Amount"),
+              6 => To_Unbounded_String(Source => "Weight")),
            Scrollbar => Y_Scroll, Command => "SortCrewInventory",
            Tooltip => "Press mouse button to sort the inventory.");
-      if Update_Inventory_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) =
+      if Update_Inventory_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) =
         TCL_ERROR then
          return TCL_ERROR;
       end if;
       Height :=
         Height +
-        Positive'Value(Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqheight"));
-      Width := Positive'Value(Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
+        Positive'Value
+          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqheight"));
+      Width :=
+        Positive'Value
+          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-pady 5");
       Widgets.Focus(Widgt => Inventory_Table.Canvas);
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Inventory_Table.Canvas & ";break}");
-      Bind(Widgt => Dialog_Close_Button, Sequence => "<Escape>", Script => "{" & Dialog_Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Bind
         (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
          Script => "{" & Dialog_Close_Button & " invoke;break}");
@@ -611,9 +650,10 @@ package body Ships.UI.Crew.Inventory is
          Height := 500;
       end if;
       configure
-        (Member_Frame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
+        (Widgt => Member_Frame,
+         options =>
+           "-height" & Positive'Image(Height) & " -width" &
+           Positive'Image(Width));
       configure
         (Member_Canvas,
          "-height" & Positive'Image(Height) & " -width" &
