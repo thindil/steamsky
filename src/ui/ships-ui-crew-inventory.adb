@@ -677,14 +677,18 @@ package body Ships.UI.Crew.Inventory is
            Positive'Image(Width));
       configure
         (Widgt => Member_Canvas,
-         options => "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width + 15));
+         options =>
+           "-height" & Positive'Image(Height) & " -width" &
+           Positive'Image(Width + 15));
       Canvas_Create
-        (Parent => Member_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Member_Frame);
+        (Parent => Member_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Member_Frame);
       Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Widgt => Member_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
       Show_Dialog
         (Dialog => Member_Dialog, Relative_X => 0.2, Relative_Y => 0.2);
       return TCL_OK;
@@ -717,8 +721,10 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Local_Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Item_Type: constant Bounded_String :=
         Objects_Container.Element
           (Container => Items_List,
@@ -729,11 +735,14 @@ package body Ships.UI.Crew.Inventory is
                .Proto_Index)
           .I_Type;
    begin
-      if Item_Is_Used(Member_Index => Local_Member_Index, Item_Index => Item_Index) then
-         Take_Off_Item(Member_Index => Local_Member_Index, Item_Index => Item_Index);
+      if Item_Is_Used
+          (Member_Index => Local_Member_Index, Item_Index => Item_Index) then
+         Take_Off_Item
+           (Member_Index => Local_Member_Index, Item_Index => Item_Index);
          return
            Sort_Crew_Inventory_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "SortCrewInventory" & "-1");
       end if;
       if Item_Type = Weapon_Type then
          if Objects_Container.Element
@@ -749,7 +758,8 @@ package body Ships.UI.Crew.Inventory is
            Player_Ship.Crew(Local_Member_Index).Equipment(SHIELD) /= 0 then
             Show_Message
               (Text =>
-                 To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
+                 To_String
+                   (Source => Player_Ship.Crew(Local_Member_Index).Name) &
                  " can't use this weapon because have shield equiped. Take off shield first.",
                Title => "Shield in use");
             return TCL_OK;
@@ -761,15 +771,18 @@ package body Ships.UI.Crew.Inventory is
                 (Container => Items_List,
                  Index =>
                    Inventory_Container.Element
-                     (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-                      Index => Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON))
+                     (Container =>
+                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                      Index =>
+                        Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON))
                      .Proto_Index)
                 .Value
                 (4) =
               2 then
                Show_Message
                  (Text =>
-                    To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
+                    To_String
+                      (Source => Player_Ship.Crew(Local_Member_Index).Name) &
                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
                   Title => "Two handed weapon in use");
                return TCL_OK;
@@ -791,7 +804,8 @@ package body Ships.UI.Crew.Inventory is
       end if;
       return
         Sort_Crew_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Set_Use_Item_Command;
 
    -- ****o* SUCI/SUCI.Show_Move_Item_Command
@@ -819,23 +833,30 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Local_Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".itemdialog",
-           Title => "Move " &
-           Get_Item_Name
-             (Item => Inventory_Container.Element
-                (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-                 Index => Item_Index)) &
-           " to ship cargo",
+           Title =>
+             "Move " &
+             Get_Item_Name
+               (Item =>
+                  Inventory_Container.Element
+                    (Container =>
+                       Player_Ship.Crew(Local_Member_Index).Inventory,
+                     Index => Item_Index)) &
+             " to ship cargo",
            Title_Width => 400, Columns => 2, Parent_Name => ".memberdialog");
       Button: Ttk_Button :=
         Create
           (pathName => Item_Dialog & ".movebutton",
-           options => "-text Move -command {MoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-           CArgv.Arg(Argv => Argv, N => 2) & "}");
+           options =>
+             "-text Move -command {MoveItem " &
+             CArgv.Arg(Argv => Argv, N => 1) & " " &
+             CArgv.Arg(Argv => Argv, N => 2) & "}");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
@@ -845,34 +866,45 @@ package body Ships.UI.Crew.Inventory is
       Amount_Box: constant Ttk_SpinBox :=
         Create
           (pathName => Item_Dialog & ".amount",
-           options => "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
-           " -validate key -validatecommand {ValidateMoveAmount" &
-           Positive'Image(Max_Amount) & " %P}");
+           options =>
+             "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
+             " -validate key -validatecommand {ValidateMoveAmount" &
+             Positive'Image(Max_Amount) & " %P}");
    begin
       Max_Amount_Button :=
         Create
           (pathName => Item_Dialog & ".amountlbl",
-           options => "-text {Amount (max:" & Positive'Image(Max_Amount) &
-           "):} -command {" & Amount_Box & " set" & Positive'Image(Max_Amount) &
-           "}");
+           options =>
+             "-text {Amount (max:" & Positive'Image(Max_Amount) &
+             "):} -command {" & Amount_Box & " set" &
+             Positive'Image(Max_Amount) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Max_Amount_Button, Options => "-padx 5");
       Set(SpinBox => Amount_Box, Value => "1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 0} -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-padx {5 0} -pady {0 5}");
       Bind
-        (Widgt => Button, Sequence => "<Escape>", Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (pathName => Item_Dialog & ".cancelbutton",
-           options => "-text Cancel -command {CloseDialog " & Item_Dialog &
-           " .memberdialog;focus .memberdialog.button}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 1 -row 2 -padx {0 5} -pady {0 5}");
+           options =>
+             "-text Cancel -command {CloseDialog " & Item_Dialog &
+             " .memberdialog;focus .memberdialog.button}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button,
+         Options => "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Widgt => Button);
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Item_Dialog & ".movebutton;break}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus " & Item_Dialog & ".movebutton;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       Show_Dialog(Dialog => Item_Dialog);
       return TCL_OK;
    end Show_Move_Item_Command;
@@ -903,36 +935,44 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       Amount: Positive;
-      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Item_Dialog: Tk_Toplevel := Get_Widget(pathName => ".itemdialog", Interp => Interp);
+      Local_Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Item_Dialog: Tk_Toplevel :=
+        Get_Widget(pathName => ".itemdialog", Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
+          (pathName =>
+             Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
            Interp => Interp);
    begin
       Amount := Positive'Value(Get(Widgt => Amount_Box));
       if Free_Cargo
-          (Amount => 0 -
-           (Objects_Container.Element
-              (Container => Items_List,
-               Index =>
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-                    Index => Item_Index)
-                   .Proto_Index)
-              .Weight *
-            Amount)) <
+          (Amount =>
+             0 -
+             (Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container =>
+                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                      Index => Item_Index)
+                     .Proto_Index)
+                .Weight *
+              Amount)) <
         0 then
          Show_Message
            (Text =>
               "No free space in ship cargo for that amount of " &
               Get_Item_Name
-                (Item => Inventory_Container.Element
-                   (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-                    Index => Item_Index)),
+                (Item =>
+                   Inventory_Container.Element
+                     (Container =>
+                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                      Index => Item_Index)),
             Title => "No free space in cargo");
          return TCL_OK;
       end if;
@@ -969,11 +1009,14 @@ package body Ships.UI.Crew.Inventory is
              (Inventory => Player_Ship.Crew(Local_Member_Index).Inventory,
               Item_Type => Repair_Tools) =
            0) then
-         Give_Orders(Ship => Player_Ship, Member_Index => Local_Member_Index, Given_Order => REST);
+         Give_Orders
+           (Ship => Player_Ship, Member_Index => Local_Member_Index,
+            Given_Order => REST);
       end if;
       Destroy(Widgt => Item_Dialog);
       Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
-      Tcl_Eval(interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
+      Tcl_Eval
+        (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
         0 then
