@@ -617,6 +617,20 @@ package body Ships.UI.Crew.Inventory is
               To_String(Source => Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
+      Reset_Item_Selection_Loop :
+      for I in
+        1 ..
+          Inventory_Container.Capacity
+            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName => "invindex" & Trim(Source => I'Img, Side => Left)) =
+           "1" then
+            Tcl_UnsetVar
+              (interp => Interp,
+               varName => "invindex" & Trim(Source => I'Img, Side => Left));
+         end if;
+      end loop Reset_Item_Selection_Loop;
       Add
         (Widget => Dialog_Close_Button,
          Message => "Close inventory \[Escape key\]");
