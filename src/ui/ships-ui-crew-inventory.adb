@@ -906,16 +906,16 @@ package body Ships.UI.Crew.Inventory is
       Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Item_Dialog: Tk_Toplevel := Get_Widget(pathName => ".itemdialog", Interp => Interp);
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(Item_Dialog & ".amount", Interp);
-      TypeBox: constant Ttk_ComboBox :=
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
+      Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
-           Interp);
+          (pathName => Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
+           Interp => Interp);
    begin
-      Amount := Positive'Value(Get(AmountBox));
+      Amount := Positive'Value(Get(Widgt => Amount_Box));
       if Free_Cargo
-          (0 -
+          (Amount => 0 -
            (Objects_Container.Element
               (Container => Items_List,
                Index =>
@@ -930,7 +930,7 @@ package body Ships.UI.Crew.Inventory is
            (Text =>
               "No free space in ship cargo for that amount of " &
               Get_Item_Name
-                (Inventory_Container.Element
+                (Item => Inventory_Container.Element
                    (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
                     Index => Item_Index)),
             Title => "No free space in cargo");
@@ -969,15 +969,15 @@ package body Ships.UI.Crew.Inventory is
              (Inventory => Player_Ship.Crew(Local_Member_Index).Inventory,
               Item_Type => Repair_Tools) =
            0) then
-         Give_Orders(Player_Ship, Local_Member_Index, REST);
+         Give_Orders(Ship => Player_Ship, Member_Index => Local_Member_Index, Given_Order => REST);
       end if;
-      Destroy(Item_Dialog);
-      Generate(TypeBox, "<<ComboboxSelected>>");
-      Tcl_Eval(Interp, "CloseDialog .itemdialog .memberdialog");
+      Destroy(Widgt => Item_Dialog);
+      Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
+      Tcl_Eval(interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
         0 then
-         Tcl_Eval(Interp, "CloseDialog .memberdialog");
+         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
          return TCL_OK;
       end if;
       return
