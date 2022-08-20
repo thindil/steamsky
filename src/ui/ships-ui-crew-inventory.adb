@@ -844,30 +844,30 @@ package body Ships.UI.Crew.Inventory is
           .Amount;
       Amount_Box: constant Ttk_SpinBox :=
         Create
-          (Item_Dialog & ".amount",
-           "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
+          (pathName => Item_Dialog & ".amount",
+           options => "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
            " -validate key -validatecommand {ValidateMoveAmount" &
            Positive'Image(Max_Amount) & " %P}");
    begin
       Max_Amount_Button :=
         Create
-          (Item_Dialog & ".amountlbl",
-           "-text {Amount (max:" & Positive'Image(Max_Amount) &
+          (pathName => Item_Dialog & ".amountlbl",
+           options => "-text {Amount (max:" & Positive'Image(Max_Amount) &
            "):} -command {" & Amount_Box & " set" & Positive'Image(Max_Amount) &
            "}");
-      Tcl.Tk.Ada.Grid.Grid(Max_Amount_Button, "-padx 5");
-      Set(Amount_Box, "1");
-      Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-column 1 -row 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Max_Amount_Button, Options => "-padx 5");
+      Set(SpinBox => Amount_Box, Value => "1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
       Bind
-        (Amount_Box, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0} -pady {0 5}");
+        (Widgt => Amount_Box, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 0} -pady {0 5}");
       Bind
-        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>", Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
-          (Item_Dialog & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & Item_Dialog &
+          (pathName => Item_Dialog & ".cancelbutton",
+           options => "-text Cancel -command {CloseDialog " & Item_Dialog &
            " .memberdialog;focus .memberdialog.button}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
