@@ -819,61 +819,61 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
-      ItemDialog: constant Ttk_Frame :=
+      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".itemdialog",
-           "Move " &
+          (Name => ".itemdialog",
+           Title => "Move " &
            Get_Item_Name
-             (Inventory_Container.Element
+             (Item => Inventory_Container.Element
                 (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-                 Index => ItemIndex)) &
+                 Index => Item_Index)) &
            " to ship cargo",
-           400, 2, ".memberdialog");
+           Title_Width => 400, Columns => 2, Parent_Name => ".memberdialog");
       Button: Ttk_Button :=
         Create
-          (ItemDialog & ".movebutton",
-           "-text Move -command {MoveItem " & CArgv.Arg(Argv, 1) & " " &
-           CArgv.Arg(Argv, 2) & "}");
+          (pathName => Item_Dialog & ".movebutton",
+           options => "-text Move -command {MoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+           CArgv.Arg(Argv => Argv, N => 2) & "}");
       Max_Amount_Button: Ttk_Button;
-      MaxAmount: constant Positive :=
+      Max_Amount: constant Positive :=
         Inventory_Container.Element
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
-           Index => ItemIndex)
+           Index => Item_Index)
           .Amount;
-      AmountBox: constant Ttk_SpinBox :=
+      Amount_Box: constant Ttk_SpinBox :=
         Create
-          (ItemDialog & ".amount",
-           "-width 5 -from 1.0 -to" & Float'Image(Float(MaxAmount)) &
+          (Item_Dialog & ".amount",
+           "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
            " -validate key -validatecommand {ValidateMoveAmount" &
-           Positive'Image(MaxAmount) & " %P}");
+           Positive'Image(Max_Amount) & " %P}");
    begin
       Max_Amount_Button :=
         Create
-          (ItemDialog & ".amountlbl",
-           "-text {Amount (max:" & Positive'Image(MaxAmount) &
-           "):} -command {" & AmountBox & " set" & Positive'Image(MaxAmount) &
+          (Item_Dialog & ".amountlbl",
+           "-text {Amount (max:" & Positive'Image(Max_Amount) &
+           "):} -command {" & Amount_Box & " set" & Positive'Image(Max_Amount) &
            "}");
       Tcl.Tk.Ada.Grid.Grid(Max_Amount_Button, "-padx 5");
-      Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Set(Amount_Box, "1");
+      Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-column 1 -row 1");
       Bind
-        (AmountBox, "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
+        (Amount_Box, "<Escape>",
+         "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0} -pady {0 5}");
       Bind
-        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
-          (ItemDialog & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & ItemDialog &
+          (Item_Dialog & ".cancelbutton",
+           "-text Cancel -command {CloseDialog " & Item_Dialog &
            " .memberdialog;focus .memberdialog.button}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
-      Bind(Button, "<Tab>", "{focus " & ItemDialog & ".movebutton;break}");
+      Bind(Button, "<Tab>", "{focus " & Item_Dialog & ".movebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(ItemDialog);
+      Show_Dialog(Item_Dialog);
       return TCL_OK;
    end Show_Move_Item_Command;
 
