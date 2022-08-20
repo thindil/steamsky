@@ -718,8 +718,8 @@ package body Ships.UI.Crew.Inventory is
       use Tiny_String;
 
       Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
-      ItemType: constant Bounded_String :=
+      Item_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Item_Type: constant Bounded_String :=
         Objects_Container.Element
           (Container => Items_List,
            Index =>
@@ -729,13 +729,13 @@ package body Ships.UI.Crew.Inventory is
                .Proto_Index)
           .I_Type;
    begin
-      if Item_Is_Used(Local_Member_Index, Item_Index) then
-         Take_Off_Item(Local_Member_Index, Item_Index);
+      if Item_Is_Used(Member_Index => Local_Member_Index, Item_Index => Item_Index) then
+         Take_Off_Item(Member_Index => Local_Member_Index, Item_Index => Item_Index);
          return
            Sort_Crew_Inventory_Command
-             (Client_Data, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
       end if;
-      if ItemType = Weapon_Type then
+      if Item_Type = Weapon_Type then
          if Objects_Container.Element
              (Container => Items_List,
               Index =>
@@ -749,13 +749,13 @@ package body Ships.UI.Crew.Inventory is
            Player_Ship.Crew(Local_Member_Index).Equipment(SHIELD) /= 0 then
             Show_Message
               (Text =>
-                 To_String(Player_Ship.Crew(Local_Member_Index).Name) &
+                 To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
                  " can't use this weapon because have shield equiped. Take off shield first.",
                Title => "Shield in use");
             return TCL_OK;
          end if;
          Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON) := Item_Index;
-      elsif ItemType = Shield_Type then
+      elsif Item_Type = Shield_Type then
          if Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON) > 0 then
             if Objects_Container.Element
                 (Container => Items_List,
@@ -769,39 +769,39 @@ package body Ships.UI.Crew.Inventory is
               2 then
                Show_Message
                  (Text =>
-                    To_String(Player_Ship.Crew(Local_Member_Index).Name) &
+                    To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
                   Title => "Two handed weapon in use");
                return TCL_OK;
             end if;
          end if;
          Player_Ship.Crew(Local_Member_Index).Equipment(SHIELD) := Item_Index;
-      elsif ItemType = Head_Armor then
+      elsif Item_Type = Head_Armor then
          Player_Ship.Crew(Local_Member_Index).Equipment(HELMET) := Item_Index;
-      elsif ItemType = Chest_Armor then
+      elsif Item_Type = Chest_Armor then
          Player_Ship.Crew(Local_Member_Index).Equipment(TORSO) := Item_Index;
-      elsif ItemType = Arms_Armor then
+      elsif Item_Type = Arms_Armor then
          Player_Ship.Crew(Local_Member_Index).Equipment(ARMS) := Item_Index;
-      elsif ItemType = Legs_Armor then
+      elsif Item_Type = Legs_Armor then
          Player_Ship.Crew(Local_Member_Index).Equipment(LEGS) := Item_Index;
       elsif TinyString_Indefinite_Container.Find_Index
-          (Container => Tools_List, Item => ItemType) /=
+          (Container => Tools_List, Item => Item_Type) /=
         TinyString_Indefinite_Container.No_Index then
          Player_Ship.Crew(Local_Member_Index).Equipment(TOOL) := Item_Index;
       end if;
       return
         Sort_Crew_Inventory_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Set_Use_Item_Command;
 
    -- ****o* SUCI/SUCI.Show_Move_Item_Command
    -- FUNCTION
    -- Show UI to move the selected item to the ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -810,16 +810,16 @@ package body Ships.UI.Crew.Inventory is
    -- be set, itemindex is the index of the item which will be set
    -- SOURCE
    function Show_Move_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Move_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Local_Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog
@@ -827,7 +827,7 @@ package body Ships.UI.Crew.Inventory is
            "Move " &
            Get_Item_Name
              (Inventory_Container.Element
-                (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
                  Index => ItemIndex)) &
            " to ship cargo",
            400, 2, ".memberdialog");
@@ -839,7 +839,7 @@ package body Ships.UI.Crew.Inventory is
       Max_Amount_Button: Ttk_Button;
       MaxAmount: constant Positive :=
         Inventory_Container.Element
-          (Container => Player_Ship.Crew(MemberIndex).Inventory,
+          (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
            Index => ItemIndex)
           .Amount;
       AmountBox: constant Ttk_SpinBox :=
