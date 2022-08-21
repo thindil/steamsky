@@ -51,7 +51,7 @@ package Bases.Trade is
    -- SOURCE
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
-      Daily_Payment, TradePayment: Natural; Contract_Length: Integer) with
+      Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) with
       Test_Case => (Name => "Test_HireRecruit", Mode => Robustness);
       -- ****
 

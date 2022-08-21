@@ -907,10 +907,10 @@ package body Bases.RecruitUI is
       if Cost < 1 then
          Cost := 1;
       end if;
-      HireRecruit
-        (RecruitIndex => Recruit_Index, Cost => Cost,
-         DailyPayment => Daily_Payment, TradePayment => Trade_Payment,
-         ContractLength => Contract_Length_2);
+      Hire_Recruit
+        (Recruit_Index => Recruit_Index, Cost => Cost,
+         Daily_Payment => Daily_Payment, Trade_Payment => Trade_Payment,
+         Contract_Length => Contract_Length_2);
       Update_Messages;
       Tcl_Eval(interp => Interp, strng => "CloseDialog " & Dialog_Name);
       return

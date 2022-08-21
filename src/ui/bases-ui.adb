@@ -308,9 +308,9 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            HealCost
+            Heal_Cost
               (Cost => Cost, Time => Time,
-               MemberIndex => Positive'Value(To_String(Source => I)));
+               Member_Index => Positive'Value(To_String(Source => I)));
             Add_Button
               (Table => Base_Table,
                Text =>
@@ -576,11 +576,11 @@ package body Bases.UI is
       Item_Index: constant String := CArgv.Arg(Argv => Argv, N => 2);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
-         HealWounded(MemberIndex => Natural'Value(Item_Index));
+         Heal_Wounded(Member_Index => Natural'Value(Item_Index));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
          Bases.Ship.Repair_Ship(Module_Index => Integer'Value(Item_Index));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
-         BuyRecipe(RecipeIndex => To_Bounded_String(Source => Item_Index));
+         Buy_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index));
       end if;
       Update_Header;
       Update_Messages;
@@ -690,9 +690,9 @@ package body Bases.UI is
       end Add_Button;
    begin
       if Action = "heal" then
-         HealCost
+         Heal_Cost
            (Cost => Cost, Time => Time,
-            MemberIndex => Integer'Value(Item_Index));
+            Member_Index => Integer'Value(Item_Index));
       elsif Action = "repair" then
          Repair_Cost
            (Cost => Cost, Time => Time,
@@ -902,9 +902,9 @@ package body Bases.UI is
          for I in Player_Ship.Crew.Iterate loop
             Cost := 0;
             Time := 0;
-            HealCost
+            Heal_Cost
               (Cost => Cost, Time => Time,
-               MemberIndex => Crew_Container.To_Index(Position => I));
+               Member_Index => Crew_Container.To_Index(Position => I));
             Local_Items(Crew_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -917,7 +917,7 @@ package body Bases.UI is
          end loop Fill_Heal_Items_Loop;
          Cost := 0;
          Time := 0;
-         HealCost(Cost => Cost, Time => Time, MemberIndex => 0);
+         Heal_Cost(Cost => Cost, Time => Time, Member_Index => 0);
          Local_Items(Local_Items'Last) :=
            (Name =>
               To_Unbounded_String(Source => "Heal all wounded crew members"),

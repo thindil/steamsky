@@ -342,9 +342,9 @@ package body Bases.SchoolUI is
              "box.amount",
            Interp => Interp);
    begin
-      TrainSkill
-        (MemberIndex => Get_Member_Index,
-         SkillIndex => Skills_Amount_Range(Get_Skill_Index),
+      Train_Skill
+        (Member_Index => Get_Member_Index,
+         Skill_Index => Skills_Amount_Range(Get_Skill_Index),
          Amount => Positive'Value(Get(Widgt => Amount_Box)),
          Is_Amount =>
            (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount"
@@ -417,9 +417,9 @@ package body Bases.SchoolUI is
          Amount := 100;
       end if;
       Cost :=
-        TrainCost
-          (MemberIndex => Get_Member_Index,
-           SkillIndex => Skills_Amount_Range(Get_Skill_Index)) *
+        Train_Cost
+          (Member_Index => Get_Member_Index,
+           Skill_Index => Skills_Amount_Range(Get_Skill_Index)) *
         Amount;
       configure
         (Widgt => Label,
@@ -465,9 +465,9 @@ package body Bases.SchoolUI is
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Cost: constant Natural :=
-        TrainCost
-          (MemberIndex => Get_Member_Index,
-           SkillIndex => Skills_Amount_Range(Get_Skill_Index));
+        Train_Cost
+          (Member_Index => Get_Member_Index,
+           Skill_Index => Skills_Amount_Range(Get_Skill_Index));
    begin
       if Money_Index_2 > 0 and Cost > 0 then
          configure
