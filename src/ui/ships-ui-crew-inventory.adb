@@ -1110,8 +1110,8 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Used: constant Boolean :=
         Item_Is_Used
-          (Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-           Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+          (Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+           Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
    begin
       Show_Inventory_Item_Info
         (Parent => ".memberdialog",
