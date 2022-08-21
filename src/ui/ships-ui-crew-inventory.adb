@@ -1039,44 +1039,44 @@ package body Ships.UI.Crew.Inventory is
       end if;
       return
         Sort_Crew_Inventory_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Move_Item_Command;
 
    -- ****o* SUCI/SUCI.Validate_Move_Amount_Command
    -- FUNCTION
    -- Validate amount of the item to move
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ValidateMoveAmount
    -- SOURCE
    function Validate_Move_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Validate_Move_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Amount: Positive;
    begin
-      Amount := Positive'Value(CArgv.Arg(Argv, 2));
-      if Amount > Positive'Value(CArgv.Arg(Argv, 1)) then
-         Tcl_SetResult(Interp, "0");
+      Amount := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      if Amount > Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) then
+         Tcl_SetResult(interp => Interp, str => "0");
          return TCL_OK;
       end if;
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    exception
       when Constraint_Error =>
-         Tcl_SetResult(Interp, "0");
+         Tcl_SetResult(interp => Interp, str => "0");
          return TCL_OK;
    end Validate_Move_Amount_Command;
 
@@ -1085,10 +1085,10 @@ package body Ships.UI.Crew.Inventory is
    -- Show detailed information about the selected item in crew member
    -- inventory
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1098,15 +1098,15 @@ package body Ships.UI.Crew.Inventory is
    -- be show
    -- SOURCE
    function Show_Inventory_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Inventory_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       Used: constant Boolean :=
         Item_Is_Used
           (Positive'Value(CArgv.Arg(Argv, 1)),
