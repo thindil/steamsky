@@ -1109,13 +1109,13 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Used: constant Boolean :=
         Item_Is_Used
-          (Positive'Value(CArgv.Arg(Argv, 1)),
-           Positive'Value(CArgv.Arg(Argv, 2)));
+          (Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+           Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
    begin
       Show_Inventory_Item_Info
-        (".memberdialog", Positive'Value(CArgv.Arg(Argv, 2)),
-         Positive'Value(CArgv.Arg(Argv, 1)),
-         (Text => To_Unbounded_String(Source => "Move"),
+        (Parent => ".memberdialog", Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+         Button_1 => (Text => To_Unbounded_String(Source => "Move"),
           Command =>
             To_Unbounded_String
               (Source =>
@@ -1125,9 +1125,9 @@ package body Ships.UI.Crew.Inventory is
           Tooltip =>
             To_Unbounded_String
               (Source => "Move the selected item to the ship's cargo")),
-         (Text =>
-            (if Used then To_Unbounded_String("Unequip")
-             else To_Unbounded_String("Equip")),
+         Button_2 => (Text =>
+            (if Used then To_Unbounded_String(Source => "Unequip")
+             else To_Unbounded_String(Source => "Equip")),
           Command =>
             To_Unbounded_String
               (Source =>
@@ -1137,8 +1137,8 @@ package body Ships.UI.Crew.Inventory is
             (if Used then To_Unbounded_String(Source => "unequipicon")
              else To_Unbounded_String(Source => "equipicon")),
           Tooltip =>
-            (if Used then To_Unbounded_String("Stop")
-             else To_Unbounded_String("Start")) &
+            (if Used then To_Unbounded_String(Source => "Stop")
+             else To_Unbounded_String(Source => "Start")) &
             " using the selected item"));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
@@ -1147,10 +1147,10 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Select or deselect the selected item in the inventory
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1159,15 +1159,15 @@ package body Ships.UI.Crew.Inventory is
    -- itemindex is the index of the selected item in crew member inventory.
    -- SOURCE
    function Toggle_Inventory_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Toggle_Inventory_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
    begin
       Toggle_Checked_Button
         (Table => Inventory_Table,
