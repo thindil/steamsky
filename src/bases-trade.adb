@@ -171,7 +171,8 @@ package body Bases.Trade is
            Get_Price
              (Sky_Bases(BaseIndex).Base_Type,
               Recipes_List
-                (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+                (To_Bounded_String
+                   (Source => To_String(Source => Recipe_Index)))
                 .Result_Index) *
            Recipes_List
              (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
