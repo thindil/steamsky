@@ -1039,7 +1039,8 @@ package body Ships.UI.Crew.Inventory is
       end if;
       return
         Sort_Crew_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Move_Item_Command;
 
    -- ****o* SUCI/SUCI.Validate_Move_Amount_Command
@@ -1113,33 +1114,36 @@ package body Ships.UI.Crew.Inventory is
            Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
    begin
       Show_Inventory_Item_Info
-        (Parent => ".memberdialog", Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+        (Parent => ".memberdialog",
+         Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
          Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Button_1 => (Text => To_Unbounded_String(Source => "Move"),
-          Command =>
-            To_Unbounded_String
-              (Source =>
-                 "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-                 CArgv.Arg(Argv => Argv, N => 2)),
-          Icon => To_Unbounded_String(Source => "cargoicon"),
-          Tooltip =>
-            To_Unbounded_String
-              (Source => "Move the selected item to the ship's cargo")),
-         Button_2 => (Text =>
-            (if Used then To_Unbounded_String(Source => "Unequip")
-             else To_Unbounded_String(Source => "Equip")),
-          Command =>
-            To_Unbounded_String
-              (Source =>
-                 "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-                 CArgv.Arg(Argv => Argv, N => 2)),
-          Icon =>
-            (if Used then To_Unbounded_String(Source => "unequipicon")
-             else To_Unbounded_String(Source => "equipicon")),
-          Tooltip =>
-            (if Used then To_Unbounded_String(Source => "Stop")
-             else To_Unbounded_String(Source => "Start")) &
-            " using the selected item"));
+         Button_1 =>
+           (Text => To_Unbounded_String(Source => "Move"),
+            Command =>
+              To_Unbounded_String
+                (Source =>
+                   "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+                   CArgv.Arg(Argv => Argv, N => 2)),
+            Icon => To_Unbounded_String(Source => "cargoicon"),
+            Tooltip =>
+              To_Unbounded_String
+                (Source => "Move the selected item to the ship's cargo")),
+         Button_2 =>
+           (Text =>
+              (if Used then To_Unbounded_String(Source => "Unequip")
+               else To_Unbounded_String(Source => "Equip")),
+            Command =>
+              To_Unbounded_String
+                (Source =>
+                   "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+                   CArgv.Arg(Argv => Argv, N => 2)),
+            Icon =>
+              (if Used then To_Unbounded_String(Source => "unequipicon")
+               else To_Unbounded_String(Source => "equipicon")),
+            Tooltip =>
+              (if Used then To_Unbounded_String(Source => "Stop")
+               else To_Unbounded_String(Source => "Start")) &
+              " using the selected item"));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
@@ -1190,16 +1194,29 @@ package body Ships.UI.Crew.Inventory is
 
    procedure Add_Commands is
    begin
-      Add_Command("UpdateInventory", Update_Inventory_Command'Access);
-      Add_Command("ShowMemberInventory", Show_Member_Inventory_Command'Access);
-      Add_Command("SetUseItem", Set_Use_Item_Command'Access);
-      Add_Command("ShowMoveItem", Show_Move_Item_Command'Access);
-      Add_Command("MoveItem", Move_Item_Command'Access);
-      Add_Command("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
       Add_Command
-        ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
-      Add_Command("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
-      Add_Command("ToggleInventoryItem", Toggle_Inventory_Item_Command'Access);
+        (Name => "UpdateInventory",
+         Ada_Command => Update_Inventory_Command'Access);
+      Add_Command
+        (Name => "ShowMemberInventory",
+         Ada_Command => Show_Member_Inventory_Command'Access);
+      Add_Command
+        (Name => "SetUseItem", Ada_Command => Set_Use_Item_Command'Access);
+      Add_Command
+        (Name => "ShowMoveItem", Ada_Command => Show_Move_Item_Command'Access);
+      Add_Command(Name => "MoveItem", Ada_Command => Move_Item_Command'Access);
+      Add_Command
+        (Name => "ValidateMoveAmount",
+         Ada_Command => Validate_Move_Amount_Command'Access);
+      Add_Command
+        (Name => "ShowInventoryItemInfo",
+         Ada_Command => Show_Inventory_Item_Info_Command'Access);
+      Add_Command
+        (Name => "SortCrewInventory",
+         Ada_Command => Sort_Crew_Inventory_Command'Access);
+      Add_Command
+        (Name => "ToggleInventoryItem",
+         Ada_Command => Toggle_Inventory_Item_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Crew.Inventory;
