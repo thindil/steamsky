@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,103 +37,103 @@ package Bases.Trade is
    Trade_Cant_Heal: exception;
    -- ****
 
-   -- ****f* BTrade/BTrade.HireRecruit
+   -- ****f* BTrade/BTrade.Hire_Recruit
    -- FUNCTION
    -- Hire selected recruit from bases and add him/her to player ship crew
    -- PARAMETERS
-   -- RecruitIndex   - Index of recruit, from base recruits list to hire
-   -- Cost           - Cost of hire of selected recruit
-   -- DailyPayment   - Daily payment of selected recruit
-   -- TradePayment   - Percent of earnings from each trade which this recruit
+   -- Recruit_Index   - Index of recruit, from base recruits list to hire
+   -- Cost            - Cost of hire of selected recruit
+   -- Daily_Payment   - Daily payment of selected recruit
+   -- Trade_Payment   - Percent of earnings from each trade which this recruit
    --                  will take
-   -- ContractLength - Length of the contract with this recruit in days. 0
+   -- Contract_Length - Length of the contract with this recruit in days. 0
    --                  means infinite contract
    -- SOURCE
-   procedure HireRecruit
-     (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
-      DailyPayment, TradePayment: Natural; ContractLength: Integer) with
+   procedure Hire_Recruit
+     (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
+      Daily_Payment, TradePayment: Natural; Contract_Length: Integer) with
       Test_Case => (Name => "Test_HireRecruit", Mode => Robustness);
       -- ****
 
-      -- ****f* BTrade/BTrade.BuyRecipe
+      -- ****f* BTrade/BTrade.Buy_Recipe
       -- FUNCTION
       -- Buy new crafting recipe
       -- PARAMETERS
-      -- RecipeIndex - Index of the recipe from base recipes list to buy
+      -- Recipe_Index - Index of the recipe from base recipes list to buy
       -- SOURCE
-   procedure BuyRecipe(RecipeIndex: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => RecipeIndex) > 0,
+   procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) with
+      Pre => Tiny_String.Length(Source => Recipe_Index) > 0,
       Test_Case => (Name => "Test_BuyRecipe", Mode => Nominal);
       -- ****
 
-      -- ****f* BTrade/BTrade.HealWounded
+      -- ****f* BTrade/BTrade.Heal_Wounded
       -- FUNCTION
       -- Heals wounded crew members in bases
       -- PARAMETERS
-      -- MemberIndex - Index of player ship crew member to heal or 0 for heal
+      -- Member_Index - Index of player ship crew member to heal or 0 for heal
       --               all wounded crew members
       -- SOURCE
-   procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex <= Player_Ship.Crew.Last_Index),
+   procedure Heal_Wounded(Member_Index: Crew_Container.Extended_Index) with
+      Pre => (Member_Index <= Player_Ship.Crew.Last_Index),
       Test_Case => (Name => "Test_HealWounded", Mode => Nominal);
       -- ****
 
-      -- ****f* BTrade/BTrade.HealCost
+      -- ****f* BTrade/BTrade.Heal_Cost
       -- FUNCTION
       -- Count cost of healing action
       -- PARAMETERS
-      -- Cost        - Overall cost of heal wounded player ship crew member(s)
-      -- Time        - Time needed to heal wounded player ship crew member(s)
-      -- MemberIndex - Index of player ship crew member to heal or 0 for heal
-      --               all wounded crew members
+      -- Cost         - Overall cost of heal wounded player ship crew member(s)
+      -- Time         - Time needed to heal wounded player ship crew member(s)
+      -- Member_Index - Index of player ship crew member to heal or 0 for heal
+      --                all wounded crew members
       -- RESULT
       -- Parameters Cost and Time
       -- SOURCE
-   procedure HealCost
+   procedure Heal_Cost
      (Cost, Time: in out Natural;
-      MemberIndex: Crew_Container.Extended_Index) with
-      Pre => MemberIndex <= Player_Ship.Crew.Last_Index,
+      Member_Index: Crew_Container.Extended_Index) with
+      Pre => Member_Index <= Player_Ship.Crew.Last_Index,
       Post => Cost > 0 and Time > 0,
       Test_Case => (Name => "Test_HealCost", Mode => Nominal);
       -- ****
 
-      -- ****f* BTrade/BTrade.TrainCost
+      -- ****f* BTrade/BTrade.Train_Cost
       -- FUNCTION
       -- Count cost of training action
       -- PARAMETERS
-      -- MemberIndex - Index of player ship crew member which will be training
-      -- SkillIndex  - Index of skill of selected crew member which will be
-      --               training
+      -- Member_Index - Index of player ship crew member which will be training
+      -- Skill_Index  - Index of skill of selected crew member which will be
+      --                training
       -- RESULT
       -- Overall cost of training selected skill by selected crew member.
       -- Return 0 if the skill can't be trained because is maxed.
       -- SOURCE
-   function TrainCost
-     (MemberIndex: Crew_Container.Extended_Index;
-      SkillIndex: Skills_Container.Extended_Index) return Natural with
-      Pre => MemberIndex in
+   function Train_Cost
+     (Member_Index: Crew_Container.Extended_Index;
+      Skill_Index: Skills_Container.Extended_Index) return Natural with
+      Pre => Member_Index in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      SkillIndex in 1 .. Skills_Amount,
+      Skill_Index in 1 .. Skills_Amount,
       Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
 
-      -- ****f* BTrade/BTrade.TrainSkill
+      -- ****f* BTrade/BTrade.Train_Skill
       -- FUNCTION
       -- Train selected skill
       -- PARAMETERS
-      -- MemberIndex - Index of Player_Ship crew member which train
-      -- SkillIndex  - Index of skill of selected crew member to train
-      -- Amount      - How many times train or how many money spend on training
-      -- Is_Amount   - If true, Amount variable is how many times train,
-      --               otherwise it is amount of money to spend
+      -- Member_Index - Index of Player_Ship crew member which train
+      -- Skill_Index  - Index of skill of selected crew member to train
+      -- Amount       - How many times train or how many money spend on training
+      -- Is_Amount    - If true, Amount variable is how many times train,
+      --                otherwise it is amount of money to spend
       -- SOURCE
-   procedure TrainSkill
-     (MemberIndex: Crew_Container.Extended_Index;
-      SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
+   procedure Train_Skill
+     (Member_Index: Crew_Container.Extended_Index;
+      Skill_Index: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) with
-      Pre => MemberIndex in
+      Pre => Member_Index in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      SkillIndex in 1 .. Skills_Amount,
+      Skill_Index in 1 .. Skills_Amount,
       Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
       -- ****
 
