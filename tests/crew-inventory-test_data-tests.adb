@@ -282,7 +282,8 @@ package body Crew.Inventory.Test_Data.Tests is
    begin
 
       Assert
-        (Item_Is_Used(1, 1) = False, "Failed to detect that item is not used.");
+        (Item_Is_Used(1, 1) = False,
+         "Failed to detect that item is not used.");
       Assert(Item_Is_Used(1, 2) = True, "Failed to detect that item is used.");
 
 --  begin read only

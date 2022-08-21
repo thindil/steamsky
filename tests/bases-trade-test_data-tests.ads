@@ -10,23 +10,23 @@ package Bases.Trade.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_HireRecruit_8627ed_6a9998(Gnattest_T: in out Test);
-   --  bases-trade.ads:52:4:HireRecruit:Test_HireRecruit
+   procedure Test_Hire_Recruit_6d7d9a_6a9998(Gnattest_T: in out Test);
+   --  bases-trade.ads:52:4:Hire_Recruit:Test_HireRecruit
 
-   procedure Test_BuyRecipe_3ba689_514d74(Gnattest_T: in out Test);
-   --  bases-trade.ads:64:4:BuyRecipe:Test_BuyRecipe
+   procedure Test_Buy_Recipe_f9dd3c_e2270a(Gnattest_T: in out Test);
+   --  bases-trade.ads:64:4:Buy_Recipe:Test_BuyRecipe
 
-   procedure Test_HealWounded_ec5713_276c05(Gnattest_T: in out Test);
-   --  bases-trade.ads:76:4:HealWounded:Test_HealWounded
+   procedure Test_Heal_Wounded_aad41c_6975e9(Gnattest_T: in out Test);
+   --  bases-trade.ads:76:4:Heal_Wounded:Test_HealWounded
 
-   procedure Test_HealCost_772065_168081(Gnattest_T: in out Test);
-   --  bases-trade.ads:92:4:HealCost:Test_HealCost
+   procedure Test_Heal_Cost_115ffd_52d375(Gnattest_T: in out Test);
+   --  bases-trade.ads:92:4:Heal_Cost:Test_HealCost
 
-   procedure Test_TrainCost_a201e9_313cfa(Gnattest_T: in out Test);
-   --  bases-trade.ads:111:4:TrainCost:Test_TrainCost
+   procedure Test_Train_Cost_7284bc_f49c70(Gnattest_T: in out Test);
+   --  bases-trade.ads:111:4:Train_Cost:Test_TrainCost
 
-   procedure Test_TrainSkill_5b8f98_bf4684(Gnattest_T: in out Test);
-   --  bases-trade.ads:130:4:TrainSkill:Test_TrainSkill
+   procedure Test_Train_Skill_30157e_5fedf8(Gnattest_T: in out Test);
+   --  bases-trade.ads:130:4:Train_Skill:Test_TrainSkill
 
 end Bases.Trade.Test_Data.Tests;
 --  end read only
