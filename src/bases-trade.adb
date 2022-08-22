@@ -169,8 +169,8 @@ package body Bases.Trade is
         0 then
          Cost :=
            Get_Price
-             (Sky_Bases(Base_Index).Base_Type,
-              Recipes_List
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Item_Index => Recipes_List
                 (To_Bounded_String
                    (Source => To_String(Source => Recipe_Index)))
                 .Result_Index) *
@@ -189,38 +189,38 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, Trader_Index);
-      Money_Index_2 := Check_Money(Cost, Recipe_Name);
+      Count_Price(Price => Cost, Trader_Index => Trader_Index);
+      Money_Index_2 := Check_Money(Price => Cost, Message => Recipe_Name);
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
-      Update_Base_Cargo(Money_Index, Cost);
+      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Known_Recipes.Append(New_Item => Recipe_Index);
       Add_Message
-        ("You bought the recipe for " & Recipe_Name & " for" &
-         Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
-         TRADEMESSAGE);
-      Gain_Exp(1, Talking_Skill, Trader_Index);
-      Gain_Rep(Base_Index, 1);
-      Update_Game(5);
+        (Message => "You bought the recipe for " & Recipe_Name & " for" &
+         Positive'Image(Cost) & " of " & To_String(Source => Money_Name) & ".",
+         M_Type => TRADEMESSAGE);
+      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Rep(Base_Index => Base_Index, Points => 1);
+      Update_Game(Minutes => 5);
    end Buy_Recipe;
 
    procedure Heal_Wounded(Member_Index: Crew_Container.Extended_Index) is
       use Tiny_String;
 
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      MoneyIndex2: Inventory_Container.Extended_Index := 0;
+      Money_Index_2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
-      TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
+      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
    begin
       Heal_Cost(Cost, Time, Member_Index);
       if Cost = 0 then
          raise Trade_Cant_Heal;
       end if;
-      if TraderIndex = 0 then
+      if Trader_Index = 0 then
          raise Trade_No_Trader;
       end if;
-      MoneyIndex2 := Check_Money(Cost);
+      Money_Index_2 := Check_Money(Cost);
       if Member_Index > 0 then
          Player_Ship.Crew(Member_Index).Health := 100;
          Add_Message
@@ -244,10 +244,10 @@ package body Bases.Trade is
             TRADEMESSAGE);
       end if;
       Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
-      Gain_Exp(1, Talking_Skill, TraderIndex);
-      Gain_Rep(BaseIndex, 1);
+      Gain_Exp(1, Talking_Skill, Trader_Index);
+      Gain_Rep(Base_Index, 1);
       Update_Game(Time);
    end Heal_Wounded;
 
