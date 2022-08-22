@@ -117,28 +117,28 @@ package body Bases.Trade is
             Faction => Recruit.Faction));
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Price));
-      Gain_Exp(1, Talking_Skill, Trader_Index);
-      Gain_Rep(Base_Index, 1);
+      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Rep(Base_Index => Base_Index, Points => 1);
       Add_Message
-        ("You hired " & To_String(Recruit.Name) & " for" &
-         Positive'Image(Price) & " " & To_String(Money_Name) & ".",
-         TRADEMESSAGE);
+        (Message => "You hired " & To_String(Source => Recruit.Name) & " for" &
+         Positive'Image(Price) & " " & To_String(Source => Money_Name) & ".",
+         M_Type => TRADEMESSAGE);
       Recruit_Container.Delete
         (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
       Sky_Bases(Base_Index).Population := Sky_Bases(Base_Index).Population - 1;
-      Update_Game(5);
+      Update_Game(Minutes => 5);
    end Hire_Recruit;
 
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
       use Tiny_String;
 
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      MoneyIndex2: Inventory_Container.Extended_Index;
+      Money_Index_2: Inventory_Container.Extended_Index;
       Cost: Natural;
-      RecipeName: constant String :=
+      Recipe_Name: constant String :=
         To_String
-          (Objects_Container.Element
+          (Source => Objects_Container.Element
              (Container => Items_List,
               Index =>
                 Recipes_List
@@ -146,11 +146,11 @@ package body Bases.Trade is
                      (Source => To_String(Source => Recipe_Index)))
                   .Result_Index)
              .Name);
-      BaseType: constant Bounded_String := Sky_Bases(BaseIndex).Base_Type;
-      TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
+      Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
+      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
    begin
-      if not Bases_Types_List(BaseType).Recipes.Contains
-          (To_Unbounded_String
+      if not Bases_Types_List(Base_Type).Recipes.Contains
+          (Item => To_Unbounded_String
              (Source => To_String(Source => Recipe_Index))) then
          raise Trade_Cant_Buy;
       end if;
@@ -158,18 +158,18 @@ package body Bases.Trade is
         Positive_Container.No_Index then
          raise Trade_Already_Known;
       end if;
-      if TraderIndex = 0 then
+      if Trader_Index = 0 then
          raise Trade_No_Trader;
       end if;
       if Get_Price
-          (Sky_Bases(BaseIndex).Base_Type,
-           Recipes_List
+          (Base_Type => Sky_Bases(Base_Index).Base_Type,
+           Item_Index => Recipes_List
              (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Result_Index) >
         0 then
          Cost :=
            Get_Price
-             (Sky_Bases(BaseIndex).Base_Type,
+             (Sky_Bases(Base_Index).Base_Type,
               Recipes_List
                 (To_Bounded_String
                    (Source => To_String(Source => Recipe_Index)))
@@ -189,18 +189,18 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, TraderIndex);
-      MoneyIndex2 := Check_Money(Cost, RecipeName);
+      Count_Price(Cost, Trader_Index);
+      Money_Index_2 := Check_Money(Cost, Recipe_Name);
       Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => Recipe_Index);
       Add_Message
-        ("You bought the recipe for " & RecipeName & " for" &
+        ("You bought the recipe for " & Recipe_Name & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
          TRADEMESSAGE);
-      Gain_Exp(1, Talking_Skill, TraderIndex);
-      Gain_Rep(BaseIndex, 1);
+      Gain_Exp(1, Talking_Skill, Trader_Index);
+      Gain_Rep(Base_Index, 1);
       Update_Game(5);
    end Buy_Recipe;
 
