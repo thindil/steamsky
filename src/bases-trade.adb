@@ -325,7 +325,7 @@ package body Bases.Trade is
             exit Count_Train_Cost_Loop;
          end if;
       end loop Count_Train_Cost_Loop;
-      Count_Price(Cost, Find_Member(TALK));
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       return Cost;
    end Train_Cost;
 
@@ -336,49 +336,49 @@ package body Bases.Trade is
       use Tiny_String;
 
       Cost: Natural;
-      MoneyIndex2: Inventory_Container.Extended_Index;
-      GainedExp: Positive;
-      BaseIndex: constant Bases_Range :=
+      Money_Index_2: Inventory_Container.Extended_Index;
+      Gained_Exp: Positive;
+      Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      TraderIndex: Crew_Container.Extended_Index;
-      Sessions, OverallCost: Natural := 0;
-      MaxAmount: Integer := Amount;
+      Trader_Index: Crew_Container.Extended_Index;
+      Sessions, Overall_Cost: Natural := 0;
+      Max_Amount: Integer := Amount;
    begin
-      Give_Orders(Player_Ship, Member_Index, REST, 0, False);
+      Give_Orders(Ship => Player_Ship, Member_Index => Member_Index, Given_Order => REST, Module_Index => 0, Check_Priorities => False);
       Train_Skill_Loop :
-      while MaxAmount > 0 loop
-         Cost := Train_Cost(Member_Index, Skill_Index);
-         MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
+      while Max_Amount > 0 loop
+         Cost := Train_Cost(Member_Index => Member_Index, Skill_Index => Skill_Index);
+         Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
            Inventory_Container.Element
-               (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+               (Container => Player_Ship.Cargo, Index => Money_Index_2)
                .Amount <
              Cost or
-           (not Is_Amount and MaxAmount < Cost);
-         GainedExp :=
-           Get_Random(10, 60) +
+           (not Is_Amount and Max_Amount < Cost);
+         Gained_Exp :=
+           Get_Random(Min => 10, Max => 60) +
            Player_Ship.Crew(Member_Index).Attributes
              (Positive
                 (SkillsData_Container.Element(Skills_List, Skill_Index)
                    .Attribute))
              .Level;
-         if GainedExp > 100 then
-            GainedExp := 100;
+         if Gained_Exp > 100 then
+            Gained_Exp := 100;
          end if;
-         Gain_Exp(GainedExp, Skill_Index, Member_Index);
+         Gain_Exp(Gained_Exp, Skill_Index, Member_Index);
          Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => MoneyIndex2,
+           (Ship => Player_Ship, Cargo_Index => Money_Index_2,
             Amount => -(Cost));
          Update_Base_Cargo(Money_Index, Cost);
-         TraderIndex := Find_Member(TALK);
-         if TraderIndex > 0 then
-            Gain_Exp(5, Talking_Skill, TraderIndex);
+         Trader_Index := Find_Member(TALK);
+         if Trader_Index > 0 then
+            Gain_Exp(5, Talking_Skill, Trader_Index);
          end if;
-         Gain_Rep(BaseIndex, 5);
+         Gain_Rep(Base_Index, 5);
          Update_Game(60);
          Sessions := Sessions + 1;
-         OverallCost := OverallCost + Cost;
-         MaxAmount := MaxAmount - (if Is_Amount then 1 else Cost);
+         Overall_Cost := Overall_Cost + Cost;
+         Max_Amount := Max_Amount - (if Is_Amount then 1 else Cost);
       end loop Train_Skill_Loop;
       if Sessions > 0 then
          Add_Message
@@ -387,7 +387,7 @@ package body Bases.Trade is
             To_String
               (SkillsData_Container.Element(Skills_List, Skill_Index).Name) &
             " for " & To_String(Player_Ship.Crew(Member_Index).Name) & " for" &
-            Positive'Image(OverallCost) & " " & To_String(Money_Name) & ".",
+            Positive'Image(Overall_Cost) & " " & To_String(Money_Name) & ".",
             TRADEMESSAGE);
       end if;
    end Train_Skill;
