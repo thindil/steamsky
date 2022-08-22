@@ -231,7 +231,10 @@ package Themes is
    -- Default the game theme
    -- SOURCE
    Default_Theme: constant Theme_Record :=
-     (Name => Null_Unbounded_String, File_Name => Null_Unbounded_String,
+     (Name => To_Unbounded_String(Source => "Default theme"),
+      File_Name =>
+        Data_Directory &
+        To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl"),
       Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
       Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
       Disease_Icon => Wide_Character'Val(16#f5a6#),

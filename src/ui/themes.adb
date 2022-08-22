@@ -49,13 +49,9 @@ package body Themes is
              (Source => Value, Mapping => To_Mapping(From => "\", To => "/"));
       end Convert_Path;
    begin
-      Temp_Record.Name := To_Unbounded_String(Source => "Default theme");
-      Temp_Record.File_Name :=
-        Data_Directory &
-        To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl");
+      Temp_Record := Default_Theme;
       Themes_Container.Include
         (Container => Themes_List, Key => "steamsky", New_Item => Temp_Record);
-      Temp_Record := Default_Theme;
       Start_Search
         (Search => Themes_Directories,
          Directory => To_String(Source => Themes_Directory), Pattern => "",
