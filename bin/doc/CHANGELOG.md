@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the item in the player's ship's crew member's
   inventory
 - Showing information about the item damage chance in the items' info dialog
+- Crash on start in Windows version of the game
 
 ## [7.7] - 2022-08-07
 
