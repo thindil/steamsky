@@ -239,16 +239,16 @@ package body Bases.Trade is
             end if;
          end loop Give_Rest_Order_Loop;
          Add_Message
-           ("You paid for healing for all wounded crew members for" &
-            Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-            TRADEMESSAGE);
+           (Message => "You paid for healing for all wounded crew members for" &
+            Positive'Image(Cost) & " " & To_String(Source => Money_Name) & ".",
+            M_Type => TRADEMESSAGE);
       end if;
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
-      Update_Base_Cargo(Money_Index, Cost);
-      Gain_Exp(1, Talking_Skill, Trader_Index);
-      Gain_Rep(Base_Index, 1);
-      Update_Game(Time);
+      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
+      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Rep(Base_Index => Base_Index, Points => 1);
+      Update_Game(Minutes => Time);
    end Heal_Wounded;
 
    procedure Heal_Cost
@@ -256,7 +256,7 @@ package body Bases.Trade is
       Member_Index: Crew_Container.Extended_Index) is
       use Tiny_String;
 
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if Member_Index > 0 then
@@ -264,8 +264,8 @@ package body Bases.Trade is
          Cost :=
            (5 * (100 - Player_Ship.Crew(Member_Index).Health)) *
            Get_Price
-             (To_Bounded_String("0"),
-              Find_Proto_Item
+             (Base_Type => To_Bounded_String(Source => "0"),
+              Item_Index => Find_Proto_Item
                 (Item_Type =>
                    Factions_List(Player_Ship.Crew(Member_Index).Faction)
                      .Healing_Tools));
@@ -291,12 +291,12 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, Find_Member(TALK));
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       if Time = 0 then
          Time := 1;
       end if;
-      if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
-          (To_Unbounded_String("temple")) then
+      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
+          (Item => To_Unbounded_String(Source => "temple")) then
          Cost := Cost / 2;
          if Cost = 0 then
             Cost := 1;
