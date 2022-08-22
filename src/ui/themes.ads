@@ -233,7 +233,7 @@ package Themes is
    Default_Theme: constant Theme_Record :=
      (Name => To_Unbounded_String(Source => "Default theme"),
       File_Name =>
-        Data_Directory &
+        Data_Directory & Dir_Separator &
         To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl"),
       Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
       Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
