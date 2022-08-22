@@ -213,29 +213,29 @@ package body Bases.Trade is
       Cost, Time: Natural := 0;
       Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
    begin
-      Heal_Cost(Cost, Time, Member_Index);
+      Heal_Cost(Cost => Cost, Time => Time, Member_Index => Member_Index);
       if Cost = 0 then
          raise Trade_Cant_Heal;
       end if;
       if Trader_Index = 0 then
          raise Trade_No_Trader;
       end if;
-      Money_Index_2 := Check_Money(Cost);
+      Money_Index_2 := Check_Money(Price => Cost);
       if Member_Index > 0 then
          Player_Ship.Crew(Member_Index).Health := 100;
          Add_Message
-           ("You paid for healing " &
-            To_String(Player_Ship.Crew(Member_Index).Name) & " for" &
-            Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-            TRADEMESSAGE);
-         Give_Orders(Player_Ship, Member_Index, REST, 0, False);
+           (Message => "You paid for healing " &
+            To_String(Source => Player_Ship.Crew(Member_Index).Name) & " for" &
+            Positive'Image(Cost) & " " & To_String(Source => Money_Name) & ".",
+            M_Type => TRADEMESSAGE);
+         Give_Orders(Ship => Player_Ship, Member_Index => Member_Index, Given_Order => REST, Module_Index => 0, Check_Priorities => False);
       else
          Give_Rest_Order_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Health < 100 then
                Player_Ship.Crew(I).Health := 100;
                Give_Orders
-                 (Player_Ship, Crew_Container.To_Index(I), REST, 0, False);
+                 (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST, Module_Index => 0, Check_Priorities => False);
             end if;
          end loop Give_Rest_Order_Loop;
          Add_Message
