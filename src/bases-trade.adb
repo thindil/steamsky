@@ -28,7 +28,7 @@ with Maps; use Maps;
 
 package body Bases.Trade is
 
-   -- ****if* BTrade/BTrade.CheckMoney
+   -- ****if* BTrade/BTrade.Check_Money
    -- FUNCTION
    -- Check if player have enough money
    -- PARAMETERS
@@ -38,13 +38,13 @@ package body Bases.Trade is
    -- RESULT
    -- Cargo index of money from the player ship
    -- SOURCE
-   function CheckMoney
+   function Check_Money
      (Price: Positive; Message: String := "") return Positive is
       -- ****
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
    begin
-      if MoneyIndex2 = 0 then
+      if Money_Index_2 = 0 then
          if Message /= "" then
             raise Trade_No_Money with Message;
          else
@@ -52,7 +52,7 @@ package body Bases.Trade is
          end if;
       end if;
       if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+          (Container => Player_Ship.Cargo, Index => Money_Index_2)
           .Amount <
         Price then
          if Message /= "" then
@@ -61,31 +61,31 @@ package body Bases.Trade is
             raise Trade_Not_Enough_Money;
          end if;
       end if;
-      return MoneyIndex2;
-   end CheckMoney;
+      return Money_Index_2;
+   end Check_Money;
 
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
       Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) is
       use Tiny_String;
 
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      MoneyIndex2: Inventory_Container.Extended_Index;
+      Money_Index_2: Inventory_Container.Extended_Index;
       Price: Natural;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
+          (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector (Capacity => 32);
-      TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
+      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
    begin
-      if TraderIndex = 0 then
+      if Trader_Index = 0 then
          raise Trade_No_Trader;
       end if;
       Price := Cost;
-      Count_Price(Price, TraderIndex);
-      MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
+      Count_Price(Price => Price, Trader_Index => Trader_Index);
+      Money_Index_2 := Check_Money(Price => Price, Message => To_String(Source => Recruit.Name));
       Add_Recruit_Inventory_Loop :
       for Item of Recruit.Inventory loop
          Inventory_Container.Append
@@ -94,13 +94,13 @@ package body Bases.Trade is
               (Proto_Index => Item, Amount => 1, Name => Null_Bounded_String,
                Durability => Default_Item_Durability, Price => 0));
       end loop Add_Recruit_Inventory_Loop;
-      if Factions_List(Sky_Bases(BaseIndex).Owner).Flags.Contains
-          (To_Unbounded_String("nomorale")) then
+      if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
+          (Item => To_Unbounded_String(Source => "nomorale")) then
          Morale := 50;
       else
          Morale :=
-           (if 50 + Sky_Bases(BaseIndex).Reputation.Level > 100 then 100
-            else 50 + Sky_Bases(BaseIndex).Reputation.Level);
+           (if 50 + Sky_Bases(Base_Index).Reputation.Level > 100 then 100
+            else 50 + Sky_Bases(Base_Index).Reputation.Level);
       end if;
       Player_Ship.Crew.Append
         (New_Item =>
@@ -111,21 +111,21 @@ package body Bases.Trade is
             Previous_Order => REST, Order_Time => 15, Orders => (others => 0),
             Attributes => Recruit.Attributes, Inventory => Inventory,
             Equipment => Recruit.Equipment,
-            Payment => (Daily_Payment, Trade_Payment),
-            Contract_Length => Contract_Length, Morale => (Morale, 0),
+            Payment => (1 => Daily_Payment, 2 => Trade_Payment),
+            Contract_Length => Contract_Length, Morale => (1 => Morale, 2 => 0),
             Loyalty => Morale, Home_Base => Recruit.Home_Base,
             Faction => Recruit.Faction));
       Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Price));
-      Gain_Exp(1, Talking_Skill, TraderIndex);
-      Gain_Rep(BaseIndex, 1);
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Price));
+      Gain_Exp(1, Talking_Skill, Trader_Index);
+      Gain_Rep(Base_Index, 1);
       Add_Message
         ("You hired " & To_String(Recruit.Name) & " for" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ".",
          TRADEMESSAGE);
       Recruit_Container.Delete
-        (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
-      Sky_Bases(BaseIndex).Population := Sky_Bases(BaseIndex).Population - 1;
+        (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
+      Sky_Bases(Base_Index).Population := Sky_Bases(Base_Index).Population - 1;
       Update_Game(5);
    end Hire_Recruit;
 
@@ -190,7 +190,7 @@ package body Bases.Trade is
          Cost := 1;
       end if;
       Count_Price(Cost, TraderIndex);
-      MoneyIndex2 := CheckMoney(Cost, RecipeName);
+      MoneyIndex2 := Check_Money(Cost, RecipeName);
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
@@ -220,7 +220,7 @@ package body Bases.Trade is
       if TraderIndex = 0 then
          raise Trade_No_Trader;
       end if;
-      MoneyIndex2 := CheckMoney(Cost);
+      MoneyIndex2 := Check_Money(Cost);
       if Member_Index > 0 then
          Player_Ship.Crew(Member_Index).Health := 100;
          Add_Message
