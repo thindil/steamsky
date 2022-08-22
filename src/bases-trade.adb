@@ -75,17 +75,21 @@ package body Bases.Trade is
       Price: Natural;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
+          (Container => Sky_Bases(Base_Index).Recruits,
+           Index => Recruit_Index);
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector (Capacity => 32);
-      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        Find_Member(Order => TALK);
    begin
       if Trader_Index = 0 then
          raise Trade_No_Trader;
       end if;
       Price := Cost;
       Count_Price(Price => Price, Trader_Index => Trader_Index);
-      Money_Index_2 := Check_Money(Price => Price, Message => To_String(Source => Recruit.Name));
+      Money_Index_2 :=
+        Check_Money
+          (Price => Price, Message => To_String(Source => Recruit.Name));
       Add_Recruit_Inventory_Loop :
       for Item of Recruit.Inventory loop
          Inventory_Container.Append
@@ -112,16 +116,20 @@ package body Bases.Trade is
             Attributes => Recruit.Attributes, Inventory => Inventory,
             Equipment => Recruit.Equipment,
             Payment => (1 => Daily_Payment, 2 => Trade_Payment),
-            Contract_Length => Contract_Length, Morale => (1 => Morale, 2 => 0),
-            Loyalty => Morale, Home_Base => Recruit.Home_Base,
-            Faction => Recruit.Faction));
+            Contract_Length => Contract_Length,
+            Morale => (1 => Morale, 2 => 0), Loyalty => Morale,
+            Home_Base => Recruit.Home_Base, Faction => Recruit.Faction));
       Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Price));
-      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2,
+         Amount => -(Price));
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Gain_Rep(Base_Index => Base_Index, Points => 1);
       Add_Message
-        (Message => "You hired " & To_String(Source => Recruit.Name) & " for" &
-         Positive'Image(Price) & " " & To_String(Source => Money_Name) & ".",
+        (Message =>
+           "You hired " & To_String(Source => Recruit.Name) & " for" &
+           Positive'Image(Price) & " " & To_String(Source => Money_Name) & ".",
          M_Type => TRADEMESSAGE);
       Recruit_Container.Delete
         (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
@@ -138,20 +146,23 @@ package body Bases.Trade is
       Cost: Natural;
       Recipe_Name: constant String :=
         To_String
-          (Source => Objects_Container.Element
-             (Container => Items_List,
-              Index =>
-                Recipes_List
-                  (To_Bounded_String
-                     (Source => To_String(Source => Recipe_Index)))
-                  .Result_Index)
-             .Name);
+          (Source =>
+             Objects_Container.Element
+               (Container => Items_List,
+                Index =>
+                  Recipes_List
+                    (To_Bounded_String
+                       (Source => To_String(Source => Recipe_Index)))
+                    .Result_Index)
+               .Name);
       Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
-      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        Find_Member(Order => TALK);
    begin
       if not Bases_Types_List(Base_Type).Recipes.Contains
-          (Item => To_Unbounded_String
-             (Source => To_String(Source => Recipe_Index))) then
+          (Item =>
+             To_Unbounded_String
+               (Source => To_String(Source => Recipe_Index))) then
          raise Trade_Cant_Buy;
       end if;
       if Known_Recipes.Find_Index(Item => Recipe_Index) /=
@@ -163,17 +174,19 @@ package body Bases.Trade is
       end if;
       if Get_Price
           (Base_Type => Sky_Bases(Base_Index).Base_Type,
-           Item_Index => Recipes_List
-             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
-             .Result_Index) >
+           Item_Index =>
+             Recipes_List
+               (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+               .Result_Index) >
         0 then
          Cost :=
            Get_Price
              (Base_Type => Sky_Bases(Base_Index).Base_Type,
-              Item_Index => Recipes_List
-                (To_Bounded_String
-                   (Source => To_String(Source => Recipe_Index)))
-                .Result_Index) *
+              Item_Index =>
+                Recipes_List
+                  (To_Bounded_String
+                     (Source => To_String(Source => Recipe_Index)))
+                  .Result_Index) *
            Recipes_List
              (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Difficulty *
@@ -196,10 +209,14 @@ package body Bases.Trade is
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Known_Recipes.Append(New_Item => Recipe_Index);
       Add_Message
-        (Message => "You bought the recipe for " & Recipe_Name & " for" &
-         Positive'Image(Cost) & " of " & To_String(Source => Money_Name) & ".",
+        (Message =>
+           "You bought the recipe for " & Recipe_Name & " for" &
+           Positive'Image(Cost) & " of " & To_String(Source => Money_Name) &
+           ".",
          M_Type => TRADEMESSAGE);
-      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Gain_Rep(Base_Index => Base_Index, Points => 1);
       Update_Game(Minutes => 5);
    end Buy_Recipe;
@@ -211,7 +228,8 @@ package body Bases.Trade is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Money_Index_2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
-      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        Find_Member(Order => TALK);
    begin
       Heal_Cost(Cost => Cost, Time => Time, Member_Index => Member_Index);
       if Cost = 0 then
@@ -224,29 +242,40 @@ package body Bases.Trade is
       if Member_Index > 0 then
          Player_Ship.Crew(Member_Index).Health := 100;
          Add_Message
-           (Message => "You paid for healing " &
-            To_String(Source => Player_Ship.Crew(Member_Index).Name) & " for" &
-            Positive'Image(Cost) & " " & To_String(Source => Money_Name) & ".",
+           (Message =>
+              "You paid for healing " &
+              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+              " for" & Positive'Image(Cost) & " " &
+              To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
-         Give_Orders(Ship => Player_Ship, Member_Index => Member_Index, Given_Order => REST, Module_Index => 0, Check_Priorities => False);
+         Give_Orders
+           (Ship => Player_Ship, Member_Index => Member_Index,
+            Given_Order => REST, Module_Index => 0, Check_Priorities => False);
       else
          Give_Rest_Order_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Health < 100 then
                Player_Ship.Crew(I).Health := 100;
                Give_Orders
-                 (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST, Module_Index => 0, Check_Priorities => False);
+                 (Ship => Player_Ship,
+                  Member_Index => Crew_Container.To_Index(Position => I),
+                  Given_Order => REST, Module_Index => 0,
+                  Check_Priorities => False);
             end if;
          end loop Give_Rest_Order_Loop;
          Add_Message
-           (Message => "You paid for healing for all wounded crew members for" &
-            Positive'Image(Cost) & " " & To_String(Source => Money_Name) & ".",
+           (Message =>
+              "You paid for healing for all wounded crew members for" &
+              Positive'Image(Cost) & " " & To_String(Source => Money_Name) &
+              ".",
             M_Type => TRADEMESSAGE);
       end if;
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Gain_Rep(Base_Index => Base_Index, Points => 1);
       Update_Game(Minutes => Time);
    end Heal_Wounded;
@@ -265,10 +294,11 @@ package body Bases.Trade is
            (5 * (100 - Player_Ship.Crew(Member_Index).Health)) *
            Get_Price
              (Base_Type => To_Bounded_String(Source => "0"),
-              Item_Index => Find_Proto_Item
-                (Item_Type =>
-                   Factions_List(Player_Ship.Crew(Member_Index).Faction)
-                     .Healing_Tools));
+              Item_Index =>
+                Find_Proto_Item
+                  (Item_Type =>
+                     Factions_List(Player_Ship.Crew(Member_Index).Faction)
+                       .Healing_Tools));
       else
          Count_Heal_Cost_Loop :
          for Member of Player_Ship.Crew loop
@@ -344,11 +374,17 @@ package body Bases.Trade is
       Sessions, Overall_Cost: Natural := 0;
       Max_Amount: Integer := Amount;
    begin
-      Give_Orders(Ship => Player_Ship, Member_Index => Member_Index, Given_Order => REST, Module_Index => 0, Check_Priorities => False);
+      Give_Orders
+        (Ship => Player_Ship, Member_Index => Member_Index,
+         Given_Order => REST, Module_Index => 0, Check_Priorities => False);
       Train_Skill_Loop :
       while Max_Amount > 0 loop
-         Cost := Train_Cost(Member_Index => Member_Index, Skill_Index => Skill_Index);
-         Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+         Cost :=
+           Train_Cost
+             (Member_Index => Member_Index, Skill_Index => Skill_Index);
+         Money_Index_2 :=
+           Find_Item
+             (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
            Inventory_Container.Element
                (Container => Player_Ship.Cargo, Index => Money_Index_2)
