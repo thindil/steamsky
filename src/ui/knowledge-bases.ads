@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,21 +20,21 @@
 package Knowledge.Bases is
 -- ****
 
-   -- ****f* KBases/KBases.UpdateBasesList
+   -- ****f* KBases/KBases.Update_Bases_List
    -- FUNCTION
    -- Update and show list of known bases
    -- PARAMETERS
-   -- BaseName - Name of the base to find on list
-   -- Page     - The current page of bases list to show
+   -- Base_Name - Name of the base to find on list
+   -- Page      - The current page of bases list to show
    -- SOURCE
-   procedure UpdateBasesList(BaseName: String := ""; Page: Positive := 1);
+   procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1);
    -- ****
 
-   -- ****f* KBases/KBases.AddCommands
+   -- ****f* KBases/KBases.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to the list of known bases
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end Knowledge.Bases;
