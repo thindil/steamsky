@@ -126,14 +126,14 @@ package body Knowledge.Bases is
       Delete_Widgets(Start_Index => 2, End_Index => Rows - 1, Frame => Bases_Frame);
       Bases_Table :=
         Create_Table
-          (Widget_Image(Bases_Frame),
-           (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-            To_Unbounded_String("Population"), To_Unbounded_String("Size"),
-            To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
-            To_Unbounded_String("Reputation")),
-           Get_Widget(".gameframe.paned.knowledgeframe.bases.scrolly"),
-           "SortKnownBases {" & Base_Name & "}",
-           "Press mouse button to sort the bases.");
+          (Parent => Widget_Image(Win => Bases_Frame),
+           Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
+            3 => To_Unbounded_String(Source => "Population"), 4 => To_Unbounded_String(Source => "Size"),
+            5 => To_Unbounded_String(Source => "Owner"), 6 => To_Unbounded_String(Source => "Type"),
+            7 => To_Unbounded_String(Source => "Reputation")),
+           Scrollbar => Get_Widget(pathName => ".gameframe.paned.knowledgeframe.bases.scrolly"),
+           Command => "SortKnownBases {" & Base_Name & "}",
+           Tooltip => "Press mouse button to sort the bases.");
       if Bases_Indexes.Is_Empty then
          for I in Sky_Bases'Range loop
             Bases_Indexes.Append(I);
