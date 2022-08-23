@@ -53,11 +53,11 @@ with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
 
-   -- ****iv* KBases/KBases.BasesTable
+   -- ****iv* KBases/KBases.Bases_Table
    -- FUNCTION
    -- Table with info about the know bases
    -- SOURCE
-   BasesTable: Table_Widget (7);
+   Bases_Table: Table_Widget (Amount => 7);
    -- ****
 
    -- ****iv* KBases/KBases.Modules_Indexes
@@ -105,28 +105,28 @@ package body Knowledge.Bases is
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
       use Tiny_String;
 
-      BasesCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".knowledgeframe.bases.canvas");
-      BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
-      SearchEntry: constant Ttk_Entry :=
-        Get_Widget(BasesFrame & ".options.search");
+      Bases_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".knowledgeframe.bases.canvas");
+      Bases_Frame: constant Ttk_Frame := Get_Widget(pathName => Bases_Canvas & ".frame");
+      Search_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Bases_Frame & ".options.search");
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
-      BasesType, BasesOwner, BasesStatus: Unbounded_String;
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Bases_Frame & ".options.types");
+      Bases_Type, Bases_Owner, Bases_Status: Unbounded_String;
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      if BasesTable.Row > 1 then
-         Clear_Table(BasesTable);
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Bases_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      if Bases_Table.Row > 1 then
+         Clear_Table(Table => Bases_Table);
       end if;
-      Delete_Widgets(2, Rows - 1, BasesFrame);
-      BasesTable :=
+      Delete_Widgets(2, Rows - 1, Bases_Frame);
+      Bases_Table :=
         Create_Table
-          (Widget_Image(BasesFrame),
+          (Widget_Image(Bases_Frame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
             To_Unbounded_String("Population"), To_Unbounded_String("Size"),
             To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
@@ -140,15 +140,15 @@ package body Knowledge.Bases is
          end loop;
       end if;
       if Base_Name'Length = 0 then
-         configure(SearchEntry, "-validatecommand {}");
-         Delete(SearchEntry, "0", "end");
-         configure(SearchEntry, "-validatecommand {ShowBases %P}");
+         configure(Search_Entry, "-validatecommand {}");
+         Delete(Search_Entry, "0", "end");
+         configure(Search_Entry, "-validatecommand {ShowBases %P}");
       end if;
-      BasesType := To_Unbounded_String(Get(ComboBox));
-      ComboBox.Name := New_String(BasesFrame & ".options.status");
-      BasesStatus := To_Unbounded_String(Get(ComboBox));
-      ComboBox.Name := New_String(BasesFrame & ".options.owner");
-      BasesOwner := To_Unbounded_String(Get(ComboBox));
+      Bases_Type := To_Unbounded_String(Get(Combo_Box));
+      Combo_Box.Name := New_String(Bases_Frame & ".options.status");
+      Bases_Status := To_Unbounded_String(Get(Combo_Box));
+      Combo_Box.Name := New_String(Bases_Frame & ".options.owner");
+      Bases_Owner := To_Unbounded_String(Get(Combo_Box));
       Rows := 0;
       Load_Bases_Loop :
       for I of Bases_Indexes loop
@@ -163,18 +163,18 @@ package body Knowledge.Bases is
              0 then
             goto End_Of_Loop;
          end if;
-         if BasesStatus = To_Unbounded_String("Only not visited") and
+         if Bases_Status = To_Unbounded_String("Only not visited") and
            Sky_Bases(I).Visited.Year /= 0 then
             goto End_Of_Loop;
          end if;
-         if BasesStatus = To_Unbounded_String("Only visited") and
+         if Bases_Status = To_Unbounded_String("Only visited") and
            Sky_Bases(I).Visited.Year = 0 then
             goto End_Of_Loop;
          end if;
          if Sky_Bases(I).Visited.Year = 0
            and then
-           (BasesType /= To_Unbounded_String("Any") or
-            BasesOwner /= To_Unbounded_String("Any")) then
+           (Bases_Type /= To_Unbounded_String("Any") or
+            Bases_Owner /= To_Unbounded_String("Any")) then
             goto End_Of_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -182,53 +182,53 @@ package body Knowledge.Bases is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (BasesTable, To_String(Sky_Bases(I).Name),
+           (Bases_Table, To_String(Sky_Bases(I).Name),
             "Show available base's options",
             "ShowBasesMenu" & Positive'Image(I), 1);
          Add_Button
-           (BasesTable,
+           (Bases_Table,
             Natural'Image
               (Count_Distance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
          if Sky_Bases(I).Visited.Year > 0 then
             Add_Button
-              (BasesTable,
+              (Bases_Table,
                (case Sky_Bases(I).Population is when 0 => "empty",
                   when 1 .. 150 => "small", when 151 .. 299 => "medium",
                   when others => "large"),
                "The population size of the base",
                "ShowBasesMenu" & Positive'Image(I), 3);
             Add_Button
-              (BasesTable, To_Lower(Bases_Size'Image(Sky_Bases(I).Size)),
+              (Bases_Table, To_Lower(Bases_Size'Image(Sky_Bases(I).Size)),
                "The size of the base", "ShowBasesMenu" & Positive'Image(I), 4);
             Add_Button
-              (BasesTable, To_String(Factions_List(Sky_Bases(I).Owner).Name),
+              (Bases_Table, To_String(Factions_List(Sky_Bases(I).Owner).Name),
                "The faction which own the base",
                "ShowBasesMenu" & Positive'Image(I), 5);
             Add_Button
-              (BasesTable,
+              (Bases_Table,
                To_String(Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
             Add_Button
-              (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation.Level),
+              (Bases_Table, Get_Reputation_Text(Sky_Bases(I).Reputation.Level),
                "Your reputation in the base",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          else
             Add_Button
-              (BasesTable, "not", "Show available base's options",
+              (Bases_Table, "not", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 3);
             Add_Button
-              (BasesTable, "", "Show available base's options",
+              (Bases_Table, "", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 4);
             Add_Button
-              (BasesTable, "visited", "Show available base's options",
+              (Bases_Table, "visited", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 5);
             Add_Button
-              (BasesTable, "", "Show available base's options",
+              (Bases_Table, "", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 6);
             Add_Button
-              (BasesTable, "yet", "Show available base's options",
+              (Bases_Table, "yet", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
          Rows := Rows + 1;
@@ -238,22 +238,22 @@ package body Knowledge.Bases is
       end loop Load_Bases_Loop;
       if Page > 1 then
          Add_Pagination
-           (BasesTable,
+           (Bases_Table,
             "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
-            (if BasesTable.Row < Game_Settings.Lists_Limit + 1 then ""
+            (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1)));
-      elsif BasesTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (BasesTable, "",
+           (Bases_Table, "",
             "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
       end if;
       Update_Table
-        (BasesTable, (if Focus = Widget_Image(SearchEntry) then False));
-      Xview_Move_To(BasesCanvas, "0.0");
-      Yview_Move_To(BasesCanvas, "0.0");
+        (Bases_Table, (if Focus = Widget_Image(Search_Entry) then False));
+      Xview_Move_To(Bases_Canvas, "0.0");
+      Yview_Move_To(Bases_Canvas, "0.0");
       Tcl_Eval(Get_Context, "update");
       configure
-        (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
+        (Bases_Canvas, "-scrollregion [list " & BBox(Bases_Canvas, "all") & "]");
    end Update_Bases_List;
 
    -- ****o* KBases/KBases.Show_Bases_Command
@@ -595,7 +595,7 @@ package body Knowledge.Bases is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(BasesTable, Natural'Value(CArgv.Arg(Argv, 2)));
+        Get_Column_Number(Bases_Table, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
