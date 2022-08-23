@@ -123,7 +123,7 @@ package body Knowledge.Bases is
       if Bases_Table.Row > 1 then
          Clear_Table(Table => Bases_Table);
       end if;
-      Delete_Widgets(2, Rows - 1, Bases_Frame);
+      Delete_Widgets(Start_Index => 2, End_Index => Rows - 1, Frame => Bases_Frame);
       Bases_Table :=
         Create_Table
           (Widget_Image(Bases_Frame),
