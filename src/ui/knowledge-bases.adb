@@ -102,7 +102,7 @@ package body Knowledge.Bases is
       end case;
    end Get_Reputation_Text;
 
-   procedure UpdateBasesList(BaseName: String := ""; Page: Positive := 1) is
+   procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
       use Tiny_String;
 
       BasesCanvas: constant Tk_Canvas :=
@@ -132,14 +132,14 @@ package body Knowledge.Bases is
             To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
             To_Unbounded_String("Reputation")),
            Get_Widget(".gameframe.paned.knowledgeframe.bases.scrolly"),
-           "SortKnownBases {" & BaseName & "}",
+           "SortKnownBases {" & Base_Name & "}",
            "Press mouse button to sort the bases.");
       if Bases_Indexes.Is_Empty then
          for I in Sky_Bases'Range loop
             Bases_Indexes.Append(I);
          end loop;
       end if;
-      if BaseName'Length = 0 then
+      if Base_Name'Length = 0 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
          configure(SearchEntry, "-validatecommand {ShowBases %P}");
@@ -155,10 +155,10 @@ package body Knowledge.Bases is
          if not Sky_Bases(I).Known then
             goto End_Of_Loop;
          end if;
-         if BaseName'Length > 0
+         if Base_Name'Length > 0
            and then
              Index
-               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(BaseName),
+               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(Base_Name),
                 1) =
              0 then
             goto End_Of_Loop;
@@ -239,13 +239,13 @@ package body Knowledge.Bases is
       if Page > 1 then
          Add_Pagination
            (BasesTable,
-            "ShowBases {" & BaseName & "}" & Positive'Image(Page - 1),
+            "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
             (if BasesTable.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1)));
+             else "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1)));
       elsif BasesTable.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
            (BasesTable, "",
-            "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
+            "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
       end if;
       Update_Table
         (BasesTable, (if Focus = Widget_Image(SearchEntry) then False));
@@ -254,7 +254,7 @@ package body Knowledge.Bases is
       Tcl_Eval(Get_Context, "update");
       configure
         (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
-   end UpdateBasesList;
+   end Update_Bases_List;
 
    -- ****o* KBases/KBases.Show_Bases_Command
    -- FUNCTION
@@ -285,12 +285,12 @@ package body Knowledge.Bases is
    begin
       case Argc is
          when 3 =>
-            UpdateBasesList
+            Update_Bases_List
               (CArgv.Arg(Argv, 1), Positive'Value(CArgv.Arg(Argv, 2)));
          when 2 =>
-            UpdateBasesList(CArgv.Arg(Argv, 1));
+            Update_Bases_List(CArgv.Arg(Argv, 1));
          when others =>
-            UpdateBasesList;
+            Update_Bases_List;
       end case;
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
@@ -741,16 +741,16 @@ package body Knowledge.Bases is
       for Base of Local_Bases loop
          Bases_Indexes.Append(Base.Id);
       end loop;
-      UpdateBasesList(CArgv.Arg(Argv, 1));
+      Update_Bases_List(CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Sort_Bases_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowBases", Show_Bases_Command'Access);
       Add_Command("ShowBasesMenu", Show_Bases_Menu_Command'Access);
       Add_Command("ShowBaseInfo", Show_Base_Info_Command'Access);
       Add_Command("SortKnownBases", Sort_Bases_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Knowledge.Bases;

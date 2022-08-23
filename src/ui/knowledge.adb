@@ -168,7 +168,7 @@ package body Knowledge is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       -- Setting bases list
-      Knowledge.Bases.UpdateBasesList;
+      Knowledge.Bases.Update_Bases_List;
       -- Setting accepted missions info
       Knowledge.Missions.UpdateMissionsList;
       -- Setting the known events list
@@ -369,7 +369,7 @@ package body Knowledge is
       Add_Command
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
-      Knowledge.Bases.AddCommands;
+      Knowledge.Bases.Add_Commands;
       Knowledge.Events.AddCommands;
       Knowledge.Missions.AddCommands;
       Knowledge.Stories.AddCommands;
