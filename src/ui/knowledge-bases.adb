@@ -135,20 +135,21 @@ package body Knowledge.Bases is
            Command => "SortKnownBases {" & Base_Name & "}",
            Tooltip => "Press mouse button to sort the bases.");
       if Bases_Indexes.Is_Empty then
+         Fill_Bases_Indexes_Loop:
          for I in Sky_Bases'Range loop
-            Bases_Indexes.Append(I);
-         end loop;
+            Bases_Indexes.Append(New_Item => I);
+         end loop Fill_Bases_Indexes_Loop;
       end if;
       if Base_Name'Length = 0 then
-         configure(Search_Entry, "-validatecommand {}");
-         Delete(Search_Entry, "0", "end");
-         configure(Search_Entry, "-validatecommand {ShowBases %P}");
+         configure(Widgt => Search_Entry, options => "-validatecommand {}");
+         Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+         configure(Widgt => Search_Entry, options => "-validatecommand {ShowBases %P}");
       end if;
-      Bases_Type := To_Unbounded_String(Get(Combo_Box));
-      Combo_Box.Name := New_String(Bases_Frame & ".options.status");
-      Bases_Status := To_Unbounded_String(Get(Combo_Box));
-      Combo_Box.Name := New_String(Bases_Frame & ".options.owner");
-      Bases_Owner := To_Unbounded_String(Get(Combo_Box));
+      Bases_Type := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      Combo_Box.Name := New_String(Str => Bases_Frame & ".options.status");
+      Bases_Status := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      Combo_Box.Name := New_String(Str => Bases_Frame & ".options.owner");
+      Bases_Owner := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Rows := 0;
       Load_Bases_Loop :
       for I of Bases_Indexes loop
