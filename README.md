@@ -38,7 +38,7 @@ To build the game for Windows 64-bit, download `adabuildwin64` image and type in
 
 ### Classic way
 
-To build(works on Linux and Windows too) you need:
+To build (works on Linux and Windows too) you need:
 
 * compiler - GCC with enabled Ada support or GNAT from:
 
@@ -68,7 +68,7 @@ To build(works on Linux and Windows too) you need:
 * Additionally, the game require a couple of other libraries to run, they are
   listed in the section *Libraries needed to run the game* below.
 
-If you have all the required packages, navigate to the main directory(where
+If you have all the required packages, navigate to the main directory (where
 this file is) to compile:
 
 * The easiest way to compile game is use Gnat Programming Studio included in
