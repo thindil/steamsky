@@ -395,20 +395,25 @@ package body Bases.Trade is
            Get_Random(Min => 10, Max => 60) +
            Player_Ship.Crew(Member_Index).Attributes
              (Positive
-                (SkillsData_Container.Element(Container => Skills_List, Index => Skill_Index)
+                (SkillsData_Container.Element
+                   (Container => Skills_List, Index => Skill_Index)
                    .Attribute))
              .Level;
          if Gained_Exp > 100 then
             Gained_Exp := 100;
          end if;
-         Gain_Exp(Amount => Gained_Exp, Skill_Number => Skill_Index, Crew_Index => Member_Index);
+         Gain_Exp
+           (Amount => Gained_Exp, Skill_Number => Skill_Index,
+            Crew_Index => Member_Index);
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Money_Index_2,
             Amount => -(Cost));
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
          Trader_Index := Find_Member(Order => TALK);
          if Trader_Index > 0 then
-            Gain_Exp(Amount => 5, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+            Gain_Exp
+              (Amount => 5, Skill_Number => Talking_Skill,
+               Crew_Index => Trader_Index);
          end if;
          Gain_Rep(Base_Index => Base_Index, Points => 5);
          Update_Game(Minutes => 60);
@@ -418,13 +423,19 @@ package body Bases.Trade is
       end loop Train_Skill_Loop;
       if Sessions > 0 then
          Add_Message
-           ("You purchased" & Positive'Image(Sessions) &
-            " training session(s) in " &
-            To_String
-              (SkillsData_Container.Element(Skills_List, Skill_Index).Name) &
-            " for " & To_String(Player_Ship.Crew(Member_Index).Name) & " for" &
-            Positive'Image(Overall_Cost) & " " & To_String(Money_Name) & ".",
-            TRADEMESSAGE);
+           (Message =>
+              "You purchased" & Positive'Image(Sessions) &
+              " training session(s) in " &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List, Index => Skill_Index)
+                     .Name) &
+              " for " &
+              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+              " for" & Positive'Image(Overall_Cost) & " " &
+              To_String(Source => Money_Name) & ".",
+            M_Type => TRADEMESSAGE);
       end if;
    end Train_Skill;
 
