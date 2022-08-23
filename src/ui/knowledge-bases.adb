@@ -159,23 +159,23 @@ package body Knowledge.Bases is
          if Base_Name'Length > 0
            and then
              Index
-               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(Base_Name),
-                1) =
+               (Source => To_Lower(Item => To_String(Source => Sky_Bases(I).Name)), Pattern => To_Lower(Item => Base_Name),
+                From => 1) =
              0 then
             goto End_Of_Loop;
          end if;
-         if Bases_Status = To_Unbounded_String("Only not visited") and
+         if Bases_Status = To_Unbounded_String(Source => "Only not visited") and
            Sky_Bases(I).Visited.Year /= 0 then
             goto End_Of_Loop;
          end if;
-         if Bases_Status = To_Unbounded_String("Only visited") and
+         if Bases_Status = To_Unbounded_String(Source => "Only visited") and
            Sky_Bases(I).Visited.Year = 0 then
             goto End_Of_Loop;
          end if;
          if Sky_Bases(I).Visited.Year = 0
            and then
-           (Bases_Type /= To_Unbounded_String("Any") or
-            Bases_Owner /= To_Unbounded_String("Any")) then
+           (Bases_Type /= To_Unbounded_String(Source => "Any") or
+            Bases_Owner /= To_Unbounded_String(Source => "Any")) then
             goto End_Of_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -183,9 +183,9 @@ package body Knowledge.Bases is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (Bases_Table, To_String(Sky_Bases(I).Name),
-            "Show available base's options",
-            "ShowBasesMenu" & Positive'Image(I), 1);
+           (Table => Bases_Table, Text => To_String(Source => Sky_Bases(I).Name),
+            Tooltip => "Show available base's options",
+            Command => "ShowBasesMenu" & Positive'Image(I), Column => 1);
          Add_Button
            (Bases_Table,
             Natural'Image
