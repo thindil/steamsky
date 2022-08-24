@@ -540,6 +540,32 @@ package body Ships.UI.Crew.Inventory is
              Trim(Source => Positive'Image(Member_Index), Side => Left));
    end Sort_Crew_Inventory_Command;
 
+   -- ****if* SUCI/SUCI.Reset_Selection
+   -- FUNCTION
+   -- Reset the currently selected items in the crew member inventory
+   -- PARAMETERS
+   -- Member_Index - The crew member index in which inventory the selection
+   --                will be reseted
+   -- Interp       - The Tcl interpreter in which the selection will be reseted
+   -- SOURCE
+   procedure Reset_Selection(Member_Index: Positive; Interp: Tcl_Interp) is
+   begin
+      Reset_Item_Selection_Loop :
+      for I in
+        1 ..
+          Inventory_Container.Capacity
+            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName => "invindex" & Trim(Source => I'Img, Side => Left)) =
+           "1" then
+            Tcl_UnsetVar
+              (interp => Interp,
+               varName => "invindex" & Trim(Source => I'Img, Side => Left));
+         end if;
+      end loop Reset_Item_Selection_Loop;
+   end Reset_Selection;
+
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
    -- FUNCTION
    -- Show inventory of the selected crew member
@@ -617,20 +643,7 @@ package body Ships.UI.Crew.Inventory is
               To_String(Source => Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
-      Reset_Item_Selection_Loop :
-      for I in
-        1 ..
-          Inventory_Container.Capacity
-            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
-         if Tcl_GetVar
-             (interp => Interp,
-              varName => "invindex" & Trim(Source => I'Img, Side => Left)) =
-           "1" then
-            Tcl_UnsetVar
-              (interp => Interp,
-               varName => "invindex" & Trim(Source => I'Img, Side => Left));
-         end if;
-      end loop Reset_Item_Selection_Loop;
+      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
       Add
         (Widget => Dialog_Close_Button,
          Message => "Close inventory \[Escape key\]");
