@@ -119,10 +119,6 @@ the game with mode `analyze` (in the main project directory, where
 
 `gprbuild -XMode=analyze`
 
-or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
-
-`bob analyze`
-
 More information about code coverage and profiling, you can find in the proper
 documentation for both programs.
 
@@ -131,11 +127,7 @@ documentation for both programs.
 After running the game in `analyze` mode, you can generate reports by using
 command:
 
-`gprof bin/steamsky gmon.out` for generate report for the code profiling
-
-or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
-
-`bob gprof`
+`gprof bin/steamsky gmon.out` for generate report for the code profiling.
 
 ### Generating unit tests
 
@@ -144,10 +136,6 @@ skeletons code for tests units (in the main project directory, where
 *steamsky.gpr* file is):
 
 `gnattest -P steamsky.gpr`
-
-or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
-
-`bob createtests`
 
 Tests are generated only for these subprograms which have explicitly declared
 tests cases in declarations. Thus, if here are no tests cases declared in the
@@ -158,10 +146,6 @@ game code, there will be no unit tests generated.
 First, you must build all tests. How to do it, is described in main
 *README.md* file. Then, in console, in the main project directory, type:
 `others/tests.sh [amount]`
-
-or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
-
-`bob tests [amount]`
 
 The `[amount]` is how many times the tests should be run. It is recommended
 to run them few times in a row to catch all problems. Tests will stop if there
