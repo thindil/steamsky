@@ -227,33 +227,48 @@ package body Knowledge.Bases is
                Tooltip => "The size of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
             Add_Button
-              (Table => Bases_Table, Text => To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
+              (Table => Bases_Table,
+               Text =>
+                 To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
             Add_Button
               (Table => Bases_Table,
-               Text => To_String(Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
-               Tooltip => "The type of the base", Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
-            Add_Button
-              (Table => Bases_Table, Text => Get_Reputation_Text(Reputation_Level => Sky_Bases(I).Reputation.Level),
-               Tooltip => "Your reputation in the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7, New_Row => True);
-         else
-            Add_Button
-              (Table => Bases_Table, Text => "not", Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3);
-            Add_Button
-              (Table => Bases_Table, Text => "", Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
-            Add_Button
-              (Table => Bases_Table, Text => "visited", Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
-            Add_Button
-              (Table => Bases_Table, Text => "", Tooltip => "Show available base's options",
+               Text =>
+                 To_String
+                   (Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
+               Tooltip => "The type of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
             Add_Button
-              (Table => Bases_Table, Text => "yet", Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7, New_Row => True);
+              (Table => Bases_Table,
+               Text =>
+                 Get_Reputation_Text
+                   (Reputation_Level => Sky_Bases(I).Reputation.Level),
+               Tooltip => "Your reputation in the base",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
+               New_Row => True);
+         else
+            Add_Button
+              (Table => Bases_Table, Text => "not",
+               Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3);
+            Add_Button
+              (Table => Bases_Table, Text => "",
+               Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
+            Add_Button
+              (Table => Bases_Table, Text => "visited",
+               Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
+            Add_Button
+              (Table => Bases_Table, Text => "",
+               Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
+            Add_Button
+              (Table => Bases_Table, Text => "yet",
+               Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
+               New_Row => True);
          end if;
          Rows := Rows + 1;
          exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
@@ -263,22 +278,30 @@ package body Knowledge.Bases is
       if Page > 1 then
          Add_Pagination
            (Table => Bases_Table,
-            Previous_Command => "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
-            Next_Command => (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1)));
+            Previous_Command =>
+              "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
+            Next_Command =>
+              (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+               else "ShowBases {" & Base_Name & "}" &
+                 Positive'Image(Page + 1)));
       elsif Bases_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
            (Table => Bases_Table, Previous_Command => "",
-            Next_Command => "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
+            Next_Command =>
+              "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
       end if;
       Update_Table
-        (Table => Bases_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+        (Table => Bases_Table,
+         Grab_Focus =>
+           (if Focus = Widget_Image(Win => Search_Entry) then False));
       Xview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Bases_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Bases_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Bases_Canvas, TagOrId => "all") & "]");
    end Update_Bases_List;
 
    -- ****o* KBases/KBases.Show_Bases_Command
@@ -311,7 +334,8 @@ package body Knowledge.Bases is
       case Argc is
          when 3 =>
             Update_Bases_List
-              (Base_Name => CArgv.Arg(Argv => Argv, N => 1), Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+              (Base_Name => CArgv.Arg(Argv => Argv, N => 1),
+               Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
          when 2 =>
             Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
          when others =>
@@ -347,7 +371,8 @@ package body Knowledge.Bases is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Base_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".baseslistmenu",
@@ -387,7 +412,8 @@ package body Knowledge.Bases is
         (Name => ".destination",
          Label => "Set the base as destination for the ship",
          Command =>
-           "SetDestination2 " & Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
+           "SetDestination2 " &
+           Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
            Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y));
       if Sky_Bases(Base_Index).Visited.Year > 0 then
          Add_Button
@@ -425,11 +451,13 @@ package body Knowledge.Bases is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Base_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Base_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".basedialog",
-           Title => To_String(Source => Sky_Bases(Base_Index).Name), Columns => 2);
+           Title => To_String(Source => Sky_Bases(Base_Index).Name),
+           Columns => 2);
       Base_Label: Ttk_Label;
       Base_Info: Unbounded_String;
       procedure Set_Reputation_Text(Reputation_Text: String) is
@@ -440,36 +468,52 @@ package body Knowledge.Bases is
          Reputation_Label: constant Ttk_Label :=
            Create(pathName => Base_Dialog & ".reputationlabel");
          Reputation_Progress: constant Ttk_Frame :=
-           Create(pathName => Reputation_Bar & ".reputation", options => "-height 18");
+           Create
+             (pathName => Reputation_Bar & ".reputation",
+              options => "-height 18");
       begin
          if Sky_Bases(Base_Index).Reputation.Level = 0 then
-            configure(Widgt => Reputation_Label, options => "-text {Reputation: Unknown}");
+            configure
+              (Widgt => Reputation_Label,
+               options => "-text {Reputation: Unknown}");
          else
-            configure(Widgt => Reputation_Label, options => "-text {Reputation:}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Reputation_Bar, Options => "-row 2 -column 1 -padx 5");
-            Tcl.Tk.Ada.Grid.Grid_Propagate(Master => Reputation_Bar, Value => "off");
+            configure
+              (Widgt => Reputation_Label, options => "-text {Reputation:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Reputation_Bar, Options => "-row 2 -column 1 -padx 5");
+            Tcl.Tk.Ada.Grid.Grid_Propagate
+              (Master => Reputation_Bar, Value => "off");
             configure
               (Widgt => Reputation_Progress,
-               options => "-width" &
-               Positive'Image(abs (Sky_Bases(Base_Index).Reputation.Level)));
+               options =>
+                 "-width" &
+                 Positive'Image(abs (Sky_Bases(Base_Index).Reputation.Level)));
             if Sky_Bases(Base_Index).Reputation.Level > 0 then
-               configure(Widgt => Reputation_Progress, options => "-style GreenProgressBar.TFrame");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Reputation_Progress, Options => "-padx {100 0} -pady 3");
-            else
-               configure(Widgt => Reputation_Progress, options => "-style RedProgressBar.TFrame");
+               configure
+                 (Widgt => Reputation_Progress,
+                  options => "-style GreenProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Reputation_Progress,
-                  Options => "-padx {" &
-                  Trim
-                    (Source => Positive'Image
-                       (100 + Sky_Bases(Base_Index).Reputation.Level),
-                     Side => Left) &
-                  " 0} -pady 3");
+                  Options => "-padx {100 0} -pady 3");
+            else
+               configure
+                 (Widgt => Reputation_Progress,
+                  options => "-style RedProgressBar.TFrame");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Reputation_Progress,
+                  Options =>
+                    "-padx {" &
+                    Trim
+                      (Source =>
+                         Positive'Image
+                           (100 + Sky_Bases(Base_Index).Reputation.Level),
+                       Side => Left) &
+                    " 0} -pady 3");
             end if;
-            Add(Reputation_Bar, Reputation_Text);
+            Add(Widget => Reputation_Bar, Message => Reputation_Text);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Reputation_Label, "-row 2 -sticky w -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Reputation_Label, "-row 2 -sticky w -padx {5 0}");
       end Set_Reputation_Text;
    begin
       Base_Info :=
@@ -500,7 +544,8 @@ package body Knowledge.Bases is
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -25 then
-            TimeDiff := Days_Difference(Sky_Bases(Base_Index).Asked_For_Events);
+            TimeDiff :=
+              Days_Difference(Sky_Bases(Base_Index).Asked_For_Events);
             if TimeDiff < 7 then
                Append
                  (Base_Info,
