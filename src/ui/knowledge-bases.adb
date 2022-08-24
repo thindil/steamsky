@@ -252,8 +252,8 @@ package body Knowledge.Bases is
               (Table => Bases_Table, Text => "", Tooltip => "Show available base's options",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
             Add_Button
-              (Bases_Table, "yet", "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 7, True);
+              (Table => Bases_Table, Text => "yet", Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7, New_Row => True);
          end if;
          Rows := Rows + 1;
          exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
@@ -262,19 +262,19 @@ package body Knowledge.Bases is
       end loop Load_Bases_Loop;
       if Page > 1 then
          Add_Pagination
-           (Bases_Table,
-            "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
-            (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+           (Table => Bases_Table,
+            Previous_Command => "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
+            Next_Command => (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1)));
       elsif Bases_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Bases_Table, "",
-            "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
+           (Table => Bases_Table, Previous_Command => "",
+            Next_Command => "ShowBases {" & Base_Name & "}" & Positive'Image(Page + 1));
       end if;
       Update_Table
-        (Bases_Table, (if Focus = Widget_Image(Search_Entry) then False));
-      Xview_Move_To(Bases_Canvas, "0.0");
-      Yview_Move_To(Bases_Canvas, "0.0");
+        (Table => Bases_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+      Xview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
       Tcl_Eval(Get_Context, "update");
       configure
         (Bases_Canvas,
