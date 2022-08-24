@@ -443,28 +443,28 @@ package body Knowledge.Bases is
            Create(pathName => Reputation_Bar & ".reputation", options => "-height 18");
       begin
          if Sky_Bases(Base_Index).Reputation.Level = 0 then
-            configure(Reputation_Label, "-text {Reputation: Unknown}");
+            configure(Widgt => Reputation_Label, options => "-text {Reputation: Unknown}");
          else
-            configure(Reputation_Label, "-text {Reputation:}");
-            Tcl.Tk.Ada.Grid.Grid(Reputation_Bar, "-row 2 -column 1 -padx 5");
-            Tcl.Tk.Ada.Grid.Grid_Propagate(Reputation_Bar, "off");
+            configure(Widgt => Reputation_Label, options => "-text {Reputation:}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Reputation_Bar, Options => "-row 2 -column 1 -padx 5");
+            Tcl.Tk.Ada.Grid.Grid_Propagate(Master => Reputation_Bar, Value => "off");
             configure
-              (Reputation_Progress,
-               "-width" &
+              (Widgt => Reputation_Progress,
+               options => "-width" &
                Positive'Image(abs (Sky_Bases(Base_Index).Reputation.Level)));
             if Sky_Bases(Base_Index).Reputation.Level > 0 then
-               configure(Reputation_Progress, "-style GreenProgressBar.TFrame");
+               configure(Widgt => Reputation_Progress, options => "-style GreenProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
-                 (Reputation_Progress, "-padx {100 0} -pady 3");
+                 (Slave => Reputation_Progress, Options => "-padx {100 0} -pady 3");
             else
-               configure(Reputation_Progress, "-style RedProgressBar.TFrame");
+               configure(Widgt => Reputation_Progress, options => "-style RedProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
-                 (Reputation_Progress,
-                  "-padx {" &
+                 (Slave => Reputation_Progress,
+                  Options => "-padx {" &
                   Trim
-                    (Positive'Image
+                    (Source => Positive'Image
                        (100 + Sky_Bases(Base_Index).Reputation.Level),
-                     Left) &
+                     Side => Left) &
                   " 0} -pady 3");
             end if;
             Add(Reputation_Bar, Reputation_Text);
