@@ -275,20 +275,20 @@ package body Knowledge.Bases is
         (Table => Bases_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
       Xview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Bases_Canvas, Fraction => "0.0");
-      Tcl_Eval(Get_Context, "update");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Bases_Canvas,
-         "-scrollregion [list " & BBox(Bases_Canvas, "all") & "]");
+        (Widgt => Bases_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Bases_Canvas, TagOrId => "all") & "]");
    end Update_Bases_List;
 
    -- ****o* KBases/KBases.Show_Bases_Command
    -- FUNCTION
    -- Show the list of known bases to a player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -298,26 +298,26 @@ package body Knowledge.Bases is
    -- bases.
    -- SOURCE
    function Show_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
    begin
       case Argc is
          when 3 =>
             Update_Bases_List
-              (CArgv.Arg(Argv, 1), Positive'Value(CArgv.Arg(Argv, 2)));
+              (Base_Name => CArgv.Arg(Argv => Argv, N => 1), Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
          when 2 =>
-            Update_Bases_List(CArgv.Arg(Argv, 1));
+            Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
          when others =>
             Update_Bases_List;
       end case;
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Bases_Command;
 
@@ -325,10 +325,10 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Show the menu with available the selected base options
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -336,23 +336,23 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base's menu to show
    -- SOURCE
    function Show_Bases_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Bases_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".baseslistmenu",
            Title =>
-             To_String(Source => Sky_Bases(BaseIndex).Name) & " actions",
+             To_String(Source => Sky_Bases(Base_Index).Name) & " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -381,15 +381,15 @@ package body Knowledge.Bases is
       Add_Button
         (Name => ".show", Label => "Show the base on map",
          Command =>
-           "ShowOnMap" & Map_X_Range'Image(Sky_Bases(BaseIndex).Sky_X) &
-           Map_Y_Range'Image(Sky_Bases(BaseIndex).Sky_Y));
+           "ShowOnMap" & Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
+           Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y));
       Add_Button
         (Name => ".destination",
          Label => "Set the base as destination for the ship",
          Command =>
-           "SetDestination2 " & Map_X_Range'Image(Sky_Bases(BaseIndex).Sky_X) &
-           Map_Y_Range'Image(Sky_Bases(BaseIndex).Sky_Y));
-      if Sky_Bases(BaseIndex).Visited.Year > 0 then
+           "SetDestination2 " & Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
+           Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y));
+      if Sky_Bases(Base_Index).Visited.Year > 0 then
          Add_Button
            (Name => ".info", Label => "Show more info about the base",
             Command => "ShowBaseInfo " & CArgv.Arg(Argv => Argv, N => 1));
