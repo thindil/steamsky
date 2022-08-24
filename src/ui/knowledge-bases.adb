@@ -347,7 +347,7 @@ package body Knowledge.Bases is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".baseslistmenu",
@@ -403,10 +403,10 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Show information about the selected base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -414,135 +414,135 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base to show
    -- SOURCE
    function Show_Base_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      BaseDialog: constant Ttk_Frame :=
+      Base_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Base_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".basedialog",
-           Title => To_String(Sky_Bases(BaseIndex).Name), Columns => 2);
-      BaseLabel: Ttk_Label;
-      BaseInfo: Unbounded_String;
-      procedure SetReputationText(ReputationText: String) is
-         ReputationBar: constant Ttk_Frame :=
+           Title => To_String(Source => Sky_Bases(Base_Index).Name), Columns => 2);
+      Base_Label: Ttk_Label;
+      Base_Info: Unbounded_String;
+      procedure Set_Reputation_Text(Reputation_Text: String) is
+         Reputation_Bar: constant Ttk_Frame :=
            Create
-             (BaseDialog & ".reputation",
-              "-width 204 -height 24 -style ProgressBar.TFrame");
-         ReputationLabel: constant Ttk_Label :=
-           Create(BaseDialog & ".reputationlabel");
-         ReputationProgress: constant Ttk_Frame :=
-           Create(ReputationBar & ".reputation", "-height 18");
+             (pathName => Base_Dialog & ".reputation",
+              options => "-width 204 -height 24 -style ProgressBar.TFrame");
+         Reputation_Label: constant Ttk_Label :=
+           Create(pathName => Base_Dialog & ".reputationlabel");
+         Reputation_Progress: constant Ttk_Frame :=
+           Create(pathName => Reputation_Bar & ".reputation", options => "-height 18");
       begin
-         if Sky_Bases(BaseIndex).Reputation.Level = 0 then
-            configure(ReputationLabel, "-text {Reputation: Unknown}");
+         if Sky_Bases(Base_Index).Reputation.Level = 0 then
+            configure(Reputation_Label, "-text {Reputation: Unknown}");
          else
-            configure(ReputationLabel, "-text {Reputation:}");
-            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 2 -column 1 -padx 5");
-            Tcl.Tk.Ada.Grid.Grid_Propagate(ReputationBar, "off");
+            configure(Reputation_Label, "-text {Reputation:}");
+            Tcl.Tk.Ada.Grid.Grid(Reputation_Bar, "-row 2 -column 1 -padx 5");
+            Tcl.Tk.Ada.Grid.Grid_Propagate(Reputation_Bar, "off");
             configure
-              (ReputationProgress,
+              (Reputation_Progress,
                "-width" &
-               Positive'Image(abs (Sky_Bases(BaseIndex).Reputation.Level)));
-            if Sky_Bases(BaseIndex).Reputation.Level > 0 then
-               configure(ReputationProgress, "-style GreenProgressBar.TFrame");
+               Positive'Image(abs (Sky_Bases(Base_Index).Reputation.Level)));
+            if Sky_Bases(Base_Index).Reputation.Level > 0 then
+               configure(Reputation_Progress, "-style GreenProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
-                 (ReputationProgress, "-padx {100 0} -pady 3");
+                 (Reputation_Progress, "-padx {100 0} -pady 3");
             else
-               configure(ReputationProgress, "-style RedProgressBar.TFrame");
+               configure(Reputation_Progress, "-style RedProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
-                 (ReputationProgress,
+                 (Reputation_Progress,
                   "-padx {" &
                   Trim
                     (Positive'Image
-                       (100 + Sky_Bases(BaseIndex).Reputation.Level),
+                       (100 + Sky_Bases(Base_Index).Reputation.Level),
                      Left) &
                   " 0} -pady 3");
             end if;
-            Add(ReputationBar, ReputationText);
+            Add(Reputation_Bar, Reputation_Text);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 2 -sticky w -padx {5 0}");
-      end SetReputationText;
+         Tcl.Tk.Ada.Grid.Grid(Reputation_Label, "-row 2 -sticky w -padx {5 0}");
+      end Set_Reputation_Text;
    begin
-      BaseInfo :=
+      Base_Info :=
         To_Unbounded_String
-          ("Coordinates X:" & Positive'Image(Sky_Bases(BaseIndex).Sky_X) &
-           " Y:" & Positive'Image(Sky_Bases(BaseIndex).Sky_Y));
+          ("Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
+           " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
       Append
-        (BaseInfo,
-         LF & "Last visited: " & Formated_Time(Sky_Bases(BaseIndex).Visited));
+        (Base_Info,
+         LF & "Last visited: " & Formated_Time(Sky_Bases(Base_Index).Visited));
       declare
          TimeDiff: Integer;
       begin
-         if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation.Level > -25 then
+         if Sky_Bases(Base_Index).Population > 0 and
+           Sky_Bases(Base_Index).Reputation.Level > -25 then
             TimeDiff :=
-              30 - Days_Difference(Sky_Bases(BaseIndex).Recruit_Date);
+              30 - Days_Difference(Sky_Bases(Base_Index).Recruit_Date);
             if TimeDiff > 0 then
                Append
-                 (BaseInfo,
+                 (Base_Info,
                   LF & "New recruits available in" & Natural'Image(TimeDiff) &
                   " days.");
             else
-               Append(BaseInfo, LF & "New recruits available now.");
+               Append(Base_Info, LF & "New recruits available now.");
             end if;
          else
             Append
-              (BaseInfo, LF & "You can't recruit crew members at this base.");
+              (Base_Info, LF & "You can't recruit crew members at this base.");
          end if;
-         if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation.Level > -25 then
-            TimeDiff := Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events);
+         if Sky_Bases(Base_Index).Population > 0 and
+           Sky_Bases(Base_Index).Reputation.Level > -25 then
+            TimeDiff := Days_Difference(Sky_Bases(Base_Index).Asked_For_Events);
             if TimeDiff < 7 then
                Append
-                 (BaseInfo,
+                 (Base_Info,
                   LF & "You asked for events" & Natural'Image(TimeDiff) &
                   " days ago.");
             else
-               Append(BaseInfo, LF & "You can ask for events again.");
+               Append(Base_Info, LF & "You can ask for events again.");
             end if;
          else
-            Append(BaseInfo, LF & "You can't ask for events at this base.");
+            Append(Base_Info, LF & "You can't ask for events at this base.");
          end if;
-         if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation.Level > -1 then
+         if Sky_Bases(Base_Index).Population > 0 and
+           Sky_Bases(Base_Index).Reputation.Level > -1 then
             TimeDiff :=
-              7 - Days_Difference(Sky_Bases(BaseIndex).Missions_Date);
+              7 - Days_Difference(Sky_Bases(Base_Index).Missions_Date);
             if TimeDiff > 0 then
                Append
-                 (BaseInfo,
+                 (Base_Info,
                   LF & "New missions available in" & Natural'Image(TimeDiff) &
                   " days.");
             else
-               Append(BaseInfo, LF & "New missions available now.");
+               Append(Base_Info, LF & "New missions available now.");
             end if;
          else
-            Append(BaseInfo, LF & "You can't take missions at this base.");
+            Append(Base_Info, LF & "You can't take missions at this base.");
          end if;
       end;
-      SetReputationText
-        (Get_Reputation_Text(Sky_Bases(BaseIndex).Reputation.Level));
-      if BaseIndex = Player_Ship.Home_Base then
-         Append(BaseInfo, LF & "It is your home base.");
+      Set_Reputation_Text
+        (Get_Reputation_Text(Sky_Bases(Base_Index).Reputation.Level));
+      if Base_Index = Player_Ship.Home_Base then
+         Append(Base_Info, LF & "It is your home base.");
       end if;
-      BaseLabel :=
+      Base_Label :=
         Create
-          (BaseDialog & ".info",
-           "-text {" & To_String(BaseInfo) & "} -wraplength 400");
+          (Base_Dialog & ".info",
+           "-text {" & To_String(Base_Info) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
-        (BaseLabel, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
+        (Base_Label, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Add_Close_Button
-        (Name => BaseDialog & ".button", Text => "Close",
-         Command => "CloseDialog " & BaseDialog, Column_Span => 2, Row => 3);
-      Show_Dialog(BaseDialog);
+        (Name => Base_Dialog & ".button", Text => "Close",
+         Command => "CloseDialog " & Base_Dialog, Column_Span => 2, Row => 3);
+      Show_Dialog(Base_Dialog);
       return TCL_OK;
    end Show_Base_Info_Command;
 
