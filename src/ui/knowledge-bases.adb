@@ -227,17 +227,17 @@ package body Knowledge.Bases is
                Tooltip => "The size of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
             Add_Button
-              (Bases_Table, To_String(Factions_List(Sky_Bases(I).Owner).Name),
-               "The faction which own the base",
-               "ShowBasesMenu" & Positive'Image(I), 5);
+              (Table => Bases_Table, Text => To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
+               Tooltip => "The faction which own the base",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
             Add_Button
-              (Bases_Table,
-               To_String(Bases_Types_List(Sky_Bases(I).Base_Type).Name),
-               "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
+              (Table => Bases_Table,
+               Text => To_String(Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
+               Tooltip => "The type of the base", Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
             Add_Button
-              (Bases_Table, Get_Reputation_Text(Sky_Bases(I).Reputation.Level),
-               "Your reputation in the base",
-               "ShowBasesMenu" & Positive'Image(I), 7, True);
+              (Table => Bases_Table, Text => Get_Reputation_Text(Reputation_Level => Sky_Bases(I).Reputation.Level),
+               Tooltip => "Your reputation in the base",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7, New_Row => True);
          else
             Add_Button
               (Bases_Table, "not", "Show available base's options",
