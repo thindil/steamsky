@@ -346,11 +346,11 @@ package body Ships.UI.Crew.Inventory is
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Inventory_Sort_Order = SELECTEDASC
-           and then Left.Name < Right.Name then
+           and then Left.Selected < Right.Selected then
             return True;
          end if;
          if Inventory_Sort_Order = SELECTEDDESC
-           and then Left.Name > Right.Name then
+           and then Left.Selected > Right.Selected then
             return True;
          end if;
          if Inventory_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -410,7 +410,7 @@ package body Ships.UI.Crew.Inventory is
             if Inventory_Sort_Order = SELECTEDASC then
                Inventory_Sort_Order := SELECTEDDESC;
             else
-               Inventory_Sort_Order := NAMEASC;
+               Inventory_Sort_Order := SELECTEDASC;
             end if;
          when 2 =>
             if Inventory_Sort_Order = NAMEASC then
@@ -458,7 +458,17 @@ package body Ships.UI.Crew.Inventory is
         Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
          Local_Inventory(I) :=
            (Selected =>
-              Is_Checked(Table => Inventory_Table, Row => I, Column => 1),
+              (if
+                 Tcl_GetVar
+                   (interp => Interp,
+                    varName =>
+                      "invindex" &
+                      Trim
+                        (Source => Positive_Container.Extended_Index'Image(I),
+                         Side => Left)) =
+                 "1"
+               then True
+               else False),
             Name =>
               To_Unbounded_String
                 (Source =>
