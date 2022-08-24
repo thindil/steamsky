@@ -240,17 +240,17 @@ package body Knowledge.Bases is
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 7, New_Row => True);
          else
             Add_Button
-              (Bases_Table, "not", "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 3);
+              (Table => Bases_Table, Text => "not", Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3);
             Add_Button
-              (Bases_Table, "", "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 4);
+              (Table => Bases_Table, Text => "", Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
             Add_Button
-              (Bases_Table, "visited", "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 5);
+              (Table => Bases_Table, Text => "visited", Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
             Add_Button
-              (Bases_Table, "", "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 6);
+              (Table => Bases_Table, Text => "", Tooltip => "Show available base's options",
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
             Add_Button
               (Bases_Table, "yet", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
