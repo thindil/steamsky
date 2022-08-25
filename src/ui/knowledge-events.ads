@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,20 +20,20 @@
 package Knowledge.Events is
 -- ****
 
-   -- ****f* KEvents/KEvents.AddCommands
+   -- ****f* KEvents/KEvents.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to the list of known bases
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
-   -- ****f* KEvents/KEvents.UpdateEventsList
+   -- ****f* KEvents/KEvents.Update_Events_List
    -- FUNCTION
    -- Update and show list of known events
    -- PARAMETERS
    -- Page     - The current page of events list to show
    -- SOURCE
-   procedure UpdateEventsList(Page: Positive := 1);
+   procedure Update_Events_List(Page: Positive := 1);
    -- ****
 
 end Knowledge.Events;
