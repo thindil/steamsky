@@ -1158,9 +1158,8 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
       end if;
       Show_Inventory_Item_Info
-        (Parent => ".memberdialog",
-         Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
-         Item_Index => Local_Member_Index,
+        (Parent => ".memberdialog", Member_Index => Local_Member_Index,
+         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
          Button_1 =>
            (Text => To_Unbounded_String(Source => "Move"),
             Command =>
