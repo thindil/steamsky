@@ -513,58 +513,59 @@ package body Knowledge.Bases is
             Add(Widget => Reputation_Bar, Message => Reputation_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (Reputation_Label, "-row 2 -sticky w -padx {5 0}");
+           (Slave => Reputation_Label, Options => "-row 2 -sticky w -padx {5 0}");
       end Set_Reputation_Text;
    begin
       Base_Info :=
         To_Unbounded_String
-          ("Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
+          (Source => "Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
            " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
       Append
-        (Base_Info,
-         LF & "Last visited: " & Formated_Time(Sky_Bases(Base_Index).Visited));
+        (Source => Base_Info,
+         New_Item => LF & "Last visited: " & Formated_Time(Time => Sky_Bases(Base_Index).Visited));
+      Show_Mission_And_Recruits_Info_Block:
       declare
-         TimeDiff: Integer;
+         Time_Diff: Integer;
       begin
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -25 then
-            TimeDiff :=
-              30 - Days_Difference(Sky_Bases(Base_Index).Recruit_Date);
-            if TimeDiff > 0 then
+            Time_Diff :=
+              30 - Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
+            if Time_Diff > 0 then
                Append
-                 (Base_Info,
-                  LF & "New recruits available in" & Natural'Image(TimeDiff) &
+                 (Source => Base_Info,
+                  New_Item => LF & "New recruits available in" & Natural'Image(Time_Diff) &
                   " days.");
             else
-               Append(Base_Info, LF & "New recruits available now.");
+               Append(Source => Base_Info, New_Item => LF & "New recruits available now.");
             end if;
          else
             Append
-              (Base_Info, LF & "You can't recruit crew members at this base.");
+              (Source => Base_Info, New_Item => LF & "You can't recruit crew members at this base.");
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -25 then
-            TimeDiff :=
-              Days_Difference(Sky_Bases(Base_Index).Asked_For_Events);
-            if TimeDiff < 7 then
+            Time_Diff :=
+              Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
+            if Time_Diff < 7 then
                Append
-                 (Base_Info,
-                  LF & "You asked for events" & Natural'Image(TimeDiff) &
+                 (Source => Base_Info,
+                  New_Item => LF & "You asked for events" & Natural'Image(Time_Diff) &
                   " days ago.");
             else
-               Append(Base_Info, LF & "You can ask for events again.");
+               Append(Source => Base_Info, New_Item => LF & "You can ask for events again.");
             end if;
          else
             Append(Base_Info, LF & "You can't ask for events at this base.");
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -1 then
-            TimeDiff :=
+            Time_Diff :=
               7 - Days_Difference(Sky_Bases(Base_Index).Missions_Date);
-            if TimeDiff > 0 then
+            if Time_Diff > 0 then
                Append
                  (Base_Info,
-                  LF & "New missions available in" & Natural'Image(TimeDiff) &
+                  LF & "New missions available in" & Natural'Image(Time_Diff) &
                   " days.");
             else
                Append(Base_Info, LF & "New missions available now.");
@@ -572,7 +573,7 @@ package body Knowledge.Bases is
          else
             Append(Base_Info, LF & "You can't take missions at this base.");
          end if;
-      end;
+      end Show_Mission_And_Recruits_Info_Block;
       Set_Reputation_Text
         (Get_Reputation_Text(Sky_Bases(Base_Index).Reputation.Level));
       if Base_Index = Player_Ship.Home_Base then
