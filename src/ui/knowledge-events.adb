@@ -115,13 +115,13 @@ package body Knowledge.Events is
          Command => "ShowOnMap" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
          Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
       Add_Button
-        (".destination", "Set the event as destination for the ship",
-         "SetDestination2" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
+        (Name => ".destination", Label => "Set the event as destination for the ship",
+         Command => "SetDestination2" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
          Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
       Add_Button
-        (".info", "Show more information about the event",
-         "ShowEventInfo " & CArgv.Arg(Argv, 1));
-      Add_Button(".close", "Close", "");
+        (Name => ".info", Label => "Show more information about the event",
+         Command => "ShowEventInfo " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
       Show_Dialog(Dialog => Event_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Events_Menu_Command;
@@ -130,10 +130,10 @@ package body Knowledge.Events is
    -- FUNCTION
    -- Show information about the selected event
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -141,54 +141,54 @@ package body Knowledge.Events is
    -- EventIndex is the index of the event to show
    -- SOURCE
    function Show_Event_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Event_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      EventInfo: Unbounded_String;
-      BaseIndex: constant Extended_Base_Range :=
-        Sky_Map(Events_List(EventIndex).Sky_X, Events_List(EventIndex).Sky_Y)
+      Event_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Event_Info: Unbounded_String;
+      Base_Index: constant Extended_Base_Range :=
+        Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
           .Base_Index;
    begin
-      EventInfo :=
+      Event_Info :=
         To_Unbounded_String
-          ("X:" & Positive'Image(Events_List(EventIndex).Sky_X) & " Y:" &
-           Positive'Image(Events_List(EventIndex).Sky_Y));
-      case Events_List(EventIndex).E_Type is
+          (Source => "X:" & Positive'Image(Events_List(Event_Index).Sky_X) & " Y:" &
+           Positive'Image(Events_List(Event_Index).Sky_Y));
+      case Events_List(Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
-              (EventInfo,
+              (Event_Info,
                LF & "Ship type: " &
                To_String
-                 (Proto_Ships_List(Events_List(EventIndex).Ship_Index).Name));
+                 (Proto_Ships_List(Events_List(Event_Index).Ship_Index).Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
-              (EventInfo,
-               LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
+              (Event_Info,
+               LF & "Base name: " & To_String(Sky_Bases(Base_Index).Name));
          when DOUBLEPRICE =>
             Append
-              (EventInfo,
-               LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
+              (Event_Info,
+               LF & "Base name: " & To_String(Sky_Bases(Base_Index).Name));
             Append
-              (EventInfo,
+              (Event_Info,
                LF & "Item: " &
                To_String
                  (Objects_Container.Element
                     (Container => Items_List,
-                     Index => Events_List(EventIndex).Item_Index)
+                     Index => Events_List(Event_Index).Item_Index)
                     .Name));
          when NONE | BASERECOVERY =>
             null;
       end case;
-      Show_Info(Text => To_String(EventInfo), Title => "Event information");
+      Show_Info(Text => To_String(Event_Info), Title => "Event information");
       return TCL_OK;
    end Show_Event_Info_Command;
 
