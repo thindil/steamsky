@@ -165,30 +165,30 @@ package body Knowledge.Events is
       case Events_List(Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
-              (Event_Info,
-               LF & "Ship type: " &
+              (Source => Event_Info,
+               New_Item => LF & "Ship type: " &
                To_String
-                 (Proto_Ships_List(Events_List(Event_Index).Ship_Index).Name));
+                 (Source => Proto_Ships_List(Events_List(Event_Index).Ship_Index).Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
-              (Event_Info,
-               LF & "Base name: " & To_String(Sky_Bases(Base_Index).Name));
+              (Source => Event_Info,
+               New_Item => LF & "Base name: " & To_String(Source => Sky_Bases(Base_Index).Name));
          when DOUBLEPRICE =>
             Append
-              (Event_Info,
-               LF & "Base name: " & To_String(Sky_Bases(Base_Index).Name));
+              (Source => Event_Info,
+               New_Item => LF & "Base name: " & To_String(Source => Sky_Bases(Base_Index).Name));
             Append
-              (Event_Info,
-               LF & "Item: " &
+              (Source => Event_Info,
+               New_Item => LF & "Item: " &
                To_String
-                 (Objects_Container.Element
+                 (Source => Objects_Container.Element
                     (Container => Items_List,
                      Index => Events_List(Event_Index).Item_Index)
                     .Name));
          when NONE | BASERECOVERY =>
             null;
       end case;
-      Show_Info(Text => To_String(Event_Info), Title => "Event information");
+      Show_Info(Text => To_String(Source => Event_Info), Title => "Event information");
       return TCL_OK;
    end Show_Event_Info_Command;
 
@@ -196,10 +196,10 @@ package body Knowledge.Events is
    -- FUNCTION
    -- Show the list of known events to the player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -207,22 +207,22 @@ package body Knowledge.Events is
    -- Page parameter is a page number which will be show
    -- SOURCE
    function Show_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
    begin
       if Argc = 2 then
-         Update_Events_List(Positive'Value(CArgv.Arg(Argv, 1)));
+         Update_Events_List(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       else
          Update_Events_List;
       end if;
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Events_Command;
 
