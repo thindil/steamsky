@@ -1148,13 +1148,55 @@ package body Ships.UI.Crew.Inventory is
          if Tcl_GetVar
              (interp => Interp,
               varName =>
-                "invindex" & Inventory_Container.Extended_Index'Image(I)) =
+                "invindex" &
+                Trim
+                  (Source => Inventory_Container.Extended_Index'Image(I),
+                   Side => Left)) =
            "1" then
             Selection := True;
             exit Check_Selection_Loop;
          end if;
       end loop Check_Selection_Loop;
       if Selection then
+         Show_Multi_Item_Actions_Menu_Block :
+         declare
+            Items_Menu: constant Ttk_Frame :=
+              Create_Dialog
+                (Name => ".itemsmenu", Title => "Selected items actions",
+                 Parent_Name => ".memberdialog");
+            procedure Add_Button(Name, Label, Command: String) is
+               Button: constant Ttk_Button :=
+                 Create
+                   (pathName => Items_Menu & Name,
+                    options =>
+                      "-text {" & Label & "} -command {CloseDialog " &
+                      Items_Menu & " .;" & Command & "}");
+            begin
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Button,
+                  Options =>
+                    "-sticky we -padx 5" &
+                    (if Command'Length = 0 then " -pady {0 3}" else ""));
+               Bind
+                 (Widgt => Button, Sequence => "<Escape>",
+                  Script => "{CloseDialog " & Items_Menu & " .;break}");
+               if Command'Length = 0 then
+                  Bind
+                    (Widgt => Button, Sequence => "<Tab>",
+                     Script => "{focus " & Items_Menu & ".equip;break}");
+                  Focus(Widgt => Button);
+               end if;
+            end Add_Button;
+         begin
+            Add_Button
+              (Name => ".equip", Label => "Equip items",
+               Command => "ToggleItems");
+            Add_Button
+              (Name => ".move", Label => "Move items to the ship's cargo",
+               Command => "MoveItems");
+            Add_Button(Name => ".close", Label => "Close", Command => "");
+            Show_Dialog(Dialog => Items_Menu, Parent_Frame => ".memberdialog");
+         end Show_Multi_Item_Actions_Menu_Block;
          return TCL_OK;
       end if;
       Show_Inventory_Item_Info
