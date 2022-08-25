@@ -218,9 +218,9 @@ package body Knowledge.Events is
       pragma Unreferenced(ClientData);
    begin
       if Argc = 2 then
-         UpdateEventsList(Positive'Value(CArgv.Arg(Argv, 1)));
+         Update_Events_List(Positive'Value(CArgv.Arg(Argv, 1)));
       else
-         UpdateEventsList;
+         Update_Events_List;
       end if;
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
@@ -408,19 +408,19 @@ package body Knowledge.Events is
       for Event of Local_Events loop
          Events_Indexes.Append(Event.Id);
       end loop;
-      UpdateEventsList;
+      Update_Events_List;
       return TCL_OK;
    end Sort_Events_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowEventMenu", Show_Events_Menu_Command'Access);
       Add_Command("ShowEventInfo", Show_Event_Info_Command'Access);
       Add_Command("ShowEvents", Show_Events_Command'Access);
       Add_Command("SortKnownEvents", Sort_Events_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
-   procedure UpdateEventsList(Page: Positive := 1) is
+   procedure Update_Events_List(Page: Positive := 1) is
       use Tiny_String;
 
       EventsCanvas: constant Tk_Canvas :=
@@ -590,6 +590,6 @@ package body Knowledge.Events is
          "-scrollregion [list " & BBox(EventsCanvas, "all") & "]");
       Xview_Move_To(EventsCanvas, "0.0");
       Yview_Move_To(EventsCanvas, "0.0");
-   end UpdateEventsList;
+   end Update_Events_List;
 
 end Knowledge.Events;

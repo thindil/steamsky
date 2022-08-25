@@ -172,7 +172,7 @@ package body Knowledge is
       -- Setting accepted missions info
       Knowledge.Missions.UpdateMissionsList;
       -- Setting the known events list
-      Knowledge.Events.UpdateEventsList;
+      Knowledge.Events.Update_Events_List;
       -- Setting the known stories list
       Knowledge_Frame.Name :=
         New_String(Str => Main_Paned & ".knowledgeframe.stories.canvas.frame");
@@ -370,7 +370,7 @@ package body Knowledge is
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.Add_Commands;
-      Knowledge.Events.AddCommands;
+      Knowledge.Events.Add_Commands;
       Knowledge.Missions.AddCommands;
       Knowledge.Stories.AddCommands;
    end Add_Commands;

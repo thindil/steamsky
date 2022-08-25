@@ -1130,16 +1130,37 @@ package body Ships.UI.Crew.Inventory is
    function Show_Inventory_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
+      pragma Unreferenced(Client_Data, Argc);
+      Local_Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Used: constant Boolean :=
         Item_Is_Used
-          (Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+          (Member_Index => Local_Member_Index,
            Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+      Selection: Boolean := False;
    begin
+      Check_Selection_Loop :
+      for I in
+        Inventory_Container.First_Index
+          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) ..
+          Inventory_Container.Last_Index
+            (Container => Player_Ship.Crew(Local_Member_Index).Inventory) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "invindex" & Inventory_Container.Extended_Index'Image(I)) =
+           "1" then
+            Selection := True;
+            exit Check_Selection_Loop;
+         end if;
+      end loop Check_Selection_Loop;
+      if Selection then
+         return TCL_OK;
+      end if;
       Show_Inventory_Item_Info
         (Parent => ".memberdialog",
          Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
-         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+         Item_Index => Local_Member_Index,
          Button_1 =>
            (Text => To_Unbounded_String(Source => "Move"),
             Command =>
