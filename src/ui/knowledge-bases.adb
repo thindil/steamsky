@@ -556,39 +556,39 @@ package body Knowledge.Bases is
                Append(Source => Base_Info, New_Item => LF & "You can ask for events again.");
             end if;
          else
-            Append(Base_Info, LF & "You can't ask for events at this base.");
+            Append(Source => Base_Info, New_Item => LF & "You can't ask for events at this base.");
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -1 then
             Time_Diff :=
-              7 - Days_Difference(Sky_Bases(Base_Index).Missions_Date);
+              7 - Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
             if Time_Diff > 0 then
                Append
-                 (Base_Info,
-                  LF & "New missions available in" & Natural'Image(Time_Diff) &
+                 (Source => Base_Info,
+                  New_Item => LF & "New missions available in" & Natural'Image(Time_Diff) &
                   " days.");
             else
-               Append(Base_Info, LF & "New missions available now.");
+               Append(Source => Base_Info, New_Item => LF & "New missions available now.");
             end if;
          else
-            Append(Base_Info, LF & "You can't take missions at this base.");
+            Append(Source => Base_Info, New_Item => LF & "You can't take missions at this base.");
          end if;
       end Show_Mission_And_Recruits_Info_Block;
       Set_Reputation_Text
-        (Get_Reputation_Text(Sky_Bases(Base_Index).Reputation.Level));
+        (Reputation_Text => Get_Reputation_Text(Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
       if Base_Index = Player_Ship.Home_Base then
-         Append(Base_Info, LF & "It is your home base.");
+         Append(Source => Base_Info, New_Item => LF & "It is your home base.");
       end if;
       Base_Label :=
         Create
-          (Base_Dialog & ".info",
-           "-text {" & To_String(Base_Info) & "} -wraplength 400");
+          (pathName => Base_Dialog & ".info",
+           options => "-text {" & To_String(Source => Base_Info) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
-        (Base_Label, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
+        (Slave => Base_Label, Options => "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Add_Close_Button
         (Name => Base_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Base_Dialog, Column_Span => 2, Row => 3);
-      Show_Dialog(Base_Dialog);
+      Show_Dialog(Dialog => Base_Dialog);
       return TCL_OK;
    end Show_Base_Info_Command;
 
@@ -643,10 +643,10 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Sort the list of known bases
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -654,15 +654,15 @@ package body Knowledge.Bases is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
