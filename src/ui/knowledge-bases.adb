@@ -513,78 +513,106 @@ package body Knowledge.Bases is
             Add(Widget => Reputation_Bar, Message => Reputation_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Reputation_Label, Options => "-row 2 -sticky w -padx {5 0}");
+           (Slave => Reputation_Label,
+            Options => "-row 2 -sticky w -padx {5 0}");
       end Set_Reputation_Text;
    begin
       Base_Info :=
         To_Unbounded_String
-          (Source => "Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
-           " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
+          (Source =>
+             "Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
+             " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
       Append
         (Source => Base_Info,
-         New_Item => LF & "Last visited: " & Formated_Time(Time => Sky_Bases(Base_Index).Visited));
-      Show_Mission_And_Recruits_Info_Block:
+         New_Item =>
+           LF & "Last visited: " &
+           Formated_Time(Time => Sky_Bases(Base_Index).Visited));
+      Show_Mission_And_Recruits_Info_Block :
       declare
          Time_Diff: Integer;
       begin
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -25 then
             Time_Diff :=
-              30 - Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
+              30 -
+              Days_Difference
+                (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
             if Time_Diff > 0 then
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "New recruits available in" & Natural'Image(Time_Diff) &
-                  " days.");
+                  New_Item =>
+                    LF & "New recruits available in" &
+                    Natural'Image(Time_Diff) & " days.");
             else
-               Append(Source => Base_Info, New_Item => LF & "New recruits available now.");
+               Append
+                 (Source => Base_Info,
+                  New_Item => LF & "New recruits available now.");
             end if;
          else
             Append
-              (Source => Base_Info, New_Item => LF & "You can't recruit crew members at this base.");
+              (Source => Base_Info,
+               New_Item =>
+                 LF & "You can't recruit crew members at this base.");
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -25 then
             Time_Diff :=
-              Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
+              Days_Difference
+                (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
             if Time_Diff < 7 then
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "You asked for events" & Natural'Image(Time_Diff) &
-                  " days ago.");
+                  New_Item =>
+                    LF & "You asked for events" & Natural'Image(Time_Diff) &
+                    " days ago.");
             else
-               Append(Source => Base_Info, New_Item => LF & "You can ask for events again.");
+               Append
+                 (Source => Base_Info,
+                  New_Item => LF & "You can ask for events again.");
             end if;
          else
-            Append(Source => Base_Info, New_Item => LF & "You can't ask for events at this base.");
+            Append
+              (Source => Base_Info,
+               New_Item => LF & "You can't ask for events at this base.");
          end if;
          if Sky_Bases(Base_Index).Population > 0 and
            Sky_Bases(Base_Index).Reputation.Level > -1 then
             Time_Diff :=
-              7 - Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
+              7 -
+              Days_Difference
+                (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
             if Time_Diff > 0 then
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "New missions available in" & Natural'Image(Time_Diff) &
-                  " days.");
+                  New_Item =>
+                    LF & "New missions available in" &
+                    Natural'Image(Time_Diff) & " days.");
             else
-               Append(Source => Base_Info, New_Item => LF & "New missions available now.");
+               Append
+                 (Source => Base_Info,
+                  New_Item => LF & "New missions available now.");
             end if;
          else
-            Append(Source => Base_Info, New_Item => LF & "You can't take missions at this base.");
+            Append
+              (Source => Base_Info,
+               New_Item => LF & "You can't take missions at this base.");
          end if;
       end Show_Mission_And_Recruits_Info_Block;
       Set_Reputation_Text
-        (Reputation_Text => Get_Reputation_Text(Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
+        (Reputation_Text =>
+           Get_Reputation_Text
+             (Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
       if Base_Index = Player_Ship.Home_Base then
          Append(Source => Base_Info, New_Item => LF & "It is your home base.");
       end if;
       Base_Label :=
         Create
           (pathName => Base_Dialog & ".info",
-           options => "-text {" & To_String(Source => Base_Info) & "} -wraplength 400");
+           options =>
+             "-text {" & To_String(Source => Base_Info) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Base_Label, Options => "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
+        (Slave => Base_Label,
+         Options => "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Add_Close_Button
         (Name => Base_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Base_Dialog, Column_Span => 2, Row => 3);
@@ -666,7 +694,9 @@ package body Knowledge.Bases is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Bases_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
+        Get_Column_Number
+          (Table => Bases_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
@@ -786,11 +816,14 @@ package body Knowledge.Bases is
       if Bases_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Bases_Loop:
+      Fill_Local_Bases_Loop :
       for I in Sky_Bases'Range loop
          Local_Bases(I) :=
            (Name => Sky_Bases(I).Name,
-            Distance => Count_Distance(Destination_X => Sky_Bases(I).Sky_X, Destination_Y => Sky_Bases(I).Sky_Y),
+            Distance =>
+              Count_Distance
+                (Destination_X => Sky_Bases(I).Sky_X,
+                 Destination_Y => Sky_Bases(I).Sky_Y),
             Population =>
               (if Sky_Bases(I).Visited = (others => 0) then -1
                else Sky_Bases(I).Population),
@@ -810,7 +843,7 @@ package body Knowledge.Bases is
       end loop Fill_Local_Bases_Loop;
       Sort_Bases(Container => Local_Bases);
       Bases_Indexes.Clear;
-      Fill_Bases_Indexes_Loop:
+      Fill_Bases_Indexes_Loop :
       for Base of Local_Bases loop
          Bases_Indexes.Append(New_Item => Base.Id);
       end loop Fill_Bases_Indexes_Loop;
@@ -820,10 +853,15 @@ package body Knowledge.Bases is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
-      Add_Command(Name => "ShowBasesMenu", Ada_Command => Show_Bases_Menu_Command'Access);
-      Add_Command(Name => "ShowBaseInfo", Ada_Command => Show_Base_Info_Command'Access);
-      Add_Command("SortKnownBases", Sort_Bases_Command'Access);
+      Add_Command
+        (Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
+      Add_Command
+        (Name => "ShowBasesMenu",
+         Ada_Command => Show_Bases_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowBaseInfo", Ada_Command => Show_Base_Info_Command'Access);
+      Add_Command
+        (Name => "SortKnownBases", Ada_Command => Sort_Bases_Command'Access);
    end Add_Commands;
 
 end Knowledge.Bases;
