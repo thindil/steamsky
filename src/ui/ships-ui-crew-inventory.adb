@@ -1170,7 +1170,7 @@ package body Ships.UI.Crew.Inventory is
                    (pathName => Items_Menu & Name,
                     options =>
                       "-text {" & Label & "} -command {CloseDialog " &
-                      Items_Menu & " .;" & Command & "}");
+                      Items_Menu & " .memberdialog;" & Command & "}");
             begin
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Button,
@@ -1179,7 +1179,8 @@ package body Ships.UI.Crew.Inventory is
                     (if Command'Length = 0 then " -pady {0 3}" else ""));
                Bind
                  (Widgt => Button, Sequence => "<Escape>",
-                  Script => "{CloseDialog " & Items_Menu & " .;break}");
+                  Script =>
+                    "{CloseDialog " & Items_Menu & " .memberdialog;break}");
                if Command'Length = 0 then
                   Bind
                     (Widgt => Button, Sequence => "<Tab>",
