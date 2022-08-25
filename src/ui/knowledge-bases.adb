@@ -666,7 +666,7 @@ package body Knowledge.Bases is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Bases_Table, Natural'Value(CArgv.Arg(Argv, 2)));
+        Get_Column_Number(Table => Bases_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
@@ -786,10 +786,11 @@ package body Knowledge.Bases is
       if Bases_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Bases_Loop:
       for I in Sky_Bases'Range loop
          Local_Bases(I) :=
            (Name => Sky_Bases(I).Name,
-            Distance => Count_Distance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y),
+            Distance => Count_Distance(Destination_X => Sky_Bases(I).Sky_X, Destination_Y => Sky_Bases(I).Sky_Y),
             Population =>
               (if Sky_Bases(I).Visited = (others => 0) then -1
                else Sky_Bases(I).Population),
@@ -806,21 +807,22 @@ package body Knowledge.Bases is
               (if Sky_Bases(I).Visited = (others => 0) then 200
                else Sky_Bases(I).Reputation.Level),
             Id => I);
-      end loop;
-      Sort_Bases(Local_Bases);
+      end loop Fill_Local_Bases_Loop;
+      Sort_Bases(Container => Local_Bases);
       Bases_Indexes.Clear;
+      Fill_Bases_Indexes_Loop:
       for Base of Local_Bases loop
-         Bases_Indexes.Append(Base.Id);
-      end loop;
-      Update_Bases_List(CArgv.Arg(Argv, 1));
+         Bases_Indexes.Append(New_Item => Base.Id);
+      end loop Fill_Bases_Indexes_Loop;
+      Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
    end Sort_Bases_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowBases", Show_Bases_Command'Access);
-      Add_Command("ShowBasesMenu", Show_Bases_Menu_Command'Access);
-      Add_Command("ShowBaseInfo", Show_Base_Info_Command'Access);
+      Add_Command(Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
+      Add_Command(Name => "ShowBasesMenu", Ada_Command => Show_Bases_Menu_Command'Access);
+      Add_Command(Name => "ShowBaseInfo", Ada_Command => Show_Base_Info_Command'Access);
       Add_Command("SortKnownBases", Sort_Bases_Command'Access);
    end Add_Commands;
 
