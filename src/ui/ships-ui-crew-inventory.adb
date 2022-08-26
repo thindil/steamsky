@@ -881,8 +881,8 @@ package body Ships.UI.Crew.Inventory is
         Create
           (pathName => Item_Dialog & ".movebutton",
            options =>
-             "-text Move -command {MoveItem " & Positive'Image(Member_Index) &
-             " " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+             "-text Move -command {MoveItem " &
+             CArgv.Arg(Argv => Argv, N => 1) & "}");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
@@ -946,9 +946,8 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- MoveItem memberindex itemindex
-   -- Memberindex is the index of the crew member in which inventory item will
-   -- be set, itemindex is the index of the item which will be set
+   -- MoveItem itemindex
+   -- itemindex is the index of the item which will be set
    -- SOURCE
    function Move_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -960,11 +959,10 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+
       Amount: Positive;
-      Local_Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Dialog: Tk_Toplevel :=
         Get_Widget(pathName => ".itemdialog", Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
@@ -983,8 +981,7 @@ package body Ships.UI.Crew.Inventory is
                 (Container => Items_List,
                  Index =>
                    Inventory_Container.Element
-                     (Container =>
-                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                     (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => Item_Index)
                      .Proto_Index)
                 .Weight *
@@ -996,8 +993,7 @@ package body Ships.UI.Crew.Inventory is
               Get_Item_Name
                 (Item =>
                    Inventory_Container.Element
-                     (Container =>
-                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                     (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => Item_Index)),
             Title => "No free space in cargo");
          return TCL_OK;
@@ -1006,37 +1002,37 @@ package body Ships.UI.Crew.Inventory is
         (Ship => Player_Ship,
          Proto_Index =>
            Inventory_Container.Element
-             (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+             (Container => Player_Ship.Crew(Member_Index).Inventory,
               Index => Item_Index)
              .Proto_Index,
          Amount => Amount,
          Durability =>
            Inventory_Container.Element
-             (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+             (Container => Player_Ship.Crew(Member_Index).Inventory,
               Index => Item_Index)
              .Durability,
          Price =>
            Inventory_Container.Element
-             (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+             (Container => Player_Ship.Crew(Member_Index).Inventory,
               Index => Item_Index)
              .Price);
       Update_Inventory
-        (Member_Index => Local_Member_Index, Amount => (0 - Amount),
+        (Member_Index => Member_Index, Amount => (0 - Amount),
          Inventory_Index => Item_Index, Ship => Player_Ship);
       if
-        (Player_Ship.Crew(Local_Member_Index).Order = CLEAN and
+        (Player_Ship.Crew(Member_Index).Order = CLEAN and
          Find_Item
-             (Inventory => Player_Ship.Crew(Local_Member_Index).Inventory,
+             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
               Item_Type => Cleaning_Tools) =
            0) or
-        ((Player_Ship.Crew(Local_Member_Index).Order = UPGRADING or
-          Player_Ship.Crew(Local_Member_Index).Order = REPAIR) and
+        ((Player_Ship.Crew(Member_Index).Order = UPGRADING or
+          Player_Ship.Crew(Member_Index).Order = REPAIR) and
          Find_Item
-             (Inventory => Player_Ship.Crew(Local_Member_Index).Inventory,
+             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
               Item_Type => Repair_Tools) =
            0) then
          Give_Orders
-           (Ship => Player_Ship, Member_Index => Local_Member_Index,
+           (Ship => Player_Ship, Member_Index => Member_Index,
             Given_Order => REST);
       end if;
       Destroy(Widgt => Item_Dialog);
@@ -1044,7 +1040,7 @@ package body Ships.UI.Crew.Inventory is
       Tcl_Eval
         (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
       if Inventory_Container.Length
-          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
+          (Container => Player_Ship.Crew(Member_Index).Inventory) =
         0 then
          Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
          return TCL_OK;
