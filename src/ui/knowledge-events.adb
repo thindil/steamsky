@@ -419,15 +419,15 @@ package body Knowledge.Events is
       Add_Command(Name => "ShowEventMenu", Ada_Command => Show_Events_Menu_Command'Access);
       Add_Command(Name => "ShowEventInfo", Ada_Command => Show_Event_Info_Command'Access);
       Add_Command(Name => "ShowEvents", Ada_Command => Show_Events_Command'Access);
-      Add_Command("SortKnownEvents", Sort_Events_Command'Access);
+      Add_Command(Name => "SortKnownEvents", Ada_Command => Sort_Events_Command'Access);
    end Add_Commands;
 
    procedure Update_Events_List(Page: Positive := 1) is
       use Tiny_String;
 
-      EventsCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".knowledgeframe.events.canvas");
-      EventsFrame: constant Ttk_Frame := Get_Widget(EventsCanvas & ".frame");
+      Events_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".knowledgeframe.events.canvas");
+      Events_Frame: constant Ttk_Frame := Get_Widget(pathName => Events_Canvas & ".frame");
       Tokens: Slice_Set;
       Rows: Natural := 0;
       Label: Ttk_Label;
@@ -436,28 +436,28 @@ package body Knowledge.Events is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(EventsFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       if Events_Table.Row > 1 then
-         Clear_Table(Events_Table);
+         Clear_Table(Table => Events_Table);
       end if;
-      Delete_Widgets(1, Rows - 1, EventsFrame);
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Events_Frame);
       if Events_List.Length = 0 then
          Label :=
            Create
-             (EventsFrame & ".noevents",
-              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
+             (pathName => Events_Frame & ".noevents",
+              options => "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
          Bind
-           (EventsCanvas, "<Configure>",
+           (Events_Canvas, "<Configure>",
             "{" & Label & " configure -wraplength [expr [winfo width " &
-            EventsCanvas & "] - 10]}");
+            Events_Canvas & "] - 10]}");
       else
-         Unbind(EventsCanvas, "<Configure>");
+         Unbind(Events_Canvas, "<Configure>");
          Row := 2;
          Events_Table :=
            Create_Table
-             (Widget_Image(EventsFrame),
+             (Widget_Image(Events_Frame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
               Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
@@ -588,10 +588,10 @@ package body Knowledge.Events is
       end if;
       Tcl_Eval(Get_Context, "update");
       configure
-        (EventsCanvas,
-         "-scrollregion [list " & BBox(EventsCanvas, "all") & "]");
-      Xview_Move_To(EventsCanvas, "0.0");
-      Yview_Move_To(EventsCanvas, "0.0");
+        (Events_Canvas,
+         "-scrollregion [list " & BBox(Events_Canvas, "all") & "]");
+      Xview_Move_To(Events_Canvas, "0.0");
+      Yview_Move_To(Events_Canvas, "0.0");
    end Update_Events_List;
 
 end Knowledge.Events;
