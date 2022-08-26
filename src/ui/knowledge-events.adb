@@ -79,7 +79,8 @@ package body Knowledge.Events is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Event_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Event_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Event_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".eventslistmenu",
@@ -96,28 +97,38 @@ package body Knowledge.Events is
          Button: constant Ttk_Button :=
            Create
              (pathName => Event_Menu & Name,
-              options => "-text {" & Label & "} -command {CloseDialog " & Event_Menu &
-              " .;" & Command & "}");
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Event_Menu &
+                " .;" & Command & "}");
       begin
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
-            Options => "-sticky we -padx 5" &
-            (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind(Widgt => Button, Sequence => "<Escape>", Script => "{CloseDialog " & Event_Menu & " .;break}");
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Event_Menu & " .;break}");
          if Command'Length = 0 then
-            Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Event_Menu & ".show;break}");
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Event_Menu & ".show;break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
    begin
       Add_Button
         (Name => ".show", Label => "Show the event on map",
-         Command => "ShowOnMap" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-         Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
+         Command =>
+           "ShowOnMap" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
+           Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
       Add_Button
-        (Name => ".destination", Label => "Set the event as destination for the ship",
-         Command => "SetDestination2" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-         Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
+        (Name => ".destination",
+         Label => "Set the event as destination for the ship",
+         Command =>
+           "SetDestination2" &
+           Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
+           Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
       Add_Button
         (Name => ".info", Label => "Show more information about the event",
          Command => "ShowEventInfo " & CArgv.Arg(Argv => Argv, N => 1));
@@ -152,7 +163,8 @@ package body Knowledge.Events is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Event_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Event_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Event_Info: Unbounded_String;
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
@@ -160,35 +172,47 @@ package body Knowledge.Events is
    begin
       Event_Info :=
         To_Unbounded_String
-          (Source => "X:" & Positive'Image(Events_List(Event_Index).Sky_X) & " Y:" &
-           Positive'Image(Events_List(Event_Index).Sky_Y));
+          (Source =>
+             "X:" & Positive'Image(Events_List(Event_Index).Sky_X) & " Y:" &
+             Positive'Image(Events_List(Event_Index).Sky_Y));
       case Events_List(Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
               (Source => Event_Info,
-               New_Item => LF & "Ship type: " &
-               To_String
-                 (Source => Proto_Ships_List(Events_List(Event_Index).Ship_Index).Name));
+               New_Item =>
+                 LF & "Ship type: " &
+                 To_String
+                   (Source =>
+                      Proto_Ships_List(Events_List(Event_Index).Ship_Index)
+                        .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
               (Source => Event_Info,
-               New_Item => LF & "Base name: " & To_String(Source => Sky_Bases(Base_Index).Name));
+               New_Item =>
+                 LF & "Base name: " &
+                 To_String(Source => Sky_Bases(Base_Index).Name));
          when DOUBLEPRICE =>
             Append
               (Source => Event_Info,
-               New_Item => LF & "Base name: " & To_String(Source => Sky_Bases(Base_Index).Name));
+               New_Item =>
+                 LF & "Base name: " &
+                 To_String(Source => Sky_Bases(Base_Index).Name));
             Append
               (Source => Event_Info,
-               New_Item => LF & "Item: " &
-               To_String
-                 (Source => Objects_Container.Element
-                    (Container => Items_List,
-                     Index => Events_List(Event_Index).Item_Index)
-                    .Name));
+               New_Item =>
+                 LF & "Item: " &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index => Events_List(Event_Index).Item_Index)
+                        .Name));
          when NONE | BASERECOVERY =>
             null;
       end case;
-      Show_Info(Text => To_String(Source => Event_Info), Title => "Event information");
+      Show_Info
+        (Text => To_String(Source => Event_Info),
+         Title => "Event information");
       return TCL_OK;
    end Show_Event_Info_Command;
 
@@ -218,7 +242,8 @@ package body Knowledge.Events is
       pragma Unreferenced(Client_Data);
    begin
       if Argc = 2 then
-         Update_Events_List(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+         Update_Events_List
+           (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       else
          Update_Events_List;
       end if;
@@ -298,7 +323,9 @@ package body Knowledge.Events is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Events_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Events_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Event_Data is record
          E_Type: Events_Types;
          Distance: Natural;
@@ -309,10 +336,12 @@ package body Knowledge.Events is
       Local_Events: Events_Array(1 .. Positive(Events_List.Length));
       function "<"(Left, Right: Local_Event_Data) return Boolean is
       begin
-         if Events_Sort_Order = TYPEASC and then Left.E_Type < Right.E_Type then
+         if Events_Sort_Order = TYPEASC
+           and then Left.E_Type < Right.E_Type then
             return True;
          end if;
-         if Events_Sort_Order = TYPEDESC and then Left.E_Type > Right.E_Type then
+         if Events_Sort_Order = TYPEDESC
+           and then Left.E_Type > Right.E_Type then
             return True;
          end if;
          if Events_Sort_Order = DISTANCEASC
@@ -362,12 +391,14 @@ package body Knowledge.Events is
       if Events_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Events_Loop:
+      Fill_Local_Events_Loop :
       for I in Events_List.Iterate loop
          Local_Events(Events_Container.To_Index(Position => I)) :=
            (E_Type => Events_List(I).E_Type,
             Distance =>
-              Count_Distance(Destination_X => Events_List(I).Sky_X, Destination_Y => Events_List(I).Sky_Y),
+              Count_Distance
+                (Destination_X => Events_List(I).Sky_X,
+                 Destination_Y => Events_List(I).Sky_Y),
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
@@ -406,7 +437,7 @@ package body Knowledge.Events is
       end loop Fill_Local_Events_Loop;
       Sort_Events(Container => Local_Events);
       Events_Indexes.Clear;
-      Fill_Events_Indexes_Loop:
+      Fill_Events_Indexes_Loop :
       for Event of Local_Events loop
          Events_Indexes.Append(New_Item => Event.Id);
       end loop Fill_Events_Indexes_Loop;
@@ -416,10 +447,16 @@ package body Knowledge.Events is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowEventMenu", Ada_Command => Show_Events_Menu_Command'Access);
-      Add_Command(Name => "ShowEventInfo", Ada_Command => Show_Event_Info_Command'Access);
-      Add_Command(Name => "ShowEvents", Ada_Command => Show_Events_Command'Access);
-      Add_Command(Name => "SortKnownEvents", Ada_Command => Sort_Events_Command'Access);
+      Add_Command
+        (Name => "ShowEventMenu",
+         Ada_Command => Show_Events_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowEventInfo",
+         Ada_Command => Show_Event_Info_Command'Access);
+      Add_Command
+        (Name => "ShowEvents", Ada_Command => Show_Events_Command'Access);
+      Add_Command
+        (Name => "SortKnownEvents", Ada_Command => Sort_Events_Command'Access);
    end Add_Commands;
 
    procedure Update_Events_List(Page: Positive := 1) is
@@ -427,7 +464,8 @@ package body Knowledge.Events is
 
       Events_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Main_Paned & ".knowledgeframe.events.canvas");
-      Events_Frame: constant Ttk_Frame := Get_Widget(pathName => Events_Canvas & ".frame");
+      Events_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Events_Canvas & ".frame");
       Tokens: Slice_Set;
       Rows: Natural := 0;
       Label: Ttk_Label;
@@ -436,37 +474,48 @@ package body Knowledge.Events is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame), Separators => " ");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       if Events_Table.Row > 1 then
          Clear_Table(Table => Events_Table);
       end if;
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Events_Frame);
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Events_Frame);
       if Events_List.Length = 0 then
          Label :=
            Create
              (pathName => Events_Frame & ".noevents",
-              options => "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
+              options =>
+                "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
          Bind
            (Widgt => Events_Canvas, Sequence => "<Configure>",
-            Script => "{" & Label & " configure -wraplength [expr [winfo width " &
-            Events_Canvas & "] - 10]}");
+            Script =>
+              "{" & Label & " configure -wraplength [expr [winfo width " &
+              Events_Canvas & "] - 10]}");
       else
          Unbind(Widgt => Events_Canvas, Sequence => "<Configure>");
          Row := 2;
          Events_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Events_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
-               3 => To_Unbounded_String(Source => "Details")),
-              Scrollbar => Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
-              Command => "SortKnownEvents", Tooltip => "Press mouse button to sort the events.");
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Distance"),
+                 3 => To_Unbounded_String(Source => "Details")),
+              Scrollbar =>
+                Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
+              Command => "SortKnownEvents",
+              Tooltip => "Press mouse button to sort the events.");
          if Events_Indexes.Length /= Events_List.Length then
             Events_Indexes.Clear;
-            Fill_Event_Indexes_Loop:
+            Fill_Event_Indexes_Loop :
             for I in Events_List.Iterate loop
-               Events_Indexes.Append(New_Item => Events_Container.To_Index(Position => I));
+               Events_Indexes.Append
+                 (New_Item => Events_Container.To_Index(Position => I));
             end loop Fill_Event_Indexes_Loop;
          end if;
          Load_Known_Events_Loop :
@@ -480,71 +529,86 @@ package body Knowledge.Events is
                   Add_Button
                     (Table => Events_Table, Text => "Enemy ship spotted",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when FULLDOCKS =>
                   Add_Button
                     (Table => Events_Table, Text => "Full docks in base",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when ATTACKONBASE =>
                   Add_Button
                     (Table => Events_Table, Text => "Base is under attack",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when DISEASE =>
                   Add_Button
                     (Table => Events_Table, Text => "Disease in base",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when ENEMYPATROL =>
                   Add_Button
                     (Table => Events_Table, Text => "Enemy patrol",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when DOUBLEPRICE =>
                   Add_Button
                     (Table => Events_Table, Text => "Double price in base",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when TRADER =>
                   Add_Button
                     (Table => Events_Table, Text => "Friendly trader spotted",
                      Tooltip => "Show available event's options",
-                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when FRIENDLYSHIP =>
                   Add_Button
-                    (Events_Table, "Friendly ship spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Friendly ship spotted",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1),
+                     Column => 1);
                when NONE | BASERECOVERY =>
                   null;
             end case;
             Add_Button
-              (Events_Table,
-               Natural'Image
-                 (Count_Distance
-                    (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)),
-               "The distance to the event",
-               "ShowEventMenu" & Positive'Image(Event), 2);
+              (Table => Events_Table,
+               Text =>
+                 Natural'Image
+                   (Count_Distance
+                      (Destination_X => Events_List(Event).Sky_X,
+                       Destination_Y => Events_List(Event).Sky_Y)),
+               Tooltip => "The distance to the event",
+               Command => "ShowEventMenu" & Positive'Image(Event),
+               Column => 2);
             case Events_List(Event).E_Type is
                when DOUBLEPRICE =>
                   Add_Button
-                    (Events_Table,
-                     To_String
-                       (Objects_Container.Element
-                          (Container => Items_List,
-                           Index => Events_List(Event).Item_Index)
-                          .Name) &
-                     " in " &
-                     To_String
-                       (Sky_Bases
-                          (Sky_Map
-                             (Events_List(Event).Sky_X,
-                              Events_List(Event).Sky_Y)
-                             .Base_Index)
-                          .Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Event), 3, True);
+                    (Table => Events_Table,
+                     Text =>
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index => Events_List(Event).Item_Index)
+                              .Name) &
+                       " in " &
+                       To_String
+                         (Source =>
+                            Sky_Bases
+                              (Sky_Map
+                                 (Events_List(Event).Sky_X,
+                                  Events_List(Event).Sky_Y)
+                                 .Base_Index)
+                              .Name),
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Event),
+                     Column => 3, New_Row => True);
                when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                   Add_Button
                     (Events_Table,
