@@ -449,24 +449,25 @@ package body Knowledge.Events is
               options => "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
          Bind
-           (Events_Canvas, "<Configure>",
-            "{" & Label & " configure -wraplength [expr [winfo width " &
+           (Widgt => Events_Canvas, Sequence => "<Configure>",
+            Script => "{" & Label & " configure -wraplength [expr [winfo width " &
             Events_Canvas & "] - 10]}");
       else
-         Unbind(Events_Canvas, "<Configure>");
+         Unbind(Widgt => Events_Canvas, Sequence => "<Configure>");
          Row := 2;
          Events_Table :=
            Create_Table
-             (Widget_Image(Events_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-               To_Unbounded_String("Details")),
-              Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
-              "SortKnownEvents", "Press mouse button to sort the events.");
+             (Parent => Widget_Image(Win => Events_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
+               3 => To_Unbounded_String(Source => "Details")),
+              Scrollbar => Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
+              Command => "SortKnownEvents", Tooltip => "Press mouse button to sort the events.");
          if Events_Indexes.Length /= Events_List.Length then
             Events_Indexes.Clear;
+            Fill_Event_Indexes_Loop:
             for I in Events_List.Iterate loop
                Events_Indexes.Append(Events_Container.To_Index(I));
-            end loop;
+            end loop Fill_Event_Indexes_Loop;
          end if;
          Load_Known_Events_Loop :
          for Event of Events_Indexes loop
