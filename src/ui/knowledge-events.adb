@@ -466,7 +466,7 @@ package body Knowledge.Events is
             Events_Indexes.Clear;
             Fill_Event_Indexes_Loop:
             for I in Events_List.Iterate loop
-               Events_Indexes.Append(Events_Container.To_Index(I));
+               Events_Indexes.Append(New_Item => Events_Container.To_Index(Position => I));
             end loop Fill_Event_Indexes_Loop;
          end if;
          Load_Known_Events_Loop :
@@ -478,19 +478,19 @@ package body Knowledge.Events is
             case Events_List(Event).E_Type is
                when ENEMYSHIP =>
                   Add_Button
-                    (Events_Table, "Enemy ship spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Enemy ship spotted",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when FULLDOCKS =>
                   Add_Button
-                    (Events_Table, "Full docks in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Full docks in base",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when ATTACKONBASE =>
                   Add_Button
-                    (Events_Table, "Base is under attack",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Base is under attack",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when DISEASE =>
                   Add_Button
                     (Events_Table, "Disease in base",
