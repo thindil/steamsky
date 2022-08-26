@@ -849,9 +849,8 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowMoveItem memberindex itemindex
-   -- Memberindex is the index of the crew member in which inventory item will
-   -- be set, itemindex is the index of the item which will be set
+   -- ShowMoveItem itemindex
+   -- itemindex is the index of the item which will be set
    -- SOURCE
    function Show_Move_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -863,10 +862,9 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Local_Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+
       Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".itemdialog",
@@ -875,8 +873,7 @@ package body Ships.UI.Crew.Inventory is
              Get_Item_Name
                (Item =>
                   Inventory_Container.Element
-                    (Container =>
-                       Player_Ship.Crew(Local_Member_Index).Inventory,
+                    (Container => Player_Ship.Crew(Member_Index).Inventory,
                      Index => Item_Index)) &
              " to ship cargo",
            Title_Width => 400, Columns => 2, Parent_Name => ".memberdialog");
@@ -884,13 +881,12 @@ package body Ships.UI.Crew.Inventory is
         Create
           (pathName => Item_Dialog & ".movebutton",
            options =>
-             "-text Move -command {MoveItem " &
-             CArgv.Arg(Argv => Argv, N => 1) & " " &
-             CArgv.Arg(Argv => Argv, N => 2) & "}");
+             "-text Move -command {MoveItem " & Positive'Image(Member_Index) &
+             " " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
-          (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+          (Container => Player_Ship.Crew(Member_Index).Inventory,
            Index => Item_Index)
           .Amount;
       Amount_Box: constant Ttk_SpinBox :=
@@ -1203,9 +1199,7 @@ package body Ships.UI.Crew.Inventory is
            (Text => To_Unbounded_String(Source => "Move"),
             Command =>
               To_Unbounded_String
-                (Source =>
-                   "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-                   CArgv.Arg(Argv => Argv, N => 2)),
+                (Source => "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 2)),
             Icon => To_Unbounded_String(Source => "cargoicon"),
             Tooltip =>
               To_Unbounded_String
