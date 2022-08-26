@@ -156,8 +156,7 @@ package body Ships.UI.Crew.Inventory is
                  Damage_Info => False, To_Lower => False),
             Tooltip => "Show the selected item's info",
             Command =>
-              "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(Inventory_Indexes(I)),
+              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
             Column => 2);
          Add_Progress_Bar
            (Table => Inventory_Table,
@@ -168,8 +167,7 @@ package body Ships.UI.Crew.Inventory is
             Max_Value => Default_Item_Durability,
             Tooltip => "The current durability level of the selected item.",
             Command =>
-              "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(Inventory_Indexes(I)),
+              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
             Column => 3);
          if Item_Is_Used
              (Member_Index => Member_Index,
@@ -178,7 +176,7 @@ package body Ships.UI.Crew.Inventory is
               (Table => Inventory_Table,
                Tooltip => "The item is used by the crew member",
                Command =>
-                 "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
+                 "ShowInventoryItemInfo " &
                  Positive'Image(Inventory_Indexes(I)),
                Checked => True, Column => 4);
          else
@@ -186,7 +184,7 @@ package body Ships.UI.Crew.Inventory is
               (Table => Inventory_Table,
                Tooltip => "The item isn't used by the crew member",
                Command =>
-                 "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
+                 "ShowInventoryItemInfo " &
                  Positive'Image(Inventory_Indexes(I)),
                Checked => False, Column => 4);
          end if;
@@ -200,8 +198,7 @@ package body Ships.UI.Crew.Inventory is
                    .Amount),
             Tooltip => "The amount of the item owned by the crew member",
             Command =>
-              "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(Inventory_Indexes(I)),
+              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
             Column => 5);
          Add_Button
            (Table => Inventory_Table,
@@ -222,8 +219,7 @@ package body Ships.UI.Crew.Inventory is
               " kg",
             Tooltip => "The total weight of the items",
             Command =>
-              "ShowInventoryItemInfo " & CArgv.Arg(Argv => Argv, N => 1) &
-              Positive'Image(Inventory_Indexes(I)),
+              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
             Column => 6, New_Row => True);
          exit Load_Inventory_Loop when Inventory_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -1102,9 +1098,7 @@ package body Ships.UI.Crew.Inventory is
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowInventoryItemInfo memberindex itemindex
-   -- Memberindex is the index of the crew member in which inventory item
-   -- information will be show, itemindex is the index of the item which will
-   -- be show
+   -- itemindex is the index of the item which will be show
    -- SOURCE
    function Show_Inventory_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -1116,20 +1110,19 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Local_Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+
       Used: constant Boolean :=
         Item_Is_Used
-          (Member_Index => Local_Member_Index,
-           Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+          (Member_Index => Member_Index,
+           Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       Selection: Boolean := False;
    begin
       Check_Selection_Loop :
       for I in
         Inventory_Container.First_Index
-          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) ..
+          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
           Inventory_Container.Last_Index
-            (Container => Player_Ship.Crew(Local_Member_Index).Inventory) loop
+            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
          if Tcl_GetVar
              (interp => Interp,
               varName =>
@@ -1189,13 +1182,13 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
       end if;
       Show_Inventory_Item_Info
-        (Parent => ".memberdialog", Member_Index => Local_Member_Index,
-         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+        (Parent => ".memberdialog", Member_Index => Member_Index,
+         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
          Button_1 =>
            (Text => To_Unbounded_String(Source => "Move"),
             Command =>
               To_Unbounded_String
-                (Source => "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 2)),
+                (Source => "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1)),
             Icon => To_Unbounded_String(Source => "cargoicon"),
             Tooltip =>
               To_Unbounded_String
@@ -1206,7 +1199,7 @@ package body Ships.UI.Crew.Inventory is
                else To_Unbounded_String(Source => "Equip")),
             Command =>
               To_Unbounded_String
-                (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 2)),
+                (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1)),
             Icon =>
               (if Used then To_Unbounded_String(Source => "unequipicon")
                else To_Unbounded_String(Source => "equipicon")),
