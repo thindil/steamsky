@@ -275,10 +275,10 @@ package body Knowledge.Events is
    -- FUNCTION
    -- Sort the known events list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -286,21 +286,21 @@ package body Knowledge.Events is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Events_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Events_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Event_Data is record
-         EType: Events_Types;
+         E_Type: Events_Types;
          Distance: Natural;
          Details: Unbounded_String;
          Id: Positive;
@@ -309,10 +309,10 @@ package body Knowledge.Events is
       Local_Events: Events_Array(1 .. Positive(Events_List.Length));
       function "<"(Left, Right: Local_Event_Data) return Boolean is
       begin
-         if Events_Sort_Order = TYPEASC and then Left.EType < Right.EType then
+         if Events_Sort_Order = TYPEASC and then Left.E_Type < Right.E_Type then
             return True;
          end if;
-         if Events_Sort_Order = TYPEDESC and then Left.EType > Right.EType then
+         if Events_Sort_Order = TYPEDESC and then Left.E_Type > Right.E_Type then
             return True;
          end if;
          if Events_Sort_Order = DISTANCEASC
@@ -362,11 +362,12 @@ package body Knowledge.Events is
       if Events_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Events_Loop:
       for I in Events_List.Iterate loop
-         Local_Events(Events_Container.To_Index(I)) :=
-           (EType => Events_List(I).E_Type,
+         Local_Events(Events_Container.To_Index(Position => I)) :=
+           (E_Type => Events_List(I).E_Type,
             Distance =>
-              Count_Distance(Events_List(I).Sky_X, Events_List(I).Sky_Y),
+              Count_Distance(Destination_X => Events_List(I).Sky_X, Destination_Y => Events_List(I).Sky_Y),
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
@@ -401,22 +402,23 @@ package body Knowledge.Events is
                              Proto_Ships_List(Events_List(I).Ship_Index)
                                .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
-            Id => Events_Container.To_Index(I));
-      end loop;
-      Sort_Events(Local_Events);
+            Id => Events_Container.To_Index(Position => I));
+      end loop Fill_Local_Events_Loop;
+      Sort_Events(Container => Local_Events);
       Events_Indexes.Clear;
+      Fill_Events_Indexes_Loop:
       for Event of Local_Events loop
-         Events_Indexes.Append(Event.Id);
-      end loop;
+         Events_Indexes.Append(New_Item => Event.Id);
+      end loop Fill_Events_Indexes_Loop;
       Update_Events_List;
       return TCL_OK;
    end Sort_Events_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowEventMenu", Show_Events_Menu_Command'Access);
-      Add_Command("ShowEventInfo", Show_Event_Info_Command'Access);
-      Add_Command("ShowEvents", Show_Events_Command'Access);
+      Add_Command(Name => "ShowEventMenu", Ada_Command => Show_Events_Menu_Command'Access);
+      Add_Command(Name => "ShowEventInfo", Ada_Command => Show_Event_Info_Command'Access);
+      Add_Command(Name => "ShowEvents", Ada_Command => Show_Events_Command'Access);
       Add_Command("SortKnownEvents", Sort_Events_Command'Access);
    end Add_Commands;
 
