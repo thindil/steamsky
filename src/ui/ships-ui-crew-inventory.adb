@@ -742,9 +742,8 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetUseItem memberindex itemindex
-   -- Memberindex is the index of the crew member in which inventory item will
-   -- be set, itemindex is the index of the item which will be set
+   -- SetUseItem itemindex
+   -- itemindex is the index of the item which will be set
    -- SOURCE
    function Set_Use_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -758,24 +757,21 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      Local_Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Type: constant Bounded_String :=
         Objects_Container.Element
           (Container => Items_List,
            Index =>
              Inventory_Container.Element
-               (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+               (Container => Player_Ship.Crew(Member_Index).Inventory,
                 Index => Item_Index)
                .Proto_Index)
           .I_Type;
    begin
       if Item_Is_Used
-          (Member_Index => Local_Member_Index, Item_Index => Item_Index) then
-         Take_Off_Item
-           (Member_Index => Local_Member_Index, Item_Index => Item_Index);
+          (Member_Index => Member_Index, Item_Index => Item_Index) then
+         Take_Off_Item(Member_Index => Member_Index, Item_Index => Item_Index);
          return
            Sort_Crew_Inventory_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => 2,
@@ -786,58 +782,55 @@ package body Ships.UI.Crew.Inventory is
              (Container => Items_List,
               Index =>
                 Inventory_Container.Element
-                  (Container => Player_Ship.Crew(Local_Member_Index).Inventory,
+                  (Container => Player_Ship.Crew(Member_Index).Inventory,
                    Index => Item_Index)
                   .Proto_Index)
              .Value
              (4) =
            2 and
-           Player_Ship.Crew(Local_Member_Index).Equipment(SHIELD) /= 0 then
+           Player_Ship.Crew(Member_Index).Equipment(SHIELD) /= 0 then
             Show_Message
               (Text =>
-                 To_String
-                   (Source => Player_Ship.Crew(Local_Member_Index).Name) &
+                 To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                  " can't use this weapon because have shield equiped. Take off shield first.",
                Title => "Shield in use");
             return TCL_OK;
          end if;
-         Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(WEAPON) := Item_Index;
       elsif Item_Type = Shield_Type then
-         if Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON) > 0 then
+         if Player_Ship.Crew(Member_Index).Equipment(WEAPON) > 0 then
             if Objects_Container.Element
                 (Container => Items_List,
                  Index =>
                    Inventory_Container.Element
-                     (Container =>
-                        Player_Ship.Crew(Local_Member_Index).Inventory,
+                     (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index =>
-                        Player_Ship.Crew(Local_Member_Index).Equipment(WEAPON))
+                        Player_Ship.Crew(Member_Index).Equipment(WEAPON))
                      .Proto_Index)
                 .Value
                 (4) =
               2 then
                Show_Message
                  (Text =>
-                    To_String
-                      (Source => Player_Ship.Crew(Local_Member_Index).Name) &
+                    To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
                   Title => "Two handed weapon in use");
                return TCL_OK;
             end if;
          end if;
-         Player_Ship.Crew(Local_Member_Index).Equipment(SHIELD) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(SHIELD) := Item_Index;
       elsif Item_Type = Head_Armor then
-         Player_Ship.Crew(Local_Member_Index).Equipment(HELMET) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(HELMET) := Item_Index;
       elsif Item_Type = Chest_Armor then
-         Player_Ship.Crew(Local_Member_Index).Equipment(TORSO) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(TORSO) := Item_Index;
       elsif Item_Type = Arms_Armor then
-         Player_Ship.Crew(Local_Member_Index).Equipment(ARMS) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(ARMS) := Item_Index;
       elsif Item_Type = Legs_Armor then
-         Player_Ship.Crew(Local_Member_Index).Equipment(LEGS) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(LEGS) := Item_Index;
       elsif TinyString_Indefinite_Container.Find_Index
           (Container => Tools_List, Item => Item_Type) /=
         TinyString_Indefinite_Container.No_Index then
-         Player_Ship.Crew(Local_Member_Index).Equipment(TOOL) := Item_Index;
+         Player_Ship.Crew(Member_Index).Equipment(TOOL) := Item_Index;
       end if;
       return
         Sort_Crew_Inventory_Command
@@ -1223,9 +1216,7 @@ package body Ships.UI.Crew.Inventory is
                else To_Unbounded_String(Source => "Equip")),
             Command =>
               To_Unbounded_String
-                (Source =>
-                   "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-                   CArgv.Arg(Argv => Argv, N => 2)),
+                (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 2)),
             Icon =>
               (if Used then To_Unbounded_String(Source => "unequipicon")
                else To_Unbounded_String(Source => "equipicon")),
