@@ -1191,10 +1191,10 @@ package body Ships.UI.Crew.Inventory is
          begin
             Add_Button
               (Name => ".equip", Label => "Equip items",
-               Command => "ToggleItems");
+               Command => "ToggleInventoryItems equip");
             Add_Button
               (Name => ".unequip", Label => "Unequip items",
-               Command => "ToggleItems");
+               Command => "ToggleInventoryItems unequip");
             Add_Button
               (Name => ".move", Label => "Move items to the ship's cargo",
                Command => "MoveItems");
@@ -1281,6 +1281,56 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Toggle_Inventory_Item_Command;
 
+   -- ****o* SUCI/SUCI.Toggle_Items_Command
+   -- FUNCTION
+   -- Equip or unequip the selected items
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleItems action
+   -- Action is the action to do with the selected items. Possible values are
+   -- equip and unequip
+   -- SOURCE
+   function Toggle_Inventory_Items_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_Inventory_Items_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+   begin
+      Toogle_Items_Loop :
+      for I in
+        Inventory_Container.First_Index
+          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
+          Inventory_Container.Last_Index
+            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "invindex" &
+                Trim
+                  (Source => Inventory_Container.Extended_Index'Image(I),
+                   Side => Left)) =
+           "1" then
+            if CArgv.Arg(Argv => Argv, N => 1) = "equip" then
+               null;
+            else
+               null;
+            end if;
+         end if;
+      end loop Toogle_Items_Loop;
+      return TCL_OK;
+   end Toggle_Inventory_Items_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -1306,6 +1356,9 @@ package body Ships.UI.Crew.Inventory is
       Add_Command
         (Name => "ToggleInventoryItem",
          Ada_Command => Toggle_Inventory_Item_Command'Access);
+      Add_Command
+        (Name => "ToggleInventoryItems",
+         Ada_Command => Toggle_Inventory_Items_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Crew.Inventory;
