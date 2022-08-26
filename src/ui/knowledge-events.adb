@@ -493,24 +493,24 @@ package body Knowledge.Events is
                      Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when DISEASE =>
                   Add_Button
-                    (Events_Table, "Disease in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Disease in base",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when ENEMYPATROL =>
                   Add_Button
-                    (Events_Table, "Enemy patrol",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Enemy patrol",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when DOUBLEPRICE =>
                   Add_Button
-                    (Events_Table, "Double price in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Double price in base",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when TRADER =>
                   Add_Button
-                    (Events_Table, "Friendly trader spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+                    (Table => Events_Table, Text => "Friendly trader spotted",
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Row - 1), Column => 1);
                when FRIENDLYSHIP =>
                   Add_Button
                     (Events_Table, "Friendly ship spotted",
