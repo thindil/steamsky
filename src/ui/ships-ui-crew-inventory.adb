@@ -1193,6 +1193,9 @@ package body Ships.UI.Crew.Inventory is
               (Name => ".equip", Label => "Equip items",
                Command => "ToggleItems");
             Add_Button
+              (Name => ".unequip", Label => "Unequip items",
+               Command => "ToggleItems");
+            Add_Button
               (Name => ".move", Label => "Move items to the ship's cargo",
                Command => "MoveItems");
             Add_Button(Name => ".close", Label => "Close", Command => "");
