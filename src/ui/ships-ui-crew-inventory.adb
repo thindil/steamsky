@@ -878,7 +878,8 @@ package body Ships.UI.Crew.Inventory is
           (pathName => Item_Dialog & ".movebutton",
            options =>
              "-text Move -command {MoveItem " &
-             CArgv.Arg(Argv => Argv, N => 1) & "}");
+             CArgv.Arg(Argv => Argv, N => 1) &
+             "} -image cargoicon -style Dialog.TButton");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
