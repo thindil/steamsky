@@ -72,7 +72,8 @@ package body Knowledge.Missions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Mission_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missionslistmenu",
@@ -152,7 +153,8 @@ package body Knowledge.Missions is
       pragma Unreferenced(Client_Data);
    begin
       if Argc = 2 then
-         Update_Missions_List(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+         Update_Missions_List
+           (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       else
          Update_Missions_List;
       end if;
@@ -243,7 +245,9 @@ package body Knowledge.Missions is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Missions_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Missions_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
@@ -337,13 +341,14 @@ package body Knowledge.Missions is
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Missions_Loop:
+      Fill_Local_Missions_Loop :
       for I in Accepted_Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(Position => I)) :=
            (M_Type => Accepted_Missions(I).M_Type,
             Distance =>
               Count_Distance
-                (Destination_X => Accepted_Missions(I).Target_X, Destination_Y => Accepted_Missions(I).Target_Y),
+                (Destination_X => Accepted_Missions(I).Target_X,
+                 Destination_Y => Accepted_Missions(I).Target_Y),
             Details =>
               (case Accepted_Missions(I).M_Type is
                  when DELIVER =>
@@ -364,8 +369,9 @@ package body Knowledge.Missions is
                           .Name),
                  when PATROL =>
                    To_Unbounded_String
-                     (Source => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
+                     (Source =>
+                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when DESTROY =>
                    To_Unbounded_String
                      (Source =>
@@ -375,8 +381,9 @@ package body Knowledge.Missions is
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
-                     (Source => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
+                     (Source =>
+                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
                    Tiny_String.To_String
@@ -393,7 +400,7 @@ package body Knowledge.Missions is
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
       Missions_Indexes.Clear;
-      Fill_Missions_Indexes_Loop:
+      Fill_Missions_Indexes_Loop :
       for Event of Local_Missions loop
          Missions_Indexes.Append(New_Item => Event.Id);
       end loop Fill_Missions_Indexes_Loop;
@@ -403,9 +410,14 @@ package body Knowledge.Missions is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowMissionMenu", Ada_Command => Show_Missions_Menu_Command'Access);
-      Add_Command(Name => "ShowMissions", Ada_Command => Show_Missions_Command'Access);
-      Add_Command(Name => "SortAccepted_Missions", Ada_Command => Sort_Missions_Command'Access);
+      Add_Command
+        (Name => "ShowMissionMenu",
+         Ada_Command => Show_Missions_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowMissions", Ada_Command => Show_Missions_Command'Access);
+      Add_Command
+        (Name => "SortAccepted_Missions",
+         Ada_Command => Sort_Missions_Command'Access);
    end Add_Commands;
 
    procedure Update_Missions_List(Page: Positive := 1) is
@@ -424,40 +436,50 @@ package body Knowledge.Missions is
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
    begin
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame), Separators => " ");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       if Missions_Table.Row > 1 then
          Clear_Table(Table => Missions_Table);
       end if;
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
       if Accepted_Missions.Length = 0 then
          Label :=
            Create
              (pathName => Missions_Frame & ".nomissions",
-              options => "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
+              options =>
+                "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
          Bind
            (Widgt => Missions_Canvas, Sequence => "<Configure>",
-            Script => "{" & Label & " configure -wraplength [expr [winfo width " &
-            Missions_Canvas & "] - 15]}");
+            Script =>
+              "{" & Label & " configure -wraplength [expr [winfo width " &
+              Missions_Canvas & "] - 15]}");
       else
          Unbind(Widgt => Missions_Canvas, Sequence => "<Configure>");
          Row := 2;
          Missions_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Missions_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
-               3 => To_Unbounded_String(Source => "Details"),
-               4 => To_Unbounded_String(Source => "Time limit"),
-               5 => To_Unbounded_String(Source => "Base reward")),
-              Scrollbar => Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Distance"),
+                 3 => To_Unbounded_String(Source => "Details"),
+                 4 => To_Unbounded_String(Source => "Time limit"),
+                 5 => To_Unbounded_String(Source => "Base reward")),
+              Scrollbar =>
+                Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
               Tooltip => "Press mouse button to sort the missions.");
          if Missions_Indexes.Length /= Accepted_Missions.Length then
             Missions_Indexes.Clear;
-            Fill_Missions_Indexes_Loop:
+            Fill_Missions_Indexes_Loop :
             for I in Accepted_Missions.Iterate loop
-               Missions_Indexes.Append(New_Item => Mission_Container.To_Index(Position => I));
+               Missions_Indexes.Append
+                 (New_Item => Mission_Container.To_Index(Position => I));
             end loop Fill_Missions_Indexes_Loop;
          end if;
          Rows := 0;
