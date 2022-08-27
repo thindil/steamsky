@@ -52,10 +52,10 @@ package body Knowledge.Missions is
    -- FUNCTION
    -- Show the menu with available the selected mission options
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -63,21 +63,21 @@ package body Knowledge.Missions is
    -- MissionIndex is the index of the mission's menu to show
    -- SOURCE
    function Show_Missions_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Missions_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Mission_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missionslistmenu",
            Title =>
-             (case Accepted_Missions(MissionIndex).M_Type is
+             (case Accepted_Missions(Mission_Index).M_Type is
                 when DELIVER => "Deliver item",
                 when DESTROY => "Destroy enemy", when PATROL => "Patrol area",
                 when EXPLORE => "Explore area",
@@ -112,15 +112,15 @@ package body Knowledge.Missions is
         (Name => ".show", Label => "Show the mission on map",
          Command =>
            "ShowOnMap" &
-           Map_X_Range'Image(Accepted_Missions(MissionIndex).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(MissionIndex).Target_Y));
+           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
+           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y));
       Add_Button
         (Name => ".destination",
          Label => "Set the mission as destination for the ship",
          Command =>
            "SetDestination2 " &
-           Map_X_Range'Image(Accepted_Missions(MissionIndex).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(MissionIndex).Target_Y));
+           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
+           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y));
       Add_Button(Name => ".close", Label => "Close", Command => "");
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
@@ -130,10 +130,10 @@ package body Knowledge.Missions is
    -- FUNCTION
    -- Show the list of known missions to the player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -141,30 +141,30 @@ package body Knowledge.Missions is
    -- Page parameter is a page number which will be show
    -- SOURCE
    function Show_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
    begin
       if Argc = 2 then
-         Update_Missions_List(Positive'Value(CArgv.Arg(Argv, 1)));
+         Update_Missions_List(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       else
          Update_Missions_List;
       end if;
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Missions_Command;
 
-   -- ****iv* KMissions/KMissions.MissionsTable
+   -- ****iv* KMissions/KMissions.Missions_Table
    -- FUNCTION
    -- Table with info about the known Missions
    -- SOURCE
-   MissionsTable: Table_Widget (5);
+   Missions_Table: Table_Widget (Amount => 5);
    -- ****
 
    -- ****it* KMissions/KMissions.Missions_Sort_Orders
@@ -220,10 +220,10 @@ package body Knowledge.Missions is
    -- FUNCTION
    -- Sort the accepted missions list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -231,21 +231,21 @@ package body Knowledge.Missions is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Missions_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Mission_Data is record
-         MType: Missions_Types;
+         M_Type: Missions_Types;
          Distance: Natural;
          Details: Unbounded_String;
          Time: Natural;
@@ -257,11 +257,11 @@ package body Knowledge.Missions is
       function "<"(Left, Right: Local_Mission_Data) return Boolean is
       begin
          if Missions_Sort_Order = TYPEASC
-           and then Left.MType < Right.MType then
+           and then Left.M_Type < Right.M_Type then
             return True;
          end if;
          if Missions_Sort_Order = TYPEDESC
-           and then Left.MType > Right.MType then
+           and then Left.M_Type > Right.M_Type then
             return True;
          end if;
          if Missions_Sort_Order = DISTANCEASC
@@ -337,9 +337,10 @@ package body Knowledge.Missions is
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Missions_Loop:
       for I in Accepted_Missions.Iterate loop
-         Local_Missions(Mission_Container.To_Index(I)) :=
-           (MType => Accepted_Missions(I).M_Type,
+         Local_Missions(Mission_Container.To_Index(Position => I)) :=
+           (M_Type => Accepted_Missions(I).M_Type,
             Distance =>
               Count_Distance
                 (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y),
@@ -389,7 +390,7 @@ package body Knowledge.Missions is
             Time => Accepted_Missions(I).Time,
             Reward => Accepted_Missions(I).Reward,
             Id => Mission_Container.To_Index(I));
-      end loop;
+      end loop Fill_Local_Missions_Loop;
       Sort_Missions(Local_Missions);
       Missions_Indexes.Clear;
       for Event of Local_Missions loop
@@ -424,8 +425,8 @@ package body Knowledge.Missions is
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MissionsFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      if MissionsTable.Row > 1 then
-         Clear_Table(MissionsTable);
+      if Missions_Table.Row > 1 then
+         Clear_Table(Missions_Table);
       end if;
       Delete_Widgets(1, Rows - 1, MissionsFrame);
       if Accepted_Missions.Length = 0 then
@@ -441,7 +442,7 @@ package body Knowledge.Missions is
       else
          Unbind(MissionsCanvas, "<Configure>");
          Row := 2;
-         MissionsTable :=
+         Missions_Table :=
            Create_Table
              (Widget_Image(MissionsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
@@ -465,13 +466,13 @@ package body Knowledge.Missions is
                goto End_Of_Loop;
             end if;
             Add_Button
-              (MissionsTable, Get_Mission_Type(Accepted_Missions(I).M_Type),
+              (Missions_Table, Get_Mission_Type(Accepted_Missions(I).M_Type),
                "Show available mission's options",
                "ShowMissionMenu" & Positive'Image(Row - 1), 1);
             case Accepted_Missions(I).M_Type is
                when DELIVER =>
                   Add_Button
-                    (MissionsTable,
+                    (Missions_Table,
                      To_String
                        (Objects_Container.Element
                           (Container => Items_List,
@@ -489,14 +490,14 @@ package body Knowledge.Missions is
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when PATROL =>
                   Add_Button
-                    (MissionsTable,
+                    (Missions_Table,
                      "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when DESTROY =>
                   Add_Button
-                    (MissionsTable,
+                    (Missions_Table,
                      To_String
                        (Proto_Ships_List(Accepted_Missions(I).Ship_Index)
                           .Name),
@@ -504,14 +505,14 @@ package body Knowledge.Missions is
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when EXPLORE =>
                   Add_Button
-                    (MissionsTable,
+                    (Missions_Table,
                      "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when PASSENGER =>
                   Add_Button
-                    (MissionsTable,
+                    (Missions_Table,
                      "To " &
                      Tiny_String.To_String
                        (Sky_Bases
@@ -524,7 +525,7 @@ package body Knowledge.Missions is
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
             end case;
             Add_Button
-              (MissionsTable,
+              (Missions_Table,
                Natural'Image
                  (Count_Distance
                     (Accepted_Missions(I).Target_X,
@@ -534,11 +535,11 @@ package body Knowledge.Missions is
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date(Accepted_Missions(I).Time, Mission_Time);
             Add_Button
-              (MissionsTable, To_String(Mission_Time),
+              (Missions_Table, To_String(Mission_Time),
                "The time limit for finish and return the mission",
                "ShowMissionMenu" & Positive'Image(Row - 1), 4);
             Add_Button
-              (MissionsTable,
+              (Missions_Table,
                Natural'Image
                  (Natural
                     (Float(Accepted_Missions(I).Reward) *
@@ -556,18 +557,18 @@ package body Knowledge.Missions is
          if Page > 1 then
             if Rows < Game_Settings.Lists_Limit then
                Add_Pagination
-                 (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
+                 (Missions_Table, "ShowMissions" & Positive'Image(Page - 1),
                   "");
             else
                Add_Pagination
-                 (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
+                 (Missions_Table, "ShowMissions" & Positive'Image(Page - 1),
                   "ShowMissions" & Positive'Image(Page + 1));
             end if;
          elsif Rows > Game_Settings.Lists_Limit - 1 then
             Add_Pagination
-              (MissionsTable, "", "ShowMissions" & Positive'Image(Page + 1));
+              (Missions_Table, "", "ShowMissions" & Positive'Image(Page + 1));
          end if;
-         Update_Table(MissionsTable);
+         Update_Table(Missions_Table);
       end if;
       Tcl_Eval(Get_Context, "update");
       configure
