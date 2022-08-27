@@ -916,7 +916,7 @@ package body Ships.UI.Crew.Inventory is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-text Cancel -command {CloseDialog " & Item_Dialog &
-             " .memberdialog;focus .memberdialog.button}");
+             " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options => "-column 1 -row 2 -padx {0 5} -pady {0 5}");
