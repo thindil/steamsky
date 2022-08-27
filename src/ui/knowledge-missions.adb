@@ -445,19 +445,20 @@ package body Knowledge.Missions is
          Row := 2;
          Missions_Table :=
            Create_Table
-             (Widget_Image(Missions_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-               To_Unbounded_String("Details"),
-               To_Unbounded_String("Time limit"),
-               To_Unbounded_String("Base reward")),
-              Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
-              "SortAccepted_Missions",
-              "Press mouse button to sort the missions.");
+             (Parent => Widget_Image(Win => Missions_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Distance"),
+               3 => To_Unbounded_String(Source => "Details"),
+               4 => To_Unbounded_String(Source => "Time limit"),
+               5 => To_Unbounded_String(Source => "Base reward")),
+              Scrollbar => Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
+              Command => "SortAccepted_Missions",
+              Tooltip => "Press mouse button to sort the missions.");
          if Missions_Indexes.Length /= Accepted_Missions.Length then
             Missions_Indexes.Clear;
+            Fill_Missions_Indexes_Loop:
             for I in Accepted_Missions.Iterate loop
-               Missions_Indexes.Append(Mission_Container.To_Index(I));
-            end loop;
+               Missions_Indexes.Append(New_Item => Mission_Container.To_Index(Position => I));
+            end loop Fill_Missions_Indexes_Loop;
          end if;
          Rows := 0;
          Load_Accepted_Missions_Loop :
