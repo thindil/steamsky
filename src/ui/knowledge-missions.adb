@@ -424,24 +424,24 @@ package body Knowledge.Missions is
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Missions_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       if Missions_Table.Row > 1 then
-         Clear_Table(Missions_Table);
+         Clear_Table(Table => Missions_Table);
       end if;
-      Delete_Widgets(1, Rows - 1, Missions_Frame);
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
       if Accepted_Missions.Length = 0 then
          Label :=
            Create
-             (Missions_Frame & ".nomissions",
-              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
+             (pathName => Missions_Frame & ".nomissions",
+              options => "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
          Bind
-           (Missions_Canvas, "<Configure>",
-            "{" & Label & " configure -wraplength [expr [winfo width " &
+           (Widgt => Missions_Canvas, Sequence => "<Configure>",
+            Script => "{" & Label & " configure -wraplength [expr [winfo width " &
             Missions_Canvas & "] - 15]}");
       else
-         Unbind(Missions_Canvas, "<Configure>");
+         Unbind(Widgt => Missions_Canvas, Sequence => "<Configure>");
          Row := 2;
          Missions_Table :=
            Create_Table
