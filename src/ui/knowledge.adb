@@ -170,7 +170,7 @@ package body Knowledge is
       -- Setting bases list
       Knowledge.Bases.Update_Bases_List;
       -- Setting accepted missions info
-      Knowledge.Missions.UpdateMissionsList;
+      Knowledge.Missions.Update_Missions_List;
       -- Setting the known events list
       Knowledge.Events.Update_Events_List;
       -- Setting the known stories list
@@ -371,7 +371,7 @@ package body Knowledge is
          Ada_Command => Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.Add_Commands;
       Knowledge.Events.Add_Commands;
-      Knowledge.Missions.AddCommands;
+      Knowledge.Missions.Add_Commands;
       Knowledge.Stories.AddCommands;
    end Add_Commands;
 

@@ -152,9 +152,9 @@ package body Knowledge.Missions is
       pragma Unreferenced(ClientData);
    begin
       if Argc = 2 then
-         UpdateMissionsList(Positive'Value(CArgv.Arg(Argv, 1)));
+         Update_Missions_List(Positive'Value(CArgv.Arg(Argv, 1)));
       else
-         UpdateMissionsList;
+         Update_Missions_List;
       end if;
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
@@ -395,18 +395,18 @@ package body Knowledge.Missions is
       for Event of Local_Missions loop
          Missions_Indexes.Append(Event.Id);
       end loop;
-      UpdateMissionsList;
+      Update_Missions_List;
       return TCL_OK;
    end Sort_Missions_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowMissionMenu", Show_Missions_Menu_Command'Access);
       Add_Command("ShowMissions", Show_Missions_Command'Access);
       Add_Command("SortAccepted_Missions", Sort_Missions_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
-   procedure UpdateMissionsList(Page: Positive := 1) is
+   procedure Update_Missions_List(Page: Positive := 1) is
       use Tiny_String;
 
       MissionsCanvas: constant Tk_Canvas :=
@@ -575,6 +575,6 @@ package body Knowledge.Missions is
          "-scrollregion [list " & BBox(MissionsCanvas, "all") & "]");
       Xview_Move_To(MissionsCanvas, "0.0");
       Yview_Move_To(MissionsCanvas, "0.0");
-   end UpdateMissionsList;
+   end Update_Missions_List;
 
 end Knowledge.Missions;
