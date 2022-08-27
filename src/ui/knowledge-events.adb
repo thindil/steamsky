@@ -507,7 +507,7 @@ package body Knowledge.Events is
                  2 => To_Unbounded_String(Source => "Distance"),
                  3 => To_Unbounded_String(Source => "Details")),
               Scrollbar =>
-                Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
+                Get_Widget(pathName => Main_Paned & ".knowledgeframe.events.scrolly"),
               Command => "SortKnownEvents",
               Tooltip => "Press mouse button to sort the events.");
          if Events_Indexes.Length /= Events_List.Length then
@@ -611,23 +611,23 @@ package body Knowledge.Events is
                      Column => 3, New_Row => True);
                when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                   Add_Button
-                    (Events_Table,
-                     To_String
-                       (Sky_Bases
+                    (Table => Events_Table,
+                     Text => To_String
+                       (Source => Sky_Bases
                           (Sky_Map
                              (Events_List(Event).Sky_X,
                               Events_List(Event).Sky_Y)
                              .Base_Index)
                           .Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Event), 3, True);
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Event), Column => 3, New_Row => True);
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Add_Button
-                    (Events_Table,
-                     To_String
-                       (Proto_Ships_List(Events_List(Event).Ship_Index).Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Event), 3, True);
+                    (Table => Events_Table,
+                     Text => To_String
+                       (Source => Proto_Ships_List(Events_List(Event).Ship_Index).Name),
+                     Tooltip => "Show available event's options",
+                     Command => "ShowEventMenu" & Positive'Image(Event), Column => 3, New_Row => True);
                when NONE | BASERECOVERY =>
                   null;
             end case;
@@ -639,7 +639,7 @@ package body Knowledge.Events is
          if Page > 1 then
             if Events_Table.Row < Game_Settings.Lists_Limit + 1 then
                Add_Pagination
-                 (Events_Table, "ShowEvents" & Positive'Image(Page - 1), "");
+                 (Table => Events_Table, Previous_Command => "ShowEvents" & Positive'Image(Page - 1), Next_Command => "");
             else
                Add_Pagination
                  (Events_Table, "ShowEvents" & Positive'Image(Page - 1),
