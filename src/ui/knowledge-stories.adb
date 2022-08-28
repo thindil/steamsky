@@ -66,14 +66,17 @@ package body Knowledge.Stories is
 
       Frame_Name: constant String :=
         Main_Paned & ".knowledgeframe.stories.canvas.frame";
-      Story_View: constant Tk_Text := Get_Widget(pathName => Frame_Name & ".view", Interp => Interp);
+      Story_View: constant Tk_Text :=
+        Get_Widget(pathName => Frame_Name & ".view", Interp => Interp);
       Story_Text: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       Story_Index: Positive;
       Stories_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".options.titles", Interp => Interp);
-      Button: Ttk_Button := Get_Widget(pathName => Frame_Name & ".options.show", Interp => Interp);
+        Get_Widget
+          (pathName => Frame_Name & ".options.titles", Interp => Interp);
+      Button: Ttk_Button :=
+        Get_Widget(pathName => Frame_Name & ".options.show", Interp => Interp);
       Rows: Positive := 1;
       Line_Width: constant Positive :=
         (Positive'Value(Winfo_Get(Widgt => Stories_Box, Info => "reqwidth")) +
@@ -81,7 +84,9 @@ package body Knowledge.Stories is
         Positive'Value(Measure(Font => "InterfaceFont", Text => "{ }"));
    begin
       Story_Index := Natural'Value(Current(ComboBox => Stories_Box)) + 1;
-      configure(Widgt => Story_View, options => "-state normal -width" & Positive'Image(Line_Width));
+      configure
+        (Widgt => Story_View,
+         options => "-state normal -width" & Positive'Image(Line_Width));
       Delete(TextWidget => Story_View, StartIndex => "1.0", Indexes => "end");
       Story_Steps_Info_Loop :
       for StepText of Finished_Stories(Story_Index).Steps_Texts loop
@@ -91,7 +96,9 @@ package body Knowledge.Stories is
       if Natural(Finished_Stories(Story_Index).Steps_Texts.Length) <
         Finished_Stories(Story_Index).Steps_Amount then
          Append(Source => Story_Text, New_Item => Get_Current_Story_Text & LF);
-         Rows := Rows + (Length(Source => Get_Current_Story_Text & LF) / Line_Width) + 1;
+         Rows :=
+           Rows +
+           (Length(Source => Get_Current_Story_Text & LF) / Line_Width) + 1;
          if Current_Story.Data /= Null_Unbounded_String then
             Step :=
               (if Current_Story.Current_Step = 0 then
@@ -100,20 +107,24 @@ package body Knowledge.Stories is
                  Stories_List(Current_Story.Index).Steps
                    (Current_Story.Current_Step)
                else Stories_List(Current_Story.Index).Final_Step);
-            Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
+            Create
+              (S => Tokens, From => To_String(Source => Current_Story.Data),
+               Separators => ";");
             case Step.Finish_Condition is
                when ASKINBASE =>
                   if Slice_Count(S => Tokens) < 2 then
                      Append
                        (Source => Story_Text,
-                        New_Item => "You must travel to base " & Current_Story.Data &
-                        " at X:");
+                        New_Item =>
+                          "You must travel to base " & Current_Story.Data &
+                          " at X:");
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
                         if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
                           To_String(Source => Current_Story.Data) then
                            Append
-                             (Source => Story_Text, New_Item => Positive'Image(Sky_Bases(I).Sky_X));
+                             (Source => Story_Text,
+                              New_Item => Positive'Image(Sky_Bases(I).Sky_X));
                            Append(Story_Text, " Y:");
                            Append
                              (Story_Text, Positive'Image(Sky_Bases(I).Sky_Y));
