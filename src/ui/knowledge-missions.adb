@@ -563,14 +563,14 @@ package body Knowledge.Missions is
                Tooltip => "The time limit for finish and return the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 4);
             Add_Button
-              (Missions_Table,
-               Natural'Image
+              (Table => Missions_Table,
+               Text => Natural'Image
                  (Natural
                     (Float(Accepted_Missions(I).Reward) *
                      Float(Accepted_Missions(I).Multiplier))) &
-               " " & To_String(Money_Name),
-               "The base money reward for the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
+               " " & To_String(Source => Money_Name),
+               Tooltip => "The base money reward for the mission",
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 5, New_Row => True);
             Row := Row + 1;
             Rows := Rows + 1;
             exit Load_Accepted_Missions_Loop when Rows =
@@ -581,20 +581,20 @@ package body Knowledge.Missions is
          if Page > 1 then
             if Rows < Game_Settings.Lists_Limit then
                Add_Pagination
-                 (Missions_Table, "ShowMissions" & Positive'Image(Page - 1),
-                  "");
+                 (Table => Missions_Table, Previous_Command => "ShowMissions" & Positive'Image(Page - 1),
+                  Next_Command => "");
             else
                Add_Pagination
-                 (Missions_Table, "ShowMissions" & Positive'Image(Page - 1),
-                  "ShowMissions" & Positive'Image(Page + 1));
+                 (Table => Missions_Table, Previous_Command => "ShowMissions" & Positive'Image(Page - 1),
+                  Next_Command => "ShowMissions" & Positive'Image(Page + 1));
             end if;
          elsif Rows > Game_Settings.Lists_Limit - 1 then
             Add_Pagination
-              (Missions_Table, "", "ShowMissions" & Positive'Image(Page + 1));
+              (Table => Missions_Table, Previous_Command => "", Next_Command => "ShowMissions" & Positive'Image(Page + 1));
          end if;
-         Update_Table(Missions_Table);
+         Update_Table(Table => Missions_Table);
       end if;
-      Tcl_Eval(Get_Context, "update");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Missions_Canvas,
          "-scrollregion [list " & BBox(Missions_Canvas, "all") & "]");
