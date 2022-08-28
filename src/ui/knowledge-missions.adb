@@ -549,19 +549,19 @@ package body Knowledge.Missions is
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
             end case;
             Add_Button
-              (Missions_Table,
-               Natural'Image
+              (Table => Missions_Table,
+               Text => Natural'Image
                  (Count_Distance
-                    (Accepted_Missions(I).Target_X,
-                     Accepted_Missions(I).Target_Y)),
-               "The distance to the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 2);
+                    (Destination_X => Accepted_Missions(I).Target_X,
+                     Destination_Y => Accepted_Missions(I).Target_Y)),
+               Tooltip => "The distance to the mission",
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 2);
             Mission_Time := Null_Unbounded_String;
-            Minutes_To_Date(Accepted_Missions(I).Time, Mission_Time);
+            Minutes_To_Date(Minutes => Accepted_Missions(I).Time, Info_Text => Mission_Time);
             Add_Button
-              (Missions_Table, To_String(Mission_Time),
-               "The time limit for finish and return the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 4);
+              (Table => Missions_Table, Text => To_String(Source => Mission_Time),
+               Tooltip => "The time limit for finish and return the mission",
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 4);
             Add_Button
               (Missions_Table,
                Natural'Image
