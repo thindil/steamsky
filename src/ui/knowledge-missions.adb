@@ -471,7 +471,9 @@ package body Knowledge.Missions is
                  4 => To_Unbounded_String(Source => "Time limit"),
                  5 => To_Unbounded_String(Source => "Base reward")),
               Scrollbar =>
-                Get_Widget(pathName => ".gameframe.paned.knowledgeframe.missions.scrolly"),
+                Get_Widget
+                  (pathName =>
+                     ".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
               Tooltip => "Press mouse button to sort the missions.");
          if Missions_Indexes.Length /= Accepted_Missions.Length then
@@ -490,87 +492,111 @@ package body Knowledge.Missions is
                goto End_Of_Loop;
             end if;
             Add_Button
-              (Table => Missions_Table, Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
+              (Table => Missions_Table,
+               Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
                Tooltip => "Show available mission's options",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 1);
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+               Column => 1);
             case Accepted_Missions(I).M_Type is
                when DELIVER =>
                   Add_Button
                     (Table => Missions_Table,
-                     Text => To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List,
-                           Index => Accepted_Missions(I).Item_Index)
-                          .Name) &
-                     " to " &
-                     Tiny_String.To_String
-                       (Source => Sky_Bases
-                          (Sky_Map
-                             (Accepted_Missions(I).Target_X,
-                              Accepted_Missions(I).Target_Y)
-                             .Base_Index)
-                          .Name),
+                     Text =>
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index => Accepted_Missions(I).Item_Index)
+                              .Name) &
+                       " to " &
+                       Tiny_String.To_String
+                         (Source =>
+                            Sky_Bases
+                              (Sky_Map
+                                 (Accepted_Missions(I).Target_X,
+                                  Accepted_Missions(I).Target_Y)
+                                 .Base_Index)
+                              .Name),
                      Tooltip => "Show available mission's options",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+                     Column => 3);
                when PATROL =>
                   Add_Button
                     (Table => Missions_Table,
-                     Text => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                     " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
+                     Text =>
+                       "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show available mission's options",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+                     Column => 3);
                when DESTROY =>
                   Add_Button
                     (Table => Missions_Table,
-                     Text => To_String
-                       (Source => Proto_Ships_List(Accepted_Missions(I).Ship_Index)
-                          .Name),
+                     Text =>
+                       To_String
+                         (Source =>
+                            Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                              .Name),
                      Tooltip => "Show available mission's options",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+                     Column => 3);
                when EXPLORE =>
                   Add_Button
                     (Table => Missions_Table,
-                     Text => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                     " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
+                     Text =>
+                       "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show available mission's options",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+                     Column => 3);
                when PASSENGER =>
                   Add_Button
                     (Table => Missions_Table,
-                     Text => "To " &
-                     Tiny_String.To_String
-                       (Source => Sky_Bases
-                          (Sky_Map
-                             (Accepted_Missions(I).Target_X,
-                              Accepted_Missions(I).Target_Y)
-                             .Base_Index)
-                          .Name),
+                     Text =>
+                       "To " &
+                       Tiny_String.To_String
+                         (Source =>
+                            Sky_Bases
+                              (Sky_Map
+                                 (Accepted_Missions(I).Target_X,
+                                  Accepted_Missions(I).Target_Y)
+                                 .Base_Index)
+                              .Name),
                      Tooltip => "Show available mission's options",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+                     Column => 3);
             end case;
             Add_Button
               (Table => Missions_Table,
-               Text => Natural'Image
-                 (Count_Distance
-                    (Destination_X => Accepted_Missions(I).Target_X,
-                     Destination_Y => Accepted_Missions(I).Target_Y)),
+               Text =>
+                 Natural'Image
+                   (Count_Distance
+                      (Destination_X => Accepted_Missions(I).Target_X,
+                       Destination_Y => Accepted_Missions(I).Target_Y)),
                Tooltip => "The distance to the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 2);
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+               Column => 2);
             Mission_Time := Null_Unbounded_String;
-            Minutes_To_Date(Minutes => Accepted_Missions(I).Time, Info_Text => Mission_Time);
-            Add_Button
-              (Table => Missions_Table, Text => To_String(Source => Mission_Time),
-               Tooltip => "The time limit for finish and return the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 4);
+            Minutes_To_Date
+              (Minutes => Accepted_Missions(I).Time,
+               Info_Text => Mission_Time);
             Add_Button
               (Table => Missions_Table,
-               Text => Natural'Image
-                 (Natural
-                    (Float(Accepted_Missions(I).Reward) *
-                     Float(Accepted_Missions(I).Multiplier))) &
-               " " & To_String(Source => Money_Name),
+               Text => To_String(Source => Mission_Time),
+               Tooltip => "The time limit for finish and return the mission",
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+               Column => 4);
+            Add_Button
+              (Table => Missions_Table,
+               Text =>
+                 Natural'Image
+                   (Natural
+                      (Float(Accepted_Missions(I).Reward) *
+                       Float(Accepted_Missions(I).Multiplier))) &
+                 " " & To_String(Source => Money_Name),
                Tooltip => "The base money reward for the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 5, New_Row => True);
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+               Column => 5, New_Row => True);
             Row := Row + 1;
             Rows := Rows + 1;
             exit Load_Accepted_Missions_Loop when Rows =
@@ -581,25 +607,32 @@ package body Knowledge.Missions is
          if Page > 1 then
             if Rows < Game_Settings.Lists_Limit then
                Add_Pagination
-                 (Table => Missions_Table, Previous_Command => "ShowMissions" & Positive'Image(Page - 1),
+                 (Table => Missions_Table,
+                  Previous_Command =>
+                    "ShowMissions" & Positive'Image(Page - 1),
                   Next_Command => "");
             else
                Add_Pagination
-                 (Table => Missions_Table, Previous_Command => "ShowMissions" & Positive'Image(Page - 1),
+                 (Table => Missions_Table,
+                  Previous_Command =>
+                    "ShowMissions" & Positive'Image(Page - 1),
                   Next_Command => "ShowMissions" & Positive'Image(Page + 1));
             end if;
          elsif Rows > Game_Settings.Lists_Limit - 1 then
             Add_Pagination
-              (Table => Missions_Table, Previous_Command => "", Next_Command => "ShowMissions" & Positive'Image(Page + 1));
+              (Table => Missions_Table, Previous_Command => "",
+               Next_Command => "ShowMissions" & Positive'Image(Page + 1));
          end if;
          Update_Table(Table => Missions_Table);
       end if;
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Missions_Canvas,
-         "-scrollregion [list " & BBox(Missions_Canvas, "all") & "]");
-      Xview_Move_To(Missions_Canvas, "0.0");
-      Yview_Move_To(Missions_Canvas, "0.0");
+        (Widgt => Missions_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
    end Update_Missions_List;
 
 end Knowledge.Missions;
