@@ -43,55 +43,55 @@ package body Knowledge.Stories is
    -- FUNCTION
    -- Show the current story information
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowStory
    -- SOURCE
    function Show_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String :=
+      Frame_Name: constant String :=
         Main_Paned & ".knowledgeframe.stories.canvas.frame";
-      StoryView: constant Tk_Text := Get_Widget(FrameName & ".view", Interp);
-      StoryText: Unbounded_String;
+      Story_View: constant Tk_Text := Get_Widget(pathName => Frame_Name & ".view", Interp => Interp);
+      Story_Text: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
-      StoryIndex: Positive;
-      StoriesBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".options.titles", Interp);
-      Button: Ttk_Button := Get_Widget(FrameName & ".options.show", Interp);
+      Story_Index: Positive;
+      Stories_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".options.titles", Interp => Interp);
+      Button: Ttk_Button := Get_Widget(pathName => Frame_Name & ".options.show", Interp => Interp);
       Rows: Positive := 1;
-      LineWidth: constant Positive :=
-        (Positive'Value(Winfo_Get(StoriesBox, "reqwidth")) +
-         Positive'Value(Winfo_Get(Button, "reqwidth"))) /
-        Positive'Value(Measure("InterfaceFont", "{ }"));
+      Line_Width: constant Positive :=
+        (Positive'Value(Winfo_Get(Widgt => Stories_Box, Info => "reqwidth")) +
+         Positive'Value(Winfo_Get(Widgt => Button, Info => "reqwidth"))) /
+        Positive'Value(Measure(Font => "InterfaceFont", Text => "{ }"));
    begin
-      StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
-      configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
-      Delete(StoryView, "1.0", "end");
+      Story_Index := Natural'Value(Current(ComboBox => Stories_Box)) + 1;
+      configure(Story_View, "-state normal -width" & Positive'Image(Line_Width));
+      Delete(Story_View, "1.0", "end");
       Story_Steps_Info_Loop :
-      for StepText of Finished_Stories(StoryIndex).Steps_Texts loop
-         Append(StoryText, StepText & LF);
-         Rows := Rows + (Length(StepText) / LineWidth) + 1;
+      for StepText of Finished_Stories(Story_Index).Steps_Texts loop
+         Append(Story_Text, StepText & LF);
+         Rows := Rows + (Length(StepText) / Line_Width) + 1;
       end loop Story_Steps_Info_Loop;
-      if Natural(Finished_Stories(StoryIndex).Steps_Texts.Length) <
-        Finished_Stories(StoryIndex).Steps_Amount then
-         Append(StoryText, Get_Current_Story_Text & LF);
-         Rows := Rows + (Length(Get_Current_Story_Text & LF) / LineWidth) + 1;
+      if Natural(Finished_Stories(Story_Index).Steps_Texts.Length) <
+        Finished_Stories(Story_Index).Steps_Amount then
+         Append(Story_Text, Get_Current_Story_Text & LF);
+         Rows := Rows + (Length(Get_Current_Story_Text & LF) / Line_Width) + 1;
          if Current_Story.Data /= Null_Unbounded_String then
             Step :=
               (if Current_Story.Current_Step = 0 then
@@ -105,7 +105,7 @@ package body Knowledge.Stories is
                when ASKINBASE =>
                   if Slice_Count(Tokens) < 2 then
                      Append
-                       (StoryText,
+                       (Story_Text,
                         "You must travel to base " & Current_Story.Data &
                         " at X:");
                      Base_Location_Loop :
@@ -113,19 +113,19 @@ package body Knowledge.Stories is
                         if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
                           To_String(Source => Current_Story.Data) then
                            Append
-                             (StoryText, Positive'Image(Sky_Bases(I).Sky_X));
-                           Append(StoryText, " Y:");
+                             (Story_Text, Positive'Image(Sky_Bases(I).Sky_X));
+                           Append(Story_Text, " Y:");
                            Append
-                             (StoryText, Positive'Image(Sky_Bases(I).Sky_Y));
+                             (Story_Text, Positive'Image(Sky_Bases(I).Sky_Y));
                            exit Base_Location_Loop;
                         end if;
                      end loop Base_Location_Loop;
                   else
-                     Append(StoryText, "You can ask in any base. ");
+                     Append(Story_Text, "You can ask in any base. ");
                   end if;
                when DESTROYSHIP =>
                   Append
-                    (StoryText,
+                    (Story_Text,
                      "You must find " &
                      To_String
                        (Source =>
@@ -134,12 +134,12 @@ package body Knowledge.Stories is
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
                   Append
-                    (StoryText,
+                    (Story_Text,
                      "You must travel to X:" & Slice(Tokens, 1) & " Y:" &
                      Slice(Tokens, 2));
                when LOOT =>
                   Append
-                    (StoryText,
+                    (Story_Text,
                      "You must loot: " &
                      To_String
                        (Source =>
@@ -149,7 +149,7 @@ package body Knowledge.Stories is
                             .Name) &
                      " from ");
                   if Slice(Tokens, 2) = "any" then
-                     Append(StoryText, "any ");
+                     Append(Story_Text, "any ");
                      if Factions_Container.Contains
                          (Factions_List,
                           To_Bounded_String
@@ -159,7 +159,7 @@ package body Knowledge.Stories is
                                     Get_Step_Data
                                       (Step.Finish_Data, "faction")))) then
                         Append
-                          (StoryText,
+                          (Story_Text,
                            To_String
                              (Source =>
                                 Factions_List
@@ -171,16 +171,16 @@ package body Knowledge.Stories is
                                                (Step.Finish_Data, "faction"))))
                                   .Name));
                      end if;
-                     Append(StoryText, " ship.");
+                     Append(Story_Text, " ship.");
                   else
                      Find_Proto_Ship_Loop :
                      for I in Proto_Ships_List.Iterate loop
                         if Proto_Ships_Container.To_Index(I) =
                           Positive'Value(Slice(Tokens, 2)) then
                            Append
-                             (StoryText,
+                             (Story_Text,
                               To_String(Source => Proto_Ships_List(I).Name));
-                           Append(StoryText, ".");
+                           Append(Story_Text, ".");
                            exit Find_Proto_Ship_Loop;
                         end if;
                      end loop Find_Proto_Ship_Loop;
@@ -189,16 +189,16 @@ package body Knowledge.Stories is
                   null;
             end case;
          end if;
-         Insert(StoryView, "end", "{" & To_String(StoryText) & "}");
+         Insert(Story_View, "end", "{" & To_String(Story_Text) & "}");
          Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name := New_String(FrameName & ".options.set");
+         Button.Name := New_String(Frame_Name & ".options.set");
          Tcl.Tk.Ada.Grid.Grid(Button);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(FrameName & ".options.set");
+         Button.Name := New_String(Frame_Name & ".options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
-      configure(StoryView, "-state disabled -height" & Positive'Image(Rows));
+      configure(Story_View, "-state disabled -height" & Positive'Image(Rows));
       return TCL_OK;
    end Show_Story_Command;
 
