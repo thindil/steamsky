@@ -471,7 +471,7 @@ package body Knowledge.Missions is
                  4 => To_Unbounded_String(Source => "Time limit"),
                  5 => To_Unbounded_String(Source => "Base reward")),
               Scrollbar =>
-                Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
+                Get_Widget(pathName => ".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
               Tooltip => "Press mouse button to sort the missions.");
          if Missions_Indexes.Length /= Accepted_Missions.Length then
@@ -490,35 +490,35 @@ package body Knowledge.Missions is
                goto End_Of_Loop;
             end if;
             Add_Button
-              (Missions_Table, Get_Mission_Type(Accepted_Missions(I).M_Type),
-               "Show available mission's options",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+              (Table => Missions_Table, Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
+               Tooltip => "Show available mission's options",
+               Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 1);
             case Accepted_Missions(I).M_Type is
                when DELIVER =>
                   Add_Button
-                    (Missions_Table,
-                     To_String
-                       (Objects_Container.Element
+                    (Table => Missions_Table,
+                     Text => To_String
+                       (Source => Objects_Container.Element
                           (Container => Items_List,
                            Index => Accepted_Missions(I).Item_Index)
                           .Name) &
                      " to " &
                      Tiny_String.To_String
-                       (Sky_Bases
+                       (Source => Sky_Bases
                           (Sky_Map
                              (Accepted_Missions(I).Target_X,
                               Accepted_Missions(I).Target_Y)
                              .Base_Index)
                           .Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                     Tooltip => "Show available mission's options",
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
                when PATROL =>
                   Add_Button
-                    (Missions_Table,
-                     "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                    (Table => Missions_Table,
+                     Text => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                     Tooltip => "Show available mission's options",
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
                when DESTROY =>
                   Add_Button
                     (Missions_Table,
