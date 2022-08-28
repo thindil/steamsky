@@ -521,32 +521,32 @@ package body Knowledge.Missions is
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
                when DESTROY =>
                   Add_Button
-                    (Missions_Table,
-                     To_String
-                       (Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                    (Table => Missions_Table,
+                     Text => To_String
+                       (Source => Proto_Ships_List(Accepted_Missions(I).Ship_Index)
                           .Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                     Tooltip => "Show available mission's options",
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
                when EXPLORE =>
                   Add_Button
-                    (Missions_Table,
-                     "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                    (Table => Missions_Table,
+                     Text => "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                     Tooltip => "Show available mission's options",
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
                when PASSENGER =>
                   Add_Button
-                    (Missions_Table,
-                     "To " &
+                    (Table => Missions_Table,
+                     Text => "To " &
                      Tiny_String.To_String
-                       (Sky_Bases
+                       (Source => Sky_Bases
                           (Sky_Map
                              (Accepted_Missions(I).Target_X,
                               Accepted_Missions(I).Target_Y)
                              .Base_Index)
                           .Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                     Tooltip => "Show available mission's options",
+                     Command => "ShowMissionMenu" & Positive'Image(Row - 1), Column => 3);
             end case;
             Add_Button
               (Missions_Table,
