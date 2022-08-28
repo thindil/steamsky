@@ -372,7 +372,7 @@ package body Knowledge is
       Knowledge.Bases.Add_Commands;
       Knowledge.Events.Add_Commands;
       Knowledge.Missions.Add_Commands;
-      Knowledge.Stories.AddCommands;
+      Knowledge.Stories.Add_Commands;
    end Add_Commands;
 
 end Knowledge;

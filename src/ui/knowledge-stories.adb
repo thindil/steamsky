@@ -268,11 +268,11 @@ package body Knowledge.Stories is
            Positive'Image(NewY));
    end Set_Story_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowStory", Show_Story_Command'Access);
       Add_Command("ShowStoryLocation", Show_Story_Location_Command'Access);
       Add_Command("SetStory", Set_Story_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Knowledge.Stories;
