@@ -81,17 +81,17 @@ package body Knowledge.Stories is
         Positive'Value(Measure(Font => "InterfaceFont", Text => "{ }"));
    begin
       Story_Index := Natural'Value(Current(ComboBox => Stories_Box)) + 1;
-      configure(Story_View, "-state normal -width" & Positive'Image(Line_Width));
-      Delete(Story_View, "1.0", "end");
+      configure(Widgt => Story_View, options => "-state normal -width" & Positive'Image(Line_Width));
+      Delete(TextWidget => Story_View, StartIndex => "1.0", Indexes => "end");
       Story_Steps_Info_Loop :
       for StepText of Finished_Stories(Story_Index).Steps_Texts loop
-         Append(Story_Text, StepText & LF);
-         Rows := Rows + (Length(StepText) / Line_Width) + 1;
+         Append(Source => Story_Text, New_Item => StepText & LF);
+         Rows := Rows + (Length(Source => StepText) / Line_Width) + 1;
       end loop Story_Steps_Info_Loop;
       if Natural(Finished_Stories(Story_Index).Steps_Texts.Length) <
         Finished_Stories(Story_Index).Steps_Amount then
-         Append(Story_Text, Get_Current_Story_Text & LF);
-         Rows := Rows + (Length(Get_Current_Story_Text & LF) / Line_Width) + 1;
+         Append(Source => Story_Text, New_Item => Get_Current_Story_Text & LF);
+         Rows := Rows + (Length(Source => Get_Current_Story_Text & LF) / Line_Width) + 1;
          if Current_Story.Data /= Null_Unbounded_String then
             Step :=
               (if Current_Story.Current_Step = 0 then
@@ -100,20 +100,20 @@ package body Knowledge.Stories is
                  Stories_List(Current_Story.Index).Steps
                    (Current_Story.Current_Step)
                else Stories_List(Current_Story.Index).Final_Step);
-            Create(Tokens, To_String(Current_Story.Data), ";");
+            Create(S => Tokens, From => To_String(Source => Current_Story.Data), Separators => ";");
             case Step.Finish_Condition is
                when ASKINBASE =>
-                  if Slice_Count(Tokens) < 2 then
+                  if Slice_Count(S => Tokens) < 2 then
                      Append
-                       (Story_Text,
-                        "You must travel to base " & Current_Story.Data &
+                       (Source => Story_Text,
+                        New_Item => "You must travel to base " & Current_Story.Data &
                         " at X:");
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
                         if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
                           To_String(Source => Current_Story.Data) then
                            Append
-                             (Story_Text, Positive'Image(Sky_Bases(I).Sky_X));
+                             (Source => Story_Text, New_Item => Positive'Image(Sky_Bases(I).Sky_X));
                            Append(Story_Text, " Y:");
                            Append
                              (Story_Text, Positive'Image(Sky_Bases(I).Sky_Y));
