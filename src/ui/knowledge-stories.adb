@@ -127,60 +127,76 @@ package body Knowledge.Stories is
                               New_Item => Positive'Image(Sky_Bases(I).Sky_X));
                            Append(Source => Story_Text, New_Item => " Y:");
                            Append
-                             (Source => Story_Text, New_Item => Positive'Image(Sky_Bases(I).Sky_Y));
+                             (Source => Story_Text,
+                              New_Item => Positive'Image(Sky_Bases(I).Sky_Y));
                            exit Base_Location_Loop;
                         end if;
                      end loop Base_Location_Loop;
                   else
-                     Append(Source => Story_Text, New_Item => "You can ask in any base. ");
+                     Append
+                       (Source => Story_Text,
+                        New_Item => "You can ask in any base. ");
                   end if;
                when DESTROYSHIP =>
                   Append
                     (Source => Story_Text,
-                     New_Item => "You must find " &
-                     To_String
-                       (Source =>
-                          Proto_Ships_List(Positive'Value(Slice(S => Tokens, Index => 3)))
-                            .Name) &
-                     " at X:" & Slice(S => Tokens, Index => 1) & " Y:" & Slice(S => Tokens, Index => 2));
+                     New_Item =>
+                       "You must find " &
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Positive'Value(Slice(S => Tokens, Index => 3)))
+                              .Name) &
+                       " at X:" & Slice(S => Tokens, Index => 1) & " Y:" &
+                       Slice(S => Tokens, Index => 2));
                when EXPLORE =>
                   Append
                     (Source => Story_Text,
-                     New_Item => "You must travel to X:" & Slice(S => Tokens, Index => 1) & " Y:" &
-                     Slice(S => Tokens, Index => 2));
+                     New_Item =>
+                       "You must travel to X:" &
+                       Slice(S => Tokens, Index => 1) & " Y:" &
+                       Slice(S => Tokens, Index => 2));
                when LOOT =>
                   Append
                     (Source => Story_Text,
-                     New_Item => "You must loot: " &
-                     To_String
-                       (Source =>
-                          Objects_Container.Element
-                            (Container => Items_List,
-                             Index => Positive'Value((Slice(S => Tokens, Index => 1))))
-                            .Name) &
-                     " from ");
+                     New_Item =>
+                       "You must loot: " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Positive'Value
+                                   ((Slice(S => Tokens, Index => 1))))
+                              .Name) &
+                       " from ");
                   if Slice(S => Tokens, Index => 2) = "any" then
                      Append(Source => Story_Text, New_Item => "any ");
                      if Factions_Container.Contains
                          (Container => Factions_List,
-                          Key => To_Bounded_String
-                            (Source =>
-                               To_String
-                                 (Source =>
-                                    Get_Step_Data
-                                      (Finish_Data => Step.Finish_Data, Name => "faction")))) then
+                          Key =>
+                            To_Bounded_String
+                              (Source =>
+                                 To_String
+                                   (Source =>
+                                      Get_Step_Data
+                                        (Finish_Data => Step.Finish_Data,
+                                         Name => "faction")))) then
                         Append
                           (Source => Story_Text,
-                           New_Item => To_String
-                             (Source =>
-                                Factions_List
-                                  (To_Bounded_String
-                                     (Source =>
-                                        To_String
-                                          (Source =>
-                                             Get_Step_Data
-                                               (Finish_Data => Step.Finish_Data, Name => "faction"))))
-                                  .Name));
+                           New_Item =>
+                             To_String
+                               (Source =>
+                                  Factions_List
+                                    (To_Bounded_String
+                                       (Source =>
+                                          To_String
+                                            (Source =>
+                                               Get_Step_Data
+                                                 (Finish_Data =>
+                                                    Step.Finish_Data,
+                                                  Name => "faction"))))
+                                    .Name));
                      end if;
                      Append(Source => Story_Text, New_Item => " ship.");
                   else
@@ -190,7 +206,8 @@ package body Knowledge.Stories is
                           Positive'Value(Slice(S => Tokens, Index => 2)) then
                            Append
                              (Source => Story_Text,
-                              New_Item => To_String(Source => Proto_Ships_List(I).Name));
+                              New_Item =>
+                                To_String(Source => Proto_Ships_List(I).Name));
                            Append(Source => Story_Text, New_Item => ".");
                            exit Find_Proto_Ship_Loop;
                         end if;
@@ -200,7 +217,9 @@ package body Knowledge.Stories is
                   null;
             end case;
          end if;
-         Insert(TextWidget => Story_View, Index => "end", Text => "{" & To_String(Source => Story_Text) & "}");
+         Insert
+           (TextWidget => Story_View, Index => "end",
+            Text => "{" & To_String(Source => Story_Text) & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Button);
          Button.Name := New_String(Str => Frame_Name & ".options.set");
          Tcl.Tk.Ada.Grid.Grid(Slave => Button);
@@ -209,7 +228,9 @@ package body Knowledge.Stories is
          Button.Name := New_String(Str => Frame_Name & ".options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end if;
-      configure(Widgt => Story_View, options => "-state disabled -height" & Positive'Image(Rows));
+      configure
+        (Widgt => Story_View,
+         options => "-state disabled -height" & Positive'Image(Rows));
       return TCL_OK;
    end Show_Story_Command;
 
@@ -242,8 +263,9 @@ package body Knowledge.Stories is
       return
         Show_On_Map_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & Positive'Image(New_X) &
-           Positive'Image(New_Y));
+           Argv =>
+             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+             Positive'Image(New_X) & Positive'Image(New_Y));
    end Show_Story_Location_Command;
 
    -- ****o* KStories/KStories.Set_Story_Command
@@ -275,15 +297,19 @@ package body Knowledge.Stories is
       return
         Set_Destination_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & Positive'Image(New_X) &
-           Positive'Image(New_Y));
+           Argv =>
+             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+             Positive'Image(New_X) & Positive'Image(New_Y));
    end Set_Story_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowStory", Show_Story_Command'Access);
-      Add_Command("ShowStoryLocation", Show_Story_Location_Command'Access);
-      Add_Command("SetStory", Set_Story_Command'Access);
+      Add_Command
+        (Name => "ShowStory", Ada_Command => Show_Story_Command'Access);
+      Add_Command
+        (Name => "ShowStoryLocation",
+         Ada_Command => Show_Story_Location_Command'Access);
+      Add_Command(Name => "SetStory", Ada_Command => Set_Story_Command'Access);
    end Add_Commands;
 
 end Knowledge.Stories;
