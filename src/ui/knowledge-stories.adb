@@ -236,47 +236,47 @@ package body Knowledge.Stories is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      New_X, NewY: Positive := 1;
+      New_X, New_Y: Positive := 1;
    begin
-      Get_Story_Location(New_X, NewY);
+      Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
       return
         Show_On_Map_Command
-          (Client_Data, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(New_X) &
-           Positive'Image(NewY));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+           Argv => CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & Positive'Image(New_X) &
+           Positive'Image(New_Y));
    end Show_Story_Location_Command;
 
    -- ****o* KStories/KStories.Set_Story_Command
    -- FUNCTION
    -- Set the current story event as the player's ship destination
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SetStory
    -- SOURCE
    function Set_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      NewX, NewY: Positive := 1;
+      New_X, New_Y: Positive := 1;
    begin
-      Get_Story_Location(NewX, NewY);
+      Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
       return
         Set_Destination_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
-           Positive'Image(NewY));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+           Argv => CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & Positive'Image(New_X) &
+           Positive'Image(New_Y));
    end Set_Story_Command;
 
    procedure Add_Commands is
