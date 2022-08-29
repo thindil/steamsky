@@ -150,28 +150,28 @@ package body Knowledge.Stories is
                      Slice(S => Tokens, Index => 2));
                when LOOT =>
                   Append
-                    (Story_Text,
-                     "You must loot: " &
+                    (Source => Story_Text,
+                     New_Item => "You must loot: " &
                      To_String
                        (Source =>
                           Objects_Container.Element
                             (Container => Items_List,
-                             Index => Positive'Value((Slice(Tokens, 1))))
+                             Index => Positive'Value((Slice(S => Tokens, Index => 1))))
                             .Name) &
                      " from ");
-                  if Slice(Tokens, 2) = "any" then
-                     Append(Story_Text, "any ");
+                  if Slice(S => Tokens, Index => 2) = "any" then
+                     Append(Source => Story_Text, New_Item => "any ");
                      if Factions_Container.Contains
-                         (Factions_List,
-                          To_Bounded_String
+                         (Container => Factions_List,
+                          Key => To_Bounded_String
                             (Source =>
                                To_String
                                  (Source =>
                                     Get_Step_Data
-                                      (Step.Finish_Data, "faction")))) then
+                                      (Finish_Data => Step.Finish_Data, Name => "faction")))) then
                         Append
-                          (Story_Text,
-                           To_String
+                          (Source => Story_Text,
+                           New_Item => To_String
                              (Source =>
                                 Factions_List
                                   (To_Bounded_String
@@ -179,14 +179,14 @@ package body Knowledge.Stories is
                                         To_String
                                           (Source =>
                                              Get_Step_Data
-                                               (Step.Finish_Data, "faction"))))
+                                               (Finish_Data => Step.Finish_Data, Name => "faction"))))
                                   .Name));
                      end if;
-                     Append(Story_Text, " ship.");
+                     Append(Source => Story_Text, New_Item => " ship.");
                   else
                      Find_Proto_Ship_Loop :
                      for I in Proto_Ships_List.Iterate loop
-                        if Proto_Ships_Container.To_Index(I) =
+                        if Proto_Ships_Container.To_Index(Position => I) =
                           Positive'Value(Slice(Tokens, 2)) then
                            Append
                              (Story_Text,
