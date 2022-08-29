@@ -125,29 +125,29 @@ package body Knowledge.Stories is
                            Append
                              (Source => Story_Text,
                               New_Item => Positive'Image(Sky_Bases(I).Sky_X));
-                           Append(Story_Text, " Y:");
+                           Append(Source => Story_Text, New_Item => " Y:");
                            Append
-                             (Story_Text, Positive'Image(Sky_Bases(I).Sky_Y));
+                             (Source => Story_Text, New_Item => Positive'Image(Sky_Bases(I).Sky_Y));
                            exit Base_Location_Loop;
                         end if;
                      end loop Base_Location_Loop;
                   else
-                     Append(Story_Text, "You can ask in any base. ");
+                     Append(Source => Story_Text, New_Item => "You can ask in any base. ");
                   end if;
                when DESTROYSHIP =>
                   Append
-                    (Story_Text,
-                     "You must find " &
+                    (Source => Story_Text,
+                     New_Item => "You must find " &
                      To_String
                        (Source =>
-                          Proto_Ships_List(Positive'Value(Slice(Tokens, 3)))
+                          Proto_Ships_List(Positive'Value(Slice(S => Tokens, Index => 3)))
                             .Name) &
-                     " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
+                     " at X:" & Slice(S => Tokens, Index => 1) & " Y:" & Slice(S => Tokens, Index => 2));
                when EXPLORE =>
                   Append
-                    (Story_Text,
-                     "You must travel to X:" & Slice(Tokens, 1) & " Y:" &
-                     Slice(Tokens, 2));
+                    (Source => Story_Text,
+                     New_Item => "You must travel to X:" & Slice(S => Tokens, Index => 1) & " Y:" &
+                     Slice(S => Tokens, Index => 2));
                when LOOT =>
                   Append
                     (Story_Text,
