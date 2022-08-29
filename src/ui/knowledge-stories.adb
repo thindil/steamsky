@@ -187,11 +187,11 @@ package body Knowledge.Stories is
                      Find_Proto_Ship_Loop :
                      for I in Proto_Ships_List.Iterate loop
                         if Proto_Ships_Container.To_Index(Position => I) =
-                          Positive'Value(Slice(Tokens, 2)) then
+                          Positive'Value(Slice(S => Tokens, Index => 2)) then
                            Append
-                             (Story_Text,
-                              To_String(Source => Proto_Ships_List(I).Name));
-                           Append(Story_Text, ".");
+                             (Source => Story_Text,
+                              New_Item => To_String(Source => Proto_Ships_List(I).Name));
+                           Append(Source => Story_Text, New_Item => ".");
                            exit Find_Proto_Ship_Loop;
                         end if;
                      end loop Find_Proto_Ship_Loop;
@@ -200,16 +200,16 @@ package body Knowledge.Stories is
                   null;
             end case;
          end if;
-         Insert(Story_View, "end", "{" & To_String(Story_Text) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name := New_String(Frame_Name & ".options.set");
-         Tcl.Tk.Ada.Grid.Grid(Button);
+         Insert(TextWidget => Story_View, Index => "end", Text => "{" & To_String(Source => Story_Text) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+         Button.Name := New_String(Str => Frame_Name & ".options.set");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(Frame_Name & ".options.set");
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+         Button.Name := New_String(Str => Frame_Name & ".options.set");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end if;
-      configure(Story_View, "-state disabled -height" & Positive'Image(Rows));
+      configure(Widgt => Story_View, options => "-state disabled -height" & Positive'Image(Rows));
       return TCL_OK;
    end Show_Story_Command;
 
@@ -217,32 +217,32 @@ package body Knowledge.Stories is
    -- FUNCTION
    -- Show the current story event on map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowStoryLocation
    -- SOURCE
    function Show_Story_Location_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Location_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      NewX, NewY: Positive := 1;
+      New_X, NewY: Positive := 1;
    begin
-      Get_Story_Location(NewX, NewY);
+      Get_Story_Location(New_X, NewY);
       return
         Show_On_Map_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
+          (Client_Data, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(New_X) &
            Positive'Image(NewY));
    end Show_Story_Location_Command;
 
