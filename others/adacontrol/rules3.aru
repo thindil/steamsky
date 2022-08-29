@@ -1,4 +1,3 @@
--- Temporary raised limit, later back to 20
-set Max_Messages 120;
+set Max_Messages 20;
 set Verbose On;
 check Global_References (all, function, procedure, task, protected);
