@@ -901,12 +901,17 @@ package body Ships.UI.Crew.Inventory is
              "-text {Amount (max:" & Positive'Image(Max_Amount) &
              "):} -command {" & Amount_Box & " set" &
              Positive'Image(Max_Amount) & "}");
+      Add
+        (Widget => Max_Amount_Button,
+         Message => "Max amount of the item to move.");
       Tcl.Tk.Ada.Grid.Grid(Slave => Max_Amount_Button, Options => "-padx 5");
       Set(SpinBox => Amount_Box, Value => "1");
+      Add(Widget => Amount_Box, Message => "Amount of the item to move.");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+      Add(Widget => Button, Message => "Move the item to the cargo.");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-padx {5 0} -pady {0 5}");
       Bind
@@ -918,6 +923,9 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-text Cancel -command {CloseDialog " & Item_Dialog &
              " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialog.TButton");
+      Add
+        (Widget => Button,
+         Message => "Cancel giving and close dialog. \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options => "-column 1 -row 2 -padx {0 5} -pady {0 5}");
