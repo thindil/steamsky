@@ -21,7 +21,6 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
-with Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -38,8 +37,6 @@ with MainMenu; use MainMenu;
 with Themes; use Themes;
 
 procedure Steamsky is
-
-   use type Interfaces.C.int;
 
    Argc: CArgv.CNatural := 0;
    Argv: CArgv.Chars_Ptr_Ptr;
@@ -64,7 +61,17 @@ procedure Steamsky is
       return True;
    end Update_Path;
 
+   procedure NimMain with
+      Import => True,
+      Convention => C,
+      External_Name => "NimMain";
+
+   function Steam_Sky return Tcl.Tcl_Interp with
+      Import => True,
+      Convention => C,
+      External_Name => "steamsky";
 begin
+   NimMain;
    Set_Directory(Directory => Dir_Name(Path => Command_Name));
    -- Command line arguments
    Command_Line_Loop :
@@ -158,27 +165,7 @@ begin
 
    --  Create one Tcl interpreter
    -----------------------------
-   Interp := Tcl.Tcl_CreateInterp;
-
-   --  Initialize Tcl
-   -----------------
-   if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
-      Ada.Text_IO.Put_Line
-        (Item =>
-           "Steam Sky: Tcl.Tcl_Init failed: " &
-           Tcl.Ada.Tcl_GetStringResult(interp => Interp));
-      return;
-   end if;
-
-   --  Initialize Tk
-   ----------------
-   if Tcl.Tk.Tk_Init(interp => Interp) = Tcl.TCL_ERROR then
-      Ada.Text_IO.Put_Line
-        (Item =>
-           "Steam Sky: Tcl.Tk.Tk_Init failed: " &
-           Tcl.Ada.Tcl_GetStringResult(interp => Interp));
-      return;
-   end if;
+   Interp := Steam_Sky;
 
    --  Set the Tk context so that we may use shortcut Tk
    --  calls that require reference to the interpreter.
