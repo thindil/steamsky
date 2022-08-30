@@ -4,7 +4,7 @@ with "xmlada";
 project steamsky is
 
    for Main use ("steamsky.adb");
-   for Source_Dirs use ("src/**");
+   for Source_Dirs use ("src/**", "nim/obj/**");
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
 
@@ -57,6 +57,8 @@ project steamsky is
                "-fprofile-arcs",
                "-ftest-coverage");
       end case;
+      for Default_Switches("c") use ("-Inim/obj/",
+         "-I/nim-1.6.6/lib/");
    end Compiler;
 
    package Linker is
