@@ -407,7 +407,7 @@ package Game is
    -- Contains data for all skills
    -- SOURCE
    Skills_List: SkillsData_Container.Vector
-     (Capacity => Count_Type(Default_Skills_Amount));
+     (Capacity => Default_Skills_Amount);
    -- ****
 
    -- ****v* Game/Game.Skills_Amount
