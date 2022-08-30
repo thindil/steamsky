@@ -771,7 +771,7 @@ package body GameOptions is
       elsif CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".helpfont" then
          Set_Fonts
            (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
-            Font_Type => HELPFONT);
+            Font_Type => Help_Font_Type);
       else
          Set_Fonts
            (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
@@ -810,7 +810,7 @@ package body GameOptions is
          2 => To_Unbounded_String(Source => "interface"),
          3 => To_Unbounded_String(Source => "help"));
       Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
-        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => HELPFONT);
+        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => Help_Font_Type);
    begin
       Spin_Box.Interp := Interp;
       Set_Default_Fonts_Loop :

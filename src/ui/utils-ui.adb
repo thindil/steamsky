@@ -1377,7 +1377,7 @@ package body Utils.UI is
               (FontName => "MapFont",
                Options =>
                  "-size" & Positive'Image(Game_Settings.Map_Font_Size));
-         when HELPFONT =>
+         when Help_Font_Type =>
             Game_Settings.Help_Font_Size := New_Size;
             Set_Fonts_Loop :
             for FontName of Help_Fonts loop
