@@ -280,6 +280,15 @@ package Config is
       Default_Value => HELPFONT;
       -- ****
 
+      -- ****d* Config/Config.Help_Font_Type
+      -- FUNCTION
+      -- Default type of font used when setting them
+      -- HISTORY
+      -- 7.8 - Added
+      -- SOURCE
+   Help_Font_Type: constant Font_Types := HELPFONT;
+   -- ****
+
       -- ****f* Config/Config.Load_Config
       -- FUNCTION
       -- Load game configuration from file
