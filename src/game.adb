@@ -371,7 +371,9 @@ package body Game is
                      (New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
+         --## rule off IMPROPER_INITIALIZATION
          Tmp_Inventory: Inventory_Container.Vector (Capacity => 32);
+         --## rule on IMPROPER_INITIALIZATION
          Player_Morale: constant Positive :=
            (if
               Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
