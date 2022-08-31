@@ -132,7 +132,7 @@ package body Game is
            Mission_Container.Empty_Vector;
          Base_Population, Base_Type_Roll: Natural := 0;
          Base_Size: Bases_Size := SMALL;
-         Base_Owner: Tiny_String.Bounded_String;
+         Base_Owner: Tiny_String.Bounded_String := Null_Bounded_String;
          Base_Type: Bounded_String := Null_Bounded_String;
          package Bases_Container is new Hashed_Maps
            (Key_Type => Bounded_String,
