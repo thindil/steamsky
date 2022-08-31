@@ -18,6 +18,9 @@ jobs:
 
     - name: Run Spark
       run: |
+         cd nim
+         nim debug
+         cd ..
          mkdir obj
          nohup gnatprove --prover=z3 --mode=check --checks-as-errors -P steamsky.gpr > spark.log
 
