@@ -22,64 +22,23 @@ There are currently 2 versions of the game:
 
 ## Build game from sources
 
+At this moment the only supported way to build the game is to use Docker images.
+Later the normal way will back.
+
 ### Docker way
 
-You can use Docker images `adabuild` and `adabuildwin64` from the project
-[Docker Ada](https://www.laeran.pl/repositories/dockerada). They contain all libraries
+You can use Docker images `build` and `buildwin64` from the project
+[Docker](https://github.com/thindil/docker). They contain all libraries
+
 and compiler needed to build the game.
 
-To build the game for Linux, download `adabuild` image and type in console:
+To build the game for Linux, download `build` image and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuild /bin/bash -c "cd /app && gprbuild -p -P steamsky.gpr -XMode=release"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/build /bin/bash -c "cd /app && others/build.tcl"`
 
-To build the game for Windows 64-bit, download `adabuildwin64` image and type in console:
+To build the game for Windows 64-bit, download `buildwin64` image and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuildwin64 /bin/bash -c "cd /app && gprbuild -p -P steamsky.gpr -XMode=release --target=x86_64-windows"`
-
-### Classic way
-
-To build (works on Linux and Windows too) you need:
-
-* compiler - GCC with enabled Ada support or GNAT from:
-
-  <https://www.adacore.com/download/>
-
-  The game requires GNAT at least version 10. Will not compile with the
-  older compilers.
-
-* XmlAda - if you use GNAT from AdaCore it is included in package. In other
-  situation, you may need to download it from:
-
-  <https://github.com/AdaCore/xmlada>
-
-* Tcl/Tk library. Should be available in every Linux distribution. For
-  Windows, it is recommended to use MagicSplat version:
-
-  <https://www.magicsplat.com/tcl-installer/index.html>
-
-* TASHY library with included binding to Tk and TkLib. You can get it from:
-
-   <https://www.laeran.pl/repositories/tashy>
-
-   **Important:** To build this version of Steam Sky you will need the 8.6.12
-   version of the library or above. Earlier versions will not work due to lack
-   of some bindings.
-
-* Additionally, the game require a couple of other libraries to run, they are
-  listed in the section *Libraries needed to run the game* below.
-
-If you have all the required packages, navigate to the main directory (where
-this file is) to compile:
-
-* The easiest way to compile game is use Gnat Programming Studio included in
-  GNAT. Just run GPS, select *steamsky.gpr* as a project file and select the option
-  `Build All`.
-
-* If you prefer using console: In the main source code directory type `gprbuild`
-  for debug mode build or for release mode: `gprbuild -XMode=release`.
-  If you want to only build release version of the game, for Linux use only
-  `gprbuild -XMode=release` command. For Windows, you have to type
-  `gprbuild -XMode=release -XOS=Windows`.
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.tcl x86_64-linux-gnu"`
 
 ### Build unit tests
 
