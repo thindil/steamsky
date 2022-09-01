@@ -61,6 +61,11 @@ type
   ## FUNCTION
   ##
   ## Pointer to the Tcl interpreter
+  TclResults* = enum
+    tclOk, tclError, tclReturn, tclBreak, tclContinue
+    ## FUNCTION
+    ##
+    ## Types of result used by Tcl
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
@@ -72,7 +77,7 @@ proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
   ##
   ## Pointer to the newly created Tcl interpreter or nil if creation failed.
 
-proc tclInit*(interp: PInterp): cint {.cdecl, dynlib: tclDllName,
+proc tclInit*(interp: PInterp): TclResults {.cdecl, dynlib: tclDllName,
     importc: "Tcl_Init".}
   ## FUNCTION
   ##
@@ -82,5 +87,5 @@ proc tclInit*(interp: PInterp): cint {.cdecl, dynlib: tclDllName,
   ##
   ## * interp - A Tcl interpreter which will be initialized
 
-proc tkInit*(interp: PInterp): cint {.cdecl, dynlib: tkDllName,
+proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
     importc: "Tk_Init".}
