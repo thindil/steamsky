@@ -20,7 +20,7 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -44,6 +44,8 @@ procedure Steamsky is
 
    function Update_Path
      (Path: in out Unbounded_String; Path_Name: String) return Boolean is
+      use Ada.Text_IO;
+
    begin
       if Element(Source => Path, Index => Length(Source => Path)) /=
         Dir_Separator then
