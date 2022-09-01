@@ -86,6 +86,21 @@ proc tclInit*(interp: PInterp): TclResults {.cdecl, dynlib: tclDllName,
   ## PARAMETERS
   ##
   ## * interp - A Tcl interpreter which will be initialized
+  ##
+  ## RETURNS
+  ##
+  ## tclOk if Tcl initialized correctly, otherwise tclError
 
 proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
     importc: "Tk_Init".}
+  ## FUNCTION
+  ##
+  ## Initialize Tk on the selected Tcl interpreter
+  ##
+  ## PARAMETERS
+  ##
+  ## * interp - A Tcl interpreter on which Tk will be initialized
+  ##
+  ## RETURNS
+  ##
+  ## tclOk if Tk initialized correctly, otherwise tclError
