@@ -64,9 +64,23 @@ type
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
+  ## FUNCTION
+  ##
+  ## Create Tcl interpreter. Imported from C
+  ##
+  ## RETURNS
+  ##
+  ## Pointer to the newly created Tcl interpreter or nil if creation failed.
 
 proc tclInit*(interp: PInterp): cint {.cdecl, dynlib: tclDllName,
     importc: "Tcl_Init".}
+  ## FUNCTION
+  ##
+  ## Initialize Tcl with the selected interpreter. Load libraries, etc.
+  ##
+  ## PARAMETERS
+  ##
+  ## * interp - A Tcl interpreter which will be initialized
 
 proc tkInit*(interp: PInterp): cint {.cdecl, dynlib: tkDllName,
     importc: "Tk_Init".}
