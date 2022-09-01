@@ -15,14 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+# Set names of Tcl/Tk libraries
+# On Windows
 when defined(windows):
   const
     tclDllName = "tcl86.dll"
     tkDllName = "tk86.dll"
+# On MacOSX
 elif defined(macosx):
   const
     tclDllName = "libtcl8.6.dylib"
     tkDllName = "libtk8.6.dylib"
+# Any other *nix system
 else:
   const
     tclDllName = "libtcl8.6.so(|.1|.0)"
@@ -30,15 +34,39 @@ else:
 
 type
   TFreeProc* = proc (theBlock: pointer){.cdecl.}
+  ## FUNCTION
+  ##
+  ## Procedure which will be run during freeing the result value
+  ##
+  ## PARAMETERS
+  ##
+  ## * theBlock - the pointer to the value to free
   TclInterp* = object
+    ## FUNCTION
+    ##
+    ## Represents Tcl interpreter
+    ##
+    ## FIELDS
+    ##
+    ## * result    - the string with result's value returned by the last Tcl
+    ##               command
+    ## * freeProc  - the procedure which will be run during freeing the result
+    ##               value
+    ## * errorLine - the number of the line where error occured. Set only when
+    ##               error happened
     result*: cstring
     freeProc*: TFreeProc
     errorLine*: int
   PInterp* = ptr TclInterp
+  ## FUNCTION
+  ##
+  ## Pointer to the Tcl interpreter
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
+
 proc tclInit*(interp: PInterp): cint {.cdecl, dynlib: tclDllName,
     importc: "Tcl_Init".}
+
 proc tkInit*(interp: PInterp): cint {.cdecl, dynlib: tkDllName,
     importc: "Tk_Init".}
