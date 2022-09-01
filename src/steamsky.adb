@@ -61,7 +61,7 @@ procedure Steamsky is
       return True;
    end Update_Path;
 
-   procedure NimMain with
+   procedure Nim_Main with
       Import => True,
       Convention => C,
       External_Name => "NimMain";
@@ -71,7 +71,7 @@ procedure Steamsky is
       Convention => C,
       External_Name => "steamsky";
 begin
-   NimMain;
+   Nim_Main;
    Set_Directory(Directory => Dir_Name(Path => Command_Name));
    -- Command line arguments
    Command_Line_Loop :
