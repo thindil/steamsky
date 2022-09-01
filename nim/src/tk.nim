@@ -34,13 +34,13 @@ else:
 
 type
   TFreeProc* = proc (theBlock: pointer){.cdecl.}
-  ## FUNCTION
-  ##
-  ## Procedure which will be run during freeing the result value
-  ##
-  ## PARAMETERS
-  ##
-  ## * theBlock - the pointer to the value to free
+    ## FUNCTION
+    ##
+    ## Procedure which will be run during freeing the result value
+    ##
+    ## PARAMETERS
+    ##
+    ## * theBlock - the pointer to the value to free
   TclInterp* = object
     ## FUNCTION
     ##
@@ -58,14 +58,20 @@ type
     freeProc*: TFreeProc
     errorLine*: int
   PInterp* = ptr TclInterp
-  ## FUNCTION
-  ##
-  ## Pointer to the Tcl interpreter
+    ## FUNCTION
+    ##
+    ## Pointer to the Tcl interpreter
   TclResults* = enum
     tclOk, tclError, tclReturn, tclBreak, tclContinue
     ## FUNCTION
     ##
     ## Types of result used by Tcl
+  TclError* = object of CatchableError
+    ## FUNCTION
+    ##
+    ## Used to raise exceptions related to the Tcl/Tk, like failed
+    ## initialization, etc.
+
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
