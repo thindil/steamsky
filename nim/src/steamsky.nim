@@ -18,6 +18,13 @@
 import tk
 
 proc steamsky(): PInterp {.exportc.} =
+  ## FUNCTION
+  ##
+  ## The main procedure of the game.
+  ##
+  ## RETURNS
+  ##
+  ## The pointer to the newly created Tcl interpreter
 
   result = tclCreateInterp()
   discard tclInit(result)
