@@ -40,6 +40,9 @@ To build the game for Windows 64-bit, download `buildwin64` image and type in co
 
 `docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.tcl x86_64-linux-gnu"`
 
+It will build the game and put all needed files (except libraries) to directory
+*release* in the project root directory (where file steamsky.gpr is).
+
 ### Build unit tests
 
 Navigate to `tests/driver` directory from the main directory (where this
