@@ -26,6 +26,16 @@ proc steamsky(): PInterp {.exportc.} =
   ##
   ## The pointer to the newly created Tcl interpreter
 
+  # Create Tcl interpreter
   result = tclCreateInterp()
-  discard tclInit(result)
-  discard tkInit(result)
+  # If creation failed, report error and quit
+  if result == nil:
+    raise newException(exceptn = TclError,
+        message = "Can't create Tcl interpreter.")
+  # Initialize Tcl. Quit if failed
+  if tclInit(interp = result) == tclError:
+    raise newException(exceptn = TclError,
+        message = "Can't initialize Tcl interpreter.")
+  # Initialize Tk. Quit if failed
+  if tkInit(interp = result) == tclError:
+    raise newException(exceptn = TclError, message = "Can't initialize Tk.")
