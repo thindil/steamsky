@@ -1352,9 +1352,30 @@ package body Ships.UI.Crew.Inventory is
    function Move_Items_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Argc, Argv);
    begin
-      return TCL_OK;
+      Move_Items_Loop :
+      for I in
+        Inventory_Container.First_Index
+          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
+          Inventory_Container.Last_Index
+            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "invindex" &
+                Trim
+                  (Source => Inventory_Container.Extended_Index'Image(I),
+                   Side => Left)) =
+           "1" then
+            return TCL_OK;
+         end if;
+      end loop Move_Items_Loop;
+      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
+      return
+        Sort_Crew_Inventory_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Move_Items_Command;
 
    procedure Add_Commands is
@@ -1386,8 +1407,7 @@ package body Ships.UI.Crew.Inventory is
         (Name => "ToggleInventoryItems",
          Ada_Command => Toggle_Inventory_Items_Command'Access);
       Add_Command
-        (Name => "MoveItems",
-         Ada_Command => Move_Items_Command'Access);
+        (Name => "MoveItems", Ada_Command => Move_Items_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Crew.Inventory;
