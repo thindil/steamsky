@@ -17,7 +17,7 @@
 
 import tk
 
-proc steamsky(): PInterp {.exportc.} =
+func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   ## FUNCTION
   ##
   ## The main procedure of the game.
