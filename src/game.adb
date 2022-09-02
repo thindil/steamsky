@@ -514,7 +514,6 @@ package body Game is
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
-      use Bases.Ship;
       use Ships.Crew;
       use Ships.Upgrade;
       use Tiny_String;
@@ -525,6 +524,8 @@ package body Game is
       Tired_Points: Natural := 0;
       Need_Cleaning, Need_Save_Game: Boolean := False;
       procedure Update_Day is
+         use Bases.Ship;
+
       begin
          Game_Date.Day := Game_Date.Day + 1;
          Get_Dirty_Loop :
