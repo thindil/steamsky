@@ -1158,17 +1158,17 @@ package body Game is
                        "skill" then
                         Delete_Skill_Block :
                         declare
-                           Delete_Index: constant SkillsData_Container
+                           Delete_Skill_Index: constant SkillsData_Container
                              .Extended_Index :=
                              Find_Skill_Index
                                (Skill_Name =>
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "value"));
                         begin
-                           if Delete_Index > 0 then
+                           if Delete_Skill_Index > 0 then
                               SkillsData_Container.Delete
                                 (Container => Skills_List,
-                                 Index => Delete_Index);
+                                 Index => Delete_Skill_Index);
                            end if;
                         end Delete_Skill_Block;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =
