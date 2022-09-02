@@ -1264,7 +1264,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Toggle_Inventory_Item_Command;
 
-   -- ****o* SUCI/SUCI.Toggle_Items_Command
+   -- ****o* SUCI/SUCI.Toggle_Inventory_Items_Command
    -- FUNCTION
    -- Equip or unequip the selected items
    -- PARAMETERS
@@ -1275,7 +1275,7 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ToggleItems action
+   -- ToggleInventoryItems action
    -- Action is the action to do with the selected items. Possible values are
    -- equip and unequip
    -- SOURCE
