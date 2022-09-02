@@ -1330,6 +1330,33 @@ package body Ships.UI.Crew.Inventory is
            Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Toggle_Inventory_Items_Command;
 
+   -- ****o* SUCI/SUCI.Move_Items_Command
+   -- FUNCTION
+   -- Move the selected items to the ships's cargo
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveItems
+   -- SOURCE
+   function Move_Items_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Items_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+   begin
+      return TCL_OK;
+   end Move_Items_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -1358,6 +1385,9 @@ package body Ships.UI.Crew.Inventory is
       Add_Command
         (Name => "ToggleInventoryItems",
          Ada_Command => Toggle_Inventory_Items_Command'Access);
+      Add_Command
+        (Name => "MoveItems",
+         Ada_Command => Move_Items_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Crew.Inventory;
