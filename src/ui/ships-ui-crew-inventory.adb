@@ -1289,6 +1289,9 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      Is_Used: Boolean;
+      Equip: constant Boolean :=
+        (if CArgv.Arg(Argv => Argv, N => 1) = "equip" then True else False);
    begin
       Toogle_Items_Loop :
       for I in
@@ -1304,13 +1307,19 @@ package body Ships.UI.Crew.Inventory is
                   (Source => Inventory_Container.Extended_Index'Image(I),
                    Side => Left)) =
            "1" then
-            if CArgv.Arg(Argv => Argv, N => 1) = "equip" then
-               null;
-            else
-               if Item_Is_Used
-                   (Member_Index => Member_Index, Item_Index => I) then
-                  Take_Off_Item(Member_Index => Member_Index, Item_Index => I);
+            Is_Used :=
+              Item_Is_Used(Member_Index => Member_Index, Item_Index => I);
+            if Equip and then not Is_Used then
+               if Set_Use_Item_Command
+                   (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+                    Argv =>
+                      CArgv.Empty & "SetUseItem" &
+                      Trim(Source => I'Img, Side => Left)) /=
+                 TCL_OK then
+                  return TCL_ERROR;
                end if;
+            elsif not Equip and then Is_Used then
+               Take_Off_Item(Member_Index => Member_Index, Item_Index => I);
             end if;
          end if;
       end loop Toogle_Items_Loop;
