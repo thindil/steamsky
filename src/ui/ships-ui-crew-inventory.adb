@@ -1268,7 +1268,7 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Equip or unequip the selected items
    -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command.
    -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command.
@@ -1288,7 +1288,7 @@ package body Ships.UI.Crew.Inventory is
    function Toggle_Inventory_Items_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
+      pragma Unreferenced(Argc);
    begin
       Toogle_Items_Loop :
       for I in
@@ -1307,11 +1307,18 @@ package body Ships.UI.Crew.Inventory is
             if CArgv.Arg(Argv => Argv, N => 1) = "equip" then
                null;
             else
-               null;
+               if Item_Is_Used
+                   (Member_Index => Member_Index, Item_Index => I) then
+                  Take_Off_Item(Member_Index => Member_Index, Item_Index => I);
+               end if;
             end if;
          end if;
       end loop Toogle_Items_Loop;
-      return TCL_OK;
+      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
+      return
+        Sort_Crew_Inventory_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Toggle_Inventory_Items_Command;
 
    procedure Add_Commands is
