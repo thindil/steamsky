@@ -555,6 +555,7 @@ package body Ships.UI.Crew.Inventory is
    -- Interp       - The Tcl interpreter in which the selection will be reseted
    -- SOURCE
    procedure Reset_Selection(Member_Index: Positive; Interp: Tcl_Interp) is
+      -- ****
    begin
       Reset_Item_Selection_Loop :
       for I in
