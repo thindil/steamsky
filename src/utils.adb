@@ -16,14 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random;
+with Interfaces.C.Strings;
 
-package body Utils with
-   SPARK_Mode
-is
+package body Utils is
 
-   function Get_Random(Min, Max: Integer) return Integer with
-      SPARK_Mode => Off
-   is
+   function Get_Random(Min, Max: Integer) return Integer is
       use Ada.Numerics;
       subtype Rand_Range is Integer range Min .. Max;
       package Rand_Roll is new Discrete_Random(Result_Subtype => Rand_Range);
@@ -34,47 +31,15 @@ is
    end Get_Random;
 
    function Generate_Robotic_Name return Game.Tiny_String.Bounded_String is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
-      Letters_Amount: constant Positive := Get_Random(Min => 2, Max => 5);
-      Numbers_Amount: constant Positive := Get_Random(Min => 2, Max => 4);
-      subtype Letters is Character range 'A' .. 'Z';
-      subtype Numbers is Character range '0' .. '9';
-      New_Name: Bounded_String :=
-        To_Bounded_String
-          (Source =>
-             "" &
-             Letters'Val
-               (Get_Random
-                  (Min => Letters'Pos(Letters'First),
-                   Max => Letters'Pos(Letters'Last))));
+      function Robotic_Name return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "generateRoboticName";
    begin
-      First_Name_Part_Loop :
-      for I in 2 .. Letters_Amount loop
-         pragma Loop_Invariant(Length(Source => New_Name) = I - 1);
-         Append
-           (Source => New_Name,
-            New_Item =>
-              Letters'Val
-                (Get_Random
-                   (Min => Letters'Pos(Letters'First),
-                    Max => Letters'Pos(Letters'Last))));
-      end loop First_Name_Part_Loop;
-      Append(Source => New_Name, New_Item => '-');
-      Second_Name_Part_Loop :
-      for I in 1 .. Numbers_Amount loop
-         pragma Loop_Invariant
-           (Length(Source => New_Name) =
-            Length(Source => New_Name'Loop_Entry) + (I - 1));
-         Append
-           (Source => New_Name,
-            New_Item =>
-              Numbers'Val
-                (Get_Random
-                   (Min => Numbers'Pos(Numbers'First),
-                    Max => Numbers'Pos(Numbers'Last))));
-      end loop Second_Name_Part_Loop;
-      return New_Name;
+      return To_Bounded_String(Source => Value(Item => Robotic_Name));
    end Generate_Robotic_Name;
 
 end Utils;

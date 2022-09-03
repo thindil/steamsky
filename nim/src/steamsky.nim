@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import tk
+import tk, utils
 
 func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   ## FUNCTION
@@ -39,3 +39,6 @@ func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   # Initialize Tk. Quit if failed
   if tkInit(interp = result) == tclError:
     raise newException(exceptn = TclError, message = "Can't initialize Tk.")
+
+proc dummy() {.used.} =
+  discard generateRoboticName()
