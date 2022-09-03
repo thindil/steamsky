@@ -49,7 +49,6 @@ package body Themes is
              (Source => Value, Mapping => To_Mapping(From => "\", To => "/"));
       end Convert_Path;
    begin
-      Temp_Record := Default_Theme;
       Themes_Container.Include
         (Container => Themes_List, Key => "steamsky", New_Item => Temp_Record);
       Start_Search
