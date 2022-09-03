@@ -17,16 +17,25 @@
 
 import random
 
-proc generateRoboticName*(): cstring {.exportc.} =
+proc generateRoboticName*(): cstring {.exportc, gcsafe, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Generate robotic type name for bases, mobs, ships, etc
+  ##
+  ## RESULT
+  ##
+  ## Random robotic name
   randomize()
   let
     lettersAmount: Positive = rand(x = 2..5)
     numbersAmount: Positive = rand(x = 2..4)
     letters: set[char] = {'A'..'Z'}
   var name: string = ""
+  # Get random letters for the name
   for i in 1..lettersAmount:
     name.add(y = sample(s = letters))
   name.add('-')
+  # Get random digits for the name
   for i in 1..numbersAmount:
     name.add(y = $rand(max = 9))
   return name.cstring
