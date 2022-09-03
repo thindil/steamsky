@@ -940,45 +940,23 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Move_Item_Command;
 
-   -- ****o* SUCI/SUCI.Move_Item_Command
+   -- ****if* SUCI/SUCI.Move_Item
    -- FUNCTION
-   -- Move the selected item to the ship cargo
+   -- Move the selected item to the player's ship's cargo
    -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- MoveItem itemindex
-   -- itemindex is the index of the item which will be set
+   -- Item_Index - The inventory index of the item to move
+   -- Amount     - The amount of the item to move
+   -- HISTORY
+   -- 7.8 - Added
    -- SOURCE
-   function Move_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+   procedure Move_Item(Item_Index, Amount: Positive) is
       -- ****
-
-   function Move_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-
-      Amount: Positive;
-      Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Dialog: Tk_Toplevel :=
-        Get_Widget(pathName => ".itemdialog", Interp => Interp);
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
-             Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
-           Interp => Interp);
+             Main_Paned &
+             ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
    begin
-      Amount := Positive'Value(Get(Widgt => Amount_Box));
       if Free_Cargo
           (Amount =>
              0 -
@@ -1001,7 +979,7 @@ package body Ships.UI.Crew.Inventory is
                      (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => Item_Index)),
             Title => "No free space in cargo");
-         return TCL_OK;
+         return;
       end if;
       Update_Cargo
         (Ship => Player_Ship,
@@ -1040,8 +1018,45 @@ package body Ships.UI.Crew.Inventory is
            (Ship => Player_Ship, Member_Index => Member_Index,
             Given_Order => REST);
       end if;
-      Destroy(Widgt => Item_Dialog);
       Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
+   end Move_Item;
+
+   -- ****o* SUCI/SUCI.Move_Item_Command
+   -- FUNCTION
+   -- Move the selected item to the ship cargo
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveItem itemindex
+   -- itemindex is the index of the item which will be set
+   -- SOURCE
+   function Move_Item_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Item_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+
+      Amount: Positive;
+      Item_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Item_Dialog: Tk_Toplevel :=
+        Get_Widget(pathName => ".itemdialog", Interp => Interp);
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
+   begin
+      Amount := Positive'Value(Get(Widgt => Amount_Box));
+      Move_Item(Item_Index => Item_Index, Amount => Amount);
+      Destroy(Widgt => Item_Dialog);
       Tcl_Eval
         (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
       if Inventory_Container.Length
