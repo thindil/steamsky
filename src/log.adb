@@ -15,9 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Calendar;
 with Ada.Calendar.Formatting;
+with Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -60,6 +60,7 @@ package body Log is
      (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
       use Ada.Calendar;
+      use Ada.Characters.Latin_1;
 
       New_Message: Unbounded_String;
    begin
