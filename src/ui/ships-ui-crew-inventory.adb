@@ -598,14 +598,14 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      Member_Index: constant Positive :=
+      Local_Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
            Title =>
              "Inventory of " &
-             To_String(Source => Player_Ship.Crew(Member_Index).Name),
+             To_String(Source => Player_Ship.Crew(Local_Member_Index).Name),
            Columns => 2);
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
@@ -638,18 +638,19 @@ package body Ships.UI.Crew.Inventory is
              "} -text {Close} -style Dialog.TButton");
    begin
       if Inventory_Container.Length
-          (Container => Player_Ship.Crew(Member_Index).Inventory) =
+          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
         0 then
          Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
          Show_Message
            (Text =>
-              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
               " doesn't own any items.",
             Title =>
               "Inventory of " &
-              To_String(Source => Player_Ship.Crew(Member_Index).Name));
+              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name));
          return TCL_OK;
       end if;
+      Member_Index := Local_Member_Index;
       Reset_Selection(Interp => Interp);
       Add
         (Widget => Dialog_Close_Button,
