@@ -550,11 +550,11 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Reset the currently selected items in the crew member inventory
    -- PARAMETERS
-   -- Member_Index - The crew member index in which inventory the selection
-   --                will be reseted
-   -- Interp       - The Tcl interpreter in which the selection will be reseted
+   -- Interp - The Tcl interpreter in which the selection will be reseted
+   -- HISTORY
+   -- 7.8 - Added
    -- SOURCE
-   procedure Reset_Selection(Member_Index: Positive; Interp: Tcl_Interp) is
+   procedure Reset_Selection(Interp: Tcl_Interp) is
       -- ****
    begin
       Reset_Item_Selection_Loop :
@@ -650,7 +650,7 @@ package body Ships.UI.Crew.Inventory is
               To_String(Source => Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
-      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
+      Reset_Selection(Interp => Interp);
       Add
         (Widget => Dialog_Close_Button,
          Message => "Close inventory \[Escape key\]");
@@ -1339,7 +1339,7 @@ package body Ships.UI.Crew.Inventory is
             end if;
          end if;
       end loop Toogle_Items_Loop;
-      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
+      Reset_Selection(Interp => Interp);
       return
         Sort_Crew_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
@@ -1387,7 +1387,7 @@ package body Ships.UI.Crew.Inventory is
             return TCL_OK;
          end if;
       end loop Move_Items_Loop;
-      Reset_Selection(Member_Index => Member_Index, Interp => Interp);
+      Reset_Selection(Interp => Interp);
       return
         Sort_Crew_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
