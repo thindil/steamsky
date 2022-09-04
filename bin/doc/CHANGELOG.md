@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Icon for move item to cargo, equip item, unequip item, unchecked empty
   checkboxes. Author: Lorc, Delapouite (https://game-icons.net), license
   CC BY 3.0
+- Ability to move, equip or take off a couple of items in the player's
+  ship's crew members' inventory
 
 ### Changed
 - Updated modding guide
