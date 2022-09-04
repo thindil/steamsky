@@ -37,6 +37,9 @@ is
    -- Random number between Min and Max
    -- SOURCE
    function Get_Random(Min, Max: Integer) return Integer with
+      Import => True,
+      Convention => C,
+      External_Name => "getRandom",
       Global => null,
       Pre => Min <= Max,
       Post => Get_Random'Result in Min .. Max,

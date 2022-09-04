@@ -39,3 +39,7 @@ proc generateRoboticName*(): cstring {.exportc, gcsafe, raises: [], tags: [].} =
   for i in 1..numbersAmount:
     name.add(y = $rand(max = 9))
   return name.cstring
+
+proc getRandom*(min, max: cint): cint {.exportc.} =
+  randomize()
+  return rand(min .. max)
