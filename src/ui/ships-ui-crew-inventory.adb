@@ -1372,7 +1372,7 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Argc, Argv);
    begin
       Move_Items_Loop :
-      for I in
+      for I in reverse
         Inventory_Container.First_Index
           (Container => Player_Ship.Crew(Member_Index).Inventory) ..
           Inventory_Container.Last_Index
@@ -1385,7 +1385,13 @@ package body Ships.UI.Crew.Inventory is
                   (Source => Inventory_Container.Extended_Index'Image(I),
                    Side => Left)) =
            "1" then
-            return TCL_OK;
+            Move_Item
+              (Item_Index => I,
+               Amount =>
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Crew(Member_Index).Inventory,
+                    Index => I)
+                   .Amount);
          end if;
       end loop Move_Items_Loop;
       Reset_Selection(Interp => Interp);
