@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.8] - 2022-09-04
 
 ### Added
 - Icon for move item to cargo, equip item, unequip item, unchecked empty
