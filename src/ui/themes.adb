@@ -585,7 +585,7 @@ package body Themes is
          55 => To_Unbounded_String(Source => "cargoicon"),
          56 => To_Unbounded_String(Source => "equipicon"),
          57 => To_Unbounded_String(Source => "unequipicon"));
-      Tmp_Image: Tk_Photo;
+      Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
