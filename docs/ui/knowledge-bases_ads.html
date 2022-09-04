@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -34,17 +34,17 @@
 <li>1. <a href="#robo34">Knowledge/KBases</a></li>
 <ul>
 <li>1.1. <a href="./knowledge-bases_adb.html#robo147">KBases/KBases.Bases_Sort_Orders</a></li>
-<li>1.2. <a href="./knowledge-bases_adb.html#robo278">KBases/KBases.Default_Bases_Sort_Order</a></li>
-<li>1.3. <a href="./knowledge-bases_adb.html#robo409">KBases/KBases.Bases_Sort_Order</a></li>
-<li>1.4. <a href="./knowledge-bases_adb.html#robo410">KBases/KBases.BasesTable</a></li>
-<li>1.5. <a href="./knowledge-bases_adb.html#robo411">KBases/KBases.Modules_Indexes</a></li>
-<li>1.6. <a href="#robo637">KBases/KBases.AddCommands</a></li>
-<li>1.7. <a href="./knowledge-bases_adb.html#robo638">KBases/KBases.Get_Reputation_Text</a></li>
-<li>1.8. <a href="./knowledge-bases_adb.html#robo639">KBases/KBases.Show_Bases_Menu_Command</a></li>
-<li>1.9. <a href="#robo640">KBases/KBases.UpdateBasesList</a></li>
-<li>1.10. <a href="./knowledge-bases_adb.html#robo863">KBases/KBases.Show_Base_Info_Command</a></li>
-<li>1.11. <a href="./knowledge-bases_adb.html#robo864">KBases/KBases.Show_Bases_Command</a></li>
-<li>1.12. <a href="./knowledge-bases_adb.html#robo865">KBases/KBases.Sort_Bases_Command</a></li>
+<li>1.2. <a href="./knowledge-bases_adb.html#robo279">KBases/KBases.Default_Bases_Sort_Order</a></li>
+<li>1.3. <a href="./knowledge-bases_adb.html#robo410">KBases/KBases.Bases_Sort_Order</a></li>
+<li>1.4. <a href="./knowledge-bases_adb.html#robo411">KBases/KBases.Bases_Table</a></li>
+<li>1.5. <a href="./knowledge-bases_adb.html#robo412">KBases/KBases.Modules_Indexes</a></li>
+<li>1.6. <a href="#robo638">KBases/KBases.Add_Commands</a></li>
+<li>1.7. <a href="./knowledge-bases_adb.html#robo639">KBases/KBases.Get_Reputation_Text</a></li>
+<li>1.8. <a href="./knowledge-bases_adb.html#robo640">KBases/KBases.Show_Bases_Menu_Command</a></li>
+<li>1.9. <a href="#robo641">KBases/KBases.Update_Bases_List</a></li>
+<li>1.10. <a href="./knowledge-bases_adb.html#robo867">KBases/KBases.Show_Base_Info_Command</a></li>
+<li>1.11. <a href="./knowledge-bases_adb.html#robo868">KBases/KBases.Show_Bases_Command</a></li>
+<li>1.12. <a href="./knowledge-bases_adb.html#robo869">KBases/KBases.Sort_Bases_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -60,36 +60,36 @@
 </pre>
 
 <hr />
-<a name="KBases2fKBases2eAddCommands"></a>
-<a name="robo637"></a><h2>KBases/KBases.AddCommands [ Subprograms ]</h2>
+<a name="KBases2fKBases2eAdd5fCommands"></a>
+<a name="robo638"></a><h2>KBases/KBases.Add_Commands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo34">KBases</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the list of known bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> AddCommands<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Add_Commands<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="KBases2fKBases2eUpdateBasesList"></a>
-<a name="robo640"></a><h2>KBases/KBases.UpdateBasesList [ Subprograms ]</h2>
+<a name="KBases2fKBases2eUpdate5fBases5fList"></a>
+<a name="robo641"></a><h2>KBases/KBases.Update_Bases_List [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo34">KBases</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update and show list of known bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> UpdateBasesList<span class="sign">(</span>BaseName<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">;</span> Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Update_Bases_List<span class="sign">(</span>Base_Name<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">;</span> Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> BaseName - Name of the base to find on list
- Page     - The current page of bases list to show
+<pre> Base_Name - Name of the base to find on list
+ Page      - The current page of bases list to show
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-08-07 03:03:41</p>
+<p>Generated from ./src/ui/knowledge-bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-09-04 03:14:57</p>
 </div> <!-- footer -->
 </body>
 </html>

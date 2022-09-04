@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,17 +31,17 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo1008">TUI/TUI.Trade_Item_Command</a></li>
-<li>2. <a href="#robo1007">TUI/TUI.Trade_Amount_Command</a></li>
-<li>3. <a href="#robo1006">TUI/TUI.Sort_Items_Command</a></li>
-<li>4. <a href="#robo1005">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
-<li>5. <a href="#robo1004">TUI/TUI.Show_Trade_Command</a></li>
-<li>6. <a href="#robo1003">TUI/TUI.Search_Trade_Command</a></li>
-<li>7. <a href="#robo802">TUI/TUI.ItemIndex</a></li>
-<li>8. <a href="#robo494">TUI/TUI.TradeTable</a></li>
-<li>9. <a href="#robo493">TUI/TUI.Items_Sort_Order</a></li>
-<li>10. <a href="#robo492">TUI/TUI.Items_Indexes</a></li>
-<li>11. <a href="#robo308">TUI/TUI.Default_Items_Sort_Order</a></li>
+<li>1. <a href="#robo1015">TUI/TUI.Trade_Item_Command</a></li>
+<li>2. <a href="#robo1014">TUI/TUI.Trade_Amount_Command</a></li>
+<li>3. <a href="#robo1013">TUI/TUI.Sort_Items_Command</a></li>
+<li>4. <a href="#robo1012">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
+<li>5. <a href="#robo1011">TUI/TUI.Show_Trade_Command</a></li>
+<li>6. <a href="#robo1010">TUI/TUI.Search_Trade_Command</a></li>
+<li>7. <a href="#robo806">TUI/TUI.Item_Index</a></li>
+<li>8. <a href="#robo495">TUI/TUI.Trade_Table</a></li>
+<li>9. <a href="#robo494">TUI/TUI.Items_Sort_Order</a></li>
+<li>10. <a href="#robo493">TUI/TUI.Items_Indexes</a></li>
+<li>11. <a href="#robo309">TUI/TUI.Default_Items_Sort_Order</a></li>
 <li>12. <a href="#robo200">TUI/TUI.Items_Sort_Orders</a></li>
 </ul>
 <hr />
@@ -84,7 +84,7 @@
 
 <hr />
 <a name="TUI2fTUI2eDefault5fItems5fSort5fOrder"></a>
-<a name="robo308"></a><h2>TUI/TUI.Default_Items_Sort_Order [ Constants ]</h2>
+<a name="robo309"></a><h2>TUI/TUI.Default_Items_Sort_Order [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -99,7 +99,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItems5fIndexes"></a>
-<a name="robo492"></a><h2>TUI/TUI.Items_Indexes [ Variables ]</h2>
+<a name="robo493"></a><h2>TUI/TUI.Items_Indexes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -111,7 +111,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItems5fSort5fOrder"></a>
-<a name="robo493"></a><h2>TUI/TUI.Items_Sort_Order [ Variables ]</h2>
+<a name="robo494"></a><h2>TUI/TUI.Items_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -125,32 +125,32 @@
 </pre>
 
 <hr />
-<a name="TUI2fTUI2eTradeTable"></a>
-<a name="robo494"></a><h2>TUI/TUI.TradeTable [ Variables ]</h2>
+<a name="TUI2fTUI2eTrade5fTable"></a>
+<a name="robo495"></a><h2>TUI/TUI.Trade_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about the available items to trade
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   TradeTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>8<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   Trade_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 8<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="TUI2fTUI2eItemIndex"></a>
-<a name="robo802"></a><h2>TUI/TUI.ItemIndex [ Subprograms ]</h2>
+<a name="TUI2fTUI2eItem5fIndex"></a>
+<a name="robo806"></a><h2>TUI/TUI.Item_Index [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of the currently selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   ItemIndex<span class="sign">:</span> Integer<span class="sign">;</span>
+<pre class="source">   Item_Index<span class="sign">:</span> Integer<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="TUI2fTUI2eSearch5fTrade5fCommand"></a>
-<a name="robo1003"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
+<a name="robo1010"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -158,15 +158,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Search_Trade_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -177,7 +177,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fCommand"></a>
-<a name="robo1004"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
+<a name="robo1011"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -185,15 +185,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Trade_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -206,7 +206,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fItem5fInfo5fCommand"></a>
-<a name="robo1005"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
+<a name="robo1012"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -214,15 +214,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Trade_Item_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -236,7 +236,7 @@
 
 <hr />
 <a name="TUI2fTUI2eSort5fItems5fCommand"></a>
-<a name="robo1006"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
+<a name="robo1013"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -244,15 +244,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Sort_Items_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -264,7 +264,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fAmount5fCommand"></a>
-<a name="robo1007"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
+<a name="robo1014"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -272,15 +272,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Trade_Amount_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -294,7 +294,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fItem5fCommand"></a>
-<a name="robo1008"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
+<a name="robo1015"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -302,15 +302,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Trade_Item_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -322,7 +322,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-08-07 03:03:41</p>
+<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-09-04 03:14:57</p>
 </div> <!-- footer -->
 </body>
 </html>

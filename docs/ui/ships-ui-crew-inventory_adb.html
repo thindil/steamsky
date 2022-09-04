@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,21 +31,25 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo963">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
-<li>2. <a href="#robo962">SUCI/SUCI.Update_Inventory_Command</a></li>
-<li>3. <a href="#robo961">SUCI/SUCI.Sort_Crew_Inventory_Command</a></li>
-<li>4. <a href="#robo960">SUCI/SUCI.Show_Move_Item_Command</a></li>
-<li>5. <a href="#robo959">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
-<li>6. <a href="#robo958">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
-<li>7. <a href="#robo957">SUCI/SUCI.Set_Use_Item_Command</a></li>
-<li>8. <a href="#robo956">SUCI/SUCI.Move_Item_Command</a></li>
-<li>9. <a href="#robo770">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
-<li>10. <a href="#robo473">SUCI/SUCI.MemberIndex</a></li>
-<li>11. <a href="#robo472">SUCI/SUCI.InventoryTable</a></li>
-<li>12. <a href="#robo471">SUCI/SUCI.Inventory_Sort_Order</a></li>
-<li>13. <a href="#robo470">SUCI/SUCI.Inventory_Indexes</a></li>
-<li>14. <a href="#robo301">SUCI/SUCI.Default_Inventory_Sort_Order</a></li>
-<li>15. <a href="#robo190">SUCI/SUCI.Inventory_Sort_Orders</a></li>
+<li>1. <a href="#robo970">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
+<li>2. <a href="#robo969">SUCI/SUCI.Update_Inventory_Command</a></li>
+<li>3. <a href="#robo968">SUCI/SUCI.Toggle_Inventory_Items_Command</a></li>
+<li>4. <a href="#robo967">SUCI/SUCI.Toggle_Inventory_Item</a></li>
+<li>5. <a href="#robo966">SUCI/SUCI.Sort_Crew_Inventory_Command</a></li>
+<li>6. <a href="#robo965">SUCI/SUCI.Show_Move_Item_Command</a></li>
+<li>7. <a href="#robo964">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
+<li>8. <a href="#robo963">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
+<li>9. <a href="#robo962">SUCI/SUCI.Set_Use_Item_Command</a></li>
+<li>10. <a href="#robo961">SUCI/SUCI.Move_Items_Command</a></li>
+<li>11. <a href="#robo960">SUCI/SUCI.Move_Item_Command</a></li>
+<li>12. <a href="#robo772">SUCI/SUCI.Reset_Selection</a></li>
+<li>13. <a href="#robo771">SUCI/SUCI.Move_Item</a></li>
+<li>14. <a href="#robo474">SUCI/SUCI.Member_Index</a></li>
+<li>15. <a href="#robo473">SUCI/SUCI.Inventory_Table</a></li>
+<li>16. <a href="#robo472">SUCI/SUCI.Inventory_Sort_Order</a></li>
+<li>17. <a href="#robo471">SUCI/SUCI.Inventory_Indexes</a></li>
+<li>18. <a href="#robo302">SUCI/SUCI.Default_Inventory_Sort_Order</a></li>
+<li>19. <a href="#robo190">SUCI/SUCI.Inventory_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="SUCI2fSUCI2eInventory5fSort5fOrders"></a>
@@ -57,13 +61,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Inventory_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> DURABILITYASC<span class="sign">,</span> DURABILITYDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span>
-      AMOUNTASC<span class="sign">,</span> AMOUNTDESC<span class="sign">,</span> WEIGHTASC<span class="sign">,</span> WEIGHTDESC<span class="sign">,</span> USEDASC<span class="sign">,</span> USEDDESC<span class="sign">,</span>
-      NONE<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>SELECTEDASC<span class="sign">,</span> SELECTEDDESC<span class="sign">,</span> NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> DURABILITYASC<span class="sign">,</span>
+      DURABILITYDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> AMOUNTASC<span class="sign">,</span> AMOUNTDESC<span class="sign">,</span> WEIGHTASC<span class="sign">,</span>
+      WEIGHTDESC<span class="sign">,</span> USEDASC<span class="sign">,</span> USEDDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
       Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
 </pre>
 <p class="item_name">OPTIONS</p>
-<pre> NAMEASC        - Sort items by name ascending
+<pre> SELECTEDASC    - Sort items by selected ascending
+ SELETEDDESC    - Sort items by selected descending
+ NAMEASC        - Sort items by name ascending
  NAMEDESC       - Sort items by name descending
  DURABILITYASC  - Sort items by durability ascending
  DURABILITYDESC - Sort items by durability descending
@@ -79,11 +85,12 @@
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 6.4 - Added
+ 7.8 - Added SELECTEDASC and SELECTEDDESC values
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eDefault5fInventory5fSort5fOrder"></a>
-<a name="robo301"></a><h2>SUCI/SUCI.Default_Inventory_Sort_Order [ Constants ]</h2>
+<a name="robo302"></a><h2>SUCI/SUCI.Default_Inventory_Sort_Order [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -98,7 +105,7 @@
 
 <hr />
 <a name="SUCI2fSUCI2eInventory5fIndexes"></a>
-<a name="robo470"></a><h2>SUCI/SUCI.Inventory_Indexes [ Variables ]</h2>
+<a name="robo471"></a><h2>SUCI/SUCI.Inventory_Indexes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -110,7 +117,7 @@
 
 <hr />
 <a name="SUCI2fSUCI2eInventory5fSort5fOrder"></a>
-<a name="robo471"></a><h2>SUCI/SUCI.Inventory_Sort_Order [ Variables ]</h2>
+<a name="robo472"></a><h2>SUCI/SUCI.Inventory_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -121,60 +128,69 @@
 </pre>
 
 <hr />
-<a name="SUCI2fSUCI2eInventoryTable"></a>
-<a name="robo472"></a><h2>SUCI/SUCI.InventoryTable [ Variables ]</h2>
+<a name="SUCI2fSUCI2eInventory5fTable"></a>
+<a name="robo473"></a><h2>SUCI/SUCI.Inventory_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about the crew member inventory
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   InventoryTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>5<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   Inventory_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="SUCI2fSUCI2eMemberIndex"></a>
-<a name="robo473"></a><h2>SUCI/SUCI.MemberIndex [ Variables ]</h2>
+<a name="SUCI2fSUCI2eMember5fIndex"></a>
+<a name="robo474"></a><h2>SUCI/SUCI.Member_Index [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> The index of the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   MemberIndex<span class="sign">:</span> Positive<span class="sign">;</span>
+<pre class="source">   Member_Index<span class="sign">:</span> Positive<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="SUCI2fSUCI2eShow5fInventory5fMenu5fCommand"></a>
-<a name="robo770"></a><h2>SUCI/SUCI.Show_Inventory_Menu_Command [ Subprograms ]</h2>
+<a name="SUCI2fSUCI2eMove5fItem"></a>
+<a name="robo771"></a><h2>SUCI/SUCI.Move_Item [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show the menu with available the selected item options
+<pre> Move the selected item to the player's ship's cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Inventory_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Move_Item<span class="sign">(</span>Item_Index<span class="sign">,</span> Amount<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Item_Index - The inventory index of the item to move
+ Amount     - The amount of the item to move
 </pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
+<p class="item_name">HISTORY</p>
+<pre> 7.8 - Added
 </pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowInventoryMenu itemindex
- ItemIndex is the index of the item's which actions' menu will be show
+
+<hr />
+<a name="SUCI2fSUCI2eReset5fSelection"></a>
+<a name="robo772"></a><h2>SUCI/SUCI.Reset_Selection [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Reset the currently selected items in the crew member inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> Reset_Selection<span class="sign">(</span>Interp<span class="sign">:</span> Tcl_Interp<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Interp - The Tcl interpreter in which the selection will be reseted
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 7.8 - Added
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eMove5fItem5fCommand"></a>
-<a name="robo956"></a><h2>SUCI/SUCI.Move_Item_Command [ Commands ]</h2>
+<a name="robo960"></a><h2>SUCI/SUCI.Move_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -182,28 +198,54 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Move_Item_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> MoveItem memberindex itemindex
- Memberindex is the index of the crew member in which inventory item will
- be set, itemindex is the index of the item which will be set
+<pre> MoveItem itemindex
+ itemindex is the index of the item which will be set
+</pre>
+
+<hr />
+<a name="SUCI2fSUCI2eMove5fItems5fCommand"></a>
+<a name="robo961"></a><h2>SUCI/SUCI.Move_Items_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Move the selected items to the ships's cargo
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Move_Items_Command
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> MoveItems
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eSet5fUse5fItem5fCommand"></a>
-<a name="robo957"></a><h2>SUCI/SUCI.Set_Use_Item_Command [ Commands ]</h2>
+<a name="robo962"></a><h2>SUCI/SUCI.Set_Use_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -211,28 +253,27 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Set_Use_Item_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> SetUseItem memberindex itemindex
- Memberindex is the index of the crew member in which inventory item will
- be set, itemindex is the index of the item which will be set
+<pre> SetUseItem itemindex
+ itemindex is the index of the item which will be set
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fInventory5fItem5fInfo5fCommand"></a>
-<a name="robo958"></a><h2>SUCI/SUCI.Show_Inventory_Item_Info_Command [ Commands ]</h2>
+<a name="robo963"></a><h2>SUCI/SUCI.Show_Inventory_Item_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -241,26 +282,27 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Inventory_Item_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> ValidateMoveAmount
+<pre> ShowInventoryItemInfo memberindex itemindex
+ itemindex is the index of the item which will be show
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fMember5fInventory5fCommand"></a>
-<a name="robo959"></a><h2>SUCI/SUCI.Show_Member_Inventory_Command [ Commands ]</h2>
+<a name="robo964"></a><h2>SUCI/SUCI.Show_Member_Inventory_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -268,15 +310,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Member_Inventory_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -288,7 +330,7 @@
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fMove5fItem5fCommand"></a>
-<a name="robo960"></a><h2>SUCI/SUCI.Show_Move_Item_Command [ Commands ]</h2>
+<a name="robo965"></a><h2>SUCI/SUCI.Show_Move_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -296,28 +338,27 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Move_Item_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> ShowMoveItem memberindex itemindex
- Memberindex is the index of the crew member in which inventory item will
- be set, itemindex is the index of the item which will be set
+<pre> ShowMoveItem itemindex
+ itemindex is the index of the item which will be set
 </pre>
 
 <hr />
 <a name="SUCI2fSUCI2eSort5fCrew5fInventory5fCommand"></a>
-<a name="robo961"></a><h2>SUCI/SUCI.Sort_Crew_Inventory_Command [ Commands ]</h2>
+<a name="robo966"></a><h2>SUCI/SUCI.Sort_Crew_Inventory_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -325,15 +366,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Sort_Crew_Inventory_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -344,8 +385,66 @@
 </pre>
 
 <hr />
+<a name="SUCI2fSUCI2eToggle5fInventory5fItem"></a>
+<a name="robo967"></a><h2>SUCI/SUCI.Toggle_Inventory_Item [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Select or deselect the selected item in the inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Toggle_Inventory_Item_Command
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ToggleInventoryItem rowindex, itemindex
+ Rowindex is the index of the row in which is the selected item,
+ itemindex is the index of the selected item in crew member inventory.
+</pre>
+
+<hr />
+<a name="SUCI2fSUCI2eToggle5fInventory5fItems5fCommand"></a>
+<a name="robo968"></a><h2>SUCI/SUCI.Toggle_Inventory_Items_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Equip or unequip the selected items
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Toggle_Inventory_Items_Command
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ToggleInventoryItems action
+ Action is the action to do with the selected items. Possible values are
+ equip and unequip
+</pre>
+
+<hr />
 <a name="SUCI2fSUCI2eUpdate5fInventory5fCommand"></a>
-<a name="robo962"></a><h2>SUCI/SUCI.Update_Inventory_Command [ Commands ]</h2>
+<a name="robo969"></a><h2>SUCI/SUCI.Update_Inventory_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -353,15 +452,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Update_Inventory_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -374,7 +473,7 @@
 
 <hr />
 <a name="SUCI2fSUCI2eValidate5fMove5fAmount5fCommand"></a>
-<a name="robo963"></a><h2>SUCI/SUCI.Validate_Move_Amount_Command [ Commands ]</h2>
+<a name="robo970"></a><h2>SUCI/SUCI.Validate_Move_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -382,15 +481,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Validate_Move_Amount_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -401,7 +500,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-crew-inventory.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-08-07 03:03:41</p>
+<p>Generated from ./src/ui/ships-ui-crew-inventory.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-09-04 03:14:57</p>
 </div> <!-- footer -->
 </body>
 </html>
