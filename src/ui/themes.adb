@@ -38,15 +38,17 @@ package body Themes is
       Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
       Equal_Index: Natural := 0;
       Temp_Record: Theme_Record := Default_Theme;
-      function Convert_Path(Value: Unbounded_String) return Unbounded_String is
+      function Convert_Path
+        (Old_Value: Unbounded_String) return Unbounded_String is
          use Ada.Strings.Maps;
       begin
          if Dir_Separator = '/' then
-            return Value;
+            return Old_Value;
          end if;
          return
            Translate
-             (Source => Value, Mapping => To_Mapping(From => "\", To => "/"));
+             (Source => Old_Value,
+              Mapping => To_Mapping(From => "\", To => "/"));
       end Convert_Path;
    begin
       Themes_Container.Include
@@ -176,81 +178,93 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "PilotIcon") then
-                  Temp_Record.Pilot_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Pilot_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "EngineerIcon") then
-                  Temp_Record.Engineer_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Engineer_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "GunnerIcon") then
-                  Temp_Record.Gunner_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Gunner_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CrewTraderIcon") then
-                  Temp_Record.Crew_Trader_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Crew_Trader_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RepairIcon") then
-                  Temp_Record.Repair_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Repair_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoRepairIcon") then
-                  Temp_Record.No_Repair_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Repair_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RepairOrderIcon") then
                   Temp_Record.Repair_Order_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "UpgradeIcon") then
-                  Temp_Record.Upgrade_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Upgrade_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoUpgradeIcon") then
-                  Temp_Record.No_Upgrade_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Upgrade_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CleanIcon") then
-                  Temp_Record.Clean_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Clean_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoCleanIcon") then
-                  Temp_Record.No_Clean_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Clean_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CleanOrderIcon") then
-                  Temp_Record.Clean_Order_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Clean_Order_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ManufactureIcon") then
-                  Temp_Record.Manufacture_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Manufacture_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoManufactureIcon") then
                   Temp_Record.No_Manufacture_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpIcon") then
-                  Temp_Record.Move_Map_Up_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Move_Map_Up_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownIcon") then
                   Temp_Record.Move_Map_Down_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapLeftIcon") then
                   Temp_Record.Move_Map_Left_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapRightIcon") then
                   Temp_Record.Move_Map_Right_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoFuelIcon") then
-                  Temp_Record.No_Fuel_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Fuel_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "LowFuelIcon") then
-                  Temp_Record.Low_Fuel_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Low_Fuel_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoFoodIcon") then
-                  Temp_Record.No_Food_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Food_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "LowFoodIcon") then
-                  Temp_Record.Low_Food_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Low_Food_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoDrinksIcon") then
-                  Temp_Record.No_Drinks_Icon := Convert_Path(Value => Value);
+                  Temp_Record.No_Drinks_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "LowDrinksIcon") then
-                  Temp_Record.Low_Drinks_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Low_Drinks_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NotVisitedBaseIcon") then
                   Temp_Record.Not_Visited_Base_Icon :=
@@ -277,74 +291,80 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "OverloadedIcon") then
-                  Temp_Record.Overloaded_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Overloaded_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowUpIcon") then
-                  Temp_Record.Arrow_Up_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Arrow_Up_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowDownIcon") then
-                  Temp_Record.Arrow_Down_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Arrow_Down_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowLeftIcon") then
-                  Temp_Record.Arrow_Left_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Arrow_Left_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowRightIcon") then
-                  Temp_Record.Arrow_Right_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Arrow_Right_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowUpLeftIcon") then
                   Temp_Record.Arrow_Up_Left_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowUpRightIcon") then
                   Temp_Record.Arrow_Up_Right_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowDownRightIcon") then
                   Temp_Record.Arrow_Down_Right_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowDownLeftIcon") then
                   Temp_Record.Arrow_Down_Left_Icon :=
-                    Convert_Path(Value => Value);
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitIcon") then
-                  Temp_Record.Wait_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Wait_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveStepIcon") then
-                  Temp_Record.Move_Step_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Move_Step_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveToIcon") then
-                  Temp_Record.Move_To_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Move_To_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MemuIcon") then
-                  Temp_Record.Menu_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Menu_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ExitIcon") then
-                  Temp_Record.Exit_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Exit_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RandomIcon") then
-                  Temp_Record.Random_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Random_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MaleIcon") then
-                  Temp_Record.Male_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Male_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "FemaleIcon") then
-                  Temp_Record.Female_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Female_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "EditIcon") then
-                  Temp_Record.Edit_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Edit_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ShowIcon") then
-                  Temp_Record.Show_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Show_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CancelIcon") then
-                  Temp_Record.Cancel_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Cancel_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RemoveIcon") then
-                  Temp_Record.Remove_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Remove_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "HelpIcon") then
-                  Temp_Record.Help_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Help_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "SpecialHelpColor") then
                   Temp_Record.Special_Help_Color := Value;
@@ -359,36 +379,38 @@ package body Themes is
                   Temp_Record.Italic_Help_Color := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GiveIcon") then
-                  Temp_Record.Give_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Give_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "DropIcon") then
-                  Temp_Record.Drop_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Drop_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name = To_Unbounded_String(Source => "BuyIcon") then
-                  Temp_Record.Buy_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Buy_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "SellIcon") then
-                  Temp_Record.Sell_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Sell_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CraftIcon") then
-                  Temp_Record.Craft_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Craft_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "StudyIcon") then
-                  Temp_Record.Study_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Study_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "DeconstructIcon") then
-                  Temp_Record.Deconstruct_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Deconstruct_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NegotiateIcon") then
-                  Temp_Record.Negotiate_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Negotiate_Icon :=
+                    Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CargoIcon") then
-                  Temp_Record.Cargo_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Cargo_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "EquipIcon") then
-                  Temp_Record.Equip_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Equip_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "UnequipIcon") then
-                  Temp_Record.Unequip_Icon := Convert_Path(Value => Value);
+                  Temp_Record.Unequip_Icon := Convert_Path(Old_Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
