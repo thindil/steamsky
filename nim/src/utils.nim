@@ -17,12 +17,13 @@
 
 import random
 
-proc generateRoboticName*(): cstring {.exportc, gcsafe, raises: [], tags: [].} =
+proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
+    tags: [].} =
   ## FUNCTION
   ##
   ## Generate robotic type name for bases, mobs, ships, etc
   ##
-  ## RESULT
+  ## RETURNS
   ##
   ## Random robotic name
   randomize()
@@ -40,6 +41,19 @@ proc generateRoboticName*(): cstring {.exportc, gcsafe, raises: [], tags: [].} =
     name.add(y = $rand(max = 9))
   return name.cstring
 
-proc getRandom*(min, max: cint): cint {.exportc.} =
+proc getRandom*(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
+    tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the random value from the selected range
+  ##
+  ## PARAMETERS
+  ##
+  ## * min - The minimal value from which the value will be taken
+  ## * max - The maximal value from which the value will be taken
+  ##
+  ## RETURNS
+  ##
+  ## The random value from min and max range
   randomize()
   return rand(min .. max)
