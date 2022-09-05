@@ -7,7 +7,14 @@ if {[file exists steamsky.gpr] == 0} {
    return
 }
 
-cd [file join tests driver]
+cd nim
+
+for {set i 1} {$i <= [lindex $argv 0]} {incr i} {
+   puts "$i:"
+   exec testament pattern "tests/**/*.nim" >@stdout
+}
+
+cd [file join .. tests driver]
 
 for {set i 1} {$i <= [lindex $argv 0]} {incr i} {
    set result [exec [file join [pwd] test_runner]]
