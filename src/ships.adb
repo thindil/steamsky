@@ -47,7 +47,9 @@ package body Ships is
       Hull_Index: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
       Proto_Ship: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
+      --## rule off IMPROPER_INITIALIZATION
       Ship_Cargo: Inventory_Container.Vector (Capacity => 128);
+      --## rule on IMPROPER_INITIALIZATION
       Owners: Natural_Container.Vector := Natural_Container.Empty_Vector;
    begin
       -- Set ship modules
