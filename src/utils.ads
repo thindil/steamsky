@@ -39,11 +39,7 @@ is
    function Get_Random(Min, Max: Integer) return Integer with
       Import => True,
       Convention => C,
-      External_Name => "getRandom",
-      Global => null,
-      Pre => Min <= Max,
-      Post => Get_Random'Result in Min .. Max,
-      Test_Case => (Name => "Test_GetRandom", Mode => Nominal);
+      External_Name => "getRandom";
       -- ****
 
       --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -70,11 +66,7 @@ is
       -- RESULT
       -- Random robotic name
       -- SOURCE
-   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String with
-      Global => null,
-      Post => Game.Tiny_String.Length(Source => Generate_Robotic_Name'Result) >
-      0,
-      Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);
+   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String;
    -- ****
 
 end Utils;
