@@ -591,8 +591,8 @@ package body Ships is
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       --## rule off IMPROPER_INITIALIZATION
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
-      --## rule on IMPROPER_INITIALIZATION
       Empty_Known_Recipes: TinyString_Formal_Container.Vector (Capacity => 16);
+      --## rule on IMPROPER_INITIALIZATION
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
