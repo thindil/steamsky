@@ -585,7 +585,7 @@ package body Ships is
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
       Module_Index: BaseModules_Container.Extended_Index;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Objects_Container.Extended_Index := 0;
       Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
