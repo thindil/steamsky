@@ -1,10 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Icon for select all items on a list. Author: Delapouite (https://game-icons.net),
+  license CC BY 3.0
+
 ## [7.8] - 2022-09-04
 
 ### Added
-- Icon for move item to cargo, equip item, unequip item, unchecked empty
+- Icons for move item to cargo, equip item, unequip item, unchecked empty
   checkboxes. Author: Lorc, Delapouite (https://game-icons.net), license
   CC BY 3.0
 - Ability to move, equip or take off a couple of items in the player's
