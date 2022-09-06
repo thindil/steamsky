@@ -21,9 +21,7 @@ with Game; use Game;
 -- FUNCTION
 -- Provided various uncategorized code
 -- SOURCE
-package Utils with
-   SPARK_Mode
-is
+package Utils is
 -- ****
 
    -- ****f* Utils/Utils.GetRandom
@@ -42,23 +40,23 @@ is
       External_Name => "getRandom";
       -- ****
 
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
       -- ****f* Utils/Utils.DaysDifference
       -- FUNCTION
       -- Count days difference between selected date and current game date
       -- PARAMETERS
       -- DateToCompare - In game date to compare with current game date
+      -- Current_Date - In game current date. Can be empty. Default value is
+      --                Game_Date
       -- RESULT
       -- Amount of days difference between DateToCompare and current game date
       -- SOURCE
-   function Days_Difference(Date_To_Compare: Date_Record) return Integer is
-     ((Game_Date.Day + (30 * Game_Date.Month) + (Game_Date.Year * 360)) -
-      (Date_To_Compare.Day + (30 * Date_To_Compare.Month) +
-       (Date_To_Compare.Year * 360))) with
-      Global => Game_Date,
-      Test_Case => (Name => "Test_DaysDifference", Mode => Robustness);
+   function Days_Difference
+     (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)
+      return Integer with
+      Import => True,
+      Convention => C,
+      External_Name => "daysDifference";
       -- ****
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
 
       -- ****f* Utils/Utils.GenerateRoboticName
       -- FUNCTION

@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import random
+import std/random
+import game
 
 proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
@@ -57,3 +58,8 @@ proc getRandom*(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
   ## The random value from min and max range
   randomize()
   return rand(min .. max)
+
+proc daysDifference(dateToCompare, currentDate: DateRecord): cint {.exportc.} =
+  return (currentDate.day.cint + (30 * currentDate.month.cint) + (
+      currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
+      dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
