@@ -1090,6 +1090,10 @@ story.
   ship's cargo icon. Optional.
 * Key `EquipIcon`: Path to the SVG image which will be used for equip item
   action. Optional.
+* Key `UnequipIcon`: Path to the SVG image which will be used for unequip item
+  action. Optional.
+* Key `SelectAllIcon`: Path to the SVG image which will be used for select all
+  items on a list buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
