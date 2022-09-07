@@ -728,95 +728,15 @@ package body Utils.UI is
    end Add_Commands;
 
    procedure Minutes_To_Date
-     (Minutes: Natural; Info_Text: in out Unbounded_String) with
-      SPARK_Mode
-   is
-      Travel_Time: Date_Record := (others => 0);
-      Minutes_Diff: Integer := Minutes;
+     (Minutes: Natural; Info_Text: in out Unbounded_String) is
+      procedure Min_To_Date(Minutes: Natural; Text: in out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "minutesToDate";
+      New_Text: chars_ptr := New_String(Str => To_String(Source => Info_Text));
    begin
-      Count_Time_Loop :
-      while Minutes_Diff > 0 loop
-         pragma Loop_Invariant
-           (Travel_Time.Year < 4_000_000 and Travel_Time.Month < 13 and
-            Travel_Time.Day < 32 and Travel_Time.Hour < 24);
-         case Minutes_Diff is
-            when 518_401 .. Integer'Last =>
-               Travel_Time.Year := Travel_Time.Year + 1;
-               Minutes_Diff := Minutes_Diff - 518_400;
-            when 43_201 .. 518_400 =>
-               Travel_Time.Month := Travel_Time.Month + 1;
-               if Travel_Time.Month > 12 then
-                  Travel_Time.Month := 1;
-                  Travel_Time.Year := Travel_Time.Year + 1;
-               end if;
-               Minutes_Diff := Minutes_Diff - 43_200;
-            when 1_441 .. 43_200 =>
-               Travel_Time.Day := Travel_Time.Day + 1;
-               if Travel_Time.Day > 31 then
-                  Travel_Time.Day := 1;
-                  Travel_Time.Month := Travel_Time.Month + 1;
-                  if Travel_Time.Month > 12 then
-                     Travel_Time.Month := 1;
-                     Travel_Time.Year := Travel_Time.Year + 1;
-                  end if;
-               end if;
-               Minutes_Diff := Minutes_Diff - 1_440;
-            when 61 .. 1_440 =>
-               Travel_Time.Hour := Travel_Time.Hour + 1;
-               if Travel_Time.Hour > 23 then
-                  Travel_Time.Hour := 0;
-                  Travel_Time.Day := Travel_Time.Day + 1;
-                  if Travel_Time.Day > 31 then
-                     Travel_Time.Day := 1;
-                     Travel_Time.Month := Travel_Time.Month + 1;
-                     if Travel_Time.Month > 12 then
-                        Travel_Time.Month := 1;
-                        Travel_Time.Year := Travel_Time.Year + 1;
-                     end if;
-                  end if;
-               end if;
-               Minutes_Diff := Minutes_Diff - 60;
-            when others =>
-               Travel_Time.Minutes := Minutes_Diff;
-               Minutes_Diff := 0;
-         end case;
-         exit Count_Time_Loop when Travel_Time.Year = 4_000_000;
-      end loop Count_Time_Loop;
-      if Travel_Time.Year > 0
-        and then Length(Source => Info_Text) <
-          Natural'Last - (Positive'Image(Travel_Time.Year)'Length + 1) then
-         Append
-           (Source => Info_Text,
-            New_Item => Positive'Image(Travel_Time.Year) & "y");
-      end if;
-      if Travel_Time.Month > 0
-        and then Length(Source => Info_Text) <
-          Natural'Last - (Positive'Image(Travel_Time.Month)'Length + 1) then
-         Append
-           (Source => Info_Text,
-            New_Item => Positive'Image(Travel_Time.Month) & "m");
-      end if;
-      if Travel_Time.Day > 0
-        and then Length(Source => Info_Text) <
-          Natural'Last - (Positive'Image(Travel_Time.Day)'Length + 1) then
-         Append
-           (Source => Info_Text,
-            New_Item => Positive'Image(Travel_Time.Day) & "d");
-      end if;
-      if Travel_Time.Hour > 0
-        and then Length(Source => Info_Text) <
-          Natural'Last - (Positive'Image(Travel_Time.Hour)'Length + 1) then
-         Append
-           (Source => Info_Text,
-            New_Item => Positive'Image(Travel_Time.Hour) & "h");
-      end if;
-      if Travel_Time.Minutes > 0
-        and then Length(Source => Info_Text) <
-          Natural'Last - (Positive'Image(Travel_Time.Minutes)'Length + 4) then
-         Append
-           (Source => Info_Text,
-            New_Item => Positive'Image(Travel_Time.Minutes) & "mins");
-      end if;
+      Min_To_Date(Minutes => Minutes, Text => New_Text);
+      Info_Text := To_Unbounded_String(Source => Value(Item => New_Text));
    end Minutes_To_Date;
 
    procedure Travel_Info
