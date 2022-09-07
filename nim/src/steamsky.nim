@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import tk, utils
+import ui/utilsui
 
 func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   ## FUNCTION
@@ -42,3 +43,5 @@ func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
 
 proc dummy() {.used.} =
   discard generateRoboticName()
+  var text: cstring = ""
+  minutesToDate(1, text)
