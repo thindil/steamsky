@@ -61,6 +61,19 @@ proc getRandom*(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
 
 proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the difference in days between two dates, mostly with the current
+  ## date in the game
+  ##
+  ## PARAMETERS
+  ##
+  ## * dateToCompare - the game date to compare
+  ## * currentDate   - the current game date to which the date will be compared
+  ##
+  ## RETURNS
+  ##
+  ## The difference in days between the two dates
   return (currentDate.day.cint + (30 * currentDate.month.cint) + (
       currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
       dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
