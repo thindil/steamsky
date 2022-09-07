@@ -885,7 +885,7 @@ package body Ships is
                      end if;
                   when UPDATE =>
                      Update_Cargo_Loop :
-                     for I in
+                     for K in
                        MobInventory_Container.First_Index
                          (Container => Temp_Record.Cargo) ..
                          MobInventory_Container.Last_Index
@@ -894,7 +894,7 @@ package body Ships is
                         declare
                            Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
-                               (Container => Temp_Record.Cargo, Index => I);
+                               (Container => Temp_Record.Cargo, Index => K);
                         begin
                            if Item.Proto_Index = Item_Index then
                               if Get_Attribute
@@ -940,7 +940,7 @@ package body Ships is
                                     Max_Amount => 0);
                               end if;
                               MobInventory_Container.Replace_Element
-                                (Container => Temp_Record.Cargo, Index => I,
+                                (Container => Temp_Record.Cargo, Index => K,
                                  New_Item => Item);
                               exit Update_Cargo_Loop;
                            end if;
