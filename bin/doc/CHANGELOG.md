@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Icon for select all items on a list. Author: Delapouite (https://game-icons.net),
   license CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ## [7.8] - 2022-09-04
 
 ### Added
