@@ -17,7 +17,8 @@
 
 import ../game
 
-proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc.} =
+proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
+    sideEffect, raises: [], tags: [].} =
   var
     travelTime: DateRecord
     minutesDiff: int = minutes
@@ -25,7 +26,7 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc.} =
     if minutesDiff > 518_400:
       minutesDiff = minutesDiff - 518_400
       travelTime.year.inc()
-    elif minutesDiff in 43_201.. 518_400:
+    elif minutesDiff in 43_201 .. 518_400:
       minutesDiff = minutesDiff - 43_200
       travelTime.month.inc()
       if travelTime.month > 12:
