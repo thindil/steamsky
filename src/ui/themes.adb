@@ -589,7 +589,7 @@ package body Themes is
          55 => To_Unbounded_String(Source => "cargoicon"),
          56 => To_Unbounded_String(Source => "equipicon"),
          57 => To_Unbounded_String(Source => "unequipicon"),
-         58 => To_Unbounded_String(Source => "selectall"));
+         58 => To_Unbounded_String(Source => "selectallicon"));
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
