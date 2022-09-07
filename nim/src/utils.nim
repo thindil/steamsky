@@ -59,7 +59,8 @@ proc getRandom*(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
   randomize()
   return rand(min .. max)
 
-proc daysDifference(dateToCompare, currentDate: DateRecord): cint {.exportc.} =
+proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
+    gcsafe, sideEffect, raises: [], tags: [].} =
   return (currentDate.day.cint + (30 * currentDate.month.cint) + (
       currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
       dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
