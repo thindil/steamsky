@@ -640,7 +640,7 @@ package body Ships.UI.Crew.Inventory is
         Create
           (pathName => Member_Frame & ".selectallbutton",
            options =>
-             "-image selectallicon -command SelectAllInventory -style Small.TButton");
+             "-image selectallicon -command {ToggleAllInventory select} -style Small.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
@@ -1413,6 +1413,41 @@ package body Ships.UI.Crew.Inventory is
            Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Move_Items_Command;
 
+   -- ****o* SUCI/SUCI.Toggle_All_Inventory_Command
+   -- FUNCTION
+   -- Select or deselect all items in the crew member inventory
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleAllInventory action
+   -- Action is the action which will be performed. Possible values are
+   -- select or deselect
+   -- SOURCE
+   function Toggle_All_Inventory_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_All_Inventory_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+   begin
+      if CArgv.Arg(Argv => Argv, N => 1) = "deselect" then
+         Reset_Selection(Interp => Interp);
+      end if;
+      return
+        Sort_Crew_Inventory_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+   end Toggle_All_Inventory_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -1443,6 +1478,9 @@ package body Ships.UI.Crew.Inventory is
          Ada_Command => Toggle_Inventory_Items_Command'Access);
       Add_Command
         (Name => "MoveItems", Ada_Command => Move_Items_Command'Access);
+      Add_Command
+        (Name => "ToggleAllInventory",
+         Ada_Command => Toggle_All_Inventory_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Crew.Inventory;
