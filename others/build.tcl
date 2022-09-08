@@ -26,6 +26,7 @@ if {$target != "x86_64-linux-gnu" && $target != "x86_64-windows"} {
 }
 
 # Clean and compile the game
+file delete -force [file join nim obj]
 file mkdir [file join nim obj]
 exec -ignorestderr gprclean -P steamsky.gpr --target=$target >@stdout
 cd nim
