@@ -671,6 +671,7 @@ package body Ships.UI.Crew.Inventory is
         Height +
         Positive'Value
           (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
+      Add(Widget => Select_All_Button, Message => "Select all items.");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Select_All_Button, Options => "-sticky w -padx 5");
       Height :=
