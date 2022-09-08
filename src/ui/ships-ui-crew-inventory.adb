@@ -636,6 +636,11 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-image exiticon -command {CloseDialog " & Member_Dialog &
              "} -text {Close} -style Dialog.TButton");
+      Select_All_Button: constant Ttk_Button :=
+        Create
+          (pathName => Member_Frame & ".selectallbutton",
+           options =>
+             "-image selectallicon -command SelectAllInventory -style Small.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
@@ -666,6 +671,12 @@ package body Ships.UI.Crew.Inventory is
         Height +
         Positive'Value
           (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Select_All_Button, Options => "-sticky w -padx 5");
+      Height :=
+        Height +
+        Positive'Value
+          (Winfo_Get(Widgt => Select_All_Button, Info => "reqheight"));
       Inventory_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Member_Frame),
