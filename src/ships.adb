@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -1326,13 +1326,13 @@ package body Ships is
                       SyllableString_Container.Element
                         (Container => Ship_Syllables_End,
                          Index =>
-                           (Get_Random
-                              (Min =>
-                                 SyllableString_Container.First_Index
-                                   (Container => Ship_Syllables_End),
-                               Max =>
-                                 SyllableString_Container.Last_Index
-                                   (Container => Ship_Syllables_End))))));
+                           Get_Random
+                             (Min =>
+                                SyllableString_Container.First_Index
+                                  (Container => Ship_Syllables_End),
+                              Max =>
+                                SyllableString_Container.Last_Index
+                                  (Container => Ship_Syllables_End)))));
          end if;
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
@@ -1442,6 +1442,7 @@ package body Ships is
    procedure Damage_Module
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
+      use Ada.Strings.Unbounded;
       use Ships.Crew;
 
       Real_Damage: Natural := Damage;
