@@ -36,7 +36,7 @@ if {$target == "x86_64-linux-gnu"} {
    set dirname steamsky-linux
    set extension {}
 } else {
-   exec -ignorestderr nim c -d:mingw -d:release src/steamsky.nim
+   exec -ignorestderr nim windows
    cd ..
    exec -ignorestderr gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target -largs -L/opt/lib >@stdout
    set dirname steamsky-windows
