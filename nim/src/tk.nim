@@ -110,3 +110,19 @@ proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
   ## RETURNS
   ##
   ## tclOk if Tk initialized correctly, otherwise tclError
+
+proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
+    dynlib: tclDllName, importc: "Tcl_Eval".}
+  ## FUNCTION
+  ##
+  ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
+  ## of the evaluation
+  ##
+  ## PARAMETERS
+  ##
+  ## * interp - The Tcl interpreter on which the code will be evaluated
+  ## * script - The Tcl code which will be evaluated
+  ##
+  ## RETURNS
+  ##
+  ## tclOk if the code evaluated correctly, otherwise tclError
