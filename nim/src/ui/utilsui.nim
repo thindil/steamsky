@@ -19,6 +19,19 @@ import ../game
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Convert the game minutes to the game time in days, hours, etc
+  ##
+  ## PARAMETERS
+  ##
+  ## * minutes  - the amount of minutes to convert
+  ## * infoText - the string to which the converted time will be added
+  ##
+  ## RETURNS
+  ##
+  ## The updated infoText paramater with converted minutes to the game
+  ## time
   var
     travelTime: DateRecord
     minutesDiff: int = minutes
