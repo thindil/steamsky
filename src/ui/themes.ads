@@ -140,7 +140,8 @@ package Themes is
    -- Cargo_Icon            - Icon used for represent the player's ship's cargo
    -- Equip_Icon            - Icon used for equip item action
    -- Unequip_Icon          - Icon used for unequip item action
-   -- SelectAll_Icon        - Icon used for select all items on a list button
+   -- Select_All_Icon       - Icon used for select all items on a list button
+   -- Unselect_All_Icon     - Icon used for unselect all items on a list button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -225,6 +226,7 @@ package Themes is
       Equip_Icon: Unbounded_String;
       Unequip_Icon: Unbounded_String;
       Select_All_Icon: Unbounded_String;
+      Unselect_All_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -317,7 +319,8 @@ package Themes is
       Cargo_Icon => Default_Theme_Icons_Path & "cargo.svg",
       Equip_Icon => Default_Theme_Icons_Path & "equip.svg",
       Unequip_Icon => Default_Theme_Icons_Path & "unequip.svg",
-      Select_All_Icon => Default_Theme_Icons_Path & "selectall.svg");
+      Select_All_Icon => Default_Theme_Icons_Path & "selectall.svg",
+      Unselect_All_Icon => Default_Theme_Icons_Path & "unselectall.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
