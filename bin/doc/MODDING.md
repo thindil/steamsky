@@ -1093,7 +1093,9 @@ story.
 * Key `UnequipIcon`: Path to the SVG image which will be used for unequip item
   action. Optional.
 * Key `SelectAllIcon`: Path to the SVG image which will be used for select all
-  items on a list buttons. Optional.
+  items on lists' buttons. Optional.
+* Key `UnselectAllIcon`: Path to the SVG image which will be used for unselect
+  all items on lists' buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
