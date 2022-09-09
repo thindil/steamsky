@@ -636,11 +636,18 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-image exiticon -command {CloseDialog " & Member_Dialog &
              "} -text {Close} -style Dialog.TButton");
+      Buttons_Box: constant Ttk_Frame :=
+        Create(pathName => Member_Frame & ".selectbox");
       Select_All_Button: constant Ttk_Button :=
         Create
-          (pathName => Member_Frame & ".selectallbutton",
+          (pathName => Buttons_Box & ".selectallbutton",
            options =>
              "-image selectallicon -command {ToggleAllInventory select} -style Small.TButton");
+      Unselect_All_Button: constant Ttk_Button :=
+        Create
+          (pathName => Buttons_Box & ".unselectallbutton",
+           options =>
+             "-image unselectallicon -command {ToggleAllInventory unselect} -style Small.TButton");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
@@ -672,12 +679,17 @@ package body Ships.UI.Crew.Inventory is
         Positive'Value
           (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
       Add(Widget => Select_All_Button, Message => "Select all items.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Select_All_Button, Options => "-sticky w");
+      Add(Widget => Unselect_All_Button, Message => "Unselect all items.");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Select_All_Button, Options => "-sticky w -padx 5");
+        (Slave => Unselect_All_Button,
+         Options => "-sticky w -row 0 -column 1");
       Height :=
         Height +
         Positive'Value
           (Winfo_Get(Widgt => Select_All_Button, Info => "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Box, Options => "-sticky w -padx 5");
       Inventory_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Member_Frame),
@@ -1439,7 +1451,7 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      if CArgv.Arg(Argv => Argv, N => 1) = "deselect" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
          Reset_Selection(Interp => Interp);
       else
          Set_Item_Selection_Loop :
