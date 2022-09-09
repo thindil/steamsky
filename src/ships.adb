@@ -951,7 +951,7 @@ package body Ships is
                      declare
                         Cargo_Index: Inventory_Amount_Range := 1;
                      begin
-                        --## rule off SIMPLIFIABLE_EXPRESSIONS
+                        --## rule off SIMPLIFIABLE_STATEMENTS
                         Delete_Cargo_Loop :
                         while Cargo_Index <=
                           MobInventory_Container.Last_Index
@@ -969,7 +969,7 @@ package body Ships is
                            Cargo_Index := Cargo_Index + 1;
                         end loop Delete_Cargo_Loop;
                      end Remove_Cargo_Block;
-                        --## rule on SIMPLIFIABLE_EXPRESSIONS
+                        --## rule on SIMPLIFIABLE_STATEMENTS
                end case;
             end loop Load_Cargo_Loop;
             if Get_Attribute(Elem => Ship_Node, Name => "owner") /= "" then
