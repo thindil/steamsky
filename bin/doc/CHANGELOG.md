@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Icon for select all items on a list. Author: Delapouite (https://game-icons.net),
-  license CC BY 3.0
+- Icons for select or unselect all items on a list. Authors: Delapouite
+  (https://game-icons.net), Bartek Jasicki license CC BY 3.0
 
 ### Changed
 - Updated modding guide
