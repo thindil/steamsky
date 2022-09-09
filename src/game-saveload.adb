@@ -57,7 +57,6 @@ package body Game.SaveLoad is
       use Ada.Strings.Fixed;
       use Ada.Text_IO;
       use Ada.Text_IO.Text_Streams;
-      use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
@@ -240,6 +239,8 @@ package body Game.SaveLoad is
          New_Line => False);
       Save_Known_Recipes_Block :
       declare
+         use Tiny_String;
+
          Recipe_Node: DOM.Core.Element;
       begin
          Save_Known_Recipes_Loop :
