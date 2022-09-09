@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../game
+import std/strutils
+import ../game, ../tk
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -82,3 +83,15 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
   if travelTime.minutes > 0:
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
+
+proc deleteWidgets(startIndex, endIndex: cint; frame: cstring;
+    interp: PInterp) {.exportc.} =
+  if endIndex < startIndex:
+    return
+  for i in startIndex .. endIndex:
+    if interp.tclEval(script = cstring("grid slaves " & $frame & " -row " &
+        $i)) == tclError:
+      return
+    let tclResult = $interp.tclGetResult()
+    for widget in tclResult.split():
+      discard interp.tclEval(script = cstring("destroy " & widget))
