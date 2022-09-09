@@ -126,3 +126,17 @@ proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
   ## RETURNS
   ##
   ## tclOk if the code evaluated correctly, otherwise tclError
+
+proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
+    importc: "Tcl_GetStringResult".}
+  ## FUNCTION
+  ##
+  ## Get the string with the result of the last evaluated Tcl command
+  ##
+  ## PARAMETERS
+  ##
+  ## * interp - The Tcl interpreter from which the result will be taken
+  ##
+  ## RETURNS
+  ##
+  ## The string with the result of the last evaluated Tcl command
