@@ -729,13 +729,13 @@ package body Utils.UI is
 
    procedure Minutes_To_Date
      (Minutes: Natural; Info_Text: in out Unbounded_String) is
-      procedure Min_To_Date(Minutes: Natural; Text: in out chars_ptr) with
+      procedure Min_To_Date(Mins: Natural; Info: in out chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "minutesToDate";
       New_Text: chars_ptr := New_String(Str => To_String(Source => Info_Text));
    begin
-      Min_To_Date(Minutes => Minutes, Text => New_Text);
+      Min_To_Date(Mins => Minutes, Info => New_Text);
       Info_Text := To_Unbounded_String(Source => Value(Item => New_Text));
    end Minutes_To_Date;
 
