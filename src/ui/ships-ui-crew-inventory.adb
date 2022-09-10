@@ -719,7 +719,7 @@ package body Ships.UI.Crew.Inventory is
       Widgets.Focus(Widgt => Inventory_Table.Canvas);
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Inventory_Table.Canvas & ";break}");
+         Script => "{focus " & Select_All_Button & ";break}");
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
          Script => "{" & Dialog_Close_Button & " invoke;break}");
