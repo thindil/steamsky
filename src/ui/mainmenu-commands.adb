@@ -43,12 +43,12 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Events;
@@ -57,7 +57,7 @@ with Game; use Game;
 with Game.SaveLoad;
 with Goals;
 with HallOfFame;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with Ships;
 with Table; use Table;
 with Utils;
@@ -579,8 +579,10 @@ package body MainMenu.Commands is
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.Toplevel;
+      use Tcl.Tk.Ada.Winfo;
       use Tcl.Tk.Ada.Wm;
       use Events;
+      use Maps.UI;
 
       Main_Window: constant Tk_Toplevel :=
         Get_Main_Window(Interp => Get_Context);
@@ -1134,6 +1136,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use CoreUI;
+
    begin
       Widgets.configure
         (Widgt => Close_Button, options => "-command ShowSkyMap");
