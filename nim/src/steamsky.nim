@@ -18,7 +18,7 @@
 import tk, utils
 import ui/utilsui
 
-func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
+proc steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   ## FUNCTION
   ##
   ## The main procedure of the game.
@@ -40,6 +40,7 @@ func steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   # Initialize Tk. Quit if failed
   if tkInit(interp = result) == tclError:
     raise newException(exceptn = TclError, message = "Can't initialize Tk.")
+  setInterp(interp = result)
 
 proc dummy() {.used.} =
   discard generateRoboticName()

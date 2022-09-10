@@ -72,6 +72,30 @@ type
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
 
+var currentTclInterp: PInterp = nil
+  ## FUNCTION
+  ##
+  ## Stores the current Tcl interpreter
+
+proc setInterp*(interp: PInterp) {.gcsafe, sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Set the current Tcl interpreter.
+  ##
+  ## PARAMETERS
+  ##
+  ## * interp - The Tcl interpreter which will be set as the current
+  currentTclInterp = interp
+
+proc getInterp*(): PInterp {.gcsafe, sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the current Tcl interpreter
+  ##
+  ## RETURNS
+  ##
+  ## The Tcl interpreter set as the current
+  result = currentTclInterp
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
