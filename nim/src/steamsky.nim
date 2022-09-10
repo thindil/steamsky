@@ -41,8 +41,3 @@ proc steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   if tkInit(interp = result) == tclError:
     raise newException(exceptn = TclError, message = "Can't initialize Tk.")
   setInterp(interp = result)
-
-proc dummy() {.used.} =
-  discard generateRoboticName()
-  var text: cstring = ""
-  minutesToDate(1, text)
