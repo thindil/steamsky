@@ -3,10 +3,6 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Added
-- Icons for select or unselect all items on a list. Authors: Delapouite
-  (https://game-icons.net), Bartek Jasicki license CC BY 3.0
-
 ### Changed
 - Updated modding guide
 
