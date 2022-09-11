@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to select and unselect all item in the player's ship's crew members'
+  inventory
+
 ### Changed
 - Updated modding guide
 
