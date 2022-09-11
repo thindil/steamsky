@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Option to select and unselect all item in the player's ship's crew members'
   inventory
+- Option to wear, take off, move to the player's ship's cargo the selected
+  items from a crew member's inventory
 
 ### Changed
 - Updated modding guide
