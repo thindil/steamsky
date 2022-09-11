@@ -178,8 +178,7 @@ package Utils.UI is
       -- 5.9 - Added
       -- SOURCE
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with
-      SPARK_Mode;
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
       -- ****
 
       -- ****f* UUI/UUI.Get_Skill_Marks

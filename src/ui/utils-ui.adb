@@ -19,7 +19,6 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -1223,29 +1222,16 @@ package body Utils.UI is
    end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with
-      SPARK_Mode
-   is
-      Tokens: Slice_Set;
-      Item: Ttk_Frame;
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
+      procedure Delete_Widgts
+        (S_Index, E_Index: Integer; Parent: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "deleteWidgets";
    begin
-      if End_Index < Start_Index then
-         return;
-      end if;
-      Delete_Widgets_Loop :
-      for I in Start_Index .. End_Index loop
-         Create
-           (S => Tokens,
-            From =>
-              Tcl.Tk.Ada.Grid.Grid_Slaves
-                (Master => Frame, Option => "-row" & Positive'Image(I)),
-            Separators => " ");
-         Delete_Row_Loop :
-         for J in 1 .. Slice_Count(S => Tokens) loop
-            Item := Get_Widget(pathName => Slice(S => Tokens, Index => J));
-            Destroy(Widgt => Item);
-         end loop Delete_Row_Loop;
-      end loop Delete_Widgets_Loop;
+      Delete_Widgts
+        (S_Index => Start_Index, E_Index => End_Index,
+         Parent => New_String(Str => Widget_Image(Win => Frame)));
    end Delete_Widgets;
 
    function Get_Skill_Marks
