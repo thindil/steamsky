@@ -781,6 +781,7 @@ package body Utils.UI is
          if Player_Ship.Crew(I).Order not in PILOT | ENGINEER then
             goto End_Of_Count_Loop;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
          if
            (Tired /
@@ -790,6 +791,7 @@ package body Utils.UI is
               (Tired /
                (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level));
          end if;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          if Rests > 0 then
             Cabin_Index :=
               Find_Cabin
@@ -830,6 +832,7 @@ package body Utils.UI is
       end loop Count_Rest_Time_Loop;
       Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
       Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Info_Text);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Append
         (Source => Info_Text,
          New_Item =>
@@ -849,6 +852,7 @@ package body Utils.UI is
                       Index => Find_Proto_Item(Item_Type => Fuel_Type))
                      .Name));
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
    end Travel_Info;
 
    procedure Update_Messages with
