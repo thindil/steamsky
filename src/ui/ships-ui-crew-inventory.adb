@@ -732,6 +732,7 @@ package body Ships.UI.Crew.Inventory is
       Bind
         (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
          Script => "{" & Dialog_Close_Button & " invoke;break}");
+      Focus(Widgt => Dialog_Close_Button);
       if Height > 500 then
          Height := 500;
       end if;
