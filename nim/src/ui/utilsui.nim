@@ -86,8 +86,8 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
 
-proc deleteWidgets(startIndex, endIndex: cint; frame: cstring;
-    interp: PInterp) {.exportc.} =
+proc deleteWidgets(startIndex, endIndex: cint; frame: cstring) {.exportc.} =
+  let interp = getInterp()
   if endIndex < startIndex:
     return
   for i in startIndex .. endIndex:
