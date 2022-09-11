@@ -536,7 +536,7 @@ package body Ships.UI.Crew is
         Get_Widget(pathName => Member_Dialog & ".button", Interp => Interp);
       Height, New_Height: Positive := 1;
       Progress_Frame: Ttk_Frame;
-      Member_Info: Unbounded_String;
+      Member_Info: Unbounded_String := Null_Unbounded_String;
       Member_Label: Ttk_Label;
       Width, New_Width: Positive := 1;
       Tired_Points: Integer;
@@ -803,14 +803,19 @@ package body Ships.UI.Crew is
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
-         Member_Info :=
-           (if Member.Gender = 'M' then To_Unbounded_String(Source => "Male")
-            else To_Unbounded_String(Source => "Female"));
+         Append
+           (Source => Member_Info,
+            New_Item =>
+              "Gender: " &
+              (if Member.Gender = 'M' then
+                 To_Unbounded_String(Source => "Male")
+               else To_Unbounded_String(Source => "Female")) &
+              LF);
       end if;
       Append
         (Source => Member_Info,
          New_Item =>
-           LF & "Faction: " &
+           "Faction: " &
            To_String(Source => Factions_List(Member.Faction).Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Member.Home_Base).Name));
