@@ -844,7 +844,13 @@ package body Ships.UI.Crew is
                        Get_Module_Name(M_Type => WORKSHOP));
                when UPGRADING =>
                   Append
-                    (Source => Member_Info, New_Item => "Upgrading the ship");
+                    (Source => Member_Info,
+                     New_Item =>
+                       "Upgrading " &
+                       To_String
+                         (Source =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Name));
                when TALK =>
                   Append(Source => Member_Info, New_Item => "Talk in bases");
                when HEAL =>
