@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Updated look of general information about the selected player's ship's crew
+  member
 
 ## [7.8] - 2022-09-04
 
