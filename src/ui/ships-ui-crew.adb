@@ -801,24 +801,70 @@ package body Ships.UI.Crew is
              (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
-         Append
-           (Source => Member_Info,
-            New_Item =>
-              "Order: " &
-              (case Member.Order is when PILOT => "Piloting the ship",
-                 when ENGINEER => "Engineering the ship",
-                 when GUNNER => "Operating a gun",
-                 when REPAIR => "Repairing the ship",
-                 when CRAFT => "Manufacturing items",
-                 when UPGRADING => "Upgrading the ship",
-                 when TALK => "Talk in bases",
-                 when HEAL => "Healing the wounded",
-                 when CLEAN => "Cleaning the ship",
-                 when REST => "Resting, no order",
-                 when DEFEND => "Defending the ship",
-                 when BOARDING => "Boarding the enemy's ship",
-                 when TRAIN => "On training") &
-              LF);
+         Show_Order_Info_Block :
+         declare
+            function Get_Module_Name(M_Type: Module_Type_2) return String is
+            begin
+               Modules_Loop :
+               for Module of Player_Ship.Modules loop
+                  if Module.M_Type = M_Type then
+                     Owners_Loop :
+                     for Owner of Module.Owner loop
+                        if Owner = Member_Index then
+                           return To_String(Source => Module.Name);
+                        end if;
+                     end loop Owners_Loop;
+                  end if;
+               end loop Modules_Loop;
+               return "";
+            end Get_Module_Name;
+         begin
+            Append(Source => Member_Info, New_Item => "Order: ");
+            case Member.Order is
+               when PILOT =>
+                  Append
+                    (Source => Member_Info, New_Item => "Piloting the ship");
+               when ENGINEER =>
+                  Append
+                    (Source => Member_Info,
+                     New_Item => "Engineering the ship");
+               when GUNNER =>
+                  Append
+                    (Source => Member_Info,
+                     New_Item =>
+                       "Operating " & Get_Module_Name(M_Type => GUN));
+               when REPAIR =>
+                  Append
+                    (Source => Member_Info, New_Item => "Repairing the ship");
+               when CRAFT =>
+                  Append
+                    (Source => Member_Info, New_Item => "Manufacturing items");
+               when UPGRADING =>
+                  Append
+                    (Source => Member_Info, New_Item => "Upgrading the ship");
+               when TALK =>
+                  Append(Source => Member_Info, New_Item => "Talk in bases");
+               when HEAL =>
+                  Append
+                    (Source => Member_Info, New_Item => "Healing the wounded");
+               when CLEAN =>
+                  Append
+                    (Source => Member_Info, New_Item => "Cleaning the ship");
+               when REST =>
+                  Append
+                    (Source => Member_Info, New_Item => "Resting, no order");
+               when DEFEND =>
+                  Append
+                    (Source => Member_Info, New_Item => "Defending the ship");
+               when BOARDING =>
+                  Append
+                    (Source => Member_Info,
+                     New_Item => "Boarding the enemy's ship");
+               when TRAIN =>
+                  Append(Source => Member_Info, New_Item => "On training");
+            end case;
+            Append(Source => Member_Info, New_Item => LF);
+         end Show_Order_Info_Block;
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
