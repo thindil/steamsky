@@ -858,7 +858,7 @@ package body Utils.UI is
       SPARK_Mode
    is
       Loop_Start: Integer := 0 - Messages_Amount;
-      Message: Message_Data;
+      Message: Message_Data; --## rule line off IMPROPER_INITIALIZATION
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "yellow"),
          2 => To_Unbounded_String(Source => "green"),
