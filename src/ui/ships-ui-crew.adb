@@ -838,7 +838,10 @@ package body Ships.UI.Crew is
                     (Source => Member_Info, New_Item => "Repairing the ship");
                when CRAFT =>
                   Append
-                    (Source => Member_Info, New_Item => "Manufacturing items");
+                    (Source => Member_Info,
+                     New_Item =>
+                       "Manufacturing items in " &
+                       Get_Module_Name(M_Type => WORKSHOP));
                when UPGRADING =>
                   Append
                     (Source => Member_Info, New_Item => "Upgrading the ship");
@@ -846,13 +849,19 @@ package body Ships.UI.Crew is
                   Append(Source => Member_Info, New_Item => "Talk in bases");
                when HEAL =>
                   Append
-                    (Source => Member_Info, New_Item => "Healing the wounded");
+                    (Source => Member_Info,
+                     New_Item =>
+                       "Healing the wounded in " &
+                       Get_Module_Name(M_Type => MEDICAL_ROOM));
                when CLEAN =>
                   Append
                     (Source => Member_Info, New_Item => "Cleaning the ship");
                when REST =>
                   Append
-                    (Source => Member_Info, New_Item => "Resting, no order");
+                    (Source => Member_Info,
+                     New_Item =>
+                       "Resting in " & Get_Module_Name(M_Type => CABIN) &
+                       ", no order");
                when DEFEND =>
                   Append
                     (Source => Member_Info, New_Item => "Defending the ship");
@@ -861,7 +870,11 @@ package body Ships.UI.Crew is
                     (Source => Member_Info,
                      New_Item => "Boarding the enemy's ship");
                when TRAIN =>
-                  Append(Source => Member_Info, New_Item => "On training");
+                  Append
+                    (Source => Member_Info,
+                     New_Item =>
+                       "On training in " &
+                       Get_Module_Name(M_Type => TRAINING_ROOM));
             end case;
             Append(Source => Member_Info, New_Item => LF);
          end Show_Order_Info_Block;
