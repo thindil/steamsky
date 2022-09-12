@@ -829,9 +829,9 @@ package body Utils.UI is
          end if;
          <<End_Of_Count_Loop>>
       end loop Count_Rest_Time_Loop;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
       Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Info_Text);
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Append
         (Source => Info_Text,
          New_Item =>
@@ -1064,7 +1064,7 @@ package body Utils.UI is
                    AttributesData_Container.Element
                      (Container => Attributes_List,
                       Index =>
-                        (SkillsData_Container.Element
+                        SkillsData_Container.Element
                            (Container => Skills_List,
                             Index =>
                               Skills_Amount_Range
@@ -1073,7 +1073,7 @@ package body Utils.UI is
                                     Index => Proto_Index)
                                    .Value
                                    (3)))
-                           .Attribute))
+                           .Attribute)
                      .Name));
          if Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
