@@ -800,6 +800,26 @@ package body Ships.UI.Crew is
            Positive'Value
              (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
+      if Skills_Container.Length(Container => Member.Skills) > 0 then
+         Append
+           (Source => Member_Info,
+            New_Item =>
+              "Order: " &
+              (case Member.Order is when PILOT => "Piloting the ship",
+                 when ENGINEER => "Engineering the ship",
+                 when GUNNER => "Operating a gun",
+                 when REPAIR => "Repairing the ship",
+                 when CRAFT => "Manufacturing items",
+                 when UPGRADING => "Upgrading the ship",
+                 when TALK => "Talk in bases",
+                 when HEAL => "Healing the wounded",
+                 when CLEAN => "Cleaning the ship",
+                 when REST => "Resting, no order",
+                 when DEFEND => "Defending the ship",
+                 when BOARDING => "Boarding the enemy's ship",
+                 when TRAIN => "On training") &
+              LF);
+      end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
