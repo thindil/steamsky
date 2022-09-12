@@ -86,10 +86,11 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
 
-proc deleteWidgets(startIndex, endIndex: cint; frame: cstring) {.exportc.} =
-  let interp = getInterp()
+proc deleteWidgets(startIndex, endIndex: cint; frame: cstring) {.exportc,
+    gcsafe, sideEffect, raises: [], tags: [].} =
   if endIndex < startIndex:
     return
+  let interp = getInterp()
   for i in startIndex .. endIndex:
     if interp.tclEval(script = cstring("grid slaves " & $frame & " -row " &
         $i)) == tclError:
