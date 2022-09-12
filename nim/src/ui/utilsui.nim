@@ -88,6 +88,15 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
 
 proc deleteWidgets(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Delete the selected widgets in the selected Tk grid
+  ##
+  ## PARAMETERS
+  ##
+  ## * startIndex - The index of the first widget to delete. Starts from 0
+  ## * endIndex   - The index of the last widget to delete
+  ## * frame      - The parent frame in which the widgets will be deleted
   if endIndex < startIndex:
     return
   let interp = getInterp()
