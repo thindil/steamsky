@@ -2046,7 +2046,7 @@ package body Ships.UI.Modules is
       Yview_Move_To(CanvasWidget => Skills_Table.Canvas, Fraction => "0.0");
       Add_Close_Button
         (Name => Module_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog);
+         Command => "CloseDialog " & Module_Dialog, Row => 2);
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
