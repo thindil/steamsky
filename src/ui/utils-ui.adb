@@ -943,8 +943,7 @@ package body Utils.UI is
                   (Source => Sub_Windows, Low => 1,
                    High => Index(Source => Sub_Windows, Pattern => " "))));
       Forget(Paned => Main_Paned, SubWindow => Old_Sub_Window);
-      Sub_Window.Name :=
-        New_String(Str => ".gameframe.paned." & New_Screen_Name);
+      Sub_Window := Get_Widget(pathName => Main_Paned & "." & New_Screen_Name);
       Insert
         (Paned => Main_Paned, Position => "0", SubWindow => Sub_Window,
          Options => "-weight 1");
