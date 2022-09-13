@@ -18,7 +18,7 @@
 {.used.}
 
 import std/strutils
-import ../game, ../tk
+import ../../src/[game, tk]
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
