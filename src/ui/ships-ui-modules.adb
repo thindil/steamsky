@@ -973,83 +973,26 @@ package body Ships.UI.Modules is
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "}");
-            if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
-               if Length(Source => Module.Crafting_Index) > 6
-                 and then
-                   Slice
-                     (Source => Module.Crafting_Index, Low => 1, High => 5) =
-                   "Study" then
+            Show_Order_Info_Block :
+            declare
+               Recipe_Name: constant String :=
+                 Get_Workshop_Recipe_Name(Workshop => Module_Index);
+            begin
+               if Recipe_Name'Length > 0 then
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Recipe_Name & "}");
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text =>
-                       "{Studying " &
-                       To_String
-                         (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
-                               Index =>
-                                 Positive'Value
-                                   (Slice
-                                      (Source => Module.Crafting_Index,
-                                       Low => 7,
-                                       High =>
-                                         Length
-                                           (Source => Module.Crafting_Index))))
-                              .Name) &
-                       "}");
-               elsif Length(Source => Module.Crafting_Index) > 12
-                 and then
-                   Slice
-                     (Source => Module.Crafting_Index, Low => 1, High => 11) =
-                   "Deconstruct" then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{Deconstructing " &
-                       To_String
-                         (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
-                               Index =>
-                                 Positive'Value
-                                   (Slice
-                                      (Source => Module.Crafting_Index,
-                                       Low => 13,
-                                       High =>
-                                         Length
-                                           (Source => Module.Crafting_Index))))
-                              .Name) &
-                       "}");
+                       "{" & LF & "Time to complete current:" &
+                       Positive'Image(Module.Crafting_Time) & " mins}");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{Manufacturing:" &
-                       Positive'Image(Module.Crafting_Amount) & "x " &
-                       To_String
-                         (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
-                               Index =>
-                                 Recipes_List
-                                   (To_Bounded_String
-                                      (Source =>
-                                         To_String
-                                           (Source => Module.Crafting_Index)))
-                                   .Result_Index)
-                              .Name) &
-                       "}");
+                     Text => "{Manufacturing: nothing}");
                end if;
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text =>
-                    "{" & LF & "Time to complete current:" &
-                    Positive'Image(Module.Crafting_Time) & " mins}");
-            else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{Manufacturing: nothing}");
-            end if;
+            end Show_Order_Info_Block;
          when MEDICAL_ROOM =>
             Add_Owners_Info(Owners_Name => "Medic");
          when TRAINING_ROOM =>
