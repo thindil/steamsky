@@ -1232,4 +1232,63 @@ package body Crafts is
       Update_Orders(Ship => Player_Ship);
    end Set_Recipe;
 
+   function Get_Workshop_Recipe_Name(Workshop: Positive) return String is
+      use Tiny_String;
+      Module: constant Module_Data := Player_Ship.Modules(Workshop);
+   begin
+      if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
+         if Length(Source => Module.Crafting_Index) > 6
+           and then
+             Slice(Source => Module.Crafting_Index, Low => 1, High => 5) =
+             "Study" then
+            return
+              "Studying " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Positive'Value
+                          (Slice
+                             (Source => Module.Crafting_Index, Low => 7,
+                              High =>
+                                Length(Source => Module.Crafting_Index))))
+                     .Name);
+         elsif Length(Source => Module.Crafting_Index) > 12
+           and then
+             Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
+             "Deconstruct" then
+            return
+              "Deconstructing " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Positive'Value
+                          (Slice
+                             (Source => Module.Crafting_Index, Low => 13,
+                              High =>
+                                Length(Source => Module.Crafting_Index))))
+                     .Name);
+         else
+            return
+              "Manufacturing:" & Positive'Image(Module.Crafting_Amount) &
+              "x " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Recipes_List
+                          (To_Bounded_String
+                             (Source =>
+                                To_String(Source => Module.Crafting_Index)))
+                          .Result_Index)
+                     .Name);
+         end if;
+      end if;
+      return "";
+   end Get_Workshop_Recipe_Name;
+
 end Crafts;
