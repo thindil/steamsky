@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
 - Updated look of general information about the selected player's ship's crew
   member
 
+### Fixed
+- Position of Close button in set skill for training rooms dialog
+
 ## [7.8] - 2022-09-04
 
 ### Added
