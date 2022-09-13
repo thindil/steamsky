@@ -837,11 +837,27 @@ package body Ships.UI.Crew is
                   Append
                     (Source => Member_Info, New_Item => "Repairing the ship");
                when CRAFT =>
-                  Append
-                    (Source => Member_Info,
-                     New_Item =>
-                       "Manufacturing items in " &
-                       Get_Module_Name(M_Type => WORKSHOP));
+                  Find_Workshop_Loop :
+                  for I in Player_Ship.Modules.Iterate loop
+                     if Player_Ship.Modules(I).M_Type = WORKSHOP then
+                        Find_Owner_Loop :
+                        for Owner of Player_Ship.Modules(I).Owner loop
+                           if Owner = Member_Index then
+                              Append
+                                (Source => Member_Info,
+                                 New_Item =>
+                                   Get_Workshop_Recipe_Name
+                                     (Workshop =>
+                                        Modules_Container.To_Index
+                                          (Position => I)) &
+                                   " in " &
+                                   To_String
+                                     (Source => Player_Ship.Modules(I).Name));
+                              exit Find_Workshop_Loop;
+                           end if;
+                        end loop Find_Owner_Loop;
+                     end if;
+                  end loop Find_Workshop_Loop;
                when UPGRADING =>
                   Append
                     (Source => Member_Info,
