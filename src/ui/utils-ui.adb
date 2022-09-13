@@ -982,7 +982,7 @@ package body Utils.UI is
       use Tiny_String;
 
       Proto_Index: Objects_Container.Extended_Index;
-      Item_Info: Unbounded_String;
+      Item_Info: Unbounded_String := Null_Unbounded_String;
       Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
          5 => Legs_Armor, 6 => Shield_Type);
