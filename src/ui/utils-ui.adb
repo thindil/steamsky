@@ -1065,15 +1065,15 @@ package body Utils.UI is
                      (Container => Attributes_List,
                       Index =>
                         SkillsData_Container.Element
-                           (Container => Skills_List,
-                            Index =>
-                              Skills_Amount_Range
-                                (Objects_Container.Element
-                                   (Container => Items_List,
-                                    Index => Proto_Index)
-                                   .Value
-                                   (3)))
-                           .Attribute)
+                          (Container => Skills_List,
+                           Index =>
+                             Skills_Amount_Range
+                               (Objects_Container.Element
+                                  (Container => Items_List,
+                                   Index => Proto_Index)
+                                  .Value
+                                  (3)))
+                          .Attribute)
                      .Name));
          if Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
