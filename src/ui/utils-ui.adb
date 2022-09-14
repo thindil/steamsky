@@ -34,26 +34,26 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
-with Combat.UI; use Combat.UI;
+with Combat.UI;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
-with Events; use Events;
-with Factions; use Factions;
+with Events;
+with Factions;
 with Items; use Items;
-with Maps; use Maps;
+with Maps;
 with Maps.UI; use Maps.UI;
-with MainMenu; use MainMenu;
+with MainMenu;
 with Messages; use Messages;
-with Missions; use Missions;
+with Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
+with Ships.Movement;
 with Ships.UI.Crew; use Ships.UI.Crew;
-with Ships.UI.Modules; use Ships.UI.Modules;
-with Statistics.UI; use Statistics.UI;
+with Ships.UI.Modules;
+with Statistics.UI;
 
 package body Utils.UI is
 
@@ -150,6 +150,7 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
       use Tiny_String;
+      use Factions;
 
       Cargo_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
@@ -382,6 +383,8 @@ package body Utils.UI is
       elsif Var_Name'Length > 10 and then Var_Name(1 .. 10) = "modulename" then
          Rename_Module_Block :
          declare
+            use Ships.UI.Modules;
+
             Module_Index: constant Positive :=
               Positive'Value(Var_Name(11 .. Var_Name'Last));
          begin
@@ -430,6 +433,8 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
+      use Maps;
+      use MainMenu;
 
       Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
@@ -492,6 +497,10 @@ package body Utils.UI is
          Wait_For_Rest;
          Check_For_Combat_Block :
          declare
+            use Combat.UI;
+            use Events;
+            use Missions;
+
             Starts_Combat: constant Boolean := Check_For_Event;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
@@ -528,6 +537,8 @@ package body Utils.UI is
       elsif Result = "showstats" then
          Show_Game_Stats_Block :
          declare
+            use Statistics.UI;
+
             Button: constant Ttk_Button :=
               Get_Widget(pathName => Game_Header & ".menubutton");
          begin
@@ -628,6 +639,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+
       Widget: constant Ttk_Frame :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
@@ -742,6 +755,7 @@ package body Utils.UI is
      (Info_Text: in out Unbounded_String; Distance: Positive;
       Show_Fuel_Name: Boolean := False) is
       use Tiny_String;
+      use Ships.Movement;
 
       type Speed_Type is digits 2;
       Speed: constant Speed_Type :=
