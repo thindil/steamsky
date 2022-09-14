@@ -13,26 +13,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Directories; use Ada.Directories;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Directories;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -149,6 +148,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Ada.Characters.Handling;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tiny_String;
       use Factions;
 
@@ -370,6 +371,7 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
       use Tiny_String;
 
       T_Entry: constant Ttk_Entry :=
@@ -432,9 +434,10 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      use Tiny_String;
+      use Ada.Directories;
       use Maps;
       use MainMenu;
+      use Tiny_String;
 
       Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
@@ -537,6 +540,7 @@ package body Utils.UI is
       elsif Result = "showstats" then
          Show_Game_Stats_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.TtkButton;
             use Statistics.UI;
 
             Button: constant Ttk_Button :=
@@ -561,6 +565,8 @@ package body Utils.UI is
       elsif Result = "messages" then
          Show_Last_Messages_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+
             Type_Box: constant Ttk_ComboBox :=
               Get_Widget
                 (pathName =>
@@ -871,6 +877,8 @@ package body Utils.UI is
    procedure Update_Messages with
       SPARK_Mode
    is
+      use Tcl.Tk.Ada.Widgets.Text;
+
       Loop_Start: Integer := 0 - Messages_Amount;
       Message: Message_Data; --## rule line off IMPROPER_INITIALIZATION
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
@@ -940,6 +948,9 @@ package body Utils.UI is
    procedure Show_Screen(New_Screen_Name: String) with
       SPARK_Mode
    is
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+
       Sub_Window, Old_Sub_Window: Ttk_Frame;
       Sub_Windows: Unbounded_String;
       Messages_Frame: constant Ttk_Frame :=
