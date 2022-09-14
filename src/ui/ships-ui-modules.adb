@@ -1968,6 +1968,8 @@ package body Ships.UI.Modules is
            Headers =>
              (1 => To_Unbounded_String(Source => "Skill"),
               2 => To_Unbounded_String(Source => "Training tool")));
+      Dialog_Close_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Module_Dialog & ".button");
    begin
       Load_Skills_List_Loop :
       for I in 1 .. Skills_Amount loop
@@ -2047,6 +2049,9 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Row => 2);
+      Bind
+        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Skills_Table.Canvas & ";break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
