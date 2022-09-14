@@ -868,7 +868,8 @@ package body Ships.UI.Crew is
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Name));
                when TALK =>
-                  Append(Source => Member_Info, New_Item => "Talk in bases");
+                  Append
+                    (Source => Member_Info, New_Item => "Talking with others");
                when HEAL =>
                   Append
                     (Source => Member_Info,
