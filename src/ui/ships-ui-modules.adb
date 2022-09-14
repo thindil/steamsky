@@ -2054,6 +2054,9 @@ package body Ships.UI.Modules is
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Skills_Table.Canvas & ";break}");
+      Bind
+        (Widgt => Skills_Table.Canvas, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
