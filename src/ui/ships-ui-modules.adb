@@ -1404,6 +1404,8 @@ package body Ships.UI.Modules is
                      .Name) &
               ".",
             M_Type => ORDERMESSAGE);
+         Update_Messages;
+         return TCL_OK;
       end if;
       Update_Messages;
       return
