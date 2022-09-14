@@ -19,6 +19,7 @@
 
 import std/strutils
 import ../../src/[game, tk]
+import coreui
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -107,3 +108,45 @@ proc deleteWidgets(startIndex, endIndex: cint; frame: cstring) {.exportc,
     let tclResult = $interp.tclGetResult()
     for widget in tclResult.split():
       discard interp.tclEval(script = cstring("destroy " & widget))
+
+proc showScreen(newScreenName: cstring) {.exportc.} =
+  const
+    paned = mainPaned & ".controls.buttons"
+    # messageFrame = mainPaned & ".controls.messages"
+  let interp = getInterp()
+  if interp.tclEval(script = paned & " panes") == tclError:
+    return
+  let
+    tclResult = $interp.tclGetResult()
+    oldSubWindow = tclResult.split()[0]
+    subWindow = mainPaned & "." & $newScreenName
+  if interp.tclEval(script = cstring(mainPaned & " forget " & oldSubWindow)) == tclError:
+    return
+  if interp.tclEval(script = cstring(mainPaned & " insert 0 " & subWindow & " -weight 1")) == tclError:
+    return
+#      if New_Screen_Name in "optionsframe" | "messagesframe" or
+#        not Game_Settings.Show_Last_Messages then
+#         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Messages_Frame);
+#         if New_Screen_Name /= "mapframe" then
+#            SashPos
+#              (Paned => Main_Paned, Index => "0",
+#               NewPos => Winfo_Get(Widgt => Main_Paned, Info => "height"));
+#         end if;
+#      else
+#         if Trim
+#             (Source => Widget_Image(Win => Old_Sub_Window), Side => Both) in
+#             Main_Paned & ".messagesframe" | Main_Paned & ".optionsframe" then
+#            SashPos
+#              (Paned => Main_Paned, Index => "0",
+#               NewPos =>
+#                 Natural'Image
+#                   (Game_Settings.Window_Height -
+#                    Game_Settings.Messages_Position));
+#         end if;
+#         Tcl.Tk.Ada.Grid.Grid(Slave => Messages_Frame);
+#      end if;
+#      if New_Screen_Name = "mapframe" then
+#         Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
+#      else
+#         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Paned);
+#      end if;
