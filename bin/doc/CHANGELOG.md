@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Tab traverse in setting skill for training rooms dialog
 - Closing setting skill for training rooms dialog after choosing the skill
 - Closing setting skill for training rooms dialog with Escape key
+- Position of the confirmation dialog for deleting a saved game
 
 ## [7.8] - 2022-09-04
 
