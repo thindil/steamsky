@@ -981,7 +981,7 @@ package body Ships.UI.Modules is
                if Recipe_Name'Length > 0 then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Recipe_Name & "}");
+                     Text => "{Order: " & Recipe_Name & "}");
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text =>
@@ -990,7 +990,7 @@ package body Ships.UI.Modules is
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{Manufacturing: nothing}");
+                     Text => "{Order: not set}");
                end if;
             end Show_Order_Info_Block;
          when MEDICAL_ROOM =>
