@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Position of Close button in set skill for training rooms dialog
 - Tab traverse in setting skill for training rooms dialog
 - Closing setting skill for training rooms dialog after choosing the skill
+- Closing setting skill for training rooms dialog with Escape key
 
 ## [7.8] - 2022-09-04
 
