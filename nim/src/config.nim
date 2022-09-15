@@ -22,23 +22,26 @@ type
     ## When to stop auto movement of the player's ship: never, on encounter any
     ## ship, friendly ship, enemy ship
     never, any, friendly, enemy
+
   MessagesOrder* = enum
     ## FUNCTION
     ##
     ## In what order show the last messages: older messages first, newer messages
     ## first
     olderFirst, newerFirst
+
   AutoSaveTime* = enum
     ## FUNCTION
     ##
     ## When save the game automatically: never, after dock to a base, after
     ## undock from a base, every game day, every game month, every game year
     none, dock, undock, daily, monthly, yearly
+
   GameSettingsRecord* = object
     ## FUNCTION
     ##
     ## Used to store the game's configuration
-    autoRest*: bool
+    autoRest*: bool ## If true, auto rest when pilot or engineer need a rest
     undockSpeed*: bool
     autoCenter*: bool
     autoReturn*: bool
