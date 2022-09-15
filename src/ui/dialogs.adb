@@ -781,7 +781,8 @@ package body Dialogs is
       if In_Game then
          Show_Dialog(Dialog => Question_Dialog);
       else
-         Show_Dialog(Dialog => Question_Dialog, Parent_Frame => ".");
+         Show_Dialog
+           (Dialog => Question_Dialog, Parent_Frame => ".", Relative_X => 0.2);
       end if;
       Bind
         (Widgt => Button, Sequence => "<Tab>",
