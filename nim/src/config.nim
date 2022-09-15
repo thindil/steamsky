@@ -17,7 +17,23 @@
 
 type
   AutoMoveBreak* = enum
+    ## FUNCTION
+    ##
+    ## When to stop auto movement of the player's ship: never, on encounter any
+    ## ship, friendly ship, enemy ship
     never, any, friendly, enemy
+  MessagesOrder* = enum
+    ## FUNCTION
+    ##
+    ## In what order show the last messages: older messages first, newer messages
+    ## first
+    olderFirst, newerFirst
+  AutoSaveTime* = enum
+    ## FUNCTION
+    ##
+    ## When save the game automatically: never, after dock to a base, after
+    ## undock from a base, every game day, every game month, every game year
+    none, dock, undock, daily, monthly, yearly
   GameSettingsRecord* = object
     ## FUNCTION
     ##
@@ -39,3 +55,16 @@ type
     mapFontSize: range[2..51]
     interfaceFontSize: range[2..51]
     interfaceTheme: cstring
+    messagesOrder: MessagesOrder
+    autoAskForBases: bool
+    autoAskForEvents: bool
+    showTooltips: bool
+    showLastMessages: bool
+    messagesPosition: Natural
+    fullScreen: bool
+    autoCloseMessagesTime: range[1..60]
+    autoSave: AutoSaveTime
+    topicsPosition: Natural
+    showNumbers: bool
+    rightButton: bool
+    listsLimit: range[5..100]
