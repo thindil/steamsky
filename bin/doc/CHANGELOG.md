@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   inventory
 - Option to wear, take off, move to the player's ship's cargo the selected
   items from a crew member's inventory
+- Information about the current order of the player's ship's crew member to
+  his/her information dialog
 
 ### Changed
 - Updated modding guide
