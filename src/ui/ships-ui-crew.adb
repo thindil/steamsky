@@ -893,11 +893,32 @@ package body Ships.UI.Crew is
                     (Source => Member_Info,
                      New_Item => "Boarding the enemy's ship");
                when TRAIN =>
-                  Append
-                    (Source => Member_Info,
-                     New_Item =>
-                       "On training in " &
-                       Get_Module_Name(M_Type => TRAINING_ROOM));
+                  Find_Training_Room_Loop :
+                  for I in Player_Ship.Modules.Iterate loop
+                     if Player_Ship.Modules(I).M_Type = TRAINING_ROOM then
+                        Find_Traineer_Loop :
+                        for Owner of Player_Ship.Modules(I).Owner loop
+                           if Owner = Member_Index then
+                              Append
+                                (Source => Member_Info,
+                                 New_Item =>
+                                   "Training " &
+                                   To_String
+                                     (Source =>
+                                        SkillsData_Container.Element
+                                          (Container => Skills_List,
+                                           Index =>
+                                             Player_Ship.Modules(I)
+                                               .Trained_Skill)
+                                          .Name) &
+                                   " in " &
+                                   To_String
+                                     (Source => Player_Ship.Modules(I).Name));
+                              exit Find_Training_Room_Loop;
+                           end if;
+                        end loop Find_Traineer_Loop;
+                     end if;
+                  end loop Find_Training_Room_Loop;
             end case;
             Append(Source => Member_Info, New_Item => LF);
          end Show_Order_Info_Block;
