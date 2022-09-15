@@ -94,6 +94,15 @@ package Bases is
    end record;
    -- ****
 
+   -- ****d* Bases/Bases.Empty_Base_Cargo
+   -- FUNCTION
+   -- Empty base cargo
+   -- SOURCE
+   Empty_Base_Cargo: constant Base_Cargo :=
+     (Proto_Index => 0, Amount => 0, Durability => Default_Item_Durability,
+      Price => 0);
+   -- ****
+
    -- ****t* Bases/Bases.BaseCargo_Container
    -- FUNCTION
    -- Used to store sky bases cargos
@@ -109,6 +118,13 @@ package Bases is
    -- SOURCE
    type Bases_Size is (SMALL, MEDIUM, BIG, UNKNOWN) with
       Default_Value => MEDIUM;
+      -- ****
+
+      -- ****d* Bases/Bases.Default_Base_Size
+      -- FUNCTION
+      -- The default size of a base
+      -- SOURCE
+   Default_Base_Size: constant Bases_Size := MEDIUM;
    -- ****
 
    -- ****s* Bases/Bases.Base_Record
