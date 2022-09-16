@@ -1273,7 +1273,7 @@ package body Crafts is
                      .Name);
          else
             return
-              "Manufacturing:" & Positive'Image(Module.Crafting_Amount) &
+              "Manufacturing" & Positive'Image(Module.Crafting_Amount) &
               "x " &
               To_String
                 (Source =>
