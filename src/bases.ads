@@ -31,6 +31,7 @@ with Ships; use Ships;
 package Bases is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Bases/Bases.Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
@@ -58,6 +59,7 @@ package Bases is
       Faction: Tiny_String.Bounded_String;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Bases/Bases.Recruit_Amount_Range
    -- FUNCTION
@@ -127,6 +129,7 @@ package Bases is
    Default_Base_Size: constant Bases_Size := MEDIUM;
    -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Bases/Bases.Base_Record
    -- FUNCTION
    -- Data structure for bases
@@ -169,6 +172,7 @@ package Bases is
       Size: Bases_Size;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****v* Bases/Bases.SkyBases
    -- FUNCTION
