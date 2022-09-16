@@ -548,7 +548,7 @@ package body Themes is
          10 => To_Unbounded_String(Source => "cleanicon"),
          11 => To_Unbounded_String(Source => "nocleanicon"),
          12 => To_Unbounded_String(Source => "cleanordericon"),
-         13 => To_Unbounded_String(Source => "crafticon"),
+         13 => To_Unbounded_String(Source => "manufactureicon"),
          14 => To_Unbounded_String(Source => "nocrafticon"),
          15 => To_Unbounded_String(Source => "nofuelicon"),
          16 => To_Unbounded_String(Source => "nofoodicon"),
