@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Updated look of general information about the selected player's ship's crew
   member
+- Small update to the information about the selected player's ship's module
 
 ### Fixed
 - Position of Close button in set skill for training rooms dialog
