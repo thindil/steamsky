@@ -40,7 +40,7 @@ package body Bases is
       end if;
       New_Points :=
         Sky_Bases(Base_Index).Reputation.Experience +
-        Integer(Float(Points) * Float(New_Game_Settings.Reputation_Bonus));
+        Integer(Float(Points) * New_Game_Settings.Reputation_Bonus);
       if Base_Index = Player_Ship.Home_Base then
          New_Points := New_Points + Points;
       end if;
