@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import ships
+
 type
   AutoMoveBreak* = enum
     ## FUNCTION
@@ -42,7 +44,7 @@ type
     ##
     ## Used to store the game's configuration
     autoRest*: bool ## If true, auto rest when pilot or engineer need a rest
-    undockSpeed*: bool
+    undockSpeed*: ShipSpeed
     autoCenter*: bool
     autoReturn*: bool
     autoFinish*: bool
