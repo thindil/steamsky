@@ -304,7 +304,7 @@ package body Maps.UI is
       Label.Name := New_String(Str => Game_Header & ".crafting");
       if Need_Worker then
          if Have_Worker then
-            configure(Widgt => Label, options => "-image crafticon");
+            configure(Widgt => Label, options => "-image manufactureicon");
             Add
               (Widget => Label,
                Message => "All crafting orders are being executed.");
