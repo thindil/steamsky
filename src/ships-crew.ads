@@ -149,4 +149,9 @@ package Ships.Crew is
       Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);
       -- ****
 
+   function Get_Current_Order
+     (Member_Index: Positive) return Unbounded_String with
+      Pre => Member_Index in
+        Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index;
+
 end Ships.Crew;
