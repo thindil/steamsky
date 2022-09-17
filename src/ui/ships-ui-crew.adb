@@ -271,8 +271,9 @@ package body Ships.UI.Crew is
                 (Item =>
                    Crew_Orders'Image(Player_Ship.Crew(I).Order)
                      (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
-            Tooltip => "The current order for the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
+            Tooltip =>
+              "The current order for the selected crew member.\nPress the mouse button to change it.",
+            Command => "ShowCrewOrder" & Positive'Image(I), Column => 2);
          if Skill = 0 then
             Add_Button
               (Table => Crew_Table,
@@ -2467,6 +2468,45 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
+   -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
+   -- FUNCTION
+   -- Show the dialog to change the order of the currently selected crew member
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrewOrder memberindex
+   -- MemberIndex is the index of the crew member which order will be changed
+   -- SOURCE
+   function Show_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
+      Member_Dialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".memberdialog",
+           Title => "Change order for " & To_String(Source => Member.Name));
+   begin
+      Add_Close_Button
+        (Name => Member_Dialog & ".button", Text => "Close",
+         Command => "CloseDialog " & Member_Dialog, Row => 1);
+      Show_Dialog(Dialog => Member_Dialog);
+      return TCL_OK;
+   end Show_Crew_Order_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -2500,6 +2540,9 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "SelectCrewSkill",
          Ada_Command => Select_Crew_Skill_Command'Access);
+      Add_Command
+        (Name => "ShowCrewOrder",
+         Ada_Command => Show_Crew_Order_Command'Access);
       Ships.UI.Crew.Inventory.Add_Commands;
    end Add_Commands;
 
