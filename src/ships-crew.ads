@@ -149,9 +149,21 @@ package Ships.Crew is
       Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);
       -- ****
 
+      -- ****f* SCrew/SCrew.Get_Current_Order
+      -- FUNCTION
+      -- Get the full information about the current order of the crew member
+      -- PARAMETERS
+      -- Member_Index - Crew index of the member which order will be get
+      -- RESULT
+      -- The Unbounded_String with information about current order of the
+      -- selected player's ship crew member
+      -- HISTORY
+      -- 7.9 - Added
+      -- SOURCE
    function Get_Current_Order
      (Member_Index: Positive) return Unbounded_String with
       Pre => Member_Index in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index;
+      -- ****
 
 end Ships.Crew;
