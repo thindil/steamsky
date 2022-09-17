@@ -2381,10 +2381,19 @@ package body Ships.UI.Crew is
         Create_Dialog
           (Name => ".memberdialog",
            Title => "Change order for " & To_String(Source => Member.Name));
+      Order_Label: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".current",
+           options =>
+             "-text {" &
+             To_String
+               (Source => Get_Current_Order(Member_Index => Member_Index)) &
+             "}");
    begin
+      Tcl.Tk.Ada.Grid.Grid(Slave => Order_Label, Options => "-padx 5");
       Add_Close_Button
         (Name => Member_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Row => 1);
+         Command => "CloseDialog " & Member_Dialog, Row => 2);
       Show_Dialog(Dialog => Member_Dialog);
       return TCL_OK;
    end Show_Crew_Order_Command;
