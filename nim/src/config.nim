@@ -47,15 +47,15 @@ type
     undockSpeed*: ShipSpeed ## The default speed of the player's ship after undock from a base
     autoCenter*: bool ## If true, back to the player's ship after setting destination for it
     autoReturn*: bool ## If true, set the destination for the player's ship to the base after
-                      ## finishing a mission
+                        ## finishing a mission
     autoFinish*: bool ## If true, automatically finish the mission if the player's ships is in
-                      ## the proper base
+                        ## the proper base
     lowFuel*: range[1..10_000] ## The amount of fuel at which the game will show the warning
-                               ## about it
-    lowDrinks*: range[1..10_000] ## The amount of drinks at which the game will show the warning
                                  ## about it
+    lowDrinks*: range[1..10_000] ## The amount of drinks at which the game will show the warning
+                                   ## about it
     lowFood*: range[1..10_000] ## The amount of food at which the game will show the warning
-                               ## about it
+                                 ## about it
     autoMoveStop*: AutoMoveBreak ## When stop the player's ship's auto movement
     windowWidth*: cint ## The game window default width
     windowHeight: cint ## The game window default height
@@ -67,17 +67,29 @@ type
     interfaceTheme: cstring ## The name of the current theme of the game interface
     messagesOrder: MessagesOrder ## In what order the messages should be shown
     autoAskForBases: bool ## If true, auto ask for new bases when the player's ship is
-                          ## docked to a base
+                            ## docked to a base
     autoAskForEvents: bool ## If true, auto ask for new events when the player's ship is
-                           ## docked to a base
+                             ## docked to a base
     showTooltips: bool ## Show the in-game tooltips with help information
     showLastMessages: bool ## Show the last messages window below the map
     messagesPosition: Natural ## The height of the last messages window
     fullScreen: bool ## Run the game in full screen mode
     autoCloseMessagesTime: range[1..60] ## The amount of seconds after which messages' dialogs
-                                        ## wil be closed
+                                          ## wil be closed
     autoSave: AutoSaveTime ## How often the game should save itself automatically
     topicsPosition: Natural ## The height of the topics' window position in help window
     showNumbers: bool ## If true, show numbers for speed, skills, attributes, etc.
     rightButton: bool ## If true, use the right mouse button for show menus in various lists
     listsLimit: range[5..100] ## The amount of items displayed in various lists
+
+const defaultGameSettings* = GameSettingsRecord(autoRest: true,
+    undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
+    autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
+    autoMoveStop: never, windowWidth: 800, windowHeight: 600,
+    messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
+    interfaceFontSize: 14, interfaceTheme: "steamsky",
+    messagesOrder: olderFirst, autoAskForBases: false, autoAskForEvents: false,
+    showTooltips: true, showLastMessages: true, messagesPosition: 213,
+    fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
+    topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25)
+    ## The default setting for the game
