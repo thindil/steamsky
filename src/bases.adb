@@ -196,19 +196,19 @@ package body Bases is
 
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit_Base: Bases_Range;
+      Recruit_Base: Bases_Range := 1;
       Base_Recruits: Recruit_Container.Vector (Capacity => 5);
       Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-      Gender: Character;
-      Price, Payment: Natural;
-      Skill_Index: Integer range -1 .. Integer'Last;
+      Gender: Character := 'M';
+      Price, Payment: Natural := 0;
+      Skill_Index: Integer range -1 .. Integer'Last := -1;
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
       Inventory: Positive_Formal_Container.Vector (Capacity => 7);
       Temp_Tools: Positive_Indefinite_Container.Vector (Capacity => 32);
       Equipment: Equipment_Array;
-      Max_Skill_Level: Integer range -100 .. 100;
-      Skill_Level, Highest_Level: Skill_Range;
-      Recruit_Faction: Bounded_String;
+      Max_Skill_Level: Integer range -100 .. 100 := -100;
+      Skill_Level, Highest_Level: Skill_Range := 0;
+      Recruit_Faction: Bounded_String := Null_Bounded_String;
       Max_Recruits, Recruits_Amount: Recruit_Amount_Range;
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
