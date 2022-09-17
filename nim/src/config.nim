@@ -44,32 +44,40 @@ type
     ##
     ## Used to store the game's configuration
     autoRest*: bool ## If true, auto rest when pilot or engineer need a rest
-    undockSpeed*: ShipSpeed
-    autoCenter*: bool
-    autoReturn*: bool
-    autoFinish*: bool
-    lowFuel*: range[1..10_000]
-    lowDrinks*: range[1..10_000]
-    lowFood*: range[1..10_000]
-    autoMoveStop*: AutoMoveBreak
-    windowWidth*: cint
-    windowHeight: cint
-    messagesLimit: range[10..5_000]
-    savedMessages: range[5..200]
-    helpFontSize: range[2..51]
-    mapFontSize: range[2..51]
-    interfaceFontSize: range[2..51]
-    interfaceTheme: cstring
-    messagesOrder: MessagesOrder
-    autoAskForBases: bool
-    autoAskForEvents: bool
-    showTooltips: bool
-    showLastMessages: bool
-    messagesPosition: Natural
-    fullScreen: bool
-    autoCloseMessagesTime: range[1..60]
-    autoSave: AutoSaveTime
-    topicsPosition: Natural
-    showNumbers: bool
-    rightButton: bool
-    listsLimit: range[5..100]
+    undockSpeed*: ShipSpeed ## The default speed of the player's ship after undock from a base
+    autoCenter*: bool ## If true, back to the player's ship after setting destination for it
+    autoReturn*: bool ## If true, set the destination for the player's ship to the base after
+                      ## finishing a mission
+    autoFinish*: bool ## If true, automatically finish the mission if the player's ships is in
+                      ## the proper base
+    lowFuel*: range[1..10_000] ## The amount of fuel at which the game will show the warning
+                               ## about it
+    lowDrinks*: range[1..10_000] ## The amount of drinks at which the game will show the warning
+                                 ## about it
+    lowFood*: range[1..10_000] ## The amount of food at which the game will show the warning
+                               ## about it
+    autoMoveStop*: AutoMoveBreak ## When stop the player's ship's auto movement
+    windowWidth*: cint ## The game window default width
+    windowHeight: cint ## The game window default height
+    messagesLimit: range[10..5_000] ## The max amount of messages to show in the game
+    savedMessages: range[5..200] ## The max amount of messages to save to a file
+    helpFontSize: range[2..51] ## The size of a font used in help
+    mapFontSize: range[2..51] ## The size of a font used on the map
+    interfaceFontSize: range[2..51] ## The size of a font used in the game interface
+    interfaceTheme: cstring ## The name of the current theme of the game interface
+    messagesOrder: MessagesOrder ## In what order the messages should be shown
+    autoAskForBases: bool ## If true, auto ask for new bases when the player's ship is
+                          ## docked to a base
+    autoAskForEvents: bool ## If true, auto ask for new events when the player's ship is
+                           ## docked to a base
+    showTooltips: bool ## Show the in-game tooltips with help information
+    showLastMessages: bool ## Show the last messages window below the map
+    messagesPosition: Natural ## The height of the last messages window
+    fullScreen: bool ## Run the game in full screen mode
+    autoCloseMessagesTime: range[1..60] ## The amount of seconds after which messages' dialogs
+                                        ## wil be closed
+    autoSave: AutoSaveTime ## How often the game should save itself automatically
+    topicsPosition: Natural ## The height of the topics' window position in help window
+    showNumbers: bool ## If true, show numbers for speed, skills, attributes, etc.
+    rightButton: bool ## If true, use the right mouse button for show menus in various lists
+    listsLimit: range[5..100] ## The amount of items displayed in various lists
