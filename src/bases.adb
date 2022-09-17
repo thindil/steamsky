@@ -137,13 +137,13 @@ package body Bases is
                 SyllableString_Container.Element
                   (Container => Base_Syllables_Pre,
                    Index =>
-                     (Get_Random
-                        (Min =>
-                           SyllableString_Container.First_Index
-                             (Container => Base_Syllables_Pre),
-                         Max =>
-                           SyllableString_Container.Last_Index
-                             (Container => Base_Syllables_Pre))))) &
+                     Get_Random
+                       (Min =>
+                          SyllableString_Container.First_Index
+                            (Container => Base_Syllables_Pre),
+                        Max =>
+                          SyllableString_Container.Last_Index
+                            (Container => Base_Syllables_Pre)))) &
            To_Bounded_String(Source => " ");
       end if;
       New_Name :=
@@ -153,25 +153,25 @@ package body Bases is
              SyllableString_Container.Element
                (Container => Base_Syllables_Start,
                 Index =>
-                  (Get_Random
-                     (Min =>
-                        SyllableString_Container.First_Index
-                          (Container => Base_Syllables_Start),
-                      Max =>
-                        SyllableString_Container.Last_Index
-                          (Container => Base_Syllables_Start))))) &
+                  Get_Random
+                    (Min =>
+                       SyllableString_Container.First_Index
+                         (Container => Base_Syllables_Start),
+                     Max =>
+                       SyllableString_Container.Last_Index
+                         (Container => Base_Syllables_Start)))) &
         Syllable_String.To_String
           (Source =>
              SyllableString_Container.Element
                (Container => Base_Syllables_End,
                 Index =>
-                  (Get_Random
-                     (Min =>
-                        SyllableString_Container.First_Index
-                          (Container => Base_Syllables_End),
-                      Max =>
-                        SyllableString_Container.Last_Index
-                          (Container => Base_Syllables_End)))));
+                  Get_Random
+                    (Min =>
+                       SyllableString_Container.First_Index
+                         (Container => Base_Syllables_End),
+                     Max =>
+                       SyllableString_Container.Last_Index
+                         (Container => Base_Syllables_End))));
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
            New_Name & " " &
@@ -180,13 +180,13 @@ package body Bases is
                 SyllableString_Container.Element
                   (Container => Base_Syllables_Post,
                    Index =>
-                     (Get_Random
-                        (Min =>
-                           SyllableString_Container.First_Index
-                             (Container => Base_Syllables_Post),
-                         Max =>
-                           SyllableString_Container.Last_Index
-                             (Container => Base_Syllables_Post)))));
+                     Get_Random
+                       (Min =>
+                          SyllableString_Container.First_Index
+                            (Container => Base_Syllables_Post),
+                        Max =>
+                          SyllableString_Container.Last_Index
+                            (Container => Base_Syllables_Post))));
       end if;
       return New_Name;
    end Generate_Base_Name;
