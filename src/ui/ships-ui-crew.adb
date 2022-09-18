@@ -804,7 +804,9 @@ package body Ships.UI.Crew is
       if Skills_Container.Length(Container => Member.Skills) > 0 then
          Append
            (Source => Member_Info,
-            New_Item => Get_Current_Order(Member_Index => Member_Index) & LF);
+            New_Item =>
+              "Order: " & Get_Current_Order(Member_Index => Member_Index) &
+              LF);
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
@@ -2386,7 +2388,7 @@ package body Ships.UI.Crew is
         Create
           (pathName => Member_Dialog & ".current",
            options =>
-             "-text {" &
+             "-text {Current order: " &
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
              "}");
