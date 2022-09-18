@@ -82,6 +82,23 @@ type
     rightButton: bool ## If true, use the right mouse button for show menus in various lists
     listsLimit: range[5..100] ## The amount of items displayed in various lists
 
+  NewGameRecord* = object
+    playerName: cstring
+    playerGender: char
+    shipName: cstring
+    playerFaction: cstring
+    playerCareer: cstring
+    startingBase: cstring
+#    enemyDamageBonus: BonusType
+#    playerDamageBonus: BonusType
+#    enemyMeleeDamage_Bonus: BonusType
+#    playerMeleeDamageBonus: BonusType
+#    experienceBonus: BonusType
+#    reputationBonus: BonusType
+#    upgradeCostBonus: BonusType
+#    pricesBonus: BonusType
+#    difficultyLevel: DifficultyType
+
 const defaultGameSettings* = GameSettingsRecord(autoRest: true,
     undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
     autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
