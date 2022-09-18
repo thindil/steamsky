@@ -82,22 +82,39 @@ type
     rightButton: bool ## If true, use the right mouse button for show menus in various lists
     listsLimit: range[5..100] ## The amount of items displayed in various lists
 
+  BonusType* = range[0.0..5.0]
+    ## FUNCTION
+    ##
+    ## Points' multiplier from various game's settings
+
+  DifficultyType* = enum
+    ## FUNCTION
+    ##
+    ## The level of the game's difficulty. All setttings except custom are preset
+    ## levels
+    veryEasy, easy, normal, hard, veryHard, custom
+
   NewGameRecord* = object
-    playerName: cstring
-    playerGender: char
-    shipName: cstring
-    playerFaction: cstring
-    playerCareer: cstring
-    startingBase: cstring
-#    enemyDamageBonus: BonusType
-#    playerDamageBonus: BonusType
-#    enemyMeleeDamage_Bonus: BonusType
-#    playerMeleeDamageBonus: BonusType
-#    experienceBonus: BonusType
-#    reputationBonus: BonusType
-#    upgradeCostBonus: BonusType
-#    pricesBonus: BonusType
-#    difficultyLevel: DifficultyType
+    ## FUNCTION
+    ##
+    ## Used to store the default settings for the new game
+    playerName: cstring ## The player's character name
+    playerGender: char ## The player's character gender
+    shipName: cstring ## The player's ship name
+    playerFaction: cstring ## The player's character faction
+    playerCareer: cstring ## The player's character career
+    startingBase: cstring ## The type of the starting base
+    enemyDamageBonus: BonusType ## The bonus to damage for enemies in ship to ship combat
+    playerDamageBonus: BonusType ## The bonus to damage for the player's character and crew in
+                                 ## ship to ship combat
+    enemyMeleeDamage_Bonus: BonusType ## The bonus to damage for enemies in melee combat
+    playerMeleeDamageBonus: BonusType ## The bonus to damage for the player's character and crew
+                                      ## in melee combat
+    experienceBonus: BonusType ## The bonus to the gained by player's character and crew experience
+    reputationBonus: BonusType ## The bonus to the gained the player's character reputation in bases
+    upgradeCostBonus: BonusType ## The bonus to costs of upgrades the player's ship
+    pricesBonus: BonusType ## The bonus to prices in bases
+    difficultyLevel: DifficultyType ## The preset level of difficulty for the game
 
 const defaultGameSettings* = GameSettingsRecord(autoRest: true,
     undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
