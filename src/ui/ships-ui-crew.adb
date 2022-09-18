@@ -2389,7 +2389,214 @@ package body Ships.UI.Crew is
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
              "}");
+      Available_Orders: Unbounded_String := Null_Unbounded_String;
+      Need_Repair, Need_Clean: Boolean := False;
+      function Is_Working
+        (Owners: Natural_Container.Vector; Member_Index: Positive)
+         return Boolean is
+      begin
+         Find_Owner_Loop :
+         for Owner of Owners loop
+            if Owner = Member_Index then
+               return True;
+            end if;
+         end loop Find_Owner_Loop;
+         return False;
+      end Is_Working;
    begin
+      Check_Modules_Loop :
+      for Module of Player_Ship.Modules loop
+         if Module.Durability < Module.Max_Durability then
+            Need_Repair := True;
+         end if;
+         if (Module.Durability > 0 and Module.M_Type = CABIN)
+           and then Module.Cleanliness < Module.Quality then
+            Need_Clean := True;
+         end if;
+         exit Check_Modules_Loop when Need_Clean and Need_Repair;
+      end loop Check_Modules_Loop;
+      if
+        ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
+         Member.Order /= REST) or
+        (Skills_Container.Length(Container => Member.Skills) = 0 or
+         Member.Contract_Length = 0) then
+         Append(Source => Available_Orders, New_Item => "{Go on break}");
+      else
+         if Member.Order /= PILOT then
+            Append
+              (Source => Available_Orders,
+               New_Item => "{Go piloting the ship}");
+         end if;
+         if Member.Order /= ENGINEER then
+            Append
+              (Source => Available_Orders,
+               New_Item => "{Go engineering the ship}");
+         end if;
+         Set_Work_Orders_Loop :
+         for J in Player_Ship.Modules.Iterate loop
+            if Player_Ship.Modules(J).Durability <
+              Player_Ship.Modules(J).Max_Durability then
+               Need_Repair := True;
+            end if;
+            if Player_Ship.Modules(J).Durability > 0 then
+               case Player_Ship.Modules(J).M_Type is
+                  when GUN | HARPOON_GUN =>
+                     if Player_Ship.Modules(J).Owner(1) /=
+                       Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) then
+                        Append
+                          (Source => Available_Orders,
+                           New_Item =>
+                             "{Operate " &
+                             To_String(Source => Player_Ship.Modules(J).Name) &
+                             "}");
+                     end if;
+                  when WORKSHOP =>
+                     if not Is_Working
+                         (Owners => Player_Ship.Modules(J).Owner,
+                          Member_Index =>
+                            Positive'Value
+                              (CArgv.Arg(Argv => Argv, N => 1))) and
+                       Player_Ship.Modules(J).Crafting_Index /=
+                         Null_Bounded_String then
+                        Append
+                          (Source => Available_Orders,
+                           New_Item =>
+                             "{" &
+                             (if
+                                Length
+                                  (Source =>
+                                     Player_Ship.Modules(J).Crafting_Index) >
+                                6
+                                and then
+                                  Slice
+                                    (Source =>
+                                       Player_Ship.Modules(J).Crafting_Index,
+                                     Low => 1, High => 5) =
+                                  "Study"
+                              then
+                                "Study " &
+                                To_String
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Positive'Value
+                                            (Slice
+                                               (Source =>
+                                                  Player_Ship.Modules(J)
+                                                    .Crafting_Index,
+                                                Low => 7,
+                                                High =>
+                                                  Length
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index))))
+                                       .Name)
+                              elsif
+                                Length
+                                  (Source =>
+                                     Player_Ship.Modules(J).Crafting_Index) >
+                                12
+                                and then
+                                  Slice
+                                    (Source =>
+                                       Player_Ship.Modules(J).Crafting_Index,
+                                     Low => 1, High => 11) =
+                                  "Deconstruct"
+                              then
+                                "Deconstruct " &
+                                To_String
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Positive'Value
+                                            (Slice
+                                               (Source =>
+                                                  Player_Ship.Modules(J)
+                                                    .Crafting_Index,
+                                                Low => 13,
+                                                High =>
+                                                  Length
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index))))
+                                       .Name)
+                              else "Manufacture" &
+                                Positive'Image
+                                  (Player_Ship.Modules(J).Crafting_Amount) &
+                                "x " &
+                                To_String
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Recipes_List
+                                            (To_Bounded_String
+                                               (Source =>
+                                                  To_String
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index)))
+                                            .Result_Index)
+                                       .Name)) &
+                             "}");
+                     end if;
+                  when CABIN =>
+                     if Player_Ship.Modules(J).Cleanliness <
+                       Player_Ship.Modules(J).Quality and
+                       Member.Order /= CLEAN and Need_Clean then
+                        Append
+                          (Source => Available_Orders,
+                           New_Item => "{Clean ship}");
+                        Need_Clean := False;
+                     end if;
+                  when TRAINING_ROOM =>
+                     if not Is_Working
+                         (Owners => Player_Ship.Modules(J).Owner,
+                          Member_Index =>
+                            Positive'Value
+                              (CArgv.Arg(Argv => Argv, N => 1))) then
+                        Append
+                          (Source => Available_Orders,
+                           New_Item =>
+                             "{Go on training in " &
+                             To_String(Source => Player_Ship.Modules(J).Name) &
+                             "}");
+                     end if;
+                  when others =>
+                     null;
+               end case;
+               if Need_Repair then
+                  Append
+                    (Source => Available_Orders, New_Item => "{Repair ship}");
+                  Need_Repair := False;
+               end if;
+            end if;
+         end loop Set_Work_Orders_Loop;
+         Check_Heal_Order_Loop :
+         for J in Player_Ship.Crew.Iterate loop
+            if Player_Ship.Crew(J).Health < 100 and
+              Crew_Container.To_Index(Position => J) /=
+                Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) and
+              Player_Ship.Crew(J).Order /= HEAL then
+               Append
+                 (Source => Available_Orders,
+                  New_Item => "{Heal wounded crew members}");
+               exit Check_Heal_Order_Loop;
+            end if;
+         end loop Check_Heal_Order_Loop;
+         if Player_Ship.Upgrade_Module > 0 and Member.Order /= UPGRADING then
+            Append(Source => Available_Orders, New_Item => "{Upgrade module}");
+         end if;
+         if Member.Order /= TALK then
+            Append
+              (Source => Available_Orders, New_Item => "{Talk with others}");
+         end if;
+         if Member.Order /= REST then
+            Append(Source => Available_Orders, New_Item => "{Go on break}");
+         end if;
+      end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Label, Options => "-padx 5");
       Add_Close_Button
         (Name => Member_Dialog & ".button", Text => "Close",
