@@ -1027,7 +1027,6 @@ package body Ships.Crew is
          return "";
       end Get_Module_Name;
    begin
-      Append(Source => Member_Info, New_Item => "Order: ");
       case Member.Order is
          when PILOT =>
             Append(Source => Member_Info, New_Item => "Piloting the ship");
