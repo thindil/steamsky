@@ -288,12 +288,12 @@ package body Bases is
            (if Get_Random(Min => 1, Max => 100) < 99 then
               Sky_Bases(Base_Index).Owner
             else Get_Random_Faction);
-         if not Factions_List(Recruit_Faction).Flags.Contains
+         if Factions_List(Recruit_Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "nogender")) then
+            Gender := 'M';
+         else
             Gender :=
               (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
-         else
-            Gender := 'M';
          end if;
          Local_Skills_Amount :=
            Skills_Amount_Range
