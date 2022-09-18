@@ -2380,7 +2380,8 @@ package body Ships.UI.Crew is
       Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
-           Title => "Change order for " & To_String(Source => Member.Name));
+           Title => "Change order for " & To_String(Source => Member.Name),
+           Columns => 2);
       Order_Label: constant Ttk_Label :=
         Create
           (pathName => Member_Dialog & ".current",
@@ -2389,6 +2390,13 @@ package body Ships.UI.Crew is
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
              "}");
+      Orders_Info: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".info",
+           options => "-text {New order:}");
+      Orders_Box: constant Ttk_ComboBox :=
+        Create
+          (pathName => Member_Dialog & ".list", options => "-state readonly");
       Available_Orders: Unbounded_String := Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
       function Is_Working
@@ -2425,12 +2433,12 @@ package body Ships.UI.Crew is
          if Member.Order /= PILOT then
             Append
               (Source => Available_Orders,
-               New_Item => "{Go piloting the ship}");
+               New_Item => " {Go piloting the ship}");
          end if;
          if Member.Order /= ENGINEER then
             Append
               (Source => Available_Orders,
-               New_Item => "{Go engineering the ship}");
+               New_Item => " {Go engineering the ship}");
          end if;
          Set_Work_Orders_Loop :
          for J in Player_Ship.Modules.Iterate loop
@@ -2446,7 +2454,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Available_Orders,
                            New_Item =>
-                             "{Operate " &
+                             " {Operate " &
                              To_String(Source => Player_Ship.Modules(J).Name) &
                              "}");
                      end if;
@@ -2461,7 +2469,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Available_Orders,
                            New_Item =>
-                             "{" &
+                             " {" &
                              (if
                                 Length
                                   (Source =>
@@ -2548,7 +2556,7 @@ package body Ships.UI.Crew is
                        Member.Order /= CLEAN and Need_Clean then
                         Append
                           (Source => Available_Orders,
-                           New_Item => "{Clean ship}");
+                           New_Item => " {Clean ship}");
                         Need_Clean := False;
                      end if;
                   when TRAINING_ROOM =>
@@ -2560,7 +2568,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Available_Orders,
                            New_Item =>
-                             "{Go on training in " &
+                             " {Go on training in " &
                              To_String(Source => Player_Ship.Modules(J).Name) &
                              "}");
                      end if;
@@ -2569,7 +2577,7 @@ package body Ships.UI.Crew is
                end case;
                if Need_Repair then
                   Append
-                    (Source => Available_Orders, New_Item => "{Repair ship}");
+                    (Source => Available_Orders, New_Item => " {Repair ship}");
                   Need_Repair := False;
                end if;
             end if;
@@ -2582,25 +2590,36 @@ package body Ships.UI.Crew is
               Player_Ship.Crew(J).Order /= HEAL then
                Append
                  (Source => Available_Orders,
-                  New_Item => "{Heal wounded crew members}");
+                  New_Item => " {Heal wounded crew members}");
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
          if Player_Ship.Upgrade_Module > 0 and Member.Order /= UPGRADING then
-            Append(Source => Available_Orders, New_Item => "{Upgrade module}");
+            Append
+              (Source => Available_Orders, New_Item => " {Upgrade module}");
          end if;
          if Member.Order /= TALK then
             Append
-              (Source => Available_Orders, New_Item => "{Talk with others}");
+              (Source => Available_Orders, New_Item => " {Talk with others}");
          end if;
          if Member.Order /= REST then
-            Append(Source => Available_Orders, New_Item => "{Go on break}");
+            Append(Source => Available_Orders, New_Item => " {Go on break}");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Order_Label, Options => "-padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Order_Label, Options => "-padx 5 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Info, Options => "-padx 5");
+      configure
+        (Widgt => Orders_Box,
+         options =>
+           "-values [list" & To_String(Source => Available_Orders) & "]");
+      Current(ComboBox => Orders_Box, NewIndex => "0");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
       Add_Close_Button
         (Name => Member_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Row => 2);
+         Command => "CloseDialog " & Member_Dialog, Column_Span => 2,
+         Row => 3);
       Show_Dialog(Dialog => Member_Dialog);
       return TCL_OK;
    end Show_Crew_Order_Command;
