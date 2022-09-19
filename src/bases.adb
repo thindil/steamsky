@@ -363,7 +363,7 @@ package body Bases is
          Generate_Attributes_Loop :
          for J in Attributes'Range loop
             Attributes(J) :=
-              (Level => Get_Random(Min => 3, Max => (Max_Skill_Level / 3)),
+              (Level => Get_Random(Min => 3, Max => Max_Skill_Level / 3),
                Experience => 0);
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
