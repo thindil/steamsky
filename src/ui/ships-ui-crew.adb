@@ -2409,7 +2409,8 @@ package body Ships.UI.Crew is
            options =>
              "-text Close -command {CloseDialog " & Member_Dialog &
              "} -image exiticon -style Dialog.TButton");
-      Available_Orders: Unbounded_String := Null_Unbounded_String;
+      Available_Orders, Tcl_Commands: Unbounded_String :=
+        Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
       function Is_Working
         (Owners: Natural_Container.Vector; Member_Index: Positive)
@@ -2440,17 +2441,27 @@ package body Ships.UI.Crew is
          Member.Order /= REST) or
         (Skills_Container.Length(Container => Member.Skills) = 0 or
          Member.Contract_Length = 0) then
-         Append(Source => Available_Orders, New_Item => "{Go on break}");
+         Append(Source => Available_Orders, New_Item => " {Go on break}");
+         Append
+           (Source => Tcl_Commands,
+            New_Item => " {Rest " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       else
          if Member.Order /= PILOT then
             Append
               (Source => Available_Orders,
                New_Item => " {Go piloting the ship}");
+            Append
+              (Source => Tcl_Commands,
+               New_Item => " {Pilot " & CArgv.Arg(Argv => Argv, N => 1) & "}");
          end if;
          if Member.Order /= ENGINEER then
             Append
               (Source => Available_Orders,
                New_Item => " {Go engineering the ship}");
+            Append
+              (Source => Tcl_Commands,
+               New_Item =>
+                 " {Engineer " & CArgv.Arg(Argv => Argv, N => 1) & "}");
          end if;
          Set_Work_Orders_Loop :
          for J in Player_Ship.Modules.Iterate loop
@@ -2468,6 +2479,15 @@ package body Ships.UI.Crew is
                            New_Item =>
                              " {Operate " &
                              To_String(Source => Player_Ship.Modules(J).Name) &
+                             "}");
+                        Append
+                          (Source => Tcl_Commands,
+                           New_Item =>
+                             " {Gunner " & CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))) &
                              "}");
                      end if;
                   when WORKSHOP =>
@@ -2561,6 +2581,15 @@ package body Ships.UI.Crew is
                                             .Result_Index)
                                        .Name)) &
                              "}");
+                        Append
+                          (Source => Tcl_Commands,
+                           New_Item =>
+                             " {Craft " & CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))) &
+                             "}");
                      end if;
                   when CABIN =>
                      if Player_Ship.Modules(J).Cleanliness <
@@ -2569,6 +2598,11 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Available_Orders,
                            New_Item => " {Clean ship}");
+                        Append
+                          (Source => Tcl_Commands,
+                           New_Item =>
+                             " {Clean " & CArgv.Arg(Argv => Argv, N => 1) &
+                             "}");
                         Need_Clean := False;
                      end if;
                   when TRAINING_ROOM =>
@@ -2583,6 +2617,15 @@ package body Ships.UI.Crew is
                              " {Go on training in " &
                              To_String(Source => Player_Ship.Modules(J).Name) &
                              "}");
+                        Append
+                          (Source => Tcl_Commands,
+                           New_Item =>
+                             " {Train " & CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))) &
+                             "}");
                      end if;
                   when others =>
                      null;
@@ -2590,6 +2633,10 @@ package body Ships.UI.Crew is
                if Need_Repair then
                   Append
                     (Source => Available_Orders, New_Item => " {Repair ship}");
+                  Append
+                    (Source => Tcl_Commands,
+                     New_Item =>
+                       " {Repair " & CArgv.Arg(Argv => Argv, N => 1) & "}");
                   Need_Repair := False;
                end if;
             end if;
@@ -2603,19 +2650,33 @@ package body Ships.UI.Crew is
                Append
                  (Source => Available_Orders,
                   New_Item => " {Heal wounded crew members}");
+               Append
+                 (Source => Tcl_Commands,
+                  New_Item =>
+                    " {Heal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
          if Player_Ship.Upgrade_Module > 0 and Member.Order /= UPGRADING then
             Append
               (Source => Available_Orders, New_Item => " {Upgrade module}");
+            Append
+              (Source => Tcl_Commands,
+               New_Item =>
+                 " {Upgrading " & CArgv.Arg(Argv => Argv, N => 1) & "}");
          end if;
          if Member.Order /= TALK then
             Append
               (Source => Available_Orders, New_Item => " {Talk with others}");
+            Append
+              (Source => Tcl_Commands,
+               New_Item => " {Talk " & CArgv.Arg(Argv => Argv, N => 1) & "}");
          end if;
          if Member.Order /= REST then
             Append(Source => Available_Orders, New_Item => " {Go on break}");
+            Append
+              (Source => Tcl_Commands,
+               New_Item => " {Rest " & CArgv.Arg(Argv => Argv, N => 1) & "}");
          end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
@@ -2632,6 +2693,11 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Orders_Box, Sequence => "<Escape>",
          Script => "{" & Close_Dialog_Button & " invoke;break}");
+      Bind
+        (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
+         Script =>
+           "{SelectCrewOrder [list" & To_String(Source => Tcl_Commands) &
+           "]}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
       Tcl.Tk.Ada.Grid.Grid
