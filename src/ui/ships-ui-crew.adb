@@ -2696,7 +2696,8 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
          Script =>
-           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}}");
+           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "} " &
+           CArgv.Arg(Argv => Argv, N => 1) & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
       Tcl.Tk.Ada.Grid.Grid
@@ -2723,8 +2724,9 @@ package body Ships.UI.Crew is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SelectCrewOrder orderslist
-   -- Orderslist is the list of the available orders with their parameters
+   -- SelectCrewOrder orderslist memberindex
+   -- Orderslist is the list of the available orders with their parameters,
+   -- memberindex is the crew index of the selected crew member
    -- SOURCE
    function Select_Crew_Order_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -2735,16 +2737,41 @@ package body Ships.UI.Crew is
    function Select_Crew_Order_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
+      pragma Unreferenced(Argc);
       Orders_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
       Order_Index: constant Natural :=
         Natural'Value(Current(ComboBox => Orders_Box));
+      Tokens: Slice_Set;
+      Order_Label: constant Ttk_Label :=
+        Get_Widget(pathName => ".memberdialog.current");
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Arguments: CArgv.Chars_Ptr_Ptr := CArgv.Empty & "SetCrewOrder";
    begin
       Tcl_Eval
         (Interp,
-         "puts [lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" &
-         Order_Index'Img & "]");
+         "lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" & Order_Index'Img);
+      Create
+        (S => Tokens, From => Tcl_GetResult(interp => Interp),
+         Separators => " ");
+      Build_Arguments_Loop :
+      for I in 1 .. Slice_Count(S => Tokens) loop
+         Arguments := Arguments & Slice(S => Tokens, Index => I);
+      end loop Build_Arguments_Loop;
+      if Set_Crew_Order_Command
+          (Client_Data => Client_Data, Interp => Interp,
+           Argc => int(Slice_Count(S => Tokens) + 1), Argv => Arguments) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
+      configure
+        (Widgt => Order_Label,
+         options =>
+           "-text {" &
+           To_String
+             (Source => Get_Current_Order(Member_Index => Member_Index)) &
+           "}");
       return TCL_OK;
    end Select_Crew_Order_Command;
 
