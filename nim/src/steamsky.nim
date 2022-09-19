@@ -15,10 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import tk, utils
+import std/[os, parseopt]
+import tk, utils, game
 import ui/utilsui
 
-proc steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
+proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
+    ReadIOEffect].} =
   ## FUNCTION
   ##
   ## The main procedure of the game.
@@ -26,6 +28,13 @@ proc steamsky(): PInterp {.exportc, gcsafe, raises: [TclError], tags: [].} =
   ## RETURNS
   ##
   ## The pointer to the newly created Tcl interpreter
+
+  var gameParams = initOptParser(cmdLine = $params)
+  for kind, key, val in gameParams.getopt():
+    case key
+    of "savedir":
+      saveDirectory = val & DirSep
+      normalizePath(saveDirectory)
 
   # Create Tcl interpreter
   result = tclCreateInterp()

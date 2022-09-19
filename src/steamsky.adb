@@ -21,6 +21,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -41,6 +42,7 @@ procedure Steamsky is
    Argc: CArgv.CNatural := 0;
    Argv: CArgv.Chars_Ptr_Ptr;
    Interp: Tcl.Tcl_Interp := Null_Interp;
+   Parameters: Unbounded_String := Null_Unbounded_String;
 
    function Update_Path
      (Path: in out Unbounded_String; Path_Name: String) return Boolean is
@@ -68,7 +70,7 @@ procedure Steamsky is
       Convention => C,
       External_Name => "NimMain";
 
-   function Steam_Sky return Tcl.Tcl_Interp with
+   function Steam_Sky(Params: chars_ptr) return Tcl.Tcl_Interp with
       Import => True,
       Convention => C,
       External_Name => "steamsky";
@@ -79,6 +81,7 @@ begin
    Command_Line_Loop :
    for I in 1 .. Argument_Count loop
       if Argument(Number => I)'Length > 8 then
+         Append(Source => Parameters, New_Item => Argument(Number => I) & " ");
          if Argument(Number => I)(1 .. 8) = "--debug=" then
             Set_Debug_Mode_Loop :
             for J in Debug_Types loop
@@ -167,7 +170,8 @@ begin
 
    --  Create one Tcl interpreter
    -----------------------------
-   Interp := Steam_Sky;
+   Interp :=
+     Steam_Sky(Params => New_String(Str => To_String(Source => Parameters)));
 
    --  Set the Tk context so that we may use shortcut Tk
    --  calls that require reference to the interpreter.

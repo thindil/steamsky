@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/os
+
 type
   DateRecord* = object
     ## FUNCTION
@@ -25,3 +27,9 @@ type
     day*: range[0..62] ## The game's day
     hour*: range[0..48] ## The game's hour
     minutes*: range[0..120] ## The game's minutes
+
+var
+  saveDirectory*: string = "data" & DirSep & "saves" & DirSep
+    ## FUNCTION
+    ##
+    ## The directory where the saved games and logs are stored
