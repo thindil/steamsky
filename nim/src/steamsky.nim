@@ -29,12 +29,14 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
   ##
   ## The pointer to the newly created Tcl interpreter
 
-  var gameParams = initOptParser(cmdLine = $params)
-  for kind, key, val in gameParams.getopt():
-    case key
-    of "savedir":
-      saveDirectory = val & DirSep
-      normalizePath(saveDirectory)
+  # Get the command line params if any
+  if params.len() > 0:
+    var gameParams = initOptParser(cmdLine = $params)
+    for kind, key, val in gameParams.getopt():
+      case key
+      of "savedir":
+        saveDirectory = val & DirSep
+        normalizePath(saveDirectory)
 
   # Create Tcl interpreter
   result = tclCreateInterp()
