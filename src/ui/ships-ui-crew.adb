@@ -2384,21 +2384,31 @@ package body Ships.UI.Crew is
           (Name => ".memberdialog",
            Title => "Change order for " & To_String(Source => Member.Name),
            Columns => 2);
+      Order_Info: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".orderinfo",
+           options => "-text {Current order:}");
       Order_Label: constant Ttk_Label :=
         Create
           (pathName => Member_Dialog & ".current",
            options =>
-             "-text {Current order: " &
+             "-text {" &
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
              "}");
       Orders_Info: constant Ttk_Label :=
         Create
-          (pathName => Member_Dialog & ".info",
+          (pathName => Member_Dialog & ".ordersinfo",
            options => "-text {New order:}");
       Orders_Box: constant Ttk_ComboBox :=
         Create
           (pathName => Member_Dialog & ".list", options => "-state readonly");
+      Close_Dialog_Button: constant Ttk_Button :=
+        Create
+          (pathName => Member_Dialog & ".button",
+           options =>
+             "-text Close -command {CloseDialog " & Member_Dialog &
+             "} -image exiticon -style Dialog.TButton");
       Available_Orders: Unbounded_String := Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
       function Is_Working
@@ -2608,20 +2618,31 @@ package body Ships.UI.Crew is
             Append(Source => Available_Orders, New_Item => " {Go on break}");
          end if;
       end if;
+      Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Order_Label, Options => "-padx 5 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Info, Options => "-padx 5");
+        (Slave => Order_Label,
+         Options => "-padx 5 -column 1 -row 1 -sticky w");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Orders_Info, Options => "-padx 5 -sticky w");
       configure
         (Widgt => Orders_Box,
          options =>
            "-values [list" & To_String(Source => Available_Orders) & "]");
       Current(ComboBox => Orders_Box, NewIndex => "0");
+      Bind
+        (Widgt => Orders_Box, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
-      Add_Close_Button
-        (Name => Member_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Column_Span => 2,
-         Row => 3);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
+      Focus(Widgt => Close_Dialog_Button);
+      Bind
+        (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
+         Script => "{focus " & Orders_Box & ";break}");
+      Bind
+        (Widgt => Close_Dialog_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
       Show_Dialog(Dialog => Member_Dialog);
       return TCL_OK;
    end Show_Crew_Order_Command;
