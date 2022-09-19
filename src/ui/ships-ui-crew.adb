@@ -2352,63 +2352,9 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
-   -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
-   -- FUNCTION
-   -- Show the dialog to change the order of the currently selected crew member
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowCrewOrder memberindex
-   -- MemberIndex is the index of the crew member which order will be changed
-   -- SOURCE
-   function Show_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+   procedure Set_Available_Orders
+     (Member_Index: Positive; Orders_Box: Ttk_ComboBox) is
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
-      Member_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".memberdialog",
-           Title => "Change order for " & To_String(Source => Member.Name),
-           Columns => 2);
-      Order_Info: constant Ttk_Label :=
-        Create
-          (pathName => Member_Dialog & ".orderinfo",
-           options => "-text {Current order:}");
-      Order_Label: constant Ttk_Label :=
-        Create
-          (pathName => Member_Dialog & ".current",
-           options =>
-             "-text {" &
-             To_String
-               (Source => Get_Current_Order(Member_Index => Member_Index)) &
-             "}");
-      Orders_Info: constant Ttk_Label :=
-        Create
-          (pathName => Member_Dialog & ".ordersinfo",
-           options => "-text {New order:}");
-      Orders_Box: constant Ttk_ComboBox :=
-        Create
-          (pathName => Member_Dialog & ".list", options => "-state readonly");
-      Close_Dialog_Button: constant Ttk_Button :=
-        Create
-          (pathName => Member_Dialog & ".button",
-           options =>
-             "-text Close -command {CloseDialog " & Member_Dialog &
-             "} -image exiticon -style Dialog.TButton");
       Available_Orders, Tcl_Commands: Unbounded_String :=
         Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
@@ -2444,7 +2390,7 @@ package body Ships.UI.Crew is
          Append(Source => Available_Orders, New_Item => " {Go on break}");
          Append
            (Source => Tcl_Commands,
-            New_Item => " {Rest " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+            New_Item => " {Rest" & Member_Index'Img & "}");
       else
          if Member.Order /= PILOT then
             Append
@@ -2452,7 +2398,7 @@ package body Ships.UI.Crew is
                New_Item => " {Go piloting the ship}");
             Append
               (Source => Tcl_Commands,
-               New_Item => " {Pilot " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+               New_Item => " {Pilot" & Member_Index'Img & "}");
          end if;
          if Member.Order /= ENGINEER then
             Append
@@ -2460,8 +2406,7 @@ package body Ships.UI.Crew is
                New_Item => " {Go engineering the ship}");
             Append
               (Source => Tcl_Commands,
-               New_Item =>
-                 " {Engineer " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+               New_Item => " {Engineer" & Member_Index'Img & "}");
          end if;
          Set_Work_Orders_Loop :
          for J in Player_Ship.Modules.Iterate loop
@@ -2472,8 +2417,7 @@ package body Ships.UI.Crew is
             if Player_Ship.Modules(J).Durability > 0 then
                case Player_Ship.Modules(J).M_Type is
                   when GUN | HARPOON_GUN =>
-                     if Player_Ship.Modules(J).Owner(1) /=
-                       Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) then
+                     if Player_Ship.Modules(J).Owner(1) /= Member_Index then
                         Append
                           (Source => Available_Orders,
                            New_Item =>
@@ -2483,7 +2427,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Tcl_Commands,
                            New_Item =>
-                             " {Gunner " & CArgv.Arg(Argv => Argv, N => 1) &
+                             " {Gunner" & Member_Index'Img &
                              Positive'Image
                                (Positive
                                   (Modules_Container.To_Index
@@ -2493,9 +2437,7 @@ package body Ships.UI.Crew is
                   when WORKSHOP =>
                      if not Is_Working
                          (Owners => Player_Ship.Modules(J).Owner,
-                          Member_Index =>
-                            Positive'Value
-                              (CArgv.Arg(Argv => Argv, N => 1))) and
+                          Member_Index => Member_Index) and
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Bounded_String then
                         Append
@@ -2584,7 +2526,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Tcl_Commands,
                            New_Item =>
-                             " {Craft " & CArgv.Arg(Argv => Argv, N => 1) &
+                             " {Craft" & Member_Index'Img &
                              Positive'Image
                                (Positive
                                   (Modules_Container.To_Index
@@ -2600,17 +2542,13 @@ package body Ships.UI.Crew is
                            New_Item => " {Clean ship}");
                         Append
                           (Source => Tcl_Commands,
-                           New_Item =>
-                             " {Clean " & CArgv.Arg(Argv => Argv, N => 1) &
-                             "}");
+                           New_Item => " {Clean" & Member_Index'Img & "}");
                         Need_Clean := False;
                      end if;
                   when TRAINING_ROOM =>
                      if not Is_Working
                          (Owners => Player_Ship.Modules(J).Owner,
-                          Member_Index =>
-                            Positive'Value
-                              (CArgv.Arg(Argv => Argv, N => 1))) then
+                          Member_Index => Member_Index) then
                         Append
                           (Source => Available_Orders,
                            New_Item =>
@@ -2620,7 +2558,7 @@ package body Ships.UI.Crew is
                         Append
                           (Source => Tcl_Commands,
                            New_Item =>
-                             " {Train " & CArgv.Arg(Argv => Argv, N => 1) &
+                             " {Train" & Member_Index'Img &
                              Positive'Image
                                (Positive
                                   (Modules_Container.To_Index
@@ -2635,8 +2573,7 @@ package body Ships.UI.Crew is
                     (Source => Available_Orders, New_Item => " {Repair ship}");
                   Append
                     (Source => Tcl_Commands,
-                     New_Item =>
-                       " {Repair " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+                     New_Item => " {Repair" & Member_Index'Img & "}");
                   Need_Repair := False;
                end if;
             end if;
@@ -2644,16 +2581,14 @@ package body Ships.UI.Crew is
          Check_Heal_Order_Loop :
          for J in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(J).Health < 100 and
-              Crew_Container.To_Index(Position => J) /=
-                Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) and
+              Crew_Container.To_Index(Position => J) /= Member_Index and
               Player_Ship.Crew(J).Order /= HEAL then
                Append
                  (Source => Available_Orders,
                   New_Item => " {Heal wounded crew members}");
                Append
                  (Source => Tcl_Commands,
-                  New_Item =>
-                    " {Heal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+                  New_Item => " {Heal" & Member_Index'Img & "}");
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
@@ -2662,42 +2597,104 @@ package body Ships.UI.Crew is
               (Source => Available_Orders, New_Item => " {Upgrade module}");
             Append
               (Source => Tcl_Commands,
-               New_Item =>
-                 " {Upgrading " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+               New_Item => " {Upgrading" & Member_Index'Img & "}");
          end if;
          if Member.Order /= TALK then
             Append
               (Source => Available_Orders, New_Item => " {Talk with others}");
             Append
               (Source => Tcl_Commands,
-               New_Item => " {Talk " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+               New_Item => " {Talk" & Member_Index'Img & "}");
          end if;
          if Member.Order /= REST then
             Append(Source => Available_Orders, New_Item => " {Go on break}");
             Append
               (Source => Tcl_Commands,
-               New_Item => " {Rest " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+               New_Item => " {Rest" & Member_Index'Img & "}");
          end if;
       end if;
+      configure
+        (Widgt => Orders_Box,
+         options =>
+           "-values [list" & To_String(Source => Available_Orders) & "]");
+      Unbind(Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>");
+      Current(ComboBox => Orders_Box, NewIndex => "0");
+      Bind
+        (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
+         Script =>
+           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}" &
+           Member_Index'Img & "}");
+   end Set_Available_Orders;
+
+   -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
+   -- FUNCTION
+   -- Show the dialog to change the order of the currently selected crew member
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrewOrder memberindex
+   -- MemberIndex is the index of the crew member which order will be changed
+   -- SOURCE
+   function Show_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
+      Member_Dialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".memberdialog",
+           Title => "Change order for " & To_String(Source => Member.Name),
+           Columns => 2);
+      Order_Info: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".orderinfo",
+           options => "-text {Current order:}");
+      Order_Label: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".current",
+           options =>
+             "-text {" &
+             To_String
+               (Source => Get_Current_Order(Member_Index => Member_Index)) &
+             "}");
+      Orders_Info: constant Ttk_Label :=
+        Create
+          (pathName => Member_Dialog & ".ordersinfo",
+           options => "-text {New order:}");
+      Orders_Box: constant Ttk_ComboBox :=
+        Create
+          (pathName => Member_Dialog & ".list", options => "-state readonly");
+      Close_Dialog_Button: constant Ttk_Button :=
+        Create
+          (pathName => Member_Dialog & ".button",
+           options =>
+             "-text Close -command {CloseDialog " & Member_Dialog &
+             "} -image exiticon -style Dialog.TButton");
+   begin
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Order_Label,
          Options => "-padx 5 -column 1 -row 1 -sticky w");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Info, Options => "-padx 5 -sticky w");
-      configure
-        (Widgt => Orders_Box,
-         options =>
-           "-values [list" & To_String(Source => Available_Orders) & "]");
-      Current(ComboBox => Orders_Box, NewIndex => "0");
       Bind
         (Widgt => Orders_Box, Sequence => "<Escape>",
          Script => "{" & Close_Dialog_Button & " invoke;break}");
-      Bind
-        (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
-         Script =>
-           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "} " &
-           CArgv.Arg(Argv => Argv, N => 1) & "}");
+      Set_Available_Orders
+        (Member_Index => Member_Index, Orders_Box => Orders_Box);
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
       Tcl.Tk.Ada.Grid.Grid
