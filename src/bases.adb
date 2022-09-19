@@ -243,12 +243,14 @@ package body Bases is
            Get_Price
              (Base_Type => Sky_Bases(Base_Index).Base_Type,
               Item_Index => Item_Index);
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Payment :=
            Payment +
            (Get_Price
               (Base_Type => Sky_Bases(Base_Index).Base_Type,
                Item_Index => Item_Index) /
             10);
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
       end Add_Inventory;
    begin
       if Days_Difference
@@ -264,9 +266,11 @@ package body Bases is
           (Item => To_Unbounded_String(Source => "barracks")) then
          Max_Recruits := Max_Recruits * 2;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if Max_Recruits > (Sky_Bases(Base_Index).Population / 10) then
          Max_Recruits := (Sky_Bases(Base_Index).Population / 10) + 1;
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
         Integer
@@ -369,8 +373,10 @@ package body Bases is
          end loop Update_Price_With_Skills_Loop;
          Update_Price_With_Stats_Loop :
          for Stat of Attributes loop
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Price := Price + (Stat.Level * 2);
             Payment := Payment + (Stat.Level * 2);
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
          end loop Update_Price_With_Stats_Loop;
          Add_Inventory(Items_Indexes => Weapons_List, Equip_Index => WEAPON);
          Add_Inventory(Items_Indexes => Shields_List, Equip_Index => SHIELD);
