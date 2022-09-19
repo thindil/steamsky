@@ -2696,8 +2696,7 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
          Script =>
-           "{SelectCrewOrder [list" & To_String(Source => Tcl_Commands) &
-           "]}");
+           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
       Tcl.Tk.Ada.Grid.Grid
@@ -2712,6 +2711,42 @@ package body Ships.UI.Crew is
       Show_Dialog(Dialog => Member_Dialog);
       return TCL_OK;
    end Show_Crew_Order_Command;
+
+   -- ****o* SUCrew/SUCrew.Select_Crew_Order_Command
+   -- FUNCTION
+   -- Set the selected order for the selected crew member
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SelectCrewOrder orderslist
+   -- Orderslist is the list of the available orders with their parameters
+   -- SOURCE
+   function Select_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Select_Crew_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+      Orders_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
+      Order_Index: constant Natural :=
+        Natural'Value(Current(ComboBox => Orders_Box));
+   begin
+      Tcl_Eval
+        (Interp,
+         "puts [lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" &
+         Order_Index'Img & "]");
+      return TCL_OK;
+   end Select_Crew_Order_Command;
 
    procedure Add_Commands is
    begin
@@ -2749,6 +2784,9 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "ShowCrewOrder",
          Ada_Command => Show_Crew_Order_Command'Access);
+      Add_Command
+        (Name => "SelectCrewOrder",
+         Ada_Command => Select_Crew_Order_Command'Access);
       Ships.UI.Crew.Inventory.Add_Commands;
    end Add_Commands;
 
