@@ -106,17 +106,18 @@ type
     startingBase: cstring ## The type of the starting base
     enemyDamageBonus: BonusType ## The bonus to damage for enemies in ship to ship combat
     playerDamageBonus: BonusType ## The bonus to damage for the player's character and crew in
-                                 ## ship to ship combat
+                                   ## ship to ship combat
     enemyMeleeDamage_Bonus: BonusType ## The bonus to damage for enemies in melee combat
     playerMeleeDamageBonus: BonusType ## The bonus to damage for the player's character and crew
-                                      ## in melee combat
+                                        ## in melee combat
     experienceBonus: BonusType ## The bonus to the gained by player's character and crew experience
     reputationBonus: BonusType ## The bonus to the gained the player's character reputation in bases
     upgradeCostBonus: BonusType ## The bonus to costs of upgrades the player's ship
     pricesBonus: BonusType ## The bonus to prices in bases
     difficultyLevel: DifficultyType ## The preset level of difficulty for the game
 
-const defaultGameSettings* = GameSettingsRecord(autoRest: true,
+const
+  defaultGameSettings* = GameSettingsRecord(autoRest: true,
     undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
     autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
     autoMoveStop: never, windowWidth: 800, windowHeight: 600,
@@ -127,3 +128,11 @@ const defaultGameSettings* = GameSettingsRecord(autoRest: true,
     fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
     topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25)
     ## The default setting for the game
+
+  defaultNewGameSettings* = NewGameRecord(playerName: "Laeran",
+    playerGender: 'M', shipName: "Anaria", playerFaction: "POLEIS",
+    playerCareer: "general", startingBase: "Any", enemyDamageBonus: 1.0,
+    playerDamageBonus: 1.0, enemyMeleeDamageBonus: 1.0,
+    playerMeleeDamageBonus: 1.0, experienceBonus: 1.0, reputationBonus: 1.0,
+    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: normal)
+    ## The default setting for the new game
