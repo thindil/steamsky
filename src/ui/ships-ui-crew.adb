@@ -2680,7 +2680,7 @@ package body Ships.UI.Crew is
              "-text {" &
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
-             "}");
+             "} -wraplength 275");
       Orders_Info: constant Ttk_Label :=
         Create
           (pathName => Member_Dialog & ".ordersinfo",
@@ -2707,7 +2707,7 @@ package body Ships.UI.Crew is
       Set_Available_Orders
         (Member_Index => Member_Index, Orders_Box => Orders_Box);
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2");
+        (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2 -sticky w");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
       Focus(Widgt => Close_Dialog_Button);
