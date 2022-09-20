@@ -136,3 +136,8 @@ const
     playerMeleeDamageBonus: 1.0, experienceBonus: 1.0, reputationBonus: 1.0,
     upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: normal)
     ## The default setting for the new game
+
+var
+  newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
+  gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
+
