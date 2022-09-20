@@ -16,11 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parseopt]
-import tk, utils, game
+import config, tk, utils, game
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
-    ReadIOEffect].} =
+    ReadIOEffect, RootEffect].} =
   ## FUNCTION
   ##
   ## The main procedure of the game.
@@ -37,6 +37,9 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
       of "savedir":
         saveDirectory = val & DirSep
         normalizePath(saveDirectory)
+
+  # Load the game configuration
+  loadConfig()
 
   # Create Tcl interpreter
   result = tclCreateInterp()

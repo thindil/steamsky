@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ships
+import std/[parsecfg, streams]
+import game, ships
 
 type
   AutoMoveBreak* = enum
@@ -107,7 +108,7 @@ type
     enemyDamageBonus: BonusType ## The bonus to damage for enemies in ship to ship combat
     playerDamageBonus: BonusType ## The bonus to damage for the player's character and crew in
                                    ## ship to ship combat
-    enemyMeleeDamage_Bonus: BonusType ## The bonus to damage for enemies in melee combat
+    enemyMeleeDamageBonus: BonusType ## The bonus to damage for enemies in melee combat
     playerMeleeDamageBonus: BonusType ## The bonus to damage for the player's character and crew
                                         ## in melee combat
     experienceBonus: BonusType ## The bonus to the gained by player's character and crew experience
@@ -141,3 +142,40 @@ var
   newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
+proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
+  let fileName = saveDirectory & "game.cfg"
+  var configFile = newFileStream(fileName, fmRead)
+  if configFile == nil:
+    return
+  var parser: CfgParser
+  try:
+    parser.open(configFile, fileName)
+  except OSError, IOError, Exception:
+    echo "Can't initialize configuration file parser. Reason: " &
+        getCurrentExceptionMsg()
+    return
+  while true:
+    try:
+      let entry = parser.next()
+      case entry.kind
+      of cfgEof:
+        break
+      of cfgKeyValuePair:
+        case entry.key
+        of "PlayerName":
+          newGameSettings.playerName = entry.value.cstring
+        else:
+          discard
+      of cfgError:
+        echo entry.msg
+      else:
+        discard
+    except ValueError, OSError, IOError:
+      echo "Invalid data in the game configuration file. Details: " &
+          getCurrentExceptionMsg()
+      continue
+  try:
+    parser.close()
+  except OSError, IOError, Exception:
+    echo "Can't close configuration file parser. Reason: " &
+        getCurrentExceptionMsg()
