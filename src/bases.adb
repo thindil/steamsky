@@ -410,8 +410,7 @@ package body Bases is
             Price := Price / 2;
             Payment := Payment / 2;
          end if;
-         Price :=
-           Natural(Float(Price * 100) * Float(New_Game_Settings.Prices_Bonus));
+         Price := Natural(Float(Price * 100) * New_Game_Settings.Prices_Bonus);
          if Price = 0 then
             Price := 1;
          end if;
