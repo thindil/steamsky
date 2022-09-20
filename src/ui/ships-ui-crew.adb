@@ -2758,8 +2758,10 @@ package body Ships.UI.Crew is
       Arguments: CArgv.Chars_Ptr_Ptr := CArgv.Empty & "SetCrewOrder";
    begin
       Tcl_Eval
-        (Interp,
-         "lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" & Order_Index'Img);
+        (interp => Interp,
+         strng =>
+           "lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" &
+           Order_Index'Img);
       Create
         (S => Tokens, From => Tcl_GetResult(interp => Interp),
          Separators => " ");
