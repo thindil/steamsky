@@ -2784,6 +2784,7 @@ package body Ships.UI.Crew is
            "}");
       Set_Available_Orders
         (Member_Index => Member_Index, Orders_Box => Orders_Box);
+      Focus(Widgt => Orders_Box);
       return TCL_OK;
    end Select_Crew_Order_Command;
 
