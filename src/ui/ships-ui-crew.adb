@@ -2352,8 +2352,19 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
+   -- ****if* SUCrew/SUCrew.Set_Available_Orders
+   -- FUNCTION
+   -- Set the list of available orders for the selected crew member
+   -- PARAMETERS
+   -- Member_Index - The crew index of the crew member which list of orders
+   --                will be set
+   -- Orders_Box   - The Ttk_ComboBox widget in which the list will be set
+   -- HISTORY
+   -- 7.9 - Added
+   -- SOURCE
    procedure Set_Available_Orders
      (Member_Index: Positive; Orders_Box: Ttk_ComboBox) is
+     -- ****
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
       Available_Orders, Tcl_Commands: Unbounded_String :=
         Null_Unbounded_String;
