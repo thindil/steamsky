@@ -2782,6 +2782,8 @@ package body Ships.UI.Crew is
            To_String
              (Source => Get_Current_Order(Member_Index => Member_Index)) &
            "}");
+      Set_Available_Orders
+        (Member_Index => Member_Index, Orders_Box => Orders_Box);
       return TCL_OK;
    end Select_Crew_Order_Command;
 
