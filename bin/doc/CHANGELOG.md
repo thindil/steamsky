@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   his/her information dialog
 - Option to set the selected crew member order on the player's ship's crew
   members' list
+- Icon for give orders to crew members. Author: Delapouite (https://game-icons.net),
+  license CC BY 3.0
 
 ### Changed
 - Updated modding guide
@@ -33,7 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Icons for move item to cargo, equip item, unequip item, unchecked empty
-  checkboxes. Author: Lorc, Delapouite (https://game-icons.net), license
+  checkboxes. Authors: Lorc, Delapouite (https://game-icons.net), license
   CC BY 3.0
 - Ability to move, equip or take off a couple of items in the player's
   ship's crew members' inventory
