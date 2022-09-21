@@ -802,11 +802,23 @@ package body Ships.UI.Crew is
              (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
-         Append
-           (Source => Member_Info,
-            New_Item =>
-              "Order: " & Get_Current_Order(Member_Index => Member_Index) &
-              LF);
+         Info_Button :=
+           Create
+             (pathName => Frame & ".orderbutton",
+              options =>
+                "-text {Order: " &
+                To_String
+                  (Source => Get_Current_Order(Member_Index => Member_Index)) &
+                "}");
+         Add
+           (Widget => Info_Button,
+            Message => "Set the new order for the crew member.");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button, Options => "-sticky w -padx 5");
+         Height :=
+           Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
