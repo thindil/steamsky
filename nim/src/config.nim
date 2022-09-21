@@ -190,6 +190,28 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
           newGameSettings.upgradeCostBonus = entry.value.parseFloat()
         of "PricesBonus":
           newGameSettings.pricesBonus = entry.value.parseFloat()
+        of "DifficultyLevel":
+          newGameSettings.difficultyLevel = parseEnum[DifficultyType](entry.value)
+        of "AutoRest":
+          gameSettings.autoRest = entry.value.parseBool()
+        of "UndockSpeed":
+          gameSettings.undockSpeed = parseEnum[ShipSpeed](entry.value)
+        of "AutoCenter":
+          gameSettings.autoCenter = entry.value.parseBool()
+        of "AutoReturn":
+          gameSettings.autoReturn = entry.value.parseBool()
+        of "AutoFinish":
+          gameSettings.autoFinish = entry.value.parseBool()
+        of "LowFuel":
+          gameSettings.lowFuel = entry.value.parseInt()
+        of "LowDrinks":
+          gameSettings.lowDrinks = entry.value.parseInt()
+        of "LowFood":
+          gameSettings.lowFood = entry.value.parseInt()
+        of "AutoMoveStop":
+          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](entry.value)
+        of "WindowWidth":
+          gameSettings.windowWidth = entry.value.parseInt().cint
         else:
           discard
       of cfgError:
