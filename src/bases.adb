@@ -345,6 +345,7 @@ package body Bases is
                   exit Get_Skill_Index_Loop;
                end if;
             end loop Get_Skill_Index_Loop;
+            --## rule off SIMPLIFIABLE_STATEMENTS
             if Skill_Index = 0 then
                Skills_Container.Append
                  (Container => Skills,
@@ -359,6 +360,7 @@ package body Bases is
                     (Index => Skill_Number, Level => Skill_Level,
                      Experience => 0));
             end if;
+            --## rule on SIMPLIFIABLE_STATEMENTS
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
          for Attribute of Attributes loop
