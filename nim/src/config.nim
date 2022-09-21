@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[parsecfg, streams]
+import std/[parsecfg, streams, strutils]
 import game, ships
 
 type
@@ -142,14 +142,14 @@ var
   newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
-proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
+proc loadConfig*() {.raises: [], tags: [RootEffect].} =
   let fileName = saveDirectory & "game.cfg"
-  var configFile = newFileStream(fileName, fmRead)
+  var configFile = newFileStream(filename = fileName, mode = fmRead)
   if configFile == nil:
     return
   var parser: CfgParser
   try:
-    parser.open(configFile, fileName)
+    parser.open(input = configFile, filename = fileName)
   except OSError, IOError, Exception:
     echo "Can't initialize configuration file parser. Reason: " &
         getCurrentExceptionMsg()
@@ -160,15 +160,41 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
       case entry.kind
       of cfgEof:
         break
-      of cfgKeyValuePair:
+      of cfgKeyValuePair, cfgOption:
         case entry.key
         of "PlayerName":
           newGameSettings.playerName = entry.value.cstring
+        of "PlayerGender":
+          newGameSettings.playerGender = entry.value[0]
+        of "ShipName":
+          newGameSettings.shipName = entry.value.cstring
+        of "PlayerFaction":
+          newGameSettings.playerFaction = entry.value.cstring
+        of "PlayerCareer":
+          newGameSettings.playerCareer = entry.value.cstring
+        of "StartingBase":
+          newGameSettings.startingBase = entry.value.cstring
+        of "EnemyDamageBonus":
+          newGameSettings.enemyDamageBonus = entry.value.parseFloat()
+        of "PlayerDamageBonus":
+          newGameSettings.playerDamageBonus = entry.value.parseFloat()
+        of "EnemyMeleeDamageBonus":
+          newGameSettings.enemyMeleeDamageBonus = entry.value.parseFloat()
+        of "PlayerMeleeDamageBonus":
+          newGameSettings.playerMeleeDamageBonus = entry.value.parseFloat()
+        of "ExperienceBonus":
+          newGameSettings.experienceBonus = entry.value.parseFloat()
+        of "ReputationBonus":
+          newGameSettings.reputationBonus = entry.value.parseFloat()
+        of "UpgradeCostBonus":
+          newGameSettings.upgradeCostBonus = entry.value.parseFloat()
+        of "PricesBonus":
+          newGameSettings.pricesBonus = entry.value.parseFloat()
         else:
           discard
       of cfgError:
         echo entry.msg
-      else:
+      of cfgSectionStart:
         discard
     except ValueError, OSError, IOError:
       echo "Invalid data in the game configuration file. Details: " &
