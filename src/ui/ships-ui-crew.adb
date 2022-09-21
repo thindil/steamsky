@@ -802,24 +802,41 @@ package body Ships.UI.Crew is
              (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
-         Info_Button :=
-           Create
-             (pathName => Frame & ".orderbutton",
-              options =>
-                "-text {Order: " &
-                To_String
-                  (Source => Get_Current_Order(Member_Index => Member_Index)) &
-                "} -command {" & Close_Button & " invoke;ShowCrewOrder " &
-                Positive'Image(Member_Index) & "}");
-         Add
-           (Widget => Info_Button,
-            Message => "Set the new order for the crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button, Options => "-sticky w -padx 5");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+         Add_Order_Info_Block :
+         declare
+            Order_Box: constant Ttk_Frame :=
+              Create(pathName => Frame & ".orderinfo");
+         begin
+            Member_Label :=
+              Create
+                (pathName => Order_Box & ".info",
+                 options =>
+                   "-text {Order: " &
+                   To_String
+                     (Source =>
+                        Get_Current_Order(Member_Index => Member_Index)) &
+                   " } -width 20");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-sticky w");
+            Info_Button :=
+              Create
+                (pathName => Order_Box & ".button",
+                 options =>
+                   "-text {T} -command {" & Close_Button &
+                   " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
+                   "} -width 1");
+            Add
+              (Widget => Info_Button,
+               Message => "Set the new order for the crew member.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button, Options => "-row 0 -column 1");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Order_Box, Options => "-sticky w -padx 5");
+            Height :=
+              Height +
+              Positive'Value
+                (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
+         end Add_Order_Info_Block;
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
