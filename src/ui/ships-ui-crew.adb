@@ -809,7 +809,8 @@ package body Ships.UI.Crew is
                 "-text {Order: " &
                 To_String
                   (Source => Get_Current_Order(Member_Index => Member_Index)) &
-                "}");
+                "} -command {" & Close_Button & " invoke;ShowCrewOrder " &
+                Positive'Image(Member_Index) & "}");
          Add
            (Widget => Info_Button,
             Message => "Set the new order for the crew member.");
