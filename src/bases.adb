@@ -361,8 +361,8 @@ package body Bases is
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
-         for J in Attributes'Range loop
-            Attributes(J) :=
+         for Attribute of Attributes loop
+            Attribute :=
               (Level => Get_Random(Min => 3, Max => Max_Skill_Level / 3),
                Experience => 0);
          end loop Generate_Attributes_Loop;
