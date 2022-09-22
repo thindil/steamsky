@@ -815,16 +815,16 @@ package body Ships.UI.Crew is
                    To_String
                      (Source =>
                         Get_Current_Order(Member_Index => Member_Index)) &
-                   " } -width 20");
+                   " }");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label, Options => "-sticky w");
             Info_Button :=
               Create
                 (pathName => Order_Box & ".button",
                  options =>
-                   "-text {T} -command {" & Close_Button &
+                   "-image giveordericon -command {" & Close_Button &
                    " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
-                   "} -width 1");
+                   "} -style Small.TButton");
             Add
               (Widget => Info_Button,
                Message => "Set the new order for the crew member.");
