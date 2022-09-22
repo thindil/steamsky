@@ -1096,6 +1096,8 @@ story.
   items on lists' buttons. Optional.
 * Key `UnselectAllIcon`: Path to the SVG image which will be used for unselect
   all items on lists' buttons. Optional.
+* Key `GiveOrderIcon`: Path to the SVG image which will be used for give order
+  to the crew member button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
