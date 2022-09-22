@@ -447,13 +447,13 @@ package body Bases is
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Tmp_Base_Index: Extended_Base_Range;
-      Ship_Index: Proto_Ships_Container.Extended_Index;
+      Tmp_Base_Index: Extended_Base_Range := 0;
+      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Unknown_Bases: Extended_Base_Range := 0;
       Trader_Index: constant Natural := Find_Member(Order => TALK);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
-      Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40;
+      Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40 := 0;
    begin
       if Trader_Index = 0 then
          return;
