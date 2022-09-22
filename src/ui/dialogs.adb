@@ -477,7 +477,8 @@ package body Dialogs is
            "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
          Command =>
            "CloseDialog " & Message_Dialog &
-           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame));
+           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame),
+         Row => 2);
       Show_Dialog
         (Dialog => Message_Dialog, Parent_Frame => Parent_Frame,
          With_Timer => True);
