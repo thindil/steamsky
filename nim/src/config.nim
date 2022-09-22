@@ -175,21 +175,21 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "StartingBase":
           newGameSettings.startingBase = entry.value.cstring
         of "EnemyDamageBonus":
-          newGameSettings.enemyDamageBonus = entry.value.parseFloat()
+          newGameSettings.enemyDamageBonus = entry.value.parseFloat().cfloat
         of "PlayerDamageBonus":
-          newGameSettings.playerDamageBonus = entry.value.parseFloat()
+          newGameSettings.playerDamageBonus = entry.value.parseFloat().cfloat
         of "EnemyMeleeDamageBonus":
-          newGameSettings.enemyMeleeDamageBonus = entry.value.parseFloat()
+          newGameSettings.enemyMeleeDamageBonus = entry.value.parseFloat().cfloat
         of "PlayerMeleeDamageBonus":
-          newGameSettings.playerMeleeDamageBonus = entry.value.parseFloat()
+          newGameSettings.playerMeleeDamageBonus = entry.value.parseFloat().cfloat
         of "ExperienceBonus":
-          newGameSettings.experienceBonus = entry.value.parseFloat()
+          newGameSettings.experienceBonus = entry.value.parseFloat().cfloat
         of "ReputationBonus":
-          newGameSettings.reputationBonus = entry.value.parseFloat()
+          newGameSettings.reputationBonus = entry.value.parseFloat().cfloat
         of "UpgradeCostBonus":
-          newGameSettings.upgradeCostBonus = entry.value.parseFloat()
+          newGameSettings.upgradeCostBonus = entry.value.parseFloat().cfloat
         of "PricesBonus":
-          newGameSettings.pricesBonus = entry.value.parseFloat()
+          newGameSettings.pricesBonus = entry.value.parseFloat().cfloat
         of "DifficultyLevel":
           newGameSettings.difficultyLevel = parseEnum[DifficultyType](entry.value)
         of "AutoRest":
@@ -203,15 +203,37 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "AutoFinish":
           gameSettings.autoFinish = entry.value.parseBool()
         of "LowFuel":
-          gameSettings.lowFuel = entry.value.parseInt()
+          gameSettings.lowFuel = entry.value.parseInt().cint
         of "LowDrinks":
-          gameSettings.lowDrinks = entry.value.parseInt()
+          gameSettings.lowDrinks = entry.value.parseInt().cint
         of "LowFood":
-          gameSettings.lowFood = entry.value.parseInt()
+          gameSettings.lowFood = entry.value.parseInt().cint
         of "AutoMoveStop":
           gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](entry.value)
         of "WindowWidth":
           gameSettings.windowWidth = entry.value.parseInt().cint
+        of "WindowHeight":
+          gameSettings.windowHeight = entry.value.parseInt().cint
+        of "MessagesLimit":
+          gameSettings.messagesLimit = entry.value.parseInt().cint
+        of "SavedMessages":
+          gameSettings.savedMessages = entry.value.parseInt().cint
+        of "HelpFontSize":
+          gameSettings.helpFontSize = entry.value.parseInt().cint
+        of "MapFontSize":
+          gameSettings.mapFontSize = entry.value.parseInt().cint
+        of "InterfaceFontSize":
+          gameSettings.interfaceFontSize = entry.value.parseInt().cint
+        of "InterfaceTheme":
+          gameSettings.interfaceTheme = entry.value.cstring
+        of "MessagesOrder":
+          gameSettings.messagesOrder = parseEnum[MessagesOrder](entry.value)
+        of "AutoAskForBases":
+          gameSettings.autoAskForBases = entry.value.parseBool()
+        of "AutoAskForEvents":
+          gameSettings.autoAskForEvents = entry.value.parseBool()
+        of "ShowTooltips":
+          gameSettings.showTooltips = entry.value.parseBool()
         else:
           discard
       of cfgError:
