@@ -234,6 +234,24 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
           gameSettings.autoAskForEvents = entry.value.parseBool()
         of "ShowTooltips":
           gameSettings.showTooltips = entry.value.parseBool()
+        of "ShowLastMessages":
+          gameSettings.showLastMessages = entry.value.parseBool()
+        of "MessagesPosition":
+          gameSettings.messagesPosition = entry.value.parseInt().cint
+        of "FullScreen":
+          gameSettings.fullScreen = entry.value.parseBool()
+        of "AutoCloseMessagesTime":
+          gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
+        of "AutoSave":
+          gameSettings.autoSave = parseEnum[AutoSaveTime](entry.value)
+        of "TopicsPosition":
+          gameSettings.topicsPosition = entry.value.parseInt().cint
+        of "ShowNumbers":
+          gameSettings.showNumbers = entry.value.parseBool()
+        of "RightButton":
+          gameSettings.rightButton = entry.value.parseBool()
+        of "ListsLimit":
+          gameSettings.listsLimit = entry.value.parseInt().cint
         else:
           discard
       of cfgError:
