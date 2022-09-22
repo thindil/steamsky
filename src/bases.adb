@@ -536,8 +536,8 @@ package body Bases is
                else 4);
          end if;
          Count_Unknown_Bases_Loop :
-         for I in Sky_Bases'Range loop
-            if not Sky_Bases(I).Known then
+         for Sky_Base of Sky_Bases loop
+            if not Sky_Base.Known then
                Unknown_Bases := Unknown_Bases + 1;
             end if;
             exit Count_Unknown_Bases_Loop when Unknown_Bases >= Amount;
@@ -554,9 +554,9 @@ package body Bases is
             end loop Reveal_Random_Bases_Loop;
          else
             Reveal_Bases_Loop :
-            for I in Sky_Bases'Range loop
-               if not Sky_Bases(I).Known then
-                  Sky_Bases(I).Known := True;
+            for Sky_Base of Sky_Bases loop
+               if not Sky_Base.Known then
+                  Sky_Base.Known := True;
                end if;
             end loop Reveal_Bases_Loop;
          end if;
