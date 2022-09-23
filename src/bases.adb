@@ -572,19 +572,19 @@ package body Bases is
 
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Event_Time, Diff_X, Diff_Y: Positive;
-      Event: Events_Types;
+      Event_Time, Diff_X, Diff_Y: Positive := 1;
+      Event: Events_Types := NONE;
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
       Enemies: Positive_Container.Vector;
-      Attempts: Natural range 0 .. 10;
-      New_Item_Index: Objects_Container.Extended_Index;
-      Ship_Index: Proto_Ships_Container.Extended_Index;
+      Attempts: Natural range 0 .. 10 := 10;
+      New_Item_Index: Objects_Container.Extended_Index := 0;
+      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;
-      Tmp_Base_Index: Bases_Range;
-      Event_X, Event_Y: Positive range 1 .. 1_024;
-      Item_Index: Integer;
+      Tmp_Base_Index: Bases_Range := 1;
+      Event_X, Event_Y: Positive range 1 .. 1_024 := 1;
+      Item_Index: Integer := 0;
    begin
       if Trader_Index = 0 then
          return;
