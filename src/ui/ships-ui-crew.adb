@@ -1285,7 +1285,8 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
-      Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.2);
+      Show_Dialog
+        (Dialog => Member_Dialog, Relative_Y => 0.2, Relative_X => 0.2);
       return TCL_OK;
    end Show_Member_Info_Command;
 
