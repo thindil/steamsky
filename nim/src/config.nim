@@ -142,7 +142,7 @@ var
   newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
-proc loadConfig*() {.raises: [], tags: [RootEffect].} =
+proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
   let fileName = saveDirectory & "game.cfg"
   var configFile = newFileStream(filename = fileName, mode = fmRead)
   if configFile == nil:
