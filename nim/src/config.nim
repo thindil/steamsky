@@ -154,6 +154,12 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
     echo "Can't initialize configuration file parser. Reason: " &
         getCurrentExceptionMsg()
     return
+
+  proc parseAdaFloat(value: string): cfloat =
+    var newValue = value
+    newValue.removeSuffix(c = 'E')
+    return newValue.parseFloat().cfloat
+
   while true:
     try:
       let entry = parser.next()
@@ -175,27 +181,29 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "StartingBase":
           newGameSettings.startingBase = entry.value.cstring
         of "EnemyDamageBonus":
-          newGameSettings.enemyDamageBonus = entry.value.parseFloat().cfloat
+          newGameSettings.enemyDamageBonus = entry.value.parseAdaFloat()
         of "PlayerDamageBonus":
-          newGameSettings.playerDamageBonus = entry.value.parseFloat().cfloat
+          newGameSettings.playerDamageBonus = entry.value.parseAdaFloat()
         of "EnemyMeleeDamageBonus":
-          newGameSettings.enemyMeleeDamageBonus = entry.value.parseFloat().cfloat
+          newGameSettings.enemyMeleeDamageBonus = entry.value.parseAdaFloat()
         of "PlayerMeleeDamageBonus":
-          newGameSettings.playerMeleeDamageBonus = entry.value.parseFloat().cfloat
+          newGameSettings.playerMeleeDamageBonus = entry.value.parseAdaFloat()
         of "ExperienceBonus":
-          newGameSettings.experienceBonus = entry.value.parseFloat().cfloat
+          newGameSettings.experienceBonus = entry.value.parseAdaFloat()
         of "ReputationBonus":
-          newGameSettings.reputationBonus = entry.value.parseFloat().cfloat
+          newGameSettings.reputationBonus = entry.value.parseAdaFloat()
         of "UpgradeCostBonus":
-          newGameSettings.upgradeCostBonus = entry.value.parseFloat().cfloat
+          newGameSettings.upgradeCostBonus = entry.value.parseAdaFloat()
         of "PricesBonus":
-          newGameSettings.pricesBonus = entry.value.parseFloat().cfloat
+          newGameSettings.pricesBonus = entry.value.parseAdaFloat()
         of "DifficultyLevel":
-          newGameSettings.difficultyLevel = parseEnum[DifficultyType](entry.value)
+          newGameSettings.difficultyLevel = parseEnum[DifficultyType](
+              entry.value.toLowerAscii)
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseBool()
         of "UndockSpeed":
-          gameSettings.undockSpeed = parseEnum[ShipSpeed](entry.value)
+          gameSettings.undockSpeed = parseEnum[ShipSpeed](
+              entry.value.toLowerAscii)
         of "AutoCenter":
           gameSettings.autoCenter = entry.value.parseBool()
         of "AutoReturn":
@@ -209,7 +217,8 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "LowFood":
           gameSettings.lowFood = entry.value.parseInt().cint
         of "AutoMoveStop":
-          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](entry.value)
+          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](
+              entry.value.toLowerAscii)
         of "WindowWidth":
           gameSettings.windowWidth = entry.value.parseInt().cint
         of "WindowHeight":
@@ -227,7 +236,8 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "InterfaceTheme":
           gameSettings.interfaceTheme = entry.value.cstring
         of "MessagesOrder":
-          gameSettings.messagesOrder = parseEnum[MessagesOrder](entry.value)
+          gameSettings.messagesOrder = parseEnum[MessagesOrder](
+              entry.value.toLowerAscii)
         of "AutoAskForBases":
           gameSettings.autoAskForBases = entry.value.parseBool()
         of "AutoAskForEvents":
@@ -243,7 +253,8 @@ proc loadConfig*() {.raises: [], tags: [RootEffect].} =
         of "AutoCloseMessagesTime":
           gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
         of "AutoSave":
-          gameSettings.autoSave = parseEnum[AutoSaveTime](entry.value)
+          gameSettings.autoSave = parseEnum[AutoSaveTime](
+              entry.value.toLowerAscii)
         of "TopicsPosition":
           gameSettings.topicsPosition = entry.value.parseInt().cint
         of "ShowNumbers":
