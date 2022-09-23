@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Information about the current order of the player's ship's crew member to
   his/her information dialog
 - Option to set the selected crew member order on the player's ship's crew
-  members' list
+  members' list and in the crew member's info dialog
 - Icon for give orders to crew members. Author: Delapouite (https://game-icons.net),
   license CC BY 3.0
 
