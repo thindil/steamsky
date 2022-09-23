@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Position of the confirmation dialog for deleting a saved game
 - Setting icon for showing that all crafting orders are running
 - Use proper icon for showing that all crafting orders are running
+- Crash when accepting transporting passenger missions
 
 ## [7.8] - 2022-09-04
 
