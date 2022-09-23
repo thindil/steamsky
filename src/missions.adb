@@ -360,8 +360,7 @@ package body Missions is
                       (Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
                Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-               Inventory: constant Inventory_Container.Vector :=
-                 Inventory_Container.Empty_Vector;
+               Inventory: Inventory_Container.Vector (Capacity => 32);
                Max_Attribute_Level, Morale: Integer;
                Attributes: Mob_Attributes
                  (1 ..
@@ -369,6 +368,7 @@ package body Missions is
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
             begin
+               Inventory_Container.Delete_Last(Container => Inventory);
                if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
                    .Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
