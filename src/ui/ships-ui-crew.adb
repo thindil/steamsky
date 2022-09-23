@@ -589,11 +589,11 @@ package body Ships.UI.Crew is
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Member_Dialog & ".button", Interp => Interp);
-      Height, New_Height: Positive := 1;
+      New_Height: Positive := 1;
       Progress_Frame: Ttk_Frame;
       Member_Info: Unbounded_String := Null_Unbounded_String;
       Member_Label: Ttk_Label;
-      Width, New_Width: Positive := 1;
+      New_Width: Positive := 1;
       Tired_Points: Integer;
       Progress_Bar: Ttk_ProgressBar;
       Tab_Button: Ttk_RadioButton;
@@ -611,8 +611,6 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Tab_Button, Sequence => "<Escape>",
          Script => "{" & Close_Button & " invoke;break}");
-      Height :=
-        Positive'Value(Winfo_Get(Widgt => Tab_Button, Info => "reqheight"));
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
          Tab_Button :=
@@ -686,10 +684,6 @@ package body Ships.UI.Crew is
             end case;
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       Tired_Points :=
         Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
@@ -730,10 +724,6 @@ package body Ships.UI.Crew is
             end case;
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Thirst > 0 then
          if Game_Settings.Show_Numbers then
@@ -770,10 +760,6 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Hunger > 0 then
          if Game_Settings.Show_Numbers then
@@ -810,10 +796,6 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Morale(1) /= 50 then
          if Game_Settings.Show_Numbers then
@@ -850,10 +832,6 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
          Add_Order_Info_Block :
@@ -887,10 +865,6 @@ package body Ships.UI.Crew is
               (Slave => Info_Button, Options => "-row 0 -column 1 -sticky n");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Order_Box, Options => "-sticky w -padx 5");
-            Height :=
-              Height +
-              Positive'Value
-                (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
             New_Width := 390;
          end Add_Order_Info_Block;
       end if;
@@ -950,12 +924,6 @@ package body Ships.UI.Crew is
              "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Member_Label, Options => "-sticky nw -padx 5");
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
-      Width :=
-        Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqwidth")) +
-        15;
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
@@ -1113,12 +1081,6 @@ package body Ships.UI.Crew is
                  (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                   else " 200"));
          end loop Load_Statistics_Experience_Loop;
-         if New_Height > Height then
-            Height := New_Height;
-         end if;
-         if New_Width > Width then
-            Width := New_Width;
-         end if;
          -- Skills of the selected crew member
          Frame := Create(pathName => Member_Canvas & ".skills");
          New_Height := 1;
@@ -1299,18 +1261,6 @@ package body Ships.UI.Crew is
                  (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                   else " 200"));
          end loop Load_Skill_Experience_Loop;
-         if New_Height > Height then
-            Height := New_Height;
-         end if;
-         if New_Width > Width then
-            Width := New_Width;
-         end if;
-      end if;
-      if Height > 500 then
-         Height := 500;
-      end if;
-      if Width < 250 then
-         Width := 250;
       end if;
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
