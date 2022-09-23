@@ -633,7 +633,9 @@ package body Bases is
       Normalize_Coord(Coord => Min_Y, Is_X_Axis => False);
       Max_Y := Player_Ship.Sky_Y + 100;
       Normalize_Coord(Coord => Max_Y, Is_X_Axis => False);
+      --## rule off IMPROPER_INITIALIZATION
       Generate_Enemies(Enemies => Enemies);
+      --## rule on IMPROPER_INITIALIZATION
       Generate_Events_Loop :
       for I in 1 .. Events_Amount loop
          Event := Events_Types'Val(Get_Random(Min => 1, Max => 5));
