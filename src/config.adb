@@ -15,191 +15,68 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
+with Interfaces.C.Strings;
 
 package body Config is
 
    procedure Load_Config is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
-      Config_File: File_Type;
-      Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
-      Equal_Index: Natural := 0;
-      function Load_Boolean return Boolean is
-      begin
-         if Value = To_Unbounded_String(Source => "Yes") then
-            return True;
-         end if;
-         return False;
-      end Load_Boolean;
+      type New_Nim_Game_Record is record
+         Player_Name: chars_ptr;
+         Player_Gender: Character;
+         Ship_Name: chars_ptr;
+         Player_Faction: chars_ptr;
+         Player_Career: chars_ptr;
+         Starting_Base: chars_ptr;
+         Enemy_Damage_Bonus: Float;
+         Player_Damage_Bonus: Float;
+         Enemy_Melee_Damage_Bonus: Float;
+         Player_Melee_Damage_Bonus: Float;
+         Experience_Bonus: Float;
+         Reputation_Bonus: Float;
+         Upgrade_Cost_Bonus: Float;
+         Prices_Bonus: Float;
+         Difficulty_Level: chars_ptr;
+      end record;
+      Temp_New_Game: New_Nim_Game_Record;
+      procedure Load_Ada_Config
+        (Ada_New_Game_Settings: out New_Nim_Game_Record) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaConfig";
    begin
-      New_Game_Settings := Default_New_Game_Settings;
       Game_Settings := Default_Game_Settings;
-      Open
-        (File => Config_File, Mode => In_File,
-         Name => To_String(Source => Save_Directory) & "game.cfg");
-      Read_Config_File_Loop :
-      while not End_Of_File(File => Config_File) loop
-         Raw_Data :=
-           To_Unbounded_String(Source => Get_Line(File => Config_File));
-         if Length(Source => Raw_Data) = 0 then
-            goto End_Of_Loop;
-         end if;
-         Equal_Index := Index(Source => Raw_Data, Pattern => "=");
-         Field_Name := Head(Source => Raw_Data, Count => Equal_Index - 2);
-         Value :=
-           Tail
-             (Source => Raw_Data,
-              Count => Length(Source => Raw_Data) - Equal_Index - 1);
-         if Field_Name = To_Unbounded_String(Source => "PlayerName") then
-            New_Game_Settings.Player_Name := Value;
-         elsif Field_Name = To_Unbounded_String(Source => "PlayerGender") then
-            New_Game_Settings.Player_Gender :=
-              Element(Source => Value, Index => 1);
-         elsif Field_Name = To_Unbounded_String(Source => "ShipName") then
-            New_Game_Settings.Ship_Name := Value;
-         elsif Field_Name = To_Unbounded_String(Source => "PlayerFaction") then
-            New_Game_Settings.Player_Faction :=
-              To_Bounded_String(Source => To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "PlayerCareer") then
-            New_Game_Settings.Player_Career := Value;
-         elsif Field_Name = To_Unbounded_String(Source => "StartingBase") then
-            New_Game_Settings.Starting_Base :=
-              To_Bounded_String(Source => To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "EnemyDamageBonus") then
-            New_Game_Settings.Enemy_Damage_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "PlayerDamageBonus") then
-            New_Game_Settings.Player_Damage_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "EnemyMeleeDamageBonus") then
-            New_Game_Settings.Enemy_Melee_Damage_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "PlayerMeleeDamageBonus") then
-            New_Game_Settings.Player_Melee_Damage_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "ExperienceBonus") then
-            New_Game_Settings.Experience_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "ReputationBonus") then
-            New_Game_Settings.Reputation_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "UpgradeCostBonus") then
-            New_Game_Settings.Upgrade_Cost_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "PricesBonus") then
-            New_Game_Settings.Prices_Bonus :=
-              Bonus_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "DifficultyLevel") then
-            if To_String(Source => Value) in "VERY_EASY" | "EASY" | "NORMAL" |
-                  "HARD" | "VERY_HARD" | "CUSTOM" then
-               New_Game_Settings.Difficulty_Level :=
-                 Difficulty_Type'Value(To_String(Source => Value));
-            else
-               New_Game_Settings.Difficulty_Level := Default_Difficulty_Type;
-            end if;
-         elsif Field_Name = To_Unbounded_String(Source => "AutoRest") then
-            Game_Settings.Auto_Rest := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "UndockSpeed") then
-            Game_Settings.Undock_Speed :=
-              Ship_Speed'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "AutoCenter") then
-            Game_Settings.Auto_Center := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "AutoReturn") then
-            Game_Settings.Auto_Return := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "AutoFinish") then
-            Game_Settings.Auto_Finish := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "LowFuel") then
-            Game_Settings.Low_Fuel :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "LowDrinks") then
-            Game_Settings.Low_Drinks :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "LowFood") then
-            Game_Settings.Low_Food :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "AutoMoveStop") then
-            Game_Settings.Auto_Move_Stop :=
-              Auto_Move_Break'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "WindowWidth") then
-            Game_Settings.Window_Width :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "WindowHeight") then
-            Game_Settings.Window_Height :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "MessagesLimit") then
-            Game_Settings.Messages_Limit :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "SavedMessages") then
-            Game_Settings.Saved_Messages :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "HelpFontSize") then
-            Game_Settings.Help_Font_Size :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "MapFontSize") then
-            Game_Settings.Map_Font_Size :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "InterfaceFontSize") then
-            Game_Settings.Interface_Font_Size :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "InterfaceTheme") then
-            Game_Settings.Interface_Theme := Value;
-         elsif Field_Name = To_Unbounded_String(Source => "MessagesOrder") then
-            Game_Settings.Messages_Order :=
-              Messages_Order_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "AutoAskForBases") then
-            Game_Settings.Auto_Ask_For_Bases := Load_Boolean;
-         elsif Field_Name =
-           To_Unbounded_String(Source => "AutoAskForEvents") then
-            Game_Settings.Auto_Ask_For_Events := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "ShowTooltips") then
-            Game_Settings.Show_Tooltips := Load_Boolean;
-         elsif Field_Name =
-           To_Unbounded_String(Source => "ShowLastMessages") then
-            Game_Settings.Show_Last_Messages := Load_Boolean;
-         elsif Field_Name =
-           To_Unbounded_String(Source => "MessagesPosition") then
-            Game_Settings.Messages_Position :=
-              Natural'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "FullScreen") then
-            Game_Settings.Full_Screen := Load_Boolean;
-         elsif Field_Name =
-           To_Unbounded_String(Source => "AutoCloseMessagesTime") then
-            Game_Settings.Auto_Close_Messages_Time :=
-              Positive'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "AutoSave") then
-            Game_Settings.Auto_Save :=
-              Auto_Save_Type'Value(To_String(Source => Value));
-         elsif Field_Name =
-           To_Unbounded_String(Source => "TopicsPosition") then
-            Game_Settings.Topics_Position :=
-              Natural'Value(To_String(Source => Value));
-         elsif Field_Name = To_Unbounded_String(Source => "ShowNumbers") then
-            Game_Settings.Show_Numbers := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "RightButton") then
-            Game_Settings.Right_Button := Load_Boolean;
-         elsif Field_Name = To_Unbounded_String(Source => "ListsLimit") then
-            Game_Settings.Lists_Limit :=
-              Positive'Value(To_String(Source => Value));
-         end if;
-         <<End_Of_Loop>>
-      end loop Read_Config_File_Loop;
-      Close(File => Config_File);
-   exception
-      when Ada.Directories.Name_Error | Use_Error =>
-         null;
+      Load_Ada_Config(Ada_New_Game_Settings => Temp_New_Game);
+      New_Game_Settings :=
+        (Player_Name =>
+           To_Unbounded_String(Value(Item => Temp_New_Game.Player_Name)),
+         Player_Gender => Temp_New_Game.Player_Gender,
+         Ship_Name =>
+           To_Unbounded_String
+             (Source => Value(Item => Temp_New_Game.Ship_Name)),
+         Player_Faction =>
+           To_Bounded_String
+             (Source => Value(Item => Temp_New_Game.Player_Faction)),
+         Player_Career =>
+           To_Unbounded_String
+             (Source => Value(Item => Temp_New_Game.Player_Career)),
+         Starting_Base =>
+           To_Bounded_String
+             (Source => Value(Item => Temp_New_Game.Starting_Base)),
+         Enemy_Damage_Bonus => Temp_New_Game.Enemy_Damage_Bonus,
+         Player_Damage_Bonus => Temp_New_Game.Player_Damage_Bonus,
+         Enemy_Melee_Damage_Bonus => Temp_New_Game.Enemy_Melee_Damage_Bonus,
+         Player_Melee_Damage_Bonus => Temp_New_Game.Player_Melee_Damage_Bonus,
+         Experience_Bonus => Temp_New_Game.Experience_Bonus,
+         Reputation_Bonus => Temp_New_Game.Reputation_Bonus,
+         Upgrade_Cost_Bonus => Temp_New_Game.Upgrade_Cost_Bonus,
+         Prices_Bonus => Temp_New_Game.Prices_Bonus,
+         Difficulty_Level =>
+           Difficulty_Type'Value
+             (Value(Item => Temp_New_Game.Difficulty_Level)));
    end Load_Config;
 
    procedure Save_Config is
