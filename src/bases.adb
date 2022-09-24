@@ -575,7 +575,9 @@ package body Bases is
       Event_Time, Diff_X, Diff_Y: Positive := 1;
       Event: Events_Types := NONE;
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
+      --## rule off IMPROPER_INITIALIZATION
       Enemies: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Attempts: Natural range 0 .. 10 := 10;
       New_Item_Index: Objects_Container.Extended_Index := 0;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
