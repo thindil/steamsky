@@ -788,7 +788,7 @@ package body Bases is
                     (E_Type => DOUBLEPRICE, Sky_X => Event_X, Sky_Y => Event_Y,
                      Time =>
                        Get_Random
-                         (Min => (Event_Time * 3), Max => (Event_Time * 4)),
+                         (Min => Event_Time * 3, Max => Event_Time * 4),
                      Item_Index => New_Item_Index));
             when BASERECOVERY =>
                Recover_Base
