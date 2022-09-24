@@ -143,6 +143,9 @@ var
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
 proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load the game and new game settings from the file
   let fileName = saveDirectory & "game.cfg"
   var configFile = newFileStream(filename = fileName, mode = fmRead)
   if configFile == nil:
@@ -156,6 +159,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     return
 
   proc parseAdaFloat(value: string): cfloat =
+    ## Temporary function, for backward compatibility with Ada code
     var newValue = value
     newValue.removeSuffix(c = 'E')
     return newValue.parseFloat().cfloat
