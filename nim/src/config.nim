@@ -99,23 +99,23 @@ type
     ## FUNCTION
     ##
     ## Used to store the default settings for the new game
-    playerName: cstring ## The player's character name
-    playerGender: char ## The player's character gender
-    shipName: cstring ## The player's ship name
-    playerFaction: cstring ## The player's character faction
-    playerCareer: cstring ## The player's character career
-    startingBase: cstring ## The type of the starting base
-    enemyDamageBonus: BonusType ## The bonus to damage for enemies in ship to ship combat
-    playerDamageBonus: BonusType ## The bonus to damage for the player's character and crew in
+    playerName*: cstring ## The player's character name
+    playerGender*: char ## The player's character gender
+    shipName*: cstring ## The player's ship name
+    playerFaction*: cstring ## The player's character faction
+    playerCareer*: cstring ## The player's character career
+    startingBase*: cstring ## The type of the starting base
+    enemyDamageBonus*: cfloat ## The bonus to damage for enemies in ship to ship combat
+    playerDamageBonus*: cfloat ## The bonus to damage for the player's character and crew in
                                    ## ship to ship combat
-    enemyMeleeDamageBonus: BonusType ## The bonus to damage for enemies in melee combat
-    playerMeleeDamageBonus: BonusType ## The bonus to damage for the player's character and crew
+    enemyMeleeDamageBonus*: cfloat ## The bonus to damage for enemies in melee combat
+    playerMeleeDamageBonus*: cfloat ## The bonus to damage for the player's character and crew
                                         ## in melee combat
-    experienceBonus: BonusType ## The bonus to the gained by player's character and crew experience
-    reputationBonus: BonusType ## The bonus to the gained the player's character reputation in bases
-    upgradeCostBonus: BonusType ## The bonus to costs of upgrades the player's ship
-    pricesBonus: BonusType ## The bonus to prices in bases
-    difficultyLevel: DifficultyType ## The preset level of difficulty for the game
+    experienceBonus*: cfloat ## The bonus to the gained by player's character and crew experience
+    reputationBonus*: cfloat ## The bonus to the gained the player's character reputation in bases
+    upgradeCostBonus*: cfloat ## The bonus to costs of upgrades the player's ship
+    pricesBonus*: cfloat ## The bonus to prices in bases
+    difficultyLevel*: cstring ## The preset level of difficulty for the game
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: true,
@@ -135,7 +135,7 @@ const
     playerCareer: "general", startingBase: "Any", enemyDamageBonus: 1.0,
     playerDamageBonus: 1.0, enemyMeleeDamageBonus: 1.0,
     playerMeleeDamageBonus: 1.0, experienceBonus: 1.0, reputationBonus: 1.0,
-    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: normal)
+    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: "normal")
     ## The default setting for the new game
 
 var
@@ -201,8 +201,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "PricesBonus":
           newGameSettings.pricesBonus = entry.value.parseAdaFloat()
         of "DifficultyLevel":
-          newGameSettings.difficultyLevel = parseEnum[DifficultyType](
-              entry.value.toLowerAscii)
+          newGameSettings.difficultyLevel = ($parseEnum[DifficultyType](
+              entry.value.toLowerAscii)).cstring
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseBool()
         of "UndockSpeed":
@@ -282,3 +282,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
   except OSError, IOError, Exception:
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
+
+proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord) {.exportc.} =
+  loadConfig()
+  adaNewGameSettings = newGameSettings
