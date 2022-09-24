@@ -20,4 +20,4 @@ type
     ## FUNCTION
     ##
     ## Ships's state of speed, how much engines are used
-    docked, fullStop, quarterSpeed, halfSpeed, fullSpeed
+    docked, full_Stop, quarter_Speed, half_Speed, full_Speed
