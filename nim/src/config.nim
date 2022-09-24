@@ -45,7 +45,7 @@ type
     ##
     ## Used to store the game's configuration
     autoRest*: bool ## If true, auto rest when pilot or engineer need a rest
-    undockSpeed*: ShipSpeed ## The default speed of the player's ship after undock from a base
+    undockSpeed*: cstring ## The default speed of the player's ship after undock from a base
     autoCenter*: bool ## If true, back to the player's ship after setting destination for it
     autoReturn*: bool ## If true, set the destination for the player's ship to the base after
                         ## finishing a mission
@@ -57,7 +57,7 @@ type
                                    ## about it
     lowFood*: range[1..10_000] ## The amount of food at which the game will show the warning
                                  ## about it
-    autoMoveStop*: AutoMoveBreak ## When stop the player's ship's auto movement
+    autoMoveStop*: cstring ## When stop the player's ship's auto movement
     windowWidth*: cint ## The game window default width
     windowHeight: cint ## The game window default height
     messagesLimit: range[10..5_000] ## The max amount of messages to show in the game
@@ -66,7 +66,7 @@ type
     mapFontSize: range[2..51] ## The size of a font used on the map
     interfaceFontSize: range[2..51] ## The size of a font used in the game interface
     interfaceTheme: cstring ## The name of the current theme of the game interface
-    messagesOrder: MessagesOrder ## In what order the messages should be shown
+    messagesOrder: cstring ## In what order the messages should be shown
     autoAskForBases: bool ## If true, auto ask for new bases when the player's ship is
                             ## docked to a base
     autoAskForEvents: bool ## If true, auto ask for new events when the player's ship is
@@ -77,7 +77,7 @@ type
     fullScreen: bool ## Run the game in full screen mode
     autoCloseMessagesTime: range[1..60] ## The amount of seconds after which messages' dialogs
                                           ## wil be closed
-    autoSave: AutoSaveTime ## How often the game should save itself automatically
+    autoSave: cstring ## How often the game should save itself automatically
     topicsPosition: Natural ## The height of the topics' window position in help window
     showNumbers: bool ## If true, show numbers for speed, skills, attributes, etc.
     rightButton: bool ## If true, use the right mouse button for show menus in various lists
@@ -107,10 +107,10 @@ type
     startingBase*: cstring ## The type of the starting base
     enemyDamageBonus*: cfloat ## The bonus to damage for enemies in ship to ship combat
     playerDamageBonus*: cfloat ## The bonus to damage for the player's character and crew in
-                                   ## ship to ship combat
+                                 ## ship to ship combat
     enemyMeleeDamageBonus*: cfloat ## The bonus to damage for enemies in melee combat
     playerMeleeDamageBonus*: cfloat ## The bonus to damage for the player's character and crew
-                                        ## in melee combat
+                                      ## in melee combat
     experienceBonus*: cfloat ## The bonus to the gained by player's character and crew experience
     reputationBonus*: cfloat ## The bonus to the gained the player's character reputation in bases
     upgradeCostBonus*: cfloat ## The bonus to costs of upgrades the player's ship
@@ -119,14 +119,15 @@ type
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: true,
-    undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
+    undockSpeed: "fullSpeed", autoCenter: true, autoReturn: true,
     autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
-    autoMoveStop: never, windowWidth: 800, windowHeight: 600,
+    autoMoveStop: "never", windowWidth: 800, windowHeight: 600,
     messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
     interfaceFontSize: 14, interfaceTheme: "steamsky",
-    messagesOrder: olderFirst, autoAskForBases: false, autoAskForEvents: false,
+    messagesOrder: "olderFirst", autoAskForBases: false,
+    autoAskForEvents: false,
     showTooltips: true, showLastMessages: true, messagesPosition: 213,
-    fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
+    fullScreen: false, autoCloseMessagesTime: 6, autoSave: "none",
     topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25)
     ## The default setting for the game
 
@@ -206,8 +207,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseBool()
         of "UndockSpeed":
-          gameSettings.undockSpeed = parseEnum[ShipSpeed](
-              entry.value.toLowerAscii)
+          gameSettings.undockSpeed = ($parseEnum[ShipSpeed](
+              entry.value.toLowerAscii)).cstring
         of "AutoCenter":
           gameSettings.autoCenter = entry.value.parseBool()
         of "AutoReturn":
@@ -221,8 +222,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "LowFood":
           gameSettings.lowFood = entry.value.parseInt().cint
         of "AutoMoveStop":
-          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](
-              entry.value.toLowerAscii)
+          gameSettings.autoMoveStop = ($parseEnum[AutoMoveBreak](
+              entry.value.toLowerAscii)).cstring
         of "WindowWidth":
           gameSettings.windowWidth = entry.value.parseInt().cint
         of "WindowHeight":
@@ -240,8 +241,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "InterfaceTheme":
           gameSettings.interfaceTheme = entry.value.cstring
         of "MessagesOrder":
-          gameSettings.messagesOrder = parseEnum[MessagesOrder](
-              entry.value.toLowerAscii)
+          gameSettings.messagesOrder = ($parseEnum[MessagesOrder](
+              entry.value.toLowerAscii)).cstring
         of "AutoAskForBases":
           gameSettings.autoAskForBases = entry.value.parseBool()
         of "AutoAskForEvents":
@@ -257,8 +258,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "AutoCloseMessagesTime":
           gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
         of "AutoSave":
-          gameSettings.autoSave = parseEnum[AutoSaveTime](
-              entry.value.toLowerAscii)
+          gameSettings.autoSave = ($parseEnum[AutoSaveTime](
+              entry.value.toLowerAscii)).cstring
         of "TopicsPosition":
           gameSettings.topicsPosition = entry.value.parseInt().cint
         of "ShowNumbers":
@@ -283,6 +284,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
 
-proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord) {.exportc.} =
+proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
+    adaGameSettings: var GameSettingsRecord) {.exportc.} =
   loadConfig()
   adaNewGameSettings = newGameSettings
+  adaGameSettings = gameSettings
