@@ -38,8 +38,9 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
         saveDirectory = val & DirSep
         normalizePath(saveDirectory)
 
-  # Load the game configuration
-  loadConfig()
+  # Load the game configuration. TODO: temporary disabled, enable it again
+  # when will be needed
+  # loadConfig()
 
   # Create Tcl interpreter
   result = tclCreateInterp()
