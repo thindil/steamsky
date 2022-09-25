@@ -645,7 +645,7 @@ package body Ships.UI.Crew is
         (Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Y_Scroll,
-         Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+         Options => " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1");
       Add_Close_Button
         (Name => Member_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Member_Dialog, Column_Span => 2,
