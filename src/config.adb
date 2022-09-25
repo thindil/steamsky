@@ -24,6 +24,7 @@ package body Config is
       use Interfaces.C.Strings;
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type New_Nim_Game_Record is record
          Player_Name: chars_ptr;
          Player_Gender: Character;
@@ -41,7 +42,6 @@ package body Config is
          Prices_Bonus: Float;
          Difficulty_Level: chars_ptr;
       end record;
-      Temp_New_Game: New_Nim_Game_Record;
       type Game_Nim_Settings_Record is record
          Auto_Rest: Integer;
          Undock_Speed: chars_ptr;
@@ -74,6 +74,8 @@ package body Config is
          Right_Button: Integer;
          Lists_Limit: Integer;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
+      Temp_New_Game: New_Nim_Game_Record;
       Temp_Settings: Game_Nim_Settings_Record;
       procedure Load_Ada_Config
         (Ada_New_Game_Settings: out New_Nim_Game_Record;
