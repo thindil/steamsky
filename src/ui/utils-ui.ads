@@ -145,7 +145,6 @@ package Utils.UI is
    -- NewScreenName - Part of th name of the new Ttk_Frame to add
    -- SOURCE
    procedure Show_Screen(New_Screen_Name: String) with
-      SPARK_Mode,
       Pre => New_Screen_Name'Length > 0;
       -- ****
 

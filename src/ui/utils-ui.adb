@@ -17,7 +17,6 @@ with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings;
-with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -945,59 +944,13 @@ package body Utils.UI is
         (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
-   procedure Show_Screen(New_Screen_Name: String) with
-      SPARK_Mode
-   is
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-
-      Sub_Window, Old_Sub_Window: Ttk_Frame;
-      Sub_Windows: Unbounded_String;
-      Messages_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".controls.messages");
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(pathName => Main_Paned & ".controls.buttons");
+   procedure Show_Screen(New_Screen_Name: String) is
+      procedure Nim_Show_Screen(Screen_Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "showScreen";
    begin
-      Sub_Windows := To_Unbounded_String(Source => Panes(Paned => Main_Paned));
-      Old_Sub_Window :=
-        (if Index(Source => Sub_Windows, Pattern => " ") = 0 then
-           Get_Widget(pathName => To_String(Source => Sub_Windows))
-         else Get_Widget
-             (pathName =>
-                Slice
-                  (Source => Sub_Windows, Low => 1,
-                   High => Index(Source => Sub_Windows, Pattern => " "))));
-      Forget(Paned => Main_Paned, SubWindow => Old_Sub_Window);
-      Sub_Window := Get_Widget(pathName => Main_Paned & "." & New_Screen_Name);
-      Insert
-        (Paned => Main_Paned, Position => "0", SubWindow => Sub_Window,
-         Options => "-weight 1");
-      if New_Screen_Name in "optionsframe" | "messagesframe" or
-        not Game_Settings.Show_Last_Messages then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Messages_Frame);
-         if New_Screen_Name /= "mapframe" then
-            SashPos
-              (Paned => Main_Paned, Index => "0",
-               NewPos => Winfo_Get(Widgt => Main_Paned, Info => "height"));
-         end if;
-      else
-         if Trim
-             (Source => Widget_Image(Win => Old_Sub_Window), Side => Both) in
-             Main_Paned & ".messagesframe" | Main_Paned & ".optionsframe" then
-            SashPos
-              (Paned => Main_Paned, Index => "0",
-               NewPos =>
-                 Natural'Image
-                   (Game_Settings.Window_Height -
-                    Game_Settings.Messages_Position));
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Messages_Frame);
-      end if;
-      if New_Screen_Name = "mapframe" then
-         Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Paned);
-      end if;
+      Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
    end Show_Screen;
 
    procedure Show_Inventory_Item_Info
