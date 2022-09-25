@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;
 with Interfaces.C.Strings;
 
 package body Config is
@@ -164,6 +164,7 @@ package body Config is
    end Load_Config;
 
    procedure Save_Config is
+      use Ada.Text_IO;
       use Tiny_String;
 
       Config_File: File_Type;
