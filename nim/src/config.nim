@@ -59,29 +59,29 @@ type
                                  ## about it
     autoMoveStop*: cstring ## When stop the player's ship's auto movement
     windowWidth*: cint ## The game window default width
-    windowHeight: cint ## The game window default height
-    messagesLimit: cint ## The max amount of messages to show in the game
-    savedMessages: cint ## The max amount of messages to save to a file
-    helpFontSize: cint ## The size of a font used in help
-    mapFontSize: cint ## The size of a font used on the map
-    interfaceFontSize: cint ## The size of a font used in the game interface
-    interfaceTheme: cstring ## The name of the current theme of the game interface
-    messagesOrder: cstring ## In what order the messages should be shown
-    autoAskForBases: cint ## If true, auto ask for new bases when the player's ship is
+    windowHeight*: cint ## The game window default height
+    messagesLimit*: cint ## The max amount of messages to show in the game
+    savedMessages*: cint ## The max amount of messages to save to a file
+    helpFontSize*: cint ## The size of a font used in help
+    mapFontSize*: cint ## The size of a font used on the map
+    interfaceFontSize*: cint ## The size of a font used in the game interface
+    interfaceTheme*: cstring ## The name of the current theme of the game interface
+    messagesOrder*: cstring ## In what order the messages should be shown
+    autoAskForBases*: cint ## If true, auto ask for new bases when the player's ship is
                             ## docked to a base
-    autoAskForEvents: cint ## If true, auto ask for new events when the player's ship is
+    autoAskForEvents*: cint ## If true, auto ask for new events when the player's ship is
                              ## docked to a base
-    showTooltips: cint ## Show the in-game tooltips with help information
-    showLastMessages: cint ## Show the last messages window below the map
-    messagesPosition: cint ## The height of the last messages window
-    fullScreen: cint ## Run the game in full screen mode
-    autoCloseMessagesTime: cint ## The amount of seconds after which messages' dialogs
+    showTooltips*: cint ## Show the in-game tooltips with help information
+    showLastMessages*: cint ## Show the last messages window below the map
+    messagesPosition*: cint ## The height of the last messages window
+    fullScreen*: cint ## Run the game in full screen mode
+    autoCloseMessagesTime*: cint ## The amount of seconds after which messages' dialogs
                                           ## wil be closed
-    autoSave: cstring ## How often the game should save itself automatically
-    topicsPosition: cint ## The height of the topics' window position in help window
-    showNumbers: cint ## If true, show numbers for speed, skills, attributes, etc.
-    rightButton: cint ## If true, use the right mouse button for show menus in various lists
-    listsLimit: cint ## The amount of items displayed in various lists
+    autoSave*: cstring ## How often the game should save itself automatically
+    topicsPosition*: cint ## The height of the topics' window position in help window
+    showNumbers*: cint ## If true, show numbers for speed, skills, attributes, etc.
+    rightButton*: cint ## If true, use the right mouse button for show menus in various lists
+    listsLimit*: cint ## The amount of items displayed in various lists
 
   BonusType* = range[0.0..5.0]
     ## FUNCTION
@@ -166,7 +166,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     return newValue.parseFloat().cfloat
   proc parseAdaBool(value: string): cint =
     ## Temporary function, for backward compatibility with Ada code
-    if value == "true":
+    if value == "Yes":
       return 1
     return 0
 
