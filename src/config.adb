@@ -96,7 +96,8 @@ package body Config is
          Ada_Game_Settings => Temp_Settings);
       New_Game_Settings :=
         (Player_Name =>
-           To_Unbounded_String(Value(Item => Temp_New_Game.Player_Name)),
+           To_Unbounded_String
+             (Source => Value(Item => Temp_New_Game.Player_Name)),
          Player_Gender => Temp_New_Game.Player_Gender,
          Ship_Name =>
            To_Unbounded_String
@@ -124,7 +125,7 @@ package body Config is
       Game_Settings :=
         (Auto_Rest => Get_Bool(Value => Temp_Settings.Auto_Rest),
          Undock_Speed =>
-            Ship_Speed'Value(Value(Item => Temp_Settings.Undock_Speed)),
+           Ship_Speed'Value(Value(Item => Temp_Settings.Undock_Speed)),
          Auto_Center => Get_Bool(Value => Temp_Settings.Auto_Center),
          Auto_Return => Get_Bool(Value => Temp_Settings.Auto_Return),
          Auto_Finish => Get_Bool(Value => Temp_Settings.Auto_Finish),
@@ -141,7 +142,8 @@ package body Config is
          Map_Font_Size => Temp_Settings.Map_Font_Size,
          Interface_Font_Size => Temp_Settings.Interface_Font_Size,
          Interface_Theme =>
-           To_Unbounded_String(Value(Item => Temp_Settings.Interface_Theme)),
+           To_Unbounded_String
+             (Source => Value(Item => Temp_Settings.Interface_Theme)),
          Messages_Order =>
            Messages_Order_Type'Value
              (Value(Item => Temp_Settings.Messages_Order)),
