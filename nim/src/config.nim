@@ -294,6 +294,19 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
 proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
     adaGameSettings: var GameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## FUNCTION
+  ##
+  ## Temporary code to load the game configuration and copy it to the Ada
+  ## code
+  ##
+  ## PARAMETERS
+  ##
+  ## * adaNewGameSettings - The new game settings which will be copied
+  ## * adaGameSettings    - The game settings which will be copied
+  ##
+  ## RETURNS
+  ##
+  ## The updated parameters adaNewGameSettings and adaGameSettings
   loadConfig()
   adaNewGameSettings = newGameSettings
   adaGameSettings = gameSettings
