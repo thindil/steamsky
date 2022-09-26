@@ -126,16 +126,14 @@ package Utils.UI is
    -- SOURCE
    procedure Travel_Info
      (Info_Text: in out Unbounded_String; Distance: Positive;
-      Show_Fuel_Name: Boolean := False) with
-      SPARK_Mode;
+      Show_Fuel_Name: Boolean := False);
    -- ****
 
    -- ****f* UUI/UUI.Update_Messages
    -- FUNCTION
    -- Update game messages
    -- SOURCE
-   procedure Update_Messages with
-      SPARK_Mode;
+   procedure Update_Messages;
    -- ****
 
    -- ****f* UUI/UUI.Show_Screen
@@ -164,7 +162,6 @@ package Utils.UI is
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) with
-      SPARK_Mode,
       Pre => Member_Index <= Player_Ship.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
@@ -198,7 +195,6 @@ package Utils.UI is
    function Get_Skill_Marks
      (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
       return String with
-      SPARK_Mode,
       Pre => Skill_Index <= Skills_Amount and
       Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
