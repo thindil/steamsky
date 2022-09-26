@@ -109,7 +109,8 @@ proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     for widget in tclResult.split():
       discard interp.tclEval(script = cstring("destroy " & widget))
 
-proc showScreen*(newScreenName: cstring) {.exportc.} =
+proc showScreen*(newScreenName: cstring) {.exportc, gcsafe, sideEffect,
+    raises: [], tags: [].} =
   const
     paned = mainPaned & ".controls.buttons"
     messagesFrame = mainPaned & ".controls.messages"
