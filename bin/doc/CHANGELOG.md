@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file.
 - Crash when accepting transporting passenger missions
 - Position of scrollbar in the information dialog about the selected crew
   member
+- Showing the title of the crew member's information dialog when the
+  scrollbar is visible
 
 ## [7.8] - 2022-09-04
 
