@@ -31,9 +31,9 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
@@ -98,6 +98,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Winfo;
+
       Canvas: constant Ttk_Frame :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
@@ -434,6 +436,7 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Directories;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Maps;
       use MainMenu;
       use Tiny_String;
@@ -873,9 +876,7 @@ package body Utils.UI is
       --## rule on SIMPLIFIABLE_EXPRESSIONS
    end Travel_Info;
 
-   procedure Update_Messages with
-      SPARK_Mode
-   is
+   procedure Update_Messages is
       use Tcl.Tk.Ada.Widgets.Text;
 
       Loop_Start: Integer := 0 - Messages_Amount;
