@@ -54,11 +54,11 @@ type
     autoFinish*: cint ## If true, automatically finish the mission if the player's ships is in
                         ## the proper base
     lowFuel*: cint ## The amount of fuel at which the game will show the warning
-                                 ## about it
+                     ## about it
     lowDrinks*: cint ## The amount of drinks at which the game will show the warning
-                                   ## about it
+                       ## about it
     lowFood*: cint ## The amount of food at which the game will show the warning
-                                 ## about it
+                     ## about it
     autoMoveStop*: cstring ## When stop the player's ship's auto movement
     windowWidth*: cint ## The game window default width
     windowHeight*: cint ## The game window default height
@@ -70,15 +70,15 @@ type
     interfaceTheme*: cstring ## The name of the current theme of the game interface
     messagesOrder*: cstring ## In what order the messages should be shown
     autoAskForBases*: cint ## If true, auto ask for new bases when the player's ship is
-                            ## docked to a base
-    autoAskForEvents*: cint ## If true, auto ask for new events when the player's ship is
                              ## docked to a base
+    autoAskForEvents*: cint ## If true, auto ask for new events when the player's ship is
+                              ## docked to a base
     showTooltips*: cint ## Show the in-game tooltips with help information
     showLastMessages*: cint ## Show the last messages window below the map
     messagesPosition*: cint ## The height of the last messages window
     fullScreen*: cint ## Run the game in full screen mode
     autoCloseMessagesTime*: cint ## The amount of seconds after which messages' dialogs
-                                          ## wil be closed
+                                   ## wil be closed
     autoSave*: cstring ## How often the game should save itself automatically
     topicsPosition*: cint ## The height of the topics' window position in help window
     showNumbers*: cint ## If true, show numbers for speed, skills, attributes, etc.
@@ -292,7 +292,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         getCurrentExceptionMsg()
 
 proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
-    adaGameSettings: var GameSettingsRecord) {.exportc.} =
+    adaGameSettings: var GameSettingsRecord) {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   loadConfig()
   adaNewGameSettings = newGameSettings
   adaGameSettings = gameSettings
