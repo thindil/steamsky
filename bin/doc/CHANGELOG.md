@@ -32,6 +32,8 @@ All notable changes to this project will be documented in this file.
 - Setting icon for showing that all crafting orders are running
 - Use proper icon for showing that all crafting orders are running
 - Crash when accepting transporting passenger missions
+- Position of scrollbar in the information dialog about the selected crew
+  member
 
 ## [7.8] - 2022-09-04
 
