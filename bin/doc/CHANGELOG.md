@@ -23,8 +23,8 @@ All notable changes to this project will be documented in this file.
 - Removed the list of orders from the crew members' actions' menu
 
 ### Fixed
-- Position of Close button in the set skill for training rooms dialog and
-  the message's dialog
+- Position of Close button in the set skill for training rooms dialog,
+  the message's dialog and the information about the selected module dialog
 - Tab traverse in setting skill for training rooms dialog
 - Closing setting skill for training rooms dialog after choosing the skill
 - Closing setting skill for training rooms dialog with Escape key
