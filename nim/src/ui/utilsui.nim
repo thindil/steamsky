@@ -111,6 +111,13 @@ proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
 
 proc showScreen*(newScreenName: cstring) {.exportc, gcsafe, sideEffect,
     raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Clear the old screen and show the selected to the player
+  ##
+  ## PARAMETERS
+  ##
+  ## * newScreenName - the Tcl name of the screen which will be show
   const
     paned = mainPaned & ".controls.buttons"
     messagesFrame = mainPaned & ".controls.messages"
