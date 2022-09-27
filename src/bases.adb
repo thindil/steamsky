@@ -717,8 +717,10 @@ package body Bases is
          end loop Generate_Event_Location_Loop;
          Diff_X := abs (Player_Ship.Sky_X - Event_X);
          Diff_Y := abs (Player_Ship.Sky_Y - Event_Y);
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Event_Time :=
            Positive(60.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          case Event is
             when ENEMYSHIP =>
                Events_List.Append
