@@ -38,7 +38,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -524,21 +523,11 @@ package body Ships.UI.Crew is
           (pathName =>
              Member_Canvas & "." &
              Tcl_GetVar(interp => Interp, varName => "newtab"));
-      X_Pos: Integer :=
-        (Positive'Value
-           (Winfo_Get(Widgt => Member_Canvas, Info => "reqwidth")) -
-         Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) /
-        2;
    begin
-      if X_Pos < 0 then
-         X_Pos := 0;
-      end if;
       Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
       Canvas_Create
         (Parent => Member_Canvas, Child_Type => "window",
-         Options =>
-           Trim(Source => Positive'Image(X_Pos), Side => Left) &
-           " 0 -anchor nw -window " & Frame & " -tag info");
+         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
       Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Widgt => Member_Canvas,
