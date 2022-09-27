@@ -811,7 +811,7 @@ package body Bases is
    procedure Update_Population is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Population_Diff: Integer;
+      Population_Diff: Integer := 0;
    begin
       if Days_Difference
           (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date) <
