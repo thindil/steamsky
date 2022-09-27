@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file.
   member
 - Showing the title of the crew member's information dialog when the
   scrollbar is visible
+- Position of information about tiredness and health of the selected crew
+  member in the information dialog
 
 ## [7.8] - 2022-09-04
 
