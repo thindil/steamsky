@@ -17,6 +17,7 @@
 
 with Ada.Characters.Handling;
 with Ada.Strings.Unbounded;
+with Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -1414,29 +1415,14 @@ package body Ships is
    end Count_Combat_Value;
 
    function Get_Cabin_Quality(Quality: Natural) return String is
+      use Interfaces.C.Strings;
+
+      function Get_Cabin_Quality_Nim(Q: Natural) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getCabinQuality";
    begin
-      case Quality is
-         when 0 .. 10 =>
-            return "Empty room";
-         when 11 .. 20 =>
-            return "Minimal quality";
-         when 21 .. 30 =>
-            return "Basic quality";
-         when 31 .. 40 =>
-            return "Second class";
-         when 41 .. 50 =>
-            return "Medium quality";
-         when 51 .. 60 =>
-            return "First class";
-         when 61 .. 70 =>
-            return "Extended quality";
-         when 71 .. 80 =>
-            return "Encrusted room";
-         when 81 .. 90 =>
-            return "Luxury quality";
-         when others =>
-            return "Palace room";
-      end case;
+      return Value(Item => Get_Cabin_Quality_Nim(Q => Quality));
    end Get_Cabin_Quality;
 
    procedure Damage_Module

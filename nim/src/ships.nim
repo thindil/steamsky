@@ -21,3 +21,26 @@ type
     ##
     ## Ships's state of speed, how much engines are used
     docked, full_Stop, quarter_Speed, half_Speed, full_Speed
+
+proc getCabinQuality*(quality: cint): cstring {.exportc.} =
+  case quality
+  of 0..10:
+    return "Empty room"
+  of 11..20:
+    return "Minimal quality"
+  of 21..30:
+    return "Basic quality"
+  of 31..40:
+    return "Second class"
+  of 41..50:
+    return "Medium quality"
+  of 51..60:
+    return "First class"
+  of 61..70:
+    return "Extended quality"
+  of 71..80:
+    return "Encrusted room"
+  of 81..90:
+    return "Luxury quality"
+  else:
+    return "Palace room"
