@@ -682,7 +682,8 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-sticky w -padx 5");
       end if;
       Tired_Points :=
         Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
@@ -722,7 +723,8 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-sticky w -padx 5");
       end if;
       if Member.Thirst > 0 then
          if Game_Settings.Show_Numbers then
