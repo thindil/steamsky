@@ -848,9 +848,9 @@ package body Bases is
    procedure Update_Prices is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Roll: Positive range 1 .. 100;
+      Roll: Positive range 1 .. 100 := 1;
       Chance: Positive;
-      Item: Base_Cargo;
+      Item: Base_Cargo := Empty_Base_Cargo;
    begin
       if Sky_Bases(Base_Index).Population = 0 then
          return;
