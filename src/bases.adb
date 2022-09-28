@@ -822,6 +822,7 @@ package body Bases is
          if Get_Random(Min => 1, Max => 100) > 30 then
             return;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Population_Diff :=
            (if Get_Random(Min => 1, Max => 100) < 20 then
               -(Get_Random(Min => 1, Max => 10))
@@ -829,6 +830,7 @@ package body Bases is
          if Sky_Bases(Base_Index).Population + Population_Diff < 0 then
             Population_Diff := -(Sky_Bases(Base_Index).Population);
          end if;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Sky_Bases(Base_Index).Population :=
            Sky_Bases(Base_Index).Population + Population_Diff;
          if Sky_Bases(Base_Index).Population = 0 then
