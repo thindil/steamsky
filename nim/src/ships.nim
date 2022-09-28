@@ -23,6 +23,18 @@ type
     docked, full_Stop, quarter_Speed, half_Speed, full_Speed
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Get the description of quality of the selected cabin in the player's ship
+  ##
+  ## PARAMETERS
+  ##
+  ## * quality - The numerical value of the cabin's quality which will be
+  ##             converted to string
+  ##
+  ## RETURNS
+  ##
+  ## The string with the description of the cabin's quality
   case quality
   of 0..10:
     return "Empty room"
