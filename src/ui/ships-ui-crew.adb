@@ -945,6 +945,9 @@ package body Ships.UI.Crew is
         Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(pathName => Member_Canvas & ".stats");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
          Load_Statistics_Loop :
          for I in Member.Attributes'Range loop
             Progress_Frame :=
@@ -968,6 +971,10 @@ package body Ships.UI.Crew is
                    "}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label, Options => "-sticky we");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Column_Configure
               (Master => Progress_Frame, Slave => Member_Label,
                Options => "-weight 1");
@@ -987,8 +994,16 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-column 1 -row 0 -padx {5 0}");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
             Tcl_Eval(interp => Interp, strng => "update");
             Progress_Bar :=
               Create
@@ -1006,6 +1021,10 @@ package body Ships.UI.Crew is
                Message => "The current level of the attribute.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Bar, Options => "-sticky w -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
             Progress_Frame :=
               Create
                 (pathName =>
@@ -1014,6 +1033,10 @@ package body Ships.UI.Crew is
                  options => "-height 12");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky w -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
             Progress_Bar :=
               Create
                 (pathName =>
@@ -1032,6 +1055,10 @@ package body Ships.UI.Crew is
               (Slave => Progress_Bar,
                Options =>
                  "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
          end loop Load_Statistics_Loop;
          Load_Statistics_Experience_Loop :
          for I in Member.Attributes'Range loop
@@ -1056,6 +1083,9 @@ package body Ships.UI.Crew is
          end loop Load_Statistics_Experience_Loop;
          -- Skills of the selected crew member
          Frame := Create(pathName => Member_Canvas & ".skills");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
          Load_Skills_Loop :
          for I in
            Skills_Container.First_Index(Container => Member.Skills) ..
@@ -1090,6 +1120,10 @@ package body Ships.UI.Crew is
                    "}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label, Options => "-sticky we");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Column_Configure
               (Master => Progress_Frame, Slave => Member_Label,
                Options => "-weight 1");
@@ -1113,8 +1147,16 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-column 1 -row 0 -padx {5 0}");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
             Tcl_Eval(interp => Interp, strng => "update");
             Progress_Bar :=
               Create
@@ -1132,6 +1174,10 @@ package body Ships.UI.Crew is
                Message => "The current level of the skill.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Bar, Options => "-sticky w -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
             Progress_Frame :=
               Create
                 (pathName =>
@@ -1140,6 +1186,10 @@ package body Ships.UI.Crew is
                  options => "-height 12");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky w -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
             Progress_Bar :=
               Create
                 (pathName =>
@@ -1165,6 +1215,10 @@ package body Ships.UI.Crew is
               (Slave => Progress_Bar,
                Options =>
                  "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
             Tcl_Eval(interp => Interp, strng => "update");
          end loop Load_Skills_Loop;
          Load_Skill_Experience_Loop :
