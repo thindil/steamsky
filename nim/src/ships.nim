@@ -22,7 +22,7 @@ type
     ## Ships's state of speed, how much engines are used
     docked, full_Stop, quarter_Speed, half_Speed, full_Speed
 
-proc getCabinQuality*(quality: cint): cstring {.exportc.} =
+func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   case quality
   of 0..10:
     return "Empty room"
