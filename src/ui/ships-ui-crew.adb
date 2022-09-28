@@ -711,6 +711,9 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Thirst > 0 then
          if Game_Settings.Show_Numbers then
@@ -747,6 +750,9 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Hunger > 0 then
          if Game_Settings.Show_Numbers then
@@ -783,6 +789,9 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Morale(1) /= 50 then
          if Game_Settings.Show_Numbers then
@@ -819,6 +828,9 @@ package body Ships.UI.Crew is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
          Add_Order_Info_Block :
@@ -838,6 +850,10 @@ package body Ships.UI.Crew is
                    " } -wraplength 325");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label, Options => "-sticky w");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
             Info_Button :=
               Create
                 (pathName => Order_Box & ".button",
@@ -851,8 +867,15 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Order_Box, Options => "-sticky w -padx 5");
+            Tcl_Eval
+              (interp => Interp,
+               strng => "SetScrollbarBindings " & Order_Box & " " & Y_Scroll);
          end Add_Order_Info_Block;
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
@@ -911,7 +934,13 @@ package body Ships.UI.Crew is
              "} -wraplength 360");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Member_Label, Options => "-sticky nw -padx 5");
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
