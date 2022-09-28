@@ -1013,19 +1013,19 @@ package body Ships.UI.Crew is
                 (pathName =>
                    Frame & ".level" &
                    Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 300");
+            configure(Widgt => Progress_Bar, options => "-length 360");
             Progress_Frame :=
               Get_Widget
                 (pathName =>
                    Frame & ".experienceframe" &
                    Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Frame, options => "-width 300");
+            configure(Widgt => Progress_Frame, options => "-width 360");
             Progress_Bar :=
               Get_Widget
                 (pathName =>
                    Progress_Frame & ".experience" &
                    Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 300");
+            configure(Widgt => Progress_Bar, options => "-length 360");
          end loop Load_Statistics_Experience_Loop;
          -- Skills of the selected crew member
          Frame := Create(pathName => Member_Canvas & ".skills");
@@ -1149,19 +1149,19 @@ package body Ships.UI.Crew is
                 (pathName =>
                    Frame & ".level" &
                    Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 300");
+            configure(Widgt => Progress_Bar, options => "-length 360");
             Progress_Frame :=
               Get_Widget
                 (pathName =>
                    Frame & ".experienceframe" &
                    Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Frame, options => "-width 300");
+            configure(Widgt => Progress_Frame, options => "-width 360");
             Progress_Bar :=
               Get_Widget
                 (pathName =>
                    Progress_Frame & ".experience" &
                    Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 300");
+            configure(Widgt => Progress_Bar, options => "-length 360");
          end loop Load_Skill_Experience_Loop;
       end if;
       Bind
