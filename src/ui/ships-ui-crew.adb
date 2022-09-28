@@ -910,7 +910,7 @@ package body Ships.UI.Crew is
           (pathName => Frame & ".label",
            options =>
              "-text {" & To_String(Source => Member_Info) &
-             "} -wraplength 400");
+             "} -wraplength 360");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Member_Label, Options => "-sticky nw -padx 5");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
