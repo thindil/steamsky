@@ -621,9 +621,6 @@ package body Ships.UI.Crew is
          Bind
            (Widgt => Tab_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script => "{focus " & Close_Button & ";break}");
       else
          Bind
            (Widgt => Tab_Button, Sequence => "<Tab>",
