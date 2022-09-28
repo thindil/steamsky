@@ -828,7 +828,7 @@ package body Ships.UI.Crew is
          declare
             Order_Box: constant Ttk_Frame :=
               Create
-                (pathName => Frame & ".orderinfo", options => "-width 390");
+                (pathName => Frame & ".orderinfo", options => "-width 360");
          begin
             Member_Label :=
               Create
@@ -838,7 +838,7 @@ package body Ships.UI.Crew is
                    To_String
                      (Source =>
                         Get_Current_Order(Member_Index => Member_Index)) &
-                   " } -wraplength 360");
+                   " } -wraplength 325");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label, Options => "-sticky w");
             Info_Button :=
@@ -852,7 +852,8 @@ package body Ships.UI.Crew is
               (Widget => Info_Button,
                Message => "Set the new order for the crew member.");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Info_Button, Options => "-row 0 -column 1 -sticky n");
+              (Slave => Info_Button,
+               Options => "-row 0 -column 1 -sticky n -padx {5 0}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Order_Box, Options => "-sticky w -padx 5");
          end Add_Order_Info_Block;
