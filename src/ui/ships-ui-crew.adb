@@ -640,6 +640,41 @@ package body Ships.UI.Crew is
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
+      Add_Name_Info_Block :
+      declare
+         Name_Box: constant Ttk_Frame :=
+           Create(pathName => Frame & ".nameinfo", options => "-width 360");
+      begin
+         Member_Label :=
+           Create
+             (pathName => Name_Box & ".info",
+              options =>
+                "-text {Name: " & To_String(Source => Member.Name) &
+                " } -wraplength 325");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         Info_Button :=
+           Create
+             (pathName => Name_Box & ".button",
+              options =>
+                "-image giveordericon -command {" & Close_Button &
+                " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
+                "} -style Small.TButton");
+         Add(Widget => Info_Button, Message => "Rename the crew member.");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button,
+            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Name_Box, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
+      end Add_Name_Info_Block;
       if Member.Health < 100 then
          if Game_Settings.Show_Numbers then
             Member_Label :=
