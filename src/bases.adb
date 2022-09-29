@@ -857,10 +857,12 @@ package body Bases is
       if Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Chance :=
         Chance +
         (Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited) /
          10);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Get_Random(Min => 1, Max => 100) > Chance then
          return;
       end if;
