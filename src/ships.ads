@@ -479,8 +479,7 @@ package Ships is
       -- Description of cabin quality
       -- SOURCE
    function Get_Cabin_Quality(Quality: Natural) return String with
-      Post => Get_Cabin_Quality'Result'Length > 0,
-      Test_Case => (Name => "Test_GetCabinQuality", Mode => Nominal);
+      Post => Get_Cabin_Quality'Result'Length > 0;
       -- ****
 
       -- ****f* Ships/Ships.Damage_Module
