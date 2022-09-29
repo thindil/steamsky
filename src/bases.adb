@@ -849,15 +849,14 @@ package body Bases is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Roll: Positive range 1 .. 100 := 1;
-      Chance: Positive;
+      Chance: Positive :=
+        (if Sky_Bases(Base_Index).Population < 150 then 1
+         elsif Sky_Bases(Base_Index).Population < 300 then 2 else 5);
       Item: Base_Cargo := Empty_Base_Cargo;
    begin
       if Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
-      Chance :=
-        (if Sky_Bases(Base_Index).Population < 150 then 1
-         elsif Sky_Bases(Base_Index).Population < 300 then 2 else 5);
       Chance :=
         Chance +
         (Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited) /
