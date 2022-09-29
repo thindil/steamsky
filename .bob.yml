@@ -94,18 +94,3 @@ version: 2.0
    description: Run AdaControl to check correctness of the selected file. Required arguments are the name of file with AdaControl rules to use and the relative path to the file which will be check
    flags:
       - unixonly
-- command:
-   name: prove
-   execute:
-      - gnatprove --prover=z3 --mode=check -P steamsky.gpr
-   description: Run Spark to formally verify the code
-- command:
-   name: provefile
-   execute:
-      - gnatprove --prover=z3 --mode=check -P steamsky.gpr -u $1
-   description: Run Spark to formally verify the selected file. Required arguments is the relative path to the file which will be check
-- command:
-   name: proveclean
-   execute:
-      - gnatprove -P steamsky.gpr --clean
-   description: Clear all the files created by the gnatprove
