@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
   members' list and in the crew member's info dialog
 - Icon for give orders to crew members. Author: Delapouite (https://game-icons.net),
   license CC BY 3.0
+- Ability to scroll the information in the player's ship crew member's info
+  dialog
 
 ### Changed
 - Updated modding guide
