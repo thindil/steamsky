@@ -659,10 +659,14 @@ package body Ships.UI.Crew is
            Create
              (pathName => Name_Box & ".button",
               options =>
-                "-image giveordericon -command {" & Close_Button &
-                " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
-                "} -style Small.TButton");
-         Add(Widget => Info_Button, Message => "Rename the crew member.");
+                "-image editicon -command {" & Close_Button &
+                " invoke;GetString {Enter a new name for the " &
+                To_String(Source => Member.Name) & ":} crewname" &
+                CArgv.Arg(Argv => Argv, N => 1) &
+                " {Renaming crew member} {Rename}" & "} -style Small.TButton");
+         Add
+           (Widget => Info_Button,
+            Message => "Set a new name for the crew member");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
             Options => "-row 0 -column 1 -sticky n -padx {5 0}");
@@ -898,7 +902,7 @@ package body Ships.UI.Crew is
                    "} -style Small.TButton");
             Add
               (Widget => Info_Button,
-               Message => "Set the new order for the crew member.");
+               Message => "Set the new order for the crew member");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-row 0 -column 1 -sticky n -padx {5 0}");
