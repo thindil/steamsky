@@ -38,6 +38,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -518,11 +519,12 @@ package body Ships.UI.Crew is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Member_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => ".memberdialog.canvas", Interp => Interp);
+      Tab_Name: constant String :=
+        Tcl_GetVar(interp => Interp, varName => "newtab");
       Frame: constant Ttk_Frame :=
-        Get_Widget
-          (pathName =>
-             Member_Canvas & "." &
-             Tcl_GetVar(interp => Interp, varName => "newtab"));
+        Get_Widget(pathName => Member_Canvas & "." & Tab_Name);
+      Tab_Button: Ttk_RadioButton :=
+        Get_Widget(pathName => ".memberdialog.buttonbox.skills");
    begin
       Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
       Canvas_Create
@@ -534,6 +536,17 @@ package body Ships.UI.Crew is
          options =>
            "-scrollregion [list " &
            BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
+      if Winfo_Get(Widgt => Tab_Button, Info => "ismapped") = "0" then
+         Tab_Button :=
+           Get_Widget(pathName => ".memberdialog.buttonbox.general");
+      end if;
+      if Tab_Name = "general" then
+         Unbind(Widgt => Tab_Button, Sequence => "<Tab>");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script =>
+              "{focus .memberdialog.canvas.general.nameinfo.button;break}");
+      end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
 
@@ -915,7 +928,18 @@ package body Ships.UI.Crew is
             Tcl_Eval
               (interp => Interp,
                strng => "SetScrollbarBindings " & Order_Box & " " & Y_Scroll);
+            Bind
+              (Widgt => Info_Button, Sequence => "<Tab>",
+               Script => "{focus " & Close_Button & ";break}");
+            Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Tab>",
+               Script => "{focus " & Order_Box & ".button;break}");
          end Add_Order_Info_Block;
+      else
+         Bind
+           (Widgt => Info_Button, Sequence => "<Tab>",
+            Script => "{focus " & Close_Button & ";break}");
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
