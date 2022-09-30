@@ -1708,18 +1708,11 @@ package body Ships.UI.Crew is
          if Command'Length = 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Crew_Menu & ".rename;break}");
+               Script => "{focus " & Crew_Menu & ".info;break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
    begin
-      Add_Button
-        (Name => ".rename", Label => "Rename crew member",
-         Command =>
-           "GetString {Enter a new name for the " &
-           To_String(Source => Member.Name) & ":} crewname" &
-           CArgv.Arg(Argv => Argv, N => 1) &
-           " {Renaming crew member} {Rename}");
       Add_Button
         (Name => ".info", Label => "Show more info about the crew member",
          Command => "ShowMemberInfo " & CArgv.Arg(Argv => Argv, N => 1));
