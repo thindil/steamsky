@@ -15,22 +15,23 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
+with Ada.Numerics.Elementary_Functions;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
-with Goals; use Goals;
-with Crafts; use Crafts;
+with Goals;
+with Crafts;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
-with Mobs; use Mobs;
+with Mobs;
 
 package body Bases is
 
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
       use Tiny_String;
+      use Goals;
 
       New_Points: Integer;
    begin
@@ -193,6 +194,7 @@ package body Bases is
 
    procedure Generate_Recruits is
       use Tiny_String;
+      use Crafts;
 
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -219,6 +221,8 @@ package body Bases is
         (Items_Indexes: Positive_Indefinite_Container.Vector;
          Equip_Index: Equipment_Locations) is
          Item_Index: Objects_Container.Extended_Index;
+         use Mobs;
+
       begin
          if Get_Random(Min => 1, Max => 100) > 80 then
             return;
@@ -568,6 +572,7 @@ package body Bases is
    end Ask_For_Bases;
 
    procedure Ask_For_Events is
+      use Ada.Numerics.Elementary_Functions;
       use Tiny_String;
 
       Base_Index: constant Extended_Base_Range :=
