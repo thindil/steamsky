@@ -540,12 +540,17 @@ package body Ships.UI.Crew is
          Tab_Button :=
            Get_Widget(pathName => ".memberdialog.buttonbox.general");
       end if;
+      Unbind(Widgt => Tab_Button, Sequence => "<Tab>");
       if Tab_Name = "general" then
-         Unbind(Widgt => Tab_Button, Sequence => "<Tab>");
          Bind
            (Widgt => Tab_Button, Sequence => "<Tab>",
             Script =>
               "{focus .memberdialog.canvas.general.nameinfo.button;break}");
+      elsif Tab_Name = "stats" then
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script =>
+              "{focus .memberdialog.canvas.stats.statinfo1.button;break}");
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
@@ -1057,6 +1062,18 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-column 1 -row 0 -padx {5 0}");
+            if I < Member.Attributes'Length then
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Tab>",
+                  Script =>
+                    "{focus " & Frame & ".statinfo" &
+                    Trim(Source => Positive'Image(I + 1), Side => Left) &
+                    ".button;break}");
+            else
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Tab>",
+                  Script => "{focus " & Close_Button & ";break}");
+            end if;
             Tcl_Eval
               (interp => Interp,
                strng =>
