@@ -27,6 +27,8 @@ type
     day*: range[0..62] ## The game's day
     hour*: range[0..48] ## The game's hour
     minutes*: range[0..120] ## The game's minutes
+  MapXRange* = range[1..1_024] ## The size of the game map in X axis
+  MapYRange* = range[1..1_024] ## The size of the game map in Y axis
 
 var
   saveDirectory*: string = "data" & DirSep & "saves" & DirSep
