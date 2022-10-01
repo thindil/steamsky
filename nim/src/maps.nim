@@ -19,7 +19,8 @@
 
 import game
 
-proc normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.exportc.} =
+func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
+    tags: [], exportc.} =
   if isXAxis == 1:
     if coord < MapXRange.low:
       coord = MapXRange.low
