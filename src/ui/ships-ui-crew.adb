@@ -693,6 +693,9 @@ package body Ships.UI.Crew is
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
             Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
@@ -929,6 +932,9 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Button & " invoke;break}");
             Tcl_Eval
               (interp => Interp,
                strng =>
