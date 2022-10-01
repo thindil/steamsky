@@ -101,9 +101,9 @@ package body Bases.Ship is
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
-      Hull_Index, Ship_Module_Index: Modules_Container.Extended_Index;
+      Hull_Index, Ship_Module_Index: Modules_Container.Extended_Index := 0;
       Free_Turret_Index: Modules_Container.Extended_Index := 0;
-      Modules_Amount: Positive;
+      Modules_Amount: Positive := 1;
       Price: Natural := 0;
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
