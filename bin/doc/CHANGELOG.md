@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Ability to scroll the information in the player's ship crew member's info
   dialog
 - Ability to rename the selected crew member in the crew member's info dialog
+- Better Tab traversal to the player's ship crew member's info dialog
 
 ### Changed
 - Updated modding guide
