@@ -551,6 +551,11 @@ package body Ships.UI.Crew is
            (Widgt => Tab_Button, Sequence => "<Tab>",
             Script =>
               "{focus .memberdialog.canvas.stats.statinfo1.button;break}");
+      elsif Tab_Name = "skills" then
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script =>
+              "{focus .memberdialog.canvas.skills.skillinfo1.button;break}");
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
@@ -1231,6 +1236,18 @@ package body Ships.UI.Crew is
               (interp => Interp,
                strng =>
                  "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+            if I < Skills_Container.Last_Index(Container => Member.Skills) then
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Tab>",
+                  Script =>
+                    "{focus " & Frame & ".skillinfo" &
+                    Trim(Source => Count_Type'Image(I + 1), Side => Left) &
+                    ".button;break}");
+            else
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Tab>",
+                  Script => "{focus " & Close_Button & ";break}");
+            end if;
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky we -padx 5");
             Tcl_Eval
