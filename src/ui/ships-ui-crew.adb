@@ -1073,6 +1073,9 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-column 1 -row 0 -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Button & " invoke;break}");
             if I < Member.Attributes'Length then
                Bind
                  (Widgt => Info_Button, Sequence => "<Tab>",
@@ -1238,6 +1241,9 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options => "-column 1 -row 0 -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Button & " invoke;break}");
             Tcl_Eval
               (interp => Interp,
                strng =>
