@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
   dialog
 - Ability to rename the selected crew member in the crew member's info dialog
 - Better Tab traversal to the player's ship crew member's info dialog
+- Closing the player's ship crew member's info dialog with Escape key when
+  various buttons in the dialog are selected
 
 ### Changed
 - Updated modding guide
