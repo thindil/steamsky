@@ -78,8 +78,10 @@ package body Bases.Ship is
               " " & To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Gain_Exp
         (Amount => 1, Skill_Number => Talking_Skill,
