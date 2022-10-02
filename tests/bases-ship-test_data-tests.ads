@@ -10,7 +10,7 @@ package Bases.Ship.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Repair_Ship_a28a55_2d5600(Gnattest_T: in out Test);
+   procedure Test_Repair_Ship_a28a55_b1413a(Gnattest_T: in out Test);
    --  bases-ship.ads:62:4:Repair_Ship:Test_RepairShip
 
    procedure Test_Upgrade_Ship_5494ec_bcac9d(Gnattest_T: in out Test);

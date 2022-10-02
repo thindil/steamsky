@@ -29,10 +29,10 @@ package body Bases.Ship.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Repair_Ship_a28a55_2d5600(Module_Index: Integer) is
+   procedure Wrap_Test_Repair_Ship_a28a55_b1413a(Module_Index: Integer) is
    begin
       begin
-         pragma Assert((Module_Index <= Player_Ship.Modules.Last_Index));
+         pragma Assert(Module_Index <= Player_Ship.Modules.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -51,17 +51,17 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "ens_sloc(bases-ship.ads:0:):Test_RepairShip test commitment violated");
       end;
-   end Wrap_Test_Repair_Ship_a28a55_2d5600;
+   end Wrap_Test_Repair_Ship_a28a55_b1413a;
 --  end read only
 
 --  begin read only
    procedure Test_Repair_Ship_test_repairship(Gnattest_T: in out Test);
-   procedure Test_Repair_Ship_a28a55_2d5600(Gnattest_T: in out Test) renames
+   procedure Test_Repair_Ship_a28a55_b1413a(Gnattest_T: in out Test) renames
      Test_Repair_Ship_test_repairship;
 --  id:2.2/a28a558c7a663eb4/Repair_Ship/1/0/test_repairship/
    procedure Test_Repair_Ship_test_repairship(Gnattest_T: in out Test) is
       procedure Repair_Ship(Module_Index: Integer) renames
-        Wrap_Test_Repair_Ship_a28a55_2d5600;
+        Wrap_Test_Repair_Ship_a28a55_b1413a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
