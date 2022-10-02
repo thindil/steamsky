@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.9] - 2022-10-02
 
 ### Added
 - Option to select and unselect all item in the player's ship's crew members'
