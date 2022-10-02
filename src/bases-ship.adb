@@ -175,8 +175,29 @@ package body Bases.Ship is
          end loop Check_Unique_Module_Loop;
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
-             .M_Type /=
+             .M_Type =
            HULL then
+            Check_Module_Size_Loop :
+            for Module of Player_Ship.Modules loop
+               if BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module.Proto_Index)
+                   .Size >
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module_Index)
+                   .Value then
+                  raise Bases_Ship_Installation_Error
+                    with "This hull don't allow to have installed that big modules what you currently have.";
+               end if;
+            end loop Check_Module_Size_Loop;
+            if BaseModules_Container.Element
+                (Container => Modules_List, Index => Module_Index)
+                .Max_Value <
+              Modules_Amount then
+               raise Bases_Ship_Installation_Error
+                 with "This hull is too small for your ship. Remove some modules first.";
+            end if;
+            Player_Ship.Modules.Delete(Index => Hull_Index);
+         else
             if BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Size >
@@ -218,27 +239,6 @@ package body Bases.Ship is
                raise Bases_Ship_Installation_Error
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
             end if;
-         else
-            Check_Module_Size_Loop :
-            for Module of Player_Ship.Modules loop
-               if BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module.Proto_Index)
-                   .Size >
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module_Index)
-                   .Value then
-                  raise Bases_Ship_Installation_Error
-                    with "This hull don't allow to have installed that big modules what you currently have.";
-               end if;
-            end loop Check_Module_Size_Loop;
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
-                .Max_Value <
-              Modules_Amount then
-               raise Bases_Ship_Installation_Error
-                 with "This hull is too small for your ship. Remove some modules first.";
-            end if;
-            Player_Ship.Modules.Delete(Index => Hull_Index);
          end if;
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Money_Index_2,
