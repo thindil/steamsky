@@ -78,7 +78,7 @@ package Maps is
    procedure Normalize_Coord
      (Coord: in out Integer; Is_X_Axis: Boolean := True) with
       Post =>
-      (if Is_X_Axis then Coord in Map_X_Range'Range else Coord in Map_Y_Range);
+      (if Is_X_Axis then Coord in Map_X_Range else Coord in Map_Y_Range);
       -- ****
 
 end Maps;
