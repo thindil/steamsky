@@ -107,7 +107,9 @@ package body Bases.Ship is
       Price: Natural := 0;
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      --## rule off IMPROPER_INITIALIZATION
       Owners: Natural_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       if Money_Index_2 = 0 then
          raise Trade_No_Money;
