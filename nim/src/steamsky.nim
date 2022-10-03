@@ -56,3 +56,9 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
   if tkInit(interp = result) == tclError:
     raise newException(exceptn = TclError, message = "Can't initialize Tk.")
   setInterp(interp = result)
+
+  # Initialize needed packages
+  for package in ["tooltip", "tksvg", "autoscroll"]:
+    if result.tclEval(script = ("package require " & package).cstring) == tclError:
+      raise newException(exceptn = TclError, message = "Can't initialize " &
+          package & " package.")

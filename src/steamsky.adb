@@ -25,10 +25,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with ErrorDialog; use ErrorDialog;
 with Game; use Game;
@@ -177,11 +174,6 @@ begin
    --  calls that require reference to the interpreter.
    ----------------------------------------------------
    Set_Context(Interp => Interp);
-
-   -- Load required Tcl packages
-   Tooltip_Init(Interp => Interp);
-   Tcl.Ada.Tcl_Eval(interp => Interp, strng => "package require tksvg");
-   Autoscroll_Init(Interp => Interp);
 
    -- Create and show the main game menu
    Create_Main_Menu;
