@@ -10,7 +10,5 @@ Various files which are helpful for the development:
                       the game in release mode and copy all files to the proper
                       location. **Important**: run this script from the main
                       project directory, not from this.
-* tests.tcl         - script to run unit tests X times. **Important**: run this
+* tests.nims        - script to run unit tests X times. **Important**: run this
                       script from the main project directory, not from this.
-                      If you don't enter amount how many times repeat tests,
-                      they will run only once.
