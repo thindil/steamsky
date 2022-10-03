@@ -240,9 +240,11 @@ package body Bases.Ship is
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
             end if;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Money_Index_2,
             Amount => -(Price));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
            (Amount => 1, Skill_Number => Talking_Skill,
