@@ -219,10 +219,10 @@ package body Bases.Ship is
                    .Size;
             end if;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
-              (BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module_Index)
-                 .M_Type not in
-                 GUN | HARPOON_GUN | ARMOR) then
+              BaseModules_Container.Element
+                (Container => Modules_List, Index => Module_Index)
+                .M_Type not in
+                GUN | HARPOON_GUN | ARMOR then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;
