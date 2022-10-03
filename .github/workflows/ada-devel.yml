@@ -40,7 +40,7 @@ jobs:
       run: gprbuild -P tests/driver/test_driver.gpr
 
     - name: Run the tests
-      run: others/tests.tcl 30
+      run: others/tests.nims 30
 
   build_linux:
 
