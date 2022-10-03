@@ -1,0 +1,13 @@
+#!/usr/bin/env -S nim --hints:off
+
+import std/strutils
+
+if not fileExists("steamsky.gpr"):
+  echo "This script must be run in the directory where steamsky.gpr file is"
+  quit QuitFailure
+
+# Run Nim tests
+withDir "nim":
+  for i in 1..parseInt(paramStr(paramCount())):
+    echo i
+    exec "testament pattern \"tests/**/*.nim\""
