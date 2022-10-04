@@ -260,8 +260,40 @@ package body Bases.Ship is
                 .Install_Time);
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
-             .M_Type /=
+             .M_Type =
            HULL then
+            Player_Ship.Modules.Insert
+              (Before => Hull_Index,
+               New_Item =>
+                 (M_Type => HULL,
+                  Name =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Name,
+                  Proto_Index => Module_Index,
+                  Weight =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Weight,
+                  Durability =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Durability,
+                  Max_Durability =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Durability,
+                  Owner => Owners, Upgrade_Progress => 0,
+                  Upgrade_Action => NONE,
+                  Installed_Modules =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Value,
+                  Max_Modules =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module_Index)
+                      .Max_Value));
+         else
             Set_Empty_Owners_Loop :
             for I in
               1 ..
@@ -586,38 +618,6 @@ package body Bases.Ship is
                when ANY | HULL =>
                   null;
             end case;
-         else
-            Player_Ship.Modules.Insert
-              (Before => Hull_Index,
-               New_Item =>
-                 (M_Type => HULL,
-                  Name =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Name,
-                  Proto_Index => Module_Index,
-                  Weight =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Weight,
-                  Durability =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Durability,
-                  Max_Durability =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Durability,
-                  Owner => Owners, Upgrade_Progress => 0,
-                  Upgrade_Action => NONE,
-                  Installed_Modules =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Value,
-                  Max_Modules =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
-                      .Max_Value));
          end if;
          case BaseModules_Container.Element
            (Container => Modules_List, Index => Module_Index)
