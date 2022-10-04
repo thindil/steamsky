@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar;
-with Ada.Calendar.Formatting;
-with Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game;
 
 package body Log is
@@ -59,30 +57,16 @@ package body Log is
    procedure Log_Message
      (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
-      use Ada.Calendar;
-      use Ada.Characters.Latin_1;
+      pragma Unreferenced(New_Line, Time_Stamp);
 
-      New_Message: Unbounded_String;
+      procedure Nim_Log_Message(C_Message: chars_ptr; Debug_Type: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "logMessage";
    begin
-      if Debug_Mode = Default_Debug_Mode or
-        (Message_Type /= Debug_Mode and Debug_Mode /= EVERYTHING) then
-         return;
-      end if;
-      if not Is_Open(File => Log_File) then
-         return;
-      end if;
-      New_Message :=
-        (if Time_Stamp then
-           To_Unbounded_String
-             (Source =>
-                "[" & Ada.Calendar.Formatting.Image(Date => Clock) & "]:" &
-                Message)
-         else To_Unbounded_String(Source => Message));
-      Put
-        (File => Log_File,
-         Item =>
-           To_String(Source => New_Message) & (if New_Line then LF else NUL));
-      Flush(File => Log_File);
+      Nim_Log_Message
+        (C_Message => New_String(Str => Message),
+         Debug_Type => Debug_Types'Pos(Message_Type));
    end Log_Message;
 
    procedure End_Logging is

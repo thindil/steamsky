@@ -26,14 +26,17 @@ type DebugTypes* = enum
 var
   debugMode*: DebugTypes = none
 
-proc logMessage*(message: cstring; debugType: DebugTypes) {.exportc.} =
-  if debugType != debugMode and debugMode != everything:
+proc logMessage*(message: cstring; debugType: cint) {.exportc.} =
+  if debugType != debugMode.cint and debugMode != everything:
     return
   log(level = lvlAll, $message)
 
-proc startLogging*() =
+proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
   if debugMode == none:
     return
-  let logger: FileLogger = newFileLogger(filename = saveDirectory & "debug.log")
-  addHandler(handler = logger)
-  log(level = lvlAll, "Starting game in debug mode.")
+  try:
+    let logger: FileLogger = newFileLogger(filename = saveDirectory & "debug.log")
+    addHandler(handler = logger)
+    log(level = lvlAll, "Starting game in debug mode.")
+  except IOError, Exception:
+    echo ("Can't start log for the game, reason: " & getCurrentExceptionMsg())
