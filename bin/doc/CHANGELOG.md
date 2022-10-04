@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on start when there is no the game configuration file
+
 ## [7.9] - 2022-10-02
 
 ### Added
