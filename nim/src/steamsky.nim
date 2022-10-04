@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, parseopt]
-import config, game, maps, tk, utils
+import std/[os, parseopt, strutils]
+import config, game, log, maps, tk, utils
 import ui/utilsui
 
-proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
-    ReadIOEffect, RootEffect].} =
+proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
+    OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =
   ## FUNCTION
   ##
   ## The main procedure of the game.
@@ -37,6 +37,14 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError], tags: [
       of "savedir":
         saveDirectory = val & DirSep
         normalizePath(saveDirectory)
+      of "debug":
+        debugMode = parseEnum[DebugTypes](val)
+
+  # Create the game directories
+  createDir(dir = saveDirectory)
+
+  # Start logging
+  startLogging()
 
   # Load the game configuration. TODO: temporary disabled, enable it again
   # when will be needed

@@ -139,11 +139,8 @@ begin
       end if;
    end loop Command_Line_Loop;
 
-   Create_Path(New_Directory => To_String(Source => Save_Directory));
    Create_Path(New_Directory => To_String(Source => Mods_Directory));
    Create_Path(New_Directory => To_String(Source => Themes_Directory));
-
-   Start_Logging;
 
    Load_Config;
    Load_Hall_Of_Fame;
