@@ -121,12 +121,12 @@ type
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: 1,
-    undockSpeed: "fullSpeed", autoCenter: 1, autoReturn: 1,
+    undockSpeed: "full_Speed", autoCenter: 1, autoReturn: 1,
     autoFinish: 1, lowFuel: 100, lowDrinks: 50, lowFood: 25,
     autoMoveStop: "never", windowWidth: 800, windowHeight: 600,
     messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
     interfaceFontSize: 14, interfaceTheme: "steamsky",
-    messagesOrder: "olderFirst", autoAskForBases: 0,
+    messagesOrder: "older_First", autoAskForBases: 0,
     autoAskForEvents: 0,
     showTooltips: 1, showLastMessages: 1, messagesPosition: 213,
     fullScreen: 0, autoCloseMessagesTime: 6, autoSave: "none",
