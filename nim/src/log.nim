@@ -26,10 +26,14 @@ type DebugTypes* = enum
 var
   debugMode*: DebugTypes = none
 
-proc logMessage*(message: cstring; debugType: cint) {.exportc.} =
+proc logMessage*(message: cstring; debugType: cint) {.exportc, sideEffect,
+    raises: [], tags: [RootEffect].} =
   if debugType != debugMode.cint and debugMode != everything:
     return
-  log(level = lvlAll, $message)
+  try:
+    log(level = lvlAll, $message)
+  except Exception:
+    echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
 proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
   if debugMode == none:
