@@ -644,13 +644,12 @@ package body Bases.Ship is
          Ship_Module_Index := Module_Index;
          Get_Price_Block :
          declare
-            Damage: Damage_Factor := 0.0;
-         begin
-            Damage :=
+            Damage: constant Damage_Factor :=
               1.0 -
               Damage_Factor
                 (Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
                  Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability));
+         begin
             Price :=
               BaseModules_Container.Element
                 (Container => Modules_List,
