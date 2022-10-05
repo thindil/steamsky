@@ -21,13 +21,25 @@ import std/logging
 import game
 
 type DebugTypes* = enum
+  ## FUNCTION
+  ##
+  ## What kind of debug messages log. None, everything, only combat or start
+  ## the game with debug menu
   none, everything, combat, menu
 
-var
-  debugMode*: DebugTypes = none
+var debugMode*: DebugTypes = none ## The debug mode of the game.
 
 proc logMessage*(message: cstring; debugType: cint) {.exportc, sideEffect,
     raises: [], tags: [RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Write the selected message to the log file
+  ##
+  ## PARAMETERS
+  ##
+  ## * message   - The message which will be written to the file
+  ## * debugType - The type of message which will be written. If different
+  ##               than the game debug mode (except everything), don't write it
   if debugType != debugMode.cint and debugMode != everything:
     return
   try:
@@ -36,6 +48,9 @@ proc logMessage*(message: cstring; debugType: cint) {.exportc, sideEffect,
     echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
 proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Start logging the game. Set the logger.
   if debugMode == none:
     return
   try:
