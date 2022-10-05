@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,5 +54,6 @@ pack $messagesview2 -side top -fill both -expand true
 SetScrollbarBindings $messagescanvas $messagesframe.list.scrolly
 bind $messagescanvas <Configure> {
    $messagesview2 configure -height [expr [winfo height $messagescanvas] \
-      / [font metrics InterfaceFont -linespace] - 1]
+      / [font metrics InterfaceFont -linespace] - 1] -width [expr %w \
+      / [font measure InterfaceFont {  }] + 4]
 }
