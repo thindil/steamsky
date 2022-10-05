@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Made the messages list in the last messages sceen wider
+
 ### Fixed
 - Crash on start when there is no the game configuration file
 
