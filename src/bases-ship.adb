@@ -797,7 +797,7 @@ package body Bases.Ship is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Docking_Cost: Natural;
+      Docking_Cost: Natural := 0;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
    begin
