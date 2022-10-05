@@ -35,7 +35,8 @@ proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
   if debugMode == none:
     return
   try:
-    let logger: FileLogger = newFileLogger(filename = saveDirectory & "debug.log")
+    let logger: FileLogger = newFileLogger(filename = saveDirectory &
+        "debug.log", fmtStr = "[$datetime] - $levelname: ")
     addHandler(handler = logger)
     log(level = lvlAll, "Starting game in debug mode.")
   except IOError, Exception:
