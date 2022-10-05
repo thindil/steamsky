@@ -666,9 +666,11 @@ package body Bases.Ship is
          end Get_Price_Block;
          Count_Price
            (Price => Price, Trader_Index => Trader_Index, Reduce => False);
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          if Free_Cargo(Amount => -(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
+         --## rule om SIMPLIFIABLE_EXPRESSIONS
          if Price >
            BaseCargo_Container.Element
              (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
