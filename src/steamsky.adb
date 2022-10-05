@@ -180,7 +180,6 @@ begin
    --------------------------------------------------------------------------
    Tcl.Tk.Tk_MainLoop;
 
-   End_Logging;
 exception
    when An_Exception : others =>
       Save_Exception(An_Exception => An_Exception);

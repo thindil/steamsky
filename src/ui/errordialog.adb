@@ -31,7 +31,6 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Game;
 with Game.SaveLoad;
-with Log;
 with MainMenu.Commands;
 with Ships;
 with Utils.UI;
@@ -47,7 +46,6 @@ package body ErrorDialog is
       use GNAT.Traceback.Symbolic;
       use Game;
       use Game.SaveLoad;
-      use Log;
       use Ships;
 
       Error_File: File_Type;
@@ -97,7 +95,6 @@ package body ErrorDialog is
             Item => To_String(Source => Error_Text & Error_Details));
          Close(File => Error_File);
       end if;
-      End_Logging;
       Show_Error_Dialog_Block :
       declare
          use type Interfaces.C.int;

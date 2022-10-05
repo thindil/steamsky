@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -46,13 +46,6 @@ package Log is
    Debug_Mode: Debug_Types := Default_Debug_Mode;
    -- ****
 
-   -- ****f* Log/Log.Start_Logging
-   -- FUNCTION
-   -- Open/create debug.log file
-   -- SOURCE
-   procedure Start_Logging;
-   -- ****
-
    -- ****f* Log/Log.Log_Message
    -- FUNCTION
    -- Log message (if proper type) to file in debug mode
@@ -69,12 +62,5 @@ package Log is
       Pre => Message'Length > 0,
       Test_Case => (Name => "Test_LogMessage", Mode => Nominal);
       -- ****
-
-      -- ****f* Log/Log.End_Logging
-      -- FUNCTION
-      -- Close debug.file
-      -- SOURCE
-   procedure End_Logging;
-   -- ****
 
 end Log;

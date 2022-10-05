@@ -15,44 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Game;
 
 package body Log is
-
-   --## rule off DIRECTLY_ACCESSED_GLOBALS
-   -- ****iv* Log/Log.Log_File
-   -- FUNCTION
-   -- Debug log file
-   -- SOURCE
-   Log_File: File_Type;
-   -- ****
-
-   procedure Start_Logging is
-      use Ada.Directories;
-      use Game;
-
-   begin
-      if Debug_Mode = Default_Debug_Mode then
-         return;
-      end if;
-      if Exists(Name => To_String(Source => Save_Directory) & "debug.log") then
-         Open
-           (File => Log_File, Mode => Append_File,
-            Name => To_String(Source => Save_Directory) & "debug.log");
-      else
-         Create
-           (File => Log_File, Mode => Append_File,
-            Name => To_String(Source => Save_Directory) & "debug.log");
-      end if;
-      Log_Message
-        (Message =>
-           "Start game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
-         Message_Type => Debug_Mode);
-   end Start_Logging;
 
    procedure Log_Message
      (Message: String; Message_Type: Debug_Types;
@@ -68,18 +33,5 @@ package body Log is
         (C_Message => New_String(Str => Message),
          Debug_Type => Debug_Types'Pos(Message_Type));
    end Log_Message;
-
-   procedure End_Logging is
-   begin
-      if Debug_Mode = Default_Debug_Mode or not Is_Open(File => Log_File) then
-         return;
-      end if;
-      Log_Message
-        (Message =>
-           "Ending game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
-         Message_Type => Debug_Mode);
-      Close(File => Log_File);
-   end End_Logging;
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
 end Log;
