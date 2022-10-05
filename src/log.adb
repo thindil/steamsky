@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Log is
 
@@ -23,6 +23,7 @@ package body Log is
      (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
       pragma Unreferenced(New_Line, Time_Stamp);
+      use Interfaces.C.Strings;
 
       procedure Nim_Log_Message(C_Message: chars_ptr; Debug_Type: Integer) with
          Import => True,
