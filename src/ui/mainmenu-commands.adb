@@ -73,14 +73,20 @@ package body MainMenu.Commands is
 
       Os_Name: constant String :=
         Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)");
-      Command: constant String :=
+      Command: constant GNAT.OS_Lib.String_Access :=
         Locate_Exec_On_Path
           (Exec_Name =>
              (if Os_Name = "Windows" then "start"
-              elsif Os_Name = "Darwin" then "open" else "xdg-open")).all;
+              elsif Os_Name = "Darwin" then "open" else "xdg-open"));
    begin
+      if Command = null then
+         Show_Message
+           (Text => "Can't open the link. Reason: no program to open it.",
+            Parent_Frame => ".", Title => "Can't open the link.");
+         return TCL_OK;
+      end if;
       if Non_Blocking_Spawn
-          (Program_Name => Command,
+          (Program_Name => Command.all,
            Args =>
              Argument_String_To_List
                (Arg_String => CArgv.Arg(Argv => Argv, N => 1)).all) =
