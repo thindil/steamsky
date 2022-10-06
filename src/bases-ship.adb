@@ -21,7 +21,7 @@ with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
-with BasesTypes; use BasesTypes;
+with BasesTypes;
 with Maps; use Maps;
 
 package body Bases.Ship is
@@ -852,7 +852,7 @@ package body Bases.Ship is
    end Pay_For_Dock;
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
-      use Tiny_String;
+      use BasesTypes;
 
       Proto_Index: Objects_Container.Extended_Index := 0;
       Base_Index: constant Bases_Range :=
