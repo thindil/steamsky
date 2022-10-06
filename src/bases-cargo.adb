@@ -48,7 +48,7 @@ package body Bases.Cargo is
            (Container => Sky_Bases(Base_Index).Cargo,
             New_Item =>
               (Proto_Index => Money_Index,
-               Amount => (Get_Random(Min => 50, Max => 200) * Population),
+               Amount => Get_Random(Min => 50, Max => 200) * Population,
                Durability => Default_Item_Durability, Price => 0));
          Add_Base_Cargo_Loop :
          for I in
@@ -61,7 +61,7 @@ package body Bases.Cargo is
                  (Container => Sky_Bases(Base_Index).Cargo,
                   New_Item =>
                     (Proto_Index => I,
-                     Amount => (Get_Random(Min => 0, Max => 100) * Population),
+                     Amount => Get_Random(Min => 0, Max => 100) * Population,
                      Durability => Default_Item_Durability,
                      Price =>
                        Get_Price
