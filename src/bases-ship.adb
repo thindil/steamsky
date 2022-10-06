@@ -894,6 +894,7 @@ package body Bases.Ship is
                      Item_Index => Proto_Index));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
+         --## rule off SIMPLIFIABLE_STATEMENTS
          if Module_Index = -1 then
             Cost := Cost * 2;
             Time := Time / 2;
@@ -901,6 +902,7 @@ package body Bases.Ship is
             Cost := Cost * 4;
             Time := Time / 4;
          end if;
+         --## rule on SIMPLIFIABLE_STATEMENTS
       end if;
       if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (Item => To_Unbounded_String(Source => "shipyard")) then
