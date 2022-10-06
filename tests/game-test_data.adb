@@ -25,7 +25,6 @@ package body Game.Test_Data is
       Create_Path(To_String(Mods_Directory));
       Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
       Debug_Mode := EVERYTHING;
-      Start_Logging;
       Load_Config;
       declare
          Message: constant String := Load_Game_Data;
