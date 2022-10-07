@@ -90,8 +90,7 @@ package Messages is
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
    function Formated_Time(Time: Date_Record := Game_Date) return String with
-      Post => Formated_Time'Result'Length > 0,
-      Test_Case => (Name => "Test_FormattedTime", Mode => Nominal);
+      Post => Formated_Time'Result'Length > 0;
       -- ****
 
       -- ****f* Messages/Messages.Add_Message
