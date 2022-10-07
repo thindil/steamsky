@@ -19,6 +19,22 @@
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Format the selected the game time, add leading zeroes, marks between
+  ## values, etc.
+  ##
+  ## PARAMETERS
+  ##
+  ## * year    - The amount of years to format
+  ## * month   - The amount of months to format
+  ## * day     - The amount of days to format
+  ## * hour    - The amount of hours to format
+  ## * minutes - The amount of minutes to format
+  ##
+  ## RETURNS
+  ##
+  ## The string with formatted time
   var formattedTime: string = $year & "-"
   if month < 10:
     formattedTime.add("0")
