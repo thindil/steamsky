@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on start when there is no the game configuration file
 - Crash on trying open link when no program to open it is installed
+- Mouse wheel doesn't scroll the player's ship crew member general info in
+  the dialog
 
 ## [7.9] - 2022-10-02
 
