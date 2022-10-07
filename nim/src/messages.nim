@@ -17,8 +17,8 @@
 
 {.used.}
 
-proc formattedTime*(year: cint, month: cint, day: cint, hour: cint,
-    minutes: cint): cstring {.exportc.} =
+func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
+    minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   var formattedTime: string = $year & "-"
   if month < 10:
     formattedTime.add("0")
