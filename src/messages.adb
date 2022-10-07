@@ -16,40 +16,25 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Config; use Config;
+with Interfaces.C.Strings;
 
 package body Messages is
 
    function Formated_Time(Time: Date_Record := Game_Date) return String is
-      Result: Unbounded_String := To_Unbounded_String(Source => "");
-      Raw_Image: Unbounded_String;
-      Time_Array: constant Natural_Array(1 .. 5) :=
-        (1 => Time.Year, 2 => Time.Month, 3 => Time.Day, 4 => Time.Hour,
-         5 => Time.Minutes);
+      use Interfaces.C.Strings;
+
+      function Nim_Formatted_Time
+        (Year, Month, Day, Hour, Minutes: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "formattedTime";
    begin
-      Format_Time_Loop :
-      for I in Time_Array'Range loop
-         Raw_Image :=
-           To_Unbounded_String(Source => Natural'Image(Time_Array(I)));
-         case I is
-            when 1 =>
-               Result :=
-                 Result & Trim(Source => Raw_Image, Side => Ada.Strings.Left);
-            when 2 | 3 =>
-               Result :=
-                 Result & To_Unbounded_String(Source => "-") &
-                 Trim(Source => Raw_Image, Side => Ada.Strings.Left);
-            when 4 =>
-               Result := Result & Raw_Image;
-            when 5 =>
-               Result :=
-                 (if Time_Array(5) < 10 then
-                    Result & ":0" &
-                    Trim(Source => Raw_Image, Side => Ada.Strings.Left)
-                  else Result & ":" &
-                    Trim(Source => Raw_Image, Side => Ada.Strings.Left));
-         end case;
-      end loop Format_Time_Loop;
-      return To_String(Source => Result);
+      return
+        Value
+          (Item =>
+             Nim_Formatted_Time
+               (Year => Time.Year, Month => Time.Month, Day => Time.Day,
+                Hour => Time.Hour, Minutes => Time.Minutes));
    end Formated_Time;
 
    procedure Add_Message
