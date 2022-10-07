@@ -100,10 +100,8 @@ package body Bases.Cargo is
                      if Item_Index = 0 then
                         if Get_Price
                             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                             Item_Index => J) =
+                             Item_Index => J) >
                           0 then
-                           Item_Index := Item_Index + 1;
-                        else
                            BaseCargo_Container.Append
                              (Container => Sky_Bases(Base_Index).Cargo,
                               New_Item =>
@@ -119,6 +117,7 @@ package body Bases.Cargo is
                                       Item_Index => J)));
                            exit Update_Item_Amount_Loop;
                         end if;
+                        Item_Index := Item_Index + 1;
                      end if;
                   end loop Update_Item_Amount_Loop;
                end loop Add_Black_Market_Cargo_Loop;
