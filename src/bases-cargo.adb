@@ -78,7 +78,9 @@ package body Bases.Cargo is
                   elsif Population < 300 then Get_Random(Min => 1, Max => 20)
                   else Get_Random(Min => 1, Max => 30));
                Item_Index: Natural range 0 ..
-                   Positive(Objects_Container.Length(Container => Items_List));
+                   Positive
+                     (Objects_Container.Length(Container => Items_List)) :=
+                 0;
             begin
                Add_Black_Market_Cargo_Loop :
                for I in 1 .. Amount loop
