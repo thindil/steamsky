@@ -611,6 +611,14 @@ package body Ships.UI.Crew is
       Info_Button: Ttk_Button;
       Frame: Ttk_Frame;
    begin
+      Tcl_Eval
+         (interp => Interp,
+         strng =>
+         "SetScrollbarBindings " & Member_Dialog & " " & Y_Scroll);
+      Tcl_Eval
+         (interp => Interp,
+         strng =>
+         "SetScrollbarBindings " & Member_Canvas & " " & Y_Scroll);
       Frame := Create(pathName => Member_Dialog & ".buttonbox");
       Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
       Tab_Button :=
