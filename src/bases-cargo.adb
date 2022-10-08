@@ -126,8 +126,8 @@ package body Bases.Cargo is
       else
          Update_Cargo_Block :
          declare
-            Roll: Positive range 1 .. 100;
-            Item: Base_Cargo;
+            Roll: Positive range 1 .. 100 := 1;
+            Item: Base_Cargo := Empty_Base_Cargo;
             function Get_Max_Amount(Amount: Positive) return Positive is
                Max_Amount: Natural;
             begin
@@ -186,7 +186,7 @@ package body Bases.Cargo is
            Find_Base_Cargo
              (Proto_Index => Proto_Index, Durability => Durability)
          else Cargo_Index);
-      Item: Base_Cargo;
+      Item: Base_Cargo := Empty_Base_Cargo;
    begin
       if Amount > 0 then
          if Item_Index = 0 then
