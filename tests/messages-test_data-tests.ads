@@ -10,27 +10,24 @@ package Messages.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Formated_Time_8c7900_c7cdf2(Gnattest_T: in out Test);
-   --  messages.ads:92:4:Formated_Time:Test_FormattedTime
-
    procedure Test_Add_Message_da0d2a_c15a00(Gnattest_T: in out Test);
-   --  messages.ads:105:4:Add_Message:Test_AddMessage
+   --  messages.ads:104:4:Add_Message:Test_AddMessage
 
    procedure Test_Get_Message_6b9b1e_0b2a8d(Gnattest_T: in out Test);
-   --  messages.ads:123:4:Get_Message:Test_GetMessage
+   --  messages.ads:122:4:Get_Message:Test_GetMessage
 
    procedure Test_Clear_Messages_c573e1_267040(Gnattest_T: in out Test);
-   --  messages.ads:133:4:Clear_Messages:Test_ClearMessages
+   --  messages.ads:132:4:Clear_Messages:Test_ClearMessages
 
    procedure Test_Messages_Amount_a330a8_8e4cbf(Gnattest_T: in out Test);
-   --  messages.ads:145:4:Messages_Amount:Test_MessagesAmount
+   --  messages.ads:144:4:Messages_Amount:Test_MessagesAmount
 
    procedure Test_Restore_Message_2b3d02_0f207a(Gnattest_T: in out Test);
-   --  messages.ads:158:4:Restore_Message:Test_RestoreMessage
+   --  messages.ads:157:4:Restore_Message:Test_RestoreMessage
 
    procedure Test_Get_Last_Message_Index_211a31_517343
      (Gnattest_T: in out Test);
-   --  messages.ads:171:4:Get_Last_Message_Index:Test_GetLastMessageIndex
+   --  messages.ads:170:4:Get_Last_Message_Index:Test_GetLastMessageIndex
 
 end Messages.Test_Data.Tests;
 --  end read only
