@@ -38,6 +38,8 @@ type
     kind: MessageType ## The type of message
     color: MessageColor ## The color used to show the message
 
+var messagesList: seq[MessageData] ## The list of in-game messages
+
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
