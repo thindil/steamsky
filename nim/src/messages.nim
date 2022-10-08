@@ -17,6 +17,18 @@
 
 {.used.}
 
+type
+  MessageType = enum
+    default, combatMessage, tradeMessage, orderMessage, craftMessage, otherMessage, missionMessage
+
+  MessageColor = enum
+    white, yellow, green, red, blue, cyan
+
+  MessageData = object
+    message: string
+    kind: MessageType
+    color: MessageColor
+
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
