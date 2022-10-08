@@ -107,8 +107,8 @@ package body Bases.Cargo is
                               New_Item =>
                                 (Proto_Index => J,
                                  Amount =>
-                                   (Get_Random(Min => 0, Max => 100) *
-                                    Population),
+                                   Get_Random(Min => 0, Max => 100) *
+                                   Population,
                                  Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
