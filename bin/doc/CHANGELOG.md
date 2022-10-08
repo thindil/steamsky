@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 - Crash on trying open link when no program to open it is installed
 - Mouse wheel doesn't scroll the player's ship crew member general info in
   the dialog
+- Position of Close button in the dialog with information about the selected
+  module from the player's ship
 
 ## [7.9] - 2022-10-02
 
