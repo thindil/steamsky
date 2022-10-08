@@ -1173,7 +1173,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
-         Row => 4);
+         Row => 5);
       Height :=
         Height +
         Positive'Value
