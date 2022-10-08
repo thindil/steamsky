@@ -74,13 +74,6 @@ package Messages is
    Messages_List: Messages_Container.Vector;
    -- ****
 
-   -- ****v* Messages/Messages.Last_Message_Index
-   -- FUNCTION
-   -- Index of last message to show
-   -- SOURCE
-   Last_Message_Index: Natural := 0;
-   -- ****
-
    -- ****f* Messages/Messages.Formated_Time
    -- FUNCTION
    -- Format game time

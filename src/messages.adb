@@ -49,7 +49,6 @@ package body Messages is
               To_Unbounded_String(Source => Formated_Time) & ": " &
               To_Unbounded_String(Source => Message),
             M_Type => M_Type, Color => Color));
-      Last_Message_Index := Get_Last_Message_Index;
    end Add_Message;
 
    function Get_Message
