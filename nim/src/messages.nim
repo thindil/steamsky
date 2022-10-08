@@ -19,15 +19,24 @@
 
 type
   MessageType = enum
+    ## FUNCTION
+    ##
+    ## Type of an in-game message
     default, combatMessage, tradeMessage, orderMessage, craftMessage, otherMessage, missionMessage
 
   MessageColor = enum
+    ## FUNCTION
+    ##
+    ## The color used to show a message
     white, yellow, green, red, blue, cyan
 
   MessageData = object
-    message: string
-    kind: MessageType
-    color: MessageColor
+    ## FUNCTION
+    ##
+    ## Used to store data about the game's messages
+    message: string ## The message itself
+    kind: MessageType ## The type of message
+    color: MessageColor ## The color used to show the message
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
