@@ -78,6 +78,16 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
 
 proc addMessage*(message: cstring; kind: cint; color: cint = ord(
     white)) {.raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Add the message to the messages list. Delete the oldest message if the
+  ## adding will reach the max limit of messages
+  ##
+  ## PARAMETERS
+  ##
+  ## * message - The message to add
+  ## * kind    - The kind of the message to add
+  ## * color   - The color used to draw the message
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
