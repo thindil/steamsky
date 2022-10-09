@@ -161,6 +161,9 @@ package Messages is
       -- List index of the last message
       -- SOURCE
    function Get_Last_Message_Index return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "getLastMessageIndex",
       Test_Case => (Name => "Test_GetLastMessageIndex", Mode => Robustness);
       -- ****
 

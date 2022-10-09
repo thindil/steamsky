@@ -118,9 +118,4 @@ package body Messages is
         (New_Item => (Message => Message, M_Type => M_Type, Color => Color));
    end Restore_Message;
 
-   function Get_Last_Message_Index return Natural is
-   begin
-      return Messages_List.Last_Index;
-   end Get_Last_Message_Index;
-
 end Messages;

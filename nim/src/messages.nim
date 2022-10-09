@@ -92,3 +92,6 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
+
+proc getLastMessageIndex(): cint {.exportc.} =
+  return (messagesList.len() - 1).cint
