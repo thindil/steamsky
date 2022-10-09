@@ -15,13 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Config; use Config;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Messages is
 
    function Formated_Time(Time: Date_Record := Game_Date) return String is
-      use Interfaces.C.Strings;
 
       function Nim_Formatted_Time
         (Year, Month, Day, Hour, Minutes: Integer) return chars_ptr with
@@ -39,16 +37,15 @@ package body Messages is
 
    procedure Add_Message
      (Message: String; M_Type: Message_Type; Color: Message_Color := WHITE) is
+      procedure Nim_Add_Message
+        (Msg: chars_ptr; Mtype: Integer; Mcolor: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "addMessage";
    begin
-      if Natural(Messages_List.Length) = Game_Settings.Messages_Limit then
-         Messages_List.Delete_First;
-      end if;
-      Messages_List.Append
-        (New_Item =>
-           (Message =>
-              To_Unbounded_String(Source => Formated_Time) & ": " &
-              To_Unbounded_String(Source => Message),
-            M_Type => M_Type, Color => Color));
+      Nim_Add_Message
+        (Msg => New_String(Str => Message), Mtype => Message_Type'Pos(M_Type),
+         Mcolor => Message_Color'Pos(Color));
    end Add_Message;
 
    function Get_Message
