@@ -17,12 +17,15 @@
 
 {.used.}
 
+import config
+
 type
   MessageType = enum
     ## FUNCTION
     ##
     ## Type of an in-game message
-    default, combatMessage, tradeMessage, orderMessage, craftMessage, otherMessage, missionMessage
+    default, combatMessage, tradeMessage, orderMessage, craftMessage,
+        otherMessage, missionMessage
 
   MessageColor = enum
     ## FUNCTION
@@ -72,3 +75,9 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     formattedTime.add("0")
   formattedTime.add($minutes)
   return formattedTime.cstring
+
+proc addMessage*(message: cstring; kind: cint; color: cint = ord(white)) {.exportc.} =
+  if messagesList.len() == gameSettings.messagesLimit:
+    messagesList.delete(i = 0)
+  messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
+      color: color.MessageColor))
