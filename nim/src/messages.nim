@@ -76,7 +76,8 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
   formattedTime.add($minutes)
   return formattedTime.cstring
 
-proc addMessage*(message: cstring; kind: cint; color: cint = ord(white)) {.exportc.} =
+proc addMessage*(message: cstring; kind: cint; color: cint = ord(
+    white)) {.raises: [], tags: [], exportc.} =
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
