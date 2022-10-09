@@ -200,20 +200,24 @@ package body Bases.Cargo is
                       (Base_Type => Sky_Bases(Base_Index).Base_Type,
                        Item_Index => Proto_Index)));
          else
+            --## rule off ASSIGNMENTS
             Item :=
               BaseCargo_Container.Element
                 (Container => Sky_Bases(Base_Index).Cargo,
                  Index => Item_Index);
             Item.Amount := Item.Amount + Amount;
+            --## rule on ASSIGNMENTS
             BaseCargo_Container.Replace_Element
               (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index,
                New_Item => Item);
          end if;
       else
+         --## rule off ASSIGNMENTS
          Item :=
            BaseCargo_Container.Element
              (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index);
          Item.Amount := Item.Amount + Amount;
+         --## rule on ASSIGNMENTS
          if Item.Amount = 0 and
            not Is_Buyable
              (Base_Type => Sky_Bases(Base_Index).Base_Type,
