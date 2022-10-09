@@ -94,4 +94,11 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
       color: color.MessageColor))
 
 proc getLastMessageIndex(): cint {.raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Get the index of the last message in the messagesList
+  ##
+  ## RETURNS
+  ##
+  ## The index of the last message in the messagesList
   return (messagesList.len() - 1).cint
