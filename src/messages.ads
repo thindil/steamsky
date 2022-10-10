@@ -160,8 +160,7 @@ package Messages is
       -- RESULT
       -- List index of the last message
       -- SOURCE
-   function Get_Last_Message_Index return Natural with
-      Test_Case => (Name => "Test_GetLastMessageIndex", Mode => Robustness);
-      -- ****
+   function Get_Last_Message_Index return Natural;
+   -- ****
 
 end Messages;
