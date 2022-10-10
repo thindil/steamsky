@@ -97,8 +97,7 @@ package Messages is
    procedure Add_Message
      (Message: String; M_Type: Message_Type;
       Color: Message_Color := WHITE) with
-      Pre => Message'Length > 0,
-      Test_Case => (Name => "Test_AddMessage", Mode => Nominal);
+      Pre => Message'Length > 0;
       -- ****
 
       -- ****f* Messages/Messages.Get_Message
