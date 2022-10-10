@@ -20,14 +20,14 @@
 import config
 
 type
-  MessageType = enum
+  MessageType* = enum
     ## FUNCTION
     ##
     ## Type of an in-game message
     default, combatMessage, tradeMessage, orderMessage, craftMessage,
         otherMessage, missionMessage
 
-  MessageColor = enum
+  MessageColor* = enum
     ## FUNCTION
     ##
     ## The color used to show a message
@@ -93,7 +93,7 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
 
-proc getLastMessageIndex(): cint {.raises: [], tags: [], exportc.} =
+proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ## FUNCTION
   ##
   ## Get the index of the last message in the messagesList
