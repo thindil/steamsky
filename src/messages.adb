@@ -118,4 +118,13 @@ package body Messages is
         (New_Item => (Message => Message, M_Type => M_Type, Color => Color));
    end Restore_Message;
 
+   function Get_Last_Message_Index return Natural is
+      function Nim_Get_Last_Message_Index return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getLastMessageIndex";
+   begin
+      return Nim_Get_Last_Message_Index + 1;
+   end Get_Last_Message_Index;
+
 end Messages;
