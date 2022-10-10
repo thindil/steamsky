@@ -174,8 +174,6 @@ package body Bases.Cargo is
      (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
-      use Tiny_String;
-
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Item_Index: constant Natural range 0 ..
