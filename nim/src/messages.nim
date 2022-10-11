@@ -130,21 +130,31 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     return
   var index: cint
   if messageIndex < 1:
-    index = 1
     if messagesList.len() + messageIndex > 0:
+      if kind == ord(default):
+        index = messagesList.len().cint - messageIndex
+        return MessageDataC(message: messagesList[index].message.cstring,
+            kind: ord(messagesList[index].kind).cint, color: ord(messagesList[
+            index].color).cint)
+      index = 1
       for i in countdown(messagesList.len() - 1, 0):
         let message = MessageDataC(message: messagesList[i].message.cstring,
             kind: ord(messagesList[i].kind).cint, color: ord(messagesList[i].color).cint)
-        if message.kind == kind or kind == 0:
+        if message.kind == kind:
           index.dec()
         if index == messageIndex:
           return message
     return
+  if kind == ord(default):
+    index = messageIndex - 1
+    return MessageDataC(message: messagesList[index].message.cstring, kind: ord(
+        messagesList[index].kind).cint, color: ord(messagesList[
+        index].color).cint)
   index = 0
   for i in countup(0, messagesList.len() - 1):
     let message = MessageDataC(message: messagesList[i].message.cstring,
         kind: ord(messagesList[i].kind).cint, color: ord(messagesList[i].color).cint)
-    if message.kind == kind or kind == 0:
+    if message.kind == kind:
       index.inc()
     if index == messageIndex:
       return message
