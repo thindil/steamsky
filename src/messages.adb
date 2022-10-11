@@ -51,42 +51,25 @@ package body Messages is
    function Get_Message
      (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
       return Message_Data is
-      Index: Integer;
+      type Message_Data_C is record
+         Msg: chars_ptr;
+         Kind: Integer;
+         Color: Integer;
+      end record;
+      function Nim_Get_Message
+        (Mindex, MType: Integer) return Message_Data_C with
+         Import => True,
+         Convention => C,
+         External_Name => "getMessage";
+      Temp_Message: constant Message_Data_C :=
+        Nim_Get_Message
+          (Mindex => Message_Index, MType => Message_Type'Pos(M_Type));
    begin
-      if Message_Index > Integer(Messages_List.Length) then
-         return
-           (Message => Null_Unbounded_String, M_Type => DEFAULT,
-            Color => WHITE);
-      end if;
-      if Message_Index < 1 then
-         Index := 1;
-         if Integer(Messages_List.Length) + Message_Index > 0 then
-            Get_Reverse_Message_Loop :
-            for Message of reverse Messages_List loop
-               if Message.M_Type = M_Type or M_Type = DEFAULT then
-                  Index := Index - 1;
-               end if;
-               if Index = Message_Index then
-                  return Message;
-               end if;
-            end loop Get_Reverse_Message_Loop;
-         end if;
-         return
-           (Message => Null_Unbounded_String, M_Type => DEFAULT,
-            Color => WHITE);
-      end if;
-      Index := 0;
-      Get_Message_Loop :
-      for Message of Messages_List loop
-         if Message.M_Type = M_Type or M_Type = DEFAULT then
-            Index := Index + 1;
-         end if;
-         if Index = Message_Index then
-            return Message;
-         end if;
-      end loop Get_Message_Loop;
       return
-        (Message => Null_Unbounded_String, M_Type => DEFAULT, Color => WHITE);
+        (Message =>
+           To_Unbounded_String(Source => Value(Item => Temp_Message.Msg)),
+         M_Type => Message_Type'Val(Temp_Message.Kind),
+         Color => Message_Color'Val(Temp_Message.Color));
    end Get_Message;
 
    procedure Clear_Messages is

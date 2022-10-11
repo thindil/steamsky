@@ -41,6 +41,11 @@ type
     kind: MessageType ## The type of message
     color: MessageColor ## The color used to show the message
 
+  MessageDataC* = object
+    message*: cstring
+    kind: cint
+    color: cint
+
 var messagesList: seq[MessageData] ## The list of in-game messages
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
@@ -102,3 +107,28 @@ proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ##
   ## The index of the last message in the messagesList
   return (messagesList.len() - 1).cint
+
+proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.exportc.} =
+  result = MessageDataC(message: "", kind: 0, color: 0)
+  if messageIndex - 1 > messagesList.len():
+    return
+  var index: cint
+  if messageIndex < 1:
+    index = 1
+    if messagesList.len() + messageIndex > 0:
+      for i in countdown(messagesList.len() - 1, 0):
+        let message = MessageDataC(message: messagesList[i].message.cstring,
+            kind: ord(messagesList[i].kind).cint, color: ord(messagesList[i].color).cint)
+        if message.kind == kind or kind == 0:
+          index.dec()
+        if index == messageIndex:
+          return message
+    return
+  index = 0
+  for i in countup(0, messagesList.len() - 1):
+    let message = MessageDataC(message: messagesList[i].message.cstring,
+        kind: ord(messagesList[i].kind).cint, color: ord(messagesList[i].color).cint)
+    if message.kind == kind or kind == 0:
+      index.inc()
+    if index == messageIndex:
+      return message
