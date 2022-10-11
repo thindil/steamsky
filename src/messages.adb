@@ -72,11 +72,6 @@ package body Messages is
          Color => Message_Color'Val(Temp_Message.Color));
    end Get_Message;
 
-   procedure Clear_Messages is
-   begin
-      Messages_List.Clear;
-   end Clear_Messages;
-
    function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural is
       Amount: Natural := 0;
    begin

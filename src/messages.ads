@@ -121,6 +121,9 @@ package Messages is
       -- Remove all messages
       -- SOURCE
    procedure Clear_Messages with
+      Import => True,
+      Convention => C,
+      External_Name => "clearMessages",
       Test_Case => (Name => "Test_ClearMessages", Mode => Robustness);
       -- ****
 
