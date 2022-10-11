@@ -108,7 +108,8 @@ proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ## The index of the last message in the messagesList
   return (messagesList.len() - 1).cint
 
-proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.exportc.} =
+proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
+    tags: [], exportc.} =
   result = MessageDataC(message: "", kind: 0, color: 0)
   if messageIndex - 1 > messagesList.len():
     return
