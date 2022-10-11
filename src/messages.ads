@@ -113,8 +113,7 @@ package Messages is
       -- SOURCE
    function Get_Message
      (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
-      return Message_Data with
-      Test_Case => (Name => "Test_GetMessage", Mode => Robustness);
+      return Message_Data;
       -- ****
 
       -- ****f* Messages/Messages.Clear_Messages
