@@ -15,14 +15,16 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Utils; use Utils;
-with Trades; use Trades;
+with Utils;
+with Trades;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
 
 package body Bases.Cargo is
 
    procedure Generate_Cargo is
+      use Utils;
+
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Population: constant Positive :=
@@ -234,6 +236,8 @@ package body Bases.Cargo is
    function Find_Base_Cargo
      (Proto_Index: Objects_Container.Extended_Index;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
+      use Trades;
+
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       function Find_Cargo
