@@ -31,8 +31,7 @@ version: 2.0
       - gnattest -P steamsky.gpr
       - gnatpp -P tests/prettytests.gpr
       - gprbuild -P tests/driver/test_driver.gpr
-      - nim others/tests.nims 2
-   description: Regenerate unit tests, pretty print, build them and run twice
+   description: Regenerate unit tests, pretty print and build them
 - command:
    name: docs
    execute:
@@ -62,8 +61,7 @@ version: 2.0
    execute:
       - gnatpp -P tests/prettytests.gpr
       - gprbuild -P tests/driver/test_driver.gpr
-      - nim others/tests.nims 2
-   description: Pretty print unit tests source code, build them and run twice
+   description: Pretty print unit tests source code and build them
 - command:
    name: push
    execute:
@@ -83,7 +81,6 @@ version: 2.0
       - bob debug
       - bob tests 20
       - bob check
-      - bob prove
    description: Run all the project tests
    flags:
       - unixonly
