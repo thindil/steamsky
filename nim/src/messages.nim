@@ -160,4 +160,7 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
       return message
 
 proc clearMessages*() {.raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Remove all the in-game messages
   messagesList = @[]
