@@ -159,5 +159,5 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     if index == messageIndex:
       return message
 
-proc clearMessages*() {.exportc.} =
+proc clearMessages*() {.raises: [], tags: [], exportc.} =
   messagesList = @[]
