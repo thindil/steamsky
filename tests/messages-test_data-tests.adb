@@ -29,34 +29,6 @@ package body Messages.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Clear_Messages_c573e1_267040 is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Messages.Clear_Messages;
-   end Wrap_Test_Clear_Messages_c573e1_267040;
---  end read only
-
---  begin read only
-   procedure Test_Clear_Messages_test_clearmessages(Gnattest_T: in out Test);
-   procedure Test_Clear_Messages_c573e1_267040(Gnattest_T: in out Test) renames
-     Test_Clear_Messages_test_clearmessages;
---  id:2.2/c573e1b25d985259/Clear_Messages/1/0/test_clearmessages/
-   procedure Test_Clear_Messages_test_clearmessages(Gnattest_T: in out Test) is
-      procedure Clear_Messages renames Wrap_Test_Clear_Messages_c573e1_267040;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Clear_Messages;
-      Assert(Messages_Amount = 0, "Failed to clear all messages.");
-      Add_Message("Test message.", DEFAULT);
-
---  begin read only
-   end Test_Clear_Messages_test_clearmessages;
---  end read only
-
---  begin read only
    function Wrap_Test_Messages_Amount_a330a8_8e4cbf
      (M_Type: Message_Type := DEFAULT) return Natural is
    begin
