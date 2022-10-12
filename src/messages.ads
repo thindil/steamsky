@@ -123,8 +123,7 @@ package Messages is
    procedure Clear_Messages with
       Import => True,
       Convention => C,
-      External_Name => "clearMessages",
-      Test_Case => (Name => "Test_ClearMessages", Mode => Robustness);
+      External_Name => "clearMessages";
       -- ****
 
       -- ****f* Messages/Messages.Messages_Amount
