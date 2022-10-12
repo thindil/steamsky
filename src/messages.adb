@@ -73,19 +73,12 @@ package body Messages is
    end Get_Message;
 
    function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural is
-      Amount: Natural := 0;
+      function Nim_Messages_Amount(Kind: Integer) return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "messagesAmount";
    begin
-      if M_Type = DEFAULT then
-         return Natural(Messages_List.Length);
-      else
-         Count_Messages_Loop :
-         for Message of Messages_List loop
-            if Message.M_Type = M_Type then
-               Amount := Amount + 1;
-            end if;
-         end loop Count_Messages_Loop;
-         return Amount;
-      end if;
+      return Nim_Messages_Amount(Kind => Message_Type'Pos(M_Type));
    end Messages_Amount;
 
    procedure Restore_Message

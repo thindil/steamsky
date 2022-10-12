@@ -164,3 +164,11 @@ proc clearMessages*() {.raises: [], tags: [], exportc.} =
   ##
   ## Remove all the in-game messages
   messagesList = @[]
+
+proc messagesAmount*(kind: cint): cint {.exportc.} =
+  if kind == ord(default):
+    return messagesList.len().cint
+  result = 0
+  for message in messagesList:
+    if ord(message.kind).cint == kind:
+      result.inc()
