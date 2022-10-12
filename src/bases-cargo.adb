@@ -241,26 +241,26 @@ package body Bases.Cargo is
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       function Find_Cargo
-        (Base_Cargo: BaseCargo_Container.Vector) return Natural is
+        (Local_Base_Cargo: BaseCargo_Container.Vector) return Natural is
       begin
          Find_Cargo_Loop :
          for I in
-           BaseCargo_Container.First_Index(Container => Base_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
+           BaseCargo_Container.First_Index(Container => Local_Base_Cargo) ..
+             BaseCargo_Container.Last_Index(Container => Local_Base_Cargo) loop
             if Durability < Items_Durability'Last then
                if BaseCargo_Container.Element
-                   (Container => Base_Cargo, Index => I)
+                   (Container => Local_Base_Cargo, Index => I)
                    .Proto_Index =
                  Proto_Index and
                  BaseCargo_Container.Element
-                     (Container => Base_Cargo, Index => I)
+                     (Container => Local_Base_Cargo, Index => I)
                      .Durability =
                    Durability then
                   return I;
                end if;
             else
                if BaseCargo_Container.Element
-                   (Container => Base_Cargo, Index => I)
+                   (Container => Local_Base_Cargo, Index => I)
                    .Proto_Index =
                  Proto_Index then
                   return I;
@@ -271,9 +271,9 @@ package body Bases.Cargo is
       end Find_Cargo;
    begin
       if Base_Index > 0 then
-         return Find_Cargo(Base_Cargo => Sky_Bases(Base_Index).Cargo);
+         return Find_Cargo(Local_Base_Cargo => Sky_Bases(Base_Index).Cargo);
       end if;
-      return Find_Cargo(Base_Cargo => Trader_Cargo);
+      return Find_Cargo(Local_Base_Cargo => Trader_Cargo);
    end Find_Base_Cargo;
 
 end Bases.Cargo;
