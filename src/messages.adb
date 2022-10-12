@@ -57,13 +57,13 @@ package body Messages is
          Color: Integer;
       end record;
       function Nim_Get_Message
-        (Mindex, MType: Integer) return Message_Data_C with
+        (Mindex, Mtype: Integer) return Message_Data_C with
          Import => True,
          Convention => C,
          External_Name => "getMessage";
       Temp_Message: constant Message_Data_C :=
         Nim_Get_Message
-          (Mindex => Message_Index, MType => Message_Type'Pos(M_Type));
+          (Mindex => Message_Index, Mtype => Message_Type'Pos(M_Type));
    begin
       return
         (Message =>
