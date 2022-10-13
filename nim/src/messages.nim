@@ -132,7 +132,7 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
   if messageIndex < 1:
     if messagesList.len() + messageIndex > 0:
       if kind == ord(default):
-        index = messagesList.len().cint - messageIndex
+        index = messagesList.len().cint + messageIndex - 1
         return MessageDataC(message: messagesList[index].message.cstring,
             kind: ord(messagesList[index].kind).cint, color: ord(messagesList[
             index].color).cint)
