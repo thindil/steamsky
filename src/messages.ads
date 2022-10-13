@@ -134,19 +134,17 @@ package Messages is
       -- RESULT
       -- Amount of messages of selected type
       -- SOURCE
-   function Messages_Amount
-     (M_Type: Message_Type := DEFAULT) return Natural with
-      Test_Case => (Name => "Test_MessagesAmount", Mode => Robustness);
-      -- ****
+   function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural;
+   -- ****
 
-      -- ****f* Messages/Messages.Restore_Message
-      -- FUNCTION
-      -- Restore message from save file
-      -- PARAMETERS
-      -- Message  - Text of message to restore
-      -- M_Type   - Type of message to restore. Default is no type
-      -- Color    - Color of message to restore. Default is white.
-      -- SOURCE
+   -- ****f* Messages/Messages.Restore_Message
+   -- FUNCTION
+   -- Restore message from save file
+   -- PARAMETERS
+   -- Message  - Text of message to restore
+   -- M_Type   - Type of message to restore. Default is no type
+   -- Color    - Color of message to restore. Default is white.
+   -- SOURCE
    procedure Restore_Message
      (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
       Color: Message_Color := WHITE) with
