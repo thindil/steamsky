@@ -15,10 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Utils;
-with Trades;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
+with Trades;
+with Utils;
 
 package body Bases.Cargo is
 
