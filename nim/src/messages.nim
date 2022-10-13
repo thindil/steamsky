@@ -185,6 +185,6 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
       result.inc()
 
 proc restoreMessage(message: cstring; kind: cint = ord(default).cint;
-    color: cint = ord(white).cint) {.exportc.} =
+    color: cint = ord(white).cint) {.raises: [], tags: [], exportc.} =
   messagesList.add(MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
