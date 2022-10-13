@@ -166,6 +166,17 @@ proc clearMessages*() {.raises: [], tags: [], exportc.} =
   messagesList = @[]
 
 proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Get the amount of the messages of the selected type
+  ##
+  ## PARAMETERS
+  ##
+  ## * kind - The type of messages which amount will be get
+  ##
+  ## RETURNS
+  ##
+  ## The amount of the selected type of messages
   if kind == ord(default):
     return messagesList.len().cint
   result = 0
