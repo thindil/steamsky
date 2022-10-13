@@ -183,3 +183,8 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
   for message in messagesList:
     if ord(message.kind).cint == kind:
       result.inc()
+
+proc restoreMessage(message: cstring; kind: cint = ord(default).cint;
+    color: cint = ord(white).cint) {.exportc.} =
+  messagesList.add(MessageData(message: $message, kind: kind.MessageType,
+      color: color.MessageColor))
