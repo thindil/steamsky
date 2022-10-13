@@ -10,11 +10,8 @@ package Messages.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Messages_Amount_a330a8_8e4cbf(Gnattest_T: in out Test);
-   --  messages.ads:137:4:Messages_Amount:Test_MessagesAmount
-
    procedure Test_Restore_Message_2b3d02_0f207a(Gnattest_T: in out Test);
-   --  messages.ads:150:4:Restore_Message:Test_RestoreMessage
+   --  messages.ads:148:4:Restore_Message:Test_RestoreMessage
 
 end Messages.Test_Data.Tests;
 --  end read only
