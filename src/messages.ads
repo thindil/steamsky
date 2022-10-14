@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 
 -- ****h* Messages/Messages
@@ -57,21 +56,6 @@ package Messages is
       M_Type: Message_Type;
       Color: Message_Color;
    end record;
-   -- ****
-
-   -- ****t* Messages/Messages.Messages_Container
-   -- FUNCTION
-   -- Used to store messages data
-   -- SOURCE
-   package Messages_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Message_Data);
-   -- ****
-
-   -- ****v* Messages/Messages.Messages_List
-   -- FUNCTION
-   -- List of all messages
-   -- SOURCE
-   Messages_List: Messages_Container.Vector;
    -- ****
 
    -- ****f* Messages/Messages.Formated_Time
