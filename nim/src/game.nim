@@ -29,6 +29,7 @@ type
     minutes*: range[0..120] ## The game's minutes
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
+  ReputationRange* = range[-100..100] ## The range of possible reputation levels
 
 var
   saveDirectory*: string = "data" & DirSep & "saves" & DirSep
