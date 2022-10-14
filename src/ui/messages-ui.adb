@@ -143,16 +143,18 @@ package body Messages.UI is
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
-            for Message of Messages_List loop
+            for I in 1 .. Messages_Amount loop
                Show_Message
-                 (Message => Message, Messages_View => Messages_View,
+                 (Message => Get_Message(Message_Index => I),
+                  Messages_View => Messages_View,
                   Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
-            for Message of reverse Messages_List loop
+            for I in reverse 1 .. Messages_Amount loop
                Show_Message
-                 (Message => Message, Messages_View => Messages_View,
+                 (Message => Get_Message(Message_Index => I),
+                  Messages_View => Messages_View,
                   Messages_Type => Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
@@ -289,16 +291,18 @@ package body Messages.UI is
       if Search_Text'Length = 0 then
          if Game_Settings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
-            for Message of Messages_List loop
+            for I in 1 .. Messages_Amount loop
                Show_Message
-                 (Message => Message, Messages_View => Messages_View,
+                 (Message => Get_Message(Message_Index => 1),
+                  Messages_View => Messages_View,
                   Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
          else
             Show_Newer_First_Loop :
-            for Message of reverse Messages_List loop
+            for I in reverse 1 .. Messages_Amount loop
                Show_Message
-                 (Message => Message, Messages_View => Messages_View,
+                 (Message => Get_Message(Message_Index => I),
+                  Messages_View => Messages_View,
                   Messages_Type => Messages_Type);
             end loop Show_Newer_First_Loop;
          end if;
@@ -307,29 +311,41 @@ package body Messages.UI is
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Search_Older_First_Loop :
-         for Message of Messages_List loop
-            if Index
-                (Source =>
-                   To_Lower(Item => To_String(Source => Message.Message)),
-                 Pattern => To_Lower(Item => Search_Text), From => 1) >
-              0 then
-               Show_Message
-                 (Message => Message, Messages_View => Messages_View,
-                  Messages_Type => Messages_Type);
-            end if;
+         for I in 1 .. Messages_Amount loop
+            Show_Selected_Messages_Block :
+            declare
+               Message: constant Message_Data :=
+                 Get_Message(Message_Index => I);
+            begin
+               if Index
+                   (Source =>
+                      To_Lower(Item => To_String(Source => Message.Message)),
+                    Pattern => To_Lower(Item => Search_Text), From => 1) >
+                 0 then
+                  Show_Message
+                    (Message => Message, Messages_View => Messages_View,
+                     Messages_Type => Messages_Type);
+               end if;
+            end Show_Selected_Messages_Block;
          end loop Search_Older_First_Loop;
       else
          Search_Newer_First_Loop :
-         for Message of reverse Messages_List loop
-            if Index
-                (Source =>
-                   To_Lower(Item => To_String(Source => Message.Message)),
-                 Pattern => To_Lower(Item => Search_Text), From => 1) >
-              0 then
-               Show_Message
-                 (Message => Message, Messages_View => Messages_View,
-                  Messages_Type => Messages_Type);
-            end if;
+         for I in reverse 1 .. Messages_Amount loop
+            Show_Selected_Reverse_Messages_Block :
+            declare
+               Message: constant Message_Data :=
+                 Get_Message(Message_Index => I);
+            begin
+               if Index
+                   (Source =>
+                      To_Lower(Item => To_String(Source => Message.Message)),
+                    Pattern => To_Lower(Item => Search_Text), From => 1) >
+                 0 then
+                  Show_Message
+                    (Message => Message, Messages_View => Messages_View,
+                     Messages_Type => Messages_Type);
+               end if;
+            end Show_Selected_Reverse_Messages_Block;
          end loop Search_Newer_First_Loop;
       end if;
       configure(Widgt => Messages_View, options => "-state disable");
