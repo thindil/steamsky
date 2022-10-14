@@ -186,5 +186,14 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
 
 proc restoreMessage*(message: cstring; kind: cint = ord(default).cint;
     color: cint = ord(white).cint) {.raises: [], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Restore the selected message from the save file
+  ##
+  ## PARAMETERS
+  ##
+  ## * message - The text of the message to restore
+  ## * kind    - The kind of the message to restore
+  ## * color   - The color used to draw the message
   messagesList.add(MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
