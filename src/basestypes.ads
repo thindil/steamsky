@@ -28,6 +28,7 @@ with Items; use Items;
 package BasesTypes is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* BasesTypes/BasesTypes.Prices_Array
    -- FUNCTION
    -- Buy and sell prices for the item in selected base type
@@ -68,6 +69,7 @@ package BasesTypes is
       Description: Unbounded_String;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* BasesTypes/BasesTypes.BasesTypes_Container
    -- FUNCTION
