@@ -17,6 +17,7 @@
 
 {.used.}
 
+import std/[streams, tables, parsexml]
 import game
 
 type
@@ -28,7 +29,7 @@ type
     max: ReputationRange
 
   RelationsData = object
-    reputation: ReputationRange
+    reputation: ReputationRanges
     friendly: bool
 
   CareerData = object
@@ -42,3 +43,30 @@ type
     memberName: string
     pluralMemberName: string
     spawnChance: Natural
+    population: AttributesArray
+    namesType: NamesTypes
+    relations: Table[string, RelationsData]
+    description: string
+    foodTypes: seq[string]
+    drinksTypes: seq[string]
+    healingTools: seq[string]
+    healingSkill: Natural
+    flags: seq[string]
+    careers: Table[string, CareerData]
+    baseIcon: Natural
+    basesTypes: Table[string, Positive]
+    weaponSkill: Natural
+
+var factionsList* = initTable[string, FactionData]
+
+proc loadFactions*(fileName: string) =
+  var
+    factionFile = newFileStream(filename = fileName)
+    parser: XmlParser
+  open(my = parser, input = factionFile, filename = fileName)
+  while true:
+    parser.next()
+    case parser.kind
+    of xmlEof: break
+    else: discard
+  close(my = parser)
