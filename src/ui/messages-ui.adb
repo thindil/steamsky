@@ -293,7 +293,7 @@ package body Messages.UI is
             Show_Older_First_Loop :
             for I in 1 .. Messages_Amount loop
                Show_Message
-                 (Message => Get_Message(Message_Index => 1),
+                 (Message => Get_Message(Message_Index => I),
                   Messages_View => Messages_View,
                   Messages_Type => Messages_Type);
             end loop Show_Older_First_Loop;
