@@ -27,6 +27,13 @@ type
     day*: range[0..62] ## The game's day
     hour*: range[0..48] ## The game's hour
     minutes*: range[0..120] ## The game's minutes
+
+  DataAction* = enum
+    # FUNCTION
+    #
+    # Possible actions to do when loading game data
+    add, update, remove
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
