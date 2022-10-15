@@ -38,10 +38,10 @@ package body BasesTypes is
       Tmp_Recipes: UnboundedString_Container.Vector;
       Tmp_Flags: UnboundedString_Container.Vector;
       Base_Node, Child_Node: Node;
-      Base_Index: Tiny_String.Bounded_String;
-      Action, Sub_Action: Data_Action;
-      Buy_Price, Sell_Price: Natural;
-      Item_Index: Objects_Container.Extended_Index;
+      Base_Index: Bounded_String := Null_Bounded_String;
+      Action, Sub_Action: Data_Action := ADD;
+      Buy_Price, Sell_Price: Natural := 0;
+      Item_Index: Objects_Container.Extended_Index := 0;
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
