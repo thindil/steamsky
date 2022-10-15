@@ -17,7 +17,7 @@
 
 {.used.}
 
-import std/[streams, tables, parsexml]
+import std/[tables, xmlparser, xmltree]
 import game
 
 type
@@ -60,13 +60,9 @@ type
 var factionsList* = initTable[string, FactionData]
 
 proc loadFactions*(fileName: string) =
-  var
-    factionFile = newFileStream(filename = fileName)
-    parser: XmlParser
-  open(my = parser, input = factionFile, filename = fileName)
-  while true:
-    parser.next()
-    case parser.kind
-    of xmlEof: break
-    else: discard
-  close(my = parser)
+  let factionsXml = loadXml(path = fileName)
+  for faction in factionsXml:
+    discard
+
+proc loadAdaFactions*(fileName: cstring) {.exportc.} =
+  loadFactions(fileName = $fileName)

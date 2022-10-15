@@ -182,9 +182,10 @@ package Factions is
    -- FUNCTION
    -- Load NPC factions from file
    -- PARAMETERS
-   -- Reader - XML Reader from which factions will be read
+   -- Reader    - XML Reader from which factions will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Factions(Reader: Tree_Reader);
+   procedure Load_Factions(Reader: Tree_Reader; File_Name: String);
    -- ****
 
    -- ****f* Factions/Factions.Get_Reputation

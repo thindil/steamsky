@@ -1229,7 +1229,9 @@ package body Game is
                     To_String(Source => Local_File_Name),
                   Message_Type => EVERYTHING);
                if To_String(Source => Data_Type) = "factions" then
-                  Load_Factions(Reader => Reader);
+                  Load_Factions
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "goals" then
                   Load_Goals(Reader => Reader);
                elsif To_String(Source => Data_Type) = "help" then
@@ -1277,7 +1279,9 @@ package body Game is
             Open
               (Filename => To_String(Source => Data_Directory) & File_Name,
                Input => Data_File);
-            Local_File_Name := To_Unbounded_String(Source => File_Name);
+            Local_File_Name :=
+              To_Unbounded_String
+                (Source => To_String(Source => Data_Directory) & File_Name);
             Load_Data_File(Local_Data_Name => Data_Name);
             Close(Input => Data_File);
          end if;
