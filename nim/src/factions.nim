@@ -49,7 +49,7 @@ type
     description: string
     foodTypes: seq[string]
     drinksTypes: seq[string]
-    healingTools: seq[string]
+    healingTools: string
     healingSkill: Natural
     flags: seq[string]
     careers: Table[string, CareerData]
@@ -103,8 +103,23 @@ proc loadFactions*(fileName: string) =
     if attribute.len() > 0:
       faction.population[1] = attribute.parseInt()
       faction.population[2] = 0
-
-
+    attribute = factionNode.attr(name = "minpopulation")
+    if attribute.len() > 0:
+      faction.population[1] = attribute.parseInt()
+      faction.population[2] = factionNode.attr(name = "maxpopulation").parseInt()
+      if faction.population[2] < faction.population[1]:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid range for faction's population.")
+    attribute = factionNode.attr(name = "namestype")
+    if attribute.len() > 0:
+      faction.namesType = try:
+          parseEnum[NamesTypes](attribute.toLowerAscii)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid type of faction's names.")
+    attribute = factionNode.attr(name = "healingtools")
+    if attribute.len() > 0:
+      faction.healingTools = attribute
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
