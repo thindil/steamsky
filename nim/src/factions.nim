@@ -17,7 +17,7 @@
 
 {.used.}
 
-import std/[tables, xmlparser, xmltree]
+import std/[strutils, tables, xmlparser, xmltree]
 import game
 
 type
@@ -57,12 +57,30 @@ type
     basesTypes: Table[string, Positive]
     weaponSkill: Natural
 
-var factionsList* = initTable[string, FactionData]
+  DataLoadingError = object of CatchableError
+
+var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
 
 proc loadFactions*(fileName: string) =
   let factionsXml = loadXml(path = fileName)
-  for faction in factionsXml:
-    discard
+  for factionNode in factionsXml:
+    var faction: FactionData
+    let
+      factionIndex = try:
+          factionNode.attr(name = "index")
+        except:
+          ""
+      factionAction: DataAction = try:
+          parseEnum[DataAction](factionNode.attr(name = "action").toLowerAscii)
+        except:
+          DataAction.add
+    if factionAction in [update, remove]:
+      if factionsList.hasKey(key = factionIndex):
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', there is no faction with that index,")
+    elif factionsList.hasKey(key = factionIndex):
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
