@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game
+import game, log
 
 type
   NamesTypes = enum
@@ -64,15 +64,13 @@ var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
 proc loadFactions*(fileName: string) =
   let factionsXml = loadXml(path = fileName)
   for factionNode in factionsXml:
-    var faction: FactionData
+    if factionNode.kind != xnElement:
+      continue
     let
-      factionIndex = try:
-          factionNode.attr(name = "index")
-        except:
-          ""
+      factionIndex = factionNode.attr(name = "index")
       factionAction: DataAction = try:
           parseEnum[DataAction](factionNode.attr(name = "action").toLowerAscii)
-        except:
+        except ValueError:
           DataAction.add
     if factionAction in [update, remove]:
       if factionsList.hasKey(key = factionIndex):
@@ -81,6 +79,32 @@ proc loadFactions*(fileName: string) =
     elif factionsList.hasKey(key = factionIndex):
         raise newException(exceptn = DataLoadingError,
             message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
+    if factionAction == DataAction.remove:
+      factionsList.del(key = factionIndex)
+      logMessage(message = "Faction removed: '" & factionIndex & "'", debugType = everything)
+      continue
+    var faction: FactionData = if factionAction == DataAction.update:
+        factionsList[factionIndex]
+      else:
+        FactionData()
+    var attribute = factionNode.attr(name = "name")
+    if attribute.len() > 0:
+      faction.name = attribute
+    attribute = factionNode.attr(name = "membername")
+    if attribute.len() > 0:
+      faction.memberName = attribute
+    attribute = factionNode.attr(name = "pluralmembername")
+    if attribute.len() > 0:
+      faction.pluralMemberName = attribute
+    attribute = factionNode.attr(name = "spawn")
+    if attribute.len() > 0:
+      faction.spawnChance = attribute.parseInt()
+    attribute = factionNode.attr(name = "population")
+    if attribute.len() > 0:
+      faction.population[1] = attribute.parseInt()
+      faction.population[2] = 0
+
+
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
