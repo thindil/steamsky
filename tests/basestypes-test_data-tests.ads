@@ -11,10 +11,10 @@ package BasesTypes.Test_Data.Tests is
    null record;
 
    procedure Test_Is_Buyable_54f6fa_e6a2f0(Gnattest_T: in out Test);
-   --  basestypes.ads:109:4:Is_Buyable:Test_Is_Buyable
+   --  basestypes.ads:111:4:Is_Buyable:Test_Is_Buyable
 
    procedure Test_Get_Price_0b9ff9_73c669(Gnattest_T: in out Test);
-   --  basestypes.ads:130:4:Get_Price:Test_Get_Price
+   --  basestypes.ads:132:4:Get_Price:Test_Get_Price
 
 end BasesTypes.Test_Data.Tests;
 --  end read only

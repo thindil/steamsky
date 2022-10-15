@@ -86,7 +86,7 @@ package body Game.Test_Data.Tests is
    begin
 
       End_Game(False);
-      Assert(Messages_List.Length = 0, "Failed to clear old game data.");
+      Assert(Messages_Amount = 0, "Failed to clear old game data.");
       New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Bounded_String("1");
