@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -31,7 +32,8 @@ with Config; use Config;
 
 package body Items is
 
-   procedure Load_Items(Reader: Tree_Reader) is
+   procedure Load_Items(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C.Strings;
       use Short_String;
       use Tiny_String;
 
@@ -42,7 +44,12 @@ package body Items is
       Item_Node, Child_Node: Node;
       Item_Index: Objects_Container.Extended_Index;
       Action: Data_Action;
+      procedure Load_Ada_Items(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaItems";
    begin
+      Load_Ada_Items(Name => New_String(Str => File_Name));
       Items_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

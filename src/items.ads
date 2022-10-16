@@ -200,9 +200,10 @@ package Items is
    -- FUNCTION
    -- Load items from files
    -- PARAMETERS
-   -- Reader - XML Reader from which items data will be read
+   -- Reader    - XML Reader from which items data will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Items(Reader: Tree_Reader);
+   procedure Load_Items(Reader: Tree_Reader; File_Name: String);
    -- ****
 
    -- ****f* Items/Items.Find_Proto_Item

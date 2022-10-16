@@ -1237,7 +1237,9 @@ package body Game is
                elsif To_String(Source => Data_Type) = "help" then
                   Load_Help(Reader => Reader);
                elsif To_String(Source => Data_Type) = "items" then
-                  Load_Items(Reader => Reader);
+                  Load_Items
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "mobiles" then
                   Load_Mobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then
