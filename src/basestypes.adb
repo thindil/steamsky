@@ -31,12 +31,14 @@ package body BasesTypes is
    procedure Load_Bases_Types(Reader: Tree_Reader) is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Base_Type_Data;
       Nodes_List, Child_Nodes: Node_List;
       Bases_Data: Document;
       Tmp_Trades: BasesTrade_Container.Map;
       Tmp_Recipes: UnboundedString_Container.Vector;
       Tmp_Flags: UnboundedString_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Base_Node, Child_Node: Node;
       Base_Index: Bounded_String := Null_Bounded_String;
       Action, Sub_Action: Data_Action := ADD;
