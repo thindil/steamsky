@@ -76,11 +76,36 @@ proc loadItems*(fileName: string) =
     var item: ObjectData = if itemAction == DataAction.update:
         itemsList[itemIndex]
       else:
-        ObjectData(weight: 1)
+        ObjectData(weight: 1, reputation: -100)
     var attribute = itemNode.attr(name = "name")
     if attribute.len() > 0:
       item.name = attribute
-
+    attribute = itemNode.attr(name = "weight")
+    if attribute.len() > 0:
+      item.weight = attribute.parseInt()
+    attribute = itemNode.attr(name = "type")
+    if attribute.len() > 0:
+      item.itemType = attribute
+    attribute = itemNode.attr(name = "showtype")
+    if attribute.len() > 0:
+      item.showType = attribute
+    attribute = itemNode.attr(name = "reputation")
+    if attribute.len() > 0:
+      item.reputation = attribute.parseInt()
+    attribute = itemNode.attr(name = "price")
+    if attribute.len() > 0:
+      item.price = attribute.parseInt()
+    for data in itemNode.findAll(tag = "data"):
+      item.value.add(y = itemNode.attr(name = "value").parseInt())
+    attribute = itemNode.child(name = "description").innerText()
+    if attribute.len() > 0:
+      item.description = attribute
+    if itemAction == DataAction.add:
+      itemsList.add(y = item)
+    else:
+      itemsList[itemIndex] = item
+    if itemIndex == moneyIndex - 1:
+      moneyName = item.name
 
 proc loadAdaItems*(fileName: cstring) {.exportc.} =
   loadItems(fileName = $fileName)
