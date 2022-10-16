@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parseopt, strutils]
-import config, factions, game, log, maps, messages, tk, utils
+import config, factions, game, items, log, maps, messages, tk, utils
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
