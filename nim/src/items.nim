@@ -96,7 +96,7 @@ proc loadItems*(fileName: string) =
     if attribute.len() > 0:
       item.price = attribute.parseInt()
     for data in itemNode.findAll(tag = "data"):
-      item.value.add(y = itemNode.attr(name = "value").parseInt())
+      item.value.add(y = data.attr(name = "value").parseInt())
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
