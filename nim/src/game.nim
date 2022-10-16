@@ -40,7 +40,8 @@ type
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
 
 var
-  saveDirectory*: string = "data" & DirSep & "saves" & DirSep
-    ## FUNCTION
-    ##
-    ## The directory where the saved games and logs are stored
+  saveDirectory*: string = "data" & DirSep & "saves" &
+      DirSep ## The directory where the saved games and logs are stored
+  moneyIndex*: Positive ## The item's index of the item used as money in the game
+  moneyName*: string ## The name of the item used as a money in the game
+
