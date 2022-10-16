@@ -17,7 +17,8 @@
 
 {.used.}
 
-import game
+import std/[strutils, xmlparser, xmltree]
+import game, log
 
 type
   ObjectData* = object
@@ -39,4 +40,47 @@ type
     durability: ItemsDurability
     price: Natural
 
+  DataLoadingError = object of CatchableError
+
+const defaultItemDurability*: ItemsDurability = 100
+
 var itemsList*: seq[ObjectData]
+
+proc loadItems*(fileName: string) =
+  let itemsXml = loadXml(path = fileName)
+  for itemNode in itemsXml:
+    if itemNode.kind != xnElement:
+      continue
+    let
+      itemIndex: Natural = try:
+          itemNode.attr(name = "index").parseInt() - 1
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,  message = "Can't add item '" & itemNode.attr(name = "index") & "', invalid index.")
+      itemAction: DataAction = try:
+          parseEnum[DataAction](itemNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if itemAction in [update, remove]:
+      if itemIndex > itemsList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $itemAction & " faction '" & $itemIndex & "', there is no item with that index,")
+    elif itemIndex < itemsList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't add item '" & $itemIndex & "', there is an item with that index.")
+    if itemAction == DataAction.remove:
+      {.warning[UnsafeSetLen]: off.}
+      itemsList.del(i = itemIndex)
+      {.warning[UnsafeSetLen]: on.}
+      logMessage(message = "Item removed: '" & $itemIndex & "'", debugType = everything)
+      continue
+    var item: ObjectData = if itemAction == DataAction.update:
+        itemsList[itemIndex]
+      else:
+        ObjectData(weight: 1)
+    var attribute = itemNode.attr(name = "name")
+    if attribute.len() > 0:
+      item.name = attribute
+
+
+proc loadAdaItems*(fileName: cstring) {.exportc.} =
+  loadItems(fileName = $fileName)
