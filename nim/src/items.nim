@@ -109,5 +109,7 @@ proc loadItems*(fileName: string) =
     if itemIndex == moneyIndex - 1:
       moneyName = item.name
 
-proc loadAdaItems*(fileName: cstring) {.exportc.} =
+proc loadAdaItems*(fileName: cstring; money: cint): cstring {.exportc.} =
+  moneyIndex = money.Positive
   loadItems(fileName = $fileName)
+  return moneyName.cstring

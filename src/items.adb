@@ -44,12 +44,20 @@ package body Items is
       Item_Node, Child_Node: Node;
       Item_Index: Objects_Container.Extended_Index;
       Action: Data_Action;
-      procedure Load_Ada_Items(Name: chars_ptr) with
+      function Load_Ada_Items
+        (Name: chars_ptr; Money: Integer) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
    begin
-      Load_Ada_Items(Name => New_String(Str => File_Name));
+      Money_Name :=
+        To_Unbounded_String
+          (Source =>
+             Value
+               (Item =>
+                  Load_Ada_Items
+                    (Name => New_String(Str => File_Name),
+                     Money => Money_Index)));
       Items_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
@@ -169,11 +177,6 @@ package body Items is
                         (N =>
                            First_Child
                              (N => Item(List => Child_Nodes, Index => 0))));
-            end if;
-            if Item_Index = Money_Index then
-               Money_Name :=
-                 To_Unbounded_String
-                   (Source => To_String(Source => Temp_Record.Name));
             end if;
             if Action /= UPDATE then
                Objects_Container.Append
