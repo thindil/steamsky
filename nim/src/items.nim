@@ -55,7 +55,8 @@ proc loadItems*(fileName: string) =
       itemIndex: Natural = try:
           itemNode.attr(name = "index").parseInt() - 1
         except ValueError:
-          raise newException(exceptn = DataLoadingError,  message = "Can't add item '" & itemNode.attr(name = "index") & "', invalid index.")
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add item '" & itemNode.attr(name = "index") & "', invalid index.")
       itemAction: DataAction = try:
           parseEnum[DataAction](itemNode.attr(name = "action").toLowerAscii)
         except ValueError:
@@ -65,13 +66,14 @@ proc loadItems*(fileName: string) =
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $itemAction & " faction '" & $itemIndex & "', there is no item with that index,")
     elif itemIndex < itemsList.len():
-        raise newException(exceptn = DataLoadingError,
-            message = "Can't add item '" & $itemIndex & "', there is an item with that index.")
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add item '" & $itemIndex & "', there is an item with that index.")
     if itemAction == DataAction.remove:
       {.warning[UnsafeSetLen]: off.}
       itemsList.del(i = itemIndex)
       {.warning[UnsafeSetLen]: on.}
-      logMessage(message = "Item removed: '" & $itemIndex & "'", debugType = everything)
+      logMessage(message = "Item removed: '" & $itemIndex & "'",
+          debugType = everything)
       continue
     var item: ObjectData = if itemAction == DataAction.update:
         itemsList[itemIndex]
