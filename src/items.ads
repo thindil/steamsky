@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 limited with Ships;
 
@@ -200,10 +199,9 @@ package Items is
    -- FUNCTION
    -- Load items from files
    -- PARAMETERS
-   -- Reader    - XML Reader from which items data will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Items(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Items(File_Name: String);
    -- ****
 
    -- ****f* Items/Items.Find_Proto_Item

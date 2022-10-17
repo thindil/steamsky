@@ -1238,8 +1238,7 @@ package body Game is
                   Load_Help(Reader => Reader);
                elsif To_String(Source => Data_Type) = "items" then
                   Load_Items
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "mobiles" then
                   Load_Mobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then

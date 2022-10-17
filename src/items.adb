@@ -27,8 +27,7 @@ with Config; use Config;
 
 package body Items is
 
-   procedure Load_Items(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(Reader);
+   procedure Load_Items(File_Name: String) is
       use Interfaces.C.Strings;
       use Short_String;
       use Tiny_String;
