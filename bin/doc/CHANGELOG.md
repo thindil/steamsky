@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
   the dialog
 - Position of Close button in the dialog with information about the selected
   module from the player's ship
+- Showing the list of installed modules in shipyards after installing a new
+  module
 
 ## [7.9] - 2022-10-02
 
