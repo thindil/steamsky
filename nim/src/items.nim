@@ -56,8 +56,14 @@ const defaultItemDurability*: ItemsDurability = 100
 
 var itemsList*: seq[ObjectData]
 
-proc loadItems*(fileName: string) =
-  let itemsXml = loadXml(path = fileName)
+proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  let itemsXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load items data file. Reason: " &
+          getCurrentExceptionMsg())
   for itemNode in itemsXml:
     if itemNode.kind != xnElement:
       continue
@@ -94,7 +100,11 @@ proc loadItems*(fileName: string) =
       item.name = attribute
     attribute = itemNode.attr(name = "weight")
     if attribute.len() > 0:
-      item.weight = attribute.parseInt()
+      item.weight = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $itemAction & " item '" & $itemIndex & "', invalid value for item weight.")
     attribute = itemNode.attr(name = "type")
     if attribute.len() > 0:
       item.itemType = attribute
@@ -103,12 +113,25 @@ proc loadItems*(fileName: string) =
       item.showType = attribute
     attribute = itemNode.attr(name = "reputation")
     if attribute.len() > 0:
-      item.reputation = attribute.parseInt()
+      item.reputation = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $itemAction & " item '" & $itemIndex & "', invalid value for item reputation.")
     attribute = itemNode.attr(name = "price")
     if attribute.len() > 0:
-      item.price = attribute.parseInt()
+      item.price = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $itemAction & " item '" & $itemIndex & "', invalid value for item price.")
     for data in itemNode.findAll(tag = "data"):
-      item.value.add(y = data.attr(name = "value").parseInt())
+      item.value.add(y = try:
+          data.attr(name = "value").parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $itemAction & " item '" & $itemIndex &
+                "', invalid value for item data."))
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
@@ -124,8 +147,8 @@ proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
   loadItems(fileName = $fileName)
   return moneyName.cstring
 
-proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [],
-    tags: [], exportc.} =
+proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
+    ], tags: [], exportc.} =
   var values: array[5, cint]
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
