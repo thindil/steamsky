@@ -35,13 +35,13 @@ package body Items is
       Temp_Record: Object_Data;
       type Object_Nim_Data is record
          Name: chars_ptr;
-         Weight: Positive;
+         Weight: Integer;
          I_Type: chars_ptr;
-         Price: Natural;
+         Price: Integer;
          Value: Integer_Array (Values_Range);
          Show_Type: chars_ptr;
          Description: chars_ptr;
-         Reputation: Reputation_Range;
+         Reputation: Integer;
       end record;
       Temp_Nim_Record: Object_Nim_Data;
       Index: Natural := 0;
@@ -50,7 +50,8 @@ package body Items is
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
-      function Get_Ada_Item(Index: Integer) return Object_Nim_Data with
+      procedure Get_Ada_Item
+        (Index: Integer; Ada_Item: out Object_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaItem";
@@ -65,9 +66,8 @@ package body Items is
                      Money => Money_Index)));
       Load_Items_Loop :
       loop
-         Temp_Nim_Record := Get_Ada_Item(Index => Index);
-         exit Load_Items_Loop when Temp_Nim_Record.Name =
-           New_String(Str => "");
+         Get_Ada_Item(Index => Index, Ada_Item => Temp_Nim_Record);
+         exit Load_Items_Loop when Temp_Nim_Record.Weight = 0;
          Temp_Record :=
            (Name =>
               To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name)),

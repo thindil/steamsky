@@ -42,6 +42,16 @@ type
 
   DataLoadingError = object of CatchableError
 
+  AdaObjectData* = object
+    name: cstring
+    weight: cint
+    itemType: cstring
+    price: cint
+    value: array[5, cint]
+    showType: cstring
+    description: cstring
+    reputation: cint
+
 const defaultItemDurability*: ItemsDurability = 100
 
 var itemsList*: seq[ObjectData]
@@ -114,15 +124,21 @@ proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
   loadItems(fileName = $fileName)
   return moneyName.cstring
 
-proc getAdaItem(index: cint): tuple[name: cstring; weight: cint;
-    itemType: cstring; price: cint; value: array[5, cint]; showType: cstring;
-    description: cstring; reputation: cint] {.exportc.} =
+proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.exportc.} =
+  var values: array[5, cint]
+  adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
+      price: 0, value: values, showType: "".cstring, description: "".cstring,
+      reputation: -100)
   if index >= itemsList.len():
     return
   let item = itemsList[index]
-  var values: array[5, cint]
+  adaItem.name = item.name.cstring
+  adaItem.weight = item.weight.cint
+  adaItem.itemType = item.itemType.cstring
+  adaItem.price = item.price.cint
   for index, item in item.value.pairs:
     values[index] = item.cint
-  return (item.name.cstring, item.weight.cint, item.itemType.cstring,
-      item.price.cint, values, item.showType.cstring, item.description.cstring,
-      item.reputation.cint)
+  adaItem.value = values
+  adaItem.showType = item.showType.cstring
+  adaItem.description = item.description.cstring
+  adaItem.reputation = item.reputation.cint
