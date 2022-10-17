@@ -47,8 +47,8 @@ package body BasesTypes is
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
-         Value: Unbounded_String;
-         Delete_Index: Positive;
+         Value: Unbounded_String := Null_Unbounded_String;
+         Delete_Index: Positive := 1;
       begin
          Child_Nodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
