@@ -124,7 +124,8 @@ proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
   loadItems(fileName = $fileName)
   return moneyName.cstring
 
-proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.exportc.} =
+proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [],
+    tags: [], exportc.} =
   var values: array[5, cint]
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
