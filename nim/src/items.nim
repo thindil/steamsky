@@ -109,7 +109,20 @@ proc loadItems*(fileName: string) =
     if itemIndex == moneyIndex - 1:
       moneyName = item.name
 
-proc loadAdaItems*(fileName: cstring; money: cint): cstring {.exportc.} =
+proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
   moneyIndex = money.Positive
   loadItems(fileName = $fileName)
   return moneyName.cstring
+
+proc getAdaItem(index: cint): tuple[name: cstring; weight: cint;
+    itemType: cstring; price: cint; value: array[5, cint]; showType: cstring;
+    description: cstring; reputation: cint] {.exportc.} =
+  if index >= itemsList.len():
+    return
+  let item = itemsList[index]
+  var values: array[5, cint]
+  for index, item in item.value.pairs:
+    values[index] = item.cint
+  return (item.name.cstring, item.weight.cint, item.itemType.cstring,
+      item.price.cint, values, item.showType.cstring, item.description.cstring,
+      item.reputation.cint)

@@ -15,13 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Interfaces.C.Strings;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
@@ -33,22 +28,33 @@ with Config; use Config;
 package body Items is
 
    procedure Load_Items(Reader: Tree_Reader; File_Name: String) is
+      pragma Unreferenced(Reader);
       use Interfaces.C.Strings;
       use Short_String;
       use Tiny_String;
 
       Temp_Record: Object_Data;
-      Nodes_List, Child_Nodes: Node_List;
-      Items_Data: Document;
-      Temp_Value: Integer_Array (Values_Range);
-      Item_Node, Child_Node: Node;
-      Item_Index: Objects_Container.Extended_Index;
-      Action: Data_Action;
+      type Object_Nim_Data is record
+         Name: chars_ptr;
+         Weight: Positive;
+         I_Type: chars_ptr;
+         Price: Natural;
+         Value: Integer_Array (Values_Range);
+         Show_Type: chars_ptr;
+         Description: chars_ptr;
+         Reputation: Reputation_Range;
+      end record;
+      Temp_Nim_Record: Object_Nim_Data;
+      Index: Natural := 0;
       function Load_Ada_Items
         (Name: chars_ptr; Money: Integer) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
+      function Get_Ada_Item(Index: Integer) return Object_Nim_Data with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItem";
    begin
       Money_Name :=
         To_Unbounded_String
@@ -58,149 +64,29 @@ package body Items is
                   Load_Ada_Items
                     (Name => New_String(Str => File_Name),
                      Money => Money_Index)));
-      Items_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Items_Data, Tag_Name => "item");
       Load_Items_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
+      loop
+         Temp_Nim_Record := Get_Ada_Item(Index => Index);
+         exit Load_Items_Loop when Temp_Nim_Record.Name =
+           New_String(Str => "");
          Temp_Record :=
-           (Name => Tiny_String.Null_Bounded_String, Weight => 1,
-            I_Type => Tiny_String.Null_Bounded_String, Price => 0,
-            Value => Temp_Value, Show_Type => Tiny_String.Null_Bounded_String,
-            Description => Short_String.Null_Bounded_String,
-            Reputation => -100);
-         Item_Node := Item(List => Nodes_List, Index => I);
-         Item_Index :=
-           Positive'Value(Get_Attribute(Elem => Item_Node, Name => "index"));
-         Action :=
-           (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Item_Node, Name => "action"))
-            else ADD);
-         if Action in UPDATE | REMOVE then
-            if Item_Index not in
-                Objects_Container.First_Index(Container => Items_List) ..
-                      Objects_Container.Last_Index
-                        (Container => Items_List) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " item '" & Positive'Image(Item_Index) &
-                 "', there is no item with that index.";
-            end if;
-         elsif Item_Index in
-             Objects_Container.First_Index(Container => Items_List) ..
-                   Objects_Container.Last_Index(Container => Items_List) then
-            raise Data_Loading_Error
-              with "Can't add item '" & Positive'Image(Item_Index) &
-              "', there is an item with that index.";
-         end if;
-         if Action /= REMOVE then
-            if Action = UPDATE then
-               Temp_Record :=
-                 Objects_Container.Element
-                   (Container => Items_List, Index => Item_Index);
-            end if;
-            if Get_Attribute(Elem => Item_Node, Name => "name")'Length > 0 then
-               Temp_Record.Name :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Item_Node, Name => "name"));
-            end if;
-            if Get_Attribute(Elem => Item_Node, Name => "weight")'Length >
-              0 then
-               Temp_Record.Weight :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Item_Node, Name => "weight"));
-            end if;
-            if Get_Attribute(Elem => Item_Node, Name => "type")'Length > 0 then
-               Temp_Record.I_Type :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Item_Node, Name => "type"));
-            end if;
-            if Get_Attribute(Elem => Item_Node, Name => "showtype") /= "" then
-               Temp_Record.Show_Type :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Item_Node, Name => "showtype"));
-            end if;
-            if Get_Attribute(Elem => Item_Node, Name => "reputation")'Length >
-              0 then
-               Temp_Record.Reputation :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Item_Node, Name => "reputation"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Item_Node, Name => "trade");
-            Set_Buyable_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               if Get_Attribute(Elem => Child_Node, Name => "buyable") =
-                 "N" then
-                  Temp_Record.Price :=
-                    Natural'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "price"));
-                  exit Set_Buyable_Loop;
-               end if;
-            end loop Set_Buyable_Loop;
-            if Get_Attribute(Elem => Item_Node, Name => "price")'Length >
-              0 then
-               Temp_Record.Price :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Item_Node, Name => "price"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Item_Node, Name => "data");
-            if Length(List => Child_Nodes) > 0 then
-               Temp_Record.Value := (others => 0);
-            end if;
-            Set_Value_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Temp_Record.Value(J + 1) :=
-                 Integer'Value
-                   (Get_Attribute
-                      (Elem => Item(List => Child_Nodes, Index => J),
-                       Name => "value"));
-            end loop Set_Value_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Item_Node, Name => "description");
-            if Length(List => Child_Nodes) > 0 then
-               Temp_Record.Description :=
-                 To_Bounded_String
-                   (Source =>
-                      Node_Value
-                        (N =>
-                           First_Child
-                             (N => Item(List => Child_Nodes, Index => 0))));
-            end if;
-            if Action /= UPDATE then
-               Objects_Container.Append
-                 (Container => Items_List, New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Item added: " & To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            else
-               Objects_Container.Replace_Element
-                 (Container => Items_List, Index => Item_Index,
-                  New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Item updated: " & To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            end if;
-         else
-            Objects_Container.Delete
-              (Container => Items_List, Index => Item_Index);
-            Log_Message
-              (Message => "Item removed: " & Positive'Image(Item_Index),
-               Message_Type => EVERYTHING);
-         end if;
+           (Name =>
+              To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name)),
+            Weight => Temp_Nim_Record.Weight,
+            I_Type =>
+              To_Bounded_String
+                (Source => Value(Item => Temp_Nim_Record.I_Type)),
+            Price => Temp_Nim_Record.Price, Value => Temp_Nim_Record.Value,
+            Show_Type =>
+              To_Bounded_String
+                (Source => Value(Item => Temp_Nim_Record.Show_Type)),
+            Description =>
+              To_Bounded_String
+                (Source => Value(Item => Temp_Nim_Record.Description)),
+            Reputation => Temp_Nim_Record.Reputation);
+         Objects_Container.Append
+           (Container => Items_List, New_Item => Temp_Record);
+         Index := Index + 1;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
       for I in
