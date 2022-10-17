@@ -414,6 +414,7 @@ package body Bases.ShipyardUI is
          Grab_Focus =>
            (if Focus = Widget_Image(Win => Search_Entry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
+         Remove_Indexes.Clear;
          Fill_Remove_Indexes_Loop :
          for I in Player_Ship.Modules.Iterate loop
             Remove_Indexes.Append
