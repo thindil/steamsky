@@ -80,7 +80,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     if itemAction in [update, remove]:
       if itemIndex > itemsList.len():
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $itemAction & " faction '" & $itemIndex & "', there is no item with that index,")
+            message = "Can't " & $itemAction & " item '" & $itemIndex & "', there is no item with that index.")
     elif itemIndex < itemsList.len():
       raise newException(exceptn = DataLoadingError,
           message = "Can't add item '" & $itemIndex & "', there is an item with that index.")
