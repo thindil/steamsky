@@ -22,29 +22,48 @@ import game, log
 
 type
   ObjectData* = object
-    name: string
-    weight: Positive
-    itemType: string
-    price: Natural
-    value: seq[int]
-    showType: string
-    description: string
-    reputation: ReputationRange
+    ## FUNCTION
+    ##
+    ## Used to store information about items
+    name: string ## The name of the item
+    weight: Positive ## The weight of the item
+    itemType: string ## The type of the item
+    price: Natural ## The base price of the item in bases
+    value: seq[int] ## Various data related to the item (damage for ammo, etc.)
+    showType: string ## The item's type to show to the player instead of the itemType
+    description: string ## The description of the item
+    reputation: ReputationRange ## The minumal reputation which is needed to buy that item
 
   ItemsDurability* = range[0..101]
+  ## FUNCTION
+  ##
+  ## Used to set items durability
 
   InventoryData* = object
-    protoIndex: Natural
-    amount: Positive
-    name: string
-    durability: ItemsDurability
-    price: Natural
+    ## FUNCTION
+    ##
+    ## Used to store information about items in various inventories (cargo, crew
+    ## inventory, ect)
+    protoIndex: Natural ## The index of the item's prototype
+    amount: Positive ## The amount of the item in the inventory
+    name: string ## The name of the item, if different than the default one
+    durability: ItemsDurability ## The current durability of the item
+    price: Natural ## The price for which the item was bought
 
   DataLoadingError = object of CatchableError
+    ## FUNCTION
+    ##
+    ## Used to mark problems during loading the items from files
 
 const defaultItemDurability*: ItemsDurability = 100
+  ## FUNCTION
+  ##
+  ## Default durability for the new items
 
 var itemsList*: seq[ObjectData]
+  ## FUNCTION
+  ##
+  ## The list of prototypes of all items availabla in the game
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
