@@ -42,16 +42,6 @@ type
 
   DataLoadingError = object of CatchableError
 
-  AdaObjectData* = object
-    name: cstring
-    weight: cint
-    itemType: cstring
-    price: cint
-    value: array[5, cint]
-    showType: cstring
-    description: cstring
-    reputation: cint
-
 const defaultItemDurability*: ItemsDurability = 100
 
 var itemsList*: seq[ObjectData]
@@ -141,6 +131,18 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       itemsList[itemIndex] = item
     if itemIndex == moneyIndex - 1:
       moneyName = item.name
+
+# Temporary code for interfacing with Ada
+
+type AdaObjectData* = object
+    name: cstring
+    weight: cint
+    itemType: cstring
+    price: cint
+    value: array[5, cint]
+    showType: cstring
+    description: cstring
+    reputation: cint
 
 proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
   moneyIndex = money.Positive
