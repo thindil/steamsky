@@ -193,6 +193,18 @@ proc loadAdaItems(fileName: cstring; money: cint): cstring {.sideEffect,
 
 proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
     ], tags: [], exportc.} =
+  ## FUNCTION
+  ##
+  ## Get the item data from Nim code to Ada
+  ##
+  ## PARAMETERS
+  ##
+  ## * index   - the index of the item to get
+  ## * adaItem - the converted item data to Ada record
+  ##
+  ## RETURNS
+  ##
+  ## Updated adaItem parameter with the data about the selected item
   var values: array[5, cint]
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
