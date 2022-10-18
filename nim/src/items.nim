@@ -67,6 +67,13 @@ var itemsList*: seq[ObjectData]
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load the items data from the file
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the name of the file to load
   let itemsXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
