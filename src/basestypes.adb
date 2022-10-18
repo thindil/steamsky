@@ -92,9 +92,7 @@ package body BasesTypes is
                     "' already added.";
                end if;
             end if;
-            if Sub_Action /= REMOVE then
-               Data.Append(New_Item => Value);
-            else
+            if Sub_Action = REMOVE then
                Delete_Index := Data.First_Index;
                Delete_Child_Data_Loop :
                while Delete_Index <= Data.Last_Index loop
@@ -104,6 +102,8 @@ package body BasesTypes is
                   end if;
                   Delete_Index := Delete_Index + 1;
                end loop Delete_Child_Data_Loop;
+            else
+               Data.Append(New_Item => Value);
             end if;
          end loop Read_Child_Node_Loop;
       end Add_Child_Node;
