@@ -135,16 +135,17 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
-    name: cstring
-    weight: cint
-    itemType: cstring
-    price: cint
-    value: array[5, cint]
-    showType: cstring
-    description: cstring
-    reputation: cint
+  name: cstring
+  weight: cint
+  itemType: cstring
+  price: cint
+  value: array[5, cint]
+  showType: cstring
+  description: cstring
+  reputation: cint
 
-proc loadAdaItems(fileName: cstring; money: cint): cstring {.exportc.} =
+proc loadAdaItems(fileName: cstring; money: cint): cstring {.sideEffect,
+    raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   moneyIndex = money.Positive
   loadItems(fileName = $fileName)
   return moneyName.cstring
