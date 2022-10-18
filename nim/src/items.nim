@@ -161,6 +161,9 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
+  ## FUNCTION
+  ##
+  ## Used to store data for items when interfacing with Ada
   name: cstring
   weight: cint
   itemType: cstring
@@ -172,6 +175,18 @@ type AdaObjectData* = object
 
 proc loadAdaItems(fileName: cstring; money: cint): cstring {.sideEffect,
     raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  ## FUNCTION
+  ##
+  ## Load items data, started from the Ada code
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the name of the file with items data to load
+  ## * money    - the index of the item used as money
+  ##
+  ## RETURNS
+  ##
+  ## The name of the item used as money
   moneyIndex = money.Positive
   loadItems(fileName = $fileName)
   return moneyName.cstring
