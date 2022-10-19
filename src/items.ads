@@ -215,8 +215,7 @@ package Items is
    function Find_Proto_Item
      (Item_Type: Tiny_String.Bounded_String)
       return Objects_Container.Extended_Index with
-      Pre => Tiny_String.Length(Source => Item_Type) > 0,
-      Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Item_Type) > 0;
       -- ****
 
       -- ****f* Items/Items.Get_Item_Damage
