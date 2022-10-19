@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, items, log
 
 type
   NamesTypes = enum
@@ -119,7 +119,12 @@ proc loadFactions*(fileName: string) =
               message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid type of faction's names.")
     attribute = factionNode.attr(name = "healingtools")
     if attribute.len() > 0:
+      let itemIndex = findProtoItem(itemType = attribute)
+      if itemIndex == 0:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', no items with type '" & attribute & "'.")
       faction.healingTools = attribute
+    attribute = factionNode.attr(name = "healingskill")
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
