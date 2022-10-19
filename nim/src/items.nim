@@ -17,7 +17,7 @@
 
 {.used.}
 
-import std/[strutils, xmlparser, xmltree]
+import std/[strutils, tables, xmlparser, xmltree]
 import game, log
 
 type
@@ -60,7 +60,7 @@ const defaultItemDurability*: ItemsDurability = 100
   ##
   ## Default durability for the new items
 
-var itemsList*: seq[ObjectData]
+var itemsList* = initTable[Positive, ObjectData]()
   ## FUNCTION
   ##
   ## The list of prototypes of all items availabla in the game
@@ -85,7 +85,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       continue
     let
       itemIndex: Natural = try:
-          itemNode.attr(name = "index").parseInt() - 1
+          itemNode.attr(name = "index").parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
               message = "Can't add item '" & itemNode.attr(name = "index") & "', invalid index.")
@@ -101,14 +101,19 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       raise newException(exceptn = DataLoadingError,
           message = "Can't add item '" & $itemIndex & "', there is an item with that index.")
     if itemAction == DataAction.remove:
-      {.warning[UnsafeSetLen]: off.}
-      itemsList.del(i = itemIndex)
-      {.warning[UnsafeSetLen]: on.}
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      itemsList.del(key = itemIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
       logMessage(message = "Item removed: '" & $itemIndex & "'",
           debugType = everything)
       continue
     var item: ObjectData = if itemAction == DataAction.update:
-        itemsList[itemIndex]
+        try:
+          itemsList[itemIndex]
+        except ValueError:
+          ObjectData(weight: 1, reputation: -100)
       else:
         ObjectData(weight: 1, reputation: -100)
     var attribute = itemNode.attr(name = "name")
@@ -151,17 +156,14 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
-    if itemAction == DataAction.add:
-      itemsList.add(y = item)
-    else:
-      itemsList[itemIndex] = item
-    if itemIndex == moneyIndex - 1:
+    itemsList[itemIndex] = item
+    if itemIndex == moneyIndex:
       moneyName = item.name
 
 proc findProtoItem*(itemType: string): Natural =
   for index, item in itemsList.pairs():
     if item.itemType == itemType:
-      return index + 1
+      return index
   return 0
 
 # Temporary code for interfacing with Ada
@@ -215,9 +217,12 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
       reputation: -100)
-  if index >= itemsList.len():
+  if not itemsList.hasKey(key = index):
     return
-  let item = itemsList[index]
+  let item = try:
+      itemsList[index]
+    except KeyError:
+      return
   adaItem.name = item.name.cstring
   adaItem.weight = item.weight.cint
   adaItem.itemType = item.itemType.cstring

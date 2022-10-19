@@ -43,7 +43,7 @@ package body Items is
          Reputation: Integer;
       end record;
       Temp_Nim_Record: Object_Nim_Data;
-      Index: Natural := 0;
+      Index: Positive := 1;
       function Load_Ada_Items
         (Name: chars_ptr; Money: Integer) return chars_ptr with
          Import => True,
