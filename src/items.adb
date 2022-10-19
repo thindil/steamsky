@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
@@ -28,7 +28,6 @@ with Config; use Config;
 package body Items is
 
    procedure Load_Items(File_Name: String) is
-      use Interfaces.C.Strings;
       use Short_String;
       use Tiny_String;
 
@@ -130,18 +129,14 @@ package body Items is
       return Objects_Container.Extended_Index is
       use Tiny_String;
 
+      function Find_Ada_Proto_Item(Itype: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "findAdaProtoItem";
    begin
-      Find_Proto_Loop :
-      for I in
-        Objects_Container.First_Index(Container => Items_List) ..
-          Objects_Container.Last_Index(Container => Items_List) loop
-         if Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Item_Type then
-            return I;
-         end if;
-      end loop Find_Proto_Loop;
-      return 0;
+      return
+        Find_Ada_Proto_Item
+          (Itype => New_String(To_String(Source => Item_Type)));
    end Find_Proto_Item;
 
    function Get_Item_Damage

@@ -158,6 +158,12 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     if itemIndex == moneyIndex - 1:
       moneyName = item.name
 
+proc findProtoItem*(itemType: string): Natural =
+  for index, item in itemsList.pairs():
+    if item.itemType == itemType:
+      return index + 1
+  return 0
+
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
@@ -222,3 +228,6 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem.showType = item.showType.cstring
   adaItem.description = item.description.cstring
   adaItem.reputation = item.reputation.cint
+
+proc findAdaProtoItem(itemType: cstring): cint {.exportc.} =
+  return findProtoItem(itemType = $itemType).cint
