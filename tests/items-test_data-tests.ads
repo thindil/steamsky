@@ -10,24 +10,21 @@ package Items.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Find_Proto_Item_1e012c_0bae5a(Gnattest_T: in out Test);
-   --  items.ads:216:4:Find_Proto_Item:Test_FindProtoItem
-
    procedure Test_Get_Item_Damage_5414f2_efab16(Gnattest_T: in out Test);
-   --  items.ads:233:4:Get_Item_Damage:Test_GetItemDamage
+   --  items.ads:231:4:Get_Item_Damage:Test_GetItemDamage
 
    procedure Test_Get_Item_Name_1f8ef2_6e935f(Gnattest_T: in out Test);
-   --  items.ads:251:4:Get_Item_Name:Test_GetItemName
+   --  items.ads:249:4:Get_Item_Name:Test_GetItemName
 
    procedure Test_Damage_Item_397a3e_4cae84(Gnattest_T: in out Test);
-   --  items.ads:274:4:Damage_Item:Test_DamageItem
+   --  items.ads:272:4:Damage_Item:Test_DamageItem
 
    procedure Test_Find_Item_800e7b_9d4eb9(Gnattest_T: in out Test);
-   --  items.ads:295:4:Find_Item:Test_FindItem
+   --  items.ads:293:4:Find_Item:Test_FindItem
 
    procedure Test_Get_Item_Chance_To_Damage_32e0c6_2bbc61
      (Gnattest_T: in out Test);
-   --  items.ads:321:4:Get_Item_Chance_To_Damage:Test_GetItemChanceToDamage
+   --  items.ads:319:4:Get_Item_Chance_To_Damage:Test_GetItemChanceToDamage
 
 end Items.Test_Data.Tests;
 --  end read only
