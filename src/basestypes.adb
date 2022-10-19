@@ -94,6 +94,7 @@ package body BasesTypes is
             end if;
             if Sub_Action = REMOVE then
                Delete_Index := Data.First_Index;
+               --## rule off SIMPLIFIABLE_STATEMENTS
                Delete_Child_Data_Loop :
                while Delete_Index <= Data.Last_Index loop
                   if Data(Delete_Index) = Value then
@@ -102,6 +103,7 @@ package body BasesTypes is
                   end if;
                   Delete_Index := Delete_Index + 1;
                end loop Delete_Child_Data_Loop;
+               --## rule on SIMPLIFIABLE_STATEMENTS
             else
                Data.Append(New_Item => Value);
             end if;
