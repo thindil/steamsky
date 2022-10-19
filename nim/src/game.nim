@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
+import std/[os, tables]
 
 type
   DateRecord* = object
@@ -39,9 +39,27 @@ type
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
 
+  ToolQuality = object
+    level: Natural
+    quality: Natural
+
+  SkillRecord* = object
+    name: string
+    attribute: Positive
+    description: string
+    tool: string
+    toolsQuality: seq[ToolQuality]
+
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep ## The directory where the saved games and logs are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string ## The name of the item used as a money in the game
+  skillsList* = initTable[Positive, SkillRecord]()
 
+
+proc findSkillIndex*(skillName: string): Natural =
+  for key, skill in skillsList.pairs:
+    if skill.name == skillName:
+      return key
+  return 0
