@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, tables, xmlparser, xmltree]
 
 type
   DateRecord* = object
@@ -50,16 +50,50 @@ type
     tool: string
     toolsQuality: seq[ToolQuality]
 
+  DataLoadingError* = object of CatchableError
+    ## FUNCTION
+    ##
+    ## Used to mark problems during loading the game data from files
+
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep ## The directory where the saved games and logs are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]()
-
+  basesSyllablesPre*: seq[string]
+  basesSyllablesStart*: seq[string]
+  basesSyllablesEnd*: seq[string]
+  basesSyllablesPost*: seq[string]
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
     if skill.name == skillName:
       return key
   return 0
+
+proc loadData(fileName: string) =
+  let gameXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load game data file. Reason: " &
+          getCurrentExceptionMsg())
+  for gameNode in gameXml:
+    if gameNode.kind != xnElement:
+      continue
+    case gameNode.tag
+    of "basessyllablepre":
+      basesSyllablesPre.add(y = gameNode.attr(name = "value"))
+    of "basessyllablestart":
+      basesSyllablesStart.add(y = gameNode.attr(name = "value"))
+    of "basessyllableend":
+      basesSyllablesEnd.add(y = gameNode.attr(name = "value"))
+    of "basessyllablepost":
+      basesSyllablesPost.add(y = gameNode.attr(name = "value"))
+
+
+# Temporary code for interfacing with Ada
+
+proc loadAdaData(fileName: cstring) {.exportc.} =
+  loadData(fileName = $fileName)

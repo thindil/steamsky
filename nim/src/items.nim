@@ -50,11 +50,6 @@ type
     durability: ItemsDurability ## The current durability of the item
     price: Natural ## The price for which the item was bought
 
-  DataLoadingError = object of CatchableError
-    ## FUNCTION
-    ##
-    ## Used to mark problems during loading the items from files
-
 const defaultItemDurability*: ItemsDurability = 100
   ## FUNCTION
   ##

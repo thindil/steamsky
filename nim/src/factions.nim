@@ -57,8 +57,6 @@ type
     basesTypes: Table[string, Positive]
     weaponSkill: Natural
 
-  DataLoadingError = object of CatchableError
-
 var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
 
 proc loadFactions*(fileName: string) =
