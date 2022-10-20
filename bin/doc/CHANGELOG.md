@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Made the messages list in the last messages sceen wider
+- Updated modding guide
 
 ### Fixed
 - Crash on start when there is no the game configuration file
