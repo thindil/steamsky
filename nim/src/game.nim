@@ -61,10 +61,19 @@ var
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]()
-  basesSyllablesPre*: seq[string]
-  basesSyllablesStart*: seq[string]
-  basesSyllablesEnd*: seq[string]
-  basesSyllablesPost*: seq[string]
+  basesSyllablesPreList*: seq[string]
+  basesSyllablesStartList*: seq[string]
+  basesSyllablesEndList*: seq[string]
+  basesSyllablesPostList*: seq[string]
+  malesSyllablesStartList*: seq[string]
+  malesSyllablesMiddleList*: seq[string]
+  malesSyllablesEndList*: seq[string]
+  malesVocalsList*: seq[string]
+  malesConsonantsList*: seq[string]
+  femalesSyllablesStartList*: seq[string]
+  femalesSyllablesMiddleList*: seq[string]
+  femalesSyllablesEndList*: seq[string]
+  femalesVocalsList*: seq[string]
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
@@ -84,13 +93,31 @@ proc loadData(fileName: string) =
       continue
     case gameNode.tag
     of "basessyllablepre":
-      basesSyllablesPre.add(y = gameNode.attr(name = "value"))
+      basesSyllablesPreList.add(y = gameNode.attr(name = "value"))
     of "basessyllablestart":
-      basesSyllablesStart.add(y = gameNode.attr(name = "value"))
+      basesSyllablesStartList.add(y = gameNode.attr(name = "value"))
     of "basessyllableend":
-      basesSyllablesEnd.add(y = gameNode.attr(name = "value"))
+      basesSyllablesEndList.add(y = gameNode.attr(name = "value"))
     of "basessyllablepost":
-      basesSyllablesPost.add(y = gameNode.attr(name = "value"))
+      basesSyllablesPostList.add(y = gameNode.attr(name = "value"))
+    of "malessyllablestart":
+      malesSyllablesStartList.add(y = gameNode.attr(name = "value"))
+    of "malessyllablemiddle":
+      malesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+    of "malessyllableend":
+      malesSyllablesEndList.add(y = gameNode.attr(name = "value"))
+    of "malesvocal":
+      malesVocalsList.add(y = gameNode.attr(name = "value"))
+    of "malesconsonant":
+      malesConsonantsList.add(y = gameNode.attr(name = "value"))
+    of "femalessyllablestart":
+      femalesSyllablesStartList.add(y = gameNode.attr(name = "value"))
+    of "femalessyllablemiddle":
+      femalesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+    of "femalessyllableend":
+      femalesSyllablesEndList.add(y = gameNode.attr(name = "value"))
+    of "femalesvocal":
+      femalesVocalsList.add(y = gameNode.attr(name = "value"))
 
 
 # Temporary code for interfacing with Ada
