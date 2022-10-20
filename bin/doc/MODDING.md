@@ -1098,6 +1098,8 @@ story.
   all items on lists' buttons. Optional.
 * Key `GiveOrderIcon`: Path to the SVG image which will be used for give order
   to the crew member button. Optional.
+* Key `NoPilotIcon`: Path to the SVG image which will be used as icon to show
+  Pilot position info for factions with sentient ships. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
