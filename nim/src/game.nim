@@ -74,6 +74,9 @@ var
   femalesSyllablesMiddleList*: seq[string]
   femalesSyllablesEndList*: seq[string]
   femalesVocalsList*: seq[string]
+  shipsSyllablesStartList*: seq[string]
+  shipsSyllablesMiddleList*: seq[string]
+  shipsSyllablesEndList*: seq[string]
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
@@ -118,9 +121,36 @@ proc loadData(fileName: string) =
       femalesSyllablesEndList.add(y = gameNode.attr(name = "value"))
     of "femalesvocal":
       femalesVocalsList.add(y = gameNode.attr(name = "value"))
+    of "shipssyllablestart":
+      shipsSyllablesStartList.add(y = gameNode.attr(name = "value"))
+    of "shipssyllablemiddle":
+      shipsSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+    of "shipssyllableend":
+      shipsSyllablesEndList.add(y = gameNode.attr(name = "value"))
 
 
 # Temporary code for interfacing with Ada
 
 proc loadAdaData(fileName: cstring) {.exportc.} =
   loadData(fileName = $fileName)
+
+proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
+  case listIndex
+  of 0:
+    if itemIndex >= basesSyllablesPreList.len():
+      return ""
+    return basesSyllablesPreList[itemIndex].cstring
+  of 1:
+    if itemIndex >= basesSyllablesStartList.len():
+      return ""
+    return basesSyllablesStartList[itemIndex].cstring
+  of 2:
+    if itemIndex >= basesSyllablesEndList.len():
+      return ""
+    return basesSyllablesEndList[itemIndex].cstring
+  of 3:
+    if itemIndex >= basesSyllablesPostList.len():
+      return ""
+    return basesSyllablesPostList[itemIndex].cstring
+  else:
+    return ""
