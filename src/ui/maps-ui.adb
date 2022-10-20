@@ -245,12 +245,12 @@ package body Maps.UI is
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-image piloticon");
             Add
               (Widget => Label,
                Message => "No pilot assigned. Ship can't move.");
          else
-            configure(Widgt => Label, options => "-style TLabel");
+            configure(Widgt => Label, options => "-image nopiloticon");
             Add
               (Widget => Label,
                Message => "No pilot assigned. Ship fly on it own.");
