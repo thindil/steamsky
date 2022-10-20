@@ -18,6 +18,7 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
+with Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Elements;
 with DOM.Core.Documents;
@@ -748,7 +749,9 @@ package body Game is
 
             Data_Type: Unbounded_String;
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-            procedure Load_Data(Current_Reader: Tree_Reader) is
+            procedure Load_Data
+              (Current_Reader: Tree_Reader; File_Name: String) is
+               use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
                use Short_String;
@@ -777,7 +780,12 @@ package body Game is
                   end loop Find_Attribute_Loop;
                   return 0;
                end Find_Attribute_Index;
+               procedure Load_Ada_Data(Name: chars_ptr) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "loadAdaData";
             begin
+               Load_Ada_Data(Name => New_String(Str => File_Name));
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -1252,7 +1260,9 @@ package body Game is
                elsif To_String(Source => Data_Type) = "stories" then
                   Load_Stories(Reader => Reader);
                elsif To_String(Source => Data_Type) = "data" then
-                  Load_Data(Current_Reader => Reader);
+                  Load_Data
+                    (Current_Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "careers" then
                   Load_Careers(Reader => Reader);
                end if;
