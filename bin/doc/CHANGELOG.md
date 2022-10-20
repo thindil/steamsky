@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   module from the player's ship
 - Showing the list of installed modules in shipyards after installing a new
   module
+- Showing information about lack of pilot on sentient ships (Drones)
 
 ## [7.9] - 2022-10-02
 
