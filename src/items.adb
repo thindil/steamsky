@@ -136,7 +136,7 @@ package body Items is
    begin
       return
         Find_Ada_Proto_Item
-          (Itype => New_String(To_String(Source => Item_Type)));
+          (Itype => New_String(Str => To_String(Source => Item_Type)));
    end Find_Proto_Item;
 
    function Get_Item_Damage
