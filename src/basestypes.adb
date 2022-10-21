@@ -144,7 +144,14 @@ package body BasesTypes is
               with "Can't add base type '" & To_String(Source => Base_Index) &
               "', there is one with that index.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            BasesTypes_Container.Exclude
+              (Container => Bases_Types_List, Key => Base_Index);
+            Log_Message
+              (Message =>
+                 "Base type removed: " & To_String(Source => Base_Index),
+               Message_Type => EVERYTHING);
+         else
             if Action = UPDATE then
                Temp_Record := Bases_Types_List(Base_Index);
             end if;
@@ -270,13 +277,6 @@ package body BasesTypes is
                     To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             end if;
-         else
-            BasesTypes_Container.Exclude
-              (Container => Bases_Types_List, Key => Base_Index);
-            Log_Message
-              (Message =>
-                 "Base type removed: " & To_String(Source => Base_Index),
-               Message_Type => EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
    end Load_Bases_Types;
