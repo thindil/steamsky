@@ -144,6 +144,7 @@ package Themes is
    -- Unselect_All_Icon     - Icon used for unselect all items on a list button
    -- Give_Order_Icon       - Icon used for give order to the crew member button
    -- No_Pilot_Icon         - Icon used for Pilot info in sentient ships
+   -- No_Engineer_Ico       - Icon used for Engineer info in sentient ships
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -231,6 +232,7 @@ package Themes is
       Unselect_All_Icon: Unbounded_String;
       Give_Order_Icon: Unbounded_String;
       No_Pilot_Icon: Unbounded_String;
+      No_Engineer_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -326,7 +328,8 @@ package Themes is
       Select_All_Icon => Default_Theme_Icons_Path & "selectall.svg",
       Unselect_All_Icon => Default_Theme_Icons_Path & "unselectall.svg",
       Give_Order_Icon => Default_Theme_Icons_Path & "giveorder.svg",
-      No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg");
+      No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg",
+      No_Engineer_Icon => Default_Theme_Icons_Path & "noengineer.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
