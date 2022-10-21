@@ -754,6 +754,7 @@ package body Game is
                use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
+               use Syllable_String;
                use Short_String;
                use Tiny_String;
 
@@ -762,6 +763,9 @@ package body Game is
                Delete_Index: Natural := 0;
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
+               Item_Index: Natural := 0;
+               Syllable: Syllable_String.Bounded_String :=
+                 Syllable_String.Null_Bounded_String;
                function Find_Attribute_Index
                  (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
@@ -784,8 +788,29 @@ package body Game is
                   Import => True,
                   Convention => C,
                   External_Name => "loadAdaData";
+               function Get_Ada_List_Value
+                 (L_Index, I_Index: Natural) return chars_ptr with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "getAdaListValue";
             begin
                Load_Ada_Data(Name => New_String(Str => File_Name));
+               Fill_Bases_Syllables_Pre_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 0, I_Index => Item_Index)));
+                  exit Fill_Bases_Syllables_Pre_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Base_Syllables_Pre, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Bases_Syllables_Pre_Loop;
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -796,16 +821,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "basessyllablepre" then
-                     SyllableString_Container.Append
-                       (Container => Base_Syllables_Pre,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
-                    "basessyllablestart" then
+                  if To_String(Source => Node_Name) = "basessyllablestart" then
                      SyllableString_Container.Append
                        (Container => Base_Syllables_Start,
                         New_Item =>
