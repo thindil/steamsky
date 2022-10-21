@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ###
-- New icon for lack of pilot for sentient ships. Author:
+- New icons for lack of pilot or engineer for sentient ships. Author:
   Delapouite (https://game-icons.net), license CC BY 3.0
 
 ### Changed
