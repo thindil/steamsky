@@ -750,7 +750,7 @@ package body Game is
             Data_Type: Unbounded_String;
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
             procedure Load_Data
-              (Current_Reader: Tree_Reader; File_Name: String) is
+              (Current_Reader: Tree_Reader; Data_File_Name: String) is
                use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
@@ -794,7 +794,7 @@ package body Game is
                   Convention => C,
                   External_Name => "getAdaListValue";
             begin
-               Load_Ada_Data(Name => New_String(Str => File_Name));
+               Load_Ada_Data(Name => New_String(Str => Data_File_Name));
                Fill_Bases_Syllables_Pre_Loop :
                loop
                   Syllable :=
@@ -1278,7 +1278,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "data" then
                   Load_Data
                     (Current_Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                     Data_File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "careers" then
                   Load_Careers(Reader => Reader);
                end if;
