@@ -221,7 +221,15 @@ package body BasesTypes is
                     "', item with index '" & Positive'Image(Item_Index) &
                     "' already added.";
                end if;
-               if Sub_Action /= REMOVE then
+               if Sub_Action = REMOVE then
+                  Temp_Record.Trades.Delete
+                    (Key =>
+                       To_Bounded_String
+                         (Source =>
+                            Trim
+                              (Source => Positive'Image(Item_Index),
+                               Side => Left)));
+               else
                   Sell_Price := 0;
                   if Get_Attribute(Elem => Child_Node, Name => "sellprice") /=
                     "" then
@@ -246,14 +254,6 @@ package body BasesTypes is
                               (Source => Positive'Image(Item_Index),
                                Side => Left)),
                      New_Item => (1 => Sell_Price, 2 => Buy_Price));
-               else
-                  Temp_Record.Trades.Delete
-                    (Key =>
-                       To_Bounded_String
-                         (Source =>
-                            Trim
-                              (Source => Positive'Image(Item_Index),
-                               Side => Left)));
                end if;
             end loop Read_Items_Loop;
             Add_Child_Node
