@@ -172,5 +172,21 @@ proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
     if itemIndex >= malesConsonantsList.len():
       return ""
     return malesConsonantsList[itemIndex].cstring
+  of 9:
+    if itemIndex >= femalesSyllablesStartList.len():
+      return ""
+    return femalesSyllablesStartList[itemIndex].cstring
+  of 10:
+    if itemIndex >= femalesSyllablesMiddleList.len():
+      return ""
+    return femalesSyllablesMiddleList[itemIndex].cstring
+  of 11:
+    if itemIndex >= femalesSyllablesEndList.len():
+      return ""
+    return femalesSyllablesEndList[itemIndex].cstring
+  of 12:
+    if itemIndex >= femalesVocalsList.len():
+      return ""
+    return femalesVocalsList[itemIndex].cstring
   else:
     return ""
