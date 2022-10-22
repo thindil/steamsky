@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables, xmlparser, xmltree]
+import std/[os, strutils, tables, xmlparser, xmltree]
 
 type
   DateRecord* = object
@@ -96,6 +96,7 @@ proc loadData(fileName: string) =
       raise newException(exceptn = DataLoadingError,
           message = "Can't load game data file. Reason: " &
           getCurrentExceptionMsg())
+  var skillIndex: Positive = 1
   for gameNode in gameXml:
     if gameNode.kind != xnElement:
       continue
@@ -135,6 +136,27 @@ proc loadData(fileName: string) =
     of "attribute":
       attributesList.add(y = AttributeRecord(name: gameNode.attr(name = "name"),
           description: gameNode.innerText()))
+    of "skill":
+      var newSkill: SkillRecord = SkillRecord(attribute: 1)
+      newSkill.name = gameNode.attr(name = "name")
+      newSkill.tool = gameNode.attr(name = "tool")
+      let attributeName = gameNode.attr(name = "attribute")
+      for index, attribute in attributesList.pairs():
+        if attribute.name == attributeName:
+          newSkill.attribute = index + 1
+          break
+      for childNode in gameNode:
+        if childNode.kind != xnElement:
+          continue
+        case childNode.tag
+        of "description":
+          newSkill.description = childNode.innerText()
+        of "toolquality":
+          newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
+              name = "level").parseInt(), quality: childNode.attr(
+              name = "quality").parseInt()))
+      skillsList[skillIndex] = newSkill
+      skillIndex.inc()
 
 # Temporary code for interfacing with Ada
 
@@ -217,3 +239,34 @@ proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
     return
   attribute = [attributesList[itemIndex].name.cstring, attributesList[
       itemIndex].description.cstring]
+
+proc getAdaSkillToolsAmount(skillIndex: cint): cint {.exportc.} =
+  if not skillsList.contains(key = skillIndex):
+    return 0
+  return skillsList[skillIndex].toolsQuality.len().cint
+
+type AdaSkillRecord = object
+  name: cstring
+  attribute: cint
+  description: cstring
+  tool: cstring
+
+proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.exportc.} =
+  skill = AdaSkillRecord(name: "".cstring, attribute: 0,
+      description: "".cstring, tool: "".cstring)
+  if not skillsList.contains(key = skillIndex):
+    return
+  skill.name = skillsList[skillIndex].name.cstring
+  skill.attribute = skillsList[skillIndex].attribute.cint
+  skill.description = skillsList[skillIndex].description.cstring
+  skill.tool = skillsList[skillIndex].tool.cstring
+
+proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
+    cint]]) {.exportc.} =
+  tools[0] = [-1.cint, -1.cint]
+  if not skillsList.contains(key = skillIndex):
+    return
+  var index = 0
+  for toolQuality in skillsList[skillIndex].toolsQuality:
+    tools[index] = [toolQuality.level.cint, toolQuality.quality.cint]
+    index.inc()
