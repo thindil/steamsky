@@ -862,6 +862,91 @@ package body Game is
                     (Container => Base_Syllables_Post, New_Item => Syllable);
                   Item_Index := Item_Index + 1;
                end loop Fill_Bases_Syllables_Post_Loop;
+               Item_Index := 0;
+               Fill_Male_Syllables_Start_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 4, I_Index => Item_Index)));
+                  exit Fill_Male_Syllables_Start_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Male_Syllables_Start, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Male_Syllables_Start_Loop;
+               Item_Index := 0;
+               Fill_Male_Syllables_Middle_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 5, I_Index => Item_Index)));
+                  exit Fill_Male_Syllables_Middle_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Male_Syllables_Middle, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Male_Syllables_Middle_Loop;
+               Item_Index := 0;
+               Fill_Male_Syllables_End_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 6, I_Index => Item_Index)));
+                  exit Fill_Male_Syllables_End_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Male_Syllables_End, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Male_Syllables_End_Loop;
+               Item_Index := 0;
+               Fill_Male_Vocals_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 7, I_Index => Item_Index)));
+                  exit Fill_Male_Vocals_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Male_Vocals, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Male_Vocals_Loop;
+               Item_Index := 0;
+               Fill_Male_Consonants_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 8, I_Index => Item_Index)));
+                  exit Fill_Male_Consonants_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Male_Consonants, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Male_Consonants_Loop;
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -873,49 +958,6 @@ package body Game is
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
                   if To_String(Source => Node_Name) =
-                    "malessyllablestart" then
-                     SyllableString_Container.Append
-                       (Container => Male_Syllables_Start,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
-                    "malessyllablemiddle" then
-                     SyllableString_Container.Append
-                       (Container => Male_Syllables_Middle,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
-                    "malessyllableend" then
-                     SyllableString_Container.Append
-                       (Container => Male_Syllables_End,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "malesvocal" then
-                     SyllableString_Container.Append
-                       (Container => Male_Vocals,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "malesconsonant" then
-                     SyllableString_Container.Append
-                       (Container => Male_Consonants,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
                     "femalessyllablestart" then
                      SyllableString_Container.Append
                        (Container => Female_Syllables_Start,
