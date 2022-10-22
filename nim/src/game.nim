@@ -55,11 +55,15 @@ type
     ##
     ## Used to mark problems during loading the game data from files
 
+  AttributeRecord* = object
+    name: string
+    description: string
+
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
-      DirSep ## The directory where the saved games and logs are stored
+      DirSep            ## The directory where the saved games and logs are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
-  moneyName*: string ## The name of the item used as a money in the game
+  moneyName*: string    ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]()
   basesSyllablesPreList*: seq[string]
   basesSyllablesStartList*: seq[string]
@@ -77,6 +81,7 @@ var
   shipsSyllablesStartList*: seq[string]
   shipsSyllablesMiddleList*: seq[string]
   shipsSyllablesEndList*: seq[string]
+  attributesList*: seq[AttributeRecord]
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
@@ -127,7 +132,9 @@ proc loadData(fileName: string) =
       shipsSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
     of "shipssyllableend":
       shipsSyllablesEndList.add(y = gameNode.attr(name = "value"))
-
+    of "attribute":
+      attributesList.add(y = AttributeRecord(name: gameNode.attr(name = "name"),
+          description: gameNode.innerText()))
 
 # Temporary code for interfacing with Ada
 
@@ -202,3 +209,11 @@ proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
     return shipsSyllablesEndList[itemIndex].cstring
   else:
     return ""
+
+proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
+    cstring]) {.exportc.} =
+  attribute = ["".cstring, "".cstring]
+  if itemIndex >= attributesList.len():
+    return
+  attribute = [attributesList[itemIndex].name.cstring, attributesList[
+      itemIndex].description.cstring]

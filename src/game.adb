@@ -925,8 +925,7 @@ package body Game is
                            (Item =>
                               Get_Ada_List_Value
                                 (L_Index => 7, I_Index => Item_Index)));
-                  exit Fill_Male_Vocals_Loop when Length
-                      (Source => Syllable) =
+                  exit Fill_Male_Vocals_Loop when Length(Source => Syllable) =
                     0;
                   SyllableString_Container.Append
                     (Container => Male_Vocals, New_Item => Syllable);
@@ -963,7 +962,8 @@ package body Game is
                       (Source => Syllable) =
                     0;
                   SyllableString_Container.Append
-                    (Container => Female_Syllables_Start, New_Item => Syllable);
+                    (Container => Female_Syllables_Start,
+                     New_Item => Syllable);
                   Item_Index := Item_Index + 1;
                end loop Fill_Female_Syllables_Start_Loop;
                Item_Index := 0;
@@ -980,7 +980,8 @@ package body Game is
                       (Source => Syllable) =
                     0;
                   SyllableString_Container.Append
-                    (Container => Female_Syllables_Middle, New_Item => Syllable);
+                    (Container => Female_Syllables_Middle,
+                     New_Item => Syllable);
                   Item_Index := Item_Index + 1;
                end loop Fill_Female_Syllables_Middle_Loop;
                Item_Index := 0;
@@ -1068,6 +1069,38 @@ package body Game is
                     (Container => Ship_Syllables_End, New_Item => Syllable);
                   Item_Index := Item_Index + 1;
                end loop Fill_Ship_Syllables_End_Loop;
+               Fill_Attributes_Block :
+               declare
+                  use Interfaces.C;
+
+                  type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
+                  Attribute_Array: Attribute_Nim_Array;
+                  procedure Get_Ada_Attribute
+                    (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaAttribute";
+               begin
+                  Fill_Attributes_Loop :
+                  loop
+                     Get_Ada_Attribute
+                       (I_Index => Attributes_Amount,
+                        Attribute => Attribute_Array);
+                     exit Fill_Attributes_Loop when Strlen
+                         (Item => Attribute_Array(0)) =
+                       0;
+                     AttributesData_Container.Append
+                       (Container => Attributes_List,
+                        New_Item =>
+                          (Name =>
+                             Tiny_String.To_Bounded_String
+                               (Source => Value(Item => Attribute_Array(0))),
+                           Description =>
+                             Short_String.To_Bounded_String
+                               (Source => Value(Item => Attribute_Array(1)))));
+                     Attributes_Amount := Attributes_Amount + 1;
+                  end loop Fill_Attributes_Loop;
+               end Fill_Attributes_Block;
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -1125,21 +1158,6 @@ package body Game is
                        To_Unbounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "attribute" then
-                     AttributesData_Container.Append
-                       (Container => Attributes_List,
-                        New_Item =>
-                          (Name =>
-                             To_Bounded_String
-                               (Source =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "name")),
-                           Description =>
-                             To_Bounded_String
-                               (Source =>
-                                  Node_Value
-                                    (N => First_Child(N => Data_Node)))));
-                     Attributes_Amount := Attributes_Amount + 1;
                   elsif To_String(Source => Node_Name) = "skill" then
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
