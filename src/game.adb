@@ -1017,6 +1017,57 @@ package body Game is
                     (Container => Female_Vocals, New_Item => Syllable);
                   Item_Index := Item_Index + 1;
                end loop Fill_Female_Vocals_Loop;
+               Item_Index := 0;
+               Fill_Ship_Syllables_Start_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 13, I_Index => Item_Index)));
+                  exit Fill_Ship_Syllables_Start_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Ship_Syllables_Start, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Ship_Syllables_Start_Loop;
+               Item_Index := 0;
+               Fill_Ship_Syllables_Middle_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 14, I_Index => Item_Index)));
+                  exit Fill_Ship_Syllables_Middle_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Ship_Syllables_Middle, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Ship_Syllables_Middle_Loop;
+               Item_Index := 0;
+               Fill_Ship_Syllables_End_Loop :
+               loop
+                  Syllable :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 15, I_Index => Item_Index)));
+                  exit Fill_Ship_Syllables_End_Loop when Length
+                      (Source => Syllable) =
+                    0;
+                  SyllableString_Container.Append
+                    (Container => Ship_Syllables_End, New_Item => Syllable);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Ship_Syllables_End_Loop;
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -1027,34 +1078,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) =
-                    "shipssyllablestart" then
-                     SyllableString_Container.Append
-                       (Container => Ship_Syllables_Start,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
-                    "shipssyllablemiddle" then
-                     SyllableString_Container.Append
-                       (Container => Ship_Syllables_Middle,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) =
-                    "shipssyllableend" then
-                     SyllableString_Container.Append
-                       (Container => Ship_Syllables_End,
-                        New_Item =>
-                          Syllable_String.To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "itemtype" then
+                  if To_String(Source => Node_Name) = "itemtype" then
                      TinyString_Formal_Container.Append
                        (Container => Items_Types,
                         New_Item =>

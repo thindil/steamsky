@@ -188,5 +188,17 @@ proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
     if itemIndex >= femalesVocalsList.len():
       return ""
     return femalesVocalsList[itemIndex].cstring
+  of 13:
+    if itemIndex >= shipsSyllablesStartList.len():
+      return ""
+    return shipsSyllablesStartList[itemIndex].cstring
+  of 14:
+    if itemIndex >= shipsSyllablesMiddleList.len():
+      return ""
+    return shipsSyllablesMiddleList[itemIndex].cstring
+  of 15:
+    if itemIndex >= shipsSyllablesEndList.len():
+      return ""
+    return shipsSyllablesEndList[itemIndex].cstring
   else:
     return ""
