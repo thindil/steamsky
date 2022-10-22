@@ -759,7 +759,9 @@ package body Game is
                use Tiny_String;
 
                Game_Data: Document;
+               --## rule off IMPROPER_INITIALIZATION
                Nodes_List, Child_Nodes: Node_List;
+               --## rule on IMPROPER_INITIALIZATION
                Delete_Index: Natural := 0;
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
