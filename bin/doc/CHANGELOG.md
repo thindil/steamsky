@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   module
 - Showing information about lack of pilot or engineer on sentient ships
   (Drones)
+- Crash when selling items after sorting the list of them (GitHub #93)
 
 ## [7.9] - 2022-10-02
 
