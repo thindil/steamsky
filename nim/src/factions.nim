@@ -75,11 +75,12 @@ proc loadFactions*(fileName: string) =
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $factionAction & " faction '" & factionIndex & "', there is no faction with that index,")
     elif factionsList.hasKey(key = factionIndex):
-        raise newException(exceptn = DataLoadingError,
-            message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
     if factionAction == DataAction.remove:
       factionsList.del(key = factionIndex)
-      logMessage(message = "Faction removed: '" & factionIndex & "'", debugType = everything)
+      logMessage(message = "Faction removed: '" & factionIndex & "'",
+          debugType = everything)
       continue
     var faction: FactionData = if factionAction == DataAction.update:
         factionsList[factionIndex]
@@ -114,15 +115,62 @@ proc loadFactions*(fileName: string) =
           parseEnum[NamesTypes](attribute.toLowerAscii)
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid type of faction's names.")
+              message = "Can't " & $factionAction & " faction '" &
+                  factionIndex & "', invalid type of faction's names.")
     attribute = factionNode.attr(name = "healingtools")
     if attribute.len() > 0:
       let itemIndex = findProtoItem(itemType = attribute)
       if itemIndex == 0:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $factionAction & " faction '" & factionIndex & "', no items with type '" & attribute & "'.")
+            message = "Can't " & $factionAction & " faction '" & factionIndex &
+            "', no items with type '" & attribute & "'.")
       faction.healingTools = attribute
     attribute = factionNode.attr(name = "healingskill")
+    if attribute.len() > 0:
+      let skillIndex = findSkillIndex(skillName = attribute)
+      if skillIndex == 0:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex &
+            "', no skill named '" & attribute & "'.")
+      faction.healingSkill = skillIndex
+    attribute = factionNode.attr(name = "baseicon")
+    if attribute.len() > 0:
+      faction.baseIcon = ("0x" & attribute).parseInt()
+    attribute = factionNode.attr(name = "weaponskill")
+    if attribute.len() > 0:
+      let skillIndex = findSkillIndex(skillName = attribute)
+      if skillIndex == 0:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex &
+            "', no skill named '" & attribute & "'.")
+      faction.weaponSkill = skillIndex
+    for childNode in factionNode:
+      if childNode.kind != xnElement:
+        continue
+      case childNode.tag
+      of "relation":
+        let relationIndex = childNode.attr(name = "faction")
+        var relation: RelationsData
+        attribute = childNode.attr(name = "reputation")
+        if attribute.len() > 0:
+          relation.reputation = ReputationRanges(min: attribute.parseInt(), max: 0)
+        else:
+          relation.reputation = ReputationRanges(min: childNode.attr(
+              name = "minreputation").parseInt(), max: childNode.attr(
+              name = "maxreputation").parseInt())
+          if relation.reputation.min > relation.reputation.max:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex &
+                "', invalid range for faction's reputation with '" &
+                relationIndex & "'.")
+        if childNode.attr(name = "friendly") == "Y":
+          relation.friendly = true
+        else:
+          relation.friendly = false
+        faction.relations[relationIndex] = relation
+      of "description":
+        faction.description = childNode.innerText()
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
