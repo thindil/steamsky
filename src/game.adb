@@ -760,7 +760,7 @@ package body Game is
 
                Game_Data: Document;
                --## rule off IMPROPER_INITIALIZATION
-               Nodes_List, Child_Nodes: Node_List;
+               Nodes_List: Node_List;
                --## rule on IMPROPER_INITIALIZATION
                Delete_Index: Natural := 0;
                Node_Name: Unbounded_String := Null_Unbounded_String;
@@ -1109,7 +1109,9 @@ package body Game is
                      Description: chars_ptr;
                      Tool: chars_ptr;
                   end record;
+                  type Nim_Tools_Array is array(0 .. 15, 0 .. 1) of Integer;
                   Skill: Nim_Skill_Record;
+                  Tools: Nim_Tools_Array;
                   function Get_Ada_Skill_Tools_Amount
                     (S_Index: Natural) return Integer with
                      Import => True,
@@ -1120,19 +1122,28 @@ package body Game is
                      Import => True,
                      Convention => C,
                      External_Name => "getAdaSkill";
+                  procedure Get_Ada_Skill_Tools
+                    (S_Index: Natural; Tools: out Nim_Tools_Array) with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaSkillTools";
                begin
                   Item_Index := 1;
                   Fill_Skills_Loop :
                   loop
-                     Get_Ada_Skill
-                       (S_Index => Item_Index, Skill => Skill);
+                     Get_Ada_Skill(S_Index => Item_Index, Skill => Skill);
                      exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
                      Load_Skill_Block :
                      declare
                         Tools_Quality: Tool_Quality_Array
                           (1 ..
-                               (if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) > 0 then
-                                  Get_Ada_Skill_Tools_Amount(S_Index => Item_Index)
+                               (if
+                                  Get_Ada_Skill_Tools_Amount
+                                    (S_Index => Item_Index) >
+                                  0
+                                then
+                                  Get_Ada_Skill_Tools_Amount
+                                    (S_Index => Item_Index)
                                 else 1)) :=
                           (others => <>);
                         Tmp_Skill: Skill_Record
@@ -1140,35 +1151,30 @@ package body Game is
                           (Quality_Amount => Tools_Quality'Length,
                            others => <>);
                      begin
+                        Get_Ada_Skill_Tools
+                          (S_Index => Item_Index, Tools => Tools);
                         Load_Skills_Loop :
-                        for J in 0 .. Length(List => Child_Nodes) - 1 loop
-                           Tools_Quality(J + 1) :=
-                             (Level =>
-                                Skill_Range'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "level")),
-                              Quality =>
-                                Skill_Range'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "quality")));
+                        for J in Tools_Quality'Range loop
+                           Tools_Quality(J) :=
+                             (Level => Tools(J - 1, 0),
+                              Quality => Tools(J - 1, 1));
                         end loop Load_Skills_Loop;
-                        if Length(List => Child_Nodes) = 0 then
+                        if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) =
+                          0 then
                            Tools_Quality := Empty_Tool_Quality_Array;
                         end if;
                         Tmp_Skill :=
                           (Quality_Amount => Tools_Quality'Length,
                            Name =>
                              To_Bounded_String
-                               (Source =>
-                                  Value(Item => Skill.Name)),
-                           Attribute =>
-                             Skill.Attribute,
-                           Description => Short_String.To_Bounded_String(Source => Value(Item => Skill.Description)),
-                           Tool => Tiny_String.To_Bounded_String(Source => Value(Item => Skill.Tool)),
+                               (Source => Value(Item => Skill.Name)),
+                           Attribute => Skill.Attribute,
+                           Description =>
+                             Short_String.To_Bounded_String
+                               (Source => Value(Item => Skill.Description)),
+                           Tool =>
+                             Tiny_String.To_Bounded_String
+                               (Source => Value(Item => Skill.Tool)),
                            Tools_Quality => Tools_Quality);
                         SkillsData_Container.Append
                           (Container => Skills_List, New_Item => Tmp_Skill);
@@ -1180,7 +1186,6 @@ package body Game is
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
-               Child_Nodes := Nodes_List;
                Load_Game_Data_Loop :
                for I in 0 .. Length(List => Nodes_List) - 1 loop
                   Data_Node := Item(List => Nodes_List, Index => I);
