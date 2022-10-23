@@ -751,11 +751,11 @@ package body Game is
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
             procedure Load_Data
               (Current_Reader: Tree_Reader; Data_File_Name: String) is
+               use Interfaces.C;
                use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
                use Syllable_String;
-               use Short_String;
                use Tiny_String;
 
                Game_Data: Document;
@@ -1071,8 +1071,6 @@ package body Game is
                end loop Fill_Ship_Syllables_End_Loop;
                Fill_Attributes_Block :
                declare
-                  use Interfaces.C;
-
                   type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
                   Attribute_Array: Attribute_Nim_Array;
                   procedure Get_Ada_Attribute
@@ -1101,6 +1099,82 @@ package body Game is
                      Attributes_Amount := Attributes_Amount + 1;
                   end loop Fill_Attributes_Loop;
                end Fill_Attributes_Block;
+               Fill_Skills_Block :
+               declare
+                  type Nim_Skill_Record is record
+                     Name: chars_ptr;
+                     Attribute: Integer;
+                     Description: chars_ptr;
+                     Tool: chars_ptr;
+                  end record;
+                  Skill: Nim_Skill_Record;
+                  function Get_Ada_Skill_Tools_Amount
+                    (S_Index: Natural) return Integer with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaSkillToolsAmount";
+                  procedure Get_Ada_Skill
+                    (S_Index: Natural; Skill: out Nim_Skill_Record) with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaSkill";
+               begin
+                  Item_Index := 1;
+                  Fill_Skills_Loop :
+                  loop
+                     Get_Ada_Skill
+                       (S_Index => Item_Index, Skill => Skill);
+                     exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
+                     Load_Skill_Block :
+                     declare
+                        Tools_Quality: Tool_Quality_Array
+                          (1 ..
+                               (if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) > 0 then
+                                  Get_Ada_Skill_Tools_Amount(S_Index => Item_Index)
+                                else 1)) :=
+                          (others => <>);
+                        Tmp_Skill: Skill_Record
+                          (Quality_Amount => Tools_Quality'Length) :=
+                          (Quality_Amount => Tools_Quality'Length,
+                           others => <>);
+                     begin
+                        Load_Skills_Loop :
+                        for J in 0 .. Length(List => Child_Nodes) - 1 loop
+                           Tools_Quality(J + 1) :=
+                             (Level =>
+                                Skill_Range'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "level")),
+                              Quality =>
+                                Skill_Range'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "quality")));
+                        end loop Load_Skills_Loop;
+                        if Length(List => Child_Nodes) = 0 then
+                           Tools_Quality := Empty_Tool_Quality_Array;
+                        end if;
+                        Tmp_Skill :=
+                          (Quality_Amount => Tools_Quality'Length,
+                           Name =>
+                             To_Bounded_String
+                               (Source =>
+                                  Value(Item => Skill.Name)),
+                           Attribute =>
+                             Skill.Attribute,
+                           Description => Short_String.To_Bounded_String(Source => Value(Item => Skill.Description)),
+                           Tool => Tiny_String.To_Bounded_String(Source => Value(Item => Skill.Tool)),
+                           Tools_Quality => Tools_Quality);
+                        SkillsData_Container.Append
+                          (Container => Skills_List, New_Item => Tmp_Skill);
+                        Skills_Amount := Skills_Amount + 1;
+                     end Load_Skill_Block;
+                     Item_Index := Item_Index + 1;
+                  end loop Fill_Skills_Loop;
+               end Fill_Skills_Block;
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -1158,87 +1232,6 @@ package body Game is
                        To_Unbounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "skill" then
-                     Child_Nodes :=
-                       DOM.Core.Elements.Get_Elements_By_Tag_Name
-                         (Elem => Data_Node, Name => "toolquality");
-                     Load_Skill_Block :
-                     declare
-                        Tools_Quality: Tool_Quality_Array
-                          (1 ..
-                               (if Length(List => Child_Nodes) > 0 then
-                                  Length(List => Child_Nodes)
-                                else 1)) :=
-                          (others => <>);
-                        Tmp_Skill: Skill_Record
-                          (Quality_Amount => Tools_Quality'Length) :=
-                          (Quality_Amount => Tools_Quality'Length,
-                           others => <>);
-                     begin
-                        Load_Skills_Loop :
-                        for J in 0 .. Length(List => Child_Nodes) - 1 loop
-                           Tools_Quality(J + 1) :=
-                             (Level =>
-                                Skill_Range'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "level")),
-                              Quality =>
-                                Skill_Range'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "quality")));
-                        end loop Load_Skills_Loop;
-                        if Length(List => Child_Nodes) = 0 then
-                           Tools_Quality := Empty_Tool_Quality_Array;
-                        end if;
-                        Tmp_Skill :=
-                          (Quality_Amount => Tools_Quality'Length,
-                           Name =>
-                             To_Bounded_String
-                               (Source =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "name")),
-                           Attribute =>
-                             Find_Attribute_Index
-                               (Attribute_Name =>
-                                  To_Bounded_String
-                                    (Source =>
-                                       Get_Attribute
-                                         (Elem => Data_Node,
-                                          Name => "attribute"))),
-                           Description => Short_String.Null_Bounded_String,
-                           Tool => Tiny_String.Null_Bounded_String,
-                           Tools_Quality => Tools_Quality);
-                        Child_Nodes :=
-                          DOM.Core.Elements.Get_Elements_By_Tag_Name
-                            (Elem => Data_Node, Name => "description");
-                        if Length(List => Child_Nodes) > 0 then
-                           Tmp_Skill.Description :=
-                             To_Bounded_String
-                               (Source =>
-                                  Node_Value
-                                    (N =>
-                                       First_Child
-                                         (N =>
-                                            Item
-                                              (List => Child_Nodes,
-                                               Index => 0))));
-                        end if;
-                        if Get_Attribute(Elem => Data_Node, Name => "tool") /=
-                          "" then
-                           Tmp_Skill.Tool :=
-                             To_Bounded_String
-                               (Source =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "tool"));
-                        end if;
-                        SkillsData_Container.Append
-                          (Container => Skills_List, New_Item => Tmp_Skill);
-                        Skills_Amount := Skills_Amount + 1;
-                     end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
                        Find_Attribute_Index
