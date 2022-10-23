@@ -1071,7 +1071,9 @@ package body Game is
                end loop Fill_Ship_Syllables_End_Loop;
                Fill_Attributes_Block :
                declare
+                  --## rule off IMPROPER_INITIALIZATION
                   type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
+                  --## rule on IMPROPER_INITIALIZATION
                   Attribute_Array: Attribute_Nim_Array;
                   procedure Get_Ada_Attribute
                     (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
