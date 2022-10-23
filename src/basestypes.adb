@@ -260,20 +260,20 @@ package body BasesTypes is
               (Data => Temp_Record.Recipes, Name => "recipe", Index => I);
             Add_Child_Node
               (Data => Temp_Record.Flags, Name => "flag", Index => I);
-            if Action /= UPDATE then
+            if Action = UPDATE then
+               Bases_Types_List(Base_Index) := Temp_Record;
+               Log_Message
+                 (Message =>
+                    "Base type updated: " &
+                    To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
+            else
                BasesTypes_Container.Include
                  (Container => Bases_Types_List, Key => Base_Index,
                   New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Base type added: " &
-                    To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            else
-               Bases_Types_List(Base_Index) := Temp_Record;
-               Log_Message
-                 (Message =>
-                    "Base type updated: " &
                     To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             end if;
