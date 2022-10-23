@@ -839,11 +839,12 @@ tags `description`. There can be maximum 64 skills declared in the game. -->
    <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">
-   <description>Used in crafting</description></skill>
+   <description>Used in crafting</description>
    <toolquality level="25" quality="20" />
    <toolquality level="50" quality="15" />
    <toolquality level="75" quality="10" />
    <toolquality level="100" quality="5" />
+</skill>
  <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">
    <description>Used in healing</description>
    <toolquality level="25" quality="20" />
