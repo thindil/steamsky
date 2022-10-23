@@ -171,6 +171,53 @@ proc loadFactions*(fileName: string) =
         faction.relations[relationIndex] = relation
       of "description":
         faction.description = childNode.innerText()
+      of "foodtype":
+        let foodType = childNode.attr(name = "name")
+        if childNode.attr(name = "action") == "remove":
+          for index, food in faction.foodTypes.pairs:
+            if food == foodType:
+              faction.foodTypes.delete(i = index)
+              break
+        else:
+          if findProtoItem(itemType = foodType) == 0:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" & factionIndex &
+                "', no items with type '" & foodType & "'.")
+          faction.foodTypes.add(y = foodType)
+      of "drinktype":
+        let drinkType = childNode.attr(name = "name")
+        if childNode.attr(name = "action") == "remove":
+          for index, drink in faction.drinksTypes.pairs:
+            if drink == drinkType:
+              faction.drinksTypes.delete(i = index)
+              break
+        else:
+          if findProtoItem(itemType = drinkType) == 0:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" & factionIndex &
+                "', no items with type '" & drinkType & "'.")
+          faction.drinksTypes.add(y = drinkType)
+      of "career":
+        let careerIndex = childNode.attr(name = "name")
+        if childNode.attr(name = "action") == "remove":
+          {.warning[ProveInit]: off.}
+          {.warning[UnsafeDefault]: off.}
+          faction.careers.del(key = careerIndex)
+          {.warning[UnsafeDefault]: on.}
+          {.warning[ProveInit]: on.}
+        else:
+          var career = CareerData(shipIndex: 1)
+          attribute = childNode.attr(name = "shipindex")
+          if attribute.len() > 0:
+            career.shipIndex = attribute.parseInt()
+          attribute = childNode.attr(name = "playerindex")
+          if attribute.len() > 0:
+            career.playerIndex = attribute
+          attribute = childNode.attr(name = "name")
+          if attribute.len() > 0:
+            career.name = attribute
+          career.description = childNode.innerText
+          faction.careers[careerIndex] = career
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
