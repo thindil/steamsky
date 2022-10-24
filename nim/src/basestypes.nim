@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, items, log
 
 type
   PricesArray* = array[1..2, Natural]
@@ -26,7 +26,7 @@ type
   BaseTypeData* = object
     name: string
     color: string
-    trades: Table[string, PricesArray]
+    trades: Table[Positive, PricesArray]
     recipes: seq[string]
     flags: seq[string]
     description: string
@@ -64,6 +64,61 @@ proc loadBasesTypes*(fileName: string) =
     var attribute = baseTypeNode.attr(name = "name")
     if attribute.len() > 0:
       baseType.name = attribute
+    attribute = baseTypeNode.attr(name = "color")
+    if attribute.len() > 0:
+      baseType.color = attribute
+    for childNode in baseTypeNode:
+      if childNode.kind != xnElement:
+        continue
+      case childNode.tag
+      of "description":
+        baseType.description = childNode.innerText()
+      of "item":
+        let
+          itemIndex = childNode.attr(name = "index").parseInt()
+          subAction = try:
+              parseEnum[DataAction](childNode.attr(
+                  name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        if not itemsList.hasKey(key = itemIndex):
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $baseTypeAction & " base type '" &
+              baseTypeIndex & "', no item with index '" & $itemIndex & "'.")
+        if subAction == DataAction.add and itemsList.hasKey(key = itemIndex):
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add base type '" & baseTypeIndex &
+              "', item with index '" & $itemIndex & "' already added.")
+        if subAction == DataAction.remove:
+          {.warning[ProveInit]: off.}
+          {.warning[UnsafeDefault]: off.}
+          baseType.trades.del(key = itemIndex)
+          {.warning[UnsafeDefault]: on.}
+          {.warning[ProveInit]: on.}
+        else:
+          let
+            buyPrice = try:
+                childNode.attr(name = "buyprice").parseInt()
+              except ValueError:
+                0
+            sellPrice = try:
+                childNode.attr(name = "sellprice").parseInt()
+              except ValueError:
+                0
+          baseType.trades[itemIndex][1] = sellPrice
+          baseType.trades[itemIndex][2] = buyPrice
+      of "recipe":
+        let
+          recipeIndex = childNode.attr(name = "index")
+          subAction = try:
+              parseEnum[DataAction](childNode.attr(
+                  name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        if subAction == DataAction.add and recipeIndex in baseType.recipes:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add base type '" & baseTypeIndex &
+              "', recipe with index '" & recipeIndex & "' already added.")
 
 proc loadAdaBasesTypes(fileName: cstring) {.exportc.} =
   loadBasesTypes(fileName = $fileName)
