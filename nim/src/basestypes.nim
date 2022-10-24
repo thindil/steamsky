@@ -119,6 +119,33 @@ proc loadBasesTypes*(fileName: string) =
           raise newException(exceptn = DataLoadingError,
               message = "Can't add base type '" & baseTypeIndex &
               "', recipe with index '" & recipeIndex & "' already added.")
+        if subAction == DataAction.remove:
+          for index, recipe in baseType.recipes.pairs:
+            if recipe == recipeIndex:
+              baseType.recipes.delete(i = index)
+              break
+        else:
+          baseType.recipes.add(y = recipeIndex)
+      of "flag":
+        let
+          flagName = childNode.attr(name = "name")
+          subAction = try:
+              parseEnum[DataAction](childNode.attr(
+                  name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        if subAction == DataAction.add and flagName in baseType.flags:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add base type '" & baseTypeIndex &
+              "', flag '" & flagName & "' already added.")
+        if subAction == DataAction.remove:
+          for index, flag in baseType.flags.pairs:
+            if flag == flagName:
+              baseType.flags.delete(i = index)
+              break
+        else:
+          baseType.flags.add(y = flagName)
+    basesTypesList[baseTypeIndex] = baseType
 
 proc loadAdaBasesTypes(fileName: cstring) {.exportc.} =
   loadBasesTypes(fileName = $fileName)
