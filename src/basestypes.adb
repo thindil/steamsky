@@ -59,6 +59,8 @@ package body BasesTypes is
       end record;
       Temp_Nim_Record: Base_Type_Nim_Data;
       Index: Positive := 1;
+      Index2: Natural := 0;
+      Base_Data: Unbounded_String := Null_Unbounded_String;
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
@@ -131,21 +133,66 @@ package body BasesTypes is
          Convention => C,
          External_Name => "loadAdaBasesTypes";
       procedure Get_Ada_Base_Type
-        (Index: chars_ptr; Ada_Base_Type: out Base_Type_Nim_Data) with
+        (Base_Index: chars_ptr; Ada_Base_Type: out Base_Type_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseType";
+      function Get_Ada_Base_Data
+        (Base_Index: chars_ptr; Item_Index: Integer; Data_Type: chars_ptr)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseData";
    begin
       Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
       Load_Bases_Types_Loop :
       loop
-         Get_Ada_Base_Type(Index => New_String(Str => Index'Img), Ada_Base_Type => Temp_Nim_Record);
-         exit Load_Bases_Types_Loop when Strlen(Item => Temp_Nim_Record.Name) = 0;
-         Temp_Record.Name := To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Name));
+         Get_Ada_Base_Type
+           (Base_Index => New_String(Str => Index'Img),
+            Ada_Base_Type => Temp_Nim_Record);
+         exit Load_Bases_Types_Loop when Strlen(Item => Temp_Nim_Record.Name) =
+           0;
+         Temp_Record.Name :=
+           To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Name));
          Temp_Record.Color := Value(Item => Temp_Nim_Record.Color);
-         Temp_Record.Description := To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Description));
+         Temp_Record.Description :=
+           To_Unbounded_String
+             (Source => Value(Item => Temp_Nim_Record.Description));
+         Index2 := 0;
+         Load_Base_Recipes_Loop :
+         loop
+            Base_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Value
+                      (Item =>
+                         Get_Ada_Base_Data
+                           (Base_Index => New_String(Str => Index'Img),
+                            Item_Index => Index2,
+                            Data_Type => New_String(Str => "recipe")))));
+            exit Load_Base_Recipes_Loop when Length(Source => Base_Data) = 0;
+            Temp_Record.Recipes.Append(New_Item => Base_Data);
+            Index2 := Index2 + 1;
+         end loop Load_Base_Recipes_Loop;
+         Index2 := 0;
+         Load_Base_Flags_Loop :
+         loop
+            Base_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Value
+                      (Item =>
+                         Get_Ada_Base_Data
+                           (Base_Index => New_String(Str => Index'Img),
+                            Item_Index => Index2,
+                            Data_Type => New_String(Str => "flag")))));
+            exit Load_Base_Flags_Loop when Length(Source => Base_Data) = 0;
+            Temp_Record.Flags.Append(New_Item => Base_Data);
+            Index2 := Index2 + 1;
+         end loop Load_Base_Flags_Loop;
          BasesTypes_Container.Include
-           (Container => Bases_Types_List, Key => To_Bounded_String(Source => Index'Img),
+           (Container => Bases_Types_List,
+            Key => To_Bounded_String(Source => Index'Img),
             New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Bases_Types_Loop;

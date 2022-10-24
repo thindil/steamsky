@@ -154,6 +154,8 @@ type
     color: cstring
     description: cstring
 
+  AdaPricesArray* = array[1..2, cint]
+
 proc loadAdaBasesTypes(fileName: cstring) {.exportc.} =
   loadBasesTypes(fileName = $fileName)
 
@@ -173,9 +175,28 @@ proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffe
 
 proc getAdaBaseData(baseIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.exportc.} =
-  if not basesTypesList.hasKey(key = $index):
+  if not basesTypesList.hasKey(key = $baseIndex):
     return ""
   let dataList = if adaDataType == "recipe":
-        basesTypesList[$index].recipes
+        basesTypesList[$baseIndex].recipes
       else:
-        basesTypesList[$index].flags
+        basesTypesList[$baseIndex].flags
+  if index >= dataList.len():
+    return ""
+  return dataList[index].cstring
+
+proc getAdaBaseTrade(baseIndex: cstring; index: cint;
+    adaBaseTrade: var AdaPricesArray): cstring {.exportc.} =
+  adaBaseTrade = [1: 0.cint, 2: 0.cint]
+  if not basesTypesList.hasKey(key = $baseIndex):
+    return ""
+  if index > basesTypesList[$baseIndex].trades.len():
+    return ""
+  var currIndex = 0
+  for tradeIndex, trade in basesTypesList[$baseIndex].trades.pairs:
+    currIndex.inc()
+    if currIndex < index:
+      continue
+    adaBaseTrade = [1: trade[1].cint, 2: trade[2].cint]
+    let newIndex = $tradeIndex
+    return newIndex.cstring
