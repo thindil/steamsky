@@ -17,18 +17,23 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with DOM.Core; use DOM.Core;
+with Ada.Characters.Handling;
+with DOM.Core;
 with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Bases; use Bases;
-with Crafts; use Crafts;
-with Log; use Log;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
+with Bases;
+with Crafts;
+with Log;
 
 package body BasesTypes is
 
    procedure Load_Bases_Types(Reader: Tree_Reader) is
+      use Ada.Characters.Handling;
+      use DOM.Core;
+      use DOM.Core.Nodes;
+      use DOM.Core.Elements;
+      use Log;
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -47,6 +52,8 @@ package body BasesTypes is
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
+         use Crafts;
+
          Value: Unbounded_String := Null_Unbounded_String;
          Delete_Index: Positive := 1;
       begin
@@ -286,7 +293,9 @@ package body BasesTypes is
       Item_Index: Objects_Container.Extended_Index;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
+      use Bases;
       use Tiny_String;
+
    begin
       if Base_Index > 0
         and then Sky_Bases(Base_Index).Reputation.Level <
