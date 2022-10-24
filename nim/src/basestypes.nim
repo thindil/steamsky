@@ -85,7 +85,7 @@ proc loadBasesTypes*(fileName: string) =
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $baseTypeAction & " base type '" &
               baseTypeIndex & "', no item with index '" & $itemIndex & "'.")
-        if subAction == DataAction.add and itemsList.hasKey(key = itemIndex):
+        if subAction == DataAction.add and baseType.trades.hasKey(key = itemIndex):
           raise newException(exceptn = DataLoadingError,
               message = "Can't add base type '" & baseTypeIndex &
               "', item with index '" & $itemIndex & "' already added.")
@@ -97,16 +97,15 @@ proc loadBasesTypes*(fileName: string) =
           {.warning[ProveInit]: on.}
         else:
           let
-            buyPrice = try:
+            buyPrice: Natural = try:
                 childNode.attr(name = "buyprice").parseInt()
               except ValueError:
                 0
-            sellPrice = try:
+            sellPrice: Natural = try:
                 childNode.attr(name = "sellprice").parseInt()
               except ValueError:
                 0
-          baseType.trades[itemIndex][1] = sellPrice
-          baseType.trades[itemIndex][2] = buyPrice
+          baseType.trades[itemIndex] = [1: sellPrice, 2: buyPrice]
       of "recipe":
         let
           recipeIndex = childNode.attr(name = "index")
