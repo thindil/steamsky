@@ -1071,9 +1071,9 @@ package body Game is
                end loop Fill_Ship_Syllables_End_Loop;
                Fill_Attributes_Block :
                declare
-                  --## rule off IMPROPER_INITIALIZATION
+                  --## rule off TYPE_INITIAL_VALUES
                   type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
-                  --## rule on IMPROPER_INITIALIZATION
+                  --## rule on TYPE_INITIAL_VALUES
                   Attribute_Array: Attribute_Nim_Array;
                   procedure Get_Ada_Attribute
                     (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
@@ -1103,6 +1103,7 @@ package body Game is
                end Fill_Attributes_Block;
                Fill_Skills_Block :
                declare
+                  --## rule off TYPE_INITIAL_VALUES
                   type Nim_Skill_Record is record
                      Name: chars_ptr;
                      Attribute: Integer;
@@ -1110,31 +1111,35 @@ package body Game is
                      Tool: chars_ptr;
                   end record;
                   type Nim_Tools_Array is array(0 .. 15, 0 .. 1) of Integer;
+                  --## rule on TYPE_INITIAL_VALUES
+                  --## rule off IMPROPER_INITIALIZATION
                   Skill: Nim_Skill_Record;
-                  Tools: Nim_Tools_Array;
-                  function Get_Ada_Skill_Tools_Amount
-                    (S_Index: Natural) return Integer with
-                     Import => True,
-                     Convention => C,
-                     External_Name => "getAdaSkillToolsAmount";
+                  --## rule on IMPROPER_INITIALIZATION
                   procedure Get_Ada_Skill
-                    (S_Index: Natural; Skill: out Nim_Skill_Record) with
+                    (S_Index: Natural; Nim_Skill: out Nim_Skill_Record) with
                      Import => True,
                      Convention => C,
                      External_Name => "getAdaSkill";
-                  procedure Get_Ada_Skill_Tools
-                    (S_Index: Natural; Tools: out Nim_Tools_Array) with
-                     Import => True,
-                     Convention => C,
-                     External_Name => "getAdaSkillTools";
                begin
                   Item_Index := 1;
                   Fill_Skills_Loop :
                   loop
-                     Get_Ada_Skill(S_Index => Item_Index, Skill => Skill);
+                     Get_Ada_Skill(S_Index => Item_Index, Nim_Skill => Skill);
                      exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
                      Load_Skill_Block :
                      declare
+                        function Get_Ada_Skill_Tools_Amount
+                          (S_Index: Natural) return Integer with
+                           Import => True,
+                           Convention => C,
+                           External_Name => "getAdaSkillToolsAmount";
+                        procedure Get_Ada_Skill_Tools
+                          (S_Index: Natural;
+                           Nim_Tools: out Nim_Tools_Array) with
+                           Import => True,
+                           Convention => C,
+                           External_Name => "getAdaSkillTools";
+                        Tools: Nim_Tools_Array;
                         Tools_Quality: Tool_Quality_Array
                           (1 ..
                                (if
@@ -1152,7 +1157,7 @@ package body Game is
                            others => <>);
                      begin
                         Get_Ada_Skill_Tools
-                          (S_Index => Item_Index, Tools => Tools);
+                          (S_Index => Item_Index, Nim_Tools => Tools);
                         Load_Skills_Loop :
                         for J in Tools_Quality'Range loop
                            Tools_Quality(J) :=
