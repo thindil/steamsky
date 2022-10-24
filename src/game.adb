@@ -1417,8 +1417,8 @@ package body Game is
                elsif To_String(Source => Data_Type) = "recipes" then
                   Load_Recipes(Reader => Reader);
                elsif To_String(Source => Data_Type) = "bases" then
-                  Load_Bases_Types(Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                  Load_Bases_Types
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "modules" then
                   Load_Ship_Modules(Reader => Reader);
                elsif To_String(Source => Data_Type) = "ships" then

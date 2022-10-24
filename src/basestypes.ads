@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 with Items; use Items;
 
@@ -91,10 +90,9 @@ package BasesTypes is
    -- FUNCTION
    -- Load bases types from file
    -- PARAMETERS
-   -- Reader    - XML Reader from which bases types will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Bases_Types(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Bases_Types(File_Name: String);
    -- ****
 
    -- ****f* BasesTypes/BasesTypes.Is_Buyable

@@ -163,10 +163,11 @@ proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffe
     raises: [], tags: [], exportc.} =
   adaBaseType = AdaBaseTypeData(name: "".cstring, color: "".cstring,
       description: "".cstring)
-  if not basesTypesList.hasKey(key = $index):
+  let baseTypeKey = strip(s = $index)
+  if not basesTypesList.hasKey(key = baseTypeKey):
     return
   let baseType = try:
-      basesTypesList[$index]
+      basesTypesList[baseTypeKey]
     except KeyError:
       return
   adaBaseType.name = baseType.name.cstring
@@ -175,12 +176,13 @@ proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffe
 
 proc getAdaBaseData(baseIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.exportc.} =
-  if not basesTypesList.hasKey(key = $baseIndex):
+  let baseTypeKey = strip(s = $index)
+  if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
   let dataList = if adaDataType == "recipe":
-        basesTypesList[$baseIndex].recipes
+        basesTypesList[baseTypeKey].recipes
       else:
-        basesTypesList[$baseIndex].flags
+        basesTypesList[baseTypeKey].flags
   if index >= dataList.len():
     return ""
   return dataList[index].cstring
@@ -188,12 +190,13 @@ proc getAdaBaseData(baseIndex: cstring; index: cint;
 proc getAdaBaseTrade(baseIndex: cstring; index: cint;
     adaBaseTrade: var AdaPricesArray): cstring {.exportc.} =
   adaBaseTrade = [1: 0.cint, 2: 0.cint]
-  if not basesTypesList.hasKey(key = $baseIndex):
+  let baseTypeKey = strip(s = $index)
+  if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
-  if index > basesTypesList[$baseIndex].trades.len():
+  if index > basesTypesList[baseTypeKey].trades.len():
     return ""
   var currIndex = 0
-  for tradeIndex, trade in basesTypesList[$baseIndex].trades.pairs:
+  for tradeIndex, trade in basesTypesList[baseTypeKey].trades.pairs:
     currIndex.inc()
     if currIndex < index:
       continue
