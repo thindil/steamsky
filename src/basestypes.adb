@@ -31,6 +31,7 @@ package body BasesTypes is
 
    procedure Load_Bases_Types(Reader: Tree_Reader; File_Name: String) is
       use Ada.Characters.Handling;
+      use Interfaces.C;
       use Interfaces.C.Strings;
       use DOM.Core;
       use DOM.Core.Nodes;
@@ -51,6 +52,13 @@ package body BasesTypes is
       Action, Sub_Action: Data_Action := ADD;
       Buy_Price, Sell_Price: Natural := 0;
       Item_Index: Objects_Container.Extended_Index := 0;
+      type Base_Type_Nim_Data is record
+         Name: chars_ptr;
+         Color: chars_ptr;
+         Description: chars_ptr;
+      end record;
+      Temp_Nim_Record: Base_Type_Nim_Data;
+      Index: Positive := 1;
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
@@ -122,8 +130,25 @@ package body BasesTypes is
          Import => True,
          Convention => C,
          External_Name => "loadAdaBasesTypes";
+      procedure Get_Ada_Base_Type
+        (Index: chars_ptr; Ada_Base_Type: out Base_Type_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseType";
    begin
       Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
+      Load_Bases_Types_Loop :
+      loop
+         Get_Ada_Base_Type(Index => New_String(Str => Index'Img), Ada_Base_Type => Temp_Nim_Record);
+         exit Load_Bases_Types_Loop when Strlen(Item => Temp_Nim_Record.Name) = 0;
+         Temp_Record.Name := To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Name));
+         Temp_Record.Color := Value(Item => Temp_Nim_Record.Color);
+         Temp_Record.Description := To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Description));
+         BasesTypes_Container.Include
+           (Container => Bases_Types_List, Key => To_Bounded_String(Source => Index'Img),
+            New_Item => Temp_Record);
+         Index := Index + 1;
+      end loop Load_Bases_Types_Loop;
       Bases_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

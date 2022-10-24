@@ -85,7 +85,8 @@ proc loadBasesTypes*(fileName: string) =
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $baseTypeAction & " base type '" &
               baseTypeIndex & "', no item with index '" & $itemIndex & "'.")
-        if subAction == DataAction.add and baseType.trades.hasKey(key = itemIndex):
+        if subAction == DataAction.add and baseType.trades.hasKey(
+            key = itemIndex):
           raise newException(exceptn = DataLoadingError,
               message = "Can't add base type '" & baseTypeIndex &
               "', item with index '" & $itemIndex & "' already added.")
@@ -146,5 +147,35 @@ proc loadBasesTypes*(fileName: string) =
           baseType.flags.add(y = flagName)
     basesTypesList[baseTypeIndex] = baseType
 
+
+type
+  AdaBaseTypeData* = object
+    name: cstring
+    color: cstring
+    description: cstring
+
 proc loadAdaBasesTypes(fileName: cstring) {.exportc.} =
   loadBasesTypes(fileName = $fileName)
+
+proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  adaBaseType = AdaBaseTypeData(name: "".cstring, color: "".cstring,
+      description: "".cstring)
+  if not basesTypesList.hasKey(key = $index):
+    return
+  let baseType = try:
+      basesTypesList[$index]
+    except KeyError:
+      return
+  adaBaseType.name = baseType.name.cstring
+  adaBaseType.color = baseType.color.cstring
+  adaBaseType.description = baseType.description.cstring
+
+proc getAdaBaseData(baseIndex: cstring; index: cint;
+    adaDataType: cstring): cstring {.exportc.} =
+  if not basesTypesList.hasKey(key = $index):
+    return ""
+  let dataList = if adaDataType == "recipe":
+        basesTypesList[$index].recipes
+      else:
+        basesTypesList[$index].flags
