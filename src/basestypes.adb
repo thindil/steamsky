@@ -17,6 +17,7 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C.Strings;
 with Ada.Characters.Handling;
 with DOM.Core;
 with DOM.Core.Documents;
@@ -28,8 +29,9 @@ with Log;
 
 package body BasesTypes is
 
-   procedure Load_Bases_Types(Reader: Tree_Reader) is
+   procedure Load_Bases_Types(Reader: Tree_Reader; File_Name: String) is
       use Ada.Characters.Handling;
+      use Interfaces.C.Strings;
       use DOM.Core;
       use DOM.Core.Nodes;
       use DOM.Core.Elements;
@@ -116,7 +118,12 @@ package body BasesTypes is
             end if;
          end loop Read_Child_Node_Loop;
       end Add_Child_Node;
+      procedure Load_Ada_Bases_Types(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaBasesTypes";
    begin
+      Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
       Bases_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
