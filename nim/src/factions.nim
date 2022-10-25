@@ -254,7 +254,7 @@ type
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
 
-proc getAdaFaction(index: cint; adaFaction: var AdaFactionData) {.sideEffect,
+proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideEffect,
     raises: [], tags: [], exportc.} =
   adaFaction = AdaFactionData(name: "".cstring, memberName: "".cstring,
       pluralMemberName: "".cstring, spawnChance: 0, population: [1: 0.cint,
@@ -262,7 +262,7 @@ proc getAdaFaction(index: cint; adaFaction: var AdaFactionData) {.sideEffect,
           healingTools: "".cstring, healingSkill: 0, baseIcon: 0,
           weaponSkill: 0)
   if index > factionsList.len():
-    return
+    return ""
   var
     faction: FactionData
     factionIndex: Positive = 1
@@ -270,8 +270,9 @@ proc getAdaFaction(index: cint; adaFaction: var AdaFactionData) {.sideEffect,
     if factionIndex == index:
       try:
         faction = factionsList[key]
+        result = key.cstring
       except KeyError:
-        return
+        return ""
       break
     factionIndex.inc()
   adaFaction.name = faction.name.cstring

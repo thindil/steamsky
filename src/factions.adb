@@ -155,9 +155,9 @@ package body Factions is
          Names_Type: Integer;
          Description: chars_ptr;
          Healing_Tools: chars_ptr;
-         Healing_Skill: Integer;
+         Healing_Skill: SkillsData_Container.Extended_Index;
          Base_Icon: Integer;
-         Weapon_Skill: Integer;
+         Weapon_Skill: SkillsData_Container.Extended_Index;
       end record;
       Temp_Nim_Record: Faction_Nim_Data;
       Index: Positive := 1;
@@ -165,22 +165,57 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "loadAdaFactions";
-      procedure Get_Ada_Faction
-        (Faction_Index: Integer; Ada_Faction: out Faction_Nim_Data) with
+      function Get_Ada_Faction
+        (Faction_Index: Integer; Ada_Faction: out Faction_Nim_Data)
+         return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaFaction";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
-      Load_Factions_Data_Loop:
+      Load_Factions_Data_Loop :
       loop
-         Get_Ada_Faction
-           (Faction_Index => Index,
-            Ada_Faction => Temp_Nim_Record);
-         exit Load_Factions_Data_Loop when Strlen(Item => Temp_Nim_Record.Name) =
-           0;
+         Faction_Index :=
+           To_Bounded_String
+             (Source =>
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction
+                       (Faction_Index => Index,
+                        Ada_Faction => Temp_Nim_Record)));
+         exit Load_Factions_Data_Loop when Length(Source => Faction_Index) = 0;
          Temp_Record.Name :=
-           To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name));
+           To_Bounded_String
+             (Source =>
+                Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Name));
+         Temp_Record.Member_Name :=
+           To_Unbounded_String
+             (Source =>
+                Interfaces.C.Strings.Value
+                  (Item => Temp_Nim_Record.Member_Name));
+         Temp_Record.Plural_Member_Name :=
+           To_Unbounded_String
+             (Source =>
+                Interfaces.C.Strings.Value
+                  (Item => Temp_Nim_Record.Plural_Member_Name));
+         Temp_Record.Spawn_Chance := Temp_Nim_Record.Spawn_Chance;
+         Temp_Record.Population := Temp_Nim_Record.Population;
+         Temp_Record.Names_Type := Names_Types'Val(Temp_Nim_Record.Names_Type);
+         Temp_Record.Description :=
+           To_Unbounded_String
+             (Source =>
+                Interfaces.C.Strings.Value
+                  (Item => Temp_Nim_Record.Description));
+         Temp_Record.Healing_Tools :=
+           To_Bounded_String
+             (Source =>
+                Interfaces.C.Strings.Value
+                  (Item => Temp_Nim_Record.Healing_Tools));
+         Temp_Record.Healing_Skill := Temp_Nim_Record.Healing_Skill;
+         Temp_Record.Base_Icon :=
+           Wide_Character'Val(Temp_Nim_Record.Base_Icon);
+         Temp_Record.Weapon_Skill := Temp_Nim_Record.Weapon_Skill;
+         Index := Index + 1;
       end loop Load_Factions_Data_Loop;
       Factions_Data := Get_Tree(Read => Reader);
       Nodes_List :=
