@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
--- with Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -30,8 +30,7 @@ with BasesTypes; use BasesTypes;
 package body Factions is
 
    procedure Load_Factions(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(File_Name);
-      -- use Interfaces.C.Strings;
+      use Interfaces.C.Strings;
       use Tiny_String;
 
       Temp_Record: Faction_Record;
@@ -146,12 +145,12 @@ package body Factions is
             end if;
          end loop Load_Items_Loop;
       end Add_Child_Node;
---      procedure Load_Ada_Factions(Name: chars_ptr) with
---         Import => True,
---         Convention => C,
---         External_Name => "loadAdaFactions";
+      procedure Load_Ada_Factions(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaFactions";
    begin
-      -- Load_Ada_Factions(Name => New_String(Str => File_Name));
+      Load_Ada_Factions(Name => New_String(Str => File_Name));
       Factions_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

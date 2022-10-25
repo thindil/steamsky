@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, items, log
+import basestypes, game, items, log
 
 type
   NamesTypes = enum
@@ -135,7 +135,7 @@ proc loadFactions*(fileName: string) =
       faction.healingSkill = skillIndex
     attribute = factionNode.attr(name = "baseicon")
     if attribute.len() > 0:
-      faction.baseIcon = ("0x" & attribute).parseInt()
+      faction.baseIcon = fromHex[Natural]("0x" & attribute)
     attribute = factionNode.attr(name = "weaponskill")
     if attribute.len() > 0:
       let skillIndex = findSkillIndex(skillName = attribute)
@@ -218,6 +218,21 @@ proc loadFactions*(fileName: string) =
             career.name = attribute
           career.description = childNode.innerText
           faction.careers[careerIndex] = career
+      of "basetype":
+        let baseIndex = childNode.attr(name = "index")
+        if childNode.attr(name = "action") == "remove":
+          {.warning[ProveInit]: off.}
+          {.warning[UnsafeDefault]: off.}
+          faction.basesTypes.del(key = baseIndex)
+          {.warning[UnsafeDefault]: on.}
+          {.warning[ProveInit]: on.}
+        elif basesTypesList.hasKey(key = baseIndex):
+          faction.basesTypes[baseIndex] = childNode.attr(name = "chance").parseInt()
+    if factionAction == DataAction.add:
+      if faction.basesTypes.len() == 0:
+        for key in basesTypesList.keys:
+          faction.basesTypes[key] = 20
+    factionsList[factionIndex] = faction
 
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
