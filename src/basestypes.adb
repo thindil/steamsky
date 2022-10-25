@@ -29,16 +29,16 @@ package body BasesTypes is
 
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Base_Type_Data;
-      --## rule on IMPROPER_INITIALIZATION
       type Base_Type_Nim_Data is record
          Name: chars_ptr;
          Color: chars_ptr;
          Description: chars_ptr;
       end record;
       Temp_Nim_Record: Base_Type_Nim_Data;
+      Trade: Prices_Array;
+      --## rule on IMPROPER_INITIALIZATION
       Index, Index2: Natural := 0;
       Base_Data: Unbounded_String := Null_Unbounded_String;
-      Trade: Prices_Array;
       procedure Load_Ada_Bases_Types(Name: chars_ptr) with
          Import => True,
          Convention => C,
