@@ -181,7 +181,8 @@ proc loadFactions*(fileName: string) =
         else:
           if findProtoItem(itemType = foodType) == 0:
             raise newException(exceptn = DataLoadingError,
-                message = "Can't " & $factionAction & " faction '" & factionIndex &
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex &
                 "', no items with type '" & foodType & "'.")
           faction.foodTypes.add(y = foodType)
       of "drinktype":
@@ -194,7 +195,8 @@ proc loadFactions*(fileName: string) =
         else:
           if findProtoItem(itemType = drinkType) == 0:
             raise newException(exceptn = DataLoadingError,
-                message = "Can't " & $factionAction & " faction '" & factionIndex &
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex &
                 "', no items with type '" & drinkType & "'.")
           faction.drinksTypes.add(y = drinkType)
       of "career":
@@ -227,12 +229,59 @@ proc loadFactions*(fileName: string) =
           {.warning[UnsafeDefault]: on.}
           {.warning[ProveInit]: on.}
         elif basesTypesList.hasKey(key = baseIndex):
-          faction.basesTypes[baseIndex] = childNode.attr(name = "chance").parseInt()
+          faction.basesTypes[baseIndex] = childNode.attr(
+              name = "chance").parseInt()
     if factionAction == DataAction.add:
       if faction.basesTypes.len() == 0:
         for key in basesTypesList.keys:
           faction.basesTypes[key] = 20
     factionsList[factionIndex] = faction
 
+type
+  AdaFactionData* = object
+    name: cstring
+    memberName: cstring
+    pluralMemberName: cstring
+    spawnChance: cint
+    population: array[1..2, cint]
+    namesType: cint
+    description: cstring
+    healingTools: cstring
+    healingSkill: cint
+    baseIcon: cint
+    weaponSkill: cint
+
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
+
+proc getAdaFaction(index: cint; adaFaction: var AdaFactionData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  adaFaction = AdaFactionData(name: "".cstring, memberName: "".cstring,
+      pluralMemberName: "".cstring, spawnChance: 0, population: [1: 0.cint,
+          2: 0.cint], namesType: 0, description: "".cstring,
+          healingTools: "".cstring, healingSkill: 0, baseIcon: 0,
+          weaponSkill: 0)
+  if index > factionsList.len():
+    return
+  var
+    faction: FactionData
+    factionIndex: Positive = 1
+  for key in factionsList.keys:
+    if factionIndex == index:
+      try:
+        faction = factionsList[key]
+      except KeyError:
+        return
+      break
+    factionIndex.inc()
+  adaFaction.name = faction.name.cstring
+  adaFaction.memberName = faction.memberName.cstring
+  adaFaction.pluralMemberName = faction.pluralMemberName.cstring
+  adaFaction.spawnChance = faction.spawnChance.cint
+  adaFaction.population = [1: faction.population[1].cint, 2: faction.population[2].cint]
+  adaFaction.namesType = faction.namesType.ord().cint
+  adaFaction.description = faction.description.cstring
+  adaFaction.healingTools = faction.healingTools.cstring
+  adaFaction.healingSkill = faction.healingSkill.cint
+  adaFaction.baseIcon = faction.baseIcon.cint
+  adaFaction.weaponSkill = faction.weaponSkill.cint

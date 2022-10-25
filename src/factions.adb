@@ -30,6 +30,7 @@ with BasesTypes; use BasesTypes;
 package body Factions is
 
    procedure Load_Factions(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C;
       use Interfaces.C.Strings;
       use Tiny_String;
 
@@ -145,12 +146,42 @@ package body Factions is
             end if;
          end loop Load_Items_Loop;
       end Add_Child_Node;
+      type Faction_Nim_Data is record
+         Name: chars_ptr;
+         Member_Name: chars_ptr;
+         Plural_Member_Name: chars_ptr;
+         Spawn_Chance: Natural := 0;
+         Population: Attributes_Array;
+         Names_Type: Integer;
+         Description: chars_ptr;
+         Healing_Tools: chars_ptr;
+         Healing_Skill: Integer;
+         Base_Icon: Integer;
+         Weapon_Skill: Integer;
+      end record;
+      Temp_Nim_Record: Faction_Nim_Data;
+      Index: Positive := 1;
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaFactions";
+      procedure Get_Ada_Faction
+        (Faction_Index: Integer; Ada_Faction: out Faction_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFaction";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
+      Load_Factions_Data_Loop:
+      loop
+         Get_Ada_Faction
+           (Faction_Index => Index,
+            Ada_Faction => Temp_Nim_Record);
+         exit Load_Factions_Data_Loop when Strlen(Item => Temp_Nim_Record.Name) =
+           0;
+         Temp_Record.Name :=
+           To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name));
+      end loop Load_Factions_Data_Loop;
       Factions_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
