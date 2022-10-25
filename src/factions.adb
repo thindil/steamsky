@@ -161,6 +161,8 @@ package body Factions is
       end record;
       Temp_Nim_Record: Faction_Nim_Data;
       Index: Positive := 1;
+      Index2: Natural := 0;
+      Faction_Data: Unbounded_String;
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -171,6 +173,12 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "getAdaFaction";
+      function Get_Ada_Faction_Data
+        (Faction_Index: chars_ptr; Item_Index: Integer; Data_Type: chars_ptr)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFactionData";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
       Load_Factions_Data_Loop :
@@ -215,6 +223,70 @@ package body Factions is
          Temp_Record.Base_Icon :=
            Wide_Character'Val(Temp_Nim_Record.Base_Icon);
          Temp_Record.Weapon_Skill := Temp_Nim_Record.Weapon_Skill;
+         Index2 := 0;
+         Load_Faction_Food_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Data
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Item_Index => Index2,
+                            Data_Type => New_String(Str => "foodType")))));
+            exit Load_Faction_Food_Loop when Length(Source => Faction_Data) =
+              0;
+            Temp_Record.Food_Types.Append
+              (New_Item =>
+                 To_Bounded_String
+                   (Source => To_String(Source => Faction_Data)));
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Food_Loop;
+         Index2 := 0;
+         Load_Faction_Drinks_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Data
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Item_Index => Index2,
+                            Data_Type => New_String(Str => "drinkType")))));
+            exit Load_Faction_Drinks_Loop when Length(Source => Faction_Data) =
+              0;
+            Temp_Record.Drinks_Types.Append
+              (New_Item =>
+                 To_Bounded_String
+                   (Source => To_String(Source => Faction_Data)));
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Drinks_Loop;
+         Index2 := 0;
+         Load_Faction_Flags_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Data
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Item_Index => Index2,
+                            Data_Type => New_String(Str => "flag")))));
+            exit Load_Faction_Flags_Loop when Length(Source => Faction_Data) =
+              0;
+            Temp_Record.Flags.Append(New_Item => Faction_Data);
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Flags_Loop;
+         Factions_List.Include(Key => Faction_Index, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Factions_Data_Loop;
       Factions_Data := Get_Tree(Read => Reader);

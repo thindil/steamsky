@@ -286,3 +286,18 @@ proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideE
   adaFaction.healingSkill = faction.healingSkill.cint
   adaFaction.baseIcon = faction.baseIcon.cint
   adaFaction.weaponSkill = faction.weaponSkill.cint
+
+proc getAdaFactionData(factionIndex: cstring; index: cint;
+    adaDataType: cstring): cstring {.exportc.} =
+  let dataList = case $adaDataType
+      of "foodType":
+        factionsList[$factionIndex].foodTypes
+      of "drinkType":
+        factionsList[$factionIndex].drinksTypes
+      of "flag":
+        factionsList[$factionIndex].flags
+      else:
+        return ""
+  if index >= dataList.len():
+    return ""
+  return dataList[index].cstring
