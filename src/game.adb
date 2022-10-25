@@ -1405,8 +1405,7 @@ package body Game is
                   Message_Type => EVERYTHING);
                if To_String(Source => Data_Type) = "factions" then
                   Load_Factions
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "goals" then
                   Load_Goals(Reader => Reader);
                elsif To_String(Source => Data_Type) = "help" then

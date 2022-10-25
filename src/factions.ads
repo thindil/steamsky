@@ -18,7 +18,6 @@
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 -- ****h* Factions/Factions
@@ -182,10 +181,9 @@ package Factions is
    -- FUNCTION
    -- Load NPC factions from file
    -- PARAMETERS
-   -- Reader    - XML Reader from which factions will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Factions(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Factions(File_Name: String);
    -- ****
 
    -- ****f* Factions/Factions.Get_Reputation
