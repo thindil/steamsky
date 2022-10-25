@@ -290,14 +290,29 @@ proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideE
 proc getAdaFactionData(factionIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.exportc.} =
   let dataList = case $adaDataType
-      of "foodType":
-        factionsList[$factionIndex].foodTypes
-      of "drinkType":
-        factionsList[$factionIndex].drinksTypes
-      of "flag":
-        factionsList[$factionIndex].flags
-      else:
-        return ""
+    of "foodType":
+      factionsList[$factionIndex].foodTypes
+    of "drinkType":
+      factionsList[$factionIndex].drinksTypes
+    of "flag":
+      factionsList[$factionIndex].flags
+    else:
+      return ""
   if index >= dataList.len():
     return ""
   return dataList[index].cstring
+
+proc getAdaFactionRelation(factionIndex: cstring; index: cint;
+    relation: var array[3, cint]): cstring {.exportc.} =
+  relation = [0.cint, 0.cint, 0.cint]
+  if index > factionsList[$factionIndex].relations.len():
+    return ""
+  var currIndex = 0
+  for relIndex, factionRelation in factionsList[$factionIndex].relations.pairs:
+    currIndex.inc()
+    if currIndex < index:
+      continue
+    relation = [factionRelation.reputation.min.cint,
+        factionRelation.reputation.max.cint, factionRelation.friendly.ord().cint]
+    return relIndex.cstring
+

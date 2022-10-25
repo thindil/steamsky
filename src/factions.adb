@@ -159,10 +159,12 @@ package body Factions is
          Base_Icon: Integer;
          Weapon_Skill: SkillsData_Container.Extended_Index;
       end record;
+      type Faction_Nim_Relation is array(0 .. 3) of Integer;
       Temp_Nim_Record: Faction_Nim_Data;
       Index: Positive := 1;
       Index2: Natural := 0;
       Faction_Data: Unbounded_String;
+      Faction_Relation: Faction_Nim_Relation;
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -179,6 +181,12 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionData";
+      function Get_Ada_Faction_Relation
+        (Faction_Index: chars_ptr; Relation_Index: Integer;
+         Relation: out Faction_Nim_Relation) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFactionRelation";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
       Load_Factions_Data_Loop :
@@ -286,6 +294,34 @@ package body Factions is
             Temp_Record.Flags.Append(New_Item => Faction_Data);
             Index2 := Index2 + 1;
          end loop Load_Faction_Flags_Loop;
+         Index2 := 1;
+         Load_Faction_Relation_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Relation
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Relation_Index => Index2,
+                            Relation => Faction_Relation))));
+            exit Load_Faction_Relation_Loop when Length
+                (Source => Faction_Data) =
+              0;
+            Temp_Record.Relations.Include
+              (Key =>
+                 To_Bounded_String
+                   (Source => To_String(Source => Faction_Data)),
+               New_Item =>
+                 (Reputation =>
+                    (Min => Faction_Relation(0), Max => Faction_Relation(1)),
+                  Friendly =>
+                    (if Faction_Relation(2) = 0 then False else True)));
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Relation_Loop;
          Factions_List.Include(Key => Faction_Index, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Factions_Data_Loop;
