@@ -339,3 +339,15 @@ proc getAdaFactionCareer(factionIndex: cstring; index: cint;
     career.name = factionCareer.name.cstring
     return carIndex.cstring
 
+proc getAdaFactionBase(factionIndex: cstring; index: cint;
+    baseIndex: var cint): cstring {.exportc.} =
+  baseIndex = 0
+  if index > factionsList[$factionIndex].basesTypes.len():
+    return ""
+  var currIndex = 0
+  for bIndex, factionBase in factionsList[$factionIndex].basesTypes.pairs:
+    currIndex.inc()
+    if currIndex < index:
+      continue
+    baseIndex = factionBase.cint
+    return bIndex.cstring

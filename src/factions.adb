@@ -172,6 +172,7 @@ package body Factions is
       Faction_Data: Unbounded_String;
       Faction_Relation: Faction_Nim_Relation;
       Faction_Career: Career_Nim_Record;
+      Faction_Base: Positive;
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -200,6 +201,12 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionCareer";
+      function Get_Ada_Faction_Base
+        (Faction_Index: chars_ptr; Base_Index: Integer; Base: out Positive)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFactionBase";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
       Load_Factions_Data_Loop :
@@ -372,6 +379,28 @@ package body Factions is
                            (Item => Faction_Career.Name))));
             Index2 := Index2 + 1;
          end loop Load_Faction_Career_Loop;
+         Index2 := 1;
+         Load_Faction_Bases_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Base
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Base_Index => Index2, Base => Faction_Base))));
+            exit Load_Faction_Bases_Loop when Length(Source => Faction_Data) =
+              0;
+            Temp_Record.Bases_Types.Include
+              (Key =>
+                 To_Bounded_String
+                   (Source => To_String(Source => Faction_Data)),
+               New_Item => Faction_Base);
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Bases_Loop;
          Factions_List.Include(Key => Faction_Index, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Factions_Data_Loop;
