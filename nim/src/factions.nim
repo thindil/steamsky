@@ -251,6 +251,12 @@ type
     baseIcon: cint
     weaponSkill: cint
 
+  AdaCareerData* = object
+    shipIndex: cint
+    playerIndex: cstring
+    description: cstring
+    name: cstring
+
 proc loadAdaFactions*(fileName: cstring) {.exportc.} =
   loadFactions(fileName = $fileName)
 
@@ -315,4 +321,21 @@ proc getAdaFactionRelation(factionIndex: cstring; index: cint;
     relation = [factionRelation.reputation.min.cint,
         factionRelation.reputation.max.cint, factionRelation.friendly.ord().cint]
     return relIndex.cstring
+
+proc getAdaFactionCareer(factionIndex: cstring; index: cint;
+    career: var AdaCareerData): cstring {.exportc.} =
+  career = AdaCareerData(shipIndex: 1, playerIndex: "".cstring,
+      description: "".cstring, name: "".cstring)
+  if index > factionsList[$factionIndex].careers.len():
+    return ""
+  var currIndex = 0
+  for carIndex, factionCareer in factionsList[$factionIndex].careers.pairs:
+    currIndex.inc()
+    if currIndex < index:
+      continue
+    career.shipIndex = factionCareer.shipIndex.cint
+    career.playerIndex = factionCareer.playerIndex.cstring
+    career.description = factionCareer.description.cstring
+    career.name = factionCareer.name.cstring
+    return carIndex.cstring
 

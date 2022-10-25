@@ -160,11 +160,18 @@ package body Factions is
          Weapon_Skill: SkillsData_Container.Extended_Index;
       end record;
       type Faction_Nim_Relation is array(0 .. 3) of Integer;
+      type Career_Nim_Record is record
+         Ship_Index: Positive;
+         Player_Index: chars_ptr;
+         Description: chars_ptr;
+         Name: chars_ptr;
+      end record;
       Temp_Nim_Record: Faction_Nim_Data;
       Index: Positive := 1;
       Index2: Natural := 0;
       Faction_Data: Unbounded_String;
       Faction_Relation: Faction_Nim_Relation;
+      Faction_Career: Career_Nim_Record;
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -187,6 +194,12 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionRelation";
+      function Get_Ada_Faction_Career
+        (Faction_Index: chars_ptr; Career_Index: Integer;
+         Career: out Career_Nim_Record) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFactionCareer";
    begin
       Load_Ada_Factions(Name => New_String(Str => File_Name));
       Load_Factions_Data_Loop :
@@ -322,6 +335,43 @@ package body Factions is
                     (if Faction_Relation(2) = 0 then False else True)));
             Index2 := Index2 + 1;
          end loop Load_Faction_Relation_Loop;
+         Index2 := 1;
+         Load_Faction_Career_Loop :
+         loop
+            Faction_Data :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Faction_Career
+                           (Faction_Index =>
+                              New_String
+                                (Str => To_String(Source => Faction_Index)),
+                            Career_Index => Index2,
+                            Career => Faction_Career))));
+            exit Load_Faction_Career_Loop when Length(Source => Faction_Data) =
+              0;
+            Temp_Record.Careers.Include
+              (Key => Faction_Data,
+               New_Item =>
+                 (Ship_Index => Faction_Career.Ship_Index,
+                  Player_Index =>
+                    To_Unbounded_String
+                      (Source =>
+                         Interfaces.C.Strings.Value
+                           (Item => Faction_Career.Player_Index)),
+                  Description =>
+                    To_Unbounded_String
+                      (Source =>
+                         Interfaces.C.Strings.Value
+                           (Item => Faction_Career.Description)),
+                  Name =>
+                    To_Unbounded_String
+                      (Source =>
+                         Interfaces.C.Strings.Value
+                           (Item => Faction_Career.Name))));
+            Index2 := Index2 + 1;
+         end loop Load_Faction_Career_Loop;
          Factions_List.Include(Key => Faction_Index, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Factions_Data_Loop;
