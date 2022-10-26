@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -25,7 +26,10 @@ with Factions; use Factions;
 
 package body Careers is
 
-   procedure Load_Careers(Reader: Tree_Reader) is
+   procedure Load_Careers(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C;
+      use Interfaces.C.Strings;
+
       Temp_Record: Career_Record;
       Nodes_List, Child_Nodes: Node_List;
       Careers_Data: Document;
@@ -34,7 +38,31 @@ package body Careers is
       Delete_Index: Positive;
       Career_Node: Node;
       Action, Skill_Action: Data_Action;
+      type Nim_Career_Array is array(0 .. 1) of chars_ptr;
+      Temp_Nim_Career: Nim_Career_Array;
+      Index: Positive := 1;
+      procedure Load_Ada_Careers(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaCareers";
+      procedure Get_Ada_Career
+        (Career_Index: Integer; Ada_Career: out Nim_Career_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCareer";
    begin
+      Load_Ada_Careers(Name => New_String(Str => File_Name));
+      Load_Careers_Data_Loop :
+      loop
+         Get_Ada_Career
+           (Career_Index => Index, Ada_Career => Temp_Nim_Career);
+         exit Load_Careers_Data_Loop when Strlen(Item => Temp_Nim_Career(0)) = 0;
+         Career_Index := To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(0)));
+         Temp_Record.Name := To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(1)));
+         Temp_Record.Skills.Clear;
+         Careers_List.Include(Key => Career_Index, New_Item => Temp_Record);
+         Index := Index + 1;
+      end loop Load_Careers_Data_Loop;
       Careers_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

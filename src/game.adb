@@ -1128,7 +1128,8 @@ package body Game is
                      Load_Skill_Block :
                      declare
                         --## rule off TYPE_INITIAL_VALUES
-                        type Nim_Tools_Array is array(0 .. 15, 0 .. 1) of Integer;
+                        type Nim_Tools_Array is
+                          array(0 .. 15, 0 .. 1) of Integer;
                         --## rule on TYPE_INITIAL_VALUES
                         function Get_Ada_Skill_Tools_Amount
                           (S_Index: Natural) return Integer with
@@ -1431,7 +1432,9 @@ package body Game is
                     (Current_Reader => Reader,
                      Data_File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "careers" then
-                  Load_Careers(Reader => Reader);
+                  Load_Careers
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                end if;
             end if;
             Free(Read => Reader); --## rule line off IMPROPER_INITIALIZATION

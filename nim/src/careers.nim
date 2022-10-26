@@ -73,3 +73,31 @@ proc loadCareers*(fileName: string) =
               careerIndex &
               "', no skill with name '" & skillName & "'.")
         career.skills.add(y = skillName)
+
+proc loadAdaCareers*(fileName: cstring) {.exportc.} =
+  loadCareers(fileName = $fileName)
+
+proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  adaCareer = ["".cstring, "".cstring]
+  if index > careersList.len():
+    return
+  var
+    career: CareerData
+    careerIndex: Positive = 1
+  for key in careersList.keys:
+    if careerIndex == index:
+      try:
+        career = careersList[key]
+        adaCareer[0] = key.cstring
+      except KeyError:
+        return
+      break
+    careerIndex.inc()
+  adaCareer[1] = career.name.cstring
+
+proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.exportc.} =
+  if index >= careersList[$careerIndex].skills.len():
+    return ""
+  return careersList[$careerIndex].skills[index].cstring
+

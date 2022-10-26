@@ -1,4 +1,4 @@
---    Copyright 2018-2021 Bartek thindil Jasicki
+--    Copyright 2018-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -62,9 +62,10 @@ package Careers is
    -- FUNCTION
    -- Load player careers from file
    -- PARAMETERS
-   -- Reader - XML Reader from which careers will be read
+   -- Reader    - XML Reader from which careers will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Careers(Reader: Tree_Reader);
+   procedure Load_Careers(Reader: Tree_Reader; File_Name: String);
    -- ****
 
 end Careers;
