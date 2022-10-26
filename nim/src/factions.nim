@@ -200,7 +200,7 @@ proc loadFactions*(fileName: string) =
                 "', no items with type '" & drinkType & "'.")
           faction.drinksTypes.add(y = drinkType)
       of "career":
-        let careerIndex = childNode.attr(name = "name")
+        let careerIndex = childNode.attr(name = "index")
         if childNode.attr(name = "action") == "remove":
           {.warning[ProveInit]: off.}
           {.warning[UnsafeDefault]: off.}
