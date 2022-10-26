@@ -22,7 +22,7 @@ import game, log
 
 type
   CareerData = object
-    name: string
+    name*: string
     skills: seq[string]
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
@@ -73,6 +73,7 @@ proc loadCareers*(fileName: string) =
               careerIndex &
               "', no skill with name '" & skillName & "'.")
         career.skills.add(y = skillName)
+    careersList[careerIndex] = career
 
 proc loadAdaCareers*(fileName: cstring) {.exportc.} =
   loadCareers(fileName = $fileName)
