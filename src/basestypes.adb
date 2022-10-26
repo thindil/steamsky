@@ -75,6 +75,7 @@ package body BasesTypes is
          Temp_Record.Description :=
            To_Unbounded_String
              (Source => Value(Item => Temp_Nim_Record.Description));
+         Temp_Record.Recipes.Clear;
          Index2 := 0;
          Load_Base_Recipes_Loop :
          loop
@@ -92,6 +93,7 @@ package body BasesTypes is
             Index2 := Index2 + 1;
          end loop Load_Base_Recipes_Loop;
          Index2 := 0;
+         Temp_Record.Flags.Clear;
          Load_Base_Flags_Loop :
          loop
             Base_Data :=
@@ -108,6 +110,7 @@ package body BasesTypes is
             Index2 := Index2 + 1;
          end loop Load_Base_Flags_Loop;
          Index2 := 1;
+         Temp_Record.Trades.Clear;
          Load_Base_Trades_Loop :
          loop
             Base_Data :=
