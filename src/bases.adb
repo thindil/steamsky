@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Elementary_Functions;
+with Interfaces.C.Strings;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
@@ -125,71 +126,22 @@ package body Bases is
    function Generate_Base_Name
      (Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String is
+      use Interfaces.C.Strings;
       use Tiny_String;
-      New_Name: Bounded_String := Null_Bounded_String;
+      function Generate_Ada_Base_Name(F_Index: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaBaseName";
    begin
-      if Factions_List(Faction_Index).Names_Type = ROBOTIC then
-         return Generate_Robotic_Name;
-      end if;
-      if Get_Random(Min => 1, Max => 100) < 16 then
-         New_Name :=
-           Syllable_String.To_String
-             (Source =>
-                SyllableString_Container.Element
-                  (Container => Base_Syllables_Pre,
-                   Index =>
-                     Get_Random
-                       (Min =>
-                          SyllableString_Container.First_Index
-                            (Container => Base_Syllables_Pre),
-                        Max =>
-                          SyllableString_Container.Last_Index
-                            (Container => Base_Syllables_Pre)))) &
-           To_Bounded_String(Source => " ");
-      end if;
-      New_Name :=
-        New_Name &
-        Syllable_String.To_String
+      return
+        To_Bounded_String
           (Source =>
-             SyllableString_Container.Element
-               (Container => Base_Syllables_Start,
-                Index =>
-                  Get_Random
-                    (Min =>
-                       SyllableString_Container.First_Index
-                         (Container => Base_Syllables_Start),
-                     Max =>
-                       SyllableString_Container.Last_Index
-                         (Container => Base_Syllables_Start)))) &
-        Syllable_String.To_String
-          (Source =>
-             SyllableString_Container.Element
-               (Container => Base_Syllables_End,
-                Index =>
-                  Get_Random
-                    (Min =>
-                       SyllableString_Container.First_Index
-                         (Container => Base_Syllables_End),
-                     Max =>
-                       SyllableString_Container.Last_Index
-                         (Container => Base_Syllables_End))));
-      if Get_Random(Min => 1, Max => 100) < 16 then
-         New_Name :=
-           New_Name & " " &
-           Syllable_String.To_String
-             (Source =>
-                SyllableString_Container.Element
-                  (Container => Base_Syllables_Post,
-                   Index =>
-                     Get_Random
-                       (Min =>
-                          SyllableString_Container.First_Index
-                            (Container => Base_Syllables_Post),
-                        Max =>
-                          SyllableString_Container.Last_Index
-                            (Container => Base_Syllables_Post))));
-      end if;
-      return New_Name;
+             Value
+               (Item =>
+                  Generate_Ada_Base_Name
+                    (F_Index =>
+                       New_String
+                         (Str => To_String(Source => Faction_Index)))));
    end Generate_Base_Name;
 
    procedure Generate_Recruits is
