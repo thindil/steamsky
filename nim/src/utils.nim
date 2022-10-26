@@ -44,7 +44,24 @@ proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     name.add(y = $rand(max = 9))
   return name.cstring
 
-proc getRandom*(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
+proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
+    tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the random value from the selected range
+  ##
+  ## PARAMETERS
+  ##
+  ## * min - The minimal value from which the value will be taken
+  ## * max - The maximal value from which the value will be taken
+  ##
+  ## RETURNS
+  ##
+  ## The random value from min and max range
+  randomize()
+  return rand(min .. max)
+
+proc getRandom*(min,max: int): int {.gcsafe, sideEffect, raises: [],
     tags: [].} =
   ## FUNCTION
   ##

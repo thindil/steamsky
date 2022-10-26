@@ -21,7 +21,7 @@ import std/[strutils, tables, xmlparser, xmltree]
 import basestypes, careers, game, items, log
 
 type
-  NamesTypes = enum
+  NamesTypes* = enum
     normal, robotic
 
   ReputationRanges = object
@@ -39,12 +39,12 @@ type
     name: string
 
   FactionData = object
-    name: string
+    name*: string
     memberName: string
     pluralMemberName: string
     spawnChance: Natural
     population: AttributesArray
-    namesType: NamesTypes
+    namesType*: NamesTypes
     relations: Table[string, RelationsData]
     description: string
     foodTypes: seq[string]
