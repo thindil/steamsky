@@ -15,32 +15,20 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Interfaces.C.Strings;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
-with Factions; use Factions;
 
 package body Careers is
 
-   procedure Load_Careers(Reader: Tree_Reader; File_Name: String) is
+   procedure Load_Careers(File_Name: String) is
       use Interfaces.C;
       use Interfaces.C.Strings;
 
       Temp_Record: Career_Record;
-      Nodes_List, Child_Nodes: Node_List;
-      Careers_Data: Document;
       Skill_Name, Career_Index: Unbounded_String;
-      Tmp_Skills: UnboundedString_Container.Vector;
-      Delete_Index: Positive;
-      Career_Node: Node;
-      Action, Skill_Action: Data_Action;
       type Nim_Career_Array is array(0 .. 1) of chars_ptr;
       Temp_Nim_Career: Nim_Career_Array;
       Index: Positive := 1;
+      Index2: Natural := 0;
       procedure Load_Ada_Careers(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -50,136 +38,41 @@ package body Careers is
          Import => True,
          Convention => C,
          External_Name => "getAdaCareer";
+      function Get_Ada_Career_Skill
+        (Career_Index: chars_ptr; Skill_Index: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCareerSkill";
    begin
       Load_Ada_Careers(Name => New_String(Str => File_Name));
       Load_Careers_Data_Loop :
       loop
-         Get_Ada_Career
-           (Career_Index => Index, Ada_Career => Temp_Nim_Career);
-         exit Load_Careers_Data_Loop when Strlen(Item => Temp_Nim_Career(0)) = 0;
-         Career_Index := To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(0)));
-         Temp_Record.Name := To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(1)));
+         Get_Ada_Career(Career_Index => Index, Ada_Career => Temp_Nim_Career);
+         exit Load_Careers_Data_Loop when Strlen(Item => Temp_Nim_Career(0)) =
+           0;
+         Career_Index :=
+           To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(0)));
+         Temp_Record.Name :=
+           To_Unbounded_String(Source => Value(Item => Temp_Nim_Career(1)));
+         Index2 := 0;
          Temp_Record.Skills.Clear;
+         Load_Skills_Loop :
+         loop
+            Skill_Name :=
+              To_Unbounded_String
+                (Source =>
+                   (Interfaces.C.Strings.Value
+                      (Item =>
+                         Get_Ada_Career_Skill
+                           (Career_Index => Temp_Nim_Career(0),
+                            Skill_Index => Index2))));
+            exit Load_Skills_Loop when Length(Source => Skill_Name) = 0;
+            Temp_Record.Skills.Append(New_Item => Skill_Name);
+            Index2 := Index2 + 1;
+         end loop Load_Skills_Loop;
          Careers_List.Include(Key => Career_Index, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Careers_Data_Loop;
-      Careers_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Careers_Data, Tag_Name => "career");
-      Load_Careers_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Temp_Record := (Name => Null_Unbounded_String, Skills => Tmp_Skills);
-         Career_Node := Item(List => Nodes_List, Index => I);
-         Career_Index :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Career_Node, Name => "index"));
-         Action :=
-           (if Get_Attribute(Elem => Career_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Career_Node, Name => "action"))
-            else ADD);
-         if Action in UPDATE | REMOVE then
-            if not Careers_Container.Contains
-                (Container => Careers_List, Key => Career_Index) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " career '" & To_String(Source => Career_Index) &
-                 "', there is no career with that index.";
-            end if;
-         elsif Careers_Container.Contains
-             (Container => Careers_List, Key => Career_Index) then
-            raise Data_Loading_Error
-              with "Can't add career '" & To_String(Source => Career_Index) &
-              "', there is already a career with that index.";
-         end if;
-         if Action /= REMOVE then
-            if Action = UPDATE then
-               Temp_Record := Careers_List(Career_Index);
-            end if;
-            if Get_Attribute(Elem => Career_Node, Name => "name") /= "" then
-               Temp_Record.Name :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Career_Node, Name => "name"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Career_Node, Name => "skill");
-            Read_Skills_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Skill_Name :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute
-                        (Elem => Item(List => Child_Nodes, Index => J),
-                         Name => "name"));
-               Skill_Action :=
-                 (if
-                    Get_Attribute
-                      (Elem => Item(List => Child_Nodes, Index => J),
-                       Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute
-                         (Elem => Item(List => Child_Nodes, Index => J),
-                          Name => "action"))
-                  else ADD);
-               if Find_Skill_Index
-                   (Skill_Name => To_String(Source => Skill_Name)) =
-                 0 then
-                  raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Item => Data_Action'Image(Action)) & "career '" &
-                    To_String(Source => Career_Index) & "', skill '" &
-                    To_String(Source => Skill_Name) & "' not exists";
-               end if;
-               if Skill_Action /= REMOVE then
-                  Temp_Record.Skills.Append(New_Item => Skill_Name);
-               else
-                  Delete_Index := Temp_Record.Skills.First_Index;
-                  Remove_Skills_Loop :
-                  while Delete_Index <= Temp_Record.Skills.Last_Index loop
-                     if Temp_Record.Skills(Delete_Index) = Skill_Name then
-                        Temp_Record.Skills.Delete(Index => Delete_Index);
-                        exit Remove_Skills_Loop;
-                     end if;
-                     Delete_Index := Delete_Index + 1;
-                  end loop Remove_Skills_Loop;
-               end if;
-            end loop Read_Skills_Loop;
-            if Action /= UPDATE then
-               Careers_Container.Include
-                 (Container => Careers_List, Key => Career_Index,
-                  New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Career added: " & To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            else
-               Careers_List(Career_Index) := Temp_Record;
-               Log_Message
-                 (Message =>
-                    "Career updated: " & To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            end if;
-         else
-            Careers_Container.Exclude
-              (Container => Careers_List, Key => Career_Index);
-            Remove_Careers_Loop :
-            for Faction of Factions_List loop
-               Factions.Careers_Container.Exclude
-                 (Container => Faction.Careers, Key => Career_Index);
-            end loop Remove_Careers_Loop;
-            Log_Message
-              (Message =>
-                 "Career removed: " & To_String(Source => Career_Index),
-               Message_Type => EVERYTHING);
-         end if;
-      end loop Load_Careers_Loop;
    end Load_Careers;
 
 end Careers;

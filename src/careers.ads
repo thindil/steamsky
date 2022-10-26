@@ -18,7 +18,6 @@
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 -- ****h* Careers/Careers
@@ -62,10 +61,9 @@ package Careers is
    -- FUNCTION
    -- Load player careers from file
    -- PARAMETERS
-   -- Reader    - XML Reader from which careers will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Careers(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Careers(File_Name: String);
    -- ****
 
 end Careers;

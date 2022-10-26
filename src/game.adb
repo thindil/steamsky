@@ -1433,8 +1433,7 @@ package body Game is
                      Data_File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "careers" then
                   Load_Careers
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                    (File_Name => To_String(Source => Local_File_Name));
                end if;
             end if;
             Free(Read => Reader); --## rule line off IMPROPER_INITIALIZATION
