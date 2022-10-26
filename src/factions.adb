@@ -133,6 +133,7 @@ package body Factions is
            Wide_Character'Val(Temp_Nim_Record.Base_Icon);
          Temp_Record.Weapon_Skill := Temp_Nim_Record.Weapon_Skill;
          Index2 := 0;
+         Temp_Record.Food_Types.Clear;
          Load_Faction_Food_Loop :
          loop
             Faction_Data :=
@@ -155,6 +156,7 @@ package body Factions is
             Index2 := Index2 + 1;
          end loop Load_Faction_Food_Loop;
          Index2 := 0;
+         Temp_Record.Drinks_Types.Clear;
          Load_Faction_Drinks_Loop :
          loop
             Faction_Data :=
@@ -177,6 +179,7 @@ package body Factions is
             Index2 := Index2 + 1;
          end loop Load_Faction_Drinks_Loop;
          Index2 := 0;
+         Temp_Record.Flags.Clear;
          Load_Faction_Flags_Loop :
          loop
             Faction_Data :=
@@ -196,6 +199,7 @@ package body Factions is
             Index2 := Index2 + 1;
          end loop Load_Faction_Flags_Loop;
          Index2 := 1;
+         Temp_Record.Relations.Clear;
          Load_Faction_Relation_Loop :
          loop
             Faction_Data :=
@@ -224,6 +228,7 @@ package body Factions is
             Index2 := Index2 + 1;
          end loop Load_Faction_Relation_Loop;
          Index2 := 1;
+         Temp_Record.Careers.Clear;
          Load_Faction_Career_Loop :
          loop
             Faction_Data :=
@@ -261,6 +266,7 @@ package body Factions is
             Index2 := Index2 + 1;
          end loop Load_Faction_Career_Loop;
          Index2 := 1;
+         Temp_Record.Bases_Types.Clear;
          Load_Faction_Bases_Loop :
          loop
             Faction_Data :=
