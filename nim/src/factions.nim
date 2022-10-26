@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import basestypes, game, items, log
+import basestypes, careers, game, items, log
 
 type
   NamesTypes = enum
@@ -218,6 +218,8 @@ proc loadFactions*(fileName: string) =
           attribute = childNode.attr(name = "name")
           if attribute.len() > 0:
             career.name = attribute
+          else:
+            career.name = careersList[careerIndex].name
           career.description = childNode.innerText
           faction.careers[careerIndex] = career
       of "basetype":
