@@ -89,7 +89,7 @@ proc findSkillIndex*(skillName: string): Natural =
       return key
   return 0
 
-proc loadData(fileName: string) =
+proc loadData*(fileName: string) =
   let gameXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
