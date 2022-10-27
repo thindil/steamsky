@@ -252,8 +252,7 @@ package Bases is
       return Tiny_String.Bounded_String with
       Pre => Factions_Container.Contains
         (Container => Factions_List, Key => Faction_Index),
-      Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0,
-      Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
+      Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0;
       -- ****
 
       -- ****f* Bases/Bases.Generate_Recruits
