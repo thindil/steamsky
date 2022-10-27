@@ -55,7 +55,7 @@ package body BasesTypes is
          Convention => C,
          External_Name => "getAdaBaseData";
       function Get_Ada_Base_Trade
-        (Base_Index: chars_ptr; Trade_Index: Integer; Trade: Prices_Array)
+        (Base_Index: chars_ptr; Trade_Index: Integer; Nim_Trade: Prices_Array)
          return chars_ptr with
          Import => True,
          Convention => C,
@@ -120,7 +120,7 @@ package body BasesTypes is
                       (Item =>
                          Get_Ada_Base_Trade
                            (Base_Index => New_String(Str => Index'Img),
-                            Trade_Index => Index2, Trade => Trade))));
+                            Trade_Index => Index2, Nim_Trade => Trade))));
             exit Load_Base_Trades_Loop when Length(Source => Base_Data) = 0;
             Temp_Record.Trades.Include
               (Key =>
