@@ -284,19 +284,19 @@ package body Bases is
             end if;
             Skill_Index := 0;
             Get_Skill_Index_Loop :
-            for C in
+            for D in
               Skills_Container.First_Index(Container => Skills) ..
                 Skills_Container.Last_Index(Container => Skills) loop
-               if Skills_Container.Element(Container => Skills, Index => C)
+               if Skills_Container.Element(Container => Skills, Index => D)
                    .Index =
                  Skill_Number then
                   Skill_Index :=
                     (if
                        Skills_Container.Element
-                         (Container => Skills, Index => C)
+                         (Container => Skills, Index => D)
                          .Level <
                        Skill_Level
-                     then Integer(C)
+                     then Integer(D)
                      else -1);
                   exit Get_Skill_Index_Loop;
                end if;
