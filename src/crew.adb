@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C.Strings;
 with Ships; use Ships;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -144,171 +145,24 @@ package body Crew is
    function Generate_Member_Name
      (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String is
+      use Interfaces.C.Strings;
       use Tiny_String;
-
-      New_Name: Bounded_String := Null_Bounded_String;
-      Name_Type: constant Names_Types :=
-        Factions_List(Faction_Index).Names_Type;
+      function Generate_Ada_Crew_Name
+        (Crew_Gender: Character; F_Index: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaCrewName";
    begin
-      if Name_Type = Factions.ROBOTIC then
-         return Generate_Robotic_Name;
-      end if;
-      if Gender = 'M' then
-         New_Name :=
-           Syllable_String.To_String
-             (Source =>
-                SyllableString_Container.Element
-                  (Container => Male_Syllables_Start,
-                   Index =>
-                     Get_Random
-                       (Min =>
-                          SyllableString_Container.First_Index
-                            (Container => Male_Syllables_Start),
-                        Max =>
-                          SyllableString_Container.Last_Index
-                            (Container => Male_Syllables_Start)))) &
-           Tiny_String.To_Bounded_String
-             (Source =>
-                Syllable_String.To_String
-                  (Source =>
-                     SyllableString_Container.Element
-                       (Container => Male_Vocals,
-                        Index =>
-                          (Get_Random
-                             (Min =>
-                                SyllableString_Container.First_Index
-                                  (Container => Male_Vocals),
-                              Max =>
-                                SyllableString_Container.Last_Index
-                                  (Container => Male_Vocals))))));
-         if Get_Random(Min => 1, Max => 100) < 36 then
-            Append
-              (Source => New_Name,
-               New_Item =>
-                 Syllable_String.To_String
-                   (Source =>
-                      SyllableString_Container.Element
-                        (Container => Male_Syllables_Middle,
-                         Index =>
-                           (Get_Random
-                              (Min =>
-                                 SyllableString_Container.First_Index
-                                   (Container => Male_Syllables_Middle),
-                               Max =>
-                                 SyllableString_Container.Last_Index
-                                   (Container => Male_Syllables_Middle))))));
-         end if;
-         if Get_Random(Min => 1, Max => 100) < 11 then
-            Append
-              (Source => New_Name,
-               New_Item =>
-                 Syllable_String.To_String
-                   (Source =>
-                      SyllableString_Container.Element
-                        (Container => Male_Consonants,
-                         Index =>
-                           (Get_Random
-                              (Min =>
-                                 SyllableString_Container.First_Index
-                                   (Container => Male_Consonants),
-                               Max =>
-                                 SyllableString_Container.Last_Index
-                                   (Container => Male_Consonants))))));
-         end if;
-         Append
-           (Source => New_Name,
-            New_Item =>
-              Syllable_String.To_String
-                (Source =>
-                   SyllableString_Container.Element
-                     (Container => Male_Syllables_End,
-                      Index =>
-                        (Get_Random
-                           (Min =>
-                              SyllableString_Container.First_Index
-                                (Container => Male_Syllables_End),
-                            Max =>
-                              SyllableString_Container.Last_Index
-                                (Container => Male_Syllables_End))))));
-         return New_Name;
-      end if;
-      New_Name :=
+      return
         To_Bounded_String
           (Source =>
-             Syllable_String.To_String
-               (Source =>
-                  SyllableString_Container.Element
-                    (Container => Female_Syllables_Start,
-                     Index =>
-                       (Get_Random
-                          (Min =>
-                             SyllableString_Container.First_Index
-                               (Container => Female_Syllables_Start),
-                           Max =>
-                             SyllableString_Container.Last_Index
-                               (Container => Female_Syllables_Start)))))) &
-        Syllable_String.To_String
-          (Source =>
-             SyllableString_Container.Element
-               (Container => Female_Vocals,
-                Index =>
-                  (Get_Random
-                     (Min =>
-                        SyllableString_Container.First_Index
-                          (Container => Female_Vocals),
-                      Max =>
-                        SyllableString_Container.Last_Index
-                          (Container => Female_Vocals)))));
-      if Get_Random(Min => 1, Max => 100) < 36 then
-         Append
-           (Source => New_Name,
-            New_Item =>
-              Syllable_String.To_String
-                (Source =>
-                   SyllableString_Container.Element
-                     (Container => Female_Syllables_Middle,
-                      Index =>
-                        (Get_Random
-                           (Min =>
-                              SyllableString_Container.First_Index
-                                (Container => Female_Syllables_Middle),
-                            Max =>
-                              SyllableString_Container.Last_Index
-                                (Container => Female_Syllables_Middle))))));
-      end if;
-      if Get_Random(Min => 1, Max => 100) < 11 then
-         Append
-           (Source => New_Name,
-            New_Item =>
-              Syllable_String.To_String
-                (Source =>
-                   SyllableString_Container.Element
-                     (Container => Female_Syllables_Middle,
-                      Index =>
-                        (Get_Random
-                           (Min =>
-                              SyllableString_Container.First_Index
-                                (Container => Female_Syllables_Middle),
-                            Max =>
-                              SyllableString_Container.Last_Index
-                                (Container => Female_Syllables_Middle))))));
-      end if;
-      Append
-        (Source => New_Name,
-         New_Item =>
-           Syllable_String.To_String
-             (Source =>
-                SyllableString_Container.Element
-                  (Container => Female_Syllables_End,
-                   Index =>
-                     (Get_Random
-                        (Min =>
-                           SyllableString_Container.First_Index
-                             (Container => Female_Syllables_End),
-                         Max =>
-                           SyllableString_Container.Last_Index
-                             (Container => Female_Syllables_End))))));
-      return New_Name;
+             Value
+               (Item =>
+                  Generate_Ada_Crew_Name
+                    (Crew_Gender => Gender,
+                     F_Index =>
+                       New_String
+                         (Str => To_String(Source => Faction_Index)))));
    end Generate_Member_Name;
 
    function Find_Cabin(Member_Index: Positive) return Natural is
