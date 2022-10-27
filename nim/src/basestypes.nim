@@ -176,7 +176,7 @@ proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffe
 
 proc getAdaBaseData(baseIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.exportc.} =
-  let baseTypeKey = strip(s = $index)
+  let baseTypeKey = strip(s = $baseIndex)
   if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
   let dataList = if adaDataType == "recipe":
@@ -190,12 +190,12 @@ proc getAdaBaseData(baseIndex: cstring; index: cint;
 proc getAdaBaseTrade(baseIndex: cstring; index: cint;
     adaBaseTrade: var AdaPricesArray): cstring {.exportc.} =
   adaBaseTrade = [1: 0.cint, 2: 0.cint]
-  let baseTypeKey = strip(s = $index)
+  let baseTypeKey = strip(s = $baseIndex)
   if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
   if index > basesTypesList[baseTypeKey].trades.len():
     return ""
-  var currIndex = 0
+  var currIndex = 1
   for tradeIndex, trade in basesTypesList[baseTypeKey].trades.pairs:
     currIndex.inc()
     if currIndex < index:
