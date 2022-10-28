@@ -1272,73 +1272,22 @@ package body Ships is
 
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
+      use Interfaces.C.Strings;
       use Tiny_String;
-      use Syllable_String;
 
-      New_Name: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
+      function Generate_Ada_Ship_Name(F_Index: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaShipName";
    begin
-      Generate_Ship_Name_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_Container.Key(Position => I) /= Owner then
-            goto End_Of_Generate_Name_Loop;
-         end if;
-         if Factions_List(I).Names_Type = ROBOTIC then
-            New_Name :=
-              To_Bounded_String
-                (Source => To_String(Source => Generate_Robotic_Name));
-         else
-            New_Name :=
-              To_Bounded_String
-                (Source =>
-                   To_String
-                     (Source =>
-                        SyllableString_Container.Element
-                          (Container => Ship_Syllables_Start,
-                           Index =>
-                             Get_Random
-                               (Min =>
-                                  SyllableString_Container.First_Index
-                                    (Container => Ship_Syllables_Start),
-                                Max =>
-                                  SyllableString_Container.Last_Index
-                                    (Container => Ship_Syllables_Start)))));
-            if Get_Random(Min => 1, Max => 100) < 51 then
-               Append
-                 (Source => New_Name,
-                  New_Item =>
-                    To_String
-                      (Source =>
-                         SyllableString_Container.Element
-                           (Container => Ship_Syllables_Middle,
-                            Index =>
-                              Get_Random
-                                (Min =>
-                                   SyllableString_Container.First_Index
-                                     (Container => Ship_Syllables_Middle),
-                                 Max =>
-                                   SyllableString_Container.Last_Index
-                                     (Container => Ship_Syllables_Middle)))));
-            end if;
-            Append
-              (Source => New_Name,
-               New_Item =>
-                 To_String
-                   (Source =>
-                      SyllableString_Container.Element
-                        (Container => Ship_Syllables_End,
-                         Index =>
-                           Get_Random
-                             (Min =>
-                                SyllableString_Container.First_Index
-                                  (Container => Ship_Syllables_End),
-                              Max =>
-                                SyllableString_Container.Last_Index
-                                  (Container => Ship_Syllables_End)))));
-         end if;
-         exit Generate_Ship_Name_Loop;
-         <<End_Of_Generate_Name_Loop>>
-      end loop Generate_Ship_Name_Loop;
-      return New_Name;
+      return
+        To_Bounded_String
+          (Source =>
+             Value
+               (Item =>
+                  Generate_Ada_Ship_Name
+                    (F_Index =>
+                       New_String(Str => To_String(Source => Owner)))));
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is

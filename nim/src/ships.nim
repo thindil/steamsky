@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
+import factions, game, utils
+
 type
   ShipSpeed* = enum
     ## FUNCTION
@@ -56,3 +59,17 @@ func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], ex
     return "Luxury quality"
   else:
     return "Palace room"
+
+proc generateShipName*(factionIndex: string): string =
+  if factionsList[factionIndex].namesType == robotic:
+    return $generateRoboticName()
+  result = shipsSyllablesStartList[getRandom(min = 0, max = (
+      shipsSyllablesStartList.len - 1))]
+  if getRandom(min = 1, max = 100) < 51:
+    result = result & shipsSyllablesMiddleList[getRandom(min = 0, max = (
+        shipsSyllablesMiddleList.len - 1))]
+  result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
+      shipsSyllablesEndList.len - 1))]
+
+proc generateAdaShipName(factionIndex: cstring): cstring {.exportc.} =
+  return generateShipName(factionIndex = $factionIndex).cstring
