@@ -20,7 +20,7 @@
 import std/[tables]
 import factions, game, utils
 
-proc generateCrewName*(gender: char; factionIndex: string): string =
+proc generateMemberName*(gender: char; factionIndex: string): string =
   if factionsList[factionIndex].namesType == robotic:
     return $generateRoboticName();
   if gender == 'M':
@@ -48,5 +48,5 @@ proc generateCrewName*(gender: char; factionIndex: string): string =
   result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
       femalesSyllablesEndList.len - 1))]
 
-proc generateAdaCrewName(gender: char; factionIndex: cstring): cstring {.exportc.} =
-  return generateCrewName(gender = gender, factionIndex = $factionIndex).cstring
+proc generateAdaMemberName(gender: char; factionIndex: cstring): cstring {.exportc.} =
+  return generateMemberName(gender = gender, factionIndex = $factionIndex).cstring

@@ -147,18 +147,18 @@ package body Crew is
       return Tiny_String.Bounded_String is
       use Interfaces.C.Strings;
       use Tiny_String;
-      function Generate_Ada_Crew_Name
+      function Generate_Ada_Member_Name
         (Crew_Gender: Character; F_Index: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
-         External_Name => "generateAdaCrewName";
+         External_Name => "generateAdaMemberName";
    begin
       return
         To_Bounded_String
           (Source =>
              Value
                (Item =>
-                  Generate_Ada_Crew_Name
+                  Generate_Ada_Member_Name
                     (Crew_Gender => Gender,
                      F_Index =>
                        New_String
