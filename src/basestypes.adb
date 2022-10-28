@@ -82,12 +82,12 @@ package body BasesTypes is
             Base_Data :=
               To_Unbounded_String
                 (Source =>
-                   (Value
-                      (Item =>
-                         Get_Ada_Base_Data
-                           (Base_Index => New_String(Str => Index'Img),
-                            Item_Index => Index2,
-                            Data_Type => New_String(Str => "recipe")))));
+                   Value
+                     (Item =>
+                        Get_Ada_Base_Data
+                          (Base_Index => New_String(Str => Index'Img),
+                           Item_Index => Index2,
+                           Data_Type => New_String(Str => "recipe"))));
             exit Load_Base_Recipes_Loop when Length(Source => Base_Data) = 0;
             Temp_Record.Recipes.Append(New_Item => Base_Data);
             Index2 := Index2 + 1;
@@ -99,12 +99,12 @@ package body BasesTypes is
             Base_Data :=
               To_Unbounded_String
                 (Source =>
-                   (Value
-                      (Item =>
-                         Get_Ada_Base_Data
-                           (Base_Index => New_String(Str => Index'Img),
-                            Item_Index => Index2,
-                            Data_Type => New_String(Str => "flag")))));
+                   Value
+                     (Item =>
+                        Get_Ada_Base_Data
+                          (Base_Index => New_String(Str => Index'Img),
+                           Item_Index => Index2,
+                           Data_Type => New_String(Str => "flag"))));
             exit Load_Base_Flags_Loop when Length(Source => Base_Data) = 0;
             Temp_Record.Flags.Append(New_Item => Base_Data);
             Index2 := Index2 + 1;
@@ -116,11 +116,11 @@ package body BasesTypes is
             Base_Data :=
               To_Unbounded_String
                 (Source =>
-                   (Value
-                      (Item =>
-                         Get_Ada_Base_Trade
-                           (Base_Index => New_String(Str => Index'Img),
-                            Trade_Index => Index2, Nim_Trade => Trade))));
+                   Value
+                     (Item =>
+                        Get_Ada_Base_Trade
+                          (Base_Index => New_String(Str => Index'Img),
+                           Trade_Index => Index2, Nim_Trade => Trade)));
             exit Load_Base_Trades_Loop when Length(Source => Base_Data) = 0;
             Temp_Record.Trades.Include
               (Key =>
