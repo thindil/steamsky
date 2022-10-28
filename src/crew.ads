@@ -303,8 +303,7 @@ package Crew is
      (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String with
       Pre => Gender in 'M' | 'F' and
-      Tiny_String.Length(Source => Faction_Index) > 0,
-      Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
+      Tiny_String.Length(Source => Faction_Index) > 0;
       -- ****
 
       -- ****f* Crew/Crew.Find_Cabin
