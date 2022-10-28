@@ -765,7 +765,7 @@ package body Game is
                Delete_Index: Natural := 0;
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
-               Item_Index: Natural := 0;
+               Item_Index: Natural;
                Syllable: Syllable_String.Bounded_String :=
                  Syllable_String.Null_Bounded_String;
                function Find_Attribute_Index
