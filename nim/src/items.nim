@@ -151,6 +151,12 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
+    if itemAction == DataAction.add:
+      logMessage(message = "Item added: '" & $itemIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Item removed: '" & $itemIndex & "'",
+          debugType = everything)
     itemsList[itemIndex] = item
     if itemIndex == moneyIndex:
       moneyName = item.name

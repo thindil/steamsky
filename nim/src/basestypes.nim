@@ -54,7 +54,7 @@ proc loadBasesTypes*(fileName: string) =
           message = "Can't add base type '" & baseTypeIndex & "', there is a base type with that index.")
     if baseTypeAction == DataAction.remove:
       basesTypesList.del(key = baseTypeIndex)
-      logMessage(message = "Base yype removed: '" & baseTypeIndex & "'",
+      logMessage(message = "Base type removed: '" & baseTypeIndex & "'",
           debugType = everything)
       continue
     var baseType: BaseTypeData = if baseTypeAction == DataAction.update:
@@ -145,6 +145,12 @@ proc loadBasesTypes*(fileName: string) =
               break
         else:
           baseType.flags.add(y = flagName)
+    if baseTypeAction == DataAction.add:
+      logMessage(message = "Base type added: '" & baseTypeIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Base type updated: '" & baseTypeIndex & "'",
+          debugType = everything)
     basesTypesList[baseTypeIndex] = baseType
 
 

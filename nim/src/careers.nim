@@ -47,7 +47,7 @@ proc loadCareers*(fileName: string) =
           message = "Can't add career '" & careerIndex & "', there is a career with that index.")
     if careerAction == DataAction.remove:
       careersList.del(key = careerIndex)
-      logMessage(message = "career removed: '" & careerIndex & "'",
+      logMessage(message = "Career removed: '" & careerIndex & "'",
           debugType = everything)
       continue
     var career: CareerData = if careerAction == DataAction.update:
@@ -73,6 +73,12 @@ proc loadCareers*(fileName: string) =
               careerIndex &
               "', no skill with name '" & skillName & "'.")
         career.skills.add(y = skillName)
+    if careerAction == DataAction.add:
+      logMessage(message = "Career added: '" & careerIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Career updated: '" & careerIndex & "'",
+          debugType = everything)
     careersList[careerIndex] = career
 
 proc loadAdaCareers*(fileName: cstring) {.exportc.} =

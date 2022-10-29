@@ -237,6 +237,11 @@ proc loadFactions*(fileName: string) =
       if faction.basesTypes.len() == 0:
         for key in basesTypesList.keys:
           faction.basesTypes[key] = 20
+      logMessage(message = "Faction added: '" & factionIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Faction updated: '" & factionIndex & "'",
+          debugType = everything)
     factionsList[factionIndex] = faction
 
 type
