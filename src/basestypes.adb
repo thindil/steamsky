@@ -29,11 +29,13 @@ package body BasesTypes is
 
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Base_Type_Data;
+      --## rule off TYPE_INITIAL_VALUES
       type Base_Type_Nim_Data is record
          Name: chars_ptr;
          Color: chars_ptr;
          Description: chars_ptr;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Temp_Nim_Record: Base_Type_Nim_Data;
       Trade: Prices_Array;
       --## rule on IMPROPER_INITIALIZATION
