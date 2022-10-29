@@ -903,7 +903,7 @@ package body MainMenu.Commands is
       Insert
         (TextWidget => Info_Text, Index => "end",
          Text =>
-           "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+           "{Select your starting base type from a list. Your starting base is your home base, where you can gain faster experience. Home base can be changed later. Some types of bases are better starting points than others. More info about each base type can be found after selecting it." &
            LF & LF & "}");
       Find_Base_Type_Loop :
       for Base of Bases_Types_List loop
