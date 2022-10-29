@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 - Crash when selling items after sorting the list of them (GitHub #93)
 - Information about tools needed to train Metalsmithing skill
 - Information about bases types during selecting it in the new game screen
+- Crash on start a new game when selected a base type unavailable for the
+  selected faction
 
 ## [7.9] - 2022-10-02
 
