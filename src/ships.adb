@@ -24,11 +24,11 @@ with DOM.Core.Nodes;
 with DOM.Core.Elements;
 with Bases;
 with Crafts; use Crafts;
-with Factions; use Factions;
+with Factions;
 with Log;
 with Maps;
 with Ships.Crew;
-with Utils; use Utils;
+with Utils;
 
 package body Ships is
 
@@ -40,6 +40,7 @@ package body Ships is
       use Bases;
       use Maps;
       use Tiny_String;
+      use Utils;
 
       Tmp_Ship: Ship_Record := Empty_Ship;
       Ship_Modules: Modules_Container.Vector := Modules_Container.Empty_Vector;
@@ -573,6 +574,7 @@ package body Ships is
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
+      use Factions;
       use Log;
       use Short_String;
       use Tiny_String;
