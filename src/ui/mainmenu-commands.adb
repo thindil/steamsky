@@ -1071,6 +1071,7 @@ package body MainMenu.Commands is
          end if;
       end loop Find_Faction_Loop;
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
+      New_Game_Settings.Starting_Base := To_Bounded_String(Source => "Any");
       Set_Starting_Base_Loop :
       for I in Bases_Types_List.Iterate loop
          if Bases_Types_List(I).Name =
