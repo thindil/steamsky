@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   (Drones)
 - Crash when selling items after sorting the list of them (GitHub #93)
 - Information about tools needed to train Metalsmithing skill
+- Information about bases types during selecting it in the new game screen
 
 ## [7.9] - 2022-10-02
 
