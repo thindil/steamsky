@@ -456,8 +456,7 @@ package Ships is
       -- SOURCE
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
-      Pre => Tiny_String.Length(Source => Owner) > 0,
-      Test_Case => (Name => "Test_GenerateShipName", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Owner) > 0;
       -- ****
 
       -- ****f* Ships/Ships.Count_Combat_Value
