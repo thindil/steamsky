@@ -1,4 +1,4 @@
---    Copyright 2018-2021 Bartek thindil Jasicki
+--    Copyright 2018-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,7 +23,9 @@ package body Careers is
       use Interfaces.C;
       use Interfaces.C.Strings;
 
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Career_Record;
+      --## rule on IMPROPER_INITIALIZATION
       Skill_Name, Career_Index: Unbounded_String := Null_Unbounded_String;
       type Nim_Career_Array is array(0 .. 1) of chars_ptr;
       Temp_Nim_Career: Nim_Career_Array;
