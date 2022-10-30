@@ -24,7 +24,7 @@ package body Careers is
       use Interfaces.C.Strings;
 
       Temp_Record: Career_Record;
-      Skill_Name, Career_Index: Unbounded_String;
+      Skill_Name, Career_Index: Unbounded_String := Null_Unbounded_String;
       type Nim_Career_Array is array(0 .. 1) of chars_ptr;
       Temp_Nim_Career: Nim_Career_Array;
       Index: Positive := 1;
