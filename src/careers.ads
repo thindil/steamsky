@@ -27,6 +27,7 @@ with Game; use Game;
 package Careers is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Careers/Careers.Career_Record
    -- FUNCTION
    -- Data structure for player career
@@ -40,6 +41,7 @@ package Careers is
       Skills: UnboundedString_Container.Vector;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Careers/Careers.Careers_Container
    -- FUNCTION
