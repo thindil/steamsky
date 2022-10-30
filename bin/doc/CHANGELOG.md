@@ -1,9 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.0] - 2022-10-30
 
-###
+### Added
 - New icons for lack of pilot or engineer for sentient ships. Author:
   Delapouite (https://game-icons.net), license CC BY 3.0
 
