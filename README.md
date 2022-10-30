@@ -13,12 +13,13 @@ closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/re
 
 There are currently 2 versions of the game:
 
-* 7.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *7.0* branch.
-* 7.x: "development" version of game, future version 8.0. This is where
+* 8.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in the *8.0* branch.
+  **This** version.
+* 8.x: "development" version of game, future version 9.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *trunk* branch. **This** version.
+  Source code for this version is in the *trunk* branch.
 
 ## Build game from sources
 
