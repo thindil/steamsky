@@ -1,8 +1,8 @@
-name: AdaControl checks
+name: AdaControl checks - development version
 
 on:
   push:
-    branches: [ 8.0 ]
+    branches: [ master ]
 
 jobs:
 
