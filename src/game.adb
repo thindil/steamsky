@@ -765,8 +765,7 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                Item_Index: Natural;
---               Syllable: Syllable_String.Bounded_String :=
---                 Syllable_String.Null_Bounded_String;
+               Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                function Find_Attribute_Index
                  (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
@@ -789,30 +788,29 @@ package body Game is
                   Import => True,
                   Convention => C,
                   External_Name => "loadAdaData";
---               function Get_Ada_List_Value
---                 (L_Index, I_Index: Natural) return chars_ptr with
---                  Import => True,
---                  Convention => C,
---                  External_Name => "getAdaListValue";
+               function Get_Ada_List_Value
+                 (L_Index, I_Index: Natural) return chars_ptr with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "getAdaListValue";
             begin
                Load_Ada_Data(Name => New_String(Str => Data_File_Name));
---               Item_Index := 0;
---               Fill_Ship_Syllables_Start_Loop :
---               loop
---                  Syllable :=
---                    To_Bounded_String
---                      (Source =>
---                         Value
---                           (Item =>
---                              Get_Ada_List_Value
---                                (L_Index => 13, I_Index => Item_Index)));
---                  exit Fill_Ship_Syllables_Start_Loop when Length
---                      (Source => Syllable) =
---                    0;
---                  SyllableString_Container.Append
---                    (Container => Ship_Syllables_Start, New_Item => Syllable);
---                  Item_Index := Item_Index + 1;
---               end loop Fill_Ship_Syllables_Start_Loop;
+               Item_Index := 0;
+               Fill_Items_Types_Loop :
+               loop
+                  Item_Type :=
+                    To_Bounded_String
+                      (Source =>
+                         Value
+                           (Item =>
+                              Get_Ada_List_Value
+                                (L_Index => 0, I_Index => Item_Index)));
+                  exit Fill_Items_Types_Loop when Length(Source => Item_Type) =
+                    0;
+                  TinyString_Formal_Container.Append
+                    (Container => Items_Types, New_Item => Item_Type);
+                  Item_Index := Item_Index + 1;
+               end loop Fill_Items_Types_Loop;
                Fill_Attributes_Block :
                declare
                   --## rule off TYPE_INITIAL_VALUES
@@ -944,15 +942,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "itemtype" then
-                     TinyString_Formal_Container.Append
-                       (Container => Items_Types,
-                        New_Item =>
-                          To_Bounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "repairtools" then
+                  if To_String(Source => Node_Name) = "repairtools" then
                      Repair_Tools :=
                        To_Bounded_String
                          (Source =>
