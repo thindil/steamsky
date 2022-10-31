@@ -82,6 +82,7 @@ var
   shipsSyllablesMiddleList*: seq[string]
   shipsSyllablesEndList*: seq[string]
   attributesList*: seq[AttributeRecord]
+  itemsTypesList*: seq[string]
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
@@ -157,6 +158,8 @@ proc loadData*(fileName: string) =
               name = "quality").parseInt()))
       skillsList[skillIndex] = newSkill
       skillIndex.inc()
+    of "itemtype":
+      itemsTypesList.add(y = gameNode.attr(name = "value"))
 
 # Temporary code for interfacing with Ada
 
@@ -166,69 +169,9 @@ proc loadAdaData(fileName: cstring) {.exportc.} =
 proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
   case listIndex
   of 0:
-    if itemIndex >= basesSyllablesPreList.len():
+    if itemIndex >= itemsTypesList.len():
       return ""
-    return basesSyllablesPreList[itemIndex].cstring
-  of 1:
-    if itemIndex >= basesSyllablesStartList.len():
-      return ""
-    return basesSyllablesStartList[itemIndex].cstring
-  of 2:
-    if itemIndex >= basesSyllablesEndList.len():
-      return ""
-    return basesSyllablesEndList[itemIndex].cstring
-  of 3:
-    if itemIndex >= basesSyllablesPostList.len():
-      return ""
-    return basesSyllablesPostList[itemIndex].cstring
-  of 4:
-    if itemIndex >= malesSyllablesStartList.len():
-      return ""
-    return malesSyllablesStartList[itemIndex].cstring
-  of 5:
-    if itemIndex >= malesSyllablesMiddleList.len():
-      return ""
-    return malesSyllablesMiddleList[itemIndex].cstring
-  of 6:
-    if itemIndex >= malesSyllablesEndList.len():
-      return ""
-    return malesSyllablesEndList[itemIndex].cstring
-  of 7:
-    if itemIndex >= malesVocalsList.len():
-      return ""
-    return malesVocalsList[itemIndex].cstring
-  of 8:
-    if itemIndex >= malesConsonantsList.len():
-      return ""
-    return malesConsonantsList[itemIndex].cstring
-  of 9:
-    if itemIndex >= femalesSyllablesStartList.len():
-      return ""
-    return femalesSyllablesStartList[itemIndex].cstring
-  of 10:
-    if itemIndex >= femalesSyllablesMiddleList.len():
-      return ""
-    return femalesSyllablesMiddleList[itemIndex].cstring
-  of 11:
-    if itemIndex >= femalesSyllablesEndList.len():
-      return ""
-    return femalesSyllablesEndList[itemIndex].cstring
-  of 12:
-    if itemIndex >= femalesVocalsList.len():
-      return ""
-    return femalesVocalsList[itemIndex].cstring
-  of 13:
-    if itemIndex >= shipsSyllablesStartList.len():
-      return ""
-    return shipsSyllablesStartList[itemIndex].cstring
-  of 14:
-    if itemIndex >= shipsSyllablesMiddleList.len():
-      return ""
-    return shipsSyllablesMiddleList[itemIndex].cstring
-  of 15:
-    if itemIndex >= shipsSyllablesEndList.len():
-      return ""
-    return shipsSyllablesEndList[itemIndex].cstring
+    return itemsTypesList[itemIndex].cstring
   else:
     return ""
 
