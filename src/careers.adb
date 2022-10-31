@@ -36,12 +36,12 @@ package body Careers is
          Convention => C,
          External_Name => "loadAdaCareers";
       procedure Get_Ada_Career
-        (Career_Index: Integer; Ada_Career: out Nim_Career_Array) with
+        (C_Index: Integer; Ada_Career: out Nim_Career_Array) with
          Import => True,
          Convention => C,
          External_Name => "getAdaCareer";
       function Get_Ada_Career_Skill
-        (Career_Index: chars_ptr; Skill_Index: Integer) return chars_ptr with
+        (C_Index: chars_ptr; Skill_Index: Integer) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaCareerSkill";
@@ -49,7 +49,7 @@ package body Careers is
       Load_Ada_Careers(Name => New_String(Str => File_Name));
       Load_Careers_Data_Loop :
       loop
-         Get_Ada_Career(Career_Index => Index, Ada_Career => Temp_Nim_Career);
+         Get_Ada_Career(C_Index => Index, Ada_Career => Temp_Nim_Career);
          exit Load_Careers_Data_Loop when Strlen(Item => Temp_Nim_Career(0)) =
            0;
          Career_Index :=
@@ -66,7 +66,7 @@ package body Careers is
                    (Interfaces.C.Strings.Value
                       (Item =>
                          Get_Ada_Career_Skill
-                           (Career_Index => Temp_Nim_Career(0),
+                           (C_Index => Temp_Nim_Career(0),
                             Skill_Index => Index2))));
             exit Load_Skills_Loop when Length(Source => Skill_Name) = 0;
             Temp_Record.Skills.Append(New_Item => Skill_Name);
