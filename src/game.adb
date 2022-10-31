@@ -755,7 +755,6 @@ package body Game is
                use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
-               use Syllable_String;
                use Tiny_String;
 
                Game_Data: Document;
@@ -766,8 +765,8 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                Item_Index: Natural;
-               Syllable: Syllable_String.Bounded_String :=
-                 Syllable_String.Null_Bounded_String;
+--               Syllable: Syllable_String.Bounded_String :=
+--                 Syllable_String.Null_Bounded_String;
                function Find_Attribute_Index
                  (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
@@ -790,64 +789,30 @@ package body Game is
                   Import => True,
                   Convention => C,
                   External_Name => "loadAdaData";
-               function Get_Ada_List_Value
-                 (L_Index, I_Index: Natural) return chars_ptr with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "getAdaListValue";
+--               function Get_Ada_List_Value
+--                 (L_Index, I_Index: Natural) return chars_ptr with
+--                  Import => True,
+--                  Convention => C,
+--                  External_Name => "getAdaListValue";
             begin
                Load_Ada_Data(Name => New_String(Str => Data_File_Name));
-               Item_Index := 0;
-               Fill_Ship_Syllables_Start_Loop :
-               loop
-                  Syllable :=
-                    To_Bounded_String
-                      (Source =>
-                         Value
-                           (Item =>
-                              Get_Ada_List_Value
-                                (L_Index => 13, I_Index => Item_Index)));
-                  exit Fill_Ship_Syllables_Start_Loop when Length
-                      (Source => Syllable) =
-                    0;
-                  SyllableString_Container.Append
-                    (Container => Ship_Syllables_Start, New_Item => Syllable);
-                  Item_Index := Item_Index + 1;
-               end loop Fill_Ship_Syllables_Start_Loop;
-               Item_Index := 0;
-               Fill_Ship_Syllables_Middle_Loop :
-               loop
-                  Syllable :=
-                    To_Bounded_String
-                      (Source =>
-                         Value
-                           (Item =>
-                              Get_Ada_List_Value
-                                (L_Index => 14, I_Index => Item_Index)));
-                  exit Fill_Ship_Syllables_Middle_Loop when Length
-                      (Source => Syllable) =
-                    0;
-                  SyllableString_Container.Append
-                    (Container => Ship_Syllables_Middle, New_Item => Syllable);
-                  Item_Index := Item_Index + 1;
-               end loop Fill_Ship_Syllables_Middle_Loop;
-               Item_Index := 0;
-               Fill_Ship_Syllables_End_Loop :
-               loop
-                  Syllable :=
-                    To_Bounded_String
-                      (Source =>
-                         Value
-                           (Item =>
-                              Get_Ada_List_Value
-                                (L_Index => 15, I_Index => Item_Index)));
-                  exit Fill_Ship_Syllables_End_Loop when Length
-                      (Source => Syllable) =
-                    0;
-                  SyllableString_Container.Append
-                    (Container => Ship_Syllables_End, New_Item => Syllable);
-                  Item_Index := Item_Index + 1;
-               end loop Fill_Ship_Syllables_End_Loop;
+--               Item_Index := 0;
+--               Fill_Ship_Syllables_Start_Loop :
+--               loop
+--                  Syllable :=
+--                    To_Bounded_String
+--                      (Source =>
+--                         Value
+--                           (Item =>
+--                              Get_Ada_List_Value
+--                                (L_Index => 13, I_Index => Item_Index)));
+--                  exit Fill_Ship_Syllables_Start_Loop when Length
+--                      (Source => Syllable) =
+--                    0;
+--                  SyllableString_Container.Append
+--                    (Container => Ship_Syllables_Start, New_Item => Syllable);
+--                  Item_Index := Item_Index + 1;
+--               end loop Fill_Ship_Syllables_Start_Loop;
                Fill_Attributes_Block :
                declare
                   --## rule off TYPE_INITIAL_VALUES

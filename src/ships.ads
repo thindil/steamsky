@@ -372,27 +372,6 @@ package Ships is
    Player_Ship: Ship_Record;
    -- ****
 
-   -- ****v* Ships/Ships.Ship_Syllables_Start
-   -- FUNCTION
-   -- List of first syllables for generating ships names
-   -- SOURCE
-   Ship_Syllables_Start: SyllableString_Container.Vector (Capacity => 128);
-   -- ****
-
-   -- ****v* Ships/Ships.Ship_Syllables_Middle
-   -- FUNCTION
-   -- List of middle syllables for generating ships names
-   -- SOURCE
-   Ship_Syllables_Middle: SyllableString_Container.Vector (Capacity => 128);
-   -- ****
-
-   -- ****v* Ships/Ships.Ship_Syllables_End
-   -- FUNCTION
-   -- List of last syllables for generating ships names
-   -- SOURCE
-   Ship_Syllables_End: SyllableString_Container.Vector (Capacity => 128);
-   -- ****
-
    -- ****e* Ships/Ships.Ships_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data in ships file
