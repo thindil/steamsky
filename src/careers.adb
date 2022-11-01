@@ -63,11 +63,11 @@ package body Careers is
             Skill_Name :=
               To_Unbounded_String
                 (Source =>
-                   (Interfaces.C.Strings.Value
-                      (Item =>
-                         Get_Ada_Career_Skill
-                           (C_Index => Temp_Nim_Career(0),
-                            Skill_Index => Index2))));
+                   Interfaces.C.Strings.Value
+                     (Item =>
+                        Get_Ada_Career_Skill
+                          (C_Index => Temp_Nim_Career(0),
+                           Skill_Index => Index2)));
             exit Load_Skills_Loop when Length(Source => Skill_Name) = 0;
             Temp_Record.Skills.Append(New_Item => Skill_Name);
             Index2 := Index2 + 1;
