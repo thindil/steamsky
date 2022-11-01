@@ -24,7 +24,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -130,14 +130,16 @@ package body Utils.UI is
    -- entered amount is a proper number
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- CheckAmount name cargoindex value
+   -- CheckAmount name cargoindex value action button
    -- Name is the name of spinbox which value will be checked, cargoindex is
-   -- the index of the item in the cargo
+   -- the index of the item in the cargo, value is the value entered by the
+   -- player, action is the action performed by the player and button is
+   -- the button which accept the action
    -- SOURCE
    function Check_Amount_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -166,6 +168,8 @@ package body Utils.UI is
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Max_Value: constant Positive :=
         Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
+      Button: constant Ttk_Button :=
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => Argc - 1));
    begin
       if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
          Check_Argument_Loop :
@@ -175,7 +179,11 @@ package body Utils.UI is
                return TCL_OK;
             end if;
          end loop Check_Argument_Loop;
-         Value := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
+         if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
+            Value := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
+         else
+            Value := 0;
+         end if;
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = ".itemdialog.giveamount" then
          Warning_Text :=
@@ -189,11 +197,17 @@ package body Utils.UI is
                 " amount below low level of ");
       end if;
       if Value < 1 then
-         Set(SpinBox => Spin_Box, Value => "1");
-         Value := 1;
+         if Strlen(Item => Button.Name) > 0 then
+            Widgets.configure(Widgt => Button, options => "-state disabled");
+         end if;
+         Tcl_SetResult(interp => Interp, str => "1");
+         return TCL_OK;
       elsif Value > Max_Value then
          Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Value));
          Value := Max_Value;
+      end if;
+      if Strlen(Item => Button.Name) > 0 then
+         Widgets.configure(Widgt => Button, options => "-state normal");
       end if;
       if Argc > 4 then
          if CArgv.Arg(Argv => Argv, N => 4) = "take" then
@@ -340,7 +354,7 @@ package body Utils.UI is
          else CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
            CArgv.Arg(Argv => Argv, N => 1) & CArgv.Arg(Argv => Argv, N => 2) &
            Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3) &
-           CArgv.Arg(Argv => Argv, N => 4));
+           CArgv.Arg(Argv => Argv, N => 4) & CArgv.Arg(Argv => Argv, N => 5));
    begin
       return
         Check_Amount_Command
@@ -542,7 +556,6 @@ package body Utils.UI is
       elsif Result = "showstats" then
          Show_Game_Stats_Block :
          declare
-            use Tcl.Tk.Ada.Widgets.TtkButton;
             use Statistics.UI;
 
             Button: constant Ttk_Button :=

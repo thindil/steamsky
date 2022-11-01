@@ -628,10 +628,11 @@ package body Dialogs is
                      .Amount) &
                 " -validate key -validatecommand {CheckAmount " & Item_Dialog &
                 ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") &
-                "} -command {ValidateAmount " & Item_Dialog & ".amount" &
-                Positive'Image(Item_Index) & " " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & "}");
+                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+                Button & "} -command {ValidateAmount " & Item_Dialog &
+                ".amount" & Positive'Image(Item_Index) & " " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+                Button & "}");
       else
          Amount_Box :=
            Create
@@ -640,10 +641,11 @@ package body Dialogs is
                 "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
                 " -validate key -validatecommand {CheckAmount " & Item_Dialog &
                 ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") &
-                "} -command {ValidateAmount " & Item_Dialog & ".amount" &
-                Positive'Image(Item_Index) & " " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & "}");
+                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+                Button & "} -command {ValidateAmount " & Item_Dialog &
+                ".amount" & Positive'Image(Item_Index) & " " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+                Button & "}");
       end if;
       if Max_Amount = 0 then
          Max_Button :=
