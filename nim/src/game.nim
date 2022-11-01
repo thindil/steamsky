@@ -248,3 +248,6 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
   for toolQuality in skillsList[skillIndex].toolsQuality:
     tools[index] = [toolQuality.level.cint, toolQuality.quality.cint]
     index.inc()
+
+proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
+  return findSkillIndex(skillName = $skillName).cint

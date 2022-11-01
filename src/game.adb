@@ -18,7 +18,7 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Elements;
 with DOM.Core.Documents;
@@ -666,20 +666,13 @@ package body Game is
 
    function Find_Skill_Index
      (Skill_Name: String) return SkillsData_Container.Extended_Index is
-      use Tiny_String;
+      function Find_Ada_Skill_Index
+        (S_Name: chars_ptr) return SkillsData_Container.Extended_Index with
+         Import => True,
+         Convention => C,
+         External_Name => "findAdaSkillIndex";
    begin
-      Find_Skill_Loop :
-      for I in 1 .. Skills_Amount loop
-         if To_String
-             (Source =>
-                SkillsData_Container.Element
-                  (Container => Skills_List, Index => I)
-                  .Name) =
-           Skill_Name then
-            return I;
-         end if;
-      end loop Find_Skill_Loop;
-      return 0;
+      return Find_Ada_Skill_Index(S_Name => New_String(Str => Skill_Name));
    end Find_Skill_Index;
 
    function Load_Game_Data return String is
@@ -752,7 +745,6 @@ package body Game is
             procedure Load_Data
               (Current_Reader: Tree_Reader; Data_File_Name: String) is
                use Interfaces.C;
-               use Interfaces.C.Strings;
                use DOM.Core;
                use DOM.Core.Elements;
                use Tiny_String;
