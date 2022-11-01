@@ -534,8 +534,10 @@ package body Ships.UI.Cargo is
                   (Container => Player_Ship.Cargo, Index => Item_Index)
                   .Amount) &
              " -validate key -validatecommand {CheckAmount %W" &
-             Positive'Image(Item_Index) & " %P} -command {ValidateAmount " &
-             Item_Dialog & ".giveamount" & Positive'Image(Item_Index) & "}");
+             Positive'Image(Item_Index) & " %P " & Item_Dialog &
+             ".givebutton} -command {ValidateAmount " & Item_Dialog &
+             ".giveamount" & Positive'Image(Item_Index) & " " & Item_Dialog &
+             ".givebutton}");
       Crew_Box: constant Ttk_ComboBox :=
         Create
           (pathName => Item_Dialog & ".member",
