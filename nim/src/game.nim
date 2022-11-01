@@ -83,6 +83,27 @@ var
   shipsSyllablesEndList*: seq[string]
   attributesList*: seq[AttributeRecord]
   itemsTypesList*: seq[string]
+  repairTools*: string
+  cleaningTools*: string
+  alchemyTools*: string
+  corpseIndex*: Positive
+  missionItemsType*: string
+  fuelType*: string
+  tradersName*: string
+  conditionIndex*: Positive
+  strengthIndex*: Positive
+  pilotingSkill*: Positive
+  engineeringSkill*: Positive
+  talkingSkill*: Positive
+  perceptionSkill*: Positive
+  headArmor*: string
+  chestArmor*: string
+  armsArmor*: string
+  legsArmor*: string
+  shieldType*: string
+  weaponType*: string
+  dodgeSkill*: Positive
+  unarmedSkill*: Positive
 
 proc findSkillIndex*(skillName: string): Natural =
   for key, skill in skillsList.pairs:
