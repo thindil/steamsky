@@ -822,8 +822,7 @@ package Game is
      (Skill_Name: String) return SkillsData_Container.Extended_Index with
       Pre => Skill_Name'Length > 0,
       Post => Find_Skill_Index'Result <=
-      SkillsData_Container.Length(Container => Skills_List),
-      Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
+      SkillsData_Container.Length(Container => Skills_List);
       -- ****
 
       -- ****f* Game/Game.Load_Game_Data
