@@ -761,7 +761,6 @@ package body Game is
                --## rule off IMPROPER_INITIALIZATION
                Nodes_List: Node_List;
                --## rule on IMPROPER_INITIALIZATION
-               Delete_Index: Natural := 0;
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                Item_Index: Natural;
@@ -1063,62 +1062,6 @@ package body Game is
                        Find_Skill_Index
                          (Skill_Name =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "remove" then
-                     if Get_Attribute(Elem => Data_Node, Name => "name") =
-                       "skill" then
-                        Delete_Skill_Block :
-                        declare
-                           Delete_Skill_Index: constant SkillsData_Container
-                             .Extended_Index :=
-                             Find_Skill_Index
-                               (Skill_Name =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "value"));
-                        begin
-                           if Delete_Skill_Index > 0 then
-                              SkillsData_Container.Delete
-                                (Container => Skills_List,
-                                 Index => Delete_Skill_Index);
-                           end if;
-                        end Delete_Skill_Block;
-                     elsif Get_Attribute(Elem => Data_Node, Name => "name") =
-                       "attribute" then
-                        Delete_Index :=
-                          Find_Attribute_Index
-                            (Attribute_Name =>
-                               To_Bounded_String
-                                 (Source =>
-                                    Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
-                        if Delete_Index > 0 then
-                           AttributesData_Container.Delete
-                             (Container => Attributes_List,
-                              Index => Delete_Index);
-                        end if;
-                     elsif Get_Attribute(Elem => Data_Node, Name => "name") =
-                       "itemtype" then
-                        Delete_Index := 0;
-                        Load_Item_Types_Loop :
-                        for J in
-                          TinyString_Formal_Container.First_Index
-                            (Container => Items_Types) ..
-                            TinyString_Formal_Container.Last_Index
-                              (Container => Items_Types) loop
-                           if TinyString_Formal_Container.Element
-                               (Container => Items_Types, Index => J) =
-                             To_Bounded_String
-                               (Source =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "value")) then
-                              Delete_Index := J;
-                              exit Load_Item_Types_Loop;
-                           end if;
-                        end loop Load_Item_Types_Loop;
-                        if Delete_Index > 0 then
-                           TinyString_Formal_Container.Delete
-                             (Container => Items_Types, Index => Delete_Index);
-                        end if;
-                     end if;
                   end if;
                end loop Load_Game_Data_Loop;
             end Load_Data;

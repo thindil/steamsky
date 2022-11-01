@@ -160,6 +160,20 @@ proc loadData*(fileName: string) =
       skillIndex.inc()
     of "itemtype":
       itemsTypesList.add(y = gameNode.attr(name = "value"))
+    of "remove":
+      case gameNode.attr(name = "name")
+      of "skill":
+        {.warning[ProveInit]: off.}
+        {.warning[UnsafeDefault]: off.}
+        skillsList.del(key = gameNode.attr(name = "value").parseInt())
+        {.warning[ProveInit]: on.}
+        {.warning[UnsafeDefault]: on.}
+      of "attribute":
+        attributesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+      of "itemtype":
+        itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+      else:
+        discard
 
 # Temporary code for interfacing with Ada
 
