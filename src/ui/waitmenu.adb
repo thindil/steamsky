@@ -116,7 +116,8 @@ package body WaitMenu is
         Create
           (pathName => Wait_Dialog & ".amount",
            options =>
-             "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
+             "-from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
+             Button & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-row 7 -column 1");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
