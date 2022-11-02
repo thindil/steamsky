@@ -968,7 +968,7 @@ package body Ships.UI.Cargo is
          options =>
            "-text {Amount (max:" & Natural'Image(Max_Amount) &
            "):} -command {" & Amount_Box & " set" & Natural'Image(Max_Amount) &
-           "}");
+           ";" & Amount_Box & " validate}");
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
