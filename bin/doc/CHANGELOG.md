@@ -5,3 +5,4 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+- Updated look of the crew members info's dialog
