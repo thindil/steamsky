@@ -923,9 +923,9 @@ package body Ships.UI.Crew.Inventory is
         Create
           (pathName => Item_Dialog & ".amount",
            options =>
-             "-width 5 -from 1.0 -to" & Float'Image(Float(Max_Amount)) &
+             "-width 5 -from 1 -to" & Positive'Image(Max_Amount) &
              " -validate key -validatecommand {ValidateMoveAmount" &
-             Positive'Image(Max_Amount) & " %P}");
+             Positive'Image(Max_Amount) & " %P " & Button & " %W}");
    begin
       Max_Amount_Button :=
         Create
@@ -933,7 +933,7 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-text {Amount (max:" & Positive'Image(Max_Amount) &
              "):} -command {" & Amount_Box & " set" &
-             Positive'Image(Max_Amount) & "}");
+             Positive'Image(Max_Amount) & ";" & Amount_Box & " validate}");
       Add
         (Widget => Max_Amount_Button,
          Message => "Max amount of the item to move.");
@@ -1115,7 +1115,7 @@ package body Ships.UI.Crew.Inventory is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ValidateMoveAmount
+   -- ValidateMoveAmount maxvalue amount button spinbox
    -- SOURCE
    function Validate_Move_Amount_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -1127,13 +1127,27 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Amount: Positive;
+
+      Amount: Natural := 0;
+      Button: constant Ttk_Button :=
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 3));
+      Max_Value: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 4), Interp => Interp);
    begin
-      Amount := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      if Amount > Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) then
-         Tcl_SetResult(interp => Interp, str => "0");
-         return TCL_OK;
+      if CArgv.Arg(Argv => Argv, N => 2)'Length > 0 then
+         Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
       end if;
+      if Amount < 1 then
+         Widgets.configure(Widgt => Button, options => "-state disabled");
+         Tcl_SetResult(interp => Interp, str => "1");
+         return TCL_OK;
+      elsif Amount > Max_Value then
+         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Value));
+      end if;
+      Widgets.configure(Widgt => Button, options => "-state normal");
       Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    exception
