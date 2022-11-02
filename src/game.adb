@@ -757,6 +757,8 @@ package body Game is
                Data_Node: Node;
                Item_Index: Natural;
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
+               type Nim_Strings_Array is array(0 .. 4) of chars_ptr;
+               Nim_Strings: Nim_Strings_Array;
                function Find_Attribute_Index
                  (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
@@ -784,6 +786,11 @@ package body Game is
                   Import => True,
                   Convention => C,
                   External_Name => "getAdaListValue";
+               procedure Get_Ada_Game_Strings
+                 (Values: out Nim_Strings_Array) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "getAdaGameStrings";
             begin
                Load_Ada_Data(Name => New_String(Str => Data_File_Name));
                Item_Index := 0;
@@ -924,6 +931,17 @@ package body Game is
                      Item_Index := Item_Index + 1;
                   end loop Fill_Skills_Loop;
                end Fill_Skills_Block;
+               Get_Ada_Game_Strings(Values => Nim_Strings);
+               Repair_Tools :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(0)));
+               Cleaning_Tools :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(1)));
+               Alchemy_Tools :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(2)));
+               Mission_Items_Type :=
+                 To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
+               Fuel_Type :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -933,36 +951,10 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "repairtools" then
-                     Repair_Tools :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "cleaningtools" then
-                     Cleaning_Tools :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "alchemytools" then
-                     Alchemy_Tools :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "corpseindex" then
+                  if To_String(Source => Node_Name) = "corpseindex" then
                      Corpse_Index :=
                        Positive'Value
                          (Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) =
-                    "missionitemstype" then
-                     Mission_Items_Type :=
-                       To_Unbounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "fueltype" then
-                     Fuel_Type :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "moneyindex" then
                      Money_Index :=
                        Positive'Value

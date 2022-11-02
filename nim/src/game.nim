@@ -263,3 +263,7 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
 
 proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
   return findSkillIndex(skillName = $skillName).cint
+
+proc getAdaGameStrings(values: var array[0..4, cstring]) {.exportc.} =
+  values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
+      missionItemsType.cstring, fuelType.cstring]
