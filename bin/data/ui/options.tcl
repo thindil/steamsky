@@ -116,7 +116,7 @@ grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}] -sticky w
 tooltip::tooltip $goptions.lbl8 \
    "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 7 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 7 -column 1 \
    -sticky w
 tooltip::tooltip $goptions.fuel \
    "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
@@ -124,7 +124,7 @@ grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}] -sticky w
 tooltip::tooltip $goptions.lbl9 \
    "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 8 -column 1 \
    -sticky w
 tooltip::tooltip $goptions.drinks \
    "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
@@ -132,7 +132,7 @@ grid [ttk::label $goptions.lbl10 -text {Low level of food:}] -sticky w
 tooltip::tooltip $goptions.lbl10 \
    "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 9 -column 1 \
    -sticky w
 tooltip::tooltip $goptions.food \
    "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
@@ -148,7 +148,7 @@ grid [ttk::label $goptions.lbl12 -text {Messages limit:}] -sticky w
 tooltip::tooltip $goptions.lbl12 \
    "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 11 -column 1 \
    -sticky w
 tooltip::tooltip $goptions.messageslimit \
    "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
@@ -156,7 +156,7 @@ grid [ttk::label $goptions.lbl13 -text {Saved messages:}] -sticky w
 tooltip::tooltip $goptions.lbl13 \
    "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
 grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 12 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 12 -column 1 \
    -sticky w
 tooltip::tooltip $goptions.savedmessages \
    "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
@@ -685,7 +685,7 @@ grid [ttk::label $ioptions.lbl7 -text {Close messages after:}] -sticky w
 tooltip::tooltip $ioptions.lbl7 \
    {Auto close game messages after that amount of seconds.}
 grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 6 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 6 -column 1 \
    -sticky w
 tooltip::tooltip $ioptions.closemessages \
    {Auto close game messages after that amount of seconds.}
@@ -699,7 +699,7 @@ grid [ttk::label $ioptions.lbl12 -text {Amount items on lists:}] -sticky w
 tooltip::tooltip $ioptions.lbl12 \
    "The amount of items displayed on various lists in\nthe game like crew members, modules, etc."
 grid [ttk::spinbox $ioptions.listslimit -from 5 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 8 -column 1 \
    -sticky w
 tooltip::tooltip $ioptions.listslimit \
    "The amount of items displayed on various lists in\nthe game like crew members, modules, etc."
@@ -707,7 +707,7 @@ grid [ttk::label $ioptions.lbl9 -text {Size of map font:}] -sticky w
 tooltip::tooltip $ioptions.lbl9 \
    {Size (in pixels) of font used to draw game map.}
 grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 9 -column 1 \
    -sticky w
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont \
@@ -716,7 +716,7 @@ grid [ttk::label $ioptions.lbl10 -text {Size of help font:}] -sticky w
 tooltip::tooltip $ioptions.lbl10 \
    {Size (in pixels) of font used mainly in help.}
 grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 10 -column 1 \
    -sticky w
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont \
@@ -725,7 +725,7 @@ grid [ttk::label $ioptions.lbl11 -text {Size of interface font:}] -sticky w
 tooltip::tooltip $ioptions.lbl11 \
    {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 11 -column 1 \
    -sticky w
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont \

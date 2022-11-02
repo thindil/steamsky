@@ -58,10 +58,14 @@ $mapview tag configure gray -foreground #1f2223
 $mapview tag configure black -foreground black
 proc ValidateSpinbox {widget value button} {
    if {$value == ""} {
-      $button configure -state disabled
+      if {$button != ""} {
+         $button configure -state disabled
+      }
       return true
    }
-   $button configure -state normal
+   if {$button != ""} {
+      $button configure -state normal
+   }
    set newvalue [regsub -all {[^0-9]} $value {}]
    set minvalue [$widget cget -from]
    if {$newvalue == ""} {
