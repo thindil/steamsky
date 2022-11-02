@@ -410,6 +410,10 @@ package body Bases.SchoolUI is
            Interp => Interp);
       Amount, Cost: Natural := 0;
    begin
+      if CArgv.Arg(Argv => Argv, N => 2) = "" then
+         Tcl_SetResult(interp => Interp, str => "1");
+         return TCL_OK;
+      end if;
       Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
       if Amount < 1 then
          Amount := 1;

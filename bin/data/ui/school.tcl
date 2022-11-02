@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ tooltip::tooltip $schoolframe.amountbox.amountlbl \
    {Enter amount of training sessions between 1 and 100}
 grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 100 \
    -validate key \
-   -validatecommand {ValidateSpinbox %W %P;UpdateSchoolCost %W %P} -width 5] \
-   -row 1 -column 1 -sticky w
+   -validatecommand {ValidateSpinbox %W %P $schoolcanvas.school.setting.train;UpdateSchoolCost %W %P} \
+   -width 5] -row 1 -column 1 -sticky w
 tooltip::tooltip $schoolframe.amountbox.amount \
    {Enter amount of training sessions between 1 and 100}
 $schoolframe.amountbox.amount set 1
@@ -89,8 +89,8 @@ grid [ttk::label $schoolframe.costbox.amountlbl -text {Cost:}] -sticky w \
 tooltip::tooltip $schoolframe.costbox.amountlbl \
    {Enter amount of money which you want to spend}
 grid [ttk::spinbox $schoolframe.costbox.amount -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 10] -row 1 -column 1 \
-   -sticky w
+   -validatecommand {ValidateSpinbox %W %P $schoolcanvas.school.setting.train} \
+   -width 10] -row 1 -column 1 -sticky w
 tooltip::tooltip $schoolframe.costbox.amount \
    {Enter amount of money which you want to spend}
 $schoolframe.costbox.amount set 1
