@@ -27,7 +27,9 @@ package body Careers is
       Temp_Record: Career_Record;
       --## rule on IMPROPER_INITIALIZATION
       Skill_Name, Career_Index: Unbounded_String := Null_Unbounded_String;
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Career_Array is array(0 .. 1) of chars_ptr;
+      --## rule on TYPE_INITIAL_VALUES
       Temp_Nim_Career: Nim_Career_Array;
       Index: Positive := 1;
       Index2: Natural := 0;
