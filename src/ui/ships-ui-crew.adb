@@ -726,17 +726,17 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create
                       (pathName => Frame & ".health",
-                       options => "-text {Slightly wounded}");
+                       options => "-text {Health: Slightly wounded}");
                when 51 .. 80 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".health",
-                       options => "-text {Wounded}");
+                       options => "-text {Health: Wounded}");
                when 1 .. 50 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".health",
-                       options => "-text {Heavily wounded}");
+                       options => "-text {Health: Heavily wounded}");
                when others =>
                   null;
             end case;
@@ -762,22 +762,22 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create
                       (pathName => Frame & ".tired",
-                       options => "-text {Bit tired}");
+                       options => "-text {Tiredness: Bit tired}");
                when 41 .. 80 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".tired",
-                       options => "-text {Tired}");
+                       options => "-text {Tiredness: Tired}");
                when 81 .. 99 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".tired",
-                       options => "-text {Very tired}");
+                       options => "-text {Tiredness: Very tired}");
                when 100 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".tired",
-                       options => "-text {Unconscious}");
+                       options => "-text {Tiredness: Unconscious}");
                when others =>
                   null;
             end case;
@@ -801,22 +801,22 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create
                       (pathName => Frame & ".thirst",
-                       options => "-text {Bit thirsty}");
+                       options => "-text {Thirst: Bit thirsty}");
                when 41 .. 80 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".thirst",
-                       options => "-text {Thirsty}");
+                       options => "-text {Thirst: Thirsty}");
                when 81 .. 99 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".thirst",
-                       options => "-text {Very thirsty}");
+                       options => "-text {Thirst: Very thirsty}");
                when 100 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".thirst",
-                       options => "-text {Dehydrated}");
+                       options => "-text {Thirst: Dehydrated}");
                when others =>
                   null;
             end case;
@@ -840,22 +840,22 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create
                       (pathName => Frame & ".hunger",
-                       options => "-text {Bit hungry}");
+                       options => "-text {Hunger: Bit hungry}");
                when 41 .. 80 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".hunger",
-                       options => "-text {Hungry}");
+                       options => "-text {Hunger: Hungry}");
                when 81 .. 99 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".hunger",
-                       options => "-text {Very hungry}");
+                       options => "-text {Hunger: Very hungry}");
                when 100 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".hunger",
-                       options => "-text {Starving}");
+                       options => "-text {Hunger: Starving}");
                when others =>
                   null;
             end case;
@@ -879,22 +879,22 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create
                       (pathName => Frame & ".morale",
-                       options => "-text {Upset}");
+                       options => "-text {Morale: Upset}");
                when 25 .. 49 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".morale",
-                       options => "-text {Unhappy}");
+                       options => "-text {Morale: Unhappy}");
                when 51 .. 74 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".morale",
-                       options => "-text {Happy}");
+                       options => "-text {Morale: Happy}");
                when 75 .. 100 =>
                   Member_Label :=
                     Create
                       (pathName => Frame & ".morale",
-                       options => "-text {Excited}");
+                       options => "-text {Morale: Excited}");
                when others =>
                   null;
             end case;
