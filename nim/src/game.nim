@@ -195,6 +195,18 @@ proc loadData*(fileName: string) =
         itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
       else:
         discard
+    of "repairtools":
+      repairTools = gameNode.attr(name = "value")
+    of "cleaningtools":
+      cleaningTools = gameNode.attr(name = "value")
+    of "alchemytools":
+      alchemyTools = gameNode.attr(name = "value")
+    of "corpseindex":
+      corpseIndex = gameNode.attr(name = "value").parseInt()
+    of "missionitemstype":
+      missionItemsType = gameNode.attr(name = "value")
+    of "fueltype":
+      fuelType = gameNode.attr(name = "value")
 
 # Temporary code for interfacing with Ada
 
