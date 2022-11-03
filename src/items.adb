@@ -44,8 +44,7 @@ package body Items is
       end record;
       Temp_Nim_Record: Object_Nim_Data;
       Index: Positive := 1;
-      function Load_Ada_Items
-        (Name: chars_ptr; Money: Integer) return chars_ptr with
+      function Load_Ada_Items(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
@@ -59,10 +58,7 @@ package body Items is
         To_Unbounded_String
           (Source =>
              Value
-               (Item =>
-                  Load_Ada_Items
-                    (Name => New_String(Str => File_Name),
-                     Money => Money_Index)));
+               (Item => Load_Ada_Items(Name => New_String(Str => File_Name))));
       Load_Items_Loop :
       loop
          Get_Ada_Item(Index => Index, Ada_Item => Temp_Nim_Record);

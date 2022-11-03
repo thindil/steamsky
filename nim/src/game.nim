@@ -207,6 +207,8 @@ proc loadData*(fileName: string) =
       missionItemsType = gameNode.attr(name = "value")
     of "fueltype":
       fuelType = gameNode.attr(name = "value")
+    of "moneyindex":
+      moneyIndex = gameNode.attr(name = "value").parseInt()
 
 # Temporary code for interfacing with Ada
 
@@ -269,4 +271,4 @@ proc getAdaGameStrings(values: var array[0..4, cstring]) {.exportc.} =
       missionItemsType.cstring, fuelType.cstring]
 
 proc getAdaGameIntegers(values: var array[0..1, cint]) {.exportc.} =
-  values = [corpseIndex.cint, 0.cint]
+  values = [corpseIndex.cint, moneyIndex.cint]

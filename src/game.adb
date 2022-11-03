@@ -953,6 +953,7 @@ package body Game is
                  To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
                Get_Ada_Game_Integers(Values => Nim_Integers);
                Corpse_Index := Nim_Integers(0);
+               Money_Index := Nim_Integers(1);
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -962,11 +963,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "moneyindex" then
-                     Money_Index :=
-                       Positive'Value
-                         (Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "tradersname" then
+                  if To_String(Source => Node_Name) = "tradersname" then
                      Traders_Name :=
                        To_Unbounded_String
                          (Source =>
