@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## Fixed
+- No check for the correct amount of items to craft during setting a crafting
+  recipe
+
 ## [8.0] - 2022-10-30
 
 ### Added
