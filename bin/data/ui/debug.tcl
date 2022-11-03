@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,11 +45,11 @@ set shipframe [ttk::frame .debugdialog.main.ship]
 grid [ttk::button $shipframe.move -text {Move ship} -command DebugMoveShip]
 grid [ttk::label $shipframe.lblx -text {X:}] -column 1 -row 0
 grid [ttk::spinbox $shipframe.x -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 2 -row 0 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.move} -width 5] -column 2 -row 0 \
    -sticky w
 grid [ttk::label $shipframe.lbly -text {Y:}] -column 3 -row 0 -sticky w
 grid [ttk::spinbox $shipframe.y -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 4 -row 0 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.move} -width 5] -column 4 -row 0 \
    -sticky w
 grid [ttk::label $shipframe.modulelbl -text {Module:}]
 grid [ttk::combobox $shipframe.module -state readonly] -column 1 -row 1 \
@@ -60,19 +60,19 @@ grid [ttk::combobox $shipframe.proto -state readonly]  -column 1 -row 2 \
    -columnspan 4 -sticky w
 grid [ttk::label $shipframe.weightlbl -text {Weight:}]
 grid [ttk::spinbox $shipframe.weight -from 0 -to 100000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.change} -width 5] -column 1 -row 3 \
    -columnspan 4 -sticky w
 grid [ttk::label $shipframe.durlbl -text {Durability:}]
 grid [ttk::spinbox $shipframe.dur -from 0 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 4 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.change} -width 5] -column 1 -row 4 \
    -columnspan 4 -sticky w
 grid [ttk::label $shipframe.maxdurlbl -text {Max durability:}]
 grid [ttk::spinbox $shipframe.maxdur -from 0 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 5 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.change} -width 5] -column 1 -row 5 \
    -columnspan 4 -sticky w
 grid [ttk::label $shipframe.upgradelbl -text {Upgrade progress:}]
 grid [ttk::spinbox $shipframe.upgrade -from 0 -to 100000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 6 \
+   -validatecommand {ValidateSpinbox %W %P $shipframe.change} -width 5] -column 1 -row 6 \
    -columnspan 4 -sticky w
 grid [ttk::button $shipframe.change -text Change -command DebugUpdateModule] \
    -columnspan 5
@@ -85,22 +85,22 @@ bind $crewframe.member <<ComboboxSelected>> RefreshMember
 grid [ttk::frame $crewframe.stats2] -columnspan 2
 grid [ttk::label $crewframe.stats2.healthlbl -text Health]
 grid [ttk::spinbox $crewframe.stats2.health -from 1 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 0
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 0
 grid [ttk::label $crewframe.stats2.thirstlbl -text Thirst]
 grid [ttk::spinbox $crewframe.stats2.thirst -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 1
 grid [ttk::label $crewframe.stats2.hungerlbl -text Hunger]
 grid [ttk::spinbox $crewframe.stats2.hunger -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 2
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 2
 grid [ttk::label $crewframe.stats2.tiredlbl -text Tired]
 grid [ttk::spinbox $crewframe.stats2.tired -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 3
 grid [ttk::label $crewframe.stats2.moralelbl -text Morale]
 grid [ttk::spinbox $crewframe.stats2.morale -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 4
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 4
 grid [ttk::label $crewframe.stats2.loyaltylbl -text Loyalty]
 grid [ttk::spinbox $crewframe.stats2.loyalty -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 5
+   -validatecommand {ValidateSpinbox %W %P $crewframe.change} -width 5] -column 1 -row 5
 grid [ttk::frame $crewframe.stats] -column 2 -row 1 -sticky n
 grid [ttk::label $crewframe.stats.name -text Name]
 grid [ttk::label $crewframe.stats.level -text Level] -column 1 -row 0
@@ -120,14 +120,14 @@ grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
 grid [ttk::combobox $cargoframe.add -width 15] -column 1 -row 0
 grid [ttk::label $cargoframe.amountlbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P $cargoframe.addbutton} -width 15] -column 1 -row 1
 grid [ttk::button $cargoframe.updatebutton -text Update \
    -command DebugUpdateItem] -pady {50 0}
 grid [ttk::combobox $cargoframe.update -state readonly -width 15] -column 1 \
    -row 2 -pady {50 0}
 grid [ttk::label $cargoframe.amount2lbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P $cargoframe.updatebutton} -width 15] -column 1 -row 3
 bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 # Bases options
 set basesframe [ttk::frame .debugdialog.main.bases]
@@ -144,13 +144,13 @@ grid [ttk::combobox $basesframe.size -state readonly \
    -values [list Small Medium Big] -width 15] -column 1 -row 3
 grid [ttk::label $basesframe.lbl5 -text {Population:}]
 grid [ttk::spinbox $basesframe.population -from 0 -to 10000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 4
+   -validatecommand {ValidateSpinbox %W %P $basesframe.update} -width 15] -column 1 -row 4
 grid [ttk::label $basesframe.lbl6 -text {Reputation:}]
 grid [ttk::spinbox $basesframe.reputation -from -100 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 5
+   -validatecommand {ValidateSpinbox %W %P $basesframe.update} -width 15] -column 1 -row 5
 grid [ttk::label $basesframe.lbl7 -text {Money:}]
 grid [ttk::spinbox $basesframe.money -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 6
+   -validatecommand {ValidateSpinbox %W %P $basesframe.update} -width 15] -column 1 -row 6
 grid [ttk::button $basesframe.update -text {Update} -command DebugUpdateBase] \
    -columnspan 2
 # World options
@@ -159,15 +159,15 @@ grid [ttk::label $worldframe.shiplbl -text {Ship:}]
 grid [ttk::combobox $worldframe.ship -width 20] -column 1 -row 0
 grid [ttk::label $worldframe.xlbl -text {X:}]
 grid [ttk::spinbox $worldframe.x -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P $worldframe.addship} -width 20] -column 1 -row 1
 $worldframe.x set 1
 grid [ttk::label $worldframe.ylbl -text {Y:}]
 grid [ttk::spinbox $worldframe.y -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 2
+   -validatecommand {ValidateSpinbox %W %P $worldframe.addship} -width 20] -column 1 -row 2
 $worldframe.y set 1
 grid [ttk::label $worldframe.durationlbl -text {Duration:}]
 grid [ttk::spinbox $worldframe.duration -from 60 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P $worldframe.addship} -width 20] -column 1 -row 3
 $worldframe.duration set 60
 grid [ttk::button $worldframe.addship -text {Add ship} -command DebugAddShip] \
    -columnspan 2
@@ -182,7 +182,7 @@ grid [ttk::label $worldframe.itemlbl -text {Item:}] -column 2 -row 2
 grid [ttk::combobox $worldframe.item -width 15] -column 3 -row 2
 grid [ttk::label $worldframe.duration2lbl -text {Duration:}] -column 2 -row 3
 grid [ttk::spinbox $worldframe.baseduration -from 15 -to 12000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 3 -row 3
+   -validatecommand {ValidateSpinbox %W %P $worldframe.addevent} -width 15] -column 3 -row 3
 grid [ttk::button $worldframe.addevent -text {Add event} \
    -command DebugAddEvent] -column 2 -row 4 -columnspan 2
 set deleteeventframe [ttk::frame $worldframe.deleteevent]
