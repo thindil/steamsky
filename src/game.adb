@@ -757,8 +757,10 @@ package body Game is
                Data_Node: Node;
                Item_Index: Natural;
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
+               --## rule off TYPE_INITIAL_VALUES
                type Nim_Strings_Array is array(0 .. 4) of chars_ptr;
                type Nim_Integers_Array is array(0 .. 1) of Integer;
+               --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
                Nim_Integers: Nim_Integers_Array;
                function Find_Attribute_Index
