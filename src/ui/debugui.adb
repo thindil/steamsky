@@ -202,7 +202,8 @@ package body DebugUI is
                 Member_Frame & ".value" &
                 Trim(Source => Positive'Image(I), Side => Left),
               options =>
-                "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+                "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P " &
+                Frame_Name & ".change} -width 5");
          Set
            (SpinBox => Spin_Box,
             Value => Positive'Image(Member.Attributes(I).Level));
@@ -246,7 +247,8 @@ package body DebugUI is
                 Member_Frame & ".value" &
                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
               options =>
-                "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+                "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P " &
+                Frame_Name & ".change} -width 5");
          Set
            (SpinBox => Spin_Box,
             Value =>
