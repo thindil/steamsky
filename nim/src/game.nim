@@ -267,3 +267,6 @@ proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
 proc getAdaGameStrings(values: var array[0..4, cstring]) {.exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring]
+
+proc getAdaGameIntegers(values: var array[0..1, cint]) {.exportc.} =
+  values = [corpseIndex.cint, 0.cint]
