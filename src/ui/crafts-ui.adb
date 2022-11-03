@@ -742,8 +742,9 @@ package body Crafts.UI is
         Create
           (pathName => Craft_Dialog & ".amount",
            options =>
-             "-to" & Positive'Image(Max_Amount) &
-             " -validate key -validatecommand {ValidateSpinbox %W %P} -width 20");
+             "-from 1 -to" & Positive'Image(Max_Amount) &
+             " -validate key -validatecommand {ValidateSpinbox %W %P " &
+             Craft_Dialog & ".craft} -width 20");
       Button: Ttk_Button :=
         Create
           (pathName => Craft_Dialog & ".maxamount",
