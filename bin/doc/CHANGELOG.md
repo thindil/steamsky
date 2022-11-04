@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to clear numeric fields (GitHub issue #95)
+
 ### Changed
 - Updated README.md
 - Updated look of the crew members info's dialog
