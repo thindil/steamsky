@@ -30,6 +30,7 @@ with Ships; use Ships;
 package Crafts is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Crafts/Crafts.Craft_Data
    -- FUNCTION
    -- Data structure for recipes
@@ -60,6 +61,7 @@ package Crafts is
       Tool_Quality: Positive := 1;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
