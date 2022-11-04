@@ -758,7 +758,7 @@ package body Game is
                Item_Index: Natural;
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                --## rule off TYPE_INITIAL_VALUES
-               type Nim_Strings_Array is array(0 .. 5) of chars_ptr;
+               type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
                type Nim_Integers_Array is array(0 .. 8) of Integer;
                --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
@@ -935,6 +935,18 @@ package body Game is
                  To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
                Traders_Name :=
                  To_Unbounded_String(Source => Value(Item => Nim_Strings(5)));
+               Head_Armor :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(6)));
+               Chest_Armor :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(7)));
+               Arms_Armor :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(8)));
+               Legs_Armor :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(9)));
+               Shield_Type :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(10)));
+               Weapon_Type :=
+                 To_Bounded_String(Source => Value(Item => Nim_Strings(11)));
                Get_Ada_Game_Integers(Values => Nim_Integers);
                Corpse_Index := Nim_Integers(0);
                Money_Index := Nim_Integers(1);
@@ -954,37 +966,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "headarmor" then
-                     Head_Armor :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "chestarmor" then
-                     Chest_Armor :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "armsarmor" then
-                     Arms_Armor :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "legsarmor" then
-                     Legs_Armor :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "shieldtype" then
-                     Shield_Type :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "weapontype" then
-                     Weapon_Type :=
-                       To_Bounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "dodgeskill" then
+                  if To_String(Source => Node_Name) = "dodgeskill" then
                      Dodge_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>

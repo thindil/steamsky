@@ -237,6 +237,18 @@ proc loadData*(fileName: string) =
     of "perceptionskill":
       perceptionSkill = findSkillIndex(skillName = gameNode.attr(
           name = "value"))
+    of "headarmor":
+      headArmor = gameNode.attr(name = "value")
+    of "chestarmor":
+      chestArmor = gameNode.attr(name = "value")
+    of "armsarmor":
+      armsArmor = gameNode.attr(name = "value")
+    of "legsarmor":
+      legsArmor = gameNode.attr(name = "value")
+    of "shieldtype":
+      shieldType = gameNode.attr(name = "value")
+    of "weapontype":
+      weaponType = gameNode.attr(name = "value")
 
 # Temporary code for interfacing with Ada
 
@@ -294,9 +306,11 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
 proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..5, cstring]) {.exportc.} =
+proc getAdaGameStrings(values: var array[0..11, cstring]) {.exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
-      missionItemsType.cstring, fuelType.cstring, tradersName.cstring]
+      missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
+      headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
+      legsArmor.cstring, shieldType.cstring, weaponType.cstring]
 
 proc getAdaGameIntegers(values: var array[0..8, cint]) {.exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
