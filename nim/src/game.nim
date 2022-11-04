@@ -209,6 +209,8 @@ proc loadData*(fileName: string) =
       fuelType = gameNode.attr(name = "value")
     of "moneyindex":
       moneyIndex = gameNode.attr(name = "value").parseInt()
+    of "tradersname":
+      tradersName = gameNode.attr(name = "value")
 
 # Temporary code for interfacing with Ada
 
@@ -266,9 +268,9 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
 proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..4, cstring]) {.exportc.} =
+proc getAdaGameStrings(values: var array[0..5, cstring]) {.exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
-      missionItemsType.cstring, fuelType.cstring]
+      missionItemsType.cstring, fuelType.cstring, tradersName.cstring]
 
 proc getAdaGameIntegers(values: var array[0..1, cint]) {.exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint]

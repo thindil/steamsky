@@ -758,11 +758,11 @@ package body Game is
                Item_Index: Natural;
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                --## rule off TYPE_INITIAL_VALUES
-               type Nim_Strings_Array is array(0 .. 4) of chars_ptr;
+               type Nim_Strings_Array is array(0 .. 5) of chars_ptr;
                type Nim_Integers_Array is array(0 .. 1) of Integer;
                --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
-               Nim_Integers: Nim_Integers_Array;
+               Nim_Integers: Nim_Integers_Array := (others => 0);
                function Find_Attribute_Index
                  (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
@@ -951,6 +951,8 @@ package body Game is
                  To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
                Fuel_Type :=
                  To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
+               Traders_Name :=
+                 To_Unbounded_String(Source => Value(Item => Nim_Strings(5)));
                Get_Ada_Game_Integers(Values => Nim_Integers);
                Corpse_Index := Nim_Integers(0);
                Money_Index := Nim_Integers(1);
@@ -963,12 +965,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "tradersname" then
-                     Traders_Name :=
-                       To_Unbounded_String
-                         (Source =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "conditionname" then
+                  if To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
                        Find_Attribute_Index
                          (Attribute_Name =>
