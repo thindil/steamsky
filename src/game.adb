@@ -759,28 +759,10 @@ package body Game is
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                --## rule off TYPE_INITIAL_VALUES
                type Nim_Strings_Array is array(0 .. 5) of chars_ptr;
-               type Nim_Integers_Array is array(0 .. 1) of Integer;
+               type Nim_Integers_Array is array(0 .. 8) of Integer;
                --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
                Nim_Integers: Nim_Integers_Array := (others => 0);
-               function Find_Attribute_Index
-                 (Attribute_Name: Tiny_String.Bounded_String) return Natural is
-               begin
-                  Find_Attribute_Loop :
-                  for J in
-                    AttributesData_Container.First_Index
-                      (Container => Attributes_List) ..
-                      AttributesData_Container.Last_Index
-                        (Container => Attributes_List) loop
-                     if AttributesData_Container.Element
-                         (Container => Attributes_List, Index => J)
-                         .Name =
-                       Attribute_Name then
-                        return Natural(J);
-                     end if;
-                  end loop Find_Attribute_Loop;
-                  return 0;
-               end Find_Attribute_Index;
                procedure Load_Ada_Data(Name: chars_ptr) with
                   Import => True,
                   Convention => C,
@@ -956,6 +938,13 @@ package body Game is
                Get_Ada_Game_Integers(Values => Nim_Integers);
                Corpse_Index := Nim_Integers(0);
                Money_Index := Nim_Integers(1);
+               Condition_Index := Nim_Integers(2);
+               Strength_Index := Nim_Integers(3);
+               Piloting_Skill := Count_Type(Nim_Integers(4));
+               Engineering_Skill := Count_Type(Nim_Integers(5));
+               Gunnery_Skill := Count_Type(Nim_Integers(6));
+               Talking_Skill := Count_Type(Nim_Integers(7));
+               Perception_Skill := Count_Type(Nim_Integers(8));
                Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
@@ -965,49 +954,7 @@ package body Game is
                   Node_Name :=
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "conditionname" then
-                     Condition_Index :=
-                       Find_Attribute_Index
-                         (Attribute_Name =>
-                            To_Bounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "strengthname" then
-                     Strength_Index :=
-                       Find_Attribute_Index
-                         (Attribute_Name =>
-                            To_Bounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
-                  elsif To_String(Source => Node_Name) = "pilotingskill" then
-                     Piloting_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) =
-                    "engineeringskill" then
-                     Engineering_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "gunneryskill" then
-                     Gunnery_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "talkingskill" then
-                     Talking_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "perceptionskill" then
-                     Perception_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "headarmor" then
+                  if To_String(Source => Node_Name) = "headarmor" then
                      Head_Armor :=
                        To_Bounded_String
                          (Source =>

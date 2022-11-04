@@ -94,6 +94,7 @@ var
   strengthIndex*: Positive
   pilotingSkill*: Positive
   engineeringSkill*: Positive
+  gunnerySkill*: Positive
   talkingSkill*: Positive
   perceptionSkill*: Positive
   headArmor*: string
@@ -112,6 +113,13 @@ proc findSkillIndex*(skillName: string): Natural =
   return 0
 
 proc loadData*(fileName: string) =
+
+  proc findAttributeIndex(attributeName: string): Natural =
+    for key, attribute in attributesList.pairs:
+      if attribute.name == attributeName:
+        return key + 1
+    return 0
+
   let gameXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -211,6 +219,24 @@ proc loadData*(fileName: string) =
       moneyIndex = gameNode.attr(name = "value").parseInt()
     of "tradersname":
       tradersName = gameNode.attr(name = "value")
+    of "conditionname":
+      conditionIndex = findAttributeIndex(attributeName = gameNode.attr(
+          name = "value"))
+    of "strengthname":
+      strengthIndex = findAttributeIndex(attributeName = gameNode.attr(
+          name = "value"))
+    of "pilotingskill":
+      pilotingSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+    of "engineeringskill":
+      engineeringSkill = findSkillIndex(skillName = gameNode.attr(
+          name = "value"))
+    of "gunneryskill":
+      gunnerySkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+    of "talkingskill":
+      talkingSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+    of "perceptionskill":
+      perceptionSkill = findSkillIndex(skillName = gameNode.attr(
+          name = "value"))
 
 # Temporary code for interfacing with Ada
 
@@ -272,5 +298,7 @@ proc getAdaGameStrings(values: var array[0..5, cstring]) {.exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring]
 
-proc getAdaGameIntegers(values: var array[0..1, cint]) {.exportc.} =
-  values = [corpseIndex.cint, moneyIndex.cint]
+proc getAdaGameIntegers(values: var array[0..8, cint]) {.exportc.} =
+  values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
+      strengthIndex.cint, pilotingSkill.cint, engineeringSkill.cint,
+      gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint]
