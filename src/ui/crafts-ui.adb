@@ -750,7 +750,8 @@ package body Crafts.UI is
           (pathName => Craft_Dialog & ".maxamount",
            options =>
              "-text {max" & Positive'Image(Max_Amount) & "} -command {" &
-             Amount_Box & " set" & Positive'Image(Max_Amount) & "}");
+             Amount_Box & " set" & Positive'Image(Max_Amount) & ";" &
+             Amount_Box & " validate}");
       Button_Row: Positive := 1;
       Modules_Amount: Natural := 0;
       Crafter_Button: Ttk_RadioButton :=
