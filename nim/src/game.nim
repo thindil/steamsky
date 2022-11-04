@@ -249,6 +249,10 @@ proc loadData*(fileName: string) =
       shieldType = gameNode.attr(name = "value")
     of "weapontype":
       weaponType = gameNode.attr(name = "value")
+    of "dodgeskill":
+      dodgeSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+    of "unarmedskill":
+      unarmedSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
 
 # Temporary code for interfacing with Ada
 
@@ -312,7 +316,8 @@ proc getAdaGameStrings(values: var array[0..11, cstring]) {.exportc.} =
       headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
       legsArmor.cstring, shieldType.cstring, weaponType.cstring]
 
-proc getAdaGameIntegers(values: var array[0..8, cint]) {.exportc.} =
+proc getAdaGameIntegers(values: var array[0..10, cint]) {.exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
       strengthIndex.cint, pilotingSkill.cint, engineeringSkill.cint,
-      gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint]
+      gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
+      dodgeSkill.cint, unarmedSkill.cint]

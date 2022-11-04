@@ -20,7 +20,6 @@ with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core;
-with DOM.Core.Elements;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
 with DOM.Readers;
@@ -742,24 +741,15 @@ package body Game is
 
             Data_Type: Unbounded_String;
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-            procedure Load_Data
-              (Current_Reader: Tree_Reader; Data_File_Name: String) is
+            procedure Load_Data(Data_File_Name: String) is
                use Interfaces.C;
-               use DOM.Core;
-               use DOM.Core.Elements;
                use Tiny_String;
 
-               Game_Data: Document;
-               --## rule off IMPROPER_INITIALIZATION
-               Nodes_List: Node_List;
-               --## rule on IMPROPER_INITIALIZATION
-               Node_Name: Unbounded_String := Null_Unbounded_String;
-               Data_Node: Node;
                Item_Index: Natural;
                Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                --## rule off TYPE_INITIAL_VALUES
                type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
-               type Nim_Integers_Array is array(0 .. 8) of Integer;
+               type Nim_Integers_Array is array(0 .. 10) of Integer;
                --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
                Nim_Integers: Nim_Integers_Array := (others => 0);
@@ -957,27 +947,8 @@ package body Game is
                Gunnery_Skill := Count_Type(Nim_Integers(6));
                Talking_Skill := Count_Type(Nim_Integers(7));
                Perception_Skill := Count_Type(Nim_Integers(8));
-               Game_Data := Get_Tree(Read => Current_Reader);
-               Nodes_List :=
-                 DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
-               Load_Game_Data_Loop :
-               for I in 0 .. Length(List => Nodes_List) - 1 loop
-                  Data_Node := Item(List => Nodes_List, Index => I);
-                  Node_Name :=
-                    To_Unbounded_String
-                      (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-                  if To_String(Source => Node_Name) = "dodgeskill" then
-                     Dodge_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  elsif To_String(Source => Node_Name) = "unarmedskill" then
-                     Unarmed_Skill :=
-                       Find_Skill_Index
-                         (Skill_Name =>
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
-                  end if;
-               end loop Load_Game_Data_Loop;
+               Dodge_Skill := Count_Type(Nim_Integers(9));
+               Unarmed_Skill := Count_Type(Nim_Integers(10));
             end Load_Data;
          begin
             --## rule off IMPROPER_INITIALIZATION
@@ -1020,8 +991,7 @@ package body Game is
                   Load_Stories(Reader => Reader);
                elsif To_String(Source => Data_Type) = "data" then
                   Load_Data
-                    (Current_Reader => Reader,
-                     Data_File_Name => To_String(Source => Local_File_Name));
+                    (Data_File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "careers" then
                   Load_Careers
                     (File_Name => To_String(Source => Local_File_Name));
