@@ -342,6 +342,9 @@ package body Bases.SchoolUI is
              "box.amount",
            Interp => Interp);
    begin
+      if Get(Widgt => Amount_Box) = "0" then
+         return TCL_OK;
+      end if;
       Train_Skill
         (Member_Index => Get_Member_Index,
          Skill_Index => Skills_Amount_Range(Get_Skill_Index),
@@ -473,7 +476,11 @@ package body Bases.SchoolUI is
           (Member_Index => Get_Member_Index,
            Skill_Index => Skills_Amount_Range(Get_Skill_Index));
    begin
-      if Money_Index_2 > 0 and Cost > 0 then
+      if Money_Index_2 > 0
+        and then Cost <=
+          Inventory_Container.Element
+            (Container => Player_Ship.Cargo, Index => Money_Index_2)
+            .Amount then
          configure
            (Widgt => Amount_Box,
             options =>
@@ -494,6 +501,7 @@ package body Bases.SchoolUI is
               Positive'Image(Cost) & " + 1]}");
       else
          configure(Widgt => Amount_Box, options => "-from 0 -to 0");
+         Set(SpinBox => Amount_Box, Value => "0");
          Unbind(Widgt => Amount_Box, Sequence => "<<Increment>>");
          Unbind(Widgt => Amount_Box, Sequence => "<<Decrement>>");
       end if;
