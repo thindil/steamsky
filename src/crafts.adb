@@ -41,14 +41,14 @@ package body Crafts is
       Temp_Amount: Positive_Container.Vector;
       Recipes_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
-      Amount, Delete_Index: Natural;
-      Recipe_Index: Tiny_String.Bounded_String;
-      Value: Unbounded_String;
+      Amount, Delete_Index: Natural := 0;
+      Recipe_Index: Tiny_String.Bounded_String := Null_Bounded_String;
+      Value: Unbounded_String := Null_Unbounded_String;
       Recipe_Node, Child_Node: Node;
-      Material_Added: Boolean;
-      Action: Data_Action;
-      Skill_Index: Skills_Container.Extended_Index;
-      Item_Index: Objects_Container.Extended_Index;
+      Material_Added: Boolean := False;
+      Action: Data_Action := ADD;
+      Skill_Index: Skills_Container.Extended_Index := 0;
+      Item_Index: Objects_Container.Extended_Index := 0;
    begin
       Recipes_Data := Get_Tree(Read => Reader);
       Nodes_List :=
