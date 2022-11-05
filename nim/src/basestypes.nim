@@ -22,19 +22,36 @@ import game, items, log
 
 type
   PricesArray* = array[1..2, Natural]
+    ## FUNCTION
+    ##
+    ## Used to set base buy and sell price for an item in the base type.
+    ## 1 - sell price, 2 - buy price
 
   BaseTypeData* = object
-    name: string
-    color: string
-    trades: Table[Positive, PricesArray]
-    recipes: seq[string]
-    flags: seq[string]
-    description: string
+    ## FUNCTION
+    ##
+    ## Used to store informaiton about bases types
+    name: string ## The name of the base type
+    color: string ## The color used to show a base of that type on the map
+    trades: Table[Positive, PricesArray] ## The list of items available to trade in the base type
+    recipes: seq[string] ## The list of crafting recipes available on sale in the base type
+    flags: seq[string] ## Additional flags for the base type like SHIPYARD, BARRACKS, etc
+    description: string ## The description of the base type, show in the new game screen
 
 var basesTypesList* = initTable[string, BaseTypeData]()
+  ## FUNCTION
+  ##
+  ## The list of all available bases types in the game
 
 proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load available bases types from the data file
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the path to the file with bases types data which will be loaded
   let basesTypesXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -168,6 +185,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     basesTypesList[baseTypeIndex] = baseType
 
+# Temporary code for interfacing with Ada
 
 type
   AdaBaseTypeData* = object
