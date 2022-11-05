@@ -17,11 +17,23 @@
 
 {.used.}
 
-import std/[tables]
+import std/tables
 import factions, game, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Generate the name for the sky base, based on its owner's faction. Based
+  ## on libtcod names generator
+  ##
+  ## PARAMETERS
+  ##
+  ## * factionIndex - the index of the faction which owns the base
+  ##
+  ## RETURNS
+  ##
+  ## The randomly generated name of the base
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName();
@@ -37,6 +49,8 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
   if getRandom(min = 1, max = 100) < 16:
     result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
         basesSyllablesPostList.len - 1))]
+
+# Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
     tags: [].} =
