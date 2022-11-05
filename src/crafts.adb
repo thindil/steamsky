@@ -36,11 +36,13 @@ package body Crafts is
    procedure Load_Recipes(Reader: Tree_Reader) is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Craft_Data;
       Temp_Materials: TinyString_Container.Vector;
       Temp_Amount: Positive_Container.Vector;
-      Recipes_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
+      --## rule on IMPROPER_INITIALIZATION
+      Recipes_Data: Document;
       Amount, Delete_Index: Natural := 0;
       Recipe_Index: Tiny_String.Bounded_String := Null_Bounded_String;
       Value: Unbounded_String := Null_Unbounded_String;
