@@ -372,8 +372,15 @@ package body Dialogs is
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
-      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
+      Assign_Mouse_Position_Block:
+      begin
+         Mouse_X_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+         Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
+      exception
+         when Constraint_Error =>
+            Mouse_X_Position := 0;
+            Mouse_Y_Position := 0;
+      end Assign_Mouse_Position_Block;
       if Mouse_X_Position > 0 and Mouse_Y_Position > 0 then
          configure(Widgt => Dialog_Header, options => "-cursor fleur");
       else
