@@ -33,8 +33,14 @@ type
 
 var basesTypesList* = initTable[string, BaseTypeData]()
 
-proc loadBasesTypes*(fileName: string) =
-  let basesTypesXml = loadXml(path = fileName)
+proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  let basesTypesXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load bases types data file. Reason: " &
+          getCurrentExceptionMsg())
   for baseTypeNode in basesTypesXml:
     if baseTypeNode.kind != xnElement:
       continue
@@ -58,7 +64,10 @@ proc loadBasesTypes*(fileName: string) =
           debugType = everything)
       continue
     var baseType: BaseTypeData = if baseTypeAction == DataAction.update:
-        basesTypesList[baseTypeIndex]
+        try:
+          basesTypesList[baseTypeIndex]
+        except KeyError:
+          BaseTypeData()
       else:
         BaseTypeData()
     var attribute = baseTypeNode.attr(name = "name")
@@ -75,7 +84,13 @@ proc loadBasesTypes*(fileName: string) =
         baseType.description = childNode.innerText()
       of "item":
         let
-          itemIndex = childNode.attr(name = "index").parseInt()
+          itemIndex = try:
+              childNode.attr(name = "index").parseInt()
+            except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $baseTypeAction & " base type '" &
+                  baseTypeIndex & "', invalid item index '" & childNode.attr(
+                  name = "index") & "'.")
           subAction = try:
               parseEnum[DataAction](childNode.attr(
                   name = "action").toLowerAscii)
