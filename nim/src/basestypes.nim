@@ -195,7 +195,8 @@ type
 
   AdaPricesArray* = array[1..2, cint]
 
-proc loadAdaBasesTypes(fileName: cstring) {.exportc.} =
+proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [
+    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadBasesTypes(fileName = $fileName)
 
 proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffect,
@@ -214,31 +215,40 @@ proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffe
   adaBaseType.description = baseType.description.cstring
 
 proc getAdaBaseData(baseIndex: cstring; index: cint;
-    adaDataType: cstring): cstring {.exportc.} =
+    adaDataType: cstring): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   let baseTypeKey = strip(s = $baseIndex)
   if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
-  let dataList = if adaDataType == "recipe":
+  let dataList = try:
+      if adaDataType == "recipe":
         basesTypesList[baseTypeKey].recipes
       else:
         basesTypesList[baseTypeKey].flags
+    except KeyError:
+      return ""
   if index >= dataList.len():
     return ""
   return dataList[index].cstring
 
 proc getAdaBaseTrade(baseIndex: cstring; index: cint;
-    adaBaseTrade: var AdaPricesArray): cstring {.exportc.} =
+    adaBaseTrade: var AdaPricesArray): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   adaBaseTrade = [1: 0.cint, 2: 0.cint]
   let baseTypeKey = strip(s = $baseIndex)
   if not basesTypesList.hasKey(key = baseTypeKey):
     return ""
-  if index > basesTypesList[baseTypeKey].trades.len():
+  try:
+    if index > basesTypesList[baseTypeKey].trades.len():
+      return ""
+  except KeyError:
     return ""
   var currIndex = 1
-  for tradeIndex, trade in basesTypesList[baseTypeKey].trades.pairs:
-    currIndex.inc()
-    if currIndex < index:
-      continue
-    adaBaseTrade = [1: trade[1].cint, 2: trade[2].cint]
-    let newIndex = $tradeIndex
-    return newIndex.cstring
+  try:
+    for tradeIndex, trade in basesTypesList[baseTypeKey].trades.pairs:
+      currIndex.inc()
+      if currIndex < index:
+        continue
+      adaBaseTrade = [1: trade[1].cint, 2: trade[2].cint]
+      let newIndex = $tradeIndex
+      return newIndex.cstring
+  except KeyError:
+    return ""
