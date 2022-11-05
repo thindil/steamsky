@@ -20,9 +20,13 @@
 import std/[tables]
 import factions, game, utils
 
-proc generateBaseName*(factionIndex: string): string =
-  if factionsList[factionIndex].namesType == robotic:
-    return $generateRoboticName();
+proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
+    tags: [].} =
+  try:
+    if factionsList[factionIndex].namesType == robotic:
+      return $generateRoboticName();
+  except KeyError:
+    discard
   if getRandom(min = 1, max = 100) < 16:
     result = basesSyllablesPreList[getRandom(min = 0, max = (
         basesSyllablesPreList.len() - 1))] & " "
@@ -34,5 +38,6 @@ proc generateBaseName*(factionIndex: string): string =
     result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
         basesSyllablesPostList.len - 1))]
 
-proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc.} =
+proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
+    tags: [].} =
   return generateBaseName(factionIndex = $factionIndex).cstring
