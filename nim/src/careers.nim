@@ -22,12 +22,25 @@ import game, log
 
 type
   CareerData = object
-    name*: string
-    skills: seq[string]
+    ## FUNCTION
+    ##
+    ## Used to store data about available player's careers
+    name*: string ## The name of the career
+    skills: seq[string] ## The list of skills which have bonuses from the career
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
+  ## FUNCTION
+  ##
+  ## The list of available player's careers in the game
 
 proc loadCareers*(fileName: string) =
+  ## FUNCTION
+  ##
+  ## Load the player's careers' data from the file
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the path to the file with careers data which will be loaded
   let careersXml = loadXml(path = fileName)
   for careerNode in careersXml:
     if careerNode.kind != xnElement:
@@ -80,6 +93,8 @@ proc loadCareers*(fileName: string) =
       logMessage(message = "Career updated: '" & careerIndex & "'",
           debugType = everything)
     careersList[careerIndex] = career
+
+# Temporary code for interfacing with Ada
 
 proc loadAdaCareers*(fileName: cstring) {.exportc.} =
   loadCareers(fileName = $fileName)
