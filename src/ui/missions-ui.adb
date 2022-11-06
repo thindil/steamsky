@@ -26,6 +26,8 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -731,14 +733,16 @@ package body Missions.UI is
           (Name => ".missiondialog",
            Title => "Accept " & Get_Mission_Type(M_Type => Mission.M_Type),
            Columns => 2);
+      Buttons_Box: constant Ttk_Frame :=
+        Create(pathName => Mission_Dialog & ".buttons");
       Button: Ttk_Button :=
         Create
-          (pathName => Mission_Dialog & ".accept",
+          (pathName => Buttons_Box & ".accept",
            options =>
              "-text Accept -command {CloseDialog " & Mission_Dialog &
              ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
              "} -image negotiateicon -style Dialog.TButton");
-      Reward_Label: constant Ttk_Label :=
+      Reward_Label: Ttk_Label :=
         Create
           (pathName => Mission_Dialog & ".rewardlbl",
            options =>
@@ -752,6 +756,12 @@ package body Missions.UI is
            options =>
              "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
              CArgv.Arg(Argv => Argv, N => 1) & "} -length 300");
+      Reward_Field: constant Ttk_SpinBox :=
+        Create
+          (pathName => Mission_Dialog & ".rewardfield",
+           options =>
+             "-from 0 -to 200 -validate key  -validatecommand {ValidateSpinbox %W %P " &
+             Button & "} -width 3");
    begin
       Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
       Add
@@ -759,21 +769,32 @@ package body Missions.UI is
          Message =>
            "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Reward_Label, Options => "-columnspan 2 -padx 5");
+        (Slave => Reward_Label, Options => "-columnspan 2 -padx 5 -stick w");
+      Reward_Label :=
+        Create
+          (pathName => Mission_Dialog & ".rewardinfo",
+           options =>
+             "-text {Percent of " & To_String(Source => Money_Name) &
+             " as reward:}");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Reward_Scale, Options => "-columnspan 2 -padx 5");
+        (Slave => Reward_Label, Options => "-columnspan 2 -padx 5 -stick w");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Reward_Scale, Options => "-padx {5 0} -stick w");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Reward_Field,
+         Options => "-row 3 -column 1 -padx {0 5} -stick w");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
          Script => "{" & Mission_Dialog & ".cancel invoke;break}");
       Button :=
         Create
-          (pathName => Mission_Dialog & ".cancel",
+          (pathName => Buttons_Box & ".cancel",
            options =>
              "-text Cancel -command {CloseDialog " & Mission_Dialog &
              "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-row 3 -column 1 -pady 5");
+        (Slave => Button, Options => "-row 0 -column 1 -pady 5 -padx 5");
       Bind
         (Widgt => Button, Sequence => "<Tab>",
          Script => "{focus .missiondialog.accept;break}");
@@ -783,6 +804,8 @@ package body Missions.UI is
       Bind
         (Widgt => Reward_Scale, Sequence => "<Escape>",
          Script => "{" & Button & " invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Box, Options => "-columnspan 2 -pady 5");
       Show_Dialog(Dialog => Mission_Dialog);
       Focus(Widgt => Button);
       return TCL_OK;
