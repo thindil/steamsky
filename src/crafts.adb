@@ -88,7 +88,14 @@ package body Crafts is
               with "Can't add recipe '" & To_String(Source => Recipe_Index) &
               "', there is already a recipe with that index.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            Recipes_Container.Exclude
+              (Container => Recipes_List, Key => Recipe_Index);
+            Log_Message
+              (Message =>
+                 "Recipe removed: " & To_String(Source => Recipe_Index),
+               Message_Type => EVERYTHING);
+         else
             if Action = UPDATE then
                Temp_Record := Recipes_List(Recipe_Index);
             end if;
@@ -247,13 +254,6 @@ package body Crafts is
                            .Name),
                   Message_Type => EVERYTHING);
             end if;
-         else
-            Recipes_Container.Exclude
-              (Container => Recipes_List, Key => Recipe_Index);
-            Log_Message
-              (Message =>
-                 "Recipe removed: " & To_String(Source => Recipe_Index),
-               Message_Type => EVERYTHING);
          end if;
       end loop Load_Recipes_Loop;
    end Load_Recipes;
