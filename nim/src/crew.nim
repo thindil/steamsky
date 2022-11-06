@@ -22,6 +22,19 @@ import factions, game, utils
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Generate the name for the mob, based on his/her faction. Based on
+  ## libtcod names generator
+  ##
+  ## PARAMETERS
+  ##
+  ## * gender       - The gender of the mob, M - male, F - female
+  ## * factionIndex - The index of the faction to which the mob belongs
+  ##
+  ## RETURNS
+  ##
+  ## The randomly generated name of the mob
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName();
@@ -53,6 +66,8 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
         femalesSyllablesMiddleList.len - 1))]
   result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
       femalesSyllablesEndList.len - 1))]
+
+# Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
     factionIndex: cstring): cstring {.exportc.} =
