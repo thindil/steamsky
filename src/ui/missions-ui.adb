@@ -16,6 +16,8 @@
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv; use CArgv;
@@ -754,13 +756,13 @@ package body Missions.UI is
         Create
           (pathName => Mission_Dialog & ".reward",
            options =>
-             "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
+             "-from 0 -to 200 -variable reward -command {UpdateMissionReward " &
              CArgv.Arg(Argv => Argv, N => 1) & "} -length 300");
       Reward_Field: constant Ttk_SpinBox :=
         Create
           (pathName => Mission_Dialog & ".rewardfield",
            options =>
-             "-from 0 -to 200 -validate key  -validatecommand {ValidateSpinbox %W %P " &
+             "-from 0 -to 200 -textvariable reward -validate key  -validatecommand {ValidateSpinbox %W %P " &
              Button & "} -width 3");
    begin
       Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
@@ -778,6 +780,7 @@ package body Missions.UI is
              " as reward:}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Reward_Label, Options => "-columnspan 2 -padx 5 -stick w");
+      Tcl_SetVar(interp => Interp, varName => "reward", newValue => "100");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Reward_Scale, Options => "-padx {5 0} -stick w");
       Tcl.Tk.Ada.Grid.Grid
@@ -835,22 +838,28 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Reward_Label: constant Ttk_Label :=
         Get_Widget(pathName => ".missiondialog.rewardlbl", Interp => Interp);
       Mission: constant Mission_Data :=
         Sky_Bases(Base_Index).Missions(Mission_Index);
+      Value: constant Natural :=
+        Natural
+          (Float'Value(Tcl_GetVar(interp => Interp, varName => "reward")));
    begin
+      Tcl_SetVar
+        (interp => Interp, varName => "reward",
+         newValue => Trim(Source => Natural'Image(Value), Side => Left));
       configure
         (Widgt => Reward_Label,
          options =>
            "-text {Reward:" &
            Natural'Image
-             (Natural
-                (Float(Mission.Reward) *
-                 Float'Value
-                   (Tcl_GetVar(interp => Interp, varName => "reward")))) &
+             (Natural(Float(Mission.Reward) * (Float(Value) / 100.0))) &
            " " & To_String(Source => Money_Name) & "}");
       return TCL_OK;
    end Update_Mission_Reward_Command;
