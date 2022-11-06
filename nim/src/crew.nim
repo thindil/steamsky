@@ -20,13 +20,18 @@
 import std/[tables]
 import factions, game, utils
 
-proc generateMemberName*(gender: char; factionIndex: string): string =
-  if factionsList[factionIndex].namesType == robotic:
-    return $generateRoboticName();
+proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
+    raises: [], tags: [].} =
+  try:
+    if factionsList[factionIndex].namesType == robotic:
+      return $generateRoboticName();
+  except KeyError:
+    discard
   if gender == 'M':
     result = malesSyllablesStartList[getRandom(min = 0, max = (
         malesSyllablesStartList.len - 1))]
-    result = result & malesVocalsList[getRandom(min = 0, max = (malesVocalsList.len - 1))]
+    result = result & malesVocalsList[getRandom(min = 0, max = (
+        malesVocalsList.len - 1))]
     if getRandom(min = 1, max = 100) < 36:
       result = result & malesSyllablesMiddleList[getRandom(min = 0, max = (
           malesSyllablesMiddleList.len - 1))]
@@ -38,7 +43,8 @@ proc generateMemberName*(gender: char; factionIndex: string): string =
     return
   result = femalesSyllablesStartList[getRandom(min = 0, max = (
       femalesSyllablesStartList.len - 1))]
-  result = result & femalesVocalsList[getRandom(min = 0, max = (femalesVocalsList.len - 1))]
+  result = result & femalesVocalsList[getRandom(min = 0, max = (
+      femalesVocalsList.len - 1))]
   if getRandom(min = 1, max = 100) < 36:
     result = result & femalesSyllablesMiddleList[getRandom(min = 0, max = (
         femalesSyllablesMiddleList.len - 1))]
@@ -48,5 +54,7 @@ proc generateMemberName*(gender: char; factionIndex: string): string =
   result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
       femalesSyllablesEndList.len - 1))]
 
-proc generateAdaMemberName(gender: char; factionIndex: cstring): cstring {.exportc.} =
-  return generateMemberName(gender = gender, factionIndex = $factionIndex).cstring
+proc generateAdaMemberName(gender: char;
+    factionIndex: cstring): cstring {.exportc.} =
+  return generateMemberName(gender = gender,
+      factionIndex = $factionIndex).cstring
