@@ -32,6 +32,8 @@ with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
@@ -1010,6 +1012,8 @@ package body Bases.RecruitUI is
         Create(pathName => Negotiate_Dialog & ".buttonbox");
       Label: Ttk_Label;
       Scale: Ttk_Scale;
+      Spinbox: Ttk_SpinBox;
+      Label_Frame: Ttk_Frame;
       Contract_Box: constant Ttk_ComboBox :=
         Create
           (pathName => Negotiate_Dialog & ".contract",
@@ -1019,25 +1023,31 @@ package body Bases.RecruitUI is
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Cost: Positive;
    begin
+      Label_Frame := Create(pathName => Negotiate_Dialog & ".dailylbl");
       Label :=
         Create
-          (pathName => Negotiate_Dialog & ".dailylbl",
-           options =>
-             "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
+          (pathName => Label_Frame & ".label",
+           options => "-text {Daily payment:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
+      Spinbox :=
+        Create
+          (pathName => Label_Frame & ".field",
+           options =>
+             "-from 0 -to" & Natural'Image(Recruit.Payment * 2) & " -width 5");
+      Set(SpinBox => Spinbox, Value => Natural'Image(Recruit.Payment));
+      Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
       Scale :=
         Create
           (pathName => Negotiate_Dialog & ".daily",
-           options => "-from 0 -command NegotiateHire -length 250");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
-      configure
-        (Widgt => Scale,
-         options =>
-           "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
-           Natural'Image(Recruit.Payment));
+           options =>
+             "-from 0 -command NegotiateHire -length 250 -to" &
+             Natural'Image(Recruit.Payment * 2) & " -value" &
+             Natural'Image(Recruit.Payment));
       Bind
         (Widgt => Scale, Sequence => "<Escape>",
          Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
       Label :=
         Create
           (pathName => Negotiate_Dialog & ".percentlbl",
@@ -1046,9 +1056,9 @@ package body Bases.RecruitUI is
       Scale :=
         Create
           (pathName => Negotiate_Dialog & ".percent",
-           options => "-from 0 -to 10 -command NegotiateHire -length 250");
+           options =>
+             "-from 0 -to 10 -command NegotiateHire -length 250 -value 0");
       Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
-      configure(Widgt => Scale, options => "-value 0");
       Label :=
         Create
           (pathName => Negotiate_Dialog & ".contractlbl",
