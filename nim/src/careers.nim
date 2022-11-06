@@ -33,7 +33,8 @@ var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ##
   ## The list of available player's careers in the game
 
-proc loadCareers*(fileName: string) =
+proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## FUNCTION
   ##
   ## Load the player's careers' data from the file
@@ -41,7 +42,12 @@ proc loadCareers*(fileName: string) =
   ## PARAMETERS
   ##
   ## * fileName - the path to the file with careers data which will be loaded
-  let careersXml = loadXml(path = fileName)
+  let careersXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load careers data file. Reason: " &
+          getCurrentExceptionMsg())
   for careerNode in careersXml:
     if careerNode.kind != xnElement:
       continue
@@ -64,7 +70,10 @@ proc loadCareers*(fileName: string) =
           debugType = everything)
       continue
     var career: CareerData = if careerAction == DataAction.update:
-        careersList[careerIndex]
+        try:
+          careersList[careerIndex]
+        except KeyError:
+          CareerData()
       else:
         CareerData()
     var attribute = careerNode.attr(name = "name")
@@ -96,7 +105,8 @@ proc loadCareers*(fileName: string) =
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaCareers*(fileName: cstring) {.exportc.} =
+proc loadAdaCareers*(fileName: cstring) {.sideEffect, raises: [
+    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadCareers(fileName = $fileName)
 
 proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
@@ -118,8 +128,12 @@ proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
     careerIndex.inc()
   adaCareer[1] = career.name.cstring
 
-proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.exportc.} =
-  if index >= careersList[$careerIndex].skills.len():
+proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  try:
+    if index >= careersList[$careerIndex].skills.len():
+      return ""
+    return careersList[$careerIndex].skills[index].cstring
+  except KeyError:
     return ""
-  return careersList[$careerIndex].skills[index].cstring
 
