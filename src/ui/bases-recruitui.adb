@@ -1041,7 +1041,7 @@ package body Bases.RecruitUI is
           (pathName => Label_Frame & ".field",
            options =>
              "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
-             " -width 5 -textvariable daily -validate key -validatecommand {ValidateSpinbox %W %P {}}");
+             " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
       Scale :=
@@ -1385,6 +1385,49 @@ package body Bases.RecruitUI is
            Argv => CArgv.Empty & "ShowRecruits" & "1");
    end Sort_Recruits_Command;
 
+   -- ****o* RecruitUI/RecruitUI.Validate_Negotiate_Command
+   -- FUNCTION
+   -- Validate value of numeric fields in negotiate dialog
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ValidateNegotiate field value
+   -- Field is Tcl path to the field which will be validated, value is
+   -- the new value of the field to validate
+   -- SOURCE
+   function Validate_Negotiate_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Validate_Negotiate_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+   begin
+      if CArgv.Arg(Argv => Argv, N => 2) = "" then
+         Tcl_SetResult(interp => Interp, str => "1");
+         return TCL_OK;
+      end if;
+      Tcl_Eval
+        (interp => Interp,
+         strng =>
+           "ValidateSpinbox " & CArgv.Arg(Argv => Argv, N => 1) & " " &
+           CArgv.Arg(Argv => Argv, N => 2) & " {}");
+      if Tcl_GetStringResult(interp => Interp) = "0" then
+         return TCL_OK;
+      end if;
+      Tcl_Eval(interp => Interp, strng => "NegotiateHire");
+      Tcl_SetResult(interp => Interp, str => "1");
+      return TCL_OK;
+   end Validate_Negotiate_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -1403,6 +1446,9 @@ package body Bases.RecruitUI is
         (Name => "Negotiate", Ada_Command => Negotiate_Command'Access);
       Add_Command
         (Name => "SortRecruits", Ada_Command => Sort_Recruits_Command'Access);
+      Add_Command
+        (Name => "ValidateNegotiate",
+         Ada_Command => Validate_Negotiate_Command'Access);
    end Add_Commands;
 
 end Bases.RecruitUI;
