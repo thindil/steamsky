@@ -32,32 +32,3 @@ jobs:
       with:
          name: adacontrol2.log
          path: adacontrol2.log
-
-  tests_global_references:
-
-    needs: tests_others
-
-    runs-on: ubuntu-latest
-
-    container: ghcr.io/thindil/build:10
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Run AdaControl - check global references
-      run: |
-         cd nim
-         nim debug
-         cd ..
-         mkdir obj
-         cd obj
-         adactl -f ../others/adacontrol/rules3.aru -p ../steamsky.gpr -o ../adacontrol3.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
-         cd ..
-
-    - name: Upload the log
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-         name: adacontrol3.log
-         path: adacontrol3.log
