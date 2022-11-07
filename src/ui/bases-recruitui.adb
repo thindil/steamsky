@@ -781,10 +781,10 @@ package body Bases.RecruitUI is
           (Container => Sky_Bases(Base_Index).Recruits,
            Index => Recruit_Index);
       Cost: Integer;
-      Scale: Ttk_Scale :=
-        Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
+      Scale: constant Ttk_Scale :=
+        Get_Widget(pathName => Dialog_Name & ".percent", Interp => Interp);
       Daily_Payment: constant Natural :=
-        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
+        Natural(Float'Value(Tcl_GetVar(interp => Interp, varName => "daily")));
       Contract_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
       Contract_Length: constant Natural :=
@@ -797,7 +797,10 @@ package body Bases.RecruitUI is
           (pathName => Dialog_Name & ".buttonbox.hirebutton",
            Interp => Interp);
    begin
-      Scale.Name := New_String(Str => Dialog_Name & ".percent");
+      Tcl_SetVar
+        (interp => Interp, varName => "daily",
+         newValue =>
+           Trim(Source => Natural'Image(Daily_Payment), Side => Left));
       Trade_Payment :=
         Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
       Cost :=
@@ -819,11 +822,6 @@ package body Bases.RecruitUI is
          options =>
            "-text {Hire for" & Natural'Image(Cost) & " " &
            To_String(Source => Money_Name) & "}");
-      Label.Name := New_String(Str => Dialog_Name & ".dailylbl");
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {Daily payment:" & Natural'Image(Daily_Payment) & "}");
       Label.Name := New_String(Str => Dialog_Name & ".percentlbl");
       configure
         (Widgt => Label,
@@ -977,7 +975,7 @@ package body Bases.RecruitUI is
    -- Show negotation UI to the player
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
@@ -994,7 +992,7 @@ package body Bases.RecruitUI is
    function Negotiate_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
@@ -1007,9 +1005,14 @@ package body Bases.RecruitUI is
            Title =>
              "Negotiate with " &
              Tiny_String.To_String(Source => Recruit.Name));
-      Dialog_Close_Button, Hire_Button: Ttk_Button;
+      Dialog_Close_Button: Ttk_Button;
       Frame: constant Ttk_Frame :=
         Create(pathName => Negotiate_Dialog & ".buttonbox");
+      Hire_Button: constant Ttk_Button :=
+        Create
+          (pathName => Frame & ".hirebutton",
+           options =>
+             "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
       Label: Ttk_Label;
       Scale: Ttk_Scale;
       Spinbox: Ttk_SpinBox;
@@ -1029,12 +1032,16 @@ package body Bases.RecruitUI is
           (pathName => Label_Frame & ".label",
            options => "-text {Daily payment:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
+      Tcl_SetVar
+        (interp => Interp, varName => "daily",
+         newValue =>
+           Trim(Source => Natural'Image(Recruit.Payment), Side => Left));
       Spinbox :=
         Create
           (pathName => Label_Frame & ".field",
            options =>
-             "-from 0 -to" & Natural'Image(Recruit.Payment * 2) & " -width 5");
-      Set(SpinBox => Spinbox, Value => Natural'Image(Recruit.Payment));
+             "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
+             " -width 5 -textvariable daily -validate key -validatecommand {ValidateSpinbox %W %P {}}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
       Scale :=
@@ -1042,8 +1049,7 @@ package body Bases.RecruitUI is
           (pathName => Negotiate_Dialog & ".daily",
            options =>
              "-from 0 -command NegotiateHire -length 250 -to" &
-             Natural'Image(Recruit.Payment * 2) & " -value" &
-             Natural'Image(Recruit.Payment));
+             Natural'Image(Recruit.Payment * 2) & " -variable daily");
       Bind
         (Widgt => Scale, Sequence => "<Escape>",
          Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
@@ -1075,11 +1081,6 @@ package body Bases.RecruitUI is
         (Widgt => Scale, Sequence => "<Escape>",
          Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
       Current(ComboBox => Contract_Box, NewIndex => "0");
-      Hire_Button :=
-        Create
-          (pathName => Negotiate_Dialog & ".buttonbox.hirebutton",
-           options =>
-             "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
       Add(Widget => Hire_Button, Message => "Hire the selected recruit.");
       Bind
         (Widgt => Contract_Box, Sequence => "<Tab>",
