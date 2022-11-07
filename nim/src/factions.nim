@@ -59,8 +59,14 @@ type
 
 var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
 
-proc loadFactions*(fileName: string) =
-  let factionsXml = loadXml(path = fileName)
+proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  let factionsXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load factions data file. Reason: " &
+          getCurrentExceptionMsg())
   for factionNode in factionsXml:
     if factionNode.kind != xnElement:
       continue
@@ -73,7 +79,7 @@ proc loadFactions*(fileName: string) =
     if factionAction in [update, remove]:
       if factionsList.hasKey(key = factionIndex):
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $factionAction & " faction '" & factionIndex & "', there is no faction with that index,")
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', there is no faction with that index.")
     elif factionsList.hasKey(key = factionIndex):
       raise newException(exceptn = DataLoadingError,
           message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
@@ -83,7 +89,10 @@ proc loadFactions*(fileName: string) =
           debugType = everything)
       continue
     var faction: FactionData = if factionAction == DataAction.update:
-        factionsList[factionIndex]
+        try:
+          factionsList[factionIndex]
+        except KeyError:
+          FactionData()
       else:
         FactionData()
     var attribute = factionNode.attr(name = "name")
@@ -97,15 +106,32 @@ proc loadFactions*(fileName: string) =
       faction.pluralMemberName = attribute
     attribute = factionNode.attr(name = "spawn")
     if attribute.len() > 0:
-      faction.spawnChance = attribute.parseInt()
+      try:
+        faction.spawnChance = attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid value for spawn chance.")
     attribute = factionNode.attr(name = "population")
     if attribute.len() > 0:
-      faction.population[1] = attribute.parseInt()
+      try:
+        faction.population[1] = attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid value for population.")
       faction.population[2] = 0
     attribute = factionNode.attr(name = "minpopulation")
     if attribute.len() > 0:
-      faction.population[1] = attribute.parseInt()
-      faction.population[2] = factionNode.attr(name = "maxpopulation").parseInt()
+      try:
+        faction.population[1] = attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid value for minpopulation.")
+      try:
+        faction.population[2] = factionNode.attr(
+            name = "maxpopulation").parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid value for maxpopulation.")
       if faction.population[2] < faction.population[1]:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid range for faction's population.")
@@ -135,7 +161,11 @@ proc loadFactions*(fileName: string) =
       faction.healingSkill = skillIndex
     attribute = factionNode.attr(name = "baseicon")
     if attribute.len() > 0:
-      faction.baseIcon = fromHex[Natural]("0x" & attribute)
+      try:
+        faction.baseIcon = fromHex[Natural]("0x" & attribute)
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $factionAction & " faction '" & factionIndex & "', invalid value for base icon.")
     attribute = factionNode.attr(name = "weaponskill")
     if attribute.len() > 0:
       let skillIndex = findSkillIndex(skillName = attribute)
@@ -153,11 +183,21 @@ proc loadFactions*(fileName: string) =
         var relation: RelationsData
         attribute = childNode.attr(name = "reputation")
         if attribute.len() > 0:
-          relation.reputation = ReputationRanges(min: attribute.parseInt(), max: 0)
+          try:
+            relation.reputation = ReputationRanges(min: attribute.parseInt(), max: 0)
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex & "', invalid value for reputation.")
         else:
-          relation.reputation = ReputationRanges(min: childNode.attr(
-              name = "minreputation").parseInt(), max: childNode.attr(
-              name = "maxreputation").parseInt())
+          try:
+            relation.reputation = ReputationRanges(min: childNode.attr(
+                name = "minreputation").parseInt(), max: childNode.attr(
+                name = "maxreputation").parseInt())
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex & "', invalid value for reputation.")
           if relation.reputation.min > relation.reputation.max:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $factionAction & " faction '" &
@@ -211,7 +251,12 @@ proc loadFactions*(fileName: string) =
           var career = CareerData(shipIndex: 1)
           attribute = childNode.attr(name = "shipindex")
           if attribute.len() > 0:
-            career.shipIndex = attribute.parseInt()
+            try:
+              career.shipIndex = attribute.parseInt()
+            except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $factionAction & " faction '" &
+                  factionIndex & "', invalid value for ship index.")
           attribute = childNode.attr(name = "playerindex")
           if attribute.len() > 0:
             career.playerIndex = attribute
@@ -219,7 +264,13 @@ proc loadFactions*(fileName: string) =
           if attribute.len() > 0:
             career.name = attribute
           else:
-            career.name = careersList[careerIndex].name
+            try:
+              career.name = careersList[careerIndex].name
+            except KeyError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $factionAction & " faction '" &
+                  factionIndex &
+                  "', no career with index '" & careerIndex & "'.")
           career.description = childNode.innerText
           faction.careers[careerIndex] = career
       of "basetype":
@@ -231,8 +282,13 @@ proc loadFactions*(fileName: string) =
           {.warning[UnsafeDefault]: on.}
           {.warning[ProveInit]: on.}
         elif basesTypesList.hasKey(key = baseIndex):
-          faction.basesTypes[baseIndex] = childNode.attr(
-              name = "chance").parseInt()
+          try:
+            faction.basesTypes[baseIndex] = childNode.attr(
+                name = "chance").parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $factionAction & " faction '" &
+                factionIndex & "', invalid value for base spawn chance.")
     if factionAction == DataAction.add:
       if faction.basesTypes.len() == 0:
         for key in basesTypesList.keys:
