@@ -320,7 +320,8 @@ type
     description: cstring
     name: cstring
 
-proc loadAdaFactions*(fileName: cstring) {.exportc.} =
+proc loadAdaFactions*(fileName: cstring) {.sideEffect, raises: [
+    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadFactions(fileName = $fileName)
 
 proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideEffect,
@@ -357,60 +358,73 @@ proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideE
   adaFaction.weaponSkill = faction.weaponSkill.cint
 
 proc getAdaFactionData(factionIndex: cstring; index: cint;
-    adaDataType: cstring): cstring {.exportc.} =
-  let dataList = case $adaDataType
-    of "foodType":
-      factionsList[$factionIndex].foodTypes
-    of "drinkType":
-      factionsList[$factionIndex].drinksTypes
-    of "flag":
-      factionsList[$factionIndex].flags
-    else:
+    adaDataType: cstring): cstring {.sideEffect, raises: [], tags: [], exportc.} =
+  try:
+    let dataList = case $adaDataType
+      of "foodType":
+        factionsList[$factionIndex].foodTypes
+      of "drinkType":
+        factionsList[$factionIndex].drinksTypes
+      of "flag":
+        factionsList[$factionIndex].flags
+      else:
+        return ""
+    if index >= dataList.len():
       return ""
-  if index >= dataList.len():
+    return dataList[index].cstring
+  except KeyError:
     return ""
-  return dataList[index].cstring
 
 proc getAdaFactionRelation(factionIndex: cstring; index: cint;
-    relation: var array[3, cint]): cstring {.exportc.} =
+    relation: var array[3, cint]): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   relation = [0.cint, 0.cint, 0.cint]
-  if index > factionsList[$factionIndex].relations.len():
+  try:
+    if index > factionsList[$factionIndex].relations.len():
+      return ""
+    var currIndex = 0
+    for relIndex, factionRelation in factionsList[
+        $factionIndex].relations.pairs:
+      currIndex.inc()
+      if currIndex < index:
+        continue
+      relation = [factionRelation.reputation.min.cint,
+          factionRelation.reputation.max.cint, factionRelation.friendly.ord().cint]
+      return relIndex.cstring
+  except KeyError:
     return ""
-  var currIndex = 0
-  for relIndex, factionRelation in factionsList[$factionIndex].relations.pairs:
-    currIndex.inc()
-    if currIndex < index:
-      continue
-    relation = [factionRelation.reputation.min.cint,
-        factionRelation.reputation.max.cint, factionRelation.friendly.ord().cint]
-    return relIndex.cstring
 
 proc getAdaFactionCareer(factionIndex: cstring; index: cint;
-    career: var AdaCareerData): cstring {.exportc.} =
+    career: var AdaCareerData): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   career = AdaCareerData(shipIndex: 1, playerIndex: "".cstring,
       description: "".cstring, name: "".cstring)
-  if index > factionsList[$factionIndex].careers.len():
+  try:
+    if index > factionsList[$factionIndex].careers.len():
+      return ""
+    var currIndex = 0
+    for carIndex, factionCareer in factionsList[$factionIndex].careers.pairs:
+      currIndex.inc()
+      if currIndex < index:
+        continue
+      career.shipIndex = factionCareer.shipIndex.cint
+      career.playerIndex = factionCareer.playerIndex.cstring
+      career.description = factionCareer.description.cstring
+      career.name = factionCareer.name.cstring
+      return carIndex.cstring
+  except KeyError:
     return ""
-  var currIndex = 0
-  for carIndex, factionCareer in factionsList[$factionIndex].careers.pairs:
-    currIndex.inc()
-    if currIndex < index:
-      continue
-    career.shipIndex = factionCareer.shipIndex.cint
-    career.playerIndex = factionCareer.playerIndex.cstring
-    career.description = factionCareer.description.cstring
-    career.name = factionCareer.name.cstring
-    return carIndex.cstring
 
 proc getAdaFactionBase(factionIndex: cstring; index: cint;
-    baseIndex: var cint): cstring {.exportc.} =
+    baseIndex: var cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   baseIndex = 0
-  if index > factionsList[$factionIndex].basesTypes.len():
+  try:
+    if index > factionsList[$factionIndex].basesTypes.len():
+      return ""
+    var currIndex = 0
+    for bIndex, factionBase in factionsList[$factionIndex].basesTypes.pairs:
+      currIndex.inc()
+      if currIndex < index:
+        continue
+      baseIndex = factionBase.cint
+      return bIndex.cstring
+  except KeyError:
     return ""
-  var currIndex = 0
-  for bIndex, factionBase in factionsList[$factionIndex].basesTypes.pairs:
-    currIndex.inc()
-    if currIndex < index:
-      continue
-    baseIndex = factionBase.cint
-    return bIndex.cstring
