@@ -762,7 +762,7 @@ package body Missions.UI is
         Create
           (pathName => Mission_Dialog & ".rewardfield",
            options =>
-             "-from 0 -to 200 -textvariable reward -validate key  -validatecommand {ValidateSpinbox %W %P " &
+             "-from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
              Button & "} -width 3");
    begin
       Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
@@ -770,6 +770,10 @@ package body Missions.UI is
         (Widget => Reward_Scale,
          Message =>
            "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
+      Add
+        (Widget => Reward_Field,
+         Message =>
+           "Lower value - more reputation from mission but less money,\nhigher value - more money from mission but less reputation.");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Reward_Label, Options => "-columnspan 2 -padx 5 -stick w");
       Reward_Label :=
