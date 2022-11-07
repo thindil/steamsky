@@ -1,3 +1,0 @@
-set Max_Messages 20;
-set Verbose On;
-check Global_References (all, function, procedure, task, protected);
