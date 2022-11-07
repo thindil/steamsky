@@ -134,6 +134,7 @@ package body Crafts is
                   end if;
                else
                   Delete_Index := Temp_Record.Material_Types.First_Index;
+                  --## rule off SIMPLIFIABLE_STATEMENTS
                   Delete_Materials_Loop :
                   while Delete_Index <=
                     Temp_Record.Material_Types.Last_Index loop
@@ -146,6 +147,7 @@ package body Crafts is
                      end if;
                      Delete_Index := Delete_Index + 1;
                   end loop Delete_Materials_Loop;
+                  --## rule on SIMPLIFIABLE_STATEMENTS
                end if;
             end loop Read_Materials_Loop;
             Value :=
