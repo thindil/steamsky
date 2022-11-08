@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to clear numeric fields (GitHub issue #95)
+- Numeric fields to sliders (GitHub issue #96)
 
 ### Changed
 - Updated README.md
