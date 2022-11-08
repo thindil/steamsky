@@ -229,13 +229,11 @@ package body Crafts is
                Temp_Record.Tool_Quality :=
                  Positive'Value(To_String(Source => Value));
             end if;
-            if Action /= UPDATE then
-               Recipes_Container.Include
-                 (Container => Recipes_List, Key => Recipe_Index,
-                  New_Item => Temp_Record);
+            if Action = UPDATE then
+               Recipes_List(Recipe_Index) := Temp_Record;
                Log_Message
                  (Message =>
-                    "Recipe added: " &
+                    "Recipe updated: " &
                     To_String
                       (Source =>
                          Objects_Container.Element
@@ -244,10 +242,12 @@ package body Crafts is
                            .Name),
                   Message_Type => EVERYTHING);
             else
-               Recipes_List(Recipe_Index) := Temp_Record;
+               Recipes_Container.Include
+                 (Container => Recipes_List, Key => Recipe_Index,
+                  New_Item => Temp_Record);
                Log_Message
                  (Message =>
-                    "Recipe updated: " &
+                    "Recipe added: " &
                     To_String
                       (Source =>
                          Objects_Container.Element
@@ -1277,8 +1277,7 @@ package body Crafts is
                      .Name);
          else
             return
-              "Manufacturing" & Positive'Image(Module.Crafting_Amount) &
-              "x " &
+              "Manufacturing" & Positive'Image(Module.Crafting_Amount) & "x " &
               To_String
                 (Source =>
                    Objects_Container.Element
