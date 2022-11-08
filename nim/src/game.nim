@@ -106,15 +106,18 @@ var
   dodgeSkill*: Positive
   unarmedSkill*: Positive
 
-proc findSkillIndex*(skillName: string): Natural =
+proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
+    tags: [].} =
   for key, skill in skillsList.pairs:
     if skill.name == skillName:
       return key
   return 0
 
-proc loadData*(fileName: string) =
+proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
 
-  proc findAttributeIndex(attributeName: string): Natural =
+  proc findAttributeIndex(attributeName: string): Natural {.sideEffect,
+      raises: [], tags: [].} =
     for key, attribute in attributesList.pairs:
       if attribute.name == attributeName:
         return key + 1
@@ -182,9 +185,13 @@ proc loadData*(fileName: string) =
         of "description":
           newSkill.description = childNode.innerText()
         of "toolquality":
-          newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
-              name = "level").parseInt(), quality: childNode.attr(
-              name = "quality").parseInt()))
+          try:
+            newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
+                name = "level").parseInt(), quality: childNode.attr(
+                name = "quality").parseInt()))
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't add skill '" & newSkill.name & "'. Invalid value for tools quality.")
       skillsList[skillIndex] = newSkill
       skillIndex.inc()
     of "itemtype":
@@ -194,13 +201,27 @@ proc loadData*(fileName: string) =
       of "skill":
         {.warning[ProveInit]: off.}
         {.warning[UnsafeDefault]: off.}
-        skillsList.del(key = gameNode.attr(name = "value").parseInt())
+        try:
+          skillsList.del(key = gameNode.attr(name = "value").parseInt())
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't delete skill '" & gameNode.attr(name = "value") & "'. Invalid index.")
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
       of "attribute":
-        attributesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+        try:
+          attributesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't delete attribute '" & gameNode.attr(
+                  name = "value") & "'. Invalid index.")
       of "itemtype":
-        itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+        try:
+          itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't delete item type '" & gameNode.attr(
+                  name = "value") & "'. Invalid index.")
       else:
         discard
     of "repairtools":
@@ -210,13 +231,21 @@ proc loadData*(fileName: string) =
     of "alchemytools":
       alchemyTools = gameNode.attr(name = "value")
     of "corpseindex":
-      corpseIndex = gameNode.attr(name = "value").parseInt()
+      try:
+        corpseIndex = gameNode.attr(name = "value").parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't set corpse index '" & gameNode.attr(name = "value") & "'. Invalid value.")
     of "missionitemstype":
       missionItemsType = gameNode.attr(name = "value")
     of "fueltype":
       fuelType = gameNode.attr(name = "value")
     of "moneyindex":
-      moneyIndex = gameNode.attr(name = "value").parseInt()
+      try:
+        moneyIndex = gameNode.attr(name = "value").parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't set money index '" & gameNode.attr(name = "value") & "'. Invalid value.")
     of "tradersname":
       tradersName = gameNode.attr(name = "value")
     of "conditionname":
