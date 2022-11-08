@@ -40,15 +40,21 @@ type
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
 
   ToolQuality = object
-    level: Natural
-    quality: Natural
+    ## FUNCTION
+    ##
+    ## Store data related to quality of tools needed for train a skill
+    level: Natural ## The minimal level of a skill which need that quality of tool
+    quality: Natural ## The level of quality of tool needed for training
 
   SkillRecord* = object
-    name: string
-    attribute: Positive
-    description: string
-    tool: string
-    toolsQuality: seq[ToolQuality]
+    ## FUNCTION
+    ##
+    ## Store data releated to the skills
+    name: string ## The name of the skill
+    attribute: Positive ## The index of the attribute related to the skill
+    description: string ## The description of the skill
+    tool: string ## The type of items used to train the skill
+    toolsQuality: seq[ToolQuality] ## The quality of tool needed for training
 
   DataLoadingError* = object of CatchableError
     ## FUNCTION
@@ -56,35 +62,38 @@ type
     ## Used to mark problems during loading the game data from files
 
   AttributeRecord* = object
-    name: string
-    description: string
+    ## FUNCTION
+    ##
+    ## Store data related to the attributes
+    name: string ## The name of the attribute
+    description: string ## The description of the attribute
 
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep            ## The directory where the saved games and logs are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string    ## The name of the item used as a money in the game
-  skillsList* = initTable[Positive, SkillRecord]()
-  basesSyllablesPreList*: seq[string]
-  basesSyllablesStartList*: seq[string]
-  basesSyllablesEndList*: seq[string]
-  basesSyllablesPostList*: seq[string]
-  malesSyllablesStartList*: seq[string]
-  malesSyllablesMiddleList*: seq[string]
-  malesSyllablesEndList*: seq[string]
-  malesVocalsList*: seq[string]
-  malesConsonantsList*: seq[string]
-  femalesSyllablesStartList*: seq[string]
-  femalesSyllablesMiddleList*: seq[string]
-  femalesSyllablesEndList*: seq[string]
-  femalesVocalsList*: seq[string]
-  shipsSyllablesStartList*: seq[string]
-  shipsSyllablesMiddleList*: seq[string]
-  shipsSyllablesEndList*: seq[string]
-  attributesList*: seq[AttributeRecord]
-  itemsTypesList*: seq[string]
-  repairTools*: string
-  cleaningTools*: string
+  skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
+  basesSyllablesPreList*: seq[string] ## The list of pre syllables for bases names
+  basesSyllablesStartList*: seq[string] ## The list of start syllables for bases names
+  basesSyllablesEndList*: seq[string] ## The list of end syllables for bases names
+  basesSyllablesPostList*: seq[string] ## The list of post syllables for bases names
+  malesSyllablesStartList*: seq[string] ## The list of start syllables for males names
+  malesSyllablesMiddleList*: seq[string] ## The list of middle syllables for males names
+  malesSyllablesEndList*: seq[string] ## The list of end syllables for males names
+  malesVocalsList*: seq[string] ## The list of vocals for males names
+  malesConsonantsList*: seq[string] ## The list of consonants for males names
+  femalesSyllablesStartList*: seq[string] ## The list of start syllables for females names
+  femalesSyllablesMiddleList*: seq[string] ## The list of middle syllables for females names
+  femalesSyllablesEndList*: seq[string] ## The list of end syllables for females names
+  femalesVocalsList*: seq[string] ## The list of vocals for female names
+  shipsSyllablesStartList*: seq[string] ## The list of start syllables for ships names
+  shipsSyllablesMiddleList*: seq[string] ## The list of middle syllables for ships names
+  shipsSyllablesEndList*: seq[string] ## The list of end syllables for ships names
+  attributesList*: seq[AttributeRecord] ## The list of all attributes available in the game
+  itemsTypesList*: seq[string] ## The list of all types of items available in the game
+  repairTools*: string ## The type of item used to repair ships
+  cleaningTools*: string ## The type of item used to cleaning ships
   alchemyTools*: string
   corpseIndex*: Positive
   missionItemsType*: string
