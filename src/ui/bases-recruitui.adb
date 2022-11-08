@@ -1147,7 +1147,7 @@ package body Bases.RecruitUI is
       Focus(Widgt => Dialog_Close_Button);
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Negotiate_Dialog & ".daily;break}");
+         Script => "{focus " & Negotiate_Dialog & ".dailylbl.field;break}");
       Bind
         (Widgt => Hire_Button, Sequence => "<Tab>",
          Script => "{focus " & Dialog_Close_Button & ";break}");
