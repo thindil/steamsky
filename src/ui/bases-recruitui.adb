@@ -1041,7 +1041,8 @@ package body Bases.RecruitUI is
           (pathName => Label_Frame & ".field",
            options =>
              "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
-             " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P}");
+             " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+             Label_Frame & ".field}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
       Scale :=
@@ -1391,7 +1392,7 @@ package body Bases.RecruitUI is
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argc        - Number of arguments passed to the command.
    -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -1409,17 +1410,22 @@ package body Bases.RecruitUI is
    function Validate_Negotiate_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
+      pragma Unreferenced(Client_Data);
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1));
+      Value: constant String :=
+        (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2)
+         else Get(Widgt => Spin_Box));
    begin
-      if CArgv.Arg(Argv => Argv, N => 2) = "" then
+      if Value = "" then
          Tcl_SetResult(interp => Interp, str => "1");
          return TCL_OK;
       end if;
       Tcl_Eval
         (interp => Interp,
          strng =>
-           "ValidateSpinbox " & CArgv.Arg(Argv => Argv, N => 1) & " " &
-           CArgv.Arg(Argv => Argv, N => 2) & " {}");
+           "ValidateSpinbox " & CArgv.Arg(Argv => Argv, N => 1) & " " & Value &
+           " {}");
       if Tcl_GetStringResult(interp => Interp) = "0" then
          return TCL_OK;
       end if;
