@@ -781,16 +781,16 @@ package body Bases.RecruitUI is
           (Container => Sky_Bases(Base_Index).Recruits,
            Index => Recruit_Index);
       Cost: Integer;
-      Scale: constant Ttk_Scale :=
-        Get_Widget(pathName => Dialog_Name & ".percent", Interp => Interp);
       Daily_Payment: constant Natural :=
         Natural(Float'Value(Tcl_GetVar(interp => Interp, varName => "daily")));
       Contract_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
       Contract_Length: constant Natural :=
         Natural'Value(Current(ComboBox => Contract_Box));
-      Trade_Payment: Natural;
-      Label: Ttk_Label :=
+      Trade_Payment: constant Natural :=
+        Natural
+          (Float'Value(Tcl_GetVar(interp => Interp, varName => "percent")));
+      Label: constant Ttk_Label :=
         Get_Widget(pathName => Dialog_Name & ".cost", Interp => Interp);
       Hire_Button: constant Ttk_Button :=
         Get_Widget
@@ -801,8 +801,10 @@ package body Bases.RecruitUI is
         (interp => Interp, varName => "daily",
          newValue =>
            Trim(Source => Natural'Image(Daily_Payment), Side => Left));
-      Trade_Payment :=
-        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
+      Tcl_SetVar
+        (interp => Interp, varName => "percent",
+         newValue =>
+           Trim(Source => Natural'Image(Trade_Payment), Side => Left));
       Cost :=
         Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
         (Trade_Payment * 5_000);
@@ -822,12 +824,6 @@ package body Bases.RecruitUI is
          options =>
            "-text {Hire for" & Natural'Image(Cost) & " " &
            To_String(Source => Money_Name) & "}");
-      Label.Name := New_String(Str => Dialog_Name & ".percentlbl");
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {Percent of profit from trades: " &
-           Natural'Image(Trade_Payment) & "}");
       if Money_Index_2 > 0
         and then
           Inventory_Container.Element
@@ -1055,16 +1051,26 @@ package body Bases.RecruitUI is
         (Widgt => Scale, Sequence => "<Escape>",
          Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
+      Label_Frame := Create(pathName => Negotiate_Dialog & ".percentlbl");
       Label :=
         Create
-          (pathName => Negotiate_Dialog & ".percentlbl",
-           options => "-text {Percent of profit from trades: 0}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
+          (pathName => Label_Frame & ".label",
+           options => "-text {Percent of profit from trades:}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+      Tcl_SetVar(interp => Interp, varName => "percent", newValue => "0");
+      Spinbox :=
+        Create
+          (pathName => Label_Frame & ".field",
+           options =>
+             "-from 0 -to 10 -width 2 -textvariable percent -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+             Label_Frame & ".field}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1 -padx {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame, Options => "-padx 5");
       Scale :=
         Create
           (pathName => Negotiate_Dialog & ".percent",
            options =>
-             "-from 0 -to 10 -command NegotiateHire -length 250 -value 0");
+             "-from 0 -to 10 -command NegotiateHire -length 250 -variable percent");
       Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
       Label :=
         Create
