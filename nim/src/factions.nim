@@ -22,42 +22,61 @@ import basestypes, careers, game, items, log
 
 type
   NamesTypes* = enum
+    ## FUNCTION
+    ##
+    ## The type of the faction names, normal, based on syllables or robotic,
+    ## based on random letters and numbers
     normal, robotic
 
   ReputationRanges = object
-    min: ReputationRange
-    max: ReputationRange
+    ## FUNCTION
+    ##
+    ## Used to store reputation ranges for relation with other factions
+    min: ReputationRange ## Minimal reputation with the selected faction
+    max: ReputationRange ## Maximal reputation with the selected faction
 
   RelationsData = object
-    reputation: ReputationRanges
-    friendly: bool
+    ## FUNCTION
+    ##
+    ## Used to store data about relation with other faction
+    reputation: ReputationRanges ## Values of min and max reputation with the faction
+    friendly: bool ## If true, the selected faction is friendly towards the faction
 
   CareerData = object
-    shipIndex: Positive
-    playerIndex: string
-    description: string
-    name: string
+    ## FUNCTION
+    ##
+    ## Used to store data about careers available for the faction
+    shipIndex: Positive ## The index of the starting ship prototype for the career
+    playerIndex: string ## The index of the starting mob prototype as the player character
+    description: string ## The description of the career
+    name: string ## The name of the career
 
   FactionData = object
-    name*: string
-    memberName: string
-    pluralMemberName: string
-    spawnChance: Natural
-    population: AttributesArray
-    namesType*: NamesTypes
-    relations: Table[string, RelationsData]
-    description: string
-    foodTypes: seq[string]
-    drinksTypes: seq[string]
-    healingTools: string
-    healingSkill: Natural
-    flags: seq[string]
-    careers: Table[string, CareerData]
-    baseIcon: Natural
-    basesTypes: Table[string, Positive]
-    weaponSkill: Natural
+    ## FUNCTION
+    ##
+    ## Used to store data about the selected faction
+    name*: string ## The name of the faction
+    memberName: string ## The name of members of the faction
+    pluralMemberName: string ## The name for plural amount of members of the faction
+    spawnChance: Natural ## The chance of the spawn for a base of the selected faction
+    population: AttributesArray ## The min and max population for new bases of the faction
+    namesType*: NamesTypes ## The type of names for the mobs, bases and ships of the faction
+    relations: Table[string, RelationsData] ## The faction's relations with other factions
+    description: string ## The description of the faction
+    foodTypes: seq[string] ## The types of items used as food for the faction's members
+    drinksTypes: seq[string] ## The types of items used as drinks for the faction's members
+    healingTools: string ## The type of items used as healing tools for the faction's members
+    healingSkill: Natural ## The skill used as healing skill for the faction's members
+    flags: seq[string] ## Various flags set for the faction
+    careers: Table[string, CareerData] ## The list of available careers for the faction
+    baseIcon: Natural ## The icon used as icon for the faction's bases on the map
+    basesTypes: Table[string, Positive] ## The list of available bases types for the faction
+    weaponSkill: Natural ## The skill used as prefered weapon skill for the faction
 
 var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
+  ## FUNCTION
+  ##
+  ## The list of all available factions in the game
 
 proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
