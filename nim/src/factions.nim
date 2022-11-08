@@ -80,6 +80,13 @@ var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
 
 proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load available factions from the data file
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the path to the file with factions data which will be loaded
   let factionsXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -318,6 +325,8 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Faction updated: '" & factionIndex & "'",
           debugType = everything)
     factionsList[factionIndex] = faction
+
+# Temporary code for interfacing with Ada
 
 type
   AdaFactionData* = object
