@@ -1001,7 +1001,6 @@ package body Bases.RecruitUI is
            Title =>
              "Negotiate with " &
              Tiny_String.To_String(Source => Recruit.Name));
-      Dialog_Close_Button: Ttk_Button;
       Frame: constant Ttk_Frame :=
         Create(pathName => Negotiate_Dialog & ".buttonbox");
       Hire_Button: constant Ttk_Button :=
@@ -1009,6 +1008,12 @@ package body Bases.RecruitUI is
           (pathName => Frame & ".hirebutton",
            options =>
              "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
+      Dialog_Close_Button: constant Ttk_Button :=
+        Create
+          (pathName => Negotiate_Dialog & ".buttonbox.button",
+           options =>
+             "-text Close -command {CloseDialog " & Negotiate_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
       Label: Ttk_Label;
       Scale: Ttk_Scale;
       Spinbox: Ttk_SpinBox;
@@ -1039,6 +1044,9 @@ package body Bases.RecruitUI is
              "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
              " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
              Label_Frame & ".field}");
+      Bind
+        (Widgt => Spinbox, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
       Scale :=
@@ -1064,7 +1072,11 @@ package body Bases.RecruitUI is
            options =>
              "-from 0 -to 10 -width 2 -textvariable percent -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
              Label_Frame & ".field}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1 -padx {0 5}");
+      Bind
+        (Widgt => Spinbox, Sequence => "<Escape>",
+         Script => "{" & Dialog_Close_Button & " invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Spinbox, Options => "-row 0 -column 1 -padx {0 5}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame, Options => "-padx 5");
       Scale :=
         Create
@@ -1132,12 +1144,6 @@ package body Bases.RecruitUI is
            "-text {Hire for" & Positive'Image(Cost) & " " &
            To_String(Source => Money_Name) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
-      Dialog_Close_Button :=
-        Create
-          (pathName => Negotiate_Dialog & ".buttonbox.button",
-           options =>
-             "-text Close -command {CloseDialog " & Negotiate_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
       Add
