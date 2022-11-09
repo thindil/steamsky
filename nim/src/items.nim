@@ -161,7 +161,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     if itemIndex == moneyIndex:
       moneyName = item.name
 
-proc findProtoItem*(itemType: string): Natural =
+proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [].} =
   for index, item in itemsList.pairs():
     if item.itemType == itemType:
       return index
@@ -233,5 +233,5 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem.description = item.description.cstring
   adaItem.reputation = item.reputation.cint
 
-proc findAdaProtoItem(itemType: cstring): cint {.exportc.} =
+proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return findProtoItem(itemType = $itemType).cint
