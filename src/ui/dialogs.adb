@@ -23,6 +23,8 @@ with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -442,6 +444,14 @@ package body Dialogs is
       end if;
       if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) < 5 and
         Mouse_Y_Position > Current_Y_Mouse then
+         return TCL_OK;
+      end if;
+      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) +
+        Integer'Value(Winfo_Get(Widgt => Dialog, Info => "width")) >
+        Integer'Value
+          (Winfo_Get
+             (Widgt => Get_Main_Window(Interp => Interp), Info => "width")) and
+        Mouse_X_Position < Current_X_Mouse then
          return TCL_OK;
       end if;
       New_X :=
