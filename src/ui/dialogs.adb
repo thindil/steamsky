@@ -421,6 +421,7 @@ package body Dialogs is
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       New_X, New_Y, Current_X_Mouse, Current_Y_Mouse: Integer;
+      Header: constant Ttk_Frame := Get_Widget(pathName => Dialog & ".header");
       function Get_Coordinate(Name: String) return Integer is
       begin
          Tcl_Eval
@@ -456,6 +457,16 @@ package body Dialogs is
             (Winfo_Get
                (Widgt => Get_Main_Window(Interp => Interp),
                 Info => "width")) then
+         return TCL_OK;
+      end if;
+      if Mouse_Y_Position < Current_Y_Mouse
+        and then
+          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) +
+            Integer'Value(Winfo_Get(Widgt => Header, Info => "height")) + 5 >
+          Integer'Value
+            (Winfo_Get
+               (Widgt => Get_Main_Window(Interp => Interp),
+                Info => "height")) then
          return TCL_OK;
       end if;
       New_X :=
