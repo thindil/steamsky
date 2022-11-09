@@ -162,6 +162,18 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       moneyName = item.name
 
 proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the index of prototype of the selected item type
+  ##
+  ## PARAMETERS
+  ##
+  ## * itemType - the type of items which prototype's index will be get
+  ##
+  ## RETURNS
+  ##
+  ## The index of the prototype of the selected item's type or 0 if no prototype
+  ## found
   for index, item in itemsList.pairs():
     if item.itemType == itemType:
       return index
