@@ -265,7 +265,7 @@ package body Crafts is
       use Tiny_String;
 
       Recipe: Craft_Data;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Objects_Container.Extended_Index := 0;
    begin
       if Length(Source => Recipe_Index) > 6
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
