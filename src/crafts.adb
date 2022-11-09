@@ -264,7 +264,9 @@ package body Crafts is
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Recipe: Craft_Data;
+      --## rule on IMPROPER_INITIALIZATION
       Item_Index: Objects_Container.Extended_Index := 0;
    begin
       if Length(Source => Recipe_Index) > 6
