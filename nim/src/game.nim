@@ -94,29 +94,40 @@ var
   itemsTypesList*: seq[string] ## The list of all types of items available in the game
   repairTools*: string ## The type of item used to repair ships
   cleaningTools*: string ## The type of item used to cleaning ships
-  alchemyTools*: string
-  corpseIndex*: Positive
-  missionItemsType*: string
-  fuelType*: string
-  tradersName*: string
-  conditionIndex*: Positive
-  strengthIndex*: Positive
-  pilotingSkill*: Positive
-  engineeringSkill*: Positive
-  gunnerySkill*: Positive
-  talkingSkill*: Positive
-  perceptionSkill*: Positive
-  headArmor*: string
-  chestArmor*: string
-  armsArmor*: string
-  legsArmor*: string
-  shieldType*: string
-  weaponType*: string
-  dodgeSkill*: Positive
-  unarmedSkill*: Positive
+  alchemyTools*: string ## The type of item used as alchemy tools
+  corpseIndex*: Positive ## The index of item used as prototype for corpses
+  missionItemsType*: string ## The type of item used in missions
+  fuelType*: string ## The type of item used as fuel for ships
+  tradersName*: string ## The word used to mark traders ships in their names
+  conditionIndex*: Positive ## The index of condition attribute
+  strengthIndex*: Positive ## The index of strength attribute
+  pilotingSkill*: Positive ## The index of piloting skill
+  engineeringSkill*: Positive ## The index of engineering skill
+  gunnerySkill*: Positive ## The index of gunnery skill
+  talkingSkill*: Positive ## The index of talking skill
+  perceptionSkill*: Positive ## The index of perception skil
+  headArmor*: string ## The type of items used as head armor
+  chestArmor*: string ## The type of items used as chest armor
+  armsArmor*: string ## The type of items used as arms armor
+  legsArmor*: string ## The type of items used as legs armor
+  shieldType*: string ## The type of items used as shield
+  weaponType*: string ## The type of items used as weapon
+  dodgeSkill*: Positive ## The index of dodge skill
+  unarmedSkill*: Positive ## The index of unarmed combat skill
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the index of the selected skill
+  ##
+  ## PARAMETERS
+  ##
+  ## * skillName - the name of the skill which index will be looking for
+  ##
+  ## RETURNS
+  ##
+  ## The index of the selected skill or 0 if the skill not found
   for key, skill in skillsList.pairs:
     if skill.name == skillName:
       return key
@@ -124,9 +135,28 @@ proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
 
 proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load the game data
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the name of the file with the game data to load
 
   proc findAttributeIndex(attributeName: string): Natural {.sideEffect,
       raises: [], tags: [].} =
+    ## FUNCTION
+    ##
+    ## Find the index of the selected attribute
+    ##
+    ## PARAMETERS
+    ##
+    ## * attributeName - the name of the attribute which index will be looking
+    ##                   for
+    ##
+    ## RETURNS
+    ##
+    ## The index of the selected attribute or 0 if the attribute not found
     for key, attribute in attributesList.pairs:
       if attribute.name == attributeName:
         return key + 1
