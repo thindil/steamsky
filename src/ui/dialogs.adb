@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
@@ -372,7 +373,7 @@ package body Dialogs is
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
-      Assign_Mouse_Position_Block:
+      Assign_Mouse_Position_Block :
       begin
          Mouse_X_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
          Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
@@ -417,7 +418,7 @@ package body Dialogs is
       Dialog: constant Ttk_Frame :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      New_X, New_Y: Integer;
+      New_X, New_Y, Current_X_Mouse, Current_Y_Mouse: Integer;
       function Get_Coordinate(Name: String) return Integer is
       begin
          Tcl_Eval
@@ -433,19 +434,27 @@ package body Dialogs is
       if Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
+      Current_X_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Current_Y_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
+      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) < 5 and
+        Mouse_X_Position > Current_X_Mouse then
+         return TCL_OK;
+      end if;
+      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) < 5 and
+        Mouse_Y_Position > Current_Y_Mouse then
+         return TCL_OK;
+      end if;
       New_X :=
-        Get_Coordinate(Name => "x") -
-        (Mouse_X_Position - Integer'Value(CArgv.Arg(Argv => Argv, N => 2)));
+        Get_Coordinate(Name => "x") - (Mouse_X_Position - Current_X_Mouse);
       New_Y :=
-        Get_Coordinate(Name => "y") -
-        (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv => Argv, N => 3)));
+        Get_Coordinate(Name => "y") - (Mouse_Y_Position - Current_Y_Mouse);
       Tcl.Tk.Ada.Place.Place_Configure
         (Slave => Dialog,
          Options =>
            "-x " & Trim(Source => Integer'Image(New_X), Side => Left) &
            " -y " & Trim(Source => Integer'Image(New_Y), Side => Left));
-      Mouse_X_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Mouse_Y_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
+      Mouse_X_Position := Current_X_Mouse;
+      Mouse_Y_Position := Current_Y_Mouse;
       return TCL_OK;
    end Move_Dialog_Command;
 
