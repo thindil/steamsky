@@ -438,20 +438,24 @@ package body Dialogs is
       end if;
       Current_X_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
       Current_Y_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
-      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) < 5 and
-        Mouse_X_Position > Current_X_Mouse then
+      if Mouse_X_Position > Current_X_Mouse
+        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) <
+          5 then
          return TCL_OK;
       end if;
-      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) < 5 and
-        Mouse_Y_Position > Current_Y_Mouse then
+      if Mouse_Y_Position > Current_Y_Mouse
+        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) <
+          5 then
          return TCL_OK;
       end if;
-      if Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) +
-        Integer'Value(Winfo_Get(Widgt => Dialog, Info => "width")) >
-        Integer'Value
-          (Winfo_Get
-             (Widgt => Get_Main_Window(Interp => Interp), Info => "width")) and
-        Mouse_X_Position < Current_X_Mouse then
+      if Mouse_X_Position < Current_X_Mouse
+        and then
+          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) +
+            Integer'Value(Winfo_Get(Widgt => Dialog, Info => "width")) >
+          Integer'Value
+            (Winfo_Get
+               (Widgt => Get_Main_Window(Interp => Interp),
+                Info => "width")) then
          return TCL_OK;
       end if;
       New_X :=
