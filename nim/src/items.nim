@@ -179,8 +179,8 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
       return index
   return 0
 
-proc getItemDamage*(itemDurability: ItemsDurability;
-    toLower: bool = false): string =
+func getItemDamage*(itemDurability: ItemsDurability;
+    toLower: bool = false): string {.raises: [], tags: [].} =
   let damage: float = 1.0 - (itemDurability.float / 100.0)
   result = ""
   if damage < 0.2:
@@ -263,6 +263,7 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
 proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return findProtoItem(itemType = $itemType).cint
 
-proc getAdaItemDamage*(itemDurability: cint; toLower: cint): cstring {.exportc.} =
+func getAdaItemDamage*(itemDurability: cint; toLower: cint): cstring {.raises: [],
+    tags: [], exportc.} =
   return getItemDamage(itemDurability.ItemsDurability, (if toLower ==
       1: true else: false)).cstring
