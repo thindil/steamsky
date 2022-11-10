@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
-- Updated look of the crew members info's dialog
+- Updated look of the crew members info's dialog and list of the known bases
 
 ### Fixed
 - No check for the correct amount of items to craft during setting a crafting
