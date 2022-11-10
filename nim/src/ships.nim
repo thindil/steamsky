@@ -60,9 +60,13 @@ func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], ex
   else:
     return "Palace room"
 
-proc generateShipName*(factionIndex: string): string =
-  if factionsList[factionIndex].namesType == robotic:
-    return $generateRoboticName()
+proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
+    tags: [].} =
+  try:
+    if factionsList[factionIndex].namesType == robotic:
+      return $generateRoboticName()
+  except KeyError:
+    discard
   result = shipsSyllablesStartList[getRandom(min = 0, max = (
       shipsSyllablesStartList.len - 1))]
   if getRandom(min = 1, max = 100) < 51:
@@ -71,5 +75,6 @@ proc generateShipName*(factionIndex: string): string =
   result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
       shipsSyllablesEndList.len - 1))]
 
-proc generateAdaShipName(factionIndex: cstring): cstring {.exportc.} =
+proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [],
+    tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
