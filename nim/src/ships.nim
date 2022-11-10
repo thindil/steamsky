@@ -62,6 +62,18 @@ func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], ex
 
 proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Generate the name for the ship, based on its owner's faction. Based
+  ## on libtcod names generator
+  ##
+  ## PARAMETERS
+  ##
+  ## * factionIndex - the index of the faction to which the ship belongs
+  ##
+  ## RETURNS
+  ##
+  ## The randomly generated name of the ship
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName()
@@ -74,6 +86,8 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
         shipsSyllablesMiddleList.len - 1))]
   result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
       shipsSyllablesEndList.len - 1))]
+
+# Temporary code for interfacing with Ada
 
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [],
     tags: [], exportc.} =
