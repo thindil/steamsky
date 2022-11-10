@@ -179,6 +179,21 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
       return index
   return 0
 
+proc getItemDamage*(itemDurability: ItemsDurability;
+    toLower: bool = false): string =
+  let damage: float = 1.0 - (itemDurability.float / 100.0)
+  result = ""
+  if damage < 0.2:
+    result = "Slightly used"
+  elif damage < 0.5:
+    result = "Damaged"
+  elif damage < 0.8:
+    result = "Heavily damaged"
+  else:
+    result = "Almost destroyed"
+  if toLower:
+    result = toLowerAscii(s = result)
+
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
@@ -247,3 +262,7 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
 
 proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return findProtoItem(itemType = $itemType).cint
+
+proc getAdaItemDamage*(itemDurability: cint; toLower: cint): cstring {.exportc.} =
+  return getItemDamage(itemDurability.ItemsDurability, (if toLower ==
+      1: true else: false)).cstring

@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -138,26 +137,18 @@ package body Items is
    function Get_Item_Damage
      (Item_Durability: Items_Durability; To_Lower: Boolean := False)
       return String is
-      Damage_Percent: Float range 0.0 .. 1.0;
-      Damage_Text: Unbounded_String;
+
+      function Get_Ada_Item_Damage
+        (I_Durability: Items_Durability; Lower: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItemDamage";
    begin
-      Damage_Percent := 1.0 - (Float(Item_Durability) / 100.0);
-      Damage_Text :=
-        (if Damage_Percent < 0.2 then
-           To_Unbounded_String(Source => "Slightly used")
-         elsif Damage_Percent < 0.5 then
-           To_Unbounded_String(Source => "Damaged")
-         elsif Damage_Percent < 0.8 then
-           To_Unbounded_String(Source => "Heavily damaged")
-         else To_Unbounded_String(Source => "Almost destroyed"));
-      if To_Lower then
-         Damage_Text :=
-           To_Unbounded_String
-             (Source =>
-                Ada.Characters.Handling.To_Lower
-                  (Item => To_String(Source => Damage_Text)));
-      end if;
-      return To_String(Source => Damage_Text);
+      return
+        Value
+          (Get_Ada_Item_Damage
+             (I_Durability => Item_Durability,
+              Lower => (if To_Lower then 1 else 0)));
    end Get_Item_Damage;
 
    function Get_Item_Name
