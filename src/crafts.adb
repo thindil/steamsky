@@ -347,7 +347,9 @@ package body Crafts is
       use Tiny_String;
 
       Recipe: Craft_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Material_Indexes: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Recipe_Name: Unbounded_String;
       Max_Amount: Positive := Positive'Last;
       M_Type: Module_Type;
