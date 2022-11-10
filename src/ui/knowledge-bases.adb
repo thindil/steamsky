@@ -202,7 +202,8 @@ package body Knowledge.Bases is
            (Table => Bases_Table,
             Text => To_String(Source => Sky_Bases(I).Name),
             Tooltip => "Show available base's options",
-            Command => "ShowBasesMenu" & Positive'Image(I), Column => 1);
+            Command => "ShowBasesMenu" & Positive'Image(I), Column => 1,
+            Color => (if Sky_Bases(I).Visited.Year > 0 then "green3" else ""));
          Add_Button
            (Table => Bases_Table,
             Text =>
@@ -211,7 +212,8 @@ package body Knowledge.Bases is
                    (Destination_X => Sky_Bases(I).Sky_X,
                     Destination_Y => Sky_Bases(I).Sky_Y)),
             Tooltip => "The distance to the base",
-            Command => "ShowBasesMenu" & Positive'Image(I), Column => 2);
+            Command => "ShowBasesMenu" & Positive'Image(I), Column => 2,
+            Color => (if Sky_Bases(I).Visited.Year > 0 then "green3" else ""));
          if Sky_Bases(I).Visited.Year > 0 then
             Add_Button
               (Table => Bases_Table,
@@ -220,25 +222,29 @@ package body Knowledge.Bases is
                     when 1 .. 150 => "small", when 151 .. 299 => "medium",
                     when others => "large"),
                Tooltip => "The population size of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3,
+               Color => "green3");
             Add_Button
               (Table => Bases_Table,
                Text => To_Lower(Item => Bases_Size'Image(Sky_Bases(I).Size)),
                Tooltip => "The size of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4,
+               Color => "green3");
             Add_Button
               (Table => Bases_Table,
                Text =>
                  To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5,
+               Color => "green3");
             Add_Button
               (Table => Bases_Table,
                Text =>
                  To_String
                    (Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                Tooltip => "The type of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6,
+               Color => "green3");
             Add_Button
               (Table => Bases_Table,
                Text =>
@@ -246,7 +252,7 @@ package body Knowledge.Bases is
                    (Reputation_Level => Sky_Bases(I).Reputation.Level),
                Tooltip => "Your reputation in the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
-               New_Row => True);
+               New_Row => True, Color => "green3");
          else
             Add_Button
               (Table => Bases_Table, Text => "not",
