@@ -547,6 +547,7 @@ package body Crafts is
                 Recipe.Material_Amounts
                   (Positive_Container.To_Index(Position => I));
          end loop Count_Needed_Space_Loop;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          if Free_Cargo
              (Amount =>
                 Space_Needed -
@@ -557,6 +558,7 @@ package body Crafts is
            0 then
             raise Trade_No_Free_Cargo;
          end if;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
       end Check_For_Free_Space_Block;
       return Max_Amount;
    end Check_Recipe;
