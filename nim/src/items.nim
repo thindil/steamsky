@@ -181,6 +181,19 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
 
 func getItemDamage*(itemDurability: ItemsDurability;
     toLower: bool = false): string {.raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the description of the item damage level
+  ##
+  ## PARAMETERS
+  ##
+  ## * itemDurability - the durability of the item which description will be get
+  ## * toLower        - if true, convert the description to lower letters
+  ##
+  ## RETURNS
+  ##
+  ## The description of the item damage level or empty string if the item isn't
+  ## damaged
   let damage: float = 1.0 - (itemDurability.float / 100.0)
   result = ""
   if damage < 0.2:
