@@ -82,6 +82,7 @@ proc ValidateSpinbox {widget value button} {
       return true
    }
    $widget set $newvalue
+   $widget icursor end
    return true
 }
 # Move map buttons
