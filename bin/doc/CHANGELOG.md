@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Set proper max amount of money to train when the player doesn't have enough
   money for training
 - Crash when moving around in-game dialogs with mouse (GitHub issue #98)
+- Cursor position inside some numeric fields after entered a number
 
 ## [8.0] - 2022-10-30
 
