@@ -115,13 +115,13 @@ package body Crafts.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Set_Recipe_06227a_d0c883
+   procedure Wrap_Test_Set_Recipe_06227a_1d4f5f
      (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
    begin
       begin
          pragma Assert
-           ((Workshop <= Player_Ship.Modules.Last_Index and
-             Tiny_String.Length(Source => Recipe_Index) > 0));
+           (Workshop <= Player_Ship.Modules.Last_Index and
+            Tiny_String.Length(Source => Recipe_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -140,19 +140,19 @@ package body Crafts.Test_Data.Tests is
               (False,
                "ens_sloc(crafts.ads:0:):Test_SetRecipe test commitment violated");
       end;
-   end Wrap_Test_Set_Recipe_06227a_d0c883;
+   end Wrap_Test_Set_Recipe_06227a_1d4f5f;
 --  end read only
 
 --  begin read only
    procedure Test_Set_Recipe_test_setrecipe(Gnattest_T: in out Test);
-   procedure Test_Set_Recipe_06227a_d0c883(Gnattest_T: in out Test) renames
+   procedure Test_Set_Recipe_06227a_1d4f5f(Gnattest_T: in out Test) renames
      Test_Set_Recipe_test_setrecipe;
 --  id:2.2/06227a2e531c4565/Set_Recipe/1/0/test_setrecipe/
    procedure Test_Set_Recipe_test_setrecipe(Gnattest_T: in out Test) is
       procedure Set_Recipe
         (Workshop, Amount: Positive;
          Recipe_Index: Tiny_String.Bounded_String) renames
-        Wrap_Test_Set_Recipe_06227a_d0c883;
+        Wrap_Test_Set_Recipe_06227a_1d4f5f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
