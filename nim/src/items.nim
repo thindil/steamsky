@@ -214,28 +214,20 @@ proc getItemName*(item: InventoryData; damageInfo,
   else:
     result = itemsList[item.protoIndex].name
     if damageInfo and item.durability < 100:
-      result = result & "(" & getItemDamage(itemDurability = item.durability,
+      result = result & " (" & getItemDamage(itemDurability = item.durability,
           toLower = toLower) & ")"
 
 # Temporary code for interfacing with Ada
 
-type
-  AdaObjectData* = object
-    name: cstring
-    weight: cint
-    itemType: cstring
-    price: cint
-    value: array[5, cint]
-    showType: cstring
-    description: cstring
-    reputation: cint
-
-  AdaInventoryData* = object
-    protoIndex: cint
-    amount: cint
-    name: cstring
-    durability: cint
-    price: cint
+type AdaObjectData* = object
+  name: cstring
+  weight: cint
+  itemType: cstring
+  price: cint
+  value: array[5, cint]
+  showType: cstring
+  description: cstring
+  reputation: cint
 
 proc loadAdaItems(fileName: cstring): cstring {.sideEffect,
     raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
@@ -268,12 +260,12 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
 proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return findProtoItem(itemType = $itemType).cint
 
-func getAdaItemDamage*(itemDurability: cint; toLower: cint): cstring {.raises: [
+func getAdaItemDamage(itemDurability: cint; toLower: cint): cstring {.raises: [
     ], tags: [], exportc.} =
   return getItemDamage(itemDurability.ItemsDurability, toLower == 1).cstring
 
-proc getAdaItemName*(item: AdaInventoryData; damageInfo,
-    toLower: cint): cstring =
-  return getItemName(InventoryData(protoIndex: item.protoIndex,
-      amount: item.amount, name: $item.name, durability: item.durability,
-      price: item.price), damageInfo == 1, toLower == 1).cstring
+proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
+    toLower: cint): cstring {.exportc.} =
+  return getItemName(InventoryData(protoIndex: protoIndex, amount: 1,
+      name: $name, durability: durability, price: 0), damageInfo == 1,
+      toLower == 1).cstring

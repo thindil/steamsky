@@ -146,9 +146,10 @@ package body Items is
    begin
       return
         Value
-          (Item => Get_Ada_Item_Damage
-             (I_Durability => Item_Durability,
-              Lower => (if To_Lower then 1 else 0)));
+          (Item =>
+             Get_Ada_Item_Damage
+               (I_Durability => Item_Durability,
+                Lower => (if To_Lower then 1 else 0)));
    end Get_Item_Damage;
 
    function Get_Item_Name
@@ -156,27 +157,21 @@ package body Items is
       return String is
       use Tiny_String;
 
-      Item_Name: Unbounded_String :=
-        (if Item.Name /= Null_Bounded_String then
-           To_Unbounded_String(Source => To_String(Source => Item.Name))
-         else To_Unbounded_String
-             (Source =>
-                To_String
-                  (Source =>
-                     Objects_Container.Element
-                       (Container => Items_List, Index => Item.Proto_Index)
-                       .Name)));
+      function Get_Ada_Item_Name
+        (Name: chars_ptr; Proto_Index, Durability, D_Info, Lower: Integer)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItemName";
    begin
-      if Damage_Info and then Item.Durability < 100 then
-         Append
-           (Source => Item_Name,
-            New_Item =>
-              " (" &
-              Get_Item_Damage
-                (Item_Durability => Item.Durability, To_Lower => To_Lower) &
-              ")");
-      end if;
-      return To_String(Source => Item_Name);
+      return
+        Value
+          (Item =>
+             Get_Ada_Item_Name
+               (Name => New_String(Str => To_String(Source => Item.Name)),
+                Proto_Index => Item.Proto_Index, Durability => Item.Durability,
+                D_Info => (if Damage_Info then 1 else 0),
+                Lower => (if To_Lower then 1 else 0)));
    end Get_Item_Name;
 
    procedure Damage_Item
