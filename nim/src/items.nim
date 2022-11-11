@@ -44,11 +44,11 @@ type
     ##
     ## Used to store information about items in various inventories (cargo, crew
     ## inventory, ect)
-    protoIndex: Natural ## The index of the item's prototype
-    amount: Positive ## The amount of the item in the inventory
-    name: string ## The name of the item, if different than the default one
-    durability: ItemsDurability ## The current durability of the item
-    price: Natural ## The price for which the item was bought
+    protoIndex*: Natural ## The index of the item's prototype
+    amount*: Positive ## The amount of the item in the inventory
+    name*: string ## The name of the item, if different than the default one
+    durability*: ItemsDurability ## The current durability of the item
+    price*: Natural ## The price for which the item was bought
 
 const defaultItemDurability*: ItemsDurability = 100
   ## FUNCTION
