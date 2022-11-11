@@ -231,8 +231,7 @@ package Items is
    function Get_Item_Damage
      (Item_Durability: Items_Durability; To_Lower: Boolean := False)
       return String with
-      Post => Get_Item_Damage'Result'Length > 0,
-      Test_Case => (Name => "Test_GetItemDamage", Mode => Nominal);
+      Post => Get_Item_Damage'Result'Length > 0;
       -- ****
 
       -- ****f* Items/Items.Get_Item_Name
