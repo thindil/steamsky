@@ -146,7 +146,7 @@ package body Items is
    begin
       return
         Value
-          (Get_Ada_Item_Damage
+          (Item => Get_Ada_Item_Damage
              (I_Durability => Item_Durability,
               Lower => (if To_Lower then 1 else 0)));
    end Get_Item_Damage;
