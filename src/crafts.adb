@@ -570,13 +570,13 @@ package body Crafts is
       Amount, New_Amount: Integer := 0;
       Recipe: Craft_Data;
       Material_Indexes: Positive_Container.Vector;
-      Work_Time, Current_Minutes, Recipe_Time: Integer;
+      Work_Time, Current_Minutes, Recipe_Time: Integer := 0;
       Damage: Damage_Factor := 0.0;
-      Recipe_Name: Unbounded_String;
-      Have_Material: Boolean;
-      Crafting_Material: Natural;
-      Crafter_Index: Crew_Container.Extended_Index;
-      Cargo_Index, Tool_Index: Inventory_Container.Extended_Index;
+      Recipe_Name: Unbounded_String := Null_Unbounded_String;
+      Have_Material: Boolean := False;
+      Crafting_Material: Natural := 0;
+      Crafter_Index: Crew_Container.Extended_Index := 0;
+      Cargo_Index, Tool_Index: Inventory_Container.Extended_Index := 0;
       procedure Reset_Order
         (Module: in out Module_Data; Module_Owner: Natural) is
          Have_Worker: Boolean := False;
