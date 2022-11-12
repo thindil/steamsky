@@ -55,10 +55,18 @@ const defaultItemDurability*: ItemsDurability = 100
   ##
   ## Default durability for the new items
 
-var itemsList* = initTable[Positive, ObjectData]()
-  ## FUNCTION
-  ##
-  ## The list of prototypes of all items availabla in the game
+var
+  itemsList* = initTable[Positive, ObjectData]()
+    ## FUNCTION
+    ##
+    ## The list of prototypes of all items availabla in the game
+
+  weaponsList*: seq[Positive]
+  shieldsList*: seq[Positive]
+  headArmorsList*: seq[Positive]
+  chestArmorsList*: seq[Positive]
+  armsArmorsList*: seq[Positive]
+  legsArmorsList*: seq[Positive]
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -160,6 +168,18 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     itemsList[itemIndex] = item
     if itemIndex == moneyIndex:
       moneyName = item.name
+    if item.itemType == weaponType:
+      weaponsList.add(y = itemIndex)
+    elif item.itemType == shieldType:
+      shieldsList.add(y = itemIndex)
+    elif item.itemType == headArmor:
+      headArmorsList.add(y = itemIndex)
+    elif item.itemType == chestArmor:
+      chestArmorsList.add(y = itemIndex)
+    elif item.itemType == armsArmor:
+      armsArmorsList.add(y = itemIndex)
+    elif item.itemType == legsArmor:
+      legsArmorsList.add(y = itemIndex)
 
 proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [].} =
   ## FUNCTION
@@ -272,3 +292,10 @@ proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
   return getItemName(InventoryData(protoIndex: protoIndex, amount: 1,
       name: $name, durability: durability, price: 0), damageInfo == 1,
       toLower == 1).cstring
+
+proc getAdaItemsList(name: cstring, itemsList: var array[64, cint]) {.exportc.} =
+  for i in 0..63:
+    itemsList[i] = 0
+  if name == "weapons":
+    for index, item in weaponsList.pairs:
+      itemsList[index] = item.cint
