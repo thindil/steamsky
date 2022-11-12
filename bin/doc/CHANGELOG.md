@@ -20,3 +20,4 @@ All notable changes to this project will be documented in this file.
   money for training
 - Crash when moving around in-game dialogs with mouse (GitHub issue #98)
 - Cursor position inside some numeric fields after entered a number
+- Loading weapons into the game
