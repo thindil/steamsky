@@ -248,8 +248,7 @@ package Items is
    function Get_Item_Name
      (Item: Inventory_Data; Damage_Info, To_Lower: Boolean := True)
       return String with
-      Post => Get_Item_Name'Result'Length > 0,
-      Test_Case => (Name => "Test_GetItemName", Mode => Nominal);
+      Post => Get_Item_Name'Result'Length > 0;
       -- ****
 
       -- ****f* Items/Items.Damage_Item
