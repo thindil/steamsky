@@ -473,6 +473,7 @@ package body Knowledge.Events is
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
+      Color: Unbounded_String;
    begin
       Create
         (S => Tokens,
@@ -531,49 +532,57 @@ package body Knowledge.Events is
                     (Table => Events_Table, Text => "Enemy ship spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "red");
+                  Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>
                   Add_Button
                     (Table => Events_Table, Text => "Full docks in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "red");
+                  Color := To_Unbounded_String(Source => "red");
                when ATTACKONBASE =>
                   Add_Button
                     (Table => Events_Table, Text => "Base is under attack",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "red");
+                  Color := To_Unbounded_String(Source => "red");
                when DISEASE =>
                   Add_Button
                     (Table => Events_Table, Text => "Disease in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "red");
+                  Color := To_Unbounded_String(Source => "red");
                when ENEMYPATROL =>
                   Add_Button
                     (Table => Events_Table, Text => "Enemy patrol",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "red");
+                  Color := To_Unbounded_String(Source => "red");
                when DOUBLEPRICE =>
                   Add_Button
                     (Table => Events_Table, Text => "Double price in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "green3");
+                  Color := To_Unbounded_String(Source => "green3");
                when TRADER =>
                   Add_Button
                     (Table => Events_Table, Text => "Friendly trader spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "green3");
+                  Color := To_Unbounded_String(Source => "green3");
                when FRIENDLYSHIP =>
                   Add_Button
                     (Table => Events_Table, Text => "Friendly ship spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1);
+                     Column => 1, Color => "green3");
+                  Color := To_Unbounded_String(Source => "green3");
                when NONE | BASERECOVERY =>
                   null;
             end case;
@@ -585,8 +594,8 @@ package body Knowledge.Events is
                       (Destination_X => Events_List(Event).Sky_X,
                        Destination_Y => Events_List(Event).Sky_Y)),
                Tooltip => "The distance to the event",
-               Command => "ShowEventMenu" & Positive'Image(Event),
-               Column => 2);
+               Command => "ShowEventMenu" & Positive'Image(Event), Column => 2,
+               Color => To_String(Source => Color));
             case Events_List(Event).E_Type is
                when DOUBLEPRICE =>
                   Add_Button
@@ -609,7 +618,8 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Event),
-                     Column => 3, New_Row => True);
+                     Column => 3, New_Row => True,
+                     Color => To_String(Source => Color));
                when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                   Add_Button
                     (Table => Events_Table,
@@ -624,7 +634,8 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Event),
-                     Column => 3, New_Row => True);
+                     Column => 3, New_Row => True,
+                     Color => To_String(Source => Color));
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Add_Button
                     (Table => Events_Table,
@@ -635,7 +646,8 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Event),
-                     Column => 3, New_Row => True);
+                     Column => 3, New_Row => True,
+                     Color => To_String(Source => Color));
                when NONE | BASERECOVERY =>
                   null;
             end case;
