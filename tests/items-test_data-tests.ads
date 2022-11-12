@@ -10,18 +10,15 @@ package Items.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Get_Item_Name_1f8ef2_6e935f(Gnattest_T: in out Test);
-   --  items.ads:248:4:Get_Item_Name:Test_GetItemName
-
    procedure Test_Damage_Item_397a3e_4cae84(Gnattest_T: in out Test);
-   --  items.ads:271:4:Damage_Item:Test_DamageItem
+   --  items.ads:270:4:Damage_Item:Test_DamageItem
 
    procedure Test_Find_Item_800e7b_9d4eb9(Gnattest_T: in out Test);
-   --  items.ads:292:4:Find_Item:Test_FindItem
+   --  items.ads:291:4:Find_Item:Test_FindItem
 
    procedure Test_Get_Item_Chance_To_Damage_32e0c6_2bbc61
      (Gnattest_T: in out Test);
-   --  items.ads:318:4:Get_Item_Chance_To_Damage:Test_GetItemChanceToDamage
+   --  items.ads:317:4:Get_Item_Chance_To_Damage:Test_GetItemChanceToDamage
 
 end Items.Test_Data.Tests;
 --  end read only
