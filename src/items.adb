@@ -41,7 +41,7 @@ package body Items is
          Description: chars_ptr;
          Reputation: Integer;
       end record;
-      type Items_Nim_Array is array (0 .. 63) of Integer;
+      type Items_Nim_Array is array(0 .. 63) of Integer;
       Temp_Nim_Record: Object_Nim_Data;
       Nim_Items_List: Items_Nim_Array := (others => 0);
       Index: Positive := 1;
@@ -54,7 +54,8 @@ package body Items is
          Import => True,
          Convention => C,
          External_Name => "getAdaItem";
-      procedure Get_Ada_Items_List(Name: chars_ptr; I_List: out Items_Nim_Array) with
+      procedure Get_Ada_Items_List
+        (Name: chars_ptr; I_List: out Items_Nim_Array) with
          Import => True,
          Convention => C,
          External_Name => "getAdaItemsList";
@@ -87,44 +88,54 @@ package body Items is
            (Container => Items_List, New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Items_Loop;
-      Get_Ada_Items_List(Name => New_String(Str => "weapons"), I_List => Nim_Items_List);
-      Load_Weapons_List_Loop:
+      Get_Ada_Items_List
+        (Name => New_String(Str => "weapons"), I_List => Nim_Items_List);
+      Load_Weapons_List_Loop :
       for I of Nim_Items_List loop
          exit Load_Weapons_List_Loop when I = 0;
          Positive_Indefinite_Container.Append
            (Container => Weapons_List, New_Item => I);
       end loop Load_Weapons_List_Loop;
-      Set_Items_Lists_Loop :
-      for I in
-        Objects_Container.First_Index(Container => Items_List) ..
-          Objects_Container.Last_Index(Container => Items_List) loop
-         if Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Shield_Type then
-            Positive_Indefinite_Container.Append
-              (Container => Shields_List, New_Item => I);
-         elsif Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Head_Armor then
-            Positive_Indefinite_Container.Append
-              (Container => Head_Armors_List, New_Item => I);
-         elsif Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Chest_Armor then
-            Positive_Indefinite_Container.Append
-              (Container => Chest_Armors_List, New_Item => I);
-         elsif Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Arms_Armor then
-            Positive_Indefinite_Container.Append
-              (Container => Arms_Armors_List, New_Item => I);
-         elsif Objects_Container.Element(Container => Items_List, Index => I)
-             .I_Type =
-           Legs_Armor then
-            Positive_Indefinite_Container.Append
-              (Container => Legs_Armors_List, New_Item => I);
-         end if;
-      end loop Set_Items_Lists_Loop;
+      Get_Ada_Items_List
+        (Name => New_String(Str => "shields"), I_List => Nim_Items_List);
+      Load_Shields_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Shields_List_Loop when I = 0;
+         Positive_Indefinite_Container.Append
+           (Container => Shields_List, New_Item => I);
+      end loop Load_Shields_List_Loop;
+      Get_Ada_Items_List
+        (Name => New_String(Str => "headarmors"), I_List => Nim_Items_List);
+      Load_Head_Armors_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Head_Armors_List_Loop when I = 0;
+         Positive_Indefinite_Container.Append
+           (Container => Head_Armors_List, New_Item => I);
+      end loop Load_Head_Armors_List_Loop;
+      Get_Ada_Items_List
+        (Name => New_String(Str => "chestarmors"), I_List => Nim_Items_List);
+      Load_Chest_Armors_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Chest_Armors_List_Loop when I = 0;
+         Positive_Indefinite_Container.Append
+           (Container => Chest_Armors_List, New_Item => I);
+      end loop Load_Chest_Armors_List_Loop;
+      Get_Ada_Items_List
+        (Name => New_String(Str => "armsarmors"), I_List => Nim_Items_List);
+      Load_Arms_Armors_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Arms_Armors_List_Loop when I = 0;
+         Positive_Indefinite_Container.Append
+           (Container => Arms_Armors_List, New_Item => I);
+      end loop Load_Arms_Armors_List_Loop;
+      Get_Ada_Items_List
+        (Name => New_String(Str => "legsarmors"), I_List => Nim_Items_List);
+      Load_Legs_Armors_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Legs_Armors_List_Loop when I = 0;
+         Positive_Indefinite_Container.Append
+           (Container => Legs_Armors_List, New_Item => I);
+      end loop Load_Legs_Armors_List_Loop;
    end Load_Items;
 
    function Find_Proto_Item
