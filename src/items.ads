@@ -157,7 +157,7 @@ package Items is
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
-   Weapons_List: Positive_Indefinite_Container.Vector (Capacity => 32);
+   Weapons_List: Positive_Indefinite_Container.Vector (Capacity => 64);
    -- ****
 
    -- ****v* Items/Items.Shields_List
