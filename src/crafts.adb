@@ -568,8 +568,10 @@ package body Crafts is
 
       Result_Amount, Crafted_Amount, Gained_Exp: Natural := 0;
       Amount, New_Amount: Integer := 0;
+      --## rule off IMPROPER_INITIALIZATION
       Recipe: Craft_Data;
       Material_Indexes: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Work_Time, Current_Minutes, Recipe_Time: Integer := 0;
       Damage: Damage_Factor := 0.0;
       Recipe_Name: Unbounded_String := Null_Unbounded_String;
