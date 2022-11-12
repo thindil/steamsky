@@ -208,11 +208,14 @@ func getItemDamage*(itemDurability: ItemsDurability;
     result = toLowerAscii(s = result)
 
 proc getItemName*(item: InventoryData; damageInfo,
-    toLower: bool = true): string =
+    toLower: bool = true): string {.sideEffect, raises: [], tags: [].} =
   if item.name.len > 0:
     result = item.name
   else:
-    result = itemsList[item.protoIndex].name
+    try:
+      result = itemsList[item.protoIndex].name
+    except KeyError:
+      return ""
     if damageInfo and item.durability < 100:
       result = result & " (" & getItemDamage(itemDurability = item.durability,
           toLower = toLower) & ")"
@@ -265,7 +268,7 @@ func getAdaItemDamage(itemDurability: cint; toLower: cint): cstring {.raises: [
   return getItemDamage(itemDurability.ItemsDurability, toLower == 1).cstring
 
 proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
-    toLower: cint): cstring {.exportc.} =
+    toLower: cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   return getItemName(InventoryData(protoIndex: protoIndex, amount: 1,
       name: $name, durability: durability, price: 0), damageInfo == 1,
       toLower == 1).cstring
