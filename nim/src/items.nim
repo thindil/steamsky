@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import config, game, log
 
 type
   ObjectData* = object
@@ -241,8 +241,8 @@ proc getItemName*(item: InventoryData; damageInfo,
           toLower = toLower) & ")"
 
 proc getItemChanceToDamage*(itemData: Natural): string =
-#  if gameSettings.showNumbers == 1:
-#    return " " & $itemData & "%"
+  if gameSettings.showNumbers == 1:
+    return " " & $itemData & "%"
   case itemData
   of 1:
     return "Almost never"
