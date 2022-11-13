@@ -266,6 +266,35 @@ package body Trades.UI is
             Items_Indexes.Append(New_Item => I);
          end loop Add_Cargo_Indexes_Loop;
       end if;
+      Fill_Cargo_Types_Loop :
+      for I of Items_Indexes loop
+         exit Fill_Cargo_Types_Loop when I = 0;
+         Proto_Index :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Proto_Index;
+         Item_Type :=
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type);
+         if Index
+             (Source => Items_Types,
+              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+           0 then
+            Append
+              (Source => Items_Types,
+               New_Item => " {" & To_String(Source => Item_Type) & "}");
+         end if;
+      end loop Fill_Cargo_Types_Loop;
       Show_Cargo_Items_Loop :
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
@@ -306,14 +335,6 @@ package body Trades.UI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index
-             (Source => Items_Types,
-              Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 then
-            Append
-              (Source => Items_Types,
-               New_Item => " {" & To_String(Source => Item_Type) & "}");
-         end if;
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
@@ -443,6 +464,34 @@ package body Trades.UI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
+      Fill_Trader_Types_Loop :
+      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
+         Proto_Index :=
+           BaseCargo_Container.Element
+             (Container => Base_Cargo, Index => Items_Indexes(I))
+             .Proto_Index;
+         Item_Type :=
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type);
+         if Index
+             (Source => Items_Types,
+              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+           0 then
+            Append
+              (Source => Items_Types,
+               New_Item => " {" & To_String(Source => Item_Type) & "}");
+         end if;
+      end loop Fill_Trader_Types_Loop;
       Show_Trader_Items_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Show_Trader_Items_Loop when Trade_Table.Row =
@@ -478,14 +527,6 @@ package body Trades.UI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index
-             (Source => Items_Types,
-              Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 then
-            Append
-              (Source => Items_Types,
-               New_Item => " {" & To_String(Source => Item_Type) & "}");
-         end if;
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
