@@ -294,7 +294,7 @@ proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
       toLower == 1).cstring
 
 proc getAdaItemsList(name: cstring; itemsList: var array[64,
-    cint]) {.exportc.} =
+    cint]) {.sideEffect, raises:[], tags: [], exportc.} =
   for i in 0..63:
     itemsList[i] = 0
   if name == "weapons":
