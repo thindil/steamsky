@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[parsecfg, streams, strutils]
-import game, ships
+import game
 
 type
   AutoMoveBreak* = enum
@@ -41,6 +41,12 @@ type
     ## When save the game automatically: never, after dock to a base, after
     ## undock from a base, every game day, every game month, every game year
     none, dock, undock, daily, monthly, yearly
+
+  ShipSpeed* = enum
+    ## FUNCTION
+    ##
+    ## Ships's state of speed, how much engines are used
+    docked, full_Stop, quarter_Speed, half_Speed, full_Speed
 
   GameSettingsRecord* = object
     ## FUNCTION

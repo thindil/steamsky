@@ -18,13 +18,6 @@
 import std/tables
 import factions, game, utils
 
-type
-  ShipSpeed* = enum
-    ## FUNCTION
-    ##
-    ## Ships's state of speed, how much engines are used
-    docked, full_Stop, quarter_Speed, half_Speed, full_Speed
-
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
   ##
