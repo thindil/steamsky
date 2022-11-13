@@ -315,8 +315,7 @@ package Items is
    -- String with chance to damage level description
    -- SOURCE
    function Get_Item_Chance_To_Damage(Item_Data: Natural) return String with
-      Post => Get_Item_Chance_To_Damage'Result'Length > 0,
-      Test_Case => (Name => "Test_GetItemChanceToDamage", Mode => Nominal);
+      Post => Get_Item_Chance_To_Damage'Result'Length > 0;
       -- ****
 
 end Items;
