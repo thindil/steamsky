@@ -240,6 +240,25 @@ proc getItemName*(item: InventoryData; damageInfo,
       result = result & " (" & getItemDamage(itemDurability = item.durability,
           toLower = toLower) & ")"
 
+proc getItemChanceToDamage*(itemData: Natural): string =
+#  if gameSettings.showNumbers == 1:
+#    return " " & $itemData & "%"
+  case itemData
+  of 1:
+    return "Almost never"
+  of 2:
+    return "Very small"
+  of 3:
+    return "Small"
+  of 4..9:
+    return "Below average"
+  of 10..14:
+    return "Average"
+  of 15..19:
+    return "High"
+  else:
+    return "Very high"
+
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
@@ -315,3 +334,6 @@ proc getAdaItemsList(name: cstring; itemsList: var array[64,
   elif name == "armsarmors":
     for index, item in armsArmorsList.pairs:
       itemsList[index] = item.cint
+
+proc getAdaItemChanceToDamage*(itemData: cint): cstring {.exportc.} =
+  return getItemChanceToDamage(itemData).cstring

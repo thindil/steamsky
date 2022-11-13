@@ -22,7 +22,6 @@ with Utils; use Utils;
 with Crew; use Crew;
 with Crew.Inventory; use Crew.Inventory;
 with Crafts; use Crafts;
-with Config; use Config;
 
 package body Items is
 
@@ -417,26 +416,13 @@ package body Items is
    end Set_Tools_List;
 
    function Get_Item_Chance_To_Damage(Item_Data: Natural) return String is
+      function Get_Ada_Item_Chance_To_Damage
+        (I_Data: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItemChanceToDamage";
    begin
-      if Game_Settings.Show_Numbers then
-         return Natural'Image(Item_Data) & "%";
-      end if;
-      case Item_Data is
-         when 1 =>
-            return "Almost never";
-         when 2 =>
-            return "Very small";
-         when 3 =>
-            return "Small";
-         when 4 .. 9 =>
-            return "Below average";
-         when 10 .. 14 =>
-            return "Average";
-         when 15 .. 19 =>
-            return "High";
-         when others =>
-            return "Very high";
-      end case;
+      return Value(Item => Get_Ada_Item_Chance_To_Damage(I_Data => Item_Data));
    end Get_Item_Chance_To_Damage;
 
 end Items;
