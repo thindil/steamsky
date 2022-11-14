@@ -720,7 +720,7 @@ package body Crafts is
                   Recipe_Time := Recipe_Time - Current_Minutes;
                   Work_Time := Work_Time - Current_Minutes - Recipe_Time;
                   Current_Minutes := -(Recipe_Time);
-                  Recipe_Time := Recipe.Time;
+                  Recipe_Time := Recipe.Time; --## rule line off ASSIGNMENTS
                   Material_Indexes.Clear;
                   if Length(Source => Module.Crafting_Index) > 6
                     and then
@@ -854,9 +854,11 @@ package body Crafts is
                     Damage_Factor
                       (Float(Module.Durability) /
                        Float(Module.Max_Durability));
+                  --## rule off ASSIGNMENTS
                   Result_Amount :=
                     Result_Amount -
                     Natural(Float(Result_Amount) * Float(Damage));
+                  --## rule on ASSIGNMENTS
                   if Result_Amount = 0 then
                      Result_Amount := 1;
                   end if;
