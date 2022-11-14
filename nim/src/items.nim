@@ -240,7 +240,8 @@ proc getItemName*(item: InventoryData; damageInfo,
       result = result & " (" & getItemDamage(itemDurability = item.durability,
           toLower = toLower) & ")"
 
-proc getItemChanceToDamage*(itemData: Natural): string =
+proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
+    tags: [].} =
   if gameSettings.showNumbers == 1:
     return " " & $itemData & "%"
   case itemData
@@ -313,7 +314,7 @@ proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
       toLower == 1).cstring
 
 proc getAdaItemsList(name: cstring; itemsList: var array[64,
-    cint]) {.sideEffect, raises:[], tags: [], exportc.} =
+    cint]) {.sideEffect, raises: [], tags: [], exportc.} =
   for i in 0..63:
     itemsList[i] = 0
   if name == "weapons":
@@ -335,5 +336,6 @@ proc getAdaItemsList(name: cstring; itemsList: var array[64,
     for index, item in armsArmorsList.pairs:
       itemsList[index] = item.cint
 
-proc getAdaItemChanceToDamage*(itemData: cint): cstring {.exportc.} =
+proc getAdaItemChanceToDamage*(itemData: cint): cstring {.sideEffect, raises: [],
+    tags: [], exportc.} =
   return getItemChanceToDamage(itemData).cstring
