@@ -216,6 +216,35 @@ package body Bases.LootUI is
          end loop Add_Base_Indexes_Loop;
       end if;
       Clear_Table(Table => Loot_Table);
+      Fill_Types_Player_Cargo_Loop :
+      for I of Items_Indexes loop
+         exit Fill_Types_Player_Cargo_Loop when I = 0;
+         Proto_Index :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Proto_Index;
+         Item_Type :=
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type);
+         if Index
+             (Source => Items_Types,
+              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+           0 then
+            Append
+              (Source => Items_Types,
+               New_Item => " {" & To_String(Source => Item_Type) & "}");
+         end if;
+      end loop Fill_Types_Player_Cargo_Loop;
       Add_Player_Cargo_Loop :
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
@@ -247,14 +276,6 @@ package body Bases.LootUI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index
-             (Source => Items_Types,
-              Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 then
-            Append
-              (Source => Items_Types,
-               New_Item => " {" & To_String(Source => Item_Type) & "}");
-         end if;
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
@@ -329,13 +350,8 @@ package body Bases.LootUI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
-      Add_Base_Cargo_Loop :
+      Fill_Types_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
-         exit Add_Base_Cargo_Loop when Loot_Table.Row =
-           Game_Settings.Lists_Limit + 1;
-         if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 then
-            goto End_Of_Base_Cargo_Loop;
-         end if;
          Proto_Index :=
            BaseCargo_Container.Element
              (Container => Base_Cargo, Index => Items_Indexes(I))
@@ -361,6 +377,31 @@ package body Bases.LootUI is
               (Source => Items_Types,
                New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
+      end loop Fill_Types_Base_Cargo_Loop;
+      Add_Base_Cargo_Loop :
+      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
+         exit Add_Base_Cargo_Loop when Loot_Table.Row =
+           Game_Settings.Lists_Limit + 1;
+         if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 then
+            goto End_Of_Base_Cargo_Loop;
+         end if;
+         Proto_Index :=
+           BaseCargo_Container.Element
+             (Container => Base_Cargo, Index => Items_Indexes(I))
+             .Proto_Index;
+         Item_Type :=
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Show_Type);
          if Argc = 2 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
