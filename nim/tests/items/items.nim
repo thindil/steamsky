@@ -2,7 +2,7 @@ discard """
   exitcode: 0
 """
 
-import ../../src/items
+import ../../src/[config, items]
 
 loadItems("../bin/data/items.dat")
 
@@ -19,3 +19,10 @@ block:
   assert getItemName(item, true, false) == "Basic Ration (Slightly used)"
   item.name = "New name"
   assert getItemName(item, false) == "New name"
+
+gameSettings.showNumbers = 0
+assert getItemChanceToDamage(3) == "Small"
+assert getItemChanceToDamage(30) == "Very high"
+gameSettings.showNumbers = 1
+assert getItemChanceToDamage(3) == " 3%"
+assert getItemChanceToDamage(30) == " 30%"
