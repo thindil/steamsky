@@ -68,6 +68,12 @@ type
     name: string ## The name of the attribute
     description: string ## The description of the attribute
 
+  ShipSpeed* = enum
+    ## FUNCTION
+    ##
+    ## Ships's state of speed, how much engines are used
+    docked, full_Stop, quarter_Speed, half_Speed, full_Speed
+
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep            ## The directory where the saved games and logs are stored
