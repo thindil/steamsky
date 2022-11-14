@@ -16,9 +16,5 @@ package Items.Test_Data.Tests is
    procedure Test_Find_Item_800e7b_9d4eb9(Gnattest_T: in out Test);
    --  items.ads:291:4:Find_Item:Test_FindItem
 
-   procedure Test_Get_Item_Chance_To_Damage_32e0c6_2bbc61
-     (Gnattest_T: in out Test);
-   --  items.ads:317:4:Get_Item_Chance_To_Damage:Test_GetItemChanceToDamage
-
 end Items.Test_Data.Tests;
 --  end read only
