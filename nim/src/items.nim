@@ -268,9 +268,9 @@ proc getItemName*(item: InventoryData; damageInfo,
       result = itemsList[item.protoIndex].name
     except KeyError:
       return ""
-    if damageInfo and item.durability < 100:
-      result = result & " (" & getItemDamage(itemDurability = item.durability,
-          toLower = toLower) & ")"
+  if damageInfo and item.durability < 100:
+    result = result & " (" & getItemDamage(itemDurability = item.durability,
+        toLower = toLower) & ")"
 
 proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
     tags: [].} =
