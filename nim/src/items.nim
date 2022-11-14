@@ -60,13 +60,30 @@ var
     ## FUNCTION
     ##
     ## The list of prototypes of all items availabla in the game
-
   weaponsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all weapons prototypes indexes
   shieldsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all shields prototypes indexes
   headArmorsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all head armors prototypes indexes
   chestArmorsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all chest armors prototypes indexes
   armsArmorsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all arms armors prototypes indexes
   legsArmorsList*: seq[Positive]
+    ## FUNCTION
+    ##
+    ## The list of all legs armors prototypes indexes
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -229,6 +246,21 @@ func getItemDamage*(itemDurability: ItemsDurability;
 
 proc getItemName*(item: InventoryData; damageInfo,
     toLower: bool = true): string {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the name of the selected item with optional info about the item's
+  ## damage
+  ##
+  ## PARAMETERS
+  ##
+  ## * item       - the item which the name will be get
+  ## * damageInfo - if true, add information about item's damage status
+  ## * toLower    - if true, the damage info should be in lower characters
+  ##
+  ## RETURNS
+  ##
+  ## The name of the selected item with optional info about the item's damage
+  ## status
   if item.name.len > 0:
     result = item.name
   else:
