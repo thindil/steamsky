@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 - Crash when moving around in-game dialogs with mouse (GitHub issue #98)
 - Cursor position inside some numeric fields after entered a number
 - Loading weapons into the game
-- Setting the list of available items' types during trading, looting bases
+- Setting the list of available items' types during trading, looting bases and
+  in the player's ship's cargo
 
 ## [8.0] - 2022-10-30
 
