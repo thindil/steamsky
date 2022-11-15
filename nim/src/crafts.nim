@@ -17,8 +17,8 @@
 
 {.used.}
 
-import std/tables
-import game, shipmodules
+import std/[strutils, tables, xmlparser, xmltree]
+import game, log, shipmodules
 
 type
   CraftData = object
@@ -35,3 +35,43 @@ type
     toolQuality: Positive
 
 var recipesList* = initTable[string, CraftData]()
+
+proc loadRecipes*(fileName: string) =
+  let recipesXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load crafting recipes data file. Reason: " &
+          getCurrentExceptionMsg())
+  for recipeNode in recipesXml:
+    if recipeNode.kind != xnElement:
+      continue
+    let
+      recipeIndex: string = recipeNode.attr(name = "index")
+      recipeAction: DataAction = try:
+          parseEnum[DataAction](recipeNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if recipeAction in [update, remove]:
+      if not recipesList.hasKey(key = recipeIndex):
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', there is no recipe with that index.")
+    elif recipesList.hasKey(key = recipeIndex):
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add recipe '" & $recipeIndex & "', there is a recipe with that index.")
+    if recipeAction == DataAction.remove:
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      recipesList.del(key = recipeIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
+      logMessage(message = "Recipe removed: '" & $recipeIndex & "'",
+          debugType = everything)
+      continue
+    var recipe: CraftData = if recipeAction == DataAction.update:
+        try:
+          recipesList[recipeIndex]
+        except ValueError:
+          CraftData(time: 1, difficulty:1, toolQuality: 1)
+      else:
+        CraftData(time: 1, difficulty:1, toolQuality: 1)
