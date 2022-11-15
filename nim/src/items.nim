@@ -274,6 +274,19 @@ proc getItemName*(item: InventoryData; damageInfo,
 
 proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the string with textual information about the item's chance for take
+  ## damage during usage
+  ##
+  ## PARAMETERS
+  ##
+  ## * itemData - the numerical chance for damage for the selected item
+  ##
+  ## RETURNS
+  ##
+  ## The string with textual value for the selected numerical chance for damage
+  ## or numerical value if the proper setting of the game is enabled
   if gameSettings.showNumbers == 1:
     return " " & $itemData & "%"
   case itemData
