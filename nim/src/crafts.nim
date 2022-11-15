@@ -101,43 +101,44 @@ proc loadRecipes*(fileName: string) =
       recipe.resultIndex = try:
         attribute.parseInt()
       except ValueError:
-        raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe result index.")
+        raise newException(exceptn = DataLoadingError, message = "Can't " &
+            $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe result index.")
     attribute = recipeNode.attr(name = "crafted")
     if attribute.len() > 0:
       recipe.resultAmount = try:
           attribute.parseInt()
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe result amount.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe result amount.")
     attribute = recipeNode.attr(name = "workplace")
     if attribute.len() > 0:
       recipe.workplace = try:
           parseEnum[ModuleType](attribute.toLowerAscii)
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe workplace.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe workplace.")
     attribute = recipeNode.attr(name = "skill")
     if attribute.len() > 0:
       let skillIndex = findSkillIndex(skillName = attribute)
       if skillIndex == 0:
-        raise newException(exceptn = DataLoadingError,
-          message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', no skill named '" & attribute & "'.")
+        raise newException(exceptn = DataLoadingError, message = "Can't " &
+            $recipeAction & " recipe '" & $recipeIndex & "', no skill named '" &
+            attribute & "'.")
       recipe.skill = skillIndex
     attribute = recipeNode.attr(name = "time")
     if attribute.len() > 0:
       recipe.time = try:
           attribute.parseInt()
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe time.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe time.")
     attribute = recipeNode.attr(name = "difficulty")
     if attribute.len() > 0:
       recipe.difficulty = try:
           attribute.parseInt()
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe difficulty.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe difficulty.")
     attribute = recipeNode.attr(name = "tool")
     if attribute.len() > 0:
       recipe.tool = attribute
@@ -146,15 +147,15 @@ proc loadRecipes*(fileName: string) =
       recipe.reputation = try:
           attribute.parseInt()
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe required reputation.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe required reputation.")
     attribute = recipeNode.attr(name = "Tool_Quality")
     if attribute.len() > 0:
       recipe.toolQuality = try:
           attribute.parseInt()
         except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe tool quality.")
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe tool quality.")
     if recipeAction == DataAction.add:
       logMessage(message = "Recipe added: '" & $recipeIndex & "'",
           debugType = everything)
@@ -162,3 +163,6 @@ proc loadRecipes*(fileName: string) =
       logMessage(message = "Recipe updated: '" & $recipeIndex & "'",
           debugType = everything)
     recipesList[recipeIndex] = recipe
+
+proc loadAdaRecipes(fileName: cstring) {.exportc.} =
+  loadRecipes(fileName = $fileName)
