@@ -149,6 +149,31 @@ package body Ships.UI.Cargo is
          options =>
            "-text {Free cargo space:" &
            Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
+      Fill_Cargo_Types_Loop:
+      for I of Cargo_Indexes loop
+         Set_Item_Type_Block :
+         declare
+            Item: constant Inventory_Data :=
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I);
+            Proto_Item: constant Object_Data :=
+              Objects_Container.Element
+                (Container => Items_List, Index => Item.Proto_Index);
+         begin
+            Item_Type :=
+              (if Proto_Item.Show_Type /= Null_Bounded_String then
+                 Proto_Item.Show_Type
+               else Proto_Item.I_Type);
+            if Index
+                (Source => Items_Types,
+                 Pattern => "{" & To_String(Source => Item_Type) & "}") =
+              0 then
+               Append
+                 (Source => Items_Types,
+                  New_Item => " {" & To_String(Source => Item_Type) & "}");
+            end if;
+         end Set_Item_Type_Block;
+      end loop Fill_Cargo_Types_Loop;
       Load_Cargo_Loop :
       for I of Cargo_Indexes loop
          Show_Item_Block :
@@ -168,14 +193,6 @@ package body Ships.UI.Cargo is
               (if Proto_Item.Show_Type /= Null_Bounded_String then
                  Proto_Item.Show_Type
                else Proto_Item.I_Type);
-            if Index
-                (Source => Items_Types,
-                 Pattern => "{" & To_String(Source => Item_Type) & "}") =
-              0 then
-               Append
-                 (Source => Items_Types,
-                  New_Item => " {" & To_String(Source => Item_Type) & "}");
-            end if;
             if Items_Type /= "All"
               and then To_String(Source => Item_Type) /= Items_Type then
                goto End_Of_Loop;
