@@ -72,6 +72,35 @@ proc loadRecipes*(fileName: string) =
         try:
           recipesList[recipeIndex]
         except ValueError:
-          CraftData(time: 1, difficulty:1, toolQuality: 1)
+          CraftData(time: 1, difficulty: 1, toolQuality: 1)
       else:
-        CraftData(time: 1, difficulty:1, toolQuality: 1)
+        CraftData(time: 1, difficulty: 1, toolQuality: 1)
+    for material in recipeNode.findAll(tag = "material"):
+      let
+        amount = try:
+            material.attr(name = "amount").parseInt()
+          except ValueError:
+            0
+        materialType = material.attr(name = "type")
+      if amount > 0:
+        if materialType notin recipe.materialTypes:
+          recipe.materialTypes.add(y = materialType)
+          recipe.materialAmounts.add(y = amount)
+      else:
+        var deleteIndex: Natural = 0
+        for index, mType in recipe.materialTypes.pairs:
+          if mType == materialType:
+            deleteIndex = index
+            break
+        recipe.materialTypes.delete(i = deleteIndex)
+        {.warning[UnsafeSetLen]: off.}
+        recipe.materialAmounts.delete(i = deleteIndex)
+        {.warning[UnsafeSetLen]: on.}
+    var attribute = recipeNode.attr(name = "result")
+    if attribute.len() > 0:
+      recipe.resultIndex = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe result index.")
+
