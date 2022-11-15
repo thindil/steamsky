@@ -719,7 +719,9 @@ package body Crafts is
                   end if;
                   Recipe_Time := Recipe_Time - Current_Minutes;
                   Work_Time := Work_Time - Current_Minutes - Recipe_Time;
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Current_Minutes := -(Recipe_Time);
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   Recipe_Time := Recipe.Time; --## rule line off ASSIGNMENTS
                   Material_Indexes.Clear;
                   if Length(Source => Module.Crafting_Index) > 6
