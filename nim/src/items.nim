@@ -180,7 +180,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Item added: '" & $itemIndex & "'",
           debugType = everything)
     else:
-      logMessage(message = "Item removed: '" & $itemIndex & "'",
+      logMessage(message = "Item updated: '" & $itemIndex & "'",
           debugType = everything)
     itemsList[itemIndex] = item
     if itemIndex == moneyIndex:
