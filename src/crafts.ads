@@ -110,8 +110,9 @@ package Crafts is
    -- Load recipes from files
    -- PARAMETERS
    -- Reader - XML reader from which recipes will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Recipes(Reader: Tree_Reader);
+   procedure Load_Recipes(Reader: Tree_Reader; File_Name: String);
    -- ****
 
    -- ****f* Crafts/Crafts.Manufacturing

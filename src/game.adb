@@ -979,7 +979,9 @@ package body Game is
                elsif To_String(Source => Data_Type) = "mobiles" then
                   Load_Mobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then
-                  Load_Recipes(Reader => Reader);
+                  Load_Recipes
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "bases" then
                   Load_Bases_Types
                     (File_Name => To_String(Source => Local_File_Name));

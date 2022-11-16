@@ -17,6 +17,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -33,7 +34,7 @@ with Trades; use Trades;
 
 package body Crafts is
 
-   procedure Load_Recipes(Reader: Tree_Reader) is
+   procedure Load_Recipes(Reader: Tree_Reader; File_Name: String) is
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -51,7 +52,12 @@ package body Crafts is
       Action: Data_Action := ADD;
       Skill_Index: Skills_Container.Extended_Index := 0;
       Item_Index: Objects_Container.Extended_Index := 0;
+      procedure Load_Ada_Recipes(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaRecipes";
    begin
+      Load_Ada_Recipes(Name => New_String(Str => File_Name));
       Recipes_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
