@@ -149,7 +149,7 @@ proc loadRecipes*(fileName: string) =
         except ValueError:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe required reputation.")
-    attribute = recipeNode.attr(name = "Tool_Quality")
+    attribute = recipeNode.attr(name = "toolquality")
     if attribute.len() > 0:
       recipe.toolQuality = try:
           attribute.parseInt()
@@ -183,8 +183,8 @@ proc loadAdaRecipes(fileName: cstring) {.exportc.} =
 
 proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
-      skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: 0,
-      toolQuality: -100)
+      skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
+      toolQuality: 1)
   let recipeKey = strip(s = $index)
   if not recipesList.hasKey(key = recipeKey):
     return
