@@ -16,253 +16,80 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Crew.Inventory; use Crew.Inventory;
 with Statistics; use Statistics;
-with Log; use Log;
 with Goals; use Goals;
 with Trades; use Trades;
 
 package body Crafts is
 
    procedure Load_Recipes(Reader: Tree_Reader; File_Name: String) is
+      pragma Unreferenced(Reader);
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Craft_Data;
       Temp_Materials: TinyString_Container.Vector;
       Temp_Amount: Positive_Container.Vector;
-      Nodes_List, Child_Nodes: Node_List;
       --## rule on IMPROPER_INITIALIZATION
-      Recipes_Data: Document;
-      Amount, Delete_Index: Natural := 0;
-      Recipe_Index: Tiny_String.Bounded_String := Null_Bounded_String;
-      Value: Unbounded_String := Null_Unbounded_String;
-      Recipe_Node, Child_Node: Node;
-      Material_Added: Boolean := False;
-      Action: Data_Action := ADD;
-      Skill_Index: Skills_Container.Extended_Index := 0;
-      Item_Index: Objects_Container.Extended_Index := 0;
+      type Craft_Nim_Data is record
+         Result_Index: Integer;
+         Result_Amount: Integer;
+         Workplace: Integer;
+         Skill: Integer;
+         Time: Positive := 1;
+         Difficulty: Positive := 1;
+         Tool: chars_ptr;
+         Reputation: Integer;
+         Tool_Quality: Positive := 1;
+      end record;
+      Temp_Nim_Record: Craft_Nim_Data;
+      Index: Positive := 1;
       procedure Load_Ada_Recipes(Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaRecipes";
+      procedure Get_Ada_Craft
+        (Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCraftData";
    begin
       Load_Ada_Recipes(Name => New_String(Str => File_Name));
-      Recipes_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Recipes_Data, Tag_Name => "recipe");
       Load_Recipes_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
+      loop
+         Get_Ada_Craft
+           (Index => New_String(Str => Index'Img),
+            Ada_Craft => Temp_Nim_Record);
+         exit Load_Recipes_Loop when Temp_Nim_Record.Result_Index = 0;
          Temp_Record :=
            (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
-            Result_Index => 0, Result_Amount => 10_000,
-            Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-            Tool => To_Bounded_String(Source => "None"), Reputation => -100,
-            Tool_Quality => 100);
-         Recipe_Node := Item(List => Nodes_List, Index => I);
-         Recipe_Index :=
-           To_Bounded_String
-             (Source => Get_Attribute(Elem => Recipe_Node, Name => "index"));
-         Action :=
-           (if Get_Attribute(Elem => Recipe_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Recipe_Node, Name => "action"))
-            else ADD);
-         if Action in UPDATE | REMOVE then
-            if not Recipes_Container.Contains
-                (Container => Recipes_List, Key => Recipe_Index) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " recipe '" & To_String(Source => Recipe_Index) &
-                 "', there is no recipe with that index.";
-            end if;
-         elsif Recipes_Container.Contains
-             (Container => Recipes_List, Key => Recipe_Index) then
-            raise Data_Loading_Error
-              with "Can't add recipe '" & To_String(Source => Recipe_Index) &
-              "', there is already a recipe with that index.";
-         end if;
-         if Action = REMOVE then
-            Recipes_Container.Exclude
-              (Container => Recipes_List, Key => Recipe_Index);
-            Log_Message
-              (Message =>
-                 "Recipe removed: " & To_String(Source => Recipe_Index),
-               Message_Type => EVERYTHING);
-         else
-            if Action = UPDATE then
-               Temp_Record := Recipes_List(Recipe_Index);
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Recipe_Node, Name => "material");
-            Read_Materials_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Amount :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Child_Node, Name => "amount"));
-               Value :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Child_Node, Name => "type"));
-               if Amount > 0 then
-                  Material_Added := False;
-                  Check_Added_Materials_Loop :
-                  for K in
-                    Temp_Record.Material_Types.First_Index ..
-                      Temp_Record.Material_Types.Last_Index loop
-                     if To_String(Source => Temp_Record.Material_Types(K)) =
-                       To_String(Source => Value) then
-                        Temp_Record.Material_Amounts(K) := Amount;
-                        Material_Added := True;
-                        exit Check_Added_Materials_Loop;
-                     end if;
-                  end loop Check_Added_Materials_Loop;
-                  if not Material_Added then
-                     Temp_Record.Material_Types.Append
-                       (New_Item =>
-                          To_Bounded_String
-                            (Source => To_String(Source => Value)));
-                     Temp_Record.Material_Amounts.Append(New_Item => Amount);
-                  end if;
-               else
-                  Delete_Index := Temp_Record.Material_Types.First_Index;
-                  --## rule off SIMPLIFIABLE_STATEMENTS
-                  Delete_Materials_Loop :
-                  while Delete_Index <=
-                    Temp_Record.Material_Types.Last_Index loop
-                     if To_String
-                         (Source => Temp_Record.Material_Types(Delete_Index)) =
-                       To_String(Source => Value) then
-                        Temp_Record.Material_Types.Delete
-                          (Index => Delete_Index);
-                        exit Delete_Materials_Loop;
-                     end if;
-                     Delete_Index := Delete_Index + 1;
-                  end loop Delete_Materials_Loop;
-                  --## rule on SIMPLIFIABLE_STATEMENTS
-               end if;
-            end loop Read_Materials_Loop;
-            Value :=
-              To_Unbounded_String
+            Result_Index => Temp_Nim_Record.Result_Index,
+            Result_Amount => Temp_Nim_Record.Result_Amount,
+            Workplace => Module_Type'Val(Temp_Nim_Record.Workplace),
+            Skill =>
+              SkillsData_Container.Extended_Index(Temp_Nim_Record.Skill),
+            Time => Temp_Nim_Record.Time,
+            Difficulty => Temp_Nim_Record.Difficulty,
+            Tool =>
+              To_Bounded_String
                 (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "result"));
-            if Value /= Null_Unbounded_String then
-               Item_Index := Natural'Value(To_String(Source => Value));
-               if Item_Index = 0 then
-                  raise Data_Loading_Error
-                    with "Can't add recipe '" &
-                    To_String(Source => Recipe_Index) &
-                    "', result item index '" & To_String(Source => Value) &
-                    "' does't exist.";
-               end if;
-               Temp_Record.Result_Index := Item_Index;
-            end if;
-            Value :=
-              To_Unbounded_String
-                (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "crafted"));
-            if Value /= Null_Unbounded_String then
-               Temp_Record.Result_Amount :=
-                 Positive'Value(To_String(Source => Value));
-            end if;
-            Value :=
-              To_Unbounded_String
-                (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "workplace"));
-            if Value /= Null_Unbounded_String then
-               Temp_Record.Workplace :=
-                 Module_Type'Value(To_String(Source => Value));
-            end if;
-            Value :=
-              To_Unbounded_String
-                (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "skill"));
-            if Value /= Null_Unbounded_String then
-               Skill_Index :=
-                 Find_Skill_Index(Skill_Name => To_String(Source => Value));
-               if Skill_Index = 0 then
-                  raise Data_Loading_Error
-                    with "Can't add recipe '" &
-                    To_String(Source => Recipe_Index) & "', no skill named '" &
-                    To_String(Source => Value) & "'";
-               end if;
-               Temp_Record.Skill := Skill_Index;
-            end if;
-            if Get_Attribute(Elem => Recipe_Node, Name => "time") /= "" then
-               Temp_Record.Time :=
-                 Positive'Value
-                   (Get_Attribute(Elem => Recipe_Node, Name => "time"));
-            end if;
-            if Get_Attribute(Elem => Recipe_Node, Name => "difficulty") /=
-              "" then
-               Temp_Record.Difficulty :=
-                 Positive'Value
-                   (Get_Attribute(Elem => Recipe_Node, Name => "difficulty"));
-            end if;
-            if Get_Attribute(Elem => Recipe_Node, Name => "tool") /= "" then
-               Temp_Record.Tool :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Recipe_Node, Name => "tool"));
-            end if;
-            Value :=
-              To_Unbounded_String
-                (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "reputation"));
-            if Value /= Null_Unbounded_String then
-               Temp_Record.Reputation :=
-                 Integer'Value(To_String(Source => Value));
-            end if;
-            Value :=
-              To_Unbounded_String
-                (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "Tool_Quality"));
-            if Value /= Null_Unbounded_String then
-               Temp_Record.Tool_Quality :=
-                 Positive'Value(To_String(Source => Value));
-            end if;
-            if Action = UPDATE then
-               Recipes_List(Recipe_Index) := Temp_Record;
-               Log_Message
-                 (Message =>
-                    "Recipe updated: " &
-                    To_String
-                      (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
-                            Index => Temp_Record.Result_Index)
-                           .Name),
-                  Message_Type => EVERYTHING);
-            else
-               Recipes_Container.Include
-                 (Container => Recipes_List, Key => Recipe_Index,
-                  New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Recipe added: " &
-                    To_String
-                      (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
-                            Index => Temp_Record.Result_Index)
-                           .Name),
-                  Message_Type => EVERYTHING);
-            end if;
-         end if;
+                   Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
+            Reputation => Temp_Nim_Record.Reputation,
+            Tool_Quality => Temp_Nim_Record.Tool_Quality);
+         Recipes_List.Include
+           (Key =>
+              To_Bounded_String
+                (Source => Trim(Source => Index'Img, Side => Left)),
+            New_Item => Temp_Record);
+         Index := Index + 1;
       end loop Load_Recipes_Loop;
    end Load_Recipes;
 
