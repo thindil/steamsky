@@ -164,5 +164,39 @@ proc loadRecipes*(fileName: string) =
           debugType = everything)
     recipesList[recipeIndex] = recipe
 
+# Temporary code for interfacing with Ada
+
+type
+  AdaCraftData = object
+    resultIndex: cint
+    resultAmount: cint
+    workplace: cint
+    skill: cint
+    time: cint
+    difficulty: cint
+    tool: cstring
+    reputation: cint
+    toolQuality: cint
+
 proc loadAdaRecipes(fileName: cstring) {.exportc.} =
   loadRecipes(fileName = $fileName)
+
+proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
+  adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
+      skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: 0,
+      toolQuality: -100)
+  let recipeKey = strip(s = $index)
+  if not recipesList.hasKey(key = recipeKey):
+    return
+  let recipe = try:
+      recipesList[recipeKey]
+    except KeyError:
+      return
+  adaRecipe.resultIndex = recipe.resultIndex.cint
+  adaRecipe.resultAmount = recipe.resultAmount.cint
+  adaRecipe.workplace = recipe.workplace.ord().cint
+  adaRecipe.skill = recipe.skill.cint
+  adaRecipe.time = recipe.time.cint
+  adaRecipe.difficulty = recipe.difficulty.cint
+  adaRecipe.tool = recipe.tool.cstring
+  adaRecipe.toolQuality = recipe.toolQuality.cint
