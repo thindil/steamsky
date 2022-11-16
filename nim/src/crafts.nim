@@ -200,3 +200,13 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
   adaRecipe.difficulty = recipe.difficulty.cint
   adaRecipe.tool = recipe.tool.cstring
   adaRecipe.toolQuality = recipe.toolQuality.cint
+
+proc getAdaRecipeMaterialType(recipeIndex: cstring;
+    index: cint): cstring {.exportc.} =
+  try:
+    if index >= recipesList[$recipeIndex].materialTypes.len():
+      return ""
+    return recipesList[$recipeIndex].materialTypes[index].cstring
+  except KeyError:
+    return ""
+

@@ -52,6 +52,8 @@ package body Crafts is
       end record;
       Temp_Nim_Record: Craft_Nim_Data;
       Index: Positive := 1;
+      Index2: Natural := 0;
+      Material_Type: Unbounded_String := Null_Unbounded_String;
       procedure Load_Ada_Recipes(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -61,6 +63,11 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "getAdaCraftData";
+      function Get_Ada_Recipe_Material_Type
+        (R_Index: chars_ptr; Type_Index: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaRecipeMaterialType";
    begin
       Load_Ada_Recipes(Name => New_String(Str => File_Name));
       Load_Recipes_Loop :
@@ -84,6 +91,29 @@ package body Crafts is
                    Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
             Reputation => Temp_Nim_Record.Reputation,
             Tool_Quality => Temp_Nim_Record.Tool_Quality);
+         Index2 := 0;
+         Temp_Record.Material_Types.Clear;
+         Load_Material_Types_Loop :
+         loop
+            Material_Type :=
+              To_Unbounded_String
+                (Source =>
+                   Interfaces.C.Strings.Value
+                     (Item =>
+                        Get_Ada_Recipe_Material_Type
+                          (R_Index =>
+                             New_String
+                               (Trim(Source => Index'Img, Side => Left)),
+                           Type_Index => Index2)));
+            exit Load_Material_Types_Loop when Length
+                (Source => Material_Type) =
+              0;
+            Temp_Record.Material_Types.Append
+              (New_Item =>
+                 To_Bounded_String
+                   (Source => To_String(Source => Material_Type)));
+            Index2 := Index2 + 1;
+         end loop Load_Material_Types_Loop;
          Recipes_List.Include
            (Key =>
               To_Bounded_String
