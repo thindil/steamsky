@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Loading weapons into the game
 - Setting the list of available items' types during trading, looting bases and
   in the player's ship's cargo
+- Keyboard shortcuts for setting the player's ship's speed
 
 ## [8.0] - 2022-10-30
 
