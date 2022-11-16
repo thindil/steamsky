@@ -149,6 +149,8 @@ proc loadRecipes*(fileName: string) =
         except ValueError:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe required reputation.")
+    else:
+      recipe.reputation = -100
     attribute = recipeNode.attr(name = "toolquality")
     if attribute.len() > 0:
       recipe.toolQuality = try:
@@ -156,6 +158,8 @@ proc loadRecipes*(fileName: string) =
         except ValueError:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe tool quality.")
+    else:
+      recipe.toolQuality = 100
     if recipeAction == DataAction.add:
       logMessage(message = "Recipe added: '" & $recipeIndex & "'",
           debugType = everything)
