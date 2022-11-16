@@ -52,7 +52,7 @@ package body Crafts is
       end record;
       Temp_Nim_Record: Craft_Nim_Data;
       Index: Positive := 1;
-      Index2: Natural := 0;
+      Index2, Material_Amount: Natural := 0;
       Material_Type: Unbounded_String := Null_Unbounded_String;
       procedure Load_Ada_Recipes(Name: chars_ptr) with
          Import => True,
@@ -68,6 +68,11 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "getAdaRecipeMaterialType";
+      function Get_Ada_Recipe_Material_Amount
+        (R_Index: chars_ptr; Type_Index: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaRecipeMaterialAmount";
    begin
       Load_Ada_Recipes(Name => New_String(Str => File_Name));
       Load_Recipes_Loop :
@@ -114,6 +119,19 @@ package body Crafts is
                    (Source => To_String(Source => Material_Type)));
             Index2 := Index2 + 1;
          end loop Load_Material_Types_Loop;
+         Index2 := 0;
+         Temp_Record.Material_Amounts.Clear;
+         Load_Material_Amount_Loop :
+         loop
+            Material_Amount :=
+              Get_Ada_Recipe_Material_Amount
+                (R_Index =>
+                   New_String(Trim(Source => Index'Img, Side => Left)),
+                 Type_Index => Index2);
+            exit Load_Material_Amount_Loop when Material_Amount = 0;
+            Temp_Record.Material_Amounts.Append(New_Item => Material_Amount);
+            Index2 := Index2 + 1;
+         end loop Load_Material_Amount_Loop;
          Recipes_List.Include
            (Key =>
               To_Bounded_String

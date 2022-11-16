@@ -210,3 +210,11 @@ proc getAdaRecipeMaterialType(recipeIndex: cstring;
   except KeyError:
     return ""
 
+proc getAdaRecipeMaterialAmount(recipeIndex: cstring;
+    index: cint): cint {.exportc.} =
+  try:
+    if index >= recipesList[$recipeIndex].materialAmounts.len():
+      return 0
+    return recipesList[$recipeIndex].materialAmounts[index].cint
+  except KeyError:
+    return 0
