@@ -1386,19 +1386,19 @@ package body Maps.UI is
          34 =>
            To_Unbounded_String
              (Source =>
-                "{" & Main_Paned & ".controls.buttons.speed current 0}"),
+                "{" & Main_Paned & ".controls.buttons.box.speed current 0}"),
          35 =>
            To_Unbounded_String
              (Source =>
-                "{" & Main_Paned & ".controls.buttons.speed current 1}"),
+                "{" & Main_Paned & ".controls.buttons.box.speed current 1}"),
          36 =>
            To_Unbounded_String
              (Source =>
-                "{" & Main_Paned & ".controls.buttons.speed current 2}"),
+                "{" & Main_Paned & ".controls.buttons.box.speed current 2}"),
          37 =>
            To_Unbounded_String
              (Source =>
-                "{" & Main_Paned & ".controls.buttons.speed current 3}"));
+                "{" & Main_Paned & ".controls.buttons.box.speed current 3}"));
    begin
       Bind_Commands_Loop :
       for I in Commands'Range loop
