@@ -817,7 +817,9 @@ package body Crafts is
                             .Proto_Index;
                      end if;
                   end loop Check_Materials_Loop;
-                  if Recipe.Tool /= To_Bounded_String(Source => "None") then
+                  if Recipe.Tool = To_Bounded_String(Source => "None") then
+                     Tool_Index := 0;
+                  else
                      Tool_Index :=
                        Find_Tools
                          (Member_Index => Crafter_Index,
@@ -832,8 +834,6 @@ package body Crafts is
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
                      end if;
-                  else
-                     Tool_Index := 0;
                   end if;
                   Amount := 0;
                   Count_Amount_Loop :
