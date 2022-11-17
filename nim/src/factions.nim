@@ -169,6 +169,8 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $factionAction & " faction '" &
                   factionIndex & "', invalid type of faction's names.")
+    else:
+      faction.namesType = normal
     attribute = factionNode.attr(name = "healingtools")
     if attribute.len() > 0:
       let itemIndex = findProtoItem(itemType = attribute)
