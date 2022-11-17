@@ -108,7 +108,8 @@ package body Crafts is
                         Get_Ada_Recipe_Material_Type
                           (R_Index =>
                              New_String
-                               (Trim(Source => Index'Img, Side => Left)),
+                               (Str =>
+                                  Trim(Source => Index'Img, Side => Left)),
                            Type_Index => Index2)));
             exit Load_Material_Types_Loop when Length
                 (Source => Material_Type) =
@@ -126,7 +127,7 @@ package body Crafts is
             Material_Amount :=
               Get_Ada_Recipe_Material_Amount
                 (R_Index =>
-                   New_String(Trim(Source => Index'Img, Side => Left)),
+                   New_String(Str => Trim(Source => Index'Img, Side => Left)),
                  Type_Index => Index2);
             exit Load_Material_Amount_Loop when Material_Amount = 0;
             Temp_Record.Material_Amounts.Append(New_Item => Material_Amount);
