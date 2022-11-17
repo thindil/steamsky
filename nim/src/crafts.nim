@@ -36,7 +36,8 @@ type
 
 var recipesList* = initTable[string, CraftData]()
 
-proc loadRecipes*(fileName: string) =
+proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   let recipesXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -186,10 +187,12 @@ type
     reputation: cint
     toolQuality: cint
 
-proc loadAdaRecipes(fileName: cstring) {.exportc.} =
+proc loadAdaRecipes(fileName: cstring) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadRecipes(fileName = $fileName)
 
-proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
+proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
@@ -210,7 +213,7 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
   adaRecipe.toolQuality = recipe.toolQuality.cint
 
 proc getAdaRecipeMaterialType(recipeIndex: cstring;
-    index: cint): cstring {.exportc.} =
+    index: cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
   try:
     if index >= recipesList[$recipeIndex].materialTypes.len():
       return ""
@@ -219,7 +222,7 @@ proc getAdaRecipeMaterialType(recipeIndex: cstring;
     return ""
 
 proc getAdaRecipeMaterialAmount(recipeIndex: cstring;
-    index: cint): cint {.exportc.} =
+    index: cint): cint {.sideEffect, raises: [], tags: [], exportc.} =
   try:
     if index >= recipesList[$recipeIndex].materialAmounts.len():
       return 0
