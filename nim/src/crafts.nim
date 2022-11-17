@@ -132,6 +132,8 @@ proc loadRecipes*(fileName: string) =
         except ValueError:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe time.")
+    else:
+      recipe.time = 15
     attribute = recipeNode.attr(name = "difficulty")
     if attribute.len() > 0:
       recipe.difficulty = try:
@@ -139,6 +141,8 @@ proc loadRecipes*(fileName: string) =
         except ValueError:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe difficulty.")
+    else:
+      recipe.difficulty = 1
     attribute = recipeNode.attr(name = "tool")
     if attribute.len() > 0:
       recipe.tool = attribute
