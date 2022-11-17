@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Setting the list of available items' types during trading, looting bases and
   in the player's ship's cargo
 - Keyboard shortcuts for setting the player's ship's speed
+- Setting tool's quality from recipes' data files
 
 ## [8.0] - 2022-10-30
 
