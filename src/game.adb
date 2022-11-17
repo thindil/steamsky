@@ -980,8 +980,7 @@ package body Game is
                   Load_Mobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then
                   Load_Recipes
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "bases" then
                   Load_Bases_Types
                     (File_Name => To_String(Source => Local_File_Name));

@@ -30,8 +30,7 @@ with Trades; use Trades;
 
 package body Crafts is
 
-   procedure Load_Recipes(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(Reader);
+   procedure Load_Recipes(File_Name: String) is
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION

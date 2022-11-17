@@ -17,7 +17,6 @@
 
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Items; use Items;
@@ -109,10 +108,9 @@ package Crafts is
    -- FUNCTION
    -- Load recipes from files
    -- PARAMETERS
-   -- Reader - XML reader from which recipes will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Recipes(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Recipes(File_Name: String);
    -- ****
 
    -- ****f* Crafts/Crafts.Manufacturing
