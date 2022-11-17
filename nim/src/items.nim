@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import config, game, log
+import config, crafts, game, log
 
 type
   ObjectData* = object
@@ -84,6 +84,7 @@ var
     ## FUNCTION
     ##
     ## The list of all legs armors prototypes indexes
+  toolsList*: seq[string]
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -307,6 +308,19 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
   else:
     return "Very high"
 
+proc setToolsList*() =
+  if toolsList.len() > 0:
+    return
+  toolsList.add(y = repairTools)
+  toolsList.add(y = cleaningTools)
+  toolsList.add(y = alchemyTools)
+  for recipe in recipesList.values:
+    if recipe.tool notin toolsList:
+      toolsList.add(y = recipe.tool)
+  for skill in skillsList.values:
+    if skill.tool notin toolsList:
+      toolsList.add(y = skill.tool)
+
 # Temporary code for interfacing with Ada
 
 type AdaObjectData* = object
@@ -383,6 +397,16 @@ proc getAdaItemsList(name: cstring; itemsList: var array[64,
     for index, item in armsArmorsList.pairs:
       itemsList[index] = item.cint
 
-proc getAdaItemChanceToDamage*(itemData: cint): cstring {.sideEffect, raises: [],
-    tags: [], exportc.} =
+proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
+    ], tags: [], exportc.} =
   return getItemChanceToDamage(itemData).cstring
+
+proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
+  setToolsList()
+
+proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [],
+    tags: [], exportc.} =
+  for i in 0..63:
+    itemsList[i] = ""
+  for index, item in toolsList.pairs:
+    itemsList[index] = item.cstring
