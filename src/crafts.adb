@@ -213,7 +213,7 @@ package body Crafts is
             Value :=
               To_Unbounded_String
                 (Source =>
-                   Get_Attribute(Elem => Recipe_Node, Name => "Tool_Quality"));
+                   Get_Attribute(Elem => Recipe_Node, Name => "toolquality"));
             if Value /= Null_Unbounded_String then
                Temp_Record.Tool_Quality :=
                  Positive'Value(To_String(Source => Value));
