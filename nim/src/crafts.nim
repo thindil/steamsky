@@ -22,22 +22,35 @@ import game, log, shipmodules
 
 type
   CraftData = object
-    materialTypes: seq[string]
-    materialAmounts: seq[Positive]
-    resultIndex: Natural
-    resultAmount: Natural
-    workplace: ModuleType
-    skill: Natural
-    time: Positive
-    difficulty: Positive
-    tool: string
-    reputation: ReputationRange
-    toolQuality: Positive
+    ## FUNCTION
+    ##
+    ## Used to store information about crafting recipes
+    materialTypes: seq[string] ## The list of materials types used in crafting
+    materialAmounts: seq[Positive] ## The list of materials amount used in crafting
+    resultIndex: Natural ## The index of proto item which is the result of the recipe
+    resultAmount: Natural ## The amount of items produced by one recipe
+    workplace: ModuleType ## The type of ship's module used as a workshop for the recipe
+    skill: Natural ## The index of the skill used in crafting
+    time: Positive ## The amount of minutes needed to finish the recipe
+    difficulty: Positive ## The difficulty level of the recipe
+    tool: string ## The type of item used as a tool in crafting
+    reputation: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
+    toolQuality: Positive ## The minimal quality of tool used in crafting
 
 var recipesList* = initTable[string, CraftData]()
+  ## FUNCTION
+  ##
+  ## The list of all available crafting recipes in the game
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## FUNCTION
+  ##
+  ## Load the crafting recipes data from the file
+  ##
+  ## PARAMETERS
+  ##
+  ## * fileName - the name of the file to load
   let recipesXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
