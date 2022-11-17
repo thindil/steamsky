@@ -33,7 +33,7 @@ type
     skill: Natural ## The index of the skill used in crafting
     time: Positive ## The amount of minutes needed to finish the recipe
     difficulty: Positive ## The difficulty level of the recipe
-    tool: string ## The type of item used as a tool in crafting
+    tool*: string ## The type of item used as a tool in crafting
     reputation: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
     toolQuality: Positive ## The minimal quality of tool used in crafting
 
