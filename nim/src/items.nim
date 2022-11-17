@@ -159,6 +159,8 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $itemAction & " item '" & $itemIndex & "', invalid value for item reputation.")
+    else:
+      item.reputation = -100
     attribute = itemNode.attr(name = "price")
     if attribute.len() > 0:
       item.price = try:
