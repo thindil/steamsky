@@ -308,7 +308,7 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
   else:
     return "Very high"
 
-proc setToolsList*() =
+proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
   ## FUNCTION
   ##
   ## Set the list of all available tools in the game
@@ -407,8 +407,8 @@ proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
 proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
   setToolsList()
 
-proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [],
-    tags: [], exportc.} =
+proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [
+    ], tags: [], exportc.} =
   for i in 0..63:
     itemsList[i] = ""
   for index, item in toolsList.pairs:
