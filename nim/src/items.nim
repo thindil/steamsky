@@ -328,6 +328,23 @@ proc findItem*(inventory: Table[Positive, InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
     quality: Positive = 100): Natural {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Find the index of the selected item in the selected inventory
+  ##
+  ## PARAMETERS
+  ##
+  ## * protoIndex - the index of prototype item of the item to find. Can be
+  ##                empty. If empty, itemType parameter must be set
+  ## * itemType   - the type of prototype item of the item to find. Can be
+  ##                empty. If empty, protoIndex parameter must be set
+  ## * durability - the durability of the item to find. Can be empty
+  ## * quality    - the quality of the item to find. Can be empty
+  ##
+  ## RETURNS
+  ##
+  ## The index of the item in the selected inventory which meet searching
+  ## criteria or 0 if item not found.
   try:
     if protoIndex > 0:
       for index, item in inventory.pairs:
