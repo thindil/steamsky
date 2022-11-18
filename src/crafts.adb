@@ -33,11 +33,7 @@ package body Crafts is
    procedure Load_Recipes(File_Name: String) is
       use Tiny_String;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Craft_Data;
-      Temp_Materials: TinyString_Container.Vector;
-      Temp_Amount: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
+      --## rule off TYPE_INITIAL_VALUES
       type Craft_Nim_Data is record
          Result_Index: Integer;
          Result_Amount: Integer;
@@ -49,7 +45,13 @@ package body Crafts is
          Reputation: Integer;
          Tool_Quality: Positive := 1;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Record: Craft_Data;
+      Temp_Materials: TinyString_Container.Vector;
+      Temp_Amount: Positive_Container.Vector;
       Temp_Nim_Record: Craft_Nim_Data;
+      --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
       Index2, Material_Amount: Natural := 0;
       Material_Type: Unbounded_String := Null_Unbounded_String;
