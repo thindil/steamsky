@@ -21,7 +21,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
 with Crew; use Crew;
 with Crew.Inventory; use Crew.Inventory;
-with Crafts; use Crafts;
 
 package body Items is
 
@@ -376,43 +375,33 @@ package body Items is
    end Find_Item;
 
    procedure Set_Tools_List is
+      use Interfaces.C;
+
+      type Items_Nim_Array is array(0 .. 63) of chars_ptr;
+      Nim_Items_List: Items_Nim_Array := (others => New_String(Str => ""));
+      procedure Set_Ada_Tools_List with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaToolsList";
+      procedure Get_Ada_Tools_List(T_List: out Items_Nim_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaToolsList";
    begin
       if TinyString_Indefinite_Container.Length(Container => Tools_List) >
         0 then
          return;
       end if;
-      TinyString_Indefinite_Container.Append
-        (Container => Tools_List, New_Item => Repair_Tools);
-      TinyString_Indefinite_Container.Append
-        (Container => Tools_List, New_Item => Cleaning_Tools);
-      TinyString_Indefinite_Container.Append
-        (Container => Tools_List, New_Item => Alchemy_Tools);
-      Recipes_Loop :
-      for Recipe of Recipes_List loop
-         if TinyString_Indefinite_Container.Find_Index
-             (Container => Tools_List, Item => Recipe.Tool) =
-           TinyString_Indefinite_Container.No_Index then
-            TinyString_Indefinite_Container.Append
-              (Container => Tools_List, New_Item => Recipe.Tool);
-         end if;
-      end loop Recipes_Loop;
-      Skills_Loop :
-      for I in 1 .. Skills_Amount loop
-         if TinyString_Indefinite_Container.Find_Index
-             (Container => Tools_List,
-              Item =>
-                SkillsData_Container.Element
-                  (Container => Skills_List, Index => I)
-                  .Tool) =
-           TinyString_Indefinite_Container.No_Index then
-            TinyString_Indefinite_Container.Append
-              (Container => Tools_List,
-               New_Item =>
-                 SkillsData_Container.Element
-                   (Container => Skills_List, Index => I)
-                   .Tool);
-         end if;
-      end loop Skills_Loop;
+      Set_Ada_Tools_List;
+      Get_Ada_Tools_List(T_List => Nim_Items_List);
+      Load_Tools_List_Loop :
+      for I of Nim_Items_List loop
+         exit Load_Tools_List_Loop when Strlen(Item => I) = 0;
+         TinyString_Indefinite_Container.Append
+           (Container => Tools_List,
+            New_Item =>
+              Tiny_String.To_Bounded_String(Source => Value(Item => I)));
+      end loop Load_Tools_List_Loop;
    end Set_Tools_List;
 
    function Get_Item_Chance_To_Damage(Item_Data: Natural) return String is
