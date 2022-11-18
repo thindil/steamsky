@@ -327,22 +327,25 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
 proc findItem*(inventory: Table[Positive, InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100): Natural =
-  if protoIndex > 0:
-    for index, item in inventory.pairs:
-      if item.protoIndex == protoIndex and itemsList[protoIndex].value[0] <= quality:
-        if durability < ItemsDurability.high and item.durability == durability:
-          return index
-        else:
-          return index
-  elif itemType.len > 0:
-    for index, item in inventory.pairs:
-      if itemsList[item.protoIndex].itemType == itemType and itemsList[
-          item.protoIndex].value[0] <= quality:
-        if durability < ItemsDurability.high and item.durability == durability:
-          return index
-        else:
-          return index
+    quality: Positive = 100): Natural {.sideEffect, raises: [], tags: [].} =
+  try:
+    if protoIndex > 0:
+      for index, item in inventory.pairs:
+        if item.protoIndex == protoIndex and itemsList[protoIndex].value[0] <= quality:
+          if durability < ItemsDurability.high and item.durability == durability:
+            return index
+          else:
+            return index
+    elif itemType.len > 0:
+      for index, item in inventory.pairs:
+        if itemsList[item.protoIndex].itemType == itemType and itemsList[
+            item.protoIndex].value[0] <= quality:
+          if durability < ItemsDurability.high and item.durability == durability:
+            return index
+          else:
+            return index
+  except KeyError:
+    discard
   return 0
 
 # Temporary code for interfacing with Ada
@@ -444,7 +447,8 @@ proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [
     itemsList[index] = item.cstring
 
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
-    itemType: cstring; durability: cint; quality: cint): cint {.exportc.} =
+    itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
+    raises: [], tags: [], exportc.} =
   var newInventory = initTable[Positive, InventoryData]()
   for i in 0..127:
     if inventory[i].protoIndex == 0:
