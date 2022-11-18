@@ -115,7 +115,7 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Bases_Frame & ".options.types");
-      Bases_Type, Bases_Owner, Bases_Status: Unbounded_String;
+      Bases_Type, Bases_Owner, Bases_Status, Color: Unbounded_String;
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
@@ -198,12 +198,20 @@ package body Knowledge.Bases is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
+         Color :=
+           (if Sky_Bases(I).Visited.Year > 0 then
+              To_Unbounded_String(Source => "green3")
+            else To_Unbounded_String(Source => ""));
+         if Sky_Bases(I).Sky_X = Player_Ship.Destination_X and
+           Sky_Bases(I).Sky_Y = Player_Ship.Destination_Y then
+            Color := To_Unbounded_String(Source => "yellow");
+         end if;
          Add_Button
            (Table => Bases_Table,
             Text => To_String(Source => Sky_Bases(I).Name),
             Tooltip => "Show available base's options",
             Command => "ShowBasesMenu" & Positive'Image(I), Column => 1,
-            Color => (if Sky_Bases(I).Visited.Year > 0 then "green3" else ""));
+            Color => To_String(Source => Color));
          Add_Button
            (Table => Bases_Table,
             Text =>
@@ -213,7 +221,7 @@ package body Knowledge.Bases is
                     Destination_Y => Sky_Bases(I).Sky_Y)),
             Tooltip => "The distance to the base",
             Command => "ShowBasesMenu" & Positive'Image(I), Column => 2,
-            Color => (if Sky_Bases(I).Visited.Year > 0 then "green3" else ""));
+            Color => To_String(Source => Color));
          if Sky_Bases(I).Visited.Year > 0 then
             Add_Button
               (Table => Bases_Table,
@@ -223,20 +231,20 @@ package body Knowledge.Bases is
                     when others => "large"),
                Tooltip => "The population size of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 3,
-               Color => "green3");
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text => To_Lower(Item => Bases_Size'Image(Sky_Bases(I).Size)),
                Tooltip => "The size of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 4,
-               Color => "green3");
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text =>
                  To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 5,
-               Color => "green3");
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text =>
@@ -244,7 +252,7 @@ package body Knowledge.Bases is
                    (Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                Tooltip => "The type of the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 6,
-               Color => "green3");
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text =>
@@ -252,29 +260,33 @@ package body Knowledge.Bases is
                    (Reputation_Level => Sky_Bases(I).Reputation.Level),
                Tooltip => "Your reputation in the base",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
-               New_Row => True, Color => "green3");
+               New_Row => True, Color => To_String(Source => Color));
          else
             Add_Button
               (Table => Bases_Table, Text => "not",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3,
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4,
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "visited",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5,
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6);
+               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6,
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "yet",
                Tooltip => "Show available base's options",
                Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
-               New_Row => True);
+               Color => To_String(Source => Color), New_Row => True);
          end if;
          Rows := Rows + 1;
          exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
