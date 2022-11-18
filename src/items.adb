@@ -304,74 +304,46 @@ package body Items is
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
       use Tiny_String;
+
+      type Nim_Inventory_Data is record
+         Proto_Index: Objects_Container.Extended_Index;
+         Amount: Natural := 1;
+         Name: chars_ptr;
+         Durability: Items_Durability;
+         Price: Natural := 0;
+      end record;
+      type Nim_Inventory_Array is array(0 .. 127) of Nim_Inventory_Data;
+      Nim_Inventory: Nim_Inventory_Array :=
+        (others =>
+           (Proto_Index => 0, Amount => 1, Name => New_String(Str => ""),
+            Durability => 0, Price => 0));
+      function Find_Ada_Item
+        (Inv: Nim_Inventory_Array; P_Index: Integer; I_Type: chars_ptr;
+         Dur: Integer; Q: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "findAdaItem";
    begin
-      if Proto_Index > 0 then
-         Find_Item_With_Proto_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Inventory) ..
-             Inventory_Container.Last_Index(Container => Inventory) loop
-            if Inventory_Container.Element(Container => Inventory, Index => I)
-                .Proto_Index =
-              Proto_Index
-              and then
-              (Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Inventory_Container.Element
-                      (Container => Inventory, Index => I)
-                      .Proto_Index)
-                 .Value
-                 (1) <=
-               Quality) then
-               if Durability < Items_Durability'Last
-                 and then
-                   Inventory_Container.Element
-                     (Container => Inventory, Index => I)
-                     .Durability =
-                   Durability then
-                  return I;
-               else
-                  return I;
-               end if;
-            end if;
-         end loop Find_Item_With_Proto_Loop;
-      elsif Item_Type /= Null_Bounded_String then
-         Find_Item_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Inventory) ..
-             Inventory_Container.Last_Index(Container => Inventory) loop
-            if Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   Inventory_Container.Element
-                     (Container => Inventory, Index => I)
-                     .Proto_Index)
-                .I_Type =
-              Item_Type
-              and then
-              (Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Inventory_Container.Element
-                      (Container => Inventory, Index => I)
-                      .Proto_Index)
-                 .Value
-                 (1) <=
-               Quality) then
-               if Durability < Items_Durability'Last
-                 and then
-                   Inventory_Container.Element
-                     (Container => Inventory, Index => I)
-                     .Durability =
-                   Durability then
-                  return I;
-               else
-                  return I;
-               end if;
-            end if;
-         end loop Find_Item_Loop;
-      end if;
-      return 0;
+      Fill_Nim_Array_Loop :
+      for I in
+        Inventory_Container.First_Index(Container => Inventory) ..
+          Inventory_Container.Last_Index(Container => Inventory) loop
+         Set_Item_Block :
+         declare
+            Item: constant Inventory_Data :=
+              Inventory_Container.Element(Container => Inventory, Index => I);
+         begin
+            Nim_Inventory(I - 1) :=
+              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+               Name => New_String(Str => To_String(Source => Item.Name)),
+               Durability => Item.Durability, Price => Item.Price);
+         end Set_Item_Block;
+      end loop Fill_Nim_Array_Loop;
+      return
+        Find_Ada_Item
+          (Inv => Nim_Inventory, P_Index => Proto_Index,
+           I_Type => New_String(Str => To_String(Source => Item_Type)),
+           Dur => Durability, Q => Quality);
    end Find_Item;
 
    procedure Set_Tools_List is

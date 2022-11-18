@@ -347,7 +347,7 @@ proc findItem*(inventory: Table[Positive, InventoryData];
 
 # Temporary code for interfacing with Ada
 
-type 
+type
   AdaObjectData* = object
     name: cstring
     weight: cint
@@ -442,3 +442,15 @@ proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [
     itemsList[i] = ""
   for index, item in toolsList.pairs:
     itemsList[index] = item.cstring
+
+proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
+    itemType: cstring; durability: cint; quality: cint): cint {.exportc.} =
+  var newInventory = initTable[Positive, InventoryData]()
+  for i in 0..127:
+    if inventory[i].protoIndex == 0:
+      break
+    newInventory[i + 1] = InventoryData(protoIndex: inventory[i].protoIndex,
+        amount: inventory[i].amount, name: $inventory[i].name,
+        durability: inventory[i].durability, price: inventory[i].price)
+  return findItem(inventory = newInventory, protoIndex = protoIndex,
+      itemType = $itemType, durability = durability, quality = quality).cint
