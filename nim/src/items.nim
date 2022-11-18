@@ -324,17 +324,46 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
     if skill.tool notin toolsList:
       toolsList.add(y = skill.tool)
 
+proc findItem*(inventory: Table[Positive, InventoryData];
+    protoIndex: Natural = 0; itemType: string = "";
+    durability: ItemsDurability = ItemsDurability.high;
+    quality: Positive = 100): Natural =
+  if protoIndex > 0:
+    for index, item in inventory.pairs:
+      if item.protoIndex == protoIndex and itemsList[protoIndex].value[0] <= quality:
+        if durability < ItemsDurability.high and item.durability == durability:
+          return index
+        else:
+          return index
+  elif itemType.len > 0:
+    for index, item in inventory.pairs:
+      if itemsList[item.protoIndex].itemType == itemType and itemsList[
+          item.protoIndex].value[0] <= quality:
+        if durability < ItemsDurability.high and item.durability == durability:
+          return index
+        else:
+          return index
+  return 0
+
 # Temporary code for interfacing with Ada
 
-type AdaObjectData* = object
-  name: cstring
-  weight: cint
-  itemType: cstring
-  price: cint
-  value: array[5, cint]
-  showType: cstring
-  description: cstring
-  reputation: cint
+type 
+  AdaObjectData* = object
+    name: cstring
+    weight: cint
+    itemType: cstring
+    price: cint
+    value: array[5, cint]
+    showType: cstring
+    description: cstring
+    reputation: cint
+
+  AdaInventoryData = object
+    protoIndex: cint
+    amount: cint
+    name: cstring
+    durability: cint
+    price: cint
 
 proc loadAdaItems(fileName: cstring): cstring {.sideEffect,
     raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
