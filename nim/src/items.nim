@@ -309,6 +309,9 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
     return "Very high"
 
 proc setToolsList*() =
+  ## FUNCTION
+  ##
+  ## Set the list of all available tools in the game
   if toolsList.len() > 0:
     return
   toolsList.add(y = repairTools)
