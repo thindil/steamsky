@@ -2,6 +2,7 @@ discard """
   exitcode: 0
 """
 
+import std/tables
 import ../../src/[config, items]
 
 loadItems("../bin/data/items.dat")
@@ -26,3 +27,14 @@ assert getItemChanceToDamage(30) == "Very high"
 gameSettings.showNumbers = 1
 assert getItemChanceToDamage(3) == " 3%"
 assert getItemChanceToDamage(30) == " 30%"
+
+block:
+  var inventory = initTable[Positive, InventoryData]()
+  inventory[1] = InventoryData(protoIndex: 66, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0)
+  inventory[2] = InventoryData(protoIndex: 67, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0)
+  assert findItem(inventory, 67) == 2
+  assert findItem(inventory = inventory, itemType = "Weapon") == 1
+  assert findItem(inventory, 500) == 0
+  assert findItem(inventory = inventory, itemType = "asdasdas") == 0
