@@ -60,7 +60,7 @@ package body Crafts is
          Convention => C,
          External_Name => "loadAdaRecipes";
       procedure Get_Ada_Craft
-        (Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
+        (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaCraftData";
@@ -79,7 +79,7 @@ package body Crafts is
       Load_Recipes_Loop :
       loop
          Get_Ada_Craft
-           (Index => New_String(Str => Index'Img),
+           (C_Index => New_String(Str => Index'Img),
             Ada_Craft => Temp_Nim_Record);
          exit Load_Recipes_Loop when Temp_Nim_Record.Result_Index = 0;
          Temp_Record :=
