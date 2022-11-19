@@ -146,13 +146,6 @@ package Items is
      (Capacity => Count_Type(Default_Items_Amount));
    -- ****
 
-   -- ****v* Items/Items.Tools_List
-   -- FUNCTION
-   -- List of all tools types in game
-   -- SOURCE
-   Tools_List: TinyString_Indefinite_Container.Vector (Capacity => 16);
-   -- ****
-
    -- ****v* Items/Items.Weapons_List
    -- FUNCTION
    -- List of indexes of all weapons in game
@@ -302,7 +295,10 @@ package Items is
       -- FUNCTION
       -- Fill tools types list
       -- SOURCE
-   procedure Set_Tools_List;
+   procedure Set_Tools_List with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaToolsList";
    -- ****
 
    -- ****f* Items/Items.Get_Item_Chance_To_Damage

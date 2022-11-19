@@ -346,36 +346,6 @@ package body Items is
            Dur => Durability, Q => Quality);
    end Find_Item;
 
-   procedure Set_Tools_List is
-      use Interfaces.C;
-
-      type Items_Nim_Array is array(0 .. 63) of chars_ptr;
-      Nim_Items_List: Items_Nim_Array := (others => New_String(Str => ""));
-      procedure Set_Ada_Tools_List with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaToolsList";
-      procedure Get_Ada_Tools_List(T_List: out Items_Nim_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaToolsList";
-   begin
-      if TinyString_Indefinite_Container.Length(Container => Tools_List) >
-        0 then
-         return;
-      end if;
-      Set_Ada_Tools_List;
-      Get_Ada_Tools_List(T_List => Nim_Items_List);
-      Load_Tools_List_Loop :
-      for I of Nim_Items_List loop
-         exit Load_Tools_List_Loop when Strlen(Item => I) = 0;
-         TinyString_Indefinite_Container.Append
-           (Container => Tools_List,
-            New_Item =>
-              Tiny_String.To_Bounded_String(Source => Value(Item => I)));
-      end loop Load_Tools_List_Loop;
-   end Set_Tools_List;
-
    function Get_Item_Chance_To_Damage(Item_Data: Natural) return String is
       function Get_Ada_Item_Chance_To_Damage
         (I_Data: Integer) return chars_ptr with

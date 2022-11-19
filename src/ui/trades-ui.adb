@@ -970,9 +970,8 @@ package body Trades.UI is
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
-      if TinyString_Indefinite_Container.Contains
-          (Container => Tools_List,
-           Item =>
+      if Is_Tool
+          (Item_Type =>
              Objects_Container.Element
                (Container => Items_List, Index => Proto_Index)
                .I_Type) then
