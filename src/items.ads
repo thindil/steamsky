@@ -295,8 +295,7 @@ package Items is
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
       Post => Find_Item'Result <=
-      Inventory_Container.Last_Index(Container => Inventory),
-      Test_Case => (Name => "Test_FindItem", Mode => Nominal);
+      Inventory_Container.Last_Index(Container => Inventory);
       -- ****
 
       -- ****f* Items/Items.Set_Tools_List
