@@ -528,61 +528,101 @@ package body Knowledge.Events is
             end if;
             case Events_List(Event).E_Type is
                when ENEMYSHIP =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "red"));
                   Add_Button
                     (Table => Events_Table, Text => "Enemy ship spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "red");
-                  Color := To_Unbounded_String(Source => "red");
+                     Column => 1, Color => To_String(Source => Color));
                when FULLDOCKS =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "red"));
                   Add_Button
                     (Table => Events_Table, Text => "Full docks in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "red");
-                  Color := To_Unbounded_String(Source => "red");
+                     Column => 1, Color => To_String(Source => Color));
                when ATTACKONBASE =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "red"));
                   Add_Button
                     (Table => Events_Table, Text => "Base is under attack",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "red");
-                  Color := To_Unbounded_String(Source => "red");
+                     Column => 1, Color => To_String(Source => Color));
                when DISEASE =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "red"));
                   Add_Button
                     (Table => Events_Table, Text => "Disease in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "red");
-                  Color := To_Unbounded_String(Source => "red");
+                     Column => 1, Color => To_String(Source => Color));
                when ENEMYPATROL =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "red"));
                   Add_Button
                     (Table => Events_Table, Text => "Enemy patrol",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "red");
-                  Color := To_Unbounded_String(Source => "red");
+                     Column => 1, Color => To_String(Source => Color));
                when DOUBLEPRICE =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "green3"));
                   Add_Button
                     (Table => Events_Table, Text => "Double price in base",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "green3");
-                  Color := To_Unbounded_String(Source => "green3");
+                     Column => 1, Color => To_String(Source => Color));
                when TRADER =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "green3"));
                   Add_Button
                     (Table => Events_Table, Text => "Friendly trader spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "green3");
-                  Color := To_Unbounded_String(Source => "green3");
+                     Column => 1, Color => To_String(Source => Color));
                when FRIENDLYSHIP =>
+                  Color :=
+                    (if
+                       Events_List(Event).Sky_X = Player_Ship.Destination_X and
+                       Events_List(Event).Sky_Y = Player_Ship.Destination_Y
+                     then To_Unbounded_String(Source => "yellow")
+                     else To_Unbounded_String(Source => "green3"));
                   Add_Button
                     (Table => Events_Table, Text => "Friendly ship spotted",
                      Tooltip => "Show available event's options",
                      Command => "ShowEventMenu" & Positive'Image(Row - 1),
-                     Column => 1, Color => "green3");
-                  Color := To_Unbounded_String(Source => "green3");
+                     Column => 1, Color => To_String(Source => Color));
                when NONE | BASERECOVERY =>
                   null;
             end case;
