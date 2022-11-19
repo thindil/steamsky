@@ -456,13 +456,6 @@ proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
 proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
   setToolsList()
 
-proc getAdaToolsList(itemsList: var array[64, cstring]) {.sideEffect, raises: [
-    ], tags: [], exportc.} =
-  for i in 0..63:
-    itemsList[i] = ""
-  for index, item in toolsList.pairs:
-    itemsList[index] = item.cstring
-
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
     itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
     raises: [], tags: [], exportc.} =
