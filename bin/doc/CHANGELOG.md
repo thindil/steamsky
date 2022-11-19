@@ -7,8 +7,10 @@ All notable changes to this project will be documented in this file.
 - Ability to clear numeric fields (GitHub issue #95)
 - Numeric fields to sliders (GitHub issue #96)
 - Block the player from moving in-game dialogs outside the game window
-- The separated color on the list of known bases for base set as target for
-  the player ship
+- The separated color on the list of known bases for the base which is set
+  as target for the player ship
+- The separated color on the list of known events for the event which is set
+  as target for the player ship
 
 ### Changed
 - Updated README.md
