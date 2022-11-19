@@ -475,3 +475,8 @@ proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
         durability: inventory[i].durability, price: inventory[i].price)
   return findItem(inventory = newInventory, protoIndex = protoIndex,
       itemType = $itemType, durability = durability, quality = quality).cint
+
+proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
+  if $itemType in toolsList:
+    return 1
+  return 0
