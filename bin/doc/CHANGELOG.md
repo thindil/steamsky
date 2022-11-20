@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
   as target for the player ship
 - The separated color on the list of known events for the event which is set
   as target for the player ship
+- The separated color on the list of accepted missions for the mission which
+  is set as target for the player ship
 
 ### Changed
 - Updated README.md
