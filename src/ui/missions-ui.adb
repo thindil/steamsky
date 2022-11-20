@@ -389,8 +389,10 @@ package body Missions.UI is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       Sky_Bases(Base_Index).Missions(Mission_Index).Multiplier :=
-        Reward_Multiplier'Value
-          (Tcl_GetVar(interp => Get_Context, varName => "reward"));
+        Reward_Multiplier
+          (Float'Value
+             (Tcl_GetVar(interp => Get_Context, varName => "reward")) /
+           100.0);
       Accept_Mission(Mission_Index => Mission_Index);
       Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions);
       Update_Table(Table => Missions_Table);
@@ -765,7 +767,6 @@ package body Missions.UI is
              "-from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
              Button & "} -width 3");
    begin
-      Tcl_SetVar(interp => Interp, varName => "reward", newValue => "1.0");
       Add
         (Widget => Reward_Scale,
          Message =>
