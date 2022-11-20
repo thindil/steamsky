@@ -434,7 +434,7 @@ package body Knowledge.Missions is
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
-      Mission_Time: Unbounded_String;
+      Mission_Time, Color: Unbounded_String;
    begin
       Create
         (S => Tokens,
@@ -491,12 +491,18 @@ package body Knowledge.Missions is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
+            Color :=
+              (if
+                 Accepted_Missions(I).Target_X = Player_Ship.Destination_X and
+                 Accepted_Missions(I).Target_Y = Player_Ship.Destination_Y
+               then To_Unbounded_String(Source => "yellow")
+               else Null_Unbounded_String);
             Add_Button
               (Table => Missions_Table,
                Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
                Tooltip => "Show available mission's options",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 1);
+               Column => 1, Color => To_String(Source => Color));
             case Accepted_Missions(I).M_Type is
                when DELIVER =>
                   Add_Button
@@ -519,7 +525,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show available mission's options",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3);
+                     Column => 3, Color => To_String(Source => Color));
                when PATROL =>
                   Add_Button
                     (Table => Missions_Table,
@@ -528,7 +534,7 @@ package body Knowledge.Missions is
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show available mission's options",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3);
+                     Column => 3, Color => To_String(Source => Color));
                when DESTROY =>
                   Add_Button
                     (Table => Missions_Table,
@@ -539,7 +545,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show available mission's options",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3);
+                     Column => 3, Color => To_String(Source => Color));
                when EXPLORE =>
                   Add_Button
                     (Table => Missions_Table,
@@ -548,7 +554,7 @@ package body Knowledge.Missions is
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show available mission's options",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3);
+                     Column => 3, Color => To_String(Source => Color));
                when PASSENGER =>
                   Add_Button
                     (Table => Missions_Table,
@@ -564,7 +570,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show available mission's options",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3);
+                     Column => 3, Color => To_String(Source => Color));
             end case;
             Add_Button
               (Table => Missions_Table,
@@ -575,7 +581,7 @@ package body Knowledge.Missions is
                        Destination_Y => Accepted_Missions(I).Target_Y)),
                Tooltip => "The distance to the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 2);
+               Column => 2, Color => To_String(Source => Color));
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date
               (Minutes => Accepted_Missions(I).Time,
@@ -585,7 +591,7 @@ package body Knowledge.Missions is
                Text => To_String(Source => Mission_Time),
                Tooltip => "The time limit for finish and return the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 4);
+               Column => 4, Color => To_String(Source => Color));
             Add_Button
               (Table => Missions_Table,
                Text =>
@@ -596,7 +602,8 @@ package body Knowledge.Missions is
                  " " & To_String(Source => Money_Name),
                Tooltip => "The base money reward for the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 5, New_Row => True);
+               Column => 5, New_Row => True,
+               Color => To_String(Source => Color));
             Row := Row + 1;
             Rows := Rows + 1;
             exit Load_Accepted_Missions_Loop when Rows =
