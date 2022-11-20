@@ -783,6 +783,7 @@ package body Crafts is
                   Remove_Materials_Loop :
                   for J in Material_Indexes.Iterate loop
                      Cargo_Index := 1;
+                     --## rule off SIMPLIFIABLE_STATEMENTS
                      Remove_Materials_From_Cargo_Loop :
                      while Cargo_Index <=
                        Inventory_Container.Last_Index
@@ -833,6 +834,7 @@ package body Crafts is
                         end Remove_Materials_From_Cargo_Block;
                         Cargo_Index := Cargo_Index + 1;
                      end loop Remove_Materials_From_Cargo_Loop;
+                     --## rule on SIMPLIFIABLE_STATEMENTS
                   end loop Remove_Materials_Loop;
                   if Tool_Index > 0 then
                      Damage_Item
