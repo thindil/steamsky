@@ -149,7 +149,7 @@ package body Table is
                   Positive'Image(Table.Row_Height - 3) & " -fill " &
                   Style_Lookup(Name => "Table", Option => "-headerbackcolor") &
                   " -outline " &
-                  Style_Lookup(Name => "Table", Option => "-rowcolor") &
+                  Style_Lookup(Name => "Table", Option => "-headerbordercolor") &
                   " -width 2 -tags [list headerback]"));
       Lower(CanvasWidget => Canvas, TagOrId => "headerback");
       if Command'Length > 0 then
