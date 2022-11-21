@@ -846,6 +846,7 @@ package body Crafts is
                              Skill_Index => Recipe.Skill),
                         Member_Index => Crafter_Index, Ship => Player_Ship);
                   end if;
+                  --## rule off SIMPLIFIABLE_STATEMENTS
                   if Length(Source => Module.Crafting_Index) < 6
                     or else
                     (Length(Source => Module.Crafting_Index) > 6
@@ -909,6 +910,7 @@ package body Crafts is
                      end loop Learn_Recipe_Loop;
                      exit Craft_Loop;
                   end if;
+                  --## rule on SIMPLIFIABLE_STATEMENTS
                   exit Craft_Loop when Module.Crafting_Amount = 0;
                   <<End_Of_Craft_Loop>>
                end loop Craft_Loop;
