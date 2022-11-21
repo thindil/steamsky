@@ -97,9 +97,10 @@ package body Table is
                      Trim(Source => Natural'Image(X), Side => Left) &
                      " 2 -anchor nw -text {" &
                      To_String(Source => Headers(I)) &
-                     "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
-                     To_String(Source => Game_Settings.Interface_Theme) &
-                     " -foreground] -tags [list header" &
+                     "} -font InterfaceFont -justify center -fill " &
+                     Style_Lookup
+                       (Name => "Table", Option => "-headerforecolor") &
+                     " -tags [list header" &
                      Trim(Source => Positive'Image(I), Side => Left) & "]"));
          if Command'Length > 0 then
             Bind
