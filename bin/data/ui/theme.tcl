@@ -302,12 +302,14 @@ namespace eval ttk::theme::steamsky {
          %W configure -cursor hand1
       }
 
-      # Treeview (like cargo, trading) setting
+      # Treeview (like goals) setting
       ttk::style configure Treeview -fieldbackground $colors(-almostblackred)\
          -background $colors(-almostblackred)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style configure Treeview \
          -rowheight [expr {[font metrics InterfaceFont -linespace] + 2}]
+      ttk::style configure Heading -background $colors(-darkorange) \
+         -foreground $colors(-goldenyellow)
       ttk::style map Treeview \
          -background [list selected $colors(-darkred)] \
          -foreground [list selected $colors(-goldenyellow)]
@@ -316,7 +318,8 @@ namespace eval ttk::theme::steamsky {
 
       # Table widget (like looting, shipyard) setting
       ttk::style configure Table -headerbackcolor $colors(-darkorange) \
-         -rowcolor $colors(-almostblackred)
+         -rowcolor $colors(-almostblackred) \
+         -headerforecolor $colors(-goldenyellow)
 
       # Check button setting
       ttk::style configure TCheckbutton -padding 4
