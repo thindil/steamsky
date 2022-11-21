@@ -146,7 +146,7 @@ package body Table is
                 Options =>
                   "0 0" & Positive'Image(X) &
                   Positive'Image(Table.Row_Height - 3) & " -fill " &
-                  Style_Lookup(Name => "Table", Option => "-headercolor") &
+                  Style_Lookup(Name => "Table", Option => "-headerbackcolor") &
                   " -outline " &
                   Style_Lookup(Name => "Table", Option => "-rowcolor") &
                   " -width 2 -tags [list headerback]"));
