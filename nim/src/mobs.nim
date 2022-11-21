@@ -18,7 +18,7 @@
 {.used.}
 
 import std/tables
-import crew, items, utils
+import crew, factions, items, utils
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive, factionIndex: string): Natural =
@@ -42,3 +42,31 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     if maxIndex > newIndexes.len - 1:
       maxIndex = newIndexes.len - 1
     itemIndex = getRandom(min = 0, max = maxIndex)
+  else:
+    for i in 0..<itemsIndexes.len:
+      added = false
+      for j in 0..<newIndexes.len:
+        if itemsList[itemsIndexes[i]].price < itemsList[newIndexes[j]].price and
+            itemsList[i].value[2] == factionsList[factionIndex].weaponSkill:
+          {.warning[UnsafeSetLen]: off.}
+          newIndexes.insert(item = i, i = j)
+          {.warning[UnsafeSetLen]: on.}
+          added = true
+          break
+      if not added and itemsList[i].value[2] == factionsList[
+          factionIndex].weaponSkill:
+        newIndexes.add(y = i)
+    if newIndexes.len == 0:
+      return 0
+    maxIndex = ((newIndexes.len - 1).float * (weaponSkillLevel.float / 100.0) + 1.0).Positive
+    if maxIndex > newIndexes.len - 1:
+      maxIndex = newIndexes.len - 1
+    while true:
+      itemIndex = getRandom(min = 0, max = maxIndex)
+      if itemsList[newIndexes[itemIndex]].value[2] == factionsList[
+          factionIndex].weaponSkill:
+        break
+  for i in 0..<itemsIndexes.len:
+    if itemsIndexes[i] == newIndexes[itemIndex]:
+      return newIndexes[itemIndex]
+  return 0
