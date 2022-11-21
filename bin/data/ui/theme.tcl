@@ -133,6 +133,10 @@ namespace eval ttk::theme::steamsky {
          }
       }
 
+      ttk::style layout Treeview {
+         Treeview.treearea sticky nswe
+      }
+
       ttk::style layout Toolbutton {
          Toolbutton.border -sticky nswe -border 1 -children {
             Toolbutton.focus -sticky nswe -children {
