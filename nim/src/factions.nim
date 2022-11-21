@@ -71,7 +71,7 @@ type
     careers: Table[string, CareerData] ## The list of available careers for the faction
     baseIcon: Natural ## The icon used as icon for the faction's bases on the map
     basesTypes: Table[string, Positive] ## The list of available bases types for the faction
-    weaponSkill: Natural ## The skill used as prefered weapon skill for the faction
+    weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
 
 var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
   ## FUNCTION
