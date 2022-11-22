@@ -30,7 +30,7 @@ type
     resultIndex: Natural ## The index of proto item which is the result of the recipe
     resultAmount: Natural ## The amount of items produced by one recipe
     workplace: ModuleType ## The type of ship's module used as a workshop for the recipe
-    skill: Natural ## The index of the skill used in crafting
+    skill*: Natural ## The index of the skill used in crafting
     time: Positive ## The amount of minutes needed to finish the recipe
     difficulty: Positive ## The difficulty level of the recipe
     tool*: string ## The type of item used as a tool in crafting

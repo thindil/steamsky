@@ -27,7 +27,7 @@ type
     ## Used to store information about items
     name: string ## The name of the item
     weight: Positive ## The weight of the item
-    itemType: string ## The type of the item
+    itemType*: string ## The type of the item
     price*: Natural ## The base price of the item in bases
     value*: seq[int] ## Various data related to the item (damage for ammo, etc.)
     showType: string ## The item's type to show to the player instead of the itemType
