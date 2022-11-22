@@ -176,6 +176,8 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $itemAction & " item '" & $itemIndex &
                 "', invalid value for item data."))
+    if item.value.len == 0:
+      item.value.add(y = 0)
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
