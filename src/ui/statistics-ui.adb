@@ -456,7 +456,10 @@ package body Statistics.UI is
             for J in Proto_Ships_List.Iterate loop
                if To_Unbounded_String
                    (Source =>
-                      Proto_Ships_Container.To_Index(Position => J)'Img) =
+                      Trim
+                        (Source =>
+                           Proto_Ships_Container.To_Index(Position => J)'Img,
+                         Side => Left)) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeViewWidget => Tree_View,
