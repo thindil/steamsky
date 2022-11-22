@@ -855,6 +855,7 @@ package body Crafts is
                          (Source => Module.Crafting_Index, Low => 1,
                           High => 5) /=
                        "Study") then
+                     --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Amount :=
                        Amount -
                        (Objects_Container.Element
@@ -862,6 +863,7 @@ package body Crafts is
                            Index => Recipe.Result_Index)
                           .Weight *
                         Result_Amount);
+                     --## rule on SIMPLIFIABLE_EXPRESSIONS
                      if Free_Cargo(Amount => Amount) < 0 then
                         Add_Message
                           (Message =>
