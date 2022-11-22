@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## Fixed
+- Showing the destroyed ships in the game statistics
+
 ## [8.0.1] - 2022-11-20
 
 ## Fixed
