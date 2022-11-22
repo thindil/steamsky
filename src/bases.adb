@@ -22,7 +22,6 @@ with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
 with Goals;
-with Crafts;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
@@ -146,7 +145,6 @@ package body Bases is
 
    procedure Generate_Recruits is
       use Tiny_String;
-      use Crafts;
 
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -170,8 +168,7 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: Positive_Indefinite_Container.Vector;
-         Equip_Index: Equipment_Locations) is
+        (Items_Indexes: String; Equip_Index: Equipment_Locations) is
          Item_Index: Objects_Container.Extended_Index;
          use Mobs;
 
@@ -186,7 +183,8 @@ package body Bases is
               Weapon_Skill_Level =>
                 Skills_Container.Element(Container => Skills, Index => 1)
                   .Level,
-              Faction_Index => Recruit_Faction);
+              Faction_Index => Recruit_Faction,
+              Highest_Skill => Positive(Highest_Skill));
          if Item_Index = 0 then
             return;
          end if;
@@ -336,33 +334,13 @@ package body Bases is
             Payment := Payment + (Stat.Level * 2);
             --## rule on SIMPLIFIABLE_EXPRESSIONS
          end loop Update_Price_With_Stats_Loop;
-         Add_Inventory(Items_Indexes => Weapons_List, Equip_Index => WEAPON);
-         Add_Inventory(Items_Indexes => Shields_List, Equip_Index => SHIELD);
-         Add_Inventory
-           (Items_Indexes => Head_Armors_List, Equip_Index => HELMET);
-         Add_Inventory
-           (Items_Indexes => Chest_Armors_List, Equip_Index => TORSO);
-         Add_Inventory(Items_Indexes => Arms_Armors_List, Equip_Index => ARMS);
-         Add_Inventory(Items_Indexes => Legs_Armors_List, Equip_Index => LEGS);
-         Add_Tool_Loop :
-         for Recipe of Recipes_List loop
-            if Highest_Skill = Recipe.Skill then
-               Find_Tool_Loop :
-               for J in
-                 Objects_Container.First_Index(Container => Items_List) ..
-                   Objects_Container.Last_Index(Container => Items_List) loop
-                  if Objects_Container.Element
-                      (Container => Items_List, Index => J)
-                      .I_Type =
-                    Recipe.Tool then
-                     Positive_Indefinite_Container.Append
-                       (Container => Temp_Tools, New_Item => J);
-                  end if;
-               end loop Find_Tool_Loop;
-               Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => TOOL);
-               exit Add_Tool_Loop;
-            end if;
-         end loop Add_Tool_Loop;
+         Add_Inventory(Items_Indexes => "weapon", Equip_Index => WEAPON);
+         Add_Inventory(Items_Indexes => "shield", Equip_Index => SHIELD);
+         Add_Inventory(Items_Indexes => "helmet", Equip_Index => HELMET);
+         Add_Inventory(Items_Indexes => "torso", Equip_Index => TORSO);
+         Add_Inventory(Items_Indexes => "arms", Equip_Index => ARMS);
+         Add_Inventory(Items_Indexes => "legs", Equip_Index => LEGS);
+         Add_Inventory(Items_Indexes => "tool", Equip_Index => TOOL);
          if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (Item => To_Unbounded_String(Source => "barracks")) then
             Price := Price / 2;

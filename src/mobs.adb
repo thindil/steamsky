@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -655,16 +656,10 @@ package body Mobs is
       for I in WEAPON .. LEGS loop
          Set_Equipment_Block :
          declare
-            Equipment_Items_List: constant Positive_Indefinite_Container
-              .Vector :=
-              Positive_Indefinite_Container.Copy
-                (Source =>
-                   (case I is when WEAPON => Weapons_List,
-                      when SHIELD => Shields_List,
-                      when HELMET => Head_Armors_List,
-                      when TORSO => Chest_Armors_List,
-                      when ARMS => Arms_Armors_List,
-                      when LEGS => Legs_Armors_List));
+            Equipment_Items_List: constant String :=
+              (case I is when WEAPON => "weapon", when SHIELD => "shield",
+                 when HELMET => "helmet", when TORSO => "torso",
+                 when ARMS => "arms", when LEGS => "legs");
             Equipment_Item_Index: Objects_Container.Extended_Index;
          begin
             if Mob.Equipment(I) = 0 then
@@ -675,7 +670,7 @@ package body Mobs is
                       (Items_Indexes => Equipment_Items_List, Equip_Index => I,
                        Highest_Level => Highest_Skill_Level,
                        Weapon_Skill_Level => Weapon_Skill_Level,
-                       Faction_Index => Mob.Faction);
+                       Faction_Index => Mob.Faction, Highest_Skill => 1);
                end if;
                if Equipment_Item_Index > 0 then
                   Inventory_Container.Append
@@ -707,149 +702,25 @@ package body Mobs is
    end Generate_Mob;
 
    function Get_Random_Item
-     (Items_Indexes: Positive_Indefinite_Container.Vector;
-      Equip_Index: Equipment_Locations;
+     (Items_Indexes: String; Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Tiny_String.Bounded_String)
+      Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
       return Objects_Container.Extended_Index is
-      Item_Index, Max_Index: Positive;
-      New_Indexes: Positive_Container.Vector;
-      Added: Boolean;
+      function Get_Ada_Random_Item
+        (Items: chars_ptr; E_Index, H_Level, W_Skill_Level: Integer;
+         F_Index: chars_ptr; H_Skill: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaRandomItem";
    begin
-      if Equip_Index > WEAPON then
-         Equipment_Item_Loop :
-         for I in
-           Positive_Indefinite_Container.First_Index
-             (Container => Items_Indexes) ..
-             Positive_Indefinite_Container.Last_Index
-               (Container => Items_Indexes) loop
-            Added := False;
-            Add_Equipment_Item_Loop :
-            for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
-               if Objects_Container.Element
-                   (Container => Items_List,
-                    Index =>
-                      Positive_Indefinite_Container.Element
-                        (Container => Items_Indexes, Index => I))
-                   .Price <
-                 Objects_Container.Element
-                   (Container => Items_List, Index => New_Indexes(J))
-                   .Price then
-                  New_Indexes.Insert
-                    (Before => J,
-                     New_Item =>
-                       Positive_Indefinite_Container.Element
-                         (Container => Items_Indexes, Index => I));
-                  Added := True;
-                  exit Add_Equipment_Item_Loop;
-               end if;
-            end loop Add_Equipment_Item_Loop;
-            if not Added then
-               New_Indexes.Append
-                 (New_Item =>
-                    Positive_Indefinite_Container.Element
-                      (Container => Items_Indexes, Index => I));
-            end if;
-         end loop Equipment_Item_Loop;
-         Max_Index :=
-           Positive
-             ((Float(New_Indexes.Last_Index) *
-               (Float(Highest_Level) / 100.0)) +
-              1.0);
-         if Max_Index > New_Indexes.Last_Index then
-            Max_Index := New_Indexes.Last_Index;
-         end if;
-         Item_Index :=
-           Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
-      else
-         Proto_Items_Loop :
-         for I in
-           Positive_Indefinite_Container.First_Index
-             (Container => Items_Indexes) ..
-             Positive_Indefinite_Container.Last_Index
-               (Container => Items_Indexes) loop
-            Added := False;
-            Add_Proto_Item_Loop :
-            for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
-               if Objects_Container.Element
-                   (Container => Items_List,
-                    Index =>
-                      Positive_Indefinite_Container.Element
-                        (Container => Items_Indexes, Index => I))
-                   .Price <
-                 Objects_Container.Element
-                   (Container => Items_List, Index => New_Indexes(J))
-                   .Price and
-                 Skills_Amount_Range
-                     (Objects_Container.Element
-                        (Container => Items_List,
-                         Index =>
-                           Positive_Indefinite_Container.Element
-                             (Container => Items_Indexes, Index => I))
-                        .Value
-                        (3)) =
-                   Factions_List(Faction_Index).Weapon_Skill then
-                  New_Indexes.Insert
-                    (Before => J,
-                     New_Item =>
-                       Positive_Indefinite_Container.Element
-                         (Container => Items_Indexes, Index => I));
-                  Added := True;
-                  exit Add_Proto_Item_Loop;
-               end if;
-            end loop Add_Proto_Item_Loop;
-            if not Added and
-              Skills_Amount_Range
-                  (Objects_Container.Element
-                     (Container => Items_List,
-                      Index =>
-                        Positive_Indefinite_Container.Element
-                          (Container => Items_Indexes, Index => I))
-                     .Value
-                     (3)) =
-                Factions_List(Faction_Index).Weapon_Skill then
-               New_Indexes.Append
-                 (New_Item =>
-                    Positive_Indefinite_Container.Element
-                      (Container => Items_Indexes, Index => I));
-            end if;
-         end loop Proto_Items_Loop;
-         if New_Indexes.Length = 0 then
-            return 0;
-         end if;
-         Max_Index :=
-           Positive
-             ((Float(New_Indexes.Last_Index) *
-               (Float(Weapon_Skill_Level) / 100.0)) +
-              1.0);
-         if Max_Index > New_Indexes.Last_Index then
-            Max_Index := New_Indexes.Last_Index;
-         end if;
-         Get_Weapon_Loop :
-         loop
-            Item_Index :=
-              Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
-            exit Get_Weapon_Loop when Skills_Amount_Range
-                (Objects_Container.Element
-                   (Container => Items_List, Index => New_Indexes(Item_Index))
-                   .Value
-                   (3)) =
-              Factions_List(Faction_Index).Weapon_Skill;
-         end loop Get_Weapon_Loop;
-      end if;
-      Get_Item_Index_Loop :
-      for I in
-        Positive_Indefinite_Container.First_Index
-          (Container => Items_Indexes) ..
-          Positive_Indefinite_Container.Last_Index
-            (Container => Items_Indexes) loop
-         if Positive_Indefinite_Container.Element
-             (Container => Items_Indexes, Index => I) =
-           New_Indexes(Item_Index) then
-            return New_Indexes(Item_Index);
-         end if;
-      end loop Get_Item_Index_Loop;
-      return 0;
+      return
+        Get_Ada_Random_Item
+          (Items => New_String(Str => Items_Indexes),
+           E_Index => Equipment_Locations'Pos(Equip_Index),
+           H_Level => Highest_Level, W_Skill_Level => Weapon_Skill_Level,
+           F_Index =>
+             New_String(Str => Tiny_String.To_String(Source => Faction_Index)),
+           H_Skill => Highest_Skill);
    end Get_Random_Item;
 
 end Mobs;
