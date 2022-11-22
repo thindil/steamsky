@@ -105,10 +105,12 @@ proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
     var tempToolsList: seq[Positive]
     for recipe in recipesList.values:
       if highestSkill == recipe.skill:
-        for j in 0..<itemsList.len:
-          if itemsList[j].itemType == recipe.tool:
-            tempToolsList.add(y = j)
+        for index, item in itemsList.pairs:
+          if item.itemType == recipe.tool:
+            tempToolsList.add(y = index)
         break
+    if tempToolsList.len == 0:
+      return 0
     return getRandomItem(itemsIndexes = tempToolsList,
         equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
         weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
