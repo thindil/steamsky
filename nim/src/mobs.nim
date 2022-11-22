@@ -70,3 +70,33 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     if itemsIndexes[i] == newIndexes[itemIndex]:
       return newIndexes[itemIndex]
   return 0
+
+# Temporary code for interfacing with Ada
+
+proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
+    weaponSkillLevel: cint; factionIndex: cstring): cint {.exportc.} =
+  case $items
+  of "weapon":
+    return getRandomItem(itemsIndexes = weaponsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+  of "shield":
+    return getRandomItem(itemsIndexes = shieldsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+  of "helmet":
+    return getRandomItem(itemsIndexes = headArmorsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+  of "torso":
+    return getRandomItem(itemsIndexes = chestArmorsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+  of "arms":
+    return getRandomItem(itemsIndexes = armsArmorsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+  of "legs":
+    return getRandomItem(itemsIndexes = legsArmorsList,
+        equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
+        weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
