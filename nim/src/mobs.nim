@@ -23,39 +23,39 @@ import crafts, crew, factions, items, utils
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive, factionIndex: string): Natural =
   var
-    itemIndex, maxIndex: Positive
+    itemIndex, maxIndex: Natural
     newIndexes: seq[Positive]
     added: bool
   if equipIndex > weapon:
-    for i in 0..<itemsIndexes.len:
+    for index in itemsIndexes:
       added = false
       for j in 0..<newIndexes.len:
-        if itemsList[itemsIndexes[i]].price < itemsList[newIndexes[j]].price:
+        if itemsList[index].price < itemsList[newIndexes[j]].price:
           {.warning[UnsafeSetLen]: off.}
-          newIndexes.insert(item = i, i = j)
+          newIndexes.insert(item = index, i = j)
           {.warning[UnsafeSetLen]: on.}
           added = true
           break
       if not added:
-        newIndexes.add(y = i)
+        newIndexes.add(y = index)
     maxIndex = ((newIndexes.len - 1).float * (highestLevel.float / 100.0) + 1.0).Positive
     if maxIndex > newIndexes.len - 1:
       maxIndex = newIndexes.len - 1
     itemIndex = getRandom(min = 0, max = maxIndex)
   else:
-    for i in 0..<itemsIndexes.len:
+    for index in itemsIndexes:
       added = false
       for j in 0..<newIndexes.len:
-        if itemsList[itemsIndexes[i]].price < itemsList[newIndexes[j]].price and
-            itemsList[i].value[2] == factionsList[factionIndex].weaponSkill:
+        if itemsList[index].price < itemsList[newIndexes[j]].price and
+            itemsList[index].value[2] == factionsList[factionIndex].weaponSkill:
           {.warning[UnsafeSetLen]: off.}
-          newIndexes.insert(item = i, i = j)
+          newIndexes.insert(item = index, i = j)
           {.warning[UnsafeSetLen]: on.}
           added = true
           break
-      if not added and itemsList[i].value[2] == factionsList[
+      if not added and itemsList[index].value[2] == factionsList[
           factionIndex].weaponSkill:
-        newIndexes.add(y = i)
+        newIndexes.add(y = index)
     if newIndexes.len == 0:
       return 0
     maxIndex = ((newIndexes.len - 1).float * (weaponSkillLevel.float / 100.0) + 1.0).Positive
@@ -66,15 +66,16 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
       if itemsList[newIndexes[itemIndex]].value[2] == factionsList[
           factionIndex].weaponSkill:
         break
-  for i in 0..<itemsIndexes.len:
-    if itemsIndexes[i] == newIndexes[itemIndex]:
+  for index in itemsIndexes:
+    if index == newIndexes[itemIndex]:
       return newIndexes[itemIndex]
   return 0
 
 # Temporary code for interfacing with Ada
 
 proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
-    weaponSkillLevel: cint; factionIndex: cstring; highestSkill: cint): cint {.exportc.} =
+    weaponSkillLevel: cint; factionIndex: cstring;
+        highestSkill: cint): cint {.exportc.} =
   case $items
   of "weapon":
     return getRandomItem(itemsIndexes = weaponsList,

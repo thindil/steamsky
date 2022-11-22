@@ -29,7 +29,7 @@ type
     weight: Positive ## The weight of the item
     itemType*: string ## The type of the item
     price*: Natural ## The base price of the item in bases
-    value*: seq[int] ## Various data related to the item (damage for ammo, etc.)
+    value*: array[1..5, int] ## Various data related to the item (damage for ammo, etc.)
     showType: string ## The item's type to show to the player instead of the itemType
     description: string ## The description of the item
     reputation: ReputationRange ## The minumal reputation which is needed to buy that item
@@ -169,15 +169,15 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $itemAction & " item '" & $itemIndex & "', invalid value for item price.")
+    var valueIndex: Positive = 1
     for data in itemNode.findAll(tag = "data"):
-      item.value.add(y = try:
+      item.value[valueIndex] = try:
           data.attr(name = "value").parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $itemAction & " item '" & $itemIndex &
-                "', invalid value for item data."))
-    if item.value.len == 0:
-      item.value.add(y = 0)
+                "', invalid value for item data.")
+      valueIndex.inc
     attribute = itemNode.child(name = "description").innerText()
     if attribute.len() > 0:
       item.description = attribute
@@ -350,7 +350,7 @@ proc findItem*(inventory: Table[Positive, InventoryData];
   try:
     if protoIndex > 0:
       for index, item in inventory.pairs:
-        if item.protoIndex == protoIndex and itemsList[protoIndex].value[0] <= quality:
+        if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <= quality:
           if durability < ItemsDurability.high and item.durability == durability:
             return index
           else:
@@ -358,7 +358,7 @@ proc findItem*(inventory: Table[Positive, InventoryData];
     elif itemType.len > 0:
       for index, item in inventory.pairs:
         if itemsList[item.protoIndex].itemType == itemType and itemsList[
-            item.protoIndex].value[0] <= quality:
+            item.protoIndex].value[1] <= quality:
           if durability < ItemsDurability.high and item.durability == durability:
             return index
           else:
@@ -409,7 +409,7 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem.itemType = item.itemType.cstring
   adaItem.price = item.price.cint
   for index, item in item.value.pairs:
-    values[index] = item.cint
+    values[index - 1] = item.cint
   adaItem.value = values
   adaItem.showType = item.showType.cstring
   adaItem.description = item.description.cstring
