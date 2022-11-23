@@ -428,29 +428,6 @@ proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
       name: $name, durability: durability, price: 0), damageInfo == 1,
       toLower == 1).cstring
 
-proc getAdaItemsList(name: cstring; itemsList: var array[64,
-    cint]) {.sideEffect, raises: [], tags: [], exportc.} =
-  for i in 0..63:
-    itemsList[i] = 0
-  if name == "weapons":
-    for index, item in weaponsList.pairs:
-      itemsList[index] = item.cint
-  elif name == "shields":
-    for index, item in shieldsList.pairs:
-      itemsList[index] = item.cint
-  elif name == "headarmors":
-    for index, item in headArmorsList.pairs:
-      itemsList[index] = item.cint
-  elif name == "chestarmors":
-    for index, item in chestArmorsList.pairs:
-      itemsList[index] = item.cint
-  elif name == "legsarmors":
-    for index, item in legsArmorsList.pairs:
-      itemsList[index] = item.cint
-  elif name == "armsarmors":
-    for index, item in armsArmorsList.pairs:
-      itemsList[index] = item.cint
-
 proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return getItemChanceToDamage(itemData).cstring
