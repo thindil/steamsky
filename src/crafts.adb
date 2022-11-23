@@ -1060,8 +1060,8 @@ package body Crafts is
      (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
       use Tiny_String;
 
-      Item_Index: Objects_Container.Extended_Index;
-      Recipe_Name: Unbounded_String;
+      Item_Index: Objects_Container.Extended_Index := 0;
+      Recipe_Name: Unbounded_String := Null_Unbounded_String;
    begin
       Player_Ship.Modules(Workshop).Crafting_Amount := Amount;
       if Length(Source => Recipe_Index) > 6
