@@ -47,13 +47,13 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
       added = false
       for j in 0..<newIndexes.len:
         if itemsList[index].price < itemsList[newIndexes[j]].price and
-            itemsList[index].value[2] == factionsList[factionIndex].weaponSkill:
+            itemsList[index].value[3] == factionsList[factionIndex].weaponSkill:
           {.warning[UnsafeSetLen]: off.}
           newIndexes.insert(item = index, i = j)
           {.warning[UnsafeSetLen]: on.}
           added = true
           break
-      if not added and itemsList[index].value[2] == factionsList[
+      if not added and itemsList[index].value[3] == factionsList[
           factionIndex].weaponSkill:
         newIndexes.add(y = index)
     if newIndexes.len == 0:
@@ -63,7 +63,7 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
       maxIndex = newIndexes.len - 1
     while true:
       itemIndex = getRandom(min = 0, max = maxIndex)
-      if itemsList[newIndexes[itemIndex]].value[2] == factionsList[
+      if itemsList[newIndexes[itemIndex]].value[3] == factionsList[
           factionIndex].weaponSkill:
         break
   for index in itemsIndexes:
