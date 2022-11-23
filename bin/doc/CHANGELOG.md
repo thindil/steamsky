@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ## Fixed
 - Showing the destroyed ships in the game statistics
+- Crash on finished boarding combat
 
 ## [8.0.1] - 2022-11-20
 
