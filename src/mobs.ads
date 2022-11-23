@@ -187,8 +187,7 @@ package Mobs is
       return Objects_Container.Extended_Index with
       Pre =>
       (Highest_Level < 101 and Weapon_Skill_Level < 101 and
-       Factions_List.Contains(Key => Faction_Index)),
-      Test_Case => (Name => "Test_GetRandomItem", Mode => Nominal);
+       Factions_List.Contains(Key => Faction_Index));
       -- ****
 
 end Mobs;
