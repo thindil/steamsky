@@ -31,3 +31,4 @@ All notable changes to this project will be documented in this file.
   in the player's ship's cargo
 - Keyboard shortcuts for setting the player's ship's speed
 - Showing the destroyed ships in the game statistics
+- Crash on finished boarding combat
