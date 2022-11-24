@@ -19,13 +19,13 @@ with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings;
+with Crew;
+with Crew.Inventory;
+with Goals;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Crew;
-with Crew.Inventory;
 with Statistics;
-with Goals;
 with Trades;
 
 package body Crafts is
