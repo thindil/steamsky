@@ -38,6 +38,7 @@ type
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
+  SkillRange* = range[0..100] ## The range of skills levels
 
   ToolQuality = object
     ## FUNCTION
