@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[tables]
-import factions, game, utils
+import factions, game, items, utils
 
 
 type
@@ -27,6 +27,39 @@ type
     ##
     ## Possible equipment location for mobiles
     weapon, shield, helmet, torso, arms, legs, tool
+
+  CrewOrders = enum
+    pilot, engineer, gunner, repair, craft, upgrading, talk, heal, clean, rest,
+        defend, boarding, train
+
+  MobAttributeRecord = object
+    level: range[1..50]
+    experience: Natural
+
+  SkillInfo = object
+    index: Natural
+    level: SkillRange
+    experience: Natural
+
+  MemberData* = object
+    attributes: seq[MobAttributeRecord]
+    skills: seq[SkillInfo]
+    name: string
+    gender: char
+    health: SkillRange
+    tired: range[0..150]
+    hunger: SkillRange
+    thirst: SkillRange
+    order: CrewOrders
+    previousOrder: CrewOrders
+    orderTime: int
+    orders: array[1..12, Natural]
+    inventory: seq[InventoryData]
+    equipment: array[EquipmentLocations, Natural]
+    payment: AttributesArray
+    contractLength: int
+    morale: AttributesArray
+    loyalty: SkillRange
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
