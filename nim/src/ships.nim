@@ -71,8 +71,12 @@ type
       discard
 
   ShipRecord = object
-    modules: Table[Positive, ModuleData]
-    cargo: Table[Positive, InventoryData]
+    name: string
+    skyX: MapXRange
+    skyY: MapYRange
+    speed: ShipSpeed
+    modules: seq[ModuleData]
+    cargo: seq[InventoryData]
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
