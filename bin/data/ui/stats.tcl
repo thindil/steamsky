@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ SetScrollbarBindings $statsframe.right.killed \
 grid [ttk::frame $statsframe.right.killedframe] -sticky w
 grid [ttk::treeview $statsframe.right.killedframe.killedview -show headings \
    -columns [list name amount] -selectmode none \
-   -yscrollcommand [list $statsframe.left.killedframe.scrolly set]]
+   -yscrollcommand [list $statsframe.right.killedframe.scrolly set]]
 $statsframe.right.killedframe.killedview heading name -text {Name} \
    -command {SortKilledMobs 1}
 $statsframe.right.killedframe.killedview column name -width 250
