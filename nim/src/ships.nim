@@ -18,7 +18,61 @@
 {.used.}
 
 import std/tables
-import factions, game, utils
+import factions, game, items, utils
+
+type
+  ShipUpgrade = enum
+    none, durability, maxValue, value
+
+  ModuleType2 = enum
+    workshop, any, medicalRoom, trainingRoom, engine, cabin, cockpit, turret,
+        gun, cargoRoom, hull, armor, batteringRam, harpoonGun
+
+  ModuleData = object
+    name: string
+    protoIndex: Natural
+    weight: Natural
+    durability: Natural
+    maxDurability: Natural
+    owner: seq[Natural]
+    upgradeProgress: int
+    upgradeAction: ShipUpgrade
+    case mType: ModuleType2
+    of engine:
+      fuelUsage: Positive
+      power: Positive
+      disabled: bool
+    of cabin:
+      cleanliness: Natural
+      quality: Natural
+    of turret:
+      gunIndex: Natural
+    of gun:
+      damage: Positive
+      ammoIndex: Natural
+    of hull:
+      installedModules: Natural
+      maxModules: Positive
+    of workshop:
+      craftingIndex: string
+      craftingTime: Natural
+      craftingAmount: Natural
+    of trainingRoom:
+      trainedSkill: Natural
+    of batteringRam:
+      damage2: Positive
+      coolingDown: bool
+    of harpoonGun:
+      duration: Positive
+      harpoonIndex: Natural
+    of any:
+      data: array[1..3, int]
+    else:
+      discard
+
+  ShipRecord = object
+    modules: Table[Positive, ModuleData]
+    cargo: Table[Positive, InventoryData]
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
@@ -84,6 +138,6 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
 
 # Temporary code for interfacing with Ada
 
-proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [],
-    tags: [], exportc.} =
+proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
+    ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
