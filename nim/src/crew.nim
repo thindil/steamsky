@@ -21,11 +21,12 @@ import std/[tables]
 import factions, game, utils
 
 
-type EquipmentLocations* = enum
-    # FUNCTION
-    #
-    # Possible equipment location for mobiles
-  weapon, shield, helmet, torso, arms, legs, tool
+type
+  EquipmentLocations* = enum
+    ## FUNCTION
+    ##
+    ## Possible equipment location for mobiles
+    weapon, shield, helmet, torso, arms, legs, tool
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
