@@ -15,22 +15,25 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions; use Ada.Exceptions;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Ada.Exceptions;
+with Ada.Strings;
+with Ada.Strings.Fixed;
+with Interfaces.C.Strings;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Crew; use Crew;
-with Crew.Inventory; use Crew.Inventory;
-with Statistics; use Statistics;
-with Goals; use Goals;
-with Trades; use Trades;
+with Crew;
+with Crew.Inventory;
+with Statistics;
+with Goals;
+with Trades;
 
 package body Crafts is
 
    procedure Load_Recipes(File_Name: String) is
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Interfaces.C.Strings;
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
@@ -413,6 +416,8 @@ package body Crafts is
       -- Check for free space
       Check_For_Free_Space_Block :
       declare
+         use Trades;
+
          Space_Needed: Integer := 0;
       begin
          Count_Needed_Space_Loop :
@@ -447,6 +452,11 @@ package body Crafts is
    end Check_Recipe;
 
    procedure Manufacturing(Minutes: Positive) is
+      use Ada.Exceptions;
+      use Crew;
+      use Crew.Inventory;
+      use Goals;
+      use Statistics;
       use Tiny_String;
 
       Result_Amount, Crafted_Amount, Gained_Exp: Natural := 0;
