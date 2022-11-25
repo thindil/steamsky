@@ -60,6 +60,8 @@ type
     contractLength: int
     morale: AttributesArray
     loyalty: SkillRange
+    homeBase: BasesRange
+    faction: string
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
