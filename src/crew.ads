@@ -123,19 +123,20 @@ package Crew is
    -- SOURCE
    type Mob_Attributes is
      array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
-   -- ****
+     -- ****
 
-   -- ****s* Crew/Crew.Mob_Record
-   -- FUNCTION
-   -- Abstract record to store all common settings for mobs (crew, other mobs,
-   -- recruits, etc)
-   -- PARAMETERS
-   -- Attributes           - Levels and experience in attributes of the mob
-   -- Amount_Of_Attributes - The amount of attributes declared in the game
-   -- Amount_Of_Skills     - The amount of skills declared in the game
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
+     --## rule off TYPE_INITIAL_VALUES
+     -- ****s* Crew/Crew.Mob_Record
+     -- FUNCTION
+     -- Abstract record to store all common settings for mobs (crew, other mobs,
+     -- recruits, etc)
+     -- PARAMETERS
+     -- Attributes           - Levels and experience in attributes of the mob
+     -- Amount_Of_Attributes - The amount of attributes declared in the game
+     -- Amount_Of_Skills     - The amount of skills declared in the game
+     -- HISTORY
+     -- 6.5 - Added
+     -- SOURCE
    type Mob_Record
      (Amount_Of_Attributes: Attributes_Amount_Range;
       Amount_Of_Skills: Skills_Amount_Range)
@@ -197,6 +198,7 @@ package Crew is
       Faction: Tiny_String.Bounded_String;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****e* Crew/Crew.Crew_Order_Error
    -- FUNCTION
