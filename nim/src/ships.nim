@@ -89,13 +89,13 @@ type
     speed: ShipSpeed ## The current setting for the ship's speed
     modules: seq[ModuleData] ## The list of modules installed on the ship
     cargo: seq[InventoryData] ## The list of items in the ship's cargo
-    crew: seq[MemberData]
-    upgradeModule: Natural
-    destinationX: range[0..MapXRange.high]
-    destinationY: range[0..MapYRange.high]
-    repairModule: Natural
-    description: string
-    homeBase: Natural
+    crew: seq[MemberData] ## The list of the crew members of the ship
+    upgradeModule: int ## The index of the currently upgraded module
+    destinationX: range[0..MapXRange.high] ## The X position to which the ship goes
+    destinationY: range[0..MapYRange.high] ## The Y position to which the ship goes
+    repairModule: int ## The index of module which will be repaired as first
+    description: string ## The description of the ship
+    homeBase: Natural ## The index of the home base of the ship
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
