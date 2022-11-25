@@ -79,7 +79,7 @@ type
     else:
       discard
 
-  ShipRecord = object
+  ShipRecord* = object
     ## FUNCTION
     ##
     ## Used to store information about ships
