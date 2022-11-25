@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Showing the destroyed ships in the game statistics
 - Crash on finished boarding combat
 - Crash on entering the game statistics when there is a list of killed mobs
+- Starting ship for the Inquisition faction and Hunter career
 
 ## [8.0.1] - 2022-11-20
 
