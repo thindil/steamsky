@@ -18,7 +18,7 @@
 {.used.}
 
 import std/tables
-import factions, game, items, utils
+import crew, factions, game, items, utils
 
 type
   ShipUpgrade = enum
@@ -89,6 +89,13 @@ type
     speed: ShipSpeed ## The current setting for the ship's speed
     modules: seq[ModuleData] ## The list of modules installed on the ship
     cargo: seq[InventoryData] ## The list of items in the ship's cargo
+    crew: seq[MemberData]
+    upgradeModule: Natural
+    destinationX: range[0..MapXRange.high]
+    destinationY: range[0..MapYRange.high]
+    repairModule: Natural
+    description: string
+    homeBase: Natural
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
