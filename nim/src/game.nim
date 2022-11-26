@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
+import types
 
 type
   DateRecord* = object
@@ -109,6 +110,7 @@ var
   weaponType*: string ## The type of items used as weapon
   dodgeSkill*: Positive ## The index of dodge skill
   unarmedSkill*: Positive ## The index of unarmed combat skill
+  factionsList*: Table[string, FactionData] = initTable[string, FactionData]() ## The list of all available factions in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =

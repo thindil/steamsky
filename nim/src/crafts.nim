@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, shipmodules
+import game, log, shipmodules, types
 
 type
   CraftData = object

@@ -18,12 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import basestypes, careers, game, items, log
-
-var factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
-  ## FUNCTION
-  ##
-  ## The list of all available factions in the game
+import basestypes, careers, game, items, log, types
 
 proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =

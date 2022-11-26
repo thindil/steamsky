@@ -18,7 +18,7 @@
 {.used.}
 
 import std/tables
-import crafts, crew, factions, items, utils
+import crafts, crew, factions, game, items, types, utils
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,

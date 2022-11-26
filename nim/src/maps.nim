@@ -17,7 +17,7 @@
 
 {.used.}
 
-import game
+import types
 
 func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
     tags: [], exportc.} =

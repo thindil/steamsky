@@ -18,7 +18,7 @@
 {.used.}
 
 import std/tables
-import crew, factions, game, items, utils
+import crew, factions, game, items, types, utils
 
 type
   ShipUpgrade = enum

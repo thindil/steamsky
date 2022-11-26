@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[tables]
-import factions, game, items, utils
+import factions, game, items, utils, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
