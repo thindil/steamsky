@@ -317,6 +317,15 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $factionAction & " faction '" &
                 factionIndex & "', invalid value for base spawn chance.")
+      of "flag":
+        let factionFlag = childNode.attr(name = "name")
+        if childNode.attr(name = "action") == "remove":
+          for index, flag in faction.foodTypes.pairs:
+            if flag == factionFlag:
+              faction.flags.delete(i = index)
+              break
+        else:
+          faction.flags.add(y = factionFlag)
     if factionAction == DataAction.add:
       if faction.basesTypes.len() == 0:
         for key in basesTypesList.keys:
