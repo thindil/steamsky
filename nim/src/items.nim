@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[strutils, tables, xmlparser, xmltree]
-import config, crafts, game, log
+import config, crafts, game, log, ships
 
 type
   ObjectData* = object
@@ -33,22 +33,6 @@ type
     showType: string ## The item's type to show to the player instead of the itemType
     description: string ## The description of the item
     reputation: ReputationRange ## The minumal reputation which is needed to buy that item
-
-  ItemsDurability* = range[0..101]
-  ## FUNCTION
-  ##
-  ## Used to set items durability
-
-  InventoryData* = object
-    ## FUNCTION
-    ##
-    ## Used to store information about items in various inventories (cargo, crew
-    ## inventory, ect)
-    protoIndex*: Natural ## The index of the item's prototype
-    amount*: Positive ## The amount of the item in the inventory
-    name*: string ## The name of the item, if different than the default one
-    durability*: ItemsDurability ## The current durability of the item
-    price*: Natural ## The price for which the item was bought
 
 const defaultItemDurability*: ItemsDurability = 100
   ## FUNCTION
@@ -366,6 +350,9 @@ proc findItem*(inventory: Table[Positive, InventoryData];
   except KeyError:
     discard
   return 0
+
+proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural; skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
+  discard
 
 # Temporary code for interfacing with Ada
 

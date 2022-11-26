@@ -40,6 +40,7 @@ type
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   SkillRange* = range[0..100] ## The range of skills levels
   BasesRange* = range[1..1_024] ## The amount of bases in the game
+  ItemsDurability* = range[0..101] ## The range of the items durability
 
   ToolQuality = object
     ## FUNCTION
@@ -75,6 +76,17 @@ type
     ##
     ## Ships's state of speed, how much engines are used
     docked, full_Stop, quarter_Speed, half_Speed, full_Speed
+
+  InventoryData* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about items in various inventories (cargo, crew
+    ## inventory, ect)
+    protoIndex*: Natural ## The index of the item's prototype
+    amount*: Positive ## The amount of the item in the inventory
+    name*: string ## The name of the item, if different than the default one
+    durability*: ItemsDurability ## The current durability of the item
+    price*: Natural ## The price for which the item was bought
 
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
