@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-{.used.}
-
 import types
 
 func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],

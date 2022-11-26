@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-{.used.}
-
 import std/[strutils, tables, xmlparser, xmltree]
 import basestypes, careers, game, items, log, types
 
