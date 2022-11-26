@@ -71,14 +71,28 @@ package Crew is
       Default_Value => REST;
       -- ****
 
-      -- ****t* Crew/Crew.Equipment_Locations
+      -- ****d* Crew/Crew.Default_Crew_Order
       -- FUNCTION
-      -- The list of equipment locations
+      -- The default order for the crew members
       -- SOURCE
+   Default_Crew_Order: constant Crew_Orders := REST;
+   -- ****
+
+   -- ****t* Crew/Crew.Equipment_Locations
+   -- FUNCTION
+   -- The list of equipment locations
+   -- SOURCE
    type Equipment_Locations is
      (WEAPON, SHIELD, HELMET, TORSO, ARMS, LEGS, TOOL) with
       Default_Value => WEAPON;
       -- ****
+
+      -- ****d* Crew/Crew.Default_Equipment_Location
+      -- FUNCTION
+      -- The default location for an equipment
+      -- SOURCE
+   Default_Equipment_Location: constant Equipment_Locations := WEAPON;
+   -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION
@@ -88,15 +102,22 @@ package Crew is
       Default_Component_Value => 0;
       -- ****
 
-      -- ****s* Crew/Crew.Mob_Attribute_Record
+      -- ****d* Crew/Crew.Empty_Equipment_Array
       -- FUNCTION
-      -- Used to store the attributes of mobs
-      -- PARAMETERS
-      -- Level      - The level of the attribute
-      -- Experience - The experience amount in the attribute
-      -- HISTORY
-      -- 6.6 - Added
+      -- The default empty equipment array
       -- SOURCE
+   Empty_Equipment_Array: constant Equipment_Array := Equipment_Array'(others => <>);
+   -- ****
+
+   -- ****s* Crew/Crew.Mob_Attribute_Record
+   -- FUNCTION
+   -- Used to store the attributes of mobs
+   -- PARAMETERS
+   -- Level      - The level of the attribute
+   -- Experience - The experience amount in the attribute
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
    type Mob_Attribute_Record is record
       Level: Positive range 1 .. 50 := 1;
       Experience: Natural := 0;
