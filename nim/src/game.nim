@@ -34,8 +34,6 @@ type
     # Possible actions to do when loading game data
     add, update, remove
 
-  ReputationRange* = range[-100..100] ## The range of possible reputation levels
-
   ToolQuality = object
     ## FUNCTION
     ##

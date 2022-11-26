@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
+
 type
   ShipUpgrade = enum
     ## FUNCTION
@@ -48,12 +50,21 @@ type
     ## Possible equipment location for mobiles
     weapon, shield, helmet, torso, arms, legs, tool
 
+  NamesTypes* = enum
+    ## FUNCTION
+    ##
+    ## The type of the faction names, normal, based on syllables or robotic,
+    ## based on random letters and numbers
+    normal, robotic
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
   SkillRange* = range[0..100] ## The range of skills levels
   AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   BasesRange* = range[1..1_024] ## The amount of bases in the game
+  ReputationRange* = range[-100..100] ## The range of possible reputation levels
+
 
   ModuleData* = object
     ## FUNCTION
@@ -168,3 +179,49 @@ type
     repairModule: int ## The index of module which will be repaired as first
     description: string ## The description of the ship
     homeBase: Natural ## The index of the home base of the ship
+
+  ReputationRanges = object
+    ## FUNCTION
+    ##
+    ## Used to store reputation ranges for relation with other factions
+    min: ReputationRange ## Minimal reputation with the selected faction
+    max: ReputationRange ## Maximal reputation with the selected faction
+
+  RelationsData = object
+    ## FUNCTION
+    ##
+    ## Used to store data about relation with other faction
+    reputation: ReputationRanges ## Values of min and max reputation with the faction
+    friendly: bool ## If true, the selected faction is friendly towards the faction
+
+  CareerData = object
+    ## FUNCTION
+    ##
+    ## Used to store data about careers available for the faction
+    shipIndex: Positive ## The index of the starting ship prototype for the career
+    playerIndex: string ## The index of the starting mob prototype as the player character
+    description: string ## The description of the career
+    name: string ## The name of the career
+
+  FactionData* = object
+    ## FUNCTION
+    ##
+    ## Used to store data about the selected faction
+    name*: string ## The name of the faction
+    memberName: string ## The name of members of the faction
+    pluralMemberName: string ## The name for plural amount of members of the faction
+    spawnChance: Natural ## The chance of the spawn for a base of the selected faction
+    population: AttributesArray ## The min and max population for new bases of the faction
+    namesType*: NamesTypes ## The type of names for the mobs, bases and ships of the faction
+    relations: Table[string, RelationsData] ## The faction's relations with other factions
+    description: string ## The description of the faction
+    foodTypes: seq[string] ## The types of items used as food for the faction's members
+    drinksTypes: seq[string] ## The types of items used as drinks for the faction's members
+    healingTools: string ## The type of items used as healing tools for the faction's members
+    healingSkill: Natural ## The skill used as healing skill for the faction's members
+    flags: seq[string] ## Various flags set for the faction
+    careers: Table[string, CareerData] ## The list of available careers for the faction
+    baseIcon: Natural ## The icon used as icon for the faction's bases on the map
+    basesTypes: Table[string, Positive] ## The list of available bases types for the faction
+    weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
+
