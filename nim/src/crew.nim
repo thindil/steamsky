@@ -20,61 +20,6 @@
 import std/[tables]
 import factions, game, items, utils
 
-
-type
-  EquipmentLocations* = enum
-    ## FUNCTION
-    ##
-    ## Possible equipment location for mobiles
-    weapon, shield, helmet, torso, arms, legs, tool
-
-  CrewOrders = enum
-    ## FUNCTION
-    ##
-    ## Possible orders for ships' crew members
-    pilot, engineer, gunner, repair, craft, upgrading, talk, heal, clean, rest,
-        defend, boarding, train
-
-  MobAttributeRecord = object
-    ## FUNCTION
-    ##
-    ## Used to store information about the crew member's attributes
-    level: range[1..50] ## The level of the attribute
-    experience: Natural ## The amount of experience in the attribute
-
-  SkillInfo = object
-    ## FUNCTION
-    ##
-    ## Used to store information about the crew member's skills
-    index: Natural ## The index of the skill
-    level: SkillRange ## The level of the skill
-    experience: Natural ## The amount of the experience in the skill
-
-  MemberData* = object
-    ## FUNCTION
-    ##
-    ## Used to store information about the crew member
-    attributes: seq[MobAttributeRecord] ## The member's attributes
-    skills: seq[SkillInfo] ## The member's skills
-    name: string ## The member's name
-    gender: char ## The member's gender
-    health: SkillRange ## The member's health points
-    tired: range[0..150] ## The member's tiredness level
-    hunger: SkillRange ## The member's hunger level
-    thirst: SkillRange ## The member's thirst level
-    order: CrewOrders ## The current order of the member
-    previousOrder: CrewOrders ## The previous order of the member
-    orderTime: int ## The amount of minutes to next check in the order
-    orders: array[1..12, Natural] ## The orders priorities for the member
-    inventory: seq[InventoryData] ## The inventory o the member
-    equipment: array[EquipmentLocations, Natural] ## The equipment of the member
-    payment: AttributesArray ## The payment information for the member
-    contractLength: int ## The length of the contract with the member
-    morale: AttributesArray ## The morale information for the member
-    loyalty: SkillRange ## The loyalty level of the member
-    homeBase: BasesRange ## The index of the home base
-    faction: string ## The faction index to which the member belongs
-
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
   ## FUNCTION

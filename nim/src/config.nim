@@ -18,7 +18,7 @@
 {.used.}
 
 import std/[parsecfg, streams, strutils]
-import game
+import game, types
 
 type
   AutoMoveBreak* = enum
