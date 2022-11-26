@@ -65,7 +65,6 @@ type
   BasesRange* = range[1..1_024] ## The amount of bases in the game
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
 
-
   ModuleData* = object
     ## FUNCTION
     ##
@@ -141,26 +140,26 @@ type
     ## FUNCTION
     ##
     ## Used to store information about the crew member
-    attributes: seq[MobAttributeRecord] ## The member's attributes
-    skills: seq[SkillInfo] ## The member's skills
-    name: string ## The member's name
-    gender: char ## The member's gender
-    health: SkillRange ## The member's health points
-    tired: range[0..150] ## The member's tiredness level
-    hunger: SkillRange ## The member's hunger level
-    thirst: SkillRange ## The member's thirst level
-    order: CrewOrders ## The current order of the member
-    previousOrder: CrewOrders ## The previous order of the member
-    orderTime: int ## The amount of minutes to next check in the order
-    orders: array[1..12, Natural] ## The orders priorities for the member
-    inventory: seq[InventoryData] ## The inventory o the member
-    equipment: array[EquipmentLocations, Natural] ## The equipment of the member
-    payment: AttributesArray ## The payment information for the member
-    contractLength: int ## The length of the contract with the member
-    morale: AttributesArray ## The morale information for the member
-    loyalty: SkillRange ## The loyalty level of the member
-    homeBase: BasesRange ## The index of the home base
-    faction: string ## The faction index to which the member belongs
+    attributes*: seq[MobAttributeRecord] ## The member's attributes
+    skills*: seq[SkillInfo] ## The member's skills
+    name*: string ## The member's name
+    gender*: char ## The member's gender
+    health*: SkillRange ## The member's health points
+    tired*: range[0..150] ## The member's tiredness level
+    hunger*: SkillRange ## The member's hunger level
+    thirst*: SkillRange ## The member's thirst level
+    order*: CrewOrders ## The current order of the member
+    previousOrder*: CrewOrders ## The previous order of the member
+    orderTime*: int ## The amount of minutes to next check in the order
+    orders*: array[1..12, Natural] ## The orders priorities for the member
+    inventory*: seq[InventoryData] ## The inventory o the member
+    equipment*: array[EquipmentLocations, Natural] ## The equipment of the member
+    payment*: AttributesArray ## The payment information for the member
+    contractLength*: int ## The length of the contract with the member
+    morale*: AttributesArray ## The morale information for the member
+    loyalty*: SkillRange ## The loyalty level of the member
+    homeBase*: BasesRange ## The index of the home base
+    faction*: string ## The faction index to which the member belongs
 
   ShipRecord* = object
     ## FUNCTION
@@ -180,48 +179,48 @@ type
     description: string ## The description of the ship
     homeBase: Natural ## The index of the home base of the ship
 
-  ReputationRanges = object
+  ReputationRanges* = object
     ## FUNCTION
     ##
     ## Used to store reputation ranges for relation with other factions
-    min: ReputationRange ## Minimal reputation with the selected faction
-    max: ReputationRange ## Maximal reputation with the selected faction
+    min*: ReputationRange ## Minimal reputation with the selected faction
+    max*: ReputationRange ## Maximal reputation with the selected faction
 
-  RelationsData = object
+  RelationsData* = object
     ## FUNCTION
     ##
     ## Used to store data about relation with other faction
-    reputation: ReputationRanges ## Values of min and max reputation with the faction
-    friendly: bool ## If true, the selected faction is friendly towards the faction
+    reputation*: ReputationRanges ## Values of min and max reputation with the faction
+    friendly*: bool ## If true, the selected faction is friendly towards the faction
 
-  CareerData = object
+  CareerData* = object
     ## FUNCTION
     ##
     ## Used to store data about careers available for the faction
-    shipIndex: Positive ## The index of the starting ship prototype for the career
-    playerIndex: string ## The index of the starting mob prototype as the player character
-    description: string ## The description of the career
-    name: string ## The name of the career
+    shipIndex*: Positive ## The index of the starting ship prototype for the career
+    playerIndex*: string ## The index of the starting mob prototype as the player character
+    description*: string ## The description of the career
+    name*: string ## The name of the career
 
   FactionData* = object
     ## FUNCTION
     ##
     ## Used to store data about the selected faction
     name*: string ## The name of the faction
-    memberName: string ## The name of members of the faction
-    pluralMemberName: string ## The name for plural amount of members of the faction
-    spawnChance: Natural ## The chance of the spawn for a base of the selected faction
-    population: AttributesArray ## The min and max population for new bases of the faction
+    memberName*: string ## The name of members of the faction
+    pluralMemberName*: string ## The name for plural amount of members of the faction
+    spawnChance*: Natural ## The chance of the spawn for a base of the selected faction
+    population*: AttributesArray ## The min and max population for new bases of the faction
     namesType*: NamesTypes ## The type of names for the mobs, bases and ships of the faction
-    relations: Table[string, RelationsData] ## The faction's relations with other factions
-    description: string ## The description of the faction
-    foodTypes: seq[string] ## The types of items used as food for the faction's members
-    drinksTypes: seq[string] ## The types of items used as drinks for the faction's members
-    healingTools: string ## The type of items used as healing tools for the faction's members
-    healingSkill: Natural ## The skill used as healing skill for the faction's members
-    flags: seq[string] ## Various flags set for the faction
-    careers: Table[string, CareerData] ## The list of available careers for the faction
-    baseIcon: Natural ## The icon used as icon for the faction's bases on the map
-    basesTypes: Table[string, Positive] ## The list of available bases types for the faction
+    relations*: Table[string, RelationsData] ## The faction's relations with other factions
+    description*: string ## The description of the faction
+    foodTypes*: seq[string] ## The types of items used as food for the faction's members
+    drinksTypes*: seq[string] ## The types of items used as drinks for the faction's members
+    healingTools*: string ## The type of items used as healing tools for the faction's members
+    healingSkill*: Natural ## The skill used as healing skill for the faction's members
+    flags*: seq[string] ## Various flags set for the faction
+    careers*: Table[string, CareerData] ## The list of available careers for the faction
+    baseIcon*: Natural ## The icon used as icon for the faction's bases on the map
+    basesTypes*: Table[string, Positive] ## The list of available bases types for the faction
     weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
 
