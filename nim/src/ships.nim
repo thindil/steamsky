@@ -95,6 +95,8 @@ type
     description: string ## The description of the ship
     homeBase: Natural ## The index of the home base of the ship
 
+var playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
+
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
   ##
@@ -159,6 +161,31 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaShipData = object
+    name: cstring
+    skyX: cint
+    skyY: cint
+    speed: cint
+    upgradeModule: cint
+    destinationX: cint
+    destinationY: cint
+    repairModule: cint
+    description: cstring
+    homeBase: cint
+
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
+
+proc getAdaPlayerShip(shipData: AdaShipData) {.exportc.} =
+  playerShip.name = $shipData.name
+  playerShip.skyX = shipData.skyX
+  playerShip.skyY = shipData.skyY
+  playerShip.speed = shipData.speed.ShipSpeed
+  playerShip.upgradeModule = shipData.upgradeModule
+  playerShip.destinationX = shipData.destinationX
+  playerShip.destinationY = shipData.destinationY
+  playerShip.repairModule = shipData.repairModule
+  playerShip.description = $shipData.description
+  playerShip.homeBase = shipData.homeBase
