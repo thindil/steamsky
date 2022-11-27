@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.1] - 2022-11-27
 
 ### Added
 - Ability to clear numeric fields (GitHub issue #95)
