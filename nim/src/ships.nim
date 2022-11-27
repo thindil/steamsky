@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, factions, game, items, types, utils
+import game, types, utils
 
 type
   ShipUpgrade = enum
