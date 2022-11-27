@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[config, items]
+import ../../src/[config, items, types]
 
 loadItems("../bin/data/items.dat")
 

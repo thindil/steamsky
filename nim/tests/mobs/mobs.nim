@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, crew, factions, game, items, mobs]
+import ../../src/[careers, factions, game, items, mobs, types]
 
 loadData("../bin/data/game.dat")
 loadItems("../bin/data/items.dat")
