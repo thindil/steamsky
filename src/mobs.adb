@@ -695,7 +695,14 @@ package body Mobs is
       Mob.Thirst := 0;
       Mob.Payment := (1 => 20, 2 => 0);
       Mob.Contract_Length := -1;
-      Mob.Morale := (1 => 50, 2 => 0);
+      Mob.Morale :=
+        (1 =>
+           (if
+              Factions_List(Mob.Faction).Flags.Contains
+                (Item => To_Unbounded_String(Source => "fanaticism"))
+            then 100
+            else 50),
+         2 => 0);
       Mob.Loyalty := 100;
       Mob.Home_Base := 1;
       return Mob;
