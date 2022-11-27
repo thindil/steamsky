@@ -132,19 +132,21 @@ package Crew is
    -- SOURCE
    Empty_Attributes: constant Mob_Attribute_Record :=
      Mob_Attribute_Record'(others => <>);
-   -- ****
+     -- ****
 
-   -- ****t* Crew/Crew.Mob_Attributes
-   -- FUNCTION
-   -- Array used to store attributes of the mobs (crew, other mobs, recruits,
-   -- etc).
-   -- HISTORY
-   -- 6.5 - Added
-   -- 6.6 - Changed from array of array to array of record
-   -- SOURCE
+     --## rule off TYPE_INITIAL_VALUES
+     -- ****t* Crew/Crew.Mob_Attributes
+     -- FUNCTION
+     -- Array used to store attributes of the mobs (crew, other mobs, recruits,
+     -- etc).
+     -- HISTORY
+     -- 6.5 - Added
+     -- 6.6 - Changed from array of array to array of record
+     -- SOURCE
    type Mob_Attributes is
      array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
      -- ****
+     --## rule on TYPE_INITIAL_VALUES
 
      --## rule off TYPE_INITIAL_VALUES
      -- ****s* Crew/Crew.Mob_Record
