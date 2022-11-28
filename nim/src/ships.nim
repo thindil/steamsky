@@ -213,6 +213,32 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
       module = ModuleData(mType: engine,
           fuelUsage: adaModule.data[1], power: adaModule.data[2],
           disabled: adaModule.data[3] == 1)
+    of cabin:
+      module = ModuleData(mType: cabin, cleanliness: adaModule.data[1],
+          quality: adaModule.data[2])
+    of turret:
+      module = ModuleData(mType: turret, gunIndex: adaModule.data[1])
+    of gun:
+      module = ModuleData(mType: gun, damage: adaModule.data[1],
+          ammoIndex: adaModule.data[2])
+    of hull:
+      module = ModuleData(mType: hull, installedModules: adaModule.data[1],
+          maxModules: adaModule.data[2])
+    of workshop:
+      module = ModuleData(mType: workshop,
+          craftingIndex: $adaModule.data[1], craftingTime: adaModule.data[2],
+              craftingAmount: adaModule.data[3])
+    of trainingRoom:
+      module = ModuleData(mType: trainingRoom, trainedSkill: adaModule.data[1])
+    of batteringRam:
+      module = ModuleData(mType: batteringRam, damage2: adaModule.data[1],
+          coolingDown: adaModule.data[2] == 1)
+    of harpoonGun:
+      module = ModuleData(mType: harpoonGun, duration: adaModule.data[1],
+          harpoonIndex: adaModule.data[2])
+    of any:
+      module = ModuleData(mType: any, data: [1: adaModule.data[1].int,
+          2: adaModule.data[2].int, 3: adaModule.data[3].int])
     else:
       discard
     module.name = $adaModule.name
