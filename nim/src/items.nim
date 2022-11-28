@@ -365,13 +365,6 @@ type
     description: cstring
     reputation: cint
 
-  AdaInventoryData = object
-    protoIndex: cint
-    amount: cint
-    name: cstring
-    durability: cint
-    price: cint
-
 proc loadAdaItems(fileName: cstring): cstring {.sideEffect,
     raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadItems(fileName = $fileName)

@@ -224,3 +224,12 @@ type
     basesTypes*: Table[string, Positive] ## The list of available bases types for the faction
     weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
 
+# Temporary code for interfacing with Ada
+
+  AdaInventoryData* = object
+    protoIndex*: cint
+    amount*: cint
+    name*: cstring
+    durability*: cint
+    price*: cint
+
