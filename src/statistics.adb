@@ -160,7 +160,7 @@ package body Statistics is
       Update_Killed_Mobs_Loop :
       for KilledMob of Game_Stats.Killed_Mobs loop
          if To_Lower(Item => To_String(Source => KilledMob.Index)) =
-           To_String(Source => Fraction_Name) then
+           To_Lower(Item => To_String(Source => Fraction_Name)) then
             KilledMob.Amount := KilledMob.Amount + 1;
             Updated := True;
             exit Update_Killed_Mobs_Loop;
