@@ -253,3 +253,12 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
         break
       module.owner.add(y = owner)
     playerShip.modules.add(y = module)
+
+proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData]) {.exportc.} =
+  playerShip.cargo = @[]
+  for adaItem in cargo:
+    if adaItem.protoIndex == 0:
+      return
+    playerShip.cargo.add(y = InventoryData(protoIndex: adaItem.protoIndex,
+        amount: adaItem.amount, name: $adaItem.name,
+        durability: adaItem.durability, price: adaItem.price))
