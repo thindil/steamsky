@@ -38,7 +38,9 @@ package body Crew is
       Crew_Index: Positive) is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
+      --## rule on IMPROPER_INITIALIZATION
       Attribute_Index: constant Skills_Container.Extended_Index :=
         Count_Type
           (SkillsData_Container.Element
