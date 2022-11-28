@@ -37,7 +37,7 @@ type
     ## Ships's state of speed, how much engines are used
     docked, full_Stop, quarter_Speed, half_Speed, full_Speed
 
-  CrewOrders = enum
+  CrewOrders* = enum
     ## FUNCTION
     ##
     ## Possible orders for ships' crew members
