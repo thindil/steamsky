@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Starting ship for the Inquisition faction and Hunter career
 - Reading factions' flags from files
 - Faction with `fanaticism` flag should start the game with maxed morale
+- Counting the amount of enemies killed in boarding combat
 
 ## [8.0.1] - 2022-11-20
 
