@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Counting the amount of enemies killed in boarding combat
+
 ## [8.1] - 2022-11-27
 
 ### Added
