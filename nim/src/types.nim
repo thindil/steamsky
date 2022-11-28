@@ -61,7 +61,7 @@ type
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
   SkillRange* = range[0..100] ## The range of skills levels
-  AttributesArray* = array[1 .. 2, Natural] ## 1 - Attribute level, 2 - Attribute experience
+  AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   BasesRange* = range[1..1_024] ## The amount of bases in the game
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
 
