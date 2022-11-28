@@ -174,6 +174,18 @@ type
     description: cstring
     homeBase: cint
 
+  AdaModuleData = object
+    name: cstring
+    protoIndex: cint
+    weight: cint
+    durability: cint
+    maxDurability: cint
+    owner: array[1..10, cint]
+    upgradeProgress: cint
+    upgradeAction: cint
+    mType: cint
+    data: array[1..3, cint]
+
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
@@ -189,3 +201,29 @@ proc getAdaPlayerShip(shipData: AdaShipData) {.exportc.} =
   playerShip.repairModule = shipData.repairModule
   playerShip.description = $shipData.description
   playerShip.homeBase = shipData.homeBase
+
+proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
+  playerShip.modules = @[]
+  for adaModule in modules:
+    if adaModule.mType == ModuleType2.any.ord:
+      return
+    var module: ModuleData
+    case adaModule.mType.ModuleType2
+    of engine:
+      module = ModuleData(mType: engine,
+          fuelUsage: adaModule.data[1], power: adaModule.data[2],
+          disabled: adaModule.data[3] == 1)
+    else:
+      discard
+    module.name = $adaModule.name
+    module.protoIndex = adaModule.protoIndex
+    module.weight = adaModule.weight
+    module.durability = adaModule.durability
+    module.maxDurability = adaModule.maxDurability
+    module.upgradeProgress = adaModule.upgradeProgress
+    module.upgradeAction = adaModule.upgradeAction.ShipUpgrade
+    for owner in adaModule.owner:
+      if owner == 0:
+        break
+      module.owner.add(y = owner)
+    playerShip.modules.add(y = module)
