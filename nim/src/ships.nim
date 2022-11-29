@@ -186,6 +186,25 @@ type
     mType: cint
     data: array[1..3, cint]
 
+  AdaMemberData = object
+    name: cstring
+    gender: char
+    health: cint
+    tired: cint
+    hunger: cint
+    thirst: cint
+    order: cint
+    previousOrder: cint
+    orderTime: cint
+    orders: array[1..12, cint]
+    equipment: array[0..6, cint]
+    payment: array[1..2, cint]
+    contractLength: cint
+    morale: array[1..2, cint]
+    loyalty: cint
+    homeBase: cint
+    faction: cstring
+
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
@@ -262,3 +281,17 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData]) {.exportc.} =
     playerShip.cargo.add(y = InventoryData(protoIndex: adaItem.protoIndex,
         amount: adaItem.amount, name: $adaItem.name,
         durability: adaItem.durability, price: adaItem.price))
+
+proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
+  playerShip.crew = @[]
+  for adaMember in crew:
+    if adaMember.name.len == 0:
+      return
+    var member = MemberData(name: $adaMember.name, gender: adaMember.gender,
+        health: adaMember.health, tired: adaMember.tired,
+        hunger: adaMember.hunger, thirst: adaMember.thirst,
+        order: adaMember.order.CrewOrders,
+        previousOrder: adaMember.previousOrder.CrewOrders,
+        contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
+        homeBase: adaMember.homeBase, faction: $adaMember.faction)
+    playerShip.crew.add(y = member)
