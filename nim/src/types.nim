@@ -18,13 +18,13 @@
 import std/tables
 
 type
-  ShipUpgrade = enum
+  ShipUpgrade* = enum
     ## FUNCTION
     ##
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
 
-  ModuleType2 = enum
+  ModuleType2* = enum
     ## FUNCTION
     ##
     ## Available types of the ships' modules
