@@ -69,44 +69,44 @@ type
     ## FUNCTION
     ##
     ## Used to store information about ships' modules
-    name: string ## The name of the module
-    protoIndex: Natural ## The index of the prototype module
-    weight: Natural ## The weight of the module
-    durability: Natural ## The current durability of the module
-    maxDurability: Natural ## The max durability of the module
-    owner: seq[Natural] ## The list of owners of the module
-    upgradeProgress: int ## The upgrade progess of the module
-    upgradeAction: ShipUpgrade ## The current upgrade type for the module
-    case mType: ModuleType2
+    name*: string ## The name of the module
+    protoIndex*: Natural ## The index of the prototype module
+    weight*: Natural ## The weight of the module
+    durability*: Natural ## The current durability of the module
+    maxDurability*: Natural ## The max durability of the module
+    owner*: seq[Natural] ## The list of owners of the module
+    upgradeProgress*: int ## The upgrade progess of the module
+    upgradeAction*: ShipUpgrade ## The current upgrade type for the module
+    case mType*: ModuleType2
     of engine:
-      fuelUsage: Positive ## The fuel usage for engines modules
-      power: Positive ## The power of the engines modules
-      disabled: bool ## If true, the engine is disabled
+      fuelUsage*: Positive ## The fuel usage for engines modules
+      power*: Positive ## The power of the engines modules
+      disabled*: bool ## If true, the engine is disabled
     of cabin:
-      cleanliness: Natural ## The cleanliness level of the cabin
-      quality: Natural ## The quality level of the cabin
+      cleanliness*: Natural ## The cleanliness level of the cabin
+      quality*: Natural ## The quality level of the cabin
     of turret:
-      gunIndex: Natural ## The index of the module used as gun in the turret
+      gunIndex*: Natural ## The index of the module used as gun in the turret
     of gun:
-      damage: Positive ## The damage of the gun
-      ammoIndex: Natural ## The index of item from ship's cargo used as ammunition
+      damage*: Positive ## The damage of the gun
+      ammoIndex*: Natural ## The index of item from ship's cargo used as ammunition
     of hull:
-      installedModules: Natural ## The amount of installed modules in the hull
-      maxModules: Positive ## The max amount of modules which the hull can hold
+      installedModules*: Natural ## The amount of installed modules in the hull
+      maxModules*: Positive ## The max amount of modules which the hull can hold
     of workshop:
-      craftingIndex: string ## The index of currently crafted recipe
-      craftingTime: Natural ## The amount of time needed to finish the order
-      craftingAmount: Natural ## How many times repeat the crafting order
+      craftingIndex*: string ## The index of currently crafted recipe
+      craftingTime*: Natural ## The amount of time needed to finish the order
+      craftingAmount*: Natural ## How many times repeat the crafting order
     of trainingRoom:
-      trainedSkill: Natural ## The index of trained skill
+      trainedSkill*: Natural ## The index of trained skill
     of batteringRam:
-      damage2: Positive ## The damage of the battering ram
-      coolingDown: bool ## If true, the battering ram can't attack now
+      damage2*: Positive ## The damage of the battering ram
+      coolingDown*: bool ## If true, the battering ram can't attack now
     of harpoonGun:
-      duration: Positive ## The duration bonus of the harpoon gun
-      harpoonIndex: Natural ## The index of item from ship's cargo used as harpoon
+      duration*: Positive ## The duration bonus of the harpoon gun
+      harpoonIndex*: Natural ## The index of item from ship's cargo used as harpoon
     of any:
-      data: array[1..3, int] ## Various data for module, depends on module
+      data*: array[1..3, int] ## Various data for module, depends on module
     else:
       discard
 
