@@ -57,7 +57,7 @@ package body Crew is
          end if;
          Attribute_Exp := Attribute_To_Check.Experience + New_Amount;
          Attribute_Level := Attribute_To_Check.Level;
-         if Attribute_Exp >= (Attribute_Level * 250) then
+         if Attribute_Exp >= Attribute_Level * 250 then
             Attribute_Exp := Attribute_Exp - (Attribute_Level * 250);
             Attribute_Level := Attribute_Level + 1;
          end if;
