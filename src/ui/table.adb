@@ -43,7 +43,7 @@ package body Table is
       Y_Scroll: Ttk_Scrollbar;
       X_Scroll: Ttk_Scrollbar;
       Table: Table_Widget (Amount => Headers'Length);
-      X: Natural := 5;
+      X, Old_X: Natural := 5;
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
       Header_Id: Unbounded_String;
@@ -131,45 +131,56 @@ package body Table is
                  TagOrId =>
                    "header" & Trim(Source => Positive'Image(I), Side => Left)),
             Separators => " ");
-         X := Positive'Value(Slice(S => Tokens, Index => 3)) + 10;
+         Old_X := X - 5;
+         X := Positive'Value(Slice(S => Tokens, Index => 3)) + 5;
          Table.Columns_Width(I) :=
            X - Positive'Value(Slice(S => Tokens, Index => 1));
          if I = 1 then
             Table.Row_Height :=
               Positive'Value(Slice(S => Tokens, Index => 4)) + 5;
          end if;
+         Header_Id :=
+           To_Unbounded_String
+             (Source =>
+                Canvas_Create
+                  (Parent => Canvas, Child_Type => "rectangle",
+                   Options =>
+                     Trim(Source => Natural'Image(Old_X), Side => Left) &
+                     " 0" & Positive'Image(X - 2) &
+                     Positive'Image(Table.Row_Height - 3) & " -fill " &
+                     Style_Lookup
+                       (Name => "Table", Option => "-headerbackcolor") &
+                     " -outline " &
+                     Style_Lookup
+                       (Name => "Table", Option => "-headerbordercolor") &
+                     " -width 2 -tags [list headerback" &
+                     Trim(Source => Positive'Image(I), Side => Left) & "]"));
+         Lower
+           (CanvasWidget => Canvas,
+            TagOrId =>
+              "headerback" & Trim(Source => Positive'Image(I), Side => Left));
+         if Command'Length > 0 then
+            Bind
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Enter>",
+               Command => "{" & Canvas & " configure -cursor hand1}");
+            Bind
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Leave>",
+               Command => "{" & Canvas & " configure -cursor left_ptr}");
+            Bind
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
+         end if;
+         if Tooltip'Length > 0 then
+            Add
+              (Widget => Canvas, Message => Tooltip,
+               Options => "-item " & To_String(Source => Header_Id));
+         end if;
       end loop Create_Headers_Loop;
-      Header_Id :=
-        To_Unbounded_String
-          (Source =>
-             Canvas_Create
-               (Parent => Canvas, Child_Type => "rectangle",
-                Options =>
-                  "0 0" & Positive'Image(X) &
-                  Positive'Image(Table.Row_Height - 3) & " -fill " &
-                  Style_Lookup(Name => "Table", Option => "-headerbackcolor") &
-                  " -outline " &
-                  Style_Lookup(Name => "Table", Option => "-headerbordercolor") &
-                  " -width 2 -tags [list headerback]"));
-      Lower(CanvasWidget => Canvas, TagOrId => "headerback");
-      if Command'Length > 0 then
-         Bind
-           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
-            Sequence => "<Enter>",
-            Command => "{" & Canvas & " configure -cursor hand1}");
-         Bind
-           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
-            Sequence => "<Leave>",
-            Command => "{" & Canvas & " configure -cursor left_ptr}");
-         Bind
-           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
-            Sequence => "<Button-1>", Command => "{" & Command & " %x}");
-      end if;
-      if Tooltip'Length > 0 then
-         Add
-           (Widget => Canvas, Message => Tooltip,
-            Options => "-item " & To_String(Source => Header_Id));
-      end if;
       Table.Canvas := Canvas;
       Tcl_Eval
         (interp => Get_Context,
@@ -405,6 +416,7 @@ package body Table is
             Coordinates =>
               Trim(Source => Positive'Image(New_X), Side => Left) &
               Positive'Image(New_Y));
+         -- TODO: resize headerback
          Update_Rows_Loop :
          for Row in 1 .. Table.Row loop
             New_Y := New_Y + Table.Row_Height;
@@ -466,13 +478,6 @@ package body Table is
                  Slice(S => Tokens, Index => 3) & " - " &
                  Slice(S => Tokens, Index => 1) & " + 5]");
          end if;
-         Coords
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Coordinates =>
-              "0 0" &
-              Positive'Image
-                (Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
-              Positive'Image(Table.Row_Height - 3));
          New_Y := Table.Row_Height;
          Resize_Background_Loop :
          for Row in 1 .. Table.Row loop
@@ -759,18 +764,27 @@ package body Table is
                TagOrId =>
                  "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Button-1>", Command => "{" & Command & " %x}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Enter>",
+               Command => "{" & Table.Canvas & " configure -cursor hand1}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Leave>",
+               Command => "{" & Table.Canvas & " configure -cursor left_ptr}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end loop Update_Headers_Loop;
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Enter>",
-            Command => "{" & Table.Canvas & " configure -cursor hand1}");
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Leave>",
-            Command => "{" & Table.Canvas & " configure -cursor left_ptr}");
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Button-1>", Command => "{" & Command & " %x}");
       else
          Reset_Headers_Command_Loop :
          for I in Table.Columns_Width'Range loop
@@ -789,16 +803,25 @@ package body Table is
                TagOrId =>
                  "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Button-1>", Command => "{}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Enter>", Command => "{}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Leave>", Command => "{}");
+            Bind
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "headerback" &
+                 Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Button-1>", Command => "{}");
          end loop Reset_Headers_Command_Loop;
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Enter>", Command => "{}");
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Leave>", Command => "{}");
-         Bind
-           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Sequence => "<Button-1>", Command => "{}");
       end if;
    end Update_Headers_Command;
 
