@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run AdaControl - check names and parameters
       run: |
@@ -53,7 +53,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Build the program
       run: others/build.nims x86_64-linux-gnu
@@ -78,7 +78,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Build the program
       run: others/build.nims x86_64-windows
