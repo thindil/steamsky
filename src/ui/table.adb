@@ -404,6 +404,12 @@ package body Table is
       New_X: Natural := Table.Columns_Width(1) + 20;
       New_Y: Natural := 2;
    begin
+      Tag := To_Unbounded_String(Source => "headerback1");
+      Coords
+        (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+         Coordinates =>
+           "0 0" & Positive'Image(Table.Columns_Width(1) + 10) &
+           Positive'Image(Table.Row_Height - 3));
       Update_Columns_Loop :
       for Column in 2 .. Table.Amount loop
          Tag :=
@@ -416,7 +422,17 @@ package body Table is
             Coordinates =>
               Trim(Source => Positive'Image(New_X), Side => Left) &
               Positive'Image(New_Y));
-         -- TODO: resize headerback
+         Tag :=
+           To_Unbounded_String
+             (Source =>
+                "headerback" &
+                Trim(Source => Natural'Image(Column), Side => Left));
+         Coords
+           (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+            Coordinates =>
+              Trim(Source => Positive'Image(New_X - 10), Side => Left) & " 0" &
+              Positive'Image(New_X + Table.Columns_Width(Column) + 10) &
+              Positive'Image(Table.Row_Height - 3));
          Update_Rows_Loop :
          for Row in 1 .. Table.Row loop
             New_Y := New_Y + Table.Row_Height;
