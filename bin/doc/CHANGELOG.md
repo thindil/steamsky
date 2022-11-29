@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Changed
+- Updated look of in-game tables
+
 ### Fixed
 - Counting the amount of enemies killed in boarding combat
 
