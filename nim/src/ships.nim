@@ -294,4 +294,10 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
         previousOrder: adaMember.previousOrder.CrewOrders,
         contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
         homeBase: adaMember.homeBase, faction: $adaMember.faction)
+    for index, order in adaMember.orders.pairs:
+      member.orders[index] = order
+    for index, item in adaMember.equipment.pairs:
+      member.equipment[index.EquipmentLocations] = item
+    member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
+    member.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
     playerShip.crew.add(y = member)
