@@ -39,6 +39,10 @@ namespace eval ttk::theme::steamsky {
       -darkyellow        "#7d7800"
       -almostblackorange "#291913"
       -almostdarkorange  "#594634"
+      -red               "#ff0000"
+      -yellow            "#ffff00"
+      -green             "#4e9a06"
+      -cyan              "#00ffff"
    }
 
    #
@@ -213,7 +217,7 @@ namespace eval ttk::theme::steamsky {
       # Labels with red text
       ttk::style configure Headerred.TLabel -foreground red
       # Labels with green text
-      ttk::style configure Headergreen.TLabel -foreground green
+      ttk::style configure Headergreen.TLabel -foreground $colors(-green)
       # Labels with gray text
       ttk::style configure Gray.TLabel -foreground $colors(-gray)
       # Dialogs header label
@@ -226,7 +230,7 @@ namespace eval ttk::theme::steamsky {
          -troughcolor $colors(-almostblackred) \
          -bordercolor $colors(-darkorange) -borderwidth 0
       # Green horizontal progress bar
-      ttk::style configure green.Horizontal.TProgressbar -background green
+      ttk::style configure green.Horizontal.TProgressbar -background $colors(-green)
       # Blue horizontal progress bar
       ttk::style configure blue.Horizontal.TProgressbar \
          -background $colors(-blue)
@@ -241,7 +245,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure ProgressBar.TFrame -relief solid \
          -bordercolor $colors(-darkorange) -background $colors(-almostblackred)
       # Dual progressbar (like reputation in bases, positive values)
-      ttk::style configure GreenProgressBar.TFrame -background green
+      ttk::style configure GreenProgressBar.TFrame -background $colors(-green)
       # Dual progressbar (like reputation in bases, negative values)
       ttk::style configure RedProgressBar.TFrame -background red
 
@@ -360,7 +364,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure MapInfo.TLabel -background black
       ttk::style configure MapInfoRed.TLabel -background black -foreground red
       ttk::style configure MapInfoGreen.TLabel -background black \
-         -foreground green
+         -foreground $colors(-green)
       ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray) \
          -background black
 
