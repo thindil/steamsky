@@ -45,6 +45,11 @@ namespace eval ttk::theme::steamsky {
       -cyan              "#00ffff"
       -black             "#000000"
       -darkgreen         "#006400"
+      -darkgray          "#1f2223"
+      -lime              "#00ff00"
+      -darkcandyapple    "#a40000"
+      -darkred2          "#732727"
+      -lightgreen        "#73d216"
    }
 
    #
