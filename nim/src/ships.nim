@@ -18,83 +18,6 @@
 import std/tables
 import game, types, utils
 
-type
-  ShipUpgrade = enum
-    ## FUNCTION
-    ##
-    ## Available types of the player's ship's upgrades
-    none, durability, maxValue, value
-
-  ModuleType2 = enum
-    ## FUNCTION
-    ##
-    ## Available types of the ships' modules
-    workshop, any, medicalRoom, trainingRoom, engine, cabin, cockpit, turret,
-        gun, cargoRoom, hull, armor, batteringRam, harpoonGun
-
-  ModuleData = object
-    ## FUNCTION
-    ##
-    ## Used to store information about ships' modules
-    name: string ## The name of the module
-    protoIndex: Natural ## The index of the prototype module
-    weight: Natural ## The weight of the module
-    durability: Natural ## The current durability of the module
-    maxDurability: Natural ## The max durability of the module
-    owner: seq[Natural] ## The list of owners of the module
-    upgradeProgress: int ## The upgrade progess of the module
-    upgradeAction: ShipUpgrade ## The current upgrade type for the module
-    case mType: ModuleType2
-    of engine:
-      fuelUsage: Positive ## The fuel usage for engines modules
-      power: Positive ## The power of the engines modules
-      disabled: bool ## If true, the engine is disabled
-    of cabin:
-      cleanliness: Natural ## The cleanliness level of the cabin
-      quality: Natural ## The quality level of the cabin
-    of turret:
-      gunIndex: Natural ## The index of the module used as gun in the turret
-    of gun:
-      damage: Positive ## The damage of the gun
-      ammoIndex: Natural ## The index of item from ship's cargo used as ammunition
-    of hull:
-      installedModules: Natural ## The amount of installed modules in the hull
-      maxModules: Positive ## The max amount of modules which the hull can hold
-    of workshop:
-      craftingIndex: string ## The index of currently crafted recipe
-      craftingTime: Natural ## The amount of time needed to finish the order
-      craftingAmount: Natural ## How many times repeat the crafting order
-    of trainingRoom:
-      trainedSkill: Natural ## The index of trained skill
-    of batteringRam:
-      damage2: Positive ## The damage of the battering ram
-      coolingDown: bool ## If true, the battering ram can't attack now
-    of harpoonGun:
-      duration: Positive ## The duration bonus of the harpoon gun
-      harpoonIndex: Natural ## The index of item from ship's cargo used as harpoon
-    of any:
-      data: array[1..3, int] ## Various data for module, depends on module
-    else:
-      discard
-
-  ShipRecord* = object
-    ## FUNCTION
-    ##
-    ## Used to store information about ships
-    name: string ## The name of the ship
-    skyX: MapXRange ## The X position of the ship on the map
-    skyY: MapYRange ## The Y position of the ship on the map
-    speed: ShipSpeed ## The current setting for the ship's speed
-    modules: seq[ModuleData] ## The list of modules installed on the ship
-    cargo: seq[InventoryData] ## The list of items in the ship's cargo
-    crew: seq[MemberData] ## The list of the crew members of the ship
-    upgradeModule: int ## The index of the currently upgraded module
-    destinationX: range[0..MapXRange.high] ## The X position to which the ship goes
-    destinationY: range[0..MapYRange.high] ## The Y position to which the ship goes
-    repairModule: int ## The index of module which will be repaired as first
-    description: string ## The description of the ship
-    homeBase: Natural ## The index of the home base of the ship
-
 var playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
@@ -255,8 +178,8 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
     of harpoonGun:
       module = ModuleData(mType: harpoonGun, duration: adaModule.data[1],
           harpoonIndex: adaModule.data[2])
-    of any:
-      module = ModuleData(mType: any, data: [1: adaModule.data[1].int,
+    of ModuleType2.any:
+      module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[1].int,
           2: adaModule.data[2].int, 3: adaModule.data[3].int])
     else:
       discard
