@@ -193,12 +193,18 @@ pack [ttk::scrollbar .gameframe.paned.controls.messages.scroll -orient vertical 
    -fill y -padx {0 5} -pady 5
 set messagesview [text .gameframe.paned.controls.messages.view -wrap word \
    -yscrollcommand [list .gameframe.paned.controls.messages.scroll set]]
-$messagesview tag configure yellow -foreground yellow
-$messagesview tag configure green -foreground #4e9a06
-$messagesview tag configure red -foreground red
-$messagesview tag configure cyan -foreground cyan
-$messagesview tag configure blue -foreground #3465a4
-$messagesview tag configure gray -foreground {dim gray}
+$messagesview tag configure yellow -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-yellow)]
+$messagesview tag configure green -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-green)]
+$messagesview tag configure red -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-red)]
+$messagesview tag configure cyan -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-cyan)]
+$messagesview tag configure blue -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-blue)]
+$messagesview tag configure gray -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-gray)]
 pack $messagesview -side top -fill both -padx 5 -pady 5
 tooltip::tooltip $messagesview \
    "The last game messages. You can see more of them\nIn Menu->Last messages screen"
