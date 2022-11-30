@@ -46,7 +46,8 @@ set mapview [text .gameframe.paned.mapframe.map \
    -bg [set ttk::theme::[ttk::style theme use]::colors(-black)] -wrap none \
    -fg white -font MapFont -cursor crosshair -bd 0]
 grid $mapview -sticky nwes
-$mapview tag configure unvisited -background #1f2223
+$mapview tag configure unvisited -background \
+   [set ttk::theme::[ttk::style theme use]::colors(-darkgray)]
 $mapview tag configure yellow -foreground \
    [set ttk::theme::[ttk::style theme use]::colors(-yellow)]
 $mapview tag configure green -foreground \
@@ -55,11 +56,16 @@ $mapview tag configure red -foreground \
    [set ttk::theme::[ttk::style theme use]::colors(-red)]
 $mapview tag configure cyan -foreground \
    [set ttk::theme::[ttk::style theme use]::colors(-cyan)]
-$mapview tag configure lime -foreground lime
-$mapview tag configure red2 -foreground #a40000
-$mapview tag configure red3 -foreground #732727
-$mapview tag configure green2 -foreground #73d216
-$mapview tag configure gray -foreground #1f2223
+$mapview tag configure lime -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-lime)]
+$mapview tag configure red2 -foreground  \
+   [set ttk::theme::[ttk::style theme use]::colors(-darkcandyapple)]
+$mapview tag configure red3 -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-darkred2)]
+$mapview tag configure green2 -foreground  \
+   [set ttk::theme::[ttk::style theme use]::colors(-lightgreen)]
+$mapview tag configure gray -foreground \
+   [set ttk::theme::[ttk::style theme use]::colors(-darkgray)]
 $mapview tag configure black -foreground \
    [set ttk::theme::[ttk::style theme use]::colors(-black)]
 proc ValidateSpinbox {widget value button} {
