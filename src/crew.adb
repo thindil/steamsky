@@ -58,7 +58,9 @@ package body Crew is
          Attribute_Exp := Attribute_To_Check.Experience + New_Amount;
          Attribute_Level := Attribute_To_Check.Level;
          if Attribute_Exp >= Attribute_Level * 250 then
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Attribute_Exp := Attribute_Exp - (Attribute_Level * 250);
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             Attribute_Level := Attribute_Level + 1;
          end if;
          Attribute_To_Check.Level := Attribute_Level;
