@@ -62,7 +62,7 @@ jobs:
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
 
     - name: Upload the artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
          name: steamsky-development-linux.tar
          path: steamsky-development-linux.tar
