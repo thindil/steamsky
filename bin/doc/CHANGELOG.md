@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Added
+- Ability to set colors for various the game's elements, like the map,
+  messages, etc. in themes
+
 ## Changed
 - Updated look of in-game tables
 
