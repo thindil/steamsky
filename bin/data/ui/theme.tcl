@@ -383,6 +383,11 @@ namespace eval ttk::theme::steamsky {
       option add *Menu.relief raised
       option add *Menu.activeBorderWidth 0
 
+      # Messages colors
+      ttk::style configure Messages -yellow $colors(-yellow) \
+         -green $colors(-green) -red $colors(-red) -cyan $colors(-cyan) \
+         -blue $colors(-blue) -gray $colors(-gray)
+
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
