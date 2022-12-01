@@ -375,6 +375,14 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray) \
          -background $colors(-black)
 
+      # The map colors
+      ttk::style configure Map -unvisited $colors(-darkgray) \
+         -yellow $colors(-yellow) -green $colors(-green) -red $colors(-red) \
+         -cyan $colors(-cyan) -lime $colors(-lime) \
+         -red2 $colors(-darkcandyapple) -red3 $colors(-darkred2) \
+         -green2 $colors(-lightgreen) -gray $colors(-darkgray) \
+         -black $colors(-black)
+
       # Dialogs (like messages, move map options, etc)
       ttk::style configure Dialog.TFrame -relief solid \
          -bordercolor $colors(-darkorange)
