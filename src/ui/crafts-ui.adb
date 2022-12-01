@@ -1051,7 +1051,12 @@ package body Crafts.UI is
    begin
       Tag_Configure
         (TextWidget => Recipe_Text, TagName => "red",
-         Options => "-foreground red");
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (Get_Context,
+              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
+              "::colors(-red)"));
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>

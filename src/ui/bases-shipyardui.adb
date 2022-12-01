@@ -1641,10 +1641,20 @@ package body Bases.ShipyardUI is
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
-         Options => "-foreground red");
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (Get_Context,
+              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
+              "::colors(-red)"));
       Tag_Configure
         (TextWidget => Module_Text, TagName => "green",
-         Options => "-foreground green");
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (Get_Context,
+              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
+              "::colors(-green)"));
       Set_Module_Info(Installing => True);
       configure
         (Widgt => Module_Text,

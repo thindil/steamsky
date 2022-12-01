@@ -584,7 +584,12 @@ package body Ships.UI.Modules is
       end if;
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
-         Options => "-foreground red");
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (Get_Context,
+              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
+              "::colors(-red)"));
       Insert
         (TextWidget => Module_Text, Index => "end",
          Text =>
