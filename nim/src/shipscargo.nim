@@ -19,7 +19,7 @@ import items, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex,
-    price: Natural = 0) =
+    price: Natural = 0) {.sideEffect, raises: [], tags: [].} =
   var itemIndex: Natural = 0
   if protoIndex > 0 and cargoIndex == 0:
     for index, item in ship.cargo.pairs:
