@@ -41,12 +41,18 @@ tooltip::tooltip $messagesframe.options.delete {Clear all messages}
 grid [ttk::frame $messagesframe.list] -sticky nwes
 set messagesview2 [text $messagesframe.list.view -width 10 -height 10 \
    -yscrollcommand [list $messagesframe.list.scrolly set]]
-$messagesview2 tag configure yellow -foreground yellow
-$messagesview2 tag configure green -foreground #4e9a06
-$messagesview2 tag configure red -foreground red
-$messagesview2 tag configure cyan -foreground cyan
-$messagesview2 tag configure blue -foreground #3465a4
-$messagesview2 tag configure gray -foreground {dim gray}
+$messagesview2 tag configure yellow -foreground \
+   [ttk::style lookup Messages -yellow]
+$messagesview2 tag configure green -foreground \
+   [ttk::style lookup Messages -green]
+$messagesview2 tag configure red -foreground \
+   [ttk::style lookup Messages -red]
+$messagesview2 tag configure cyan -foreground \
+   [ttk::style lookup Messages -cyan]
+$messagesview2 tag configure blue -foreground \
+   [ttk::style lookup Messages -blue]
+$messagesview2 tag configure gray -foreground \
+   [ttk::style lookup Messages -gray]
 pack [ttk::scrollbar $messagesframe.list.scrolly -orient vertical \
    -command [list $messagesview2 yview]] -side right -fill y
 pack $messagesview2 -side top -fill both -expand true
