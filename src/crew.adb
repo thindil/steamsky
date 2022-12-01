@@ -69,6 +69,7 @@ package body Crew is
            Attribute_To_Check;
       end Gain_Exp_In_Attribute;
    begin
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       New_Amount :=
         (if
            Careers_List(Player_Career).Skills.Contains
@@ -82,8 +83,11 @@ package body Crew is
                             .Name)))
          then Amount + (Amount / 2)
          else Amount);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
+      --## rule off ASSIGNMENTS
       New_Amount :=
         Natural(Float(New_Amount) * Float(New_Game_Settings.Experience_Bonus));
+      --## rule on ASSIGNMENTS
       if New_Amount = 0 then
          return;
       end if;
