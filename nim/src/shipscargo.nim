@@ -20,6 +20,23 @@ import items, types
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex,
     price: Natural = 0) {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Updated the selected ship cargo, add or remove items to it
+  ##
+  ## PARAMETERS
+  ## * ship       - The ship which cargo will be updated
+  ## * protoIndex - The prototype index of the item which will be modified. Can
+  ##                be empty if cargoIndex is set
+  ## * amount     - The amount of the item to add or delete from the cargo
+  ## * durability - The durability of the item to modify. Can be empty
+  ## * cargoIndex - The ship cargo index of the item which will be modified. Can
+  ##                be empty if protoIndex is set
+  ## * price      - The price of the item which will be modified
+  ##
+  ## RETURNS
+  ##
+  ## The modified ship parameter
   var itemIndex: Natural = 0
   if protoIndex > 0 and cargoIndex == 0:
     for index, item in ship.cargo.pairs:
