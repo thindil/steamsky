@@ -86,7 +86,7 @@ package body Crew is
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       --## rule off ASSIGNMENTS
       New_Amount :=
-        Natural(Float(New_Amount) * Float(New_Game_Settings.Experience_Bonus));
+        Natural(Float(New_Amount) * New_Game_Settings.Experience_Bonus);
       --## rule on ASSIGNMENTS
       if New_Amount = 0 then
          return;
