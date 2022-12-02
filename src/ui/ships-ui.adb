@@ -95,13 +95,13 @@ package body Ships.UI is
              (pathName =>
                 Main_Paned &
                 ".shipinfoframe.general.canvas.frame.cancelpriority");
-         configure(Widgt => Button, options => "-image removeicon");
+         configure(Widgt => Button, options => "-image cancelicon");
          Button :=
            Get_Widget
              (pathName =>
                 Main_Paned &
                 ".shipinfoframe.general.canvas.frame.canceldestination");
-         configure(Widgt => Button, options => "-image removeicon");
+         configure(Widgt => Button, options => "-image cancelicon");
       elsif Winfo_Get(Widgt => Ship_Info_Frame, Info => "ismapped") = "1" and
         Argc = 1 then
          Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
