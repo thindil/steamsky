@@ -15,9 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import types
+import items, types
 
 proc updateInventory*(memberIndex: Positive; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
     price: Natural; ship: var ShipRecord) =
-    discard
+  var itemIndex: Natural = 0
+  if inventoryIndex == 0:
+    if durability > 0:
+      itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
+          protoIndex = protoIndex, durability = durability)
+    else:
+      itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
+          protoIndex = protoIndex)
+  else:
+    itemIndex = inventoryIndex
