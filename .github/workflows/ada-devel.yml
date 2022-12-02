@@ -27,7 +27,7 @@ jobs:
          cd ..
 
     - name: Upload the log
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: failure()
       with:
          name: adacontrol.log
