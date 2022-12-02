@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import config, crafts, game, log, types
+import config, crafts, game, log, types, utils
 
 type
   ObjectData* = object
@@ -349,8 +349,24 @@ proc findItem*(inventory: Table[Positive, InventoryData];
     discard
   return 0
 
-proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural; skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
-  discard
+proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
+    skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
+  var
+    item = inventory[itemIndex]
+    damageChance = itemsList[item.protoIndex].value[1]
+    i = 1
+  if skillLevel > 0:
+    damageChance = damageChance - (skillLevel / 5).int
+    if damageChance < 1:
+      damageChance = 1
+  if getRandom(min = 1, max = 100) > damageChance:
+    return
+  if item.amount > 1:
+    inventory.add(y = InventoryData(protoIndex: item.protoIndex,
+        amount: item.amount - 1, name: item.name, durability: item.durability,
+        price: item.price))
+    item.amount = 1
+  item.durability.dec
 
 # Temporary code for interfacing with Ada
 
