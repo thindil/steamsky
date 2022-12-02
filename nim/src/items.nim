@@ -308,7 +308,7 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
     if skill.tool notin toolsList:
       toolsList.add(y = skill.tool)
 
-proc findItem*(inventory: Table[Positive, InventoryData];
+proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
     quality: Positive = 100): Natural {.sideEffect, raises: [], tags: [].} =
@@ -432,13 +432,13 @@ proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
     itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
     raises: [], tags: [], exportc.} =
-  var newInventory = initTable[Positive, InventoryData]()
+  var newInventory: seq[InventoryData]
   for i in 0..127:
     if inventory[i].protoIndex == 0:
       break
-    newInventory[i + 1] = InventoryData(protoIndex: inventory[i].protoIndex,
+    newInventory.add(y = InventoryData(protoIndex: inventory[i].protoIndex,
         amount: inventory[i].amount, name: $inventory[i].name,
-        durability: inventory[i].durability, price: inventory[i].price)
+        durability: inventory[i].durability, price: inventory[i].price))
   return findItem(inventory = newInventory, protoIndex = protoIndex,
       itemType = $itemType, durability = durability, quality = quality).cint
 
