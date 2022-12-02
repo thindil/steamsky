@@ -318,6 +318,7 @@ proc findItem*(inventory: seq[InventoryData];
   ##
   ## PARAMETERS
   ##
+  ## * inventory  - the inventory in which the item will be looking for
   ## * protoIndex - the index of prototype item of the item to find. Can be
   ##                empty. If empty, itemType parameter must be set
   ## * itemType   - the type of prototype item of the item to find. Can be
