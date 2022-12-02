@@ -1054,9 +1054,11 @@ package body Crafts.UI is
          Options =>
            "-foreground " &
            Tcl_GetVar
-             (Get_Context,
-              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
-              "::colors(-red)"));
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" &
+                To_String(Source => Game_Settings.Interface_Theme) &
+                "::colors(-red)"));
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>

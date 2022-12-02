@@ -1543,7 +1543,7 @@ package body Bases.ShipyardUI is
    -- Show information about the selected module to install
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -1556,7 +1556,7 @@ package body Bases.ShipyardUI is
    function Show_Install_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
       Cost: Positive;
@@ -1644,17 +1644,21 @@ package body Bases.ShipyardUI is
          Options =>
            "-foreground " &
            Tcl_GetVar
-             (Get_Context,
-              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
-              "::colors(-red)"));
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" &
+                To_String(Source => Game_Settings.Interface_Theme) &
+                "::colors(-red)"));
       Tag_Configure
         (TextWidget => Module_Text, TagName => "green",
          Options =>
            "-foreground " &
            Tcl_GetVar
-             (Get_Context,
-              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
-              "::colors(-green)"));
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" &
+                To_String(Source => Game_Settings.Interface_Theme) &
+                "::colors(-green)"));
       Set_Module_Info(Installing => True);
       configure
         (Widgt => Module_Text,

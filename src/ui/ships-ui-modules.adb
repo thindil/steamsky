@@ -444,7 +444,7 @@ package body Ships.UI.Modules is
    -- Show information about the selected module and set option for it
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command.
    -- RESULT
@@ -462,7 +462,7 @@ package body Ships.UI.Modules is
    function Show_Module_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Short_String;
       use Tiny_String;
 
@@ -587,9 +587,11 @@ package body Ships.UI.Modules is
          Options =>
            "-foreground " &
            Tcl_GetVar
-             (Get_Context,
-              "ttk::theme::" & To_String(Game_Settings.Interface_Theme) &
-              "::colors(-red)"));
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" &
+                To_String(Source => Game_Settings.Interface_Theme) &
+                "::colors(-red)"));
       Insert
         (TextWidget => Module_Text, Index => "end",
          Text =>
