@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Updated look of in-game tables
 - Color of buttons remove repair priority and cancel the ship destination
 
+### Removed
+- The icon for remove actions, replaced it with icon for cancel actions
+
 ### Fixed
 - Counting the amount of enemies killed in boarding combat
 
