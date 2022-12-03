@@ -1058,8 +1058,6 @@ story.
   on map buttons. Optional.
 * Key `CancelIcon`: Path to the SVG image which will be used for cancel action
   buttons. Optional.
-* Key `RemoveIcon`: Path to the SVG image which will be used for remove action
-  buttons. Optional.
 * Key `HelpIcon`: Path to the SVG image which will be used for help action
   buttons. Optional.
 * Key `SpecialHelpColor`: The name of the Tcl color used to show special names,
