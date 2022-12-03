@@ -15,12 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import items, types
+import std/tables
+import game, items, types, ships
+
+proc freeInventory*(memberIndex: Positive; amount: int): int =
+  result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
+  for item in playerShip.crew[memberIndex].inventory:
+    result = result - (itemsList[item.protoIndex].weight * item.amount)
 
 proc updateInventory*(memberIndex: Positive; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
     price: Natural; ship: var ShipRecord) =
-  var itemIndex: Natural = 0
+  var itemIndex: int
   if inventoryIndex == 0:
     if durability > 0:
       itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
