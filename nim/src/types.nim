@@ -121,12 +121,12 @@ type
     durability*: ItemsDurability ## The current durability of the item
     price*: Natural ## The price for which the item was bought
 
-  MobAttributeRecord = object
+  MobAttributeRecord* = object
     ## FUNCTION
     ##
     ## Used to store information about the crew member's attributes
-    level: range[1..50] ## The level of the attribute
-    experience: Natural ## The amount of experience in the attribute
+    level*: range[1..50] ## The level of the attribute
+    experience*: Natural ## The amount of experience in the attribute
 
   SkillInfo = object
     ## FUNCTION
