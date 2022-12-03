@@ -119,7 +119,6 @@ package Themes is
    -- Edit_Icon             - Icon used for edit button
    -- Show_Icon             - Icon used for show button
    -- Cancel_Icon           - Icon used for cancel actions
-   -- Remove_Icon           - Icon used for remove actions
    -- Help_Icon             - Icon used for showing help
    -- Special_Help_Color    - Name of color used to show keys and special names in the help.
    --                         Can be any value accepted by Tcl.
@@ -211,7 +210,6 @@ package Themes is
       Edit_Icon: Unbounded_String;
       Show_Icon: Unbounded_String;
       Cancel_Icon: Unbounded_String;
-      Remove_Icon: Unbounded_String;
       Help_Icon: Unbounded_String;
       Special_Help_Color: Unbounded_String;
       Underline_Help_Color: Unbounded_String;
@@ -308,7 +306,6 @@ package Themes is
       Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
       Show_Icon => Default_Theme_Icons_Path & "show.svg",
       Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
-      Remove_Icon => Default_Theme_Icons_Path & "remove.svg",
       Help_Icon => Default_Theme_Icons_Path & "help.svg",
       Special_Help_Color => To_Unbounded_String(Source => "yellow"),
       Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"),

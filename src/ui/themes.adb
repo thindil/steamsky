@@ -360,9 +360,6 @@ package body Themes is
                  To_Unbounded_String(Source => "CancelIcon") then
                   Temp_Record.Cancel_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
-                 To_Unbounded_String(Source => "RemoveIcon") then
-                  Temp_Record.Remove_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
                  To_Unbounded_String(Source => "HelpIcon") then
                   Temp_Record.Help_Icon := Convert_Path(Old_Value => Value);
                elsif Field_Name =
@@ -592,24 +589,23 @@ package body Themes is
          42 => To_Unbounded_String(Source => "editicon"),
          43 => To_Unbounded_String(Source => "showicon"),
          44 => To_Unbounded_String(Source => "cancelicon"),
-         45 => To_Unbounded_String(Source => "removeicon"),
-         46 => To_Unbounded_String(Source => "helpicon"),
-         47 => To_Unbounded_String(Source => "giveicon"),
-         48 => To_Unbounded_String(Source => "dropicon"),
-         49 => To_Unbounded_String(Source => "buyicon"),
-         50 => To_Unbounded_String(Source => "sellicon"),
-         51 => To_Unbounded_String(Source => "crafticon"),
-         52 => To_Unbounded_String(Source => "studyicon"),
-         53 => To_Unbounded_String(Source => "deconstructicon"),
-         54 => To_Unbounded_String(Source => "negotiateicon"),
-         55 => To_Unbounded_String(Source => "cargoicon"),
-         56 => To_Unbounded_String(Source => "equipicon"),
-         57 => To_Unbounded_String(Source => "unequipicon"),
-         58 => To_Unbounded_String(Source => "selectallicon"),
-         59 => To_Unbounded_String(Source => "unselectallicon"),
-         60 => To_Unbounded_String(Source => "giveordericon"),
-         61 => To_Unbounded_String(Source => "nopiloticon"),
-         62 => To_Unbounded_String(Source => "noengineericon"));
+         45 => To_Unbounded_String(Source => "helpicon"),
+         46 => To_Unbounded_String(Source => "giveicon"),
+         47 => To_Unbounded_String(Source => "dropicon"),
+         48 => To_Unbounded_String(Source => "buyicon"),
+         49 => To_Unbounded_String(Source => "sellicon"),
+         50 => To_Unbounded_String(Source => "crafticon"),
+         51 => To_Unbounded_String(Source => "studyicon"),
+         52 => To_Unbounded_String(Source => "deconstructicon"),
+         53 => To_Unbounded_String(Source => "negotiateicon"),
+         54 => To_Unbounded_String(Source => "cargoicon"),
+         55 => To_Unbounded_String(Source => "equipicon"),
+         56 => To_Unbounded_String(Source => "unequipicon"),
+         57 => To_Unbounded_String(Source => "selectallicon"),
+         58 => To_Unbounded_String(Source => "unselectallicon"),
+         59 => To_Unbounded_String(Source => "giveordericon"),
+         60 => To_Unbounded_String(Source => "nopiloticon"),
+         61 => To_Unbounded_String(Source => "noengineericon"));
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -635,15 +631,14 @@ package body Themes is
          35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
          37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
          40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
-         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon,
-         45 => Theme.Remove_Icon, 46 => Theme.Help_Icon, 47 => Theme.Give_Icon,
-         48 => Theme.Drop_Icon, 49 => Theme.Buy_Icon, 50 => Theme.Sell_Icon,
-         51 => Theme.Craft_Icon, 52 => Theme.Study_Icon,
-         53 => Theme.Deconstruct_Icon, 54 => Theme.Negotiate_Icon,
-         55 => Theme.Cargo_Icon, 56 => Theme.Equip_Icon,
-         57 => Theme.Unequip_Icon, 58 => Theme.Select_All_Icon,
-         59 => Theme.Unselect_All_Icon, 60 => Theme.Give_Order_Icon,
-         61 => Theme.No_Pilot_Icon, 62 => Theme.No_Engineer_Icon);
+         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon, 45 => Theme.Help_Icon,
+         46 => Theme.Give_Icon, 47 => Theme.Drop_Icon, 48 => Theme.Buy_Icon,
+         49 => Theme.Sell_Icon, 50 => Theme.Craft_Icon, 51 => Theme.Study_Icon,
+         52 => Theme.Deconstruct_Icon, 53 => Theme.Negotiate_Icon,
+         54 => Theme.Cargo_Icon, 55 => Theme.Equip_Icon,
+         56 => Theme.Unequip_Icon, 57 => Theme.Select_All_Icon,
+         58 => Theme.Unselect_All_Icon, 59 => Theme.Give_Order_Icon,
+         60 => Theme.No_Pilot_Icon, 61 => Theme.No_Engineer_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
