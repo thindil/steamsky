@@ -179,8 +179,8 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
       module = ModuleData(mType: harpoonGun, duration: adaModule.data[1],
           harpoonIndex: adaModule.data[2])
     of ModuleType2.any:
-      module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[1].int,
-          2: adaModule.data[2].int, 3: adaModule.data[3].int])
+      module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[
+          1].int, 2: adaModule.data[2].int, 3: adaModule.data[3].int])
     else:
       discard
     module.name = $adaModule.name
@@ -224,3 +224,14 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
     member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
     member.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
     playerShip.crew.add(y = member)
+
+proc getAdaCrewInventory(inventory: array[1..32, AdaInventoryData],
+    memberIndex: cint) {.exportc.} =
+  playerShip.crew[memberIndex].inventory = @[]
+  for adaItem in inventory:
+    if adaItem.protoIndex == 0:
+      return
+    playerShip.crew[memberIndex].inventory.add(y = InventoryData(
+        protoIndex: adaItem.protoIndex, amount: adaItem.amount,
+        name: $adaItem.name,
+        durability: adaItem.durability, price: adaItem.price))
