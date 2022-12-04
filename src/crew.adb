@@ -131,7 +131,9 @@ package body Crew is
            New_Amount;
       end if;
       if Skill_Exp >= Skill_Level * 25 then
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Skill_Exp := Skill_Exp - (Skill_Level * 25);
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Skill_Level := Skill_Level + 1;
       end if;
       if Skill_Index > 0 then
