@@ -311,7 +311,7 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100): Natural {.sideEffect, raises: [], tags: [].} =
+    quality: Positive = 100): int {.sideEffect, raises: [], tags: [].} =
   ## FUNCTION
   ##
   ## Find the index of the selected item in the selected inventory
@@ -329,7 +329,7 @@ proc findItem*(inventory: seq[InventoryData];
   ## RETURNS
   ##
   ## The index of the item in the selected inventory which meet searching
-  ## criteria or 0 if item not found.
+  ## criteria or -1 if item not found.
   try:
     if protoIndex > 0:
       for index, item in inventory.pairs:
@@ -348,7 +348,7 @@ proc findItem*(inventory: seq[InventoryData];
             return index
   except KeyError:
     discard
-  return 0
+  return -1
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
@@ -440,8 +440,8 @@ proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
     newInventory.add(y = InventoryData(protoIndex: inventory[i].protoIndex,
         amount: inventory[i].amount, name: $inventory[i].name,
         durability: inventory[i].durability, price: inventory[i].price))
-  return findItem(inventory = newInventory, protoIndex = protoIndex,
-      itemType = $itemType, durability = durability, quality = quality).cint
+  return (findItem(inventory = newInventory, protoIndex = protoIndex,
+      itemType = $itemType, durability = durability, quality = quality) + 1).cint
 
 proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   if $itemType in toolsList:
