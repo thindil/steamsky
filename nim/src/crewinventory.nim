@@ -20,6 +20,19 @@ import game, items, types, ships
 
 proc freeInventory*(memberIndex: Positive; amount: int): int {.sideEffect,
     raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the amount of free space in the selected player ship's crew member's
+  ## inventory.
+  ##
+  ## PARAMETERS
+  ##
+  ## * memberIndex - the index of the crew member which inventory will be check
+  ## * amount      - the amount of kilograms to add or remove during the check
+  ##
+  ## RETURNS
+  ##
+  ## The amount of kilograms of free space in the crew member's inventory
   result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
   for item in playerShip.crew[memberIndex].inventory:
     try:
