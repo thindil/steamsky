@@ -18,10 +18,14 @@
 import std/tables
 import game, items, types, ships
 
-proc freeInventory*(memberIndex: Positive; amount: int): int =
+proc freeInventory*(memberIndex: Positive; amount: int): int {.sideEffect,
+    raises: [], tags: [].} =
   result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
   for item in playerShip.crew[memberIndex].inventory:
-    result = result - (itemsList[item.protoIndex].weight * item.amount)
+    try:
+      result = result - (itemsList[item.protoIndex].weight * item.amount)
+    except KeyError:
+      discard
 
 proc updateInventory*(memberIndex: Positive; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
