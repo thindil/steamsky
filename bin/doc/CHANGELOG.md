@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ## Changed
 - Updated look of in-game tables
 - Color of buttons remove repair priority and cancel the ship destination
+- Updated modding guide
 
 ### Removed
 - The icon for remove actions, replaced it with icon for cancel actions
