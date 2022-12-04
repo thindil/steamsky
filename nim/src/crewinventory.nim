@@ -18,7 +18,7 @@
 import std/tables
 import game, items, types, ships
 
-proc freeInventory*(memberIndex: Positive; amount: int): int {.sideEffect,
+proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     raises: [], tags: [].} =
   ## FUNCTION
   ##
@@ -40,6 +40,7 @@ proc freeInventory*(memberIndex: Positive; amount: int): int {.sideEffect,
     except KeyError:
       discard
 
+# TODO: unfinished
 proc updateInventory*(memberIndex: Positive; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
     price: Natural; ship: var ShipRecord) =
@@ -53,3 +54,8 @@ proc updateInventory*(memberIndex: Positive; amount: int;
           protoIndex = protoIndex)
   else:
     itemIndex = inventoryIndex
+
+# Temporary code for interfacing with Ada
+
+proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
+  return freeInventory(memberIndex = (memberIndex - 1).Natural, amount = amount).cint
