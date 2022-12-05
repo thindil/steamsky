@@ -186,10 +186,15 @@ package Dialogs is
       --               button will not show. Default value is empty.
       -- Button_2    - The setting for the second optional button. If empty,
       --               the button will not show. Default value is empty.
+      -- Wrap_Length - The amount of pixels at which the info text will be
+      --               wrapped. Default value is 300
+      -- HISTORY
+      -- 8.2 - Added parameter Wrap_Length
       -- SOURCE
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings) with
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings;
+      Wrap_Length: Positive := 300) with
       Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 

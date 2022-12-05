@@ -527,7 +527,8 @@ package body Dialogs is
 
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings;
+      Wrap_Length: Positive := 300) is
       Info_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".info", Title => Title, Title_Width => 275, Columns => 3,
@@ -535,7 +536,8 @@ package body Dialogs is
       Info_Label: constant Ttk_Label :=
         Create
           (pathName => Info_Dialog & ".text",
-           options => "-text {" & Text & "} -wraplength 300");
+           options =>
+             "-text {" & Text & "} -wraplength" & Positive'Image(Wrap_Length));
       Button: Ttk_Button;
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
