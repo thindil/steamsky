@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ## Added
 - Ability to set colors for various the game's elements, like the map,
   messages, etc. in themes
+- Icon for set the player's ship destination. Author: Delapouite (https://game-icons.net),
+  license CC BY 3.0
 
 ## Changed
 - Updated look of in-game tables
