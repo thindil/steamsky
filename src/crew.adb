@@ -197,16 +197,16 @@ package body Crew is
 
       Tired_Level, Hunger_Level, Thirst_Level: Integer := 0;
       Health_Level: Integer := 100;
-      Death_Reason: Unbounded_String;
-      Tool_Index: Inventory_Container.Extended_Index;
-      Cabin_Index: Modules_Container.Extended_Index;
-      Times, Rest_Amount, I: Natural;
-      Order_Time, Current_Minutes, Heal_Amount: Integer;
+      Death_Reason: Unbounded_String := Null_Unbounded_String;
+      Tool_Index: Inventory_Container.Extended_Index := 0;
+      Cabin_Index: Modules_Container.Extended_Index := 0;
+      Times, Rest_Amount, I: Natural := 0;
+      Order_Time, Current_Minutes, Heal_Amount: Integer := 0;
       Damage: Damage_Factor := 0.0;
       Need_Cleaning, Have_Medical_Room: Boolean := False;
-      Skill_Index: Skills_Container.Extended_Index;
+      Skill_Index: Skills_Container.Extended_Index := 0;
       function Consume(Item_Type: Bounded_String) return Natural is
-         Consume_Value: Natural;
+         Consume_Value: Natural := 0;
          Item_Index: Inventory_Container.Extended_Index :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Item_Type);
       begin
