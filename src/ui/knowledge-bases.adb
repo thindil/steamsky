@@ -210,7 +210,7 @@ package body Knowledge.Bases is
            (Table => Bases_Table,
             Text => To_String(Source => Sky_Bases(I).Name),
             Tooltip => "Show available base's options",
-            Command => "ShowBasesMenu" & Positive'Image(I), Column => 1,
+            Command => "ShowBaseInfo" & Positive'Image(I), Column => 1,
             Color => To_String(Source => Color));
          Add_Button
            (Table => Bases_Table,
@@ -220,7 +220,7 @@ package body Knowledge.Bases is
                    (Destination_X => Sky_Bases(I).Sky_X,
                     Destination_Y => Sky_Bases(I).Sky_Y)),
             Tooltip => "The distance to the base",
-            Command => "ShowBasesMenu" & Positive'Image(I), Column => 2,
+            Command => "ShowBaseInfo" & Positive'Image(I), Column => 2,
             Color => To_String(Source => Color));
          if Sky_Bases(I).Visited.Year > 0 then
             Add_Button
@@ -230,20 +230,20 @@ package body Knowledge.Bases is
                     when 1 .. 150 => "small", when 151 .. 299 => "medium",
                     when others => "large"),
                Tooltip => "The population size of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text => To_Lower(Item => Bases_Size'Image(Sky_Bases(I).Size)),
                Tooltip => "The size of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text =>
                  To_String(Source => Factions_List(Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
@@ -251,7 +251,7 @@ package body Knowledge.Bases is
                  To_String
                    (Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                Tooltip => "The type of the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
@@ -259,33 +259,33 @@ package body Knowledge.Bases is
                  Get_Reputation_Text
                    (Reputation_Level => Sky_Bases(I).Reputation.Level),
                Tooltip => "Your reputation in the base",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
                New_Row => True, Color => To_String(Source => Color));
          else
             Add_Button
               (Table => Bases_Table, Text => "not",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 3,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 4,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "visited",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 5,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 6,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "yet",
                Tooltip => "Show available base's options",
-               Command => "ShowBasesMenu" & Positive'Image(I), Column => 7,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
                Color => To_String(Source => Color), New_Row => True);
          end if;
          Rows := Rows + 1;
@@ -540,88 +540,93 @@ package body Knowledge.Bases is
           (Source =>
              "Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
              " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
-      Append
-        (Source => Base_Info,
-         New_Item =>
-           LF & "Last visited: " &
-           Formated_Time(Time => Sky_Bases(Base_Index).Visited));
-      Show_Mission_And_Recruits_Info_Block :
-      declare
-         Time_Diff: Integer;
-      begin
-         if Sky_Bases(Base_Index).Population > 0 and
-           Sky_Bases(Base_Index).Reputation.Level > -25 then
-            Time_Diff :=
-              30 -
-              Days_Difference
-                (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
-            if Time_Diff > 0 then
-               Append
-                 (Source => Base_Info,
-                  New_Item =>
-                    LF & "New recruits available in" &
-                    Natural'Image(Time_Diff) & " days.");
+      if Sky_Bases(Base_Index).Visited.Year > 0 then
+         Append
+           (Source => Base_Info,
+            New_Item =>
+              LF & "Last visited: " &
+              Formated_Time(Time => Sky_Bases(Base_Index).Visited));
+         Show_Mission_And_Recruits_Info_Block :
+         declare
+            Time_Diff: Integer;
+         begin
+            if Sky_Bases(Base_Index).Population > 0 and
+              Sky_Bases(Base_Index).Reputation.Level > -25 then
+               Time_Diff :=
+                 30 -
+                 Days_Difference
+                   (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
+               if Time_Diff > 0 then
+                  Append
+                    (Source => Base_Info,
+                     New_Item =>
+                       LF & "New recruits available in" &
+                       Natural'Image(Time_Diff) & " days.");
+               else
+                  Append
+                    (Source => Base_Info,
+                     New_Item => LF & "New recruits available now.");
+               end if;
             else
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "New recruits available now.");
-            end if;
-         else
-            Append
-              (Source => Base_Info,
-               New_Item =>
-                 LF & "You can't recruit crew members at this base.");
-         end if;
-         if Sky_Bases(Base_Index).Population > 0 and
-           Sky_Bases(Base_Index).Reputation.Level > -25 then
-            Time_Diff :=
-              Days_Difference
-                (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
-            if Time_Diff < 7 then
-               Append
-                 (Source => Base_Info,
                   New_Item =>
-                    LF & "You asked for events" & Natural'Image(Time_Diff) &
-                    " days ago.");
+                    LF & "You can't recruit crew members at this base.");
+            end if;
+            if Sky_Bases(Base_Index).Population > 0 and
+              Sky_Bases(Base_Index).Reputation.Level > -25 then
+               Time_Diff :=
+                 Days_Difference
+                   (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
+               if Time_Diff < 7 then
+                  Append
+                    (Source => Base_Info,
+                     New_Item =>
+                       LF & "You asked for events" & Natural'Image(Time_Diff) &
+                       " days ago.");
+               else
+                  Append
+                    (Source => Base_Info,
+                     New_Item => LF & "You can ask for events again.");
+               end if;
             else
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "You can ask for events again.");
+                  New_Item => LF & "You can't ask for events at this base.");
             end if;
-         else
-            Append
-              (Source => Base_Info,
-               New_Item => LF & "You can't ask for events at this base.");
-         end if;
-         if Sky_Bases(Base_Index).Population > 0 and
-           Sky_Bases(Base_Index).Reputation.Level > -1 then
-            Time_Diff :=
-              7 -
-              Days_Difference
-                (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
-            if Time_Diff > 0 then
-               Append
-                 (Source => Base_Info,
-                  New_Item =>
-                    LF & "New missions available in" &
-                    Natural'Image(Time_Diff) & " days.");
+            if Sky_Bases(Base_Index).Population > 0 and
+              Sky_Bases(Base_Index).Reputation.Level > -1 then
+               Time_Diff :=
+                 7 -
+                 Days_Difference
+                   (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
+               if Time_Diff > 0 then
+                  Append
+                    (Source => Base_Info,
+                     New_Item =>
+                       LF & "New missions available in" &
+                       Natural'Image(Time_Diff) & " days.");
+               else
+                  Append
+                    (Source => Base_Info,
+                     New_Item => LF & "New missions available now.");
+               end if;
             else
                Append
                  (Source => Base_Info,
-                  New_Item => LF & "New missions available now.");
+                  New_Item => LF & "You can't take missions at this base.");
             end if;
-         else
+         end Show_Mission_And_Recruits_Info_Block;
+         Set_Reputation_Text
+           (Reputation_Text =>
+              Get_Reputation_Text
+                (Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
+         if Base_Index = Player_Ship.Home_Base then
             Append
-              (Source => Base_Info,
-               New_Item => LF & "You can't take missions at this base.");
+              (Source => Base_Info, New_Item => LF & "It is your home base.");
          end if;
-      end Show_Mission_And_Recruits_Info_Block;
-      Set_Reputation_Text
-        (Reputation_Text =>
-           Get_Reputation_Text
-             (Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
-      if Base_Index = Player_Ship.Home_Base then
-         Append(Source => Base_Info, New_Item => LF & "It is your home base.");
+      else
+         Append(Source => Base_Info, New_Item => LF & "Not visited yet.");
       end if;
       Base_Label :=
         Create
