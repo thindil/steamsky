@@ -478,11 +478,12 @@ package body Knowledge.Bases is
            Columns => 3);
       Base_Label: Ttk_Label;
       Base_Info: Unbounded_String;
-      Base_Button: constant Ttk_Button :=
+      Base_Button: Ttk_Button :=
         Create
           (pathName => Base_Dialog & ".destination",
            options =>
-             "-text Destination -image destinationicon -command {SetDestination2" &
+             "-text Destination -image destinationicon -command {CloseDialog " &
+             Base_Dialog & ";SetDestination2" &
              Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
              "} -style Dialog.TButton");
@@ -652,6 +653,18 @@ package body Knowledge.Bases is
       Add_Close_Button
         (Name => Base_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Base_Dialog, Row => 3, Column => 1);
+      Base_Button :=
+        Create
+          (pathName => Base_Dialog & ".show",
+           options =>
+             "-text Show -image showicon -command {CloseDialog " &
+             Base_Dialog & ";ShowOnMap" &
+             Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
+             Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
+             "} -style Dialog.TButton");
+      Add(Widget => Base_Button, Message => "Show the base on the map");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Base_Button, Options => "-row 3 -column 2 -padx 5");
       Show_Dialog(Dialog => Base_Dialog);
       return TCL_OK;
    end Show_Base_Info_Command;
