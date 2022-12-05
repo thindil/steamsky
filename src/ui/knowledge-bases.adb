@@ -475,9 +475,17 @@ package body Knowledge.Bases is
         Create_Dialog
           (Name => ".basedialog",
            Title => To_String(Source => Sky_Bases(Base_Index).Name),
-           Columns => 2);
+           Columns => 3);
       Base_Label: Ttk_Label;
       Base_Info: Unbounded_String;
+      Base_Button: constant Ttk_Button :=
+        Create
+          (pathName => Base_Dialog & ".destination",
+           options =>
+             "-text Destination -image destinationicon -command {SetDestination2" &
+             Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
+             Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
+             "} -style Dialog.TButton");
       procedure Set_Reputation_Text(Reputation_Text: String) is
          Reputation_Bar: constant Ttk_Frame :=
            Create
@@ -498,7 +506,8 @@ package body Knowledge.Bases is
             configure
               (Widgt => Reputation_Label, options => "-text {Reputation:}");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Reputation_Bar, Options => "-row 2 -column 1 -padx 5");
+              (Slave => Reputation_Bar,
+               Options => "-row 2 -column 1 -padx 5 -columnspan 2");
             Tcl.Tk.Ada.Grid.Grid_Propagate
               (Master => Reputation_Bar, Value => "off");
             configure
@@ -635,10 +644,14 @@ package body Knowledge.Bases is
              "-text {" & To_String(Source => Base_Info) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Base_Label,
-         Options => "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
+         Options => "-row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w");
+      Add
+        (Widget => Base_Button,
+         Message => "Set the base as the ship destination");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Base_Button, Options => "-row 3 -padx 5");
       Add_Close_Button
         (Name => Base_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Base_Dialog, Column_Span => 2, Row => 3);
+         Command => "CloseDialog " & Base_Dialog, Row => 3, Column => 1);
       Show_Dialog(Dialog => Base_Dialog);
       return TCL_OK;
    end Show_Base_Info_Command;
