@@ -650,9 +650,19 @@ package body Knowledge.Bases is
         (Widget => Base_Button,
          Message => "Set the base as the ship destination");
       Tcl.Tk.Ada.Grid.Grid(Slave => Base_Button, Options => "-row 3 -padx 5");
+      Bind
+        (Widgt => Base_Button, Sequence => "<Tab>",
+         Script => "{focus " & Base_Dialog & ".button;break}");
+      Bind
+        (Widgt => Base_Button, Sequence => "<Escape>",
+         Script => "{" & Base_Dialog & ".button invoke;break}");
       Add_Close_Button
         (Name => Base_Dialog & ".button", Text => "Close",
          Command => "CloseDialog " & Base_Dialog, Row => 3, Column => 1);
+      Base_Button := Get_Widget(pathName => Base_Dialog & ".button");
+      Bind
+        (Widgt => Base_Button, Sequence => "<Tab>",
+         Script => "{focus " & Base_Dialog & ".show;break}");
       Base_Button :=
         Create
           (pathName => Base_Dialog & ".show",
@@ -665,6 +675,12 @@ package body Knowledge.Bases is
       Add(Widget => Base_Button, Message => "Show the base on the map");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Base_Button, Options => "-row 3 -column 2 -padx 5");
+      Bind
+        (Widgt => Base_Button, Sequence => "<Tab>",
+         Script => "{focus " & Base_Dialog & ".destination;break}");
+      Bind
+        (Widgt => Base_Button, Sequence => "<Escape>",
+         Script => "{" & Base_Dialog & ".button invoke;break}");
       Show_Dialog(Dialog => Base_Dialog);
       return TCL_OK;
    end Show_Base_Info_Command;
