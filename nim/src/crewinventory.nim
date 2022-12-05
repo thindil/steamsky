@@ -57,5 +57,8 @@ proc updateInventory*(memberIndex: Positive; amount: int;
 
 # Temporary code for interfacing with Ada
 
-proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
+proc freeAdaInventory(memberIndex, amount, crewAmount: cint): cint {.exportc.} =
+  if playerShip.crew.len == 0:
+    for i in 1..crewAmount:
+      playerShip.crew.add(y = MemberData(homeBase: 1))
   return freeInventory(memberIndex = (memberIndex - 1).Natural, amount = amount).cint
