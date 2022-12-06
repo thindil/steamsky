@@ -363,86 +363,6 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Bases_Command;
 
-   -- ****if* KBases/KBases.Show_Bases_Menu_Command
-   -- FUNCTION
-   -- Show the menu with available the selected base options
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowBaseMenu baseindex
-   -- BaseIndex is the index of the base's menu to show
-   -- SOURCE
-   function Show_Bases_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Bases_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tiny_String;
-
-      Base_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Base_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".baseslistmenu",
-           Title =>
-             To_String(Source => Sky_Bases(Base_Index).Name) & " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Base_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Base_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Base_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Base_Menu & ".show;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".show", Label => "Show the base on map",
-         Command =>
-           "ShowOnMap" & Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
-           Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y));
-      Add_Button
-        (Name => ".destination",
-         Label => "Set the base as destination for the ship",
-         Command =>
-           "SetDestination2 " &
-           Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
-           Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y));
-      if Sky_Bases(Base_Index).Visited.Year > 0 then
-         Add_Button
-           (Name => ".info", Label => "Show more info about the base",
-            Command => "ShowBaseInfo " & CArgv.Arg(Argv => Argv, N => 1));
-      end if;
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Base_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Bases_Menu_Command;
-
    -- ****o* KBases/KBases.Show_Base_Info_Command
    -- FUNCTION
    -- Show information about the selected base
@@ -920,9 +840,6 @@ package body Knowledge.Bases is
    begin
       Add_Command
         (Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
-      Add_Command
-        (Name => "ShowBasesMenu",
-         Ada_Command => Show_Bases_Menu_Command'Access);
       Add_Command
         (Name => "ShowBaseInfo", Ada_Command => Show_Base_Info_Command'Access);
       Add_Command
