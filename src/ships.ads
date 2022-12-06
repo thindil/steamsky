@@ -479,4 +479,13 @@ package Ships is
       Test_Case => (Name => "Test_DamageModule", Mode => Nominal);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Ada_Crew_Inventory
+     (Inventory: Nim_Inventory_Array;
+      Member_Index, Members_Amount: Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaCrewInventory";
+
 end Ships;
