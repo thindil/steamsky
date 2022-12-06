@@ -233,3 +233,12 @@ type
     durability*: cint
     price*: cint
 
+proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
+    InventoryData] =
+  for item in inventory:
+    if item.protoIndex == 0:
+      break
+    result.add(y = InventoryData(protoIndex: item.protoIndex,
+        amount: item.amount, name: $item.name, durability: item.durability,
+        price: item.price))
+

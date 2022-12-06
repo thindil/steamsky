@@ -433,15 +433,9 @@ proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
     itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
     raises: [], tags: [], exportc.} =
-  var newInventory: seq[InventoryData]
-  for i in 0..127:
-    if inventory[i].protoIndex == 0:
-      break
-    newInventory.add(y = InventoryData(protoIndex: inventory[i].protoIndex,
-        amount: inventory[i].amount, name: $inventory[i].name,
-        durability: inventory[i].durability, price: inventory[i].price))
-  return (findItem(inventory = newInventory, protoIndex = protoIndex,
-      itemType = $itemType, durability = durability, quality = quality) + 1).cint
+  return (findItem(inventory = inventoryToNim(inventory = inventory),
+      protoIndex = protoIndex, itemType = $itemType, durability = durability,
+      quality = quality) + 1).cint
 
 proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   if $itemType in toolsList:
