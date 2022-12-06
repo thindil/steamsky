@@ -200,7 +200,8 @@ package body Crew is
       Death_Reason: Unbounded_String := Null_Unbounded_String;
       Tool_Index: Inventory_Container.Extended_Index := 0;
       Cabin_Index: Modules_Container.Extended_Index := 0;
-      Times, Rest_Amount, I: Natural := 0;
+      Times, Rest_Amount: Natural := 0;
+      I: Natural;
       Order_Time, Current_Minutes, Heal_Amount: Integer := 0;
       Damage: Damage_Factor := 0.0;
       Need_Cleaning, Have_Medical_Room: Boolean := False;
