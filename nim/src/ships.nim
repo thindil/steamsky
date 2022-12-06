@@ -226,7 +226,10 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
     playerShip.crew.add(y = member)
 
 proc getAdaCrewInventory(inventory: array[1..32, AdaInventoryData],
-    memberIndex: cint) {.exportc.} =
+    memberIndex, crewAmount: cint) {.exportc.} =
+  if playerShip.crew.len == 0:
+    for i in 1..crewAmount:
+      playerShip.crew.add(y = MemberData(homeBase: 1))
   playerShip.crew[memberIndex].inventory = @[]
   for adaItem in inventory:
     if adaItem.protoIndex == 0:
