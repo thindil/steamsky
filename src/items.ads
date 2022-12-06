@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
 limited with Ships;
 
@@ -281,5 +282,19 @@ package Items is
       -- SOURCE
    function Is_Tool(Item_Type: Tiny_String.Bounded_String) return Boolean;
    -- ****
+
+-- Temporary code to interact with Nim
+
+   type Nim_Inventory_Data is record
+      Proto_Index: Natural;
+      Amount: Positive := 1;
+      Name: chars_ptr;
+      Durability: Items_Durability;
+      Price: Natural := 0;
+   end record;
+   type Nim_Inventory_Array is array(0 .. 127) of Nim_Inventory_Data;
+
+   function Inventory_To_Nim
+     (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array;
 
 end Items;

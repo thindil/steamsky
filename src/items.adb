@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
@@ -250,18 +249,6 @@ package body Items is
       Quality: Positive := 100) return Natural is
       use Tiny_String;
 
-      type Nim_Inventory_Data is record
-         Proto_Index: Objects_Container.Extended_Index;
-         Amount: Natural := 1;
-         Name: chars_ptr;
-         Durability: Items_Durability;
-         Price: Natural := 0;
-      end record;
-      type Nim_Inventory_Array is array(0 .. 127) of Nim_Inventory_Data;
-      Nim_Inventory: Nim_Inventory_Array :=
-        (others =>
-           (Proto_Index => 0, Amount => 1, Name => New_String(Str => ""),
-            Durability => 0, Price => 0));
       function Find_Ada_Item
         (Inv: Nim_Inventory_Array; P_Index: Integer; I_Type: chars_ptr;
          Dur: Integer; Q: Integer) return Integer with
@@ -269,24 +256,10 @@ package body Items is
          Convention => C,
          External_Name => "findAdaItem";
    begin
-      Fill_Nim_Array_Loop :
-      for I in
-        Inventory_Container.First_Index(Container => Inventory) ..
-          Inventory_Container.Last_Index(Container => Inventory) loop
-         Set_Item_Block :
-         declare
-            Item: constant Inventory_Data :=
-              Inventory_Container.Element(Container => Inventory, Index => I);
-         begin
-            Nim_Inventory(I - 1) :=
-              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
-               Name => New_String(Str => To_String(Source => Item.Name)),
-               Durability => Item.Durability, Price => Item.Price);
-         end Set_Item_Block;
-      end loop Fill_Nim_Array_Loop;
       return
         Find_Ada_Item
-          (Inv => Nim_Inventory, P_Index => Proto_Index,
+          (Inv => Inventory_To_Nim(Inventory => Inventory),
+           P_Index => Proto_Index,
            I_Type => New_String(Str => To_String(Source => Item_Type)),
            Dur => Durability, Q => Quality);
    end Find_Item;
@@ -315,5 +288,32 @@ package body Items is
       end if;
       return False;
    end Is_Tool;
+
+   function Inventory_To_Nim
+     (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array is
+      use Tiny_String;
+
+      Nim_Inventory: Nim_Inventory_Array :=
+        (others =>
+           (Proto_Index => 0, Amount => 1, Name => New_String(Str => ""),
+            Durability => 0, Price => 0));
+   begin
+      Fill_Nim_Array_Loop :
+      for I in
+        Inventory_Container.First_Index(Container => Inventory) ..
+          Inventory_Container.Last_Index(Container => Inventory) loop
+         Set_Item_Block :
+         declare
+            Item: constant Inventory_Data :=
+              Inventory_Container.Element(Container => Inventory, Index => I);
+         begin
+            Nim_Inventory(I - 1) :=
+              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+               Name => New_String(Str => To_String(Source => Item.Name)),
+               Durability => Item.Durability, Price => Item.Price);
+         end Set_Item_Block;
+      end loop Fill_Nim_Array_Loop;
+      return Nim_Inventory;
+   end Inventory_To_Nim;
 
 end Items;
