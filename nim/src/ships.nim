@@ -110,6 +110,8 @@ type
     data: array[1..3, cint]
 
   AdaMemberData = object
+    attributes: array[17, array[2, cint]]
+    skills: array[65, array[3, cint]]
     name: cstring
     gender: char
     health: cint
@@ -221,6 +223,12 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
       member.orders[index] = order
     for index, item in adaMember.equipment.pairs:
       member.equipment[index.EquipmentLocations] = item
+    for attribute in adaMember.attributes:
+      member.attributes.add(y = MobAttributeRecord(level: attribute[0],
+          experience: attribute[1]))
+    for skill in adaMember.skills:
+      member.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
+          experience: skill[2]))
     member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
     member.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
     playerShip.crew.add(y = member)
