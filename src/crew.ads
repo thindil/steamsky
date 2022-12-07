@@ -358,28 +358,29 @@ package Crew is
 
 -- Temporary code to interact with Nim
 
+   type Nim_Attributes_Array is array(1 .. 16, 1 .. 2) of Integer;
    type Nim_Skills_Array is array(1 .. 64, 1 .. 3) of Integer;
 
    type Nim_Member_Data is record
-      Attributes: Natural_Array(1 .. 16);
-      skills: Nim_Skills_Array;
-      name: chars_ptr;
-      gender: Character;
-      health: Integer;
-      tired: Integer;
-      hunger: Integer;
-      thirst: Integer;
-      order: Integer;
-      previousOrder: Integer;
-      orderTime: Integer;
-      orders: Natural_Array(1 .. 16);
-      equipment: Natural_Array(1 .. 7);
-      payment: Attributes_Array;
-      contractLength: Integer;
-      morale: Attributes_Array;
-      loyalty: Integer;
-      homeBase: Integer;
-      faction: chars_ptr;
+      Attributes: Nim_Attributes_Array;
+      Skills: Nim_Skills_Array;
+      Name: chars_ptr;
+      Gender: Character;
+      Health: Integer;
+      Tired: Integer;
+      Hunger: Integer;
+      Thirst: Integer;
+      Order: Integer;
+      Previous_Order: Integer;
+      Order_Time: Integer;
+      Orders: Natural_Array(1 .. 12);
+      Equipment: Natural_Array(1 .. 7);
+      Payment: Attributes_Array;
+      Contract_Length: Integer;
+      Morale: Attributes_Array;
+      Loyalty: Integer;
+      Home_Base: Integer;
+      Faction: chars_ptr;
    end record;
 
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data;
