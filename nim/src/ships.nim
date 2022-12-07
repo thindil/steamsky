@@ -110,8 +110,8 @@ type
     data: array[1..3, cint]
 
   AdaMemberData = object
-    attributes: array[17, array[2, cint]]
-    skills: array[65, array[3, cint]]
+    attributes: array[1..16, array[2, cint]]
+    skills: array[1..64, array[3, cint]]
     name: cstring
     gender: char
     health: cint
