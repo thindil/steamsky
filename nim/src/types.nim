@@ -128,13 +128,13 @@ type
     level*: range[1..50] ## The level of the attribute
     experience*: Natural ## The amount of experience in the attribute
 
-  SkillInfo = object
+  SkillInfo* = object
     ## FUNCTION
     ##
     ## Used to store information about the crew member's skills
-    index: Natural ## The index of the skill
-    level: SkillRange ## The level of the skill
-    experience: Natural ## The amount of the experience in the skill
+    index*: Natural ## The index of the skill
+    level*: SkillRange ## The level of the skill
+    experience*: Natural ## The amount of the experience in the skill
 
   MemberData* = object
     ## FUNCTION
