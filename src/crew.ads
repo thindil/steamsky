@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Items; use Items;
 with Game; use Game;
 
@@ -106,7 +107,8 @@ package Crew is
       -- FUNCTION
       -- The default empty equipment array
       -- SOURCE
-   Empty_Equipment_Array: constant Equipment_Array := Equipment_Array'(others => <>);
+   Empty_Equipment_Array: constant Equipment_Array :=
+     Equipment_Array'(others => <>);
    -- ****
 
    -- ****s* Crew/Crew.Mob_Attribute_Record
@@ -353,5 +355,33 @@ package Crew is
       Pre => Skill_Index <= Natural(Skills_Amount),
       Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
       -- ****
+
+-- Temporary code to interact with Nim
+
+   type Nim_Skills_Array is array(1 .. 64, 1 .. 3) of Integer;
+
+   type Nim_Member_Data is record
+      Attributes: Natural_Array(1 .. 16);
+      skills: Nim_Skills_Array;
+      name: chars_ptr;
+      gender: Character;
+      health: Integer;
+      tired: Integer;
+      hunger: Integer;
+      thirst: Integer;
+      order: Integer;
+      previousOrder: Integer;
+      orderTime: Integer;
+      orders: Natural_Array(1 .. 16);
+      equipment: Natural_Array(1 .. 7);
+      payment: Attributes_Array;
+      contractLength: Integer;
+      morale: Attributes_Array;
+      loyalty: Integer;
+      homeBase: Integer;
+      faction: chars_ptr;
+   end record;
+
+   function Member_To_Nim(Member: Member_Data) return Nim_Member_Data;
 
 end Crew;
