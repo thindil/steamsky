@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Color of buttons remove repair priority and cancel the ship destination
 - Updated modding guide
 - Show the base info dialog with available actions instead of menu in the list
-  of known bases
+  of known bases and the list of known events
 
 ### Removed
 - The icon for remove actions, replaced it with icon for cancel actions
