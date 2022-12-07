@@ -333,7 +333,7 @@ package body Crew is
                Module_Loop :
                for Module of Player_Ship.Modules loop
                   if (Member.Previous_Order = GUNNER and Module.M_Type = GUN)
-                    and then (Module.Owner(1) in I | 0) then
+                    and then Module.Owner(1) in I | 0 then
                      Back_To_Work := True;
                      Module.Owner(1) := I;
                      exit Module_Loop;
@@ -374,7 +374,7 @@ package body Crew is
             Member.Previous_Order := REST;
          end if;
          if Tired_Level >
-           (80 + Member.Attributes(Positive(Condition_Index)).Level) and
+           80 + Member.Attributes(Positive(Condition_Index)).Level and
            Member.Order /= REST and not In_Combat then
             Member_Rest_Block :
             declare
