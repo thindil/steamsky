@@ -27,7 +27,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -54,88 +53,6 @@ package body Knowledge.Events is
    -- SOURCE
    Events_Table: Table_Widget (Amount => 3);
    -- ****
-
-   -- ****if* KEvents/KEvents.Show_Events_Menu_Command
-   -- FUNCTION
-   -- Show the menu with available the selected event options
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowEventMenu eventindex
-   -- EventIndex is the index of the event's menu to show
-   -- SOURCE
-   function Show_Events_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Events_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Event_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Event_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".eventslistmenu",
-           Title =>
-             (case Events_List(Event_Index).E_Type is
-                when ENEMYSHIP | ENEMYPATROL => "Enemy",
-                when ATTACKONBASE => "Defend", when DISEASE => "Disease",
-                when DOUBLEPRICE => "Price", when FULLDOCKS => "Full docks",
-                when TRADER | FRIENDLYSHIP => "Friendly ship",
-                when others => "") &
-             " event actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Event_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Event_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Event_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Event_Menu & ".show;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".show", Label => "Show the event on map",
-         Command =>
-           "ShowOnMap" & Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-           Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
-      Add_Button
-        (Name => ".destination",
-         Label => "Set the event as destination for the ship",
-         Command =>
-           "SetDestination2" &
-           Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-           Map_Y_Range'Image(Events_List(Event_Index).Sky_Y));
-      Add_Button
-        (Name => ".info", Label => "Show more information about the event",
-         Command => "ShowEventInfo " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Event_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Events_Menu_Command;
 
    -- ****o* KEvents/KEvents.Show_Event_Info_Command
    -- FUNCTION
@@ -469,9 +386,6 @@ package body Knowledge.Events is
 
    procedure Add_Commands is
    begin
-      Add_Command
-        (Name => "ShowEventMenu",
-         Ada_Command => Show_Events_Menu_Command'Access);
       Add_Command
         (Name => "ShowEventInfo",
          Ada_Command => Show_Event_Info_Command'Access);
