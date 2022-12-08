@@ -95,8 +95,8 @@ var
   missionItemsType*: string ## The type of item used in missions
   fuelType*: string ## The type of item used as fuel for ships
   tradersName*: string ## The word used to mark traders ships in their names
-  conditionIndex*: Positive ## The index of condition attribute
-  strengthIndex*: Positive ## The index of strength attribute
+  conditionIndex*: Natural ## The index of condition attribute
+  strengthIndex*: Natural ## The index of strength attribute
   pilotingSkill*: Positive ## The index of piloting skill
   engineeringSkill*: Positive ## The index of engineering skill
   gunnerySkill*: Positive ## The index of gunnery skill
@@ -140,7 +140,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   ##
   ## * fileName - the name of the file with the game data to load
 
-  proc findAttributeIndex(attributeName: string): Natural {.sideEffect,
+  proc findAttributeIndex(attributeName: string): int {.sideEffect,
       raises: [], tags: [].} =
     ## FUNCTION
     ##
@@ -153,11 +153,11 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     ##
     ## RETURNS
     ##
-    ## The index of the selected attribute or 0 if the attribute not found
+    ## The index of the selected attribute or -1 if the attribute not found
     for key, attribute in attributesList.pairs:
       if attribute.name == attributeName:
-        return key + 1
-    return 0
+        return key
+    return -1
 
   let gameXml = try:
       loadXml(path = fileName)
@@ -383,6 +383,6 @@ proc getAdaGameStrings(values: var array[0..11, cstring]) {.exportc.} =
 
 proc getAdaGameIntegers(values: var array[0..10, cint]) {.exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
-      strengthIndex.cint, pilotingSkill.cint, engineeringSkill.cint,
+      (strengthIndex + 1).cint, pilotingSkill.cint, engineeringSkill.cint,
       gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
       dodgeSkill.cint, unarmedSkill.cint]
