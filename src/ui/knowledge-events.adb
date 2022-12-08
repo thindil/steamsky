@@ -140,7 +140,7 @@ package body Knowledge.Events is
                    Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
                    Map_Y_Range'Image(Events_List(Event_Index).Sky_Y)),
             Icon => To_Unbounded_String(Source => "destinationicon"),
-            Text => To_Unbounded_String(Source => "Destination")),
+            Text => To_Unbounded_String(Source => "Target")),
          Button_2 =>
            (Tooltip =>
               To_Unbounded_String(Source => "Show the event on the map"),

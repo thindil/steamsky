@@ -402,7 +402,7 @@ package body Knowledge.Bases is
         Create
           (pathName => Base_Dialog & ".destination",
            options =>
-             "-text Destination -image destinationicon -command {CloseDialog " &
+             "-text Target -image destinationicon -command {CloseDialog " &
              Base_Dialog & ";SetDestination2" &
              Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
