@@ -547,7 +547,9 @@ package body Crew is
                   if Rest_Amount = 0 then
                      Rest_Amount := 1;
                   end if;
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Tired_Level := Tired_Level - (Times * Rest_Amount);
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                else
                   Tired_Level := Tired_Level - Times;
                end if;
