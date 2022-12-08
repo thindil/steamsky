@@ -350,6 +350,7 @@ proc findItem*(inventory: seq[InventoryData];
     discard
   return -1
 
+# TODO: unfinished
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
   var
