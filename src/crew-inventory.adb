@@ -123,21 +123,18 @@ package body Crew.Inventory is
 
    function Free_Inventory
      (Member_Index: Positive; Amount: Integer) return Integer is
-      Free_Space: Integer :=
-        50 +
-        Player_Ship.Crew(Member_Index).Attributes(Positive(Strength_Index))
-          .Level;
+      function Free_Ada_Inventory(M_Index, Amnt: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "freeAdaInventory";
    begin
-      Count_Free_Inventory_Space_Loop :
-      for Item of Player_Ship.Crew(Member_Index).Inventory loop
-         Free_Space :=
-           Free_Space -
-           (Objects_Container.Element
-              (Container => Items_List, Index => Item.Proto_Index)
-              .Weight *
-            Item.Amount);
-      end loop Count_Free_Inventory_Space_Loop;
-      return Free_Space + Amount;
+      Get_Ada_Crew;
+      Get_Ada_Crew_Inventory
+        (Inventory =>
+           Inventory_To_Nim
+             (Inventory => Player_Ship.Crew(Member_Index).Inventory),
+         Member_Index => Member_Index);
+      return Free_Ada_Inventory(M_Index => Member_Index, Amnt => Amount);
    end Free_Inventory;
 
    procedure Take_Off_Item(Member_Index, Item_Index: Positive) is

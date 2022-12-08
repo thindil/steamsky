@@ -224,9 +224,13 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
     for index, item in adaMember.equipment.pairs:
       member.equipment[index.EquipmentLocations] = item
     for attribute in adaMember.attributes:
+      if attribute[0] == 0:
+        break
       member.attributes.add(y = MobAttributeRecord(level: attribute[0],
           experience: attribute[1]))
     for skill in adaMember.skills:
+      if skill[0] == 0:
+        break
       member.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
           experience: skill[2]))
     member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
@@ -235,11 +239,11 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
     memberIndex: cint) {.exportc.} =
-  playerShip.crew[memberIndex].inventory = @[]
+  playerShip.crew[memberIndex - 1].inventory = @[]
   for adaItem in inventory:
     if adaItem.protoIndex == 0:
       return
-    playerShip.crew[memberIndex].inventory.add(y = InventoryData(
+    playerShip.crew[memberIndex - 1].inventory.add(y = InventoryData(
         protoIndex: adaItem.protoIndex, amount: adaItem.amount,
         name: $adaItem.name,
         durability: adaItem.durability, price: adaItem.price))
