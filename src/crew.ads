@@ -148,9 +148,7 @@ package Crew is
    type Mob_Attributes is
      array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
      -- ****
-     --## rule on TYPE_INITIAL_VALUES
 
-     --## rule off TYPE_INITIAL_VALUES
      -- ****s* Crew/Crew.Mob_Record
      -- FUNCTION
      -- Abstract record to store all common settings for mobs (crew, other mobs,
@@ -358,8 +356,10 @@ package Crew is
 
 -- Temporary code to interact with Nim
 
+   --## rule off TYPE_INITIAL_VALUES
    type Nim_Attributes_Array is array(1 .. 16, 1 .. 2) of Integer;
    type Nim_Skills_Array is array(1 .. 64, 1 .. 3) of Integer;
+   type Nim_Equipment_Array is array(0 .. 6) of Integer;
 
    type Nim_Member_Data is record
       Attributes: Nim_Attributes_Array;
@@ -374,7 +374,7 @@ package Crew is
       Previous_Order: Integer;
       Order_Time: Integer;
       Orders: Natural_Array(1 .. 12);
-      Equipment: Natural_Array(1 .. 7);
+      Equipment: Nim_Equipment_Array;
       Payment: Attributes_Array;
       Contract_Length: Integer;
       Morale: Attributes_Array;
@@ -382,6 +382,7 @@ package Crew is
       Home_Base: Integer;
       Faction: chars_ptr;
    end record;
+   --## rule on TYPE_INITIAL_VALUES
 
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data;
 
