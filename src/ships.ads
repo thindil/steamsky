@@ -481,6 +481,8 @@ package Ships is
 
 -- Temporary code to interact with Nim
 
+   procedure Get_Ada_Crew;
+
    procedure Get_Ada_Crew_Inventory
      (Inventory: Nim_Inventory_Array; Member_Index: Positive) with
       Import => True,
