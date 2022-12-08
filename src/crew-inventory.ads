@@ -70,8 +70,7 @@ package Crew.Inventory is
       -- SOURCE
    function Free_Inventory
      (Member_Index: Positive; Amount: Integer) return Integer with
-      Pre => Member_Index <= Player_Ship.Crew.Last_Index,
-      Test_Case => (Name => "Test_FreeInventory", Mode => Nominal);
+      Pre => Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
 
       -- ****f* Inventory/Inventory.Take_Off_Item
