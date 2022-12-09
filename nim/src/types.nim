@@ -153,7 +153,7 @@ type
     orderTime*: int ## The amount of minutes to next check in the order
     orders*: array[1..12, Natural] ## The orders priorities for the member
     inventory*: seq[InventoryData] ## The inventory o the member
-    equipment*: array[EquipmentLocations, Natural] ## The equipment of the member
+    equipment*: array[EquipmentLocations, int] ## The equipment of the member
     payment*: AttributesArray ## The payment information for the member
     contractLength*: int ## The length of the contract with the member
     morale*: AttributesArray ## The morale information for the member
