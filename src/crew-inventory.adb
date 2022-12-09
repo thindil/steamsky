@@ -151,14 +151,26 @@ package body Crew.Inventory is
       end loop Take_Off_Item_Loop;
    end Take_Off_Item;
 
-   function Item_Is_Used(Member_Index, Item_Index: Positive) return Boolean is
+   function Item_Is_Used
+     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
+      return Boolean is
+      function Item_Ada_Is_Used(M_Index, I_Index: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "itemAdaIsUsed";
    begin
-      Check_Item_Usage_Loop :
-      for I in Player_Ship.Crew(Member_Index).Equipment'Range loop
-         if Player_Ship.Crew(Member_Index).Equipment(I) = Item_Index then
-            return True;
-         end if;
-      end loop Check_Item_Usage_Loop;
+      if Update_Nim then
+         Get_Ada_Crew;
+         Get_Ada_Crew_Inventory
+           (Inventory =>
+              Inventory_To_Nim
+                (Inventory => Player_Ship.Crew(Member_Index).Inventory),
+            Member_Index => Member_Index);
+      end if;
+      if Item_Ada_Is_Used(M_Index => Member_Index, I_Index => Item_Index) =
+        1 then
+         return True;
+      end if;
       return False;
    end Item_Is_Used;
 
