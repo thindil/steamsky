@@ -559,7 +559,7 @@ package body Crew is
             end if;
             if not Factions_List(Player_Ship.Crew(I).Faction).Flags.Contains
                 (Item => To_Unbounded_String(Source => "nofatigue")) and
-              (Health_Level in 1 .. 99) and Cabin_Index > 0 then
+              Health_Level in 1 .. 99 and Cabin_Index > 0 then
                Health_Level := Health_Level + Times;
                if Health_Level > 100 then
                   Health_Level := 100;
@@ -568,7 +568,7 @@ package body Crew is
             if Player_Ship.Crew(I).Morale(1) < 50 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
-                  Value => (Times + Rest_Amount));
+                  Value => Times + Rest_Amount);
                if Player_Ship.Crew(I).Morale(1) > 50 then
                   Player_Ship.Crew(I).Morale := (1 => 50, 2 => 0);
                end if;
@@ -578,18 +578,18 @@ package body Crew is
                Tired_Level := Tired_Level + Times;
             end if;
             if Tired_Level >
-              (100 +
-               Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
-                 .Level) then
+              100 +
+                Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
+                  .Level then
                Tired_Level :=
-                 (100 +
-                  Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
-                    .Level);
+                 100 +
+                 Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
+                   .Level;
             end if;
             if Tired_Level >=
-              (50 +
-               Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
-                 .Level) then
+              50 +
+                Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
+                  .Level then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value => ((Times / 5) * (-1)));
