@@ -222,7 +222,7 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
     for index, order in adaMember.orders.pairs:
       member.orders[index] = order
     for index, item in adaMember.equipment.pairs:
-      member.equipment[index.EquipmentLocations] = item
+      member.equipment[index.EquipmentLocations] = item - 1
     for attribute in adaMember.attributes:
       if attribute[0] == 0:
         break
