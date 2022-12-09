@@ -30,6 +30,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
@@ -84,45 +85,52 @@ package body Knowledge.Missions is
                 when EXPLORE => "Explore area",
                 when PASSENGER => "Transport passenger") &
              " mission actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
+           Parent_Name => ".", Columns => 3);
+      procedure Add_Button
+        (Name, Label, Command, Icon, Tooltip: String; Column: Natural) is
          Button: constant Ttk_Button :=
            Create
              (pathName => Mission_Menu & Name,
               options =>
                 "-text {" & Label & "} -command {CloseDialog " & Mission_Menu &
-                " .;" & Command & "}");
+                " .;" & Command & "} -image " & Icon &
+                "icon -style Dialog.TButton");
       begin
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
             Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
+              "-sticky we -padx 5 -pady {0 5} -row 1 -column" &
+              Natural'Image(Column));
+         Add(Widget => Button, Message => Tooltip);
          Bind
            (Widgt => Button, Sequence => "<Escape>",
             Script => "{CloseDialog " & Mission_Menu & " .;break}");
-         if Command'Length = 0 then
+         if Name = ".show" then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Mission_Menu & ".show;break}");
+               Script => "{focus " & Mission_Menu & ".destination;break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
    begin
       Add_Button
-        (Name => ".show", Label => "Show the mission on map",
-         Command =>
-           "ShowOnMap" &
-           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y));
-      Add_Button
         (Name => ".destination",
-         Label => "Set the mission as destination for the ship",
+         Tooltip => "Set the mission as destination for the ship.",
          Command =>
            "SetDestination2 " &
            Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
+           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y),
+         Icon => "destination", Label => "Target", Column => 0);
+      Add_Button
+        (Name => ".close", Label => "Close", Command => "", Icon => "exit",
+         Tooltip => "Close the dialog.", Column => 1);
+      Add_Button
+        (Name => ".show", Tooltip => "Show the mission on map.",
+         Command =>
+           "ShowOnMap" &
+           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
+           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y),
+         Icon => "show", Label => "Show", Column => 2);
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Missions_Menu_Command;
