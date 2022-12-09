@@ -122,18 +122,21 @@ package body Crew.Inventory is
    end Update_Inventory;
 
    function Free_Inventory
-     (Member_Index: Positive; Amount: Integer) return Integer is
+     (Member_Index: Positive; Amount: Integer; Update_Nim: Boolean := True)
+      return Integer is
       function Free_Ada_Inventory(M_Index, Amnt: Integer) return Integer with
          Import => True,
          Convention => C,
          External_Name => "freeAdaInventory";
    begin
-      Get_Ada_Crew;
-      Get_Ada_Crew_Inventory
-        (Inventory =>
-           Inventory_To_Nim
-             (Inventory => Player_Ship.Crew(Member_Index).Inventory),
-         Member_Index => Member_Index);
+      if Update_Nim then
+         Get_Ada_Crew;
+         Get_Ada_Crew_Inventory
+           (Inventory =>
+              Inventory_To_Nim
+                (Inventory => Player_Ship.Crew(Member_Index).Inventory),
+            Member_Index => Member_Index);
+      end if;
       return Free_Ada_Inventory(M_Index => Member_Index, Amnt => Amount);
    end Free_Inventory;
 

@@ -69,7 +69,8 @@ package Crew.Inventory is
       -- 7.5 - Renamed to Free_Inventory, changed parameter name to Member_Index
       -- SOURCE
    function Free_Inventory
-     (Member_Index: Positive; Amount: Integer) return Integer with
+     (Member_Index: Positive; Amount: Integer; Update_Nim: Boolean := True)
+      return Integer with
       Pre => Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
 
