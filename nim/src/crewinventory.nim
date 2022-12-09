@@ -40,6 +40,9 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     except KeyError:
       discard
 
+proc itemIsUsed*(memberIndex, itemIndex: Natural): bool =
+  return itemIndex in playerShip.crew[memberIndex].equipment
+
 # TODO: unfinished
 proc updateInventory*(memberIndex: Positive; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
@@ -60,3 +63,6 @@ proc updateInventory*(memberIndex: Positive; amount: int;
 proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
   return freeInventory(memberIndex = (memberIndex - 1).Natural,
       amount = amount).cint
+
+proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.exportc.} =
+  return itemIsUsed(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1)).ord.cint
