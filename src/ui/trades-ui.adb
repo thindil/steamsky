@@ -434,7 +434,20 @@ package body Trades.UI is
             Tooltip => "Show available options for item",
             Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 5,
             Color =>
-              (if Profit > 0 then "green" elsif Profit < 0 then "red"
+              (if Profit > 0 then
+                 Tcl_GetVar
+                   (interp => Interp,
+                    varName =>
+                      "ttk::theme::" &
+                      To_String(Source => Game_Settings.Interface_Theme) &
+                      "::colors(-green)")
+               elsif Profit < 0 then
+                 Tcl_GetVar
+                   (interp => Interp,
+                    varName =>
+                      "ttk::theme::" &
+                      To_String(Source => Game_Settings.Interface_Theme) &
+                      "::colors(-red)")
                else ""));
          Add_Button
            (Table => Trade_Table,
@@ -630,7 +643,14 @@ package body Trades.UI is
             Command =>
               "ShowTradeItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 5, New_Row => False, Color => "red");
+            Column => 5, New_Row => False,
+            Color =>
+              Tcl_GetVar
+                (interp => Interp,
+                 varName =>
+                   "ttk::theme::" &
+                   To_String(Source => Game_Settings.Interface_Theme) &
+                   "::colors(-red)"));
          Add_Button
            (Table => Trade_Table,
             Text =>
