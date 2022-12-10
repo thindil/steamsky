@@ -590,9 +590,11 @@ package body Crew is
               50 +
                 Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
                   .Level then
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value => ((Times / 5) * (-1)));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
             case Player_Ship.Crew(I).Order is
                when PILOT =>
