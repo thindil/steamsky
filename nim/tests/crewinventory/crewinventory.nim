@@ -18,3 +18,6 @@ discard freeInventory(0, 0)
 
 assert not itemIsUsed(0, 0)
 assert itemIsUsed(0, 1)
+
+takeOffItem(0, 1)
+assert not itemIsUsed(0, 1)
