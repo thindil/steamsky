@@ -142,10 +142,16 @@ package body Crew.Inventory is
 
    procedure Take_Off_Item
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) is
+      Nim_Equipment: Nim_Equipment_Array;
       procedure Take_Ada_Off_Item(M_Index, I_Index: Integer) with
          Import => True,
          Convention => C,
          External_Name => "takeAdaOffItem";
+      procedure Equipment_To_Ada
+        (M_Index: Integer; Equipment: out Nim_Equipment_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "equipmentToAda";
    begin
       if Update_Nim then
          Get_Ada_Crew;
@@ -156,6 +162,12 @@ package body Crew.Inventory is
             Member_Index => Member_Index);
       end if;
       Take_Ada_Off_Item(M_Index => Member_Index, I_Index => Item_Index);
+      Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
+      for I in Nim_Equipment'Range loop
+         Player_Ship.Crew(Member_Index).Equipment
+           (Equipment_Locations'Val(I)) :=
+           Nim_Equipment(I);
+      end loop;
    end Take_Off_Item;
 
    function Item_Is_Used

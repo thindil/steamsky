@@ -61,7 +61,7 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) =
   for i in playerShip.crew[memberIndex].equipment.low..playerShip.crew[
       memberIndex].equipment.high:
     if playerShip.crew[memberIndex].equipment[i] == itemIndex:
-      playerShip.crew[memberIndex].equipment[i] = 0
+      playerShip.crew[memberIndex].equipment[i] = -1
       break
 
 # TODO: unfinished
@@ -90,3 +90,9 @@ proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.exportc.} =
 
 proc takeAdaOffItem(memberIndex, itemIndex: cint) {.exportc.} =
   takeOffItem(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1))
+
+proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
+    cint]) {.exportc.} =
+  for i in 0..6:
+    equipment[i] = playerShip.crew[(memberIndex - 1)].equipment[
+        i.EquipmentLocations].cint + 1
