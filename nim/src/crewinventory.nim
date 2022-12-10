@@ -42,6 +42,19 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
 
 proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Check if the item is currently used by the selected crew member in the
+  ## player ship crew.
+  ##
+  ## PARAMETERS
+  ##
+  ## * memberIndex - the index of the crew member which will be check for usage
+  ## * itemIndex   - the index of the item which will be check
+  ##
+  ## RETURNS
+  ##
+  ## True if the item is used, otherwise false
   return itemIndex in playerShip.crew[memberIndex].equipment
 
 # TODO: unfinished
