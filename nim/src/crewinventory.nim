@@ -40,7 +40,8 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     except KeyError:
       discard
 
-proc itemIsUsed*(memberIndex, itemIndex: Natural): bool =
+proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [],
+    tags: [].} =
   return itemIndex in playerShip.crew[memberIndex].equipment
 
 # TODO: unfinished
