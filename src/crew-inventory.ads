@@ -86,7 +86,8 @@ package Crew.Inventory is
       -- 7.5 - Renamed to Take_Off_Item, changed parameters names to
       --       Member_Index and Item_Index
       -- SOURCE
-   procedure Take_Off_Item(Member_Index, Item_Index: Positive) with
+   procedure Take_Off_Item
+     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) with
       Pre =>
       (Member_Index <= Player_Ship.Crew.Last_Index and
        Item_Index <=

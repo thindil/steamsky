@@ -140,15 +140,22 @@ package body Crew.Inventory is
       return Free_Ada_Inventory(M_Index => Member_Index, Amnt => Amount);
    end Free_Inventory;
 
-   procedure Take_Off_Item(Member_Index, Item_Index: Positive) is
+   procedure Take_Off_Item
+     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) is
+      procedure Take_Ada_Off_Item(M_Index, I_Index: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "takeAdaOffItem";
    begin
-      Take_Off_Item_Loop :
-      for I in Player_Ship.Crew(Member_Index).Equipment'Range loop
-         if Player_Ship.Crew(Member_Index).Equipment(I) = Item_Index then
-            Player_Ship.Crew(Member_Index).Equipment(I) := 0;
-            exit Take_Off_Item_Loop;
-         end if;
-      end loop Take_Off_Item_Loop;
+      if Update_Nim then
+         Get_Ada_Crew;
+         Get_Ada_Crew_Inventory
+           (Inventory =>
+              Inventory_To_Nim
+                (Inventory => Player_Ship.Crew(Member_Index).Inventory),
+            Member_Index => Member_Index);
+      end if;
+      Take_Ada_Off_Item(M_Index => Member_Index, I_Index => Item_Index);
    end Take_Off_Item;
 
    function Item_Is_Used

@@ -40,8 +40,8 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     except KeyError:
       discard
 
-proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [],
-    tags: [].} =
+proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
+    ], tags: [].} =
   ## FUNCTION
   ##
   ## Check if the item is currently used by the selected crew member in the
@@ -56,6 +56,13 @@ proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: []
   ##
   ## True if the item is used, otherwise false
   return itemIndex in playerShip.crew[memberIndex].equipment
+
+proc takeOffItem*(memberIndex, itemIndex: Natural) =
+  for i in playerShip.crew[memberIndex].equipment.low..playerShip.crew[
+      memberIndex].equipment.high:
+    if playerShip.crew[memberIndex].equipment[i] == itemIndex:
+      playerShip.crew[memberIndex].equipment[i] = 0
+      break
 
 # TODO: unfinished
 proc updateInventory*(memberIndex: Positive; amount: int;
@@ -80,3 +87,6 @@ proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
 
 proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.exportc.} =
   return itemIsUsed(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1)).ord.cint
+
+proc takeAdaOffItem(memberIndex, itemIndex: cint) {.exportc.} =
+  takeOffItem(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1))
