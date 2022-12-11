@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   messages, etc. in themes
 - Icon for set the player's ship destination. Author: Delapouite (https://game-icons.net),
   license CC BY 3.0
+- Help entry for the knowledge screen
 
 ## Changed
 - Updated look of in-game tables
