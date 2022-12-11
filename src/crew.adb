@@ -598,20 +598,20 @@ package body Crew is
             end if;
             case Player_Ship.Crew(I).Order is
                when PILOT =>
-                  if Player_Ship.Speed /= DOCKED then
+                  if Player_Ship.Speed = DOCKED then
+                     Tired_Level := Player_Ship.Crew(I).Tired;
+                  else
                      Gain_Exp
                        (Amount => Times, Skill_Number => Piloting_Skill,
                         Crew_Index => I);
-                  else
-                     Tired_Level := Player_Ship.Crew(I).Tired;
                   end if;
                when ENGINEER =>
-                  if Player_Ship.Speed /= DOCKED then
+                  if Player_Ship.Speed = DOCKED then
+                     Tired_Level := Player_Ship.Crew(I).Tired;
+                  else
                      Gain_Exp
                        (Amount => Times, Skill_Number => Engineering_Skill,
                         Crew_Index => I);
-                  else
-                     Tired_Level := Player_Ship.Crew(I).Tired;
                   end if;
                when GUNNER =>
                   if Player_Ship.Speed = DOCKED then
