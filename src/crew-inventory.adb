@@ -163,11 +163,12 @@ package body Crew.Inventory is
       end if;
       Take_Ada_Off_Item(M_Index => Member_Index, I_Index => Item_Index);
       Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
+      Update_Equipment_Loop:
       for I in Nim_Equipment'Range loop
          Player_Ship.Crew(Member_Index).Equipment
            (Equipment_Locations'Val(I)) :=
            Nim_Equipment(I);
-      end loop;
+      end loop Update_Equipment_Loop;
    end Take_Off_Item;
 
    function Item_Is_Used
