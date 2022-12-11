@@ -62,7 +62,8 @@
 {b}9.{/b} Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting order priorities and some specific crew member tips.
 {b}10.{/b} Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
 {b}11.{/b} Hiring crew members: Detailed information about hiring new crew members in sky bases.
-{b}12.{/b} Tips: General tips for playing the game.
+{b}12.{/b} Knowledge screen: General information about the knowledge screen.
+{b}13.{/b} Tips: General tips for playing the game.
 
     Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}First steps{/b}, {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.</entry>
  <entry index="firststeps" title=" 2. First steps">    {i}These steps are only suggestions on how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
@@ -373,7 +374,18 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Here no limit how many crew members you can have on ship, just remember, all of them needs food, drinks, place to rest and payment.
 {b}*{/b} Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base.
 {b}*{/b} Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
- <entry index="tips" title="12. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
+ <entry index="knowledge" title="12. Knowledge screen">{u}General info{/u}
+
+    On the knownledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is currently set as your ship destination.
+
+ {u}Known bases list{/u}
+
+    The list presents all known for your character bases. To fill the list, when docked to the base, select option {b}Ask for bases{/b} from {b}Orders{/b} menu. You can ask for bases in each base only once. To known more about the selected base, you have to visit it, by flying to it and dock there. If you visited the base, its entry on the list will be colored (with default the game settings) on green. Unvisited bases use default color. Over time this list can only grow, you will never lost any information about bases.
+
+ {u}Known events list{/u}
+
+   The list presents all know for your characters events which currently take place in the game. To fill the list, when docked to the base, select option {b}Ask for events{/b} from {b}Orders{/b} menu. You can ask for events from time to time in each base. The time when you can ask again, you can check in the base's information dialog in the list of known bases. The colors of the events are the same as for the events on the map. For default the game settings, friendly events are colored on green and enemy related events are red.</entry>
+ <entry index="tips" title="13. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
 {b}*{/b} If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to ship information screen, select desired item and select proper option from item options' menu.
 {b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 {b}*{/b} You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
