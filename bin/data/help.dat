@@ -376,7 +376,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
  <entry index="knowledge" title="12. Knowledge screen">{u}General info{/u}
 
-    On the knownledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is currently set as your ship destination.
+    On the knowledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is currently set as your ship destination.
 
  {u}Known bases list{/u}
 
@@ -384,7 +384,15 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 
  {u}Known events list{/u}
 
-   The list presents all know for your characters events which currently take place in the game. To fill the list, when docked to the base, select option {b}Ask for events{/b} from {b}Orders{/b} menu. You can ask for events from time to time in each base. The time when you can ask again, you can check in the base's information dialog in the list of known bases. The colors of the events are the same as for the events on the map. For default the game settings, friendly events are colored on green and enemy related events are red.</entry>
+    The list presents all known for your characters events which currently take place in the game. To fill the list, when docked to the base, select option {b}Ask for events{/b} from {b}Orders{/b} menu. You can ask for events from time to time in each base. The time when you can ask again, you can check in the base's information dialog in the list of known bases. The colors of the events are the same as for the events on the map. For default the game settings, friendly events are colored on green and enemy related events are red.
+
+ {u}Accepted missions list{/u}
+
+    The list presents all currently accepted missions by your character. You can find missions in the bases. For more information about missions, please see {b}Missions{/b} help section.
+
+ {u}Known stories{/u}
+
+    The list presents all information about stories known to your character. The stories are series of randomly generated missions, connected to themselves. You can see the details of each step in a story by selecting the story and then selecting the step on the list. Finding stories is the hardest part of the game. One tip: during combat with an undead ships, it is good to send the boarding party on the enemy ship. After combat, they may find an interesting thing which will start something interesting.</entry>
  <entry index="tips" title="13. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
 {b}*{/b} If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to ship information screen, select desired item and select proper option from item options' menu.
 {b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
@@ -401,7 +409,6 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Abandoned bases may be recovered by someone. In that situation, they gain a small population and a new owner.
 {b}*{/b} You may move most items (with except of items needed for missions) between ship cargo and crew members inventory in ship info screen and from inventory to ship in selected crew member inventory screen.
 {b}*{/b} Enemies during combat can send boarding parties to your ship too, so when you are caught by a harpoon or battering ram, you caught an enemy by your harpoon or battering ram, don't forget to set someone to defends ship.
-{b}*{/b} During combat with undead ships, it is good to send boarding party on enemy ship. After combat, they may find interesting thing which will lead you to another things...
 {b}*{/b} Your career determine not only your starting ship and crew, but mainly gaining experience by you and your crew members in skills during game. Those who choice combat based career will be learned combat skills faster than those who choice crafting based career.
 {b}*{/b} When you are waiting in place outside sky bases, your ship will be use fuel too. Watch out on it, because if you will not have enough fuel, you may fall from sky and die.
 {b}*{/b} You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 24} and {GameKey 25} keys.
