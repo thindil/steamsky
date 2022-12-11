@@ -92,8 +92,7 @@ package Crew.Inventory is
       (Member_Index <= Player_Ship.Crew.Last_Index and
        Item_Index <=
          Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(Member_Index).Inventory)),
-      Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
+           (Container => Player_Ship.Crew(Member_Index).Inventory));
       -- ****
 
       -- ****f* Inventory/Inventory.Item_Is_Used
