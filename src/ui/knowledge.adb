@@ -143,6 +143,8 @@ package body Knowledge is
               "<" & To_String(Source => General_Accelerators(4)) & ">");
          return TCL_OK;
       end if;
+      Tcl_SetVar
+        (interp => Interp, varName => "gamestate", newValue => "knowledge");
       Bind_To_Main_Window
         (Interp => Interp,
          Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
