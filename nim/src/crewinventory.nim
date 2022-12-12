@@ -18,6 +18,11 @@
 import std/tables
 import game, items, types, ships
 
+type CrewNoSpaceError* = object of CatchableError
+  ## FUNCTION
+  ##
+  ## Raised when there is no space for new item in crew member inventory
+
 proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     raises: [], tags: [].} =
   ## FUNCTION
@@ -88,6 +93,20 @@ proc updateInventory*(memberIndex: Natural; amount: int;
           protoIndex = protoIndex)
   else:
     itemIndex = inventoryIndex
+  if amount > 0:
+    let weight = if itemIndex > 0:
+        itemsList[ship.crew[memberIndex].inventory[itemIndex].protoIndex].weight * amount
+      else:
+        itemsList[protoIndex].weight * amount
+    if freeInventory(memberIndex = memberIndex, amount = 0 - weight) < 0:
+      raise newException(exceptn = CrewNoSpaceError,
+          message = ship.crew[memberIndex].name & " doesn't have any free space in their inventory.")
+  else:
+    if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
+      takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
+  if itemIndex == -1:
+    ship.crew[memberIndex].inventory.add(y = InventoryData(protoIndex = protoIndex, amount = amount, name = itemsList[protoIndex].name, durability = durability, price = price))
+
 
 # Temporary code for interfacing with Ada
 
