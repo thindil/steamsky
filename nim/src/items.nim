@@ -23,7 +23,7 @@ type
     ## FUNCTION
     ##
     ## Used to store information about items
-    name: string ## The name of the item
+    name*: string ## The name of the item
     weight*: Positive ## The weight of the item
     itemType*: string ## The type of the item
     price*: Natural ## The base price of the item in bases
