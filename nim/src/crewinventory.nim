@@ -79,7 +79,6 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
       playerShip.crew[memberIndex].equipment[i] = -1
       break
 
-# TODO: unfinished
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
     inventoryIndex: int = -1; price: Natural; ship: var ShipRecord) =
@@ -95,7 +94,8 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     itemIndex = inventoryIndex
   if amount > 0:
     let weight = if itemIndex > 0:
-        itemsList[ship.crew[memberIndex].inventory[itemIndex].protoIndex].weight * amount
+        itemsList[ship.crew[memberIndex].inventory[
+            itemIndex].protoIndex].weight * amount
       else:
         itemsList[protoIndex].weight * amount
     if freeInventory(memberIndex = memberIndex, amount = 0 - weight) < 0:
@@ -105,8 +105,17 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
       takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
   if itemIndex == -1:
-    ship.crew[memberIndex].inventory.add(y = InventoryData(protoIndex = protoIndex, amount = amount, name = itemsList[protoIndex].name, durability = durability, price = price))
-
+    ship.crew[memberIndex].inventory.add(y = InventoryData(
+        protoIndex: protoIndex, amount: amount, name: itemsList[
+        protoIndex].name, durability: durability, price: price))
+  else:
+    let newAmount = ship.crew[memberIndex].inventory[itemIndex].amount + amount
+    if newAmount == 0:
+      {.warning[UnsafeSetLen]: off.}
+      ship.crew[memberIndex].inventory.delete(i = itemIndex)
+      {.warning[UnsafeSetLen]: on.}
+    else:
+      ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
 # Temporary code for interfacing with Ada
 
