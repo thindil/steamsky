@@ -18,7 +18,9 @@
 import std/tables
 import game, types, utils
 
-var playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
+var
+  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
+  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
@@ -134,20 +136,36 @@ proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
 
-proc getAdaPlayerShip(shipData: AdaShipData) {.exportc.} =
-  playerShip.name = $shipData.name
-  playerShip.skyX = shipData.skyX
-  playerShip.skyY = shipData.skyY
-  playerShip.speed = shipData.speed.ShipSpeed
-  playerShip.upgradeModule = shipData.upgradeModule
-  playerShip.destinationX = shipData.destinationX
-  playerShip.destinationY = shipData.destinationY
-  playerShip.repairModule = shipData.repairModule
-  playerShip.description = $shipData.description
-  playerShip.homeBase = shipData.homeBase
+proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.exportc.} =
+  if getPlayerShip == 1:
+    playerShip.name = $shipData.name
+    playerShip.skyX = shipData.skyX
+    playerShip.skyY = shipData.skyY
+    playerShip.speed = shipData.speed.ShipSpeed
+    playerShip.upgradeModule = shipData.upgradeModule
+    playerShip.destinationX = shipData.destinationX
+    playerShip.destinationY = shipData.destinationY
+    playerShip.repairModule = shipData.repairModule
+    playerShip.description = $shipData.description
+    playerShip.homeBase = shipData.homeBase
+  else:
+    npcShip.name = $shipData.name
+    npcShip.skyX = shipData.skyX
+    npcShip.skyY = shipData.skyY
+    npcShip.speed = shipData.speed.ShipSpeed
+    npcShip.upgradeModule = shipData.upgradeModule
+    npcShip.destinationX = shipData.destinationX
+    npcShip.destinationY = shipData.destinationY
+    npcShip.repairModule = shipData.repairModule
+    npcShip.description = $shipData.description
+    npcShip.homeBase = shipData.homeBase
 
-proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
-  playerShip.modules = @[]
+proc getAdaShipModules(modules: array[1..75, AdaModuleData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  if getPlayerShip == 1:
+    playerShip.modules = @[]
+  else:
+    npcShip.modules = @[]
   for adaModule in modules:
     if adaModule.mType == ModuleType2.any.ord:
       return
@@ -196,19 +214,35 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData]) {.exportc.} =
       if owner == 0:
         break
       module.owner.add(y = owner)
-    playerShip.modules.add(y = module)
+    if getPlayerShip == 1:
+      playerShip.modules.add(y = module)
+    else:
+      npcShip.modules.add(y = module)
 
-proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData]) {.exportc.} =
-  playerShip.cargo = @[]
+proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  if getPlayerShip == 1:
+    playerShip.cargo = @[]
+  else:
+    npcShip.cargo = @[]
   for adaItem in cargo:
     if adaItem.protoIndex == 0:
       return
-    playerShip.cargo.add(y = InventoryData(protoIndex: adaItem.protoIndex,
-        amount: adaItem.amount, name: $adaItem.name,
-        durability: adaItem.durability, price: adaItem.price))
+    if getPlayerShip == 1:
+      playerShip.cargo.add(y = InventoryData(protoIndex: adaItem.protoIndex,
+          amount: adaItem.amount, name: $adaItem.name,
+          durability: adaItem.durability, price: adaItem.price))
+    else:
+      npcShip.cargo.add(y = InventoryData(protoIndex: adaItem.protoIndex,
+          amount: adaItem.amount, name: $adaItem.name,
+          durability: adaItem.durability, price: adaItem.price))
 
-proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
-  playerShip.crew = @[]
+proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  if getPlayerShip == 1:
+    playerShip.crew = @[]
+  else:
+    npcShip.crew = @[]
   for adaMember in crew:
     if adaMember.name.len == 0:
       return
@@ -235,15 +269,27 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData]) {.exportc.} =
           experience: skill[2]))
     member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
     member.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
-    playerShip.crew.add(y = member)
+    if getPlayerShip == 1:
+      playerShip.crew.add(y = member)
+    else:
+      npcShip.crew.add(y = member)
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
-    memberIndex: cint) {.exportc.} =
-  playerShip.crew[memberIndex - 1].inventory = @[]
+    memberIndex: cint; getPlayerShip: cint = 1) {.exportc.} =
+  if getPlayerShip == 1:
+    playerShip.crew[memberIndex - 1].inventory = @[]
+  else:
+    npcShip.crew[memberIndex - 1].inventory = @[]
   for adaItem in inventory:
     if adaItem.protoIndex == 0:
       return
-    playerShip.crew[memberIndex - 1].inventory.add(y = InventoryData(
-        protoIndex: adaItem.protoIndex, amount: adaItem.amount,
-        name: $adaItem.name,
-        durability: adaItem.durability, price: adaItem.price))
+    if getPlayerShip == 1:
+      playerShip.crew[memberIndex - 1].inventory.add(y = InventoryData(
+          protoIndex: adaItem.protoIndex, amount: adaItem.amount,
+          name: $adaItem.name,
+          durability: adaItem.durability, price: adaItem.price))
+    else:
+      npcShip.crew[memberIndex - 1].inventory.add(y = InventoryData(
+          protoIndex: adaItem.protoIndex, amount: adaItem.amount,
+          name: $adaItem.name,
+          durability: adaItem.durability, price: adaItem.price))

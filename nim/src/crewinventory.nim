@@ -134,3 +134,6 @@ proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
   for i in 0..6:
     equipment[i] = playerShip.crew[(memberIndex - 1)].equipment[
         i.EquipmentLocations].cint + 1
+
+proc updateAdaInventory(memberIndex, amount, protoIndex, durability, inventoryIndex, price: cint; ship: var ShipRecord) {.exportc.} =
+  discard
