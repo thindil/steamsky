@@ -59,6 +59,15 @@ proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
 
 proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Stop using the selected item by the selected the player's ship crew
+  ## member.
+  ##
+  ## PARAMETERS
+  ##
+  ## * memberIndex - the index of the crew member which will stop using the item
+  ## * itemIndex   - the index of the item to stop using
   for i in playerShip.crew[memberIndex].equipment.low..playerShip.crew[
       memberIndex].equipment.high:
     if playerShip.crew[memberIndex].equipment[i] == itemIndex:
