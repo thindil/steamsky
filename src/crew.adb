@@ -657,6 +657,7 @@ package body Crew is
                                 Item_Type =>
                                   Factions_List(Member.Faction).Healing_Tools);
                            if Tool_Index > 0 then
+                              --## rule off SIMPLIFIABLE_EXPRESSIONS
                               Heal_Amount :=
                                 (if
                                    Inventory_Container.Element
@@ -673,6 +674,7 @@ package body Crew is
                               Update_Cargo
                                 (Ship => Player_Ship, Amount => -(Heal_Amount),
                                  Cargo_Index => Tool_Index);
+                              --## rule on SIMPLIFIABLE_EXPRESSIONS
                            else
                               Tool_Index :=
                                 Find_Item
@@ -681,6 +683,7 @@ package body Crew is
                                      Factions_List(Member.Faction)
                                        .Healing_Tools);
                               if Tool_Index > 0 then
+                              --## rule off SIMPLIFIABLE_EXPRESSIONS
                                  Heal_Amount :=
                                    (if
                                       Inventory_Container.Element
@@ -701,6 +704,7 @@ package body Crew is
                                     Amount => -(Heal_Amount),
                                     Inventory_Index => Tool_Index,
                                     Ship => Player_Ship);
+                              --## rule on SIMPLIFIABLE_EXPRESSIONS
                               end if;
                            end if;
                         end if;
@@ -950,9 +954,11 @@ package body Crew is
                   else Hunger_Level + Tired_Points);
                if Player_Ship.Crew(I).Hunger = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
                      Value => -(Tired_Points));
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
                      Death_Reason :=
@@ -968,9 +974,11 @@ package body Crew is
                   else Thirst_Level + Tired_Points);
                if Player_Ship.Crew(I).Thirst = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
                      Value => -(Tired_Points));
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
                      Death_Reason :=
