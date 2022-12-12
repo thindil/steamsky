@@ -57,7 +57,8 @@ proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
   ## True if the item is used, otherwise false
   return itemIndex in playerShip.crew[memberIndex].equipment
 
-proc takeOffItem*(memberIndex, itemIndex: Natural) =
+proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
+    tags: [].} =
   for i in playerShip.crew[memberIndex].equipment.low..playerShip.crew[
       memberIndex].equipment.high:
     if playerShip.crew[memberIndex].equipment[i] == itemIndex:
