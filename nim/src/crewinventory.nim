@@ -75,11 +75,11 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
       break
 
 # TODO: unfinished
-proc updateInventory*(memberIndex: Positive; amount: int;
-    protoIndex: Natural = 0; durability: ItemsDurability = 0; inventoryIndex,
-    price: Natural; ship: var ShipRecord) =
+proc updateInventory*(memberIndex: Natural; amount: int;
+    protoIndex: Natural = 0; durability: ItemsDurability = 0;
+    inventoryIndex: int = -1; price: Natural; ship: var ShipRecord) =
   var itemIndex: int
-  if inventoryIndex == 0:
+  if inventoryIndex == -1:
     if durability > 0:
       itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
           protoIndex = protoIndex, durability = durability)
