@@ -209,7 +209,7 @@ package body Knowledge.Bases is
          Add_Button
            (Table => Bases_Table,
             Text => To_String(Source => Sky_Bases(I).Name),
-            Tooltip => "Show available base's options",
+            Tooltip => "Show the base's details",
             Command => "ShowBaseInfo" & Positive'Image(I), Column => 1,
             Color => To_String(Source => Color));
          Add_Button
@@ -264,27 +264,27 @@ package body Knowledge.Bases is
          else
             Add_Button
               (Table => Bases_Table, Text => "not",
-               Tooltip => "Show available base's options",
+               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
-               Tooltip => "Show available base's options",
+               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "visited",
-               Tooltip => "Show available base's options",
+               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "",
-               Tooltip => "Show available base's options",
+               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table, Text => "yet",
-               Tooltip => "Show available base's options",
+               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
                Color => To_String(Source => Color), New_Row => True);
          end if;

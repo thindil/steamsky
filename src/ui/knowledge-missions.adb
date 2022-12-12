@@ -508,7 +508,7 @@ package body Knowledge.Missions is
             Add_Button
               (Table => Missions_Table,
                Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
-               Tooltip => "Show available mission's options",
+               Tooltip => "Show the mission's menu",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                Column => 1, Color => To_String(Source => Color));
             case Accepted_Missions(I).M_Type is
@@ -531,7 +531,7 @@ package body Knowledge.Missions is
                                   Accepted_Missions(I).Target_Y)
                                  .Base_Index)
                               .Name),
-                     Tooltip => "Show available mission's options",
+                     Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 3, Color => To_String(Source => Color));
                when PATROL =>
@@ -540,7 +540,7 @@ package body Knowledge.Missions is
                      Text =>
                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
-                     Tooltip => "Show available mission's options",
+                     Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 3, Color => To_String(Source => Color));
                when DESTROY =>
@@ -551,7 +551,7 @@ package body Knowledge.Missions is
                          (Source =>
                             Proto_Ships_List(Accepted_Missions(I).Ship_Index)
                               .Name),
-                     Tooltip => "Show available mission's options",
+                     Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 3, Color => To_String(Source => Color));
                when EXPLORE =>
@@ -560,7 +560,7 @@ package body Knowledge.Missions is
                      Text =>
                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
-                     Tooltip => "Show available mission's options",
+                     Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 3, Color => To_String(Source => Color));
                when PASSENGER =>
@@ -576,7 +576,7 @@ package body Knowledge.Missions is
                                   Accepted_Missions(I).Target_Y)
                                  .Base_Index)
                               .Name),
-                     Tooltip => "Show available mission's options",
+                     Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 3, Color => To_String(Source => Color));
             end case;
