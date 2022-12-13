@@ -293,3 +293,18 @@ proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
           protoIndex: adaItem.protoIndex, amount: adaItem.amount,
           name: $adaItem.name,
           durability: adaItem.durability, price: adaItem.price))
+
+proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
+    memberIndex: cint; getPlayerShip: cint = 1) {.exportc.} =
+  let nimInventory = if getPlayerShip == 1:
+      playerShip.crew[memberIndex - 1].inventory
+    else:
+      npcShip.crew[memberIndex - 1].inventory
+  for index in inventory.low..inventory.high:
+    if index <= nimInventory.len:
+      inventory[index] = AdaInventoryData(protoIndex: nimInventory[index -
+          1].protoIndex.cint, amount: nimInventory[index - 1].amount.cint,
+          name: nimInventory[index - 1].name.cstring, durability: nimInventory[
+          index - 1].durability.cint, price: nimInventory[index - 1].price.cint)
+    else:
+      inventory[index] = AdaInventoryData(protoIndex: 0)

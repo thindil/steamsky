@@ -489,4 +489,10 @@ package Ships is
       Convention => C,
       External_Name => "getAdaCrewInventory";
 
+   procedure Set_Ada_Crew_Inventory
+     (Inventory: out Nim_Inventory_Array; Member_Index: Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaCrewInventory";
+
 end Ships;
