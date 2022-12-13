@@ -204,106 +204,6 @@ package body Crew is
       Damage: Damage_Factor := 0.0;
       Need_Cleaning, Have_Medical_Room: Boolean := False;
       Skill_Index: Skills_Container.Extended_Index := 0;
-      function Consume(Item_Type: Bounded_String) return Natural is
-         Consume_Value: Natural := 0;
-         Item_Index: Inventory_Container.Extended_Index :=
-           Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Item_Type);
-      begin
-         if Item_Index > 0 then
-            Consume_Value :=
-              Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Proto_Index)
-                .Value
-                (1);
-            if Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Proto_Index)
-                .Value'
-                Length >
-              1
-              and then
-                Objects_Container.Element
-                  (Container => Items_List,
-                   Index =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => Item_Index)
-                       .Proto_Index)
-                  .Value
-                  (2) /=
-                0 then
-               Update_Morale
-                 (Ship => Player_Ship, Member_Index => I,
-                  Value =>
-                    Objects_Container.Element
-                      (Container => Items_List,
-                       Index =>
-                         Inventory_Container.Element
-                           (Container => Player_Ship.Cargo,
-                            Index => Item_Index)
-                           .Proto_Index)
-                      .Value
-                      (2));
-            end if;
-            Update_Cargo
-              (Ship => Player_Ship,
-               Proto_Index =>
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Item_Index)
-                   .Proto_Index,
-               Amount => -1);
-            return Consume_Value;
-         end if;
-         Item_Index :=
-           Find_Item
-             (Inventory => Player_Ship.Crew(I).Inventory,
-              Item_Type => Item_Type);
-         if Item_Index > 0 then
-            Consume_Value :=
-              Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Crew(I).Inventory,
-                      Index => Item_Index)
-                     .Proto_Index)
-                .Value
-                (1);
-            if Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Proto_Index)
-                .Value
-                (2) /=
-              0 then
-               Update_Morale
-                 (Ship => Player_Ship, Member_Index => I,
-                  Value =>
-                    Objects_Container.Element
-                      (Container => Items_List,
-                       Index =>
-                         Inventory_Container.Element
-                           (Container => Player_Ship.Cargo,
-                            Index => Item_Index)
-                           .Proto_Index)
-                      .Value
-                      (2));
-            end if;
-            Update_Inventory
-              (Member_Index => I, Amount => -1, Inventory_Index => Item_Index,
-               Ship => Player_Ship);
-            return Consume_Value;
-         end if;
-         return 0;
-      end Consume;
       procedure Update_Member(Member: in out Member_Data) is
          Back_To_Work: Boolean := True;
          Consume_Result: Natural := 0;
@@ -316,6 +216,107 @@ package body Crew is
                Stat := 0;
             end if;
          end Normalize_Stat;
+         function Consume(Item_Type: Bounded_String) return Natural is
+            Consume_Value: Natural := 0;
+            Item_Index: Inventory_Container.Extended_Index :=
+              Find_Item
+                (Inventory => Player_Ship.Cargo, Item_Type => Item_Type);
+         begin
+            if Item_Index > 0 then
+               Consume_Value :=
+                 Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index)
+                        .Proto_Index)
+                   .Value
+                   (1);
+               if Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index)
+                        .Proto_Index)
+                   .Value'
+                   Length >
+                 1
+                 and then
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo, Index => Item_Index)
+                          .Proto_Index)
+                     .Value
+                     (2) /=
+                   0 then
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => I,
+                     Value =>
+                       Objects_Container.Element
+                         (Container => Items_List,
+                          Index =>
+                            Inventory_Container.Element
+                              (Container => Player_Ship.Cargo,
+                               Index => Item_Index)
+                              .Proto_Index)
+                         .Value
+                         (2));
+               end if;
+               Update_Cargo
+                 (Ship => Player_Ship,
+                  Proto_Index =>
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Item_Index)
+                      .Proto_Index,
+                  Amount => -1);
+               return Consume_Value;
+            end if;
+            Item_Index :=
+              Find_Item
+                (Inventory => Player_Ship.Crew(I).Inventory,
+                 Item_Type => Item_Type);
+            if Item_Index > 0 then
+               Consume_Value :=
+                 Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(I).Inventory,
+                         Index => Item_Index)
+                        .Proto_Index)
+                   .Value
+                   (1);
+               if Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index)
+                        .Proto_Index)
+                   .Value
+                   (2) /=
+                 0 then
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => I,
+                     Value =>
+                       Objects_Container.Element
+                         (Container => Items_List,
+                          Index =>
+                            Inventory_Container.Element
+                              (Container => Player_Ship.Cargo,
+                               Index => Item_Index)
+                              .Proto_Index)
+                         .Value
+                         (2));
+               end if;
+               Update_Inventory
+                 (Member_Index => I, Amount => -1,
+                  Inventory_Index => Item_Index, Ship => Player_Ship);
+               return Consume_Value;
+            end if;
+            return 0;
+         end Consume;
       begin
          if Factions_List(Member.Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "nofatigue")) then
