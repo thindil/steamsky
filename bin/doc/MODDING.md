@@ -1100,6 +1100,8 @@ story.
   Pilot position info for factions with sentient ships. Optional.
 * Key `NoEngineerIcon`: Path to the SVG image which will be used as icon to show
   Engineer position info for factions with sentient ships. Optional.
+* Key `DestinationIcon`: Path to the SVG image which will be used for set
+  destination button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
