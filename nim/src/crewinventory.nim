@@ -136,8 +136,12 @@ proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
         i.EquipmentLocations].cint + 1
 
 proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
-    inventoryIndex, price, inPlayerShip: cint) {.exportc.} =
+    inventoryIndex, price, inPlayerShip: cint): cint {.exportc.} =
   var ship = (if inPlayerShip == 1: playerShip else: npcShip)
-  updateInventory(memberIndex = memberIndex, amount = amount,
-      protoIndex = protoIndex, durability = durability,
-      inventoryIndex = inventoryIndex, price = price, ship = ship)
+  try:
+    updateInventory(memberIndex = memberIndex, amount = amount,
+        protoIndex = protoIndex, durability = durability,
+        inventoryIndex = inventoryIndex, price = price, ship = ship)
+    return 1
+  except CrewNoSpaceError:
+    return 0
