@@ -81,7 +81,9 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
 
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
-    inventoryIndex: int = -1; price: Natural; ship: var ShipRecord) =
+    inventoryIndex: int = -1; price: Natural;
+    ship: var ShipRecord) {.sideEffect, raises: [CrewNoSpaceError, KeyError],
+    tags: [].} =
   var itemIndex: int
   if inventoryIndex == -1:
     if durability > 0:
@@ -147,5 +149,5 @@ proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
           protoIndex = protoIndex, durability = durability, inventoryIndex = (
           inventoryIndex - 1), price = price, ship = npcShip)
     return 1
-  except CrewNoSpaceError:
+  except CrewNoSpaceError, KeyError:
     return 0
