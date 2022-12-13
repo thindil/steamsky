@@ -27,98 +27,34 @@ package body Crew.Inventory is
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) is
       use Tiny_String;
-
-      Item_Index: Inventory_Container.Extended_Index := 0;
+      Nim_Inventory: Nim_Inventory_Array :=
+        Inventory_To_Nim
+          (Inventory => Player_Ship.Crew(Member_Index).Inventory);
+      function Update_Ada_Inventory
+        (M_Index, Amnt, P_Index, Dur, I_Index, Pric, In_Player_Ship: Integer)
+         return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaInventory";
    begin
-      if Inventory_Index = 0 then
-         Item_Index :=
-           (if Durability > 0 then
-              Find_Item
-                (Inventory => Ship.Crew(Member_Index).Inventory,
-                 Proto_Index => Proto_Index, Durability => Durability)
-            else Find_Item
-                (Inventory => Ship.Crew(Member_Index).Inventory,
-                 Proto_Index => Proto_Index));
-      else
-         Item_Index := Inventory_Index;
+      Get_Ada_Crew;
+      Get_Ada_Crew_Inventory
+        (Inventory => Nim_Inventory, Member_Index => Member_Index,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      if Update_Ada_Inventory
+          (M_Index => Member_Index, Amnt => Amount, P_Index => Proto_Index,
+           Dur => Durability, I_Index => Inventory_Index, Pric => Price,
+           In_Player_Ship => (if Ship = Player_Ship then 1 else 0)) =
+        0 then
+         raise Crew_No_Space_Error
+           with To_String(Source => Ship.Crew(Member_Index).Name) &
+           " doesn't have any free space in their inventory.";
       end if;
-      if Amount > 0 then
-         Check_Free_Inventory_Space_Block :
-         declare
-            Weight: constant Positive :=
-              (if Item_Index > 0 then
-                 Objects_Container.Element
-                   (Container => Items_List,
-                    Index =>
-                      Inventory_Container.Element
-                        (Container => Ship.Crew(Member_Index).Inventory,
-                         Index => Item_Index)
-                        .Proto_Index)
-                   .Weight *
-                 Amount
-               else Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
-                   .Weight *
-                 Amount);
-         begin
-            if Free_Inventory
-                (Member_Index => Member_Index, Amount => -(Weight)) <
-              0 then
-               raise Crew_No_Space_Error
-                 with To_String(Source => Ship.Crew(Member_Index).Name) &
-                 " doesn't have any free space in their inventory.";
-            end if;
-         end Check_Free_Inventory_Space_Block;
-      else
-         if Item_Is_Used
-             (Member_Index => Member_Index, Item_Index => Item_Index) then
-            Take_Off_Item
-              (Member_Index => Member_Index, Item_Index => Item_Index);
-         end if;
-      end if;
-      if Item_Index = 0 then
-         Inventory_Container.Append
-           (Container => Ship.Crew(Member_Index).Inventory,
-            New_Item =>
-              (Proto_Index => Proto_Index, Amount => Amount,
-               Name =>
-                 To_Bounded_String
-                   (Source =>
-                      To_String
-                        (Source =>
-                           Objects_Container.Element
-                             (Container => Items_List, Index => Proto_Index)
-                             .Name)),
-               Durability => Durability, Price => Price));
-      else
-         Update_Inventory_Block :
-         declare
-            Item: Inventory_Data :=
-              Inventory_Container.Element
-                (Container => Ship.Crew(Member_Index).Inventory,
-                 Index => Item_Index);
-            New_Amount: constant Natural := Item.Amount + Amount;
-         begin
-            if New_Amount = 0 then
-               Inventory_Container.Delete
-                 (Container => Ship.Crew(Member_Index).Inventory,
-                  Index => Item_Index);
-               Update_Item_Index_Loop :
-               for Item of Ship.Crew(Member_Index).Equipment loop
-                  if Item = Item_Index then
-                     Item := 0;
-                  elsif Item > Item_Index then
-                     Item := Item - 1;
-                  end if;
-               end loop Update_Item_Index_Loop;
-            else
-               Item.Amount := New_Amount;
-               Inventory_Container.Replace_Element
-                 (Container => Ship.Crew(Member_Index).Inventory,
-                  Index => Item_Index, New_Item => Item);
-            end if;
-         end Update_Inventory_Block;
-      end if;
+      Set_Ada_Crew_Inventory
+        (Inventory => Nim_Inventory, Member_Index => Member_Index,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Ship.Crew(Member_Index).Inventory :=
+        Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
    end Update_Inventory;
 
    function Free_Inventory
@@ -163,7 +99,7 @@ package body Crew.Inventory is
       end if;
       Take_Ada_Off_Item(M_Index => Member_Index, I_Index => Item_Index);
       Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
-      Update_Equipment_Loop:
+      Update_Equipment_Loop :
       for I in Nim_Equipment'Range loop
          Player_Ship.Crew(Member_Index).Equipment
            (Equipment_Locations'Val(I)) :=
