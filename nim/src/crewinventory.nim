@@ -139,9 +139,9 @@ proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
     inventoryIndex, price, inPlayerShip: cint): cint {.exportc.} =
   var ship = (if inPlayerShip == 1: playerShip else: npcShip)
   try:
-    updateInventory(memberIndex = memberIndex, amount = amount,
+    updateInventory(memberIndex = (memberIndex - 1), amount = amount,
         protoIndex = protoIndex, durability = durability,
-        inventoryIndex = inventoryIndex, price = price, ship = ship)
+        inventoryIndex = (inventoryIndex - 1), price = price, ship = ship)
     return 1
   except CrewNoSpaceError:
     return 0
