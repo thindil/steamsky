@@ -44,6 +44,7 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
       result = result - (itemsList[item.protoIndex].weight * item.amount)
     except KeyError:
       discard
+  result = result + amount
 
 proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
     ], tags: [].} =
