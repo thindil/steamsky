@@ -125,7 +125,7 @@ When you undocked from base, in this same menu, you can dock again.
 
 {u}Events{/u}
 
-   During travel you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exist by some time. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 12} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
+   During travel, you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exist by some time. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 12} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
 
 {u}Setting ship destination{/u}
 
@@ -344,7 +344,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 
 {u}Some details about different types of missions{/u}
 
-{b}* Deliver items{/b}: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position. Additionally, deliver missions gives reputation to both bases (base where mission was started and base where mission was ended).
+{b}* Deliver items{/b}: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position. Additionally, deliver missions gives reputation to both bases (base where mission started and base where mission ended).
 {b}* Transport passengers{/b}: generally similar to {b}Deliver items{/b} missions: gives reputation to both bases, etc. Passengers are special crew members: you can't assign them to work, you can't change they cabin. They need food and drinks during transport. Same as normal crew members they can die during combat if they cabin will be destroyed. Each passenger always demands whole cabin for self.
 {b}* Patrol{/b} or {b}Explore area{/b}: If you were attacked by enemy during exploring or patrolling, after fight you need to patrol or explore area again (again select proper order from {b}Orders{/b} menu).
 {b}* Destroy ship{/b}: Same as {b}Patrol area{/b}: if you were attacked by other ship during searching for target, first you must finish this fight before you can start search again. If you escape from fight with mission target, you have been needing to search for it again.
@@ -376,11 +376,11 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
  <entry index="knowledge" title="12. Knowledge screen">{u}General info{/u}
 
-    On the knowledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is currently set as your ship destination.
+    On the knowledge screen you can find important information about the world which your character found during the game. By clicking with the mouse on any entry there, like base, event or mission, you can bring more information about the selected entry with buttons for actions related to that entry. If the entry in a list is colored on yellow (with default the game settings), the entry is your ship destination.
 
  {u}Known bases list{/u}
 
-    The list presents all known for your character bases. To fill the list, when docked to the base, select option {b}Ask for bases{/b} from {b}Orders{/b} menu. You can ask for bases in each base only once. To known more about the selected base, you have to visit it, by flying to it and dock there. If you visited the base, its entry on the list will be colored (with default the game settings) on green. Unvisited bases use default color. Over time this list can only grow, you will never lost any information about bases.
+    The list presents all known for your character bases. To fill the list, when docked to the base, select option {b}Ask for bases{/b} from {b}Orders{/b} menu. You can ask for bases in each base only once. To known more about the selected base, you have to visit it, by flying to it and dock there. If you visited the base, its entry on the list will be colored (with default the game settings) on green. Unvisited bases use default color. Over time this list can only grow, you will never lose any information about bases.
 
  {u}Known events list{/u}
 
@@ -395,7 +395,7 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
     The list presents all information about stories known to your character. The stories are series of randomly generated missions, connected to themselves. You can see the details of each step in a story by selecting the story and then selecting the step on the list. Finding stories is the hardest part of the game. One tip: during combat with an undead ships, it is good to send the boarding party on the enemy ship. After combat, they may find an interesting thing which will start something interesting.</entry>
  <entry index="tips" title="13. Tips">{b}*{/b} All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 19} key on sky map (no need to press {GameKey 22} first to show menu).
 {b}*{/b} If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to ship information screen, select desired item and select proper option from item options' menu.
-{b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
+{b}*{/b} Each crew member need proper module for work. If that module is destroyed, member cannot start selected work, for example, can't start piloting when cockpit was destroyed.
 {b}*{/b} You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
 {b}*{/b} You can reduce how long disease affect selected base by delivering medicines to it. What exactly medical supplies are needed depends on faction which belongs base. If you select to deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation. The amount of gained or lost reputation depends on how many medical supplies you gave or sold.
 {b}*{/b} What enemy you meet depends on how much upgraded ship you have: especially on upgrades of hull, armor, weapons and type of ammo. At beginning of game you can meet the weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
