@@ -81,9 +81,30 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
 
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
-    inventoryIndex: int = -1; price: Natural;
+    inventoryIndex: int = -1; price: Natural = 0;
     ship: var ShipRecord) {.sideEffect, raises: [CrewNoSpaceError, KeyError],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Update the inventory of the selected crew member.
+  ##
+  ## PARAMETERS
+  ##
+  ## * memberIndex    - the index of the crew member which inventory will be updated
+  ## * amount         - the amount of which the selected item will be updated
+  ## * protoIndex     - the index of the prototype of the item which will be updated.
+  ##                    If set 0, inventoryIndex must be set then. Default value is 0.
+  ## * durability     - the durability of the item to update. Is greater than 0, the
+  ##                    inventory will be looking for only items with that durability.
+  ##                    Default value is 0.
+  ## * inventoryIndex - the index of the item in the inventory. If set 0, protoIndex
+  ##                    must be set then. Default value is 0.
+  ## * price          - the price of the item to update. Default value is 0.
+  ## * ship           - the ship in which the crew member inventory will be updated
+  ##
+  ## RETURNS
+  ##
+  ## The updated ship argument
   var itemIndex: int
   if inventoryIndex == -1:
     if durability > 0:
