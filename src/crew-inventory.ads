@@ -52,8 +52,7 @@ package Crew.Inventory is
       (Member_Index <= Ship.Crew.Last_Index and
        Inventory_Index <=
          Inventory_Container.Last_Index
-           (Container => Ship.Crew(Member_Index).Inventory)),
-      Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
+           (Container => Ship.Crew(Member_Index).Inventory));
       -- ****
 
       -- ****f* Inventory/Inventory.Free_Inventory
