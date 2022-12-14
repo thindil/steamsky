@@ -1009,7 +1009,7 @@ package body Crew is
       Cabin_Index: Modules_Container.Extended_Index := 0;
       Time_Needed, Temp_Time_Needed: Natural := 0;
       Damage: Damage_Factor := 0.0;
-      Cabin_Bonus: Natural;
+      Cabin_Bonus: Natural := 0;
    begin
       Wait_For_Rest_Loop :
       for I in Player_Ship.Crew.Iterate loop
