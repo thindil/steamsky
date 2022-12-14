@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Counting the amount of enemies killed in boarding combat
+- Typos in help text
 
 ## [8.1] - 2022-11-27
 
