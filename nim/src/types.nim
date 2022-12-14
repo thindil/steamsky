@@ -224,6 +224,19 @@ type
     basesTypes*: Table[string, Positive] ## The list of available bases types for the faction
     weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
 
+  ObjectData* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about items
+    name*: string ## The name of the item
+    weight*: Positive ## The weight of the item
+    itemType*: string ## The type of the item
+    price*: Natural ## The base price of the item in bases
+    value*: array[1..5, int] ## Various data related to the item (damage for ammo, etc.)
+    showType*: string ## The item's type to show to the player instead of the itemType
+    description*: string ## The description of the item
+    reputation*: ReputationRange ## The minumal reputation which is needed to buy that item
+
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object

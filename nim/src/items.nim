@@ -18,30 +18,12 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import config, crafts, crewinventory, game, log, shipscargo, types, utils
 
-type
-  ObjectData* = object
-    ## FUNCTION
-    ##
-    ## Used to store information about items
-    name*: string ## The name of the item
-    weight*: Positive ## The weight of the item
-    itemType*: string ## The type of the item
-    price*: Natural ## The base price of the item in bases
-    value*: array[1..5, int] ## Various data related to the item (damage for ammo, etc.)
-    showType: string ## The item's type to show to the player instead of the itemType
-    description: string ## The description of the item
-    reputation: ReputationRange ## The minumal reputation which is needed to buy that item
-
 const defaultItemDurability*: ItemsDurability = 100
   ## FUNCTION
   ##
   ## Default durability for the new items
 
 var
-  itemsList* = initTable[Positive, ObjectData]()
-    ## FUNCTION
-    ##
-    ## The list of prototypes of all items availabla in the game
   weaponsList*: seq[Positive]
     ## FUNCTION
     ##

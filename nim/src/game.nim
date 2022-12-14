@@ -111,6 +111,7 @@ var
   dodgeSkill*: Positive ## The index of dodge skill
   unarmedSkill*: Positive ## The index of unarmed combat skill
   factionsList*: Table[string, FactionData] = initTable[string, FactionData]() ## The list of all available factions in the game
+  itemsList* = initTable[Positive, ObjectData]() ## The list of prototypes of all items availabla in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
