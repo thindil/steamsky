@@ -237,6 +237,21 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
           amount: adaItem.amount, name: $adaItem.name,
           durability: adaItem.durability, price: adaItem.price))
 
+proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  let nimCargo = if getPlayerShip == 1:
+      playerShip.cargo
+    else:
+      npcShip.cargo
+  for index in cargo.low..cargo.high:
+    if index <= nimCargo.len:
+      cargo[index] = AdaInventoryData(protoIndex: nimCargo[index -
+          1].protoIndex.cint, amount: nimCargo[index - 1].amount.cint,
+          name: nimCargo[index - 1].name.cstring, durability: nimCargo[index -
+          1].durability.cint, price: nimCargo[index - 1].price.cint)
+    else:
+      cargo[index] = AdaInventoryData(protoIndex: 0)
+
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.exportc.} =
   if getPlayerShip == 1:

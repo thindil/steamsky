@@ -497,4 +497,16 @@ package Ships is
       Convention => C,
       External_Name => "setAdaCrewInventory";
 
+   procedure Get_Ada_Ship_Cargo
+     (Cargo: Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaShipCargo";
+
+   procedure Set_Ada_Ship_Cargo
+     (Cargo: out Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaShipCargo";
+
 end Ships;

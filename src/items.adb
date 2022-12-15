@@ -147,10 +147,12 @@ package body Items is
         (Inv => Nim_Inventory, I_Index => Item_Index, S_Level => Skill_Level,
          M_Index => Member_Index,
          In_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Inventory :=
-        Inventory_From_Nim
-          (Inventory => Nim_Inventory,
-           Size => (if Member_Index > 0 then 32 else 128));
+      Inventory_Container.Assign
+        (Target => Inventory,
+         Source =>
+           Inventory_From_Nim
+             (Inventory => Nim_Inventory,
+              Size => (if Member_Index > 0 then 32 else 128)));
    end Damage_Item;
 
    function Find_Item
