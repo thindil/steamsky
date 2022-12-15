@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Icon for set the player's ship destination. Author: Delapouite (https://game-icons.net),
   license CC BY 3.0
 - Help entry for the knowledge screen
+- Hide Equip button in the player's ship crew inventory if the item cannot be
+  equipped
 
 ## Changed
 - Updated look of in-game tables
