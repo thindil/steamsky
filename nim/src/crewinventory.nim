@@ -16,12 +16,54 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, items, types, ships
+import game, types, ships
 
 type CrewNoSpaceError* = object of CatchableError
   ## FUNCTION
   ##
   ## Raised when there is no space for new item in crew member inventory
+
+proc findItem*(inventory: seq[InventoryData];
+    protoIndex: Natural = 0; itemType: string = "";
+    durability: ItemsDurability = ItemsDurability.high;
+    quality: Positive = 100): int {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Find the index of the selected item in the selected inventory
+  ##
+  ## PARAMETERS
+  ##
+  ## * inventory  - the inventory in which the item will be looking for
+  ## * protoIndex - the index of prototype item of the item to find. Can be
+  ##                empty. If empty, itemType parameter must be set
+  ## * itemType   - the type of prototype item of the item to find. Can be
+  ##                empty. If empty, protoIndex parameter must be set
+  ## * durability - the durability of the item to find. Can be empty
+  ## * quality    - the quality of the item to find. Can be empty
+  ##
+  ## RETURNS
+  ##
+  ## The index of the item in the selected inventory which meet searching
+  ## criteria or -1 if item not found.
+  try:
+    if protoIndex > 0:
+      for index, item in inventory.pairs:
+        if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <= quality:
+          if durability < ItemsDurability.high and item.durability == durability:
+            return index
+          else:
+            return index
+    elif itemType.len > 0:
+      for index, item in inventory.pairs:
+        if itemsList[item.protoIndex].itemType == itemType and itemsList[
+            item.protoIndex].value[1] <= quality:
+          if durability < ItemsDurability.high and item.durability == durability:
+            return index
+          else:
+            return index
+  except KeyError:
+    discard
+  return -1
 
 proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     raises: [], tags: [].} =
@@ -142,6 +184,13 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
 # Temporary code for interfacing with Ada
+
+proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
+    itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  return (findItem(inventory = inventoryToNim(inventory = inventory),
+      protoIndex = protoIndex, itemType = $itemType, durability = durability,
+      quality = quality) + 1).cint
 
 proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
   return freeInventory(memberIndex = (memberIndex - 1).Natural,

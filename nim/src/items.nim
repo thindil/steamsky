@@ -290,48 +290,6 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
     if skill.tool notin toolsList:
       toolsList.add(y = skill.tool)
 
-proc findItem*(inventory: seq[InventoryData];
-    protoIndex: Natural = 0; itemType: string = "";
-    durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100): int {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
-  ## Find the index of the selected item in the selected inventory
-  ##
-  ## PARAMETERS
-  ##
-  ## * inventory  - the inventory in which the item will be looking for
-  ## * protoIndex - the index of prototype item of the item to find. Can be
-  ##                empty. If empty, itemType parameter must be set
-  ## * itemType   - the type of prototype item of the item to find. Can be
-  ##                empty. If empty, protoIndex parameter must be set
-  ## * durability - the durability of the item to find. Can be empty
-  ## * quality    - the quality of the item to find. Can be empty
-  ##
-  ## RETURNS
-  ##
-  ## The index of the item in the selected inventory which meet searching
-  ## criteria or -1 if item not found.
-  try:
-    if protoIndex > 0:
-      for index, item in inventory.pairs:
-        if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <= quality:
-          if durability < ItemsDurability.high and item.durability == durability:
-            return index
-          else:
-            return index
-    elif itemType.len > 0:
-      for index, item in inventory.pairs:
-        if itemsList[item.protoIndex].itemType == itemType and itemsList[
-            item.protoIndex].value[1] <= quality:
-          if durability < ItemsDurability.high and item.durability == durability:
-            return index
-          else:
-            return index
-  except KeyError:
-    discard
-  return -1
-
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
   var
@@ -435,13 +393,6 @@ proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
 
 proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
   setToolsList()
-
-proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
-    itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
-    raises: [], tags: [], exportc.} =
-  return (findItem(inventory = inventoryToNim(inventory = inventory),
-      protoIndex = protoIndex, itemType = $itemType, durability = durability,
-      quality = quality) + 1).cint
 
 proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   if $itemType in toolsList:
