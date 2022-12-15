@@ -18,11 +18,6 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import config, crafts, crewinventory, game, log, shipscargo, types, utils
 
-const defaultItemDurability*: ItemsDurability = 100
-  ## FUNCTION
-  ##
-  ## Default durability for the new items
-
 var
   weaponsList*: seq[Positive]
     ## FUNCTION

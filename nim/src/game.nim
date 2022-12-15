@@ -64,6 +64,8 @@ type
     name: string ## The name of the attribute
     description: string ## The description of the attribute
 
+const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
+
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep            ## The directory where the saved games and logs are stored
