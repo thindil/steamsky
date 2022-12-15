@@ -184,7 +184,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
-    skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
+    skillLevel: Natural = 0; memberIndex: int = -1; ship: var ShipRecord) =
   var
     item = inventory[itemIndex]
     damageChance = itemsList[item.protoIndex].value[1]
@@ -214,7 +214,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     for j in inventory.low..inventory.high:
       if inventory[i].protoIndex == inventory[j].protoIndex and inventory[
           i].durability == inventory[j].durability and i != j:
-        if memberIndex == 0:
+        if memberIndex == -1:
           updateCargo(ship = ship, cargoIndex = j, amount = 0 - inventory[j].amount)
           updateCargo(ship = ship, cargoIndex = i, amount = inventory[j].amount)
         else:
