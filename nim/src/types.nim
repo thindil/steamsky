@@ -255,3 +255,12 @@ proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
         amount: item.amount, name: $item.name, durability: item.durability,
         price: item.price))
 
+proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
+    AdaInventoryData] =
+  for i in 0..127:
+    if i < inventory.len:
+      result[i] = AdaInventoryData(protoIndex: inventory[i].protoIndex.cint,
+          amount: inventory[i].amount.cint, name: inventory[i].name.cstring,
+          durability: inventory[i].durability.cint, price: inventory[i].price.cint)
+    else:
+      result[i] = AdaInventoryData(protoIndex: 0)
