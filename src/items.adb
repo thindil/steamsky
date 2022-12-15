@@ -16,10 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
-with Utils; use Utils;
-with Crew; use Crew;
-with Crew.Inventory; use Crew.Inventory;
 
 package body Items is
 
@@ -138,107 +134,23 @@ package body Items is
    procedure Damage_Item
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0; Ship: in out Ship_Record) is
-      Damage_Chance: Integer :=
-        Objects_Container.Element
-          (Container => Items_List,
-           Index =>
-             Inventory_Container.Element
-               (Container => Inventory, Index => Item_Index)
-               .Proto_Index)
-          .Value
-          (1);
-      I: Inventory_Container.Extended_Index :=
-        Inventory_Container.First_Index(Container => Inventory);
-      Item: Inventory_Data :=
-        Inventory_Container.Element
-          (Container => Inventory, Index => Item_Index);
+      Nim_Inventory: Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Inventory);
+      procedure Damage_Ada_Item
+        (Inv: in out Nim_Inventory_Array;
+         I_Index, S_Level, M_Index, In_Player_Ship: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "damageAdaItem";
    begin
-      if Skill_Level > 0 then
-         Damage_Chance := Damage_Chance - (Skill_Level / 5);
-         if Damage_Chance < 1 then
-            Damage_Chance := 1;
-         end if;
-      end if;
-      if Get_Random(Min => 1, Max => 100) >
-        Damage_Chance then -- Item not damaged
-         return;
-      end if;
-      if Inventory_Container.Element
-          (Container => Inventory, Index => Item_Index)
-          .Amount >
-        1 then
-         Inventory_Container.Append
-           (Container => Inventory,
-            New_Item =>
-              (Proto_Index => Item.Proto_Index, Amount => (Item.Amount - 1),
-               Name => Item.Name, Durability => Item.Durability,
-               Price => Item.Price));
-         Item.Amount := 1;
-      end if;
-      Item.Durability := Item.Durability - 1;
-      if Item.Durability = 0 then -- Item destroyed
-         if Member_Index = 0 then
-            Update_Cargo
-              (Ship => Ship, Cargo_Index => Item_Index, Amount => -1);
-         else
-            Update_Inventory
-              (Member_Index => Member_Index, Amount => -1,
-               Inventory_Index => Item_Index, Ship => Ship);
-         end if;
-         return;
-      end if;
-      Inventory_Container.Replace_Element
-        (Container => Inventory, Index => Item_Index, New_Item => Item);
-      Update_Inventory_Loop :
-      while I <= Inventory_Container.Last_Index(Container => Inventory) loop
-         Find_Item_Loop :
-         for J in
-           Inventory_Container.First_Index(Container => Inventory) ..
-             Inventory_Container.Last_Index(Container => Inventory) loop
-            if Inventory_Container.Element(Container => Inventory, Index => I)
-                .Proto_Index =
-              Inventory_Container.Element(Container => Inventory, Index => J)
-                .Proto_Index and
-              Inventory_Container.Element(Container => Inventory, Index => I)
-                  .Durability =
-                Inventory_Container.Element(Container => Inventory, Index => J)
-                  .Durability and
-              I /= J then
-               if Member_Index = 0 then
-                  Update_Cargo
-                    (Ship => Ship, Cargo_Index => J,
-                     Amount =>
-                       -(Inventory_Container.Element
-                          (Container => Inventory, Index => J)
-                          .Amount));
-                  Update_Cargo
-                    (Ship => Ship, Cargo_Index => I,
-                     Amount =>
-                       Inventory_Container.Element
-                         (Container => Inventory, Index => J)
-                         .Amount);
-               else
-                  Update_Inventory
-                    (Member_Index => Member_Index,
-                     Amount =>
-                       -(Inventory_Container.Element
-                          (Container => Inventory, Index => J)
-                          .Amount),
-                     Inventory_Index => J, Ship => Ship);
-                  Update_Inventory
-                    (Member_Index => Member_Index,
-                     Amount =>
-                       Inventory_Container.Element
-                         (Container => Inventory, Index => J)
-                         .Amount,
-                     Inventory_Index => I, Ship => Ship);
-               end if;
-               I := I - 1;
-               exit Find_Item_Loop;
-            end if;
-         end loop Find_Item_Loop;
-         I := I + 1;
-      end loop Update_Inventory_Loop;
+      Damage_Ada_Item
+        (Inv => Nim_Inventory, I_Index => Item_Index, S_Level => Skill_Level,
+         M_Index => Member_Index,
+         In_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Inventory :=
+        Inventory_From_Nim
+          (Inventory => Nim_Inventory,
+           Size => (if Member_Index > 0 then 32 else 128));
    end Damage_Item;
 
    function Find_Item
