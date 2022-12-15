@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import config, crafts, crewinventory, game, log, shipscargo, types, utils
+import config, crafts, game, log, types
 
 var
   weaponsList*: seq[Positive]
@@ -284,49 +284,6 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
   for skill in skillsList.values:
     if skill.tool notin toolsList:
       toolsList.add(y = skill.tool)
-
-proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
-    skillLevel, memberIndex: Natural = 0; ship: var ShipRecord) =
-  var
-    item = inventory[itemIndex]
-    damageChance = itemsList[item.protoIndex].value[1]
-  if skillLevel > 0:
-    damageChance = damageChance - (skillLevel / 5).int
-    if damageChance < 1:
-      damageChance = 1
-  if getRandom(min = 1, max = 100) > damageChance:
-    return
-  if item.amount > 1:
-    inventory.add(y = InventoryData(protoIndex: item.protoIndex,
-        amount: item.amount - 1, name: item.name, durability: item.durability,
-        price: item.price))
-    item.amount = 1
-  item.durability.dec
-  # Item destroyed
-  if item.durability == 0:
-    if memberIndex == 0:
-      updateCargo(ship = ship, cargoIndex = itemIndex, amount = -1)
-    else:
-      updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = itemIndex, ship = ship)
-    return
-  inventory[itemIndex] = item
-  var i = 0
-  while i <= inventory.high:
-    for j in inventory.low..inventory.high:
-      if inventory[i].protoIndex == inventory[j].protoIndex and inventory[
-          i].durability == inventory[j].durability and i != j:
-        if memberIndex == 0:
-          updateCargo(ship = ship, cargoIndex = j, amount = 0 - inventory[j].amount)
-          updateCargo(ship = ship, cargoIndex = i, amount = inventory[j].amount)
-        else:
-          updateInventory(memberIndex = memberIndex, amount = 0 - inventory[
-              j].amount, inventoryIndex = j, ship = ship)
-          updateInventory(memberIndex = memberIndex, amount = inventory[
-              j].amount, inventoryIndex = i, ship = ship)
-        i.dec
-        break
-    i.inc
 
 # Temporary code for interfacing with Ada
 
