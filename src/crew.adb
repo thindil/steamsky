@@ -1015,7 +1015,6 @@ package body Crew is
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Tired > 0 and
            Player_Ship.Crew(I).Order = REST then
-            Cabin_Index := 0;
             Temp_Time_Needed := 0;
             Cabin_Index :=
               Find_Cabin
