@@ -1179,12 +1179,25 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tiny_String;
 
       Used: constant Boolean :=
         Item_Is_Used
           (Member_Index => Member_Index,
            Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      Selection: Boolean := False;
+      Selection, Equipable: Boolean := False;
+      Item_Type: constant Tiny_String.Bounded_String :=
+        Objects_Container.Element
+          (Container => Items_List,
+           Index =>
+             Inventory_Container.Element
+               (Container => Player_Ship.Crew(Member_Index).Inventory,
+                Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
+               .Proto_Index)
+          .I_Type;
+      Types_Array: constant array(1 .. 6) of Tiny_String.Bounded_String :=
+        (Weapon_Type, Shield_Type, Head_Armor, Chest_Armor, Arms_Armor,
+         Legs_Armor);
    begin
       Check_Selection_Loop :
       for I in
@@ -1250,6 +1263,14 @@ package body Ships.UI.Crew.Inventory is
          end Show_Multi_Item_Actions_Menu_Block;
          return TCL_OK;
       end if;
+      Equipable := Is_Tool(Item_Type => Item_Type);
+      Is_Equipable_Loop:
+      for I_Type of Types_Array loop
+         if I_Type = Item_Type then
+            Equipable := True;
+            exit Is_Equipable_Loop;
+         end if;
+      end loop Is_Equipable_Loop;
       Show_Inventory_Item_Info
         (Parent => ".memberdialog", Member_Index => Member_Index,
          Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
@@ -1263,19 +1284,21 @@ package body Ships.UI.Crew.Inventory is
               To_Unbounded_String
                 (Source => "Move the selected item to the ship's cargo")),
          Button_2 =>
-           (Text =>
-              (if Used then To_Unbounded_String(Source => "Unequip")
-               else To_Unbounded_String(Source => "Equip")),
-            Command =>
-              To_Unbounded_String
-                (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1)),
-            Icon =>
-              (if Used then To_Unbounded_String(Source => "unequipicon")
-               else To_Unbounded_String(Source => "equipicon")),
-            Tooltip =>
-              (if Used then To_Unbounded_String(Source => "Stop")
-               else To_Unbounded_String(Source => "Start")) &
-              " using the selected item"));
+           (if Equipable then
+              (Text =>
+                 (if Used then To_Unbounded_String(Source => "Unequip")
+                  else To_Unbounded_String(Source => "Equip")),
+               Command =>
+                 To_Unbounded_String
+                   (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1)),
+               Icon =>
+                 (if Used then To_Unbounded_String(Source => "unequipicon")
+                  else To_Unbounded_String(Source => "equipicon")),
+               Tooltip =>
+                 (if Used then To_Unbounded_String(Source => "Stop")
+                  else To_Unbounded_String(Source => "Start")) &
+                 " using the selected item")
+            else Empty_Button_Settings));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
