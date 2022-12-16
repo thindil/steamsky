@@ -1196,8 +1196,8 @@ package body Ships.UI.Crew.Inventory is
                .Proto_Index)
           .I_Type;
       Types_Array: constant array(1 .. 6) of Tiny_String.Bounded_String :=
-        (Weapon_Type, Shield_Type, Head_Armor, Chest_Armor, Arms_Armor,
-         Legs_Armor);
+        (1 => Weapon_Type, 2 => Shield_Type, 3 => Head_Armor, 4 => Chest_Armor,
+         5 => Arms_Armor, 6 => Legs_Armor);
    begin
       Check_Selection_Loop :
       for I in
@@ -1264,7 +1264,7 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
       end if;
       Equipable := Is_Tool(Item_Type => Item_Type);
-      Is_Equipable_Loop:
+      Is_Equipable_Loop :
       for I_Type of Types_Array loop
          if I_Type = Item_Type then
             Equipable := True;
