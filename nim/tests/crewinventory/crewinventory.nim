@@ -33,3 +33,6 @@ try:
 except CrewNoSpaceError:
   discard
 assert playerShip.crew[0].inventory[0].amount == 1
+
+for i in 1..100:
+  damageItem(playerShip.crew[0].inventory, 0, 0, 0, playerShip)
