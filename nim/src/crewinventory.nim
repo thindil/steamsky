@@ -184,7 +184,9 @@ proc updateInventory*(memberIndex: Natural; amount: int;
       ship.crew[memberIndex].inventory[itemIndex].amount = newAmount
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
-    skillLevel: Natural = 0; memberIndex: int = -1; ship: var ShipRecord) =
+    skillLevel: Natural = 0; memberIndex: int = -1;
+    ship: var ShipRecord) {.sideEffect, raises: [KeyError, CrewNoSpaceError],
+    tags: [].} =
   var
     item = inventory[itemIndex]
     damageChance = itemsList[item.protoIndex].value[1]
