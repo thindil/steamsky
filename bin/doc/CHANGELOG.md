@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 - Show the info dialog with available actions instead of menu in the list
   of known bases and the list of known events
 - Updated look of the accepted mission's actions menu
+- Reduced influence of battering ram installed on the player's ship on
+  generating enemies
 
 ### Removed
 - The icon for remove actions, replaced it with icon for cancel actions
