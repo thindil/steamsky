@@ -187,6 +187,24 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel: Natural = 0; memberIndex: int = -1;
     ship: var ShipRecord) {.sideEffect, raises: [KeyError, CrewNoSpaceError],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Check if item in the inventory was damaged, if yes, update inventory and
+  ## the ship cargo
+  ##
+  ## PARAMETERS
+  ##
+  ## * inventory   - the inventory in which the item will be check
+  ## * itemIndex   - the index of the item in the inventory which will be check
+  ## * skillLevel  - the skill level of the crew member which affects chance to
+  ##                 damage. Default value is 0 (no skill affecting).
+  ## * memberIndex - the index of the crew member to which the item belongs. Default
+  ##                 value is -1
+  ## * ship        - the ship in which the item will be check
+  ##
+  ## RETURNS
+  ##
+  ## The updated parameters inventory and ship
   var
     item = inventory[itemIndex]
     damageChance = itemsList[item.protoIndex].value[1]
