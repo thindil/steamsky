@@ -1324,10 +1324,7 @@ package body Ships is
            (Container => Modules_List, Index => Module.Proto_Index)
            .M_Type is
             when BATTERING_RAM =>
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               Combat_Value :=
-                 Combat_Value + Module.Max_Durability + (Module.Damage2 * 10);
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value := Combat_Value + Module.Damage2;
             when GUN =>
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
