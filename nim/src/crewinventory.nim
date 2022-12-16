@@ -219,7 +219,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         amount: item.amount - 1, name: item.name, durability: item.durability,
         price: item.price))
     item.amount = 1
-  item.durability.dec
+  if item.durability > ItemsDurability.low:
+    item.durability.dec
   # Item destroyed
   if item.durability == 0:
     if memberIndex == 0:
