@@ -1117,10 +1117,10 @@ package body Crew is
 
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Pay_Message: Unbounded_String;
+      Pay_Message: Unbounded_String := Null_Unbounded_String;
       Member_Index: Crew_Container.Extended_Index;
       Have_Money: Boolean := True;
-      Money_Needed: Natural;
+      Money_Needed: Natural := 0;
    begin
       Member_Index := 1;
       Daily_Payment_Loop :
