@@ -21,6 +21,12 @@ with Ships.Crew; use Ships.Crew;
 
 package body Crew.Inventory is
 
+   procedure Equipment_To_Ada
+     (M_Index: Integer; Equipment: out Nim_Equipment_Array) with
+      Import => True,
+      Convention => C,
+      External_Name => "equipmentToAda";
+
    procedure Update_Inventory
      (Member_Index: Positive; Amount: Integer;
       Proto_Index: Objects_Container.Extended_Index := 0;
@@ -30,6 +36,7 @@ package body Crew.Inventory is
       Nim_Inventory: Nim_Inventory_Array :=
         Inventory_To_Nim
           (Inventory => Player_Ship.Crew(Member_Index).Inventory);
+      Nim_Equipment: Nim_Equipment_Array;
       function Update_Ada_Inventory
         (M_Index, Amnt, P_Index, Dur, I_Index, Pric, In_Player_Ship: Integer)
          return Integer with
@@ -55,6 +62,13 @@ package body Crew.Inventory is
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
       Ship.Crew(Member_Index).Inventory :=
         Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
+      Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
+      Update_Equipment_Loop :
+      for I in Nim_Equipment'Range loop
+         Player_Ship.Crew(Member_Index).Equipment
+           (Equipment_Locations'Val(I)) :=
+           Nim_Equipment(I);
+      end loop Update_Equipment_Loop;
    end Update_Inventory;
 
    function Free_Inventory
@@ -83,11 +97,6 @@ package body Crew.Inventory is
          Import => True,
          Convention => C,
          External_Name => "takeAdaOffItem";
-      procedure Equipment_To_Ada
-        (M_Index: Integer; Equipment: out Nim_Equipment_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "equipmentToAda";
    begin
       if Update_Nim then
          Get_Ada_Crew;
