@@ -1145,7 +1145,7 @@ package body Crew is
                       .Amount;
                   Update_Cargo
                     (Ship => Player_Ship, Proto_Index => Money_Index,
-                     Amount => (0 - Money_Needed));
+                     Amount => 0 - Money_Needed);
                   Add_Message
                     (Message =>
                        "You don't have enough " &
@@ -1157,7 +1157,7 @@ package body Crew is
                if Have_Money then
                   Update_Cargo
                     (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-                     Amount => (0 - Member.Payment(1)));
+                     Amount => 0 - Member.Payment(1));
                   Pay_Message :=
                     To_Unbounded_String(Source => "You pay ") &
                     To_String(Source => Member.Name);
