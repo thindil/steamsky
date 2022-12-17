@@ -261,4 +261,42 @@ package body Items is
       return Ada_Inventory;
    end Inventory_From_Nim;
 
+   function Get_Proto_Item(Index: Positive) return Object_Data is
+      use Short_String;
+      use Tiny_String;
+
+      type Object_Nim_Data is record
+         Name: chars_ptr;
+         Weight: Integer;
+         I_Type: chars_ptr;
+         Price: Integer;
+         Value: Integer_Array (Values_Range);
+         Show_Type: chars_ptr;
+         Description: chars_ptr;
+         Reputation: Integer;
+      end record;
+      Temp_Nim_Record: Object_Nim_Data;
+      procedure Get_Ada_Item
+        (Index: Integer; Ada_Item: out Object_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItem";
+   begin
+      Get_Ada_Item(Index => Index, Ada_Item => Temp_Nim_Record);
+      return
+        (Name =>
+           To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name)),
+         Weight => Temp_Nim_Record.Weight,
+         I_Type =>
+           To_Bounded_String(Source => Value(Item => Temp_Nim_Record.I_Type)),
+         Price => Temp_Nim_Record.Price, Value => Temp_Nim_Record.Value,
+         Show_Type =>
+           To_Bounded_String
+             (Source => Value(Item => Temp_Nim_Record.Show_Type)),
+         Description =>
+           To_Bounded_String
+             (Source => Value(Item => Temp_Nim_Record.Description)),
+         Reputation => Temp_Nim_Record.Reputation);
+   end Get_Proto_Item;
+
 end Items;

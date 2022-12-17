@@ -300,4 +300,6 @@ package Items is
      (Inventory: Nim_Inventory_Array; Size: Positive)
       return Inventory_Container.Vector;
 
+   function Get_Proto_Item(Index: Positive) return Object_Data;
+
 end Items;
