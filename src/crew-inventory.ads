@@ -45,7 +45,7 @@ package Crew.Inventory is
    -- SOURCE
    procedure Update_Inventory
      (Member_Index: Positive; Amount: Integer;
-      Proto_Index: Objects_Container.Extended_Index := 0;
+      Proto_Index: Natural := 0;
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) with
       Pre =>

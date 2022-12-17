@@ -588,7 +588,7 @@ package body Ships is
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
       Module_Index: BaseModules_Container.Extended_Index := 0;
-      Item_Index: Objects_Container.Extended_Index := 0;
+      Item_Index: Natural := 0;
       Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
@@ -610,16 +610,16 @@ package body Ships is
                  MobInventory_Container.Element
                    (Container => Temp_Record.Cargo, Index => I);
             begin
-               if Objects_Container.Element
-                   (Container => Items_List, Index => Temp_Cargo.Proto_Index)
+               if Get_Proto_Item
+                   (Index => Temp_Cargo.Proto_Index)
                    .I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
                     Temp_Record.Combat_Value +
-                    (Objects_Container.Element
-                       (Container => Items_List,
+                    (Get_Proto_Item
+                       (
                         Index => Temp_Cargo.Proto_Index)
                        .Value
                        (1) *
@@ -823,12 +823,9 @@ package body Ships is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 Objects_Container.Extended_Index'Value
+                 Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in
-                   Objects_Container.First_Index(Container => Items_List) ..
-                         Objects_Container.Last_Index
-                           (Container => Items_List) then
+               if Item_Index not in 1 .. Get_Proto_Amount then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
@@ -1264,8 +1261,8 @@ package body Ships is
       for Item of Ship.Cargo loop
          Cargo_Weight :=
            Item.Amount *
-           Objects_Container.Element
-             (Container => Items_List, Index => Item.Proto_Index)
+           Get_Proto_Item
+             (Index => Item.Proto_Index)
              .Weight;
          Weight := Weight + Cargo_Weight;
       end loop Count_Cargo_Weight_Loop;
@@ -1300,16 +1297,16 @@ package body Ships is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
-            if Objects_Container.Element
-                (Container => Items_List, Index => Item.Proto_Index)
+            if Get_Proto_Item
+                (Index => Item.Proto_Index)
                 .I_Type =
               TinyString_Formal_Container.Element
                 (Container => Items_Types, Index => Item_Type_Index) then
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => Item.Proto_Index)
+                 (Get_Proto_Item
+                    (Index => Item.Proto_Index)
                     .Value
                     (1) *
                   Multiple);

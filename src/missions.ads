@@ -18,7 +18,6 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
-with Items; use Items;
 
 -- ****h* Missions/Missions
 -- FUNCTION
@@ -71,7 +70,7 @@ package Missions is
       Multiplier: Reward_Multiplier := 1.0;
       case M_Type is
          when DELIVER =>
-            Item_Index: Objects_Container.Extended_Index;
+            Item_Index: Positive;
          when PASSENGER =>
             Data: Positive := 1;
          when DESTROY =>

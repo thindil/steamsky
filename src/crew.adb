@@ -224,16 +224,16 @@ package body Crew is
          begin
             if Item_Index > 0 then
                Consume_Value :=
-                 Objects_Container.Element
-                   (Container => Items_List,
+                 Get_Proto_Item
+                   (
                     Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
                         .Proto_Index)
                    .Value
                    (1);
-               if Objects_Container.Element
-                   (Container => Items_List,
+               if Get_Proto_Item
+                   (
                     Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
@@ -242,8 +242,8 @@ package body Crew is
                    Length >
                  1
                  and then
-                   Objects_Container.Element
-                     (Container => Items_List,
+                   Get_Proto_Item
+                     (
                       Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Item_Index)
@@ -254,8 +254,8 @@ package body Crew is
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
                      Value =>
-                       Objects_Container.Element
-                         (Container => Items_List,
+                       Get_Proto_Item
+                         (
                           Index =>
                             Inventory_Container.Element
                               (Container => Player_Ship.Cargo,
@@ -279,8 +279,8 @@ package body Crew is
                  Item_Type => Item_Type);
             if Item_Index > 0 then
                Consume_Value :=
-                 Objects_Container.Element
-                   (Container => Items_List,
+                 Get_Proto_Item
+                   (
                     Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(I).Inventory,
@@ -288,8 +288,8 @@ package body Crew is
                         .Proto_Index)
                    .Value
                    (1);
-               if Objects_Container.Element
-                   (Container => Items_List,
+               if Get_Proto_Item
+                   (
                     Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
@@ -300,8 +300,8 @@ package body Crew is
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
                      Value =>
-                       Objects_Container.Element
-                         (Container => Items_List,
+                       Get_Proto_Item
+                         (
                           Index =>
                             Inventory_Container.Element
                               (Container => Player_Ship.Cargo,

@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Game; use Game;
-with Items; use Items;
 
 -- ****h* BasesTypes/BasesTypes
 -- FUNCTION
@@ -109,13 +108,10 @@ package BasesTypes is
    -- SOURCE
    function Is_Buyable
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Positive;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean with
-      Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Item_Index in
-        Objects_Container.First_Index(Container => Items_List) ..
-              Objects_Container.Last_Index(Container => Items_List),
+      Pre => Bases_Types_List.Contains(Key => Base_Type),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
       -- ****
 
@@ -130,11 +126,8 @@ package BasesTypes is
       -- SOURCE
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Objects_Container.Extended_Index) return Natural with
-      Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Item_Index in
-        Objects_Container.First_Index(Container => Items_List) ..
-              Objects_Container.Last_Index(Container => Items_List),
+      Item_Index: Positive) return Natural with
+      Pre => Bases_Types_List.Contains(Key => Base_Type),
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
       -- ****
 

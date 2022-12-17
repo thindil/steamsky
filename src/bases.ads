@@ -89,7 +89,7 @@ package Bases is
    -- Price       - Current price of item
    -- SOURCE
    type Base_Cargo is record
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Amount: Natural;
       Durability: Items_Durability;
       Price: Natural;

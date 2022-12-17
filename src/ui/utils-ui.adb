@@ -246,8 +246,8 @@ package body Utils.UI is
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       if To_String
           (Source =>
-             Objects_Container.Element
-               (Container => Items_List,
+             Get_Proto_Item
+               (
                 Index =>
                   Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
@@ -269,8 +269,8 @@ package body Utils.UI is
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
-                Objects_Container.Element
-                  (Container => Items_List,
+                Get_Proto_Item
+                  (
                    Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
@@ -290,8 +290,8 @@ package body Utils.UI is
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
-                Objects_Container.Element
-                  (Container => Items_List,
+                Get_Proto_Item
+                  (
                    Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
@@ -881,8 +881,8 @@ package body Utils.UI is
             New_Item =>
               To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List,
+                   Get_Proto_Item
+                     (
                       Index => Find_Proto_Item(Item_Type => Fuel_Type))
                      .Name));
       end if;
@@ -973,7 +973,7 @@ package body Utils.UI is
       use Short_String;
       use Tiny_String;
 
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Item_Info: Unbounded_String := Null_Unbounded_String;
       Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
@@ -1026,12 +1026,12 @@ package body Utils.UI is
          New_Item =>
            "Weight:" &
            Positive'Image
-             (Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+             (Get_Proto_Item
+                (Index => Proto_Index)
                 .Weight) &
            " kg");
-      if Objects_Container.Element
-          (Container => Items_List, Index => Proto_Index)
+      if Get_Proto_Item
+          (Index => Proto_Index)
           .I_Type =
         Weapon_Type then
          Append
@@ -1044,8 +1044,8 @@ package body Utils.UI is
                      (Container => Skills_List,
                       Index =>
                         Skills_Amount_Range
-                          (Objects_Container.Element
-                             (Container => Items_List, Index => Proto_Index)
+                          (Get_Proto_Item
+                             (Index => Proto_Index)
                              .Value
                              (3)))
                      .Name) &
@@ -1059,15 +1059,15 @@ package body Utils.UI is
                           (Container => Skills_List,
                            Index =>
                              Skills_Amount_Range
-                               (Objects_Container.Element
-                                  (Container => Items_List,
+                               (Get_Proto_Item
+                                  (
                                    Index => Proto_Index)
                                   .Value
                                   (3)))
                           .Attribute)
                      .Name));
-         if Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
+         if Get_Proto_Item
+             (Index => Proto_Index)
              .Value
              (4) =
            1 then
@@ -1084,8 +1084,8 @@ package body Utils.UI is
            (Source => Item_Info,
             New_Item =>
               LF & "Damage type: " &
-              (case Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
+              (case Get_Proto_Item
+                 (Index => Proto_Index)
                  .Value
                  (5) is
                  when 1 => "cutting", when 2 => "impaling", when 3 => "blunt",
@@ -1093,8 +1093,8 @@ package body Utils.UI is
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
-         if Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
+         if Get_Proto_Item
+             (Index => Proto_Index)
              .I_Type =
            ItemType then
             Append
@@ -1103,14 +1103,14 @@ package body Utils.UI is
                  LF & "Damage chance: " &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => Proto_Index)
+                      Get_Proto_Item
+                        (Index => Proto_Index)
                         .Value
                         (1)) &
                  LF & "Strength:" &
                  Integer'Image
-                   (Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                   (Get_Proto_Item
+                      (Index => Proto_Index)
                       .Value
                       (2)));
             exit Show_More_Item_Info_Loop;
@@ -1118,8 +1118,8 @@ package body Utils.UI is
       end loop Show_More_Item_Info_Loop;
       if Is_Tool
           (Item_Type =>
-             Objects_Container.Element
-               (Container => Items_List, Index => Proto_Index)
+             Get_Proto_Item
+               (Index => Proto_Index)
                .I_Type) then
          Append
            (Source => Item_Info,
@@ -1127,27 +1127,27 @@ package body Utils.UI is
               LF & "Damage chance: " &
               Get_Item_Chance_To_Damage
                 (Item_Data =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Proto_Index)
+                   Get_Proto_Item
+                     (Index => Proto_Index)
                      .Value
                      (1)));
       end if;
       if Length
           (Source =>
-             Objects_Container.Element
-               (Container => Items_List, Index => Proto_Index)
+             Get_Proto_Item
+               (Index => Proto_Index)
                .I_Type) >
         4
         and then
         (Slice
            (Source =>
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type,
             Low => 1, High => 4) =
          "Ammo" or
-         Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
+         Get_Proto_Item
+             (Index => Proto_Index)
              .I_Type =
            To_Bounded_String(Source => "Harpoon")) then
          Append
@@ -1155,13 +1155,13 @@ package body Utils.UI is
             New_Item =>
               LF & "Strength:" &
               Integer'Image
-                (Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                (Get_Proto_Item
+                   (Index => Proto_Index)
                    .Value
                    (1)));
       end if;
-      if Objects_Container.Element
-          (Container => Items_List, Index => Proto_Index)
+      if Get_Proto_Item
+          (Index => Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          Append
@@ -1170,8 +1170,8 @@ package body Utils.UI is
               LF & LF &
               Short_String.To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Proto_Index)
+                   Get_Proto_Item
+                     (Index => Proto_Index)
                      .Description));
       end if;
       if Parent = "." then

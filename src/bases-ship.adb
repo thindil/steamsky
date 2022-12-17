@@ -854,7 +854,7 @@ package body Bases.Ship is
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
       use BasesTypes;
 
-      Proto_Index: Objects_Container.Extended_Index := 0;
+      Proto_Index: Natural := 0;
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin

@@ -54,8 +54,7 @@ package body Bases.Cargo is
                Durability => Default_Item_Durability, Price => 0));
          Add_Base_Cargo_Loop :
          for I in
-           Objects_Container.First_Index(Container => Items_List) ..
-             Objects_Container.Last_Index(Container => Items_List) loop
+           1 .. Get_Proto_Amount loop
             if Is_Buyable
                 (Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => I,
                  Check_Flag => False) then
@@ -80,8 +79,7 @@ package body Bases.Cargo is
                   elsif Population < 300 then Get_Random(Min => 1, Max => 20)
                   else Get_Random(Min => 1, Max => 30));
                Item_Index: Natural range 0 ..
-                   Positive
-                     (Objects_Container.Length(Container => Items_List)) :=
+                   Get_Proto_Amount :=
                  0;
             begin
                Add_Black_Market_Cargo_Loop :
@@ -90,14 +88,11 @@ package body Bases.Cargo is
                     Get_Random
                       (Min => 1,
                        Max =>
-                         Positive
-                           (Objects_Container.Length
-                              (Container => Items_List)));
+                         Get_Proto_Amount);
                   Update_Item_Amount_Loop :
                   for J in
-                    Objects_Container.First_Index(Container => Items_List) ..
-                      Objects_Container.Last_Index
-                        (Container => Items_List) loop
+                    1 ..
+                      Get_Proto_Amount loop
                      Item_Index := Item_Index - 1;
                      if Item_Index = 0 then
                         if Get_Price
@@ -173,7 +168,7 @@ package body Bases.Cargo is
    end Generate_Cargo;
 
    procedure Update_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+     (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
       Base_Index: constant Bases_Range :=
@@ -234,7 +229,7 @@ package body Bases.Cargo is
    end Update_Base_Cargo;
 
    function Find_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index;
+     (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
       use Trades;
 

@@ -19,7 +19,6 @@ with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with ShipModules; use ShipModules;
 with Game; use Game;
-with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Crafts/Crafts
@@ -49,7 +48,7 @@ package Crafts is
    type Craft_Data is record
       Material_Types: TinyString_Container.Vector;
       Material_Amounts: Positive_Container.Vector;
-      Result_Index: Objects_Container.Extended_Index;
+      Result_Index: Natural;
       Result_Amount: Natural := 0;
       Workplace: Module_Type;
       Skill: SkillsData_Container.Extended_Index;

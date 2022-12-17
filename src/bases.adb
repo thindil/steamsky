@@ -169,7 +169,7 @@ package body Bases is
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
         (Items_Indexes: String; Equip_Index: Equipment_Locations) is
-         Item_Index: Objects_Container.Extended_Index;
+         Item_Index: Natural;
          use Mobs;
 
       begin
@@ -514,7 +514,7 @@ package body Bases is
       Enemies: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       Attempts: Natural range 0 .. 10 := 10;
-      New_Item_Index: Objects_Container.Extended_Index := 0;
+      New_Item_Index: Natural := 0;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
@@ -698,14 +698,11 @@ package body Bases is
                     Get_Random
                       (Min => 1,
                        Max =>
-                         Positive
-                           (Objects_Container.Length
-                              (Container => Items_List)));
+                         Get_Proto_Amount);
                   Find_Item_Index_Loop :
                   for J in
-                    Objects_Container.First_Index(Container => Items_List) ..
-                      Objects_Container.Last_Index
-                        (Container => Items_List) loop
+                    1 ..
+                      Get_Proto_Amount loop
                      Item_Index := Item_Index - 1;
                      if Item_Index <= 0
                        and then

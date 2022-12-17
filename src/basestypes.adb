@@ -19,6 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings;
 with Bases;
+with Items; use Items;
 
 package body BasesTypes is
 
@@ -142,7 +143,7 @@ package body BasesTypes is
 
    function Is_Buyable
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Positive;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
       use Bases;
@@ -151,8 +152,8 @@ package body BasesTypes is
    begin
       if Base_Index > 0
         and then Sky_Bases(Base_Index).Reputation.Level <
-          Objects_Container.Element
-            (Container => Items_List, Index => Item_Index)
+          Get_Proto_Item
+            (Index => Item_Index)
             .Reputation then
          return False;
       end if;
@@ -184,13 +185,13 @@ package body BasesTypes is
 
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Objects_Container.Extended_Index) return Natural is
+      Item_Index: Positive) return Natural is
       New_Item_Index: constant Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String
           (Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
    begin
-      if Objects_Container.Element
-          (Container => Items_List, Index => Item_Index)
+      if Get_Proto_Item
+          (Index => Item_Index)
           .Price =
         0 then
          return 0;
@@ -204,7 +205,7 @@ package body BasesTypes is
          end if;
       end if;
       return
-        Objects_Container.Element(Container => Items_List, Index => Item_Index)
+        Get_Proto_Item(Index => Item_Index)
           .Price;
    end Get_Price;
 

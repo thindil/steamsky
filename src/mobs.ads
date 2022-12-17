@@ -22,7 +22,6 @@ with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Factions; use Factions;
 with Game; use Game;
-with Items; use Items;
 
 -- ****h* Mobs/Mobs
 -- FUNCTION
@@ -40,7 +39,7 @@ package Mobs is
    -- Max_Amount  - Maximum amount of item in mob inventory
    -- SOURCE
    type Mob_Inventory_Record is record
-      Proto_Index: Objects_Container.Extended_Index := 0;
+      Proto_Index: Natural := 0;
       Min_Amount: Natural range 0 .. 100_000 := 0;
       Max_Amount: Natural range 0 .. 100_000 := 0;
    end record;
@@ -184,7 +183,7 @@ package Mobs is
      (Items_Indexes: String; Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
-      return Objects_Container.Extended_Index with
+      return Natural with
       Pre =>
       (Highest_Level < 101 and Weapon_Skill_Level < 101 and
        Factions_List.Contains(Key => Faction_Index));

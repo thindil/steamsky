@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -41,7 +41,7 @@ package Bases.Cargo is
       --            is set
       -- SOURCE
    procedure Update_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+     (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) with
       Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
@@ -57,7 +57,7 @@ package Bases.Cargo is
       -- Index of item in sky base cargo or 0 if item not found
       -- SOURCE
    function Find_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index;
+     (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
       Pre => Proto_Index > 0,
