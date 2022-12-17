@@ -2,7 +2,7 @@ discard """
   exitcode: 0
 """
 
-import ../../src/[crewinventory, items, ships, types]
+import ../../src/[crewinventory, game, items, ships, types]
 
 loadItems("../bin/data/items.dat")
 
@@ -36,3 +36,14 @@ assert playerShip.crew[0].inventory[0].amount == 1
 
 for i in 1..100:
   damageItem(playerShip.crew[0].inventory, 0, 0, 0, playerShip)
+
+block:
+  var inventory: seq[InventoryData]
+  inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
+  inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
+  assert findItem(inventory, 67) == 1
+  assert findItem(inventory = inventory, itemType = "Weapon") == 0
+  assert findItem(inventory, 500) == -1
+  assert findItem(inventory = inventory, itemType = "asdasdas") == -1
