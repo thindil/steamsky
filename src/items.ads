@@ -224,8 +224,7 @@ package Items is
       Skill_Level, Member_Index: Natural := 0;
       Ship: in out Ships.Ship_Record) with
       Pre =>
-      (Item_Index <= Inventory_Container.Last_Index(Container => Inventory)),
-      Test_Case => (Name => "Test_DamageItem", Mode => Nominal);
+      (Item_Index <= Inventory_Container.Last_Index(Container => Inventory));
       -- ****
 
       -- ****f* Items/Items.Find_Item
@@ -298,6 +297,7 @@ package Items is
      (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array;
 
    function Inventory_From_Nim
-     (Inventory: Nim_Inventory_Array; Size: Positive) return Inventory_Container.Vector;
+     (Inventory: Nim_Inventory_Array; Size: Positive)
+      return Inventory_Container.Vector;
 
 end Items;
