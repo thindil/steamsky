@@ -282,4 +282,9 @@ package Items is
 
    function Get_Proto_Item(Index: Positive) return Object_Data;
 
+   function Get_Proto_Amount return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaProtoAmount";
+
 end Items;

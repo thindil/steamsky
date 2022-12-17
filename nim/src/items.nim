@@ -350,3 +350,6 @@ proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], expo
   if $itemType in toolsList:
     return 1
   return 0
+
+proc getAdaProtoAmount(): cint {.exportc.} =
+  return itemsList.len.cint
