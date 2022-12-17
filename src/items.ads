@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
-with Ada.Containers.Formal_Indefinite_Vectors;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
 limited with Ships;
@@ -89,15 +88,6 @@ package Items is
    Default_Items_Amount: constant Items_Amount_Range := 379;
    -- ****
 
-   -- ****t* Items/Items.Objects_Container
-   -- FUNCTION
-   -- Used to store items data
-   -- SOURCE
-   package Objects_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Items_Amount_Range, Element_Type => Object_Data,
-      Max_Size_In_Storage_Elements => Object_Data'Size, Bounded => False);
-   -- ****
-
    -- ****t* Items/Items.Items_Durability
    -- FUNCTION
    -- Used to mark items durability
@@ -123,7 +113,7 @@ package Items is
    -- Price       - Price for which item was bought
    -- SOURCE
    type Inventory_Data is record
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Amount: Positive := 1;
       Name: Tiny_String.Bounded_String;
       Durability: Items_Durability;
@@ -137,14 +127,6 @@ package Items is
    -- SOURCE
    package Inventory_Container is new Formal_Vectors
      (Index_Type => Positive, Element_Type => Inventory_Data);
-   -- ****
-
-   -- ****v* Items/Items.Items_List
-   -- FUNCTION
-   -- List of item available in game
-   -- SOURCE
-   Items_List: Objects_Container.Vector
-     (Capacity => Count_Type(Default_Items_Amount));
    -- ****
 
    -- ****f* Items/Items.Load_Items
@@ -165,8 +147,7 @@ package Items is
    -- Prototype index of the item or 0 if index can't be found
    -- SOURCE
    function Find_Proto_Item
-     (Item_Type: Tiny_String.Bounded_String)
-      return Objects_Container.Extended_Index with
+     (Item_Type: Tiny_String.Bounded_String) return Natural with
       Pre => Tiny_String.Length(Source => Item_Type) > 0;
       -- ****
 
@@ -240,8 +221,7 @@ package Items is
       -- Iventory index of item or 0 if item was not found
       -- SOURCE
    function Find_Item
-     (Inventory: Inventory_Container.Vector;
-      Proto_Index: Objects_Container.Extended_Index := 0;
+     (Inventory: Inventory_Container.Vector; Proto_Index: Natural := 0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with

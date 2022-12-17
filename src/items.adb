@@ -20,60 +20,16 @@ with Ships; use Ships;
 package body Items is
 
    procedure Load_Items(File_Name: String) is
-      use Short_String;
-      use Tiny_String;
-
-      Temp_Record: Object_Data;
-      type Object_Nim_Data is record
-         Name: chars_ptr;
-         Weight: Integer;
-         I_Type: chars_ptr;
-         Price: Integer;
-         Value: Integer_Array (Values_Range);
-         Show_Type: chars_ptr;
-         Description: chars_ptr;
-         Reputation: Integer;
-      end record;
-      Temp_Nim_Record: Object_Nim_Data;
-      Index: Positive := 1;
       function Load_Ada_Items(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
-      procedure Get_Ada_Item
-        (Index: Integer; Ada_Item: out Object_Nim_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaItem";
    begin
       Money_Name :=
         To_Unbounded_String
           (Source =>
              Value
                (Item => Load_Ada_Items(Name => New_String(Str => File_Name))));
-      Load_Items_Loop :
-      loop
-         Get_Ada_Item(Index => Index, Ada_Item => Temp_Nim_Record);
-         exit Load_Items_Loop when Temp_Nim_Record.Weight = 0;
-         Temp_Record :=
-           (Name =>
-              To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name)),
-            Weight => Temp_Nim_Record.Weight,
-            I_Type =>
-              To_Bounded_String
-                (Source => Value(Item => Temp_Nim_Record.I_Type)),
-            Price => Temp_Nim_Record.Price, Value => Temp_Nim_Record.Value,
-            Show_Type =>
-              To_Bounded_String
-                (Source => Value(Item => Temp_Nim_Record.Show_Type)),
-            Description =>
-              To_Bounded_String
-                (Source => Value(Item => Temp_Nim_Record.Description)),
-            Reputation => Temp_Nim_Record.Reputation);
-         Objects_Container.Append
-           (Container => Items_List, New_Item => Temp_Record);
-         Index := Index + 1;
-      end loop Load_Items_Loop;
    end Load_Items;
 
    function Find_Proto_Item
