@@ -34,7 +34,7 @@ package body Items is
 
    function Find_Proto_Item
      (Item_Type: Tiny_String.Bounded_String)
-      return Objects_Container.Extended_Index is
+      return Natural is
       use Tiny_String;
 
       function Find_Ada_Proto_Item(Itype: chars_ptr) return Integer with
@@ -124,7 +124,7 @@ package body Items is
 
    function Find_Item
      (Inventory: Inventory_Container.Vector;
-      Proto_Index: Objects_Container.Extended_Index := 0;
+      Proto_Index: Natural := 0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is

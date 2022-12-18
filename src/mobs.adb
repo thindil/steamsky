@@ -23,6 +23,7 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Utils; use Utils;
+with Items; use Items;
 
 package body Mobs is
 
@@ -61,7 +62,7 @@ package body Mobs is
       Child_Index: SkillsData_Container.Extended_Index;
       Delete_Index: Skills_Amount_Range;
       Mob_Index: Positive;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Natural;
    begin
       Mobs_Data := Get_Tree(Read => Reader);
       Nodes_List :=
@@ -349,10 +350,7 @@ package body Mobs is
                Item_Index :=
                  Positive'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in
-                   Objects_Container.First_Index(Container => Items_List) ..
-                         Objects_Container.Last_Index
-                           (Container => Items_List) then
+               if Item_Index not in 1 .. Get_Proto_Amount then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
@@ -660,7 +658,7 @@ package body Mobs is
               (case I is when WEAPON => "weapon", when SHIELD => "shield",
                  when HELMET => "helmet", when TORSO => "torso",
                  when ARMS => "arms", when LEGS => "legs");
-            Equipment_Item_Index: Objects_Container.Extended_Index;
+            Equipment_Item_Index: Natural;
          begin
             if Mob.Equipment(I) = 0 then
                Equipment_Item_Index := 0;
@@ -712,7 +710,7 @@ package body Mobs is
      (Items_Indexes: String; Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
-      return Objects_Container.Extended_Index is
+      return Natural is
       function Get_Ada_Random_Item
         (Items: chars_ptr; E_Index, H_Level, W_Skill_Level: Integer;
          F_Index: chars_ptr; H_Skill: Integer) return Integer with

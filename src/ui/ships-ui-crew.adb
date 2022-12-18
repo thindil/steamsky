@@ -1441,7 +1441,7 @@ package body Ships.UI.Crew is
       Skill_Index: constant Skills_Amount_Range :=
         Skills_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1));
       Message_Text: Unbounded_String;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Natural;
       Quality: Natural;
    begin
       Append(Source => Message_Text, New_Item => "Related attribute: ");
@@ -1466,33 +1466,32 @@ package body Ships.UI.Crew is
          Quality := 0;
          if CArgv.Arg(Argv => Argv, N => 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
-            for I in
-              Objects_Container.First_Index(Container => Items_List) ..
-                Objects_Container.Last_Index(Container => Items_List) loop
-               if Objects_Container.Element
-                   (Container => Items_List, Index => I)
+            for I in 1 .. Get_Proto_Amount
+              loop
+               if Get_Proto_Item
+                   (Index => I)
                    .I_Type =
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
                  and then
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => I)
+                 (Get_Proto_Item
+                    (Index => I)
                     .Value
                     (1) <=
                   Get_Training_Tool_Quality
                     (Member_Index =>
                        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
                      Skill_Index => Natural(Skill_Index))) then
-                  if Objects_Container.Element
-                      (Container => Items_List, Index => I)
+                  if Get_Proto_Item
+                      (Index => I)
                       .Value
                       (1) >
                     Quality then
                      Item_Index := I;
                      Quality :=
-                       Objects_Container.Element
-                         (Container => Items_List, Index => I)
+                       Get_Proto_Item
+                         (Index => I)
                          .Value
                          (1);
                   end if;
@@ -1500,30 +1499,29 @@ package body Ships.UI.Crew is
             end loop Find_Training_Tool_Loop;
          else
             Find_Training_Tool_2_Loop :
-            for I in
-              Objects_Container.First_Index(Container => Items_List) ..
-                Objects_Container.Last_Index(Container => Items_List) loop
-               if Objects_Container.Element
-                   (Container => Items_List, Index => I)
+            for I in 1 .. Get_Proto_Amount
+               loop
+               if Get_Proto_Item
+                   (Index => I)
                    .I_Type =
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
                  and then
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => I)
+                 (Get_Proto_Item
+                    (Index => I)
                     .Value
                     (1) <=
                   Positive'Value(CArgv.Arg(Argv => Argv, N => 2))) then
-                  if Objects_Container.Element
-                      (Container => Items_List, Index => I)
+                  if Get_Proto_Item
+                      (Index => I)
                       .Value
                       (1) >
                     Quality then
                      Item_Index := I;
                      Quality :=
-                       Objects_Container.Element
-                         (Container => Items_List, Index => I)
+                       Get_Proto_Item
+                         (Index => I)
                          .Value
                          (1);
                   end if;
@@ -1535,8 +1533,8 @@ package body Ships.UI.Crew is
             New_Item =>
               To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Item_Index)
+                   Get_Proto_Item
+                     (Index => Item_Index)
                      .Name));
       end if;
       Append(Source => Message_Text, New_Item => "." & LF);
@@ -2257,8 +2255,8 @@ package body Ships.UI.Crew is
                                 "Study " &
                                 To_String
                                   (Source =>
-                                     Objects_Container.Element
-                                       (Container => Items_List,
+                                     Get_Proto_Item
+                                       (
                                         Index =>
                                           Positive'Value
                                             (Slice
@@ -2287,8 +2285,8 @@ package body Ships.UI.Crew is
                                 "Deconstruct " &
                                 To_String
                                   (Source =>
-                                     Objects_Container.Element
-                                       (Container => Items_List,
+                                     Get_Proto_Item
+                                       (
                                         Index =>
                                           Positive'Value
                                             (Slice
@@ -2308,8 +2306,8 @@ package body Ships.UI.Crew is
                                 "x " &
                                 To_String
                                   (Source =>
-                                     Objects_Container.Element
-                                       (Container => Items_List,
+                                     Get_Proto_Item
+                                       (
                                         Index =>
                                           Recipes_List
                                             (To_Bounded_String

@@ -31,6 +31,7 @@ with Config; use Config;
 with Events; use Events;
 with Goals; use Goals;
 with Factions; use Factions;
+with Items; use Items;
 with Ada.Text_IO;
 
 package body Missions is
@@ -73,12 +74,11 @@ package body Missions is
            when 76 .. 100 => Missions_Amount + 10,
            when others => Missions_Amount);
       Find_Mission_Items_Loop :
-      for I in
-        Objects_Container.First_Index(Container => Items_List) ..
-          Objects_Container.Last_Index(Container => Items_List) loop
+      for I in 1 .. Get_Proto_Amount
+         loop
          if To_String
              (Source =>
-                Objects_Container.Element(Container => Items_List, Index => I)
+                Get_Proto_Item(Index => I)
                   .I_Type) =
            To_String(Source => Mission_Items_Type) then
             Missions_Items.Append(New_Item => I);
@@ -280,8 +280,8 @@ package body Missions is
           Free_Cargo
             (Amount =>
                (0 -
-                Objects_Container.Element
-                  (Container => Items_List, Index => Mission.Item_Index)
+                Get_Proto_Item
+                  (Index => Mission.Item_Index)
                   .Weight)) <
           0 then
          raise Missions_Accepting_Error
@@ -325,8 +325,8 @@ package body Missions is
                  "'Deliver " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => Mission.Item_Index)
+                      Get_Proto_Item
+                        (Index => Mission.Item_Index)
                         .Name) &
                  "'.");
             Update_Cargo
@@ -485,8 +485,8 @@ package body Missions is
                  "You finished mission 'Deliver " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.",
@@ -564,8 +564,8 @@ package body Missions is
                     "'Deliver " &
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
+                         Get_Proto_Item
+                           (
                             Index => Mission.Item_Index)
                            .Name) &
                     "'.");
@@ -694,8 +694,8 @@ package body Missions is
                  "'Deliver " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.");

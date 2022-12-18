@@ -1021,7 +1021,7 @@ package body Ships.SaveLoad is
                Amount: Positive;
                Name: Bounded_String;
                Durability, Price: Natural;
-               Proto_Index: Objects_Container.Extended_Index;
+               Proto_Index: Natural;
             begin
                Proto_Index :=
                  Positive'Value
@@ -1056,7 +1056,7 @@ package body Ships.SaveLoad is
                Member_Data: Node_List;
                Item_Name: Bounded_String;
                Name, Faction_Index: Tiny_String.Bounded_String;
-               Item_Index: Objects_Container.Extended_Index;
+               Item_Index: Natural;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;

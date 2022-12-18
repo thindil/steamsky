@@ -229,8 +229,8 @@ package body Statistics.UI is
                  "{} end -values [list {" &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index =>
                            Recipes_List
                              (To_Bounded_String
@@ -711,8 +711,8 @@ package body Statistics.UI is
                 (Source =>
                    To_String
                      (Source =>
-                        Objects_Container.Element
-                          (Container => Items_List,
+                        Get_Proto_Item
+                          (
                            Index =>
                              Recipes_List
                                (To_Bounded_String

@@ -29,7 +29,7 @@ package body Crew.Inventory is
 
    procedure Update_Inventory
      (Member_Index: Positive; Amount: Integer;
-      Proto_Index: Objects_Container.Extended_Index := 0;
+      Proto_Index: Natural := 0;
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) is
       use Tiny_String;
@@ -152,18 +152,18 @@ package body Crew.Inventory is
       if Tools_Index > 0 then
          Update_Cargo_Block :
          declare
-            Proto_Index: constant Objects_Container.Extended_Index :=
+            Proto_Index: constant Natural :=
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(Member_Index).Inventory,
                  Index => Tools_Index)
                 .Proto_Index;
          begin
-            if Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+            if Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type /=
               Item_Type or
-              (Objects_Container.Element
-                 (Container => Items_List, Index => Proto_Index)
+              (Get_Proto_Item
+                 (Index => Proto_Index)
                  .Value
                  (1) <
                Tool_Quality) then

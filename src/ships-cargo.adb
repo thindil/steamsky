@@ -22,7 +22,7 @@ package body Ships.Cargo is
 
    procedure Update_Cargo
      (Ship: in out Ship_Record;
-      Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+      Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) is
       use Tiny_String;
@@ -107,8 +107,8 @@ package body Ships.Cargo is
       for Item of Ship.Cargo loop
          Ship_Free_Cargo :=
            Ship_Free_Cargo -
-           (Objects_Container.Element
-              (Container => Items_List, Index => Item.Proto_Index)
+           (Get_Proto_Item
+              (Index => Item.Proto_Index)
               .Weight *
             Item.Amount);
       end loop Count_Cargo_Weight_Loop;
@@ -124,8 +124,8 @@ package body Ships.Cargo is
    begin
       Get_Item_Amount_Loop :
       for Item of Player_Ship.Cargo loop
-         if Objects_Container.Element
-             (Container => Items_List, Index => Item.Proto_Index)
+         if Get_Proto_Item
+             (Index => Item.Proto_Index)
              .I_Type =
            Item_Type then
             Amount := Amount + Item.Amount;

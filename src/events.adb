@@ -20,6 +20,7 @@ with BasesTypes; use BasesTypes;
 with Combat; use Combat;
 with Crew; use Crew;
 with Factions; use Factions;
+with Items; use Items;
 with Maps; use Maps;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
@@ -264,7 +265,7 @@ package body Events is
                   Set_Double_Price_Event_Block :
                   declare
                      Item_Index: Natural;
-                     New_Item_Index: Objects_Container.Extended_Index;
+                     New_Item_Index: Natural;
                   begin
                      Get_Price_Loop :
                      loop
@@ -272,15 +273,10 @@ package body Events is
                           Get_Random
                             (Min => 1,
                              Max =>
-                               Positive
-                                 (Objects_Container.Length
-                                    (Container => Items_List)));
+                               Get_Proto_Amount);
                         Find_Item_Index_Loop :
-                        for J in
-                          Objects_Container.First_Index
-                            (Container => Items_List) ..
-                            Objects_Container.Last_Index
-                              (Container => Items_List) loop
+                        for J in 1 .. Get_Proto_Amount
+                           loop
                            Item_Index := Item_Index - 1;
                            if Item_Index = 0 then
                               if Get_Price

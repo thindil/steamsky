@@ -393,8 +393,8 @@ package body Ships.Crew is
       Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
       if Tools_Index > 0
         and then
-          Objects_Container.Element
-            (Container => Items_List,
+          Get_Proto_Item
+            (
              Index =>
                Inventory_Container.Element
                  (Container => Ship.Crew(Member_Index).Inventory,
@@ -798,8 +798,8 @@ package body Ships.Crew is
             for Item of Ship.Cargo loop
                if To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => Item.Proto_Index)
+                      Get_Proto_Item
+                        (Index => Item.Proto_Index)
                         .I_Type) =
                  To_String
                    (Source =>

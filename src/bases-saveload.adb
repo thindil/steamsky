@@ -645,7 +645,7 @@ package body Bases.SaveLoad is
                declare
                   Durability: Items_Durability;
                   Amount, Price: Natural;
-                  Proto_Index: Objects_Container.Extended_Index;
+                  Proto_Index: Natural;
                begin
                   Proto_Index :=
                     Positive'Value

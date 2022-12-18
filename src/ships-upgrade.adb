@@ -251,13 +251,12 @@ package body Ships.Upgrade is
       begin
          if Material_Index = 0 then
             Materials_Loop :
-            for I in
-              Objects_Container.First_Index(Container => Items_List) ..
-                Objects_Container.Last_Index(Container => Items_List) loop
+            for I in 1 .. Get_Proto_Amount
+               loop
                if To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => I)
+                      Get_Proto_Item
+                        (Index => I)
                         .I_Type) =
                  To_String
                    (Source =>
@@ -270,8 +269,8 @@ package body Ships.Upgrade is
                     with "You don't have the " &
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List, Index => I)
+                         Get_Proto_Item
+                           (Index => I)
                            .Name) &
                     " to upgrade " &
                     To_String
