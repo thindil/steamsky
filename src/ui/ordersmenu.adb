@@ -135,8 +135,8 @@ package body OrdersMenu is
                              "Ask for " &
                              To_String
                                (Source =>
-                                  Objects_Container.Element
-                                    (Container => Items_List,
+                                  Get_Proto_Item
+                                    (
                                      Index =>
                                        Positive'Value
                                          (To_String
@@ -308,8 +308,8 @@ package body OrdersMenu is
                                 "Complete delivery of " &
                                 To_String
                                   (Source =>
-                                     Objects_Container.Element
-                                       (Container => Items_List,
+                                     Get_Proto_Item
+                                       (
                                         Index => Mission.Item_Index)
                                        .Name),
                               Command => "CompleteMission", Shortcut => "c",
@@ -464,8 +464,8 @@ package body OrdersMenu is
                                    "Complete delivery of " &
                                    To_String
                                      (Source =>
-                                        Objects_Container.Element
-                                          (Container => Items_List,
+                                        Get_Proto_Item
+                                          (
                                            Index => Mission.Item_Index)
                                           .Name),
                                  Command => "CompleteMission", Shortcut => "c",
@@ -1183,8 +1183,8 @@ package body OrdersMenu is
               "You gave " &
               To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List,
+                   Get_Proto_Item
+                     (
                       Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Item_Index)

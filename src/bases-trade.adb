@@ -147,8 +147,8 @@ package body Bases.Trade is
       Recipe_Name: constant String :=
         To_String
           (Source =>
-             Objects_Container.Element
-               (Container => Items_List,
+             Get_Proto_Item
+               (
                 Index =>
                   Recipes_List
                     (To_Bounded_String
@@ -307,8 +307,8 @@ package body Bases.Trade is
                Cost :=
                  Cost +
                  ((5 * (100 - Member.Health)) *
-                  Objects_Container.Element
-                    (Container => Items_List,
+                  Get_Proto_Item
+                    (
                      Index =>
                        Find_Proto_Item
                          (Item_Type =>

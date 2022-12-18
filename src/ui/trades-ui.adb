@@ -157,7 +157,7 @@ package body Trades.UI is
           (pathName => Trade_Canvas & ".trade.options.typelabel",
            Interp => Interp);
       Item_Name, Trade_Info, Item_Durability: Unbounded_String;
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Base_Type, Item_Type: Bounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Price: Positive;
@@ -275,16 +275,16 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type =
               Null_Bounded_String
             then
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type
-            else Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+            else Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type);
          if Index
              (Source => Items_Types,
@@ -324,16 +324,16 @@ package body Trades.UI is
          end if;
          Item_Type :=
            (if
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type =
               Null_Bounded_String
             then
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type
-            else Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+            else Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type);
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
@@ -453,8 +453,8 @@ package body Trades.UI is
            (Table => Trade_Table,
             Text =>
               Positive'Image
-                (Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                (Get_Proto_Item
+                   (Index => Proto_Index)
                    .Weight) &
               " kg",
             Tooltip => "Show available options for item",
@@ -485,16 +485,16 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type =
               Null_Bounded_String
             then
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type
-            else Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+            else Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type);
          if Index
              (Source => Items_Types,
@@ -529,16 +529,16 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type =
               Null_Bounded_String
             then
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type
-            else Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+            else Get_Proto_Item
+                (Index => Proto_Index)
                 .Show_Type);
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
@@ -550,8 +550,8 @@ package body Trades.UI is
              (Source =>
                 To_String
                   (Source =>
-                     Objects_Container.Element
-                       (Container => Items_List, Index => Proto_Index)
+                     Get_Proto_Item
+                       (Index => Proto_Index)
                        .Name));
          if Argc = 3
            and then
@@ -655,8 +655,8 @@ package body Trades.UI is
            (Table => Trade_Table,
             Text =>
               Positive'Image
-                (Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                (Get_Proto_Item
+                   (Index => Proto_Index)
                    .Weight) &
               " kg",
             Tooltip => "Show available options for item",
@@ -853,7 +853,7 @@ package body Trades.UI is
       use Tiny_String;
 
       Item_Info: Unbounded_String;
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Cargo_Index, Base_Cargo_Index, Price: Natural := 0;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -903,8 +903,8 @@ package body Trades.UI is
                  Index => Base_Cargo_Index)
                 .Proto_Index);
       end if;
-      if Objects_Container.Element
-          (Container => Items_List, Index => Proto_Index)
+      if Get_Proto_Item
+          (Index => Proto_Index)
           .I_Type =
         Weapon_Type then
          Append
@@ -917,8 +917,8 @@ package body Trades.UI is
                      (Container => Skills_List,
                       Index =>
                         Skills_Amount_Range
-                          (Objects_Container.Element
-                             (Container => Items_List, Index => Proto_Index)
+                          (Get_Proto_Item
+                             (Index => Proto_Index)
                              .Value
                              (3)))
                      .Name) &
@@ -932,24 +932,24 @@ package body Trades.UI is
                           (Container => Skills_List,
                            Index =>
                              Skills_Amount_Range
-                               (Objects_Container.Element
-                                  (Container => Items_List,
+                               (Get_Proto_Item
+                                  (
                                    Index => Proto_Index)
                                   .Value
                                   (3)))
                           .Attribute)
                      .Name) &
               (if
-                 Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                 Get_Proto_Item
+                   (Index => Proto_Index)
                    .Value
                    (4) =
                  1
                then LF & "Can be used with shield."
                else LF & "Can't be used with shield (two-handed weapon).") &
               LF & "Damage type: ");
-         case Objects_Container.Element
-           (Container => Items_List, Index => Proto_Index)
+         case Get_Proto_Item
+           (Index => Proto_Index)
            .Value
            (5) is
             when 1 =>
@@ -964,8 +964,8 @@ package body Trades.UI is
       end if;
       Show_More_Info_Loop :
       for ItemType of Item_Types loop
-         if Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
+         if Get_Proto_Item
+             (Index => Proto_Index)
              .I_Type =
            ItemType then
             if Item_Info /= Null_Unbounded_String then
@@ -977,14 +977,14 @@ package body Trades.UI is
                  "Damage chance: " &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => Proto_Index)
+                      Get_Proto_Item
+                        (Index => Proto_Index)
                         .Value
                         (1)) &
                  LF & "Strength:" &
                  Integer'Image
-                   (Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                   (Get_Proto_Item
+                      (Index => Proto_Index)
                       .Value
                       (2)));
             exit Show_More_Info_Loop;
@@ -992,8 +992,8 @@ package body Trades.UI is
       end loop Show_More_Info_Loop;
       if Is_Tool
           (Item_Type =>
-             Objects_Container.Element
-               (Container => Items_List, Index => Proto_Index)
+             Get_Proto_Item
+               (Index => Proto_Index)
                .I_Type) then
          if Item_Info /= Null_Unbounded_String then
             Append(Source => Item_Info, New_Item => LF);
@@ -1004,27 +1004,27 @@ package body Trades.UI is
               "Damage chance: " &
               Get_Item_Chance_To_Damage
                 (Item_Data =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Proto_Index)
+                   Get_Proto_Item
+                     (Index => Proto_Index)
                      .Value
                      (1)));
       end if;
       if Length
           (Source =>
-             Objects_Container.Element
-               (Container => Items_List, Index => Proto_Index)
+             Get_Proto_Item
+               (Index => Proto_Index)
                .I_Type) >
         4
         and then
         (Slice
            (Source =>
-              Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
+              Get_Proto_Item
+                (Index => Proto_Index)
                 .I_Type,
             Low => 1, High => 4) =
          "Ammo" or
-         Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
+         Get_Proto_Item
+             (Index => Proto_Index)
              .I_Type =
            To_Bounded_String(Source => "Harpoon")) then
          if Item_Info /= Null_Unbounded_String then
@@ -1035,13 +1035,13 @@ package body Trades.UI is
             New_Item =>
               "Strength:" &
               Integer'Image
-                (Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                (Get_Proto_Item
+                   (Index => Proto_Index)
                    .Value
                    (1)));
       end if;
-      if Objects_Container.Element
-          (Container => Items_List, Index => Proto_Index)
+      if Get_Proto_Item
+          (Index => Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          if Item_Info /= Null_Unbounded_String then
@@ -1052,8 +1052,8 @@ package body Trades.UI is
             New_Item =>
               To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => Proto_Index)
+                   Get_Proto_Item
+                     (Index => Proto_Index)
                      .Description));
       end if;
       Base_Type :=
@@ -1156,8 +1156,8 @@ package body Trades.UI is
             Weight :=
               Free_Cargo
                 (Amount =>
-                   (Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                   (Get_Proto_Item
+                      (Index => Proto_Index)
                       .Weight *
                     Max_Sell_Amount) -
                    Max_Price);
@@ -1176,8 +1176,8 @@ package body Trades.UI is
                Weight :=
                  Free_Cargo
                    (Amount =>
-                      (Objects_Container.Element
-                         (Container => Items_List, Index => Proto_Index)
+                      (Get_Proto_Item
+                         (Index => Proto_Index)
                          .Weight *
                        Max_Sell_Amount) -
                       Max_Price);
@@ -1237,8 +1237,8 @@ package body Trades.UI is
                  Free_Cargo
                    (Amount =>
                       Max_Price -
-                      (Objects_Container.Element
-                         (Container => Items_List, Index => Proto_Index)
+                      (Get_Proto_Item
+                         (Index => Proto_Index)
                          .Weight *
                        Max_Buy_Amount));
                Count_Buy_Amount_Loop :
@@ -1246,8 +1246,8 @@ package body Trades.UI is
                   Max_Buy_Amount :=
                     Max_Buy_Amount +
                     (Weight /
-                     Objects_Container.Element
-                       (Container => Items_List, Index => Proto_Index)
+                     Get_Proto_Item
+                       (Index => Proto_Index)
                        .Weight) -
                     1;
                   if Max_Buy_Amount < 0 then
@@ -1262,8 +1262,8 @@ package body Trades.UI is
                     Free_Cargo
                       (Amount =>
                          Max_Price -
-                         (Objects_Container.Element
-                            (Container => Items_List, Index => Proto_Index)
+                         (Get_Proto_Item
+                            (Index => Proto_Index)
                             .Weight *
                           Max_Buy_Amount));
                end loop Count_Buy_Amount_Loop;
@@ -1278,8 +1278,8 @@ package body Trades.UI is
          Title =>
            To_String
              (Source =>
-                Objects_Container.Element
-                  (Container => Items_List, Index => Proto_Index)
+                Get_Proto_Item
+                  (Index => Proto_Index)
                   .Name),
          Button_1 =>
            (if Max_Buy_Amount = 0 then Empty_Button_Settings
@@ -1414,8 +1414,8 @@ package body Trades.UI is
                     "Buy " &
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
+                         Get_Proto_Item
+                           (
                             Index =>
                               BaseCargo_Container.Element
                                 (Container => Sky_Bases(Base_Index).Cargo,
@@ -1432,8 +1432,8 @@ package body Trades.UI is
                     "Buy " &
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
+                         Get_Proto_Item
+                           (
                             Index =>
                               BaseCargo_Container.Element
                                 (Container => Trader_Cargo,
@@ -1499,7 +1499,7 @@ package body Trades.UI is
       Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
       Base_Cargo_Index, Price: Natural;
       Base_Type: Bounded_String;
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       package Items_Container is new Vectors
@@ -1674,16 +1674,16 @@ package body Trades.UI is
                              (Container => Player_Ship.Cargo, Index => I))),
                I_Type =>
                  (if
-                    Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                    Get_Proto_Item
+                      (Index => Proto_Index)
                       .Show_Type =
                     Null_Bounded_String
                   then
-                    Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                    Get_Proto_Item
+                      (Index => Proto_Index)
                       .I_Type
-                  else Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                  else Get_Proto_Item
+                      (Index => Proto_Index)
                       .Show_Type),
                Damage =>
                  Float
@@ -1698,8 +1698,8 @@ package body Trades.UI is
                    (Container => Player_Ship.Cargo, Index => I)
                    .Price,
                Weight =>
-                 Objects_Container.Element
-                   (Container => Items_List, Index => Proto_Index)
+                 Get_Proto_Item
+                   (Index => Proto_Index)
                    .Weight,
                Owned =>
                  Inventory_Container.Element
@@ -1746,21 +1746,21 @@ package body Trades.UI is
                       (Source =>
                          To_String
                            (Source =>
-                              Objects_Container.Element
-                                (Container => Items_List, Index => Proto_Index)
+                              Get_Proto_Item
+                                (Index => Proto_Index)
                                 .Name)),
                   I_Type =>
                     (if
-                       Objects_Container.Element
-                         (Container => Items_List, Index => Proto_Index)
+                       Get_Proto_Item
+                         (Index => Proto_Index)
                          .Show_Type =
                        Null_Bounded_String
                      then
-                       Objects_Container.Element
-                         (Container => Items_List, Index => Proto_Index)
+                       Get_Proto_Item
+                         (Index => Proto_Index)
                          .I_Type
-                     else Objects_Container.Element
-                         (Container => Items_List, Index => Proto_Index)
+                     else Get_Proto_Item
+                         (Index => Proto_Index)
                          .Show_Type),
                   Damage =>
                     Float
@@ -1770,8 +1770,8 @@ package body Trades.UI is
                     Float(Default_Item_Durability),
                   Price => Price, Profit => -(Price),
                   Weight =>
-                    Objects_Container.Element
-                      (Container => Items_List, Index => Proto_Index)
+                    Get_Proto_Item
+                      (Index => Proto_Index)
                       .Weight,
                   Owned => 0,
                   Available =>
@@ -1819,7 +1819,7 @@ package body Trades.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Base_Cargo_Index, Cargo_Index: Natural := 0;
       Trader: String(1 .. 4);
-      Proto_Index: Objects_Container.Extended_Index;
+      Proto_Index: Natural;
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
    begin

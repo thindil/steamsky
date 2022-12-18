@@ -362,8 +362,8 @@ package body Knowledge.Missions is
                  when DELIVER =>
                    To_String
                      (Source =>
-                        Objects_Container.Element
-                          (Container => Items_List,
+                        Get_Proto_Item
+                          (
                            Index => Accepted_Missions(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
@@ -518,8 +518,8 @@ package body Knowledge.Missions is
                      Text =>
                        To_String
                          (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
+                            Get_Proto_Item
+                              (
                                Index => Accepted_Missions(I).Item_Index)
                               .Name) &
                        " to " &

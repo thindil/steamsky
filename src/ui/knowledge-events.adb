@@ -120,8 +120,8 @@ package body Knowledge.Events is
                  LF & "Item: " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index => Events_List(Event_Index).Item_Index)
                         .Name));
          when NONE | BASERECOVERY =>
@@ -343,8 +343,8 @@ package body Knowledge.Events is
                  when DOUBLEPRICE =>
                    To_String
                      (Source =>
-                        Objects_Container.Element
-                          (Container => Items_List,
+                        Get_Proto_Item
+                          (
                            Index => Events_List(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " in ") &
@@ -579,8 +579,8 @@ package body Knowledge.Events is
                      Text =>
                        To_String
                          (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
+                            Get_Proto_Item
+                              (
                                Index => Events_List(Event).Item_Index)
                               .Name) &
                        " in " &

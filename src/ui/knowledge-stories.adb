@@ -163,8 +163,8 @@ package body Knowledge.Stories is
                        "You must loot: " &
                        To_String
                          (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List,
+                            Get_Proto_Item
+                              (
                                Index =>
                                  Positive'Value
                                    ((Slice(S => Tokens, Index => 1))))

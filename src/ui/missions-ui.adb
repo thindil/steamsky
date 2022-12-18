@@ -41,6 +41,7 @@ with Bases; use Bases;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
+with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -241,8 +242,8 @@ package body Missions.UI is
                   Text =>
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List,
+                         Get_Proto_Item
+                           (
                             Index => List(I).Item_Index)
                            .Name) &
                     " to " &
@@ -577,13 +578,13 @@ package body Missions.UI is
                  "-text {Item: " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => Mission.Item_Index)
+                      Get_Proto_Item
+                        (Index => Mission.Item_Index)
                         .Name) &
                  LF & "Weight:" &
                  Positive'Image
-                   (Objects_Container.Element
-                      (Container => Items_List, Index => Mission.Item_Index)
+                   (Get_Proto_Item
+                      (Index => Mission.Item_Index)
                       .Weight) &
                  " kg" & LF & "To base: " &
                  To_String
@@ -1056,8 +1057,8 @@ package body Missions.UI is
                  when DELIVER =>
                    To_String
                      (Source =>
-                        Objects_Container.Element
-                          (Container => Items_List,
+                        Get_Proto_Item
+                          (
                            Index =>
                              Sky_Bases(Base_Index).Missions(I).Item_Index)
                           .Name) &
