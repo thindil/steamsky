@@ -70,24 +70,6 @@ package Items is
    end record;
    -- ****
 
-   -- ****t* Items/Items.Item_Amount_Range
-   -- FUNCTION
-   -- Used to set the amount of items prototypes available in the game
-   -- HISTORY
-   -- 7.5 - Added
-   -- SOURCE
-   subtype Items_Amount_Range is Positive range 1 .. 512;
-   -- ****
-
-   -- ****d* Items/Items.Default_Items_Amount
-   -- FUNCTION
-   -- The default amount of items prototypes in the game
-   -- HISTORY
-   -- 7.5 - Added
-   -- SOURCE
-   Default_Items_Amount: constant Items_Amount_Range := 379;
-   -- ****
-
    -- ****t* Items/Items.Items_Durability
    -- FUNCTION
    -- Used to mark items durability
