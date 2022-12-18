@@ -1189,12 +1189,7 @@ package body Crew is
                     To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                     " has ended.",
                   M_Type => TRADEMESSAGE, Color => RED);
-               if Player_Ship.Speed /= DOCKED then
-                  Player_Ship.Crew(Member_Index).Orders := (others => 0);
-                  Give_Orders
-                    (Ship => Player_Ship, Member_Index => Member_Index,
-                     Given_Order => REST);
-               else
+               if Player_Ship.Speed = DOCKED then
                   Delete_Member
                     (Member_Index => Member_Index, Ship => Player_Ship);
                   Sky_Bases
@@ -1206,6 +1201,11 @@ package body Crew is
                       .Population +
                     1;
                   Member_Index := Member_Index - 1;
+               else
+                  Player_Ship.Crew(Member_Index).Orders := (others => 0);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Member_Index,
+                     Given_Order => REST);
                end if;
             end if;
          end if;
