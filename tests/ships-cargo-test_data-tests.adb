@@ -30,8 +30,7 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_Update_Cargo_9816c2_08c386
-     (Ship: in out Ship_Record;
-      Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+     (Ship: in out Ship_Record; Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) is
    begin
@@ -67,8 +66,7 @@ package body Ships.Cargo.Test_Data.Tests is
 --  id:2.2/9816c2b0bfa95b8f/Update_Cargo/1/0/test_updatecargo/
    procedure Test_Update_Cargo_test_updatecargo(Gnattest_T: in out Test) is
       procedure Update_Cargo
-        (Ship: in out Ship_Record;
-         Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+        (Ship: in out Ship_Record; Proto_Index: Natural := 0; Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          Cargo_Index, Price: Natural := 0) renames
         Wrap_Test_Update_Cargo_9816c2_08c386;

@@ -64,7 +64,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_Update_Base_Cargo_a5e235_1e1787
-     (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+     (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
    begin
@@ -83,7 +83,7 @@ package body Bases.Cargo.Test_Data.Tests is
    procedure Test_Update_Base_Cargo_test_updatebasecargo
      (Gnattest_T: in out Test) is
       procedure Update_Base_Cargo
-        (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+        (Proto_Index: Natural := 0; Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          Cargo_Index: Inventory_Container.Extended_Index := 0) renames
         Wrap_Test_Update_Base_Cargo_a5e235_1e1787;
@@ -93,7 +93,7 @@ package body Bases.Cargo.Test_Data.Tests is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Amount: Positive;
-      ProtoIndex: Objects_Container.Extended_Index;
+      ProtoIndex: Natural;
 
    begin
 
@@ -120,7 +120,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_Find_Base_Cargo_6c7fc4_b84903
-     (Proto_Index: Objects_Container.Extended_Index;
+     (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
    begin
       begin
@@ -160,7 +160,7 @@ package body Bases.Cargo.Test_Data.Tests is
    procedure Test_Find_Base_Cargo_test_findbasecargo
      (Gnattest_T: in out Test) is
       function Find_Base_Cargo
-        (Proto_Index: Objects_Container.Extended_Index;
+        (Proto_Index: Natural;
          Durability: Items_Durability := Items_Durability'Last)
          return Natural renames
         Wrap_Test_Find_Base_Cargo_6c7fc4_b84903;
