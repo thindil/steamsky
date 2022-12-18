@@ -394,8 +394,7 @@ package body Ships.Crew is
       if Tools_Index > 0
         and then
           Get_Proto_Item
-            (
-             Index =>
+            (Index =>
                Inventory_Container.Element
                  (Container => Ship.Crew(Member_Index).Inventory,
                   Index => Tools_Index)
@@ -798,9 +797,7 @@ package body Ships.Crew is
             for Item of Ship.Cargo loop
                if To_String
                    (Source =>
-                      Get_Proto_Item
-                        (Index => Item.Proto_Index)
-                        .I_Type) =
+                      Get_Proto_Item(Index => Item.Proto_Index).I_Type) =
                  To_String
                    (Source =>
                       BaseModules_Container.Element

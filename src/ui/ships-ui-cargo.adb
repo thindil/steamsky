@@ -149,7 +149,7 @@ package body Ships.UI.Cargo is
          options =>
            "-text {Free cargo space:" &
            Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
-      Fill_Cargo_Types_Loop:
+      Fill_Cargo_Types_Loop :
       for I of Cargo_Indexes loop
          Set_Item_Type_Block :
          declare
@@ -157,8 +157,7 @@ package body Ships.UI.Cargo is
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I);
             Proto_Item: constant Object_Data :=
-              Get_Proto_Item
-                (Index => Item.Proto_Index);
+              Get_Proto_Item(Index => Item.Proto_Index);
          begin
             Item_Type :=
               (if Proto_Item.Show_Type /= Null_Bounded_String then
@@ -182,8 +181,7 @@ package body Ships.UI.Cargo is
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I);
             Proto_Item: constant Object_Data :=
-              Get_Proto_Item
-                (Index => Item.Proto_Index);
+              Get_Proto_Item(Index => Item.Proto_Index);
          begin
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
@@ -448,8 +446,7 @@ package body Ships.UI.Cargo is
             Item_Type =>
               (if
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => I)
                         .Proto_Index)
@@ -457,15 +454,13 @@ package body Ships.UI.Cargo is
                  Null_Bounded_String
                then
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => I)
                         .Proto_Index)
                    .Show_Type
                else Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => I)
                         .Proto_Index)
@@ -479,8 +474,7 @@ package body Ships.UI.Cargo is
                 (Container => Player_Ship.Cargo, Index => I)
                 .Amount *
               Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => I)
                      .Proto_Index)
@@ -686,11 +680,7 @@ package body Ships.UI.Cargo is
       if Free_Inventory
           (Member_Index => Member_Index,
            Amount =>
-             0 -
-             (Get_Proto_Item
-                (Index => Item.Proto_Index)
-                .Weight *
-              Amount)) <
+             0 - (Get_Proto_Item(Index => Item.Proto_Index).Weight * Amount)) <
         0 then
          Show_Message
            (Text =>
@@ -806,8 +796,7 @@ package body Ships.UI.Cargo is
       if To_String
           (Source =>
              Get_Proto_Item
-               (
-                Index =>
+               (Index =>
                   Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Item_Index)
                     .Proto_Index)
@@ -966,9 +955,7 @@ package body Ships.UI.Cargo is
            Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       Max_Amount: Natural :=
         Free_Inventory(Member_Index => Member_Index, Amount => 0) /
-        Get_Proto_Item
-          (Index => Item.Proto_Index)
-          .Weight;
+        Get_Proto_Item(Index => Item.Proto_Index).Weight;
       Max_Button: constant Ttk_Button :=
         Get_Widget(pathName => ".itemdialog.maxbutton", Interp => Interp);
    begin

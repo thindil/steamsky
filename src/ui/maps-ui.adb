@@ -727,8 +727,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index => Events_List(Event_Index).Item_Index)
+                              (Index => Events_List(Event_Index).Item_Index)
                               .Name));
                when NONE | BASERECOVERY =>
                   null;
@@ -769,8 +768,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Accepted_Missions(Mission_Index).Item_Index)
                               .Name));
                when DESTROY =>

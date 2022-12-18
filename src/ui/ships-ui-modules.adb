@@ -316,8 +316,7 @@ package body Ships.UI.Modules is
                    Inventory_Container.Last_Index
                      (Container => Player_Ship.Cargo) loop
                   if Get_Proto_Item
-                      (
-                       Index =>
+                      (Index =>
                          Inventory_Container.Element
                            (Container => Player_Ship.Cargo, Index => I)
                            .Proto_Index)
@@ -598,12 +597,8 @@ package body Ships.UI.Modules is
            "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
            "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
-      for I in 1 .. Get_Proto_Amount
-         loop
-         if To_String
-             (Source =>
-                Get_Proto_Item(Index => I)
-                  .I_Type) =
+      for I in 1 .. Get_Proto_Amount loop
+         if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
            To_String
              (Source =>
                 BaseModules_Container.Element
@@ -616,20 +611,12 @@ package body Ships.UI.Modules is
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text =>
-                 "{" &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index => I)
-                        .Name) &
+                 "{" & To_String(Source => Get_Proto_Item(Index => I).Name) &
                  "}" &
                  (if
                     Find_Item
                       (Inventory => Player_Ship.Cargo,
-                       Item_Type =>
-                         Get_Proto_Item
-                           (Index => I)
-                           .I_Type) =
+                       Item_Type => Get_Proto_Item(Index => I).I_Type) =
                     0
                   then " [list red]"
                   else ""));
@@ -853,8 +840,7 @@ package body Ships.UI.Modules is
                            (Container => Player_Ship.Cargo)
                  and then
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Ammo_Index)
                           .Proto_Index)
@@ -873,8 +859,7 @@ package body Ships.UI.Modules is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Inventory_Container.Element
                                    (Container => Player_Ship.Cargo,
                                     Index => Ammo_Index)
@@ -887,11 +872,8 @@ package body Ships.UI.Modules is
             if not Have_Ammo then
                M_Amount := 0;
                Find_Ammo_Info_Loop :
-               for I in 1 .. Get_Proto_Amount
-                  loop
-                  if Get_Proto_Item
-                      (Index => I)
-                      .I_Type =
+               for I in 1 .. Get_Proto_Amount loop
+                  if Get_Proto_Item(Index => I).I_Type =
                     TinyString_Formal_Container.Element
                       (Container => Items_Types,
                        Index =>
@@ -909,10 +891,7 @@ package body Ships.UI.Modules is
                         Text =>
                           "{" &
                           To_String
-                            (Source =>
-                               Get_Proto_Item
-                                 (Index => I)
-                                 .Name) &
+                            (Source => Get_Proto_Item(Index => I).Name) &
                           "}" &
                           (if
                              Find_Item
@@ -1378,8 +1357,7 @@ package body Ships.UI.Modules is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo,
                            Index => Assign_Index)
@@ -1991,17 +1969,10 @@ package body Ships.UI.Modules is
                      .Tool);
             Tool_Name :=
               (if
-                 Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Show_Type /=
+                 Get_Proto_Item(Index => Proto_Index).Show_Type /=
                  Null_Bounded_String
-               then
-                 Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Show_Type
-               else Get_Proto_Item
-                   (Index => Proto_Index)
-                   .I_Type);
+               then Get_Proto_Item(Index => Proto_Index).Show_Type
+               else Get_Proto_Item(Index => Proto_Index).I_Type);
          end if;
          Skill_Name :=
            To_Unbounded_String
@@ -2013,10 +1984,7 @@ package body Ships.UI.Modules is
                        .Name));
          Tool_Color := To_Unbounded_String(Source => "green");
          if Get_Item_Amount
-             (Item_Type =>
-                Get_Proto_Item
-                  (Index => Proto_Index)
-                  .I_Type) =
+             (Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) =
            0 then
             Append(Source => Skill_Name, New_Item => " (no tool)");
             Tool_Color := To_Unbounded_String(Source => "red");
@@ -2492,8 +2460,7 @@ package body Ships.UI.Modules is
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
          if Get_Proto_Item
-             (
-              Index =>
+             (Index =>
                 Inventory_Container.Element
                   (Container => Player_Ship.Cargo, Index => I)
                   .Proto_Index)
@@ -2513,8 +2480,7 @@ package body Ships.UI.Modules is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index =>
+                        (Index =>
                            Inventory_Container.Element
                              (Container => Player_Ship.Cargo, Index => I)
                              .Proto_Index)

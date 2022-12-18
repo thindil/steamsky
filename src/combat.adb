@@ -163,14 +163,9 @@ package body Combat is
             exit Add_Enemy_Cargo_Loop when Free_Cargo
                 (Amount => 0, Ship => Enemy_Ship) <=
               Min_Free_Space;
-            Item_Index :=
-              Get_Random
-                (Min => 1,
-                 Max =>
-                   Get_Proto_Amount);
+            Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
             Find_Item_Index_Loop :
-            for I in 1 .. Get_Proto_Amount
-               loop
+            for I in 1 .. Get_Proto_Amount loop
                Item_Index := Item_Index - 1;
                if Item_Index = 0 then
                   New_Item_Index := I;
@@ -198,9 +193,7 @@ package body Combat is
                if Free_Cargo
                    (Amount =>
                       0 -
-                      (Get_Proto_Item
-                         (Index => New_Item_Index)
-                         .Weight *
+                      (Get_Proto_Item(Index => New_Item_Index).Weight *
                        Item_Amount)) >
                  -1 then
                   Inventory_Container.Append
@@ -584,8 +577,7 @@ package body Combat is
                            (Container => Ship.Cargo)
                  and then
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Inventory_Container.Element
                           (Container => Ship.Cargo, Index => Ammo_Index_2)
                           .Proto_Index)
@@ -601,11 +593,8 @@ package body Combat is
                end if;
                if Ammo_Index = 0 then
                   Find_Ammo_Index_Loop :
-                  for I in 1 .. Get_Proto_Amount
-                     loop
-                     if Get_Proto_Item
-                         (Index => I)
-                         .I_Type =
+                  for I in 1 .. Get_Proto_Amount loop
+                     if Get_Proto_Item(Index => I).I_Type =
                        TinyString_Formal_Container.Element
                          (Container => Items_Types,
                           Index =>
@@ -668,8 +657,7 @@ package body Combat is
                end if;
                if Ship.Modules(K).M_Type = GUN and Shoots > 0 then
                   case Get_Proto_Item
-                    (
-                     Index =>
+                    (Index =>
                        Inventory_Container.Element
                          (Container => Ship.Cargo, Index => Ammo_Index)
                          .Proto_Index)
@@ -849,8 +837,7 @@ package body Combat is
                         Weapon_Damage :=
                           Weapon_Damage +
                           Get_Proto_Item
-                            (
-                             Index =>
+                            (Index =>
                                Inventory_Container.Element
                                  (Container => Ship.Cargo, Index => Ammo_Index)
                                  .Proto_Index)
@@ -1017,8 +1004,7 @@ package body Combat is
                Base_Damage :=
                  Base_Damage +
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Attacker.Inventory,
                          Index => Attacker.Equipment(WEAPON))
@@ -1055,8 +1041,7 @@ package body Combat is
                     Skill_Index =>
                       Skills_Amount_Range
                         (Get_Proto_Item
-                           (
-                            Index =>
+                           (Index =>
                               Inventory_Container.Element
                                 (Container => Attacker.Inventory,
                                  Index => Attacker.Equipment(WEAPON))
@@ -1081,8 +1066,7 @@ package body Combat is
                   Hit_Chance :=
                     Hit_Chance +
                     Get_Proto_Item
-                      (
-                       Index =>
+                      (Index =>
                          Inventory_Container.Element
                            (Container => Defender.Inventory,
                             Index => Defender.Equipment(I))
@@ -1095,8 +1079,7 @@ package body Combat is
                Damage :=
                  Damage -
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Defender.Inventory,
                          Index => Defender.Equipment(Hit_Location))
@@ -1108,8 +1091,7 @@ package body Combat is
                Damage :=
                  Damage -
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Defender.Inventory,
                          Index => Defender.Equipment(SHIELD))
@@ -1150,8 +1132,7 @@ package body Combat is
             -- Count damage based on damage type of weapon
             if Attacker.Equipment(WEAPON) > 0 then
                if Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Attacker.Inventory,
                          Index => Attacker.Equipment(WEAPON))
@@ -1161,8 +1142,7 @@ package body Combat is
                  1 then -- cutting weapon
                   Damage := Integer(Float(Damage) * 1.5);
                elsif Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Attacker.Inventory,
                          Index => Attacker.Equipment(WEAPON))
@@ -1229,8 +1209,7 @@ package body Combat is
                         Skill_Number =>
                           Skills_Amount_Range
                             (Get_Proto_Item
-                               (
-                                Index =>
+                               (Index =>
                                   Inventory_Container.Element
                                     (Container => Attacker.Inventory,
                                      Index => Attacker.Equipment(WEAPON))
@@ -1592,8 +1571,7 @@ package body Combat is
                       Inventory_Container.Last_Index
                         (Container => Enemy.Ship.Cargo) then
                if Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Enemy.Ship.Cargo, Index => Ammo_Index_2)
                         .Proto_Index)
@@ -1610,11 +1588,8 @@ package body Combat is
             end if;
             if Enemy_Ammo_Index = 0 then
                Enemy_Ammo_Index_Loop :
-               for K in 1 .. Get_Proto_Amount
-                  loop
-                  if Get_Proto_Item
-                      (Index => K)
-                      .I_Type =
+               for K in 1 .. Get_Proto_Amount loop
+                  if Get_Proto_Item(Index => K).I_Type =
                     TinyString_Formal_Container.Element
                       (Container => Items_Types,
                        Index =>
@@ -1908,10 +1883,7 @@ package body Combat is
                   if Ship_Free_Space < 0 then
                      Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
-                  if Get_Proto_Item
-                      (Index => Item.Proto_Index)
-                      .Price =
-                    0 and
+                  if Get_Proto_Item(Index => Item.Proto_Index).Price = 0 and
                     Item.Proto_Index /= Money_Index then
                      Loot_Amount := 0;
                   end if;
@@ -1930,10 +1902,7 @@ package body Combat is
                        To_Unbounded_String(Source => " ") &
                        To_String
                          (Source =>
-                            Get_Proto_Item
-                              (
-                               Index => Item.Proto_Index)
-                              .Name);
+                            Get_Proto_Item(Index => Item.Proto_Index).Name);
                      Ship_Free_Space := Free_Cargo(Amount => 0);
                      exit Looting_Loop when Item =
                        Inventory_Container.Last_Element

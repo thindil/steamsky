@@ -102,13 +102,8 @@ package body Crafts.UI is
       if Tool_Needed /= To_Bounded_String(Source => "None") then
          Has_Tool := False;
          Check_Tool_Loop :
-         for I in 1 .. Get_Proto_Amount
-            loop
-            if To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => I)
-                     .I_Type) =
+         for I in 1 .. Get_Proto_Amount loop
+            if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
               To_String(Source => Tool_Needed) then
                Cargo_Index :=
                  Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I);
@@ -172,11 +167,8 @@ package body Crafts.UI is
            Recipe.Material_Types.First_Index ..
              Recipe.Material_Types.Last_Index loop
             Find_Cargo_Index_Loop :
-            for J in 1 .. Get_Proto_Amount
-               loop
-               if Get_Proto_Item
-                   (Index => J)
-                   .I_Type =
+            for J in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => J).I_Type =
                  Recipe.Material_Types(K) then
                   Cargo_Index :=
                     Find_Item
@@ -384,8 +376,7 @@ package body Crafts.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Recipes_List
                                    (To_Bounded_String
                                       (Source =>
@@ -419,8 +410,7 @@ package body Crafts.UI is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Recipes_List
                           (To_Bounded_String
                              (Source =>
@@ -473,8 +463,7 @@ package body Crafts.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Positive'Value
                                    (To_String(Source => Recipes_Indexes(I))))
                               .Name)),
@@ -497,8 +486,7 @@ package body Crafts.UI is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Positive'Value
                           (To_String(Source => Recipes_Indexes(I))))
                      .Name),
@@ -540,8 +528,7 @@ package body Crafts.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Positive'Value
                                    (To_String(Source => Recipes_Indexes(I))))
                               .Name)),
@@ -563,8 +550,7 @@ package body Crafts.UI is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Positive'Value
                           (To_String(Source => Recipes_Indexes(I))))
                      .Name),
@@ -702,8 +688,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index =>
+                       (Index =>
                           Positive'Value
                             (Slice
                                (Source => Recipe_Index, Low => 7,
@@ -713,8 +698,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index =>
+                       (Index =>
                           Positive'Value
                             (Slice
                                (Source => Recipe_Index, Low => 13,
@@ -723,8 +707,7 @@ package body Crafts.UI is
               else To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index => Recipes_List(Recipe_Index).Result_Index)
+                       (Index => Recipes_List(Recipe_Index).Result_Index)
                        .Name)),
            Title_Width => 275, Columns => 2);
       Max_Amount: constant Positive :=
@@ -1010,8 +993,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index =>
+                       (Index =>
                           Positive'Value
                             (Slice
                                (Source => Recipe_Index, Low => 7,
@@ -1022,8 +1004,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index =>
+                       (Index =>
                           Positive'Value
                             (Slice
                                (Source => Recipe_Index, Low => 13,
@@ -1033,8 +1014,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index => Recipes_List(Recipe_Index).Result_Index)
+                       (Index => Recipes_List(Recipe_Index).Result_Index)
                        .Name)),
            Title_Width => 275);
       Workplace_Name: Bounded_String := Null_Bounded_String;
@@ -1062,8 +1042,7 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Positive'Value
                      (Slice
                         (Source => Recipe_Index, Low => 7,
@@ -1092,8 +1071,7 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Positive'Value
                      (Slice
                         (Source => Recipe_Index, Low => 13,
@@ -1145,18 +1123,13 @@ package body Crafts.UI is
             Text => "{" & LF & "-}");
          M_Amount := 0;
          Find_Materials_Loop :
-         for J in 1 .. Get_Proto_Amount
-            loop
+         for J in 1 .. Get_Proto_Amount loop
             Is_Material := False;
             if Length(Source => Recipe_Index) > 6
               and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
                 "Study" then
-               if Get_Proto_Item
-                   (Index => J)
-                   .Name =
-                 Get_Proto_Item
-                   (Index => Recipe.Result_Index)
-                   .Name then
+               if Get_Proto_Item(Index => J).Name =
+                 Get_Proto_Item(Index => Recipe.Result_Index).Name then
                   Is_Material := True;
                end if;
             elsif Length(Source => Recipe_Index) > 12
@@ -1170,9 +1143,7 @@ package body Crafts.UI is
                   Is_Material := True;
                end if;
             else
-               if Get_Proto_Item
-                   (Index => J)
-                   .I_Type =
+               if Get_Proto_Item(Index => J).I_Type =
                  Recipe.Material_Types(I) then
                   Is_Material := True;
                end if;
@@ -1201,11 +1172,7 @@ package body Crafts.UI is
                     (TextWidget => Recipe_Text, Index => "end",
                      Text =>
                        "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index => J)
-                              .Name) &
+                       To_String(Source => Get_Proto_Item(Index => J).Name) &
                        "(owned: " &
                        Positive'Image
                          (Inventory_Container.Element
@@ -1219,11 +1186,7 @@ package body Crafts.UI is
                     (TextWidget => Recipe_Text, Index => "end",
                      Text =>
                        "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index => J)
-                              .Name) &
+                       To_String(Source => Get_Proto_Item(Index => J).Name) &
                        "} [list red]");
                end if;
                M_Amount := M_Amount + 1;
@@ -1236,17 +1199,11 @@ package body Crafts.UI is
             Text => "{" & LF & "Tool: }");
          M_Amount := 0;
          Check_Tool_Loop :
-         for I in 1 .. Get_Proto_Amount
-            loop
+         for I in 1 .. Get_Proto_Amount loop
             Have_Tool := False;
-            if Get_Proto_Item(Index => I)
-                .I_Type =
-              Recipe.Tool
+            if Get_Proto_Item(Index => I).I_Type = Recipe.Tool
               and then
-              (Get_Proto_Item(Index => I)
-                 .Value
-                 (1) <=
-               Recipe.Tool_Quality) then
+              (Get_Proto_Item(Index => I).Value(1) <= Recipe.Tool_Quality) then
                if M_Amount > 0 then
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
@@ -1263,11 +1220,7 @@ package body Crafts.UI is
                  (TextWidget => Recipe_Text, Index => "end",
                   Text =>
                     "{" &
-                    To_String
-                      (Source =>
-                         Get_Proto_Item
-                           (Index => I)
-                           .Name) &
+                    To_String(Source => Get_Proto_Item(Index => I).Name) &
                     "}" & (if not Have_Tool then " [list red]" else ""));
                M_Amount := M_Amount + 1;
             end if;
@@ -1654,8 +1607,7 @@ package body Crafts.UI is
                       To_String
                         (Source =>
                            Get_Proto_Item
-                             (
-                              Index =>
+                             (Index =>
                                 Recipes_List
                                   (To_Bounded_String
                                      (Source =>
@@ -1689,10 +1641,7 @@ package body Crafts.UI is
                  To_Unbounded_String
                    (Source =>
                       To_String
-                        (Source =>
-                           Get_Proto_Item
-                             (Index => Studies(I))
-                             .Name)),
+                        (Source => Get_Proto_Item(Index => Studies(I)).Name)),
                Tool => Has_Tool, Workplace => Has_Workplace, Materials => True,
                Id =>
                  To_Bounded_String
@@ -1721,10 +1670,7 @@ package body Crafts.UI is
                    (Source =>
                       To_String
                         (Source =>
-                           Get_Proto_Item
-                             (
-                              Index => Deconstructs(I))
-                             .Name)),
+                           Get_Proto_Item(Index => Deconstructs(I)).Name)),
                Workplace => Has_Workplace, Tool => Has_Tool, Materials => True,
                Id =>
                  To_Bounded_String

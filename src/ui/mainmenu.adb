@@ -176,7 +176,8 @@ package body MainMenu is
              (Font.Configure(FontName => "HelpFont", Option => "-size")));
       Set_Fonts(New_Size => Game_Settings.Map_Font_Size, Font_Type => MAPFONT);
       Set_Fonts
-        (New_Size => Game_Settings.Help_Font_Size, Font_Type => Help_Font_Type);
+        (New_Size => Game_Settings.Help_Font_Size,
+         Font_Type => Help_Font_Type);
       Set_Fonts
         (New_Size => Game_Settings.Interface_Font_Size,
          Font_Type => INTERFACEFONT);

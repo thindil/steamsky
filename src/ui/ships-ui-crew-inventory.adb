@@ -209,8 +209,7 @@ package body Ships.UI.Crew.Inventory is
                     Index => Inventory_Indexes(I))
                    .Amount *
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Member.Inventory,
                          Index => Inventory_Indexes(I))
@@ -485,8 +484,7 @@ package body Ships.UI.Crew.Inventory is
             Item_Type =>
               (if
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
@@ -495,16 +493,14 @@ package body Ships.UI.Crew.Inventory is
                  Null_Bounded_String
                then
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
                         .Proto_Index)
                    .Show_Type
                else Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => I)
@@ -521,8 +517,7 @@ package body Ships.UI.Crew.Inventory is
                  Index => I)
                 .Amount *
               Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Inventory_Container.Element
                      (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => I)
@@ -790,8 +785,7 @@ package body Ships.UI.Crew.Inventory is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Item_Type: constant Bounded_String :=
         Get_Proto_Item
-          (
-           Index =>
+          (Index =>
              Inventory_Container.Element
                (Container => Player_Ship.Crew(Member_Index).Inventory,
                 Index => Item_Index)
@@ -808,8 +802,7 @@ package body Ships.UI.Crew.Inventory is
       end if;
       if Item_Type = Weapon_Type then
          if Get_Proto_Item
-             (
-              Index =>
+             (Index =>
                 Inventory_Container.Element
                   (Container => Player_Ship.Crew(Member_Index).Inventory,
                    Index => Item_Index)
@@ -829,8 +822,7 @@ package body Ships.UI.Crew.Inventory is
       elsif Item_Type = Shield_Type then
          if Player_Ship.Crew(Member_Index).Equipment(WEAPON) > 0 then
             if Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Inventory_Container.Element
                      (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index =>
@@ -992,8 +984,7 @@ package body Ships.UI.Crew.Inventory is
           (Amount =>
              0 -
              (Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Inventory_Container.Element
                      (Container => Player_Ship.Crew(Member_Index).Inventory,
                       Index => Item_Index)
@@ -1188,8 +1179,7 @@ package body Ships.UI.Crew.Inventory is
       Selection, Equipable: Boolean := False;
       Item_Type: constant Tiny_String.Bounded_String :=
         Get_Proto_Item
-          (
-           Index =>
+          (Index =>
              Inventory_Container.Element
                (Container => Player_Ship.Crew(Member_Index).Inventory,
                 Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))

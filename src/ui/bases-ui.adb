@@ -426,8 +426,7 @@ package body Bases.UI is
                           To_String
                             (Source =>
                                Get_Proto_Item
-                                 (
-                                  Index =>
+                                 (Index =>
                                     Recipes_List
                                       (To_Bounded_String
                                          (Source => To_String(Source => I)))
@@ -451,8 +450,7 @@ package body Bases.UI is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index =>
+                        (Index =>
                            Recipes_List
                              (To_Bounded_String
                                 (Source => To_String(Source => I)))
@@ -1008,8 +1006,7 @@ package body Bases.UI is
                       To_String
                         (Source =>
                            Get_Proto_Item
-                             (
-                              Index => Recipes_List(I).Result_Index)
+                             (Index => Recipes_List(I).Result_Index)
                              .Name)),
                Cost => Cost, Time => 1,
                Id =>

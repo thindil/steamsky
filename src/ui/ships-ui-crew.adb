@@ -612,13 +612,11 @@ package body Ships.UI.Crew is
       Frame: Ttk_Frame;
    begin
       Tcl_Eval
-         (interp => Interp,
-         strng =>
-         "SetScrollbarBindings " & Member_Dialog & " " & Y_Scroll);
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Member_Dialog & " " & Y_Scroll);
       Tcl_Eval
-         (interp => Interp,
-         strng =>
-         "SetScrollbarBindings " & Member_Canvas & " " & Y_Scroll);
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Member_Canvas & " " & Y_Scroll);
       Frame := Create(pathName => Member_Dialog & ".buttonbox");
       Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
       Tab_Button :=
@@ -1466,64 +1464,36 @@ package body Ships.UI.Crew is
          Quality := 0;
          if CArgv.Arg(Argv => Argv, N => 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
-            for I in 1 .. Get_Proto_Amount
-              loop
-               if Get_Proto_Item
-                   (Index => I)
-                   .I_Type =
+            for I in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => I).I_Type =
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
                  and then
-                 (Get_Proto_Item
-                    (Index => I)
-                    .Value
-                    (1) <=
+                 (Get_Proto_Item(Index => I).Value(1) <=
                   Get_Training_Tool_Quality
                     (Member_Index =>
                        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
                      Skill_Index => Natural(Skill_Index))) then
-                  if Get_Proto_Item
-                      (Index => I)
-                      .Value
-                      (1) >
-                    Quality then
+                  if Get_Proto_Item(Index => I).Value(1) > Quality then
                      Item_Index := I;
-                     Quality :=
-                       Get_Proto_Item
-                         (Index => I)
-                         .Value
-                         (1);
+                     Quality := Get_Proto_Item(Index => I).Value(1);
                   end if;
                end if;
             end loop Find_Training_Tool_Loop;
          else
             Find_Training_Tool_2_Loop :
-            for I in 1 .. Get_Proto_Amount
-               loop
-               if Get_Proto_Item
-                   (Index => I)
-                   .I_Type =
+            for I in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => I).I_Type =
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
                  and then
-                 (Get_Proto_Item
-                    (Index => I)
-                    .Value
-                    (1) <=
+                 (Get_Proto_Item(Index => I).Value(1) <=
                   Positive'Value(CArgv.Arg(Argv => Argv, N => 2))) then
-                  if Get_Proto_Item
-                      (Index => I)
-                      .Value
-                      (1) >
-                    Quality then
+                  if Get_Proto_Item(Index => I).Value(1) > Quality then
                      Item_Index := I;
-                     Quality :=
-                       Get_Proto_Item
-                         (Index => I)
-                         .Value
-                         (1);
+                     Quality := Get_Proto_Item(Index => I).Value(1);
                   end if;
                end if;
             end loop Find_Training_Tool_2_Loop;
@@ -1531,11 +1501,7 @@ package body Ships.UI.Crew is
          Append
            (Source => Message_Text,
             New_Item =>
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => Item_Index)
-                     .Name));
+              To_String(Source => Get_Proto_Item(Index => Item_Index).Name));
       end if;
       Append(Source => Message_Text, New_Item => "." & LF);
       Append
@@ -2256,8 +2222,7 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Source =>
                                      Get_Proto_Item
-                                       (
-                                        Index =>
+                                       (Index =>
                                           Positive'Value
                                             (Slice
                                                (Source =>
@@ -2286,8 +2251,7 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Source =>
                                      Get_Proto_Item
-                                       (
-                                        Index =>
+                                       (Index =>
                                           Positive'Value
                                             (Slice
                                                (Source =>
@@ -2307,8 +2271,7 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Source =>
                                      Get_Proto_Item
-                                       (
-                                        Index =>
+                                       (Index =>
                                           Recipes_List
                                             (To_Bounded_String
                                                (Source =>

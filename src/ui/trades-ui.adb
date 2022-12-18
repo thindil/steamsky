@@ -275,17 +275,10 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type =
+              Get_Proto_Item(Index => Proto_Index).Show_Type =
               Null_Bounded_String
-            then
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type
-            else Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type);
+            then Get_Proto_Item(Index => Proto_Index).I_Type
+            else Get_Proto_Item(Index => Proto_Index).Show_Type);
          if Index
              (Source => Items_Types,
               Pattern => To_String(Source => "{" & Item_Type & "}")) =
@@ -324,17 +317,10 @@ package body Trades.UI is
          end if;
          Item_Type :=
            (if
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type =
+              Get_Proto_Item(Index => Proto_Index).Show_Type =
               Null_Bounded_String
-            then
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type
-            else Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type);
+            then Get_Proto_Item(Index => Proto_Index).I_Type
+            else Get_Proto_Item(Index => Proto_Index).Show_Type);
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
@@ -452,10 +438,7 @@ package body Trades.UI is
          Add_Button
            (Table => Trade_Table,
             Text =>
-              Positive'Image
-                (Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Weight) &
+              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
               " kg",
             Tooltip => "Show available options for item",
             Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 6);
@@ -485,17 +468,10 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type =
+              Get_Proto_Item(Index => Proto_Index).Show_Type =
               Null_Bounded_String
-            then
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type
-            else Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type);
+            then Get_Proto_Item(Index => Proto_Index).I_Type
+            else Get_Proto_Item(Index => Proto_Index).Show_Type);
          if Index
              (Source => Items_Types,
               Pattern => To_String(Source => "{" & Item_Type & "}")) =
@@ -529,17 +505,10 @@ package body Trades.UI is
              .Proto_Index;
          Item_Type :=
            (if
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type =
+              Get_Proto_Item(Index => Proto_Index).Show_Type =
               Null_Bounded_String
-            then
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type
-            else Get_Proto_Item
-                (Index => Proto_Index)
-                .Show_Type);
+            then Get_Proto_Item(Index => Proto_Index).I_Type
+            else Get_Proto_Item(Index => Proto_Index).Show_Type);
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Source => Item_Type) /=
              CArgv.Arg(Argv => Argv, N => 1) then
@@ -549,10 +518,7 @@ package body Trades.UI is
            To_Unbounded_String
              (Source =>
                 To_String
-                  (Source =>
-                     Get_Proto_Item
-                       (Index => Proto_Index)
-                       .Name));
+                  (Source => Get_Proto_Item(Index => Proto_Index).Name));
          if Argc = 3
            and then
              Index
@@ -654,10 +620,7 @@ package body Trades.UI is
          Add_Button
            (Table => Trade_Table,
             Text =>
-              Positive'Image
-                (Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Weight) &
+              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
               " kg",
             Tooltip => "Show available options for item",
             Command =>
@@ -903,10 +866,7 @@ package body Trades.UI is
                  Index => Base_Cargo_Index)
                 .Proto_Index);
       end if;
-      if Get_Proto_Item
-          (Index => Proto_Index)
-          .I_Type =
-        Weapon_Type then
+      if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
@@ -917,10 +877,7 @@ package body Trades.UI is
                      (Container => Skills_List,
                       Index =>
                         Skills_Amount_Range
-                          (Get_Proto_Item
-                             (Index => Proto_Index)
-                             .Value
-                             (3)))
+                          (Get_Proto_Item(Index => Proto_Index).Value(3)))
                      .Name) &
               "/" &
               To_String
@@ -932,26 +889,14 @@ package body Trades.UI is
                           (Container => Skills_List,
                            Index =>
                              Skills_Amount_Range
-                               (Get_Proto_Item
-                                  (
-                                   Index => Proto_Index)
-                                  .Value
-                                  (3)))
+                               (Get_Proto_Item(Index => Proto_Index).Value(3)))
                           .Attribute)
                      .Name) &
-              (if
-                 Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Value
-                   (4) =
-                 1
-               then LF & "Can be used with shield."
+              (if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
+                 LF & "Can be used with shield."
                else LF & "Can't be used with shield (two-handed weapon).") &
               LF & "Damage type: ");
-         case Get_Proto_Item
-           (Index => Proto_Index)
-           .Value
-           (5) is
+         case Get_Proto_Item(Index => Proto_Index).Value(5) is
             when 1 =>
                Append(Source => Item_Info, New_Item => "cutting");
             when 2 =>
@@ -964,10 +909,7 @@ package body Trades.UI is
       end if;
       Show_More_Info_Loop :
       for ItemType of Item_Types loop
-         if Get_Proto_Item
-             (Index => Proto_Index)
-             .I_Type =
-           ItemType then
+         if Get_Proto_Item(Index => Proto_Index).I_Type = ItemType then
             if Item_Info /= Null_Unbounded_String then
                Append(Source => Item_Info, New_Item => LF);
             end if;
@@ -977,24 +919,13 @@ package body Trades.UI is
                  "Damage chance: " &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
-                      Get_Proto_Item
-                        (Index => Proto_Index)
-                        .Value
-                        (1)) &
+                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
                  LF & "Strength:" &
-                 Integer'Image
-                   (Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Value
-                      (2)));
+                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
-      if Is_Tool
-          (Item_Type =>
-             Get_Proto_Item
-               (Index => Proto_Index)
-               .I_Type) then
+      if Is_Tool(Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) then
          if Item_Info /= Null_Unbounded_String then
             Append(Source => Item_Info, New_Item => LF);
          end if;
@@ -1003,29 +934,15 @@ package body Trades.UI is
             New_Item =>
               "Damage chance: " &
               Get_Item_Chance_To_Damage
-                (Item_Data =>
-                   Get_Proto_Item
-                     (Index => Proto_Index)
-                     .Value
-                     (1)));
+                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)));
       end if;
-      if Length
-          (Source =>
-             Get_Proto_Item
-               (Index => Proto_Index)
-               .I_Type) >
-        4
+      if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
         and then
         (Slice
-           (Source =>
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type,
-            Low => 1, High => 4) =
+           (Source => Get_Proto_Item(Index => Proto_Index).I_Type, Low => 1,
+            High => 4) =
          "Ammo" or
-         Get_Proto_Item
-             (Index => Proto_Index)
-             .I_Type =
+         Get_Proto_Item(Index => Proto_Index).I_Type =
            To_Bounded_String(Source => "Harpoon")) then
          if Item_Info /= Null_Unbounded_String then
             Append(Source => Item_Info, New_Item => LF);
@@ -1034,15 +951,9 @@ package body Trades.UI is
            (Source => Item_Info,
             New_Item =>
               "Strength:" &
-              Integer'Image
-                (Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Value
-                   (1)));
+              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)));
       end if;
-      if Get_Proto_Item
-          (Index => Proto_Index)
-          .Description /=
+      if Get_Proto_Item(Index => Proto_Index).Description /=
         Short_String.Null_Bounded_String then
          if Item_Info /= Null_Unbounded_String then
             Append(Source => Item_Info, New_Item => LF & LF);
@@ -1051,10 +962,7 @@ package body Trades.UI is
            (Source => Item_Info,
             New_Item =>
               To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => Proto_Index)
-                     .Description));
+                (Source => Get_Proto_Item(Index => Proto_Index).Description));
       end if;
       Base_Type :=
         (if Base_Index > 0 then Sky_Bases(Base_Index).Base_Type
@@ -1156,9 +1064,7 @@ package body Trades.UI is
             Weight :=
               Free_Cargo
                 (Amount =>
-                   (Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Weight *
+                   (Get_Proto_Item(Index => Proto_Index).Weight *
                     Max_Sell_Amount) -
                    Max_Price);
             Count_Sell_Amount_Loop :
@@ -1176,9 +1082,7 @@ package body Trades.UI is
                Weight :=
                  Free_Cargo
                    (Amount =>
-                      (Get_Proto_Item
-                         (Index => Proto_Index)
-                         .Weight *
+                      (Get_Proto_Item(Index => Proto_Index).Weight *
                        Max_Sell_Amount) -
                       Max_Price);
             end loop Count_Sell_Amount_Loop;
@@ -1237,19 +1141,13 @@ package body Trades.UI is
                  Free_Cargo
                    (Amount =>
                       Max_Price -
-                      (Get_Proto_Item
-                         (Index => Proto_Index)
-                         .Weight *
+                      (Get_Proto_Item(Index => Proto_Index).Weight *
                        Max_Buy_Amount));
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
                   Max_Buy_Amount :=
                     Max_Buy_Amount +
-                    (Weight /
-                     Get_Proto_Item
-                       (Index => Proto_Index)
-                       .Weight) -
-                    1;
+                    (Weight / Get_Proto_Item(Index => Proto_Index).Weight) - 1;
                   if Max_Buy_Amount < 0 then
                      Max_Buy_Amount := 0;
                   end if;
@@ -1262,9 +1160,7 @@ package body Trades.UI is
                     Free_Cargo
                       (Amount =>
                          Max_Price -
-                         (Get_Proto_Item
-                            (Index => Proto_Index)
-                            .Weight *
+                         (Get_Proto_Item(Index => Proto_Index).Weight *
                           Max_Buy_Amount));
                end loop Count_Buy_Amount_Loop;
             end if;
@@ -1276,11 +1172,7 @@ package body Trades.UI is
       Show_Info
         (Text => To_String(Source => Item_Info),
          Title =>
-           To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index => Proto_Index)
-                  .Name),
+           To_String(Source => Get_Proto_Item(Index => Proto_Index).Name),
          Button_1 =>
            (if Max_Buy_Amount = 0 then Empty_Button_Settings
             else
@@ -1415,8 +1307,7 @@ package body Trades.UI is
                     To_String
                       (Source =>
                          Get_Proto_Item
-                           (
-                            Index =>
+                           (Index =>
                               BaseCargo_Container.Element
                                 (Container => Sky_Bases(Base_Index).Cargo,
                                  Index => abs (Item_Index))
@@ -1433,8 +1324,7 @@ package body Trades.UI is
                     To_String
                       (Source =>
                          Get_Proto_Item
-                           (
-                            Index =>
+                           (Index =>
                               BaseCargo_Container.Element
                                 (Container => Trader_Cargo,
                                  Index => abs (Item_Index))
@@ -1674,17 +1564,10 @@ package body Trades.UI is
                              (Container => Player_Ship.Cargo, Index => I))),
                I_Type =>
                  (if
-                    Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Show_Type =
+                    Get_Proto_Item(Index => Proto_Index).Show_Type =
                     Null_Bounded_String
-                  then
-                    Get_Proto_Item
-                      (Index => Proto_Index)
-                      .I_Type
-                  else Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Show_Type),
+                  then Get_Proto_Item(Index => Proto_Index).I_Type
+                  else Get_Proto_Item(Index => Proto_Index).Show_Type),
                Damage =>
                  Float
                    (Inventory_Container.Element
@@ -1697,10 +1580,7 @@ package body Trades.UI is
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
                    .Price,
-               Weight =>
-                 Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Weight,
+               Weight => Get_Proto_Item(Index => Proto_Index).Weight,
                Owned =>
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
@@ -1746,22 +1626,13 @@ package body Trades.UI is
                       (Source =>
                          To_String
                            (Source =>
-                              Get_Proto_Item
-                                (Index => Proto_Index)
-                                .Name)),
+                              Get_Proto_Item(Index => Proto_Index).Name)),
                   I_Type =>
                     (if
-                       Get_Proto_Item
-                         (Index => Proto_Index)
-                         .Show_Type =
+                       Get_Proto_Item(Index => Proto_Index).Show_Type =
                        Null_Bounded_String
-                     then
-                       Get_Proto_Item
-                         (Index => Proto_Index)
-                         .I_Type
-                     else Get_Proto_Item
-                         (Index => Proto_Index)
-                         .Show_Type),
+                     then Get_Proto_Item(Index => Proto_Index).I_Type
+                     else Get_Proto_Item(Index => Proto_Index).Show_Type),
                   Damage =>
                     Float
                       (BaseCargo_Container.Element
@@ -1769,10 +1640,7 @@ package body Trades.UI is
                          .Durability) /
                     Float(Default_Item_Durability),
                   Price => Price, Profit => -(Price),
-                  Weight =>
-                    Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Weight,
+                  Weight => Get_Proto_Item(Index => Proto_Index).Weight,
                   Owned => 0,
                   Available =>
                     BaseCargo_Container.Element

@@ -28,8 +28,7 @@ package body Crew.Inventory is
       External_Name => "equipmentToAda";
 
    procedure Update_Inventory
-     (Member_Index: Positive; Amount: Integer;
-      Proto_Index: Natural := 0;
+     (Member_Index: Positive; Amount: Integer; Proto_Index: Natural := 0;
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) is
       use Tiny_String;
@@ -158,14 +157,8 @@ package body Crew.Inventory is
                  Index => Tools_Index)
                 .Proto_Index;
          begin
-            if Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type /=
-              Item_Type or
-              (Get_Proto_Item
-                 (Index => Proto_Index)
-                 .Value
-                 (1) <
+            if Get_Proto_Item(Index => Proto_Index).I_Type /= Item_Type or
+              (Get_Proto_Item(Index => Proto_Index).Value(1) <
                Tool_Quality) then
                Update_Cargo
                  (Ship => Player_Ship, Proto_Index => Proto_Index, Amount => 1,

@@ -225,16 +225,14 @@ package body Crew is
             if Item_Index > 0 then
                Consume_Value :=
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
                         .Proto_Index)
                    .Value
                    (1);
                if Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
                         .Proto_Index)
@@ -243,8 +241,7 @@ package body Crew is
                  1
                  and then
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Item_Index)
                           .Proto_Index)
@@ -255,8 +252,7 @@ package body Crew is
                     (Ship => Player_Ship, Member_Index => I,
                      Value =>
                        Get_Proto_Item
-                         (
-                          Index =>
+                         (Index =>
                             Inventory_Container.Element
                               (Container => Player_Ship.Cargo,
                                Index => Item_Index)
@@ -280,8 +276,7 @@ package body Crew is
             if Item_Index > 0 then
                Consume_Value :=
                  Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(I).Inventory,
                          Index => Item_Index)
@@ -289,8 +284,7 @@ package body Crew is
                    .Value
                    (1);
                if Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
                         .Proto_Index)
@@ -301,8 +295,7 @@ package body Crew is
                     (Ship => Player_Ship, Member_Index => I,
                      Value =>
                        Get_Proto_Item
-                         (
-                          Index =>
+                         (Index =>
                             Inventory_Container.Element
                               (Container => Player_Ship.Cargo,
                                Index => Item_Index)

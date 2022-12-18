@@ -136,8 +136,7 @@ package body OrdersMenu is
                              To_String
                                (Source =>
                                   Get_Proto_Item
-                                    (
-                                     Index =>
+                                    (Index =>
                                        Positive'Value
                                          (To_String
                                             (Source =>
@@ -309,8 +308,7 @@ package body OrdersMenu is
                                 To_String
                                   (Source =>
                                      Get_Proto_Item
-                                       (
-                                        Index => Mission.Item_Index)
+                                       (Index => Mission.Item_Index)
                                        .Name),
                               Command => "CompleteMission", Shortcut => "c",
                               Underline => 0, Row => 0);
@@ -465,8 +463,7 @@ package body OrdersMenu is
                                    To_String
                                      (Source =>
                                         Get_Proto_Item
-                                          (
-                                           Index => Mission.Item_Index)
+                                          (Index => Mission.Item_Index)
                                           .Name),
                                  Command => "CompleteMission", Shortcut => "c",
                                  Underline => 0);
@@ -1184,8 +1181,7 @@ package body OrdersMenu is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Item_Index)
                           .Proto_Index)

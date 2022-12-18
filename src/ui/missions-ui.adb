@@ -242,10 +242,7 @@ package body Missions.UI is
                   Text =>
                     To_String
                       (Source =>
-                         Get_Proto_Item
-                           (
-                            Index => List(I).Item_Index)
-                           .Name) &
+                         Get_Proto_Item(Index => List(I).Item_Index).Name) &
                     " to " &
                     To_String
                       (Source =>
@@ -578,14 +575,10 @@ package body Missions.UI is
                  "-text {Item: " &
                  To_String
                    (Source =>
-                      Get_Proto_Item
-                        (Index => Mission.Item_Index)
-                        .Name) &
+                      Get_Proto_Item(Index => Mission.Item_Index).Name) &
                  LF & "Weight:" &
                  Positive'Image
-                   (Get_Proto_Item
-                      (Index => Mission.Item_Index)
-                      .Weight) &
+                   (Get_Proto_Item(Index => Mission.Item_Index).Weight) &
                  " kg" & LF & "To base: " &
                  To_String
                    (Source =>
@@ -1058,8 +1051,7 @@ package body Missions.UI is
                    To_String
                      (Source =>
                         Get_Proto_Item
-                          (
-                           Index =>
+                          (Index =>
                              Sky_Bases(Base_Index).Missions(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &

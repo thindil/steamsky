@@ -270,13 +270,9 @@ package body Events is
                      Get_Price_Loop :
                      loop
                         Item_Index :=
-                          Get_Random
-                            (Min => 1,
-                             Max =>
-                               Get_Proto_Amount);
+                          Get_Random(Min => 1, Max => Get_Proto_Amount);
                         Find_Item_Index_Loop :
-                        for J in 1 .. Get_Proto_Amount
-                           loop
+                        for J in 1 .. Get_Proto_Amount loop
                            Item_Index := Item_Index - 1;
                            if Item_Index = 0 then
                               if Get_Price

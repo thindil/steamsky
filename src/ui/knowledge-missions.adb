@@ -363,8 +363,7 @@ package body Knowledge.Missions is
                    To_String
                      (Source =>
                         Get_Proto_Item
-                          (
-                           Index => Accepted_Missions(I).Item_Index)
+                          (Index => Accepted_Missions(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
@@ -519,8 +518,7 @@ package body Knowledge.Missions is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index => Accepted_Missions(I).Item_Index)
+                              (Index => Accepted_Missions(I).Item_Index)
                               .Name) &
                        " to " &
                        Tiny_String.To_String

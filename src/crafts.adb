@@ -165,10 +165,7 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 7,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item =>
-              Get_Proto_Item
-                (Index => Item_Index)
-                .I_Type);
+           (New_Item => Get_Proto_Item(Index => Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
@@ -194,10 +191,7 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 13,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item =>
-              Get_Proto_Item
-                (Index => Item_Index)
-                .I_Type);
+           (New_Item => Get_Proto_Item(Index => Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
@@ -250,8 +244,7 @@ package body Crafts is
            To_String
              (Source =>
                 Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Positive'Value
                        (Slice
                           (Source => Recipe_Index, Low => 7,
@@ -266,8 +259,7 @@ package body Crafts is
            To_String
              (Source =>
                 Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Positive'Value
                        (Slice
                           (Source => Recipe_Index, Low => 13,
@@ -278,10 +270,7 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
            To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index => Recipe.Result_Index)
-                  .Name);
+             (Source => Get_Proto_Item(Index => Recipe.Result_Index).Name);
          M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
@@ -314,15 +303,12 @@ package body Crafts is
              Inventory_Container.Last_Index
                (Container => Player_Ship.Cargo) loop
             if Get_Proto_Item
-                (
-                 Index =>
+                (Index =>
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => I)
                      .Proto_Index)
                 .Name =
-              Get_Proto_Item
-                (Index => Recipe.Result_Index)
-                .Name then
+              Get_Proto_Item(Index => Recipe.Result_Index).Name then
                Material_Indexes.Append(New_Item => I);
                exit Study_Materials_Loop;
             end if;
@@ -361,8 +347,7 @@ package body Crafts is
                 Inventory_Container.Last_Index
                   (Container => Player_Ship.Cargo) loop
                if Get_Proto_Item
-                   (
-                    Index =>
+                   (Index =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => I)
                         .Proto_Index)
@@ -426,8 +411,7 @@ package body Crafts is
             Space_Needed :=
               Space_Needed +
               Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo,
                         Index => Material_Indexes(I))
@@ -440,9 +424,7 @@ package body Crafts is
          if Free_Cargo
              (Amount =>
                 Space_Needed -
-                (Get_Proto_Item
-                   (Index => Recipe.Result_Index)
-                   .Weight *
+                (Get_Proto_Item(Index => Recipe.Result_Index).Weight *
                  Recipe.Result_Amount)) <
            0 then
             raise Trade_No_Free_Cargo;
@@ -555,10 +537,7 @@ package body Crafts is
                     To_Unbounded_String(Source => "studying ") &
                     To_String
                       (Source =>
-                         Get_Proto_Item
-                           (
-                            Index => Recipe.Result_Index)
-                           .Name);
+                         Get_Proto_Item(Index => Recipe.Result_Index).Name);
                elsif Length(Source => Module.Crafting_Index) > 12
                  and then
                    Slice
@@ -569,8 +548,7 @@ package body Crafts is
                     To_String
                       (Source =>
                          Get_Proto_Item
-                           (
-                            Index =>
+                           (Index =>
                               Positive'Value
                                 (Slice
                                    (Source => Module.Crafting_Index, Low => 13,
@@ -583,10 +561,7 @@ package body Crafts is
                     To_Unbounded_String(Source => "manufacturing ") &
                     To_String
                       (Source =>
-                         Get_Proto_Item
-                           (
-                            Index => Recipe.Result_Index)
-                           .Name);
+                         Get_Proto_Item(Index => Recipe.Result_Index).Name);
                end if;
                if Module.Durability = 0 then
                   Add_Message
@@ -625,14 +600,9 @@ package body Crafts is
                          High => 5) =
                       "Study" then
                      Study_Materials_Loop :
-                     for J in 1 .. Get_Proto_Amount
-                            loop
-                        if Get_Proto_Item
-                            (Index => J)
-                            .Name =
-                          Get_Proto_Item
-                            (
-                             Index => Recipe.Result_Index)
+                     for J in 1 .. Get_Proto_Amount loop
+                        if Get_Proto_Item(Index => J).Name =
+                          Get_Proto_Item(Index => Recipe.Result_Index)
                             .Name then
                            Material_Indexes.Append(New_Item => J);
                            exit Study_Materials_Loop;
@@ -655,11 +625,8 @@ package body Crafts is
                      Recipe_Loop :
                      for K in Recipe.Material_Types.Iterate loop
                         Materials_Loop :
-                        for J in 1 .. Get_Proto_Amount
-                           loop
-                           if Get_Proto_Item
-                               (Index => J)
-                               .I_Type =
+                        for J in 1 .. Get_Proto_Amount loop
+                           if Get_Proto_Item(Index => J).I_Type =
                              Recipe.Material_Types
                                (TinyString_Container.To_Index
                                   (Position => K)) then
@@ -676,9 +643,7 @@ package body Crafts is
                        Find_Item
                          (Inventory => Player_Ship.Cargo,
                           Item_Type =>
-                            Get_Proto_Item
-                              (Index => MaterialIndex)
-                              .I_Type);
+                            Get_Proto_Item(Index => MaterialIndex).I_Type);
                      if Crafting_Material = 0 then
                         Add_Message
                           (Message =>
@@ -722,10 +687,7 @@ package body Crafts is
                   for J in Material_Indexes.Iterate loop
                      Amount :=
                        Amount +
-                       Get_Proto_Item
-                           (
-                            Index => Material_Indexes(J))
-                           .Weight *
+                       Get_Proto_Item(Index => Material_Indexes(J)).Weight *
                          Recipe.Material_Amounts
                            (Positive_Container.To_Index(Position => J));
                   end loop Count_Amount_Loop;
@@ -757,13 +719,8 @@ package body Crafts is
                      Have_Material := False;
                      Check_Cargo_Materials_Loop :
                      for Item of Player_Ship.Cargo loop
-                        if Get_Proto_Item
-                            (
-                             Index => Item.Proto_Index)
-                            .I_Type =
-                          Get_Proto_Item
-                            (
-                             Index => Material_Indexes(J))
+                        if Get_Proto_Item(Index => Item.Proto_Index).I_Type =
+                          Get_Proto_Item(Index => Material_Indexes(J))
                             .I_Type and
                           Item.Amount >=
                             Recipe.Material_Amounts
@@ -800,13 +757,9 @@ package body Crafts is
                                (Container => Player_Ship.Cargo,
                                 Index => Cargo_Index);
                         begin
-                           if Get_Proto_Item
-                               (
-                                Index => Material.Proto_Index)
+                           if Get_Proto_Item(Index => Material.Proto_Index)
                                .I_Type =
-                             Get_Proto_Item
-                               (
-                                Index => Material_Indexes(J))
+                             Get_Proto_Item(Index => Material_Indexes(J))
                                .I_Type then
                               if Material.Amount >
                                 Recipe.Material_Amounts
@@ -863,10 +816,7 @@ package body Crafts is
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Amount :=
                        Amount -
-                       (Get_Proto_Item
-                          (
-                           Index => Recipe.Result_Index)
-                          .Weight *
+                       (Get_Proto_Item(Index => Recipe.Result_Index).Weight *
                         Result_Amount);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      if Free_Cargo(Amount => Amount) < 0 then
@@ -939,9 +889,7 @@ package body Crafts is
                              " " &
                              To_String
                                (Source =>
-                                  Get_Proto_Item
-                                    (
-                                     Index => Recipe.Result_Index)
+                                  Get_Proto_Item(Index => Recipe.Result_Index)
                                     .Name) &
                              ".",
                            M_Type => CRAFTMESSAGE, Color => GREEN);
@@ -955,9 +903,7 @@ package body Crafts is
                              Integer'Image(Crafted_Amount) & " " &
                              To_String
                                (Source =>
-                                  Get_Proto_Item
-                                    (
-                                     Index => Recipe.Result_Index)
+                                  Get_Proto_Item(Index => Recipe.Result_Index)
                                     .Name) &
                              ".",
                            M_Type => CRAFTMESSAGE, Color => GREEN);
@@ -988,13 +934,10 @@ package body Crafts is
                                   To_String
                                     (Source =>
                                        Get_Proto_Item
-                                         (
-                                          Index => Recipe.Result_Index)
+                                         (Index => Recipe.Result_Index)
                                          .I_Type)),
                            Amount => Crafted_Amount);
-                        if Get_Proto_Item
-                            (
-                             Index => Recipe.Result_Index)
+                        if Get_Proto_Item(Index => Recipe.Result_Index)
                             .Show_Type /=
                           Null_Bounded_String then
                            Update_Goal
@@ -1005,8 +948,7 @@ package body Crafts is
                                      To_String
                                        (Source =>
                                           Get_Proto_Item
-                                            (
-                                             Index => Recipe.Result_Index)
+                                            (Index => Recipe.Result_Index)
                                             .Show_Type)),
                               Amount => Crafted_Amount);
                         end if;
@@ -1019,9 +961,7 @@ package body Crafts is
                           " has discovered recipe for " &
                           To_String
                             (Source =>
-                               Get_Proto_Item
-                                 (
-                                  Index => Recipe.Result_Index)
+                               Get_Proto_Item(Index => Recipe.Result_Index)
                                  .Name) &
                           ".",
                         M_Type => CRAFTMESSAGE, Color => GREEN);
@@ -1087,11 +1027,7 @@ package body Crafts is
          end loop Set_Study_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Studying ") &
-           To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index => Item_Index)
-                  .Name);
+           To_String(Source => Get_Proto_Item(Index => Item_Index).Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
@@ -1111,11 +1047,7 @@ package body Crafts is
          end loop Set_Deconstruct_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Deconstructing ") &
-           To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index => Item_Index)
-                  .Name);
+           To_String(Source => Get_Proto_Item(Index => Item_Index).Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
@@ -1127,8 +1059,7 @@ package body Crafts is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index => Recipes_List(Recipe_Index).Result_Index)
+                       (Index => Recipes_List(Recipe_Index).Result_Index)
                        .Name));
       end if;
       Add_Message
@@ -1154,8 +1085,7 @@ package body Crafts is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Positive'Value
                           (Slice
                              (Source => Module.Crafting_Index, Low => 7,
@@ -1171,8 +1101,7 @@ package body Crafts is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Positive'Value
                           (Slice
                              (Source => Module.Crafting_Index, Low => 13,
@@ -1185,8 +1114,7 @@ package body Crafts is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index =>
+                     (Index =>
                         Recipes_List
                           (To_Bounded_String
                              (Source =>

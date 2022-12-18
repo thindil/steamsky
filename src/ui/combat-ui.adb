@@ -342,8 +342,7 @@ package body Combat.UI is
                          (Container => Player_Ship.Cargo))
               and then
                 Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Ammo_Index)
                        .Proto_Index)
@@ -365,11 +364,8 @@ package body Combat.UI is
          if not Have_Ammo then
             Ammo_Amount := 0;
             Find_Ammo_Loop :
-            for J in 1 .. Get_Proto_Amount
-               loop
-               if Get_Proto_Item
-                   (Index => J)
-                   .I_Type =
+            for J in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => J).I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types,
                     Index =>

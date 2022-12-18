@@ -280,9 +280,7 @@ package body Goals is
                           ": " &
                           To_String
                             (Source =>
-                               Get_Proto_Item
-                                 (Index => Item_Index)
-                                 .Name));
+                               Get_Proto_Item(Index => Item_Index).Name));
                   end Get_Item_Name_Block;
                else
                   Append

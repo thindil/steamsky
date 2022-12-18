@@ -251,13 +251,8 @@ package body Ships.Upgrade is
       begin
          if Material_Index = 0 then
             Materials_Loop :
-            for I in 1 .. Get_Proto_Amount
-               loop
-               if To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index => I)
-                        .I_Type) =
+            for I in 1 .. Get_Proto_Amount loop
+               if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
                  To_String
                    (Source =>
                       BaseModules_Container.Element
@@ -267,11 +262,7 @@ package body Ships.Upgrade is
                         .Repair_Material) then
                   raise Ship_Upgrade_Error
                     with "You don't have the " &
-                    To_String
-                      (Source =>
-                         Get_Proto_Item
-                           (Index => I)
-                           .Name) &
+                    To_String(Source => Get_Proto_Item(Index => I).Name) &
                     " to upgrade " &
                     To_String
                       (Source => Player_Ship.Modules(Module_Index).Name) &

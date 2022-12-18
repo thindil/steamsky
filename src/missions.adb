@@ -74,12 +74,8 @@ package body Missions is
            when 76 .. 100 => Missions_Amount + 10,
            when others => Missions_Amount);
       Find_Mission_Items_Loop :
-      for I in 1 .. Get_Proto_Amount
-         loop
-         if To_String
-             (Source =>
-                Get_Proto_Item(Index => I)
-                  .I_Type) =
+      for I in 1 .. Get_Proto_Amount loop
+         if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
            To_String(Source => Mission_Items_Type) then
             Missions_Items.Append(New_Item => I);
          end if;
@@ -279,10 +275,7 @@ package body Missions is
         and then
           Free_Cargo
             (Amount =>
-               (0 -
-                Get_Proto_Item
-                  (Index => Mission.Item_Index)
-                  .Weight)) <
+               (0 - Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
@@ -325,9 +318,7 @@ package body Missions is
                  "'Deliver " &
                  To_String
                    (Source =>
-                      Get_Proto_Item
-                        (Index => Mission.Item_Index)
-                        .Name) &
+                      Get_Proto_Item(Index => Mission.Item_Index).Name) &
                  "'.");
             Update_Cargo
               (Ship => Player_Ship, Proto_Index => Mission.Item_Index,
@@ -486,8 +477,7 @@ package body Missions is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index => Accepted_Missions(Mission_Index).Item_Index)
+                        (Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
@@ -564,10 +554,7 @@ package body Missions is
                     "'Deliver " &
                     To_String
                       (Source =>
-                         Get_Proto_Item
-                           (
-                            Index => Mission.Item_Index)
-                           .Name) &
+                         Get_Proto_Item(Index => Mission.Item_Index).Name) &
                     "'.");
             when DESTROY =>
                Append
@@ -695,8 +682,7 @@ package body Missions is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index => Accepted_Missions(Mission_Index).Item_Index)
+                        (Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.");
          when DESTROY =>

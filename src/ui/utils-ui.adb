@@ -247,8 +247,7 @@ package body Utils.UI is
       if To_String
           (Source =>
              Get_Proto_Item
-               (
-                Index =>
+               (Index =>
                   Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
                     .Proto_Index)
@@ -270,8 +269,7 @@ package body Utils.UI is
          if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
                 Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
                        .Proto_Index)
@@ -291,8 +289,7 @@ package body Utils.UI is
          elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
                 Get_Proto_Item
-                  (
-                   Index =>
+                  (Index =>
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
                        .Proto_Index)
@@ -882,8 +879,7 @@ package body Utils.UI is
               To_String
                 (Source =>
                    Get_Proto_Item
-                     (
-                      Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                     (Index => Find_Proto_Item(Item_Type => Fuel_Type))
                      .Name));
       end if;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
@@ -1025,15 +1021,9 @@ package body Utils.UI is
         (Source => Item_Info,
          New_Item =>
            "Weight:" &
-           Positive'Image
-             (Get_Proto_Item
-                (Index => Proto_Index)
-                .Weight) &
+           Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
            " kg");
-      if Get_Proto_Item
-          (Index => Proto_Index)
-          .I_Type =
-        Weapon_Type then
+      if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
@@ -1044,10 +1034,7 @@ package body Utils.UI is
                      (Container => Skills_List,
                       Index =>
                         Skills_Amount_Range
-                          (Get_Proto_Item
-                             (Index => Proto_Index)
-                             .Value
-                             (3)))
+                          (Get_Proto_Item(Index => Proto_Index).Value(3)))
                      .Name) &
               "/" &
               To_String
@@ -1059,18 +1046,10 @@ package body Utils.UI is
                           (Container => Skills_List,
                            Index =>
                              Skills_Amount_Range
-                               (Get_Proto_Item
-                                  (
-                                   Index => Proto_Index)
-                                  .Value
-                                  (3)))
+                               (Get_Proto_Item(Index => Proto_Index).Value(3)))
                           .Attribute)
                      .Name));
-         if Get_Proto_Item
-             (Index => Proto_Index)
-             .Value
-             (4) =
-           1 then
+         if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
             Append
               (Source => Item_Info,
                New_Item => LF & "Can be used with shield.");
@@ -1084,95 +1063,55 @@ package body Utils.UI is
            (Source => Item_Info,
             New_Item =>
               LF & "Damage type: " &
-              (case Get_Proto_Item
-                 (Index => Proto_Index)
-                 .Value
-                 (5) is
+              (case Get_Proto_Item(Index => Proto_Index).Value(5) is
                  when 1 => "cutting", when 2 => "impaling", when 3 => "blunt",
                  when others => ""));
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
-         if Get_Proto_Item
-             (Index => Proto_Index)
-             .I_Type =
-           ItemType then
+         if Get_Proto_Item(Index => Proto_Index).I_Type = ItemType then
             Append
               (Source => Item_Info,
                New_Item =>
                  LF & "Damage chance: " &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
-                      Get_Proto_Item
-                        (Index => Proto_Index)
-                        .Value
-                        (1)) &
+                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
                  LF & "Strength:" &
-                 Integer'Image
-                   (Get_Proto_Item
-                      (Index => Proto_Index)
-                      .Value
-                      (2)));
+                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Is_Tool
-          (Item_Type =>
-             Get_Proto_Item
-               (Index => Proto_Index)
-               .I_Type) then
+      if Is_Tool(Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & "Damage chance: " &
               Get_Item_Chance_To_Damage
-                (Item_Data =>
-                   Get_Proto_Item
-                     (Index => Proto_Index)
-                     .Value
-                     (1)));
+                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)));
       end if;
-      if Length
-          (Source =>
-             Get_Proto_Item
-               (Index => Proto_Index)
-               .I_Type) >
-        4
+      if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
         and then
         (Slice
-           (Source =>
-              Get_Proto_Item
-                (Index => Proto_Index)
-                .I_Type,
-            Low => 1, High => 4) =
+           (Source => Get_Proto_Item(Index => Proto_Index).I_Type, Low => 1,
+            High => 4) =
          "Ammo" or
-         Get_Proto_Item
-             (Index => Proto_Index)
-             .I_Type =
+         Get_Proto_Item(Index => Proto_Index).I_Type =
            To_Bounded_String(Source => "Harpoon")) then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & "Strength:" &
-              Integer'Image
-                (Get_Proto_Item
-                   (Index => Proto_Index)
-                   .Value
-                   (1)));
+              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)));
       end if;
-      if Get_Proto_Item
-          (Index => Proto_Index)
-          .Description /=
+      if Get_Proto_Item(Index => Proto_Index).Description /=
         Short_String.Null_Bounded_String then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & LF &
               Short_String.To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => Proto_Index)
-                     .Description));
+                (Source => Get_Proto_Item(Index => Proto_Index).Description));
       end if;
       if Parent = "." then
          Show_Info

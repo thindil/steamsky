@@ -53,8 +53,7 @@ package body Bases.Cargo is
                Amount => Get_Random(Min => 50, Max => 200) * Population,
                Durability => Default_Item_Durability, Price => 0));
          Add_Base_Cargo_Loop :
-         for I in
-           1 .. Get_Proto_Amount loop
+         for I in 1 .. Get_Proto_Amount loop
             if Is_Buyable
                 (Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => I,
                  Check_Flag => False) then
@@ -78,21 +77,13 @@ package body Bases.Cargo is
                  (if Population < 150 then Get_Random(Min => 1, Max => 10)
                   elsif Population < 300 then Get_Random(Min => 1, Max => 20)
                   else Get_Random(Min => 1, Max => 30));
-               Item_Index: Natural range 0 ..
-                   Get_Proto_Amount :=
-                 0;
+               Item_Index: Natural range 0 .. Get_Proto_Amount := 0;
             begin
                Add_Black_Market_Cargo_Loop :
                for I in 1 .. Amount loop
-                  Item_Index :=
-                    Get_Random
-                      (Min => 1,
-                       Max =>
-                         Get_Proto_Amount);
+                  Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
                   Update_Item_Amount_Loop :
-                  for J in
-                    1 ..
-                      Get_Proto_Amount loop
+                  for J in 1 .. Get_Proto_Amount loop
                      Item_Index := Item_Index - 1;
                      if Item_Index = 0 then
                         if Get_Price

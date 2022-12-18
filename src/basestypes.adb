@@ -142,8 +142,7 @@ package body BasesTypes is
    end Load_Bases_Types;
 
    function Is_Buyable
-     (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Positive;
+     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
       use Bases;
@@ -152,9 +151,7 @@ package body BasesTypes is
    begin
       if Base_Index > 0
         and then Sky_Bases(Base_Index).Reputation.Level <
-          Get_Proto_Item
-            (Index => Item_Index)
-            .Reputation then
+          Get_Proto_Item(Index => Item_Index).Reputation then
          return False;
       end if;
       if Check_Flag
@@ -184,16 +181,13 @@ package body BasesTypes is
    end Is_Buyable;
 
    function Get_Price
-     (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Positive) return Natural is
+     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
+      return Natural is
       New_Item_Index: constant Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String
           (Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
    begin
-      if Get_Proto_Item
-          (Index => Item_Index)
-          .Price =
-        0 then
+      if Get_Proto_Item(Index => Item_Index).Price = 0 then
          return 0;
       end if;
       if Bases_Types_List(Base_Type).Trades.Contains
@@ -204,9 +198,7 @@ package body BasesTypes is
             return Bases_Types_List(Base_Type).Trades(New_Item_Index)(2);
          end if;
       end if;
-      return
-        Get_Proto_Item(Index => Item_Index)
-          .Price;
+      return Get_Proto_Item(Index => Item_Index).Price;
    end Get_Price;
 
 end BasesTypes;

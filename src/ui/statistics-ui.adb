@@ -230,8 +230,7 @@ package body Statistics.UI is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index =>
+                        (Index =>
                            Recipes_List
                              (To_Bounded_String
                                 (Source =>
@@ -712,8 +711,7 @@ package body Statistics.UI is
                    To_String
                      (Source =>
                         Get_Proto_Item
-                          (
-                           Index =>
+                          (Index =>
                              Recipes_List
                                (To_Bounded_String
                                   (Source =>

@@ -610,19 +610,13 @@ package body Ships is
                  MobInventory_Container.Element
                    (Container => Temp_Record.Cargo, Index => I);
             begin
-               if Get_Proto_Item
-                   (Index => Temp_Cargo.Proto_Index)
-                   .I_Type =
+               if Get_Proto_Item(Index => Temp_Cargo.Proto_Index).I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
                     Temp_Record.Combat_Value +
-                    (Get_Proto_Item
-                       (
-                        Index => Temp_Cargo.Proto_Index)
-                       .Value
-                       (1) *
+                    (Get_Proto_Item(Index => Temp_Cargo.Proto_Index).Value(1) *
                      Multiple);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                end if;
@@ -1260,10 +1254,7 @@ package body Ships is
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
          Cargo_Weight :=
-           Item.Amount *
-           Get_Proto_Item
-             (Index => Item.Proto_Index)
-             .Weight;
+           Item.Amount * Get_Proto_Item(Index => Item.Proto_Index).Weight;
          Weight := Weight + Cargo_Weight;
       end loop Count_Cargo_Weight_Loop;
       return Weight;
@@ -1297,18 +1288,13 @@ package body Ships is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
-            if Get_Proto_Item
-                (Index => Item.Proto_Index)
-                .I_Type =
+            if Get_Proto_Item(Index => Item.Proto_Index).I_Type =
               TinyString_Formal_Container.Element
                 (Container => Items_Types, Index => Item_Type_Index) then
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +
-                 (Get_Proto_Item
-                    (Index => Item.Proto_Index)
-                    .Value
-                    (1) *
+                 (Get_Proto_Item(Index => Item.Proto_Index).Value(1) *
                   Multiple);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;

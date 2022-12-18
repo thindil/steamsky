@@ -148,8 +148,7 @@ package body Bases.Trade is
         To_String
           (Source =>
              Get_Proto_Item
-               (
-                Index =>
+               (Index =>
                   Recipes_List
                     (To_Bounded_String
                        (Source => To_String(Source => Recipe_Index)))
@@ -308,8 +307,7 @@ package body Bases.Trade is
                  Cost +
                  ((5 * (100 - Member.Health)) *
                   Get_Proto_Item
-                    (
-                     Index =>
+                    (Index =>
                        Find_Proto_Item
                          (Item_Type =>
                             Factions_List(Member.Faction).Healing_Tools))

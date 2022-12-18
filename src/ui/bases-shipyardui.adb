@@ -1103,11 +1103,8 @@ package body Bases.ShipyardUI is
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
-            for I in 1 .. Get_Proto_Amount
-               loop
-               if Get_Proto_Item
-                   (Index => I)
-                   .I_Type =
+            for I in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => I).I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
                   Insert
@@ -1115,23 +1112,14 @@ package body Bases.ShipyardUI is
                      Text =>
                        "{Any" &
                        Slice
-                         (Source =>
-                            Get_Proto_Item
-                              (Index => I)
-                              .Name,
+                         (Source => Get_Proto_Item(Index => I).Name,
                           Low =>
                             Index
-                              (Source =>
-                                 Get_Proto_Item
-                                   (Index => I)
-                                   .Name,
+                              (Source => Get_Proto_Item(Index => I).Name,
                                Pattern => " "),
                           High =>
                             Length
-                              (Source =>
-                                 Get_Proto_Item
-                                   (Index => I)
-                                   .Name)) &
+                              (Source => Get_Proto_Item(Index => I).Name)) &
                        "}");
                   exit Ammunition_Info_Loop;
                end if;
@@ -1300,13 +1288,8 @@ package body Bases.ShipyardUI is
             Text => "{" & LF & "Repair/Upgrade material: }");
          M_Amount := 0;
          Repair_Materials_Loop :
-         for I in 1 .. Get_Proto_Amount
-            loop
-            if To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => I)
-                     .I_Type) =
+         for I in 1 .. Get_Proto_Amount loop
+            if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
               To_String
                 (Source =>
                    BaseModules_Container.Element
@@ -1321,11 +1304,7 @@ package body Bases.ShipyardUI is
                  (TextWidget => Module_Text, Index => "end",
                   Text =>
                     "{" &
-                    To_String
-                      (Source =>
-                         Get_Proto_Item
-                           (Index => I)
-                           .Name) &
+                    To_String(Source => Get_Proto_Item(Index => I).Name) &
                     "}");
                M_Amount := M_Amount + 1;
             end if;

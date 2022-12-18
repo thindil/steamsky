@@ -146,8 +146,7 @@ package body Ships.Movement is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (
-                        Index =>
+                       (Index =>
                           Inventory_Container.Element
                             (Container => Player_Ship.Cargo,
                              Index => Fuel_Index)

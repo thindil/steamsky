@@ -154,32 +154,20 @@ package body Help is
                         .Name) &
                  LF);
             Load_Training_Tools_Loop :
-            for I in 1 .. Get_Proto_Amount
-               loop
-               if Get_Proto_Item
-                   (Index => I)
-                   .I_Type =
-                 Skill.Tool then
+            for I in 1 .. Get_Proto_Amount loop
+               if Get_Proto_Item(Index => I).I_Type = Skill.Tool then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
                        (if
-                          Get_Proto_Item
-                            (Index => I)
-                            .Show_Type =
+                          Get_Proto_Item(Index => I).Show_Type =
                           Tiny_String.Null_Bounded_String
                         then
                           To_String
-                            (Source =>
-                               Get_Proto_Item
-                                 (Index => I)
-                                 .I_Type)
+                            (Source => Get_Proto_Item(Index => I).I_Type)
                         else To_String
-                            (Source =>
-                               Get_Proto_Item
-                                 (Index => I)
-                                 .Show_Type)) &
+                            (Source => Get_Proto_Item(Index => I).Show_Type)) &
                        LF);
                   exit Load_Training_Tools_Loop;
                end if;

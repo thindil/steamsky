@@ -82,8 +82,7 @@ package body Help.UI is
                    To_String
                      (Source =>
                         Get_Proto_Item
-                          (
-                           Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                          (Index => Find_Proto_Item(Item_Type => Fuel_Type))
                           .Name))),
          3 =>
            (Name => To_Unbounded_String(Source => "StrengthName"),

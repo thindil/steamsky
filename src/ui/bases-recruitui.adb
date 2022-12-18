@@ -680,8 +680,7 @@ package body Bases.RecruitUI is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (
-                         Index =>
+                        (Index =>
                            Positive_Formal_Container.Element
                              (Container => Recruit.Inventory,
                               Index => Recruit.Equipment(I)))

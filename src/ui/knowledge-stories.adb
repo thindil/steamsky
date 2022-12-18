@@ -164,8 +164,7 @@ package body Knowledge.Stories is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (
-                               Index =>
+                              (Index =>
                                  Positive'Value
                                    ((Slice(S => Tokens, Index => 1))))
                               .Name) &
