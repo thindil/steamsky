@@ -243,7 +243,7 @@ namespace eval ttk::theme::steamsky {
          -background $colors(-blue)
       # Yellow horizontal progress bar
       ttk::style configure yellow.Horizontal.TProgressbar \
-         -background $colors(-goldenyellow)
+         -background $colors(-yellow)
       # Experience progressbars
       ttk::style configure experience.Horizontal.TProgressbar \
          -background $colors(-darkyellow) -troughcolor $colors(-verydarkorange) \
