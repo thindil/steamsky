@@ -679,8 +679,8 @@ package body Bases.RecruitUI is
                  ": " &
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index =>
                            Positive_Formal_Container.Element
                              (Container => Recruit.Inventory,

@@ -425,8 +425,8 @@ package body Bases.UI is
                        (Item =>
                           To_String
                             (Source =>
-                               Objects_Container.Element
-                                 (Container => Items_List,
+                               Get_Proto_Item
+                                 (
                                   Index =>
                                     Recipes_List
                                       (To_Bounded_String
@@ -450,8 +450,8 @@ package body Bases.UI is
                Text =>
                  To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List,
+                      Get_Proto_Item
+                        (
                          Index =>
                            Recipes_List
                              (To_Bounded_String
@@ -1007,8 +1007,8 @@ package body Bases.UI is
                    (Source =>
                       To_String
                         (Source =>
-                           Objects_Container.Element
-                             (Container => Items_List,
+                           Get_Proto_Item
+                             (
                               Index => Recipes_List(I).Result_Index)
                              .Name)),
                Cost => Cost, Time => 1,

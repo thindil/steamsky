@@ -946,14 +946,13 @@ package body DebugUI is
       Item_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".amount", Interp => Interp);
       Item_Name: Bounded_String;
-      Item_Index: Objects_Container.Extended_Index;
+      Item_Index: Natural;
    begin
       Item_Name := To_Bounded_String(Source => Get(Widgt => Item_Entry));
       Find_Index_Loop :
-      for I in
-        Objects_Container.First_Index(Container => Items_List) ..
-          Objects_Container.Last_Index(Container => Items_List) loop
-         if Objects_Container.Element(Container => Items_List, Index => I)
+      for I in 1 .. Get_Proto_Amount
+         loop
+         if Get_Proto_Item(Index => I)
              .Name =
            Item_Name then
             Item_Index := I;
@@ -1273,13 +1272,12 @@ package body DebugUI is
               To_Unbounded_String(Source => Get(Widgt => Event_Box));
             Added := False;
             Find_Item_Loop :
-            for I in
-              Objects_Container.First_Index(Container => Items_List) ..
-                Objects_Container.Last_Index(Container => Items_List) loop
+            for I in 1 .. Get_Proto_Amount
+               loop
                if To_String
                    (Source =>
-                      Objects_Container.Element
-                        (Container => Items_List, Index => I)
+                      Get_Proto_Item
+                        (Index => I)
                         .Name) =
                  To_String(Source => Event_Name) then
                   Events_List.Append
@@ -1460,17 +1458,16 @@ package body DebugUI is
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => ".debugdialog.main.cargo.add");
       Load_Items_Loop :
-      for I in
-        Objects_Container.First_Index(Container => Items_List) ..
-          Objects_Container.Last_Index(Container => Items_List) loop
+      for I in 1 .. Get_Proto_Amount
+         loop
          Append
            (Source => Values_List,
             New_Item =>
               " {" &
               To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => I)
+                   Get_Proto_Item
+                     (Index => I)
                      .Name) &
               "}");
       end loop Load_Items_Loop;

@@ -1103,11 +1103,10 @@ package body Bases.ShipyardUI is
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
-            for I in
-              Objects_Container.First_Index(Container => Items_List) ..
-                Objects_Container.Last_Index(Container => Items_List) loop
-               if Objects_Container.Element
-                   (Container => Items_List, Index => I)
+            for I in 1 .. Get_Proto_Amount
+               loop
+               if Get_Proto_Item
+                   (Index => I)
                    .I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
@@ -1117,21 +1116,21 @@ package body Bases.ShipyardUI is
                        "{Any" &
                        Slice
                          (Source =>
-                            Objects_Container.Element
-                              (Container => Items_List, Index => I)
+                            Get_Proto_Item
+                              (Index => I)
                               .Name,
                           Low =>
                             Index
                               (Source =>
-                                 Objects_Container.Element
-                                   (Container => Items_List, Index => I)
+                                 Get_Proto_Item
+                                   (Index => I)
                                    .Name,
                                Pattern => " "),
                           High =>
                             Length
                               (Source =>
-                                 Objects_Container.Element
-                                   (Container => Items_List, Index => I)
+                                 Get_Proto_Item
+                                   (Index => I)
                                    .Name)) &
                        "}");
                   exit Ammunition_Info_Loop;
@@ -1301,13 +1300,12 @@ package body Bases.ShipyardUI is
             Text => "{" & LF & "Repair/Upgrade material: }");
          M_Amount := 0;
          Repair_Materials_Loop :
-         for I in
-           Objects_Container.First_Index(Container => Items_List) ..
-             Objects_Container.Last_Index(Container => Items_List) loop
+         for I in 1 .. Get_Proto_Amount
+            loop
             if To_String
                 (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List, Index => I)
+                   Get_Proto_Item
+                     (Index => I)
                      .I_Type) =
               To_String
                 (Source =>
@@ -1325,8 +1323,8 @@ package body Bases.ShipyardUI is
                     "{" &
                     To_String
                       (Source =>
-                         Objects_Container.Element
-                           (Container => Items_List, Index => I)
+                         Get_Proto_Item
+                           (Index => I)
                            .Name) &
                     "}");
                M_Amount := M_Amount + 1;
