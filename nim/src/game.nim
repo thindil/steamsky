@@ -327,14 +327,10 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 proc loadAdaData(fileName: cstring) {.exportc.} =
   loadData(fileName = $fileName)
 
-proc getAdaListValue(listIndex, itemIndex: cint): cstring {.exportc.} =
-  case listIndex
-  of 0:
-    if itemIndex >= itemsTypesList.len():
-      return ""
-    return itemsTypesList[itemIndex].cstring
-  else:
+proc getAdaItemType(itemIndex: cint): cstring {.exportc.} =
+  if itemIndex >= itemsTypesList.len():
     return ""
+  return itemsTypesList[itemIndex].cstring
 
 proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
     cstring]) {.exportc.} =
