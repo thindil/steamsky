@@ -746,7 +746,6 @@ package body Game is
                use Tiny_String;
 
                Item_Index: Natural;
-               Item_Type: Tiny_String.Bounded_String := Null_Bounded_String;
                --## rule off TYPE_INITIAL_VALUES
                type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
                type Nim_Integers_Array is array(0 .. 10) of Integer;
@@ -757,11 +756,6 @@ package body Game is
                   Import => True,
                   Convention => C,
                   External_Name => "loadAdaData";
-               function Get_Ada_List_Value
-                 (L_Index, I_Index: Natural) return chars_ptr with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "getAdaListValue";
                procedure Get_Ada_Game_Strings
                  (Values: out Nim_Strings_Array) with
                   Import => True,
@@ -775,21 +769,6 @@ package body Game is
             begin
                Load_Ada_Data(Name => New_String(Str => Data_File_Name));
                Item_Index := 0;
-               Fill_Items_Types_Loop :
-               loop
-                  Item_Type :=
-                    To_Bounded_String
-                      (Source =>
-                         Value
-                           (Item =>
-                              Get_Ada_List_Value
-                                (L_Index => 0, I_Index => Item_Index)));
-                  exit Fill_Items_Types_Loop when Length(Source => Item_Type) =
-                    0;
-                  TinyString_Formal_Container.Append
-                    (Container => Items_Types, New_Item => Item_Type);
-                  Item_Index := Item_Index + 1;
-               end loop Fill_Items_Types_Loop;
                Fill_Attributes_Block :
                declare
                   --## rule off TYPE_INITIAL_VALUES

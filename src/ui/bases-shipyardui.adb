@@ -1105,8 +1105,7 @@ package body Bases.ShipyardUI is
             Ammunition_Info_Loop :
             for I in 1 .. Get_Proto_Amount loop
                if Get_Proto_Item(Index => I).I_Type =
-                 TinyString_Formal_Container.Element
-                   (Container => Items_Types, Index => Value) then
+                 Get_Ada_Item_Type(Item_Index => Value - 1) then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text =>

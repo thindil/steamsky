@@ -132,9 +132,10 @@ package body ShipModules is
                       Get_Attribute(Elem => Module_Node, Name => "material"));
                Material_Exists := False;
                Check_Materials_Loop :
-               for Material of Items_Types loop
-                  if To_String(Source => Material) =
-                    To_String(Source => Temp_Record.Repair_Material) then
+               for I in 0 .. 256 loop
+                  exit Check_Materials_Loop when Length(Source => Get_Ada_Item_Type(Item_Index => I)) = 0;
+                  if Get_Ada_Item_Type(Item_Index => I) =
+                    Temp_Record.Repair_Material then
                      Material_Exists := True;
                      exit Check_Materials_Loop;
                   end if;

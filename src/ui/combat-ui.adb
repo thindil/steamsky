@@ -346,14 +346,11 @@ package body Combat.UI is
                      Inventory_Container.Element
                        (Container => Player_Ship.Cargo, Index => Ammo_Index)
                        .Proto_Index)
-                  .I_Type =
-                TinyString_Formal_Container.Element
-                  (Container => Items_Types,
-                   Index =>
+                  .I_Type = Get_Ada_Item_Type(Item_Index =>
                      BaseModules_Container.Element
                        (Container => Modules_List,
                         Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
-                       .Value) then
+                       .Value - 1) then
                Ammo_Amount :=
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Ammo_Index)
@@ -366,13 +363,11 @@ package body Combat.UI is
             Find_Ammo_Loop :
             for J in 1 .. Get_Proto_Amount loop
                if Get_Proto_Item(Index => J).I_Type =
-                 TinyString_Formal_Container.Element
-                   (Container => Items_Types,
-                    Index =>
+                 Get_Ada_Item_Type(Item_Index =>
                       BaseModules_Container.Element
                         (Container => Modules_List,
                          Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
-                        .Value) then
+                        .Value - 1) then
                   Ammo_Index :=
                     Find_Item
                       (Inventory => Player_Ship.Cargo, Proto_Index => J);
