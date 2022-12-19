@@ -133,7 +133,9 @@ package body ShipModules is
                Material_Exists := False;
                Check_Materials_Loop :
                for I in 0 .. 256 loop
-                  exit Check_Materials_Loop when Length(Source => Get_Ada_Item_Type(Item_Index => I)) = 0;
+                  exit Check_Materials_Loop when Length
+                      (Source => Get_Ada_Item_Type(Item_Index => I)) =
+                    0;
                   if Get_Ada_Item_Type(Item_Index => I) =
                     Temp_Record.Repair_Material then
                      Material_Exists := True;

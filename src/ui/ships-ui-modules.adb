@@ -320,12 +320,15 @@ package body Ships.UI.Modules is
                          Inventory_Container.Element
                            (Container => Player_Ship.Cargo, Index => I)
                            .Proto_Index)
-                      .I_Type = Get_Ada_Item_Type(Item_Index =>
+                      .I_Type =
+                    Get_Ada_Item_Type
+                      (Item_Index =>
                          BaseModules_Container.Element
                            (Container => Modules_List,
                             Index =>
                               Player_Ship.Modules(Module_Index).Proto_Index)
-                           .Value - 1) and
+                           .Value -
+                         1) and
                     I /= Ammo_Index then
                      Add_Button
                        (Name => ".assignammo",
@@ -841,11 +844,14 @@ package body Ships.UI.Modules is
                         Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Ammo_Index)
                           .Proto_Index)
-                     .I_Type = Get_Ada_Item_Type(Item_Index =>
+                     .I_Type =
+                   Get_Ada_Item_Type
+                     (Item_Index =>
                         BaseModules_Container.Element
                           (Container => Modules_List,
                            Index => Module.Proto_Index)
-                          .Value - 1) then
+                          .Value -
+                        1) then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text =>
@@ -868,11 +874,13 @@ package body Ships.UI.Modules is
                Find_Ammo_Info_Loop :
                for I in 1 .. Get_Proto_Amount loop
                   if Get_Proto_Item(Index => I).I_Type =
-                    Get_Ada_Item_Type(Item_Index =>
+                    Get_Ada_Item_Type
+                      (Item_Index =>
                          BaseModules_Container.Element
                            (Container => Modules_List,
                             Index => Module.Proto_Index)
-                           .Value - 1) then
+                           .Value -
+                         1) then
                      if M_Amount > 0 then
                         Insert
                           (TextWidget => Module_Text, Index => "end",
@@ -2456,11 +2464,14 @@ package body Ships.UI.Modules is
                 Inventory_Container.Element
                   (Container => Player_Ship.Cargo, Index => I)
                   .Proto_Index)
-             .I_Type = Get_Ada_Item_Type(Item_Index =>
+             .I_Type =
+           Get_Ada_Item_Type
+             (Item_Index =>
                 BaseModules_Container.Element
                   (Container => Modules_List,
                    Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                  .Value - 1) and
+                  .Value -
+                1) and
            I /= Ammo_Index then
             Add_Button
               (Name =>
