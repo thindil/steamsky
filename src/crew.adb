@@ -15,26 +15,27 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ships; use Ships;
+with Bases;
+with Careers;
+with Config; use Config;
+with Combat;
+with Crew.Inventory;
+with Factions;
+with Maps; use Maps;
 with Messages; use Messages;
-with ShipModules; use ShipModules;
-with Utils; use Utils;
+with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
-with Maps; use Maps;
-with Crew.Inventory; use Crew.Inventory;
-with Combat; use Combat;
-with Factions; use Factions;
-with Bases; use Bases;
-with Careers; use Careers;
-with Config; use Config;
+with Ships.Movement;
+with ShipModules;
+with Utils; use Utils;
 
 package body Crew is
 
    procedure Gain_Exp
      (Amount: Natural; Skill_Number: Skills_Amount_Range;
       Crew_Index: Positive) is
+      use Careers;
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -191,6 +192,9 @@ package body Crew is
 
    procedure Update_Crew
      (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
+      use Crew.Inventory;
+      use Factions;
+      use ShipModules;
       use Tiny_String;
 
       Tired_Level, Hunger_Level, Thirst_Level: Integer := 0;
@@ -370,6 +374,8 @@ package body Crew is
            Member.Order /= REST and not In_Combat then
             Member_Rest_Block :
             declare
+               use Combat;
+
                Can_Rest: Boolean := True;
             begin
                if Member.Order = BOARDING and Harpoon_Duration = 0 and
@@ -999,6 +1005,8 @@ package body Crew is
    end Update_Crew;
 
    procedure Wait_For_Rest is
+      use Ships.Movement;
+
       Cabin_Index: Modules_Container.Extended_Index := 0;
       Time_Needed, Temp_Time_Needed: Natural := 0;
       Damage: Damage_Factor := 0.0;
@@ -1106,6 +1114,7 @@ package body Crew is
    end Get_Attribute_Level_Name;
 
    procedure Daily_Payment is
+      use Bases;
       use Tiny_String;
 
       Money_Index_2: constant Inventory_Container.Extended_Index :=
