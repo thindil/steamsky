@@ -44,6 +44,9 @@ var
     ##
     ## The list of all legs armors prototypes indexes
   toolsList*: seq[string]
+    ## FUNCTION
+    ##
+    ## The list of all tools prototypes indexes
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
