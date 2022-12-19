@@ -253,4 +253,16 @@ package body Items is
          Reputation => Temp_Nim_Record.Reputation);
    end Get_Proto_Item;
 
+   function Get_Ada_Item_Type
+     (Item_Index: Natural) return Tiny_String.Bounded_String is
+      function Get_Ada_Item_Type(I_Index: Natural) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItemType";
+   begin
+      return
+        Tiny_String.To_Bounded_String
+          (Source => Value(Item => Get_Ada_Item_Type(I_Index => Item_Index)));
+   end Get_Ada_Item_Type;
+
 end Items;

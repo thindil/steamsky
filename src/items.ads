@@ -28,13 +28,6 @@ limited with Ships;
 package Items is
 -- ****
 
-   -- ****v* Items/Items.Items_Types
-   -- FUNCTION
-   -- Types of items
-   -- SOURCE
-   Items_Types: TinyString_Formal_Container.Vector (Capacity => 128);
-   -- ****
-
    -- ****t* Items/Items.Values_Range
    -- FUNCTION
    -- Used to set amount of additional data for items
@@ -268,5 +261,8 @@ package Items is
       Import => True,
       Convention => C,
       External_Name => "getAdaProtoAmount";
+
+   function Get_Ada_Item_Type
+     (Item_Index: Natural) return Tiny_String.Bounded_String;
 
 end Items;
