@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of the accepted mission's actions menu
 - Reduced influence of battering ram installed on the player's ship on
   generating enemies
+- Some colors of the game default theme
 
 ### Removed
 - The icon for remove actions, replaced it with icon for cancel actions
