@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import basestypes, careers, game, items, log, types
+import basestypes, careers, game, items, log, types, utils
 
 proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -276,6 +276,13 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Faction updated: '" & factionIndex & "'",
           debugType = everything)
     factionsList[factionIndex] = faction
+
+proc getReputation*(sourceFaction, targetFaction: string): int =
+  if factionsList[sourceFaction].relations[targetFaction].reputation.max == 0:
+    return factionsList[sourceFaction].relations[targetFaction].reputation.min
+  return getRandom(min = factionsList[sourceFaction].relations[
+      targetFaction].reputation.min, max = factionsList[
+      sourceFaction].relations[targetFaction].reputation.max)
 
 # Temporary code for interfacing with Ada
 
