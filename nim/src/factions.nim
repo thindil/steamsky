@@ -277,7 +277,8 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     factionsList[factionIndex] = faction
 
-proc getReputation*(sourceFaction, targetFaction: string): int =
+proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
+    raises: [KeyError], tags: [].} =
   if factionsList[sourceFaction].relations[targetFaction].reputation.max == 0:
     return factionsList[sourceFaction].relations[targetFaction].reputation.min
   return getRandom(min = factionsList[sourceFaction].relations[
