@@ -726,20 +726,25 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
+                  Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Full docks in base");
+                  Color := To_Unbounded_String(Source => "cyan");
                when ATTACKONBASE =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Base is under attack");
+                  Color := To_Unbounded_String(Source => "red");
                when DISEASE =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Disease in base");
+                  Color := To_Unbounded_String(Source => "yellow");
                when ENEMYPATROL =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Enemy patrol");
+                  Color := To_Unbounded_String(Source => "red3");
                when DOUBLEPRICE =>
                   Append
                     (Source => Event_Info_Text,
@@ -754,21 +759,12 @@ package body Maps.UI is
                when NONE | BASERECOVERY =>
                   null;
             end case;
-            if Events_List(Event_Index).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
-                  TRADER then
-               configure
-                 (Widgt => Event_Info,
-                  options =>
-                    "-text {" & To_String(Source => Event_Info_Text) &
-                    "} -style MapInfo.TLabel -foreground " &
-                    To_String(Source => Color));
-            else
-               configure
-                 (Widgt => Event_Info,
-                  options =>
-                    "-text {" & To_String(Source => Event_Info_Text) &
-                    "} -style MapInfoRed.TLabel");
-            end if;
+            configure
+              (Widgt => Event_Info,
+               options =>
+                 "-text {" & To_String(Source => Event_Info_Text) &
+                 "} -style MapInfo.TLabel -foreground " &
+                 To_String(Source => Color));
          end Add_Event_Info_Block;
       end if;
       if Sky_Map(X, Y).Mission_Index > 0 then
