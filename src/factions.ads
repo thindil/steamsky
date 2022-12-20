@@ -200,8 +200,7 @@ package Factions is
       return Integer with
       Pre =>
       (Factions_List.Contains(Key => Source_Faction) and
-       Factions_List.Contains(Key => Target_Faction)),
-      Test_Case => (Name => "Test_GetReputation", Mode => Nominal);
+       Factions_List.Contains(Key => Target_Faction));
       -- ****
 
       -- ****f* Factions/Factions.Is_Friendly
