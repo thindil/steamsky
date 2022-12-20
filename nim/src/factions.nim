@@ -414,3 +414,7 @@ proc getAdaFactionBase(factionIndex: cstring; index: cint;
       return bIndex.cstring
   except KeyError:
     return ""
+
+proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.exportc.} =
+  return getReputation(sourceFaction = $sourceFaction,
+      targetFaction = $targetFaction).cint

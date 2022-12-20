@@ -15,14 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Utils; use Utils;
 
 package body Factions is
 
    procedure Load_Factions(File_Name: String) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       Temp_Record: Faction_Record;
@@ -296,24 +295,18 @@ package body Factions is
    function Get_Reputation
      (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
       return Integer is
+      use Tiny_String;
+
+      function Get_Ada_Reputation
+        (S_Index, T_Index: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaReputation";
    begin
       return
-        (if
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             .Max =
-           0
-         then
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             .Min
-         else Get_Random
-             (Min =>
-                Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation
-                  .Min,
-              Max =>
-                Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation
-                  .Max));
+        Get_Ada_Reputation
+          (S_Index => New_String(Str => To_String(Source => Source_Faction)),
+           T_Index => New_String(Str => To_String(Source => Target_Faction)));
    end Get_Reputation;
 
    function Is_Friendly
