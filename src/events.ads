@@ -37,18 +37,25 @@ package Events is
       Default_Value => NONE;
       -- ****
 
-      -- ****s* Events/Events.Event_Data
+      -- ****d* Events/Events.No_Event
       -- FUNCTION
-      -- Data structure for random events
-      -- PARAMETERS
-      -- E_Type     - The type of the event
-      -- Sky_X      - X coordinate on sky map
-      -- Sky_Y      - Y coordinate on sky map
-      -- Time       - Time to end of event
-      -- Item_Index - Index of proto item which have bonus to price
-      -- Ship_Index - Index of proto ship which player meet
-      -- Data      - Various data for event (for example index of enemy ship)
+      -- Default value for Events_Types
       -- SOURCE
+   No_Event: constant Events_Types := NONE;
+   -- ****
+
+   -- ****s* Events/Events.Event_Data
+   -- FUNCTION
+   -- Data structure for random events
+   -- PARAMETERS
+   -- E_Type     - The type of the event
+   -- Sky_X      - X coordinate on sky map
+   -- Sky_Y      - Y coordinate on sky map
+   -- Time       - Time to end of event
+   -- Item_Index - Index of proto item which have bonus to price
+   -- Ship_Index - Index of proto ship which player meet
+   -- Data      - Various data for event (for example index of enemy ship)
+   -- SOURCE
    type Event_Data(E_Type: Events_Types := NONE) is record
       Sky_X: Map_X_Range;
       Sky_Y: Map_Y_Range;
@@ -62,6 +69,14 @@ package Events is
             Data: Natural := 0;
       end case;
    end record;
+   -- ****
+
+   -- ****d* Events/Events.Empty_Event
+   -- FUNCTION
+   -- Default value for Event_Data, an empty event
+   -- SOURCE
+   Empty_Event: constant Event_Data :=
+     (E_Type => No_Event, Sky_X => 1, Sky_Y => 1, Time => 1, Data => 0);
    -- ****
 
    -- ****t* Events/Events.Events_Container
