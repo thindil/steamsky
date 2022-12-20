@@ -279,6 +279,19 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the reputation level between the two factions
+  ##
+  ## PARAMETERS
+  ##
+  ## * sourceFaction - the faction which repuration level will be get
+  ## * targetFaction - the faction to which reputation level will be get
+  ##
+  ## RETURNS
+  ##
+  ## The level of the reputation between factions. If only one value is set
+  ## return value, if both, return random value between them.
   if factionsList[sourceFaction].relations[targetFaction].reputation.max == 0:
     return factionsList[sourceFaction].relations[targetFaction].reputation.min
   return getRandom(min = factionsList[sourceFaction].relations[
