@@ -369,9 +369,6 @@ namespace eval ttk::theme::steamsky {
 
       # Map info label
       ttk::style configure MapInfo.TLabel -background $colors(-black)
-      ttk::style configure MapInfoRed.TLabel -background $colors(-black) -foreground $colors(-red)
-      ttk::style configure MapInfoGreen.TLabel -background $colors(-black) \
-         -foreground $colors(-green)
       ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray) \
          -background $colors(-black)
 
