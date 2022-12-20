@@ -691,12 +691,33 @@ package body Maps.UI is
          declare
             Event_Index: constant Events_Container.Extended_Index :=
               Sky_Map(X, Y).Event_Index;
+            Color: Unbounded_String;
          begin
             if Events_List(Event_Index).E_Type /= BASERECOVERY then
                Append(Source => Event_Info_Text, New_Item => LF);
             end if;
             case Events_List(Event_Index).E_Type is
-               when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
+               when TRADER =>
+                  Append
+                    (Source => Event_Info_Text,
+                     New_Item =>
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Events_List(Event_Index).Ship_Index)
+                              .Name));
+                  Color := To_Unbounded_String(Source => "green");
+               when FRIENDLYSHIP =>
+                  Append
+                    (Source => Event_Info_Text,
+                     New_Item =>
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Events_List(Event_Index).Ship_Index)
+                              .Name));
+                  Color := To_Unbounded_String(Source => "green2");
+               when ENEMYSHIP =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item =>
@@ -729,6 +750,7 @@ package body Maps.UI is
                             Get_Proto_Item
                               (Index => Events_List(Event_Index).Item_Index)
                               .Name));
+                  Color := To_Unbounded_String(Source => "lime");
                when NONE | BASERECOVERY =>
                   null;
             end case;
@@ -738,7 +760,8 @@ package body Maps.UI is
                  (Widgt => Event_Info,
                   options =>
                     "-text {" & To_String(Source => Event_Info_Text) &
-                    "} -style MapInfoGreen.TLabel");
+                    "} -style MapInfo.TLabel -foreground " &
+                    To_String(Source => Color));
             else
                configure
                  (Widgt => Event_Info,
