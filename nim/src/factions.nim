@@ -298,6 +298,9 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
       targetFaction].reputation.min, max = factionsList[
       sourceFaction].relations[targetFaction].reputation.max)
 
+proc isFriendly*(sourceFaction, targetFaction: string): bool =
+  return factionsList[sourceFaction].relations[targetFaction].friendly
+
 # Temporary code for interfacing with Ada
 
 type
@@ -432,3 +435,7 @@ proc getAdaFactionBase(factionIndex: cstring; index: cint;
 proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.exportc.} =
   return getReputation(sourceFaction = $sourceFaction,
       targetFaction = $targetFaction).cint
+
+proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.exportc.} =
+  return isFriendly(sourceFaction = $sourceFaction,
+      targetFaction = $targetFaction).ord.cint
