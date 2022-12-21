@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Help entry for the knowledge screen
 - Hide Equip button in the player's ship crew inventory if the item cannot be
   equipped
+- Use colors of events when showing information about them in the map cell info
 
 ## Changed
 - Updated look of in-game tables
