@@ -312,8 +312,20 @@ package body Factions is
    function Is_Friendly
      (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
       return Boolean is
+      use Tiny_String;
+
+      function Is_Ada_Friendly(S_Index, T_Index: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "isAdaFriendly";
    begin
-      return Factions_List(Source_Faction).Relations(Target_Faction).Friendly;
+      if Is_Ada_Friendly
+          (S_Index => New_String(Str => To_String(Source => Source_Faction)),
+           T_Index => New_String(Str => To_String(Source => Target_Faction))) =
+        1 then
+         return True;
+      end if;
+      return False;
    end Is_Friendly;
 
    function Get_Random_Faction return Tiny_String.Bounded_String is
