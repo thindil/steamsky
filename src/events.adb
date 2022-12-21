@@ -37,10 +37,12 @@ package body Events is
       Crew_Index: Crew_Container.Extended_Index := 0;
       Roll: Positive range 1 .. 100;
       Roll2: Integer range -20 .. 120;
+      --## rule off IMPROPER_INITIALIZATION
       Engines: Positive_Container.Vector;
+      Enemies: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Enemies: Positive_Container.Vector;
       procedure Gain_Perception is
       begin
          Gain_Perception_Loop :
