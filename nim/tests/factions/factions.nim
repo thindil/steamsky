@@ -11,3 +11,6 @@ loadFactions("../bin/data/factions.dat")
 
 assert getReputation("POLEIS", "POLEIS") == 0
 assert getReputation("POLEIS", "PIRATES") == -10
+
+assert isFriendly("POLEIS", "INDEPENDENT")
+assert not isFriendly("POLEIS", "PIRATES")
