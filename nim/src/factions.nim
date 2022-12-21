@@ -298,7 +298,8 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
       targetFaction].reputation.min, max = factionsList[
       sourceFaction].relations[targetFaction].reputation.max)
 
-proc isFriendly*(sourceFaction, targetFaction: string): bool =
+proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
+    raises: [KeyError], tags: [].} =
   return factionsList[sourceFaction].relations[targetFaction].friendly
 
 # Temporary code for interfacing with Ada
