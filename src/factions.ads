@@ -217,8 +217,7 @@ package Factions is
       return Boolean with
       Pre =>
       (Factions_List.Contains(Key => Source_Faction) and
-       Factions_List.Contains(Key => Target_Faction)),
-      Test_Case => (Name => "Test_IsFriendly", Mode => Nominal);
+       Factions_List.Contains(Key => Target_Faction));
       -- ****
 
       -- ****f* Factions/Factions.Get_Random_Faction
