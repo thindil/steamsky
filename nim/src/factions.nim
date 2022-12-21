@@ -300,6 +300,18 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
 
 proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Check if the selected factions are friendly towards self
+  ##
+  ## PARAMETERS
+  ##
+  ## * sourceFaction - the faction which will be checked for friendliness
+  ## * targetFaction - the faction towards which check will be make
+  ##
+  ## RETRUNS
+  ##
+  ## True if factions are friendly towards self, otherwise false.
   return factionsList[sourceFaction].relations[targetFaction].friendly
 
 # Temporary code for interfacing with Ada
