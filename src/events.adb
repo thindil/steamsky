@@ -33,10 +33,10 @@ package body Events is
    function Check_For_Event return Boolean is
       use Tiny_String;
 
-      Time_Passed: Integer;
+      Time_Passed: Integer := 0;
       Crew_Index: Crew_Container.Extended_Index := 0;
       Roll: Positive range 1 .. 100;
-      Roll2: Integer range -20 .. 120;
+      Roll2: Integer range -20 .. 120 := 0;
       --## rule off IMPROPER_INITIALIZATION
       Engines: Positive_Container.Vector;
       Enemies: Positive_Container.Vector;
