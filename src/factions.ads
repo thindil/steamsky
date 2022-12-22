@@ -226,8 +226,7 @@ package Factions is
       -- RESULT
       -- Random index of faction
       -- SOURCE
-   function Get_Random_Faction return Tiny_String.Bounded_String with
-      Test_Case => (Name => "Test_GetRandomFaction", Mode => Robustness);
+   function Get_Random_Faction return Tiny_String.Bounded_String;
       -- ****
 
 end Factions;
