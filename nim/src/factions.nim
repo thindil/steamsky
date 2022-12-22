@@ -314,6 +314,14 @@ proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
   ## True if factions are friendly towards self, otherwise false.
   return factionsList[sourceFaction].relations[targetFaction].friendly
 
+proc getRandomFaction*(): string =
+  let factionIndex = getRandom(min = 1, max = factionsList.len)
+  var currentIndex = 1
+  for key in factionsList.keys:
+    if currentIndex == factionIndex:
+      return key
+    currentIndex.inc
+
 # Temporary code for interfacing with Ada
 
 type
@@ -452,3 +460,6 @@ proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.exportc.} =
 proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.exportc.} =
   return isFriendly(sourceFaction = $sourceFaction,
       targetFaction = $targetFaction).ord.cint
+
+proc getAdaRandomFaction(): cstring {.exportc.} =
+  return getRandomFaction().cstring
