@@ -309,12 +309,19 @@ proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
   ## * sourceFaction - the faction which will be checked for friendliness
   ## * targetFaction - the faction towards which check will be make
   ##
-  ## RETRUNS
+  ## RETURNS
   ##
   ## True if factions are friendly towards self, otherwise false.
   return factionsList[sourceFaction].relations[targetFaction].friendly
 
 proc getRandomFaction*(): string {.sideEffect, raises: [], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the index of the random faction
+  ##
+  ## RETURNS
+  ##
+  ## The index of the random faction
   let factionIndex = getRandom(min = 1, max = factionsList.len)
   var currentIndex = 1
   for key in factionsList.keys:
