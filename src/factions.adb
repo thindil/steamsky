@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Utils; use Utils;
 
 package body Factions is
 
@@ -329,20 +328,14 @@ package body Factions is
    end Is_Friendly;
 
    function Get_Random_Faction return Tiny_String.Bounded_String is
-      Faction_Index,
-      Current_Index: Positive range 1 .. Positive(Factions_List.Length);
+      function Get_Ada_Random_Faction return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaRandomFaction";
    begin
-      Faction_Index :=
-        Get_Random(Min => 1, Max => Positive(Factions_List.Length));
-      Current_Index := 1;
-      Get_Random_Faction_Loop :
-      for J in Factions_List.Iterate loop
-         if Current_Index = Faction_Index then
-            return Factions_Container.Key(Position => J);
-         end if;
-         Current_Index := Current_Index + 1;
-      end loop Get_Random_Faction_Loop;
-      return Tiny_String.Null_Bounded_String;
+      return
+        Tiny_String.To_Bounded_String
+          (Source => Value(Item => Get_Ada_Random_Faction));
    end Get_Random_Faction;
 
 end Factions;
