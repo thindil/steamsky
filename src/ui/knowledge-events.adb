@@ -478,7 +478,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red"));
+                     else To_Unbounded_String(Source => "cyan"));
                   Add_Button
                     (Table => Events_Table, Text => "Full docks in base",
                      Tooltip => "Show the event's details",
@@ -502,7 +502,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red"));
+                     else To_Unbounded_String(Source => "yellow3"));
                   Add_Button
                     (Table => Events_Table, Text => "Disease in base",
                      Tooltip => "Show the event's details",
@@ -514,7 +514,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red"));
+                     else To_Unbounded_String(Source => "red3"));
                   Add_Button
                     (Table => Events_Table, Text => "Enemy patrol",
                      Tooltip => "Show the event's details",
@@ -526,7 +526,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "green3"));
+                     else To_Unbounded_String(Source => "lime"));
                   Add_Button
                     (Table => Events_Table, Text => "Double price in base",
                      Tooltip => "Show the event's details",
@@ -538,7 +538,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "green3"));
+                     else To_Unbounded_String(Source => "green"));
                   Add_Button
                     (Table => Events_Table, Text => "Friendly trader spotted",
                      Tooltip => "Show the event's details",
@@ -550,7 +550,7 @@ package body Knowledge.Events is
                        Events_List(Event).Sky_X = Player_Ship.Destination_X and
                        Events_List(Event).Sky_Y = Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "green3"));
+                     else To_Unbounded_String(Source => "green2"));
                   Add_Button
                     (Table => Events_Table, Text => "Friendly ship spotted",
                      Tooltip => "Show the event's details",
