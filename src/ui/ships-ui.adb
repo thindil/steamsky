@@ -34,7 +34,6 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Config; use Config;
 with CoreUI; use CoreUI;
-with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;

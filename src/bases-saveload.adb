@@ -20,6 +20,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
+with Factions;
 with Maps; use Maps;
 
 package body Bases.SaveLoad is
@@ -304,6 +305,7 @@ package body Bases.SaveLoad is
    end Save_Bases;
 
    procedure Load_Bases(Save_Data: not null Document) is
+      use Factions;
       use Tiny_String;
 
       Base_Recruits: Recruit_Container.Vector (Capacity => 5);
@@ -344,8 +346,7 @@ package body Bases.SaveLoad is
          Sky_Bases(Base_Index).Reputation := (Level => 0, Experience => 0);
          Sky_Bases(Base_Index).Missions_Date := (others => 0);
          Sky_Bases(Base_Index).Missions := Base_Missions;
-         Sky_Bases(Base_Index).Owner :=
-           Factions_Container.Key(Position => Factions_List.First);
+         Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => 1);
          Sky_Bases(Base_Index).Size :=
            Bases_Size'Value(Get_Attribute(Elem => Base_Node, Name => "size"));
          Sky_Bases(Base_Index).Owner :=

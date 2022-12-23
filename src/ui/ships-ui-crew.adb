@@ -610,6 +610,7 @@ package body Ships.UI.Crew is
       Tab_Button: Ttk_RadioButton;
       Info_Button: Ttk_Button;
       Frame: Ttk_Frame;
+      Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
    begin
       Tcl_Eval
         (interp => Interp,
@@ -963,7 +964,7 @@ package body Ships.UI.Crew is
            (Widgt => Info_Button, Sequence => "<Tab>",
             Script => "{focus " & Close_Button & ";break}");
       end if;
-      if Factions_List(Member.Faction).Flags.Find_Index
+      if Faction.Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
          Append
@@ -979,7 +980,7 @@ package body Ships.UI.Crew is
         (Source => Member_Info,
          New_Item =>
            "Faction: " &
-           To_String(Source => Factions_List(Member.Faction).Name) & LF &
+           To_String(Source => Faction.Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or

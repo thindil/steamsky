@@ -129,16 +129,18 @@ package body Ships.Cargo is
 
    function Get_Items_Amount(I_Type: String) return Natural is
       Items_Amount: Natural;
+      Faction: Faction_Record;
    begin
       if I_Type = "Drinks" then
          Get_Drinks_Amount_Loop :
          for Member of Player_Ship.Crew loop
-            if Factions_List(Member.Faction).Drinks_Types.Length = 0 then
+            Faction := Get_Faction(Index => Member.Faction);
+            if Faction.Drinks_Types.Length = 0 then
                Items_Amount := Game_Settings.Low_Drinks + 1;
             else
                Items_Amount := 0;
                Get_Selected_Drinks_Amount_Loop :
-               for DrinkType of Factions_List(Member.Faction).Drinks_Types loop
+               for DrinkType of Faction.Drinks_Types loop
                   Items_Amount :=
                     Items_Amount + Get_Item_Amount(Item_Type => DrinkType);
                end loop Get_Selected_Drinks_Amount_Loop;
@@ -149,12 +151,13 @@ package body Ships.Cargo is
       else
          Get_Items_Amount_Loop :
          for Member of Player_Ship.Crew loop
-            if Factions_List(Member.Faction).Food_Types.Length = 0 then
+            Faction := Get_Faction(Index => Member.Faction);
+            if Faction.Food_Types.Length = 0 then
                Items_Amount := Game_Settings.Low_Food + 1;
             else
                Items_Amount := 0;
                Get_Food_Amount_Loop :
-               for FoodType of Factions_List(Member.Faction).Food_Types loop
+               for FoodType of Faction.Food_Types loop
                   Items_Amount :=
                     Items_Amount + Get_Item_Amount(Item_Type => FoodType);
                end loop Get_Food_Amount_Loop;

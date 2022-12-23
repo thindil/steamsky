@@ -106,7 +106,7 @@ package body Combat is
       end Count_Perception;
    begin
       Enemy_Ship_Index := Enemy_Index;
-      Faction_Name := Factions_List(Proto_Ships_List(Enemy_Index).Owner).Name;
+      Faction_Name := Get_Faction(Index => Proto_Ships_List(Enemy_Index).Owner).Name;
       Harpoon_Duration := 0;
       Boarding_Orders.Clear;
       Enemy_Ship :=
@@ -960,6 +960,7 @@ package body Combat is
          Attack_Done, Riposte: Boolean;
          Attacker_Index, Defender_Index: Positive;
          Order_Index: Natural;
+         Faction: Faction_Record;
          function Character_Attack
            (Attacker_Index_2, Defender_Index_2: Positive;
             Player_Attack_2: Boolean) return Boolean is
@@ -1113,15 +1114,16 @@ package body Combat is
                   Damage := Damage + Damage_Bonus;
                end Count_Damage_Bonus_Block;
             end if;
-            if Factions_List(Defender.Faction).Flags.Contains
+            Faction := Get_Faction(Index => Defender.Faction);
+            if Faction.Flags.Contains
                 (Item => To_Unbounded_String(Source => "naturalarmor")) then
                Damage := Damage / 2;
             end if;
             if
-              (Factions_List(Attacker.Faction).Flags.Contains
+              (Get_Faction(Index => Attacker.Faction).Flags.Contains
                  (Item => To_Unbounded_String(Source => "toxicattack")) and
                Attacker.Equipment(WEAPON) = 0) and
-              not Factions_List(Defender.Faction).Flags.Contains
+              not Faction.Flags.Contains
                 (Item => To_Unbounded_String(Source => "diseaseimmune")) then
                Damage :=
                  (if Damage * 10 < 30 then Damage * 10 else Damage + 30);
@@ -1529,7 +1531,7 @@ package body Combat is
               Skill_Index => Piloting_Skill);
       end if;
       if Engineer_Index > 0 or
-        Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+        Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          Message :=
            To_Unbounded_String

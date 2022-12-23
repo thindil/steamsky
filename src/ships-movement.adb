@@ -64,7 +64,7 @@ package body Ships.Movement is
          return
            "You don't have a cockpit on your ship or the cockpit is destroyed.";
       end if;
-      if Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+      if Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          Have_Pilot := True;
          Have_Engineer := True;
@@ -209,7 +209,7 @@ package body Ships.Movement is
             return 0;
          end if;
       end if;
-      if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+      if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          if Need_Rest(Order => PILOT) then
             if not Game_Settings.Auto_Rest then
@@ -472,7 +472,7 @@ package body Ships.Movement is
            "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if Find_Member(Order => ENGINEER) = 0 and
-        not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+        not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          return "You don't have an engineer on duty.";
       end if;
@@ -513,7 +513,7 @@ package body Ships.Movement is
           ((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) *
            100_000.0);
       if Ship.Crew.Length > 0 then
-         if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
+         if not Get_Faction(Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop

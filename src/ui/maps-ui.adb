@@ -89,6 +89,7 @@ package body Maps.UI is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
       Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combat");
+      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
    begin
       configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
       if Game_Settings.Show_Numbers then
@@ -180,7 +181,7 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       if Have_Pilot and
         (Have_Engineer or
-         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+         Faction.Flags.Contains
            (Item => To_Unbounded_String(Source => "sentientships"))) and
         (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
          or else (Winfo_Get(Widgt => Frame, Info => "ismapped") = "0")) then
@@ -243,7 +244,7 @@ package body Maps.UI is
       if Have_Pilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
-         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+         if not Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             configure(Widgt => Label, options => "-image piloticon");
             Add
@@ -261,7 +262,7 @@ package body Maps.UI is
       if Have_Engineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
-         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+         if not Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             configure(Widgt => Label, options => "-image engineericon");
             Add
@@ -521,8 +522,8 @@ package body Maps.UI is
                      if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year >
                        0 then
                         Map_Char :=
-                          Factions_List
-                            (Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
+                          Get_Faction
+                            (Index => Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
                             .Base_Icon;
                         Map_Tag :=
                           To_Unbounded_String
@@ -632,7 +633,7 @@ package body Maps.UI is
                        "Owner: " &
                        Tiny_String.To_String
                          (Source =>
-                            Factions_List(Sky_Bases(Base_Index).Owner).Name));
+                            Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
                else
                   Append
                     (Source => Map_Info_Text, New_Item => "Base is abandoned");

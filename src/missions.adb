@@ -358,9 +358,10 @@ package body Missions is
                       Positive
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
+               Faction: constant Faction_Record := Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
             begin
                Inventory_Container.Delete_Last(Container => Inventory);
-               if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
+               if not Faction.Flags
                    .Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
                   Gender :=
@@ -368,7 +369,7 @@ package body Missions is
                else
                   Gender := 'M';
                end if;
-               if Factions_List(Sky_Bases(Passenger_Base).Owner).Flags.Contains
+               if Faction.Flags.Contains
                    (Item => To_Unbounded_String(Source => "nomorale")) then
                   Morale := 50;
                else

@@ -597,9 +597,9 @@ package body Stories is
          return;
       end if;
       Find_Faction_Index_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = Faction_Name then
-            Faction_Index := Factions_Container.Key(Position => I);
+      for I in 1 .. Get_Factions_Amount loop
+         if Get_Faction(Number => I).Name = Faction_Name then
+            Faction_Index := Get_Faction_Index(Number => I);
             exit Find_Faction_Index_Loop;
          end if;
       end loop Find_Faction_Index_Loop;

@@ -759,7 +759,7 @@ package body Ships.Crew is
          if Member.Health < 100 then
             if Find_Item
                 (Inventory => Ship.Cargo,
-                 Item_Type => Factions_List(Member.Faction).Healing_Tools) >
+                 Item_Type => Get_Faction(Index => Member.Faction).Healing_Tools) >
               0 then
                Can_Heal := True;
             end if;
@@ -944,13 +944,14 @@ package body Ships.Crew is
       New_Morale, New_Loyalty, New_Value: Integer;
       Faction_Index: constant Tiny_String.Bounded_String :=
         Ship.Crew(Member_Index).Faction;
+      Faction: constant Faction_Record := Get_Faction(Index => Faction_Index);
    begin
-      if Factions_List(Faction_Index).Flags.Contains
+      if Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "nomorale")) then
          return;
       end if;
       New_Value := Value;
-      if Factions_List(Faction_Index).Flags.Contains
+      if Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "fanaticism")) then
          if Value > 0 then
             New_Value := Value * 5;

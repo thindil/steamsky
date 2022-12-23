@@ -402,7 +402,7 @@ package body Ships.UI.Modules is
                  Find_Item
                      (Inventory => Player_Ship.Cargo,
                       Item_Type =>
-                        Factions_List(Player_Ship.Crew(1).Faction)
+                        Get_Faction(Index => Player_Ship.Crew(1).Faction)
                           .Healing_Tools) >
                    0 then
                   Add_Button

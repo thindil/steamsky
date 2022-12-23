@@ -236,6 +236,7 @@ package body Combat.UI is
       Damage_Percent: Float;
       Combat_Canvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
+      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
       function Get_Crew_List(Position: Natural) return String is
          Crew_List: Unbounded_String :=
            To_Unbounded_String(Source => "Nobody");
@@ -293,7 +294,7 @@ package body Combat.UI is
       Combo_Box.Name := New_String(Str => Frame & ".pilotorder");
       Current
         (ComboBox => Combo_Box, NewIndex => Integer'Image(Pilot_Order - 1));
-      if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+      if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) and
         Find_Member(Order => PILOT) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
@@ -310,7 +311,7 @@ package body Combat.UI is
       Combo_Box.Name := New_String(Str => Frame & ".engineerorder");
       Current
         (ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
-      if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+      if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) and
         Find_Member(Order => ENGINEER) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
@@ -1433,12 +1434,13 @@ package body Combat.UI is
       Gun_Index: Positive;
       Frame_Name: constant String :=
         Main_Paned & ".combatframe.crew.canvas.frame";
+      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
    begin
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotorder");
          Pilot_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
-         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+         if not Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
               (Message =>
@@ -1457,7 +1459,7 @@ package body Combat.UI is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineerorder");
          Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
-         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
+         if not Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
               (Message =>

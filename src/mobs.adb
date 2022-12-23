@@ -24,6 +24,7 @@ with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Utils; use Utils;
 with Items; use Items;
+with Factions;
 
 package body Mobs is
 
@@ -549,6 +550,7 @@ package body Mobs is
    function Generate_Mob
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data is
+      use Factions;
       use Tiny_String;
 
       Mob: Member_Data
@@ -560,12 +562,13 @@ package body Mobs is
       Amount: Natural;
       Highest_Skill_Level, Weapon_Skill_Level: Skill_Range := 1;
       Skill_Index: Skills_Container.Extended_Index;
+      Faction: constant Faction_Record := Get_Faction(Index => Mob.Faction);
    begin
       Mob.Faction :=
         (if Get_Random(Min => 1, Max => 100) < 99 then Faction_Index
          else Get_Random_Faction);
       Mob.Gender := 'M';
-      if not Factions_List(Mob.Faction).Flags.Contains
+      if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "nogender"))
         and then Get_Random(Min => 1, Max => 100) > 50 then
          Mob.Gender := 'F';
@@ -577,7 +580,7 @@ package body Mobs is
       for Skill of Proto_Mob.Skills loop
          Skill_Index :=
            (if Skill.Index = Skills_Amount + 1 then
-              Factions_List(Mob.Faction).Weapon_Skill
+              Faction.Weapon_Skill
             else Skill.Index);
          if Skill.Experience = 0 then
             Skills_Container.Append
@@ -594,7 +597,7 @@ package body Mobs is
                     Get_Random(Min => Skill.Level, Max => Skill.Experience),
                   Experience => 0));
          end if;
-         if Skill_Index = Factions_List(Mob.Faction).Weapon_Skill then
+         if Skill_Index = Faction.Weapon_Skill then
             Weapon_Skill_Level :=
               Skills_Container.Element
                 (Container => Mob.Skills,
@@ -696,7 +699,7 @@ package body Mobs is
       Mob.Morale :=
         (1 =>
            (if
-              Factions_List(Mob.Faction).Flags.Contains
+              Faction.Flags.Contains
                 (Item => To_Unbounded_String(Source => "fanaticism"))
             then 100
             else 50),
