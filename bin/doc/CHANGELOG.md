@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Reduced influence of battering ram installed on the player's ship on
   generating enemies
 - Some colors of the game default theme
+- Updated look of the list of known events
 
 ### Removed
 - The icon for remove actions, replaced it with icon for cancel actions
