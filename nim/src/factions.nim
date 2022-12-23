@@ -355,38 +355,29 @@ proc loadAdaFactions*(fileName: cstring) {.sideEffect, raises: [
     DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadFactions(fileName = $fileName)
 
-proc getAdaFaction(index: cint; adaFaction: var AdaFactionData): cstring {.sideEffect,
+proc getAdaFaction(index: cstring; adaFaction: var AdaFactionData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   adaFaction = AdaFactionData(name: "".cstring, memberName: "".cstring,
       pluralMemberName: "".cstring, spawnChance: 0, population: [1: 0.cint,
           2: 0.cint], namesType: 0, description: "".cstring,
           healingTools: "".cstring, healingSkill: 0, baseIcon: 0,
           weaponSkill: 0)
-  if index > factionsList.len():
-    return ""
-  var
-    faction: FactionData
-    factionIndex: Positive = 1
-  for key in factionsList.keys:
-    if factionIndex == index:
-      try:
-        faction = factionsList[key]
-        result = key.cstring
-      except KeyError:
-        return ""
-      break
-    factionIndex.inc()
-  adaFaction.name = faction.name.cstring
-  adaFaction.memberName = faction.memberName.cstring
-  adaFaction.pluralMemberName = faction.pluralMemberName.cstring
-  adaFaction.spawnChance = faction.spawnChance.cint
-  adaFaction.population = [1: faction.population[1].cint, 2: faction.population[2].cint]
-  adaFaction.namesType = faction.namesType.ord().cint
-  adaFaction.description = faction.description.cstring
-  adaFaction.healingTools = faction.healingTools.cstring
-  adaFaction.healingSkill = faction.healingSkill.cint
-  adaFaction.baseIcon = faction.baseIcon.cint
-  adaFaction.weaponSkill = faction.weaponSkill.cint
+  try:
+    let faction: FactionData = factionsList[$index]
+    adaFaction.name = faction.name.cstring
+    adaFaction.memberName = faction.memberName.cstring
+    adaFaction.pluralMemberName = faction.pluralMemberName.cstring
+    adaFaction.spawnChance = faction.spawnChance.cint
+    adaFaction.population = [1: faction.population[1].cint,
+        2: faction.population[2].cint]
+    adaFaction.namesType = faction.namesType.ord().cint
+    adaFaction.description = faction.description.cstring
+    adaFaction.healingTools = faction.healingTools.cstring
+    adaFaction.healingSkill = faction.healingSkill.cint
+    adaFaction.baseIcon = faction.baseIcon.cint
+    adaFaction.weaponSkill = faction.weaponSkill.cint
+  except KeyError:
+    discard
 
 proc getAdaFactionData(factionIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.sideEffect, raises: [], tags: [], exportc.} =

@@ -229,4 +229,8 @@ package Factions is
    function Get_Random_Faction return Tiny_String.Bounded_String;
       -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_Faction(Index: Tiny_String.Bounded_String) return Faction_Record;
+
 end Factions;
