@@ -59,6 +59,7 @@ package body Game is
       use Utils;
 
       Random_Base: Positive := Positive'First;
+      Player_Faction: Faction_Record;
    begin
       -- Save game configuration
       Save_Config;
@@ -81,6 +82,7 @@ package body Game is
             Index := 1;
             New_Game_Settings.Player_Faction := Get_Faction_Index(Number => Roll);
          end if;
+         Player_Faction := Get_Faction(Index => New_Game_Settings.Player_Faction);
          -- Set player career if random option was selected
          if New_Game_Settings.Player_Career =
            To_Unbounded_String(Source => "random") then
@@ -89,11 +91,11 @@ package body Game is
                 (Min => 1,
                  Max =>
                    Positive
-                     (Factions_List(New_Game_Settings.Player_Faction).Careers
+                     (Player_Faction.Careers
                         .Length));
             Index := 1;
             Get_Player_Career_Loop :
-            for I in Factions_List(New_Game_Settings.Player_Faction).Careers
+            for I in Player_Faction.Careers
               .Iterate loop
                if Index = Roll then
                   New_Game_Settings.Player_Career :=
@@ -126,6 +128,7 @@ package body Game is
          Base_Size: Bases_Size := SMALL;
          Base_Owner: Tiny_String.Bounded_String := Null_Bounded_String;
          Base_Type: Bounded_String := Null_Bounded_String;
+         Base_Faction: Faction_Record;
          package Bases_Container is new Hashed_Maps
            (Key_Type => Bounded_String,
             Element_Type => Positive_Container.Vector,
@@ -135,49 +138,51 @@ package body Game is
          Attempts: Positive range 1 .. 251 := 1;
       begin
          Count_Spawn_Chance_Loop :
-         for I in Factions_List.Iterate loop
-            Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).Spawn_Chance;
+         for I in 1 .. Get_Factions_Amount loop
+            Base_Faction := Get_Faction(Number => I);
+            Max_Spawn_Roll := Max_Spawn_Roll + Base_Faction.Spawn_Chance;
             Bases_Array.Include
-              (Key => Factions_Container.Key(Position => I),
+              (Key => Get_Faction_Index(Number => I),
                New_Item => Positive_Container.Empty_Vector);
          end loop Count_Spawn_Chance_Loop;
          Set_Bases_Loop :
          for I in Sky_Bases'Range loop
             Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);
             Set_Base_Faction_Loop :
-            for J in Factions_List.Iterate loop
-               if Faction_Roll <= Factions_List(J).Spawn_Chance then
-                  Base_Owner := Factions_Container.Key(Position => J);
+            for J in 1 .. Get_Factions_Amount loop
+               Base_Faction := Get_Faction(Number => J);
+               if Faction_Roll <= Base_Faction.Spawn_Chance then
+                  Base_Owner := Get_Faction_Index(Number => J);
                   Base_Population :=
-                    (if Factions_List(J).Population(2) = 0 then
-                       Factions_List(J).Population(1)
+                    (if Base_Faction.Population(2) = 0 then
+                       Base_Faction.Population(1)
                      else Get_Random
-                         (Min => Factions_List(J).Population(1),
-                          Max => Factions_List(J).Population(2)));
+                         (Min => Base_Faction.Population(1),
+                          Max => Base_Faction.Population(2)));
                   Base_Reputation :=
                     Get_Reputation
                       (Source_Faction => New_Game_Settings.Player_Faction,
                        Target_Faction =>
-                         Factions_Container.Key(Position => J));
+                         Get_Faction_Index(Number => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
-                  for SpawnChance of Factions_List(J).Bases_Types loop
+                  for SpawnChance of Base_Faction.Bases_Types loop
                      Max_Base_Spawn_Roll := Max_Base_Spawn_Roll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
                   Base_Type_Roll :=
                     Get_Random(Min => 1, Max => Max_Base_Spawn_Roll);
                   Get_Base_Type_Loop :
-                  for K in Factions_List(J).Bases_Types.Iterate loop
-                     if Base_Type_Roll <= Factions_List(J).Bases_Types(K) then
+                  for K in Base_Faction.Bases_Types.Iterate loop
+                     if Base_Type_Roll <= Base_Faction.Bases_Types(K) then
                         Base_Type := BaseType_Container.Key(Position => K);
                         exit Get_Base_Type_Loop;
                      end if;
                      Base_Type_Roll :=
-                       Base_Type_Roll - Factions_List(J).Bases_Types(K);
+                       Base_Type_Roll - Base_Faction.Bases_Types(K);
                   end loop Get_Base_Type_Loop;
                   exit Set_Base_Faction_Loop;
                end if;
-               Faction_Roll := Faction_Roll - Factions_List(J).Spawn_Chance;
+               Faction_Roll := Faction_Roll - Base_Faction.Spawn_Chance;
             end loop Set_Base_Faction_Loop;
             Base_Size :=
               (if Base_Population = 0 then
@@ -203,16 +208,18 @@ package body Game is
             Sky_Bases(I).Size := Base_Size;
             Recruit_Container.Assign
               (Target => Sky_Bases(I).Recruits, Source => Tmp_Recruits);
-            if Factions_List(Base_Owner).Flags.Contains
+            Base_Faction := Get_Faction(Index => Base_Owner);
+            if Base_Faction.Flags.Contains
                 (Item => To_Unbounded_String(Source => "loner")) then
                Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);
                Get_Faction_Loop :
-               for J in Factions_List.Iterate loop
-                  if Faction_Roll > Factions_List(J).Spawn_Chance then
+               for J in 1 .. Get_Factions_Amount loop
+                  Base_Faction := Get_Faction(Number => J);
+                  if Faction_Roll > Base_Faction.Spawn_Chance then
                      Faction_Roll :=
-                       Faction_Roll - Factions_List(J).Spawn_Chance;
+                       Faction_Roll - Base_Faction.Spawn_Chance;
                   else
-                     Base_Owner := Factions_Container.Key(Position => J);
+                     Base_Owner := Get_Faction_Index(Number => J);
                   end if;
                end loop Get_Faction_Loop;
             end if;
@@ -228,13 +235,13 @@ package body Game is
                   Valid_Location := True;
                   if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
-                    (Factions_List
-                       (Sky_Bases(FactionBases(FactionBases.First_Index))
+                    (Get_Faction
+                       (Index => Sky_Bases(FactionBases(FactionBases.First_Index))
                           .Owner)
                        .Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner")) and
-                     Factions_List(Sky_Bases(FactionBases(I)).Owner).Flags
+                     Get_Faction(Index => Sky_Bases(FactionBases(I)).Owner).Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner"))) then
                      Pos_X :=
@@ -343,7 +350,7 @@ package body Game is
       Player_Ship :=
         Create_Ship
           (Proto_Index =>
-             Factions_List(New_Game_Settings.Player_Faction).Careers
+             Player_Faction.Careers
                (New_Game_Settings.Player_Career)
                .Ship_Index,
            Name =>
@@ -359,7 +366,7 @@ package body Game is
            Positive'Value
              (To_String
                 (Source =>
-                   Factions_List(New_Game_Settings.Player_Faction).Careers
+                   Player_Faction.Careers
                      (New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
@@ -368,7 +375,7 @@ package body Game is
          --## rule on IMPROPER_INITIALIZATION
          Player_Morale: constant Positive :=
            (if
-              Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
+              Player_Faction.Flags.Contains
                 (Item => To_Unbounded_String(Source => "nomorale"))
             then 50
             else 100);
@@ -1000,7 +1007,7 @@ package body Game is
          end if;
       end Load_Selected_Data;
    begin
-      if Factions_List.Length > 0 then
+      if Proto_Ships_List.Length > 0 then
          return "";
       end if;
       -- Load standard game data

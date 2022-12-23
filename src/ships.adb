@@ -633,7 +633,7 @@ package body Ships is
             Perception => No_Ship_Bonus, Cargo => Empty_Cargo,
             Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
             Description => Short_String.Null_Bounded_String,
-            Owner => Factions_Container.Key(Position => Factions_List.First),
+            Owner => Get_Faction_Index(Number => 1),
             Known_Recipes => Empty_Known_Recipes);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=

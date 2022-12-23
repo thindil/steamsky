@@ -122,6 +122,7 @@ package body MainMenu is
         Get_Widget(pathName => ".mainmenu.version");
       Button: Ttk_Button :=
         Get_Widget(pathName => ".newgamemenu.canvas.player.randomplayer");
+      Faction: Faction_Record;
    begin
       if not Exists(Name => Icon_Path) then
          Wm_Set(Widgt => Main_Window, Action => "withdraw");
@@ -202,10 +203,11 @@ package body MainMenu is
         (TextEntry => Text_Entry, Index => "0",
          Text => To_String(Source => New_Game_Settings.Ship_Name));
       Load_Factions_Names_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Careers.Length > 0 then
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
+         if Faction.Careers.Length > 0 then
             Values :=
-              Values & " {" & To_String(Source => Factions_List(I).Name) & "}";
+              Values & " {" & To_String(Source => Faction.Name) & "}";
          end if;
       end loop Load_Factions_Names_Loop;
       Append(Source => Values, New_Item => " Random");
@@ -216,7 +218,7 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Factions_List(New_Game_Settings.Player_Faction).Name));
+             (Source => Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
       Set

@@ -78,8 +78,8 @@ package body Factions is
    end Get_Random_Faction;
 
    function Get_Faction
-     (Index: Tiny_String.Bounded_String; Number: Natural := 0)
-      return Faction_Record is
+     (Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
+      Number: Natural := 0) return Faction_Record is
       use Tiny_String;
 
       Temp_Record: Faction_Record;

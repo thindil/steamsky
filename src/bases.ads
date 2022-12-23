@@ -19,7 +19,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Game; use Game;
 with Crew; use Crew;
-with Factions; use Factions;
 with Items; use Items;
 with Missions; use Missions;
 with Ships; use Ships;
@@ -222,8 +221,6 @@ package Bases is
    function Generate_Base_Name
      (Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String with
-      Pre => Factions_Container.Contains
-        (Container => Factions_List, Key => Faction_Index),
       Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0;
       -- ****
 
