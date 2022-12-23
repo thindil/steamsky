@@ -20,7 +20,6 @@ with Ada.Containers.Formal_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
-with Factions; use Factions;
 with Game; use Game;
 
 -- ****h* Mobs/Mobs
@@ -161,8 +160,7 @@ package Mobs is
       Pre =>
       (Mob_Index > 0 and
        Mob_Index <
-         ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
-       Factions_List.Contains(Key => Faction_Index)),
+         ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List)),
       Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
       -- ****
@@ -184,9 +182,7 @@ package Mobs is
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
       return Natural with
-      Pre =>
-      (Highest_Level < 101 and Weapon_Skill_Level < 101 and
-       Factions_List.Contains(Key => Faction_Index));
+      Pre => (Highest_Level < 101 and Weapon_Skill_Level < 101);
       -- ****
 
 end Mobs;

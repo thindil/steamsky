@@ -163,20 +163,6 @@ package Factions is
    end record;
    -- ****
 
-   -- ****t* Factions/Factions.Factions_Container
-   -- FUNCTION
-   -- Used to store factions data
-   -- SOURCE
-   package Factions_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Faction_Record,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
-   -- ****
-
-   -- ****v* Factions/Factions.Factions_List
-   -- SOURCE
-   Factions_List: Factions_Container.Map;
-   -- ****
-
    -- ****f* Factions/Factions.Load_Factions
    -- FUNCTION
    -- Load NPC factions from file
@@ -197,10 +183,7 @@ package Factions is
    -- SOURCE
    function Get_Reputation
      (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Integer with
-      Pre =>
-      (Factions_List.Contains(Key => Source_Faction) and
-       Factions_List.Contains(Key => Target_Faction));
+      return Integer;
       -- ****
 
       -- ****f* Factions/Factions.Is_Friendly
@@ -214,10 +197,7 @@ package Factions is
       -- SOURCE
    function Is_Friendly
      (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Boolean with
-      Pre =>
-      (Factions_List.Contains(Key => Source_Faction) and
-       Factions_List.Contains(Key => Target_Faction));
+      return Boolean;
       -- ****
 
       -- ****f* Factions/Factions.Get_Random_Faction
@@ -231,6 +211,7 @@ package Factions is
 
 -- Temporary code to interact with Nim
 
-   function Get_Faction(Index: Tiny_String.Bounded_String) return Faction_Record;
+   function Get_Faction
+     (Index: Tiny_String.Bounded_String) return Faction_Record;
 
 end Factions;
