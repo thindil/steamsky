@@ -39,7 +39,6 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
-with Factions; use Factions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;

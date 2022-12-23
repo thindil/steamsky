@@ -82,6 +82,7 @@ package body Knowledge.Stories is
         (Positive'Value(Winfo_Get(Widgt => Stories_Box, Info => "reqwidth")) +
          Positive'Value(Winfo_Get(Widgt => Button, Info => "reqwidth"))) /
         Positive'Value(Measure(Font => "InterfaceFont", Text => "{ }"));
+      Faction: Faction_Record;
    begin
       Story_Index := Natural'Value(Current(ComboBox => Stories_Box)) + 1;
       configure
@@ -171,31 +172,20 @@ package body Knowledge.Stories is
                        " from ");
                   if Slice(S => Tokens, Index => 2) = "any" then
                      Append(Source => Story_Text, New_Item => "any ");
-                     if Factions_Container.Contains
-                         (Container => Factions_List,
-                          Key =>
-                            To_Bounded_String
+                     Faction := Get_Faction(Index => To_Bounded_String
                               (Source =>
                                  To_String
                                    (Source =>
                                       Get_Step_Data
                                         (Finish_Data => Step.Finish_Data,
-                                         Name => "faction")))) then
+                                         Name => "faction"))));
+                     if Length(Source => Faction.Name) > 0 then
                         Append
                           (Source => Story_Text,
                            New_Item =>
                              To_String
                                (Source =>
-                                  Factions_List
-                                    (To_Bounded_String
-                                       (Source =>
-                                          To_String
-                                            (Source =>
-                                               Get_Step_Data
-                                                 (Finish_Data =>
-                                                    Step.Finish_Data,
-                                                  Name => "faction"))))
-                                    .Name));
+                                    Faction.Name));
                      end if;
                      Append(Source => Story_Text, New_Item => " ship.");
                   else

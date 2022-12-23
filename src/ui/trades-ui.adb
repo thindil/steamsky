@@ -46,7 +46,6 @@ with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
 with Events; use Events;
-with Factions; use Factions;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;

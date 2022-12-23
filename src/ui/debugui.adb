@@ -614,7 +614,7 @@ package body DebugUI is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
+             (Source => Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
       Combo_Box.Name := New_String(Str => Frame_Name & ".size");
       Current
         (ComboBox => Combo_Box,
@@ -1065,11 +1065,10 @@ package body DebugUI is
       end loop Update_Base_Type_Loop;
       Base_Combo.Name := New_String(Str => Frame_Name & ".owner");
       Update_Base_Owner_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Name =
+      for I in 1 .. Get_Factions_Amount loop
+         if Get_Faction(Number => I).Name =
            To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
-            Sky_Bases(Base_Index).Owner :=
-              Factions_Container.Key(Position => I);
+            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
@@ -1404,10 +1403,10 @@ package body DebugUI is
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
       Load_Factions_Loop :
-      for Faction of Factions_List loop
+      for I in 1 .. Get_Factions_Amount loop
          Append
            (Source => Values_List,
-            New_Item => " {" & To_String(Source => Faction.Name) & "}");
+            New_Item => " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
       end loop Load_Factions_Loop;
       configure
         (Widgt => Combo_Box,

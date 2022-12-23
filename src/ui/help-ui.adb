@@ -222,6 +222,7 @@ package body Help.UI is
         Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
       Help_View: constant Tk_Text :=
         Get_Widget(pathName => ".help.paned.content.view", Interp => Interp);
+      Faction: Faction_Record;
    begin
       configure(Widgt => Help_View, options => "-state normal");
       Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
@@ -315,7 +316,8 @@ package body Help.UI is
             if Tag_Text = Flags_Tags(I) then
                Factions_With_Flag := Null_Unbounded_String;
                Create_Factions_List_Loop :
-               for Faction of Factions_List loop
+               for I in 1 .. Get_Factions_Amount loop
+                  Faction := Get_Faction(Number => I);
                   if Faction.Flags.Contains(Item => Tag_Text) then
                      if Factions_With_Flag /= Null_Unbounded_String then
                         Append

@@ -110,11 +110,11 @@ package body Knowledge is
          Combo_Box.Name :=
            New_String(Str => Knowledge_Canvas & ".frame.options.owner");
          Load_Bases_Owners_Loop :
-         for I in Factions_List.Iterate loop
+         for I in 1 .. Get_Factions_Amount loop
             Append
               (Source => Combo_Values,
                New_Item =>
-                 " {" & To_String(Source => Factions_List(I).Name) & "}");
+                 " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
          end loop Load_Bases_Owners_Loop;
          configure
            (Widgt => Combo_Box,

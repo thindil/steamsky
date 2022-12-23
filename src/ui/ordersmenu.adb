@@ -400,7 +400,7 @@ package body OrdersMenu is
                     Find_Item
                       (Inventory => Player_Ship.Cargo,
                        Item_Type =>
-                         Factions_List(Sky_Bases(Base_Index).Owner)
+                         Get_Faction(Index => Sky_Bases(Base_Index).Owner)
                            .Healing_Tools);
                   if Item_Index > 0 then
                      Add_Button
@@ -1155,7 +1155,7 @@ package body OrdersMenu is
         Find_Item
           (Inventory => Player_Ship.Cargo,
            Item_Type =>
-             Factions_List(Sky_Bases(Base_Index).Owner).Healing_Tools);
+             Get_Faction(Index => Sky_Bases(Base_Index).Owner).Healing_Tools);
       New_Time: constant Integer :=
         Events_List(Event_Index).Time -
         Inventory_Container.Element

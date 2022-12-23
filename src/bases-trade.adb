@@ -25,6 +25,7 @@ with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
+with Factions; use Factions;
 
 package body Bases.Trade is
 
@@ -98,7 +99,7 @@ package body Bases.Trade is
               (Proto_Index => Item, Amount => 1, Name => Null_Bounded_String,
                Durability => Default_Item_Durability, Price => 0));
       end loop Add_Recruit_Inventory_Loop;
-      if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
+      if Get_Faction(Index => Sky_Bases(Base_Index).Owner).Flags.Contains
           (Item => To_Unbounded_String(Source => "nomorale")) then
          Morale := 50;
       else
@@ -296,7 +297,7 @@ package body Bases.Trade is
               Item_Index =>
                 Find_Proto_Item
                   (Item_Type =>
-                     Factions_List(Player_Ship.Crew(Member_Index).Faction)
+                     Get_Faction(Index => Player_Ship.Crew(Member_Index).Faction)
                        .Healing_Tools));
       else
          Count_Heal_Cost_Loop :
@@ -310,7 +311,7 @@ package body Bases.Trade is
                     (Index =>
                        Find_Proto_Item
                          (Item_Type =>
-                            Factions_List(Member.Faction).Healing_Tools))
+                            Get_Faction(Index => Member.Faction).Healing_Tools))
                     .Price);
             end if;
          end loop Count_Heal_Cost_Loop;

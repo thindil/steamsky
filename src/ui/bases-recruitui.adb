@@ -46,6 +46,7 @@ with Bases.Trade; use Bases.Trade;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
+with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -274,8 +275,8 @@ package body Bases.RecruitUI is
             Text =>
               To_String
                 (Source =>
-                   Factions_List
-                     (Recruit_Container.Element
+                   Get_Faction
+                     (Index => Recruit_Container.Element
                         (Container => Sky_Bases(Base_Index).Recruits,
                          Index => I)
                         .Faction)
@@ -405,12 +406,14 @@ package body Bases.RecruitUI is
          2 => To_Unbounded_String(Source => "Attributes"),
          3 => To_Unbounded_String(Source => "Skills"),
          4 => To_Unbounded_String(Source => "Inventory"));
+      Faction: Faction_Record;
    begin
       Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Recruit :=
         Recruit_Container.Element
           (Container => Sky_Bases(Base_Index).Recruits,
            Index => Recruit_Index);
+      Faction := Get_Faction(Index => Recruit.Faction);
       Change_Title
         (Dialog => Recruit_Dialog,
          New_Title => To_String(Source => Recruit.Name));
@@ -475,7 +478,7 @@ package body Bases.RecruitUI is
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected recruit
       Frame := Create(pathName => Recruit_Canvas & ".general");
-      if not Factions_List(Recruit.Faction).Flags.Contains
+      if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "nogender")) then
          Recruit_Info :=
            (if Recruit.Gender = 'M' then
@@ -486,7 +489,7 @@ package body Bases.RecruitUI is
         (Source => Recruit_Info,
          New_Item =>
            LF & "Faction: " &
-           To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
+           To_String(Source => Faction.Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       Recruit_Label :=
