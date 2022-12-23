@@ -218,7 +218,89 @@ package body Events is
             end if;
             return False;
          end if;
-         if Player_Ship.Speed /= DOCKED then
+         if Player_Ship.Speed = DOCKED then
+            if Roll < 5 and
+              Player_Ship.Crew.Last_Index > 1 then -- Brawl in base
+               Count_Injuries_Block :
+               declare
+                  Resting_Crew: Positive_Container.Vector;
+                  Injuries: Positive;
+               begin
+                  Find_Resting_Crew_Loop :
+                  for I in Player_Ship.Crew.Iterate loop
+                     if Player_Ship.Crew(I).Order = REST then
+                        Resting_Crew.Append
+                          (New_Item => Crew_Container.To_Index(Position => I));
+                     end if;
+                  end loop Find_Resting_Crew_Loop;
+                  if Resting_Crew.Length > 0 then
+                     Roll2 :=
+                       Get_Random
+                         (Min => Resting_Crew.First_Index,
+                          Max => Resting_Crew.Last_Index);
+                     Injuries := Get_Random(Min => 1, Max => 10);
+                     if Injuries >
+                       Player_Ship.Crew(Resting_Crew(Roll2)).Health then
+                        Injuries :=
+                          Player_Ship.Crew(Resting_Crew(Roll2)).Health;
+                     end if;
+                     Player_Ship.Crew(Resting_Crew(Roll2)).Health :=
+                       Player_Ship.Crew(Resting_Crew(Roll2)).Health - Injuries;
+                     Add_Message
+                       (Message =>
+                          To_String
+                            (Source =>
+                               Player_Ship.Crew(Resting_Crew(Roll2)).Name) &
+                          " was injured in a brawl inside the base.",
+                        M_Type => OTHERMESSAGE, Color => RED);
+                     if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
+                        Death
+                          (Member_Index => Resting_Crew(Roll2),
+                           Reason =>
+                             To_Unbounded_String
+                               (Source => "injuries in brawl in base"),
+                           Ship => Player_Ship);
+                     end if;
+                  end if;
+               end Count_Injuries_Block;
+            elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
+               Roll2 :=
+                 Get_Random
+                   (Min => 1,
+                    Max =>
+                      Inventory_Container.Last_Index
+                        (Container => Player_Ship.Cargo));
+               Count_Lost_Cargo_Block :
+               declare
+                  Lost_Cargo: Positive range 1 .. 10 :=
+                    Get_Random(Min => 1, Max => 10);
+               begin
+                  if Lost_Cargo >
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Roll2)
+                      .Amount then
+                     Lost_Cargo :=
+                       Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => Roll2)
+                         .Amount;
+                  end if;
+                  Add_Message
+                    (Message =>
+                       "During checking ship's cargo, you noticed that you lost" &
+                       Positive'Image(Lost_Cargo) & " " &
+                       Get_Item_Name
+                         (Item =>
+                            Inventory_Container.Element
+                              (Container => Player_Ship.Cargo,
+                               Index => Roll2)) &
+                       ".",
+                     M_Type => OTHERMESSAGE, Color => RED);
+                  Update_Cargo
+                    (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
+                     Cargo_Index => Roll2);
+               end Count_Lost_Cargo_Block;
+            end if;
+         else
             if Roll in 21 .. 30 and
               Sky_Bases(Base_Index).Reputation.Level = -100 then
                Roll := 31;
@@ -347,88 +429,6 @@ package body Events is
             end case;
             Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
               Events_List.Last_Index;
-         else
-            if Roll < 5 and
-              Player_Ship.Crew.Last_Index > 1 then -- Brawl in base
-               Count_Injuries_Block :
-               declare
-                  Resting_Crew: Positive_Container.Vector;
-                  Injuries: Positive;
-               begin
-                  Find_Resting_Crew_Loop :
-                  for I in Player_Ship.Crew.Iterate loop
-                     if Player_Ship.Crew(I).Order = REST then
-                        Resting_Crew.Append
-                          (New_Item => Crew_Container.To_Index(Position => I));
-                     end if;
-                  end loop Find_Resting_Crew_Loop;
-                  if Resting_Crew.Length > 0 then
-                     Roll2 :=
-                       Get_Random
-                         (Min => Resting_Crew.First_Index,
-                          Max => Resting_Crew.Last_Index);
-                     Injuries := Get_Random(Min => 1, Max => 10);
-                     if Injuries >
-                       Player_Ship.Crew(Resting_Crew(Roll2)).Health then
-                        Injuries :=
-                          Player_Ship.Crew(Resting_Crew(Roll2)).Health;
-                     end if;
-                     Player_Ship.Crew(Resting_Crew(Roll2)).Health :=
-                       Player_Ship.Crew(Resting_Crew(Roll2)).Health - Injuries;
-                     Add_Message
-                       (Message =>
-                          To_String
-                            (Source =>
-                               Player_Ship.Crew(Resting_Crew(Roll2)).Name) &
-                          " was injured in a brawl inside the base.",
-                        M_Type => OTHERMESSAGE, Color => RED);
-                     if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
-                        Death
-                          (Member_Index => Resting_Crew(Roll2),
-                           Reason =>
-                             To_Unbounded_String
-                               (Source => "injuries in brawl in base"),
-                           Ship => Player_Ship);
-                     end if;
-                  end if;
-               end Count_Injuries_Block;
-            elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
-               Roll2 :=
-                 Get_Random
-                   (Min => 1,
-                    Max =>
-                      Inventory_Container.Last_Index
-                        (Container => Player_Ship.Cargo));
-               Count_Lost_Cargo_Block :
-               declare
-                  Lost_Cargo: Positive range 1 .. 10 :=
-                    Get_Random(Min => 1, Max => 10);
-               begin
-                  if Lost_Cargo >
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Roll2)
-                      .Amount then
-                     Lost_Cargo :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => Roll2)
-                         .Amount;
-                  end if;
-                  Add_Message
-                    (Message =>
-                       "During checking ship's cargo, you noticed that you lost" &
-                       Positive'Image(Lost_Cargo) & " " &
-                       Get_Item_Name
-                         (Item =>
-                            Inventory_Container.Element
-                              (Container => Player_Ship.Cargo,
-                               Index => Roll2)) &
-                       ".",
-                     M_Type => OTHERMESSAGE, Color => RED);
-                  Update_Cargo
-                    (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
-                     Cargo_Index => Roll2);
-               end Count_Lost_Cargo_Block;
-            end if;
          end if;
       end if;
       return False;
