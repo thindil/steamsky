@@ -305,7 +305,7 @@ package body Events is
               Sky_Bases(Base_Index).Reputation.Level = -100 then
                Roll := 31;
             end if;
-            if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
+            if Get_Faction(Index => Sky_Bases(Base_Index).Owner).Flags.Contains
                 (Item => To_Unbounded_String(Source => "diseaseimmune")) and
               Roll = 21 then
                Roll := 20;
@@ -508,9 +508,11 @@ package body Events is
    procedure Get_Player_Ships
      (Player_Ships: in out Positive_Container.Vector) is
    -- ****
+      Faction: Faction_Record;
    begin
       Get_Faction_Loop :
-      for Faction of Factions_List loop
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
          Get_Career_Loop :
          for Career of Faction.Careers loop
             Player_Ships.Append(New_Item => Career.Ship_Index);
@@ -550,19 +552,20 @@ package body Events is
    procedure Recover_Base(Base_Index: Bases_Range) is
       Max_Spawn_Chance: Natural := 0;
       Faction_Roll: Positive;
+      Faction: Faction_Record;
    begin
       Count_Spawn_Chance_Loop :
-      for Faction of Factions_List loop
-         Max_Spawn_Chance := Max_Spawn_Chance + Faction.Spawn_Chance;
+      for I in 1.. Get_Factions_Amount loop
+         Max_Spawn_Chance := Max_Spawn_Chance + Get_Faction(Number => I).Spawn_Chance;
       end loop Count_Spawn_Chance_Loop;
       Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Chance);
       Choose_Faction_Loop :
-      for I in Factions_List.Iterate loop
-         if Faction_Roll > Factions_List(I).Spawn_Chance then
-            Faction_Roll := Faction_Roll - Factions_List(I).Spawn_Chance;
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
+         if Faction_Roll > Faction.Spawn_Chance then
+            Faction_Roll := Faction_Roll - Faction.Spawn_Chance;
          else
-            Sky_Bases(Base_Index).Owner :=
-              Factions_Container.Key(Position => I);
+            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number =>I);
             Sky_Bases(Base_Index).Reputation.Level :=
               Get_Reputation
                 (Source_Faction => Player_Ship.Crew(1).Faction,

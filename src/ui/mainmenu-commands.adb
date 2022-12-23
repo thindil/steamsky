@@ -706,6 +706,7 @@ package body MainMenu.Commands is
       Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
       Gender_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
+      Faction: Faction_Record;
       procedure Update_Info(New_Text: String) is
          Info_Text: constant Tk_Text :=
            Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
@@ -748,7 +749,8 @@ package body MainMenu.Commands is
       Combo_Box.Name := New_String(Str => Frame_Name & ".base");
       Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       Load_Faction_Based_Info_Loop :
-      for Faction of Factions_List loop
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
          if Faction.Name /= Faction_Name then
             goto End_Of_Faction_Info_Loop;
          end if;
@@ -778,12 +780,12 @@ package body MainMenu.Commands is
          Set(ComboBox => Combo_Box, Value => "General");
          Values := To_Unbounded_String(Source => " Any");
          Load_Bases_Types_Loop :
-         for I in Faction.Bases_Types.Iterate loop
+         for J in Faction.Bases_Types.Iterate loop
             Append
               (Source => Values,
                New_Item =>
                  " {" &
-                 Bases_Types_List(BaseType_Container.Key(Position => I)).Name &
+                 Bases_Types_List(BaseType_Container.Key(Position => J)).Name &
                  "}");
          end loop Load_Bases_Types_Loop;
          Combo_Box.Name := New_String(Str => Frame_Name & ".base");
@@ -831,6 +833,7 @@ package body MainMenu.Commands is
         Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
       Info_Text: constant Tk_Text :=
         Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
+      Faction: Faction_Record;
    begin
       Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
       Combo_Box.Name := New_String(Str => Frame_Name & ".career");
@@ -843,7 +846,8 @@ package body MainMenu.Commands is
            "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
            LF & LF & "}");
       Set_Faction_Careers_Loop :
-      for Faction of Factions_List loop
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
          if Faction.Name = Faction_Name then
             Load_Careers_Loop :
             for Career of Faction.Careers loop
@@ -967,9 +971,9 @@ package body MainMenu.Commands is
            Interp => Interp);
    begin
       Find_Faction_Index_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = Faction_Name then
-            Faction_Index := Factions_Container.Key(Position => I);
+      for I in 1 .. Get_Factions_Amount loop
+         if Get_Faction(Number => I).Name = Faction_Name then
+            Faction_Index := Get_Faction_Index(Number => I);
             exit Find_Faction_Index_Loop;
          end if;
       end loop Find_Faction_Index_Loop;
@@ -1037,6 +1041,7 @@ package body MainMenu.Commands is
         Get_Widget
           (pathName => Difficulty_Frame_Name & ".enemydamage",
            Interp => Interp);
+      Faction: Faction_Record;
    begin
       New_Game_Settings.Player_Gender :=
         Tcl_GetVar(interp => Interp, varName => "playergender")(1);
@@ -1053,15 +1058,15 @@ package body MainMenu.Commands is
       New_Game_Settings.Ship_Name :=
         To_Unbounded_String(Source => Get(Widgt => Text_Entry));
       Find_Faction_Loop :
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Name =
+      for I in 1 .. Get_Factions_Amount loop
+         Faction := Get_Faction(Number => I);
+         if Faction.Name =
            To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
-            New_Game_Settings.Player_Faction :=
-              Factions_Container.Key(Position => I);
+            New_Game_Settings.Player_Faction := Get_Faction_Index(Number => I);
             Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
             Find_Career_Loop :
-            for J in Factions_List(I).Careers.Iterate loop
-               if Factions_List(I).Careers(J).Name =
+            for J in Faction.Careers.Iterate loop
+               if Faction.Careers(J).Name =
                  To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
                   New_Game_Settings.Player_Career :=
                     Careers_Container.Key(Position => J);

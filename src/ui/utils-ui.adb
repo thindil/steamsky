@@ -170,6 +170,7 @@ package body Utils.UI is
         Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
       Button: constant Ttk_Button :=
         Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => Argc - 1));
+      Faction: Faction_Record;
    begin
       if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
          Check_Argument_Loop :
@@ -266,7 +267,8 @@ package body Utils.UI is
       end if;
       Check_Food_And_Drinks_Loop :
       for Member of Player_Ship.Crew loop
-         if Factions_List(Member.Faction).Drinks_Types.Contains
+         Faction := Get_Faction(Index => Member.Faction);
+         if Faction.Drinks_Types.Contains
              (Item =>
                 Get_Proto_Item
                   (Index =>
@@ -286,7 +288,7 @@ package body Utils.UI is
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
-         elsif Factions_List(Member.Faction).Food_Types.Contains
+         elsif Faction.Food_Types.Contains
              (Item =>
                 Get_Proto_Item
                   (Index =>

@@ -26,6 +26,7 @@ with Config; use Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
 with Mobs;
+with Factions; use Factions;
 
 package body Bases is
 
@@ -167,6 +168,7 @@ package body Bases is
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
       Max_Skill_Amount: Integer;
+      Faction: Faction_Record;
       procedure Add_Inventory
         (Items_Indexes: String; Equip_Index: Equipment_Locations) is
          Item_Index: Natural;
@@ -246,7 +248,8 @@ package body Bases is
            (if Get_Random(Min => 1, Max => 100) < 99 then
               Sky_Bases(Base_Index).Owner
             else Get_Random_Faction);
-         if Factions_List(Recruit_Faction).Flags.Contains
+         Faction := Get_Faction(Index => Recruit_Faction);
+         if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "nogender")) then
             Gender := 'M';
          else
@@ -274,7 +277,7 @@ package body Bases is
               (if J > 1 then
                  Skills_Amount_Range
                    (Get_Random(Min => 1, Max => Natural(Skills_Amount)))
-               else Factions_List(Recruit_Faction).Weapon_Skill);
+               else Faction.Weapon_Skill);
             Skill_Level := Get_Random(Min => 1, Max => Max_Skill_Level);
             if Skill_Level > Highest_Level then
                Highest_Level := Skill_Level;
@@ -628,8 +631,8 @@ package body Bases is
                      exit Generate_Event_Location_Loop;
                   end if;
                   if Event = DISEASE and
-                    not Factions_List
-                      (Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Owner)
+                    not Get_Faction
+                      (Index => Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Owner)
                       .Flags
                       .Contains
                       (Item =>
