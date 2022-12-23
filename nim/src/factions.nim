@@ -355,15 +355,26 @@ proc loadAdaFactions*(fileName: cstring) {.sideEffect, raises: [
     DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadFactions(fileName = $fileName)
 
-proc getAdaFaction(index: cstring; adaFaction: var AdaFactionData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+proc getAdaFactionIndex(index: cint): cstring {.exportc.} =
+  var factionNumber: Positive = 1
+  for factionIndex in factionsList.keys:
+    if index == factionNumber:
+      return factionIndex.cstring
+    factionNumber.inc
+
+proc getAdaFaction(index: cstring; numericIndex: cint;
+    adaFaction: var AdaFactionData) {.sideEffect, raises: [], tags: [], exportc.} =
   adaFaction = AdaFactionData(name: "".cstring, memberName: "".cstring,
       pluralMemberName: "".cstring, spawnChance: 0, population: [1: 0.cint,
           2: 0.cint], namesType: 0, description: "".cstring,
           healingTools: "".cstring, healingSkill: 0, baseIcon: 0,
           weaponSkill: 0)
   try:
-    let faction: FactionData = factionsList[$index]
+    var faction: FactionData
+    if numericIndex > 0:
+      faction = factionsList[$getAdaFactionIndex(numericIndex)]
+    else:
+      faction = factionsList[$index]
     adaFaction.name = faction.name.cstring
     adaFaction.memberName = faction.memberName.cstring
     adaFaction.pluralMemberName = faction.pluralMemberName.cstring
@@ -461,3 +472,6 @@ proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.exportc.} =
 
 proc getAdaRandomFaction(): cstring {.exportc.} =
   return getRandomFaction().cstring
+
+proc getAdaFactionsAmount(): cint {.exportc.} =
+  return factionsList.len.cint

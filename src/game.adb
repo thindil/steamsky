@@ -68,7 +68,7 @@ package body Game is
       declare
          Roll,
          Index: Positive range Positive'First ..
-             Positive(Factions_List.Length) :=
+             Get_Factions_Amount :=
            Positive'First;
       begin
          -- Set player faction if random option was selected
@@ -77,17 +77,9 @@ package body Game is
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
             Roll :=
-              Get_Random(Min => 1, Max => Positive(Factions_List.Length));
+              Get_Random(Min => 1, Max => Get_Factions_Amount);
             Index := 1;
-            Get_Player_Faction_Loop :
-            for I in Factions_List.Iterate loop
-               if Index = Roll then
-                  New_Game_Settings.Player_Faction :=
-                    Factions_Container.Key(Position => I);
-                  exit Get_Player_Faction_Loop;
-               end if;
-               Index := Index + 1;
-            end loop Get_Player_Faction_Loop;
+            New_Game_Settings.Player_Faction := Get_Faction_Index(Number => Roll);
          end if;
          -- Set player career if random option was selected
          if New_Game_Settings.Player_Career =

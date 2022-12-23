@@ -212,6 +212,15 @@ package Factions is
 -- Temporary code to interact with Nim
 
    function Get_Faction
-     (Index: Tiny_String.Bounded_String) return Faction_Record;
+     (Index: Tiny_String.Bounded_String; Number: Natural := 0)
+      return Faction_Record;
+
+   function Get_Factions_Amount return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaFactionsAmount";
+
+   function Get_Faction_Index
+     (Number: Positive) return Tiny_String.Bounded_String;
 
 end Factions;

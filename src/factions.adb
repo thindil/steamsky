@@ -78,7 +78,8 @@ package body Factions is
    end Get_Random_Faction;
 
    function Get_Faction
-     (Index: Tiny_String.Bounded_String) return Faction_Record is
+     (Index: Tiny_String.Bounded_String; Number: Natural := 0)
+      return Faction_Record is
       use Tiny_String;
 
       Temp_Record: Faction_Record;
@@ -110,7 +111,8 @@ package body Factions is
       Faction_Career: Career_Nim_Record;
       Faction_Base: Positive;
       procedure Get_Ada_Faction
-        (Faction_Index: chars_ptr; Ada_Faction: out Faction_Nim_Data) with
+        (Faction_Index: chars_ptr; Faction_Number: Natural;
+         Ada_Faction: out Faction_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaFaction";
@@ -141,7 +143,7 @@ package body Factions is
    begin
       Get_Ada_Faction
         (Faction_Index => New_String(Str => To_String(Source => Index)),
-         Ada_Faction => Temp_Nim_Record);
+         Faction_Number => Number, Ada_Faction => Temp_Nim_Record);
       Temp_Record.Name :=
         To_Bounded_String
           (Source => Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Name));
@@ -315,5 +317,19 @@ package body Factions is
       end loop Load_Faction_Bases_Loop;
       return Temp_Record;
    end Get_Faction;
+
+   function Get_Faction_Index
+     (Number: Positive) return Tiny_String.Bounded_String is
+      function Get_Ada_Faction_Index
+        (Faction_Number: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFactionIndex";
+   begin
+      return
+        Tiny_String.To_Bounded_String
+          (Source =>
+             Value(Item => Get_Ada_Faction_Index(Faction_Number => Number)));
+   end Get_Faction_Index;
 
 end Factions;
