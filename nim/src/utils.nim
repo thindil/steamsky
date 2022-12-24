@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/random
-import game
+import types
 
 proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =

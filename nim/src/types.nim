@@ -267,6 +267,16 @@ type
     durability*: ItemsDurability ## The current durability of the item
     price*: Natural ## The price for which the item was bought
 
+  DateRecord* = object
+    ## FUNCTION
+    ##
+    ## Used to store the game's time
+    year*: range[0..4_000_000] ## The game's year
+    month*: range[0..24] ## The game's month
+    day*: range[0..62] ## The game's day
+    hour*: range[0..48] ## The game's hour
+    minutes*: range[0..120] ## The game's minutes
+
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object

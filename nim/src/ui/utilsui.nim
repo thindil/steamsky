@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../../src/[config, game, tk]
+import ../../src/[config, tk, types]
 import coreui
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
