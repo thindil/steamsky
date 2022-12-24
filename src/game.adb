@@ -59,7 +59,7 @@ package body Game is
       use Utils;
 
       Random_Base: Positive := Positive'First;
-      Player_Faction: Faction_Record;
+      Player_Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       -- Save game configuration
       Save_Config;
@@ -67,9 +67,7 @@ package body Game is
       Clear_Game_Stats;
       Set_Faction_Career_Block :
       declare
-         Roll,
-         Index: Positive range Positive'First ..
-             Get_Factions_Amount :=
+         Roll, Index: Positive range Positive'First .. Get_Factions_Amount :=
            Positive'First;
       begin
          -- Set player faction if random option was selected
@@ -77,26 +75,22 @@ package body Game is
            To_Bounded_String(Source => "random") then
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
-            Roll :=
-              Get_Random(Min => 1, Max => Get_Factions_Amount);
+            Roll := Get_Random(Min => 1, Max => Get_Factions_Amount);
             Index := 1;
-            New_Game_Settings.Player_Faction := Get_Faction_Index(Number => Roll);
+            New_Game_Settings.Player_Faction :=
+              Get_Faction_Index(Number => Roll);
          end if;
-         Player_Faction := Get_Faction(Index => New_Game_Settings.Player_Faction);
+         Player_Faction :=
+           Get_Faction(Index => New_Game_Settings.Player_Faction);
          -- Set player career if random option was selected
          if New_Game_Settings.Player_Career =
            To_Unbounded_String(Source => "random") then
             Roll :=
               Get_Random
-                (Min => 1,
-                 Max =>
-                   Positive
-                     (Player_Faction.Careers
-                        .Length));
+                (Min => 1, Max => Positive(Player_Faction.Careers.Length));
             Index := 1;
             Get_Player_Career_Loop :
-            for I in Player_Faction.Careers
-              .Iterate loop
+            for I in Player_Faction.Careers.Iterate loop
                if Index = Roll then
                   New_Game_Settings.Player_Career :=
                     Factions.Careers_Container.Key(Position => I);
@@ -128,7 +122,7 @@ package body Game is
          Base_Size: Bases_Size := SMALL;
          Base_Owner: Tiny_String.Bounded_String := Null_Bounded_String;
          Base_Type: Bounded_String := Null_Bounded_String;
-         Base_Faction: Faction_Record;
+         Base_Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
          package Bases_Container is new Hashed_Maps
            (Key_Type => Bounded_String,
             Element_Type => Positive_Container.Vector,
@@ -162,8 +156,7 @@ package body Game is
                   Base_Reputation :=
                     Get_Reputation
                       (Source_Faction => New_Game_Settings.Player_Faction,
-                       Target_Faction =>
-                         Get_Faction_Index(Number => J));
+                       Target_Faction => Get_Faction_Index(Number => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
                   for SpawnChance of Base_Faction.Bases_Types loop
@@ -216,8 +209,7 @@ package body Game is
                for J in 1 .. Get_Factions_Amount loop
                   Base_Faction := Get_Faction(Number => J);
                   if Faction_Roll > Base_Faction.Spawn_Chance then
-                     Faction_Roll :=
-                       Faction_Roll - Base_Faction.Spawn_Chance;
+                     Faction_Roll := Faction_Roll - Base_Faction.Spawn_Chance;
                   else
                      Base_Owner := Get_Faction_Index(Number => J);
                   end if;
@@ -236,12 +228,14 @@ package body Game is
                   if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
                     (Get_Faction
-                       (Index => Sky_Bases(FactionBases(FactionBases.First_Index))
-                          .Owner)
+                       (Index =>
+                          Sky_Bases(FactionBases(FactionBases.First_Index))
+                            .Owner)
                        .Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner")) and
-                     Get_Faction(Index => Sky_Bases(FactionBases(I)).Owner).Flags
+                     Get_Faction(Index => Sky_Bases(FactionBases(I)).Owner)
+                       .Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner"))) then
                      Pos_X :=
@@ -350,8 +344,7 @@ package body Game is
       Player_Ship :=
         Create_Ship
           (Proto_Index =>
-             Player_Faction.Careers
-               (New_Game_Settings.Player_Career)
+             Player_Faction.Careers(New_Game_Settings.Player_Career)
                .Ship_Index,
            Name =>
              To_Bounded_String
@@ -366,8 +359,7 @@ package body Game is
            Positive'Value
              (To_String
                 (Source =>
-                   Player_Faction.Careers
-                     (New_Game_Settings.Player_Career)
+                   Player_Faction.Careers(New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
          --## rule off IMPROPER_INITIALIZATION
