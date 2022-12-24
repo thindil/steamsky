@@ -513,7 +513,7 @@ package body Ships.Movement is
           ((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) *
            100_000.0);
       if Ship.Crew.Length > 0 then
-         if not Get_Faction(Ship.Crew(1).Faction).Flags.Contains
+         if not Get_Faction(Index => Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop
