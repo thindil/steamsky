@@ -979,8 +979,7 @@ package body Ships.UI.Crew is
       Append
         (Source => Member_Info,
          New_Item =>
-           "Faction: " &
-           To_String(Source => Faction.Name) & LF &
+           "Faction: " & To_String(Source => Faction.Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or

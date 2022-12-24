@@ -106,7 +106,8 @@ package body Combat is
       end Count_Perception;
    begin
       Enemy_Ship_Index := Enemy_Index;
-      Faction_Name := Get_Faction(Index => Proto_Ships_List(Enemy_Index).Owner).Name;
+      Faction_Name :=
+        Get_Faction(Index => Proto_Ships_List(Enemy_Index).Owner).Name;
       Harpoon_Duration := 0;
       Boarding_Orders.Clear;
       Enemy_Ship :=

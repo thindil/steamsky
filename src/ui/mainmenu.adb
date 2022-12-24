@@ -206,8 +206,7 @@ package body MainMenu is
       for I in 1 .. Get_Factions_Amount loop
          Faction := Get_Faction(Number => I);
          if Faction.Careers.Length > 0 then
-            Values :=
-              Values & " {" & To_String(Source => Faction.Name) & "}";
+            Values := Values & " {" & To_String(Source => Faction.Name) & "}";
          end if;
       end loop Load_Factions_Names_Loop;
       Append(Source => Values, New_Item => " Random");
@@ -218,7 +217,8 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
+             (Source =>
+                Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
       Set

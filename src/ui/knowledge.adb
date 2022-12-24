@@ -114,7 +114,8 @@ package body Knowledge is
             Append
               (Source => Combo_Values,
                New_Item =>
-                 " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
+                 " {" & To_String(Source => Get_Faction(Number => I).Name) &
+                 "}");
          end loop Load_Bases_Owners_Loop;
          configure
            (Widgt => Combo_Box,

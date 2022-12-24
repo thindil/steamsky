@@ -614,7 +614,8 @@ package body DebugUI is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
+             (Source =>
+                Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
       Combo_Box.Name := New_String(Str => Frame_Name & ".size");
       Current
         (ComboBox => Combo_Box,
@@ -1406,7 +1407,8 @@ package body DebugUI is
       for I in 1 .. Get_Factions_Amount loop
          Append
            (Source => Values_List,
-            New_Item => " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
+            New_Item =>
+              " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
       end loop Load_Factions_Loop;
       configure
         (Widgt => Combo_Box,

@@ -555,8 +555,9 @@ package body Events is
       Faction: Faction_Record;
    begin
       Count_Spawn_Chance_Loop :
-      for I in 1.. Get_Factions_Amount loop
-         Max_Spawn_Chance := Max_Spawn_Chance + Get_Faction(Number => I).Spawn_Chance;
+      for I in 1 .. Get_Factions_Amount loop
+         Max_Spawn_Chance :=
+           Max_Spawn_Chance + Get_Faction(Number => I).Spawn_Chance;
       end loop Count_Spawn_Chance_Loop;
       Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Chance);
       Choose_Faction_Loop :
@@ -565,7 +566,7 @@ package body Events is
          if Faction_Roll > Faction.Spawn_Chance then
             Faction_Roll := Faction_Roll - Faction.Spawn_Chance;
          else
-            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number =>I);
+            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
             Sky_Bases(Base_Index).Reputation.Level :=
               Get_Reputation
                 (Source_Faction => Player_Ship.Crew(1).Faction,

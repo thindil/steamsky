@@ -141,18 +141,16 @@ package body Goals is
       function Get_Faction_Name
         (Faction_Index: Bounded_String; F_Type: Faction_Name_Type)
          return String is
-         Faction: constant Faction_Record := Get_Faction(Index => Faction_Index);
+         Faction: constant Faction_Record :=
+           Get_Faction(Index => Faction_Index);
       begin
          case F_Type is
             when NAME =>
                return To_String(Source => Faction.Name);
             when MEMBERNAME =>
-               return
-                 To_String(Source => Faction.Member_Name);
+               return To_String(Source => Faction.Member_Name);
             when PLURALMEMBERNAME =>
-               return
-                 To_String
-                   (Source => Faction.Plural_Member_Name);
+               return To_String(Source => Faction.Plural_Member_Name);
          end case;
       end Get_Faction_Name;
    begin

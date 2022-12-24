@@ -781,7 +781,8 @@ package body Maps.UI.Commands is
             end if;
             if Result = 8 then
                Wait_For_Rest;
-               if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
+               if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags
+                   .Contains
                    (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
                  (Find_Member(Order => PILOT) = 0 or
@@ -897,7 +898,8 @@ package body Maps.UI.Commands is
             Starts_Combat := Check_For_Event;
             if not Starts_Combat then
                Wait_For_Rest;
-               if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
+               if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags
+                   .Contains
                    (Item => To_Unbounded_String(Source => "sentientships"))
                  and then
                  (Find_Member(Order => PILOT) = 0 or

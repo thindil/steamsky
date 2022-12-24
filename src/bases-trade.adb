@@ -297,7 +297,8 @@ package body Bases.Trade is
               Item_Index =>
                 Find_Proto_Item
                   (Item_Type =>
-                     Get_Faction(Index => Player_Ship.Crew(Member_Index).Faction)
+                     Get_Faction
+                       (Index => Player_Ship.Crew(Member_Index).Faction)
                        .Healing_Tools));
       else
          Count_Heal_Cost_Loop :
@@ -311,7 +312,8 @@ package body Bases.Trade is
                     (Index =>
                        Find_Proto_Item
                          (Item_Type =>
-                            Get_Faction(Index => Member.Faction).Healing_Tools))
+                            Get_Faction(Index => Member.Faction)
+                              .Healing_Tools))
                     .Price);
             end if;
          end loop Count_Heal_Cost_Loop;

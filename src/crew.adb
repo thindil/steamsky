@@ -212,7 +212,8 @@ package body Crew is
       procedure Update_Member(Member: in out Member_Data) is
          Back_To_Work: Boolean := True;
          Consume_Result: Natural := 0;
-         Member_Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
+         Member_Faction: constant Faction_Record :=
+           Get_Faction(Index => Member.Faction);
          procedure Normalize_Stat
            (Stat: in out Integer; Max_Value: Positive := 100) is
          begin
@@ -559,7 +560,8 @@ package body Crew is
                   Tired_Level := 0;
                end if;
             end if;
-            if not Get_Faction(Index => Player_Ship.Crew(I).Faction).Flags.Contains
+            if not Get_Faction(Index => Player_Ship.Crew(I).Faction).Flags
+                .Contains
                 (Item => To_Unbounded_String(Source => "nofatigue")) and
               Health_Level in 1 .. 99 and Cabin_Index > 0 then
                Health_Level := Health_Level + Times;
@@ -643,8 +645,7 @@ package body Crew is
                           Times *
                           (Get_Skill_Level
                              (Member => Player_Ship.Crew(I),
-                              Skill_Index =>
-                                Faction.Healing_Skill) /
+                              Skill_Index => Faction.Healing_Skill) /
                            20);
                         if Heal_Amount < Times then
                            Heal_Amount := Times;
@@ -657,8 +658,7 @@ package body Crew is
                            Tool_Index :=
                              Find_Item
                                (Inventory => Player_Ship.Cargo,
-                                Item_Type =>
-                                  Faction.Healing_Tools);
+                                Item_Type => Faction.Healing_Tools);
                            if Tool_Index > 0 then
                               --## rule off SIMPLIFIABLE_EXPRESSIONS
                               Heal_Amount :=
@@ -682,9 +682,7 @@ package body Crew is
                               Tool_Index :=
                                 Find_Item
                                   (Inventory => Player_Ship.Crew(I).Inventory,
-                                   Item_Type =>
-                                     Faction
-                                       .Healing_Tools);
+                                   Item_Type => Faction.Healing_Tools);
                               if Tool_Index > 0 then
                               --## rule off SIMPLIFIABLE_EXPRESSIONS
                                  Heal_Amount :=
@@ -736,9 +734,7 @@ package body Crew is
                                     M_Type => ORDERMESSAGE);
                                  Gain_Exp
                                    (Amount => Times,
-                                    Skill_Number =>
-                                      Faction
-                                        .Healing_Skill,
+                                    Skill_Number => Faction.Healing_Skill,
                                     Crew_Index => I);
                                  exit Heal_Crew_Loop;
                               end if;
@@ -748,10 +744,7 @@ package body Crew is
                               Add_Message
                                 (Message =>
                                    "You don't have any " &
-                                   To_String
-                                     (Source =>
-                                        Faction
-                                          .Healing_Tools) &
+                                   To_String(Source => Faction.Healing_Tools) &
                                    " to continue healing the wounded " &
                                    To_String(Source => Member.Name) & ".",
                                  M_Type => ORDERMESSAGE, Color => RED);
@@ -774,20 +767,17 @@ package body Crew is
                      if Player_Ship.Crew(J).Health < 100 and
                        Crew_Container.To_Index(Position => J) /= I then
                         Heal_Amount := 0;
-                        Faction := Get_Faction(Index => Player_Ship.Crew(J).Faction);
+                        Faction :=
+                          Get_Faction(Index => Player_Ship.Crew(J).Faction);
                         Tool_Index :=
                           Find_Item
                             (Inventory => Player_Ship.Cargo,
-                             Item_Type =>
-                               Faction
-                                 .Healing_Tools);
+                             Item_Type => Faction.Healing_Tools);
                         if Tool_Index = 0 then
                            Tool_Index :=
                              Find_Item
                                (Inventory => Player_Ship.Crew(I).Inventory,
-                                Item_Type =>
-                                  Faction
-                                    .Healing_Tools);
+                                Item_Type => Faction.Healing_Tools);
                            if Tool_Index = 0 then
                               Heal_Amount := -1;
                            end if;
@@ -951,8 +941,7 @@ package body Crew is
          <<End_Of_Loop>>
          if Tired_Points > 0 then
             Faction := Get_Faction(Index => Player_Ship.Crew(I).Faction);
-            if Faction.Food_Types.Length >
-              0 then
+            if Faction.Food_Types.Length > 0 then
                Hunger_Level :=
                  (if Hunger_Level + Tired_Points > Skill_Range'Last then
                     Skill_Range'Last
@@ -971,8 +960,7 @@ package body Crew is
                   end if;
                end if;
             end if;
-            if Faction.Drinks_Types.Length >
-              0 then
+            if Faction.Drinks_Types.Length > 0 then
                Thirst_Level :=
                  (if Thirst_Level + Tired_Points > Skill_Range'Last then
                     Skill_Range'Last

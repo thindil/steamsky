@@ -172,7 +172,10 @@ package body Knowledge.Stories is
                        " from ");
                   if Slice(S => Tokens, Index => 2) = "any" then
                      Append(Source => Story_Text, New_Item => "any ");
-                     Faction := Get_Faction(Index => To_Bounded_String
+                     Faction :=
+                       Get_Faction
+                         (Index =>
+                            To_Bounded_String
                               (Source =>
                                  To_String
                                    (Source =>
@@ -182,10 +185,7 @@ package body Knowledge.Stories is
                      if Length(Source => Faction.Name) > 0 then
                         Append
                           (Source => Story_Text,
-                           New_Item =>
-                             To_String
-                               (Source =>
-                                    Faction.Name));
+                           New_Item => To_String(Source => Faction.Name));
                      end if;
                      Append(Source => Story_Text, New_Item => " ship.");
                   else

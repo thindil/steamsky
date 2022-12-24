@@ -632,7 +632,8 @@ package body Bases is
                   end if;
                   if Event = DISEASE and
                     not Get_Faction
-                      (Index => Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Owner)
+                      (Index =>
+                         Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Owner)
                       .Flags
                       .Contains
                       (Item =>

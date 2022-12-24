@@ -236,7 +236,8 @@ package body Combat.UI is
       Damage_Percent: Float;
       Combat_Canvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
-      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
+      Faction: constant Faction_Record :=
+        Get_Faction(Index => Player_Ship.Crew(1).Faction);
       function Get_Crew_List(Position: Natural) return String is
          Crew_List: Unbounded_String :=
            To_Unbounded_String(Source => "Nobody");
@@ -1434,7 +1435,8 @@ package body Combat.UI is
       Gun_Index: Positive;
       Frame_Name: constant String :=
         Main_Paned & ".combatframe.crew.canvas.frame";
-      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
+      Faction: constant Faction_Record :=
+        Get_Faction(Index => Player_Ship.Crew(1).Faction);
    begin
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then

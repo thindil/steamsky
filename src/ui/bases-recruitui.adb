@@ -276,10 +276,11 @@ package body Bases.RecruitUI is
               To_String
                 (Source =>
                    Get_Faction
-                     (Index => Recruit_Container.Element
-                        (Container => Sky_Bases(Base_Index).Recruits,
-                         Index => I)
-                        .Faction)
+                     (Index =>
+                        Recruit_Container.Element
+                          (Container => Sky_Bases(Base_Index).Recruits,
+                           Index => I)
+                          .Faction)
                      .Name),
             Tooltip => "Show recruit's details",
             Command => "ShowRecruitInfo" & Positive'Image(I), Column => 3);
@@ -488,8 +489,7 @@ package body Bases.RecruitUI is
       Append
         (Source => Recruit_Info,
          New_Item =>
-           LF & "Faction: " &
-           To_String(Source => Faction.Name) & LF &
+           LF & "Faction: " & To_String(Source => Faction.Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       Recruit_Label :=

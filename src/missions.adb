@@ -358,11 +358,11 @@ package body Missions is
                       Positive
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
-               Faction: constant Faction_Record := Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
+               Faction: constant Faction_Record :=
+                 Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
             begin
                Inventory_Container.Delete_Last(Container => Inventory);
-               if not Faction.Flags
-                   .Contains
+               if not Faction.Flags.Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
                   Gender :=
                     (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');

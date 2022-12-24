@@ -241,7 +241,8 @@ package body Knowledge.Bases is
             Add_Button
               (Table => Bases_Table,
                Text =>
-                 To_String(Source => Get_Faction(Index => Sky_Bases(I).Owner).Name),
+                 To_String
+                   (Source => Get_Faction(Index => Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
