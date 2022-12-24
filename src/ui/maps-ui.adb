@@ -26,6 +26,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -89,7 +90,8 @@ package body Maps.UI is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
       Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combat");
-      Faction: constant Faction_Record := Get_Faction(Index => Player_Ship.Crew(1).Faction);
+      Faction: constant Faction_Record :=
+        Get_Faction(Index => Player_Ship.Crew(1).Faction);
    begin
       configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
       if Game_Settings.Show_Numbers then
@@ -523,7 +525,8 @@ package body Maps.UI is
                        0 then
                         Map_Char :=
                           Get_Faction
-                            (Index => Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
+                            (Index =>
+                               Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
                             .Base_Icon;
                         Map_Tag :=
                           To_Unbounded_String
@@ -633,7 +636,8 @@ package body Maps.UI is
                        "Owner: " &
                        Tiny_String.To_String
                          (Source =>
-                            Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
+                            Get_Faction(Index => Sky_Bases(Base_Index).Owner)
+                              .Name));
                else
                   Append
                     (Source => Map_Info_Text, New_Item => "Base is abandoned");
@@ -707,7 +711,10 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color := To_Unbounded_String(Source => "green");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-green"));
                when FRIENDLYSHIP =>
                   Append
                     (Source => Event_Info_Text,
@@ -717,7 +724,10 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color := To_Unbounded_String(Source => "green2");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-green2"));
                when ENEMYSHIP =>
                   Append
                     (Source => Event_Info_Text,
@@ -727,25 +737,40 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color := To_Unbounded_String(Source => "red");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-red"));
                when FULLDOCKS =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Full docks in base");
-                  Color := To_Unbounded_String(Source => "cyan");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-cyan"));
                when ATTACKONBASE =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Base is under attack");
-                  Color := To_Unbounded_String(Source => "red");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-red"));
                when DISEASE =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Disease in base");
-                  Color := To_Unbounded_String(Source => "yellow");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-yellow"));
                when ENEMYPATROL =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Enemy patrol");
-                  Color := To_Unbounded_String(Source => "red3");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-red3"));
                when DOUBLEPRICE =>
                   Append
                     (Source => Event_Info_Text,
@@ -756,7 +781,10 @@ package body Maps.UI is
                             Get_Proto_Item
                               (Index => Events_List(Event_Index).Item_Index)
                               .Name));
-                  Color := To_Unbounded_String(Source => "lime");
+                  Color :=
+                    To_Unbounded_String
+                      (Source =>
+                         Style_Lookup(Name => "Map", Option => "-lime"));
                when NONE | BASERECOVERY =>
                   null;
             end case;
