@@ -57,6 +57,12 @@ type
     ## based on random letters and numbers
     normal, robotic
 
+  Bases_Size* = enum
+    ## FUNCTION
+    ##
+    ## Size of sky bases
+    small, medium, big, unknown
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
@@ -152,7 +158,7 @@ type
     previousOrder*: CrewOrders ## The previous order of the member
     orderTime*: int ## The amount of minutes to next check in the order
     orders*: array[1..12, Natural] ## The orders priorities for the member
-    inventory*: seq[InventoryData] ## The inventory o the member
+    inventory*: seq[InventoryData] ## The inventory of the member
     equipment*: array[EquipmentLocations, int] ## The equipment of the member
     payment*: AttributesArray ## The payment information for the member
     contractLength*: int ## The length of the contract with the member
@@ -236,6 +242,30 @@ type
     showType*: string ## The item's type to show to the player instead of the itemType
     description*: string ## The description of the item
     reputation*: ReputationRange ## The minumal reputation which is needed to buy that item
+
+  RecruitData* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about the recruit in bases
+    attributes*: seq[MobAttributeRecord] ## The recruit's attributes
+    skills*: seq[SkillInfo] ## The recruit's skills
+    name*: string ## The recruit's name
+    gender*: char ## The recruit's gender
+    price*: Positive ## The cost of hire of the recruit
+    inventory*:seq[InventoryData] ## The inventory of the recruit
+    equipment*: array[EquipmentLocations, int] ## The equipment of the recruit
+    payment*: Positive ## The payment information for the recruit
+    homeBase*: BasesRange ## The index of the home base
+    faction*: string ## The faction index to which the recruit belongs
+
+  BaseCargo* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about items in bases cargo
+    protoIndex*: Natural ## The index of the item's prototype
+    amount*: Positive ## The amount of the item in the inventory
+    durability*: ItemsDurability ## The current durability of the item
+    price*: Natural ## The price for which the item was bought
 
 # Temporary code for interfacing with Ada
 
