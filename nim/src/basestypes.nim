@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, items, log
+import game, log
 
 type
   PricesArray* = array[1..2, Natural]
