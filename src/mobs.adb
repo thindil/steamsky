@@ -562,12 +562,13 @@ package body Mobs is
       Amount: Natural;
       Highest_Skill_Level, Weapon_Skill_Level: Skill_Range := 1;
       Skill_Index: Skills_Container.Extended_Index;
-      Faction: constant Faction_Record := Get_Faction(Index => Mob.Faction);
+      Faction: Faction_Record;
    begin
       Mob.Faction :=
         (if Get_Random(Min => 1, Max => 100) < 99 then Faction_Index
          else Get_Random_Faction);
       Mob.Gender := 'M';
+      Faction := Get_Faction(Index => Mob.Faction);
       if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "nogender"))
         and then Get_Random(Min => 1, Max => 100) > 50 then
@@ -579,8 +580,7 @@ package body Mobs is
       Skills_Loop :
       for Skill of Proto_Mob.Skills loop
          Skill_Index :=
-           (if Skill.Index = Skills_Amount + 1 then
-              Faction.Weapon_Skill
+           (if Skill.Index = Skills_Amount + 1 then Faction.Weapon_Skill
             else Skill.Index);
          if Skill.Experience = 0 then
             Skills_Container.Append

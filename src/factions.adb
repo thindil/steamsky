@@ -141,6 +141,11 @@ package body Factions is
          Convention => C,
          External_Name => "getAdaFactionBase";
    begin
+      if Length(Source => Index) > 0 then
+         Faction_Index := Index;
+      else
+         Faction_Index := Get_Faction_Index(Number => Number);
+      end if;
       Get_Ada_Faction
         (Faction_Index => New_String(Str => To_String(Source => Index)),
          Faction_Number => Number, Ada_Faction => Temp_Nim_Record);
