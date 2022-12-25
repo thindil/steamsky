@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,11 +33,11 @@
 <ul>
 <li>1. <a href="#robo19">Crew/Inventory</a></li>
 <ul>
-<li>1.1. <a href="#robo604">Inventory/Inventory.Find_Tools</a></li>
-<li>1.2. <a href="#robo605">Inventory/Inventory.Free_Inventory</a></li>
-<li>1.3. <a href="#robo606">Inventory/Inventory.Item_Is_Used</a></li>
-<li>1.4. <a href="#robo607">Inventory/Inventory.Take_Off_Item</a></li>
-<li>1.5. <a href="#robo608">Inventory/Inventory.Update_Inventory</a></li>
+<li>1.1. <a href="#robo599">Inventory/Inventory.Find_Tools</a></li>
+<li>1.2. <a href="#robo600">Inventory/Inventory.Free_Inventory</a></li>
+<li>1.3. <a href="#robo601">Inventory/Inventory.Item_Is_Used</a></li>
+<li>1.4. <a href="#robo602">Inventory/Inventory.Take_Off_Item</a></li>
+<li>1.5. <a href="#robo603">Inventory/Inventory.Update_Inventory</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,7 +54,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eFind5fTools"></a>
-<a name="robo604"></a><h2>Inventory/Inventory.Find_Tools [ Subprograms ]</h2>
+<a name="robo599"></a><h2>Inventory/Inventory.Find_Tools [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -87,7 +87,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eFree5fInventory"></a>
-<a name="robo605"></a><h2>Inventory/Inventory.Free_Inventory [ Subprograms ]</h2>
+<a name="robo600"></a><h2>Inventory/Inventory.Free_Inventory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -96,13 +96,14 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Free_Inventory
-     <span class="sign">(</span>Member_Index<span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Member_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_FreeInventory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Member_Index<span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span> Update_Nim<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+      <span class="keyword">return</span> Integer <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Member_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Member_Index - <a href="./crew_ads.html#robo18">Crew</a> index of the member which inventory will be checked
  Amount       - Amount of kilogram to add or remove during check
+ Update_Nim   - If true, update crew and the selected inventory in Nim
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Amount of available space in kilograms
@@ -113,7 +114,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eItem5fIs5fUsed"></a>
-<a name="robo606"></a><h2>Inventory/Inventory.Item_Is_Used [ Subprograms ]</h2>
+<a name="robo601"></a><h2>Inventory/Inventory.Item_Is_Used [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -121,17 +122,18 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Item_Is_Used
-     <span class="sign">(</span>Member_Index<span class="sign">,</span> Item_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">with</span>
+     <span class="sign">(</span>Member_Index<span class="sign">,</span> Item_Index<span class="sign">:</span> Positive<span class="sign">;</span> Update_Nim<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+      <span class="keyword">return</span> Boolean <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>Member_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
        Item_Index <span class="sign">&lt;</span><span class="sign">=</span>
          Inventory_Container<span class="sign">.</span>Last_Index
-           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ItemIsUsed"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Member_Index - <a href="./crew_ads.html#robo18">Crew</a> index of the member which will be checked
  Item_Index   - Iventory index of the item which will be checked
+ Update_Nim   - If true, update crew and the selected inventory in Nim
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 7.5 - Renamed to Item_Is_Used, changed parameters names to Member_Index
@@ -140,20 +142,20 @@
 
 <hr />
 <a name="Inventory2fInventory2eTake5fOff5fItem"></a>
-<a name="robo607"></a><h2>Inventory/Inventory.Take_Off_Item [ Subprograms ]</h2>
+<a name="robo602"></a><h2>Inventory/Inventory.Take_Off_Item [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Remove selected item from character equipment
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Take_Off_Item<span class="sign">(</span>Member_Index<span class="sign">,</span> Item_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Take_Off_Item
+     <span class="sign">(</span>Member_Index<span class="sign">,</span> Item_Index<span class="sign">:</span> Positive<span class="sign">;</span> Update_Nim<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>Member_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
        Item_Index <span class="sign">&lt;</span><span class="sign">=</span>
          Inventory_Container<span class="sign">.</span>Last_Index
-           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_TakeOffItem"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Member_Index - <a href="./crew_ads.html#robo18">Crew</a> index of the member from which item willl be taken
@@ -167,7 +169,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eUpdate5fInventory"></a>
-<a name="robo608"></a><h2>Inventory/Inventory.Update_Inventory [ Subprograms ]</h2>
+<a name="robo603"></a><h2>Inventory/Inventory.Update_Inventory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -175,16 +177,14 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Update_Inventory
-     <span class="sign">(</span>Member_Index<span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span>
-      Proto_Index<span class="sign">:</span> Objects_Container<span class="sign">.</span>Extended_Index <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+     <span class="sign">(</span>Member_Index<span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span> Proto_Index<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span> Inventory_Index<span class="sign">,</span> Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Ship_Record<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>Member_Index <span class="sign">&lt;</span><span class="sign">=</span> <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
        Inventory_Index <span class="sign">&lt;</span><span class="sign">=</span>
          Inventory_Container<span class="sign">.</span>Last_Index
-           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateInventory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+           <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">(</span>Member_Index<span class="sign">)</span><span class="sign">.</span><a href="#robo19">Inventory</a><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Member_Index    - <a href="./crew_ads.html#robo18">Crew</a> index of member which will be have updated the
@@ -206,7 +206,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crew-inventory.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-11-27 04:20:27</p>
+<p>Generated from ./src/crew-inventory.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-12-25 04:06:02</p>
 </div> <!-- footer -->
 </body>
 </html>

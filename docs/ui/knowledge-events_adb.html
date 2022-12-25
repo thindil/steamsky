@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,19 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo852">KEvents/KEvents.Sort_Events_Command</a></li>
-<li>2. <a href="#robo851">KEvents/KEvents.Show_Events_Command</a></li>
-<li>3. <a href="#robo850">KEvents/KEvents.Show_Event_Info_Command</a></li>
-<li>4. <a href="#robo623">KEvents/KEvents.Show_Events_Menu_Command</a></li>
-<li>5. <a href="#robo399">KEvents/KEvents.Events_Table</a></li>
-<li>6. <a href="#robo398">KEvents/KEvents.Events_Sort_Order</a></li>
-<li>7. <a href="#robo397">KEvents/KEvents.Events_Indexes</a></li>
-<li>8. <a href="#robo284">KEvents/KEvents.Default_Events_Sort_Order</a></li>
-<li>9. <a href="#robo148">KEvents/KEvents.Events_Sort_Orders</a></li>
+<li>1. <a href="#robo845">KEvents/KEvents.Sort_Events_Command</a></li>
+<li>2. <a href="#robo844">KEvents/KEvents.Show_Events_Command</a></li>
+<li>3. <a href="#robo843">KEvents/KEvents.Show_Event_Info_Command</a></li>
+<li>4. <a href="#robo394">KEvents/KEvents.Events_Table</a></li>
+<li>5. <a href="#robo393">KEvents/KEvents.Events_Sort_Order</a></li>
+<li>6. <a href="#robo392">KEvents/KEvents.Events_Indexes</a></li>
+<li>7. <a href="#robo282">KEvents/KEvents.Default_Events_Sort_Order</a></li>
+<li>8. <a href="#robo145">KEvents/KEvents.Events_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="KEvents2fKEvents2eEvents5fSort5fOrders"></a>
-<a name="robo148"></a><h2>KEvents/KEvents.Events_Sort_Orders [ Types ]</h2>
+<a name="robo145"></a><h2>KEvents/KEvents.Events_Sort_Orders [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -70,7 +69,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eDefault5fEvents5fSort5fOrder"></a>
-<a name="robo284"></a><h2>KEvents/KEvents.Default_Events_Sort_Order [ Constants ]</h2>
+<a name="robo282"></a><h2>KEvents/KEvents.Default_Events_Sort_Order [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -85,7 +84,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eEvents5fIndexes"></a>
-<a name="robo397"></a><h2>KEvents/KEvents.Events_Indexes [ Variables ]</h2>
+<a name="robo392"></a><h2>KEvents/KEvents.Events_Indexes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -97,7 +96,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eEvents5fSort5fOrder"></a>
-<a name="robo398"></a><h2>KEvents/KEvents.Events_Sort_Order [ Variables ]</h2>
+<a name="robo393"></a><h2>KEvents/KEvents.Events_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -112,7 +111,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eEvents5fTable"></a>
-<a name="robo399"></a><h2>KEvents/KEvents.Events_Table [ Variables ]</h2>
+<a name="robo394"></a><h2>KEvents/KEvents.Events_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,36 +122,8 @@
 </pre>
 
 <hr />
-<a name="KEvents2fKEvents2eShow5fEvents5fMenu5fCommand"></a>
-<a name="robo623"></a><h2>KEvents/KEvents.Show_Events_Menu_Command [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show the menu with available the selected event options
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Events_Menu_Command
-     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Client_Data - Custom data send to the command. Unused
- Interp      - Tcl interpreter in which command was executed. Unused
- Argc        - Number of arguments passed to the command. Unused
- Argv        - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowEventMenu eventindex
- EventIndex is the index of the event's menu to show
-</pre>
-
-<hr />
 <a name="KEvents2fKEvents2eShow5fEvent5fInfo5fCommand"></a>
-<a name="robo850"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
+<a name="robo843"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -180,7 +151,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eShow5fEvents5fCommand"></a>
-<a name="robo851"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
+<a name="robo844"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -208,7 +179,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eSort5fEvents5fCommand"></a>
-<a name="robo852"></a><h2>KEvents/KEvents.Sort_Events_Command [ Commands ]</h2>
+<a name="robo845"></a><h2>KEvents/KEvents.Sort_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo35">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -236,7 +207,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-11-27 04:20:27</p>
+<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-12-25 04:06:02</p>
 </div> <!-- footer -->
 </body>
 </html>
