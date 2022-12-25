@@ -277,6 +277,19 @@ type
     hour*: range[0..48] ## The game's hour
     minutes*: range[0..120] ## The game's minutes
 
+  BaseRecord* = object
+    name*: string
+    visited*: DateRecord
+    skyX*: MapXRange
+    skyY*: MapYRange
+    baseType*: string
+    population*: Natural
+    recruitDate*: DateRecord
+    recruits*: seq[RecruitData]
+    known*: bool
+    askedForBases*: bool
+    askedForEvents*: DateRecord
+
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object
