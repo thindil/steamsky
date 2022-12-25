@@ -122,7 +122,7 @@ package body MainMenu is
         Get_Widget(pathName => ".mainmenu.version");
       Button: Ttk_Button :=
         Get_Widget(pathName => ".newgamemenu.canvas.player.randomplayer");
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       if not Exists(Name => Icon_Path) then
          Wm_Set(Widgt => Main_Window, Action => "withdraw");
