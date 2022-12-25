@@ -706,7 +706,7 @@ package body MainMenu.Commands is
       Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
       Gender_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
       procedure Update_Info(New_Text: String) is
          Info_Text: constant Tk_Text :=
            Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
