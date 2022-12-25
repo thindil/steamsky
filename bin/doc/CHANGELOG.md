@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.2] - 2022-12-25
 
 ## Added
 - Ability to set colors for various the game's elements, like the map,
