@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [8.2] - 2022-12-25
 
-## Added
+### Added
 - Ability to set colors for various the game's elements, like the map,
   messages, etc. in themes
 - Icon for set the player's ship destination. Author: Delapouite (https://game-icons.net),
@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   equipped
 - Use colors of events when showing information about them in the map cell info
 
-## Changed
+### Changed
 - Updated look of in-game tables
 - Color of buttons remove repair priority and cancel the ship destination
 - Updated modding guide
