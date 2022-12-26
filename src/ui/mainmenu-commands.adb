@@ -768,9 +768,9 @@ package body MainMenu.Commands is
          end if;
          Values := Null_Unbounded_String;
          Load_Careers_Loop :
-         for I in Faction.Careers.Iterate loop
+         for J in Faction.Careers.Iterate loop
             Append
-              (Source => Values, New_Item => " " & Faction.Careers(I).Name);
+              (Source => Values, New_Item => " " & Faction.Careers(J).Name);
          end loop Load_Careers_Loop;
          Append(Source => Values, New_Item => " Random");
          Combo_Box.Name := New_String(Str => Frame_Name & ".career");
