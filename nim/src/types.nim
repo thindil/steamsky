@@ -313,19 +313,26 @@ type
       target: Natural ## The target for the mission (ship, item)
 
   BaseRecord* = object
-    name*: string
-    visited*: DateRecord
-    skyX*: MapXRange
-    skyY*: MapYRange
-    baseType*: string
-    population*: Natural
-    recruitDate*: DateRecord
-    recruits*: seq[RecruitData]
-    known*: bool
-    askedForBases*: bool
-    askedForEvents*: DateRecord
-    reputation*: ReputationData
-    missionsDate*: DateRecord
+    ## FUNCTION
+    ##
+    ## Used to store information about bases
+    name*: string ## The name of the base
+    visited*: DateRecord ## The date when the base was last visited
+    skyX*: MapXRange ## The X position of the base on the map
+    skyY*: MapYRange ## The Y position of the base on the map
+    baseType*: string ## The type of the base
+    population*: Natural ## The amount of people living in the base
+    recruitDate*: DateRecord ## The date when recruits were last checked
+    recruits*: seq[RecruitData] ## The list of recruits available in the base
+    known*: bool ## If true, the base is known to the player, otherwise false
+    askedForBases*: bool ## If true, the player asked for other bases in the base
+    askedForEvents*: DateRecord ## The date when the player asked for event last time
+    reputation*: ReputationData ## The player's reputation in the base
+    missionsDate*: DateRecord ## The date when the player last checked missions in the base
+    missions*: seq[MissionData] ## The list of available missions in the base
+    owner*: string ## The index of faction which owe the base
+    cargo*: seq[BaseCargo] ## The base's cargo
+    size*: BasesSize ## The size of the base
 
 # Temporary code for interfacing with Ada
 
