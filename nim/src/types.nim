@@ -296,6 +296,8 @@ type
     known*: bool
     askedForBases*: bool
     askedForEvents*: DateRecord
+    reputation*: ReputationData
+    missionsDate*: DateRecord
 
 # Temporary code for interfacing with Ada
 
