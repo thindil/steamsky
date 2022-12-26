@@ -57,11 +57,17 @@ type
     ## based on random letters and numbers
     normal, robotic
 
-  Bases_Size* = enum
+  BasesSize* = enum
     ## FUNCTION
     ##
     ## Size of sky bases
     small, medium, big, unknown
+
+  MissionsTypes* = enum
+    ## FUNCTION
+    ##
+    ## Types of missions
+    deliver, destroy, patrol, explore, passenger
 
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
@@ -70,6 +76,7 @@ type
   AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   BasesRange* = range[1..1_024] ## The amount of bases in the game
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
+  RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
 
   ModuleData* = object
     ## FUNCTION
@@ -283,6 +290,27 @@ type
     ## Used to store information about the level of the player's reputation
     level: ReputationRange ## The level of the reputation
     experience: Natural ## The current experience gained in the reputation
+
+  MissionData* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about missions
+    time*: Positive ## The amount of minutes to finish the mission
+    targetX*: range[0..MapXRange.high] ## The X position of the target on the map
+    targetY*: range[0..MapYRange.high] ## The Y position of the target on the map
+    reward*: Positive ## The amount of money as the reward for the mission
+    startBase*: BasesRange ## The index of the starting base for the mission
+    finished*: bool ## If true, the mission is ready to return, otherwise false
+    multiplier*: RewardMultiplier ## The multiplier for the mission reward money and reputation
+    case mType: MissionsTypes
+    of deliver:
+      itemIndex: Natural ## The index of the proto item to deliver
+    of passenger:
+      data: Natural ## The minumum quality of the cabin (in bases) or passenger index (in accepted)
+    of destroy:
+      shipIndex: Natural ## The index of the prototype ship to destroy
+    else:
+      target: Natural ## The target for the mission (ship, item)
 
   BaseRecord* = object
     name*: string
