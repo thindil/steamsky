@@ -277,6 +277,13 @@ type
     hour*: range[0..48] ## The game's hour
     minutes*: range[0..120] ## The game's minutes
 
+  ReputationData* = object
+    ## FUNCTION
+    ##
+    ## Used to store information about the level of the player's reputation
+    level: ReputationRange ## The level of the reputation
+    experience: Natural ## The current experience gained in the reputation
+
   BaseRecord* = object
     name*: string
     visited*: DateRecord
