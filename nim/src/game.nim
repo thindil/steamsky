@@ -104,6 +104,7 @@ var
   unarmedSkill*: Positive ## The index of unarmed combat skill
   factionsList*: Table[string, FactionData] = initTable[string, FactionData]() ## The list of all available factions in the game
   itemsList* = initTable[Positive, ObjectData]() ## The list of prototypes of all items availabla in the game
+  skyBases*: array[BasesRange, BaseRecord] ## The list of all bases in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
