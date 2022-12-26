@@ -288,8 +288,8 @@ type
     ## FUNCTION
     ##
     ## Used to store information about the level of the player's reputation
-    level: ReputationRange ## The level of the reputation
-    experience: Natural ## The current experience gained in the reputation
+    level*: ReputationRange ## The level of the reputation
+    experience*: Natural ## The current experience gained in the reputation
 
   MissionData* = object
     ## FUNCTION
