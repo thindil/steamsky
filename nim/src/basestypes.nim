@@ -183,6 +183,16 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     basesTypesList[baseTypeIndex] = baseType
 
+proc getPrice*(baseType: string; itemIndex: Natural): Natural =
+  if itemsList[itemIndex].price == 0:
+    return 0
+  if basesTypesList[baseType].trades.hasKey(key = itemIndex):
+    if basesTypesList[baseType].trades[itemIndex][1] > 0:
+      return basesTypesList[baseType].trades[itemIndex][1]
+    elif basesTypesList[baseType].trades[itemIndex][2] > 0:
+      return basesTypesList[baseType].trades[itemIndex][2]
+  return itemsList[itemIndex].price
+
 # Temporary code for interfacing with Ada
 
 type
@@ -250,3 +260,6 @@ proc getAdaBaseTrade(baseIndex: cstring; index: cint;
       return newIndex.cstring
   except KeyError:
     return ""
+
+proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.exportc.} =
+  return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
