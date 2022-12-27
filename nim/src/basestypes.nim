@@ -183,7 +183,8 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     basesTypesList[baseTypeIndex] = baseType
 
-proc getPrice*(baseType: string; itemIndex: Natural): Natural =
+proc getPrice*(baseType: string; itemIndex: Natural): Natural {.sideEffect,
+    raises: [KeyError], tags: [].} =
   if itemsList[itemIndex].price == 0:
     return 0
   if basesTypesList[baseType].trades.hasKey(key = itemIndex):
