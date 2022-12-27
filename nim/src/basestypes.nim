@@ -185,6 +185,18 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getPrice*(baseType: string; itemIndex: Natural): Natural {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the price of the selected item in the selected type of bases
+  ##
+  ## PARAMETERS
+  ##
+  ## * baseType  - the type of base from which the price will be taken
+  ## * itemIndex - the index of the item's prototype which price will be taken
+  ##
+  ## RETURNS
+  ##
+  ## The price of the selected item
   if itemsList[itemIndex].price == 0:
     return 0
   if basesTypesList[baseType].trades.hasKey(key = itemIndex):
