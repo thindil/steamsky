@@ -833,7 +833,7 @@ package body MainMenu.Commands is
         Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
       Info_Text: constant Tk_Text :=
         Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
       Combo_Box.Name := New_String(Str => Frame_Name & ".career");
@@ -1041,7 +1041,7 @@ package body MainMenu.Commands is
         Get_Widget
           (pathName => Difficulty_Frame_Name & ".enemydamage",
            Interp => Interp);
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       New_Game_Settings.Player_Gender :=
         Tcl_GetVar(interp => Interp, varName => "playergender")(1);
