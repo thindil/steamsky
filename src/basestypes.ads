@@ -126,8 +126,7 @@ package BasesTypes is
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
       return Natural with
-      Pre => Bases_Types_List.Contains(Key => Base_Type),
-      Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
+      Pre => Bases_Types_List.Contains(Key => Base_Type);
       -- ****
 
 end BasesTypes;
