@@ -17,7 +17,7 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
 with Items; use Items;
 
@@ -25,7 +25,6 @@ package body BasesTypes is
 
    procedure Load_Bases_Types(File_Name: String) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -183,22 +182,17 @@ package body BasesTypes is
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
       return Natural is
-      New_Item_Index: constant Tiny_String.Bounded_String :=
-        Tiny_String.To_Bounded_String
-          (Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
+      function Get_Ada_Price
+        (B_Type: chars_ptr; I_Index: Positive) return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaPrice";
    begin
-      if Get_Proto_Item(Index => Item_Index).Price = 0 then
-         return 0;
-      end if;
-      if Bases_Types_List(Base_Type).Trades.Contains
-          (Key => New_Item_Index) then
-         if Bases_Types_List(Base_Type).Trades(New_Item_Index)(1) > 0 then
-            return Bases_Types_List(Base_Type).Trades(New_Item_Index)(1);
-         elsif Bases_Types_List(Base_Type).Trades(New_Item_Index)(2) > 0 then
-            return Bases_Types_List(Base_Type).Trades(New_Item_Index)(2);
-         end if;
-      end if;
-      return Get_Proto_Item(Index => Item_Index).Price;
+      return
+        Get_Ada_Price
+          (B_Type =>
+             New_String(Str => Tiny_String.To_String(Source => Base_Type)),
+           I_Index => Item_Index);
    end Get_Price;
 
 end BasesTypes;
