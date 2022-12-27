@@ -170,7 +170,7 @@ package body Utils.UI is
         Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
       Button: constant Ttk_Button :=
         Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => Argc - 1));
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
          Check_Argument_Loop :
