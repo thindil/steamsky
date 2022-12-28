@@ -368,8 +368,6 @@ namespace eval ttk::theme::steamsky {
          -background $colors(-black) -foreground $colors(-palegoldenrod) -padx 5 -pady 5]
 
       # Map info label
-      ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray) \
-         -background $colors(-black)
       ttk::style configure MapInfo -background $colors(-black)
 
       # The map colors
