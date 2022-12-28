@@ -168,7 +168,7 @@ package body Bases is
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
       Max_Skill_Amount: Integer;
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
       procedure Add_Inventory
         (Items_Indexes: String; Equip_Index: Equipment_Locations) is
          Item_Index: Natural;
