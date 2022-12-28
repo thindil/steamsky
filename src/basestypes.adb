@@ -19,7 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
-with Items; use Items;
+with Items;
 
 package body BasesTypes is
 
@@ -145,6 +145,7 @@ package body BasesTypes is
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
       use Bases;
+      use Items;
       use Tiny_String;
 
    begin
