@@ -26,7 +26,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
-with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
+-- with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -562,11 +562,9 @@ package body Maps.UI is
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
       use Tiny_String;
 
-      Map_Info_Text, Event_Info_Text: Unbounded_String;
-      Map_Info: constant Ttk_Label :=
+      Map_Info_Text, Event_Info_Text, Color: Unbounded_String;
+      Map_Info: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.info.info");
-      Event_Info: constant Ttk_Label :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.info.eventinfo");
    begin
       Append
         (Source => Map_Info_Text,
@@ -696,10 +694,9 @@ package body Maps.UI is
          declare
             Event_Index: constant Events_Container.Extended_Index :=
               Sky_Map(X, Y).Event_Index;
-            Color: Unbounded_String;
          begin
             if Events_List(Event_Index).E_Type /= BASERECOVERY then
-               Append(Source => Event_Info_Text, New_Item => LF);
+               Append(Source => Event_Info_Text, New_Item => LF & LF);
             end if;
             case Events_List(Event_Index).E_Type is
                when TRADER =>
@@ -711,10 +708,7 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-green"));
+                  Color := To_Unbounded_String(Source => "green");
                when FRIENDLYSHIP =>
                   Append
                     (Source => Event_Info_Text,
@@ -724,10 +718,7 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-green2"));
+                  Color := To_Unbounded_String(Source => "green2");
                when ENEMYSHIP =>
                   Append
                     (Source => Event_Info_Text,
@@ -737,40 +728,25 @@ package body Maps.UI is
                             Proto_Ships_List
                               (Events_List(Event_Index).Ship_Index)
                               .Name));
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-red"));
+                  Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Full docks in base");
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-cyan"));
+                  Color := To_Unbounded_String(Source => "cyan");
                when ATTACKONBASE =>
                   Append
                     (Source => Event_Info_Text,
                      New_Item => "Base is under attack");
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-red"));
+                  Color := To_Unbounded_String(Source => "red");
                when DISEASE =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Disease in base");
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-yellow"));
+                  Color := To_Unbounded_String(Source => "yellow");
                when ENEMYPATROL =>
                   Append
                     (Source => Event_Info_Text, New_Item => "Enemy patrol");
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-red3"));
+                  Color := To_Unbounded_String(Source => "red3");
                when DOUBLEPRICE =>
                   Append
                     (Source => Event_Info_Text,
@@ -781,19 +757,10 @@ package body Maps.UI is
                             Get_Proto_Item
                               (Index => Events_List(Event_Index).Item_Index)
                               .Name));
-                  Color :=
-                    To_Unbounded_String
-                      (Source =>
-                         Style_Lookup(Name => "Map", Option => "-lime"));
+                  Color := To_Unbounded_String(Source => "lime");
                when NONE | BASERECOVERY =>
                   null;
             end case;
-            configure
-              (Widgt => Event_Info,
-               options =>
-                 "-text {" & To_String(Source => Event_Info_Text) &
-                 "} -style MapInfo.TLabel -foreground " &
-                 To_String(Source => Color));
          end Add_Event_Info_Block;
       end if;
       if Sky_Map(X, Y).Mission_Index > 0 then
@@ -873,14 +840,19 @@ package body Maps.UI is
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
          Append(Source => Map_Info_Text, New_Item => LF & "You are here");
       end if;
-      configure
-        (Widgt => Map_Info,
-         options => "-text {" & To_String(Source => Map_Info_Text) & "}");
+      configure(Widgt => Map_Info, options => "-state normal");
+      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
+      Insert
+        (TextWidget => Map_Info, Index => "end",
+         Text => "{" & To_String(Source => Map_Info_Text) & "}");
       if Event_Info_Text /= Null_Unbounded_String then
-         Tcl.Tk.Ada.Grid.Grid(Slave => Event_Info, Options => "-sticky nwes");
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Event_Info);
+         Insert
+           (TextWidget => Map_Info, Index => "end",
+            Text =>
+              "{" & To_String(Source => Event_Info_Text) & "} [list " &
+              To_String(Source => Color) & "]");
       end if;
+      configure(Widgt => Map_Info, options => "-state disabled");
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is

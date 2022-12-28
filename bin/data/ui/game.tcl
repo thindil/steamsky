@@ -180,9 +180,16 @@ grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .gameframe.paned.mapframe.info -relief solid -padding 5 \
    -style MapInfo.TFrame -borderwidth 1] -column 0 -row 0 -sticky ne
 bind .gameframe.paned.mapframe.info <Enter> MoveMapInfo
-grid [ttk::label .gameframe.paned.mapframe.info.info -style MapInfo.TLabel] \
-   -sticky nwes
-ttk::label .gameframe.paned.mapframe.info.eventinfo -wraplength 225
+set mapinfo [text .gameframe.paned.mapframe.info.info -wrap word -height 10 -width 20]
+$mapinfo tag configure yellow -foreground [ttk::style lookup Map -yellow]
+$mapinfo tag configure green -foreground [ttk::style lookup Map -green]
+$mapinfo tag configure red -foreground [ttk::style lookup Map -red]
+$mapinfo tag configure cyan -foreground [ttk::style lookup Map -cyan]
+$mapinfo tag configure lime -foreground [ttk::style lookup Map -lime]
+$mapinfo tag configure red2 -foreground [ttk::style lookup Map -red2]
+$mapinfo tag configure red3 -foreground [ttk::style lookup Map -red3]
+$mapinfo tag configure green2 -foreground [ttk::style lookup Map -green2]
+grid $mapinfo -padx 5 -pady 5
 grid rowconfigure .gameframe.paned.mapframe 0 -weight 1
 grid columnconfigure .gameframe.paned.mapframe 0 -weight 1
 # Last messages
