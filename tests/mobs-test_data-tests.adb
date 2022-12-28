@@ -29,7 +29,7 @@ package body Mobs.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Generate_Mob_cf8a16_3125d0
+   function Wrap_Test_Generate_Mob_cf8a16_7748b7
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data is
    begin
@@ -37,8 +37,7 @@ package body Mobs.Test_Data.Tests is
          pragma Assert
            ((Mob_Index > 0 and
              Mob_Index <
-               ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
-             Factions_List.Contains(Key => Faction_Index)));
+               ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -47,14 +46,14 @@ package body Mobs.Test_Data.Tests is
                "req_sloc(mobs.ads:0):Test_GenearateMob test requirement violated");
       end;
       declare
-         Test_Generate_Mob_cf8a16_3125d0_Result: constant Member_Data :=
+         Test_Generate_Mob_cf8a16_7748b7_Result: constant Member_Data :=
            GNATtest_Generated.GNATtest_Standard.Mobs.Generate_Mob
              (Mob_Index, Faction_Index);
       begin
          begin
             pragma Assert
               (Tiny_String.Length
-                 (Source => Test_Generate_Mob_cf8a16_3125d0_Result.Name) >
+                 (Source => Test_Generate_Mob_cf8a16_7748b7_Result.Name) >
                0);
             null;
          exception
@@ -63,21 +62,21 @@ package body Mobs.Test_Data.Tests is
                  (False,
                   "ens_sloc(mobs.ads:0:):Test_GenearateMob test commitment violated");
          end;
-         return Test_Generate_Mob_cf8a16_3125d0_Result;
+         return Test_Generate_Mob_cf8a16_7748b7_Result;
       end;
-   end Wrap_Test_Generate_Mob_cf8a16_3125d0;
+   end Wrap_Test_Generate_Mob_cf8a16_7748b7;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Mob_test_genearatemob(Gnattest_T: in out Test);
-   procedure Test_Generate_Mob_cf8a16_3125d0(Gnattest_T: in out Test) renames
+   procedure Test_Generate_Mob_cf8a16_7748b7(Gnattest_T: in out Test) renames
      Test_Generate_Mob_test_genearatemob;
 --  id:2.2/cf8a161a4fb3a01b/Generate_Mob/1/0/test_genearatemob/
    procedure Test_Generate_Mob_test_genearatemob(Gnattest_T: in out Test) is
       function Generate_Mob
         (Mob_Index: ProtoMobs_Container.Extended_Index;
          Faction_Index: Tiny_String.Bounded_String) return Member_Data renames
-        Wrap_Test_Generate_Mob_cf8a16_3125d0;
+        Wrap_Test_Generate_Mob_cf8a16_7748b7;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

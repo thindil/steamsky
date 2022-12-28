@@ -10,8 +10,8 @@ package Mobs.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Generate_Mob_cf8a16_3125d0(Gnattest_T: in out Test);
-   --  mobs.ads:158:4:Generate_Mob:Test_GenearateMob
+   procedure Test_Generate_Mob_cf8a16_7748b7(Gnattest_T: in out Test);
+   --  mobs.ads:157:4:Generate_Mob:Test_GenearateMob
 
 end Mobs.Test_Data.Tests;
 --  end read only
