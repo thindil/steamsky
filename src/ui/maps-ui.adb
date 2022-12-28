@@ -564,7 +564,7 @@ package body Maps.UI is
 
       Map_Info_Text, Event_Info_Text, Color: Unbounded_String;
       Map_Info: constant Tk_Text :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.info.info");
+        Get_Widget(pathName => Main_Paned & ".mapframe.info");
    begin
       Append
         (Source => Map_Info_Text,
