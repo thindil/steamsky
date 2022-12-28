@@ -180,7 +180,8 @@ grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .gameframe.paned.mapframe.info -relief solid -padding 5 \
    -style MapInfo.TFrame -borderwidth 1] -column 0 -row 0 -sticky ne
 bind .gameframe.paned.mapframe.info <Enter> MoveMapInfo
-set mapinfo [text .gameframe.paned.mapframe.info.info -wrap word -height 10 -width 20]
+set mapinfo [text .gameframe.paned.mapframe.info.info -wrap word -height 10 \
+   -width 20 -background [ttk::style lookup MapInfo -background]]
 $mapinfo tag configure yellow -foreground [ttk::style lookup Map -yellow]
 $mapinfo tag configure green -foreground [ttk::style lookup Map -green]
 $mapinfo tag configure red -foreground [ttk::style lookup Map -red]
