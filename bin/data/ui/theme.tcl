@@ -78,8 +78,6 @@ namespace eval ttk::theme::steamsky {
    font create OverstrikedFont -family {Amarante} -size 14 -overstrike true
    # Underlined font used for buttons with URL's links
    font create UnderlineFont -family {Amarante} -underline true -size 14
-   # Bold font used for example in map cell info
-   font create BoldFont -family {Amarante} -weight bold -size 14
 
 
    #
