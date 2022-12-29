@@ -224,7 +224,7 @@ package body Events is
                Count_Injuries_Block :
                declare
                   Resting_Crew: Positive_Container.Vector;
-                  Injuries: Positive;
+                  Injuries: Positive := 1;
                begin
                   Find_Resting_Crew_Loop :
                   for I in Player_Ship.Crew.Iterate loop
