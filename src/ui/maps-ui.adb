@@ -566,9 +566,9 @@ package body Maps.UI is
       Map_Info: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.info");
    begin
-      Append
-        (Source => Map_Info_Text,
-         New_Item => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+      Map_Info_Text :=
+        To_Unbounded_String
+          (Source => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          Add_Distance_Info_Block :
          declare
