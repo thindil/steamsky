@@ -75,6 +75,7 @@ type
   SkillRange* = range[0..100] ## The range of skills levels
   AttributesArray* = array[1..2, Natural] ## 1 - Attribute level, 2 - Attribute experience
   BasesRange* = range[1..1_024] ## The amount of bases in the game
+  ExtendedBasesRange* = range[0..1_024] ## The amount of bases in the game with zero value
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
 
