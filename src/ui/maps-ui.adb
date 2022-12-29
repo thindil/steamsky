@@ -569,16 +569,24 @@ package body Maps.UI is
       Map_Info_Text :=
         To_Unbounded_String
           (Source => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+      configure(Widgt => Map_Info, options => "-state normal");
+      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
+      Insert
+        (TextWidget => Map_Info, Index => "end",
+         Text => "{" & To_String(Source => Map_Info_Text) & "}");
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          Add_Distance_Info_Block :
          declare
             Distance: constant Positive :=
               Count_Distance(Destination_X => X, Destination_Y => Y);
          begin
-            Append
-              (Source => Map_Info_Text,
-               New_Item => LF & "Distance:" & Positive'Image(Distance));
+            Map_Info_Text :=
+              To_Unbounded_String
+                (Source => LF & "Distance:" & Positive'Image(Distance));
             Travel_Info(Info_Text => Map_Info_Text, Distance => Distance);
+            Insert
+              (TextWidget => Map_Info, Index => "end",
+               Text => "{" & To_String(Source => Map_Info_Text) & "}");
          end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
@@ -587,25 +595,35 @@ package body Maps.UI is
             Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
          begin
             if Sky_Bases(Base_Index).Known then
-               Append
-                 (Source => Map_Info_Text,
-                  New_Item =>
-                    LF & "Base info:" & LF &
-                    To_Unbounded_String(Source => "Name: ") &
-                    Tiny_String.To_String
-                      (Source => Sky_Bases(Base_Index).Name));
+               Map_Info_Text :=
+                 To_Unbounded_String(Source => LF & "Base info:");
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
+               Map_Info_Text :=
+                 To_Unbounded_String
+                   (Source =>
+                      LF & "Name: " &
+                      Tiny_String.To_String
+                        (Source => Sky_Bases(Base_Index).Name));
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
             end if;
             if Sky_Bases(Base_Index).Visited.Year > 0 then
-               Append
-                 (Source => Map_Info_Text,
-                  New_Item =>
-                    LF & "Type: " &
-                    To_String
-                      (Source =>
-                         Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
-                           .Name));
+               Map_Info_Text :=
+                 To_Unbounded_String
+                   (Source =>
+                      LF & "Type: " &
+                      To_String
+                        (Source =>
+                           Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
+                             .Name));
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
                if Sky_Bases(Base_Index).Population > 0 then
-                  Append(Source => Map_Info_Text, New_Item => LF);
+                  Map_Info_Text := To_Unbounded_String(Source => "" & LF);
                end if;
                if Sky_Bases(Base_Index).Population > 0 and
                  Sky_Bases(Base_Index).Population < 150 then
@@ -620,28 +638,38 @@ package body Maps.UI is
                   Append
                     (Source => Map_Info_Text, New_Item => "Population: large");
                end if;
-               Append
-                 (Source => Map_Info_Text,
-                  New_Item =>
-                    LF & "Size: " &
-                    To_Lower
-                      (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
-                    LF);
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
+               Map_Info_Text :=
+                 To_Unbounded_String
+                   (Source =>
+                      LF & "Size: " &
+                      To_Lower
+                        (Item =>
+                           Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
+                      LF);
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
                if Sky_Bases(Base_Index).Population > 0 then
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item =>
-                       "Owner: " &
-                       Tiny_String.To_String
-                         (Source =>
-                            Get_Faction(Index => Sky_Bases(Base_Index).Owner)
-                              .Name));
+                  Map_Info_Text :=
+                    To_Unbounded_String
+                      (Source =>
+                         "Owner: " &
+                         Tiny_String.To_String
+                           (Source =>
+                              Get_Faction(Index => Sky_Bases(Base_Index).Owner)
+                                .Name));
                else
-                  Append
-                    (Source => Map_Info_Text, New_Item => "Base is abandoned");
+                  Map_Info_Text :=
+                    To_Unbounded_String(Source => "Base is abandoned");
                end if;
+               Insert
+                 (TextWidget => Map_Info, Index => "end",
+                  Text => "{" & To_String(Source => Map_Info_Text) & "}");
                if Sky_Bases(Base_Index).Population > 0 then
-                  Append(Source => Map_Info_Text, New_Item => LF);
+                  Map_Info_Text := To_Unbounded_String(Source => "" & LF);
                   case Sky_Bases(Base_Index).Reputation.Level is
                      when -100 .. -75 =>
                         Append
@@ -680,14 +708,104 @@ package body Maps.UI is
                           (Source => Map_Info_Text,
                            New_Item => "You are well known here");
                   end case;
+                  Insert
+                    (TextWidget => Map_Info, Index => "end",
+                     Text => "{" & To_String(Source => Map_Info_Text) & "}");
                end if;
                if Base_Index = Player_Ship.Home_Base then
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item => LF & "It is your home base");
+                  Map_Info_Text :=
+                    To_Unbounded_String(Source => LF & "It is your home base");
+                  Insert
+                    (TextWidget => Map_Info, Index => "end",
+                     Text => "{" & To_String(Source => Map_Info_Text) & "}");
                end if;
             end if;
          end Add_Base_Info_Block;
+      end if;
+      if Sky_Map(X, Y).Mission_Index > 0 then
+         Add_Mission_Info_Block :
+         declare
+            Mission_Index: constant Mission_Container.Extended_Index :=
+              Sky_Map(X, Y).Mission_Index;
+         begin
+            Map_Info_Text := To_Unbounded_String(Source => "" & LF);
+            if Sky_Map(X, Y).Base_Index > 0 or
+              Sky_Map(X, Y).Event_Index > 0 then
+               Append(Source => Map_Info_Text, New_Item => LF);
+            end if;
+            case Accepted_Missions(Mission_Index).M_Type is
+               when DELIVER =>
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item =>
+                       "Deliver " &
+                       To_String
+                         (Source =>
+                            Get_Proto_Item
+                              (Index =>
+                                 Accepted_Missions(Mission_Index).Item_Index)
+                              .Name));
+               when DESTROY =>
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item =>
+                       "Destroy " &
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Accepted_Missions(Mission_Index).Ship_Index)
+                              .Name));
+               when PATROL =>
+                  Append(Source => Map_Info_Text, New_Item => "Patrol area");
+               when EXPLORE =>
+                  Append(Source => Map_Info_Text, New_Item => "Explore area");
+               when PASSENGER =>
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item => "Transport passenger");
+            end case;
+            Insert
+              (TextWidget => Map_Info, Index => "end",
+               Text => "{" & To_String(Source => Map_Info_Text) & "}");
+         end Add_Mission_Info_Block;
+      end if;
+      if Current_Story.Index /= Null_Unbounded_String then
+         Add_Story_Info_Block :
+         declare
+            Story_X, Story_Y: Natural := 1;
+            Finish_Condition: Step_Condition_Type;
+         begin
+            Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
+            if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
+               Story_X := 0;
+               Story_Y := 0;
+            end if;
+            if X = Story_X and Y = Story_Y then
+               Finish_Condition :=
+                 (if Current_Story.Current_Step = 0 then
+                    Stories_List(Current_Story.Index).Starting_Step
+                      .Finish_Condition
+                  elsif Current_Story.Current_Step > 0 then
+                    Stories_List(Current_Story.Index).Steps
+                      (Current_Story.Current_Step)
+                      .Finish_Condition
+                  else Stories_List(Current_Story.Index).Final_Step
+                      .Finish_Condition);
+               if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
+                  Map_Info_Text :=
+                    To_Unbounded_String(Source => LF & "Story leads you here");
+                  Insert
+                    (TextWidget => Map_Info, Index => "end",
+                     Text => "{" & To_String(Source => Map_Info_Text) & "}");
+               end if;
+            end if;
+         end Add_Story_Info_Block;
+      end if;
+      if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
+         Map_Info_Text := To_Unbounded_String(Source => LF & "You are here");
+         Insert
+           (TextWidget => Map_Info, Index => "end",
+            Text => "{" & To_String(Source => Map_Info_Text) & "}");
       end if;
       if Sky_Map(X, Y).Event_Index > 0 then
          Add_Event_Info_Block :
@@ -696,7 +814,7 @@ package body Maps.UI is
               Sky_Map(X, Y).Event_Index;
          begin
             if Events_List(Event_Index).E_Type /= BASERECOVERY then
-               Append(Source => Event_Info_Text, New_Item => LF & LF);
+               Event_Info_Text := To_Unbounded_String(Source => LF & LF);
             end if;
             case Events_List(Event_Index).E_Type is
                when TRADER =>
@@ -761,96 +879,12 @@ package body Maps.UI is
                when NONE | BASERECOVERY =>
                   null;
             end case;
+            Insert
+              (TextWidget => Map_Info, Index => "end",
+               Text =>
+                 "{" & To_String(Source => Event_Info_Text) & "} [list " &
+                 To_String(Source => Color) & "]");
          end Add_Event_Info_Block;
-      end if;
-      if Sky_Map(X, Y).Mission_Index > 0 then
-         Add_Mission_Info_Block :
-         declare
-            Mission_Index: constant Mission_Container.Extended_Index :=
-              Sky_Map(X, Y).Mission_Index;
-         begin
-            Append(Source => Map_Info_Text, New_Item => LF);
-            if Sky_Map(X, Y).Base_Index > 0 or
-              Sky_Map(X, Y).Event_Index > 0 then
-               Append(Source => Map_Info_Text, New_Item => LF);
-            end if;
-            case Accepted_Missions(Mission_Index).M_Type is
-               when DELIVER =>
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item =>
-                       "Deliver " &
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index =>
-                                 Accepted_Missions(Mission_Index).Item_Index)
-                              .Name));
-               when DESTROY =>
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item =>
-                       "Destroy " &
-                       To_String
-                         (Source =>
-                            Proto_Ships_List
-                              (Accepted_Missions(Mission_Index).Ship_Index)
-                              .Name));
-               when PATROL =>
-                  Append(Source => Map_Info_Text, New_Item => "Patrol area");
-               when EXPLORE =>
-                  Append(Source => Map_Info_Text, New_Item => "Explore area");
-               when PASSENGER =>
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item => "Transport passenger");
-            end case;
-         end Add_Mission_Info_Block;
-      end if;
-      if Current_Story.Index /= Null_Unbounded_String then
-         Add_Story_Info_Block :
-         declare
-            Story_X, Story_Y: Natural := 1;
-            Finish_Condition: Step_Condition_Type;
-         begin
-            Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
-            if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
-               Story_X := 0;
-               Story_Y := 0;
-            end if;
-            if X = Story_X and Y = Story_Y then
-               Finish_Condition :=
-                 (if Current_Story.Current_Step = 0 then
-                    Stories_List(Current_Story.Index).Starting_Step
-                      .Finish_Condition
-                  elsif Current_Story.Current_Step > 0 then
-                    Stories_List(Current_Story.Index).Steps
-                      (Current_Story.Current_Step)
-                      .Finish_Condition
-                  else Stories_List(Current_Story.Index).Final_Step
-                      .Finish_Condition);
-               if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Append
-                    (Source => Map_Info_Text,
-                     New_Item => LF & "Story leads you here");
-               end if;
-            end if;
-         end Add_Story_Info_Block;
-      end if;
-      if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-         Append(Source => Map_Info_Text, New_Item => LF & "You are here");
-      end if;
-      configure(Widgt => Map_Info, options => "-state normal");
-      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
-      Insert
-        (TextWidget => Map_Info, Index => "end",
-         Text => "{" & To_String(Source => Map_Info_Text) & "}");
-      if Event_Info_Text /= Null_Unbounded_String then
-         Insert
-           (TextWidget => Map_Info, Index => "end",
-            Text =>
-              "{" & To_String(Source => Event_Info_Text) & "} [list " &
-              To_String(Source => Color) & "]");
       end if;
       configure(Widgt => Map_Info, options => "-state disabled");
    end Update_Map_Info;
