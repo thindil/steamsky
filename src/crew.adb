@@ -208,7 +208,7 @@ package body Crew is
       Damage: Damage_Factor := 0.0;
       Need_Cleaning, Have_Medical_Room: Boolean := False;
       Skill_Index: Skills_Container.Extended_Index := 0;
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
       procedure Update_Member(Member: in out Member_Data) is
          Back_To_Work: Boolean := True;
          Consume_Result: Natural := 0;
