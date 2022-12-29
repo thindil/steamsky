@@ -593,12 +593,26 @@ package body Maps.UI is
             Distance: constant Positive :=
               Count_Distance(Destination_X => X, Destination_Y => Y);
             Distance_Text: Unbounded_String;
+            New_Line_Index: Positive;
          begin
             Distance_Text :=
               To_Unbounded_String
                 (Source => LF & "Distance:" & Positive'Image(Distance));
-            Travel_Info(Info_Text => Distance_Text, Distance => Distance);
             Insert_Text(Text => To_String(Source => Distance_Text));
+            Distance_Text := Null_Unbounded_String;
+            Travel_Info(Info_Text => Distance_Text, Distance => Distance);
+            New_Line_Index :=
+              Index(Source => Distance_Text, Pattern => "" & LF, From => 2);
+            Insert_Text
+              (Text =>
+                 Slice
+                   (Source => Distance_Text, Low => 1,
+                    High => New_Line_Index));
+            Insert_Text
+              (Text =>
+                 Slice
+                   (Source => Distance_Text, Low => New_Line_Index + 1,
+                    High => Length(Source => Distance_Text)));
          end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
@@ -865,7 +879,9 @@ package body Maps.UI is
               (Text => To_String(Source => Event_Info_Text), Color => Color);
          end Add_Event_Info_Block;
       end if;
-      configure(Widgt => Map_Info, options => "-state disabled");
+      configure
+        (Widgt => Map_Info,
+         options => "-state disabled -width" & Positive'Image(Width));
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
