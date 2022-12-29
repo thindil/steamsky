@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, log, types
 
 type
   PricesArray* = array[1..2, Natural]
@@ -183,7 +183,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     basesTypesList[baseTypeIndex] = baseType
 
-proc getPrice*(baseType: string; itemIndex: Natural): Natural {.sideEffect,
+proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
     raises: [KeyError], tags: [].} =
   ## FUNCTION
   ##
@@ -205,6 +205,20 @@ proc getPrice*(baseType: string; itemIndex: Natural): Natural {.sideEffect,
     elif basesTypesList[baseType].trades[itemIndex][2] > 0:
       return basesTypesList[baseType].trades[itemIndex][2]
   return itemsList[itemIndex].price
+
+proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
+    baseIndex: ExtendedBasesRange = 0): bool =
+  if baseIndex > 0 and skyBases[baseIndex].reputation.level < itemsList[
+      itemIndex].reputation:
+    return false
+  if checkFlag and "blackmarket" in basesTypesList[baseType].flags and getPrice(
+      baseType = baseType, itemIndex = itemIndex) > 0:
+    return true
+  if not basesTypesList[baseType].trades.hasKey(key = itemIndex):
+    return false
+  if basesTypesList[baseType].trades[itemIndex][1] == 0:
+    return false
+  return true
 
 # Temporary code for interfacing with Ada
 
@@ -276,3 +290,8 @@ proc getAdaBaseTrade(baseIndex: cstring; index: cint;
 
 proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.exportc.} =
   return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
+
+proc isAdaBuyable(baseType: cstring; itemIndex: cint; checkFlag: cint;
+    baseIndex: cint): cint {.exportc.} =
+  return isBuyable(baseType = $baseType, itemIndex = itemIndex, checkFlag = (
+      if checkFlag == 1: true else: false), baseIndex = baseIndex).ord.cint
