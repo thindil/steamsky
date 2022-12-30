@@ -881,7 +881,11 @@ package body Maps.UI is
       end if;
       configure
         (Widgt => Map_Info,
-         options => "-state disabled -width" & Positive'Image(Width));
+         options =>
+           "-state disabled -width" & Positive'Image(Width) & " -height " &
+           Text.Count
+             (TextWidget => Map_Info, Options => "-displaylines",
+              Index1 => "0.0", Index2 => "end"));
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
