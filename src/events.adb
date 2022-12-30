@@ -223,7 +223,9 @@ package body Events is
               Player_Ship.Crew.Last_Index > 1 then -- Brawl in base
                Count_Injuries_Block :
                declare
+                  --## rule off IMPROPER_INITIALIZATION
                   Resting_Crew: Positive_Container.Vector;
+                  --## rule on IMPROPER_INITIALIZATION
                   Injuries: Positive := 1;
                begin
                   Find_Resting_Crew_Loop :
