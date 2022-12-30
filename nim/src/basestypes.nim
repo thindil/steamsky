@@ -291,7 +291,10 @@ proc getAdaBaseTrade(baseIndex: cstring; index: cint;
 proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.exportc.} =
   return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
 
-proc isAdaBuyable(baseType: cstring; itemIndex: cint; checkFlag: cint;
-    baseIndex: cint): cint {.exportc.} =
+proc isAdaBuyable(baseType: cstring; itemIndex, checkFlag, baseIndex,
+    reputationLevel, reputationExperience: cint): cint {.exportc.} =
+  if baseIndex > 0:
+    skyBases[baseIndex].reputation = ReputationData(level: reputationLevel,
+        experience: reputationExperience)
   return isBuyable(baseType = $baseType, itemIndex = itemIndex, checkFlag = (
       if checkFlag == 1: true else: false), baseIndex = baseIndex).ord.cint
