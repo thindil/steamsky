@@ -567,7 +567,7 @@ package body Maps.UI is
         Get_Widget(pathName => Main_Paned & ".mapframe.info");
       Width: Positive := 1;
       procedure Insert_Text
-        (Text: String; Color: Unbounded_String := Null_Unbounded_String) is
+        (Text: String; Tag_Name: Unbounded_String := Null_Unbounded_String) is
       begin
          if Text'Length > Width then
             Width := Text'Length;
@@ -579,8 +579,8 @@ package body Maps.UI is
            (TextWidget => Map_Info, Index => "end",
             Text =>
               "{" & Text & "}" &
-              (if Length(Source => Color) = 0 then ""
-               else " [list " & To_String(Source => Color) & "]"));
+              (if Length(Source => Tag_Name) = 0 then ""
+               else " [list " & To_String(Source => Tag_Name) & "]"));
       end Insert_Text;
    begin
       configure(Widgt => Map_Info, options => "-state normal");
@@ -642,7 +642,7 @@ package body Maps.UI is
                       (Source =>
                          Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
                            .Name),
-                  Color => To_Unbounded_String(Source => "basetype"));
+                  Tag_Name => To_Unbounded_String(Source => "basetype"));
                if Sky_Bases(Base_Index).Population > 0 then
                   Base_Info_Text := To_Unbounded_String(Source => "" & LF);
                end if;
@@ -882,7 +882,7 @@ package body Maps.UI is
                   null;
             end case;
             Insert_Text
-              (Text => To_String(Source => Event_Info_Text), Color => Color);
+              (Text => To_String(Source => Event_Info_Text), Tag_Name => Color);
          end Add_Event_Info_Block;
       end if;
       configure
