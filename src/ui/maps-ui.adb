@@ -622,7 +622,9 @@ package body Maps.UI is
             Base_Info_Text: Unbounded_String;
          begin
             if Sky_Bases(Base_Index).Known then
-               Insert_Text(Text => LF & "Base info:");
+               Insert_Text
+                 (Text => LF & "Base info:",
+                  Tag_Name => To_Unbounded_String(Source => "underline"));
                Insert_Text
                  (Text =>
                     LF & "Name: " &
@@ -882,7 +884,8 @@ package body Maps.UI is
                   null;
             end case;
             Insert_Text
-              (Text => To_String(Source => Event_Info_Text), Tag_Name => Color);
+              (Text => To_String(Source => Event_Info_Text),
+               Tag_Name => Color);
          end Add_Event_Info_Block;
       end if;
       configure
