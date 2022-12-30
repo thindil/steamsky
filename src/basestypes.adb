@@ -19,7 +19,6 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
-with Items;
 
 package body BasesTypes is
 
@@ -145,39 +144,32 @@ package body BasesTypes is
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
       use Bases;
-      use Items;
       use Tiny_String;
 
+      function Is_Ada_Buyable
+        (B_Type: chars_ptr;
+         I_Index, C_Flags, B_Index, Rep_Level, Rep_Experience: Integer)
+         return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "isAdaBuyable";
+
    begin
-      if Base_Index > 0
-        and then Sky_Bases(Base_Index).Reputation.Level <
-          Get_Proto_Item(Index => Item_Index).Reputation then
-         return False;
-      end if;
-      if Check_Flag
-        and then
-        (Bases_Types_List(Base_Type).Flags.Contains
-           (Item => To_Unbounded_String(Source => "blackmarket")) and
-         Get_Price(Base_Type => Base_Type, Item_Index => Item_Index) > 0) then
+      if Is_Ada_Buyable
+          (B_Type => New_String(Str => To_String(Source => Base_Type)),
+           I_Index => Item_Index, C_Flags => (if Check_Flag then 1 else 0),
+           B_Index => Base_Index,
+           Rep_Level =>
+             (if Base_Index > 0 then Sky_Bases(Base_Index).Reputation.Level
+              else 0),
+           Rep_Experience =>
+             (if Base_Index > 0 then
+                Sky_Bases(Base_Index).Reputation.Experience
+              else 0)) =
+        1 then
          return True;
       end if;
-      if not Bases_Types_List(Base_Type).Trades.Contains
-          (Key =>
-             To_Bounded_String
-               (Source =>
-                  Trim
-                    (Source => Positive'Image(Item_Index), Side => Left))) then
-         return False;
-      end if;
-      if Bases_Types_List(Base_Type).Trades
-          (To_Bounded_String
-             (Source =>
-                Trim(Source => Positive'Image(Item_Index), Side => Left)))
-          (1) =
-        0 then
-         return False;
-      end if;
-      return True;
+      return False;
    end Is_Buyable;
 
    function Get_Price
