@@ -691,43 +691,56 @@ package body Maps.UI is
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are hated here");
+                        Color := To_Unbounded_String(Source => "red");
                      when -74 .. -50 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are outlawed here");
+                        Color := To_Unbounded_String(Source => "red");
                      when -49 .. -25 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are disliked here");
+                        Color := To_Unbounded_String(Source => "red");
                      when -24 .. -1 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "They are unfriendly to you");
+                        Color := To_Unbounded_String(Source => "red");
                      when 0 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are unknown here");
+                        Color := Null_Unbounded_String;
                      when 1 .. 25 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are know here as visitor");
+                        Color := To_Unbounded_String(Source => "green");
                      when 26 .. 50 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are know here as trader");
+                        Color := To_Unbounded_String(Source => "green");
                      when 51 .. 75 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are know here as friend");
+                        Color := To_Unbounded_String(Source => "green");
                      when 76 .. 100 =>
                         Append
                           (Source => Base_Info_Text,
                            New_Item => "You are well known here");
+                        Color := To_Unbounded_String(Source => "green");
                   end case;
-                  Insert_Text(Text => To_String(Source => Base_Info_Text));
+                  Insert_Text
+                    (Text => To_String(Source => Base_Info_Text),
+                     Tag_Name => Color);
                end if;
                if Base_Index = Player_Ship.Home_Base then
-                  Insert_Text(Text => LF & "It is your home base");
+                  Insert_Text
+                    (Text => LF & "It is your home base",
+                     Tag_Name => To_Unbounded_String(Source => "cyan"));
                end if;
             end if;
          end Add_Base_Info_Block;
@@ -809,7 +822,9 @@ package body Maps.UI is
          end Add_Story_Info_Block;
       end if;
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-         Insert_Text(Text => LF & "You are here");
+         Insert_Text
+           (Text => LF & "You are here",
+            Tag_Name => To_Unbounded_String(Source => "yellow"));
       end if;
       if Sky_Map(X, Y).Event_Index > 0 then
          Add_Event_Info_Block :
