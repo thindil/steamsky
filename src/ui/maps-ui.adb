@@ -630,13 +630,19 @@ package body Maps.UI is
                       (Source => Sky_Bases(Base_Index).Name));
             end if;
             if Sky_Bases(Base_Index).Visited.Year > 0 then
+               Tag_Configure
+                 (TextWidget => Map_Info, TagName => "basetype",
+                  Options =>
+                    "-foreground #" &
+                    Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Color);
+               Insert_Text(Text => LF & "Type: ");
                Insert_Text
                  (Text =>
-                    LF & "Type: " &
                     To_String
                       (Source =>
                          Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
-                           .Name));
+                           .Name),
+                  Color => To_Unbounded_String(Source => "basetype"));
                if Sky_Bases(Base_Index).Population > 0 then
                   Base_Info_Text := To_Unbounded_String(Source => "" & LF);
                end if;
