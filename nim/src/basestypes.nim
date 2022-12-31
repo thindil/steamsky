@@ -207,7 +207,8 @@ proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
   return itemsList[itemIndex].price
 
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
-    baseIndex: ExtendedBasesRange = 0): bool =
+    baseIndex: ExtendedBasesRange = 0): bool {.sideEffect, raises: [KeyError],
+    tags: [].} =
   if baseIndex > 0 and skyBases[baseIndex].reputation.level < itemsList[
       itemIndex].reputation:
     return false
