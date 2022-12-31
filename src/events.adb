@@ -298,7 +298,7 @@ package body Events is
                        ".",
                      M_Type => OTHERMESSAGE, Color => RED);
                   Update_Cargo
-                    (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
+                    (Ship => Player_Ship, Amount => 0 - Lost_Cargo,
                      Cargo_Index => Roll2);
                end Count_Lost_Cargo_Block;
             end if;
