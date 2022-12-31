@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated look of the map cell info
+
 ### Fixed
 - Typos in changelog
 
