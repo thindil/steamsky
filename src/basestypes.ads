@@ -110,8 +110,7 @@ package BasesTypes is
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean with
-      Pre => Bases_Types_List.Contains(Key => Base_Type),
-      Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
+      Pre => Bases_Types_List.Contains(Key => Base_Type);
       -- ****
 
       -- ****f* BasesTypes/BasesTypes.Get_Price
