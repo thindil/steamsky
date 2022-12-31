@@ -316,3 +316,10 @@ proc isAdaBuyable(baseType: cstring; itemIndex, checkFlag, baseIndex,
         experience: reputationExperience)
   return isBuyable(baseType = $baseType, itemIndex = itemIndex, checkFlag = (
       if checkFlag == 1: true else: false), baseIndex = baseIndex).ord.cint
+
+proc hasAdaFlag(baseType, flag: cstring): cint {.exportc.} =
+  if not basesTypesList.hasKey(key = $baseType):
+    return 0
+  if $flag in basesTypesList[$baseType].flags:
+    return 1
+  return 0

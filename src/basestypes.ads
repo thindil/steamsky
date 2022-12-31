@@ -128,4 +128,9 @@ package BasesTypes is
       Pre => Bases_Types_List.Contains(Key => Base_Type);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   function Has_Flag
+     (Base_Type: Tiny_String.Bounded_String; Flag: String) return Boolean;
+
 end BasesTypes;

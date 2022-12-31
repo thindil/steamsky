@@ -190,4 +190,22 @@ package body BasesTypes is
            I_Index => Item_Index);
    end Get_Price;
 
+   function Has_Flag
+     (Base_Type: Tiny_String.Bounded_String; Flag: String) return Boolean is
+      function Has_Ada_Flag
+        (B_Type, Flag_To_Check: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "hasAdaFlag";
+   begin
+      if Has_Ada_Flag
+          (B_Type =>
+             New_String(Str => Tiny_String.To_String(Source => Base_Type)),
+           Flag_To_Check => New_String(Str => Flag)) =
+        0 then
+         return True;
+      end if;
+      return False;
+   end Has_Flag;
+
 end BasesTypes;
