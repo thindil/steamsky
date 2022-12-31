@@ -209,6 +209,23 @@ proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
     baseIndex: ExtendedBasesRange = 0): bool {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## FUNCTION
+  ##
+  ## Check if the selected item is buyable in the selected bases type
+  ##
+  ## PARAMETERS
+  ##
+  ## * baseType  - the type of base in which the item will be check
+  ## * itemIndex - the index of the item's prototype which will be check
+  ## * checkFlag - if true, check if the base type is black market. Can be
+  ##               empty. Default value is true
+  ## * baseIndex - if greater than 0, check the player reputation in the
+  ##               selected base. Can be empty. Default value is 0.
+  ##
+  ## RETURNS
+  ##
+  ## True if the item is buyable in the selected bases type, otherwise
+  ## false.
   if baseIndex > 0 and skyBases[baseIndex].reputation.level < itemsList[
       itemIndex].reputation:
     return false
