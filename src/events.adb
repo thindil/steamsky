@@ -350,8 +350,8 @@ package body Events is
                when 22 .. 30 => -- Double price for item in base
                   Set_Double_Price_Event_Block :
                   declare
-                     Item_Index: Natural;
-                     New_Item_Index: Natural;
+                     Item_Index: Natural := 0;
+                     New_Item_Index: Natural := 0;
                   begin
                      Get_Price_Loop :
                      loop
@@ -439,10 +439,10 @@ package body Events is
    procedure Update_Events(Minutes: Positive) is
       Current_Index: Events_Container.Extended_Index :=
         Events_List.First_Index;
-      New_Time: Integer;
+      New_Time: Integer := 0;
       Events_Amount: constant Natural := Natural(Events_List.Length);
-      Population_Lost: Positive range 1 .. 10;
-      Base_Index: Bases_Range;
+      Population_Lost: Positive range 1 .. 10 := 1;
+      Base_Index: Bases_Range := 1;
    begin
       if Events_Amount = 0 then
          return;
@@ -553,7 +553,7 @@ package body Events is
 
    procedure Recover_Base(Base_Index: Bases_Range) is
       Max_Spawn_Chance: Natural := 0;
-      Faction_Roll: Positive;
+      Faction_Roll: Positive := 1;
       Faction: Faction_Record;
    begin
       Count_Spawn_Chance_Loop :
