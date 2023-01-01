@@ -1852,10 +1852,6 @@ package body Ships.UI.Crew is
       Add_Button
         (Name => ".inventory", Label => "Show inventory of the crew member",
          Command => "ShowMemberInventory " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".priorities",
-         Label => "Set order priorities of the crew member",
-         Command => "ShowMemberPriorities " & CArgv.Arg(Argv => Argv, N => 1));
       if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
         Player_Ship.Speed = DOCKED then
          Add_Button
