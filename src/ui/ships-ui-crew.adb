@@ -560,7 +560,7 @@ package body Ships.UI.Crew is
          Bind
            (Widgt => Tab_Button, Sequence => "<Tab>",
             Script =>
-              "{focus .memberdialog.canvas.priorities.priorityinfo1.button;break}");
+              "{focus .memberdialog.canvas.priorities.level1;break}");
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
@@ -1393,6 +1393,63 @@ package body Ships.UI.Crew is
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         Show_Priorities_Block :
+         declare
+            Priorities_Names: constant array
+              (Member.Orders'Range) of Unbounded_String :=
+              (1 => To_Unbounded_String(Source => "Piloting"),
+               2 => To_Unbounded_String(Source => "Engineering"),
+               3 => To_Unbounded_String(Source => "Operating guns"),
+               4 => To_Unbounded_String(Source => "Repair ship"),
+               5 => To_Unbounded_String(Source => "Manufacturing"),
+               6 => To_Unbounded_String(Source => "Upgrading ship"),
+               7 => To_Unbounded_String(Source => "Talking in bases"),
+               8 => To_Unbounded_String(Source => "Healing wounded"),
+               9 => To_Unbounded_String(Source => "Cleaning ship"),
+               10 => To_Unbounded_String(Source => "Defend ship"),
+               11 => To_Unbounded_String(Source => "Board enemy ship"),
+               12 => To_Unbounded_String(Source => "Train skill"));
+            Combo_Box: Ttk_ComboBox;
+         begin
+            Load_Priorities_Loop :
+            for I in Member.Orders'Range loop
+               Member_Label :=
+                 Create
+                   (pathName =>
+                      Frame & ".name" &
+                      Trim(Source => Positive'Image(I), Side => Left),
+                    options =>
+                      "-text {" & To_String(Source => Priorities_Names(I)) &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Member_Label, Options => "-sticky w -padx {5 0}");
+               Tcl_Eval
+                  (interp => Interp,
+                  strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+               Combo_Box :=
+                 Create
+                   (pathName =>
+                      Frame & ".level" &
+                      Trim(Source => Positive'Image(I), Side => Left),
+                    options =>
+                      "-values [list None Normal Highest] -state readonly -width 8");
+               Current
+                 (ComboBox => Combo_Box,
+                  NewIndex => Natural'Image(Member.Orders(I)));
+               Bind
+                 (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+                  Script =>
+                    "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
+                    " current]" & Positive'Image(Member_Index) & "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Combo_Box,
+                  Options =>
+                    "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
+               Bind
+                 (Widgt => Combo_Box, Sequence => "<Escape>",
+                  Script => "{" & Close_Button & " invoke;break}");
+            end loop Load_Priorities_Loop;
+         end Show_Priorities_Block;
       end if;
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
@@ -1724,7 +1781,7 @@ package body Ships.UI.Crew is
          Combo_Box.Name :=
            New_String
              (Str =>
-                ".memberdialog.level" &
+                ".memberdialog.canvas.priorities.level" &
                 Trim(Source => Positive'Image(I), Side => Left));
          Current
            (ComboBox => Combo_Box,
