@@ -218,8 +218,9 @@ package body Bases is
       Max_Recruits :=
         (if Sky_Bases(Base_Index).Population < 150 then 5
          elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
-      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-          (Item => To_Unbounded_String(Source => "barracks")) then
+      if Has_Flag
+          (Base_Type => Sky_Bases(Base_Index).Base_Type,
+           Flag => "barracks") then
          Max_Recruits := Max_Recruits * 2;
       end if;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -344,8 +345,9 @@ package body Bases is
          Add_Inventory(Items_Indexes => "arms", Equip_Index => ARMS);
          Add_Inventory(Items_Indexes => "legs", Equip_Index => LEGS);
          Add_Inventory(Items_Indexes => "tool", Equip_Index => TOOL);
-         if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-             (Item => To_Unbounded_String(Source => "barracks")) then
+         if Has_Flag
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Flag => "barracks") then
             Price := Price / 2;
             Payment := Payment / 2;
          end if;

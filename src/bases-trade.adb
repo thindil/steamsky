@@ -326,8 +326,8 @@ package body Bases.Trade is
       if Time = 0 then
          Time := 1;
       end if;
-      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-          (Item => To_Unbounded_String(Source => "temple")) then
+      if Has_Flag
+          (Base_Type => Sky_Bases(Base_Index).Base_Type, Flag => "temple") then
          Cost := Cost / 2;
          if Cost = 0 then
             Cost := 1;

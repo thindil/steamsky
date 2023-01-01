@@ -37,7 +37,6 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
-with BasesTypes; use BasesTypes;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;

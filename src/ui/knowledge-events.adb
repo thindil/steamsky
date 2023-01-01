@@ -32,7 +32,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
-with BasesTypes; use BasesTypes;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;

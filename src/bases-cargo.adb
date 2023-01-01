@@ -69,8 +69,9 @@ package body Bases.Cargo is
                           Item_Index => I)));
             end if;
          end loop Add_Base_Cargo_Loop;
-         if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-             (Item => To_Unbounded_String(Source => "blackmarket")) then
+         if Has_Flag
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Flag => "blackmarket") then
             Add_Black_Market_Cargo_Block :
             declare
                Amount: constant Positive range 1 .. 30 :=

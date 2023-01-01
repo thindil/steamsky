@@ -109,8 +109,7 @@ package BasesTypes is
    function Is_Buyable
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
-      return Boolean with
-      Pre => Bases_Types_List.Contains(Key => Base_Type);
+      return Boolean;
       -- ****
 
       -- ****f* BasesTypes/BasesTypes.Get_Price
@@ -124,8 +123,7 @@ package BasesTypes is
       -- SOURCE
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
-      return Natural with
-      Pre => Bases_Types_List.Contains(Key => Base_Type);
+      return Natural;
       -- ****
 
 -- Temporary code to interact with Nim

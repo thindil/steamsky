@@ -904,8 +904,9 @@ package body Bases.Ship is
          end if;
          --## rule on SIMPLIFIABLE_STATEMENTS
       end if;
-      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-          (Item => To_Unbounded_String(Source => "shipyard")) then
+      if Has_Flag
+          (Base_Type => Sky_Bases(Base_Index).Base_Type,
+           Flag => "shipyard") then
          Cost := Cost / 2;
       end if;
       Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));

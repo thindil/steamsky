@@ -235,8 +235,9 @@ package body OrdersMenu is
                  (Name => ".bases", Label => "Ask for bases",
                   Command => "AskForBases", Shortcut => "b", Underline => 8);
             end if;
-            if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-                (Item => To_Unbounded_String(Source => "temple")) then
+            if Has_Flag
+                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                 Flag => "temple") then
                Add_Button
                  (Name => ".pray", Label => "Pray", Command => "Pray",
                   Shortcut => "p", Underline => 0);
@@ -261,8 +262,9 @@ package body OrdersMenu is
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
-            if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-                (Item => To_Unbounded_String(Source => "shipyard")) then
+            if Has_Flag
+                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                 Flag => "shipyard") then
                Add_Button
                  (Name => ".shipyard", Label => "Shipyard",
                   Command => "ShowShipyard", Shortcut => "i", Underline => 2);
