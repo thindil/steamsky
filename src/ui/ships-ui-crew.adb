@@ -524,7 +524,7 @@ package body Ships.UI.Crew is
       Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Member_Canvas & "." & Tab_Name);
       Tab_Button: Ttk_RadioButton :=
-        Get_Widget(pathName => ".memberdialog.buttonbox.skills");
+        Get_Widget(pathName => ".memberdialog.buttonbox.priorities");
    begin
       Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
       Canvas_Create
@@ -1420,7 +1420,7 @@ package body Ships.UI.Crew is
                       Trim(Source => Positive'Image(I), Side => Left),
                     options =>
                       "-text {" & To_String(Source => Priorities_Names(I)) &
-                      "}");
+                      "} -takefocus 0");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Member_Label, Options => "-sticky w -padx {5 0}");
                Tcl_Eval
@@ -1449,6 +1449,9 @@ package body Ships.UI.Crew is
                  (Widgt => Combo_Box, Sequence => "<Escape>",
                   Script => "{" & Close_Button & " invoke;break}");
             end loop Load_Priorities_Loop;
+            Bind
+               (Widgt => Combo_Box, Sequence => "<Tab>",
+               Script => "{focus " & Close_Button & ";break}");
          end Show_Priorities_Block;
       end if;
       Bind
