@@ -556,6 +556,11 @@ package body Ships.UI.Crew is
            (Widgt => Tab_Button, Sequence => "<Tab>",
             Script =>
               "{focus .memberdialog.canvas.skills.skillinfo1.button;break}");
+      elsif Tab_Name = "priorities" then
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script =>
+              "{focus .memberdialog.canvas.priorities.priorityinfo1.button;break}");
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
@@ -648,6 +653,16 @@ package body Ships.UI.Crew is
                 " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Tab_Button, Options => "-column 2 -row 0");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
+         Tab_Button :=
+           Create
+             (pathName => Frame & ".priorities",
+              options =>
+                " -text Priorities -style Radio.Toolbutton -value priorities -variable newtab -command ShowMemberTab");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Tab_Button, Options => "-column 3 -row 0");
          Bind
            (Widgt => Tab_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
@@ -1359,6 +1374,25 @@ package body Ships.UI.Crew is
                    Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             configure(Widgt => Progress_Bar, options => "-length 360");
          end loop Load_Skill_Experience_Loop;
+         -- Orders priorities of the selected crew member
+         Frame := Create(pathName => Member_Canvas & ".priorities");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
+         Member_Label :=
+           Create
+             (pathName => Frame & ".label1", options => "-text {Priority}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label);
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         Member_Label :=
+           Create(pathName => Frame & ".label2", options => "-text {Level}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-row 0 -column 1");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
