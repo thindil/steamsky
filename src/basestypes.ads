@@ -1,4 +1,4 @@
---    Copyright 2019-2022 Bartek thindil Jasicki
+--    Copyright 2019-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -127,6 +127,8 @@ package BasesTypes is
       -- ****
 
 -- Temporary code to interact with Nim
+
+   Bases_Types: array(0 .. 15) of Tiny_String.Bounded_String;
 
    function Has_Flag
      (Base_Type: Tiny_String.Bounded_String; Flag: String) return Boolean;

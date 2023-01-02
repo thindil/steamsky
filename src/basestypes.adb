@@ -1,4 +1,4 @@
---    Copyright 2019-2022 Bartek thindil Jasicki
+--    Copyright 2019-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,12 +36,14 @@ package body BasesTypes is
          Color: chars_ptr;
          Description: chars_ptr;
       end record;
+      type Ada_Bases_Types is array(0 .. 10) of chars_ptr;
       --## rule on TYPE_INITIAL_VALUES
       Temp_Nim_Record: Base_Type_Nim_Data;
       Trade: Prices_Array;
       --## rule on IMPROPER_INITIALIZATION
       Index, Index2: Natural := 0;
       Base_Data: Unbounded_String := Null_Unbounded_String;
+      A_Bases_Types: Ada_Bases_Types;
       procedure Load_Ada_Bases_Types(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -63,6 +65,10 @@ package body BasesTypes is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseTrade";
+      procedure Get_Ada_Bases_Types(B_Types: out Ada_Bases_Types) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBasesTypes";
    begin
       Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
       Load_Bases_Types_Loop :
@@ -139,6 +145,12 @@ package body BasesTypes is
             New_Item => Temp_Record);
          Index := Index + 1;
       end loop Load_Bases_Types_Loop;
+      Get_Ada_Bases_Types(B_Types => A_Bases_Types);
+      Set_Bases_Types_Loop :
+      for I in A_Bases_Types'Range loop
+         Bases_Types(I) :=
+           To_Bounded_String(Source => Value(Item => A_Bases_Types(I)));
+      end loop Set_Bases_Types_Loop;
    end Load_Bases_Types;
 
    function Is_Buyable

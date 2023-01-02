@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -323,3 +323,12 @@ proc hasAdaFlag(baseType, flag: cstring): cint {.exportc.} =
   if $flag in basesTypesList[$baseType].flags:
     return 1
   return 0
+
+proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.exportc.} =
+  var i = 0
+  for key in basesTypesList.keys:
+    basesTypes[i] = key.cstring
+    i.inc
+  i.inc
+  for index in i..15:
+    basesTypes[i] = ""
