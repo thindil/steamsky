@@ -510,7 +510,7 @@ package body Events is
    procedure Get_Player_Ships
      (Player_Ships: in out Positive_Container.Vector) is
    -- ****
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       Get_Faction_Loop :
       for I in 1 .. Get_Factions_Amount loop
@@ -525,7 +525,9 @@ package body Events is
    procedure Generate_Traders is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Player_Ships: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Count_Traders_Loop :
       for I in Proto_Ships_List.Iterate loop
@@ -554,7 +556,7 @@ package body Events is
    procedure Recover_Base(Base_Index: Bases_Range) is
       Max_Spawn_Chance: Natural := 0;
       Faction_Roll: Positive := 1;
-      Faction: Faction_Record;
+      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
       Count_Spawn_Chance_Loop :
       for I in 1 .. Get_Factions_Amount loop
