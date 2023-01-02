@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -355,12 +355,12 @@ package body Help.UI is
             end if;
             Bases_With_Flag := Null_Unbounded_String;
             Create_Bases_List_Loop :
-            for BaseType of Bases_Types_List loop
-               if BaseType.Flags.Contains(Item => Tag_Text) then
+            for BaseType of Bases_Types loop
+               if Has_Flag(Base_Type => BaseType, Flag => To_String(Source => Tag_Text)) then
                   if Bases_With_Flag /= Null_Unbounded_String then
                      Append(Source => Bases_With_Flag, New_Item => " and ");
                   end if;
-                  Append(Source => Bases_With_Flag, New_Item => BaseType.Name);
+                  Append(Source => Bases_With_Flag, New_Item => Get_Base_Type_Name(Base_Type => BaseType));
                end if;
             end loop Create_Bases_List_Loop;
             Insert_Bases_Loop :

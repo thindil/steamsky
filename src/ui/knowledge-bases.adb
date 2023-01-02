@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -248,9 +248,8 @@ package body Knowledge.Bases is
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
-               Text =>
-                 To_String
-                   (Source => Bases_Types_List(Sky_Bases(I).Base_Type).Name),
+               Text => Get_Base_Type_Name(Base_Type => Sky_Bases(I).Base_Type)
+                 ,
                Tooltip => "The type of the base",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));

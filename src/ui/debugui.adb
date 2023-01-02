@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -605,10 +605,8 @@ package body DebugUI is
       end if;
       Set
         (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+         Value => Get_Base_Type_Name(Base_Type => Sky_Bases(Base_Index).Base_Type)
+           );
       Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
       Set
         (ComboBox => Combo_Box,
@@ -1056,11 +1054,10 @@ package body DebugUI is
          return TCL_OK;
       end if;
       Update_Base_Type_Loop :
-      for I in Bases_Types_List.Iterate loop
-         if Bases_Types_List(I).Name =
-           To_Unbounded_String(Source => Get(Widgt => Base_Combo)) then
-            Sky_Bases(Base_Index).Base_Type :=
-              BasesTypes_Container.Key(Position => I);
+      for Base_Type of Bases_Types loop
+         if Get_Base_Type_Name(Base_Type => Base_Type) =
+           Get(Widgt => Base_Combo) then
+            Sky_Bases(Base_Index).Base_Type := Base_Type;
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
@@ -1395,8 +1392,8 @@ package body DebugUI is
         (Name => "DebugDeleteEvent",
          Ada_Command => Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
-      for BaseType of Bases_Types_List loop
-         Append(Source => Values_List, New_Item => " {" & BaseType.Name & "}");
+      for BaseType of Bases_Types loop
+         Append(Source => Values_List, New_Item => " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
       end loop Load_Bases_Types_Loop;
       configure
         (Widgt => Combo_Box,

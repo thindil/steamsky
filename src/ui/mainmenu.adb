@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -234,10 +234,8 @@ package body MainMenu is
               New_Game_Settings.Starting_Base =
               To_Bounded_String(Source => "Any")
             then "Any"
-            else "{" &
-              To_String
-                (Source =>
-                   Bases_Types_List(New_Game_Settings.Starting_Base).Name) &
+            else "{" & Get_Base_Type_Name(Base_Type => New_Game_Settings.Starting_Base)
+               &
               "}"));
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");

@@ -640,10 +640,7 @@ package body Maps.UI is
                Insert_Text(Text => LF & "Type: ");
                Insert_Text
                  (Text =>
-                    To_String
-                      (Source =>
-                         Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
-                           .Name),
+                         Get_Base_Type_Name(Sky_Bases(Base_Index).Base_Type),
                   Tag_Name => To_Unbounded_String(Source => "basetype"));
                if Sky_Bases(Base_Index).Population > 0 then
                   Base_Info_Text := To_Unbounded_String(Source => "" & LF);

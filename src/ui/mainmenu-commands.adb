@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -785,7 +785,7 @@ package body MainMenu.Commands is
               (Source => Values,
                New_Item =>
                  " {" &
-                 Bases_Types_List(BaseType_Container.Key(Position => J)).Name &
+                 Get_Base_Type_Name(Base_Type => BaseType_Container.Key(Position => J)) &
                  "}");
          end loop Load_Bases_Types_Loop;
          Combo_Box.Name := New_String(Str => Frame_Name & ".base");
@@ -1078,11 +1078,10 @@ package body MainMenu.Commands is
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       New_Game_Settings.Starting_Base := To_Bounded_String(Source => "Any");
       Set_Starting_Base_Loop :
-      for I in Bases_Types_List.Iterate loop
-         if Bases_Types_List(I).Name =
-           To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
-            New_Game_Settings.Starting_Base :=
-              BasesTypes_Container.Key(Position => I);
+      for Base_Type of Bases_Types loop
+         if Get_Base_Type_Name(Base_Type => Base_Type) =
+           Get(Widgt => Combo_Box) then
+            New_Game_Settings.Starting_Base := Base_Type;
             exit Set_Starting_Base_Loop;
          end if;
       end loop Set_Starting_Base_Loop;
