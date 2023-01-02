@@ -2,10 +2,12 @@ discard """
   exitcode: 0
 """
 
+import std/tables
 import ../../src/[basestypes, game, items]
 
-loadData("../bin/data/game.dat")
-loadItems("../bin/data/items.dat")
+if itemsList.len == 0:
+  loadData("../bin/data/game.dat")
+  loadItems("../bin/data/items.dat")
 loadBasesTypes("../bin/data/bases.dat")
 
 assert getPrice("0", 1) == 0
