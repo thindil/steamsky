@@ -133,4 +133,7 @@ package BasesTypes is
    function Has_Flag
      (Base_Type: Tiny_String.Bounded_String; Flag: String) return Boolean;
 
+   function Get_Base_Type_Name
+     (Base_Type: Tiny_String.Bounded_String) return String;
+
 end BasesTypes;

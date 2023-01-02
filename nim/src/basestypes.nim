@@ -332,3 +332,6 @@ proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.exportc.} =
   i.inc
   for index in i..15:
     basesTypes[i] = ""
+
+proc getAdaBaseTypeName(baseType: cstring): cstring {.exportc.} =
+  return basesTypesList[$baseType].name.cstring
