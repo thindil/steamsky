@@ -605,8 +605,8 @@ package body DebugUI is
       end if;
       Set
         (ComboBox => Combo_Box,
-         Value => Get_Base_Type_Name(Base_Type => Sky_Bases(Base_Index).Base_Type)
-           );
+         Value =>
+           Get_Base_Type_Name(Base_Type => Sky_Bases(Base_Index).Base_Type));
       Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
       Set
         (ComboBox => Combo_Box,
@@ -1393,7 +1393,10 @@ package body DebugUI is
          Ada_Command => Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
       for BaseType of Bases_Types loop
-         Append(Source => Values_List, New_Item => " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
+         Append
+           (Source => Values_List,
+            New_Item =>
+              " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
       end loop Load_Bases_Types_Loop;
       configure
         (Widgt => Combo_Box,

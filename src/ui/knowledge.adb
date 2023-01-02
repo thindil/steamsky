@@ -99,7 +99,9 @@ package body Knowledge is
          Load_Bases_Types_Loop :
          for BaseType of Bases_Types loop
             Append
-              (Source => Combo_Values, New_Item => " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
+              (Source => Combo_Values,
+               New_Item =>
+                 " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
          end loop Load_Bases_Types_Loop;
          configure
            (Widgt => Combo_Box,

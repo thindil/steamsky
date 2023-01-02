@@ -785,7 +785,8 @@ package body MainMenu.Commands is
               (Source => Values,
                New_Item =>
                  " {" &
-                 Get_Base_Type_Name(Base_Type => BaseType_Container.Key(Position => J)) &
+                 Get_Base_Type_Name
+                   (Base_Type => BaseType_Container.Key(Position => J)) &
                  "}");
          end loop Load_Bases_Types_Loop;
          Combo_Box.Name := New_String(Str => Frame_Name & ".base");

@@ -248,8 +248,7 @@ package body Knowledge.Bases is
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
-               Text => Get_Base_Type_Name(Base_Type => Sky_Bases(I).Base_Type)
-                 ,
+               Text => Get_Base_Type_Name(Base_Type => Sky_Bases(I).Base_Type),
                Tooltip => "The type of the base",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));

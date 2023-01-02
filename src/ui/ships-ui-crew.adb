@@ -559,8 +559,7 @@ package body Ships.UI.Crew is
       elsif Tab_Name = "priorities" then
          Bind
            (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script =>
-              "{focus .memberdialog.canvas.priorities.level1;break}");
+            Script => "{focus .memberdialog.canvas.priorities.level1;break}");
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
@@ -1424,8 +1423,9 @@ package body Ships.UI.Crew is
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Member_Label, Options => "-sticky w -padx {5 0}");
                Tcl_Eval
-                  (interp => Interp,
-                  strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+                 (interp => Interp,
+                  strng =>
+                    "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
                Combo_Box :=
                  Create
                    (pathName =>
@@ -1450,7 +1450,7 @@ package body Ships.UI.Crew is
                   Script => "{" & Close_Button & " invoke;break}");
             end loop Load_Priorities_Loop;
             Bind
-               (Widgt => Combo_Box, Sequence => "<Tab>",
+              (Widgt => Combo_Box, Sequence => "<Tab>",
                Script => "{focus " & Close_Button & ";break}");
          end Show_Priorities_Block;
       end if;

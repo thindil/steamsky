@@ -234,8 +234,9 @@ package body MainMenu is
               New_Game_Settings.Starting_Base =
               To_Bounded_String(Source => "Any")
             then "Any"
-            else "{" & Get_Base_Type_Name(Base_Type => New_Game_Settings.Starting_Base)
-               &
+            else "{" &
+              Get_Base_Type_Name
+                (Base_Type => New_Game_Settings.Starting_Base) &
               "}"));
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
