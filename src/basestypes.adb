@@ -215,9 +215,9 @@ package body BasesTypes is
              New_String(Str => Tiny_String.To_String(Source => Base_Type)),
            Flag_To_Check => New_String(Str => Flag)) =
         0 then
-         return True;
+         return False;
       end if;
-      return False;
+      return True;
    end Has_Flag;
 
 end BasesTypes;
