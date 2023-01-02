@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1343,12 +1343,11 @@ package body Maps.UI is
       Center_X := Player_Ship.Sky_X;
       Center_Y := Player_Ship.Sky_Y;
       Set_Tags_Loop :
-      for I in Bases_Types_List.Iterate loop
+      for Base_Type of Bases_Types loop
+         exit Set_Tags_Loop when Length(Source => Base_Type) = 0;
          Tag_Configure
-           (TextWidget => Map_View,
-            TagName =>
-              To_String(Source => BasesTypes_Container.Key(Position => I)),
-            Options => "-foreground #" & Bases_Types_List(I).Color);
+           (TextWidget => Map_View, TagName => To_String(Source => Base_Type),
+            Options => "-foreground #" & Bases_Types_List(Base_Type).Color);
       end loop Set_Tags_Loop;
       Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
