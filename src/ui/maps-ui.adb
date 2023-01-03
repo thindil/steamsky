@@ -636,7 +636,8 @@ package body Maps.UI is
                  (TextWidget => Map_Info, TagName => "basetype",
                   Options =>
                     "-foreground #" &
-                    Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Color);
+                    Get_Base_Type_Color
+                      (Base_Type => Sky_Bases(Base_Index).Base_Type));
                Insert_Text(Text => LF & "Type: ");
                Insert_Text
                  (Text =>
@@ -1345,7 +1346,8 @@ package body Maps.UI is
          exit Set_Tags_Loop when Length(Source => Base_Type) = 0;
          Tag_Configure
            (TextWidget => Map_View, TagName => To_String(Source => Base_Type),
-            Options => "-foreground #" & Bases_Types_List(Base_Type).Color);
+            Options =>
+              "-foreground #" & Get_Base_Type_Color(Base_Type => Base_Type));
       end loop Set_Tags_Loop;
       Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
