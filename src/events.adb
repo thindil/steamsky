@@ -567,9 +567,7 @@ package body Events is
       Choose_Faction_Loop :
       for I in 1 .. Get_Factions_Amount loop
          Faction := Get_Faction(Number => I);
-         if Faction_Roll > Faction.Spawn_Chance then
-            Faction_Roll := Faction_Roll - Faction.Spawn_Chance;
-         else
+         if Faction_Roll < Faction.Spawn_Chance then
             Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
             Sky_Bases(Base_Index).Reputation.Level :=
               Get_Reputation
@@ -577,6 +575,7 @@ package body Events is
                  Target_Faction => Sky_Bases(Base_Index).Owner);
             exit Choose_Faction_Loop;
          end if;
+         Faction_Roll := Faction_Roll - Faction.Spawn_Chance;
       end loop Choose_Faction_Loop;
       Sky_Bases(Base_Index).Population := Get_Random(Min => 2, Max => 50);
       Sky_Bases(Base_Index).Visited := (others => 0);
