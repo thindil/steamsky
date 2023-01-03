@@ -335,3 +335,10 @@ proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.exportc.} =
 
 proc getAdaBaseTypeName(baseType: cstring): cstring {.exportc.} =
   return basesTypesList[$baseType].name.cstring
+
+proc hasAdaRecipe(baseType, recipe: cstring): cint {.exportc.} =
+  if not basesTypesList.hasKey(key = $baseType):
+    return 0
+  if $recipe in basesTypesList[$baseType].recipes:
+    return 1
+  return 0

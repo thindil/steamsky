@@ -236,4 +236,22 @@ package body BasesTypes is
                     (Str => Tiny_String.To_String(Source => Base_Type))));
    end Get_Base_Type_Name;
 
+   function Has_Recipe
+     (Base_Type: Tiny_String.Bounded_String; Recipe: String) return Boolean is
+      function Has_Ada_Recipe
+        (B_Type, Recipe_To_Check: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "hasAdaRecipe";
+   begin
+      if Has_Ada_Recipe
+          (B_Type =>
+             New_String(Str => Tiny_String.To_String(Source => Base_Type)),
+           Recipe_To_Check => New_String(Str => Recipe)) =
+        0 then
+         return False;
+      end if;
+      return True;
+   end Has_Recipe;
+
 end BasesTypes;

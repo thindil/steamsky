@@ -136,4 +136,7 @@ package BasesTypes is
    function Get_Base_Type_Name
      (Base_Type: Tiny_String.Bounded_String) return String;
 
+   function Has_Recipe
+     (Base_Type: Tiny_String.Bounded_String; Recipe: String) return Boolean;
+
 end BasesTypes;
