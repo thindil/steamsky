@@ -33,7 +33,7 @@ type
     ##
     ## In what order show the last messages: older messages first, newer messages
     ## first
-    older_First, newer_First
+    olderFirst = "older_First", newerFirst = "newer_First"
 
   AutoSaveTime* = enum
     ## FUNCTION
