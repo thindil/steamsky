@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -334,7 +334,7 @@ package body Ships.UI.Crew.Inventory is
       type Inventory_Array is array(Positive range <>) of Local_Item_Data;
       Local_Inventory: Inventory_Array
         (1 ..
-             Positive
+             Natural
                (Inventory_Container.Length
                   (Container => Player_Ship.Crew(Member_Index).Inventory)));
       function "<"(Left, Right: Local_Item_Data) return Boolean is
