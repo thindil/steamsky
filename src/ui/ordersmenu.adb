@@ -273,15 +273,10 @@ package body OrdersMenu is
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index
                    (Item => Recipes_Container.Key(Position => I)) =
-                 UnboundedString_Container.No_Index and
-                 Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Recipes
-                   .Contains
-                   (Item =>
-                      To_Unbounded_String
-                        (Source =>
-                           To_String
+                 UnboundedString_Container.No_Index and Has_Recipe(Base_Type => Sky_Bases(Base_Index).Base_Type, Recipe => To_String
                              (Source =>
-                                Recipes_Container.Key(Position => I)))) and
+                                Recipes_Container.Key(Position => I)))
+                 and
                  Recipes_List(I).Reputation <=
                    Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button

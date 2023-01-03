@@ -407,7 +407,7 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
-            if not Bases_Types_List(Base_Type).Recipes.Contains(Item => I) or
+            if not Has_Recipe(Base_Type => Base_Type, Recipe => To_String(Source => I)) or
               Known_Recipes.Find_Index
                   (Item =>
                      To_Bounded_String(Source => To_String(Source => I))) /=

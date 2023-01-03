@@ -159,10 +159,8 @@ package body Bases.Trade is
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
    begin
-      if not Bases_Types_List(Base_Type).Recipes.Contains
-          (Item =>
-             To_Unbounded_String
-               (Source => To_String(Source => Recipe_Index))) then
+      if not Has_Recipe(Base_Type => Base_Type, Recipe =>
+          To_String(Source => Recipe_Index)) then
          raise Trade_Cant_Buy;
       end if;
       if Known_Recipes.Find_Index(Item => Recipe_Index) /=
