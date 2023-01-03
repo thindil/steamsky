@@ -23,7 +23,7 @@ type
     ## FUNCTION
     ##
     ## Ships's state of speed, how much engines are used
-    docked, full_Stop, quarter_Speed, half_Speed, full_Speed
+    docked, fullStop = "full_Stop", quarterSpeed = "quarter_Speed", halfSpeed = "half_Speed", fullSpeed = "full_Speed"
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## FUNCTION
