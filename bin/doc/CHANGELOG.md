@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when moving all items from the player's ship crew member inventory to
+  the ship's cargo
+
 ## [8.0.2] - 2022-12-04
 
 ## Fixed
