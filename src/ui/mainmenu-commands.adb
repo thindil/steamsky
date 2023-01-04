@@ -911,11 +911,13 @@ package body MainMenu.Commands is
            "{Select your starting base type from a list. Your starting base is your home base, where you can gain faster experience. Home base can be changed later. Some types of bases are better starting points than others. More info about each base type can be found after selecting it." &
            LF & LF & "}");
       Find_Base_Type_Loop :
-      for Base of Bases_Types_List loop
-         if Base.Name = Base_Name then
+      for Base_Type of Bases_Types loop
+         if Get_Base_Type_Name(Base_Type => Base_Type) = Base_Name then
             Insert
               (TextWidget => Info_Text, Index => "end",
-               Text => "{" & To_String(Source => Base.Description) & "}");
+               Text =>
+                 "{" & Get_Base_Type_Description(Base_Type => Base_Type) &
+                 "}");
             exit Find_Base_Type_Loop;
          end if;
       end loop Find_Base_Type_Loop;
