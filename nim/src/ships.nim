@@ -110,6 +110,7 @@ type
     upgradeAction: cint
     mType: cint
     data: array[1..3, cint]
+    data2: cstring
 
   AdaMemberData = object
     attributes: array[1..16, array[2, cint]]
@@ -188,8 +189,8 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
           maxModules: adaModule.data[2])
     of workshop:
       module = ModuleData(mType: workshop,
-          craftingIndex: $adaModule.data[1], craftingTime: adaModule.data[2],
-              craftingAmount: adaModule.data[3])
+          craftingIndex: $adaModule.data2, craftingTime: adaModule.data[1],
+              craftingAmount: adaModule.data[2])
     of trainingRoom:
       module = ModuleData(mType: trainingRoom, trainedSkill: adaModule.data[1])
     of batteringRam:
