@@ -2,9 +2,11 @@ discard """
   exitcode: 0
 """
 
+import std/tables
 import ../../src/[crewinventory, game, items, ships, types]
 
-loadItems("../bin/data/items.dat")
+if itemsList.len == 0:
+  loadItems("../bin/data/items.dat")
 
 var member = MemberData(homeBase: 1)
 const attribute = MobAttributeRecord(level: 1, experience: 0)
