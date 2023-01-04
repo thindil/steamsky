@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Game; use Game;
 
 -- ****h* BasesTypes/BasesTypes
@@ -25,49 +23,6 @@ with Game; use Game;
 -- SOURCE
 package BasesTypes is
 -- ****
-
-   --## rule off TYPE_INITIAL_VALUES
-   -- ****t* BasesTypes/BasesTypes.Prices_Array
-   -- FUNCTION
-   -- Buy and sell prices for the item in selected base type
-   -- SOURCE
-   type Prices_Array is array(1 .. 2) of Natural with
-      Default_Component_Value => 0;
-   -- ****
-
-   -- ****t* BasesTypes/BasesTypes.BasesTrade_Container
-   -- FUNCTION
-   -- Used to store base buy and sell prices for items in selected base type
-   -- SOURCE
-   package BasesTrade_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Prices_Array,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
-   -- ****
-
-   -- ****s* BasesTypes/Bases_Types.BaseType_Data
-   -- FUNCTION
-   -- Data structure for bases types
-   -- PARAMETERS
-   -- Name        - Name of base type, will be presented to the player
-   -- Color       - Hexadecimal number of color used to show that base type on
-   --               the map
-   -- Trades      - List of base items prices for buy and sale in that base
-   --               type
-   -- Recipes     - List of available crafting recipes in that base type
-   -- Flags       - Special flags for selected base type (like shipyard, etc)
-   -- Description - Description of the base type. Will be presented to the
-   --               player, for example in new game menu
-   -- SOURCE
-   type Base_Type_Data is record
-      Name: Unbounded_String;
-      Color: String(1 .. 6);
-      Trades: BasesTrade_Container.Map;
-      Recipes: UnboundedString_Container.Vector;
-      Flags: UnboundedString_Container.Vector;
-      Description: Unbounded_String;
-   end record;
-   -- ****
-   --## rule on TYPE_INITIAL_VALUES
 
    -- ****f* BasesTypes/BasesTypes.Load_Bases_Types
    -- FUNCTION

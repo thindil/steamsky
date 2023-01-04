@@ -15,14 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
 
 package body BasesTypes is
 
    procedure Load_Bases_Types(File_Name: String) is
-      use Ada.Strings;
       use Interfaces.C;
       use Tiny_String;
 
