@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
 
@@ -24,127 +23,21 @@ package body BasesTypes is
 
    procedure Load_Bases_Types(File_Name: String) is
       use Ada.Strings;
-      use Ada.Strings.Fixed;
       use Interfaces.C;
       use Tiny_String;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Base_Type_Data;
-      --## rule off TYPE_INITIAL_VALUES
-      type Base_Type_Nim_Data is record
-         Name: chars_ptr;
-         Color: chars_ptr;
-         Description: chars_ptr;
-      end record;
       type Ada_Bases_Types is array(0 .. 10) of chars_ptr;
-      --## rule on TYPE_INITIAL_VALUES
-      Temp_Nim_Record: Base_Type_Nim_Data;
-      Trade: Prices_Array;
-      --## rule on IMPROPER_INITIALIZATION
-      Index, Index2: Natural := 0;
-      Base_Data: Unbounded_String := Null_Unbounded_String;
       A_Bases_Types: Ada_Bases_Types;
       procedure Load_Ada_Bases_Types(Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaBasesTypes";
-      procedure Get_Ada_Base_Type
-        (Base_Index: chars_ptr; Ada_Base_Type: out Base_Type_Nim_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseType";
-      function Get_Ada_Base_Data
-        (Base_Index: chars_ptr; Item_Index: Integer; Data_Type: chars_ptr)
-         return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseData";
-      function Get_Ada_Base_Trade
-        (Base_Index: chars_ptr; Trade_Index: Integer; Nim_Trade: Prices_Array)
-         return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseTrade";
       procedure Get_Ada_Bases_Types(B_Types: out Ada_Bases_Types) with
          Import => True,
          Convention => C,
          External_Name => "getAdaBasesTypes";
    begin
       Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
-      Load_Bases_Types_Loop :
-      loop
-         Get_Ada_Base_Type
-           (Base_Index => New_String(Str => Index'Img),
-            Ada_Base_Type => Temp_Nim_Record);
-         exit Load_Bases_Types_Loop when Strlen(Item => Temp_Nim_Record.Name) =
-           0;
-         Temp_Record.Name :=
-           To_Unbounded_String(Source => Value(Item => Temp_Nim_Record.Name));
-         Temp_Record.Color := Value(Item => Temp_Nim_Record.Color);
-         Temp_Record.Description :=
-           To_Unbounded_String
-             (Source => Value(Item => Temp_Nim_Record.Description));
-         Temp_Record.Recipes.Clear;
-         Index2 := 0;
-         Load_Base_Recipes_Loop :
-         loop
-            Base_Data :=
-              To_Unbounded_String
-                (Source =>
-                   Value
-                     (Item =>
-                        Get_Ada_Base_Data
-                          (Base_Index => New_String(Str => Index'Img),
-                           Item_Index => Index2,
-                           Data_Type => New_String(Str => "recipe"))));
-            exit Load_Base_Recipes_Loop when Length(Source => Base_Data) = 0;
-            Temp_Record.Recipes.Append(New_Item => Base_Data);
-            Index2 := Index2 + 1;
-         end loop Load_Base_Recipes_Loop;
-         Index2 := 0;
-         Temp_Record.Flags.Clear;
-         Load_Base_Flags_Loop :
-         loop
-            Base_Data :=
-              To_Unbounded_String
-                (Source =>
-                   Value
-                     (Item =>
-                        Get_Ada_Base_Data
-                          (Base_Index => New_String(Str => Index'Img),
-                           Item_Index => Index2,
-                           Data_Type => New_String(Str => "flag"))));
-            exit Load_Base_Flags_Loop when Length(Source => Base_Data) = 0;
-            Temp_Record.Flags.Append(New_Item => Base_Data);
-            Index2 := Index2 + 1;
-         end loop Load_Base_Flags_Loop;
-         Index2 := 1;
-         Temp_Record.Trades.Clear;
-         Load_Base_Trades_Loop :
-         loop
-            Base_Data :=
-              To_Unbounded_String
-                (Source =>
-                   Value
-                     (Item =>
-                        Get_Ada_Base_Trade
-                          (Base_Index => New_String(Str => Index'Img),
-                           Trade_Index => Index2, Nim_Trade => Trade)));
-            exit Load_Base_Trades_Loop when Length(Source => Base_Data) = 0;
-            Temp_Record.Trades.Include
-              (Key =>
-                 To_Bounded_String(Source => To_String(Source => Base_Data)),
-               New_Item => Trade);
-            Index2 := Index2 + 1;
-         end loop Load_Base_Trades_Loop;
-         BasesTypes_Container.Include
-           (Container => Bases_Types_List,
-            Key =>
-              To_Bounded_String
-                (Source => Trim(Source => Index'Img, Side => Left)),
-            New_Item => Temp_Record);
-         Index := Index + 1;
-      end loop Load_Bases_Types_Loop;
       Get_Ada_Bases_Types(B_Types => A_Bases_Types);
       Set_Bases_Types_Loop :
       for I in A_Bases_Types'Range loop

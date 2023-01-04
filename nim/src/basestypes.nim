@@ -252,60 +252,6 @@ proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [
     DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadBasesTypes(fileName = $fileName)
 
-proc getAdaBaseType(index: cstring; adaBaseType: var AdaBaseTypeData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
-  adaBaseType = AdaBaseTypeData(name: "".cstring, color: "".cstring,
-      description: "".cstring)
-  let baseTypeKey = strip(s = $index)
-  if not basesTypesList.hasKey(key = baseTypeKey):
-    return
-  let baseType = try:
-      basesTypesList[baseTypeKey]
-    except KeyError:
-      return
-  adaBaseType.name = baseType.name.cstring
-  adaBaseType.color = baseType.color.cstring
-  adaBaseType.description = baseType.description.cstring
-
-proc getAdaBaseData(baseIndex: cstring; index: cint;
-    adaDataType: cstring): cstring {.sideEffect, raises: [], tags: [], exportc.} =
-  let baseTypeKey = strip(s = $baseIndex)
-  if not basesTypesList.hasKey(key = baseTypeKey):
-    return ""
-  let dataList = try:
-      if adaDataType == "recipe":
-        basesTypesList[baseTypeKey].recipes
-      else:
-        basesTypesList[baseTypeKey].flags
-    except KeyError:
-      return ""
-  if index >= dataList.len():
-    return ""
-  return dataList[index].cstring
-
-proc getAdaBaseTrade(baseIndex: cstring; index: cint;
-    adaBaseTrade: var AdaPricesArray): cstring {.sideEffect, raises: [], tags: [], exportc.} =
-  adaBaseTrade = [1: 0.cint, 2: 0.cint]
-  let baseTypeKey = strip(s = $baseIndex)
-  if not basesTypesList.hasKey(key = baseTypeKey):
-    return ""
-  try:
-    if index > basesTypesList[baseTypeKey].trades.len():
-      return ""
-  except KeyError:
-    return ""
-  var currIndex = 1
-  try:
-    for tradeIndex, trade in basesTypesList[baseTypeKey].trades.pairs:
-      currIndex.inc()
-      if currIndex < index:
-        continue
-      adaBaseTrade = [1: trade[1].cint, 2: trade[2].cint]
-      let newIndex = $tradeIndex
-      return newIndex.cstring
-  except KeyError:
-    return ""
-
 proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.exportc.} =
   return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
 
