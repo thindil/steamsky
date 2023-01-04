@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ## [8.0.2] - 2022-12-04
 
-## Fixed
+### Fixed
 - Showing the destroyed ships in the game statistics
 - Crash on finished boarding combat
 - Crash on entering the game statistics when there is a list of killed mobs
@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ## [8.0.1] - 2022-11-20
 
-## Fixed
+### Fixed
 - No check for the correct amount of items to craft during setting a crafting
   recipe
 - Set proper max amount of money to train when the player doesn't have enough
