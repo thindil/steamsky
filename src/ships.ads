@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -508,5 +508,7 @@ package Ships is
       Import => True,
       Convention => C,
       External_Name => "setAdaShipCargo";
+
+   procedure Get_Ship_Modules;
 
 end Ships;

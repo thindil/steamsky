@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,7 +17,7 @@
 
 with Ada.Characters.Handling;
 with Ada.Strings.Unbounded;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -1261,7 +1261,6 @@ package body Ships is
 
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       function Generate_Ada_Ship_Name(F_Index: chars_ptr) return chars_ptr with
@@ -1344,8 +1343,6 @@ package body Ships is
    end Count_Combat_Value;
 
    function Get_Cabin_Quality(Quality: Natural) return String is
-      use Interfaces.C.Strings;
-
       function Get_Cabin_Quality_Nim(Q: Natural) return chars_ptr with
          Import => True,
          Convention => C,
@@ -1441,5 +1438,38 @@ package body Ships is
       end loop Convert_Crew_Loop;
       Get_Ada_Ship_Crew(N_Crew => Nim_Crew);
    end Get_Ada_Crew;
+
+   procedure Get_Ship_Modules is
+      use Tiny_String;
+
+      type Owners_Array is array(1 .. 10) of Integer;
+      type Module_Data is array(1 .. 3) of Integer;
+      type Nim_Module_Data is record
+         Name: chars_ptr;
+         Proto_Index: Integer;
+         Weight: Integer;
+         Durability: Integer;
+         Max_Durability: Integer;
+         Owner: Owners_Array;
+         Upgrade_Progress: Integer;
+         Upgrade_Action: Integer;
+         M_Type: Integer;
+         Data: Module_Data;
+      end record;
+      type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
+      Nim_Modules: Nim_Modules_Array;
+      Index: Positive := 1;
+      procedure Get_Ada_Ship_Modules(N_Modules: Nim_Modules_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaShipModules";
+   begin
+      Convert_Modules_Loop:
+      for Module of Player_Ship.Modules loop
+         Nim_Modules(Index) := (Name => New_String(Str => To_String(Source => Module.Name)), others => <>);
+         Index := Index + 1;
+      end loop Convert_Modules_Loop;
+      Get_Ada_Ship_Modules(N_Modules => Nim_Modules);
+   end Get_Ship_Modules;
 
 end Ships;
