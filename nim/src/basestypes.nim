@@ -240,14 +240,6 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
 
 # Temporary code for interfacing with Ada
 
-type
-  AdaBaseTypeData* = object
-    name: cstring
-    color: cstring
-    description: cstring
-
-  AdaPricesArray* = array[1..2, cint]
-
 proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [
     DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadBasesTypes(fileName = $fileName)
