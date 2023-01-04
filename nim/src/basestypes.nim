@@ -345,3 +345,6 @@ proc hasAdaRecipe(baseType, recipe: cstring): cint {.exportc.} =
 
 proc getAdaBaseTypeColor(baseType: cstring): cstring {.exportc.} =
   return basesTypesList[$baseType].color.cstring
+
+proc getAdaBaseTypeDescription(baseType: cstring): cstring {.exportc.} =
+  return basesTypesList[$baseType].description.cstring
