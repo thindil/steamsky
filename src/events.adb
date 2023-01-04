@@ -596,14 +596,18 @@ package body Events is
       With_Traders: Boolean := True) is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Player_Value: Natural := 0;
       Player_Ships: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Player_Value := Count_Combat_Value;
       if Get_Random(Min => 1, Max => 100) > 98 then
          Player_Value := Player_Value * 2;
       end if;
+      --## rule off IMPROPER_INITIALIZATION
       Get_Player_Ships(Player_Ships => Player_Ships);
+      --## rule on IMPROPER_INITIALIZATION
       Generate_Enemies_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Combat_Value <= Player_Value and
