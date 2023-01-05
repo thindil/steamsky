@@ -15,7 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+--## rule off REDUCEABLE_SCOPE
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+--## rule on REDUCEABLE_SCOPE
 with Bases;
 
 package body BasesTypes is
@@ -24,7 +26,9 @@ package body BasesTypes is
       use Interfaces.C;
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Ada_Bases_Types is array(0 .. 10) of chars_ptr;
+      --## rule on TYPE_INITIAL_VALUES
       A_Bases_Types: Ada_Bases_Types;
       procedure Load_Ada_Bases_Types(Name: chars_ptr) with
          Import => True,
