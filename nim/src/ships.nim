@@ -168,7 +168,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
   else:
     npcShip.modules = @[]
   for adaModule in modules:
-    if adaModule.mType == ModuleType2.any.ord:
+    if adaModule.mType == -1:
       return
     var module: ModuleData
     case adaModule.mType.ModuleType2

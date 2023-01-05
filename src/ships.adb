@@ -1454,7 +1454,7 @@ package body Ships is
          Owner: Owners_Array := (others => 0);
          Upgrade_Progress: Integer;
          Upgrade_Action: Integer;
-         M_Type: Integer;
+         M_Type: Integer := -1;
          Data: Module_Data_Array;
          Data_2: chars_ptr;
       end record;
