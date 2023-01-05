@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,21 +16,27 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Bases; use Bases;
-with BasesTypes; use BasesTypes;
-with Combat; use Combat;
-with Crew; use Crew;
+with BasesTypes;
+with Combat;
+with Crew;
 with Factions; use Factions;
-with Items; use Items;
+with Items;
 with Maps; use Maps;
 with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
+with Ships.Cargo;
+with Ships.Crew;
+with Ships.Movement;
 with Utils; use Utils;
 
 package body Events is
 
    function Check_For_Event return Boolean is
+      use Combat;
+      use Crew;
+      use Items;
+      use Ships.Cargo;
+      use Ships.Crew;
+      use Ships.Movement;
       use Tiny_String;
 
       Time_Passed: Integer := 0;
@@ -350,6 +356,8 @@ package body Events is
                when 22 .. 30 => -- Double price for item in base
                   Set_Double_Price_Event_Block :
                   declare
+                     use BasesTypes;
+
                      Item_Index: Natural := 0;
                      New_Item_Index: Natural := 0;
                   begin
