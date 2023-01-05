@@ -5,10 +5,11 @@ discard """
 import std/tables
 import ../../src/[factions, careers, game, items]
 
-loadData("../bin/data/game.dat")
-loadItems("../bin/data/items.dat")
-loadCareers("../bin/data/careers.dat")
-loadFactions("../bin/data/factions.dat")
+if itemsList.len == 0:
+  loadData("../bin/data/game.dat")
+  loadItems("../bin/data/items.dat")
+  loadCareers("../bin/data/careers.dat")
+  loadFactions("../bin/data/factions.dat")
 
 assert getReputation("POLEIS", "POLEIS") == 0
 assert getReputation("POLEIS", "PIRATES") == -10
