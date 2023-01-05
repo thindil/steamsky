@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, shipmodules, types
+import game, log, ships, shipmodules, types
 
 type
   CraftData = object
@@ -184,6 +184,19 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     recipesList[recipeIndex] = recipe
 
+proc getWorkshopRecipeName*(workshop: Natural): string =
+  let module = playerShip.modules[workshop]
+  if module.craftingIndex.len > 0:
+    if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+      return "Studying " & itemsList[module.craftingIndex[6..^1].parseInt].name
+    elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+      return "Deconstructing " & itemsList[module.craftingIndex[
+          12..^1].parseInt].name
+    else:
+      return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
+          module.craftingIndex.parseInt].name
+  return ""
+
 # Temporary code for interfacing with Ada
 
 type
@@ -240,3 +253,6 @@ proc getAdaRecipeMaterialAmount(recipeIndex: cstring;
     return recipesList[$recipeIndex].materialAmounts[index].cint
   except KeyError:
     return 0
+
+proc getAdaWorkshopRecipeName(workshop: cint): cstring {.exportc.} =
+  return getWorkshopRecipeName(workshop).cstring
