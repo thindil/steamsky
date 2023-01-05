@@ -1439,37 +1439,89 @@ package body Ships is
       Get_Ada_Ship_Crew(N_Crew => Nim_Crew);
    end Get_Ada_Crew;
 
-   procedure Get_Ship_Modules is
+   procedure Get_Ada_Modules is
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Owners_Array is array(1 .. 10) of Integer;
-      type Module_Data is array(1 .. 3) of Integer;
+      type Module_Data_Array is array(1 .. 3) of Integer;
       type Nim_Module_Data is record
          Name: chars_ptr;
          Proto_Index: Integer;
          Weight: Integer;
          Durability: Integer;
          Max_Durability: Integer;
-         Owner: Owners_Array;
+         Owner: Owners_Array := (others => 0);
          Upgrade_Progress: Integer;
          Upgrade_Action: Integer;
          M_Type: Integer;
-         Data: Module_Data;
+         Data: Module_Data_Array;
+         Data_2: chars_ptr;
       end record;
       type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
-      Nim_Modules: Nim_Modules_Array;
-      Index: Positive := 1;
+      --## rule on TYPE_INITIAL_VALUES
+      Nim_Modules: Nim_Modules_Array := (others => Nim_Module_Data'(others => <>));
+      Index, Index2: Positive := 1;
+      Tmp_Owners: Owners_Array;
+      Tmp_Data: Module_Data_Array;
+      Tmp_Data_2: chars_ptr;
       procedure Get_Ada_Ship_Modules(N_Modules: Nim_Modules_Array) with
          Import => True,
          Convention => C,
          External_Name => "getAdaShipModules";
    begin
-      Convert_Modules_Loop:
+      Convert_Modules_Loop :
       for Module of Player_Ship.Modules loop
-         Nim_Modules(Index) := (Name => New_String(Str => To_String(Source => Module.Name)), others => <>);
+         Tmp_Owners := (others => 0);
+         Index2 := 1;
+         Convert_Module_Owners_Loop :
+         for Owner of Module.Owner loop
+            Tmp_Owners(Index2) := Owner;
+            Index2 := Index2 + 1;
+         end loop Convert_Module_Owners_Loop;
+         case Module.M_Type is
+            when ENGINE =>
+               Tmp_Data :=
+                 (Module.Fuel_Usage, Module.Power,
+                  (if Module.Disabled then 1 else 0));
+            when CABIN =>
+               Tmp_Data := (Module.Cleanliness, Module.Quality, 0);
+            when TURRET =>
+               Tmp_Data := (Module.Gun_Index, 0, 0);
+            when GUN =>
+               Tmp_Data := (Module.Damage, Module.Ammo_Index, 0);
+            when HULL =>
+               Tmp_Data := (Module.Installed_Modules, Module.Max_Modules, 0);
+            when WORKSHOP =>
+               Tmp_Data := (Module.Crafting_Time, Module.Crafting_Amount, 0);
+            when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM | ANY =>
+               Tmp_Data := (0, 0, 0);
+            when TRAINING_ROOM =>
+               Tmp_Data := (Integer(Module.Trained_Skill), 0, 0);
+            when BATTERING_RAM =>
+               Tmp_Data :=
+                 (Module.Damage2, (if Module.Cooling_Down then 1 else 0), 0);
+            when HARPOON_GUN =>
+               Tmp_Data := (Module.Duration, Module.Harpoon_Index, 0);
+         end case;
+         if Module.M_Type = WORKSHOP then
+            Tmp_Data_2 :=
+              New_String(Str => To_String(Source => Module.Crafting_Index));
+         else
+            Tmp_Data_2 := New_String(Str => "");
+         end if;
+         Nim_Modules(Index) :=
+           (Name => New_String(Str => To_String(Source => Module.Name)),
+            Proto_Index => Module.Proto_Index, Weight => Module.Weight,
+            Durability => Module.Durability,
+            Max_Durability => Module.Max_Durability, Owner => Tmp_Owners,
+            Upgrade_Progress => Module.Upgrade_Progress,
+            Upgrade_Action => Ship_Upgrade'Pos(Module.Upgrade_Action),
+            M_Type => Module_Type_2'Pos(Module.M_Type), Data => Tmp_Data,
+            Data_2 => Tmp_Data_2);
          Index := Index + 1;
       end loop Convert_Modules_Loop;
       Get_Ada_Ship_Modules(N_Modules => Nim_Modules);
-   end Get_Ship_Modules;
+   end Get_Ada_Modules;
 
 end Ships;

@@ -509,6 +509,6 @@ package Ships is
       Convention => C,
       External_Name => "setAdaShipCargo";
 
-   procedure Get_Ship_Modules;
+   procedure Get_Ada_Modules;
 
 end Ships;
