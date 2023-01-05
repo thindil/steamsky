@@ -112,15 +112,14 @@ package body Bases.Trade.Test_Data.Tests is
       Amount: constant Positive := Positive(Known_Recipes.Length);
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Recipes: constant array(1 .. 9) of String(1 .. 1) :=
+        ("1", "2", "3", "4", "5", "6", "7", "8", "9");
 
    begin
 
-      for Recipe of Bases_Types_List(Sky_Bases(BaseIndex).Base_Type)
-        .Recipes loop
-         if Known_Recipes.Find_Index
-             (Item => To_Bounded_String(To_String(Recipe))) =
-           Positive_Container.No_Index then
-            Buy_Recipe(To_Bounded_String(To_String(Recipe)));
+      for Recipe of Recipes loop
+         if Has_Recipe(Sky_Bases(BaseIndex).Base_Type, Recipe) then
+            Buy_Recipe(To_Bounded_String(Recipe));
             exit;
          end if;
       end loop;
