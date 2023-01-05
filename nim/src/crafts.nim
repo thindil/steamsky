@@ -188,13 +188,13 @@ proc getWorkshopRecipeName*(workshop: Natural): string =
   let module = playerShip.modules[workshop]
   if module.craftingIndex.len > 0:
     if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
-      return "Studying " & itemsList[module.craftingIndex[6..^1].parseInt].name
+      return "Studying " & itemsList[module.craftingIndex[6..^1].strip.parseInt].name
     elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
       return "Deconstructing " & itemsList[module.craftingIndex[
-          12..^1].parseInt].name
+          12..^1].strip.parseInt].name
     else:
       return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
-          module.craftingIndex.parseInt].name
+          recipesList[module.craftingIndex].resultIndex].name
   return ""
 
 # Temporary code for interfacing with Ada

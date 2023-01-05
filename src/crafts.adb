@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,7 +18,7 @@
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Crew;
 with Crew.Inventory;
 with Goals;
@@ -34,7 +34,6 @@ package body Crafts is
    procedure Load_Recipes(File_Name: String) is
       use Ada.Strings;
       use Ada.Strings.Fixed;
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
@@ -1072,58 +1071,13 @@ package body Crafts is
    end Set_Recipe;
 
    function Get_Workshop_Recipe_Name(Workshop: Positive) return String is
-      use Tiny_String;
-      Module: constant Module_Data := Player_Ship.Modules(Workshop);
+      function Get_Ada_Workshop_Recipe_Name(W: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaWorkshopRecipeName";
    begin
-      if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
-         if Length(Source => Module.Crafting_Index) > 6
-           and then
-             Slice(Source => Module.Crafting_Index, Low => 1, High => 5) =
-             "Study" then
-            return
-              "Studying " &
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index =>
-                        Positive'Value
-                          (Slice
-                             (Source => Module.Crafting_Index, Low => 7,
-                              High =>
-                                Length(Source => Module.Crafting_Index))))
-                     .Name);
-         elsif Length(Source => Module.Crafting_Index) > 12
-           and then
-             Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
-             "Deconstruct" then
-            return
-              "Deconstructing " &
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index =>
-                        Positive'Value
-                          (Slice
-                             (Source => Module.Crafting_Index, Low => 13,
-                              High =>
-                                Length(Source => Module.Crafting_Index))))
-                     .Name);
-         else
-            return
-              "Manufacturing" & Positive'Image(Module.Crafting_Amount) & "x " &
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index =>
-                        Recipes_List
-                          (To_Bounded_String
-                             (Source =>
-                                To_String(Source => Module.Crafting_Index)))
-                          .Result_Index)
-                     .Name);
-         end if;
-      end if;
-      return "";
+      Get_Ada_Modules;
+      return Value(Item => Get_Ada_Workshop_Recipe_Name(W => Workshop - 1));
    end Get_Workshop_Recipe_Name;
 
 end Crafts;
