@@ -1425,6 +1425,12 @@ package body Ships.UI.Crew.Inventory is
                    .Amount);
          end if;
       end loop Move_Items_Loop;
+      if Inventory_Container.Length
+          (Container => Player_Ship.Crew(Member_Index).Inventory) =
+        0 then
+         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
+         return TCL_OK;
+      end if;
       Reset_Selection(Interp => Interp);
       return
         Sort_Crew_Inventory_Command
