@@ -63,6 +63,6 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural; value: int) =
 
 proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.exportc.} =
   if isPlayerShip == 1:
-    updateMorale(ship = playerShip, memberIndex = memberIndex, value = value)
+    updateMorale(ship = playerShip, memberIndex = memberIndex - 1, value = value)
   else:
-    updateMorale(ship = npcShip, memberIndex = memberIndex, value = value)
+    updateMorale(ship = npcShip, memberIndex = memberIndex - 1, value = value)
