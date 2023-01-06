@@ -186,6 +186,19 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
     KeyError, ValueError], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Get the name of the recipe set as working order for the selected workshop
+  ##
+  ## PARAMETERS
+  ##
+  ## * workshop - the index of the workshop which crafting order recipe name
+  ##              will be get
+  ##
+  ## RETURNS
+  ##
+  ## The name of the recipe set as the crafting order or empty string if nothing
+  ## is set
   let module = playerShip.modules[workshop]
   if module.craftingIndex.len > 0:
     if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
