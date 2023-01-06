@@ -184,11 +184,13 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     recipesList[recipeIndex] = recipe
 
-proc getWorkshopRecipeName*(workshop: Natural): string =
+proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
+    KeyError, ValueError], tags: [].} =
   let module = playerShip.modules[workshop]
   if module.craftingIndex.len > 0:
     if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
-      return "Studying " & itemsList[module.craftingIndex[6..^1].strip.parseInt].name
+      return "Studying " & itemsList[module.craftingIndex[
+          6..^1].strip.parseInt].name
     elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
       return "Deconstructing " & itemsList[module.craftingIndex[
           12..^1].strip.parseInt].name
