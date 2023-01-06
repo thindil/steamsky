@@ -98,6 +98,7 @@ package body Knowledge is
          Append(Source => Combo_Values, New_Item => " {Any}");
          Load_Bases_Types_Loop :
          for BaseType of Bases_Types loop
+            exit Load_Bases_Types_Loop when Length(Source => BaseType) = 0;
             Append
               (Source => Combo_Values,
                New_Item =>

@@ -912,6 +912,7 @@ package body MainMenu.Commands is
            LF & LF & "}");
       Find_Base_Type_Loop :
       for Base_Type of Bases_Types loop
+         exit Find_Base_Type_Loop when Tiny_String.Length(Source => Base_Type) = 0;
          if Get_Base_Type_Name(Base_Type => Base_Type) = Base_Name then
             Insert
               (TextWidget => Info_Text, Index => "end",
@@ -1082,6 +1083,7 @@ package body MainMenu.Commands is
       New_Game_Settings.Starting_Base := To_Bounded_String(Source => "Any");
       Set_Starting_Base_Loop :
       for Base_Type of Bases_Types loop
+         exit Set_Starting_Base_Loop when Length(Source => Base_Type) = 0;
          if Get_Base_Type_Name(Base_Type => Base_Type) =
            Get(Widgt => Combo_Box) then
             New_Game_Settings.Starting_Base := Base_Type;

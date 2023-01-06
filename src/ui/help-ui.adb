@@ -356,6 +356,7 @@ package body Help.UI is
             Bases_With_Flag := Null_Unbounded_String;
             Create_Bases_List_Loop :
             for BaseType of Bases_Types loop
+               exit Create_Bases_List_Loop when Length(Source => BaseType) = 0;
                if Has_Flag
                    (Base_Type => BaseType,
                     Flag => To_String(Source => Tag_Text)) then

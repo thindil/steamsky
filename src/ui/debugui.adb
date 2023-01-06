@@ -1055,6 +1055,7 @@ package body DebugUI is
       end if;
       Update_Base_Type_Loop :
       for Base_Type of Bases_Types loop
+         exit Update_Base_Type_Loop when Length(Source => Base_Type) = 0;
          if Get_Base_Type_Name(Base_Type => Base_Type) =
            Get(Widgt => Base_Combo) then
             Sky_Bases(Base_Index).Base_Type := Base_Type;
@@ -1393,6 +1394,7 @@ package body DebugUI is
          Ada_Command => Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
       for BaseType of Bases_Types loop
+         exit Load_Bases_Types_Loop when Length(Source => BaseType) = 0;
          Append
            (Source => Values_List,
             New_Item =>
