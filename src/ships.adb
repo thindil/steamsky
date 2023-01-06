@@ -1420,23 +1420,26 @@ package body Ships is
       end if;
    end Damage_Module;
 
-   procedure Get_Ada_Crew is
+   procedure Get_Ada_Crew(Ship: Ship_Record := Player_Ship) is
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
       --## rule on TYPE_INITIAL_VALUES
       Nim_Crew: Nim_Crew_Array; --## rule line off IMPROPER_INITIALIZATION
       Index: Positive := 1;
-      procedure Get_Ada_Ship_Crew(N_Crew: Nim_Crew_Array) with
+      procedure Get_Ada_Ship_Crew
+        (N_Crew: Nim_Crew_Array; Is_Player_Ship: Integer) with
          Import => True,
          Convention => C,
          External_Name => "getAdaShipCrew";
    begin
       Convert_Crew_Loop :
-      for Member of Player_Ship.Crew loop
+      for Member of Ship.Crew loop
          Nim_Crew(Index) := Member_To_Nim(Member => Member);
          Index := Index + 1;
       end loop Convert_Crew_Loop;
-      Get_Ada_Ship_Crew(N_Crew => Nim_Crew);
+      Get_Ada_Ship_Crew
+        (N_Crew => Nim_Crew,
+         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Get_Ada_Crew;
 
    procedure Get_Ada_Modules is
