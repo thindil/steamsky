@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -17,7 +17,8 @@
 
 import std/[os, parseopt, strutils]
 import bases, basestypes, careers, crafts, config, crew, crewinventory,
-    factions, game, items, log, maps, messages, mobs, ships, shipscargo, tk, utils
+    factions, game, items, log, maps, messages, mobs, ships, shipscargo,
+    shipscrew, tk, utils
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
