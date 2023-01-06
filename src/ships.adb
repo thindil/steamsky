@@ -1460,7 +1460,8 @@ package body Ships is
       end record;
       type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
       --## rule on TYPE_INITIAL_VALUES
-      Nim_Modules: Nim_Modules_Array := (others => Nim_Module_Data'(others => <>));
+      Nim_Modules: Nim_Modules_Array :=
+        (others => Nim_Module_Data'(others => <>));
       Index, Index2: Positive := 1;
       Tmp_Owners: Owners_Array;
       Tmp_Data: Module_Data_Array;
@@ -1482,27 +1483,36 @@ package body Ships is
          case Module.M_Type is
             when ENGINE =>
                Tmp_Data :=
-                 (Module.Fuel_Usage, Module.Power,
-                  (if Module.Disabled then 1 else 0));
+                 (1 => Module.Fuel_Usage, 2 => Module.Power,
+                  3 => (if Module.Disabled then 1 else 0));
             when CABIN =>
-               Tmp_Data := (Module.Cleanliness, Module.Quality, 0);
+               Tmp_Data :=
+                 (1 => Module.Cleanliness, 2 => Module.Quality, 3 => 0);
             when TURRET =>
-               Tmp_Data := (Module.Gun_Index, 0, 0);
+               Tmp_Data := (1 => Module.Gun_Index, 2 => 0, 3 => 0);
             when GUN =>
-               Tmp_Data := (Module.Damage, Module.Ammo_Index, 0);
+               Tmp_Data :=
+                 (1 => Module.Damage, 2 => Module.Ammo_Index, 3 => 0);
             when HULL =>
-               Tmp_Data := (Module.Installed_Modules, Module.Max_Modules, 0);
+               Tmp_Data :=
+                 (1 => Module.Installed_Modules, 2 => Module.Max_Modules,
+                  3 => 0);
             when WORKSHOP =>
-               Tmp_Data := (Module.Crafting_Time, Module.Crafting_Amount, 0);
+               Tmp_Data :=
+                 (1 => Module.Crafting_Time, 2 => Module.Crafting_Amount,
+                  3 => 0);
             when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM | ANY =>
-               Tmp_Data := (0, 0, 0);
+               Tmp_Data := (1 => 0, 2 => 0, 3 => 0);
             when TRAINING_ROOM =>
-               Tmp_Data := (Integer(Module.Trained_Skill), 0, 0);
+               Tmp_Data :=
+                 (1 => Integer(Module.Trained_Skill), 2 => 0, 3 => 0);
             when BATTERING_RAM =>
                Tmp_Data :=
-                 (Module.Damage2, (if Module.Cooling_Down then 1 else 0), 0);
+                 (1 => Module.Damage2,
+                  2 => (if Module.Cooling_Down then 1 else 0), 3 => 0);
             when HARPOON_GUN =>
-               Tmp_Data := (Module.Duration, Module.Harpoon_Index, 0);
+               Tmp_Data :=
+                 (1 => Module.Duration, 2 => Module.Harpoon_Index, 3 => 0);
          end case;
          if Module.M_Type = WORKSHOP then
             Tmp_Data_2 :=
