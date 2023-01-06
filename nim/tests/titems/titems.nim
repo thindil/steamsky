@@ -2,9 +2,11 @@ discard """
   exitcode: 0
 """
 
-import ../../src/[config, items, types]
+import std/tables
+import ../../src/[config, game, items, types]
 
-loadItems("../bin/data/items.dat")
+if itemsList.len == 0:
+  loadItems("../bin/data/items.dat")
 
 assert findProtoItem("Iron") > 0
 assert findProtoItem("sfdsfsdfsdf") == 0
