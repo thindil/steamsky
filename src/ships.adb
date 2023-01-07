@@ -1442,6 +1442,30 @@ package body Ships is
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Get_Ada_Crew;
 
+   procedure Set_Ada_Crew(Ship: in out Ship_Record) is
+      use Interfaces.C;
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
+      --## rule on TYPE_INITIAL_VALUES
+      Nim_Crew: Nim_Crew_Array; --## rule line off IMPROPER_INITIALIZATION
+      Index: Positive := 1;
+      procedure Set_Ada_Ship_Crew
+        (N_Crew: in out Nim_Crew_Array; Is_Player_Ship: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaShipCrew";
+   begin
+      Set_Ada_Ship_Crew
+        (N_Crew => Nim_Crew,
+         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Convert_Crew_Loop :
+      for Member of Nim_Crew loop
+         exit Convert_Crew_Loop when Strlen(Item => Member.Name) = 0;
+         Member_From_Nim(Member => Member, Ada_Member => Ship.Crew(Index));
+         Index := Index + 1;
+      end loop Convert_Crew_Loop;
+   end Set_Ada_Crew;
+
    procedure Get_Ada_Modules is
       use Tiny_String;
 
