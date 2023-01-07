@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
   the ship's cargo
 - Close the player's ship's crew member's inventory after moving all items
   from it
+- Counting amount of work needed to upgrade the player's ship's module's
+  durability
 
 ## [8.2] - 2022-12-25
 
