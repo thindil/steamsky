@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -58,10 +58,13 @@ package body Ships.Upgrade is
             end if;
             Upgrade_Action := DURABILITY;
             Upgrade_Progress :=
-              BaseModules_Container.Element
-                (Container => Modules_List,
-                 Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                .Durability;
+              Integer
+                (Float
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                      .Durability) *
+                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
          when 2 => -- Upgrade various max value of selected module
             Local_Max_Value :=
               Natural
