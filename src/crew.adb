@@ -1280,4 +1280,46 @@ package body Crew is
       return Nim_Member;
    end Member_To_Nim;
 
+   procedure Member_From_Nim
+     (Member: Nim_Member_Data; Ada_Member: in out Member_Data) is
+      use Tiny_String;
+   begin
+      Ada_Member.Name :=
+        To_Bounded_String(Source => Value(Item => Member.Name));
+      Ada_Member.Health := Member.Health;
+      Ada_Member.Tired := Member.Tired;
+      Ada_Member.Hunger := Member.Hunger;
+      Ada_Member.Thirst := Member.Thirst;
+      Ada_Member.Order := Crew_Orders'Val(Member.Order);
+      Ada_Member.Previous_Order := Crew_Orders'Val(Member.Previous_Order);
+      Ada_Member.Order_Time := Member.Order_Time;
+      Ada_Member.Payment := Member.Payment;
+      Ada_Member.Contract_Length := Member.Contract_Length;
+      Ada_Member.Morale := Member.Morale;
+      Ada_Member.Loyalty := Member.Loyalty;
+      Convert_Equipment_Loop :
+      for I in Member.Equipment'Range loop
+         Ada_Member.Equipment(Equipment_Locations'Val(I)) :=
+           Member.Equipment(I) + 1;
+      end loop Convert_Equipment_Loop;
+      Convert_Atrributes_Loop :
+      for I in Member.Attributes'Range(1) loop
+         exit Convert_Atrributes_Loop when I > Attributes_Amount;
+         Ada_Member.Attributes(I).Level := Member.Attributes(I, 1);
+         Ada_Member.Attributes(I).Experience := Member.Attributes(I, 2);
+      end loop Convert_Atrributes_Loop;
+      Skills_Container.Clear(Container => Ada_Member.Skills);
+      Convert_Skills_Loop :
+      for I in Member.Skills'Range(1) loop
+         exit Convert_Skills_Loop when Member.Skills(I, 1) = 0;
+         Skills_Container.Append
+           (Container => Ada_Member.Skills,
+            New_Item =>
+              Skill_Info'
+                (Index => Skills_Amount_Range(Member.Skills(I, 1)),
+                 Level => Member.Skills(I, 2),
+                 Experience => Member.Skills(I, 3)));
+      end loop Convert_Skills_Loop;
+   end Member_From_Nim;
+
 end Crew;
