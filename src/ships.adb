@@ -1466,8 +1466,10 @@ package body Ships is
       Nim_Modules: Nim_Modules_Array :=
         (others => Nim_Module_Data'(others => <>));
       Index, Index2: Positive := 1;
+      --## rule off IMPROPER_INITIALIZATION
       Tmp_Owners: Owners_Array;
       Tmp_Data: Module_Data_Array;
+      --## rule on IMPROPER_INITIALIZATION
       Tmp_Data_2: chars_ptr;
       procedure Get_Ada_Ship_Modules(N_Modules: Nim_Modules_Array) with
          Import => True,
