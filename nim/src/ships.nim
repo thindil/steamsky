@@ -324,3 +324,31 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
           index - 1].durability.cint, price: nimInventory[index - 1].price.cint)
     else:
       inventory[index] = AdaInventoryData(protoIndex: 0)
+
+proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  let nimCrew = if getPlayerShip == 1:
+      playerShip.crew
+    else:
+      npcShip.crew
+  var index, secondIndex = 1
+  for member in nimCrew:
+    secondIndex = 1
+    for attribute in member.attributes:
+      crew[index].attributes[secondIndex] = [attribute.level.cint,
+          attribute.experience.cint]
+      secondIndex.inc
+    secondIndex = 1
+    for skill in member.skills:
+      crew[index].skills[secondIndex] = [skill.index.cint, skill.level.cint,
+          skill.experience.cint]
+      secondIndex.inc
+    crew[index].name = member.name.cstring
+    crew[index].gender = member.gender
+    crew[index].health = member.health
+    crew[index].tired = member.tired
+    crew[index].hunger = member.hunger
+    crew[index].thirst = member.thirst
+    crew[index].order = member.order.ord.cint
+    crew[index].previousOrder = member.previousOrder.ord.cint
+    index.inc
