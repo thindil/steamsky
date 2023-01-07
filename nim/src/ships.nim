@@ -351,4 +351,17 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     crew[index].thirst = member.thirst
     crew[index].order = member.order.ord.cint
     crew[index].previousOrder = member.previousOrder.ord.cint
+    secondIndex = 1
+    for order in member.orders:
+      crew[index].orders[secondIndex] = order.ord.cint
+      secondIndex.inc
+    secondIndex = 0
+    for item in member.equipment:
+      crew[index].equipment[secondIndex] = item.cint
+    crew[index].payment = [1: member.payment[1].cint, 2: member.payment[2].cint]
+    crew[index].contractLength = member.contractLength.cint
+    crew[index].morale = [1: member.morale[1].cint, 2: member.morale[2].cint]
+    crew[index].loyalty = member.loyalty
+    crew[index].homeBase = member.homeBase
+    crew[index].faction = member.faction.cstring
     index.inc
