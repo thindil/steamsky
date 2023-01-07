@@ -1,4 +1,4 @@
---    Copyright 2018-2022 Bartek thindil Jasicki
+--    Copyright 2018-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -34,6 +34,15 @@ package Factions is
    type Names_Types is (STANDARD, ROBOTIC) with
       Default_Value => STANDARD;
       -- ****
+
+   -- ****d* Factions/Factions.Default_Names_Type
+   -- FUNCTION
+   -- Default type of names of npc
+   -- HISTORY
+   -- 8.3 - Added
+   -- SOURCE
+   Default_Names_Type: constant Names_Types := STANDARD;
+   -- ****
 
       -- ****s* Factions/Factions.Reputation_Range_Record
       -- FUNCTION
@@ -90,6 +99,15 @@ package Factions is
       Description: Unbounded_String;
       Name: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* Factions/Factions.Empty_Carreer
+   -- FUNCTION
+   -- Default empty career
+   -- HISTORY
+   -- 8.3 - Added
+   -- SOURCE
+   Empty_Carreer: constant Career_Record := (others => <>);
    -- ****
 
    -- ****t* Factions/Factions.Careers_Container
@@ -161,6 +179,15 @@ package Factions is
       Bases_Types: BaseType_Container.Map;
       Weapon_Skill: SkillsData_Container.Extended_Index;
    end record;
+   -- ****
+
+   -- ****d* Factions/Factions.Empty_Faction
+   -- FUNCTION
+   -- Default empty faction
+   -- HISTORY
+   -- 8.3 - Added
+   -- SOURCE
+   Empty_Faction: constant Faction_Record := (others => <>);
    -- ****
 
    -- ****f* Factions/Factions.Load_Factions
