@@ -631,10 +631,13 @@ package body Ships.Upgrade is
                      return;
                   else
                      Upgraded_Module.Upgrade_Progress :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
-                          Index => Upgraded_Module.Proto_Index)
-                         .Durability;
+                       Integer
+                         (Float
+                            (BaseModules_Container.Element
+                               (Container => Modules_List,
+                                Index => Upgraded_Module.Proto_Index)
+                               .Durability) *
+                          Float(New_Game_Settings.Upgrade_Cost_Bonus));
                   end if;
                when MAX_VALUE =>
                   case Upgraded_Module.M_Type is
