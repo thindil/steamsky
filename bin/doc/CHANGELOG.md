@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   from it
 - Counting amount of work needed to upgrade the player's ship's module's
   durability
+- Crash when upgrading player's ship's module's durability
 
 ## [8.2] - 2022-12-25
 
