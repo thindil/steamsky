@@ -28,8 +28,5 @@ package Ships.Crew.Test_Data.Tests is
    procedure Test_Update_Orders_9d8659_cad1b0(Gnattest_T: in out Test);
    --  ships-crew.ads:130:4:Update_Orders:Test_UpdateOrders
 
-   procedure Test_Update_Morale_4b2bdd_63517c(Gnattest_T: in out Test);
-   --  ships-crew.ads:145:4:Update_Morale:Test_UpdateMorale
-
 end Ships.Crew.Test_Data.Tests;
 --  end read only
