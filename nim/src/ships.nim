@@ -365,3 +365,4 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     crew[index].homeBase = member.homeBase
     crew[index].faction = member.faction.cstring
     index.inc
+  crew[index].name = "".cstring
