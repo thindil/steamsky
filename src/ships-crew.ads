@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -145,8 +145,7 @@ package Ships.Crew is
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) with
-      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
-      Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index;
       -- ****
 
       -- ****f* SCrew/SCrew.Get_Current_Order
