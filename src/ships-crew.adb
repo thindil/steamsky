@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -942,65 +942,17 @@ package body Ships.Crew is
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) is
-      New_Morale, New_Loyalty, New_Value: Integer;
-      Faction_Index: constant Tiny_String.Bounded_String :=
-        Ship.Crew(Member_Index).Faction;
-      Faction: constant Faction_Record := Get_Faction(Index => Faction_Index);
+      procedure Update_Ada_Morale
+        (Is_Player_Ship, M_Index, N_Value: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMorale";
    begin
-      if Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "nomorale")) then
-         return;
-      end if;
-      New_Value := Value;
-      if Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "fanaticism")) then
-         if Value > 0 then
-            New_Value := Value * 5;
-         else
-            New_Value := Value / 10;
-            if New_Value = 0
-              and then Get_Random(Min => 1, Max => 10) <= abs (Value) then
-               New_Value := -1;
-            end if;
-            if New_Value = 0 then
-               return;
-            end if;
-         end if;
-      end if;
-      New_Value := Ship.Crew(Member_Index).Morale(2) + New_Value;
-      New_Morale := Ship.Crew(Member_Index).Morale(1);
-      Raise_Morale_Loop :
-      while New_Value >= 5 loop
-         New_Value := New_Value - 5;
-         New_Morale := New_Morale + 1;
-      end loop Raise_Morale_Loop;
-      Lower_Morale_Loop :
-      while New_Value < 0 loop
-         New_Value := New_Value + 5;
-         New_Morale := New_Morale - 1;
-      end loop Lower_Morale_Loop;
-      if New_Morale > 100 then
-         New_Morale := 100;
-      elsif New_Morale < 0 then
-         New_Morale := 0;
-      end if;
-      Ship.Crew(Member_Index).Morale := (1 => New_Morale, 2 => New_Value);
-      if Ship = Player_Ship and Member_Index = 1 then
-         return;
-      end if;
-      New_Loyalty := Ship.Crew(Member_Index).Loyalty;
-      if New_Morale > 75 and New_Loyalty < 100 then
-         New_Loyalty := New_Loyalty + 1;
-      end if;
-      if New_Morale < 25 and New_Loyalty > 0 then
-         New_Loyalty := New_Loyalty - Get_Random(Min => 5, Max => 10);
-      end if;
-      if New_Loyalty > 100 then
-         New_Loyalty := 100;
-      elsif New_Loyalty < 0 then
-         New_Loyalty := 0;
-      end if;
-      Ship.Crew(Member_Index).Loyalty := New_Loyalty;
+      Get_Ada_Crew(Ship => Ship);
+      Update_Ada_Morale
+        (Is_Player_Ship => (if Ship = Player_Ship then 1 else 0),
+         M_Index => Member_Index, N_Value => Value);
+      Set_Ada_Crew(Ship => Ship);
    end Update_Morale;
 
    function Get_Current_Order
