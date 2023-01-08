@@ -44,19 +44,29 @@ package Factions is
    Default_Names_Type: constant Names_Types := STANDARD;
    -- ****
 
-      -- ****s* Factions/Factions.Reputation_Range_Record
-      -- FUNCTION
-      -- Data structure for set reputation range between factions
-      -- PARAMETERS
-      -- Min - Minimum value of reputation between selected factions
-      -- Max - Maximum value of reputation between selected factions
-      -- HISTORY
-      -- 7.1 - Added
-      -- SOURCE
+   -- ****s* Factions/Factions.Reputation_Range_Record
+   -- FUNCTION
+   -- Data structure for set reputation range between factions
+   -- PARAMETERS
+   -- Min - Minimum value of reputation between selected factions
+   -- Max - Maximum value of reputation between selected factions
+   -- HISTORY
+   -- 7.1 - Added
+   -- SOURCE
    type Reputation_Range_Record is record
       Min: Reputation_Range := 0;
       Max: Reputation_Range := 0;
    end record;
+   -- ****
+
+   -- ****d* Factions/Factions.Empty_Reputation_Range_Record
+   -- FUNCTION
+   -- Empty range for reputation range
+   -- HISTORY
+   -- 8.3 - Added
+   -- SOURCE
+   Empty_Reputation_Range_Record: constant Reputation_Range_Record :=
+     (others => <>);
    -- ****
 
    -- ****s* Factions/Factions.Relations_Record
@@ -71,6 +81,16 @@ package Factions is
       Reputation: Reputation_Range_Record;
       Friendly: Boolean;
    end record;
+   -- ****
+
+   -- ****d* Factions/Factions.Empty_Relations_Record
+   -- FUNCTION
+   -- Empty relations data
+   -- HISTORY
+   -- 8.3 - Added
+   -- SOURCE
+   Empty_Relations_Record: constant Relations_Record :=
+     (Reputation => Empty_Reputation_Range_Record, Friendly => True);
    -- ****
 
    -- ****t* Factions/Factions.Relations_Container
