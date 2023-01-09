@@ -18,7 +18,8 @@
 import std/tables
 import game, ships, types, utils
 
-proc updateMorale*(ship: var ShipRecord; memberIndex: Natural; value: int) =
+proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
+    value: int) {.sideEffect, raises: [KeyError], tags: [].} =
   var newMorale, newLoyalty, newValue: int
   let factionIndex = ship.crew[memberIndex].faction
   if "nomorale" in factionsList[factionIndex].flags:
