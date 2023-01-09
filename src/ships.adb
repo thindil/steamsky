@@ -1455,9 +1455,11 @@ package body Ships is
          Convention => C,
          External_Name => "setAdaShipCrew";
    begin
+      --## rule off IMPROPER_INITIALIZATION
       Set_Ada_Ship_Crew
         (N_Crew => Nim_Crew,
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      --## rule on IMPROPER_INITIALIZATION
       Convert_Crew_Loop :
       for Member of Nim_Crew loop
          exit Convert_Crew_Loop when Strlen(Item => Member.Name) = 0;
