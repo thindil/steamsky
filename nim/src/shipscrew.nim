@@ -16,7 +16,30 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, ships, types, utils
+import crew, game, ships, types, utils
+
+proc updateOrders*(ship: var ShipRecord; combat: bool = false)
+
+proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
+    givenOrder: CrewOrders; moduleIndex: int = -1;
+    checkPriorities: bool = true) =
+  if givenOrder == ship.crew[memberIndex].order:
+    if givenOrder in [craft, gunner]:
+      for index, module in ship.modules.pairs:
+        if index == moduleIndex:
+          for owner in module.owner:
+            if owner == memberIndex:
+              return
+    else:
+      return
+  let memberName = ship.crew[memberIndex].name
+  if givenOrder != rest and ((ship.crew[memberIndex].morale[1] < 11 and
+      getRandom(min = 1, max = 100) < 50) or ship.crew[memberIndex].loyalty < 20):
+    if ship.crew == playerShip.crew:
+      raise newException(exceptn = CrewOrderError, message = memberName & " refuses to execute order.")
+
+proc updateOrders(ship: var ShipRecord; combat: bool = false) =
+  discard
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
