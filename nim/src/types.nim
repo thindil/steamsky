@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -88,7 +88,7 @@ type
     weight*: Natural ## The weight of the module
     durability*: Natural ## The current durability of the module
     maxDurability*: Natural ## The max durability of the module
-    owner*: seq[Natural] ## The list of owners of the module
+    owner*: seq[int] ## The list of owners of the module
     upgradeProgress*: int ## The upgrade progess of the module
     upgradeAction*: ShipUpgrade ## The current upgrade type for the module
     case mType*: ModuleType2
