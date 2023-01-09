@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -17,6 +17,12 @@
 
 import std/[tables]
 import game, utils, types
+
+type
+  CrewOrderError* = object of CatchableError
+    ## FUNCTION
+    ##
+    ## Used to mark problems during giving orders to the crew members
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
