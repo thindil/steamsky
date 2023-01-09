@@ -20,6 +20,20 @@ import game, ships, types, utils
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
+  ## FUNCTION
+  ##
+  ## Update the morale of the selected crew member in the selected ship
+  ##
+  ## PARAMETERS
+  ##
+  ## * ship        - the ship in which the crew member's morale will be changed
+  ## * memberIndex - the index of the crew member which morale will be changed
+  ## * value       - the value with which the morale will be changed
+  ##
+  ## RETURNS
+  ##
+  ## The modified ship parameter with updated morale of the selected crew
+  ## member.
   var newMorale, newLoyalty, newValue: int
   let factionIndex = ship.crew[memberIndex].faction
   if "nomorale" in factionsList[factionIndex].flags:
