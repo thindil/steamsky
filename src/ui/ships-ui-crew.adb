@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -604,15 +604,17 @@ package body Ships.UI.Crew is
         Create
           (pathName => Member_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      Buttons_Frame: constant Ttk_Frame :=
+        Create(pathName => Member_Dialog & ".buttons");
       Close_Button: constant Ttk_Button :=
-        Get_Widget(pathName => Member_Dialog & ".button", Interp => Interp);
+        Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
       Progress_Frame: Ttk_Frame;
       Member_Info: Unbounded_String := Null_Unbounded_String;
       Member_Label: Ttk_Label;
       Tired_Points: Integer;
       Progress_Bar: Ttk_ProgressBar;
       Tab_Button: Ttk_RadioButton;
-      Info_Button: Ttk_Button;
+      Info_Button, Button: Ttk_Button;
       Frame: Ttk_Frame;
       Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
    begin
@@ -678,9 +680,24 @@ package body Ships.UI.Crew is
         (Slave => Y_Scroll,
          Options => " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1");
       Add_Close_Button
-        (Name => Member_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Column_Span => 2,
-         Row => 3);
+        (Name => Buttons_Frame & ".button", Text => "Close",
+         Command => "CloseDialog " & Member_Dialog);
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".button1",
+           options =>
+             "-text {Inventory} -image {unequipicon} -command {" &
+             Close_Button & " invoke;ShowMemberInventory " &
+             CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
+      Add(Widget => Button, Message => "Show the crew member inventory");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-padx 5 -row 0 -column 1");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Buttons_Frame & ".button invoke;break}");
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
@@ -1456,7 +1473,9 @@ package body Ships.UI.Crew is
       end if;
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+         Script => "{focus " & Buttons_Frame & ".button1;break}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog
         (Dialog => Member_Dialog, Relative_Y => 0.2, Relative_X => 0.2);
       return
