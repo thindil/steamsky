@@ -1,4 +1,4 @@
---    Copyright 2018-2022 Bartek thindil Jasicki
+--    Copyright 2018-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,8 +20,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 package body Factions is
 
    procedure Load_Factions(File_Name: String) is
-      use Interfaces.C;
-
       procedure Load_Ada_Factions(Name: chars_ptr) with
          Import => True,
          Convention => C,
