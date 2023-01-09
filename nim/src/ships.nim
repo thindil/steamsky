@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -214,7 +214,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
     for owner in adaModule.owner:
       if owner == 0:
         break
-      module.owner.add(y = owner)
+      module.owner.add(y = owner - 1)
     if getPlayerShip == 1:
       playerShip.modules.add(y = module)
     else:
