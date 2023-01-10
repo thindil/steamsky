@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import types
+import std/[strutils, tables, xmlparser, xmltree]
+import game, log, types
 
 type
   ModuleType* = enum
@@ -42,3 +43,52 @@ type
     maxOwners*: range[0..10] ## The amount of users of the module
     speed*: int ## How fast the gun shoots in the combat
     reputation*: ReputationRange ## The minumum amount of reputation needed for buy the module
+
+var modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
+
+proc loadModules*(fileName: string) =
+  let modulesXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load modules data file. Reason: " &
+          getCurrentExceptionMsg())
+  for moduleNode in modulesXml:
+    if moduleNode.kind != xnElement:
+      continue
+    let
+      moduleIndex: Natural = try:
+          moduleNode.attr(name = "index").parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add module '" & moduleNode.attr(name = "index") & "', invalid index.")
+      moduleAction: DataAction = try:
+          parseEnum[DataAction](moduleNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if moduleAction in [update, remove]:
+      if moduleIndex > modulesList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', there is no module with that index.")
+    elif moduleIndex < modulesList.len():
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add module '" & $moduleIndex & "', there is an module with that index.")
+    if moduleAction == DataAction.remove:
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      modulesList.del(key = moduleIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
+      logMessage(message = "module removed: '" & $moduleIndex & "'",
+          debugType = everything)
+      continue
+    var module: BaseModuleData = if moduleAction == DataAction.update:
+        try:
+          modulesList[moduleIndex]
+        except ValueError:
+          BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
+      else:
+        BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
+    var attribute = moduleNode.attr(name = "name")
+    if attribute.len() > 0:
+      module.name = attribute
