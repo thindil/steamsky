@@ -10,4 +10,4 @@ if not fileExists("steamsky.gpr"):
 withDir "nim":
   for i in 1..parseInt(paramStr(paramCount())):
     echo i
-    exec "testament pattern \"tests/**/*.nim\""
+    exec "testament all"
