@@ -103,11 +103,11 @@ package body Factions is
       end record;
       Faction_Index: Tiny_String.Bounded_String;
       Temp_Nim_Record: Faction_Nim_Data;
-      Index2: Natural := 0;
-      Faction_Data: Unbounded_String;
-      Faction_Relation: Faction_Nim_Relation;
+      Index2: Natural;
+      Faction_Data: Unbounded_String := Null_Unbounded_String;
+      Faction_Relation: Faction_Nim_Relation := (others => 0);
       Faction_Career: Career_Nim_Record;
-      Faction_Base: Positive;
+      Faction_Base: Positive := 1;
       procedure Get_Ada_Faction
         (Faction_Index: chars_ptr; Faction_Number: Natural;
          Ada_Faction: out Faction_Nim_Data) with
