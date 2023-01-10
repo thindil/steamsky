@@ -25,19 +25,20 @@ type
     ## Types of available prototypes of ships modules
 
   BaseModuleData* = object
-    name*: string
-    mType*: ModuleType
-    weight*: Natural
-    value*: int
-    maxValue*: int
-    durability*: int
-    repairMaterial*: string
-    repairSkill*: Positive
-    price*: Natural
-    installTime*: Positive
-    unique*: bool
-    size*: range[1..10]
-    description*: string
-    maxOwners*: range[0..10]
-    speed*: int
-    reputation*: ReputationRange
+    ## Used to store information about prototypes of ships' modules
+    name*: string ## The name of the module
+    mType*: ModuleType ## The type of the module
+    weight*: Natural ## The weight of the module
+    value*: int ## Additional data for the module, for engines it is power
+    maxValue*: int ## Additional data for the mode, for guns it is damage
+    durability*: int ## The base durability of the module
+    repairMaterial*: string ## The index of the material used to repair the module
+    repairSkill*: Positive ## The index of the skill used to repair the module
+    price*: Natural ## The base price of the module in shipyards
+    installTime*: Positive ## The amount of time needed to install the module
+    unique*: bool ## If true, only one that module can be installed on the ship
+    size*: range[1..10] ## The size of the module
+    description*: string ## The description of the module
+    maxOwners*: range[0..10] ## The amount of users of the module
+    speed*: int ## How fast the gun shoots in the combat
+    reputation*: ReputationRange ## The minumum amount of reputation needed for buy the module
