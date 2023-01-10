@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Button to open inventory to the crew member info dialog
+
 ### Changed
 - Updated look of the map cell info
 - Moved setting the player's ship's crew member's priorities to the crew
