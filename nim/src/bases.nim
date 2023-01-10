@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,18 +20,12 @@ import game, utils, types
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Generate the name for the sky base, based on its owner's faction. Based
   ## on libtcod names generator
   ##
-  ## PARAMETERS
-  ##
   ## * factionIndex - the index of the faction which owns the base
   ##
-  ## RETURNS
-  ##
-  ## The randomly generated name of the base
+  ## Returns the randomly generated name of the base
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName();
