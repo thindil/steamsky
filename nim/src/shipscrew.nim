@@ -37,6 +37,26 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       getRandom(min = 1, max = 100) < 50) or ship.crew[memberIndex].loyalty < 20):
     if ship.crew == playerShip.crew:
       raise newException(exceptn = CrewOrderError, message = memberName & " refuses to execute order.")
+  if givenOrder == train and ship.modules[moduleIndex].trainedSkill == 0:
+    raise newException(exceptn = CrewOrderError, message = memberName &
+        " can't start training because " & ship.modules[moduleIndex].name & " isn't prepared.")
+  if givenOrder in [pilot, engineer, upgrading, talk]:
+    for index, member in ship.crew.pairs:
+      if member.order == givenOrder:
+        giveOrders(ship = ship, memberIndex = index, givenOrder = rest,
+            moduleIndex = -1, checkPriorities = false)
+        break
+  elif givenOrder in [gunner, craft, train] or (givenOrder == heal and
+      moduleIndex > 0):
+    var freePosition: bool = false
+    for owner in ship.modules[moduleIndex].owner:
+      if owner == 0:
+        freePosition = true
+        break
+    if not freePosition:
+      giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[0],
+          givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+  # TODO: continue work
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
