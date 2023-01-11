@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, ships, shipmodules, types
+import game, log, ships, types
 
 type
   CraftData = object

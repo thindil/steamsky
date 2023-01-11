@@ -172,32 +172,32 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
       return
     var module: ModuleData
     case adaModule.mType.ModuleType2
-    of engine:
-      module = ModuleData(mType: engine,
+    of ModuleType2.engine:
+      module = ModuleData(mType: ModuleType2.engine,
           fuelUsage: adaModule.data[1], power: adaModule.data[2],
           disabled: adaModule.data[3] == 1)
-    of cabin:
-      module = ModuleData(mType: cabin, cleanliness: adaModule.data[1],
+    of ModuleType2.cabin:
+      module = ModuleData(mType: ModuleType2.cabin, cleanliness: adaModule.data[1],
           quality: adaModule.data[2])
-    of turret:
-      module = ModuleData(mType: turret, gunIndex: adaModule.data[1])
-    of gun:
-      module = ModuleData(mType: gun, damage: adaModule.data[1],
+    of ModuleType2.turret:
+      module = ModuleData(mType: ModuleType2.turret, gunIndex: adaModule.data[1])
+    of ModuleType2.gun:
+      module = ModuleData(mType: ModuleType2.gun, damage: adaModule.data[1],
           ammoIndex: adaModule.data[2])
-    of hull:
-      module = ModuleData(mType: hull, installedModules: adaModule.data[1],
+    of ModuleType2.hull:
+      module = ModuleData(mType: ModuleType2.hull, installedModules: adaModule.data[1],
           maxModules: adaModule.data[2])
-    of workshop:
-      module = ModuleData(mType: workshop,
+    of ModuleType2.workshop:
+      module = ModuleData(mType: ModuleType2.workshop,
           craftingIndex: $adaModule.data2, craftingTime: adaModule.data[1],
               craftingAmount: adaModule.data[2])
-    of trainingRoom:
-      module = ModuleData(mType: trainingRoom, trainedSkill: adaModule.data[1])
-    of batteringRam:
-      module = ModuleData(mType: batteringRam, damage2: adaModule.data[1],
+    of ModuleType2.trainingRoom:
+      module = ModuleData(mType: ModuleType2.trainingRoom, trainedSkill: adaModule.data[1])
+    of ModuleType2.batteringRam:
+      module = ModuleData(mType: ModuleType2.batteringRam, damage2: adaModule.data[1],
           coolingDown: adaModule.data[2] == 1)
-    of harpoonGun:
-      module = ModuleData(mType: harpoonGun, duration: adaModule.data[1],
+    of ModuleType2.harpoonGun:
+      module = ModuleData(mType: ModuleType2.harpoonGun, duration: adaModule.data[1],
           harpoonIndex: adaModule.data[2])
     of ModuleType2.any:
       module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[

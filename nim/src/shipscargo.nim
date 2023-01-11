@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -57,7 +57,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     ship.cargo.delete(i = itemIndex)
     {.warning[UnsafeSetLen]: on.}
     for module in ship.modules.mitems:
-      if module.mType == gun:
+      if module.mType == ModuleType2.gun:
         if module.ammoIndex > itemIndex:
           module.ammoIndex.dec
         elif module.ammoIndex == itemIndex:
