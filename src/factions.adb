@@ -80,7 +80,7 @@ package body Factions is
       Number: Natural := 0) return Faction_Record is
       use Tiny_String;
 
-      Temp_Record: Faction_Record;
+      Temp_Record: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
       type Faction_Nim_Data is record
          Name: chars_ptr;
          Member_Name: chars_ptr;
@@ -106,7 +106,9 @@ package body Factions is
       Index2: Natural;
       Faction_Data: Unbounded_String := Null_Unbounded_String;
       Faction_Relation: Faction_Nim_Relation := (others => 0);
+      --## rule off IMPROPER_INITIALIZATION
       Faction_Career: Career_Nim_Record;
+      --## rule on IMPROPER_INITIALIZATION
       Faction_Base: Positive := 1;
       procedure Get_Ada_Faction
         (Faction_Index: chars_ptr; Faction_Number: Natural;
@@ -175,7 +177,7 @@ package body Factions is
       Temp_Record.Base_Icon := Wide_Character'Val(Temp_Nim_Record.Base_Icon);
       Temp_Record.Weapon_Skill := Temp_Nim_Record.Weapon_Skill;
       Index2 := 0;
-      Temp_Record.Food_Types.Clear;
+      Temp_Record.Food_Types.Clear; --## rule line off IMPROPER_INITIALIZATION
       Load_Faction_Food_Loop :
       loop
          Faction_Data :=
