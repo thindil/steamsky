@@ -137,6 +137,46 @@ proc loadModules*(fileName: string) =
       let skillIndex = findSkillIndex(skillName = attribute)
       if skillIndex == 0:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $moduleAction & " faction '" & $moduleIndex &
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex &
             "', no skill named '" & attribute & "'.")
       module.repairSkill = skillIndex
+    attribute = moduleNode.attr(name = "price")
+    if attribute.len() > 0:
+      module.price = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module price.")
+    attribute = moduleNode.attr(name = "installtime")
+    if attribute.len() > 0:
+      module.installTime = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module installation time.")
+    attribute = moduleNode.attr(name = "unique")
+    if attribute.len() > 0:
+      module.unique = true
+    else:
+      module.unique = false
+    attribute = moduleNode.attr(name = "size")
+    if attribute.len() > 0:
+      module.size = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module size.")
+    attribute = moduleNode.attr(name = "maxowners")
+    if attribute.len() > 0:
+      module.maxOwners = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module maxium owners amount.")
+    attribute = moduleNode.attr(name = "speed")
+    if attribute.len() > 0:
+      module.speed = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module speed.")
