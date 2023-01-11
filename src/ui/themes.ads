@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -145,6 +145,7 @@ package Themes is
    -- No_Pilot_Icon         - Icon used for Pilot info in sentient ships
    -- No_Engineer_Icon      - Icon used for Engineer info in sentient ships
    -- Destination_Icon      - Icon used for set the ship destination button
+   -- Inventory_Icon        - Icon used for show inventory button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -233,6 +234,7 @@ package Themes is
       No_Pilot_Icon: Unbounded_String;
       No_Engineer_Icon: Unbounded_String;
       Destination_Icon: Unbounded_String;
+      Inventory_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -329,7 +331,8 @@ package Themes is
       Give_Order_Icon => Default_Theme_Icons_Path & "giveorder.svg",
       No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg",
       No_Engineer_Icon => Default_Theme_Icons_Path & "noengineer.svg",
-      Destination_Icon => Default_Theme_Icons_Path & "destination.svg");
+      Destination_Icon => Default_Theme_Icons_Path & "destination.svg",
+      Inventory_Icon => Default_Theme_Icons_Path & "unequip.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
