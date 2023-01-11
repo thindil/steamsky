@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, types
+import game, items, log, types
 
 type
   ModuleType* = enum
@@ -92,3 +92,57 @@ proc loadModules*(fileName: string) =
     var attribute = moduleNode.attr(name = "name")
     if attribute.len() > 0:
       module.name = attribute
+    attribute = moduleNode.attr(name = "type")
+    if attribute.len() > 0:
+      module.mType = try:
+          parseEnum[ModuleType](attribute.toLowerAscii)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $moduleAction & " module '" &
+                  $moduleIndex & "', invalid type of module.")
+    else:
+      module.mType = any
+    attribute = moduleNode.attr(name = "weight")
+    if attribute.len() > 0:
+      module.weight = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module weight.")
+    attribute = moduleNode.attr(name = "value")
+    if attribute.len() > 0:
+      module.value = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for value field.")
+    attribute = moduleNode.attr(name = "maxvalue")
+    if attribute.len() > 0:
+      module.maxvalue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for maxvalue field.")
+    attribute = moduleNode.attr(name = "durability")
+    if attribute.len() > 0:
+      module.durability = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module durability.")
+    attribute = moduleNode.attr(name = "material")
+    if attribute.len() > 0:
+      let itemIndex = findProtoItem(itemType = attribute)
+      if itemIndex == 0:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex &
+            "', no items with type '" & attribute & "'.")
+      module.repairMaterial = attribute
+    attribute = moduleNode.attr(name = "skill")
+    if attribute.len() > 0:
+      let skillIndex = findSkillIndex(skillName = attribute)
+      if skillIndex == 0:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " faction '" & $moduleIndex &
+            "', no skill named '" & attribute & "'.")
+      module.repairSkill = skillIndex
