@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -53,6 +53,12 @@ type
     ## Store data related to the attributes
     name: string ## The name of the attribute
     description: string ## The description of the attribute
+
+  ModuleType* = enum
+    any, engine, cabin, cockpit, turret, gun, cargo, hull, armor, batteringRam,
+    alchemyLab, furnace, waterCollector, workshop, greenhouse, medicalRoom,
+    harpoonGun, trainingRoom
+    ## Types of available prototypes of ships modules
 
 const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
 

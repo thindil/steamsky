@@ -19,12 +19,6 @@ import std/[strutils, tables, xmlparser, xmltree]
 import game, items, log, types
 
 type
-  ModuleType* = enum
-    any, engine, cabin, cockpit, turret, gun, cargo, hull, armor, batteringRam,
-    alchemyLab, furnace, waterCollector, workshop, greenhouse, medicalRoom,
-    harpoonGun, trainingRoom
-    ## Types of available prototypes of ships modules
-
   BaseModuleData* = object
     ## Used to store information about prototypes of ships' modules
     name*: string ## The name of the module
@@ -101,7 +95,7 @@ proc loadModules*(fileName: string) =
               message = "Can't " & $moduleAction & " module '" &
                   $moduleIndex & "', invalid type of module.")
     else:
-      module.mType = any
+      module.mType = ModuleType.any
     attribute = moduleNode.attr(name = "weight")
     if attribute.len() > 0:
       module.weight = try:
