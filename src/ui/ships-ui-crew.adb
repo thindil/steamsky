@@ -686,7 +686,7 @@ package body Ships.UI.Crew is
         Create
           (pathName => Buttons_Frame & ".button1",
            options =>
-             "-text {Inventory} -image {unequipicon} -command {" &
+             "-text {Inventory} -image {inventoryicon} -command {" &
              Close_Button & " invoke;ShowMemberInventory " &
              CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
       Add(Widget => Button, Message => "Show the crew member inventory");
