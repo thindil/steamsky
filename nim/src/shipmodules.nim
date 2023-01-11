@@ -112,7 +112,7 @@ proc loadModules*(fileName: string) =
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for value field.")
     attribute = moduleNode.attr(name = "maxvalue")
     if attribute.len() > 0:
-      module.maxvalue = try:
+      module.maxValue = try:
           attribute.parseInt()
       except ValueError:
         raise newException(exceptn = DataLoadingError,
@@ -180,3 +180,20 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module speed.")
+    attribute = moduleNode.attr(name = "reputation")
+    if attribute.len() > 0:
+      module.reputation = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module required reputation.")
+    attribute = moduleNode.child(name = "description").innerText()
+    if attribute.len() > 0:
+      module.description = attribute
+    if moduleAction == DataAction.add:
+      logMessage(message = "Module added: '" & $moduleIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Module updated: '" & $moduleIndex & "'",
+          debugType = everything)
+    modulesList[moduleIndex] = module
