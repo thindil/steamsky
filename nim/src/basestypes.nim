@@ -20,14 +20,10 @@ import game, log, types
 
 type
   PricesArray* = array[1..2, Natural]
-    ## FUNCTION
-    ##
     ## Used to set base buy and sell price for an item in the base type.
     ## 1 - sell price, 2 - buy price
 
   BaseTypeData* = object
-    ## FUNCTION
-    ##
     ## Used to store informaiton about bases types
     name: string ## The name of the base type
     color: string ## The color used to show a base of that type on the map
@@ -37,17 +33,11 @@ type
     description: string ## The description of the base type, show in the new game screen
 
 var basesTypesList* = initTable[string, BaseTypeData]()
-  ## FUNCTION
-  ##
   ## The list of all available bases types in the game
 
 proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load available bases types from the data file
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the path to the file with bases types data which will be loaded
   let basesTypesXml = try:
@@ -185,18 +175,12 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
     raises: [KeyError], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the price of the selected item in the selected type of bases
-  ##
-  ## PARAMETERS
   ##
   ## * baseType  - the type of base from which the price will be taken
   ## * itemIndex - the index of the item's prototype which price will be taken
   ##
-  ## RETURNS
-  ##
-  ## The price of the selected item
+  ## Returns the price of the selected item
   if itemsList[itemIndex].price == 0:
     return 0
   if basesTypesList[baseType].trades.hasKey(key = itemIndex):
@@ -209,11 +193,7 @@ proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
     baseIndex: ExtendedBasesRange = 0): bool {.sideEffect, raises: [KeyError],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Check if the selected item is buyable in the selected bases type
-  ##
-  ## PARAMETERS
   ##
   ## * baseType  - the type of base in which the item will be check
   ## * itemIndex - the index of the item's prototype which will be check
@@ -222,9 +202,7 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
   ## * baseIndex - if greater than 0, check the player reputation in the
   ##               selected base. Can be empty. Default value is 0.
   ##
-  ## RETURNS
-  ##
-  ## True if the item is buyable in the selected bases type, otherwise
+  ## Returns True if the item is buyable in the selected bases type, otherwise
   ## false.
   if baseIndex > 0 and skyBases[baseIndex].reputation.level < itemsList[
       itemIndex].reputation:
