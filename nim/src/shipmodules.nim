@@ -197,3 +197,55 @@ proc loadModules*(fileName: string) =
       logMessage(message = "Module updated: '" & $moduleIndex & "'",
           debugType = everything)
     modulesList[moduleIndex] = module
+
+# Temporary code for interfacing with Ada
+
+type
+  AdaBaseModuleData = object
+    name: cstring
+    mType: cint
+    weight: cint
+    value: cint
+    maxValue: cint
+    durability: cint
+    repairMaterial: cstring
+    repairSkill: cint
+    price: cint
+    installTime: cint
+    unique: cint
+    size: cint
+    description: cstring
+    maxOwners: cint
+    speed: cint
+    reputation: cint
+
+proc loadAdaModules(fileName: cstring) {.exportc.} =
+  loadModules(fileName = $fileName)
+
+proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.exportc.} =
+  adaModule = AdaBaseModuleData(name: "".cstring, mType: 0, weight: 0, value: 0,
+      maxValue: 0, durability: 0, repairMaterial: "".cstring, repairSkill: 0,
+      price: 0, installTime: 0, unique: 0, size: 0, description: "".cstring,
+      maxOwners: 0, speed: 0, reputation: -100)
+  if not modulesList.hasKey(key = index):
+    return
+  let module = try:
+      modulesList[index]
+    except KeyError:
+      return
+  adaModule.name = module.name.cstring
+  adaModule.mType = module.mType.ord.cint
+  adaModule.weight = module.weight.cint
+  adaModule.value = module.value.cint
+  adaModule.maxValue = module.maxValue.cint
+  adaModule.durability = module.durability.cint
+  adaModule.repairMaterial = module.repairMaterial.cstring
+  adaModule.repairSkill = module.repairSkill.cint
+  adaModule.price = module.price.cint
+  adaModule.installTime = module.installTime.cint
+  adaModule.unique = (if module.unique: 1 else: 0)
+  adaModule.size = module.size.cint
+  adaModule.description = module.description.cstring
+  adaModule.maxOwners = module.maxOwners.cint
+  adaModule.speed = module.speed.cint
+  adaModule.reputation = module.reputation.cint
