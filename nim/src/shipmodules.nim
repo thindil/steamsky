@@ -187,7 +187,7 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module required reputation.")
-    attribute = moduleNode.child(name = "description").innerText()
+    attribute = moduleNode.innerText()
     if attribute.len() > 0:
       module.description = attribute
     if moduleAction == DataAction.add:
