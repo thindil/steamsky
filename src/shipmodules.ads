@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 -- ****h* ShipModules/ShipModules
@@ -138,10 +137,9 @@ package ShipModules is
    -- FUNCTION
    -- Load modules from files
    -- PARAMETERS
-   -- Reader    - XML Reader from which ship modules data will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Ship_Modules(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Ship_Modules(File_Name: String);
    -- ****
 
    -- ****f* ShipModules/ShipModules.Get_Module_Type

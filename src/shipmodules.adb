@@ -21,8 +21,7 @@ with Interfaces.C.Strings;
 
 package body ShipModules is
 
-   procedure Load_Ship_Modules(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(Reader);
+   procedure Load_Ship_Modules(File_Name: String) is
       use Interfaces.C;
       use Interfaces.C.Strings;
       use Tiny_String;
