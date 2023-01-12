@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Maps; use Ada.Strings.Maps;
+with Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -26,7 +27,8 @@ with Items; use Items;
 
 package body ShipModules is
 
-   procedure Load_Ship_Modules(Reader: Tree_Reader) is
+   procedure Load_Ship_Modules(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
       Nodes_List: Node_List;
@@ -38,7 +40,12 @@ package body ShipModules is
       Material_Exists: Boolean;
       Module_Index: BaseModules_Container.Extended_Index;
       Value: Integer;
+      procedure Load_Ada_Items(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaModules";
    begin
+      Load_Ada_Items(Name => New_String(Str => File_Name));
       Modules_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

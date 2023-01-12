@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -955,7 +955,9 @@ package body Game is
                   Load_Bases_Types
                     (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "modules" then
-                  Load_Ship_Modules(Reader => Reader);
+                  Load_Ship_Modules
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "ships" then
                   Load_Ships(Reader => Reader);
                elsif To_String(Source => Data_Type) = "stories" then

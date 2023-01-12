@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -138,9 +138,10 @@ package ShipModules is
    -- FUNCTION
    -- Load modules from files
    -- PARAMETERS
-   -- Reader - XML Reader from which ship modules data will be read
+   -- Reader    - XML Reader from which ship modules data will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Ship_Modules(Reader: Tree_Reader);
+   procedure Load_Ship_Modules(Reader: Tree_Reader; File_Name: String);
    -- ****
 
    -- ****f* ShipModules/ShipModules.Get_Module_Type
