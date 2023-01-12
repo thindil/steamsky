@@ -159,4 +159,8 @@ package ShipModules is
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_Module(Index: Positive) return Base_Module_Data;
+
 end ShipModules;
