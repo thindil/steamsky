@@ -1102,6 +1102,8 @@ story.
   Engineer position info for factions with sentient ships. Optional.
 * Key `DestinationIcon`: Path to the SVG image which will be used for set
   destination button. Optional.
+* Key `InventoryIcon`: Path to the SVG image which will be used for set
+  the player's ship's crew member's inventory button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
