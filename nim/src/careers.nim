@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,24 +20,16 @@ import game, log
 
 type
   CareerData = object
-    ## FUNCTION
-    ##
     ## Used to store data about available player's careers
     name*: string ## The name of the career
     skills: seq[string] ## The list of skills which have bonuses from the career
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
-  ## FUNCTION
-  ##
   ## The list of available player's careers in the game
 
 proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load the player's careers' data from the file
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the path to the file with careers data which will be loaded
   let careersXml = try:
