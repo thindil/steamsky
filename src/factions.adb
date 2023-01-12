@@ -111,31 +111,31 @@ package body Factions is
       --## rule on IMPROPER_INITIALIZATION
       Faction_Base: Positive := 1;
       procedure Get_Ada_Faction
-        (Faction_Index: chars_ptr; Faction_Number: Natural;
+        (F_Index: chars_ptr; Faction_Number: Natural;
          Ada_Faction: out Faction_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaFaction";
       function Get_Ada_Faction_Data
-        (Faction_Index: chars_ptr; Item_Index: Integer; Data_Type: chars_ptr)
+        (F_Index: chars_ptr; Item_Index: Integer; Data_Type: chars_ptr)
          return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionData";
       function Get_Ada_Faction_Relation
-        (Faction_Index: chars_ptr; Relation_Index: Integer;
+        (F_Index: chars_ptr; Relation_Index: Integer;
          Relation: out Faction_Nim_Relation) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionRelation";
       function Get_Ada_Faction_Career
-        (Faction_Index: chars_ptr; Career_Index: Integer;
+        (F_Index: chars_ptr; Career_Index: Integer;
          Career: out Career_Nim_Record) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionCareer";
       function Get_Ada_Faction_Base
-        (Faction_Index: chars_ptr; Base_Index: Integer; Base: out Positive)
+        (F_Index: chars_ptr; Base_Index: Integer; Base: out Positive)
          return chars_ptr with
          Import => True,
          Convention => C,
@@ -147,7 +147,7 @@ package body Factions is
          Faction_Index := Get_Faction_Index(Number => Number);
       end if;
       Get_Ada_Faction
-        (Faction_Index => New_String(Str => To_String(Source => Index)),
+        (F_Index => New_String(Str => To_String(Source => Index)),
          Faction_Number => Number, Ada_Faction => Temp_Nim_Record);
       Temp_Record.Name :=
         To_Bounded_String
@@ -186,7 +186,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Data
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Item_Index => Index2,
@@ -207,7 +207,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Data
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Item_Index => Index2,
@@ -228,7 +228,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Data
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Item_Index => Index2,
@@ -247,7 +247,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Relation
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Relation_Index => Index2,
@@ -273,7 +273,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Career
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Career_Index => Index2, Career => Faction_Career))));
@@ -309,7 +309,7 @@ package body Factions is
                 (Interfaces.C.Strings.Value
                    (Item =>
                       Get_Ada_Faction_Base
-                        (Faction_Index =>
+                        (F_Index =>
                            New_String
                              (Str => To_String(Source => Faction_Index)),
                          Base_Index => Index2, Base => Faction_Base))));
