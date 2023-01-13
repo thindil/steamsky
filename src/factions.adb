@@ -183,14 +183,14 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Data
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Item_Index => Index2,
-                         Data_Type => New_String(Str => "foodType")))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Data
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Item_Index => Index2,
+                        Data_Type => New_String(Str => "foodType"))));
          exit Load_Faction_Food_Loop when Length(Source => Faction_Data) = 0;
          Temp_Record.Food_Types.Append
            (New_Item =>
@@ -204,14 +204,14 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Data
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Item_Index => Index2,
-                         Data_Type => New_String(Str => "drinkType")))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Data
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Item_Index => Index2,
+                        Data_Type => New_String(Str => "drinkType"))));
          exit Load_Faction_Drinks_Loop when Length(Source => Faction_Data) = 0;
          Temp_Record.Drinks_Types.Append
            (New_Item =>
@@ -225,14 +225,14 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Data
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Item_Index => Index2,
-                         Data_Type => New_String(Str => "flag")))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Data
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Item_Index => Index2,
+                        Data_Type => New_String(Str => "flag"))));
          exit Load_Faction_Flags_Loop when Length(Source => Faction_Data) = 0;
          Temp_Record.Flags.Append(New_Item => Faction_Data);
          Index2 := Index2 + 1;
@@ -244,14 +244,14 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Relation
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Relation_Index => Index2,
-                         Relation => Faction_Relation))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Relation
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Relation_Index => Index2,
+                        Relation => Faction_Relation)));
          exit Load_Faction_Relation_Loop when Length(Source => Faction_Data) =
            0;
          Temp_Record.Relations.Include
@@ -270,13 +270,13 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Career
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Career_Index => Index2, Career => Faction_Career))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Career
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Career_Index => Index2, Career => Faction_Career)));
          exit Load_Faction_Career_Loop when Length(Source => Faction_Data) = 0;
          Temp_Record.Careers.Include
            (Key => Faction_Data,
@@ -306,13 +306,13 @@ package body Factions is
          Faction_Data :=
            To_Unbounded_String
              (Source =>
-                (Interfaces.C.Strings.Value
-                   (Item =>
-                      Get_Ada_Faction_Base
-                        (F_Index =>
-                           New_String
-                             (Str => To_String(Source => Faction_Index)),
-                         Base_Index => Index2, Base => Faction_Base))));
+                Interfaces.C.Strings.Value
+                  (Item =>
+                     Get_Ada_Faction_Base
+                       (F_Index =>
+                          New_String
+                            (Str => To_String(Source => Faction_Index)),
+                        Base_Index => Index2, Base => Faction_Base)));
          exit Load_Faction_Bases_Loop when Length(Source => Faction_Data) = 0;
          Temp_Record.Bases_Types.Include
            (Key =>
