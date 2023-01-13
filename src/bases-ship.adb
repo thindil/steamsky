@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,6 +23,7 @@ with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
 with BasesTypes;
 with Maps; use Maps;
+with ShipModules; use ShipModules;
 
 package body Bases.Ship is
 
@@ -94,7 +95,7 @@ package body Bases.Ship is
    end Repair_Ship;
 
    procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: BaseModules_Container.Extended_Index) is
+     (Install: Boolean; Module_Index: Positive) is
       use Tiny_String;
 
       Money_Index_2: constant Inventory_Container.Extended_Index :=
@@ -123,12 +124,10 @@ package body Bases.Ship is
             when TURRET =>
                if (Player_Ship.Modules(C).Gun_Index = 0 and Install)
                  and then
-                   BaseModules_Container.Element
-                     (Container => Modules_List,
+                   Get_Module(
                       Index => Player_Ship.Modules(C).Proto_Index)
                      .Size >=
-                   BaseModules_Container.Element
-                     (Container => Modules_List, Index => Module_Index)
+                   Get_Module(Index => Module_Index)
                      .Size then
                   Free_Turret_Index :=
                     Modules_Container.To_Index(Position => C);
@@ -139,8 +138,7 @@ package body Bases.Ship is
       end loop Find_Hull_And_Turrets_Loop;
       if Install then
          Price :=
-           BaseModules_Container.Element
-             (Container => Modules_List, Index => Module_Index)
+           Get_Module(Index => Module_Index)
              .Price;
          Count_Price(Price => Price, Trader_Index => Trader_Index);
          if Inventory_Container.Element
@@ -150,47 +148,38 @@ package body Bases.Ship is
             raise Trade_Not_Enough_Money
               with To_String
                 (Source =>
-                   BaseModules_Container.Element
-                     (Container => Modules_List, Index => Module_Index)
+                   Get_Module(Index => Module_Index)
                      .Name);
          end if;
          Check_Unique_Module_Loop :
          for Module of Player_Ship.Modules loop
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module.Proto_Index)
+            if Get_Module(Index => Module.Proto_Index)
                 .M_Type =
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+              Get_Module(Index => Module_Index)
                 .M_Type and
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+              Get_Module(Index => Module_Index)
                 .Unique then
                raise Bases_Ship_Unique_Module
                  with To_String
                    (Source =>
-                      BaseModules_Container.Element
-                        (Container => Modules_List, Index => Module_Index)
+                      Get_Module(Index => Module_Index)
                         .Name);
             end if;
          end loop Check_Unique_Module_Loop;
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module_Index)
+         if Get_Module(Index => Module_Index)
              .M_Type =
            HULL then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
-               if BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module.Proto_Index)
+               if Get_Module(Index => Module.Proto_Index)
                    .Size >
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module_Index)
+                 Get_Module(Index => Module_Index)
                    .Value then
                   raise Bases_Ship_Installation_Error
                     with "This hull don't allow to have installed that big modules what you currently have.";
                end if;
             end loop Check_Module_Size_Loop;
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+            if Get_Module(Index => Module_Index)
                 .Max_Value <
               Modules_Amount then
                raise Bases_Ship_Installation_Error
@@ -198,41 +187,34 @@ package body Bases.Ship is
             end if;
             Player_Ship.Modules.Delete(Index => Hull_Index);
          else
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+            if Get_Module(Index => Module_Index)
                 .Size >
-              BaseModules_Container.Element
-                (Container => Modules_List,
+              Get_Module(
                  Index => Player_Ship.Modules(Hull_Index).Proto_Index)
                 .Value then
                raise Bases_Ship_Installation_Error
                  with "You can't install this module because it is too big for this hull.";
             end if;
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+            if Get_Module(Index => Module_Index)
                 .M_Type not in
                 GUN | HARPOON_GUN | ARMOR then
                Modules_Amount :=
                  Modules_Amount +
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module_Index)
+                 Get_Module(Index => Module_Index)
                    .Size;
             end if;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+              Get_Module(Index => Module_Index)
                 .M_Type not in
                 GUN | HARPOON_GUN | ARMOR then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;
             if
-              (BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module_Index)
+              (Get_Module(Index => Module_Index)
                  .M_Type =
                GUN or
-               BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module_Index)
+               Get_Module(Index => Module_Index)
                    .M_Type =
                  HARPOON_GUN) and
               Free_Turret_Index = 0 then
@@ -255,11 +237,9 @@ package body Bases.Ship is
             Points => 1);
          Update_Game
            (Minutes =>
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
+              Get_Module(Index => Module_Index)
                 .Install_Time);
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module_Index)
+         if Get_Module(Index => Module_Index)
              .M_Type =
            HULL then
             Player_Ship.Modules.Insert
@@ -267,64 +247,52 @@ package body Bases.Ship is
                New_Item =>
                  (M_Type => HULL,
                   Name =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Name,
                   Proto_Index => Module_Index,
                   Weight =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Weight,
                   Durability =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Durability,
                   Max_Durability =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Durability,
                   Owner => Owners, Upgrade_Progress => 0,
                   Upgrade_Action => NONE,
                   Installed_Modules =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Value,
                   Max_Modules =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module_Index)
+                    Get_Module(Index => Module_Index)
                       .Max_Value));
          else
             Set_Empty_Owners_Loop :
             for I in
               1 ..
-                BaseModules_Container.Element
-                  (Container => Modules_List, Index => Module_Index)
+                Get_Module(Index => Module_Index)
                   .Max_Owners loop
                Owners.Append(New_Item => 0);
             end loop Set_Empty_Owners_Loop;
-            case BaseModules_Container.Element
-              (Container => Modules_List, Index => Module_Index)
+            case Get_Module(Index => Module_Index)
               .M_Type is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => WORKSHOP,
                         Name =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Name,
                         Proto_Index => Module_Index,
                         Weight =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Weight,
                         Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Max_Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
@@ -335,21 +303,17 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
                         Name =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Name,
                         Proto_Index => Module_Index,
                         Weight =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Weight,
                         Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Max_Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
@@ -358,21 +322,17 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
                         Name =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Name,
                         Proto_Index => Module_Index,
                         Weight =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Weight,
                         Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Max_Durability =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index)
+                          Get_Module(Index => Module_Index)
                             .Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Trained_Skill => 0));

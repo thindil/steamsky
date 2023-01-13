@@ -1143,22 +1143,18 @@ package body Ships is
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element
-                         (Container => Modules_List, Index => Module_Index2)
+                       Get_Module(Index => Module_Index2)
                          .Durability +
-                       (BaseModules_Container.Element
-                          (Container => Modules_List, Index => Module_Index2)
+                       (Get_Module(Index => Module_Index2)
                           .Max_Value *
                         10);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     if BaseModules_Container.Element
-                         (Container => Modules_List, Index => Module_Index2)
+                     if Get_Module(Index => Module_Index2)
                          .M_Type =
                        GUN then
                         Count_Ammo_Value
                           (Item_Type_Index =>
-                             BaseModules_Container.Element
-                               (Container => Modules_List,
+                             Get_Module(
                                 Index => Module_Index2)
                                .Value,
                            Multiple => 10);
@@ -1166,25 +1162,21 @@ package body Ships is
                   when ARMOR =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element
-                         (Container => Modules_List, Index => Module_Index2)
+                       Get_Module(Index => Module_Index2)
                          .Durability;
                   when HARPOON_GUN =>
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element
-                         (Container => Modules_List, Index => Module_Index2)
+                       Get_Module(Index => Module_Index2)
                          .Durability +
-                       (BaseModules_Container.Element
-                          (Container => Modules_List, Index => Module_Index2)
+                       (Get_Module(Index => Module_Index2)
                           .Max_Value *
                         5);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      Count_Ammo_Value
                        (Item_Type_Index =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List, Index => Module_Index2)
+                          Get_Module(Index => Module_Index2)
                             .Value,
                         Multiple => 5);
                   when others =>
@@ -1263,8 +1255,7 @@ package body Ships is
    begin
       Count_Combat_Value_Loop :
       for Module of Player_Ship.Modules loop
-         case BaseModules_Container.Element
-           (Container => Modules_List, Index => Module.Proto_Index)
+         case Get_Module(Index => Module.Proto_Index)
            .M_Type is
             when BATTERING_RAM =>
                Combat_Value := Combat_Value + Module.Damage2;
@@ -1275,8 +1266,7 @@ package body Ships is
                --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value
                  (Item_Type_Index =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                    Get_Module(Index => Module.Proto_Index)
                       .Value,
                   Multiple => 10);
             when ARMOR =>
@@ -1288,8 +1278,7 @@ package body Ships is
                --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value
                  (Item_Type_Index =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                    Get_Module(Index => Module.Proto_Index)
                       .Value,
                   Multiple => 5);
             when HULL =>
@@ -1338,8 +1327,7 @@ package body Ships is
       Ship.Modules(Module_Index).Durability :=
         Ship.Modules(Module_Index).Durability - Real_Damage;
       if Ship.Modules(Module_Index).Durability = 0 then
-         case BaseModules_Container.Element
-           (Container => Modules_List,
+         case Get_Module(
             Index => Ship.Modules(Module_Index).Proto_Index)
            .M_Type is
             when HULL | ENGINE =>
