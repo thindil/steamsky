@@ -57,10 +57,12 @@ package body ShipModules is
          External_Name => "getAdaModule";
    begin
       Load_Ada_Items(Name => New_String(Str => File_Name));
-      Load_Ship_Modules :
+      Load_Ship_Modules_Loop :
       for I in Ship_Modules_Amount_Range loop
          Get_Ada_Module(Index => I, Ada_Module => Temp_Nim_Module);
-         exit Load_Ship_Modules when Strlen(Item => Temp_Nim_Module.Name) = 0;
+         exit Load_Ship_Modules_Loop when Strlen
+             (Item => Temp_Nim_Module.Name) =
+           0;
          Temp_Record :=
            (Name =>
               To_Bounded_String
@@ -86,7 +88,7 @@ package body ShipModules is
             Reputation => Temp_Nim_Module.Reputation);
          BaseModules_Container.Append
            (Container => Modules_List, New_Item => Temp_Record);
-      end loop Load_Ship_Modules;
+      end loop Load_Ship_Modules_Loop;
    end Load_Ship_Modules;
 
    function Get_Module_Type
