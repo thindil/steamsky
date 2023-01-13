@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,29 +20,21 @@ import game, types
 
 type
   AutoMoveBreak* = enum
-    ## FUNCTION
-    ##
     ## When to stop auto movement of the player's ship: never, on encounter any
     ## ship, friendly ship, enemy ship
     never, any, friendly, enemy
 
   MessagesOrder* = enum
-    ## FUNCTION
-    ##
     ## In what order show the last messages: older messages first, newer messages
     ## first
     olderFirst = "older_First", newerFirst = "newer_First"
 
   AutoSaveTime* = enum
-    ## FUNCTION
-    ##
     ## When save the game automatically: never, after dock to a base, after
     ## undock from a base, every game day, every game month, every game year
     none, dock, undock, daily, monthly, yearly
 
   GameSettingsRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store the game's configuration
     autoRest*: cint ## If true, auto rest when pilot or engineer need a rest
     undockSpeed*: cstring ## The default speed of the player's ship after undock from a base
@@ -84,20 +76,14 @@ type
     listsLimit*: cint ## The amount of items displayed in various lists
 
   BonusType* = range[0.0..5.0]
-    ## FUNCTION
-    ##
     ## Points' multiplier from various game's settings
 
   DifficultyType* = enum
-    ## FUNCTION
-    ##
     ## The level of the game's difficulty. All setttings except custom are preset
     ## levels
     veryEasy, easy, normal, hard, veryHard, custom
 
   NewGameRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store the default settings for the new game
     playerName*: cstring ## The player's character name
     playerGender*: char ## The player's character gender
@@ -144,8 +130,6 @@ var
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
 proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load the game and new game settings from the file
   let fileName = saveDirectory & "game.cfg"
   var configFile = newFileStream(filename = fileName, mode = fmRead)
@@ -292,19 +276,13 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
 proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
     adaGameSettings: var GameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
-  ## FUNCTION
-  ##
   ## Temporary code to load the game configuration and copy it to the Ada
   ## code
-  ##
-  ## PARAMETERS
   ##
   ## * adaNewGameSettings - The new game settings which will be copied
   ## * adaGameSettings    - The game settings which will be copied
   ##
-  ## RETURNS
-  ##
-  ## The updated parameters adaNewGameSettings and adaGameSettings
+  ## Returns the updated parameters adaNewGameSettings and adaGameSettings
   loadConfig()
   adaNewGameSettings = newGameSettings
   adaGameSettings = gameSettings
