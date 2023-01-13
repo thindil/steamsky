@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of the map cell info
 - Moved setting the player's ship's crew member's priorities to the crew
   member's info dialog
+- Updated modding guide
 
 ### Fixed
 - Typos in changelog
