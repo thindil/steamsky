@@ -279,8 +279,7 @@ package body Crafts is
       begin
          Check_For_Workshop_Loop :
          for Module of Player_Ship.Modules loop
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module.Proto_Index)
+            if Get_Module(Index => Module.Proto_Index)
                 .M_Type =
               M_Type and
               Module.Durability > 0 then

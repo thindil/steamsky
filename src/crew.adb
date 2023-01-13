@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -625,8 +625,7 @@ package body Crew is
                   Have_Medical_Room := False;
                   Heal_Module_Loop :
                   for Module of Player_Ship.Modules loop
-                     if BaseModules_Container.Element
-                         (Container => Modules_List,
+                     if Get_Module(
                           Index => Module.Proto_Index)
                          .M_Type =
                        MEDICAL_ROOM and

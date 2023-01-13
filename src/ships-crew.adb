@@ -26,6 +26,7 @@ with Crew.Inventory; use Crew.Inventory;
 with Utils; use Utils;
 with Missions; use Missions;
 with Factions; use Factions;
+with ShipModules; use ShipModules;
 
 package body Ships.Crew is
 
@@ -287,8 +288,7 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if M_Type /= CABIN then
-                  if BaseModules_Container.Element
-                      (Container => Modules_List,
+                  if Get_Module(
                        Index => Ship.Modules(I).Proto_Index)
                       .M_Type =
                     M_Type and
@@ -801,8 +801,7 @@ package body Ships.Crew is
                       Get_Proto_Item(Index => Item.Proto_Index).I_Type) =
                  To_String
                    (Source =>
-                      BaseModules_Container.Element
-                        (Container => Modules_List,
+                      Get_Module(
                          Index => Module.Proto_Index)
                         .Repair_Material) then
                   Need_Repairs := True;
@@ -836,8 +835,7 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                BaseModules_Container.Element
-                  (Container => Modules_List,
+                Get_Module(
                    Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
@@ -896,8 +894,7 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                BaseModules_Container.Element
-                  (Container => Modules_List,
+                Get_Module(
                    Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0

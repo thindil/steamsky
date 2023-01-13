@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,6 +20,7 @@ with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crew.Inventory; use Crew.Inventory;
+with ShipModules; use ShipModules;
 
 package body Ships.Repairs is
 
@@ -47,8 +48,7 @@ package body Ships.Repairs is
                  (Get_Skill_Level
                     (Member => Player_Ship.Crew(J),
                      Skill_Index =>
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Module_Index).Proto_Index)
                          .Repair_Skill) /
@@ -84,8 +84,7 @@ package body Ships.Repairs is
                  Find_Item
                    (Inventory => Player_Ship.Cargo,
                     Item_Type =>
-                      BaseModules_Container.Element
-                        (Container => Modules_List,
+                      Get_Module(
                          Index =>
                            Player_Ship.Modules(Module_Index).Proto_Index)
                         .Repair_Material);
@@ -145,8 +144,7 @@ package body Ships.Repairs is
                Gain_Exp
                  (Amount => Repair_Value,
                   Skill_Number =>
-                    BaseModules_Container.Element
-                      (Container => Modules_List,
+                    Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Repair_Skill,
                   Crew_Index => Crew_Container.To_Index(Position => J));
@@ -158,8 +156,7 @@ package body Ships.Repairs is
                     Get_Skill_Level
                       (Member => Player_Ship.Crew(J),
                        Skill_Index =>
-                         BaseModules_Container.Element
-                           (Container => Modules_List,
+                         Get_Module(
                             Index =>
                               Player_Ship.Modules(Module_Index).Proto_Index)
                            .Repair_Skill),
