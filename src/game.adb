@@ -458,8 +458,7 @@ package body Game is
                   Owner := Owner + 1;
                end if;
             end loop Module_Owner_Loop;
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => Module.Proto_Index)
+            if Get_Module(Index => Module.Proto_Index)
                 .M_Type =
               CABIN and
               not Cabin_Assigned then

@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -14,8 +14,6 @@
 --
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
-
-with ShipModules; use ShipModules;
 
 -- ****h* Bases/Ship
 -- FUNCTION
@@ -74,7 +72,7 @@ package Bases.Ship is
       -- SOURCE
    procedure Upgrade_Ship
      (Install: Boolean;
-      Module_Index: BaseModules_Container.Extended_Index) with
+      Module_Index: Positive) with
       Pre => Module_Index in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index,
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);

@@ -22,7 +22,6 @@ with Crew; use Crew;
 with Game; use Game;
 with Items; use Items;
 with Mobs; use Mobs;
-with ShipModules; use ShipModules;
 
 -- ****h* Ships/Ships
 -- FUNCTION
@@ -147,7 +146,7 @@ package Ships is
    -- SOURCE
    type Module_Data(M_Type: Module_Type_2 := Default_Module_Type) is record
       Name: Tiny_String.Bounded_String;
-      Proto_Index: BaseModules_Container.Extended_Index;
+      Proto_Index: Positive;
       Weight: Natural := 0;
       Durability: Integer := 0;
       Max_Durability: Natural := 0;
