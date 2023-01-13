@@ -140,6 +140,8 @@ proc loadModules*(fileName: string) =
             message = "Can't " & $moduleAction & " module '" & $moduleIndex &
             "', no skill named '" & attribute & "'.")
       module.repairSkill = skillIndex
+    else:
+      module.repairSkill = 2
     attribute = moduleNode.attr(name = "price")
     if attribute.len() > 0:
       module.price = try:
@@ -154,6 +156,8 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module installation time.")
+    else:
+      module.installTime = 60
     attribute = moduleNode.attr(name = "unique")
     if attribute.len() > 0:
       module.unique = true
@@ -173,6 +177,8 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module maxium owners amount.")
+    else:
+      module.maxOwners = 1
     attribute = moduleNode.attr(name = "speed")
     if attribute.len() > 0:
       module.speed = try:
@@ -180,6 +186,8 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module speed.")
+    else:
+      module.speed = 4
     attribute = moduleNode.attr(name = "reputation")
     if attribute.len() > 0:
       module.reputation = try:
@@ -187,6 +195,8 @@ proc loadModules*(fileName: string) =
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module required reputation.")
+    else:
+      module.reputation = -100
     attribute = moduleNode.innerText()
     if attribute.len() > 0:
       module.description = attribute
