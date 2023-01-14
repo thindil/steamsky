@@ -171,8 +171,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
@@ -189,8 +188,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Value) /
                  2.0);
@@ -224,8 +222,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
@@ -271,8 +268,7 @@ package body Ships.UI.Modules is
                Module_Max_Value :=
                  Natural
                    (Float
-                      (BaseModules_Container.Element
-                         (Container => Modules_List,
+                      (Get_Module(
                           Index =>
                             Player_Ship.Modules(Module_Index).Proto_Index)
                          .Max_Value) *
@@ -323,8 +319,7 @@ package body Ships.UI.Modules is
                       .I_Type =
                     Get_Ada_Item_Type
                       (Item_Index =>
-                         BaseModules_Container.Element
-                           (Container => Modules_List,
+                         Get_Module(
                             Index =>
                               Player_Ship.Modules(Module_Index).Proto_Index)
                            .Value -
@@ -343,8 +338,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
@@ -364,8 +358,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
@@ -569,8 +562,7 @@ package body Ships.UI.Modules is
          Module_Max_Value :=
            Positive
              (Float
-                (BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module.Proto_Index)
+                (Get_Module( Index => Module.Proto_Index)
                    .Durability) *
               1.5);
          if Module.Max_Durability = Module_Max_Value then
@@ -601,8 +593,7 @@ package body Ships.UI.Modules is
          if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
            To_String
              (Source =>
-                BaseModules_Container.Element
-                  (Container => Modules_List, Index => Module.Proto_Index)
+                Get_Module(Index => Module.Proto_Index)
                   .Repair_Material) then
             if M_Amount > 0 then
                Insert
@@ -632,8 +623,7 @@ package body Ships.UI.Modules is
                 SkillsData_Container.Element
                   (Container => Skills_List,
                    Index =>
-                     BaseModules_Container.Element
-                       (Container => Modules_List, Index => Module.Proto_Index)
+                     Get_Module(Index => Module.Proto_Index)
                        .Repair_Skill)
                   .Name) &
            "/" &
@@ -645,8 +635,7 @@ package body Ships.UI.Modules is
                      SkillsData_Container.Element
                        (Container => Skills_List,
                         Index =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List,
+                          Get_Module(
                              Index => Module.Proto_Index)
                             .Repair_Skill)
                        .Attribute)
@@ -661,8 +650,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Positive
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                   (Get_Module(Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
             if Module.Power = Module_Max_Value then
@@ -683,8 +671,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Positive
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                   (Get_Module(Index => Module.Proto_Index)
                       .Value) /
                  2.0);
             if Module.Fuel_Usage = Module_Max_Value then
@@ -698,8 +685,7 @@ package body Ships.UI.Modules is
                Text =>
                  "{" & LF & "Max cargo:" &
                  Integer'Image
-                   (BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                   (Get_Module(Index => Module.Proto_Index)
                       .Max_Value) &
                  " kg}");
          when HULL =>
@@ -713,8 +699,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Positive
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                   (Get_Module(Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
             if Module.Max_Modules = Module_Max_Value then
@@ -794,8 +779,7 @@ package body Ships.UI.Modules is
             Module_Max_Value :=
               Positive
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                   (Get_Module(Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
             if Module.Quality = Module_Max_Value then
@@ -819,8 +803,7 @@ package body Ships.UI.Modules is
                Text =>
                  "{" & LF & "Strength:" &
                  (if
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
+                    Get_Module( Index => Module.Proto_Index)
                       .M_Type =
                     GUN
                   then Positive'Image(Module.Damage)
@@ -847,8 +830,7 @@ package body Ships.UI.Modules is
                      .I_Type =
                    Get_Ada_Item_Type
                      (Item_Index =>
-                        BaseModules_Container.Element
-                          (Container => Modules_List,
+                        Get_Module(
                            Index => Module.Proto_Index)
                           .Value -
                         1) then
@@ -876,8 +858,7 @@ package body Ships.UI.Modules is
                   if Get_Proto_Item(Index => I).I_Type =
                     Get_Ada_Item_Type
                       (Item_Index =>
-                         BaseModules_Container.Element
-                           (Container => Modules_List,
+                         Get_Module(
                             Index => Module.Proto_Index)
                            .Value -
                          1) then
@@ -918,15 +899,13 @@ package body Ships.UI.Modules is
                   Text =>
                     "{" & LF & "Max fire rate:" &
                     (if
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Speed >
                        0
                      then
                        Positive'Image
-                         (BaseModules_Container.Element
-                            (Container => Modules_List,
+                         (Get_Module(
                              Index => Module.Proto_Index)
                             .Speed) &
                        "/round}"
@@ -935,8 +914,7 @@ package body Ships.UI.Modules is
                          (Source =>
                             Integer'Image
                               (abs
-                               (BaseModules_Container.Element
-                                  (Container => Modules_List,
+                               (Get_Module(
                                    Index => Module.Proto_Index)
                                   .Speed)),
                           Side => Left) &
@@ -1007,12 +985,10 @@ package body Ships.UI.Modules is
          Text =>
            "{" & LF & "Size:" &
            Natural'Image
-             (BaseModules_Container.Element
-                (Container => Modules_List, Index => Module.Proto_Index)
+             (Get_Module(Index => Module.Proto_Index)
                 .Size) &
            "}");
-      if BaseModules_Container.Element
-          (Container => Modules_List, Index => Module.Proto_Index)
+      if Get_Module(Index => Module.Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          Insert
@@ -1021,8 +997,7 @@ package body Ships.UI.Modules is
               "{" & LF & LF &
               To_String
                 (Source =>
-                   BaseModules_Container.Element
-                     (Container => Modules_List, Index => Module.Proto_Index)
+                   Get_Module(Index => Module.Proto_Index)
                      .Description) &
               "}");
       end if;
@@ -1032,49 +1007,42 @@ package body Ships.UI.Modules is
             when DURABILITY =>
                Append(Source => Module_Info, New_Item => "durability");
                Max_Upgrade :=
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module.Proto_Index)
+                 Get_Module(Index => Module.Proto_Index)
                    .Durability;
             when MAX_VALUE =>
-               case BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module.Proto_Index)
+               case Get_Module( Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
                      Append(Source => Module_Info, New_Item => "power");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Max_Value /
                        20;
                   when CABIN =>
                      Append(Source => Module_Info, New_Item => "quality");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
                      Append(Source => Module_Info, New_Item => "damage");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Max_Value *
                        2;
                   when HULL =>
                      Append(Source => Module_Info, New_Item => "enlarge");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Max_Value *
                        40;
                   when HARPOON_GUN =>
                      Append(Source => Module_Info, New_Item => "strength");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Max_Value *
                        10;
@@ -1082,14 +1050,12 @@ package body Ships.UI.Modules is
                      null;
                end case;
             when VALUE =>
-               case BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module.Proto_Index)
+               case Get_Module(Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
                      Append(Source => Module_Info, New_Item => "fuel usage");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index => Module.Proto_Index)
                          .Value *
                        20;
@@ -1295,8 +1261,7 @@ package body Ships.UI.Modules is
       end Update_Order;
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "crew" then
-         case BaseModules_Container.Element
-           (Container => Modules_List,
+         case Get_Module(
             Index => Player_Ship.Modules(Module_Index).Proto_Index)
            .M_Type is
             when CABIN =>
@@ -1652,8 +1617,7 @@ package body Ships.UI.Modules is
                   exit Remove_Owner_Loop;
                end if;
             end loop Remove_Owner_Loop;
-            if BaseModules_Container.Element
-                (Container => Modules_List,
+            if Get_Module(
                  Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .M_Type /=
               CABIN then
@@ -2467,8 +2431,7 @@ package body Ships.UI.Modules is
              .I_Type =
            Get_Ada_Item_Type
              (Item_Index =>
-                BaseModules_Container.Element
-                  (Container => Modules_List,
+                Get_Module(
                    Index => Player_Ship.Modules(Module_Index).Proto_Index)
                   .Value -
                 1) and
