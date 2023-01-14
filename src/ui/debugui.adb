@@ -93,8 +93,8 @@ package body DebugUI is
            "{" &
            To_String
              (Source =>
-                Get_Module(
-                   Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                Get_Module
+                  (Index => Player_Ship.Modules(Module_Index).Proto_Index)
                   .Name) &
            "}");
       Set
@@ -741,12 +741,8 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
       Update_Proto_Index_Loop :
-      for I in 1 .. Get_Modules_Amount
-         loop
-         if To_String
-             (Source =>
-                Get_Module(Index => I)
-                  .Name) =
+      for I in 1 .. Get_Modules_Amount loop
+         if To_String(Source => Get_Module(Index => I).Name) =
            To_String(Source => Value) then
             Value := Null_Unbounded_String;
             Player_Ship.Modules(Module_Index).Proto_Index := I;
@@ -1430,17 +1426,11 @@ package body DebugUI is
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
-      for I in 1 .. Get_Modules_Amount
-         loop
+      for I in 1 .. Get_Modules_Amount loop
          Append
            (Source => Values_List,
             New_Item =>
-              " {" &
-              To_String
-                (Source =>
-                   Get_Module(Index => I)
-                     .Name) &
-              "}");
+              " {" & To_String(Source => Get_Module(Index => I).Name) & "}");
       end loop Load_Modules_Prototypes_Loop;
       configure
         (Widgt => Combo_Box,

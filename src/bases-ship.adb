@@ -94,8 +94,7 @@ package body Bases.Ship is
       Update_Game(Minutes => Time);
    end Repair_Ship;
 
-   procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: Positive) is
+   procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) is
       use Tiny_String;
 
       Money_Index_2: constant Inventory_Container.Extended_Index :=
@@ -124,11 +123,9 @@ package body Bases.Ship is
             when TURRET =>
                if (Player_Ship.Modules(C).Gun_Index = 0 and Install)
                  and then
-                   Get_Module(
-                      Index => Player_Ship.Modules(C).Proto_Index)
+                   Get_Module(Index => Player_Ship.Modules(C).Proto_Index)
                      .Size >=
-                   Get_Module(Index => Module_Index)
-                     .Size then
+                   Get_Module(Index => Module_Index).Size then
                   Free_Turret_Index :=
                     Modules_Container.To_Index(Position => C);
                end if;
@@ -137,86 +134,61 @@ package body Bases.Ship is
          end case;
       end loop Find_Hull_And_Turrets_Loop;
       if Install then
-         Price :=
-           Get_Module(Index => Module_Index)
-             .Price;
+         Price := Get_Module(Index => Module_Index).Price;
          Count_Price(Price => Price, Trader_Index => Trader_Index);
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
            Price then
             raise Trade_Not_Enough_Money
-              with To_String
-                (Source =>
-                   Get_Module(Index => Module_Index)
-                     .Name);
+              with To_String(Source => Get_Module(Index => Module_Index).Name);
          end if;
          Check_Unique_Module_Loop :
          for Module of Player_Ship.Modules loop
-            if Get_Module(Index => Module.Proto_Index)
-                .M_Type =
-              Get_Module(Index => Module_Index)
-                .M_Type and
-              Get_Module(Index => Module_Index)
-                .Unique then
+            if Get_Module(Index => Module.Proto_Index).M_Type =
+              Get_Module(Index => Module_Index).M_Type and
+              Get_Module(Index => Module_Index).Unique then
                raise Bases_Ship_Unique_Module
                  with To_String
-                   (Source =>
-                      Get_Module(Index => Module_Index)
-                        .Name);
+                   (Source => Get_Module(Index => Module_Index).Name);
             end if;
          end loop Check_Unique_Module_Loop;
-         if Get_Module(Index => Module_Index)
-             .M_Type =
-           HULL then
+         if Get_Module(Index => Module_Index).M_Type = HULL then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
-               if Get_Module(Index => Module.Proto_Index)
-                   .Size >
-                 Get_Module(Index => Module_Index)
-                   .Value then
+               if Get_Module(Index => Module.Proto_Index).Size >
+                 Get_Module(Index => Module_Index).Value then
                   raise Bases_Ship_Installation_Error
                     with "This hull don't allow to have installed that big modules what you currently have.";
                end if;
             end loop Check_Module_Size_Loop;
-            if Get_Module(Index => Module_Index)
-                .Max_Value <
+            if Get_Module(Index => Module_Index).Max_Value <
               Modules_Amount then
                raise Bases_Ship_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
             end if;
             Player_Ship.Modules.Delete(Index => Hull_Index);
          else
-            if Get_Module(Index => Module_Index)
-                .Size >
-              Get_Module(
-                 Index => Player_Ship.Modules(Hull_Index).Proto_Index)
+            if Get_Module(Index => Module_Index).Size >
+              Get_Module(Index => Player_Ship.Modules(Hull_Index).Proto_Index)
                 .Value then
                raise Bases_Ship_Installation_Error
                  with "You can't install this module because it is too big for this hull.";
             end if;
-            if Get_Module(Index => Module_Index)
-                .M_Type not in
-                GUN | HARPOON_GUN | ARMOR then
+            if Get_Module(Index => Module_Index).M_Type not in GUN |
+                  HARPOON_GUN | ARMOR then
                Modules_Amount :=
-                 Modules_Amount +
-                 Get_Module(Index => Module_Index)
-                   .Size;
+                 Modules_Amount + Get_Module(Index => Module_Index).Size;
             end if;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
-              Get_Module(Index => Module_Index)
-                .M_Type not in
-                GUN | HARPOON_GUN | ARMOR then
+              Get_Module(Index => Module_Index).M_Type not in GUN |
+                  HARPOON_GUN | ARMOR then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;
             if
-              (Get_Module(Index => Module_Index)
-                 .M_Type =
-               GUN or
-               Get_Module(Index => Module_Index)
-                   .M_Type =
-                 HARPOON_GUN) and
+              (Get_Module(Index => Module_Index).M_Type = GUN or
+               Get_Module(Index => Module_Index).M_Type = HARPOON_GUN) and
               Free_Turret_Index = 0 then
                raise Bases_Ship_Installation_Error
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
@@ -236,64 +208,39 @@ package body Bases.Ship is
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
          Update_Game
-           (Minutes =>
-              Get_Module(Index => Module_Index)
-                .Install_Time);
-         if Get_Module(Index => Module_Index)
-             .M_Type =
-           HULL then
+           (Minutes => Get_Module(Index => Module_Index).Install_Time);
+         if Get_Module(Index => Module_Index).M_Type = HULL then
             Player_Ship.Modules.Insert
               (Before => Hull_Index,
                New_Item =>
                  (M_Type => HULL,
-                  Name =>
-                    Get_Module(Index => Module_Index)
-                      .Name,
+                  Name => Get_Module(Index => Module_Index).Name,
                   Proto_Index => Module_Index,
-                  Weight =>
-                    Get_Module(Index => Module_Index)
-                      .Weight,
-                  Durability =>
-                    Get_Module(Index => Module_Index)
-                      .Durability,
+                  Weight => Get_Module(Index => Module_Index).Weight,
+                  Durability => Get_Module(Index => Module_Index).Durability,
                   Max_Durability =>
-                    Get_Module(Index => Module_Index)
-                      .Durability,
+                    Get_Module(Index => Module_Index).Durability,
                   Owner => Owners, Upgrade_Progress => 0,
                   Upgrade_Action => NONE,
-                  Installed_Modules =>
-                    Get_Module(Index => Module_Index)
-                      .Value,
-                  Max_Modules =>
-                    Get_Module(Index => Module_Index)
-                      .Max_Value));
+                  Installed_Modules => Get_Module(Index => Module_Index).Value,
+                  Max_Modules => Get_Module(Index => Module_Index).Max_Value));
          else
             Set_Empty_Owners_Loop :
-            for I in
-              1 ..
-                Get_Module(Index => Module_Index)
-                  .Max_Owners loop
+            for I in 1 .. Get_Module(Index => Module_Index).Max_Owners loop
                Owners.Append(New_Item => 0);
             end loop Set_Empty_Owners_Loop;
-            case Get_Module(Index => Module_Index)
-              .M_Type is
+            case Get_Module(Index => Module_Index).M_Type is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => WORKSHOP,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Crafting_Index => Null_Bounded_String,
@@ -302,242 +249,163 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when TRAINING_ROOM =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Trained_Skill => 0));
                when COCKPIT =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => COCKPIT,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when TURRET =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TURRET,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Gun_Index => 0));
                when CABIN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CABIN,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Cleanliness =>
-                          Get_Module(Index => Module_Index)
-                            .Value,
+                        Cleanliness => Get_Module(Index => Module_Index).Value,
                         Quality =>
-                          Get_Module(Index => Module_Index)
-                            .Max_Value));
+                          Get_Module(Index => Module_Index).Max_Value));
                when ShipModules.CARGO =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when ENGINE =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ENGINE,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Fuel_Usage =>
-                          Get_Module(Index => Module_Index)
-                            .Value,
-                        Power =>
-                          Get_Module(Index => Module_Index)
-                            .Max_Value,
+                        Fuel_Usage => Get_Module(Index => Module_Index).Value,
+                        Power => Get_Module(Index => Module_Index).Max_Value,
                         Disabled => False));
                when ARMOR =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ARMOR,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when BATTERING_RAM =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage2 =>
-                          Get_Module(Index => Module_Index)
-                            .Max_Value,
+                        Damage2 => Get_Module(Index => Module_Index).Max_Value,
                         Cooling_Down => False));
                when GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => GUN,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage =>
-                          Get_Module(Index => Module_Index)
-                            .Max_Value,
+                        Damage => Get_Module(Index => Module_Index).Max_Value,
                         Ammo_Index => 0));
                when HARPOON_GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name =>
-                          Get_Module(Index => Module_Index)
-                            .Name,
+                        Name => Get_Module(Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight =>
-                          Get_Module(Index => Module_Index)
-                            .Weight,
+                        Weight => Get_Module(Index => Module_Index).Weight,
                         Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Max_Durability =>
-                          Get_Module(Index => Module_Index)
-                            .Durability,
+                          Get_Module(Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Duration =>
-                          Get_Module(Index => Module_Index)
-                            .Max_Value,
+                          Get_Module(Index => Module_Index).Max_Value,
                         Harpoon_Index => 0));
                when ANY | HULL =>
                   null;
             end case;
          end if;
-         case Get_Module(Index => Module_Index)
-           .M_Type is
+         case Get_Module(Index => Module_Index).M_Type is
             when GUN | HARPOON_GUN =>
                Player_Ship.Modules(Free_Turret_Index).Gun_Index :=
                  Player_Ship.Modules.Last_Index;
@@ -548,10 +416,7 @@ package body Bases.Ship is
          Add_Message
            (Message =>
               "You installed " &
-              To_String
-                (Source =>
-                   Get_Module(Index => Module_Index)
-                     .Name) &
+              To_String(Source => Get_Module(Index => Module_Index).Name) &
               " on your ship for" & Positive'Image(Price) & " " &
               To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
@@ -566,13 +431,13 @@ package body Bases.Ship is
                  Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability));
          begin
             Price :=
-              Get_Module(
-                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price -
               Integer
                 (Float
-                   (Get_Module(
-                       Index =>
+                   (Get_Module
+                      (Index =>
                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Price) *
                  Float(Damage));
@@ -590,8 +455,8 @@ package body Bases.Ship is
              .Amount then
             raise Trade_No_Money_In_Base;
          end if;
-         case Get_Module(
-            Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+         case Get_Module
+           (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
            .M_Type is
             when TURRET =>
                if Player_Ship.Modules(Ship_Module_Index).Gun_Index > 0 then
@@ -611,8 +476,8 @@ package body Bases.Ship is
                if Free_Cargo
                    (Amount =>
                       0 -
-                      Get_Module(
-                         Index =>
+                      Get_Module
+                        (Index =>
                            Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                         .Max_Value) <
                  0 then
@@ -622,14 +487,14 @@ package body Bases.Ship is
             when others =>
                null;
          end case;
-         if Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+         if Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .M_Type not in
              HULL | ARMOR | GUN | HARPOON_GUN then
             Modules_Amount :=
               Modules_Amount -
-              Get_Module(
-                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Size;
             Player_Ship.Modules(Hull_Index).Installed_Modules :=
               Modules_Amount;
@@ -670,8 +535,8 @@ package body Bases.Ship is
             Points => 1);
          Update_Game
            (Minutes =>
-              Get_Module(
-                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Install_Time);
          Add_Message
            (Message =>
@@ -773,8 +638,8 @@ package body Bases.Ship is
          Proto_Index :=
            Find_Proto_Item
              (Item_Type =>
-                Get_Module(
-                   Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                Get_Module
+                  (Index => Player_Ship.Modules(Module_Index).Proto_Index)
                   .Repair_Material);
          Cost :=
            Time *
@@ -789,9 +654,7 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                      Get_Module(
-                         Index => Module.Proto_Index)
-                        .Repair_Material);
+                      Get_Module(Index => Module.Proto_Index).Repair_Material);
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *

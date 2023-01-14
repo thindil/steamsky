@@ -385,6 +385,7 @@ package Crew is
    --## rule on TYPE_INITIAL_VALUES
 
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data;
-   procedure Member_From_Nim(Member: Nim_Member_Data; Ada_Member: in out Member_Data);
+   procedure Member_From_Nim
+     (Member: Nim_Member_Data; Ada_Member: in out Member_Data);
 
 end Crew;

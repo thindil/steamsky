@@ -213,9 +213,7 @@ package body Bases.ShipyardUI is
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
-            Max_Size :=
-              Get_Module(Index => Module.Proto_Index)
-                .Value;
+            Max_Size := Get_Module(Index => Module.Proto_Index).Value;
             Used_Space := Module.Installed_Modules;
             All_Space := Module.Max_Modules;
             exit Find_Max_Module_Size_Loop;
@@ -271,20 +269,15 @@ package body Bases.ShipyardUI is
       Clear_Table(Table => Install_Table);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
-         if Get_Module(Index => I)
-             .Price =
-           0 or
+         if Get_Module(Index => I).Price = 0 or
            Sky_Bases(Base_Index).Reputation.Level <
-             Get_Module(Index => I)
-               .Reputation then
+             Get_Module(Index => I).Reputation then
             goto End_Of_Loop;
          end if;
          if Argc > 1
            and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) > 0
            and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) /=
-             Module_Type'Pos
-               (Get_Module(Index => I)
-                  .M_Type) then
+             Module_Type'Pos(Get_Module(Index => I).M_Type) then
             goto End_Of_Loop;
          end if;
          if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
@@ -292,11 +285,7 @@ package body Bases.ShipyardUI is
              Index
                (Source =>
                   To_Lower
-                    (Item =>
-                       To_String
-                         (Source =>
-                            Get_Module(Index => I)
-                              .Name)),
+                    (Item => To_String(Source => Get_Module(Index => I).Name)),
                 Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
              0 then
             goto End_Of_Loop;
@@ -306,22 +295,12 @@ package body Bases.ShipyardUI is
             goto End_Of_Loop;
          end if;
          Module_Size :=
-           (if
-              Get_Module(Index => I)
-                .M_Type =
-              HULL
-            then
-              Get_Module(Index => I)
-                .Max_Value
-            else Get_Module(Index => I)
-                .Size);
+           (if Get_Module(Index => I).M_Type = HULL then
+              Get_Module(Index => I).Max_Value
+            else Get_Module(Index => I).Size);
          Add_Button
            (Table => Install_Table,
-            Text =>
-              To_String
-                (Source =>
-                   Get_Module(Index => I)
-                     .Name),
+            Text => To_String(Source => Get_Module(Index => I).Name),
             Tooltip => "Show available options for module",
             Command =>
               "ShowShipyardModuleMenu {" &
@@ -342,29 +321,20 @@ package body Bases.ShipyardUI is
               Trim(Source => I'Img, Side => Left) & "} install",
             Column => 3, New_Row => False,
             Color =>
-              (if
-                 Get_Module(Index => I)
-                   .M_Type =
-                 HULL
-               then
+              (if Get_Module(Index => I).M_Type = HULL then
                  (if Module_Size < All_Space then "red"
                   elsif Module_Size > All_Space then "green" else "")
                else (if Module_Size > Max_Size then "red" else "")));
          Add_Button
            (Table => Install_Table,
             Text =>
-              To_String
-                (Source =>
-                   Get_Module(Index => I)
-                     .Repair_Material),
+              To_String(Source => Get_Module(Index => I).Repair_Material),
             Tooltip => "Show available options for module",
             Command =>
               "ShowShipyardModuleMenu {" &
               Trim(Source => I'Img, Side => Left) & "} install",
             Column => 4);
-         Cost :=
-           Get_Module(Index => I)
-             .Price;
+         Cost := Get_Module(Index => I).Price;
          Count_Price
            (Price => Cost, Trader_Index => Find_Member(Order => TALK));
          Add_Button
@@ -412,9 +382,7 @@ package body Bases.ShipyardUI is
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I of Remove_Indexes loop
-         if Get_Module(
-              Index => Player_Ship.Modules(I).Proto_Index)
-             .M_Type =
+         if Get_Module(Index => Player_Ship.Modules(I).Proto_Index).M_Type =
            HULL then
             goto End_Of_Remove_Loop;
          end if;
@@ -442,9 +410,7 @@ package body Bases.ShipyardUI is
            (Table => Remove_Table,
             Text =>
               Integer'Image
-                (Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
-                   .Size),
+                (Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Size),
             Tooltip => "Show available options for module",
             Command =>
               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
@@ -454,8 +420,7 @@ package body Bases.ShipyardUI is
             Text =>
               To_String
                 (Source =>
-                   Get_Module(
-                      Index => Player_Ship.Modules(I).Proto_Index)
+                   Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                      .Repair_Material),
             Tooltip => "Show available options for module",
             Command =>
@@ -466,13 +431,10 @@ package body Bases.ShipyardUI is
            Float(Player_Ship.Modules(I).Durability) /
              Float(Player_Ship.Modules(I).Max_Durability);
          Cost :=
-           Get_Module(
-              Index => Player_Ship.Modules(I).Proto_Index)
-             .Price -
+           Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Price -
            Integer
              (Float
-                (Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
+                (Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                    .Price) *
               Damage);
          if Cost = 0 then
@@ -543,27 +505,13 @@ package body Bases.ShipyardUI is
       Money_Index_2: Natural;
    begin
       if Installing then
-         M_Type :=
-           Get_Module(Index => Module_Index)
-             .M_Type;
-         Max_Value :=
-           Get_Module( Index => Module_Index)
-             .Max_Value;
-         Value :=
-           Get_Module(Index => Module_Index)
-             .Value;
-         Size :=
-           Get_Module(Index => Module_Index)
-             .Size;
-         Weight :=
-           Get_Module(Index => Module_Index)
-             .Weight;
-         Max_Owners :=
-           Get_Module(Index => Module_Index)
-             .Max_Owners;
-         Speed :=
-           Get_Module(Index => Module_Index)
-             .Speed;
+         M_Type := Get_Module(Index => Module_Index).M_Type;
+         Max_Value := Get_Module(Index => Module_Index).Max_Value;
+         Value := Get_Module(Index => Module_Index).Value;
+         Size := Get_Module(Index => Module_Index).Size;
+         Weight := Get_Module(Index => Module_Index).Weight;
+         Max_Owners := Get_Module(Index => Module_Index).Max_Owners;
+         Speed := Get_Module(Index => Module_Index).Speed;
          Module_Text := Get_Widget(pathName => ".moduledialog.info");
          Get_Module_Index_Block :
          declare
@@ -577,8 +525,7 @@ package body Bases.ShipyardUI is
             end if;
             Set_Ship_Module_Index_Loop :
             for I in Player_Ship.Modules.Iterate loop
-               if Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
+               if Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                    .M_Type =
                  M_Type then
                   Module_Iterator := Module_Iterator - 1;
@@ -590,9 +537,7 @@ package body Bases.ShipyardUI is
                end if;
             end loop Set_Ship_Module_Index_Loop;
          end Get_Module_Index_Block;
-         Cost :=
-           Get_Module(Index => Module_Index)
-             .Price;
+         Cost := Get_Module(Index => Module_Index).Price;
          Count_Price
            (Price => Cost, Trader_Index => Find_Member(Order => TALK));
          Money_Index_2 :=
@@ -622,22 +567,20 @@ package body Bases.ShipyardUI is
            (TextWidget => Module_Text, Index => "end",
             Text =>
               "{" & LF & "Installation time:" &
-              Positive'Image
-                (Get_Module(Index => Module_Index)
-                   .Install_Time) &
+              Positive'Image(Get_Module(Index => Module_Index).Install_Time) &
               " minutes}");
       else
          Ship_Module_Index := Module_Index;
          M_Type :=
-           Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+           Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .M_Type;
          case M_Type is
             when HARPOON_GUN =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Duration;
                Value :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ENGINE =>
@@ -649,26 +592,26 @@ package body Bases.ShipyardUI is
             when GUN =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Damage;
                Value :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ShipModules.CARGO =>
                Max_Value :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value;
                Value :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when HULL =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Max_Modules;
                Value :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when BATTERING_RAM =>
@@ -679,20 +622,20 @@ package body Bases.ShipyardUI is
                Value := 0;
          end case;
          Size :=
-           Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+           Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Size;
          Weight :=
-           Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+           Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Weight;
          Max_Owners :=
-           Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+           Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Max_Owners;
          Speed :=
-           Get_Module(
-              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+           Get_Module
+             (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Speed;
          Module_Text := Get_Widget(pathName => ".moduledialog.info");
       end if;
@@ -729,8 +672,8 @@ package body Bases.ShipyardUI is
                Text => "{" & LF & "Max module size:}");
             if Installing then
                if Value <
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
@@ -738,8 +681,8 @@ package body Bases.ShipyardUI is
                      Text =>
                        "{" & Positive'Image(Value) & " (smaller)} [list red]");
                elsif Value >
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
@@ -815,8 +758,8 @@ package body Bases.ShipyardUI is
                Text => "{" & LF & "Max cargo:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
@@ -825,8 +768,8 @@ package body Bases.ShipyardUI is
                        "{" & Positive'Image(Max_Value) &
                        " kg (bigger)} [list green]");
                elsif Max_Value <
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
@@ -937,8 +880,8 @@ package body Bases.ShipyardUI is
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "Max owners:}");
             if Installing and then Ship_Module_Index > 0 then
-               if Get_Module(
-                    Index =>
+               if Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
@@ -947,8 +890,8 @@ package body Bases.ShipyardUI is
                      Text =>
                        "{" & Natural'Image(Max_Owners) &
                        " (less)} [list red]");
-               elsif Get_Module(
-                    Index =>
+               elsif Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
@@ -972,8 +915,8 @@ package body Bases.ShipyardUI is
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "Max workers:}");
             if Installing and then Ship_Module_Index > 0 then
-               if Get_Module(
-                    Index =>
+               if Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
@@ -982,8 +925,8 @@ package body Bases.ShipyardUI is
                      Text =>
                        "{" & Natural'Image(Max_Owners) &
                        " (less)} [list red]");
-               elsif Get_Module(
-                    Index =>
+               elsif Get_Module
+                   (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
@@ -1082,8 +1025,8 @@ package body Bases.ShipyardUI is
                  (TextWidget => Module_Text, Index => "end",
                   Text => "{" & LF & "Max fire rate:}");
                if Installing and then Ship_Module_Index > 0 then
-                  if Get_Module(
-                       Index =>
+                  if Get_Module
+                      (Index =>
                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Speed >
                     Speed then
@@ -1103,8 +1046,8 @@ package body Bases.ShipyardUI is
                                 Side => Both) &
                              " rounds (slower)} [list red]");
                      end if;
-                  elsif Get_Module(
-                       Index =>
+                  elsif Get_Module
+                      (Index =>
                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Speed <
                     Speed then
@@ -1198,8 +1141,7 @@ package body Bases.ShipyardUI is
             for Module of Player_Ship.Modules loop
                if Module.M_Type = HULL
                  and then Size >
-                   Get_Module(Index => Module.Proto_Index)
-                     .Value then
+                   Get_Module(Index => Module.Proto_Index).Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text =>
@@ -1242,8 +1184,7 @@ package body Bases.ShipyardUI is
             if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
               To_String
                 (Source =>
-                   Get_Module(Index => Module_Index)
-                     .Repair_Material) then
+                   Get_Module(Index => Module_Index).Repair_Material) then
                if M_Amount > 0 then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
@@ -1266,9 +1207,7 @@ package body Bases.ShipyardUI is
                 (Source =>
                    SkillsData_Container.Element
                      (Container => Skills_List,
-                      Index =>
-                        Get_Module(Index => Module_Index)
-                          .Repair_Skill)
+                      Index => Get_Module(Index => Module_Index).Repair_Skill)
                      .Name) &
               "/" &
               To_String
@@ -1279,31 +1218,25 @@ package body Bases.ShipyardUI is
                         SkillsData_Container.Element
                           (Container => Skills_List,
                            Index =>
-                             Get_Module(
-                                Index => Module_Index)
-                               .Repair_Skill)
+                             Get_Module(Index => Module_Index).Repair_Skill)
                           .Attribute)
                      .Name) &
               "}");
-         if Get_Module( Index => Module_Index)
-             .Unique then
+         if Get_Module(Index => Module_Index).Unique then
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text =>
                  "{" & LF &
                  "The module is unique. Only one module of that type can be installed on the ship.}");
          end if;
-         if Get_Module(Index => Module_Index)
-             .Description /=
+         if Get_Module(Index => Module_Index).Description /=
            Short_String.Null_Bounded_String then
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text =>
                  "{" & LF & LF &
                  To_String
-                   (Source =>
-                      Get_Module(Index => Module_Index)
-                        .Description) &
+                   (Source => Get_Module(Index => Module_Index).Description) &
                  "}");
          end if;
       end if;
@@ -1329,19 +1262,15 @@ package body Bases.ShipyardUI is
          case Player_Ship.Modules(I).M_Type is
             when HULL =>
                Max_Size :=
-                 Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
-                   .Value;
+                 Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Value;
                Used_Space := Player_Ship.Modules(I).Installed_Modules;
                All_Space := Player_Ship.Modules(I).Max_Modules;
             when TURRET =>
                if Player_Ship.Modules(I).Gun_Index = 0
                  and then
-                   Get_Module(
-                      Index => Player_Ship.Modules(I).Proto_Index)
+                   Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                      .Size >=
-                   Get_Module(Index => Module_Index)
-                     .Size then
+                   Get_Module(Index => Module_Index).Size then
                   Free_Turret_Index :=
                     Modules_Container.To_Index(Position => I);
                end if;
@@ -1351,12 +1280,9 @@ package body Bases.ShipyardUI is
       end loop Find_Hull_And_Free_Turret_Loop;
       Check_Unique_Module_Loop :
       for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index)
-             .M_Type =
-           Get_Module(Index => Module_Index)
-             .M_Type and
-           Get_Module(Index => Module_Index)
-             .Unique then
+         if Get_Module(Index => Module.Proto_Index).M_Type =
+           Get_Module(Index => Module_Index).M_Type and
+           Get_Module(Index => Module_Index).Unique then
             Has_Unique := True;
             exit Check_Unique_Module_Loop;
          end if;
@@ -1387,12 +1313,9 @@ package body Bases.ShipyardUI is
               (Widget => Install_Button,
                Message =>
                  "Only one module of that type can be installed on the ship.");
-         elsif Get_Module(Index => Module_Index)
-             .M_Type not in
-             GUN | HARPOON_GUN | HULL then
-            if Get_Module(Index => Module_Index)
-                .Size >
-              Max_Size then
+         elsif Get_Module(Index => Module_Index).M_Type not in GUN |
+               HARPOON_GUN | HULL then
+            if Get_Module(Index => Module_Index).Size > Max_Size then
                configure
                  (Widgt => Install_Button,
                   options => "-state disabled -text {Too big}");
@@ -1401,11 +1324,8 @@ package body Bases.ShipyardUI is
                   Message =>
                     "The selected module is too big for your's ship's hull.");
             elsif (All_Space - Used_Space) <
-              Get_Module(Index => Module_Index)
-                .Size and
-              Get_Module(Index => Module_Index)
-                  .M_Type /=
-                ARMOR then
+              Get_Module(Index => Module_Index).Size and
+              Get_Module(Index => Module_Index).M_Type /= ARMOR then
                configure
                  (Widgt => Install_Button,
                   options => "-state disabled -text {No space}");
@@ -1414,12 +1334,8 @@ package body Bases.ShipyardUI is
                   Message =>
                     "You don't have enough space in your ship's hull to install the module.");
             end if;
-         elsif Get_Module(Index => Module_Index)
-             .M_Type =
-           HULL and
-           Get_Module(Index => Module_Index)
-               .Max_Value <
-             Used_Space then
+         elsif Get_Module(Index => Module_Index).M_Type = HULL and
+           Get_Module(Index => Module_Index).Max_Value < Used_Space then
             configure
               (Widgt => Install_Button,
                options => "-state disabled -text {Too small}");
@@ -1427,9 +1343,7 @@ package body Bases.ShipyardUI is
               (Widget => Install_Button,
                Message =>
                  "The selected hull is too small to replace your current hull.");
-         elsif Get_Module(Index => Module_Index)
-             .M_Type in
-             GUN | HARPOON_GUN
+         elsif Get_Module(Index => Module_Index).M_Type in GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
             configure
               (Widgt => Install_Button,
@@ -1473,10 +1387,7 @@ package body Bases.ShipyardUI is
         Create_Dialog
           (Name => ".moduledialog",
            Title =>
-             To_String
-               (Source =>
-                  Get_Module(Index => Module_Index)
-                    .Name));
+             To_String(Source => Get_Module(Index => Module_Index).Name));
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Dialog & ".info",
@@ -1508,11 +1419,8 @@ package body Bases.ShipyardUI is
    begin
       Fill_Compare_Modules_Loop :
       for I in Player_Ship.Modules.Iterate loop
-         if Get_Module(
-              Index => Player_Ship.Modules(I).Proto_Index)
-             .M_Type =
-           Get_Module(Index => Module_Index)
-             .M_Type then
+         if Get_Module(Index => Player_Ship.Modules(I).Proto_Index).M_Type =
+           Get_Module(Index => Module_Index).M_Type then
             Module_Iterator := Module_Iterator + 1;
             Append
               (Source => Compare_Modules,
@@ -1537,9 +1445,7 @@ package body Bases.ShipyardUI is
            (Widgt => Compare_Box, Sequence => "<<ComboboxSelected>>",
             Script => "{CompareModules}");
       end if;
-      Cost :=
-        Get_Module(Index => Module_Index)
-          .Price;
+      Cost := Get_Module(Index => Module_Index).Price;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       Money_Index_2 :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
@@ -1731,13 +1637,12 @@ package body Bases.ShipyardUI is
         Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
           Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
       Cost :=
-        Get_Module(
-           Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+        Get_Module(Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
           .Price -
         Integer
           (Float
-             (Get_Module(
-                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+             (Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price) *
            Damage);
       if Cost = 0 then
@@ -1755,8 +1660,8 @@ package body Bases.ShipyardUI is
          Text =>
            "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
            Positive'Image
-             (Get_Module(
-                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+             (Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Install_Time) &
            " minutes}");
       Set_Module_Info(Installing => False);
@@ -1780,8 +1685,8 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Tcl.Tk.Ada.Grid.Grid(Slave => Damage_Bar);
       end if;
-      if Get_Module(
-           Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+      if Get_Module
+          (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          Label :=
@@ -1791,8 +1696,8 @@ package body Bases.ShipyardUI is
                 "-text {" & LF &
                 To_String
                   (Source =>
-                     Get_Module(
-                        Index =>
+                     Get_Module
+                       (Index =>
                           Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                        .Description) &
                 "} -wraplength 450");
@@ -1899,10 +1804,7 @@ package body Bases.ShipyardUI is
          Change_Title
            (Dialog => Module_Menu,
             New_Title =>
-              To_String
-                (Source =>
-                   Get_Module(Index => Module_Index)
-                     .Name) &
+              To_String(Source => Get_Module(Index => Module_Index).Name) &
               " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
@@ -1917,9 +1819,7 @@ package body Bases.ShipyardUI is
             Button: constant Ttk_Button :=
               Get_Widget(pathName => Module_Menu & ".install");
          begin
-            Cost :=
-              Get_Module(Index => Module_Index)
-                .Price;
+            Cost := Get_Module(Index => Module_Index).Price;
             Count_Price
               (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Money_Index_2 :=
@@ -2098,9 +1998,9 @@ package body Bases.ShipyardUI is
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
       Local_Modules: Modules_Array
         (1 ..
-               (if CArgv.Arg(Argv => Argv, N => 1) = "install" then
-                   Get_Modules_Amount
-                 else Positive(Player_Ship.Modules.Length)));
+             (if CArgv.Arg(Argv => Argv, N => 1) = "install" then
+                Get_Modules_Amount
+              else Positive(Player_Ship.Modules.Length)));
       Index: Positive := 1;
       Cost: Natural;
       Damage: Float;
@@ -2187,36 +2087,23 @@ package body Bases.ShipyardUI is
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Fill_Local_Install_Modules_Loop :
-         for I in 1 .. Get_Modules_Amount
-            loop
-            Cost :=
-              Get_Module(Index => I)
-                .Price;
+         for I in 1 .. Get_Modules_Amount loop
+            Cost := Get_Module(Index => I).Price;
             Count_Price
               (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             if Cost = 0 then
                Cost := 1;
             end if;
             Local_Modules(Index) :=
-              (Name =>
-                 Get_Module(Index => I)
-                   .Name,
+              (Name => Get_Module(Index => I).Name,
                M_Type =>
                  To_Unbounded_String
                    (Source => Get_Module_Type(Module_Index => I)),
                Size =>
-                 (if
-                    Get_Module(Index => I)
-                      .M_Type =
-                    HULL
-                  then
-                    Get_Module(Index => I)
-                      .Max_Value
-                  else Get_Module(Index => I)
-                      .Size),
-               Material =>
-                 Get_Module(Index => I)
-                   .Repair_Material,
+                 (if Get_Module(Index => I).M_Type = HULL then
+                    Get_Module(Index => I).Max_Value
+                  else Get_Module(Index => I).Size),
+               Material => Get_Module(Index => I).Repair_Material,
                Price => Cost, Id => I);
             Index := Index + 1;
          end loop Fill_Local_Install_Modules_Loop;
@@ -2228,13 +2115,10 @@ package body Bases.ShipyardUI is
               Float(Player_Ship.Modules(I).Durability) /
                 Float(Player_Ship.Modules(I).Max_Durability);
             Cost :=
-              Get_Module(
-                 Index => Player_Ship.Modules(I).Proto_Index)
-                .Price -
+              Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Price -
               Integer
                 (Float
-                   (Get_Module(
-                       Index => Player_Ship.Modules(I).Proto_Index)
+                   (Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                       .Price) *
                  Damage);
             if Cost = 0 then
@@ -2254,12 +2138,9 @@ package body Bases.ShipyardUI is
                       Get_Module_Type
                         (Module_Index => Player_Ship.Modules(I).Proto_Index)),
                Size =>
-                 Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
-                   .Size,
+                 Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Size,
                Material =>
-                 Get_Module(
-                    Index => Player_Ship.Modules(I).Proto_Index)
+                 Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                    .Repair_Material,
                Price => Cost, Id => Modules_Container.To_Index(Position => I));
             Index := Index + 1;

@@ -34,16 +34,14 @@ package body ShipModules is
       Load_Ada_Items(Name => New_String(Str => File_Name));
    end Load_Ship_Modules;
 
-   function Get_Module_Type
-     (Module_Index: Positive) return String is
+   function Get_Module_Type(Module_Index: Positive) return String is
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>
              To_Lower
                (Item =>
                   Module_Type'Image
-                    (Get_Module(Index => Module_Index)
-                       .M_Type)));
+                    (Get_Module(Index => Module_Index).M_Type)));
    begin
       Replace_Element
         (Source => Module_Type_Name, Index => 1,

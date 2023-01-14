@@ -150,8 +150,7 @@ package body Combat is
             if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
                Min_Free_Space :=
                  Min_Free_Space +
-                 Get_Module(Index => Module.Proto_Index)
-                   .Max_Value;
+                 Get_Module(Index => Module.Proto_Index).Max_Value;
             end if;
          end loop Count_Free_Space_Loop;
          Min_Free_Space :=
@@ -211,31 +210,26 @@ package body Combat is
       for I in Enemy_Ship.Modules.Iterate loop
          if (Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
            Enemy_Ship.Modules(I).Durability > 0 then
-            if Get_Module(
-                 Index => Enemy_Ship.Modules(I).Proto_Index)
-                .Speed >
+            if Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index).Speed >
               0 then
                Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
-                            (Get_Module(
-                                Index => Enemy_Ship.Modules(I).Proto_Index)
+                            (Get_Module
+                               (Index => Enemy_Ship.Modules(I).Proto_Index)
                                .Speed) /
                           2.0))
-                  else Get_Module(
-                       Index => Enemy_Ship.Modules(I).Proto_Index)
+                  else Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
                       .Speed);
             else
                Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
-                    Get_Module(
-                       Index => Enemy_Ship.Modules(I).Proto_Index)
+                    Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
                       .Speed -
                     1
-                  else Get_Module(
-                       Index => Enemy_Ship.Modules(I).Proto_Index)
+                  else Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
                       .Speed);
             end if;
             Enemy_Guns.Append
@@ -295,8 +289,7 @@ package body Combat is
                  (New_Item =>
                     (1 => Modules_Container.To_Index(Position => I), 2 => 1,
                      3 =>
-                       Get_Module(
-                          Index => Player_Ship.Modules(I).Proto_Index)
+                       Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                          .Speed));
             end if;
          end loop Set_Player_Guns_Loop;
@@ -405,8 +398,7 @@ package body Combat is
          begin
             Find_Enemy_Module_Loop :
             for I in Enemy_Ship.Modules.Iterate loop
-               if Get_Module(
-                    Index => Enemy_Ship.Modules(I).Proto_Index)
+               if Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
                    .M_Type =
                  M_Type and
                  Enemy_Ship.Modules(I).Durability > 0 then
@@ -422,8 +414,7 @@ package body Combat is
                if
                  ((Enemy_Ship.Modules(J).M_Type = TURRET
                    and then Enemy_Ship.Modules(J).Gun_Index > 0) or
-                  Get_Module(
-                       Index => Enemy_Ship.Modules(J).Proto_Index)
+                  Get_Module(Index => Enemy_Ship.Modules(J).Proto_Index)
                       .M_Type =
                     BATTERING_RAM) and
                  Enemy_Ship.Modules(J).Durability > 0 then
@@ -486,13 +477,13 @@ package body Combat is
                                  Shoots := 1;
                                  Gun(3) :=
                                    (if Gunner_Order = 3 then
-                                      Get_Module(
-                                         Index =>
+                                      Get_Module
+                                        (Index =>
                                            Player_Ship.Modules(Gun(1))
                                              .Proto_Index)
                                         .Speed
-                                    else Get_Module(
-                                         Index =>
+                                    else Get_Module
+                                        (Index =>
                                            Player_Ship.Modules(Gun(1))
                                              .Proto_Index)
                                         .Speed -
@@ -541,13 +532,13 @@ package body Combat is
                               Shoots := 1;
                               Gun(3) :=
                                 (if Enemy.Combat_Ai = DISARMER then
-                                   Get_Module(
-                                      Index =>
+                                   Get_Module
+                                     (Index =>
                                         Ship.Modules(Gun(1)).Proto_Index)
                                      .Speed -
                                    1
-                                 else Get_Module(
-                                      Index =>
+                                 else Get_Module
+                                     (Index =>
                                         Ship.Modules(Gun(1)).Proto_Index)
                                      .Speed);
                            end if;
@@ -572,8 +563,7 @@ package body Combat is
                      .I_Type =
                    Get_Ada_Item_Type
                      (Item_Index =>
-                        Get_Module(
-                           Index => Ship.Modules(K).Proto_Index)
+                        Get_Module(Index => Ship.Modules(K).Proto_Index)
                           .Value -
                         1) then
                   Ammo_Index := Ammo_Index_2;
@@ -584,8 +574,7 @@ package body Combat is
                      if Get_Proto_Item(Index => I).I_Type =
                        Get_Ada_Item_Type
                          (Item_Index =>
-                            Get_Module(
-                               Index => Ship.Modules(K).Proto_Index)
+                            Get_Module(Index => Ship.Modules(K).Proto_Index)
                               .Value -
                             1) then
                         Get_Ammo_Index_Loop :
@@ -873,8 +862,8 @@ package body Combat is
                         Damage => Weapon_Damage,
                         Death_Reason => "enemy fire in ship combat");
                      if Enemy_Ship.Modules(Hit_Location).Durability = 0 then
-                        case Get_Module(
-                           Index =>
+                        case Get_Module
+                          (Index =>
                              Enemy_Ship.Modules(Hit_Location).Proto_Index)
                           .M_Type is
                            when HULL | ENGINE =>
@@ -1565,8 +1554,7 @@ package body Combat is
                    .I_Type =
                  Get_Ada_Item_Type
                    (Item_Index =>
-                      Get_Module(
-                         Index => Enemy.Ship.Modules(I).Proto_Index)
+                      Get_Module(Index => Enemy.Ship.Modules(I).Proto_Index)
                         .Value -
                       1) then
                   Enemy_Ammo_Index := Ammo_Index_2;
@@ -1578,8 +1566,7 @@ package body Combat is
                   if Get_Proto_Item(Index => K).I_Type =
                     Get_Ada_Item_Type
                       (Item_Index =>
-                         Get_Module(
-                            Index => Enemy.Ship.Modules(I).Proto_Index)
+                         Get_Module(Index => Enemy.Ship.Modules(I).Proto_Index)
                            .Value -
                          1) then
                      Find_Enemy_Ammo_Index_Loop :

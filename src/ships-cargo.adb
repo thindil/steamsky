@@ -98,8 +98,7 @@ package body Ships.Cargo is
          if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
             Ship_Free_Cargo :=
               Ship_Free_Cargo +
-              Get_Module(Index => Module.Proto_Index)
-                .Max_Value;
+              Get_Module(Index => Module.Proto_Index).Max_Value;
          end if;
       end loop Count_Cargo_Size_Loop;
       Count_Cargo_Weight_Loop :

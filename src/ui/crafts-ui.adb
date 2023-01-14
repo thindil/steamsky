@@ -145,9 +145,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index)
-             .M_Type =
-           Recipe.Workplace
+         if Get_Module(Index => Module.Proto_Index).M_Type = Recipe.Workplace
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Workshop_Loop;
@@ -219,9 +217,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index)
-             .M_Type =
-           ALCHEMY_LAB
+         if Get_Module(Index => Module.Proto_Index).M_Type = ALCHEMY_LAB
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Alchemy_Lab_Loop;
@@ -791,9 +787,7 @@ package body Crafts.UI is
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index)
-             .M_Type =
-           M_Type then
+         if Get_Module(Index => Module.Proto_Index).M_Type = M_Type then
             Append
               (Source => Modules_List_2,
                New_Item => " {" & To_String(Source => Module.Name) & "}");
@@ -1231,8 +1225,7 @@ package body Crafts.UI is
       Have_Workplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index)
-             .M_Type =
+         if Get_Module(Index => Module.Proto_Index).M_Type =
            Recipe.Workplace then
             Workplace_Name := Module.Name;
             if Module.Durability > 0 then
@@ -1243,11 +1236,8 @@ package body Crafts.UI is
       end loop Have_Workplace_Loop;
       if Workplace_Name = Null_Bounded_String then
          Find_Workshop_Name_Loop :
-         for I in 1 .. Get_Modules_Amount
-            loop
-            if Get_Module(Index => I)
-                .M_Type =
-              Recipe.Workplace then
+         for I in 1 .. Get_Modules_Amount loop
+            if Get_Module(Index => I).M_Type = Recipe.Workplace then
                Workplace_Name :=
                  To_Bounded_String
                    (Source => Get_Module_Type(Module_Index => I));

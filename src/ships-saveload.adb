@@ -547,8 +547,7 @@ package body Ships.SaveLoad is
                                (Elem => Child_Node, Name => "mtype"));
                   end case;
                else
-                  case Get_Module(Index => Proto_Index)
-                    .M_Type is
+                  case Get_Module(Index => Proto_Index).M_Type is
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         M_Type := WORKSHOP;
                      when MEDICAL_ROOM =>

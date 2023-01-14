@@ -162,22 +162,22 @@ package body Ships.UI is
             when DURABILITY =>
                Append(Source => Upgrade_Info, New_Item => "(durability)");
                Max_Upgrade :=
-                 Get_Module(
-                    Index =>
+                 Get_Module
+                   (Index =>
                       Player_Ship.Modules(Player_Ship.Upgrade_Module)
                         .Proto_Index)
                    .Durability;
             when MAX_VALUE =>
-               case Get_Module(
-                  Index =>
+               case Get_Module
+                 (Index =>
                     Player_Ship.Modules(Player_Ship.Upgrade_Module)
                       .Proto_Index)
                  .M_Type is
                   when ENGINE =>
                      Append(Source => Upgrade_Info, New_Item => "(power)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Max_Value /
@@ -185,16 +185,16 @@ package body Ships.UI is
                   when CABIN =>
                      Append(Source => Upgrade_Info, New_Item => "(quality)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
                      Append(Source => Upgrade_Info, New_Item => "(damage)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Max_Value *
@@ -202,8 +202,8 @@ package body Ships.UI is
                   when HULL =>
                      Append(Source => Upgrade_Info, New_Item => "(enlarge)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Max_Value *
@@ -211,8 +211,8 @@ package body Ships.UI is
                   when HARPOON_GUN =>
                      Append(Source => Upgrade_Info, New_Item => "(strength)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Max_Value *
@@ -221,8 +221,8 @@ package body Ships.UI is
                      null;
                end case;
             when VALUE =>
-               case Get_Module(
-                  Index =>
+               case Get_Module
+                 (Index =>
                     Player_Ship.Modules(Player_Ship.Upgrade_Module)
                       .Proto_Index)
                  .M_Type is
@@ -230,8 +230,8 @@ package body Ships.UI is
                      Append
                        (Source => Upgrade_Info, New_Item => "(fuel usage)");
                      Max_Upgrade :=
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
                          .Value *

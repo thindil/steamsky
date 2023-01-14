@@ -208,8 +208,7 @@ package body Maps.UI is
       end if;
       Check_Workers_Loop :
       for Module of Player_Ship.Modules loop
-         case Get_Module(Index => Module.Proto_Index)
-           .M_Type is
+         case Get_Module(Index => Module.Proto_Index).M_Type is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
                   Have_Gunner := False;

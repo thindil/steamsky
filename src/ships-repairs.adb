@@ -48,8 +48,8 @@ package body Ships.Repairs is
                  (Get_Skill_Level
                     (Member => Player_Ship.Crew(J),
                      Skill_Index =>
-                       Get_Module(
-                          Index =>
+                       Get_Module
+                         (Index =>
                             Player_Ship.Modules(Module_Index).Proto_Index)
                          .Repair_Skill) /
                   10) *
@@ -84,8 +84,8 @@ package body Ships.Repairs is
                  Find_Item
                    (Inventory => Player_Ship.Cargo,
                     Item_Type =>
-                      Get_Module(
-                         Index =>
+                      Get_Module
+                        (Index =>
                            Player_Ship.Modules(Module_Index).Proto_Index)
                         .Repair_Material);
                if Repair_Material > 0
@@ -144,8 +144,8 @@ package body Ships.Repairs is
                Gain_Exp
                  (Amount => Repair_Value,
                   Skill_Number =>
-                    Get_Module(
-                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                    Get_Module
+                      (Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Repair_Skill,
                   Crew_Index => Crew_Container.To_Index(Position => J));
                Crew_Repair_Points(Points_Index) := Repair_Points;
@@ -156,8 +156,8 @@ package body Ships.Repairs is
                     Get_Skill_Level
                       (Member => Player_Ship.Crew(J),
                        Skill_Index =>
-                         Get_Module(
-                            Index =>
+                         Get_Module
+                           (Index =>
                               Player_Ship.Modules(Module_Index).Proto_Index)
                            .Repair_Skill),
                   Member_Index => Crew_Container.To_Index(Position => J),

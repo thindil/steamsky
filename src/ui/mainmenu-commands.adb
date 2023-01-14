@@ -912,7 +912,9 @@ package body MainMenu.Commands is
            LF & LF & "}");
       Find_Base_Type_Loop :
       for Base_Type of Bases_Types loop
-         exit Find_Base_Type_Loop when Tiny_String.Length(Source => Base_Type) = 0;
+         exit Find_Base_Type_Loop when Tiny_String.Length
+             (Source => Base_Type) =
+           0;
          if Get_Base_Type_Name(Base_Type => Base_Type) = Base_Name then
             Insert
               (TextWidget => Info_Text, Index => "end",

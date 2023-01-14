@@ -288,9 +288,7 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if M_Type /= CABIN then
-                  if Get_Module(
-                       Index => Ship.Modules(I).Proto_Index)
-                      .M_Type =
+                  if Get_Module(Index => Ship.Modules(I).Proto_Index).M_Type =
                     M_Type and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
@@ -801,8 +799,7 @@ package body Ships.Crew is
                       Get_Proto_Item(Index => Item.Proto_Index).I_Type) =
                  To_String
                    (Source =>
-                      Get_Module(
-                         Index => Module.Proto_Index)
+                      Get_Module(Index => Module.Proto_Index)
                         .Repair_Material) then
                   Need_Repairs := True;
                   exit Find_Need_Repairs_Loop;
@@ -835,8 +832,8 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                Get_Module(
-                   Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                Get_Module
+                  (Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
            and then Update_Position(Order => UPGRADING) then
@@ -894,8 +891,8 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                Get_Module(
-                   Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                Get_Module
+                  (Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
            and then Update_Position
