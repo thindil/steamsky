@@ -20,8 +20,6 @@ import game, log, ships, types
 
 type
   CraftData = object
-    ## FUNCTION
-    ##
     ## Used to store information about crafting recipes
     materialTypes: seq[string] ## The list of materials types used in crafting
     materialAmounts: seq[Positive] ## The list of materials amount used in crafting
@@ -36,17 +34,11 @@ type
     toolQuality: Positive ## The minimal quality of tool used in crafting
 
 var recipesList* = initTable[string, CraftData]()
-  ## FUNCTION
-  ##
   ## The list of all available crafting recipes in the game
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load the crafting recipes data from the file
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the name of the file to load
   let recipesXml = try:
@@ -186,18 +178,12 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
     KeyError, ValueError], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the name of the recipe set as working order for the selected workshop
-  ##
-  ## PARAMETERS
   ##
   ## * workshop - the index of the workshop which crafting order recipe name
   ##              will be get
   ##
-  ## RETURNS
-  ##
-  ## The name of the recipe set as the crafting order or empty string if nothing
+  ## Returns the name of the recipe set as the crafting order or empty string if nothing
   ## is set
   let module = playerShip.modules[workshop]
   if module.craftingIndex.len > 0:
