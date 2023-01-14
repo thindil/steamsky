@@ -81,6 +81,7 @@ package body Factions is
       use Tiny_String;
 
       Temp_Record: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
+      --## rule off TYPE_INITIAL_VALUES
       type Faction_Nim_Data is record
          Name: chars_ptr;
          Member_Name: chars_ptr;
@@ -101,6 +102,7 @@ package body Factions is
          Description: chars_ptr;
          Name: chars_ptr;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Faction_Index: Tiny_String.Bounded_String;
       Temp_Nim_Record: Faction_Nim_Data;
       Index2: Natural;
