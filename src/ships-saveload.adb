@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,6 +21,7 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Bases; use Bases;
+with ShipModules; use ShipModules;
 
 package body Ships.SaveLoad is
 
@@ -513,8 +514,7 @@ package body Ships.SaveLoad is
                          (Elem => Child_Node, Name => "upgradeprogress"));
                end if;
                if Get_Attribute(Elem => Child_Node, Name => "mtype") /= "" then
-                  case BaseModules_Container.Element
-                    (Container => Modules_List, Index => Proto_Index)
+                  case Get_Module(Index => Proto_Index)
                     .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
                         M_Type := MEDICAL_ROOM;
@@ -547,8 +547,7 @@ package body Ships.SaveLoad is
                                (Elem => Child_Node, Name => "mtype"));
                   end case;
                else
-                  case BaseModules_Container.Element
-                    (Container => Modules_List, Index => Proto_Index)
+                  case Get_Module(Index => Proto_Index)
                     .M_Type is
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         M_Type := WORKSHOP;

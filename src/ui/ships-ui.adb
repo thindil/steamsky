@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;
 with Utils.UI; use Utils.UI;
+with ShipModules; use ShipModules;
 
 package body Ships.UI is
 
@@ -161,15 +162,13 @@ package body Ships.UI is
             when DURABILITY =>
                Append(Source => Upgrade_Info, New_Item => "(durability)");
                Max_Upgrade :=
-                 BaseModules_Container.Element
-                   (Container => Modules_List,
+                 Get_Module(
                     Index =>
                       Player_Ship.Modules(Player_Ship.Upgrade_Module)
                         .Proto_Index)
                    .Durability;
             when MAX_VALUE =>
-               case BaseModules_Container.Element
-                 (Container => Modules_List,
+               case Get_Module(
                   Index =>
                     Player_Ship.Modules(Player_Ship.Upgrade_Module)
                       .Proto_Index)
@@ -177,8 +176,7 @@ package body Ships.UI is
                   when ENGINE =>
                      Append(Source => Upgrade_Info, New_Item => "(power)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
@@ -187,8 +185,7 @@ package body Ships.UI is
                   when CABIN =>
                      Append(Source => Upgrade_Info, New_Item => "(quality)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
@@ -196,8 +193,7 @@ package body Ships.UI is
                   when GUN | BATTERING_RAM =>
                      Append(Source => Upgrade_Info, New_Item => "(damage)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
@@ -206,8 +202,7 @@ package body Ships.UI is
                   when HULL =>
                      Append(Source => Upgrade_Info, New_Item => "(enlarge)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
@@ -216,8 +211,7 @@ package body Ships.UI is
                   when HARPOON_GUN =>
                      Append(Source => Upgrade_Info, New_Item => "(strength)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)
@@ -227,8 +221,7 @@ package body Ships.UI is
                      null;
                end case;
             when VALUE =>
-               case BaseModules_Container.Element
-                 (Container => Modules_List,
+               case Get_Module(
                   Index =>
                     Player_Ship.Modules(Player_Ship.Upgrade_Module)
                       .Proto_Index)
@@ -237,8 +230,7 @@ package body Ships.UI is
                      Append
                        (Source => Upgrade_Info, New_Item => "(fuel usage)");
                      Max_Upgrade :=
-                       BaseModules_Container.Element
-                         (Container => Modules_List,
+                       Get_Module(
                           Index =>
                             Player_Ship.Modules(Player_Ship.Upgrade_Module)
                               .Proto_Index)

@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Factions; use Factions;
 with Config; use Config;
+with ShipModules; use ShipModules;
 
 package body Ships.Cargo is
 
@@ -97,8 +98,7 @@ package body Ships.Cargo is
          if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
             Ship_Free_Cargo :=
               Ship_Free_Cargo +
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => Module.Proto_Index)
+              Get_Module(Index => Module.Proto_Index)
                 .Max_Value;
          end if;
       end loop Count_Cargo_Size_Loop;

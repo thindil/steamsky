@@ -26,7 +26,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
--- with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -209,8 +208,7 @@ package body Maps.UI is
       end if;
       Check_Workers_Loop :
       for Module of Player_Ship.Modules loop
-         case BaseModules_Container.Element
-           (Container => Modules_List, Index => Module.Proto_Index)
+         case Get_Module(Index => Module.Proto_Index)
            .M_Type is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then

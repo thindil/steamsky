@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ with Ships.UI.Crew; use Ships.UI.Crew;
 with Ships.Upgrade; use Ships.Upgrade;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
+with ShipModules; use ShipModules;
 
 package body Ships.UI.Modules is
 
@@ -151,8 +152,7 @@ package body Ships.UI.Modules is
       Module_Max_Value :=
         Natural
           (Float
-             (BaseModules_Container.Element
-                (Container => Modules_List,
+             (Get_Module(
                  Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .Durability) *
            1.5);

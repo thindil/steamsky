@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -75,9 +75,7 @@ package body Combat.UI is
       Gun_Speed: Integer;
       Firerate: Unbounded_String;
    begin
-      Gun_Speed :=
-        BaseModules_Container.Element
-          (Container => Modules_List,
+      Gun_Speed := Get_Module(
            Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
           .Speed;
       case Index is
@@ -351,8 +349,7 @@ package body Combat.UI is
                   .I_Type =
                 Get_Ada_Item_Type
                   (Item_Index =>
-                     BaseModules_Container.Element
-                       (Container => Modules_List,
+                     Get_Module(
                         Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                        .Value -
                      1) then
@@ -370,8 +367,7 @@ package body Combat.UI is
                if Get_Proto_Item(Index => J).I_Type =
                  Get_Ada_Item_Type
                    (Item_Index =>
-                      BaseModules_Container.Element
-                        (Container => Modules_List,
+                      Get_Module(
                          Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                         .Value -
                       1) then
@@ -749,8 +745,7 @@ package body Combat.UI is
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
-                  case BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module.Proto_Index)
+                  case Get_Module(Index => Module.Proto_Index)
                     .M_Type is
                      when ARMOR =>
                         Append(Source => Enemy_Info, New_Item => " (armored)");
@@ -865,8 +860,7 @@ package body Combat.UI is
                           (Source =>
                              To_String
                                (Source =>
-                                  BaseModules_Container.Element
-                                    (Container => Modules_List,
+                                  Get_Module(
                                      Index =>
                                        Enemy.Ship.Modules(I).Proto_Index)
                                     .Name)))) &
@@ -1487,8 +1481,7 @@ package body Combat.UI is
            Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          Guns(Gun_Index)(3) :=
            (if Current(ComboBox => Combo_Box) = "0" then 0
-            else BaseModules_Container.Element
-                (Container => Modules_List,
+            else Get_Module(
                  Index => Player_Ship.Modules(Guns(Gun_Index)(1)).Proto_Index)
                 .Speed);
          Add_Message
