@@ -261,8 +261,7 @@ package body Bases.ShipyardUI is
       end if;
       if Install_Indexes.Length = 0 then
          Fill_Install_Indexes_Loop :
-         for I in Ship_Modules_Amount_Range loop
-            exit Fill_Install_Indexes_Loop when Length(Source => Get_Module(Index => I).Name) = 0;
+         for I in 1 .. Get_Modules_Amount loop
             Install_Indexes.Append(New_Item => I);
          end loop Fill_Install_Indexes_Loop;
       end if;
@@ -2188,12 +2187,10 @@ package body Bases.ShipyardUI is
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Fill_Local_Install_Modules_Loop :
-         for I in
-           BaseModules_Container.First_Index(Container => Modules_List) ..
-             BaseModules_Container.Last_Index(Container => Modules_List) loop
+         for I in 1 .. Get_Modules_Amount
+            loop
             Cost :=
-              BaseModules_Container.Element
-                (Container => Modules_List, Index => I)
+              Get_Module(Index => I)
                 .Price;
             Count_Price
               (Price => Cost, Trader_Index => Find_Member(Order => TALK));
@@ -2202,28 +2199,23 @@ package body Bases.ShipyardUI is
             end if;
             Local_Modules(Index) :=
               (Name =>
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => I)
+                 Get_Module(Index => I)
                    .Name,
                M_Type =>
                  To_Unbounded_String
                    (Source => Get_Module_Type(Module_Index => I)),
                Size =>
                  (if
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => I)
+                    Get_Module(Index => I)
                       .M_Type =
                     HULL
                   then
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => I)
+                    Get_Module(Index => I)
                       .Max_Value
-                  else BaseModules_Container.Element
-                      (Container => Modules_List, Index => I)
+                  else Get_Module(Index => I)
                       .Size),
                Material =>
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => I)
+                 Get_Module(Index => I)
                    .Repair_Material,
                Price => Cost, Id => I);
             Index := Index + 1;
@@ -2236,14 +2228,12 @@ package body Bases.ShipyardUI is
               Float(Player_Ship.Modules(I).Durability) /
                 Float(Player_Ship.Modules(I).Max_Durability);
             Cost :=
-              BaseModules_Container.Element
-                (Container => Modules_List,
+              Get_Module(
                  Index => Player_Ship.Modules(I).Proto_Index)
                 .Price -
               Integer
                 (Float
-                   (BaseModules_Container.Element
-                      (Container => Modules_List,
+                   (Get_Module(
                        Index => Player_Ship.Modules(I).Proto_Index)
                       .Price) *
                  Damage);
@@ -2264,13 +2254,11 @@ package body Bases.ShipyardUI is
                       Get_Module_Type
                         (Module_Index => Player_Ship.Modules(I).Proto_Index)),
                Size =>
-                 BaseModules_Container.Element
-                   (Container => Modules_List,
+                 Get_Module(
                     Index => Player_Ship.Modules(I).Proto_Index)
                    .Size,
                Material =>
-                 BaseModules_Container.Element
-                   (Container => Modules_List,
+                 Get_Module(
                     Index => Player_Ship.Modules(I).Proto_Index)
                    .Repair_Material,
                Price => Cost, Id => Modules_Container.To_Index(Position => I));

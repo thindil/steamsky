@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -145,8 +145,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module.Proto_Index)
+         if Get_Module(Index => Module.Proto_Index)
              .M_Type =
            Recipe.Workplace
            and then Module.Durability > 0 then
@@ -220,8 +219,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of Player_Ship.Modules loop
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module.Proto_Index)
+         if Get_Module(Index => Module.Proto_Index)
              .M_Type =
            ALCHEMY_LAB
            and then Module.Durability > 0 then
@@ -793,8 +791,7 @@ package body Crafts.UI is
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module.Proto_Index)
+         if Get_Module(Index => Module.Proto_Index)
              .M_Type =
            M_Type then
             Append
@@ -1234,8 +1231,7 @@ package body Crafts.UI is
       Have_Workplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
-         if BaseModules_Container.Element
-             (Container => Modules_List, Index => Module.Proto_Index)
+         if Get_Module(Index => Module.Proto_Index)
              .M_Type =
            Recipe.Workplace then
             Workplace_Name := Module.Name;
@@ -1247,11 +1243,9 @@ package body Crafts.UI is
       end loop Have_Workplace_Loop;
       if Workplace_Name = Null_Bounded_String then
          Find_Workshop_Name_Loop :
-         for I in
-           BaseModules_Container.First_Index(Container => Modules_List) ..
-             BaseModules_Container.Last_Index(Container => Modules_List) loop
-            if BaseModules_Container.Element
-                (Container => Modules_List, Index => I)
+         for I in 1 .. Get_Modules_Amount
+            loop
+            if Get_Module(Index => I)
                 .M_Type =
               Recipe.Workplace then
                Workplace_Name :=

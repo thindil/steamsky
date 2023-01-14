@@ -93,8 +93,7 @@ package body DebugUI is
            "{" &
            To_String
              (Source =>
-                BaseModules_Container.Element
-                  (Container => Modules_List,
+                Get_Module(
                    Index => Player_Ship.Modules(Module_Index).Proto_Index)
                   .Name) &
            "}");
@@ -742,13 +741,11 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
       Update_Proto_Index_Loop :
-      for I in
-        BaseModules_Container.First_Index(Container => Modules_List) ..
-          BaseModules_Container.Last_Index(Container => Modules_List) loop
+      for I in 1 .. Get_Modules_Amount
+         loop
          if To_String
              (Source =>
-                BaseModules_Container.Element
-                  (Container => Modules_List, Index => I)
+                Get_Module(Index => I)
                   .Name) =
            To_String(Source => Value) then
             Value := Null_Unbounded_String;
@@ -1433,17 +1430,15 @@ package body DebugUI is
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
-      for I in
-        BaseModules_Container.First_Index(Container => Modules_List) ..
-          BaseModules_Container.Last_Index(Container => Modules_List) loop
+      for I in 1 .. Get_Modules_Amount
+         loop
          Append
            (Source => Values_List,
             New_Item =>
               " {" &
               To_String
                 (Source =>
-                   BaseModules_Container.Element
-                     (Container => Modules_List, Index => I)
+                   Get_Module(Index => I)
                      .Name) &
               "}");
       end loop Load_Modules_Prototypes_Loop;
