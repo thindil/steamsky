@@ -141,4 +141,9 @@ package ShipModules is
 
    function Get_Module(Index: Positive) return Base_Module_Data;
 
+   function Get_Modules_Amount return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaModulesAmount";
+
 end ShipModules;

@@ -259,3 +259,6 @@ proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.exportc.} =
   adaModule.maxOwners = module.maxOwners.cint
   adaModule.speed = module.speed.cint
   adaModule.reputation = module.reputation.cint
+
+  proc getAdaModulesAmount(): cint {.exportc.} =
+    return modulesList.len.cint
