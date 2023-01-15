@@ -88,7 +88,7 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_Upgrade_Ship_5494ec_bcac9d
-     (Install: Boolean; Module_Index: BaseModules_Container.Extended_Index) is
+     (Install: Boolean; Module_Index: Positive) is
    begin
       begin
          pragma Assert
@@ -122,9 +122,7 @@ package body Bases.Ship.Test_Data.Tests is
      Test_Upgrade_Ship_test_updgradeship;
 --  id:2.2/5494ec96ae7f87a3/Upgrade_Ship/1/0/test_updgradeship/
    procedure Test_Upgrade_Ship_test_updgradeship(Gnattest_T: in out Test) is
-      procedure Upgrade_Ship
-        (Install: Boolean;
-         Module_Index: BaseModules_Container.Extended_Index) renames
+      procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) renames
         Wrap_Test_Upgrade_Ship_5494ec_bcac9d;
 --  end read only
 

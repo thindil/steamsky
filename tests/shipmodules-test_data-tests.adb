@@ -29,15 +29,11 @@ package body ShipModules.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Get_Module_Type_15ddd4_ae50de
-     (Module_Index: BaseModules_Container.Extended_Index) return String is
+   function Wrap_Test_Get_Module_Type_15ddd4_f90fdb
+     (Module_Index: Positive) return String is
    begin
       begin
-         pragma Assert
-           (Module_Index in
-              BaseModules_Container.First_Index(Container => Modules_List) ..
-                    BaseModules_Container.Last_Index
-                      (Container => Modules_List));
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -46,13 +42,13 @@ package body ShipModules.Test_Data.Tests is
                "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
       end;
       declare
-         Test_Get_Module_Type_15ddd4_ae50de_Result: constant String :=
+         Test_Get_Module_Type_15ddd4_f90fdb_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.ShipModules.Get_Module_Type
              (Module_Index);
       begin
          begin
             pragma Assert
-              (Test_Get_Module_Type_15ddd4_ae50de_Result'Length > 0);
+              (Test_Get_Module_Type_15ddd4_f90fdb_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -60,23 +56,21 @@ package body ShipModules.Test_Data.Tests is
                  (False,
                   "ens_sloc(shipmodules.ads:0:):Test_GetModuleType test commitment violated");
          end;
-         return Test_Get_Module_Type_15ddd4_ae50de_Result;
+         return Test_Get_Module_Type_15ddd4_f90fdb_Result;
       end;
-   end Wrap_Test_Get_Module_Type_15ddd4_ae50de;
+   end Wrap_Test_Get_Module_Type_15ddd4_f90fdb;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Module_Type_test_getmoduletype(Gnattest_T: in out Test);
-   procedure Test_Get_Module_Type_15ddd4_ae50de
+   procedure Test_Get_Module_Type_15ddd4_f90fdb
      (Gnattest_T: in out Test) renames
      Test_Get_Module_Type_test_getmoduletype;
 --  id:2.2/15ddd42e133f2ec8/Get_Module_Type/1/0/test_getmoduletype/
    procedure Test_Get_Module_Type_test_getmoduletype
      (Gnattest_T: in out Test) is
-      function Get_Module_Type
-        (Module_Index: BaseModules_Container.Extended_Index)
-         return String renames
-        Wrap_Test_Get_Module_Type_15ddd4_ae50de;
+      function Get_Module_Type(Module_Index: Positive) return String renames
+        Wrap_Test_Get_Module_Type_15ddd4_f90fdb;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
