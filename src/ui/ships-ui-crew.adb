@@ -679,9 +679,6 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Y_Scroll,
          Options => " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1");
-      Add_Close_Button
-        (Name => Buttons_Frame & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog);
       Button :=
         Create
           (pathName => Buttons_Frame & ".button1",
@@ -690,14 +687,16 @@ package body Ships.UI.Crew is
              Close_Button & " invoke;ShowMemberInventory " &
              CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
       Add(Widget => Button, Message => "Show the crew member inventory");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-padx 5 -row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
       Bind
         (Widgt => Button, Sequence => "<Tab>",
-         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+         Script => "{focus " & Close_Button & ";break}");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Buttons_Frame & ".button invoke;break}");
+         Script => "{" & Close_Button & " invoke;break}");
+      Add_Close_Button
+        (Name => Buttons_Frame & ".button", Text => "Close",
+         Command => "CloseDialog " & Member_Dialog, Row => 0, Column => 1);
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
@@ -984,7 +983,7 @@ package body Ships.UI.Crew is
                strng => "SetScrollbarBindings " & Order_Box & " " & Y_Scroll);
             Bind
               (Widgt => Info_Button, Sequence => "<Tab>",
-               Script => "{focus " & Close_Button & ";break}");
+               Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
             Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
             Bind
               (Widgt => Info_Button, Sequence => "<Tab>",
@@ -1123,7 +1122,8 @@ package body Ships.UI.Crew is
             else
                Bind
                  (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script => "{focus " & Close_Button & ";break}");
+                  Script =>
+                    "{focus " & Buttons_Frame & ".button1" & ";break}");
             end if;
             Tcl_Eval
               (interp => Interp,
@@ -1295,7 +1295,8 @@ package body Ships.UI.Crew is
             else
                Bind
                  (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script => "{focus " & Close_Button & ";break}");
+                  Script =>
+                    "{focus " & Buttons_Frame & ".button1" & ";break}");
             end if;
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Frame, Options => "-sticky we -padx 5");
@@ -1468,12 +1469,12 @@ package body Ships.UI.Crew is
             end loop Load_Priorities_Loop;
             Bind
               (Widgt => Combo_Box, Sequence => "<Tab>",
-               Script => "{focus " & Close_Button & ";break}");
+               Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
          end Show_Priorities_Block;
       end if;
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Buttons_Frame & ".button1;break}");
+         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog
