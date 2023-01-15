@@ -20,25 +20,17 @@ import game, utils, types
 
 type
   CrewOrderError* = object of CatchableError
-    ## FUNCTION
-    ##
     ## Used to mark problems during giving orders to the crew members
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Generate the name for the mob, based on his/her faction. Based on
   ## libtcod names generator
-  ##
-  ## PARAMETERS
   ##
   ## * gender       - The gender of the mob, M - male, F - female
   ## * factionIndex - The index of the faction to which the mob belongs
   ##
-  ## RETURNS
-  ##
-  ## The randomly generated name of the mob
+  ## Returns the randomly generated name of the mob
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName();
