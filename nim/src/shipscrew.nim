@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, game, messages, shipmodules, ships, types, utils
+import crew, crewinventory, game, messages, shipmodules, ships, shipscargo,
+    types, utils
 
 proc updateOrders*(ship: var ShipRecord; combat: bool = false)
 
@@ -104,6 +105,32 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
                   break take_cabin
       else:
         discard
+  block releaseModule:
+    for index, module in ship.modules.pairs:
+      if module.mType != ModuleType2.cabin:
+        for i, owner in module.owner.pairs:
+          if owner == memberIndex:
+            ship.modules[index].owner[i] = 0
+            break releaseModule
+  var
+    toolsIndex = 0
+    requiredTool = ""
+  if toolsIndex > 0 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
+    updateInventory(memberIndex = memberIndex, amount = 1,
+        protoIndex = ship.cargo[toolsIndex].protoIndex, durability = ship.cargo[
+        toolsIndex].durability, ship = ship)
+    updateCargo(ship = ship, amount = -1, cargoIndex = toolsIndex)
+    ship.crew[memberIndex].equipment[tool] = findItem(inventory = ship.crew[
+        memberIndex].inventory, itemType = requiredTool)
+  toolsIndex = ship.crew[memberIndex].equipment[tool]
+  if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
+      toolsIndex].protoIndex].itemType != requiredTool:
+    updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
+        toolsIndex].protoIndex, amount = 1, durability = ship.crew[
+        memberIndex].inventory[toolsIndex].durability)
+    updateInventory(memberIndex = memberIndex, amount = -1,
+        inventoryIndex = toolsIndex, ship = ship)
+    toolsIndex = 0
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
