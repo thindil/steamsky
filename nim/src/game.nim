@@ -29,8 +29,8 @@ type
     ## FUNCTION
     ##
     ## Store data related to quality of tools needed for train a skill
-    level: Natural ## The minimal level of a skill which need that quality of tool
-    quality: Natural ## The level of quality of tool needed for training
+    level*: Natural ## The minimal level of a skill which need that quality of tool
+    quality*: Natural ## The level of quality of tool needed for training
 
   SkillRecord* = object
     ## FUNCTION
@@ -40,7 +40,7 @@ type
     attribute: Positive ## The index of the attribute related to the skill
     description: string ## The description of the skill
     tool*: string ## The type of items used to train the skill
-    toolsQuality: seq[ToolQuality] ## The quality of tool needed for training
+    toolsQuality*: seq[ToolQuality] ## The quality of tool needed for training
 
   DataLoadingError* = object of CatchableError
     ## FUNCTION
