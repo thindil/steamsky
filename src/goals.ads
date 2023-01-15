@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,17 +35,24 @@ package Goals is
       Default_Value => RANDOM;
       -- ****
 
-      -- ****s* Goals/Goals.Goal_Data
+      -- ****d* Goals/Goals.Default_Goal_Type
       -- FUNCTION
-      -- Data structure for each goal
-      -- PARAMETERS
-      -- Index        - Index of goal
-      -- G_Type       - Type of goal
-      -- Amount       - Amount of targets needed for finish goal
-      -- Target_Index - Index of target needed for finish goal. If empty, mean all
-      --                targets selected type (bases, ships, etc)
-      -- Multiplie r  - Multiplier for points awarded for finish this goal
+      -- Default goal type, random type
       -- SOURCE
+   Default_Goal_Type: constant Goal_Types := RANDOM;
+   -- ****
+
+   -- ****s* Goals/Goals.Goal_Data
+   -- FUNCTION
+   -- Data structure for each goal
+   -- PARAMETERS
+   -- Index        - Index of goal
+   -- G_Type       - Type of goal
+   -- Amount       - Amount of targets needed for finish goal
+   -- Target_Index - Index of target needed for finish goal. If empty, mean all
+   --                targets selected type (bases, ships, etc)
+   -- Multiplie r  - Multiplier for points awarded for finish this goal
+   -- SOURCE
    type Goal_Data is record
       Index: Unbounded_String;
       G_Type: Goal_Types;
@@ -53,6 +60,13 @@ package Goals is
       Target_Index: Unbounded_String;
       Multiplier: Positive;
    end record;
+   -- ****
+
+   -- ****d* Goals/Goals.Empty_Goal
+   -- FUNCTION
+   -- Default value for Goal_Data, an empty goal data
+   -- SOURCE
+   Empty_Goal: constant Goal_Data := (others => <>);
    -- ****
 
    -- ****t* Goals/Goals.Goals_Container
