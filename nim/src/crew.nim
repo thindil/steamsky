@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import game, utils, types
+import game, utils, ships, types
 
 type
   CrewOrderError* = object of CatchableError
@@ -63,9 +63,23 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
   result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
       femalesSyllablesEndList.len - 1))]
 
+proc getTrainingToolQuality*(memberIndex: Natural;
+    skillIndex: Positive): Positive =
+  result = 100
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.index == skillIndex:
+      for quality in skillsList[skillIndex].toolsQuality:
+        if skill.level <= quality.level:
+          return quality.quality
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
     factionIndex: cstring): cstring {.exportc.} =
   return generateMemberName(gender = gender,
       factionIndex = $factionIndex).cstring
+
+proc getAdaTrainingToolQuality(memberIndex,
+    skillIndex: cint): cint {.exportc.} =
+  return getTrainingToolQuality(memberIndex = memberIndex - 1,
+      skillIndex = skillIndex).cint
