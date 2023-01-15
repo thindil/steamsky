@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, game, ships, types, utils
+import crew, game, messages, shipmodules, ships, types, utils
 
 proc updateOrders*(ship: var ShipRecord; combat: bool = false)
 
@@ -56,7 +56,54 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     if not freePosition:
       giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[0],
           givenOrder = rest, moduleIndex = -1, checkPriorities = false)
-  # TODO: continue work
+  var moduleIndex2 = 0
+  if moduleIndex == 0 and givenOrder in [pilot, engineer, rest]:
+    let mType: ModuleType = case givenOrder
+      of pilot:
+        ModuleType.cockpit
+      of engineer:
+        ModuleType.engine
+      of rest:
+        ModuleType.cabin
+      else:
+        ModuleType.engine
+    for index, module in ship.modules.pairs:
+      if mType != ModuleType.cabin:
+        if modulesList[module.protoIndex].mType == mType and module.durability > 0:
+          if module.owner[0] > 0:
+            giveOrders(ship = ship, memberIndex = module.owner[0],
+                givenOrder = rest, moduleIndex = 0, checkPriorities = false)
+          moduleIndex2 = index
+          break
+      else:
+        if module.mType == ModuleType2.cabin and module.durability > 0:
+          for owner in module.owner:
+            if memberIndex == owner:
+              moduleIndex2 = index
+              break
+  else:
+    moduleIndex2 = moduleIndex
+  if moduleIndex2 == 0 and ship.crew == playerShip.crew:
+    case givenOrder
+      of pilot:
+        raise newException(exceptn = CrewOrderError, message = memberName & " can't start piloting because the cockpit is destroyed or you don't have cockpit.")
+      of engineer:
+        raise newException(exceptn = CrewOrderError, message = memberName & " can't start engineer's duty because all of the engines are destroyed or you don't have engine.")
+      of gunner:
+        raise newException(exceptn = CrewOrderError, message = memberName & " can't start operating gun because all of the guns are destroyed or you don't have any installed.")
+      of rest:
+        block takeCabin:
+          for index, module in ship.modules.pairs:
+            if module.mType == ModuleType2.cabin and module.durability > 0:
+              for i, owner in module.owner.pairs:
+                if owner == 0:
+                  ship.modules[index].owner[i] = memberIndex;
+                  addMessage(message = (memberName & " takes " & module.name &
+                      " as their own cabin.").cstring,
+                      kind = otherMessage.ord.cint)
+                  break take_cabin
+      else:
+        discard
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
