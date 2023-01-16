@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,8 +37,8 @@ package body Goals is
       Temp_Record: Goal_Data;
       Nodes_List: Node_List;
       Goals_Data: Document;
-      Action: Data_Action;
-      Goal_Index: Natural;
+      Action: Data_Action := ADD;
+      Goal_Index: Natural := 0;
       Goal_Node: Node;
    begin
       Goals_Data := Get_Tree(Read => Reader);
