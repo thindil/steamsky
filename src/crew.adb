@@ -1214,24 +1214,16 @@ package body Crew is
 
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive is
-      Tool_Quality: Positive := 100;
+      function Get_Ada_Training_Tool_Quality
+        (M_Index, S_Index: Positive) return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaTrainingToolQuality";
    begin
-      Skill_Loop :
-      for Skill of Player_Ship.Crew(Member_Index).Skills loop
-         if Positive(Skill.Index) = Skill_Index then
-            Tool_Quality_Loop :
-            for Quality of SkillsData_Container.Element
-              (Container => Skills_List,
-               Index => Skills_Amount_Range(Skill_Index))
-              .Tools_Quality loop
-               if Skill.Level <= Quality.Level then
-                  Tool_Quality := Quality.Quality;
-                  exit Skill_Loop;
-               end if;
-            end loop Tool_Quality_Loop;
-         end if;
-      end loop Skill_Loop;
-      return Tool_Quality;
+      Get_Ada_Crew;
+      return
+        Get_Ada_Training_Tool_Quality
+          (M_Index => Member_Index, S_Index => Skill_Index);
    end Get_Training_Tool_Quality;
 
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data is
