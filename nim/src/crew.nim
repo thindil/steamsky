@@ -64,13 +64,16 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
       femalesSyllablesEndList.len - 1))]
 
 proc getTrainingToolQuality*(memberIndex: Natural;
-    skillIndex: Positive): Positive =
+    skillIndex: Positive): Positive {.sideEffect, raises: [], tags: [].} =
   result = 100
   for skill in playerShip.crew[memberIndex].skills:
     if skill.index == skillIndex:
-      for quality in skillsList[skillIndex].toolsQuality:
-        if skill.level <= quality.level:
-          return quality.quality
+      try:
+        for quality in skillsList[skillIndex].toolsQuality:
+          if skill.level <= quality.level:
+            return quality.quality
+      except KeyError:
+        return
 
 # Temporary code for interfacing with Ada
 
