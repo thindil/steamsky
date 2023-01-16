@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,19 +19,13 @@ import std/tables
 import game, types, ships, shipscargo, utils
 
 type CrewNoSpaceError* = object of CatchableError
-  ## FUNCTION
-  ##
   ## Raised when there is no space for new item in crew member inventory
 
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
     quality: Positive = 100): int {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Find the index of the selected item in the selected inventory
-  ##
-  ## PARAMETERS
   ##
   ## * inventory  - the inventory in which the item will be looking for
   ## * protoIndex - the index of prototype item of the item to find. Can be
@@ -41,9 +35,7 @@ proc findItem*(inventory: seq[InventoryData];
   ## * durability - the durability of the item to find. Can be empty
   ## * quality    - the quality of the item to find. Can be empty
   ##
-  ## RETURNS
-  ##
-  ## The index of the item in the selected inventory which meet searching
+  ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
   try:
     if protoIndex > 0:
@@ -67,19 +59,13 @@ proc findItem*(inventory: seq[InventoryData];
 
 proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the amount of free space in the selected player ship's crew member's
   ## inventory.
-  ##
-  ## PARAMETERS
   ##
   ## * memberIndex - the index of the crew member which inventory will be check
   ## * amount      - the amount of kilograms to add or remove during the check
   ##
-  ## RETURNS
-  ##
-  ## The amount of kilograms of free space in the crew member's inventory
+  ## Returns the amount of kilograms of free space in the crew member's inventory
   result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
   for item in playerShip.crew[memberIndex].inventory:
     try:
@@ -90,29 +76,19 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
 
 proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
     ], tags: [].} =
-  ## FUNCTION
-  ##
   ## Check if the item is currently used by the selected crew member in the
   ## player ship crew.
-  ##
-  ## PARAMETERS
   ##
   ## * memberIndex - the index of the crew member which will be check for usage
   ## * itemIndex   - the index of the item which will be check
   ##
-  ## RETURNS
-  ##
-  ## True if the item is used, otherwise false
+  ## Returns true if the item is used, otherwise false
   return itemIndex in playerShip.crew[memberIndex].equipment
 
 proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Stop using the selected item by the selected the player's ship crew
   ## member.
-  ##
-  ## PARAMETERS
   ##
   ## * memberIndex - the index of the crew member which will stop using the item
   ## * itemIndex   - the index of the item to stop using
@@ -127,11 +103,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     inventoryIndex: int = -1; price: Natural = 0;
     ship: var ShipRecord) {.sideEffect, raises: [CrewNoSpaceError, KeyError],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Update the inventory of the selected crew member.
-  ##
-  ## PARAMETERS
   ##
   ## * memberIndex    - the index of the crew member which inventory will be updated
   ## * amount         - the amount of which the selected item will be updated
@@ -145,9 +117,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   ## * price          - the price of the item to update. Default value is 0.
   ## * ship           - the ship in which the crew member inventory will be updated
   ##
-  ## RETURNS
-  ##
-  ## The updated ship argument
+  ## Returns the updated ship argument
   var itemIndex: int
   if inventoryIndex == -1:
     if durability > 0:
@@ -187,12 +157,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel: Natural = 0; memberIndex: int = -1;
     ship: var ShipRecord) {.sideEffect, raises: [KeyError, CrewNoSpaceError],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Check if item in the inventory was damaged, if yes, update inventory and
   ## the ship cargo
-  ##
-  ## PARAMETERS
   ##
   ## * inventory   - the inventory in which the item will be check
   ## * itemIndex   - the index of the item in the inventory which will be check
@@ -202,9 +168,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   ##                 value is -1
   ## * ship        - the ship in which the item will be check
   ##
-  ## RETURNS
-  ##
-  ## The updated parameters inventory and ship
+  ## Returns the updated parameters inventory and ship
   var
     item = inventory[itemIndex]
     damageChance = itemsList[item.protoIndex].value[1]
