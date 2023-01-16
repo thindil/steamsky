@@ -350,8 +350,7 @@ package Crew is
       -- SOURCE
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive with
-      Pre => Skill_Index <= Natural(Skills_Amount),
-      Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
+      Pre => Skill_Index <= Natural(Skills_Amount);
       -- ****
 
 -- Temporary code to interact with Nim
