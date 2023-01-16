@@ -65,6 +65,13 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
 
 proc getTrainingToolQuality*(memberIndex: Natural;
     skillIndex: Positive): Positive {.sideEffect, raises: [], tags: [].} =
+  ## Get the required tools quality for the selected skill
+  ##
+  ## * memberIndex - the index of the crew member in the player ship
+  ## * skillIndex  - the index of the skill which training tool quality will be get
+  ##
+  ## Returns numeric value for the minimum training tool quality required to
+  ## train the selected skill.
   result = 100
   for skill in playerShip.crew[memberIndex].skills:
     if skill.index == skillIndex:
