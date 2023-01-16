@@ -131,6 +131,15 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     updateInventory(memberIndex = memberIndex, amount = -1,
         inventoryIndex = toolsIndex, ship = ship)
     toolsIndex = 0
+  var toolQuality = defaultItemDurability
+  if givenOrder in [upgrading, repair, clean, train]:
+    if givenOrder == clean:
+      requiredTool = cleaningTools
+    elif givenOrder == train:
+      requiredTool = skillsList[ship.modules[moduleIndex].trainedSkill].tool
+      toolQuality = getTrainingToolQuality(memberIndex = memberIndex, skillIndex = ship.modules[moduleIndex].trainedSkill)
+    else:
+      requiredTool = repairTools
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
