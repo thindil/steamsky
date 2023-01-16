@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -169,7 +169,8 @@ package body Dialogs is
          Tcl.Tk.Ada.Busy.Forget(Window => Frame);
          if CArgv.Arg(Argv => Argv, N => 2) = ".memberdialog" then
             Frame :=
-              Get_Widget(pathName => Frame & ".button", Interp => Interp);
+              Get_Widget
+                (pathName => Frame & ".buttons.button", Interp => Interp);
          end if;
          Focus(Widgt => Frame);
          Destroy(Widgt => Dialog);
