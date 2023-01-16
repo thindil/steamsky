@@ -32,9 +32,5 @@ package Crew.Test_Data.Tests is
    procedure Test_Daily_Payment_f0944a_0bfd06(Gnattest_T: in out Test);
    --  crew.ads:336:4:Daily_Payment:Test_DailyPayment
 
-   procedure Test_Get_Training_Tool_Quality_6d83ce_af65c0
-     (Gnattest_T: in out Test);
-   --  crew.ads:351:4:Get_Training_Tool_Quality:Test_GetTrainingToolQuality
-
 end Crew.Test_Data.Tests;
 --  end read only
