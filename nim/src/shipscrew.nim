@@ -21,19 +21,13 @@ import crew, crewinventory, game, messages, shipmodules, ships, shipscargo,
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
-  ## FUNCTION
-  ##
   ## Update the morale of the selected crew member in the selected ship
-  ##
-  ## PARAMETERS
   ##
   ## * ship        - the ship in which the crew member's morale will be changed
   ## * memberIndex - the index of the crew member which morale will be changed
   ## * value       - the value with which the morale will be changed
   ##
-  ## RETURNS
-  ##
-  ## The modified ship parameter with updated morale of the selected crew
+  ## Returns the modified ship parameter with updated morale of the selected crew
   ## member.
   var newMorale, newLoyalty, newValue: int
   let factionIndex = ship.crew[memberIndex].faction
@@ -233,42 +227,60 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
   if ship.crew == playerShip.crew:
     case givenOrder
       of pilot:
-        addMessage(message = (memberName & " starts piloting.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts piloting.").cstring,
+            kind = orderMessage.ord.cint)
         ship.modules[moduleIndex2].owner[0] = memberIndex
       of engineer:
-        addMessage(message = (memberName & " starts engineer's duty.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts engineer's duty.").cstring,
+            kind = orderMessage.ord.cint)
       of gunner:
-        addMessage(message = (memberName & " starts operating gun.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts operating gun.").cstring,
+            kind = orderMessage.ord.cint)
         ship.modules[moduleIndex2].owner[0] = memberIndex
       of rest:
-        addMessage(message = (memberName & " is going on break.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " is going on break.").cstring,
+            kind = orderMessage.ord.cint)
       of repair:
-        addMessage(message = (memberName & " starts repairing ship.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts repairing ship.").cstring,
+            kind = orderMessage.ord.cint)
       of craft:
-        addMessage(message = (memberName & " starts manufacturing.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts manufacturing.").cstring,
+            kind = orderMessage.ord.cint)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
           if owner == 0:
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
       of upgrading:
-        addMessage(message = (memberName & " starts upgrading " & ship.modules[ship.upgradeModule].name & ".").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts upgrading " & ship.modules[
+            ship.upgradeModule].name & ".").cstring,
+            kind = orderMessage.ord.cint)
       of talk:
-        addMessage(message = (memberName & " is now assigned to talking in bases.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName &
+            " is now assigned to talking in bases.").cstring,
+            kind = orderMessage.ord.cint)
       of heal:
-        addMessage(message = (memberName & " starts healing wounded crew members.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName &
+            " starts healing wounded crew members.").cstring,
+            kind = orderMessage.ord.cint)
         if moduleIndex > 0:
           for index, owner in ship.modules[moduleIndex].owner.pairs:
             if owner == 0:
               ship.modules[moduleIndex2].owner[index] = memberIndex
               break
       of clean:
-        addMessage(message = (memberName & " starts cleaning ship.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName & " starts cleaning ship.").cstring,
+            kind = orderMessage.ord.cint)
       of boarding:
-        addMessage(message = (memberName & " starts boarding the enemy ship.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName &
+            " starts boarding the enemy ship.").cstring,
+            kind = orderMessage.ord.cint)
       of defend:
-        addMessage(message = (memberName & " starts defending the ship.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName &
+            " starts defending the ship.").cstring,
+            kind = orderMessage.ord.cint)
       of train:
-        addMessage(message = (memberName & " starts personal training.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = (memberName &
+            " starts personal training.").cstring, kind = orderMessage.ord.cint)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
           if owner == 0:
             ship.modules[moduleIndex2].owner[index] = memberIndex
@@ -281,19 +293,22 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     updateOrders(ship = ship)
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
-  proc updatePosition(order: CrewOrders, maxPriority: bool = true): bool =
+
+  proc updatePosition(order: CrewOrders; maxPriority: bool = true): bool =
     var
       orderIndex: Natural
       memberIndex, moduleIndex: int = -1
     orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
     if maxPriority:
       for index, member in ship.crew.pairs:
-        if member.orders[orderIndex] == 2 and member.order != order and member.previousOrder != order:
+        if member.orders[orderIndex] == 2 and member.order != order and
+            member.previousOrder != order:
           memberIndex = index
           break
     else:
       for index, member in ship.crew.pairs:
-        if member.orders[orderIndex] == 1 and member.order == rest and member.previousOrder == rest:
+        if member.orders[orderIndex] == 1 and member.order == rest and
+            member.previousOrder == rest:
           memberIndex = index
           break
     if memberIndex == -1:
@@ -339,9 +354,53 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
       if moduleIndex == -1:
         return false
       if ship.crew[memberIndex].order != rest:
-        giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest, moduleIndex = 0, checkPriorities = false)
-      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order, moduleIndex = moduleIndex)
+        giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
+            moduleIndex = 0, checkPriorities = false)
+      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
+          moduleIndex = moduleIndex)
       return true
+
+    var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
+      needCrafters, needClean, needRepairs: bool = false
+    for member in ship.crew:
+      case member.order
+        of pilot:
+          havePilot = true
+        of engineer:
+          haveEngineer = true
+        of upgrading:
+          haveUpgrade = true
+        of talk:
+          haveTrader = true
+        else:
+          discard
+      if member.health < 100:
+        if findItem(inventory = ship.cargo, itemType = factionsList[
+            member.faction].healingTools) > -1:
+          canHeal = true
+    for module in ship.modules:
+      if module.durability > 0:
+        case module.mType
+          of ModuleType2.gun:
+            if module.owner[0] == 0 and not needGunners:
+              needGunners = true
+          of ModuleType2.workshop:
+            if module.craftingIndex.len > 0 and not needCrafters:
+              for owner in module.owner:
+                if owner == 0:
+                  needCrafters = true
+                  break
+          of ModuleType2.cabin:
+            if module.cleanliness < module.quality:
+              needClean = true
+          else:
+            discard
+      if module.durability < module.maxDurability and not needRepairs:
+        for item in ship.cargo:
+          if itemsList[item.protoIndex].itemType == modulesList[
+              module.protoIndex].repairMaterial:
+            needRepairs = true
+            break
 
 # Temporary code for interfacing with Ada
 
