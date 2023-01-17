@@ -281,7 +281,67 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     updateOrders(ship = ship)
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
-  discard
+  proc updatePosition(order: CrewOrders, maxPriority: bool = true): bool =
+    var
+      orderIndex: Natural
+      memberIndex, moduleIndex: int = -1
+    orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
+    if maxPriority:
+      for index, member in ship.crew.pairs:
+        if member.orders[orderIndex] == 2 and member.order != order and member.previousOrder != order:
+          memberIndex = index
+          break
+    else:
+      for index, member in ship.crew.pairs:
+        if member.orders[orderIndex] == 1 and member.order == rest and member.previousOrder == rest:
+          memberIndex = index
+          break
+    if memberIndex == -1:
+      return false
+    if order in [gunner, craft, heal, pilot, engineer, train]:
+      for index, module in ship.modules.pairs:
+        if module.durability > 0:
+          case module.mType
+            of ModuleType2.gun:
+              if order == gunner and module.owner[0] == 0:
+                moduleIndex = index
+                break
+            of ModuleType2.workshop:
+              if order == craft and module.craftingIndex.len > 0:
+                for owner in module.owner:
+                  if owner == 0:
+                    moduleIndex = index
+                    break
+            of ModuleType2.medicalRoom:
+              if order == heal:
+                for owner in module.owner:
+                  if owner == 0:
+                    moduleIndex = index
+                    break
+            of ModuleType2.cockpit:
+              if order == pilot:
+                moduleIndex = index
+                break
+            of ModuleType2.engine:
+              if order == engineer:
+                moduleIndex = index
+                break
+            of ModuleType2.trainingRoom:
+              if order == train and module.trainedSkill > 0:
+                for owner in module.owner:
+                  if owner == 0:
+                    moduleIndex = index
+                    break
+            else:
+              discard
+        if moduleIndex > -1:
+          break
+      if moduleIndex == -1:
+        return false
+      if ship.crew[memberIndex].order != rest:
+        giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest, moduleIndex = 0, checkPriorities = false)
+      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order, moduleIndex = moduleIndex)
+      return true
 
 # Temporary code for interfacing with Ada
 
