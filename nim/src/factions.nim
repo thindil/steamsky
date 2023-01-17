@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,11 +20,7 @@ import basestypes, careers, game, items, log, types, utils
 
 proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load available factions from the data file
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the path to the file with factions data which will be loaded
   let factionsXml = try:
@@ -279,18 +275,12 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
     raises: [KeyError], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the reputation level between the two factions
-  ##
-  ## PARAMETERS
   ##
   ## * sourceFaction - the faction which repuration level will be get
   ## * targetFaction - the faction to which reputation level will be get
   ##
-  ## RETURNS
-  ##
-  ## The level of the reputation between factions. If only one value is set
+  ## Returns the level of the reputation between factions. If only one value is set
   ## return value, if both, return random value between them.
   if factionsList[sourceFaction].relations[targetFaction].reputation.max == 0:
     return factionsList[sourceFaction].relations[targetFaction].reputation.min
@@ -300,28 +290,18 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
 
 proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
     raises: [KeyError], tags: [].} =
-  ## FUNCTION
-  ##
   ## Check if the selected factions are friendly towards self
-  ##
-  ## PARAMETERS
   ##
   ## * sourceFaction - the faction which will be checked for friendliness
   ## * targetFaction - the faction towards which check will be make
   ##
-  ## RETURNS
-  ##
-  ## True if factions are friendly towards self, otherwise false.
+  ## Returns true if factions are friendly towards self, otherwise false.
   return factionsList[sourceFaction].relations[targetFaction].friendly
 
 proc getRandomFaction*(): string {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the index of the random faction
   ##
-  ## RETURNS
-  ##
-  ## The index of the random faction
+  ## Returns the index of the random faction
   let factionIndex = getRandom(min = 1, max = factionsList.len)
   var currentIndex = 1
   for key in factionsList.keys:
