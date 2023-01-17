@@ -34,7 +34,7 @@ with Game; use Game;
 package body Goals is
 
    procedure Load_Goals(Reader: Tree_Reader) is
-      Temp_Record: Goal_Data;
+      Temp_Record: Goal_Data; --## rule line off IMPROPER_INITIALIZATION
       Nodes_List: Node_List;
       Goals_Data: Document;
       Action: Data_Action := ADD;
