@@ -137,9 +137,43 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       requiredTool = cleaningTools
     elif givenOrder == train:
       requiredTool = skillsList[ship.modules[moduleIndex].trainedSkill].tool
-      toolQuality = getTrainingToolQuality(memberIndex = memberIndex, skillIndex = ship.modules[moduleIndex].trainedSkill)
+      toolQuality = getTrainingToolQuality(memberIndex = memberIndex,
+          skillIndex = ship.modules[moduleIndex].trainedSkill)
     else:
       requiredTool = repairTools
+    if requiredTool.len > 0:
+      if toolsIndex == 0:
+        toolsIndex = findItem(inventory = ship.cargo, itemType = requiredTool,
+            quality = toolQuality)
+        if toolsIndex == 0:
+          toolsIndex = findItem(inventory = ship.crew[memberIndex].inventory,
+              itemType = requiredTool, quality = toolQuality)
+          if toolsIndex > 0:
+            ship.crew[memberIndex].equipment[tool] = toolsIndex
+        else:
+          ship.crew[memberIndex].equipment[tool] = 0
+      if toolsIndex == 0:
+        case givenOrder
+          of repair:
+            raise newException(exceptn = CrewOrderError, message = memberName & " can't start repairing ship because you don't have the proper tools.")
+          of clean:
+            raise newException(exceptn = CrewOrderError, message = memberName & " can't start cleaning ship because you don't have any cleaning tools.")
+          of upgrading:
+            raise newException(exceptn = CrewOrderError, message = memberName & " can't start upgrading module because you don't have the proper tools.")
+          of train:
+            raise newException(exceptn = CrewOrderError, message = memberName & " can't start training because you don't have the proper tools.")
+          else:
+            return
+  if givenOrder == rest:
+    ship.crew[memberIndex].previousOrder = rest
+    if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
+      toolsIndex = ship.crew[memberIndex].equipment[tool]
+      if toolsIndex > 0:
+        updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
+            toolsIndex].protoIndex, amount = 1, durability = ship.crew[
+            memberIndex].inventory[toolsIndex].durability)
+        updateInventory(memberIndex = memberIndex, amount = -1,
+            inventoryIndex = toolsIndex, ship = ship)
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
