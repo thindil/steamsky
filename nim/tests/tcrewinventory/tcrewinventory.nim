@@ -8,6 +8,7 @@ import ../../src/[crewinventory, game, items, ships, types]
 if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
 
+playerShip.crew = @[]
 var member = MemberData(homeBase: 1)
 const attribute = MobAttributeRecord(level: 1, experience: 0)
 member.attributes = @[attribute, attribute, attribute, attribute]
