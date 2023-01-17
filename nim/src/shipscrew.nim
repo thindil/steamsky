@@ -174,6 +174,49 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
             memberIndex].inventory[toolsIndex].durability)
         updateInventory(memberIndex = memberIndex, amount = -1,
             inventoryIndex = toolsIndex, ship = ship)
+  if ship.crew == playerShip.crew:
+    case givenOrder
+      of pilot:
+        addMessage(message = (memberName & " starts piloting.").cstring, kind = orderMessage.ord.cint)
+        ship.modules[moduleIndex2].owner[0] = memberIndex
+      of engineer:
+        addMessage(message = (memberName & " starts engineer's duty.").cstring, kind = orderMessage.ord.cint)
+      of gunner:
+        addMessage(message = (memberName & " starts operating gun.").cstring, kind = orderMessage.ord.cint)
+        ship.modules[moduleIndex2].owner[0] = memberIndex
+      of rest:
+        addMessage(message = (memberName & " is going on break.").cstring, kind = orderMessage.ord.cint)
+      of repair:
+        addMessage(message = (memberName & " starts repairing ship.").cstring, kind = orderMessage.ord.cint)
+      of craft:
+        addMessage(message = (memberName & " starts manufacturing.").cstring, kind = orderMessage.ord.cint)
+        for index, owner in ship.modules[moduleIndex2].owner.pairs:
+          if owner == 0:
+            ship.modules[moduleIndex2].owner[index] = memberIndex
+            break
+      of upgrading:
+        addMessage(message = (memberName & " starts upgrading " & ship.modules[ship.upgradeModule].name & ".").cstring, kind = orderMessage.ord.cint)
+      of talk:
+        addMessage(message = (memberName & " is now assigned to talking in bases.").cstring, kind = orderMessage.ord.cint)
+      of heal:
+        addMessage(message = (memberName & " starts healing wounded crew members.").cstring, kind = orderMessage.ord.cint)
+        if moduleIndex > 0:
+          for index, owner in ship.modules[moduleIndex].owner.pairs:
+            if owner == 0:
+              ship.modules[moduleIndex2].owner[index] = memberIndex
+              break
+      of clean:
+        addMessage(message = (memberName & " starts cleaning ship.").cstring, kind = orderMessage.ord.cint)
+      of boarding:
+        addMessage(message = (memberName & " starts boarding the enemy ship.").cstring, kind = orderMessage.ord.cint)
+      of defend:
+        addMessage(message = (memberName & " starts defending the ship.").cstring, kind = orderMessage.ord.cint)
+      of train:
+        addMessage(message = (memberName & " starts personal training.").cstring, kind = orderMessage.ord.cint)
+        for index, owner in ship.modules[moduleIndex2].owner.pairs:
+          if owner == 0:
+            ship.modules[moduleIndex2].owner[index] = memberIndex
+            break
 
 proc updateOrders(ship: var ShipRecord; combat: bool = false) =
   discard
