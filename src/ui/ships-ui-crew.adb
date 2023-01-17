@@ -697,6 +697,27 @@ package body Ships.UI.Crew is
       Add_Close_Button
         (Name => Buttons_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Member_Dialog, Row => 0, Column => 1);
+      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
+        Player_Ship.Speed = DOCKED then
+         Button :=
+           Create
+             (pathName => Buttons_Frame & ".button2",
+              options =>
+                "-text {Dismiss} -image {inventoryicon} -command {" &
+                Close_Button & " invoke;Dismiss " &
+                CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
+         Add
+           (Widget => Button,
+            Message => "Remove the crew member from the ship's crew.");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-padx 5 -row 0 -column 2");
+         Bind
+           (Widgt => Button, Sequence => "<Tab>",
+            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
+      end if;
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
@@ -1472,9 +1493,16 @@ package body Ships.UI.Crew is
                Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
          end Show_Priorities_Block;
       end if;
-      Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+      if CArgv.Arg(Argv => Argv, N => 1) = "1" or
+        Player_Ship.Speed /= DOCKED then
+         Bind
+           (Widgt => Close_Button, Sequence => "<Tab>",
+            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+      else
+         Bind
+           (Widgt => Close_Button, Sequence => "<Tab>",
+            Script => "{focus " & Member_Dialog & ".buttons.button2;break}");
+      end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog
