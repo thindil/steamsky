@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, crewinventory, game, maps, messages, shipmodules, ships, shipscargo, types, utils
+import crew, crewinventory, events, game, maps, messages, shipmodules, ships,
+    shipscargo, types, utils
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
@@ -402,6 +403,39 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
           break
   if skyMap[ship.skyX][ship.skyY].baseIndex > 0:
     needTrader = true
+  let eventIndex = skyMap[ship.skyX][ship.skyY].eventIndex
+  if not needTrader and eventIndex > 0 and eventsList[eventIndex].eType in [
+      trader, friendlyShip]:
+    needTrader = true
+  if not havePilot and updatePosition(order = pilot):
+    updateOrders(ship = ship)
+  if not haveEngineer and updatePosition(order = engineer):
+    updateOrders(ship = ship)
+  if needGunners and updatePosition(order = gunner):
+    updateOrders(ship = ship)
+  if needCrafters and updatePosition(order = craft):
+    updateOrders(ship = ship)
+  if not haveUpgrade and ship.upgradeModule > -1 and findItem(
+      inventory = ship.cargo, itemType = repairTools) > -1:
+    if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
+        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
+        order = upgrading):
+      updateOrders(ship = ship)
+  if (not haveTrader and needTrader) and updatePosition(order = talk):
+    updateOrders(ship = ship)
+  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
+      -1) and updatePosition(order = clean):
+    updateOrders(ship = ship)
+  if canHeal and updatePosition(order = heal):
+    updateOrders(ship = ship)
+  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
+      -1) and updatePosition(order = repair):
+    updateOrders(ship = ship)
+  if combat:
+    if updatePosition(order = defend):
+      updateOrders(ship = ship)
+    if updatePosition(order = boarding):
+      updateOrders(ship = ship)
 
 # Temporary code for interfacing with Ada
 
