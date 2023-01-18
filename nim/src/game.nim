@@ -20,21 +20,15 @@ import types
 
 type
   DataAction* = enum
-    # FUNCTION
-    #
     # Possible actions to do when loading game data
     add, update, remove
 
   ToolQuality = object
-    ## FUNCTION
-    ##
     ## Store data related to quality of tools needed for train a skill
     level*: Natural ## The minimal level of a skill which need that quality of tool
     quality*: Natural ## The level of quality of tool needed for training
 
   SkillRecord* = object
-    ## FUNCTION
-    ##
     ## Store data releated to the skills
     name: string ## The name of the skill
     attribute: Positive ## The index of the attribute related to the skill
@@ -43,13 +37,9 @@ type
     toolsQuality*: seq[ToolQuality] ## The quality of tool needed for training
 
   DataLoadingError* = object of CatchableError
-    ## FUNCTION
-    ##
     ## Used to mark problems during loading the game data from files
 
   AttributeRecord* = object
-    ## FUNCTION
-    ##
     ## Store data related to the attributes
     name: string ## The name of the attribute
     description: string ## The description of the attribute
@@ -114,17 +104,11 @@ var
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the index of the selected skill
-  ##
-  ## PARAMETERS
   ##
   ## * skillName - the name of the skill which index will be looking for
   ##
-  ## RETURNS
-  ##
-  ## The index of the selected skill or 0 if the skill not found
+  ## Returns the index of the selected skill or 0 if the skill not found
   for key, skill in skillsList.pairs:
     if skill.name == skillName:
       return key
@@ -132,28 +116,18 @@ proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
 
 proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load the game data
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the name of the file with the game data to load
 
   proc findAttributeIndex(attributeName: string): int {.sideEffect,
       raises: [], tags: [].} =
-    ## FUNCTION
-    ##
     ## Find the index of the selected attribute
-    ##
-    ## PARAMETERS
     ##
     ## * attributeName - the name of the attribute which index will be looking
     ##                   for
     ##
-    ## RETURNS
-    ##
-    ## The index of the selected attribute or -1 if the attribute not found
+    ## Returns the index of the selected attribute or -1 if the attribute not found
     for key, attribute in attributesList.pairs:
       if attribute.name == attributeName:
         return key
