@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -80,5 +80,13 @@ package Maps is
       Post =>
       (if Is_X_Axis then Coord in Map_X_Range else Coord in Map_Y_Range);
       -- ****
+
+-- Temporary code to interact with Nim
+
+   procedure Get_Ada_Map_Cell
+     (X, Y, Base_Index, Visited, Event_Index, Mission_Index: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaMapCell";
 
 end Maps;
