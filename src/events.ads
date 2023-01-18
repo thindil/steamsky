@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -173,5 +173,12 @@ package Events is
       With_Traders: Boolean := True) with
       Test_Case => (Name => "Test_GenerateEnemies", Mode => Nominal);
       -- ****
+
+-- Temporary code to interact with Nim
+
+   procedure Get_Ada_Event(Index, X, Y, Time, E_Type, Data: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaEvent";
 
 end Events;
