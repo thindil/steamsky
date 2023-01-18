@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,15 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import types
+
+type SkyCell* = object
+  ## Used to store information about the map's cell
+  baseIndex*: ExtendedBasesRange ## The index of the sky base located in the cell
+  visited*: bool ## If true, the cell was visited by the player
+  eventIndex*: int ## Index of the event which happens in the cell
+  missionIndex*: int ## Index of the mission which takes place in the cell
+
+var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
 
 func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
     tags: [], exportc.} =
