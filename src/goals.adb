@@ -47,13 +47,13 @@ package body Goals is
           (Doc => Goals_Data, Tag_Name => "goal");
       Load_Goals_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Temp_Record :=
-           (Index => Null_Unbounded_String, G_Type => RANDOM, Amount => 0,
-            Target_Index => Null_Unbounded_String, Multiplier => 1);
          Goal_Node := Item(List => Nodes_List, Index => I);
-         Temp_Record.Index :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Goal_Node, Name => "index"));
+         Temp_Record :=
+           (Index =>
+              To_Unbounded_String
+                (Source => Get_Attribute(Elem => Goal_Node, Name => "index")),
+            G_Type => RANDOM, Amount => 0,
+            Target_Index => Null_Unbounded_String, Multiplier => 1);
          Action :=
            (if Get_Attribute(Elem => Goal_Node, Name => "action")'Length > 0
             then
