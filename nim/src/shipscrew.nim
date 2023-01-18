@@ -16,8 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, crewinventory, game, messages, shipmodules, ships, shipscargo,
-    types, utils
+import crew, crewinventory, game, maps, messages, shipmodules, ships, shipscargo, types, utils
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
@@ -360,47 +359,49 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
           moduleIndex = moduleIndex)
       return true
 
-    var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
-      needCrafters, needClean, needRepairs: bool = false
-    for member in ship.crew:
-      case member.order
-        of pilot:
-          havePilot = true
-        of engineer:
-          haveEngineer = true
-        of upgrading:
-          haveUpgrade = true
-        of talk:
-          haveTrader = true
+  var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
+    needCrafters, needClean, needRepairs, needTrader: bool = false
+  for member in ship.crew:
+    case member.order
+      of pilot:
+        havePilot = true
+      of engineer:
+        haveEngineer = true
+      of upgrading:
+        haveUpgrade = true
+      of talk:
+        haveTrader = true
+      else:
+        discard
+    if member.health < 100:
+      if findItem(inventory = ship.cargo, itemType = factionsList[
+          member.faction].healingTools) > -1:
+        canHeal = true
+  for module in ship.modules:
+    if module.durability > 0:
+      case module.mType
+        of ModuleType2.gun:
+          if module.owner[0] == 0 and not needGunners:
+            needGunners = true
+        of ModuleType2.workshop:
+          if module.craftingIndex.len > 0 and not needCrafters:
+            for owner in module.owner:
+              if owner == 0:
+                needCrafters = true
+                break
+        of ModuleType2.cabin:
+          if module.cleanliness < module.quality:
+            needClean = true
         else:
           discard
-      if member.health < 100:
-        if findItem(inventory = ship.cargo, itemType = factionsList[
-            member.faction].healingTools) > -1:
-          canHeal = true
-    for module in ship.modules:
-      if module.durability > 0:
-        case module.mType
-          of ModuleType2.gun:
-            if module.owner[0] == 0 and not needGunners:
-              needGunners = true
-          of ModuleType2.workshop:
-            if module.craftingIndex.len > 0 and not needCrafters:
-              for owner in module.owner:
-                if owner == 0:
-                  needCrafters = true
-                  break
-          of ModuleType2.cabin:
-            if module.cleanliness < module.quality:
-              needClean = true
-          else:
-            discard
-      if module.durability < module.maxDurability and not needRepairs:
-        for item in ship.cargo:
-          if itemsList[item.protoIndex].itemType == modulesList[
-              module.protoIndex].repairMaterial:
-            needRepairs = true
-            break
+    if module.durability < module.maxDurability and not needRepairs:
+      for item in ship.cargo:
+        if itemsList[item.protoIndex].itemType == modulesList[
+            module.protoIndex].repairMaterial:
+          needRepairs = true
+          break
+  if skyMap[ship.skyX][ship.skyY].baseIndex > 0:
+    needTrader = true
 
 # Temporary code for interfacing with Ada
 
