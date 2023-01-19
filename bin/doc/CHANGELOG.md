@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Button to open inventory to the crew member info dialog
+- Icon for dismissing the player ship's crew member. Author: Delapouite
+  (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Updated look of the map cell info
