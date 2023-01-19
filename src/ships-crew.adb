@@ -615,10 +615,9 @@ package body Ships.Crew is
    begin
       Get_Ada_Crew(Ship => Ship);
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         Nim_Inventory :=
-           Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory);
          Get_Ada_Crew_Inventory
-           (Inventory => Nim_Inventory, Member_Index => I,
+           (Inventory => Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory),
+            Member_Index => I,
             Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
       end loop;
       Update_Ada_Orders
