@@ -81,7 +81,13 @@ package body Goals is
               To_String(Source => Temp_Record.Index) &
               "', there is already a goal with that index.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            Goals_List.Delete(Index => Goal_Index);
+            Log_Message
+              (Message =>
+                 "Goal removed: " & To_String(Source => Temp_Record.Index),
+               Message_Type => EVERYTHING);
+         else
             if Action = UPDATE then
                Temp_Record := Goals_List(Goal_Index);
             end if;
@@ -107,25 +113,19 @@ package body Goals is
                  Natural'Value
                    (Get_Attribute(Elem => Goal_Node, Name => "multiplier"));
             end if;
-            if Action /= UPDATE then
-               Goals_List.Append(New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Goal added: " & To_String(Source => Temp_Record.Index),
-                  Message_Type => EVERYTHING);
-            else
+            if Action = UPDATE then
                Goals_List(Goal_Index) := Temp_Record;
                Log_Message
                  (Message =>
                     "Goal updated: " & To_String(Source => Temp_Record.Index),
                   Message_Type => EVERYTHING);
+            else
+               Goals_List.Append(New_Item => Temp_Record);
+               Log_Message
+                 (Message =>
+                    "Goal added: " & To_String(Source => Temp_Record.Index),
+                  Message_Type => EVERYTHING);
             end if;
-         else
-            Goals_List.Delete(Index => Goal_Index);
-            Log_Message
-              (Message =>
-                 "Goal removed: " & To_String(Source => Temp_Record.Index),
-               Message_Type => EVERYTHING);
          end if;
       end loop Load_Goals_Loop;
    end Load_Goals;
