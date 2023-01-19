@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,41 +20,23 @@ import config, crafts, game, log, types
 
 var
   weaponsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all weapons prototypes indexes
   shieldsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all shields prototypes indexes
   headArmorsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all head armors prototypes indexes
   chestArmorsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all chest armors prototypes indexes
   armsArmorsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all arms armors prototypes indexes
   legsArmorsList*: seq[Positive]
-    ## FUNCTION
-    ##
     ## The list of all legs armors prototypes indexes
   toolsList*: seq[string]
-    ## FUNCTION
-    ##
     ## The list of all tools prototypes indexes
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## Load the items data from the file
-  ##
-  ## PARAMETERS
   ##
   ## * fileName - the name of the file to load
   let itemsXml = try:
@@ -166,17 +148,11 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       legsArmorsList.add(y = itemIndex)
 
 proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the index of prototype of the selected item type
-  ##
-  ## PARAMETERS
   ##
   ## * itemType - the type of items which prototype's index will be get
   ##
-  ## RETURNS
-  ##
-  ## The index of the prototype of the selected item's type or 0 if no prototype
+  ## Returns the index of the prototype of the selected item's type or 0 if no prototype
   ## found
   for index, item in itemsList.pairs():
     if item.itemType == itemType:
@@ -185,18 +161,12 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
 
 func getItemDamage*(itemDurability: ItemsDurability;
     toLower: bool = false): string {.raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the description of the item damage level
-  ##
-  ## PARAMETERS
   ##
   ## * itemDurability - the durability of the item which description will be get
   ## * toLower        - if true, convert the description to lower letters
   ##
-  ## RETURNS
-  ##
-  ## The description of the item damage level or empty string if the item isn't
+  ## Returns the description of the item damage level or empty string if the item isn't
   ## damaged
   let damage: float = 1.0 - (itemDurability.float / 100.0)
   result = ""
@@ -213,20 +183,14 @@ func getItemDamage*(itemDurability: ItemsDurability;
 
 proc getItemName*(item: InventoryData; damageInfo,
     toLower: bool = true): string {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the name of the selected item with optional info about the item's
   ## damage
-  ##
-  ## PARAMETERS
   ##
   ## * item       - the item which the name will be get
   ## * damageInfo - if true, add information about item's damage status
   ## * toLower    - if true, the damage info should be in lower characters
   ##
-  ## RETURNS
-  ##
-  ## The name of the selected item with optional info about the item's damage
+  ## Returns the name of the selected item with optional info about the item's damage
   ## status
   if item.name.len > 0:
     result = item.name
@@ -241,18 +205,12 @@ proc getItemName*(item: InventoryData; damageInfo,
 
 proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the string with textual information about the item's chance for take
   ## damage during usage
   ##
-  ## PARAMETERS
-  ##
   ## * itemData - the numerical chance for damage for the selected item
   ##
-  ## RETURNS
-  ##
-  ## The string with textual value for the selected numerical chance for damage
+  ## Returns the string with textual value for the selected numerical chance for damage
   ## or numerical value if the proper setting of the game is enabled
   if gameSettings.showNumbers == 1:
     return " " & $itemData & "%"
@@ -273,8 +231,6 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
     return "Very high"
 
 proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Set the list of all available tools in the game
   if toolsList.len() > 0:
     return
