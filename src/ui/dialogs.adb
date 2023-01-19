@@ -171,6 +171,11 @@ package body Dialogs is
             Frame :=
               Get_Widget
                 (pathName => Frame & ".buttons.button", Interp => Interp);
+            if Winfo_Get(Widgt => Frame, Info => "exists") = "0" then
+               Frame :=
+                 Get_Widget
+                   (pathName => ".memberdialog.button", Interp => Interp);
+            end if;
          end if;
          Focus(Widgt => Frame);
          Destroy(Widgt => Dialog);
