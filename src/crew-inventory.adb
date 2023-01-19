@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,7 +43,7 @@ package body Crew.Inventory is
          Convention => C,
          External_Name => "updateAdaInventory";
    begin
-      Get_Ada_Crew;
+      Get_Ada_Crew(Ship => Ship);
       Get_Ada_Crew_Inventory
         (Inventory => Nim_Inventory, Member_Index => Member_Index,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
