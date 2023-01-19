@@ -357,7 +357,8 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
       secondIndex.inc
     secondIndex = 0
     for item in member.equipment:
-      crew[index].equipment[secondIndex] = item.cint
+      crew[index].equipment[secondIndex] = (item + 1).cint
+      secondIndex.inc
     crew[index].payment = [1: member.payment[1].cint, 2: member.payment[2].cint]
     crew[index].contractLength = member.contractLength.cint
     crew[index].morale = [1: member.morale[1].cint, 2: member.morale[2].cint]
