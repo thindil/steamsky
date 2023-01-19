@@ -436,6 +436,40 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
       updateOrders(ship = ship)
     if updatePosition(order = boarding):
       updateOrders(ship = ship)
+  if updatePosition(order = train):
+    updateOrders(ship = ship)
+  if not havePilot and updatePosition(order = pilot, maxPriority = false):
+    updateOrders(ship = ship)
+  if not haveEngineer and updatePosition(order = engineer, maxPriority = false):
+    updateOrders(ship = ship)
+  if needGunners and updatePosition(order = gunner, maxPriority = false):
+    updateOrders(ship = ship)
+  if needCrafters and updatePosition(order = craft, maxPriority = false):
+    updateOrders(ship = ship)
+  if not haveUpgrade and ship.upgradeModule > -1 and findItem(
+      inventory = ship.cargo, itemType = repairTools) > -1:
+    if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
+        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
+        order = upgrading, maxPriority = false):
+      updateOrders(ship = ship)
+  if (not haveTrader and needTrader) and updatePosition(order = talk,
+      maxPriority = false):
+    updateOrders(ship = ship)
+  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
+      -1) and updatePosition(order = clean, maxPriority = false):
+    updateOrders(ship = ship)
+  if canHeal and updatePosition(order = heal, maxPriority = false):
+    updateOrders(ship = ship)
+  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
+      -1) and updatePosition(order = repair, maxPriority = false):
+    updateOrders(ship = ship)
+  if combat:
+    if updatePosition(order = defend, maxPriority = false):
+      updateOrders(ship = ship)
+    if updatePosition(order = boarding, maxPriority = false):
+      updateOrders(ship = ship)
+  if updatePosition(order = train, maxPriority = false):
+    updateOrders(ship = ship)
 
 # Temporary code for interfacing with Ada
 
