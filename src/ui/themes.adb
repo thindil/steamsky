@@ -436,6 +436,9 @@ package body Themes is
                  To_Unbounded_String(Source => "InventoryIcon") then
                   Temp_Record.Inventory_Icon :=
                     Convert_Path(Old_Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DismissIcon") then
+                  Temp_Record.Dismiss_Icon := Convert_Path(Old_Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -615,7 +618,8 @@ package body Themes is
          60 => To_Unbounded_String(Source => "nopiloticon"),
          61 => To_Unbounded_String(Source => "noengineericon"),
          62 => To_Unbounded_String(Source => "destinationicon"),
-         63 => To_Unbounded_String(Source => "inventoryicon"));
+         63 => To_Unbounded_String(Source => "inventoryicon"),
+         64 => To_Unbounded_String(Source => "dismissicon"));
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -649,7 +653,8 @@ package body Themes is
          56 => Theme.Unequip_Icon, 57 => Theme.Select_All_Icon,
          58 => Theme.Unselect_All_Icon, 59 => Theme.Give_Order_Icon,
          60 => Theme.No_Pilot_Icon, 61 => Theme.No_Engineer_Icon,
-         62 => Theme.Destination_Icon, 63 => Theme.Inventory_Icon);
+         62 => Theme.Destination_Icon, 63 => Theme.Inventory_Icon,
+         64 => Theme.Dismiss_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
