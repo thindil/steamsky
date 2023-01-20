@@ -608,11 +608,16 @@ package body Ships.Crew is
    procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) is
       Nim_Inventory: Nim_Inventory_Array;
+      Nim_Cargo: Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Ship.Cargo);
       procedure Update_Ada_Orders(Get_Player_Ship, Comb: Natural) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaOrders";
    begin
+      Get_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
       Get_Ada_Crew(Ship => Ship);
       Get_Ada_Crew_Loop :
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
@@ -624,6 +629,12 @@ package body Ships.Crew is
       Update_Ada_Orders
         (Get_Player_Ship => (if Ship = Player_Ship then 1 else 0),
          Comb => (if Combat then 1 else 0));
+      Set_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Inventory_Container.Assign
+        (Target => Ship.Cargo,
+         Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
       Set_Ada_Crew(Ship => Ship);
       Set_Ada_Crew_Loop :
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
