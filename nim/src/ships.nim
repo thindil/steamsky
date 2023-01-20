@@ -215,6 +215,8 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
       if owner == 0:
         break
       module.owner.add(y = owner - 1)
+    if module.owner.len == 0:
+      module.owner.add(y = 0)
     if getPlayerShip == 1:
       playerShip.modules.add(y = module)
     else:
