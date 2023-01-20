@@ -133,9 +133,9 @@ package body Goals is
    function Goal_Text(Index: Goals_Container.Extended_Index) return String is
       use Tiny_String;
 
-      Text: Unbounded_String;
+      Text: Unbounded_String := Null_Unbounded_String;
       Goal: Goal_Data;
-      Insert_Position: Positive;
+      Insert_Position: Positive := 1;
       Added: Boolean := False;
       type Faction_Name_Type is (NAME, MEMBERNAME, PLURALMEMBERNAME);
       function Get_Faction_Name
