@@ -703,7 +703,7 @@ package body Ships.UI.Crew is
            Create
              (pathName => Buttons_Frame & ".button2",
               options =>
-                "-text {Dismiss} -image {inventoryicon} -command {" &
+                "-text {Dismiss} -image {dismissicon} -command {" &
                 Close_Button & " invoke;Dismiss " &
                 CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
          Add
