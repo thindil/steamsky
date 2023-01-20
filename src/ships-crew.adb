@@ -629,9 +629,7 @@ package body Ships.Crew is
            (Inventory => Nim_Inventory, Member_Index => I,
             Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
          Ship.Crew(I).Inventory :=
-           Inventory_Container.Copy
-             (Source =>
-                Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32));
+           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       end loop;
    end Update_Orders;
 
