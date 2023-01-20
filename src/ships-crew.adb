@@ -614,23 +614,25 @@ package body Ships.Crew is
          External_Name => "updateAdaOrders";
    begin
       Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew_Loop :
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
          Get_Ada_Crew_Inventory
            (Inventory => Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory),
             Member_Index => I,
             Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      end loop;
+      end loop Get_Ada_Crew_Loop;
       Update_Ada_Orders
         (Get_Player_Ship => (if Ship = Player_Ship then 1 else 0),
          Comb => (if Combat then 1 else 0));
       Set_Ada_Crew(Ship => Ship);
+      Set_Ada_Crew_Loop :
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
          Set_Ada_Crew_Inventory
            (Inventory => Nim_Inventory, Member_Index => I,
             Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
          Ship.Crew(I).Inventory :=
            Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
-      end loop;
+      end loop Set_Ada_Crew_Loop;
    end Update_Orders;
 
    procedure Update_Morale
