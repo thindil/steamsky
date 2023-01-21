@@ -615,7 +615,7 @@ package body Ships.Crew is
          Convention => C,
          External_Name => "updateAdaOrders";
    begin
-      Get_Ada_Modules;
+      Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
