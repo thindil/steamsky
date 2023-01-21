@@ -510,6 +510,6 @@ package Ships is
       Convention => C,
       External_Name => "setAdaShipCargo";
 
-   procedure Get_Ada_Modules;
+   procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship);
 
 end Ships;

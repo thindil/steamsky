@@ -1347,7 +1347,7 @@ package body Ships is
       end loop Convert_Crew_Loop;
    end Set_Ada_Crew;
 
-   procedure Get_Ada_Modules is
+   procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship) is
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
@@ -1376,13 +1376,14 @@ package body Ships is
       Tmp_Data: Module_Data_Array;
       --## rule on IMPROPER_INITIALIZATION
       Tmp_Data_2: chars_ptr;
-      procedure Get_Ada_Ship_Modules(N_Modules: Nim_Modules_Array) with
+      procedure Get_Ada_Ship_Modules
+        (N_Modules: Nim_Modules_Array; Is_Player_Ship: Integer) with
          Import => True,
          Convention => C,
          External_Name => "getAdaShipModules";
    begin
       Convert_Modules_Loop :
-      for Module of Player_Ship.Modules loop
+      for Module of Ship.Modules loop
          Tmp_Owners := (others => 0);
          Index2 := 1;
          Convert_Module_Owners_Loop :
@@ -1441,7 +1442,9 @@ package body Ships is
             Data_2 => Tmp_Data_2);
          Index := Index + 1;
       end loop Convert_Modules_Loop;
-      Get_Ada_Ship_Modules(N_Modules => Nim_Modules);
+      Get_Ada_Ship_Modules
+        (N_Modules => Nim_Modules,
+         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Get_Ada_Modules;
 
 end Ships;
