@@ -143,10 +143,10 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.exportc.} =
     playerShip.skyX = shipData.skyX
     playerShip.skyY = shipData.skyY
     playerShip.speed = shipData.speed.ShipSpeed
-    playerShip.upgradeModule = shipData.upgradeModule
+    playerShip.upgradeModule = shipData.upgradeModule - 1
     playerShip.destinationX = shipData.destinationX
     playerShip.destinationY = shipData.destinationY
-    playerShip.repairModule = shipData.repairModule
+    playerShip.repairModule = shipData.repairModule - 1
     playerShip.description = $shipData.description
     playerShip.homeBase = shipData.homeBase
   else:
@@ -154,10 +154,10 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.exportc.} =
     npcShip.skyX = shipData.skyX
     npcShip.skyY = shipData.skyY
     npcShip.speed = shipData.speed.ShipSpeed
-    npcShip.upgradeModule = shipData.upgradeModule
+    npcShip.upgradeModule = shipData.upgradeModule - 1
     npcShip.destinationX = shipData.destinationX
     npcShip.destinationY = shipData.destinationY
-    npcShip.repairModule = shipData.repairModule
+    npcShip.repairModule = shipData.repairModule - 1
     npcShip.description = $shipData.description
     npcShip.homeBase = shipData.homeBase
 
@@ -381,9 +381,56 @@ proc setAdaShip(shipData: var AdaShipData;
   shipData.skyX = nimShip.skyX.cint
   shipData.skyY = nimShip.skyY.cint
   shipData.speed = nimShip.speed.ord.cint
-  shipData.upgradeModule = nimShip.upgradeModule.cint
+  shipData.upgradeModule = nimShip.upgradeModule.cint + 1
   shipData.destinationX = nimShip.destinationX.cint
   shipData.destinationY = nimShip.destinationY.cint
-  shipData.repairModule = nimShip.repairModule.cint
+  shipData.repairModule = nimShip.repairModule.cint + 1
   shipData.description = nimShip.description.cstring
   shipData.homeBase = nimShip.homeBase.cint
+
+proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
+    getPlayerShip: cint = 1) {.exportc.} =
+  for i in modules.low..modules.high:
+    modules[i] = AdaModuleData(name: "".cstring)
+  let nimModules = if getPlayerShip == 1:
+      playerShip.modules
+    else:
+      npcShip.modules
+  var index = 1
+  for module in nimModules:
+    var
+      adaModule = AdaModuleData(name: module.name.cstring,
+          protoIndex: module.protoIndex.cint, weight: module.weight.cint,
+          durability: module.durability.cint,
+          maxDurability: module.maxDurability.cint,
+          upgradeProgress: module.upgradeProgress.cint,
+          upgradeAction: module.upgradeAction.ord.cint,
+          mType: module.mType.ModuleType2.ord.cint)
+      secondIndex = 1
+    case module.mType
+    of ModuleType2.engine:
+      adaModule.data = [module.fuelUsage.cint, module.power.cint, (if module.disabled: 1 else: 0)]
+    of ModuleType2.cabin:
+      adaModule.data = [module.cleanliness.cint, module.quality.cint, 0]
+    of ModuleType2.turret:
+      adaModule.data = [module.gunIndex.cint, 0.cint, 0.cint]
+    of ModuleType2.gun:
+      adaModule.data = [module.damage.cint, module.ammoIndex.cint, 0.cint]
+    of ModuleType2.hull:
+      adaModule.data = [module.installedModules.cint, module.maxModules.cint, 0.cint]
+    of ModuleType2.workshop:
+      adaModule.data = [module.craftingTime.cint, module.craftingAmount.cint, 0.cint]
+      adaModule.data2 = module.craftingIndex.cstring
+    of ModuleType2.trainingRoom:
+      adaModule.data = [module.trainedSkill.cint, 0.cint, 0.cint]
+    of ModuleType2.batteringRam:
+      adaModule.data = [module.damage2.cint, (if module.coolingDown: 1 else: 0), 0.cint]
+    of ModuleType2.harpoonGun:
+      adaModule.data = [module.duration.cint, module.harpoonIndex.cint, 0.cint]
+    else:
+      discard
+    for owner in module.owner:
+      adaModule.owner[secondIndex] = (owner + 1).cint
+      secondIndex.inc
+    modules[index] = adaModule
+    index.inc
