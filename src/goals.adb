@@ -190,7 +190,7 @@ package body Goals is
          when RANDOM =>
             null;
       end case;
-      if (Goal.G_Type not in RANDOM | KILL) and Goal.Amount > 1 then
+      if Goal.G_Type not in RANDOM | KILL and Goal.Amount > 1 then
          Append(Source => Text, New_Item => "s");
       end if;
       case Goal.G_Type is
