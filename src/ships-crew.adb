@@ -615,6 +615,7 @@ package body Ships.Crew is
          Convention => C,
          External_Name => "updateAdaOrders";
    begin
+      Get_Ada_Ship(Ship => Ship);
       Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
@@ -645,6 +646,7 @@ package body Ships.Crew is
          Ship.Crew(I).Inventory :=
            Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       end loop Set_Ada_Crew_Loop;
+      Set_Ada_Ship(Ship => Ship);
    end Update_Orders;
 
    procedure Update_Morale
