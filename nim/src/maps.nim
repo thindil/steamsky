@@ -28,19 +28,13 @@ var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map'
 
 func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
     tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Normalize (fix to be in range of) the map's coordinates
-  ##
-  ## PARAMETERS
   ##
   ## * coord   - The coordinate which will be normalized
   ## * isXAxis - If 1 the coordinate to be normalized is in X axis, otherwise
   ##             it is in Y axis
   ##
-  ## RETURNS
-  ##
-  ## The updated coord argument
+  ## Returns the updated coord argument
   if isXAxis == 1:
     if coord < MapXRange.low:
       coord = MapXRange.low
