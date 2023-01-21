@@ -177,28 +177,29 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
           fuelUsage: adaModule.data[1], power: adaModule.data[2],
           disabled: adaModule.data[3] == 1)
     of ModuleType2.cabin:
-      module = ModuleData(mType: ModuleType2.cabin, cleanliness: adaModule.data[1],
-          quality: adaModule.data[2])
+      module = ModuleData(mType: ModuleType2.cabin, cleanliness: adaModule.data[
+          1], quality: adaModule.data[2])
     of ModuleType2.turret:
       module = ModuleData(mType: ModuleType2.turret, gunIndex: adaModule.data[1])
     of ModuleType2.gun:
       module = ModuleData(mType: ModuleType2.gun, damage: adaModule.data[1],
           ammoIndex: adaModule.data[2])
     of ModuleType2.hull:
-      module = ModuleData(mType: ModuleType2.hull, installedModules: adaModule.data[1],
-          maxModules: adaModule.data[2])
+      module = ModuleData(mType: ModuleType2.hull,
+          installedModules: adaModule.data[1], maxModules: adaModule.data[2])
     of ModuleType2.workshop:
       module = ModuleData(mType: ModuleType2.workshop,
           craftingIndex: $adaModule.data2, craftingTime: adaModule.data[1],
               craftingAmount: adaModule.data[2])
     of ModuleType2.trainingRoom:
-      module = ModuleData(mType: ModuleType2.trainingRoom, trainedSkill: adaModule.data[1])
+      module = ModuleData(mType: ModuleType2.trainingRoom,
+          trainedSkill: adaModule.data[1])
     of ModuleType2.batteringRam:
-      module = ModuleData(mType: ModuleType2.batteringRam, damage2: adaModule.data[1],
-          coolingDown: adaModule.data[2] == 1)
+      module = ModuleData(mType: ModuleType2.batteringRam,
+          damage2: adaModule.data[1], coolingDown: adaModule.data[2] == 1)
     of ModuleType2.harpoonGun:
-      module = ModuleData(mType: ModuleType2.harpoonGun, duration: adaModule.data[1],
-          harpoonIndex: adaModule.data[2])
+      module = ModuleData(mType: ModuleType2.harpoonGun,
+          duration: adaModule.data[1], harpoonIndex: adaModule.data[2])
     of ModuleType2.any:
       module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[
           1].int, 2: adaModule.data[2].int, 3: adaModule.data[3].int])
@@ -369,3 +370,20 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     crew[index].faction = member.faction.cstring
     index.inc
   crew[index].name = "".cstring
+
+proc setAdaShip(shipData: var AdaShipData;
+    getPlayerShip: cint = 1) {.exportc.} =
+  let nimShip = if getPlayerShip == 1:
+      playerShip
+    else:
+      npcShip
+  shipData.name = nimShip.name.cstring
+  shipData.skyX = nimShip.skyX.cint
+  shipData.skyY = nimShip.skyY.cint
+  shipData.speed = nimShip.speed.ord.cint
+  shipData.upgradeModule = nimShip.upgradeModule.cint
+  shipData.destinationX = nimShip.destinationX.cint
+  shipData.destinationY = nimShip.destinationY.cint
+  shipData.repairModule = nimShip.repairModule.cint
+  shipData.description = nimShip.description.cstring
+  shipData.homeBase = nimShip.homeBase.cint
