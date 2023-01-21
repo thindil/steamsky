@@ -1447,4 +1447,42 @@ package body Ships is
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Get_Ada_Modules;
 
+   procedure Get_Ada_Ship(Ship: Ship_Record := Player_Ship) is
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Ship_Data is record
+         Name: chars_ptr;
+         Sky_X: Integer;
+         Sky_Y: Integer;
+         Speed: Integer;
+         Upgrade_Module: Integer;
+         Destination_X: Integer;
+         Destination_Y: Integer;
+         Repair_Module: Integer;
+         Description: chars_ptr;
+         Home_Base: Integer;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
+      Nim_Ship: constant Nim_Ship_Data :=
+        (Name => New_String(Str => Tiny_String.To_String(Source => Ship.Name)),
+         Sky_X => Ship.Sky_X, Sky_Y => Ship.Sky_Y,
+         Speed => Ship_Speed'Pos(Ship.Speed),
+         Upgrade_Module => Ship.Upgrade_Module,
+         Destination_X => Ship.Destination_X,
+         Destination_Y => Ship.Destination_Y,
+         Repair_Module => Ship.Repair_Module,
+         Description =>
+           New_String
+             (Str => Short_String.To_String(Source => Ship.Description)),
+         Home_Base => Ship.Home_Base);
+      procedure Get_Ada_Ship
+        (Ship_Data: Nim_Ship_Data; Is_Player_Ship: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaShip";
+   begin
+      Get_Ada_Ship
+        (Ship_Data => Nim_Ship,
+         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+   end Get_Ada_Ship;
+
 end Ships;

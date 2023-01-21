@@ -512,4 +512,6 @@ package Ships is
 
    procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship);
 
+   procedure Get_Ada_Ship(Ship: Ship_Record := Player_Ship);
+
 end Ships;
