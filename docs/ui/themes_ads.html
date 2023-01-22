@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,12 +33,12 @@
 <ul>
 <li>1. <a href="#robo68">Themes/Themes</a></li>
 <ul>
-<li>1.1. <a href="#robo193">Themes/Themes.FontTypes</a></li>
-<li>1.2. <a href="#robo194">Themes/Themes.Theme_Record</a></li>
-<li>1.3. <a href="#robo195">Themes/Themes.Themes_Container</a></li>
-<li>1.4. <a href="#robo308">Themes/Themes.All_Fonts</a></li>
-<li>1.5. <a href="#robo309">Themes/Themes.Default_Theme</a></li>
-<li>1.6. <a href="#robo310">Themes/ThemesDefault_Theme_Icons_Path</a></li>
+<li>1.1. <a href="#robo189">Themes/Themes.FontTypes</a></li>
+<li>1.2. <a href="#robo190">Themes/Themes.Theme_Record</a></li>
+<li>1.3. <a href="#robo191">Themes/Themes.Themes_Container</a></li>
+<li>1.4. <a href="#robo310">Themes/Themes.All_Fonts</a></li>
+<li>1.5. <a href="#robo311">Themes/Themes.Default_Theme</a></li>
+<li>1.6. <a href="#robo312">Themes/ThemesDefault_Theme_Icons_Path</a></li>
 <li>1.7. <a href="#robo464">Themes/Themes.Themes_List</a></li>
 <li>1.8. <a href="#robo772">Themes/Themes.Load_Theme_Images</a></li>
 <li>1.9. <a href="#robo773">Themes/Themes.Load_Themes</a></li>
@@ -59,7 +59,7 @@
 
 <hr />
 <a name="Themes2fThemes2eFontTypes"></a>
-<a name="robo193"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
+<a name="robo189"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -71,7 +71,7 @@
 
 <hr />
 <a name="Themes2fThemes2eTheme5fRecord"></a>
-<a name="robo194"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
+<a name="robo190"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -165,6 +165,8 @@
       No_Pilot_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       No_Engineer_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Destination_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Inventory_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Dismiss_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -258,11 +260,13 @@
  No_Pilot_Icon         - Icon used for Pilot info in sentient ships
  No_Engineer_Icon      - Icon used for Engineer info in sentient ships
  Destination_Icon      - Icon used for set the ship destination button
+ Inventory_Icon        - Icon used for show inventory button
+ Dismiss_Icon          - Icon used for dismiss crew member button
 </pre>
 
 <hr />
 <a name="Themes2fThemes2eThemes5fContainer"></a>
-<a name="robo195"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
+<a name="robo191"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -276,7 +280,7 @@
 
 <hr />
 <a name="Themes2fThemes2eAll5fFonts"></a>
-<a name="robo308"></a><h2>Themes/Themes.All_Fonts [ Constants ]</h2>
+<a name="robo310"></a><h2>Themes/Themes.All_Fonts [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -288,7 +292,7 @@
 
 <hr />
 <a name="Themes2fThemes2eDefault5fTheme"></a>
-<a name="robo309"></a><h2>Themes/Themes.Default_Theme [ Constants ]</h2>
+<a name="robo311"></a><h2>Themes/Themes.Default_Theme [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -384,12 +388,14 @@
       Give_Order_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"giveorder.svg"</span><span class="sign">,</span>
       No_Pilot_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"nopilot.svg"</span><span class="sign">,</span>
       No_Engineer_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"noengineer.svg"</span><span class="sign">,</span>
-      Destination_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"destination.svg"</span><span class="sign">)</span><span class="sign">;</span>
+      Destination_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"destination.svg"</span><span class="sign">,</span>
+      Inventory_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"unequip.svg"</span><span class="sign">,</span>
+      Dismiss_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"dismiss.svg"</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Themes2fThemesDefault5fTheme5fIcons5fPath"></a>
-<a name="robo310"></a><h2>Themes/ThemesDefault_Theme_Icons_Path [ Constants ]</h2>
+<a name="robo312"></a><h2>Themes/ThemesDefault_Theme_Icons_Path [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -457,7 +463,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-12-25 04:06:02</p>
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-01-22 04:01:46</p>
 </div> <!-- footer -->
 </body>
 </html>

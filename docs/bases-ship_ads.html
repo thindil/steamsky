@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -169,9 +169,7 @@
 <pre> Install or remove modules on player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Upgrade_Ship
-     <span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span>
-      Module_Index<span class="sign">:</span> BaseModules_Container<span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Upgrade_Ship<span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> Module_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Module_Index <span class="keyword">in</span>
         Player_Ship<span class="sign">.</span>Modules<span class="sign">.</span>First_Index <span class="sign">.</span><span class="sign">.</span> Player_Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdgradeShip"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
@@ -184,7 +182,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-12-25 04:06:02</p>
+<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-01-22 04:01:46</p>
 </div> <!-- footer -->
 </body>
 </html>
