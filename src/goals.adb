@@ -137,7 +137,9 @@ package body Goals is
       Goal: Goal_Data;
       Insert_Position: Positive := 1;
       Added: Boolean := False;
+      --## rule off TYPE_INITIAL_VALUES
       type Faction_Name_Type is (NAME, MEMBERNAME, PLURALMEMBERNAME);
+      --## rule on TYPE_INITIAL_VALUES
       function Get_Faction_Name
         (Faction_Index: Bounded_String; F_Type: Faction_Name_Type)
          return String is
