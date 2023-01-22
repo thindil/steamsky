@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,21 +19,15 @@ import config
 
 type
   MessageType* = enum
-    ## FUNCTION
-    ##
     ## Type of an in-game message
     default, combatMessage, tradeMessage, orderMessage, craftMessage,
         otherMessage, missionMessage
 
   MessageColor* = enum
-    ## FUNCTION
-    ##
     ## The color used to show a message
     white, yellow, green, red, blue, cyan
 
   MessageData = object
-    ## FUNCTION
-    ##
     ## Used to store data about the game's messages
     message: string ## The message itself
     kind: MessageType ## The type of message
@@ -48,12 +42,8 @@ var messagesList: seq[MessageData] ## The list of in-game messages
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Format the selected the game time, add leading zeroes, marks between
   ## values, etc.
-  ##
-  ## PARAMETERS
   ##
   ## * year    - The amount of years to format
   ## * month   - The amount of months to format
@@ -61,9 +51,7 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
   ## * hour    - The amount of hours to format
   ## * minutes - The amount of minutes to format
   ##
-  ## RETURNS
-  ##
-  ## The string with formatted time
+  ## Returns the string with formatted time
   var formattedTime: string = $year & "-"
   if month < 10:
     formattedTime.add("0")
@@ -81,12 +69,8 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
 
 proc addMessage*(message: cstring; kind: cint; color: cint = ord(
     white)) {.raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages
-  ##
-  ## PARAMETERS
   ##
   ## * message - The message to add
   ## * kind    - The kind of the message to add
@@ -97,31 +81,21 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
       color: color.MessageColor))
 
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Get the index of the last message in the messagesList
   ##
-  ## RETURNS
-  ##
-  ## The index of the last message in the messagesList
+  ## Returns the index of the last message in the messagesList
   return (messagesList.len() - 1).cint
 
 proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Get the selected message of the selected type
-  ##
-  ## PARAMETERS
   ##
   ## * messageIndex - The index of the message. If positive, it is the index from
   ##                  the begining. If negative it is the index from the last
   ##                  message
   ## * kind         - The type of the message to get
   ##
-  ## RETURNS
-  ##
-  ## The selected message data or empty message if the message with the selected
+  ## Returns the selected message data or empty message if the message with the selected
   ## index doesn't exist
   result = MessageDataC(message: "", kind: 0, color: 0)
   if messageIndex - 1 > messagesList.len():
@@ -158,23 +132,15 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
       return message
 
 proc clearMessages*() {.raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Remove all the in-game messages
   messagesList = @[]
 
 proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Get the amount of the messages of the selected type
-  ##
-  ## PARAMETERS
   ##
   ## * kind - The type of messages which amount will be get
   ##
-  ## RETURNS
-  ##
-  ## The amount of the selected type of messages
+  ## Returns the amount of the selected type of messages
   if kind == ord(default):
     return messagesList.len().cint
   result = 0
@@ -184,11 +150,7 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
 
 proc restoreMessage*(message: cstring; kind: cint = ord(default).cint;
     color: cint = ord(white).cint) {.raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Restore the selected message from the save file
-  ##
-  ## PARAMETERS
   ##
   ## * message - The text of the message to restore
   ## * kind    - The kind of the message to restore
