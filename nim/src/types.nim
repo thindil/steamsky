@@ -100,10 +100,10 @@ type
       cleanliness*: Natural ## The cleanliness level of the cabin
       quality*: Natural ## The quality level of the cabin
     of turret:
-      gunIndex*: Natural ## The index of the module used as gun in the turret
+      gunIndex*: int ## The index of the module used as gun in the turret
     of gun:
       damage*: Positive ## The damage of the gun
-      ammoIndex*: Natural ## The index of item from ship's cargo used as ammunition
+      ammoIndex*: int ## The index of item from ship's cargo used as ammunition
     of hull:
       installedModules*: Natural ## The amount of installed modules in the hull
       maxModules*: Positive ## The max amount of modules which the hull can hold
@@ -118,7 +118,7 @@ type
       coolingDown*: bool ## If true, the battering ram can't attack now
     of harpoonGun:
       duration*: Positive ## The duration bonus of the harpoon gun
-      harpoonIndex*: Natural ## The index of item from ship's cargo used as harpoon
+      harpoonIndex*: int ## The index of item from ship's cargo used as harpoon
     of any:
       data*: array[1..3, int] ## Various data for module, depends on module
     else:
