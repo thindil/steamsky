@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.3] - 2023-01-22
 
 ### Added
 - Button to open inventory to the crew member info dialog
