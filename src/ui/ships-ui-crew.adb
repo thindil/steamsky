@@ -262,7 +262,7 @@ package body Ships.UI.Crew is
            (Table => Crew_Table,
             Text => To_String(Source => Player_Ship.Crew(I).Name),
             Tooltip => "Show available crew member's options",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 1);
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 1);
          Add_Button
            (Table => Crew_Table,
             Text =>
@@ -279,7 +279,7 @@ package body Ships.UI.Crew is
               (Table => Crew_Table,
                Text => Get_Highest_Skill(Member_Index => I),
                Tooltip => "The highest skill of the selected crew member",
-               Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
+               Command => "ShowMemberInfo" & Positive'Image(I), Column => 3);
          else
             Add_Button
               (Table => Crew_Table,
@@ -292,13 +292,13 @@ package body Ships.UI.Crew is
                Tooltip =>
                  "The level of the " & Get(Widgt => Skill_Box) &
                  " of the selected crew member",
-               Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
+               Command => "ShowMemberInfo" & Positive'Image(I), Column => 3);
          end if;
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Health,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current health level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 4);
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
          Tired_Level :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
@@ -309,25 +309,25 @@ package body Ships.UI.Crew is
            (Table => Crew_Table, Value => Tired_Level,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current tired level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 5,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 5,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Thirst,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current thirst level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 6,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 6,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current hunger level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 7,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 7,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1),
             Max_Value => Skill_Range'Last,
             Tooltip => "The current morale level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 8,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 8,
             New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -1729,79 +1729,6 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Set_Priority_Command;
 
-   -- ****o* SUCrew/SUCrew.Show_Member_Menu_Command
-   -- FUNCTION
-   -- Show the menu with options for the selected crew member
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowMemberMenu memberindex
-   -- MemberIndex is the index of the crew member to show menu
-   -- SOURCE
-   function Show_Member_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Member_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Member: constant Member_Data :=
-        Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      Crew_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".membermenu",
-           Title => To_String(Source => Member.Name) & " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Crew_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Crew_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Crew_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Crew_Menu & ".info;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".info", Label => "Show more info about the crew member",
-         Command => "ShowMemberInfo " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".inventory", Label => "Show inventory of the crew member",
-         Command => "ShowMemberInventory " & CArgv.Arg(Argv => Argv, N => 1));
-      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
-        Player_Ship.Speed = DOCKED then
-         Add_Button
-           (Name => ".dismiss", Label => "Dismiss",
-            Command => "Dismiss " & CArgv.Arg(Argv => Argv, N => 1));
-      end if;
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog
-        (Dialog => Crew_Menu, Parent_Frame => ".", Relative_Y => 0.15);
-      return TCL_OK;
-   end Show_Member_Menu_Command;
-
    -- ****o* SUCrew/SUCrew.Show_Crew_Command
    -- FUNCTION
    -- Show the list of the player's ship crew to a player
@@ -2582,9 +2509,6 @@ package body Ships.UI.Crew is
          Ada_Command => Show_Crew_Skill_Info_Command'Access);
       Add_Command
         (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
-      Add_Command
-        (Name => "ShowMemberMenu",
-         Ada_Command => Show_Member_Menu_Command'Access);
       Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
       Add_Command
         (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
