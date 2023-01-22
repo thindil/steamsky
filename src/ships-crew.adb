@@ -646,6 +646,7 @@ package body Ships.Crew is
          Ship.Crew(I).Inventory :=
            Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       end loop Set_Ada_Crew_Loop;
+      Set_Ada_Modules(Ship => Ship);
       Set_Ada_Ship(Ship => Ship);
    end Update_Orders;
 
