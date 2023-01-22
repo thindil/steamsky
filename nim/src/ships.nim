@@ -180,10 +180,11 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
       module = ModuleData(mType: ModuleType2.cabin, cleanliness: adaModule.data[
           1], quality: adaModule.data[2])
     of ModuleType2.turret:
-      module = ModuleData(mType: ModuleType2.turret, gunIndex: adaModule.data[1])
+      module = ModuleData(mType: ModuleType2.turret, gunIndex: adaModule.data[
+          1] - 1)
     of ModuleType2.gun:
       module = ModuleData(mType: ModuleType2.gun, damage: adaModule.data[1],
-          ammoIndex: adaModule.data[2])
+          ammoIndex: adaModule.data[2] - 1)
     of ModuleType2.hull:
       module = ModuleData(mType: ModuleType2.hull,
           installedModules: adaModule.data[1], maxModules: adaModule.data[2])
@@ -199,12 +200,18 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
           damage2: adaModule.data[1], coolingDown: adaModule.data[2] == 1)
     of ModuleType2.harpoonGun:
       module = ModuleData(mType: ModuleType2.harpoonGun,
-          duration: adaModule.data[1], harpoonIndex: adaModule.data[2])
+          duration: adaModule.data[1], harpoonIndex: adaModule.data[2] - 1)
     of ModuleType2.any:
       module = ModuleData(mType: ModuleType2.any, data: [1: adaModule.data[
           1].int, 2: adaModule.data[2].int, 3: adaModule.data[3].int])
-    else:
-      discard
+    of ModuleType2.cargoRoom:
+      module = ModuleData(mType: ModuleType2.cargoRoom)
+    of ModuleType2.medicalRoom:
+      module = ModuleData(mType: ModuleType2.medicalRoom)
+    of ModuleType2.cockpit:
+      module = ModuleData(mType: ModuleType2.cockpit)
+    of ModuleType2.armor:
+      module = ModuleData(mType: ModuleType2.armor)
     module.name = $adaModule.name
     module.protoIndex = adaModule.protoIndex
     module.weight = adaModule.weight
@@ -217,7 +224,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
         break
       module.owner.add(y = owner - 1)
     if module.owner.len == 0:
-      module.owner.add(y = 0)
+      module.owner.add(y = -1)
     if getPlayerShip == 1:
       playerShip.modules.add(y = module)
     else:
@@ -409,13 +416,14 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
       secondIndex = 1
     case module.mType
     of ModuleType2.engine:
-      adaModule.data = [module.fuelUsage.cint, module.power.cint, (if module.disabled: 1 else: 0)]
+      adaModule.data = [module.fuelUsage.cint, module.power.cint, (
+          if module.disabled: 1 else: 0)]
     of ModuleType2.cabin:
       adaModule.data = [module.cleanliness.cint, module.quality.cint, 0]
     of ModuleType2.turret:
-      adaModule.data = [module.gunIndex.cint, 0.cint, 0.cint]
+      adaModule.data = [(module.gunIndex + 1).cint, 0.cint, 0.cint]
     of ModuleType2.gun:
-      adaModule.data = [module.damage.cint, module.ammoIndex.cint, 0.cint]
+      adaModule.data = [module.damage.cint, (module.ammoIndex + 1).cint, 0.cint]
     of ModuleType2.hull:
       adaModule.data = [module.installedModules.cint, module.maxModules.cint, 0.cint]
     of ModuleType2.workshop:
@@ -426,7 +434,7 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
     of ModuleType2.batteringRam:
       adaModule.data = [module.damage2.cint, (if module.coolingDown: 1 else: 0), 0.cint]
     of ModuleType2.harpoonGun:
-      adaModule.data = [module.duration.cint, module.harpoonIndex.cint, 0.cint]
+      adaModule.data = [module.duration.cint, (module.harpoonIndex + 1).cint, 0.cint]
     else:
       discard
     for owner in module.owner:
