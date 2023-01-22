@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 - Moved setting the player's ship's crew member's priorities to the crew
   member's info dialog
 - Updated modding guide
+- Show the info dialog with available actions instead of menu in the list
+  of the player's ship's crew members
 
 ### Fixed
 - Typos in changelog
