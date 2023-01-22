@@ -1347,27 +1347,28 @@ package body Ships is
       end loop Convert_Crew_Loop;
    end Set_Ada_Crew;
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Owners_Array is array(1 .. 10) of Integer;
+   type Module_Data_Array is array(1 .. 3) of Integer;
+   type Nim_Module_Data is record
+      Name: chars_ptr;
+      Proto_Index: Integer;
+      Weight: Integer;
+      Durability: Integer;
+      Max_Durability: Integer;
+      Owner: Owners_Array := (others => 0);
+      Upgrade_Progress: Integer;
+      Upgrade_Action: Integer;
+      M_Type: Integer := -1;
+      Data: Module_Data_Array;
+      Data_2: chars_ptr;
+   end record;
+   type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
+   --## rule on TYPE_INITIAL_VALUES
+
    procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship) is
       use Tiny_String;
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Owners_Array is array(1 .. 10) of Integer;
-      type Module_Data_Array is array(1 .. 3) of Integer;
-      type Nim_Module_Data is record
-         Name: chars_ptr;
-         Proto_Index: Integer;
-         Weight: Integer;
-         Durability: Integer;
-         Max_Durability: Integer;
-         Owner: Owners_Array := (others => 0);
-         Upgrade_Progress: Integer;
-         Upgrade_Action: Integer;
-         M_Type: Integer := -1;
-         Data: Module_Data_Array;
-         Data_2: chars_ptr;
-      end record;
-      type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
-      --## rule on TYPE_INITIAL_VALUES
       Nim_Modules: Nim_Modules_Array :=
         (others => Nim_Module_Data'(others => <>));
       Index, Index2: Positive := 1;
@@ -1498,7 +1499,6 @@ package body Ships is
       Set_Ada_Ship
         (N_Ship => Nim_Ship,
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      --## rule on IMPROPER_INITIALIZATION
       Ship.Name :=
         Tiny_String.To_Bounded_String(Source => Value(Item => Nim_Ship.Name));
       Ship.Sky_X := Nim_Ship.Sky_X;
@@ -1512,6 +1512,206 @@ package body Ships is
         Short_String.To_Bounded_String
           (Source => Value(Item => Nim_Ship.Description));
       Ship.Home_Base := Nim_Ship.Home_Base;
+      --## rule on IMPROPER_INITIALIZATION
    end Set_Ada_Ship;
+
+   procedure Set_Ada_Modules(Ship: in out Ship_Record) is
+      use Tiny_String;
+      use Interfaces.C;
+
+      Nim_Modules: Nim_Modules_Array :=
+        (others => Nim_Module_Data'(others => <>));
+      procedure Set_Ada_Ship_Modules
+        (N_Modules: in out Nim_Modules_Array; Is_Player_Ship: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaShipModules";
+   begin
+      Set_Ada_Ship_Modules
+        (N_Modules => Nim_Modules,
+         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Ship.Modules.Clear;
+      Convert_Modules_Loop :
+      for Module of Nim_Modules loop
+         exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
+         Convert_Module_Block :
+         declare
+            M_Type: constant Module_Type_2 := Module_Type_2'Val(Module.M_Type);
+            Temp_Module: Module_Data;
+            Owners: Natural_Container.Vector;
+         begin
+            Convert_Owners_Loop :
+            for Index in Module.Owner'Range loop
+               exit Convert_Owners_Loop when Index >
+                 Get_Module(Index => Module.Proto_Index).Max_Owners;
+               Owners.Append(New_Item => Module.Owner(Index));
+            end loop Convert_Owners_Loop;
+            if Owners.Length = 0 then
+               Owners.Append(New_Item => 0);
+            end if;
+            case M_Type is
+               when ENGINE =>
+                  Temp_Module :=
+                    (M_Type => ENGINE,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Power => Module.Data(2),
+                     Fuel_Usage => Module.Data(1),
+                     Disabled => (if Module.Data(3) = 1 then True else False));
+               when CABIN =>
+                  Temp_Module :=
+                    (M_Type => CABIN,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Cleanliness => Module.Data(1),
+                     Quality => Module.Data(2));
+               when TURRET =>
+                  Temp_Module :=
+                    (M_Type => TURRET,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Gun_Index => Module.Data(1));
+               when GUN =>
+                  Temp_Module :=
+                    (M_Type => GUN,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Damage => Module.Data(1),
+                     Ammo_Index => Module.Data(2));
+               when HULL =>
+                  Temp_Module :=
+                    (M_Type => HULL,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Installed_Modules => Module.Data(1),
+                     Max_Modules => Module.Data(2));
+               when WORKSHOP =>
+                  Temp_Module :=
+                    (M_Type => WORKSHOP,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Crafting_Time => Module.Data(1),
+                     Crafting_Amount => Module.Data(2),
+                     Crafting_Index =>
+                       To_Bounded_String
+                         (Source => Value(Item => Module.Data_2)));
+               when MEDICAL_ROOM =>
+                  Temp_Module :=
+                    (M_Type => MEDICAL_ROOM,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners);
+               when COCKPIT =>
+                  Temp_Module :=
+                    (M_Type => COCKPIT,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners);
+               when ARMOR =>
+                  Temp_Module :=
+                    (M_Type => ARMOR,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners);
+               when CARGO_ROOM =>
+                  Temp_Module :=
+                    (M_Type => CARGO_ROOM,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners);
+               when TRAINING_ROOM =>
+                  Temp_Module :=
+                    (M_Type => TRAINING_ROOM,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners,
+                     Trained_Skill => Count_Type(Module.Data(1)));
+               when BATTERING_RAM =>
+                  Temp_Module :=
+                    (M_Type => BATTERING_RAM,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Damage2 => Module.Data(1),
+                     Cooling_Down =>
+                       (if Module.Data(2) = 1 then True else False));
+               when HARPOON_GUN =>
+                  Temp_Module :=
+                    (M_Type => HARPOON_GUN,
+                     Name =>
+                       To_Bounded_String(Source => Value(Item => Module.Name)),
+                     Proto_Index => Module.Proto_Index,
+                     Weight => Module.Weight, Durability => Module.Durability,
+                     Max_Durability => Module.Max_Durability,
+                     Upgrade_Progress => Module.Upgrade_Progress,
+                     Upgrade_Action => Ship_Upgrade'Val(Module.Upgrade_Action),
+                     Owner => Owners, Duration => Module.Data(1),
+                     Harpoon_Index => Module.Data(2));
+               when others =>
+                  null;
+            end case;
+            Ship.Modules.Append(New_Item => Temp_Module);
+         end Convert_Module_Block;
+      end loop Convert_Modules_Loop;
+   end Set_Ada_Modules;
 
 end Ships;
