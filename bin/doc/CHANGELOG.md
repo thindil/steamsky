@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Updating the player's ship's crew member orders
+
 ## [8.3] - 2023-01-22
 
 ### Added
