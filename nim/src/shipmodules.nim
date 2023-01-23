@@ -40,7 +40,8 @@ type
 
 var modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
 
-proc loadModules*(fileName: string) =
+proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   let modulesXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
