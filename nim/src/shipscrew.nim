@@ -485,15 +485,19 @@ proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.exportc.} =
     updateMorale(ship = npcShip, memberIndex = memberIndex - 1, value = value)
 
 proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
-    checkPriorities: cint) {.exportc.} =
-  if isPlayerShip == 1:
-    giveOrders(ship = playerShip, memberIndex = memberIndex - 1,
-        givenOrder = givenOrder.CrewOrders, moduleIndex = moduleIndex - 1,
-        checkPriorities = (if checkPriorities == 1: true else: false))
-  else:
-    giveOrders(ship = npcShip, memberIndex = memberIndex - 1,
-        givenOrder = givenOrder.CrewOrders, moduleIndex = moduleIndex - 1,
-        checkPriorities = (if checkPriorities == 1: true else: false))
+  checkPriorities: cint): cstring {.exportc.} =
+  try:
+    if isPlayerShip == 1:
+      giveOrders(ship = playerShip, memberIndex = memberIndex - 1,
+          givenOrder = givenOrder.CrewOrders, moduleIndex = moduleIndex - 1,
+          checkPriorities = (if checkPriorities == 1: true else: false))
+    else:
+      giveOrders(ship = npcShip, memberIndex = memberIndex - 1,
+          givenOrder = givenOrder.CrewOrders, moduleIndex = moduleIndex - 1,
+          checkPriorities = (if checkPriorities == 1: true else: false))
+  except CrewOrderError:
+    return getCurrentExceptionMsg().cstring
+  return "".cstring
 
 proc updateAdaOrders(isPlayerShip, combat: cint) {.exportc.} =
   if isPlayerShip == 1:
