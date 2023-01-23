@@ -1516,7 +1516,6 @@ package body Ships is
    end Set_Ada_Ship;
 
    procedure Set_Ada_Modules(Ship: in out Ship_Record) is
-      use Tiny_String;
       use Interfaces.C;
 
       Nim_Modules: Nim_Modules_Array :=
@@ -1536,9 +1535,13 @@ package body Ships is
          exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
          Convert_Module_Block :
          declare
+            use Tiny_String;
+
             M_Type: constant Module_Type_2 := Module_Type_2'Val(Module.M_Type);
+            --## rule off IMPROPER_INITIALIZATION
             Temp_Module: Module_Data;
             Owners: Natural_Container.Vector;
+            --## rule on IMPROPER_INITIALIZATION
          begin
             Convert_Owners_Loop :
             for Index in Module.Owner'Range loop
