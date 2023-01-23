@@ -354,12 +354,12 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
           break
       if moduleIndex == -1:
         return false
-      if ship.crew[memberIndex].order != rest:
-        giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
-            moduleIndex = 0, checkPriorities = false)
-      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
-          moduleIndex = moduleIndex)
-      return true
+    if ship.crew[memberIndex].order != rest:
+      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
+          moduleIndex = 0, checkPriorities = false)
+    giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
+        moduleIndex = moduleIndex)
+    return true
 
   var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
     needCrafters, needClean, needRepairs, needTrader: bool = false
