@@ -42,6 +42,9 @@ var modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototyp
 
 proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## Load available prototypes of ship's modules from the data file
+  ##
+  ## * fileName - the path to the file with ship's modules data which will be loaded
   let modulesXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
