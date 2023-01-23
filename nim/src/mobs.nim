@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,11 +21,7 @@ import crafts, game, items, types, utils
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
     factionIndex: string): Natural {.sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the random index of the item of the selected type
-  ##
-  ## PARAMETERS
   ##
   ## * itemsIndexes     - the list of indexes of the items from which the index will be get
   ## * equipIndex       - the position of the item in equipment (like weapon, tools, etc)
@@ -33,9 +29,7 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
   ## * weaponSkillLevel - the index of the weapon skill for the selected mob
   ## * factionIndex     - the index of the faction to which the mob belongs
   ##
-  ## RETURNS
-  ##
-  ## The random index from the selected itemsIndexes list of 0 if the item
+  ## Returns the random index from the selected itemsIndexes list of 0 if the item
   ## can't be get
   var
     itemIndex, maxIndex: Natural
