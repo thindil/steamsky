@@ -25,6 +25,7 @@ with Crew.Inventory; use Crew.Inventory;
 with Utils; use Utils;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
+with Maps; use Maps;
 
 package body Ships.Crew is
 
@@ -610,11 +611,17 @@ package body Ships.Crew is
       Nim_Inventory: Nim_Inventory_Array;
       Nim_Cargo: Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
+      Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
       procedure Update_Ada_Orders(Get_Player_Ship, Comb: Natural) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaOrders";
    begin
+      Get_Ada_Map_Cell
+        (X => Ship.Sky_X, Y => Ship.Sky_Y, Base_Index => Map_Cell.Base_Index,
+         Visited => (if Map_Cell.Visited then 1 else 0),
+         Event_Index => Map_Cell.Event_Index,
+         Mission_Index => Map_Cell.Mission_Index);
       Get_Ada_Ship(Ship => Ship);
       Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo
