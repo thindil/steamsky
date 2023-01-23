@@ -16,24 +16,29 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with DOM.Core; use DOM.Core;
+with DOM.Core;
 with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
-with Ships; use Ships;
-with Crafts; use Crafts;
-with Items; use Items;
-with Utils; use Utils;
-with Statistics; use Statistics;
-with Messages; use Messages;
-with Missions; use Missions;
-with Factions; use Factions;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
+with Log;
+with Ships;
+with Crafts;
+with Items;
+with Utils;
+with Statistics;
+with Messages;
+with Missions;
+with Factions;
 with Game; use Game;
 
 package body Goals is
 
    procedure Load_Goals(Reader: Tree_Reader) is
+      use DOM.Core;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
+      use Log;
+
       Temp_Record: Goal_Data; --## rule line off IMPROPER_INITIALIZATION
       Nodes_List: Node_List;
       Goals_Data: Document;
@@ -131,6 +136,9 @@ package body Goals is
    end Load_Goals;
 
    function Goal_Text(Index: Goals_Container.Extended_Index) return String is
+      use Crafts;
+      use Missions;
+      use Factions;
       use Tiny_String;
 
       Text: Unbounded_String := Null_Unbounded_String;
@@ -225,6 +233,8 @@ package body Goals is
                     " ");
             when DESTROY =>
                Destroy_Ship_Block :
+               declare
+                  use Ships;
                begin
                   Destroy_Ship_Loop :
                   for I in Proto_Ships_List.Iterate loop
@@ -269,6 +279,8 @@ package body Goals is
                            To_String(Source => Goal.Target_Index))) then
                   Get_Item_Name_Block :
                   declare
+                     use Items;
+
                      Item_Index: constant Natural :=
                        Recipes_List
                          (To_Bounded_String
@@ -358,6 +370,10 @@ package body Goals is
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
+      use Messages;
+      use Statistics;
+      use Utils;
+
    begin
       if G_Type /= Current_Goal.G_Type then
          return;
