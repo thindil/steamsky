@@ -102,7 +102,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       moduleIndex > -1):
     var freePosition: bool = false
     for owner in ship.modules[moduleIndex].owner:
-      if owner == 0:
+      if owner == -1:
         freePosition = true
         break
     if not freePosition:
@@ -248,7 +248,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         addMessage(message = (memberName & " starts manufacturing.").cstring,
             kind = orderMessage.ord.cint)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
-          if owner == 0:
+          if owner == -1:
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
       of upgrading:
@@ -265,7 +265,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
             kind = orderMessage.ord.cint)
         if moduleIndex > -1:
           for index, owner in ship.modules[moduleIndex].owner.pairs:
-            if owner == 0:
+            if owner == -1:
               ship.modules[moduleIndex2].owner[index] = memberIndex
               break
       of clean:
@@ -283,7 +283,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         addMessage(message = (memberName &
             " starts personal training.").cstring, kind = orderMessage.ord.cint)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
-          if owner == 0:
+          if owner == -1:
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
   ship.crew[memberIndex].order = givenOrder
