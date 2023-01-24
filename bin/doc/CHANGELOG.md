@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated icon for unchecked options, for example, the random game's difficulty
+
 ### Fixed
 - Updating the player's ship's crew member orders
 
