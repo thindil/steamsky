@@ -15,16 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions; use Ada.Exceptions;
+with Interfaces.C.Strings;
 with Crafts;
 with Messages; use Messages;
 with HallOfFame; use HallOfFame;
-with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
-with Crew.Inventory; use Crew.Inventory;
 with Utils; use Utils;
 with Missions; use Missions;
-with ShipModules; use ShipModules;
 with Maps; use Maps;
 
 package body Ships.Crew is
@@ -200,410 +197,69 @@ package body Ships.Crew is
       Given_Order: Crew_Orders;
       Module_Index: Modules_Container.Extended_Index := 0;
       Check_Priorities: Boolean := True) is
-      use Tiny_String;
+      use Interfaces.C;
+      use Interfaces.C.Strings;
 
-      Member_Name: constant String :=
-        To_String(Source => Ship.Crew(Member_Index).Name);
-      Tools_Index: Inventory_Container.Extended_Index := 0;
-      Required_Tool: Bounded_String;
-      Tool_Quality: Items_Durability := Default_Item_Durability;
-      Module_Index_2: Modules_Container.Extended_Index := 0;
+      Nim_Inventory: Nim_Inventory_Array;
+      Nim_Cargo: Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Ship.Cargo);
+      Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
+      Message: chars_ptr;
+      function Give_Ada_Orders
+        (Get_Player_Ship, M_Index, G_Order, Mod_Index, Priorities: Natural)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "giveAdaOrders";
    begin
-      if Given_Order = Ship.Crew(Member_Index).Order then
-         if Given_Order in CRAFT | GUNNER then
-            Give_Orders_Modules_Loop :
-            for I in Ship.Modules.Iterate loop
-               if Modules_Container.To_Index(Position => I) = Module_Index then
-                  Owners_Loop :
-                  for Owner of Ship.Modules(I).Owner loop
-                     if Owner = Member_Index then
-                        return;
-                     end if;
-                  end loop Owners_Loop;
-               end if;
-            end loop Give_Orders_Modules_Loop;
-         else
-            return;
-         end if;
-      end if;
-      if Given_Order /= REST and
-        ((Ship.Crew(Member_Index).Morale(1) < 11 and
-          Get_Random(Min => 1, Max => 100) < 50) or
-         Ship.Crew(Member_Index).Loyalty < 20) then
+      Get_Ada_Map_Cell
+        (X => Ship.Sky_X, Y => Ship.Sky_Y, Base_Index => Map_Cell.Base_Index,
+         Visited => (if Map_Cell.Visited then 1 else 0),
+         Event_Index => Map_Cell.Event_Index,
+         Mission_Index => Map_Cell.Mission_Index);
+      Get_Ada_Ship(Ship => Ship);
+      Get_Ada_Modules(Ship => Ship);
+      Get_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew_Loop :
+      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         Get_Ada_Crew_Inventory
+           (Inventory => Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory),
+            Member_Index => I,
+            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      end loop Get_Ada_Crew_Loop;
+      Message :=
+        Give_Ada_Orders
+          (Get_Player_Ship => (if Ship = Player_Ship then 1 else 0),
+           M_Index => Member_Index, G_Order => Crew_Orders'Pos(Given_Order),
+           Mod_Index => Module_Index,
+           Priorities => (if Check_Priorities then 1 else 0));
+      if Strlen(Item => Message) > 0 then
          if Ship = Player_Ship then
-            raise Crew_Order_Error
-              with Member_Name & " refuses to execute order.";
+            raise Crew_Order_Error with Value(Item => Message);
          else
             return;
          end if;
       end if;
-      if Given_Order = TRAIN
-        and then Ship.Modules(Module_Index).Trained_Skill = 0 then
-         raise Crew_Order_Error
-           with Member_Name & " can't start training because " &
-           To_String(Source => Ship.Modules(Module_Index).Name) &
-           " isn't prepared.";
-      end if;
-      if Given_Order in PILOT | ENGINEER | UPGRADING | TALK then
-         Give_Crew_Orders_Loop :
-         for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-            if Ship.Crew(I).Order = Given_Order then
-               Give_Orders
-                 (Ship => Player_Ship, Member_Index => I, Given_Order => REST,
-                  Module_Index => 0, Check_Priorities => False);
-               exit Give_Crew_Orders_Loop;
-            end if;
-         end loop Give_Crew_Orders_Loop;
-      elsif (Given_Order in GUNNER | CRAFT | TRAIN) or
-        (Given_Order = HEAL and Module_Index > 0) then
-         Find_Free_Position_Block :
-         declare
-            Free_Position: Boolean := False;
-         begin
-            Free_Position_Loop :
-            for Owner of Ship.Modules(Module_Index).Owner loop
-               if Owner = 0 then
-                  Free_Position := True;
-                  exit Free_Position_Loop;
-               end if;
-            end loop Free_Position_Loop;
-            if not Free_Position then
-               Give_Orders
-                 (Ship => Player_Ship,
-                  Member_Index => Ship.Modules(Module_Index).Owner(1),
-                  Given_Order => REST, Module_Index => 0,
-                  Check_Priorities => False);
-            end if;
-         end Find_Free_Position_Block;
-      end if;
-      if Module_Index = 0 and (Given_Order in PILOT | ENGINEER | REST) then
-         Find_Order_Module_Block :
-         declare
-            M_Type: constant Module_Type :=
-              (case Given_Order is when PILOT => COCKPIT,
-                 when ENGINEER => ENGINE, when REST => CABIN,
-                 when others => ENGINE);
-         begin
-            Modules_Loop :
-            for I in Ship.Modules.Iterate loop
-               if M_Type /= CABIN then
-                  if Get_Module(Index => Ship.Modules(I).Proto_Index).M_Type =
-                    M_Type and
-                    Ship.Modules(I).Durability > 0 then
-                     if Ship.Modules(I).Owner(1) /= 0 then
-                        Give_Orders
-                          (Ship => Player_Ship,
-                           Member_Index => Ship.Modules(I).Owner(1),
-                           Given_Order => REST, Module_Index => 0,
-                           Check_Priorities => False);
-                     end if;
-                     Module_Index_2 :=
-                       Modules_Container.To_Index(Position => I);
-                     exit Modules_Loop;
-                  end if;
-               else
-                  if Ship.Modules(I).M_Type = CABIN and
-                    Ship.Modules(I).Durability > 0 then
-                     Cabin_Owners_Loop :
-                     for Owner of Ship.Modules(I).Owner loop
-                        if Member_Index = Owner then
-                           Module_Index_2 :=
-                             Modules_Container.To_Index(Position => I);
-                           exit Modules_Loop;
-                        end if;
-                     end loop Cabin_Owners_Loop;
-                  end if;
-               end if;
-            end loop Modules_Loop;
-         end Find_Order_Module_Block;
-      else
-         Module_Index_2 := Module_Index;
-      end if;
-      if Module_Index_2 = 0 and Ship = Player_Ship then
-         case Given_Order is
-            when PILOT =>
-               raise Crew_Order_Error
-                 with Member_Name &
-                 " can't start piloting because the cockpit is destroyed or you don't have cockpit.";
-            when ENGINEER =>
-               raise Crew_Order_Error
-                 with Member_Name &
-                 " can't start engineer's duty because all of the engines are destroyed or you don't have engine.";
-            when GUNNER =>
-               raise Crew_Order_Error
-                 with Member_Name &
-                 " can't start operating gun because all of the guns are destroyed or you don't have any installed.";
-            when REST =>
-               Modules_2_Loop :
-               for Module of Ship.Modules loop
-                  if Module.M_Type = CABIN and Module.Durability > 0 then
-                     Owners_2_Loop :
-                     for Owner of Module.Owner loop
-                        if Owner = 0 then
-                           Owner := Member_Index;
-                           Add_Message
-                             (Message =>
-                                Member_Name & " takes " &
-                                To_String(Source => Module.Name) &
-                                " as their own cabin.",
-                              M_Type => OTHERMESSAGE);
-                           exit Modules_2_Loop;
-                        end if;
-                     end loop Owners_2_Loop;
-                  end if;
-               end loop Modules_2_Loop;
-            when others =>
-               null;
-         end case;
-      end if;
-      Modules_3_Loop :
-      for Module of Ship.Modules loop
-         if Module.M_Type /= CABIN then
-            Owners_3_Loop :
-            for Owner of Module.Owner loop
-               if Owner = Member_Index then
-                  Owner := 0;
-                  exit Modules_3_Loop;
-               end if;
-            end loop Owners_3_Loop;
-         end if;
-      end loop Modules_3_Loop;
-      if Tools_Index > 0 and
-        Ship.Crew(Member_Index).Equipment(TOOL) /= Tools_Index then
-         Update_Inventory
-           (Member_Index => Member_Index, Amount => 1,
-            Proto_Index =>
-              Inventory_Container.Element
-                (Container => Ship.Cargo, Index => Tools_Index)
-                .Proto_Index,
-            Durability =>
-              Inventory_Container.Element
-                (Container => Ship.Cargo, Index => Tools_Index)
-                .Durability,
-            Ship => Ship);
-         Update_Cargo(Ship => Ship, Amount => -1, Cargo_Index => Tools_Index);
-         Ship.Crew(Member_Index).Equipment(TOOL) :=
-           Find_Item
-             (Inventory => Ship.Crew(Member_Index).Inventory,
-              Item_Type => Required_Tool);
-      end if;
-      Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
-      if Tools_Index > 0
-        and then
-          Get_Proto_Item
-            (Index =>
-               Inventory_Container.Element
-                 (Container => Ship.Crew(Member_Index).Inventory,
-                  Index => Tools_Index)
-                 .Proto_Index)
-            .I_Type /=
-          Required_Tool then
-         Update_Cargo
-           (Ship => Ship,
-            Proto_Index =>
-              Inventory_Container.Element
-                (Container => Ship.Crew(Member_Index).Inventory,
-                 Index => Tools_Index)
-                .Proto_Index,
-            Amount => 1,
-            Durability =>
-              Inventory_Container.Element
-                (Container => Ship.Crew(Member_Index).Inventory,
-                 Index => Tools_Index)
-                .Durability);
-         Update_Inventory
-           (Member_Index => Member_Index, Amount => -1,
-            Inventory_Index => Tools_Index, Ship => Ship);
-         Tools_Index := 0;
-      end if;
-      if Given_Order in UPGRADING | REPAIR | CLEAN |
-            TRAIN then -- Check for tools
-         if Given_Order = CLEAN then
-            Required_Tool := Cleaning_Tools;
-         elsif Given_Order = TRAIN then
-            Required_Tool :=
-              SkillsData_Container.Element
-                (Container => Skills_List,
-                 Index => Ship.Modules(Module_Index).Trained_Skill)
-                .Tool;
-            Tool_Quality :=
-              Get_Training_Tool_Quality
-                (Member_Index => Member_Index,
-                 Skill_Index =>
-                   Natural(Ship.Modules(Module_Index).Trained_Skill));
-         else
-            Required_Tool := Repair_Tools;
-         end if;
-         if Required_Tool /= Null_Bounded_String then
-            if Tools_Index = 0 then
-               Tools_Index :=
-                 Find_Item
-                   (Inventory => Ship.Cargo, Item_Type => Required_Tool,
-                    Quality => Tool_Quality);
-               if Tools_Index = 0 then
-                  Tools_Index :=
-                    Find_Item
-                      (Inventory => Ship.Crew(Member_Index).Inventory,
-                       Item_Type => Required_Tool, Quality => Tool_Quality);
-                  if Tools_Index > 0 then
-                     Ship.Crew(Member_Index).Equipment(TOOL) := Tools_Index;
-                  end if;
-               else
-                  Ship.Crew(Member_Index).Equipment(TOOL) := 0;
-               end if;
-            end if;
-            if Tools_Index = 0 then
-               case Given_Order is
-                  when REPAIR =>
-                     raise Crew_Order_Error
-                       with Member_Name &
-                       " can't start repairing ship because you don't have the proper tools.";
-                  when CLEAN =>
-                     raise Crew_Order_Error
-                       with Member_Name &
-                       " can't start cleaning ship because you don't have any cleaning tools.";
-                  when UPGRADING =>
-                     raise Crew_Order_Error
-                       with Member_Name &
-                       " can't start upgrading module because you don't have the proper tools.";
-                  when TRAIN =>
-                     raise Crew_Order_Error
-                       with Member_Name &
-                       " can't start training because you don't have the proper tools.";
-                  when others =>
-                     return;
-               end case;
-            end if;
-         end if;
-      end if;
-      if Given_Order = REST then
-         Ship.Crew(Member_Index).Previous_Order := REST;
-         if Ship.Crew(Member_Index).Order in REPAIR | CLEAN | UPGRADING |
-               TRAIN then
-            Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
-            if Tools_Index > 0 then
-               Update_Cargo
-                 (Ship => Ship,
-                  Proto_Index =>
-                    Inventory_Container.Element
-                      (Container => Ship.Crew(Member_Index).Inventory,
-                       Index => Tools_Index)
-                      .Proto_Index,
-                  Amount => 1,
-                  Durability =>
-                    Inventory_Container.Element
-                      (Container => Ship.Crew(Member_Index).Inventory,
-                       Index => Tools_Index)
-                      .Durability);
-               Update_Inventory
-                 (Member_Index => Member_Index, Amount => -1,
-                  Inventory_Index => Tools_Index, Ship => Ship);
-            end if;
-         end if;
-      end if;
-      if Ship = Player_Ship then
-         case Given_Order is
-            when PILOT =>
-               Add_Message
-                 (Message => Member_Name & " starts piloting.",
-                  M_Type => ORDERMESSAGE);
-               Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
-            when ENGINEER =>
-               Add_Message
-                 (Message => Member_Name & " starts engineer's duty.",
-                  M_Type => ORDERMESSAGE);
-            when GUNNER =>
-               Add_Message
-                 (Message => Member_Name & " starts operating gun.",
-                  M_Type => ORDERMESSAGE);
-               Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
-            when REST =>
-               Add_Message
-                 (Message => Member_Name & " is going on a break.",
-                  M_Type => ORDERMESSAGE);
-            when REPAIR =>
-               Add_Message
-                 (Message => Member_Name & " starts repairing ship.",
-                  M_Type => ORDERMESSAGE);
-            when CRAFT =>
-               Add_Message
-                 (Message => Member_Name & " starts manufacturing.",
-                  M_Type => ORDERMESSAGE);
-               Find_Owner_Loop :
-               for Owner of Ship.Modules(Module_Index_2).Owner loop
-                  if Owner = 0 then
-                     Owner := Member_Index;
-                     exit Find_Owner_Loop;
-                  end if;
-               end loop Find_Owner_Loop;
-            when UPGRADING =>
-               Add_Message
-                 (Message =>
-                    Member_Name & " starts upgrading " &
-                    To_String
-                      (Source => Ship.Modules(Ship.Upgrade_Module).Name) &
-                    ".",
-                  M_Type => ORDERMESSAGE);
-            when TALK =>
-               Add_Message
-                 (Message =>
-                    Member_Name & " is now assigned to talking in bases.",
-                  M_Type => ORDERMESSAGE);
-            when HEAL =>
-               Add_Message
-                 (Message =>
-                    Member_Name & " starts healing wounded crew members.",
-                  M_Type => ORDERMESSAGE);
-               if Module_Index > 0 then
-                  Find_Owner_2_Loop :
-                  for Owner of Ship.Modules(Module_Index).Owner loop
-                     if Owner = 0 then
-                        Owner := Member_Index;
-                        exit Find_Owner_2_Loop;
-                     end if;
-                  end loop Find_Owner_2_Loop;
-               end if;
-            when CLEAN =>
-               Add_Message
-                 (Message => Member_Name & " starts cleaning ship.",
-                  M_Type => ORDERMESSAGE);
-            when BOARDING =>
-               Add_Message
-                 (Message => Member_Name & " starts boarding the enemy ship.",
-                  M_Type => ORDERMESSAGE);
-            when DEFEND =>
-               Add_Message
-                 (Message => Member_Name & " starts defending the ship.",
-                  M_Type => ORDERMESSAGE);
-            when TRAIN =>
-               Add_Message
-                 (Message => Member_Name & " starts personal training.",
-                  M_Type => ORDERMESSAGE);
-               Find_Owner_3_Loop :
-               for Owner of Ship.Modules(Module_Index_2).Owner loop
-                  if Owner = 0 then
-                     Owner := Member_Index;
-                     exit Find_Owner_3_Loop;
-                  end if;
-               end loop Find_Owner_3_Loop;
-         end case;
-      end if;
-      Ship.Crew(Member_Index).Order := Given_Order;
-      Ship.Crew(Member_Index).Order_Time := 15;
-      if Given_Order /= REST then
-         Update_Morale
-           (Ship => Ship, Member_Index => Member_Index, Value => -1);
-      end if;
-      if Check_Priorities then
-         Update_Orders(Ship => Ship);
-      end if;
-   exception
-      when An_Exception : Crew_No_Space_Error =>
-         if Ship = Player_Ship then
-            raise Crew_Order_Error with Exception_Message(X => An_Exception);
-         else
-            return;
-         end if;
+      Set_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Inventory_Container.Assign
+        (Target => Ship.Cargo,
+         Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
+      Set_Ada_Crew(Ship => Ship);
+      Set_Ada_Crew_Loop :
+      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         Set_Ada_Crew_Inventory
+           (Inventory => Nim_Inventory, Member_Index => I,
+            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+         Ship.Crew(I).Inventory :=
+           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
+      end loop Set_Ada_Crew_Loop;
+      Set_Ada_Modules(Ship => Ship);
+      Set_Ada_Ship(Ship => Ship);
    end Give_Orders;
 
    procedure Update_Orders
