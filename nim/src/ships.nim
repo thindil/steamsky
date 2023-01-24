@@ -23,18 +23,12 @@ var
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
-  ## FUNCTION
-  ##
   ## Get the description of quality of the selected cabin in the player's ship
-  ##
-  ## PARAMETERS
   ##
   ## * quality - The numerical value of the cabin's quality which will be
   ##             converted to string
   ##
-  ## RETURNS
-  ##
-  ## The string with the description of the cabin's quality
+  ## Returns the string with the description of the cabin's quality
   case quality
   of 0..10:
     return "Empty room"
@@ -59,18 +53,12 @@ func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], ex
 
 proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Generate the name for the ship, based on its owner's faction. Based
   ## on libtcod names generator
   ##
-  ## PARAMETERS
-  ##
   ## * factionIndex - the index of the faction to which the ship belongs
   ##
-  ## RETURNS
-  ##
-  ## The randomly generated name of the ship
+  ## Returns the randomly generated name of the ship
   try:
     if factionsList[factionIndex].namesType == robotic:
       return $generateRoboticName()
