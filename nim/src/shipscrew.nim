@@ -75,6 +75,17 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
     checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
     KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
+  ## Give the selected order to the selected crew member and update orders of
+  ## the whole crew if needed
+  ##
+  ## * ship            - the ship in which the crew member will have given order
+  ## * memberIndex     - the index of the crew member which will have given order
+  ## * givenOrder      - the order to give to the crew member
+  ## * moduleIndex     - the index of module related to the order. Can be empty.
+  ##                     Default value is -1.
+  ## * checkPriorities - if true, update orders of the crew after succesfully
+  ##                     assigned the selected order. Can be empty. Default value
+  ##                     is true.
   if givenOrder == ship.crew[memberIndex].order:
     if givenOrder in [craft, gunner]:
       for index, module in ship.modules.pairs:
