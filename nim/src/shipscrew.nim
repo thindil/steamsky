@@ -73,7 +73,8 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false)
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
-    checkPriorities: bool = true) =
+    checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
+    KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
   if givenOrder == ship.crew[memberIndex].order:
     if givenOrder in [craft, gunner]:
       for index, module in ship.modules.pairs:
@@ -152,7 +153,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
                   addMessage(message = (memberName & " takes " & module.name &
                       " as their own cabin.").cstring,
                       kind = otherMessage.ord.cint)
-                  break take_cabin
+                  break takeCabin
       else:
         discard
   block releaseModule:
@@ -495,7 +496,7 @@ proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
       giveOrders(ship = npcShip, memberIndex = memberIndex - 1,
           givenOrder = givenOrder.CrewOrders, moduleIndex = moduleIndex - 1,
           checkPriorities = (if checkPriorities == 1: true else: false))
-  except CrewOrderError:
+  except:
     return getCurrentExceptionMsg().cstring
   return "".cstring
 
