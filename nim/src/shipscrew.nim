@@ -108,7 +108,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     if not freePosition:
       giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[0],
           givenOrder = rest, moduleIndex = -1, checkPriorities = false)
-  var moduleIndex2 = 0
+  var moduleIndex2 = -1
   if moduleIndex == -1 and givenOrder in [pilot, engineer, rest]:
     let mType: ModuleType = case givenOrder
       of pilot:
@@ -122,7 +122,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     for index, module in ship.modules.pairs:
       if mType != ModuleType.cabin:
         if modulesList[module.protoIndex].mType == mType and module.durability > 0:
-          if module.owner[0] > 0:
+          if module.owner[0] > -1:
             giveOrders(ship = ship, memberIndex = module.owner[0],
                 givenOrder = rest, moduleIndex = -1, checkPriorities = false)
           moduleIndex2 = index
@@ -135,7 +135,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
               break
   else:
     moduleIndex2 = moduleIndex
-  if moduleIndex2 == 0 and ship.crew == playerShip.crew:
+  if moduleIndex2 == -1 and ship.crew == playerShip.crew:
     case givenOrder
       of pilot:
         raise newException(exceptn = CrewOrderError, message = memberName & " can't start piloting because the cockpit is destroyed or you don't have cockpit.")
@@ -148,7 +148,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           for index, module in ship.modules.pairs:
             if module.mType == ModuleType2.cabin and module.durability > 0:
               for i, owner in module.owner.pairs:
-                if owner == 0:
+                if owner == -1:
                   ship.modules[index].owner[i] = memberIndex;
                   addMessage(message = (memberName & " takes " & module.name &
                       " as their own cabin.").cstring,
@@ -161,12 +161,12 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       if module.mType != ModuleType2.cabin:
         for i, owner in module.owner.pairs:
           if owner == memberIndex:
-            ship.modules[index].owner[i] = 0
+            ship.modules[index].owner[i] = -1
             break releaseModule
   var
-    toolsIndex = 0
+    toolsIndex = -1
     requiredTool = ""
-  if toolsIndex > 0 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
+  if toolsIndex > -1 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
     updateInventory(memberIndex = memberIndex, amount = 1,
         protoIndex = ship.cargo[toolsIndex].protoIndex, durability = ship.cargo[
         toolsIndex].durability, ship = ship)
@@ -181,7 +181,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         memberIndex].inventory[toolsIndex].durability)
     updateInventory(memberIndex = memberIndex, amount = -1,
         inventoryIndex = toolsIndex, ship = ship)
-    toolsIndex = 0
+    toolsIndex = -1
   var toolQuality = defaultItemDurability
   if givenOrder in [upgrading, repair, clean, train]:
     if givenOrder == clean:
@@ -193,17 +193,17 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     else:
       requiredTool = repairTools
     if requiredTool.len > 0:
-      if toolsIndex == 0:
+      if toolsIndex == -1:
         toolsIndex = findItem(inventory = ship.cargo, itemType = requiredTool,
             quality = toolQuality)
-        if toolsIndex == 0:
+        if toolsIndex == -1:
           toolsIndex = findItem(inventory = ship.crew[memberIndex].inventory,
               itemType = requiredTool, quality = toolQuality)
-          if toolsIndex > 0:
+          if toolsIndex > -1:
             ship.crew[memberIndex].equipment[tool] = toolsIndex
         else:
-          ship.crew[memberIndex].equipment[tool] = 0
-      if toolsIndex == 0:
+          ship.crew[memberIndex].equipment[tool] = -1
+      if toolsIndex == -1:
         case givenOrder
           of repair:
             raise newException(exceptn = CrewOrderError, message = memberName & " can't start repairing ship because you don't have the proper tools.")
@@ -219,7 +219,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     ship.crew[memberIndex].previousOrder = rest
     if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
       toolsIndex = ship.crew[memberIndex].equipment[tool]
-      if toolsIndex > 0:
+      if toolsIndex > -1:
         updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
             toolsIndex].protoIndex, amount = 1, durability = ship.crew[
             memberIndex].inventory[toolsIndex].durability)
@@ -320,19 +320,19 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
         if module.durability > 0:
           case module.mType
             of ModuleType2.gun:
-              if order == gunner and module.owner[0] == 0:
+              if order == gunner and module.owner[0] == -1:
                 moduleIndex = index
                 break
             of ModuleType2.workshop:
               if order == craft and module.craftingIndex.len > 0:
                 for owner in module.owner:
-                  if owner == 0:
+                  if owner == -1:
                     moduleIndex = index
                     break
             of ModuleType2.medicalRoom:
               if order == heal:
                 for owner in module.owner:
-                  if owner == 0:
+                  if owner == -1:
                     moduleIndex = index
                     break
             of ModuleType2.cockpit:
@@ -346,7 +346,7 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
             of ModuleType2.trainingRoom:
               if order == train and module.trainedSkill > 0:
                 for owner in module.owner:
-                  if owner == 0:
+                  if owner == -1:
                     moduleIndex = index
                     break
             else:
@@ -357,7 +357,7 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
         return false
     if ship.crew[memberIndex].order != rest:
       giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
-          moduleIndex = 0, checkPriorities = false)
+          moduleIndex = -1, checkPriorities = false)
     giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
         moduleIndex = moduleIndex)
     return true
@@ -384,12 +384,12 @@ proc updateOrders(ship: var ShipRecord; combat: bool = false) =
     if module.durability > 0:
       case module.mType
         of ModuleType2.gun:
-          if module.owner[0] == 0 and not needGunners:
+          if module.owner[0] == -1 and not needGunners:
             needGunners = true
         of ModuleType2.workshop:
           if module.craftingIndex.len > 0 and not needCrafters:
             for owner in module.owner:
-              if owner == 0:
+              if owner == -1:
                 needCrafters = true
                 break
         of ModuleType2.cabin:
