@@ -138,7 +138,6 @@ package body Goals is
    function Goal_Text(Index: Goals_Container.Extended_Index) return String is
       use Crafts;
       use Missions;
-      use Factions;
       use Tiny_String;
 
       Text: Unbounded_String := Null_Unbounded_String;
@@ -151,6 +150,8 @@ package body Goals is
       function Get_Faction_Name
         (Faction_Index: Bounded_String; F_Type: Faction_Name_Type)
          return String is
+         use Factions;
+
          Faction: constant Faction_Record :=
            Get_Faction(Index => Faction_Index);
       begin
