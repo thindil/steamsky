@@ -98,7 +98,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
             moduleIndex = -1, checkPriorities = false)
         break
   elif givenOrder in [gunner, craft, train] or (givenOrder == heal and
-      moduleIndex > 0):
+      moduleIndex > -1):
     var freePosition: bool = false
     for owner in ship.modules[moduleIndex].owner:
       if owner == 0:
@@ -108,7 +108,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[0],
           givenOrder = rest, moduleIndex = -1, checkPriorities = false)
   var moduleIndex2 = 0
-  if moduleIndex == 0 and givenOrder in [pilot, engineer, rest]:
+  if moduleIndex == -1 and givenOrder in [pilot, engineer, rest]:
     let mType: ModuleType = case givenOrder
       of pilot:
         ModuleType.cockpit
@@ -123,7 +123,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         if modulesList[module.protoIndex].mType == mType and module.durability > 0:
           if module.owner[0] > 0:
             giveOrders(ship = ship, memberIndex = module.owner[0],
-                givenOrder = rest, moduleIndex = 0, checkPriorities = false)
+                givenOrder = rest, moduleIndex = -1, checkPriorities = false)
           moduleIndex2 = index
           break
       else:
@@ -262,7 +262,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         addMessage(message = (memberName &
             " starts healing wounded crew members.").cstring,
             kind = orderMessage.ord.cint)
-        if moduleIndex > 0:
+        if moduleIndex > -1:
           for index, owner in ship.modules[moduleIndex].owner.pairs:
             if owner == 0:
               ship.modules[moduleIndex2].owner[index] = memberIndex
