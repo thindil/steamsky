@@ -18,7 +18,7 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
     1, 0, 0], order: talk, loyalty: 100))
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
-    homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 1, 1, 1,
+    homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
     1, 0, 0], order: gunner, loyalty: 100))
 skyMap[1][1].baseIndex = 1
 
@@ -30,10 +30,12 @@ assert playerShip.crew[0].morale[2] == oldMorale + 1 or playerShip.crew[
 updateMorale(playerShip, 0, -1)
 assert playerShip.crew[0].morale[2] == oldMorale
 
-updateMorale(playerShip, 0, 10)
 giveOrders(playerShip, 0, rest)
 assert playerShip.crew[0].order == talk
 
-updateMorale(playerShip, 1, 10)
 giveOrders(playerShip, 1, rest)
 assert playerShip.crew[1].order == rest
+
+giveOrders(playerShip, 0, rest, -1, false)
+updateOrders(playerShip)
+assert playerShip.crew[0].order == talk
