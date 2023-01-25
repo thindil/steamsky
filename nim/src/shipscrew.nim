@@ -86,6 +86,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
   ## * checkPriorities - if true, update orders of the crew after succesfully
   ##                     assigned the selected order. Can be empty. Default value
   ##                     is true.
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
   if givenOrder == ship.crew[memberIndex].order:
     if givenOrder in [craft, gunner]:
       for index, module in ship.modules.pairs:
@@ -304,10 +306,12 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
   if checkPriorities:
     updateOrders(ship = ship)
 
-proc updateOrders(ship: var ShipRecord; combat: bool = false) =
+proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
+    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
 
   proc updatePosition(ship: var ShipRecord; order: CrewOrders;
-      maxPriority: bool = true): bool =
+      maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
+      KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
     var
       orderIndex: Natural
       memberIndex, moduleIndex: int = -1
