@@ -114,8 +114,7 @@ package Ships.Crew is
       Check_Priorities: Boolean := True) with
       Pre =>
       (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-       Module_Index <= Ship.Modules.Last_Index),
-      Test_Case => (Name => "Test_GiveOrders", Mode => Nominal);
+       Module_Index <= Ship.Modules.Last_Index);
       -- ****
 
       -- ****f* SCrew/SCrew.Update_Orders
