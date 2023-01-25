@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,6 +37,14 @@ package Help is
       Index: Unbounded_String;
       Text: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* Help/Help.Empty_Help
+   -- FUNCTION
+   -- Default value for Help_Data, an empty help entry
+   -- SOURCE
+   Empty_Help: constant Help_Data :=
+     (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
    -- ****
 
    -- ****t* Help/Help.Help_Container
