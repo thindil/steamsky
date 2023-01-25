@@ -308,6 +308,14 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
 
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
+  ## Update the orders of the crew of the selected ship, based on the crew
+  ## members orders' priorities
+  ##
+  ## * ship   - the ship of which crew's orders will be updated
+  ## * combat - if true, the orders update takes place in a combat. Default
+  ##            value is false.
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
 
   proc updatePosition(ship: var ShipRecord; order: CrewOrders;
       maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
