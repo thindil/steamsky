@@ -126,9 +126,7 @@ package Ships.Crew is
       -- RESULT
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
-   procedure Update_Orders
-     (Ship: in out Ship_Record; Combat: Boolean := False) with
-      Test_Case => (Name => "Test_UpdateOrders", Mode => Robustness);
+   procedure Update_Orders(Ship: in out Ship_Record; Combat: Boolean := False);
       -- ****
 
       -- ****f* SCrew/SCrew.Update_Morale
