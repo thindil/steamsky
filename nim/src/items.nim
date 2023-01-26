@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import config, crafts, game, log, types
+import config, game, log, types
 
 var
   weaponsList*: seq[Positive]
