@@ -16,22 +16,22 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, ships, types
+import game, log, messages, ships, shipscrew, types
 
 type
   CraftData = object
     ## Used to store information about crafting recipes
     materialTypes: seq[string] ## The list of materials types used in crafting
     materialAmounts: seq[Positive] ## The list of materials amount used in crafting
-    resultIndex: Natural ## The index of proto item which is the result of the recipe
-    resultAmount: Natural ## The amount of items produced by one recipe
-    workplace: ModuleType ## The type of ship's module used as a workshop for the recipe
-    skill*: Natural ## The index of the skill used in crafting
-    time: Positive ## The amount of minutes needed to finish the recipe
-    difficulty: Positive ## The difficulty level of the recipe
-    tool*: string ## The type of item used as a tool in crafting
+    resultIndex: Natural       ## The index of proto item which is the result of the recipe
+    resultAmount: Natural      ## The amount of items produced by one recipe
+    workplace: ModuleType      ## The type of ship's module used as a workshop for the recipe
+    skill*: Natural            ## The index of the skill used in crafting
+    time: Positive             ## The amount of minutes needed to finish the recipe
+    difficulty: Positive       ## The difficulty level of the recipe
+    tool*: string              ## The type of item used as a tool in crafting
     reputation: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
-    toolQuality: Positive ## The minimal quality of tool used in crafting
+    toolQuality: Positive      ## The minimal quality of tool used in crafting
 
 var recipesList* = initTable[string, CraftData]()
   ## The list of all available crafting recipes in the game
@@ -175,6 +175,36 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Recipe updated: '" & $recipeIndex & "'",
           debugType = everything)
     recipesList[recipeIndex] = recipe
+
+proc setRecipe*(workshop: Natural, amount: Positive, recipeIndex: string) =
+  playerShip.modules[workshop].craftingAmount = amount
+  var
+    itemIndex = 0
+    recipeName = ""
+  if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    itemIndex = recipeIndex[6..^1].parseInt
+    for recipe in recipesList.values:
+      if recipe.resultIndex == itemIndex:
+        playerShip.modules[workshop].craftingTime = recipe.difficulty * 15
+        break
+    recipeName = "Studying " & itemsList[itemIndex].name
+    playerShip.modules[workshop].craftingIndex = recipeIndex
+  elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    itemIndex = recipeIndex[10..^1].parseInt
+    for recipe in recipesList.values:
+      if recipe.resultIndex == itemIndex:
+        playerShip.modules[workshop].craftingTime = recipe.difficulty * 15
+        break
+    recipeName = "Deconstructing " & itemsList[itemIndex].name
+    playerShip.modules[workshop].craftingIndex = recipeIndex
+  else:
+    playerShip.modules[workshop].craftingIndex = recipeIndex
+    playerShip.modules[workshop].craftingTime = recipesList[recipeIndex].time
+    recipeName = itemsList[itemIndex].name
+  addMessage(message = (recipeName & " was set as manufacturing order in " &
+      playerShip.modules[workshop].name & ".").cstring,
+      kind = orderMessage.ord.cint)
+  updateOrders(ship = playerShip)
 
 proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
     KeyError, ValueError], tags: [].} =
