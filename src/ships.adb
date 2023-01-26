@@ -26,7 +26,7 @@ with Bases;
 with Crafts; use Crafts;
 with Factions;
 with Log;
-with Maps;
+with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships.Crew;
 with Utils;
@@ -39,7 +39,6 @@ package body Ships is
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Bases;
-      use Maps;
       use Tiny_String;
       use Utils;
 
@@ -1716,5 +1715,54 @@ package body Ships is
          end Convert_Module_Block;
       end loop Convert_Modules_Loop;
    end Set_Ada_Modules;
+
+   procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
+      Nim_Cargo: constant Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Ship.Cargo);
+      Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
+   begin
+      Get_Ada_Map_Cell
+        (X => Ship.Sky_X, Y => Ship.Sky_Y, Base_Index => Map_Cell.Base_Index,
+         Visited => (if Map_Cell.Visited then 1 else 0),
+         Event_Index => Map_Cell.Event_Index,
+         Mission_Index => Map_Cell.Mission_Index);
+      Get_Ada_Ship(Ship => Ship);
+      Get_Ada_Modules(Ship => Ship);
+      Get_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew_Loop :
+      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         Get_Ada_Crew_Inventory
+           (Inventory => Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory),
+            Member_Index => I,
+            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      end loop Get_Ada_Crew_Loop;
+   end Set_Ship_In_Nim;
+
+   procedure Get_Ship_From_Nim(Ship: in out Ship_Record) is
+      Nim_Inventory: Nim_Inventory_Array;
+      Nim_Cargo: Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Ship.Cargo);
+   begin
+      Set_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Inventory_Container.Assign
+        (Target => Ship.Cargo,
+         Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
+      Set_Ada_Crew(Ship => Ship);
+      Set_Ada_Crew_Loop :
+      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         Set_Ada_Crew_Inventory
+           (Inventory => Nim_Inventory, Member_Index => I,
+            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+         Ship.Crew(I).Inventory :=
+           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
+      end loop Set_Ada_Crew_Loop;
+      Set_Ada_Modules(Ship => Ship);
+      Set_Ada_Ship(Ship => Ship);
+   end Get_Ship_From_Nim;
 
 end Ships;
