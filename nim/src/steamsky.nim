@@ -23,13 +23,9 @@ import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
     OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =
-  ## FUNCTION
-  ##
   ## The main procedure of the game.
   ##
-  ## RETURNS
-  ##
-  ## The pointer to the newly created Tcl interpreter
+  ## Returns the pointer to the newly created Tcl interpreter
 
   # Get the command line params if any
   if params.len() > 0:
