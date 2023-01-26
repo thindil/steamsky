@@ -24,7 +24,7 @@ type
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
 
-  ModuleType2* = enum
+  ModuleType2* {.pure.} = enum
     ## FUNCTION
     ##
     ## Available types of the ships' modules
@@ -35,7 +35,8 @@ type
     ## FUNCTION
     ##
     ## Ships's state of speed, how much engines are used
-    docked, fullStop = "full_Stop", quarterSpeed = "quarter_Speed", halfSpeed = "half_Speed", fullSpeed = "full_Speed"
+    docked, fullStop = "full_Stop", quarterSpeed = "quarter_Speed",
+        halfSpeed = "half_Speed", fullSpeed = "full_Speed"
 
   CrewOrders* = enum
     ## FUNCTION
@@ -69,6 +70,12 @@ type
     ## Types of missions
     deliver, destroy, patrol, explore, passenger
 
+  ModuleType* {.pure.} = enum
+    any, engine, cabin, cockpit, turret, gun, cargo, hull, armor, batteringRam,
+    alchemyLab, furnace, waterCollector, workshop, greenhouse, medicalRoom,
+    harpoonGun, trainingRoom
+    ## Types of available prototypes of ships modules
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
@@ -92,34 +99,34 @@ type
     upgradeProgress*: int ## The upgrade progess of the module
     upgradeAction*: ShipUpgrade ## The current upgrade type for the module
     case mType*: ModuleType2
-    of engine:
+    of ModuleType2.engine:
       fuelUsage*: Positive ## The fuel usage for engines modules
       power*: Positive ## The power of the engines modules
       disabled*: bool ## If true, the engine is disabled
-    of cabin:
+    of ModuleType2.cabin:
       cleanliness*: Natural ## The cleanliness level of the cabin
       quality*: Natural ## The quality level of the cabin
-    of turret:
+    of ModuleType2.turret:
       gunIndex*: int ## The index of the module used as gun in the turret
-    of gun:
+    of ModuleType2.gun:
       damage*: Positive ## The damage of the gun
       ammoIndex*: int ## The index of item from ship's cargo used as ammunition
-    of hull:
+    of ModuleType2.hull:
       installedModules*: Natural ## The amount of installed modules in the hull
       maxModules*: Positive ## The max amount of modules which the hull can hold
-    of workshop:
+    of ModuleType2.workshop:
       craftingIndex*: string ## The index of currently crafted recipe
       craftingTime*: Natural ## The amount of time needed to finish the order
       craftingAmount*: Natural ## How many times repeat the crafting order
-    of trainingRoom:
+    of ModuleType2.trainingRoom:
       trainedSkill*: Natural ## The index of trained skill
-    of batteringRam:
+    of ModuleType2.batteringRam:
       damage2*: Positive ## The damage of the battering ram
       coolingDown*: bool ## If true, the battering ram can't attack now
-    of harpoonGun:
+    of ModuleType2.harpoonGun:
       duration*: Positive ## The duration bonus of the harpoon gun
       harpoonIndex*: int ## The index of item from ship's cargo used as harpoon
-    of any:
+    of ModuleType2.any:
       data*: array[1..3, int] ## Various data for module, depends on module
     else:
       discard
@@ -260,7 +267,7 @@ type
     name*: string ## The recruit's name
     gender*: char ## The recruit's gender
     price*: Positive ## The cost of hire of the recruit
-    inventory*:seq[InventoryData] ## The inventory of the recruit
+    inventory*: seq[InventoryData] ## The inventory of the recruit
     equipment*: array[EquipmentLocations, int] ## The equipment of the recruit
     payment*: Positive ## The payment information for the recruit
     homeBase*: BasesRange ## The index of the home base
@@ -334,6 +341,39 @@ type
     owner*: string ## The index of faction which owe the base
     cargo*: seq[BaseCargo] ## The base's cargo
     size*: BasesSize ## The size of the base
+
+  BaseModuleData* = object
+    ## Used to store information about prototypes of ships' modules
+    name*: string            ## The name of the module
+    mType*: ModuleType       ## The type of the module
+    weight*: Natural         ## The weight of the module
+    value*: int              ## Additional data for the module, for engines it is power
+    maxValue*: int           ## Additional data for the mode, for guns it is damage
+    durability*: int         ## The base durability of the module
+    repairMaterial*: string  ## The index of the material used to repair the module
+    repairSkill*: Positive   ## The index of the skill used to repair the module
+    price*: Natural          ## The base price of the module in shipyards
+    installTime*: Positive   ## The amount of time needed to install the module
+    unique*: bool            ## If true, only one that module can be installed on the ship
+    size*: range[1..10]      ## The size of the module
+    description*: string     ## The description of the module
+    maxOwners*: range[0..10] ## The amount of users of the module
+    speed*: int              ## How fast the gun shoots in the combat
+    reputation*: ReputationRange ## The minumum amount of reputation needed for buy the module
+
+  CraftData* = object
+    ## Used to store information about crafting recipes
+    materialTypes*: seq[string] ## The list of materials types used in crafting
+    materialAmounts*: seq[Positive] ## The list of materials amount used in crafting
+    resultIndex*: Natural       ## The index of proto item which is the result of the recipe
+    resultAmount*: Natural      ## The amount of items produced by one recipe
+    workplace*: ModuleType      ## The type of ship's module used as a workshop for the recipe
+    skill*: Natural             ## The index of the skill used in crafting
+    time*: Positive             ## The amount of minutes needed to finish the recipe
+    difficulty*: Positive       ## The difficulty level of the recipe
+    tool*: string               ## The type of item used as a tool in crafting
+    reputation*: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
+    toolQuality*: Positive      ## The minimal quality of tool used in crafting
 
 # Temporary code for interfacing with Ada
 

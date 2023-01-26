@@ -44,12 +44,6 @@ type
     name: string ## The name of the attribute
     description: string ## The description of the attribute
 
-  ModuleType* = enum
-    any, engine, cabin, cockpit, turret, gun, cargo, hull, armor, batteringRam,
-    alchemyLab, furnace, waterCollector, workshop, greenhouse, medicalRoom,
-    harpoonGun, trainingRoom
-    ## Types of available prototypes of ships modules
-
 const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
 
 var
@@ -101,6 +95,8 @@ var
   factionsList*: Table[string, FactionData] = initTable[string, FactionData]() ## The list of all available factions in the game
   itemsList* = initTable[Positive, ObjectData]() ## The list of prototypes of all items availabla in the game
   skyBases*: array[BasesRange, BaseRecord] ## The list of all bases in the game
+  modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
+  recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
