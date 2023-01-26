@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -33,11 +33,11 @@ package body Help is
       use Short_String;
       use Tiny_String;
 
-      Tmp_Help: Help_Data;
+      Tmp_Help: Help_Data := Empty_Help;
       Nodes_List: Node_List;
       Help_Data: Document;
-      Action: Data_Action;
-      Help_Index, Help_Title: Unbounded_String;
+      Action: Data_Action := ADD;
+      Help_Index, Help_Title: Unbounded_String := Null_Unbounded_String;
       Help_Node: Node;
    begin
       Help_Data := Get_Tree(Read => Reader);
