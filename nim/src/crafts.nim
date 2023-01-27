@@ -164,7 +164,7 @@ proc setRecipe*(workshop: Natural, amount: Positive, recipeIndex: string) =
     itemIndex = 0
     recipeName = ""
   if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
-    itemIndex = recipeIndex[6..^1].parseInt
+    itemIndex = recipeIndex[6..^1].strip.parseInt
     for recipe in recipesList.values:
       if recipe.resultIndex == itemIndex:
         playerShip.modules[workshop].craftingTime = recipe.difficulty * 15
@@ -172,7 +172,7 @@ proc setRecipe*(workshop: Natural, amount: Positive, recipeIndex: string) =
     recipeName = "Studying " & itemsList[itemIndex].name
     playerShip.modules[workshop].craftingIndex = recipeIndex
   elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
-    itemIndex = recipeIndex[10..^1].parseInt
+    itemIndex = recipeIndex[12..^1].strip.parseInt
     for recipe in recipesList.values:
       if recipe.resultIndex == itemIndex:
         playerShip.modules[workshop].craftingTime = recipe.difficulty * 15
@@ -180,9 +180,9 @@ proc setRecipe*(workshop: Natural, amount: Positive, recipeIndex: string) =
     recipeName = "Deconstructing " & itemsList[itemIndex].name
     playerShip.modules[workshop].craftingIndex = recipeIndex
   else:
-    playerShip.modules[workshop].craftingIndex = recipeIndex
+    playerShip.modules[workshop].craftingIndex = recipeIndex.strip
     playerShip.modules[workshop].craftingTime = recipesList[recipeIndex].time
-    recipeName = itemsList[itemIndex].name
+    recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
   addMessage(message = (recipeName & " was set as manufacturing order in " &
       playerShip.modules[workshop].name & ".").cstring,
       kind = orderMessage.ord.cint)
@@ -269,3 +269,7 @@ proc getAdaRecipeMaterialAmount(recipeIndex: cstring;
 
 proc getAdaWorkshopRecipeName(workshop: cint): cstring {.exportc.} =
   return getWorkshopRecipeName(workshop).cstring
+
+proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.exportc.} =
+  setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
+      recipeIndex = $recipeIndex)
