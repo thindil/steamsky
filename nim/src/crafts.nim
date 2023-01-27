@@ -161,6 +161,12 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
     CrewNoSpaceError, Exception], tags: [RootEffect].} =
+  ## Set the selected crafting recipe for the selected workshop in the player's
+  ## ship
+  ##
+  ## * workshop    - the index of the workshop in which the recipe will be set
+  ## * amount      - how many times the recipe will be made
+  ## * recipeIndex - the index of the crafting recipe to set
   playerShip.modules[workshop].craftingAmount = amount
   var
     itemIndex = 0
