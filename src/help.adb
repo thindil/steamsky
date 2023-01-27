@@ -35,15 +35,15 @@ package body Help is
 
       Tmp_Help: Help_Data := Empty_Help;
       Nodes_List: Node_List;
-      Help_Data: Document;
+      Help_Xml_Data: Document;
       Action: Data_Action := ADD;
       Help_Index, Help_Title: Unbounded_String := Null_Unbounded_String;
       Help_Node: Node;
    begin
-      Help_Data := Get_Tree(Read => Reader);
+      Help_Xml_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Help_Data, Tag_Name => "entry");
+          (Doc => Help_Xml_Data, Tag_Name => "entry");
       Load_Help_Data_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Tmp_Help :=
