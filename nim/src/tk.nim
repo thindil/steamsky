@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -34,133 +34,78 @@ else:
 
 type
   TFreeProc* = proc (theBlock: pointer){.cdecl.}
-    ## FUNCTION
-    ##
     ## Procedure which will be run during freeing the result value
     ##
-    ## PARAMETERS
-    ##
     ## * theBlock - the pointer to the value to free
+
   TclInterp* = object
-    ## FUNCTION
-    ##
     ## Represents Tcl interpreter
-    ##
-    ## FIELDS
-    ##
-    ## * result    - the string with result's value returned by the last Tcl
-    ##               command
-    ## * freeProc  - the procedure which will be run during freeing the result
-    ##               value
-    ## * errorLine - the number of the line where error occured. Set only when
-    ##               error happened
-    result*: cstring
-    freeProc*: TFreeProc
-    errorLine*: int
+    result*: cstring ## the string with result's value returned by the last Tcl command
+    freeProc*: TFreeProc ## the procedure which will be run during freeing the result value
+    errorLine*: int ## the number of the line where error occured. Set only when error happened
+
   PInterp* = ptr TclInterp
-    ## FUNCTION
-    ##
     ## Pointer to the Tcl interpreter
+
   TclResults* = enum
     tclOk, tclError, tclReturn, tclBreak, tclContinue
-    ## FUNCTION
-    ##
     ## Types of result used by Tcl
+
   TclError* = object of CatchableError
-    ## FUNCTION
-    ##
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
 
 var currentTclInterp: PInterp = nil
-  ## FUNCTION
-  ##
   ## Stores the current Tcl interpreter
 
 proc setInterp*(interp: PInterp) {.gcsafe, sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Set the current Tcl interpreter.
-  ##
-  ## PARAMETERS
   ##
   ## * interp - The Tcl interpreter which will be set as the current
   currentTclInterp = interp
 
 proc getInterp*(): PInterp {.gcsafe, sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the current Tcl interpreter
   ##
-  ## RETURNS
-  ##
-  ## The Tcl interpreter set as the current
+  ## Returns the Tcl interpreter set as the current
   result = currentTclInterp
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
     importc: "Tcl_CreateInterp".}
-  ## FUNCTION
-  ##
   ## Create Tcl interpreter. Imported from C
   ##
-  ## RETURNS
-  ##
-  ## Pointer to the newly created Tcl interpreter or nil if creation failed.
+  ## Returns pointer to the newly created Tcl interpreter or nil if creation failed.
 
 proc tclInit*(interp: PInterp): TclResults {.cdecl, dynlib: tclDllName,
     importc: "Tcl_Init".}
-  ## FUNCTION
-  ##
   ## Initialize Tcl with the selected interpreter. Load libraries, etc.
-  ##
-  ## PARAMETERS
   ##
   ## * interp - A Tcl interpreter which will be initialized
   ##
-  ## RETURNS
-  ##
-  ## tclOk if Tcl initialized correctly, otherwise tclError
+  ## Returns tclOk if Tcl initialized correctly, otherwise tclError
 
 proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
     importc: "Tk_Init".}
-  ## FUNCTION
-  ##
   ## Initialize Tk on the selected Tcl interpreter
-  ##
-  ## PARAMETERS
   ##
   ## * interp - A Tcl interpreter on which Tk will be initialized
   ##
-  ## RETURNS
-  ##
-  ## tclOk if Tk initialized correctly, otherwise tclError
+  ## Returns tclOk if Tk initialized correctly, otherwise tclError
 
 proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
     dynlib: tclDllName, importc: "Tcl_Eval".}
-  ## FUNCTION
-  ##
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation
-  ##
-  ## PARAMETERS
   ##
   ## * interp - The Tcl interpreter on which the code will be evaluated
   ## * script - The Tcl code which will be evaluated
   ##
-  ## RETURNS
-  ##
-  ## tclOk if the code evaluated correctly, otherwise tclError
+  ## Returns tclOk if the code evaluated correctly, otherwise tclError
 
 proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
     importc: "Tcl_GetStringResult".}
-  ## FUNCTION
-  ##
   ## Get the string with the result of the last evaluated Tcl command
-  ##
-  ## PARAMETERS
   ##
   ## * interp - The Tcl interpreter from which the result will be taken
   ##
-  ## RETURNS
-  ##
-  ## The string with the result of the last evaluated Tcl command
+  ## Returns the string with the result of the last evaluated Tcl command
