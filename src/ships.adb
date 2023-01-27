@@ -1742,9 +1742,11 @@ package body Ships is
    end Set_Ship_In_Nim;
 
    procedure Get_Ship_From_Nim(Ship: in out Ship_Record) is
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Inventory: Nim_Inventory_Array;
       Nim_Cargo: Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Set_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
