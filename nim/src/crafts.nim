@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, messages, ships, shipscrew, types
+import crew, crewinventory, game, log, messages, ships, shipscrew, types
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -158,7 +158,9 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     recipesList[recipeIndex] = recipe
 
-proc setRecipe*(workshop: Natural, amount: Positive, recipeIndex: string) =
+proc setRecipe*(workshop: Natural, amount: Positive,
+    recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
+    CrewNoSpaceError, Exception], tags: [RootEffect].} =
   playerShip.modules[workshop].craftingAmount = amount
   var
     itemIndex = 0
