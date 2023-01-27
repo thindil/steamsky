@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated icon for checked and unchecked options, for example, the random
   game's difficulty
-- Updated icon for unselect all in the player's ship's crew member inventory
+- Updated icon for select or unselect all in the player's ship's crew member
+  inventory
 
 ### Fixed
 - Updating the player's ship's crew member orders
