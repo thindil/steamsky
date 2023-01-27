@@ -999,72 +999,17 @@ package body Crafts is
 
    procedure Set_Recipe
      (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
-      use Tiny_String;
-
-      Item_Index: Natural := 0;
-      Recipe_Name: Unbounded_String := Null_Unbounded_String;
+      procedure Set_Ada_Recipe(W, A: Integer; R_Index: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaRecipe";
    begin
-      Player_Ship.Modules(Workshop).Crafting_Amount := Amount;
-      if Length(Source => Recipe_Index) > 6
-        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
-          "Study" then
-         Item_Index :=
-           Positive'Value
-             (Slice
-                (Source => Recipe_Index, Low => 7,
-                 High => Length(Source => Recipe_Index)));
-         Set_Study_Difficulty_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Item_Index then
-               Player_Ship.Modules(Workshop).Crafting_Time :=
-                 ProtoRecipe.Difficulty * 15;
-               exit Set_Study_Difficulty_Loop;
-            end if;
-         end loop Set_Study_Difficulty_Loop;
-         Recipe_Name :=
-           To_Unbounded_String(Source => "Studying ") &
-           To_String(Source => Get_Proto_Item(Index => Item_Index).Name);
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
-      elsif Length(Source => Recipe_Index) > 12
-        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
-          "Deconstruct" then
-         Item_Index :=
-           Positive'Value
-             (Slice
-                (Source => Recipe_Index, Low => 13,
-                 High => Length(Source => Recipe_Index)));
-         Set_Deconstruct_Difficulty_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Item_Index then
-               Player_Ship.Modules(Workshop).Crafting_Time :=
-                 ProtoRecipe.Difficulty * 15;
-               exit Set_Deconstruct_Difficulty_Loop;
-            end if;
-         end loop Set_Deconstruct_Difficulty_Loop;
-         Recipe_Name :=
-           To_Unbounded_String(Source => "Deconstructing ") &
-           To_String(Source => Get_Proto_Item(Index => Item_Index).Name);
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
-      else
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
-         Player_Ship.Modules(Workshop).Crafting_Time :=
-           Recipes_List(Recipe_Index).Time;
-         Recipe_Name :=
-           To_Unbounded_String
-             (Source =>
-                To_String
-                  (Source =>
-                     Get_Proto_Item
-                       (Index => Recipes_List(Recipe_Index).Result_Index)
-                       .Name));
-      end if;
-      Add_Message
-        (Message =>
-           To_String(Source => Recipe_Name) &
-           " was set as manufacturing order in " &
-           To_String(Source => Player_Ship.Modules(Workshop).Name) & ".",
-         M_Type => CRAFTMESSAGE);
-      Update_Orders(Ship => Player_Ship);
+      Set_Ship_In_Nim;
+      Set_Ada_Recipe
+        (W => Workshop, A => Amount,
+         R_Index =>
+           New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
+      Get_Ship_From_Nim(Ship => Player_Ship);
    end Set_Recipe;
 
    function Get_Workshop_Recipe_Name(Workshop: Positive) return String is
