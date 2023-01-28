@@ -16,8 +16,5 @@ package Crafts.Test_Data.Tests is
    procedure Test_Check_Recipe_b182a8_b1abbf(Gnattest_T: in out Test);
    --  crafts.ads:147:4:Check_Recipe:Test_CheckRecipe
 
-   procedure Test_Set_Recipe_06227a_1d4f5f(Gnattest_T: in out Test);
-   --  crafts.ads:163:4:Set_Recipe:Test_SetRecipe
-
 end Crafts.Test_Data.Tests;
 --  end read only
