@@ -2062,11 +2062,12 @@ package body Ships.UI.Crew is
    -- Member_Index - The crew index of the crew member which list of orders
    --                will be set
    -- Orders_Box   - The Ttk_ComboBox widget in which the list will be set
+   -- Button       - The Ttk_Button which will set the order
    -- HISTORY
    -- 7.9 - Added
    -- SOURCE
    procedure Set_Available_Orders
-     (Member_Index: Positive; Orders_Box: Ttk_ComboBox) is
+     (Member_Index: Positive; Orders_Box: Ttk_ComboBox; Button: Ttk_Button) is
      -- ****
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
       Available_Orders, Tcl_Commands: Unbounded_String :=
@@ -2328,13 +2329,11 @@ package body Ships.UI.Crew is
         (Widgt => Orders_Box,
          options =>
            "-values [list" & To_String(Source => Available_Orders) & "]");
-      Unbind(Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>");
-      Current(ComboBox => Orders_Box, NewIndex => "0");
-      Bind
-        (Widgt => Orders_Box, Sequence => "<<ComboboxSelected>>",
-         Script =>
-           "{SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}" &
-           Member_Index'Img & "}");
+      configure
+        (Widgt => Button,
+         options =>
+           "-command {SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}" &
+           Member_Index'Img & ";CloseDialog .memberdialog}");
    end Set_Available_Orders;
 
    -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
@@ -2388,12 +2387,18 @@ package body Ships.UI.Crew is
       Orders_Box: constant Ttk_ComboBox :=
         Create
           (pathName => Member_Dialog & ".list", options => "-state readonly");
+      Buttons_Box: constant Ttk_Frame :=
+        Create(pathName => Member_Dialog & ".buttons");
       Close_Dialog_Button: constant Ttk_Button :=
         Create
-          (pathName => Member_Dialog & ".button",
+          (pathName => Member_Dialog & ".buttons.button",
            options =>
-             "-text Close -command {CloseDialog " & Member_Dialog &
-             "} -image exiticon -style Dialog.TButton");
+             "-text Cancel -command {CloseDialog " & Member_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
+      Accept_Button: constant Ttk_Button :=
+        Create
+          (pathName => Member_Dialog & ".buttons.button2",
+           options => "-text Assign -image giveordericon -style Dialog.TButton");
    begin
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -2404,12 +2409,25 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Orders_Box, Sequence => "<Escape>",
          Script => "{" & Close_Dialog_Button & " invoke;break}");
+      Bind
+        (Widgt => Orders_Box, Sequence => "<Tab>",
+         Script => "{focus " & Accept_Button & ";break}");
       Set_Available_Orders
-        (Member_Index => Member_Index, Orders_Box => Orders_Box);
+        (Member_Index => Member_Index, Orders_Box => Orders_Box,
+         Button => Accept_Button);
+      Current(ComboBox => Orders_Box, NewIndex => "0");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2 -sticky w");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
+        (Slave => Buttons_Box, Options => "-columnspan 2 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Accept_Button);
+      Bind
+        (Widgt => Accept_Button, Sequence => "<Tab>",
+         Script => "{focus " & Close_Dialog_Button & ";break}");
+      Bind
+        (Widgt => Accept_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Dialog_Button, Options => "-column 1 -row 0 -padx {5 0}");
       Focus(Widgt => Close_Dialog_Button);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
@@ -2448,6 +2466,9 @@ package body Ships.UI.Crew is
       pragma Unreferenced(Argc);
       Orders_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget
+          (pathName => ".memberdialog.buttons.button2", Interp => Interp);
       Order_Index: constant Natural :=
         Natural'Value(Current(ComboBox => Orders_Box));
       Tokens: Slice_Set;
@@ -2483,7 +2504,8 @@ package body Ships.UI.Crew is
              (Source => Get_Current_Order(Member_Index => Member_Index)) &
            "}");
       Set_Available_Orders
-        (Member_Index => Member_Index, Orders_Box => Orders_Box);
+        (Member_Index => Member_Index, Orders_Box => Orders_Box,
+         Button => Button);
       Focus(Widgt => Orders_Box);
       return TCL_OK;
    end Select_Crew_Order_Command;
