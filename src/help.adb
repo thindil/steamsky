@@ -75,7 +75,12 @@ package body Help is
               with "Can't add help '" & To_String(Source => Help_Title) &
               "', there is one with that title.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            Help_Container.Exclude(Container => Help_List, Key => Help_Title);
+            Log_Message
+              (Message => "Help removed: " & To_String(Source => Help_Title),
+               Message_Type => EVERYTHING);
+         else
             Tmp_Help.Index := Help_Index;
             if Action = UPDATE then
                Tmp_Help := Help_List(Help_Title);
@@ -85,21 +90,16 @@ package body Help is
                  To_Unbounded_String
                    (Source => Node_Value(N => First_Child(N => Help_Node)));
             end if;
-            if Action /= UPDATE then
+            if Action = UPDATE then
+               Help_List(Help_Title) := Tmp_Help;
+            else
                Help_Container.Include
                  (Container => Help_List, Key => Help_Title,
                   New_Item => Tmp_Help);
                Log_Message
                  (Message => "Help added: " & To_String(Source => Help_Title),
                   Message_Type => EVERYTHING);
-            else
-               Help_List(Help_Title) := Tmp_Help;
             end if;
-         else
-            Help_Container.Exclude(Container => Help_List, Key => Help_Title);
-            Log_Message
-              (Message => "Help removed: " & To_String(Source => Help_Title),
-               Message_Type => EVERYTHING);
          end if;
       end loop Load_Help_Data_Loop;
       Tmp_Help.Index := To_Unbounded_String(Source => "stats");
