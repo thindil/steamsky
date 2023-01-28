@@ -19,54 +19,38 @@ import std/tables
 
 type
   ShipUpgrade* = enum
-    ## FUNCTION
-    ##
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
 
   ModuleType2* {.pure.} = enum
-    ## FUNCTION
-    ##
     ## Available types of the ships' modules
     workshop, any, medicalRoom, trainingRoom, engine, cabin, cockpit, turret,
         gun, cargoRoom, hull, armor, batteringRam, harpoonGun
 
   ShipSpeed* = enum
-    ## FUNCTION
-    ##
     ## Ships's state of speed, how much engines are used
     docked, fullStop = "full_Stop", quarterSpeed = "quarter_Speed",
         halfSpeed = "half_Speed", fullSpeed = "full_Speed"
 
   CrewOrders* = enum
-    ## FUNCTION
-    ##
     ## Possible orders for ships' crew members
     pilot, engineer, gunner, repair, craft, upgrading, talk, heal, clean, rest,
         defend, boarding, train
 
   EquipmentLocations* = enum
-    ## FUNCTION
-    ##
     ## Possible equipment location for mobiles
     weapon, shield, helmet, torso, arms, legs, tool
 
   NamesTypes* = enum
-    ## FUNCTION
-    ##
     ## The type of the faction names, normal, based on syllables or robotic,
     ## based on random letters and numbers
     normal, robotic
 
   BasesSize* = enum
-    ## FUNCTION
-    ##
     ## Size of sky bases
     small, medium, big, unknown
 
   MissionsTypes* = enum
-    ## FUNCTION
-    ##
     ## Types of missions
     deliver, destroy, patrol, explore, passenger
 
@@ -87,8 +71,6 @@ type
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
 
   ModuleData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about ships' modules
     name*: string ## The name of the module
     protoIndex*: Natural ## The index of the prototype module
@@ -132,8 +114,6 @@ type
       discard
 
   InventoryData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about items in various inventories (cargo, crew
     ## inventory, ect)
     protoIndex*: Natural ## The index of the item's prototype
@@ -143,23 +123,17 @@ type
     price*: Natural ## The price for which the item was bought
 
   MobAttributeRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store information about the crew member's attributes
     level*: range[1..50] ## The level of the attribute
     experience*: Natural ## The amount of experience in the attribute
 
   SkillInfo* = object
-    ## FUNCTION
-    ##
     ## Used to store information about the crew member's skills
     index*: Natural ## The index of the skill
     level*: SkillRange ## The level of the skill
     experience*: Natural ## The amount of the experience in the skill
 
   MemberData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about the crew member
     attributes*: seq[MobAttributeRecord] ## The member's attributes
     skills*: seq[SkillInfo] ## The member's skills
@@ -183,8 +157,6 @@ type
     faction*: string ## The faction index to which the member belongs
 
   ShipRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store information about ships
     name*: string ## The name of the ship
     skyX*: MapXRange ## The X position of the ship on the map
@@ -201,22 +173,16 @@ type
     homeBase*: Natural ## The index of the home base of the ship
 
   ReputationRanges* = object
-    ## FUNCTION
-    ##
     ## Used to store reputation ranges for relation with other factions
     min*: ReputationRange ## Minimal reputation with the selected faction
     max*: ReputationRange ## Maximal reputation with the selected faction
 
   RelationsData* = object
-    ## FUNCTION
-    ##
     ## Used to store data about relation with other faction
     reputation*: ReputationRanges ## Values of min and max reputation with the faction
     friendly*: bool ## If true, the selected faction is friendly towards the faction
 
   CareerData* = object
-    ## FUNCTION
-    ##
     ## Used to store data about careers available for the faction
     shipIndex*: Positive ## The index of the starting ship prototype for the career
     playerIndex*: string ## The index of the starting mob prototype as the player character
@@ -224,8 +190,6 @@ type
     name*: string ## The name of the career
 
   FactionData* = object
-    ## FUNCTION
-    ##
     ## Used to store data about the selected faction
     name*: string ## The name of the faction
     memberName*: string ## The name of members of the faction
@@ -246,8 +210,6 @@ type
     weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
 
   ObjectData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about items
     name*: string ## The name of the item
     weight*: Positive ## The weight of the item
@@ -259,8 +221,6 @@ type
     reputation*: ReputationRange ## The minumal reputation which is needed to buy that item
 
   RecruitData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about the recruit in bases
     attributes*: seq[MobAttributeRecord] ## The recruit's attributes
     skills*: seq[SkillInfo] ## The recruit's skills
@@ -274,8 +234,6 @@ type
     faction*: string ## The faction index to which the recruit belongs
 
   BaseCargo* = object
-    ## FUNCTION
-    ##
     ## Used to store information about items in bases cargo
     protoIndex*: Natural ## The index of the item's prototype
     amount*: Positive ## The amount of the item in the inventory
@@ -283,8 +241,6 @@ type
     price*: Natural ## The price for which the item was bought
 
   DateRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store the game's time
     year*: range[0..4_000_000] ## The game's year
     month*: range[0..24] ## The game's month
@@ -293,15 +249,11 @@ type
     minutes*: range[0..120] ## The game's minutes
 
   ReputationData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about the level of the player's reputation
     level*: ReputationRange ## The level of the reputation
     experience*: Natural ## The current experience gained in the reputation
 
   MissionData* = object
-    ## FUNCTION
-    ##
     ## Used to store information about missions
     time*: Positive ## The amount of minutes to finish the mission
     targetX*: range[0..MapXRange.high] ## The X position of the target on the map
@@ -321,8 +273,6 @@ type
       target: Natural ## The target for the mission (ship, item)
 
   BaseRecord* = object
-    ## FUNCTION
-    ##
     ## Used to store information about bases
     name*: string ## The name of the base
     visited*: DateRecord ## The date when the base was last visited
