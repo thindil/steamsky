@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   game's difficulty
 - Updated icon for select or unselect all in the player's ship's crew member
   inventory
+- Updated look of the dialog for giving orders to the player's ship's crew
+  members
 
 ### Fixed
 - Updating the player's ship's crew member orders
