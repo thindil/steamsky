@@ -23,9 +23,9 @@ with Crew;
 with Crew.Inventory;
 with Goals;
 with Items; use Items;
-with Messages; use Messages;
+with Messages;
 with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Crew;
 with Statistics;
 with Trades;
 
@@ -435,6 +435,8 @@ package body Crafts is
       use Crew;
       use Crew.Inventory;
       use Goals;
+      use Messages;
+      use Ships.Crew;
       use Statistics;
       use Tiny_String;
 
