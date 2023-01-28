@@ -164,8 +164,7 @@ package Crafts is
      (Workshop, Amount: Positive;
       Recipe_Index: Tiny_String.Bounded_String) with
       Pre => Workshop <= Player_Ship.Modules.Last_Index and
-      Tiny_String.Length(Source => Recipe_Index) > 0,
-      Test_Case => (Name => "Test_SetRecipe", Mode => Nominal);
+      Tiny_String.Length(Source => Recipe_Index) > 0;
       -- ****
 
       -- ****f* Crafts/Crafts.Get_Workshop_Recipe_Name
