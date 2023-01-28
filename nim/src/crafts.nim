@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables, xmlparser, xmltree]
-import crew, crewinventory, game, log, messages, ships, shipscrew, types
+import std/[math, strutils, tables, xmlparser, xmltree]
+import crew, crewinventory, game, items, log, messages, ships, shipscrew, types
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -157,6 +157,41 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Recipe updated: '" & $recipeIndex & "'",
           debugType = everything)
     recipesList[recipeIndex] = recipe
+
+proc setRecipeData*(recipeIndex: string): CraftData =
+  result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
+  var itemIndex = 0
+  if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    itemIndex = recipeIndex[6..^1].strip.parseInt
+    result.materialTypes.add(y = itemsList[itemIndex].itemType)
+    result.materialAmounts.add(y = 1)
+    result.resultIndex = itemIndex
+    result.resultAmount = 0
+    result.workplace = alchemyLab
+    for recipe in recipesList.values:
+      if recipe.resultIndex == result.resultIndex:
+        result.skill = recipe.skill
+        result.time = recipe.difficulty * 15
+        break
+    result.tool = alchemyTools
+    return
+  elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    itemIndex = recipeIndex[12..^1].strip.parseInt
+    result.materialTypes.add(y = itemsList[itemIndex].itemType)
+    result.materialAmounts.add(y = 1)
+    result.workplace = alchemyLab
+    for recipe in recipesList.values:
+      if recipe.resultIndex == itemIndex:
+        result.skill = recipe.skill
+        result.time = recipe.difficulty * 15
+        result.resultIndex = findProtoItem(itemType = recipe.materialTypes[0])
+        result.resultAmount = ceil(x = recipe.materialAmounts[0].float * 0.8).int
+        if result.resultAmount == recipe.resultAmount:
+          result.resultAmount.dec
+        break
+    result.tool = alchemyTools
+    return
+  return recipesList[recipeIndex]
 
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
