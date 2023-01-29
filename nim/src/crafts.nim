@@ -257,6 +257,8 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
 
 type
   AdaCraftData = object
+    materialTypes: array[0..4, cstring]
+    materialAmounts: array[0..4, cint]
     resultIndex: cint
     resultAmount: cint
     workplace: cint
@@ -276,6 +278,9 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
+  for i in 0..4:
+    adaRecipe.materialTypes[i] = "".cstring
+    adaRecipe.materialAmounts[i] = 0
   let recipeKey = strip(s = $index)
   if not recipesList.hasKey(key = recipeKey):
     return
@@ -291,24 +296,9 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
   adaRecipe.difficulty = recipe.difficulty.cint
   adaRecipe.tool = recipe.tool.cstring
   adaRecipe.toolQuality = recipe.toolQuality.cint
-
-proc getAdaRecipeMaterialType(recipeIndex: cstring;
-    index: cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
-  try:
-    if index >= recipesList[$recipeIndex].materialTypes.len():
-      return ""
-    return recipesList[$recipeIndex].materialTypes[index].cstring
-  except KeyError:
-    return ""
-
-proc getAdaRecipeMaterialAmount(recipeIndex: cstring;
-    index: cint): cint {.sideEffect, raises: [], tags: [], exportc.} =
-  try:
-    if index >= recipesList[$recipeIndex].materialAmounts.len():
-      return 0
-    return recipesList[$recipeIndex].materialAmounts[index].cint
-  except KeyError:
-    return 0
+  for i in 0..recipe.materialTypes.high:
+    adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
+    adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
 
 proc getAdaWorkshopRecipeName(workshop: cint): cstring {.exportc.} =
   return getWorkshopRecipeName(workshop).cstring

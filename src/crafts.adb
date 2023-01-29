@@ -37,7 +37,11 @@ package body Crafts is
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
+      type Material_Types_Array is array(0 .. 4) of chars_ptr;
+      type Material_Amounts_Array is array(0 .. 4) of Integer;
       type Craft_Nim_Data is record
+         Material_Types: Material_Types_Array;
+         Material_Amounts: Material_Amounts_Array;
          Result_Index: Integer;
          Result_Amount: Integer;
          Workplace: Integer;
@@ -56,8 +60,6 @@ package body Crafts is
       Temp_Nim_Record: Craft_Nim_Data;
       --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
-      Index2, Material_Amount: Natural := 0;
-      Material_Type: Unbounded_String := Null_Unbounded_String;
       procedure Load_Ada_Recipes(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -67,16 +69,6 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "getAdaCraftData";
-      function Get_Ada_Recipe_Material_Type
-        (R_Index: chars_ptr; Type_Index: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaRecipeMaterialType";
-      function Get_Ada_Recipe_Material_Amount
-        (R_Index: chars_ptr; Type_Index: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaRecipeMaterialAmount";
    begin
       Load_Ada_Recipes(Name => New_String(Str => File_Name));
       Load_Recipes_Loop :
@@ -100,43 +92,18 @@ package body Crafts is
                    Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
             Reputation => Temp_Nim_Record.Reputation,
             Tool_Quality => Temp_Nim_Record.Tool_Quality);
-         Index2 := 0;
-         Temp_Record.Material_Types.Clear;
-         Load_Material_Types_Loop :
-         loop
-            Material_Type :=
-              To_Unbounded_String
-                (Source =>
-                   Interfaces.C.Strings.Value
-                     (Item =>
-                        Get_Ada_Recipe_Material_Type
-                          (R_Index =>
-                             New_String
-                               (Str =>
-                                  Trim(Source => Index'Img, Side => Left)),
-                           Type_Index => Index2)));
-            exit Load_Material_Types_Loop when Length
-                (Source => Material_Type) =
+         Load_Materials_Loop :
+         for I in Temp_Nim_Record.Material_Types'Range loop
+            exit Load_Materials_Loop when Temp_Nim_Record.Material_Amounts(I) =
               0;
             Temp_Record.Material_Types.Append
               (New_Item =>
                  To_Bounded_String
-                   (Source => To_String(Source => Material_Type)));
-            Index2 := Index2 + 1;
-         end loop Load_Material_Types_Loop;
-         Index2 := 0;
-         Temp_Record.Material_Amounts.Clear;
-         Load_Material_Amount_Loop :
-         loop
-            Material_Amount :=
-              Get_Ada_Recipe_Material_Amount
-                (R_Index =>
-                   New_String(Str => Trim(Source => Index'Img, Side => Left)),
-                 Type_Index => Index2);
-            exit Load_Material_Amount_Loop when Material_Amount = 0;
-            Temp_Record.Material_Amounts.Append(New_Item => Material_Amount);
-            Index2 := Index2 + 1;
-         end loop Load_Material_Amount_Loop;
+                   (Source =>
+                      Value(Item => Temp_Nim_Record.Material_Types(I))));
+            Temp_Record.Material_Amounts.Append
+              (New_Item => Temp_Nim_Record.Material_Amounts(I));
+         end loop Load_Materials_Loop;
          Recipes_List.Include
            (Key =>
               To_Bounded_String
