@@ -31,28 +31,29 @@ with Trades;
 
 package body Crafts is
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Material_Types_Array is array(0 .. 4) of chars_ptr;
+   type Material_Amounts_Array is array(0 .. 4) of Integer;
+   type Craft_Nim_Data is record
+      Material_Types: Material_Types_Array;
+      Material_Amounts: Material_Amounts_Array;
+      Result_Index: Integer;
+      Result_Amount: Integer;
+      Workplace: Integer;
+      Skill: Integer;
+      Time: Positive := 1;
+      Difficulty: Positive := 1;
+      Tool: chars_ptr;
+      Reputation: Integer;
+      Tool_Quality: Positive := 1;
+   end record;
+   --## rule on TYPE_INITIAL_VALUES
+
    procedure Load_Recipes(File_Name: String) is
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Tiny_String;
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Material_Types_Array is array(0 .. 4) of chars_ptr;
-      type Material_Amounts_Array is array(0 .. 4) of Integer;
-      type Craft_Nim_Data is record
-         Material_Types: Material_Types_Array;
-         Material_Amounts: Material_Amounts_Array;
-         Result_Index: Integer;
-         Result_Amount: Integer;
-         Workplace: Integer;
-         Skill: Integer;
-         Time: Positive := 1;
-         Difficulty: Positive := 1;
-         Tool: chars_ptr;
-         Reputation: Integer;
-         Tool_Quality: Positive := 1;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Craft_Data;
       Temp_Materials: TinyString_Container.Vector;
@@ -119,74 +120,44 @@ package body Crafts is
 
       --## rule off IMPROPER_INITIALIZATION
       Recipe: Craft_Data;
+      Temp_Materials: TinyString_Container.Vector;
+      Temp_Amount: Positive_Container.Vector;
+      Temp_Nim_Record: Craft_Nim_Data;
       --## rule on IMPROPER_INITIALIZATION
-      Item_Index: Natural := 0;
+      procedure Set_Ada_Recipe_Data
+        (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaRecipeData";
    begin
-      if Length(Source => Recipe_Index) > 6
-        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
-          "Study" then
-         Item_Index :=
-           Positive'Value
-             (Slice
-                (Source => Recipe_Index, Low => 7,
-                 High => Length(Source => Recipe_Index)));
+      Set_Ada_Recipe_Data
+        (C_Index => New_String(Str => To_String(Source => Recipe_Index)),
+         Ada_Craft => Temp_Nim_Record);
+      Recipe :=
+        (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
+         Result_Index => Temp_Nim_Record.Result_Index,
+         Result_Amount => Temp_Nim_Record.Result_Amount,
+         Workplace => Module_Type'Val(Temp_Nim_Record.Workplace),
+         Skill => SkillsData_Container.Extended_Index(Temp_Nim_Record.Skill),
+         Time => Temp_Nim_Record.Time,
+         Difficulty => Temp_Nim_Record.Difficulty,
+         Tool =>
+           To_Bounded_String
+             (Source =>
+                Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
+         Reputation => Temp_Nim_Record.Reputation,
+         Tool_Quality => Temp_Nim_Record.Tool_Quality);
+      Load_Materials_Loop :
+      for I in Temp_Nim_Record.Material_Types'Range loop
+         exit Load_Materials_Loop when Temp_Nim_Record.Material_Amounts(I) = 0;
          Recipe.Material_Types.Append
-           (New_Item => Get_Proto_Item(Index => Item_Index).I_Type);
-         Recipe.Material_Amounts.Append(New_Item => 1);
-         Recipe.Result_Index := Item_Index;
-         Recipe.Result_Amount := 0;
-         Recipe.Workplace := ALCHEMY_LAB;
-         Set_Recipe_Skill_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Recipe.Result_Index then
-               Recipe.Skill := ProtoRecipe.Skill;
-               Recipe.Time := ProtoRecipe.Difficulty * 15;
-               exit Set_Recipe_Skill_Loop;
-            end if;
-         end loop Set_Recipe_Skill_Loop;
-         Recipe.Difficulty := 1;
-         Recipe.Tool := Alchemy_Tools;
-         Recipe.Tool_Quality := 100;
-         return Recipe;
-      elsif Length(Source => Recipe_Index) > 12
-        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
-          "Deconstruct" then
-         Item_Index :=
-           Positive'Value
-             (Slice
-                (Source => Recipe_Index, Low => 13,
-                 High => Length(Source => Recipe_Index)));
-         Recipe.Material_Types.Append
-           (New_Item => Get_Proto_Item(Index => Item_Index).I_Type);
-         Recipe.Material_Amounts.Append(New_Item => 1);
-         Recipe.Workplace := ALCHEMY_LAB;
-         Set_Recipe_Data_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Item_Index then
-               Recipe.Skill := ProtoRecipe.Skill;
-               Recipe.Time := ProtoRecipe.Difficulty * 15;
-               Recipe.Difficulty := ProtoRecipe.Difficulty;
-               Recipe.Result_Index :=
-                 Find_Proto_Item(Item_Type => ProtoRecipe.Material_Types(1));
-               Recipe.Result_Amount :=
-                 Positive
-                   (Float'Ceiling
-                      (Float
-                         (ProtoRecipe.Material_Amounts.Element(Index => 1)) *
-                       0.8));
-               if Recipe.Result_Amount = ProtoRecipe.Material_Amounts(1) then
-                  Recipe.Result_Amount := Recipe.Result_Amount - 1;
-               end if;
-               exit Set_Recipe_Data_Loop;
-            end if;
-         end loop Set_Recipe_Data_Loop;
-         Recipe.Tool := Alchemy_Tools;
-         Recipe.Tool_Quality := 100;
-         return Recipe;
-      end if;
-      return
-        Recipes_List
-          (To_Bounded_String(Source => To_String(Source => Recipe_Index)));
+           (New_Item =>
+              To_Bounded_String
+                (Source => Value(Item => Temp_Nim_Record.Material_Types(I))));
+         Recipe.Material_Amounts.Append
+           (New_Item => Temp_Nim_Record.Material_Amounts(I));
+      end loop Load_Materials_Loop;
+      return Recipe;
    end Set_Recipe_Data;
 
    function Check_Recipe
