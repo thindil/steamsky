@@ -185,7 +185,7 @@ proc setRecipeData*(recipeIndex: string): CraftData =
         result.skill = recipe.skill
         result.time = recipe.difficulty * 15
         result.resultIndex = findProtoItem(itemType = recipe.materialTypes[0])
-        result.resultAmount = ceil(x = recipe.materialAmounts[0].float * 0.8).int
+        result.resultAmount = (recipe.materialAmounts[0].float * 0.8).int
         if result.resultAmount == recipe.resultAmount:
           result.resultAmount.dec
         break
@@ -296,6 +296,7 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
   adaRecipe.difficulty = recipe.difficulty.cint
   adaRecipe.tool = recipe.tool.cstring
   adaRecipe.toolQuality = recipe.toolQuality.cint
+  adaRecipe.reputation = recipe.reputation.cint
   for i in 0..recipe.materialTypes.high:
     adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
     adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
@@ -306,3 +307,24 @@ proc getAdaWorkshopRecipeName(workshop: cint): cstring {.exportc.} =
 proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.exportc.} =
   setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
       recipeIndex = $recipeIndex)
+
+proc setAdaRecipeData(recipeIndex: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
+  adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
+      skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
+      toolQuality: 1)
+  for i in 0..4:
+    adaRecipe.materialTypes[i] = "".cstring
+    adaRecipe.materialAmounts[i] = 0
+  let recipe = setRecipeData(recipeIndex = $recipeIndex)
+  adaRecipe.resultIndex = recipe.resultIndex.cint
+  adaRecipe.resultAmount = recipe.resultAmount.cint
+  adaRecipe.workplace = recipe.workplace.ord().cint
+  adaRecipe.skill = recipe.skill.cint
+  adaRecipe.time = recipe.time.cint
+  adaRecipe.difficulty = recipe.difficulty.cint
+  adaRecipe.tool = recipe.tool.cstring
+  adaRecipe.toolQuality = recipe.toolQuality.cint
+  adaRecipe.reputation = recipe.reputation.cint
+  for i in 0..recipe.materialTypes.high:
+    adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
+    adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
