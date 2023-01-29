@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,13 +20,9 @@ import types
 
 proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Generate robotic type name for bases, mobs, ships, etc
   ##
-  ## RETURNS
-  ##
-  ## Random robotic name
+  ## Returns random robotic name
   randomize()
   let
     lettersAmount: Positive = rand(x = 2..5)
@@ -44,53 +40,35 @@ proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
 
 proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the random value from the selected range
-  ##
-  ## PARAMETERS
   ##
   ## * min - The minimal value from which the value will be taken
   ## * max - The maximal value from which the value will be taken
   ##
-  ## RETURNS
-  ##
-  ## The random value from min and max range
+  ## Returns the random value from min and max range
   randomize()
   return rand(min .. max)
 
 proc getRandom*(min,max: int): int {.gcsafe, sideEffect, raises: [],
     tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the random value from the selected range
-  ##
-  ## PARAMETERS
   ##
   ## * min - The minimal value from which the value will be taken
   ## * max - The maximal value from which the value will be taken
   ##
-  ## RETURNS
-  ##
-  ## The random value from min and max range
+  ## Returns the random value from min and max range
   randomize()
   return rand(min .. max)
 
 proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game
-  ##
-  ## PARAMETERS
   ##
   ## * dateToCompare - the game date to compare
   ## * currentDate   - the current game date to which the date will be compared
   ##
-  ## RETURNS
-  ##
-  ## The difference in days between the two dates
+  ## Returns the difference in days between the two dates
   return (currentDate.day.cint + (30 * currentDate.month.cint) + (
       currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
       dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
