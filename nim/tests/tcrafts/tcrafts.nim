@@ -8,6 +8,7 @@ import ../../src/[crafts, game, items, ships, shipscargo, types]
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
+if recipesList.len == 0:
   loadRecipes("../bin/data/recipes.dat")
 
 playerShip.modules = @[]
