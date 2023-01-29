@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Icon for sending all ship's crew member to rest. Author: Delapouite
+  (https://game-icons.net), license CC BY 3.0
+
 ### Changed
 - Updated icon for checked and unchecked options, for example, the random
   game's difficulty
