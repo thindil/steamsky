@@ -15,21 +15,30 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with DOM.Core; use DOM.Core;
+with Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
+with Ada.Strings;
+with Ada.Strings.Fixed;
+with DOM.Core;
 with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
-with Game; use Game;
-with Items; use Items;
+with DOM.Core.Elements;
+with DOM.Core.Nodes;
+with Game;
+with Items;
+with Log;
 
 package body Help is
 
    procedure Load_Help(Reader: Tree_Reader) is
+      use Ada.Characters.Handling;
+      use Ada.Characters.Latin_1;
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use DOM.Core;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
+      use Game;
+      use Log;
       use Short_String;
       use Tiny_String;
 
@@ -137,6 +146,8 @@ package body Help is
       for I in 1 .. Skills_Amount loop
          Load_Skills_Block :
          declare
+            use Items;
+
             Skill: constant Skill_Record :=
               SkillsData_Container.Element
                 (Container => Skills_List, Index => I);
