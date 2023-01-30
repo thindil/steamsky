@@ -18,6 +18,10 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import crew, crewinventory, game, items, log, messages, ships, shipscrew, types
 
+type
+  CraftingNoWorkshopError* = object of CatchableError
+    ## Used to mark problems during crafting with lack of proper workshop
+
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the crafting recipes data from the file
@@ -162,7 +166,8 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
     KeyError, ValueError], tags: [].} =
   ## Set the crafting data for the selected recipe
   ##
-  ## * recipeIndex - index of the recipe which data will be set
+  ## * recipeIndex - index of the recipe which data will be set or full action
+  ##                 name related to the recipe, like "Study 12"
   ##
   ## Returns CraftData object with information about the crafting recipe
   result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
@@ -200,6 +205,39 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
     result.tool = alchemyTools
     return
   return recipesList[recipeIndex]
+
+proc checkRecipe*(recipeIndex: string): Positive =
+  let recipe = setRecipeData(recipeIndex = recipeIndex)
+  var
+    recipeName = ""
+    itemIndex = 0
+    mType: ModuleType
+  if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    itemIndex = recipeIndex[6..^1].strip.parseInt
+    recipeName = "studying " & itemsList[itemIndex].name
+    mType = alchemyLab
+  elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    itemIndex = recipeIndex[12..^1].strip.parseInt
+    recipeName = "deconstructing " & itemsList[itemIndex].name
+    mType = alchemyLab
+  else:
+    recipeName = "manufacturing " & itemsList[recipe.resultIndex].name
+    mType = recipesList[recipeIndex].workplace
+  var haveWorkshop = false
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == mType and module.durability > 0:
+      haveWorkshop = true
+      break
+  if not haveWorkshop:
+    raise newException(exceptn = CraftingNoWorkshopError, message = recipeName)
+  result = Positive.high
+  var materialIndexes: seq[Natural]
+  if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
+    for i in playerShip.cargo.low..playerShip.cargo.high:
+      if itemsList[playerShip.cargo[i].protoIndex].name == itemsList[recipe.resultIndex].name:
+        materialIndexes.add(y = i)
+        break
+    result = 1
 
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
