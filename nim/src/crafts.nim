@@ -158,7 +158,8 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     recipesList[recipeIndex] = recipe
 
-proc setRecipeData*(recipeIndex: string): CraftData =
+proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
+    KeyError, ValueError], tags: [].} =
   result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
   var itemIndex = 0
   if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
@@ -310,7 +311,8 @@ proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.exportc.} =
   setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
       recipeIndex = $recipeIndex)
 
-proc setAdaRecipeData(recipeIndex: cstring; adaRecipe: var AdaCraftData) {.exportc.} =
+proc setAdaRecipeData(recipeIndex: cstring;
+    adaRecipe: var AdaCraftData) {.exportc.} =
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
