@@ -133,6 +133,7 @@ package body Crafts is
       Set_Ada_Recipe_Data
         (C_Index => New_String(Str => To_String(Source => Recipe_Index)),
          Ada_Craft => Temp_Nim_Record);
+      --## rule off IMPROPER_INITIALIZATION
       Recipe :=
         (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
          Result_Index => Temp_Nim_Record.Result_Index,
@@ -147,6 +148,7 @@ package body Crafts is
                 Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
          Reputation => Temp_Nim_Record.Reputation,
          Tool_Quality => Temp_Nim_Record.Tool_Quality);
+      --## rule on IMPROPER_INITIALIZATION
       Load_Materials_Loop :
       for I in Temp_Nim_Record.Material_Types'Range loop
          exit Load_Materials_Loop when Temp_Nim_Record.Material_Amounts(I) = 0;
