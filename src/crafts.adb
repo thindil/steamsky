@@ -49,6 +49,42 @@ package body Crafts is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
+   function Convert_Recipe_From_Nim
+     (Crafting_Data: Craft_Nim_Data) return Craft_Data is
+      use Tiny_String;
+
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Record: Craft_Data;
+      Temp_Materials: TinyString_Container.Vector;
+      Temp_Amount: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+   begin
+      Temp_Record :=
+        (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
+         Result_Index => Crafting_Data.Result_Index,
+         Result_Amount => Crafting_Data.Result_Amount,
+         Workplace => Module_Type'Val(Crafting_Data.Workplace),
+         Skill => SkillsData_Container.Extended_Index(Crafting_Data.Skill),
+         Time => Crafting_Data.Time, Difficulty => Crafting_Data.Difficulty,
+         Tool =>
+           To_Bounded_String
+             (Source =>
+                Interfaces.C.Strings.Value(Item => Crafting_Data.Tool)),
+         Reputation => Crafting_Data.Reputation,
+         Tool_Quality => Crafting_Data.Tool_Quality);
+      Load_Materials_Loop :
+      for I in Crafting_Data.Material_Types'Range loop
+         exit Load_Materials_Loop when Crafting_Data.Material_Amounts(I) = 0;
+         Temp_Record.Material_Types.Append
+           (New_Item =>
+              To_Bounded_String
+                (Source => Value(Item => Crafting_Data.Material_Types(I))));
+         Temp_Record.Material_Amounts.Append
+           (New_Item => Crafting_Data.Material_Amounts(I));
+      end loop Load_Materials_Loop;
+      return Temp_Record;
+   end Convert_Recipe_From_Nim;
+
    procedure Load_Recipes(File_Name: String) is
       use Ada.Strings;
       use Ada.Strings.Fixed;
@@ -56,8 +92,6 @@ package body Crafts is
 
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Craft_Data;
-      Temp_Materials: TinyString_Container.Vector;
-      Temp_Amount: Positive_Container.Vector;
       Temp_Nim_Record: Craft_Nim_Data;
       --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
@@ -79,32 +113,7 @@ package body Crafts is
             Ada_Craft => Temp_Nim_Record);
          exit Load_Recipes_Loop when Temp_Nim_Record.Result_Index = 0;
          Temp_Record :=
-           (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
-            Result_Index => Temp_Nim_Record.Result_Index,
-            Result_Amount => Temp_Nim_Record.Result_Amount,
-            Workplace => Module_Type'Val(Temp_Nim_Record.Workplace),
-            Skill =>
-              SkillsData_Container.Extended_Index(Temp_Nim_Record.Skill),
-            Time => Temp_Nim_Record.Time,
-            Difficulty => Temp_Nim_Record.Difficulty,
-            Tool =>
-              To_Bounded_String
-                (Source =>
-                   Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
-            Reputation => Temp_Nim_Record.Reputation,
-            Tool_Quality => Temp_Nim_Record.Tool_Quality);
-         Load_Materials_Loop :
-         for I in Temp_Nim_Record.Material_Types'Range loop
-            exit Load_Materials_Loop when Temp_Nim_Record.Material_Amounts(I) =
-              0;
-            Temp_Record.Material_Types.Append
-              (New_Item =>
-                 To_Bounded_String
-                   (Source =>
-                      Value(Item => Temp_Nim_Record.Material_Types(I))));
-            Temp_Record.Material_Amounts.Append
-              (New_Item => Temp_Nim_Record.Material_Amounts(I));
-         end loop Load_Materials_Loop;
+           Convert_Recipe_From_Nim(Crafting_Data => Temp_Nim_Record);
          Recipes_List.Include
            (Key =>
               To_Bounded_String
@@ -120,8 +129,6 @@ package body Crafts is
 
       --## rule off IMPROPER_INITIALIZATION
       Recipe: Craft_Data;
-      Temp_Materials: TinyString_Container.Vector;
-      Temp_Amount: Positive_Container.Vector;
       Temp_Nim_Record: Craft_Nim_Data;
       --## rule on IMPROPER_INITIALIZATION
       procedure Set_Ada_Recipe_Data
@@ -134,31 +141,7 @@ package body Crafts is
         (C_Index => New_String(Str => To_String(Source => Recipe_Index)),
          Ada_Craft => Temp_Nim_Record);
       --## rule off IMPROPER_INITIALIZATION
-      Recipe :=
-        (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
-         Result_Index => Temp_Nim_Record.Result_Index,
-         Result_Amount => Temp_Nim_Record.Result_Amount,
-         Workplace => Module_Type'Val(Temp_Nim_Record.Workplace),
-         Skill => SkillsData_Container.Extended_Index(Temp_Nim_Record.Skill),
-         Time => Temp_Nim_Record.Time,
-         Difficulty => Temp_Nim_Record.Difficulty,
-         Tool =>
-           To_Bounded_String
-             (Source =>
-                Interfaces.C.Strings.Value(Item => Temp_Nim_Record.Tool)),
-         Reputation => Temp_Nim_Record.Reputation,
-         Tool_Quality => Temp_Nim_Record.Tool_Quality);
-      --## rule on IMPROPER_INITIALIZATION
-      Load_Materials_Loop :
-      for I in Temp_Nim_Record.Material_Types'Range loop
-         exit Load_Materials_Loop when Temp_Nim_Record.Material_Amounts(I) = 0;
-         Recipe.Material_Types.Append
-           (New_Item =>
-              To_Bounded_String
-                (Source => Value(Item => Temp_Nim_Record.Material_Types(I))));
-         Recipe.Material_Amounts.Append
-           (New_Item => Temp_Nim_Record.Material_Amounts(I));
-      end loop Load_Materials_Loop;
+      Recipe := Convert_Recipe_From_Nim(Crafting_Data => Temp_Nim_Record);
       return Recipe;
    end Set_Recipe_Data;
 
