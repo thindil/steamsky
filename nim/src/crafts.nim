@@ -160,6 +160,11 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
     KeyError, ValueError], tags: [].} =
+  ## Set the crafting data for the selected recipe
+  ##
+  ## * recipeIndex - index of the recipe which data will be set
+  ##
+  ## Returns CraftData object with information about the crafting recipe
   result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
   var itemIndex = 0
   if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
