@@ -22,6 +22,12 @@ type
   CraftingNoWorkshopError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper workshop
 
+  CraftingNoMaterialsError* = object of CatchableError
+    ## Used to mark problems during crafting with lack of proper crafting materials
+
+  CraftingNoToolsError* = object of CatchableError
+    ## Used to mark problems during crafting with lack of proper crafting tools
+
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the crafting recipes data from the file
@@ -234,10 +240,35 @@ proc checkRecipe*(recipeIndex: string): Positive =
   var materialIndexes: seq[Natural]
   if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
     for i in playerShip.cargo.low..playerShip.cargo.high:
-      if itemsList[playerShip.cargo[i].protoIndex].name == itemsList[recipe.resultIndex].name:
+      if itemsList[playerShip.cargo[i].protoIndex].name == itemsList[
+          recipe.resultIndex].name:
         materialIndexes.add(y = i)
         break
     result = 1
+  elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
+    for i in playerShip.cargo.low..playerShip.cargo.high:
+      if playerShip.cargo[i].protoIndex == itemIndex:
+        materialIndexes.add(y = i)
+        result = playerShip.cargo[i].amount
+        break
+  else:
+    for j in recipe.materialTypes.low..recipe.materialTypes.high:
+      for i in playerShip.cargo.low..playerShip.cargo.high:
+        if itemsList[playerShip.cargo[i].protoIndex].itemType ==
+            recipe.materialTypes[j] and playerShip.cargo[i].amount >=
+            recipe.materialAmounts[j]:
+          materialIndexes.add(y = i)
+          if result > (playerShip.cargo[i].amount / recipe.materialAmounts[j]).Positive:
+            result = (playerShip.cargo[i].amount / recipe.materialAmounts[j]).Positive
+            break
+  if materialIndexes.len < recipe.materialTypes.len:
+    raise newException(exceptn = CraftingNoMaterialsError, message = recipeName)
+  var haveTool = false
+  if recipe.tool != "None" and findItem(inventory = playerShip.cargo,
+      itemType = recipe.tool, quality = recipe.toolQuality) > 0:
+    haveTool = true
+    if not haveTool:
+      raise newException(exceptn = CraftingNoToolsError, message = recipeName)
 
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
