@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,8 +15,4 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-const
-  mainPaned* = ".gameframe.paned"
-    ## FUNCTION
-    ##
-    ## The name of the main Tk paned widget of the game
+const mainPaned* = ".gameframe.paned" ## The name of the main Tk paned widget of the game
