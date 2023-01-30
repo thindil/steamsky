@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[math, strutils, tables, xmlparser, xmltree]
+import std/[strutils, tables, xmlparser, xmltree]
 import crew, crewinventory, game, items, log, messages, ships, shipscrew, types
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
@@ -188,6 +188,8 @@ proc setRecipeData*(recipeIndex: string): CraftData =
         result.resultAmount = (recipe.materialAmounts[0].float * 0.8).int
         if result.resultAmount == recipe.resultAmount:
           result.resultAmount.dec
+        if result.resultAmount == 0:
+          result.resultAmount = 1
         break
     result.tool = alchemyTools
     return
