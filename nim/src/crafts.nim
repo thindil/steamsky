@@ -269,6 +269,11 @@ proc checkRecipe*(recipeIndex: string): Positive =
     haveTool = true
     if not haveTool:
       raise newException(exceptn = CraftingNoToolsError, message = recipeName)
+  var spaceNeeded = 0
+  for i in materialIndexes.low..materialIndexes.high:
+    spaceNeeded = spaceNeeded + (itemsList[playerShip.cargo[materialIndexes[i]].protoIndex].weight * recipe.materialAmounts[i])
+#    if freeCargo(amount = spaceNeeded - (itemsList[recipe.resultIndex].weight * recipe.resultAmount)) < 0:
+#      raise newException(exceptn = TradeNoFreeCargoError)
 
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
