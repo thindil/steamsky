@@ -1,4 +1,4 @@
-# Copyright 2022 Bartek thindil Jasicki
+# Copyright 2022-2023 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,18 +21,12 @@ import coreui
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Convert the game minutes to the game time in days, hours, etc
-  ##
-  ## PARAMETERS
   ##
   ## * minutes  - the amount of minutes to convert
   ## * infoText - the string to which the converted time will be added
   ##
-  ## RETURNS
-  ##
-  ## The updated infoText paramater with converted minutes to the game
+  ## Returns the updated infoText paramater with converted minutes to the game
   ## time
   var
     travelTime: DateRecord
@@ -87,11 +81,7 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
 
 proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Delete the selected widgets in the selected Tk grid
-  ##
-  ## PARAMETERS
   ##
   ## * startIndex - The index of the first widget to delete. Starts from 0
   ## * endIndex   - The index of the last widget to delete
@@ -109,11 +99,7 @@ proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
 
 proc showScreen*(newScreenName: cstring) {.exportc, gcsafe, sideEffect,
     raises: [], tags: [].} =
-  ## FUNCTION
-  ##
   ## Clear the old screen and show the selected to the player
-  ##
-  ## PARAMETERS
   ##
   ## * newScreenName - the Tcl name of the screen which will be show
   const
