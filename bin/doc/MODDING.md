@@ -1106,6 +1106,8 @@ story.
   the player's ship's crew member's inventory button. Optional.
 * Key `DismissIcon`: Path to the SVG image which will be used for dismiss the
   player's ship's crew member button. Optional.
+* Key `GoRestIcon`: Path to the SVG image which will be used for give order to
+  go rest for the whole the player's ship's crew button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
