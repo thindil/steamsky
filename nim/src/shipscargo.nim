@@ -62,7 +62,8 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   ship.cargo[itemIndex].amount = newAmount
   ship.cargo[itemIndex].price = price
 
-proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int =
+proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
+    raises: [KeyError], tags: [].} =
   result = 0
   for module in ship.modules:
     if module.mType == cargoRoom and module.durability > 0:
