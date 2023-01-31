@@ -64,6 +64,13 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
 
 proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Get the amount of free space in the selected ship's cargo
+  ##
+  ## * amount - the amount of space which will be taken or add from the current cargo
+  ## * ship   - the ship in which the free space will be check
+  ##
+  ## Returns the amount of free space after adding or removing the amount
+  ## parameter.
   result = 0
   for module in ship.modules:
     if module.mType == cargoRoom and module.durability > 0:
