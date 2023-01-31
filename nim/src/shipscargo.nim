@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import game, types
+import std/tables
+import game, ships, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex,
@@ -60,3 +61,20 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     return
   ship.cargo[itemIndex].amount = newAmount
   ship.cargo[itemIndex].price = price
+
+proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int =
+  result = 0
+  for module in ship.modules:
+    if module.mType == cargoRoom and module.durability > 0:
+      result = result + modulesList[module.protoIndex].maxValue
+  for item in ship.cargo:
+    result = result - (itemsList[item.protoIndex].weight * item.amount)
+  result = result + amount
+
+# Temporary code for interfacing with Ada
+
+proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.exportc.} =
+  if getPlayerShip == 1:
+    return freeCargo(amount = amount).cint
+  else:
+    return freeCargo(amount = amount, ship = npcShip).cint
