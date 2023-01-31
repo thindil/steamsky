@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -179,8 +179,8 @@ package Items is
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0;
       Ship: in out Ships.Ship_Record) with
-      Pre =>
-      (Item_Index <= Inventory_Container.Last_Index(Container => Inventory));
+      Pre => Item_Index <=
+      Inventory_Container.Last_Index(Container => Inventory);
       -- ****
 
       -- ****f* Items/Items.Find_Item
