@@ -17,7 +17,6 @@
 
 with Factions; use Factions;
 with Config; use Config;
-with ShipModules; use ShipModules;
 
 package body Ships.Cargo is
 
@@ -91,24 +90,20 @@ package body Ships.Cargo is
 
    function Free_Cargo
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
-      Ship_Free_Cargo: Integer := 0;
+      function Free_Ada_Cargo
+        (A: Integer; Get_Player_Ship: Natural := 1) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "freeAdaCargo";
    begin
-      Count_Cargo_Size_Loop :
-      for Module of Ship.Modules loop
-         if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
-            Ship_Free_Cargo :=
-              Ship_Free_Cargo +
-              Get_Module(Index => Module.Proto_Index).Max_Value;
-         end if;
-      end loop Count_Cargo_Size_Loop;
-      Count_Cargo_Weight_Loop :
-      for Item of Ship.Cargo loop
-         Ship_Free_Cargo :=
-           Ship_Free_Cargo -
-           (Get_Proto_Item(Index => Item.Proto_Index).Weight * Item.Amount);
-      end loop Count_Cargo_Weight_Loop;
-      Ship_Free_Cargo := Ship_Free_Cargo + Amount;
-      return Ship_Free_Cargo;
+      Get_Ada_Modules(Ship => Ship);
+      Get_Ada_Ship_Cargo
+        (Cargo => Inventory_To_Nim(Inventory => Ship.Cargo),
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      return
+        Free_Ada_Cargo
+          (A => Amount,
+           Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Free_Cargo;
 
    function Get_Item_Amount
