@@ -57,7 +57,6 @@ package body Crafts is
       Temp_Record: Craft_Data;
       Temp_Materials: TinyString_Container.Vector;
       Temp_Amount: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
    begin
       Temp_Record :=
         (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
@@ -72,6 +71,7 @@ package body Crafts is
                 Interfaces.C.Strings.Value(Item => Crafting_Data.Tool)),
          Reputation => Crafting_Data.Reputation,
          Tool_Quality => Crafting_Data.Tool_Quality);
+      --## rule on IMPROPER_INITIALIZATION
       Load_Materials_Loop :
       for I in Crafting_Data.Material_Types'Range loop
          exit Load_Materials_Loop when Crafting_Data.Material_Amounts(I) = 0;
