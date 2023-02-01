@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crew, crewinventory, game, items, log, messages, ships, shipscrew, types
+import crew, crewinventory, game, items, log, messages, ships, shipscargo,
+    shipscrew, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -271,9 +272,11 @@ proc checkRecipe*(recipeIndex: string): Positive =
       raise newException(exceptn = CraftingNoToolsError, message = recipeName)
   var spaceNeeded = 0
   for i in materialIndexes.low..materialIndexes.high:
-    spaceNeeded = spaceNeeded + (itemsList[playerShip.cargo[materialIndexes[i]].protoIndex].weight * recipe.materialAmounts[i])
-#    if freeCargo(amount = spaceNeeded - (itemsList[recipe.resultIndex].weight * recipe.resultAmount)) < 0:
-#      raise newException(exceptn = TradeNoFreeCargoError)
+    spaceNeeded = spaceNeeded + (itemsList[playerShip.cargo[materialIndexes[
+        i]].protoIndex].weight * recipe.materialAmounts[i])
+    if freeCargo(amount = spaceNeeded - (itemsList[recipe.resultIndex].weight *
+        recipe.resultAmount)) < 0:
+      raise newException(exceptn = TradeNoFreeCargoError, message = "")
 
 proc setRecipe*(workshop: Natural, amount: Positive,
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
@@ -411,3 +414,15 @@ proc setAdaRecipeData(recipeIndex: cstring;
   for i in 0..recipe.materialTypes.high:
     adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
     adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
+
+proc checkAdaRecipe(recipeIndex: cstring): cint {.exportc.} =
+  try:
+    return checkRecipe(recipeIndex = $recipeIndex).cint
+  except TradeNoFreeCargoError:
+    return -1
+  except CraftingNoWorkshopError:
+    return -2
+  except CraftingNoMaterialsError:
+    return -3
+  except CraftingNoToolsError:
+    return -4
