@@ -103,44 +103,6 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Free_Cargo_ece8ef_4f2f60
-     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
-   begin
-      declare
-         Test_Free_Cargo_ece8ef_4f2f60_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Cargo.Free_Cargo
-             (Amount, Ship);
-      begin
-         return Test_Free_Cargo_ece8ef_4f2f60_Result;
-      end;
-   end Wrap_Test_Free_Cargo_ece8ef_4f2f60;
---  end read only
-
---  begin read only
-   procedure Test_Free_Cargo_test_freecargo(Gnattest_T: in out Test);
-   procedure Test_Free_Cargo_ece8ef_4f2f60(Gnattest_T: in out Test) renames
-     Test_Free_Cargo_test_freecargo;
---  id:2.2/ece8ef93b323d083/Free_Cargo/1/0/test_freecargo/
-   procedure Test_Free_Cargo_test_freecargo(Gnattest_T: in out Test) is
-      function Free_Cargo
-        (Amount: Integer; Ship: Ship_Record := Player_Ship)
-         return Integer renames
-        Wrap_Test_Free_Cargo_ece8ef_4f2f60;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Assert
-        (Free_Cargo(1) > Free_Cargo(0),
-         "Failed to get proper amount of free cargo in player ship.");
-
---  begin read only
-   end Test_Free_Cargo_test_freecargo;
---  end read only
-
---  begin read only
    function Wrap_Test_Get_Item_Amount_a81592_e03f36
      (Item_Type: Tiny_String.Bounded_String) return Natural is
    begin
