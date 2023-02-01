@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -61,8 +61,7 @@ package Ships.Cargo is
       -- of kilograms
       -- SOURCE
    function Free_Cargo
-     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer with
-      Test_Case => (Name => "Test_FreeCargo", Mode => Robustness);
+     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer;
       -- ****
 
       -- ****f* SCargo/SCargo.Get_Item_Amount
