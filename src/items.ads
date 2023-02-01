@@ -63,6 +63,13 @@ package Items is
    end record;
    -- ****
 
+   -- ****d* Items/Items.Empty_Object
+   -- FUNCTION
+   -- Default, empty object prototype
+   -- SOURCE
+   Empty_Object: constant Object_Data := (others => <>);
+   -- ****
+
    -- ****t* Items/Items.Items_Durability
    -- FUNCTION
    -- Used to mark items durability
@@ -94,6 +101,13 @@ package Items is
       Durability: Items_Durability;
       Price: Natural := 0;
    end record;
+   -- ****
+
+   -- ****d* Items/Items.Empty_Item
+   -- FUNCTION
+   -- Default, empty item for inventory
+   -- SOURCE
+   Empty_Item: constant Inventory_Data := (others => <>);
    -- ****
 
    -- ****t* Items/Items.Inventory_Container
