@@ -213,7 +213,9 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
     return
   return recipesList[recipeIndex]
 
-proc checkRecipe*(recipeIndex: string): Positive =
+proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
+    ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
+    CraftingNoToolsError, TradeNoFreeCargoError], tags: [].} =
   let recipe = setRecipeData(recipeIndex = recipeIndex)
   var
     recipeName = ""
