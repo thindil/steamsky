@@ -147,210 +147,34 @@ package body Crafts is
 
    function Check_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Positive is
-      use Tiny_String;
+      use Trades;
 
-      Recipe: Craft_Data;
-      --## rule off IMPROPER_INITIALIZATION
-      Material_Indexes: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Recipe_Name: Unbounded_String;
-      Max_Amount: Positive := Positive'Last;
-      M_Type: Module_Type;
+      Max_Amount: Integer;
+      function Check_Ada_Recipe(R_Index: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "checkAdaRecipe";
    begin
-      Recipe := Set_Recipe_Data(Recipe_Index => Recipe_Index);
-      if Length(Source => Recipe_Index) > 6
-        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
-          "Study" then
-         Recipe_Name :=
-           To_Unbounded_String(Source => "studying ") &
-           To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index =>
-                     Positive'Value
-                       (Slice
-                          (Source => Recipe_Index, Low => 7,
-                           High => Length(Source => Recipe_Index))))
-                  .Name);
-         M_Type := ALCHEMY_LAB;
-      elsif Length(Source => Recipe_Index) > 12
-        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
-          "Deconstruct" then
-         Recipe_Name :=
-           To_Unbounded_String(Source => "deconstructing ") &
-           To_String
-             (Source =>
-                Get_Proto_Item
-                  (Index =>
-                     Positive'Value
-                       (Slice
-                          (Source => Recipe_Index, Low => 13,
-                           High => Length(Source => Recipe_Index))))
-                  .Name);
-         M_Type := ALCHEMY_LAB;
-      else
-         Recipe_Name :=
-           To_Unbounded_String(Source => "manufacturing ") &
-           To_String
-             (Source => Get_Proto_Item(Index => Recipe.Result_Index).Name);
-         M_Type := Recipes_List(Recipe_Index).Workplace;
-      end if;
-      -- Check for workshop
-      Check_For_Workshop_Block :
-      declare
-         Have_Workshop: Boolean := False;
-      begin
-         Check_For_Workshop_Loop :
-         for Module of Player_Ship.Modules loop
-            if Get_Module(Index => Module.Proto_Index).M_Type = M_Type and
-              Module.Durability > 0 then
-               Have_Workshop := True;
-               exit Check_For_Workshop_Loop;
-            end if;
-         end loop Check_For_Workshop_Loop;
-         if not Have_Workshop then
-            raise Crafting_No_Workshop with To_String(Source => Recipe_Name);
-         end if;
-      end Check_For_Workshop_Block;
-      -- Check for materials
-      if Length(Source => Recipe_Index) > 6
-        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
-          "Study" then
-         Study_Materials_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-             Inventory_Container.Last_Index
-               (Container => Player_Ship.Cargo) loop
-            if Get_Proto_Item
-                (Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => I)
-                     .Proto_Index)
-                .Name =
-              Get_Proto_Item(Index => Recipe.Result_Index).Name then
-               Material_Indexes.Append(New_Item => I);
-               exit Study_Materials_Loop;
-            end if;
-         end loop Study_Materials_Loop;
-         Max_Amount := 1;
-      elsif Length(Source => Recipe_Index) > 12
-        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
-          "Deconstruct" then
-         Deconstruct_Materials_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-             Inventory_Container.Last_Index
-               (Container => Player_Ship.Cargo) loop
-            if Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Proto_Index =
-              Positive'Value
-                (Slice
-                   (Source => Recipe_Index, Low => 13,
-                    High => Length(Source => Recipe_Index))) then
-               Material_Indexes.Append(New_Item => I);
-               Max_Amount :=
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => I)
-                   .Amount;
-               exit Deconstruct_Materials_Loop;
-            end if;
-         end loop Deconstruct_Materials_Loop;
-      else
-         Find_Materials_Loop :
-         for J in Recipe.Material_Types.Iterate loop
-            Check_Player_Cargo_Loop :
-            for I in
-              Inventory_Container.First_Index
-                (Container => Player_Ship.Cargo) ..
-                Inventory_Container.Last_Index
-                  (Container => Player_Ship.Cargo) loop
-               if Get_Proto_Item
-                   (Index =>
-                      Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => I)
-                        .Proto_Index)
-                   .I_Type =
-                 Recipe.Material_Types(J) and
-                 Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => I)
-                     .Amount >=
-                   Recipe.Material_Amounts
-                     (TinyString_Container.To_Index(Position => J)) then
-                  Material_Indexes.Append(New_Item => I);
-                  if Max_Amount >
-                    Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => I)
-                        .Amount /
-                      Recipe.Material_Amounts
-                        (TinyString_Container.To_Index(Position => J)) then
-                     Max_Amount :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => I)
-                         .Amount /
-                       Recipe.Material_Amounts
-                         (TinyString_Container.To_Index(Position => J));
-                  end if;
-                  exit Check_Player_Cargo_Loop;
-               end if;
-            end loop Check_Player_Cargo_Loop;
-         end loop Find_Materials_Loop;
-      end if;
-      if Material_Indexes.Length < Recipe.Material_Types.Length then
-         raise Crafting_No_Materials with To_String(Source => Recipe_Name);
-      end if;
-      -- Check for tool
-      Check_For_Tool_Block :
-      declare
-         Have_Tool: Boolean := False;
-      begin
-         if Recipe.Tool /= To_Bounded_String(Source => "None")
-           and then
-             Find_Item
-               (Inventory => Player_Ship.Cargo, Item_Type => Recipe.Tool,
-                Quality => Recipe.Tool_Quality) >
-             0 then
-            Have_Tool := True;
-         elsif Recipe.Tool = To_Bounded_String(Source => "None") then
-            Have_Tool := True;
-         end if;
-         if not Have_Tool then
-            raise Crafting_No_Tools with To_String(Source => Recipe_Name);
-         end if;
-      end Check_For_Tool_Block;
-      -- Check for free space
-      Check_For_Free_Space_Block :
-      declare
-         use Trades;
-
-         Space_Needed: Integer := 0;
-      begin
-         Count_Needed_Space_Loop :
-         for I in Material_Indexes.Iterate loop
-            Space_Needed :=
-              Space_Needed +
-              Get_Proto_Item
-                  (Index =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo,
-                        Index => Material_Indexes(I))
-                       .Proto_Index)
-                  .Weight *
-                Recipe.Material_Amounts
-                  (Positive_Container.To_Index(Position => I));
-         end loop Count_Needed_Space_Loop;
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         if Free_Cargo
-             (Amount =>
-                Space_Needed -
-                (Get_Proto_Item(Index => Recipe.Result_Index).Weight *
-                 Recipe.Result_Amount)) <
-           0 then
+      Get_Ada_Modules;
+      Get_Ada_Ship_Cargo
+        (Cargo => Inventory_To_Nim(Inventory => Player_Ship.Cargo),
+         Get_Player_Ship => 1);
+      Max_Amount :=
+        Check_Ada_Recipe
+          (R_Index =>
+             New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
+      case Max_Amount is
+         when -1 =>
             raise Trade_No_Free_Cargo;
-         end if;
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-      end Check_For_Free_Space_Block;
-      return Max_Amount;
+         when -2 =>
+            raise Crafting_No_Workshop;
+         when -3 =>
+            raise Crafting_No_Materials;
+         when -4 =>
+            raise Crafting_No_Tools;
+         when others =>
+            return Max_Amount;
+      end case;
    end Check_Recipe;
 
    procedure Manufacturing(Minutes: Positive) is
