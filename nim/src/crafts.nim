@@ -216,6 +216,13 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
 proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
     ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
     CraftingNoToolsError, TradeNoFreeCargoError], tags: [].} =
+  ## Check if player have all requirements for the selected recipe
+  ##
+  ## * recipeIndex - index of the recipe which data will be set or full action
+  ##                 name related to the recipe, like "Study 12"
+  ##
+  ## Returns the maximum amount of items which can be crafted with the selected
+  ## recipe
   let recipe = setRecipeData(recipeIndex = recipeIndex)
   var
     recipeName = ""
