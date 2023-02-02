@@ -29,8 +29,8 @@ type
 
   MessageData = object
     ## Used to store data about the game's messages
-    message: string ## The message itself
-    kind: MessageType ## The type of message
+    message: string     ## The message itself
+    kind: MessageType   ## The type of message
     color: MessageColor ## The color used to show the message
 
   MessageDataC* = object
@@ -68,7 +68,7 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
   return formattedTime.cstring
 
 proc addMessage*(message: cstring; kind: cint; color: cint = ord(
-    white)) {.raises: [], tags: [], exportc.} =
+    white)) {.sideEffect, raises: [], tags: [], exportc.} =
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages
   ##
@@ -80,8 +80,10 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
 
-proc addMessage*(message: string; mType: MessageType; color: MessageColor = white) =
-  addMessage(message = message.cstring, kind = mType.ord.cint, color = color.ord.cint)
+proc addMessage*(message: string; mType: MessageType;
+    color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
+  addMessage(message = message.cstring, kind = mType.ord.cint,
+      color = color.ord.cint)
 
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ## Get the index of the last message in the messagesList
