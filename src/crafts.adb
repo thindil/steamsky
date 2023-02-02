@@ -18,13 +18,14 @@
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Crew;
 with Crew.Inventory;
 with Goals;
 with Items; use Items;
 with Messages;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Ships.Crew;
 with Statistics;
 with Trades;
@@ -179,10 +180,12 @@ package body Crafts is
 
    procedure Manufacturing(Minutes: Positive) is
       use Ada.Exceptions;
+      use Ada.Strings.Unbounded;
       use Crew;
       use Crew.Inventory;
       use Goals;
       use Messages;
+      use Ships.Cargo;
       use Ships.Crew;
       use Statistics;
       use Tiny_String;
