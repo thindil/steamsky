@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Ships; use Ships;
@@ -146,8 +145,7 @@ package Crafts is
       -- SOURCE
    function Check_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Positive with
-      Pre => Tiny_String.Length(Source => Recipe_Index) > 0,
-      Test_Case => (Name => "Test_CheckRecipe", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Recipe_Index) > 0;
       -- ****
 
       -- ****f* Crafts/Crafts.Set_Recipe
