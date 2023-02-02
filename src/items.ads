@@ -253,6 +253,7 @@ package Items is
 
 -- Temporary code to interact with Nim
 
+   --## rule off TYPE_INITIAL_VALUES
    type Nim_Inventory_Data is record
       Proto_Index: Natural;
       Amount: Positive := 1;
@@ -261,6 +262,7 @@ package Items is
       Price: Natural := 0;
    end record;
    type Nim_Inventory_Array is array(0 .. 127) of Nim_Inventory_Data;
+   --## rule on TYPE_INITIAL_VALUES
 
    function Inventory_To_Nim
      (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array;
