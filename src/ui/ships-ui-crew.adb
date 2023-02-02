@@ -140,22 +140,29 @@ package body Ships.UI.Crew is
          end if;
          exit Check_Modules_Loop when Need_Clean and Need_Repair;
       end loop Check_Modules_Loop;
+      Orders_Label :=
+        Create
+          (pathName => Buttons_Frame & ".label",
+           options => "-text {Orders for all:}");
+      Add
+        (Widget => Orders_Label,
+         Message => "Give the selected order to the whole crew.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".rest",
+           options => "-image goresticon -command {OrderForAll Rest}");
+      Add(Widget => Button, Message => "Go rest everyone");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-row 0 -column 1 -padx {0 2}");
       if Need_Clean then
-         Orders_Label :=
-           Create
-             (pathName => Buttons_Frame & ".label",
-              options => "-text {Orders for all:}");
-         Add
-           (Widget => Orders_Label,
-            Message => "Give the selected order to the whole crew.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
          Button :=
            Create
              (pathName => Buttons_Frame & ".clean",
               options => "-image cleanordericon -command {OrderForAll Clean}");
          Add(Widget => Button, Message => "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-row 0 -column 1 -padx {0 2}");
+           (Slave => Button, Options => "-row 0 -column 2 -padx {0 2}");
       end if;
       if Need_Repair then
          Button :=
@@ -166,19 +173,10 @@ package body Ships.UI.Crew is
          Add(Widget => Button, Message => "Repair ship everyone");
          if Need_Clean then
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-row 0 -column 2");
+              (Slave => Button, Options => "-row 0 -column 3");
          else
-            Orders_Label :=
-              Create
-                (pathName => Buttons_Frame & ".label",
-                 options => "-text {Orders for all:}");
-            Add
-              (Widget => Orders_Label,
-               Message => "Give the selected order to the whole crew.");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Orders_Label, Options => "-padx {5 2}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-row 0 -column 1");
+              (Slave => Button, Options => "-row 0 -column 2");
          end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Buttons_Frame, Options => "-sticky w");
@@ -2332,8 +2330,8 @@ package body Ships.UI.Crew is
       configure
         (Widgt => Button,
          options =>
-           "-command {SelectCrewOrder {" & To_String(Source => Tcl_Commands) & "}" &
-           Member_Index'Img & ";CloseDialog .memberdialog}");
+           "-command {SelectCrewOrder {" & To_String(Source => Tcl_Commands) &
+           "}" & Member_Index'Img & ";CloseDialog .memberdialog}");
    end Set_Available_Orders;
 
    -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
@@ -2398,7 +2396,8 @@ package body Ships.UI.Crew is
       Accept_Button: constant Ttk_Button :=
         Create
           (pathName => Member_Dialog & ".buttons.button2",
-           options => "-text Assign -image giveordericon -style Dialog.TButton");
+           options =>
+             "-text Assign -image giveordericon -style Dialog.TButton");
    begin
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -2427,7 +2426,9 @@ package body Ships.UI.Crew is
       Bind
         (Widgt => Accept_Button, Sequence => "<Escape>",
          Script => "{" & Close_Dialog_Button & " invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Dialog_Button, Options => "-column 1 -row 0 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Dialog_Button,
+         Options => "-column 1 -row 0 -padx {5 0}");
       Focus(Widgt => Close_Dialog_Button);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
