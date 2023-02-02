@@ -82,6 +82,13 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
 
 proc addMessage*(message: string; mType: MessageType;
     color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
+  ## Add the message to the messages list. Delete the oldest message if the
+  ## adding will reach the max limit of messages. Same as above, but uses
+  ## the standard types instead of compatible string or int.
+  ##
+  ## * message - The message to add
+  ## * mType   - The type of the message to add
+  ## * color   - The color used to draw the message
   addMessage(message = message.cstring, kind = mType.ord.cint,
       color = color.ord.cint)
 
