@@ -287,7 +287,46 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
         recipe.resultAmount)) < 0:
       raise newException(exceptn = TradeNoFreeCargoError, message = "")
 
-proc setRecipe*(workshop: Natural, amount: Positive,
+proc manufacturing*(minutes: Positive) =
+  var toolIndex, crafterIndex: int
+
+  proc resetOrder(module: var ModuleData; moduleOwner: int) =
+    if toolIndex in 0..playerShip.crew[crafterIndex].inventory.high:
+      updateCargo(ship = playerShip, protoIndex = playerShip.crew[
+          crafterIndex].inventory[toolIndex].protoIndex, amount = 1,
+          durability = playerShip.crew[crafterIndex].inventory[
+          toolIndex].durability)
+      updateInventory(memberIndex = crafterIndex, amount = -1,
+          inventoryIndex = toolIndex, ship = playerShip)
+    var haveWorker = false
+    for i in module.owner.low..module.owner.high:
+      if module.owner[i] == moduleOwner or moduleOwner == -1:
+        if module.owner[i] in 0..playerShip.crew.high:
+          giveOrders(ship = playerShip, memberIndex = module.owner[i], givenOrder = rest)
+        module.owner[i] = -1
+      if module.owner[i] > -1:
+        haveWorker = true
+    if not haveWorker:
+      module.craftingIndex = ""
+      module.craftingTime = 0
+      module.craftingAmount = 0
+
+  for module in playerShip.modules:
+    if module.mType != ModuleType2.workshop:
+      continue
+    if module.craftingIndex.len == 0:
+      continue
+    for owner in module.owner:
+      if owner == -1:
+        continue
+      crafterIndex = owner
+      if playerShip.crew[crafterIndex].order == craft:
+        var
+          currentMinutes = minutes
+          recipeTime = module.craftingTime
+        let recipe = setRecipeData(recipeIndex = module.craftingIndex)
+
+proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
     CrewNoSpaceError, Exception], tags: [RootEffect].} =
   ## Set the selected crafting recipe for the selected workshop in the player's
