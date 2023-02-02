@@ -80,6 +80,9 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
 
+proc addMessage*(message: string; mType: MessageType; color: MessageColor = white) =
+  addMessage(message = message.cstring, kind = mType.ord.cint, color = color.ord.cint)
+
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ## Get the index of the last message in the messagesList
   ##
