@@ -13,8 +13,5 @@ package Crafts.Test_Data.Tests is
    procedure Test_Manufacturing_dd583a_cf804c(Gnattest_T: in out Test);
    --  crafts.ads:121:4:Manufacturing:Test_Manufacturing
 
-   procedure Test_Check_Recipe_b182a8_b1abbf(Gnattest_T: in out Test);
-   --  crafts.ads:147:4:Check_Recipe:Test_CheckRecipe
-
 end Crafts.Test_Data.Tests;
 --  end read only
