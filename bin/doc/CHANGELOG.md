@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Starting crew for players from Independent faction
+
 ## [8.0.3] - 2023-01-08
 
 ### Fixed
