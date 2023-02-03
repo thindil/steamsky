@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, types, ships, shipscargo, utils
+import game, messages, ships, shipscargo, types, utils
 
 type CrewNoSpaceError* = object of CatchableError
   ## Raised when there is no space for new item in crew member inventory
@@ -210,6 +210,41 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         i.dec
         break
     i.inc
+
+proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
+    toolQuality: Positive = 100): int =
+  result = playerShip.crew[memberIndex].equipment[tool]
+  if result > -1:
+    let protoIndex = playerShip.crew[memberIndex].inventory[result].protoIndex
+    if itemsList[protoIndex].itemType != itemType or itemsList[
+        protoIndex].value[1] < toolQuality:
+      updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
+          durability = playerShip.crew[memberIndex].inventory[
+          result].durability)
+      updateInventory(memberIndex = memberIndex, amount = -1,
+          inventoryIndex = result, ship = playerShip)
+      result = -1
+  result = findItem(inventory = playerShip.crew[memberIndex].inventory,
+      itemType = itemType, quality = toolQuality)
+  if result == -1:
+    result = findItem(inventory = playerShip.cargo, itemType = itemType,
+        quality = toolQuality)
+    if result > -1:
+      try:
+        updateInventory(memberIndex = memberIndex, amount = 1,
+            protoIndex = playerShip.cargo[result].protoIndex,
+            durability = playerShip.cargo[result].durability, ship = playerShip)
+        updateCargo(ship = playerShip, amount = -1, cargoIndex = result)
+        result = findItem(inventory = playerShip.crew[memberIndex].inventory,
+            itemType = itemType, quality = toolQuality)
+      except CrewNoSpaceError:
+        case order:
+        of repair:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue repairs because they don't have free space in their inventory for repair tools.",
+              mType = orderMessage, color = red)
+        else:
+          discard
 
 # Temporary code for interfacing with Ada
 
