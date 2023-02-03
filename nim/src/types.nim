@@ -18,6 +18,10 @@
 import std/tables
 
 type
+
+  CrewNoSpaceError* = object of CatchableError
+    ## Raised when there is no space for new item in crew member inventory
+
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
