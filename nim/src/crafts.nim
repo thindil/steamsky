@@ -302,7 +302,8 @@ proc manufacturing*(minutes: Positive) =
     for i in module.owner.low..module.owner.high:
       if module.owner[i] == moduleOwner or moduleOwner == -1:
         if module.owner[i] in 0..playerShip.crew.high:
-          giveOrders(ship = playerShip, memberIndex = module.owner[i], givenOrder = rest)
+          giveOrders(ship = playerShip, memberIndex = module.owner[i],
+              givenOrder = rest)
         module.owner[i] = -1
       if module.owner[i] > -1:
         haveWorker = true
@@ -311,7 +312,7 @@ proc manufacturing*(minutes: Positive) =
       module.craftingTime = 0
       module.craftingAmount = 0
 
-  for module in playerShip.modules:
+  for module in playerShip.modules.mitems:
     if module.mType != ModuleType2.workshop:
       continue
     if module.craftingIndex.len == 0:
@@ -324,7 +325,48 @@ proc manufacturing*(minutes: Positive) =
         var
           currentMinutes = minutes
           recipeTime = module.craftingTime
+          recipeName = ""
         let recipe = setRecipeData(recipeIndex = module.craftingIndex)
+        if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+          recipeName = "studying " & itemsList[recipe.resultIndex].name
+        elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+          recipeName = "deconstructing " & itemsList[module.craftingIndex[
+              12..^1].strip.parseInt].name
+        else:
+          recipeName = "manufacturing " & itemsList[recipe.resultIndex].name
+        if module.durability == 0:
+          addMessage(message = module.name & " is destroyed, so " &
+              playerShip.crew[crafterIndex].name & " can't work on " &
+              recipeName & ".", mType = craftMessage, color = red)
+          resetOrder(module = module, moduleOwner = owner)
+          currentMinutes = 0
+        var
+          workTime = playerShip.crew[crafterIndex].orderTime
+          craftedAmount = 0
+        while currentMinutes > 0:
+          if currentMinutes < recipeTime:
+            recipeTime.dec(y = currentMinutes)
+            workTime.dec(y = currentMinutes)
+            currentMinutes = 0
+            break
+          recipeTime.dec(y = currentMinutes)
+          workTime.dec(y = (currentMinutes - recipeTime))
+          currentMinutes = 0 - recipeTime
+          recipeTime = recipe.time
+          var materialIndexes: seq[Positive]
+          if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+            for j in 1..itemsList.len:
+              if itemsList[j].name == itemsList[recipe.resultIndex].name:
+                materialIndexes.add(y = j)
+                break
+          elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
+            materialIndexes.add(y = module.craftingIndex[12..^1].strip.parseInt)
+          else:
+            for materialType in recipe.materialTypes:
+              for j in 1..itemsList.len:
+                if itemsList[j].itemType == materialType:
+                  materialIndexes.add(y = j)
+                  break
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
