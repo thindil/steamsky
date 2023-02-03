@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, messages, ships, shipscargo, shipscrew, types, utils
+import game, ships, shipscargo, types, utils
 
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
@@ -207,61 +207,6 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         i.dec
         break
     i.inc
-
-proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
-    toolQuality: Positive = 100): int =
-  result = playerShip.crew[memberIndex].equipment[tool]
-  if result > -1:
-    let protoIndex = playerShip.crew[memberIndex].inventory[result].protoIndex
-    if itemsList[protoIndex].itemType != itemType or itemsList[
-        protoIndex].value[1] < toolQuality:
-      updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
-          durability = playerShip.crew[memberIndex].inventory[
-          result].durability)
-      updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = result, ship = playerShip)
-      result = -1
-  result = findItem(inventory = playerShip.crew[memberIndex].inventory,
-      itemType = itemType, quality = toolQuality)
-  if result == -1:
-    result = findItem(inventory = playerShip.cargo, itemType = itemType,
-        quality = toolQuality)
-    if result > -1:
-      try:
-        updateInventory(memberIndex = memberIndex, amount = 1,
-            protoIndex = playerShip.cargo[result].protoIndex,
-            durability = playerShip.cargo[result].durability, ship = playerShip)
-        updateCargo(ship = playerShip, amount = -1, cargoIndex = result)
-        result = findItem(inventory = playerShip.crew[memberIndex].inventory,
-            itemType = itemType, quality = toolQuality)
-      except CrewNoSpaceError:
-        case order:
-        of repair:
-          addMessage(message = playerShip.crew[memberIndex].name &
-              " can't continue repairs because they don't have free space in their inventory for repair tools.",
-              mType = orderMessage, color = red)
-        of upgrading:
-          addMessage(message = playerShip.crew[memberIndex].name &
-              " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
-              mType = orderMessage, color = red)
-        of clean:
-          addMessage(message = playerShip.crew[memberIndex].name &
-              " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
-              mType = orderMessage, color = red)
-        of craft:
-          addMessage(message = playerShip.crew[memberIndex].name &
-              " can't continue manufacturing because they don't have free space in their inventory for the proper tools.",
-              mType = orderMessage, color = red)
-        of train:
-          addMessage(message = playerShip.crew[memberIndex].name &
-              " can't continue training because they don't have free space in their inventory for the proper tools.",
-              mType = orderMessage, color = red)
-        else:
-          discard
-        giveOrders(ship = playerShip, memberIndex = memberIndex,
-            givenOrder = rest)
-        return -1
-  playerShip.crew[memberIndex].equipment[tool] = result
 
 # Temporary code for interfacing with Ada
 
