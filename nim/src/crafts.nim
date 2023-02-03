@@ -349,8 +349,8 @@ proc manufacturing*(minutes: Positive) =
             workTime.dec(y = currentMinutes)
             currentMinutes = 0
             break
-          recipeTime.dec(y = currentMinutes)
-          workTime.dec(y = (currentMinutes - recipeTime))
+          recipeTime = recipeTime - currentMinutes
+          workTime = workTime - currentMinutes - recipeTime
           currentMinutes = 0 - recipeTime
           recipeTime = recipe.time
           var materialIndexes: seq[Positive]
@@ -367,6 +367,26 @@ proc manufacturing*(minutes: Positive) =
                 if itemsList[j].itemType == materialType:
                   materialIndexes.add(y = j)
                   break
+          var craftingMaterial = -1
+          for materialIndex in materialIndexes.mitems:
+            craftingMaterial = findItem(inventory = playerShip.cargo,
+                itemType = itemsList[materialIndex].itemType)
+            if craftingMaterial == -1:
+              addMessage(message = "You don't have the crafting materials for " &
+                  recipeName & ".", mType = craftMessage, color = red)
+              resetOrder(module = module, moduleOwner = owner)
+              break
+            elif playerShip.cargo[craftingMaterial].protoIndex != materialIndex:
+              materialIndex = playerShip.cargo[craftingMaterial].protoIndex
+          if craftingMaterial == -1:
+            break
+          var toolIndex = -1
+          if recipe.tool == "None":
+            toolIndex = -1
+  #        else:
+  #          toolIndex = findTools(memberIndex = crafterIndex,
+  #              itemType = recipe.tool, order = craft,
+  #              toolQuality = recipe.toolQuality)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
