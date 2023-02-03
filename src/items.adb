@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -170,8 +170,6 @@ package body Items is
 
    function Inventory_To_Nim
      (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array is
-      use Tiny_String;
-
       Nim_Inventory: Nim_Inventory_Array :=
         (others =>
            (Proto_Index => 0, Amount => 1, Name => New_String(Str => ""),
@@ -183,6 +181,8 @@ package body Items is
           Inventory_Container.Last_Index(Container => Inventory) loop
          Set_Item_Block :
          declare
+            use Tiny_String;
+
             Item: constant Inventory_Data :=
               Inventory_Container.Element(Container => Inventory, Index => I);
          begin
