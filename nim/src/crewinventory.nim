@@ -16,10 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, messages, ships, shipscargo, types, utils
-
-type CrewNoSpaceError* = object of CatchableError
-  ## Raised when there is no space for new item in crew member inventory
+import game, messages, ships, shipscargo, shipscrew, types, utils
 
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
@@ -243,8 +240,28 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
           addMessage(message = playerShip.crew[memberIndex].name &
               " can't continue repairs because they don't have free space in their inventory for repair tools.",
               mType = orderMessage, color = red)
+        of upgrading:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
+              mType = orderMessage, color = red)
+        of clean:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
+              mType = orderMessage, color = red)
+        of craft:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue manufacturing because they don't have free space in their inventory for the proper tools.",
+              mType = orderMessage, color = red)
+        of train:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue training because they don't have free space in their inventory for the proper tools.",
+              mType = orderMessage, color = red)
         else:
           discard
+        giveOrders(ship = playerShip, memberIndex = memberIndex,
+            givenOrder = rest)
+        return -1
+  playerShip.crew[memberIndex].equipment[tool] = result
 
 # Temporary code for interfacing with Ada
 
