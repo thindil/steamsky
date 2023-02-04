@@ -245,7 +245,8 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
       toolsList.add(y = skill.tool)
 
 proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
-    toolQuality: Positive = 100): int =
+    toolQuality: Positive = 100): int {.sideEffect, raises: [KeyError,
+    CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect].} =
   result = playerShip.crew[memberIndex].equipment[tool]
   if result > -1:
     let protoIndex = playerShip.crew[memberIndex].inventory[result].protoIndex
@@ -370,5 +371,7 @@ proc getAdaProtoAmount(): cint {.exportc.} =
 
 proc findAdaTools(memberIndex: cint; itemType: cstring; order,
     toolQuality: cint): cint {.exportc.} =
-  return findTools(memberIndex = (memberIndex - 1).Natural, itemType = $itemType,
-      order = order.CrewOrders, toolQuality = toolQuality.Positive).cint + 1
+  return findTools(memberIndex = (memberIndex - 1).Natural,
+      itemType = $itemType,
+
+order = order.CrewOrders, toolQuality = toolQuality.Positive).cint + 1
