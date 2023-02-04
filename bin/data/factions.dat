@@ -126,12 +126,12 @@ between 51 and 70 it will be second base type.
   <basetype index="10" chance="10" />
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f5df" weaponskill="Spears">
-  <relation faction="POLEIS" reputation="0" friendly="Y" />
-  <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
-  <relation faction="PIRATES" reputation="-10" friendly="N" />
+  <relation faction="POLEIS" minreputation="-3" maxreputation="2" friendly="Y" />
+  <relation faction="INDEPENDENT" reputation="0" friendly="Y" />
+  <relation faction="PIRATES" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
-  <relation faction="INQUISITION" reputation="-50" friendly="N" />
+  <relation faction="INQUISITION" minreputation="-40" maxreputation="-25" friendly="N" />
   <description>Group of sky bases independent from each other, not connected in any way with each other. Their favorite melee weapons are spears. Their unique base is Market - a place which sells random items and allows you to upgrade your ship. Bases of this faction are much less common than Poleis, and are rarely near other Independent bases. Gameplay is harder than Poleis due to fewer sky bases, but generally very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
