@@ -200,7 +200,9 @@ package body Items is
       return Inventory_Container.Vector is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Ada_Inventory: Inventory_Container.Vector (Capacity => Count_Type(Size));
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Fill_Ada_Inventory_Loop :
       for Item of Inventory loop
