@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Updating the player's ship's crew member orders
 - Starting crew for players from Independent faction
+- Reputation with other factions for Independent faction
 
 ## [8.3] - 2023-01-22
 
