@@ -15,10 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-
 package body Crew.Inventory is
 
    procedure Equipment_To_Ada
@@ -143,121 +139,38 @@ package body Crew.Inventory is
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural is
       use Tiny_String;
 
-      Tools_Index: Inventory_Container.Extended_Index :=
-        Player_Ship.Crew(Member_Index).Equipment(TOOL);
+      Tools_Index: Natural := 0;
+      Nim_Equipment: Nim_Equipment_Array;
+      Nim_Inventory: Nim_Inventory_Array :=
+        Inventory_To_Nim
+          (Inventory => Player_Ship.Crew(Member_Index).Inventory);
+      function Find_Ada_Tools
+        (M_Index: Integer; I_Type: chars_ptr; M_Order, T_Quality: Integer)
+         return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "findAdaTools";
    begin
-      -- If the crew member has equiped tool, check if it is a proper tool.
-      -- If not, remove it and put to the ship cargo
-      if Tools_Index > 0 then
-         Update_Cargo_Block :
-         declare
-            Proto_Index: constant Natural :=
-              Inventory_Container.Element
-                (Container => Player_Ship.Crew(Member_Index).Inventory,
-                 Index => Tools_Index)
-                .Proto_Index;
-         begin
-            if Get_Proto_Item(Index => Proto_Index).I_Type /= Item_Type or
-              (Get_Proto_Item(Index => Proto_Index).Value(1) <
-               Tool_Quality) then
-               Update_Cargo
-                 (Ship => Player_Ship, Proto_Index => Proto_Index, Amount => 1,
-                  Durability =>
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Crew(Member_Index).Inventory,
-                       Index => Tools_Index)
-                      .Durability);
-               Update_Inventory
-                 (Member_Index => Member_Index, Amount => -1,
-                  Inventory_Index => Tools_Index, Ship => Player_Ship);
-               Tools_Index := 0;
-            end if;
-         end Update_Cargo_Block;
-      end if;
+      Get_Ada_Crew;
+      Get_Ada_Crew_Inventory
+        (Inventory => Nim_Inventory, Member_Index => Member_Index);
       Tools_Index :=
-        Find_Item
-          (Inventory => Player_Ship.Crew(Member_Index).Inventory,
-           Item_Type => Item_Type, Quality => Tool_Quality);
-      if Tools_Index = 0 then
-         Tools_Index :=
-           Find_Item
-             (Inventory => Player_Ship.Cargo, Item_Type => Item_Type,
-              Quality => Tool_Quality);
-         if Tools_Index > 0 then
-            Find_Tool_Block :
-            begin
-               Update_Inventory
-                 (Member_Index => Member_Index, Amount => 1,
-                  Proto_Index =>
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Tools_Index)
-                      .Proto_Index,
-                  Durability =>
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Tools_Index)
-                      .Durability,
-                  Ship => Player_Ship);
-               Update_Cargo
-                 (Ship => Player_Ship, Amount => -1,
-                  Cargo_Index => Tools_Index);
-               Tools_Index :=
-                 Find_Item
-                   (Inventory => Player_Ship.Crew(Member_Index).Inventory,
-                    Item_Type => Item_Type, Quality => Tool_Quality);
-            exception
-               when Crew_No_Space_Error =>
-                  case Order is
-                     when REPAIR =>
-                        Add_Message
-                          (Message =>
-                             To_String
-                               (Source =>
-                                  Player_Ship.Crew(Member_Index).Name) &
-                             " can't continue repairs because they don't have free space in their inventory for repair tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
-                     when UPGRADING =>
-                        Add_Message
-                          (Message =>
-                             To_String
-                               (Source =>
-                                  Player_Ship.Crew(Member_Index).Name) &
-                             " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
-                     when CLEAN =>
-                        Add_Message
-                          (Message =>
-                             To_String
-                               (Source =>
-                                  Player_Ship.Crew(Member_Index).Name) &
-                             " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
-                     when CRAFT =>
-                        Add_Message
-                          (Message =>
-                             To_String
-                               (Source =>
-                                  Player_Ship.Crew(Member_Index).Name) &
-                             " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
-                     when TRAIN =>
-                        Add_Message
-                          (Message =>
-                             To_String
-                               (Source =>
-                                  Player_Ship.Crew(Member_Index).Name) &
-                             " can't continue training because they don't have space in their inventory for the proper tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
-                     when others =>
-                        null;
-                  end case;
-                  Give_Orders
-                    (Ship => Player_Ship, Member_Index => Member_Index,
-                     Given_Order => REST);
-                  return 0;
-            end Find_Tool_Block;
-         end if;
-      end if;
-      Player_Ship.Crew(Member_Index).Equipment(TOOL) := Tools_Index;
+        Find_Ada_Tools
+          (M_Index => Member_Index,
+           I_Type => New_String(Str => To_String(Source => Item_Type)),
+           M_Order => Crew_Orders'Pos(Order), T_Quality => Tool_Quality);
+      Set_Ada_Crew_Inventory
+        (Inventory => Nim_Inventory, Member_Index => Member_Index,
+         Get_Player_Ship => 1);
+      Player_Ship.Crew(Member_Index).Inventory :=
+        Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
+      Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
+      Update_Equipment_Loop :
+      for I in Nim_Equipment'Range loop
+         Player_Ship.Crew(Member_Index).Equipment
+           (Equipment_Locations'Val(I)) :=
+           Nim_Equipment(I);
+      end loop Update_Equipment_Loop;
       return Tools_Index;
    end Find_Tools;
 
