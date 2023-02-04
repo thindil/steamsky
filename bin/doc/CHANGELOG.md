@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Starting crew for players from Independent faction
+- Reputation with other factions for Independent faction
 
 ## [8.0.3] - 2023-01-08
 
