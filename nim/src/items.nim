@@ -367,3 +367,8 @@ proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], expo
 
 proc getAdaProtoAmount(): cint {.exportc.} =
   return itemsList.len.cint
+
+proc findAdaTools(memberIndex: cint; itemType: cstring; order,
+    toolQuality: cint): cint {.exportc.} =
+  return findTools(memberIndex = (memberIndex - 1).Natural, itemType = $itemType,
+      order = order.CrewOrders, toolQuality = toolQuality.Positive).cint + 1
