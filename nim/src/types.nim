@@ -22,6 +22,9 @@ type
   CrewNoSpaceError* = object of CatchableError
     ## Raised when there is no space for new item in crew member inventory
 
+  CrewOrderError* = object of CatchableError
+    ## Used to mark problems during giving orders to the crew members
+
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value

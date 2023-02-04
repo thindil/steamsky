@@ -18,10 +18,6 @@
 import std/[tables]
 import game, utils, ships, types
 
-type
-  CrewOrderError* = object of CatchableError
-    ## Used to mark problems during giving orders to the crew members
-
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
   ## Generate the name for the mob, based on his/her faction. Based on
