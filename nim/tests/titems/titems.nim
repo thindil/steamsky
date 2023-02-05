@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[config, game, items, types]
+import ../../src/[config, game, items, ships, types]
 
 if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
@@ -28,3 +28,22 @@ assert getItemChanceToDamage(30) == "Very high"
 gameSettings.showNumbers = 1
 assert getItemChanceToDamage(3) == " 3%"
 assert getItemChanceToDamage(30) == " 30%"
+
+
+playerShip.modules = @[]
+playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
+playerShip.cargo = @[]
+playerShip.cargo.add(InventoryData(protoIndex: 53, amount: 1))
+playerShip.crew = @[]
+var member = MemberData(homeBase: 1)
+const attribute = MobAttributeRecord(level: 1, experience: 0)
+member.attributes = @[attribute, attribute, attribute, attribute]
+member.inventory.add(InventoryData(amount: 1, protoIndex: 1))
+member.inventory.add(InventoryData(amount: 1, protoIndex: 2))
+for index, _ in member.equipment.mpairs:
+  member.equipment[index] = -1
+member.equipment[weapon] = 1
+playerShip.crew.add(member)
+
+assert findTools(0, "Bucket", clean) > -1
+assert findTools(0, "sfewrwer", talk) == -1
