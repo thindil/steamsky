@@ -11,7 +11,7 @@ package Crafts.Test_Data.Tests is
    null record;
 
    procedure Test_Manufacturing_dd583a_cf804c(Gnattest_T: in out Test);
-   --  crafts.ads:121:4:Manufacturing:Test_Manufacturing
+   --  crafts.ads:120:4:Manufacturing:Test_Manufacturing
 
 end Crafts.Test_Data.Tests;
 --  end read only
