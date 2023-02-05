@@ -233,12 +233,12 @@ package body Items is
       end record;
       Temp_Nim_Record: Object_Nim_Data;
       procedure Get_Ada_Item
-        (Index: Integer; Ada_Item: out Object_Nim_Data) with
+        (I_Index: Integer; Ada_Item: out Object_Nim_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaItem";
    begin
-      Get_Ada_Item(Index => Index, Ada_Item => Temp_Nim_Record);
+      Get_Ada_Item(I_Index => Index, Ada_Item => Temp_Nim_Record);
       return
         (Name =>
            To_Bounded_String(Source => Value(Item => Temp_Nim_Record.Name)),
