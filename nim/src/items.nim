@@ -247,6 +247,16 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [].} =
 proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
     toolQuality: Positive = 100): int {.sideEffect, raises: [KeyError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect].} =
+  ## Search for specified tools in the crew member and the ship cargo
+  ##
+  ## * memberIndex - The index of the crew member which will be checked
+  ## * itemType    - The type of the item which will be looking for
+  ## * order       - The order which crew member will be doing when he/she find
+  ##                 the proper tool
+  ## * toolQuality - The minimal quality of tool to find. Default value is 100
+  ##
+  ## Returns the selected crew member inventory index of the tool or -1 if
+  ## tool was not found
   result = playerShip.crew[memberIndex].equipment[tool]
   if result > -1:
     let protoIndex = playerShip.crew[memberIndex].inventory[result].protoIndex
