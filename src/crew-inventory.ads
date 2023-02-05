@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -135,8 +135,7 @@ package Crew.Inventory is
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural with
       Pre =>
       (Member_Index <= Player_Ship.Crew.Last_Index and
-       Tiny_String.Length(Source => Item_Type) > 0),
-      Test_Case => (Name => "Test_FindTools", Mode => Nominal);
+       Tiny_String.Length(Source => Item_Type) > 0);
       -- ****
 
 end Crew.Inventory;
