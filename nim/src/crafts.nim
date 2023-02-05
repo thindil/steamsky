@@ -383,10 +383,20 @@ proc manufacturing*(minutes: Positive) =
           var toolIndex = -1
           if recipe.tool == "None":
             toolIndex = -1
-  #        else:
-  #          toolIndex = findTools(memberIndex = crafterIndex,
-  #              itemType = recipe.tool, order = craft,
-  #              toolQuality = recipe.toolQuality)
+          else:
+            toolIndex = findTools(memberIndex = crafterIndex,
+                itemType = recipe.tool, order = craft,
+                toolQuality = recipe.toolQuality)
+            if toolIndex == -1:
+              addMessage(message = "You don't have the tool for " & recipeName &
+                  ".", mType = craftMessage, color = red)
+              break
+          var amount = 0
+          for j in 0..materialIndexes.high:
+            amount = amount + (itemsList[j].weight * recipe.materialAmounts[j])
+#          var resultAmount = recipe.resultAmount + (recipe.resultAmount.float *
+#              (getSkillLevel(member = playerShip.crew[crafterIndex],
+#              skillIndex = recipe.skill).float / 100.0)).int
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
