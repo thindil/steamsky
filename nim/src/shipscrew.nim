@@ -19,6 +19,34 @@ import std/tables
 import crew, crewinventory, events, game, maps, messages, ships, shipscargo,
     types, utils
 
+proc getSkillLevel*(member: MemberData; skillIndex: Positive): int =
+  result = 0
+  for skill in member.skills:
+    if skill.index == skillIndex:
+      let baseSkillLevel = skill.level + member.attributes[skillsList[
+          skill.index].attribute].level
+      var damage = 1.0 - (member.health.float / 100.0)
+      result = result + (baseSkillLevel - (baseSkillLevel.float * damage).int)
+      if member.thirst > 40:
+        damage = 1.0 - (member.thirst.float / 100.0)
+        result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+      if member.hunger > 80:
+        damage = 1.0 - (member.hunger.float / 100.0)
+        result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+      if member.morale[1] < 25:
+        damage = member.morale[1].float / 100.0
+        result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+      if result < 1:
+        result = 1
+      elif result > 100:
+        result = 100
+      if member.morale[1] > 90:
+        damage = result.float / 100.0
+        result = result + (baseSkillLevel.float * damage).int
+        if result > 100:
+          result = 100
+      return
+
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     value: int) {.sideEffect, raises: [KeyError], tags: [].} =
   ## Update the morale of the selected crew member in the selected ship
