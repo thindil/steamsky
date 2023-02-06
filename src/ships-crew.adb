@@ -28,63 +28,16 @@ package body Ships.Crew is
    function Get_Skill_Level
      (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range is
-      Skill_Level: Integer := 0;
-      Damage: Damage_Factor := 0.0;
-      Base_Skill_Level: Natural range 0 .. 151;
+      function Get_Ada_Skill_Level
+        (M: Nim_Member_Data; S_Index: Skills_Amount_Range)
+         return Skill_Range with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaSkillLevel";
    begin
-      Get_Skill_Loop :
-      for Skill of Member.Skills loop
-         if Skill.Index = Skill_Index then
-            Base_Skill_Level :=
-              Skill.Level +
-              Member.Attributes
-                (Positive
-                   (SkillsData_Container.Element
-                      (Container => Skills_List, Index => Skill.Index)
-                      .Attribute))
-                .Level;
-            Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
-            Skill_Level :=
-              Skill_Level +
-              (Base_Skill_Level -
-               Integer(Float(Base_Skill_Level) * Float(Damage)));
-            if Member.Thirst > 40 then
-               Damage := 1.0 - Damage_Factor(Float(Member.Thirst) / 100.0);
-               Skill_Level :=
-                 Skill_Level -
-                 (Integer(Float(Base_Skill_Level) * Float(Damage)));
-            end if;
-            if Member.Hunger > 80 then
-               Damage := 1.0 - Damage_Factor(Float(Member.Hunger) / 100.0);
-               Skill_Level :=
-                 Skill_Level -
-                 (Integer(Float(Base_Skill_Level) * Float(Damage)));
-            end if;
-            if Member.Morale(1) < 25 then
-               Damage := Damage_Factor(Float(Member.Morale(1)) / 100.0);
-               Skill_Level :=
-                 Skill_Level -
-                 (Integer(Float(Base_Skill_Level) * Float(Damage)));
-            end if;
-            if Skill_Level < 1 then
-               Skill_Level := 1;
-            end if;
-            if Skill_Level > 100 then
-               Skill_Level := 100;
-            end if;
-            if Member.Morale(1) > 90 then
-               Damage := Damage_Factor(Float(Skill_Level) / 100.0);
-               Skill_Level :=
-                 Skill_Level +
-                 (Integer(Float(Base_Skill_Level) * Float(Damage)));
-               if Skill_Level > 100 then
-                  Skill_Level := 100;
-               end if;
-            end if;
-            return Skill_Level;
-         end if;
-      end loop Get_Skill_Loop;
-      return Skill_Level;
+      return
+        Get_Ada_Skill_Level
+          (M => Member_To_Nim(Member => Member), S_Index => Skill_Index);
    end Get_Skill_Level;
 
    procedure Death
