@@ -23,13 +23,15 @@ with Bases;
 package body BasesTypes is
 
    procedure Load_Bases_Types(File_Name: String) is
+      use Interfaces.C;
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
       type Ada_Bases_Types is array(0 .. 10) of chars_ptr;
       --## rule on TYPE_INITIAL_VALUES
       A_Bases_Types: Ada_Bases_Types;
-      procedure Load_Ada_Bases_Types(Name: chars_ptr) with
+      Result: chars_ptr;
+      function Load_Ada_Bases_Types(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaBasesTypes";
@@ -38,7 +40,10 @@ package body BasesTypes is
          Convention => C,
          External_Name => "getAdaBasesTypes";
    begin
-      Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
+      Result := Load_Ada_Bases_Types(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
       Get_Ada_Bases_Types(B_Types => A_Bases_Types);
       Set_Bases_Types_Loop :
       for I in A_Bases_Types'Range loop

@@ -218,12 +218,13 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [], tags: [
+proc loadAdaBasesTypes(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
     loadBasesTypes(fileName = $fileName)
+    return "".cstring
   except DataLoadingError:
-    discard
+    return getCurrentExceptionMsg().cstring
 
 proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [], exportc.} =
   try:
