@@ -251,6 +251,31 @@ proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
     else:
       cargo[index] = AdaInventoryData(protoIndex: 0)
 
+proc adaMemberToNim*(adaMember: AdaMemberData): MemberData =
+  result = MemberData(name: $adaMember.name, gender: adaMember.gender,
+      health: adaMember.health, tired: adaMember.tired,
+      hunger: adaMember.hunger, thirst: adaMember.thirst,
+      order: adaMember.order.CrewOrders,
+      previousOrder: adaMember.previousOrder.CrewOrders,
+      contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
+      homeBase: adaMember.homeBase, faction: $adaMember.faction)
+  for index, order in adaMember.orders.pairs:
+    result.orders[index] = order
+  for index, item in adaMember.equipment.pairs:
+    result.equipment[index.EquipmentLocations] = item - 1
+  for attribute in adaMember.attributes:
+    if attribute[0] == 0:
+      break
+    result.attributes.add(y = MobAttributeRecord(level: attribute[0],
+        experience: attribute[1]))
+  for skill in adaMember.skills:
+    if skill[0] == 0:
+      break
+    result.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
+        experience: skill[2]))
+  result.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
+  result.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
+
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.exportc.} =
   if getPlayerShip == 1:
@@ -260,33 +285,10 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
   for adaMember in crew:
     if adaMember.name.len == 0:
       return
-    var member = MemberData(name: $adaMember.name, gender: adaMember.gender,
-        health: adaMember.health, tired: adaMember.tired,
-        hunger: adaMember.hunger, thirst: adaMember.thirst,
-        order: adaMember.order.CrewOrders,
-        previousOrder: adaMember.previousOrder.CrewOrders,
-        contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
-        homeBase: adaMember.homeBase, faction: $adaMember.faction)
-    for index, order in adaMember.orders.pairs:
-      member.orders[index] = order
-    for index, item in adaMember.equipment.pairs:
-      member.equipment[index.EquipmentLocations] = item - 1
-    for attribute in adaMember.attributes:
-      if attribute[0] == 0:
-        break
-      member.attributes.add(y = MobAttributeRecord(level: attribute[0],
-          experience: attribute[1]))
-    for skill in adaMember.skills:
-      if skill[0] == 0:
-        break
-      member.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
-          experience: skill[2]))
-    member.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
-    member.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
     if getPlayerShip == 1:
-      playerShip.crew.add(y = member)
+      playerShip.crew.add(y = adaMemberToNim(adaMember = adaMember))
     else:
-      npcShip.crew.add(y = member)
+      npcShip.crew.add(y = adaMemberToNim(adaMember = adaMember))
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
     memberIndex: cint; getPlayerShip: cint = 1) {.exportc.} =
