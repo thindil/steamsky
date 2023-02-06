@@ -25,7 +25,7 @@ type
 
   BaseTypeData* = object
     ## Used to store informaiton about bases types
-    name: string ## The name of the base type
+    name: string  ## The name of the base type
     color: string ## The color used to show a base of that type on the map
     trades: Table[Positive, PricesArray] ## The list of items available to trade in the base type
     recipes: seq[string] ## The list of crafting recipes available on sale in the base type
@@ -218,29 +218,42 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [
-    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  loadBasesTypes(fileName = $fileName)
+proc loadAdaBasesTypes(fileName: cstring) {.sideEffect, raises: [], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadBasesTypes(fileName = $fileName)
+  except DataLoadingError:
+    discard
 
-proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.exportc.} =
-  return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
+proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [], exportc.} =
+  try:
+    return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
+  except KeyError:
+    return 0
 
 proc isAdaBuyable(baseType: cstring; itemIndex, checkFlag, baseIndex,
-    reputationLevel, reputationExperience: cint): cint {.exportc.} =
+    reputationLevel, reputationExperience: cint): cint {.raises: [], tags: [], exportc.} =
   if baseIndex > 0:
     skyBases[baseIndex].reputation = ReputationData(level: reputationLevel,
         experience: reputationExperience)
-  return isBuyable(baseType = $baseType, itemIndex = itemIndex, checkFlag = (
-      if checkFlag == 1: true else: false), baseIndex = baseIndex).ord.cint
+  try:
+    return isBuyable(baseType = $baseType, itemIndex = itemIndex, checkFlag = (
+        if checkFlag == 1: true else: false), baseIndex = baseIndex).ord.cint
+  except KeyError:
+    return 0
 
-proc hasAdaFlag(baseType, flag: cstring): cint {.exportc.} =
+proc hasAdaFlag(baseType, flag: cstring): cint {.raises: [], tags: [], exportc.} =
   if not basesTypesList.hasKey(key = $baseType):
     return 0
-  if $flag in basesTypesList[$baseType].flags:
-    return 1
+  try:
+    if $flag in basesTypesList[$baseType].flags:
+      return 1
+  except KeyError:
+    return 0
   return 0
 
-proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.exportc.} =
+proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.raises: [],
+    tags: [], exportc.} =
   var i = 0
   for key in basesTypesList.keys:
     basesTypes[i] = key.cstring
@@ -249,18 +262,30 @@ proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.exportc.} =
   for index in i..15:
     basesTypes[i] = ""
 
-proc getAdaBaseTypeName(baseType: cstring): cstring {.exportc.} =
-  return basesTypesList[$baseType].name.cstring
+proc getAdaBaseTypeName(baseType: cstring): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return basesTypesList[$baseType].name.cstring
+  except KeyError:
+    return "".cstring
 
-proc hasAdaRecipe(baseType, recipe: cstring): cint {.exportc.} =
+proc hasAdaRecipe(baseType, recipe: cstring): cint {.raises: [], tags: [], exportc.} =
   if not basesTypesList.hasKey(key = $baseType):
     return 0
-  if $recipe in basesTypesList[$baseType].recipes:
-    return 1
+  try:
+    if $recipe in basesTypesList[$baseType].recipes:
+      return 1
+  except KeyError:
+    return 0
   return 0
 
-proc getAdaBaseTypeColor(baseType: cstring): cstring {.exportc.} =
-  return basesTypesList[$baseType].color.cstring
+proc getAdaBaseTypeColor(baseType: cstring): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return basesTypesList[$baseType].color.cstring
+  except KeyError:
+    return "".cstring
 
-proc getAdaBaseTypeDescription(baseType: cstring): cstring {.exportc.} =
-  return basesTypesList[$baseType].description.cstring
+proc getAdaBaseTypeDescription(baseType: cstring): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return basesTypesList[$baseType].description.cstring
+  except KeyError:
+    return "".cstring
