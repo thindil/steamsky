@@ -557,10 +557,7 @@ proc updateAdaOrders(isPlayerShip, combat: cint) {.exportc.} =
   else:
     updateOrders(ship = npcShip, combat = (if combat == 1: true else: false))
 
-proc getAdaSkillLevel(memberIndex, skillIndex,
-    isPlayerShip: cint): cint {.exportc.} =
-  let member = if isPlayerShip == 1:
-      playerShip.crew[memberIndex]
-    else:
-      npcShip.crew[memberIndex]
-  return getSkillLevel(member = member, skillIndex = skillIndex.Positive).cint
+proc getAdaSkillLevel(member: AdaMemberData;
+    skillIndex: cint): cint {.exportc.} =
+  return getSkillLevel(member = adaMemberToNim(adaMember = member),
+      skillIndex = skillIndex.Positive).cint

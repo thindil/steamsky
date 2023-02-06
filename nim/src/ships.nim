@@ -100,7 +100,7 @@ type
     data: array[1..3, cint]
     data2: cstring
 
-  AdaMemberData = object
+  AdaMemberData* = object
     attributes: array[1..16, array[2, cint]]
     skills: array[1..64, array[3, cint]]
     name: cstring
