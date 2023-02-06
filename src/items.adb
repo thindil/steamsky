@@ -221,6 +221,7 @@ package body Items is
       use Short_String;
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Object_Nim_Data is record
          Name: chars_ptr;
          Weight: Integer;
@@ -231,6 +232,7 @@ package body Items is
          Description: chars_ptr;
          Reputation: Integer;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Temp_Nim_Record: Object_Nim_Data;
       procedure Get_Ada_Item
         (I_Index: Integer; Ada_Item: out Object_Nim_Data) with
