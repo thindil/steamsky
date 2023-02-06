@@ -251,7 +251,7 @@ proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
     else:
       cargo[index] = AdaInventoryData(protoIndex: 0)
 
-proc adaMemberToNim*(adaMember: AdaMemberData): MemberData =
+func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [].} =
   result = MemberData(name: $adaMember.name, gender: adaMember.gender,
       health: adaMember.health, tired: adaMember.tired,
       hunger: adaMember.hunger, thirst: adaMember.thirst,
