@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ package body Knowledge.Missions is
    -- FUNCTION
    -- Table with info about the known Missions
    -- SOURCE
-   Missions_Table: Table_Widget (Amount => 5);
+   Missions_Table: Table_Widget (Amount => 6);
    -- ****
 
    -- ****it* KMissions/KMissions.Missions_Sort_Orders
@@ -189,13 +189,16 @@ package body Knowledge.Missions is
    -- TIMEDESC     - Sort missions by time descending
    -- REWARDASC    - Sort missions by reward ascending
    -- REWARDDESC   - Sort missions by reward descending
+   -- COORDASC     - Sort missions by coordinates ascending
+   -- COORDDESC    - Sort missions by coordinates descending
    -- NONE         - No sorting missions (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 8.4 - Added sorting by coordinates
    -- SOURCE
    type Missions_Sort_Orders is
      (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
-      TIMEASC, TIMEDESC, REWARDASC, REWARDDESC, NONE) with
+      TIMEASC, TIMEDESC, REWARDASC, REWARDDESC, COORDASC, COORDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -257,6 +260,7 @@ package body Knowledge.Missions is
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
+         Coords: Unbounded_String;
          Details: Unbounded_String;
          Time: Natural;
          Reward: Natural;
@@ -304,6 +308,14 @@ package body Knowledge.Missions is
            and then Left.Reward > Right.Reward then
             return True;
          end if;
+         if Missions_Sort_Order = COORDASC
+           and then Left.Coords < Right.Coords then
+            return True;
+         end if;
+         if Missions_Sort_Order = COORDDESC
+           and then Left.Coords > Right.Coords then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
@@ -324,18 +336,24 @@ package body Knowledge.Missions is
                Missions_Sort_Order := DISTANCEASC;
             end if;
          when 3 =>
+            if Missions_Sort_Order = COORDASC then
+               Missions_Sort_Order := COORDDESC;
+            else
+               Missions_Sort_Order := COORDASC;
+            end if;
+         when 4 =>
             if Missions_Sort_Order = DETAILSASC then
                Missions_Sort_Order := DETAILSDESC;
             else
                Missions_Sort_Order := DETAILSASC;
             end if;
-         when 4 =>
+         when 5 =>
             if Missions_Sort_Order = TIMEASC then
                Missions_Sort_Order := TIMEDESC;
             else
                Missions_Sort_Order := TIMEASC;
             end if;
-         when 5 =>
+         when 6 =>
             if Missions_Sort_Order = REWARDASC then
                Missions_Sort_Order := REWARDDESC;
             else
@@ -355,6 +373,11 @@ package body Knowledge.Missions is
               Count_Distance
                 (Destination_X => Accepted_Missions(I).Target_X,
                  Destination_Y => Accepted_Missions(I).Target_Y),
+            Coords =>
+              To_Unbounded_String
+                (Source =>
+                   "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
+                   " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
             Details =>
               (case Accepted_Missions(I).M_Type is
                  when DELIVER =>
@@ -472,9 +495,10 @@ package body Knowledge.Missions is
               Headers =>
                 (1 => To_Unbounded_String(Source => "Name"),
                  2 => To_Unbounded_String(Source => "Distance"),
-                 3 => To_Unbounded_String(Source => "Details"),
-                 4 => To_Unbounded_String(Source => "Time limit"),
-                 5 => To_Unbounded_String(Source => "Base reward")),
+                 3 => To_Unbounded_String(Source => "Coordinates"),
+                 4 => To_Unbounded_String(Source => "Details"),
+                 5 => To_Unbounded_String(Source => "Time limit"),
+                 6 => To_Unbounded_String(Source => "Base reward")),
               Scrollbar =>
                 Get_Widget
                   (pathName =>
@@ -529,7 +553,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3, Color => To_String(Source => Color));
+                     Column => 4, Color => To_String(Source => Color));
                when PATROL =>
                   Add_Button
                     (Table => Missions_Table,
@@ -538,7 +562,7 @@ package body Knowledge.Missions is
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3, Color => To_String(Source => Color));
+                     Column => 4, Color => To_String(Source => Color));
                when DESTROY =>
                   Add_Button
                     (Table => Missions_Table,
@@ -549,7 +573,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3, Color => To_String(Source => Color));
+                     Column => 4, Color => To_String(Source => Color));
                when EXPLORE =>
                   Add_Button
                     (Table => Missions_Table,
@@ -558,7 +582,7 @@ package body Knowledge.Missions is
                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3, Color => To_String(Source => Color));
+                     Column => 4, Color => To_String(Source => Color));
                when PASSENGER =>
                   Add_Button
                     (Table => Missions_Table,
@@ -574,7 +598,7 @@ package body Knowledge.Missions is
                               .Name),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 3, Color => To_String(Source => Color));
+                     Column => 4, Color => To_String(Source => Color));
             end case;
             Add_Button
               (Table => Missions_Table,
@@ -586,6 +610,13 @@ package body Knowledge.Missions is
                Tooltip => "The distance to the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                Column => 2, Color => To_String(Source => Color));
+            Add_Button
+              (Table => Missions_Table,
+               Text =>
+                 "X:" & Natural'Image(Accepted_Missions(I).Target_X) & " Y:" &
+                 Natural'Image(Accepted_Missions(I).Target_Y),
+               Tooltip => "Show more info about the mission",
+               Command => "MissionMoreInfo" & Positive'Image(I), Column => 3);
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date
               (Minutes => Accepted_Missions(I).Time,
@@ -595,7 +626,7 @@ package body Knowledge.Missions is
                Text => To_String(Source => Mission_Time),
                Tooltip => "The time limit for finish and return the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 4, Color => To_String(Source => Color));
+               Column => 5, Color => To_String(Source => Color));
             Add_Button
               (Table => Missions_Table,
                Text =>
@@ -606,7 +637,7 @@ package body Knowledge.Missions is
                  " " & To_String(Source => Money_Name),
                Tooltip => "The base money reward for the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 5, New_Row => True,
+               Column => 6, New_Row => True,
                Color => To_String(Source => Color));
             Row := Row + 1;
             Rows := Rows + 1;
