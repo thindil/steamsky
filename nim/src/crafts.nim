@@ -394,9 +394,31 @@ proc manufacturing*(minutes: Positive) =
           var amount = 0
           for j in 0..materialIndexes.high:
             amount = amount + (itemsList[j].weight * recipe.materialAmounts[j])
-#          var resultAmount = recipe.resultAmount + (recipe.resultAmount.float *
-#              (getSkillLevel(member = playerShip.crew[crafterIndex],
-#              skillIndex = recipe.skill).float / 100.0)).int
+          var resultAmount = recipe.resultAmount + (recipe.resultAmount.float *
+              (getSkillLevel(member = playerShip.crew[crafterIndex],
+              skillIndex = recipe.skill).float / 100.0)).int
+          let damage = 1.0 - (module.durability.float /
+              module.maxDurability.float)
+          resultAmount = resultAmount - (resultAmount.float * damage).int
+          if resultAmount == 0:
+            resultAmount = 1
+          var haveMaterial = false
+          for j in 0..materialIndexes.high:
+            haveMaterial = false
+            for item in playerShip.cargo:
+              if itemsList[item.protoIndex].itemType == itemsList[
+                  j].itemType and item.amount >= recipe.materialAmounts[j]:
+                haveMaterial = true
+                break
+            if not haveMaterial:
+              break
+          if not haveMaterial:
+            addMessage(message = "You don't have enough crafting materials for " &
+                recipeName & ".", mType = craftMessage, color = red)
+            resetOrder(module = module, moduleOwner = owner)
+            break
+          craftedAmount = craftedAmount + resultAmount
+          module.craftingAmount.dec
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
