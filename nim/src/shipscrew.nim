@@ -21,6 +21,13 @@ import crew, crewinventory, events, game, maps, messages, ships, shipscargo,
 
 proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Get the real level of the selected skill of the selected crew member.
+  ##
+  ## * member     - the member which skill will be get
+  ## * skillIndex - the index of the skill which will be get
+  ##
+  ## Returns the selected skill level with bonuses or maluses from health,
+  ## hunger, tiredness and morale
   result = 0
   for skill in member.skills:
     if skill.index == skillIndex:
