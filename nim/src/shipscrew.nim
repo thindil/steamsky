@@ -19,7 +19,8 @@ import std/tables
 import crew, crewinventory, events, game, maps, messages, ships, shipscargo,
     types, utils
 
-proc getSkillLevel*(member: MemberData; skillIndex: Positive): int =
+proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
+    raises: [KeyError], tags: [].} =
   result = 0
   for skill in member.skills:
     if skill.index == skillIndex:
