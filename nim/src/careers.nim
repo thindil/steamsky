@@ -21,7 +21,7 @@ import game, log
 type
   CareerData = object
     ## Used to store data about available player's careers
-    name*: string ## The name of the career
+    name*: string       ## The name of the career
     skills: seq[string] ## The list of skills which have bonuses from the career
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
@@ -95,9 +95,13 @@ proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaCareers*(fileName: cstring) {.sideEffect, raises: [
-    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  loadCareers(fileName = $fileName)
+proc loadAdaCareers*(fileName: cstring): cstring {.sideEffect, raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadCareers(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
 
 proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
     raises: [], tags: [], exportc.} =
