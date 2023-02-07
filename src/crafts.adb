@@ -89,6 +89,7 @@ package body Crafts is
    procedure Load_Recipes(File_Name: String) is
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Interfaces.C;
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -96,7 +97,8 @@ package body Crafts is
       Temp_Nim_Record: Craft_Nim_Data;
       --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
-      procedure Load_Ada_Recipes(Name: chars_ptr) with
+      Result: chars_ptr;
+      function Load_Ada_Recipes(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaRecipes";
@@ -106,7 +108,10 @@ package body Crafts is
          Convention => C,
          External_Name => "getAdaCraftData";
    begin
-      Load_Ada_Recipes(Name => New_String(Str => File_Name));
+      Result := Load_Ada_Recipes(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
       Load_Recipes_Loop :
       loop
          Get_Ada_Craft
