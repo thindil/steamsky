@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;

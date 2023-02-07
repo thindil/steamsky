@@ -15,11 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded;
 with Ships; use Ships;
 
 package body Items is
 
    procedure Load_Items(File_Name: String) is
+      use Ada.Strings.Unbounded;
+
       function Load_Ada_Items(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
