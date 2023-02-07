@@ -36,8 +36,7 @@ package Ships.Crew is
    function Get_Skill_Level
      (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range with
-      Pre => Skill_Index in 1 .. Skills_Amount,
-      Test_Case => (Name => "Test_GetSkillLevel", Mode => Nominal);
+      Pre => Skill_Index in 1 .. Skills_Amount;
       -- ****
 
       -- ****f* SCrew/SCrew.Death
