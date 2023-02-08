@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Icon for sending all ship's crew member to rest. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 - Order Go Rest for the whole player's ship's crew
-- Column with coordinates to the list of available missions in the bases
+- Column with coordinates to the list of available missions in the bases and
+  to the list of accepted missions in the knowledge screen
 
 ### Changed
 - Updated icon for checked and unchecked options, for example, the random
