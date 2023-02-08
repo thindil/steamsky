@@ -24,6 +24,44 @@ with Config; use Config;
 
 package body Statistics is
 
+   type Ada_Game_Stats is record
+      Bases_Visited: Bases_Range;
+      Map_Visited: Positive;
+      Distance_Traveled: Natural;
+      Accepted_Missions: Natural;
+      Points: Natural;
+   end record;
+
+   procedure Get_Game_Stats is
+      procedure Get_Ada_Game_Stats(Stats: Ada_Game_Stats) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameStats";
+   begin
+      Get_Ada_Game_Stats
+        (Stats =>
+           (Bases_Visited => Game_Stats.Bases_Visited,
+            Map_Visited => Game_Stats.Map_Visited,
+            Distance_Traveled => Game_Stats.Distance_Traveled,
+            Accepted_Missions => Game_Stats.Accepted_Missions,
+            Points => Game_Stats.Points));
+   end Get_Game_Stats;
+
+   procedure Set_Game_Stats is
+      Temp_Stats: Ada_Game_Stats;
+      procedure Set_Ada_Game_Stats(Stats: out Ada_Game_Stats) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameStats";
+   begin
+      Set_Ada_Game_Stats(Stats => Temp_Stats);
+      Game_Stats.Bases_Visited := Temp_Stats.Bases_Visited;
+      Game_Stats.Map_Visited := Temp_Stats.Map_Visited;
+      Game_Stats.Distance_Traveled := Temp_Stats.Distance_Traveled;
+      Game_Stats.Accepted_Missions := Temp_Stats.Accepted_Missions;
+      Game_Stats.Points := Temp_Stats.Points;
+   end Set_Game_Stats;
+
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
@@ -126,6 +164,7 @@ package body Statistics is
    procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
    begin
+      Get_Game_Stats;
       Update_Crafting_Loop :
       for CraftingOrder of Game_Stats.Crafting_Orders loop
          if To_String(Source => CraftingOrder.Index) =
@@ -143,6 +182,7 @@ package body Statistics is
                Amount => 1));
       end if;
       Game_Stats.Points := Game_Stats.Points + 5;
+      Set_Game_Stats;
    end Update_Crafting_Orders;
 
    procedure Update_Killed_Mobs
