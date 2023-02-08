@@ -39,3 +39,19 @@ type
 
 var gameStats* = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
+
+proc updateCraftingOrders*(index: string) =
+  var updated = false
+  for craftingOrder in gameStats.craftingOrders.mitems:
+    if craftingOrder.index == index:
+      craftingOrder.amount.inc
+      updated = true
+      break
+  if not updated:
+    gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
+  gameStats.points = gameStats.points + 5
+
+# Temporary code for interfacing with Ada
+
+proc updateAdaCraftingOrders(index: cstring) {.exportc.} =
+  updateCraftingOrders(index = $index)
