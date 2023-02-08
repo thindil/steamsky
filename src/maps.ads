@@ -43,6 +43,13 @@ package Maps is
    end record;
    -- ****
 
+   -- ****d* Maps/Maps.Empty_Cell
+   -- FUNCTION
+   -- Default, empty map cell data
+   -- SOURCE
+   Empty_Cell: constant Sky_Cell := (others => <>);
+   -- ****
+
    -- ****v* Maps/Maps.Sky_Map
    -- FUNCTION
    -- Game map
