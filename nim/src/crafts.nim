@@ -393,7 +393,8 @@ proc manufacturing*(minutes: Positive) =
               break
           var amount = 0
           for j in 0..materialIndexes.high:
-            amount = amount + (itemsList[j].weight * recipe.materialAmounts[j])
+            amount = amount + (itemsList[materialIndexes[j]].weight *
+                recipe.materialAmounts[j])
           var resultAmount = recipe.resultAmount + (recipe.resultAmount.float *
               (getSkillLevel(member = playerShip.crew[crafterIndex],
               skillIndex = recipe.skill).float / 100.0)).int
@@ -407,7 +408,8 @@ proc manufacturing*(minutes: Positive) =
             haveMaterial = false
             for item in playerShip.cargo:
               if itemsList[item.protoIndex].itemType == itemsList[
-                  j].itemType and item.amount >= recipe.materialAmounts[j]:
+                  materialIndexes[j]].itemType and item.amount >=
+                      recipe.materialAmounts[j]:
                 haveMaterial = true
                 break
             if not haveMaterial:
@@ -419,6 +421,29 @@ proc manufacturing*(minutes: Positive) =
             break
           craftedAmount = craftedAmount + resultAmount
           module.craftingAmount.dec
+          for j in 0..materialIndexes.high:
+            var cargoIndex = 0
+            while cargoIndex <= playerShip.cargo.high:
+              var material = playerShip.cargo[cargoIndex]
+              if itemsList[material.protoIndex].itemType == itemsList[
+                  materialIndexes[j]].itemType:
+                if material.amount > recipe.materialAmounts[j]:
+                  let newAmount = material.amount - recipe.materialAmounts[j]
+                  material.amount = newAmount
+                  playerShip.cargo[cargoIndex] = material
+                  break
+                elif material.amount == recipe.materialAmounts[j]:
+                  playerShip.cargo.delete(i = cargoIndex)
+                  if toolIndex > cargoIndex:
+                    toolIndex.dec
+                  break
+            cargoIndex.inc
+          if toolIndex > -1:
+            damageItem(inventory = playerShip.crew[crafterIndex].inventory,
+                itemIndex = toolIndex, skillLevel = getSkillLevel(
+                member = playerShip.crew[crafterIndex],
+                skillIndex = recipe.skill), memberIndex = crafterIndex,
+                ship = playerShip)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
