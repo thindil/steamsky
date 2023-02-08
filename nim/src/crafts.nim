@@ -532,38 +532,50 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
     adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
     adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
 
-proc getAdaWorkshopRecipeName(workshop: cint): cstring {.exportc.} =
-  return getWorkshopRecipeName(workshop).cstring
+proc getAdaWorkshopRecipeName(workshop: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return getWorkshopRecipeName(workshop).cstring
+  except ValueError:
+    return "".cstring
 
-proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.exportc.} =
-  setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
-      recipeIndex = $recipeIndex)
+proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.raises: [],
+    tags: [RootEffect], exportc.} =
+  try:
+    setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
+        recipeIndex = $recipeIndex)
+  except ValueError, Exception:
+    discard
 
 proc setAdaRecipeData(recipeIndex: cstring;
-    adaRecipe: var AdaCraftData) {.exportc.} =
+    adaRecipe: var AdaCraftData) {.raises: [], tags: [], exportc.} =
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
   for i in 0..4:
     adaRecipe.materialTypes[i] = "".cstring
     adaRecipe.materialAmounts[i] = 0
-  let recipe = setRecipeData(recipeIndex = $recipeIndex)
-  adaRecipe.resultIndex = recipe.resultIndex.cint
-  adaRecipe.resultAmount = recipe.resultAmount.cint
-  adaRecipe.workplace = recipe.workplace.ord().cint
-  adaRecipe.skill = recipe.skill.cint
-  adaRecipe.time = recipe.time.cint
-  adaRecipe.difficulty = recipe.difficulty.cint
-  adaRecipe.tool = recipe.tool.cstring
-  adaRecipe.toolQuality = recipe.toolQuality.cint
-  adaRecipe.reputation = recipe.reputation.cint
-  for i in 0..recipe.materialTypes.high:
-    adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
-    adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
+  try:
+    let recipe = setRecipeData(recipeIndex = $recipeIndex)
+    adaRecipe.resultIndex = recipe.resultIndex.cint
+    adaRecipe.resultAmount = recipe.resultAmount.cint
+    adaRecipe.workplace = recipe.workplace.ord().cint
+    adaRecipe.skill = recipe.skill.cint
+    adaRecipe.time = recipe.time.cint
+    adaRecipe.difficulty = recipe.difficulty.cint
+    adaRecipe.tool = recipe.tool.cstring
+    adaRecipe.toolQuality = recipe.toolQuality.cint
+    adaRecipe.reputation = recipe.reputation.cint
+    for i in 0..recipe.materialTypes.high:
+      adaRecipe.materialTypes[i] = recipe.materialTypes[i].cstring
+      adaRecipe.materialAmounts[i] = recipe.materialAmounts[i].cint
+  except ValueError:
+    discard
 
-proc checkAdaRecipe(recipeIndex: cstring): cint {.exportc.} =
+proc checkAdaRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], exportc.} =
   try:
     return checkRecipe(recipeIndex = $recipeIndex).cint
+  except ValueError:
+    return 0
   except TradeNoFreeCargoError:
     return -1
   except CraftingNoWorkshopError:
