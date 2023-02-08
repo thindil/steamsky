@@ -61,19 +61,62 @@ type
     acceptedMissions: cint
     points: cint
 
+  AdaStatisticsData = object
+    index: cstring
+    amount: cint
+
 proc updateAdaCraftingOrders(index: cstring) {.exportc.} =
   updateCraftingOrders(index = $index)
 
-proc getGameStats(stats: AdaGameStats) {.exportc.} =
+proc getAdaGameStats(stats: AdaGameStats) {.exportc.} =
   gameStats.basesVisited = stats.basesVisited
   gameStats.mapVisited = stats.mapVisited
   gameStats.distanceTraveled = stats.distanceTraveled
   gameStats.acceptedMissions = stats.acceptedMissions
   gameStats.points = stats.points
 
-proc setGameStats(stats: var AdaGameStats) {.exportc.} =
+proc getAdaGameStatsList(name: cstring; statsList: array[512,
+    AdaStatisticsData]) {.exportc.} =
+  var list = case $name
+    of "destroyedShips":
+      gameStats.destroyedShips
+    of "craftingOrders":
+      gameStats.craftingOrders
+    of "finishedMissions":
+      gameStats.finishedMissions
+    of "finishedGoals":
+      gameStats.finishedGoals
+    else:
+      gameStats.killedMobs
+  list = @[]
+  for stat in statsList:
+    if stat.index.len == 0:
+      break
+    list.add(y = StatisticsData(index: $stat.index,
+        amount: stat.amount.Positive))
+
+proc setAdaGameStats(stats: var AdaGameStats) {.exportc.} =
   stats.basesVisited = gameStats.basesVisited.cint
   stats.mapVisited = gameStats.mapVisited.cint
   stats.distanceTraveled = gameStats.distanceTraveled.cint
   stats.acceptedMissions = gameStats.acceptedMissions.cint
   stats.points = gameStats.points.cint
+
+proc setAdaGameStatsList(name: cstring; statsList: var array[512,
+    AdaStatisticsData]) {.exportc.} =
+  var list = case $name
+    of "destroyedShips":
+      gameStats.destroyedShips
+    of "craftingOrders":
+      gameStats.craftingOrders
+    of "finishedMissions":
+      gameStats.finishedMissions
+    of "finishedGoals":
+      gameStats.finishedGoals
+    else:
+      gameStats.killedMobs
+  for i in 0..statsList.high:
+    statsList[i] = AdaStatisticsData(index: "".cstring, amount: 1)
+  for index, stat in list.pairs:
+    statsList[index] = AdaStatisticsData(index: stat.index.cstring,
+        amount: stat.amount.cint)
