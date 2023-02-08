@@ -18,7 +18,7 @@
 import std/[os, parseopt, strutils]
 import bases, basestypes, careers, crafts, config, crew, crewinventory,
     events, factions, game, items, log, maps, messages, mobs, shipmodules,
-    ships, shipscargo, shipscrew, tk, utils
+    ships, shipscargo, shipscrew, statistics, tk, utils
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
