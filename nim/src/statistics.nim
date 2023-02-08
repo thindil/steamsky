@@ -53,5 +53,27 @@ proc updateCraftingOrders*(index: string) =
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaGameStats = object
+    basesVisited: cint
+    mapVisited: cint
+    distanceTraveled: cint
+    acceptedMissions: cint
+    points: cint
+
 proc updateAdaCraftingOrders(index: cstring) {.exportc.} =
   updateCraftingOrders(index = $index)
+
+proc getGameStats(stats: AdaGameStats) {.exportc.} =
+  gameStats.basesVisited = stats.basesVisited
+  gameStats.mapVisited = stats.mapVisited
+  gameStats.distanceTraveled = stats.distanceTraveled
+  gameStats.acceptedMissions = stats.acceptedMissions
+  gameStats.points = stats.points
+
+proc setGameStats(stats: var AdaGameStats) {.exportc.} =
+  stats.basesVisited = gameStats.basesVisited.cint
+  stats.mapVisited = gameStats.mapVisited.cint
+  stats.distanceTraveled = gameStats.distanceTraveled.cint
+  stats.acceptedMissions = gameStats.acceptedMissions.cint
+  stats.points = gameStats.points.cint
