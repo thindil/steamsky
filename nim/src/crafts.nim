@@ -444,6 +444,28 @@ proc manufacturing*(minutes: Positive) =
                 member = playerShip.crew[crafterIndex],
                 skillIndex = recipe.skill), memberIndex = crafterIndex,
                 ship = playerShip)
+          if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
+              module.craftingIndex[0..4] != "Study"):
+            amount = amount - (itemsList[recipe.resultIndex].weight * resultAmount)
+            if freeCargo(amount = amount) < 0:
+              addMessage(message = "You don't have the free cargo space for " &
+                  recipeName, mType = craftMessage, color = red)
+              resetOrder(module = module, moduleOwner = owner)
+              break
+            if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
+              updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
+                  amount = resultAmount)
+            else:
+              updateCargo(ship = playerShip, protoIndex = recipesList[
+                  module.craftingIndex].resultIndex, amount = resultAmount)
+#            for key, recipe in recipesList.pairs:
+#              if recipe.resultIndex == recipe.resultIndex:
+#                updateCraftingOrders(index = key)
+#                break
+#          else:
+#            for key, recipe in recipesList.pairs:
+#              if recipe.resultIndex == recipe.resultIndex:
+#                knownRecipes.add(y = key)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
