@@ -78,11 +78,14 @@ proc getTrainingToolQuality*(memberIndex: Natural;
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
-    factionIndex: cstring): cstring {.exportc.} =
+    factionIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
   return generateMemberName(gender = gender,
       factionIndex = $factionIndex).cstring
 
-proc getAdaTrainingToolQuality(memberIndex,
-    skillIndex: cint): cint {.exportc.} =
-  return getTrainingToolQuality(memberIndex = memberIndex - 1,
-      skillIndex = skillIndex).cint
+proc getAdaTrainingToolQuality(memberIndex, skillIndex: cint): cint {.raises: [],
+    tags: [], exportc.} =
+  try:
+    return getTrainingToolQuality(memberIndex = memberIndex - 1,
+        skillIndex = skillIndex).cint
+  except KeyError:
+    return 100
