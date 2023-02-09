@@ -399,9 +399,14 @@ package body Missions.UI is
              (Tcl_GetVar(interp => Get_Context, varName => "reward")) /
            100.0);
       Accept_Mission(Mission_Index => Mission_Index);
-      Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions);
-      Update_Table(Table => Missions_Table);
-      Update_Messages;
+      if Count_Missions_Amount > 0 then
+         Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions);
+         Update_Table(Table => Missions_Table);
+         Update_Messages;
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
+      end if;
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
