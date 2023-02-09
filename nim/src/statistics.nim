@@ -94,6 +94,17 @@ proc getAdaGameStatsList(name: cstring; statsList: array[512,
       break
     list.add(y = StatisticsData(index: $stat.index,
         amount: stat.amount.Positive))
+  case $name
+  of "destroyedShips":
+    gameStats.destroyedShips = list
+  of "craftingOrders":
+    gameStats.craftingOrders = list
+  of "finishedMissions":
+    gameStats.finishedMissions = list
+  of "finishedGoals":
+    gameStats.finishedGoals = list
+  else:
+    gameStats.killedMobs = list
 
 proc setAdaGameStats(stats: var AdaGameStats) {.exportc.} =
   stats.basesVisited = gameStats.basesVisited.cint
