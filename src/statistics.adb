@@ -32,6 +32,11 @@ package body Statistics is
       Accepted_Missions: Integer;
       Points: Integer;
    end record;
+   type Nim_Statistics_Data is record
+      Index: chars_ptr;
+      Amount: Integer;
+   end record;
+   type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
 
    procedure Get_Game_Stats is
       Nim_Stats: constant Nim_Game_Stats :=
@@ -65,14 +70,35 @@ package body Statistics is
       Game_Stats.Points := Temp_Stats.Points;
    end Set_Game_Stats;
 
+   procedure Get_Game_Stats_List(Name: String) is
+      Nim_List: Nim_Stats_List := (others => <>);
+      procedure Get_Ada_Game_Stats_List
+        (N: chars_ptr; Stats_List: Nim_Stats_List) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameStatsList";
+   begin
+      if Name = "craftingOrders" then
+         Get_Crafting_Orders_Loop :
+         for I in
+           Game_Stats.Crafting_Orders.First_Index ..
+             Game_Stats.Crafting_Orders.Last_Index loop
+            Nim_List(I - 1) :=
+              (Index =>
+                 New_String
+                   (Str =>
+                      To_String
+                        (Source => Game_Stats.Crafting_Orders(I).Index)),
+               Amount => Game_Stats.Crafting_Orders(I).Amount);
+         end loop Get_Crafting_Orders_Loop;
+      end if;
+      Get_Ada_Game_Stats_List
+        (N => New_String(Str => Name), Stats_List => Nim_List);
+   end Get_Game_Stats_List;
+
    procedure Set_Game_Stats_List(Name: String) is
       use Interfaces.C;
 
-      type Nim_Statistics_Data is record
-         Index: chars_ptr;
-         Amount: Integer;
-      end record;
-      type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
       Nim_List: Nim_Stats_List := (others => <>);
       procedure Set_Ada_Game_Stats_List
         (N: chars_ptr; Stats_List: out Nim_Stats_List) with
@@ -202,6 +228,7 @@ package body Statistics is
          External_Name => "updateAdaCraftingOrders";
    begin
       Get_Game_Stats;
+      Get_Game_Stats_List(Name => "craftingOrders");
       Update_Ada_Crafting_Orders
         (I => New_String(Str => Tiny_String.To_String(Source => Index)));
       Set_Game_Stats_List(Name => "craftingOrders");
