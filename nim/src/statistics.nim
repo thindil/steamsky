@@ -40,7 +40,7 @@ type
 var gameStats* = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
-proc updateCraftingOrders*(index: string) =
+proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [].} =
   var updated = false
   for craftingOrder in gameStats.craftingOrders.mitems:
     if craftingOrder.index == index:
