@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,7 +28,9 @@ package body Maps is
    begin
       Diff_X := abs (Player_Ship.Sky_X - Destination_X);
       Diff_Y := abs (Player_Ship.Sky_Y - Destination_Y);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Distance := Sqrt(X => Float((Diff_X**2) + (Diff_Y**2)));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       return Natural(Float'Floor(Distance));
    end Count_Distance;
 
