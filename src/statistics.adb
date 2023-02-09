@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Goals; use Goals;
 with Ships; use Ships;
 with Config; use Config;
@@ -63,6 +64,37 @@ package body Statistics is
       Game_Stats.Accepted_Missions := Temp_Stats.Accepted_Missions;
       Game_Stats.Points := Temp_Stats.Points;
    end Set_Game_Stats;
+
+   procedure Set_Game_Stats_List(Name: String) is
+      use Interfaces.C;
+
+      type Nim_Statistics_Data is record
+         Index: chars_ptr;
+         Amount: Integer;
+      end record;
+      type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
+      Nim_List: Nim_Stats_List := (others => <>);
+      procedure Set_Ada_Game_Stats_List
+        (N: chars_ptr; Stats_List: out Nim_Stats_List) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGameStatsList";
+   begin
+      Set_Ada_Game_Stats_List
+        (N => New_String(Str => Name), Stats_List => Nim_List);
+      if Name = "craftingOrders" then
+         Game_Stats.Crafting_Orders.Clear;
+         Set_Crafting_Orders_Loop :
+         for Order of Nim_List loop
+            exit Set_Crafting_Orders_Loop when Strlen(Item => Order.Index) = 0;
+            Game_Stats.Crafting_Orders.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String(Source => Value(Item => Order.Index)),
+                  Amount => Order.Amount));
+         end loop Set_Crafting_Orders_Loop;
+      end if;
+   end Set_Game_Stats_List;
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
@@ -164,26 +196,15 @@ package body Statistics is
    end Update_Finished_Missions;
 
    procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
-      Updated: Boolean := False;
+      procedure Update_Ada_Crafting_Orders(I: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaCraftingOrders";
    begin
       Get_Game_Stats;
-      Update_Crafting_Loop :
-      for CraftingOrder of Game_Stats.Crafting_Orders loop
-         if To_String(Source => CraftingOrder.Index) =
-           To_String(Source => Index) then
-            CraftingOrder.Amount := CraftingOrder.Amount + 1;
-            Updated := True;
-            exit Update_Crafting_Loop;
-         end if;
-      end loop Update_Crafting_Loop;
-      if not Updated then
-         Game_Stats.Crafting_Orders.Append
-           (New_Item =>
-              (Index =>
-                 To_Unbounded_String(Source => To_String(Source => Index)),
-               Amount => 1));
-      end if;
-      Game_Stats.Points := Game_Stats.Points + 5;
+      Update_Ada_Crafting_Orders
+        (I => New_String(Str => Tiny_String.To_String(Source => Index)));
+      Set_Game_Stats_List(Name => "craftingOrders");
       Set_Game_Stats;
    end Update_Crafting_Orders;
 
