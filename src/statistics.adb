@@ -24,35 +24,37 @@ with Config; use Config;
 
 package body Statistics is
 
-   type Ada_Game_Stats is record
-      Bases_Visited: Bases_Range;
-      Map_Visited: Positive;
-      Distance_Traveled: Natural;
-      Accepted_Missions: Natural;
-      Points: Natural;
+   type Nim_Game_Stats is record
+      Bases_Visited: Integer;
+      Map_Visited: Integer;
+      Distance_Traveled: Integer;
+      Accepted_Missions: Integer;
+      Points: Integer;
    end record;
 
    procedure Get_Game_Stats is
-      procedure Get_Ada_Game_Stats(Stats: Ada_Game_Stats) with
+      Nim_Stats: constant Nim_Game_Stats :=
+        (Bases_Visited => Game_Stats.Bases_Visited,
+         Map_Visited => Game_Stats.Map_Visited,
+         Distance_Traveled => Game_Stats.Distance_Traveled,
+         Accepted_Missions => Game_Stats.Accepted_Missions,
+         Points => Game_Stats.Points);
+      procedure Get_Ada_Game_Stats(Stats: Nim_Game_Stats) with
          Import => True,
          Convention => C,
          External_Name => "getAdaGameStats";
    begin
-      Get_Ada_Game_Stats
-        (Stats =>
-           (Bases_Visited => Game_Stats.Bases_Visited,
-            Map_Visited => Game_Stats.Map_Visited,
-            Distance_Traveled => Game_Stats.Distance_Traveled,
-            Accepted_Missions => Game_Stats.Accepted_Missions,
-            Points => Game_Stats.Points));
+      Get_Ada_Game_Stats(Stats => Nim_Stats);
    end Get_Game_Stats;
 
    procedure Set_Game_Stats is
-      Temp_Stats: Ada_Game_Stats;
-      procedure Set_Ada_Game_Stats(Stats: out Ada_Game_Stats) with
+      Temp_Stats: Nim_Game_Stats :=
+        (Bases_Visited => 0, Map_Visited => 0, Distance_Traveled => 0,
+         Accepted_Missions => 0, Points => 0);
+      procedure Set_Ada_Game_Stats(Stats: out Nim_Game_Stats) with
          Import => True,
          Convention => C,
-         External_Name => "getAdaGameStats";
+         External_Name => "setAdaGameStats";
    begin
       Set_Ada_Game_Stats(Stats => Temp_Stats);
       Game_Stats.Bases_Visited := Temp_Stats.Bases_Visited;
