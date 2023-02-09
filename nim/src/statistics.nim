@@ -26,16 +26,16 @@ type
 
   GameStatsData = object
     ## Used to store information about the player's game's statistics
-    destroyedShips: seq[StatisticsData]   ## The list of destroyed ships
-    basesVisited: BasesRange              ## The amount of visited bases
-    mapVisited: Positive                  ## The amount of visited map fields
-    distanceTraveled: Natural             ## The length of the traveled distance
-    craftingOrders: seq[StatisticsData]   ## The list of finished crafting orders
-    acceptedMissions: Natural             ## The amount of accepted missions
-    finishedMissions: seq[StatisticsData] ## The list of finished missions
-    finishedGoals: seq[StatisticsData]    ## The list of finished goals
-    killedMobs: seq[StatisticsData]       ## The list of enemies killed
-    points: Natural                       ## The amount of points gained in the game's session
+    destroyedShips*: seq[StatisticsData]   ## The list of destroyed ships
+    basesVisited*: BasesRange              ## The amount of visited bases
+    mapVisited*: Positive                  ## The amount of visited map fields
+    distanceTraveled*: Natural             ## The length of the traveled distance
+    craftingOrders*: seq[StatisticsData]   ## The list of finished crafting orders
+    acceptedMissions*: Natural             ## The amount of accepted missions
+    finishedMissions*: seq[StatisticsData] ## The list of finished missions
+    finishedGoals*: seq[StatisticsData]    ## The list of finished goals
+    killedMobs*: seq[StatisticsData]       ## The list of enemies killed
+    points*: Natural                       ## The amount of points gained in the game's session
 
 var gameStats* = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
