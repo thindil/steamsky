@@ -24,15 +24,11 @@ package Statistics.Test_Data.Tests is
      (Gnattest_T: in out Test);
    --  statistics.ads:125:4:Update_Finished_Missions:Test_UpdateFinishedMissions
 
-   procedure Test_Update_Crafting_Orders_26bcdc_6660d1
-     (Gnattest_T: in out Test);
-   --  statistics.ads:136:4:Update_Crafting_Orders:Test_UpdateCraftingOrders
-
    procedure Test_Update_Killed_Mobs_d347f4_3672b4(Gnattest_T: in out Test);
-   --  statistics.ads:148:4:Update_Killed_Mobs:Test_UpdateKilledMobs
+   --  statistics.ads:147:4:Update_Killed_Mobs:Test_UpdateKilledMobs
 
    procedure Test_Get_Game_Points_9ad2e4_4eed1d(Gnattest_T: in out Test);
-   --  statistics.ads:160:4:Get_Game_Points:Test_GetGamePoints
+   --  statistics.ads:159:4:Get_Game_Points:Test_GetGamePoints
 
 end Statistics.Test_Data.Tests;
 --  end read only
