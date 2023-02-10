@@ -15,13 +15,16 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
-with Ships; use Ships;
+with Ada.Numerics.Elementary_Functions;
+with Ships;
 
 package body Maps is
 
    function Count_Distance
      (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range) return Natural is
+      use Ada.Numerics.Elementary_Functions;
+      use Ships;
+
       Diff_X: Natural range 0 .. Map_X_Range'Last;
       Diff_Y: Natural range 0 .. Map_Y_Range'Last;
       Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
