@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
+
 type
   GoalTypes = enum
     ## Types of in-game goals
@@ -30,3 +32,12 @@ type
     multiplier: Positive ## The muliplier for points awarded for finishing the goal
 
 var currentGoal* = GoalData(multiplier: 1) ## The player's current goal
+
+proc updateGoal*(goalType: GoalTypes; targetIndex: string;
+    amount: Positive = 1) =
+  if goalType != currentGoal.goalType:
+    return
+  if targetIndex.toLowerAscii != currentGoal.targetIndex.toLowerAscii and
+      currentGoal.targetIndex.len > 0:
+    return
+  currentGoal.amount = (if amount > currentGoal.amount: 0 else: currentGoal.amount - amount)
