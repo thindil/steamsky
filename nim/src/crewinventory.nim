@@ -217,24 +217,24 @@ proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
       protoIndex = protoIndex, itemType = $itemType, durability = durability,
       quality = quality) + 1).cint
 
-proc freeAdaInventory(memberIndex, amount: cint): cint {.exportc.} =
+proc freeAdaInventory(memberIndex, amount: cint): cint {.raises: [], tags: [], exportc.} =
   return freeInventory(memberIndex = (memberIndex - 1).Natural,
       amount = amount).cint
 
-proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.exportc.} =
+proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.raises: [], tags: [], exportc.} =
   return itemIsUsed(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1)).ord.cint
 
-proc takeAdaOffItem(memberIndex, itemIndex: cint) {.exportc.} =
+proc takeAdaOffItem(memberIndex, itemIndex: cint) {.raises: [], tags: [], exportc.} =
   takeOffItem(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1))
 
 proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
-    cint]) {.exportc.} =
+    cint]) {.raises: [], tags: [], exportc.} =
   for i in 0..6:
     equipment[i] = playerShip.crew[(memberIndex - 1)].equipment[
         i.EquipmentLocations].cint + 1
 
 proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
-    inventoryIndex, price, inPlayerShip: cint): cint {.exportc.} =
+    inventoryIndex, price, inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
   try:
     if inPlayerShip == 1:
       updateInventory(memberIndex = (memberIndex - 1), amount = amount,
@@ -249,12 +249,15 @@ proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
     return 0
 
 proc damageAdaItem(inventory: var array[128, AdaInventoryData]; itemIndex,
-    skillLevel, memberIndex, inPlayerShip: cint) {.exportc.} =
+    skillLevel, memberIndex, inPlayerShip: cint) {.raises: [], tags: [], exportc.} =
   var nimInventory = inventoryToNim(inventory = inventory)
-  if inPlayerShip == 1:
-    damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
-        skillLevel = skillLevel, memberIndex = (memberIndex - 1), playerShip)
-  else:
-    damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
-        skillLevel = skillLevel, memberIndex = (memberIndex - 1), npcShip)
+  try:
+    if inPlayerShip == 1:
+      damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
+          skillLevel = skillLevel, memberIndex = (memberIndex - 1), playerShip)
+    else:
+      damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
+          skillLevel = skillLevel, memberIndex = (memberIndex - 1), npcShip)
+  except KeyError, CrewNoSpaceError:
+    discard
   inventory = inventoryToAda(inventory = nimInventory)
