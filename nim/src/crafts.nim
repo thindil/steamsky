@@ -17,7 +17,7 @@
 
 import std/[strutils, tables, xmlparser, xmltree]
 import crewinventory, game, items, log, messages, ships, shipscargo, shipscrew,
-    trades, types
+    statistics, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -28,6 +28,8 @@ type
 
   CraftingNoToolsError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper crafting tools
+
+var knownRecipes: seq[string] ## The list of known recipes by the player
 
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -458,14 +460,14 @@ proc manufacturing*(minutes: Positive) =
             else:
               updateCargo(ship = playerShip, protoIndex = recipesList[
                   module.craftingIndex].resultIndex, amount = resultAmount)
-#            for key, recipe in recipesList.pairs:
-#              if recipe.resultIndex == recipe.resultIndex:
-#                updateCraftingOrders(index = key)
-#                break
-#          else:
-#            for key, recipe in recipesList.pairs:
-#              if recipe.resultIndex == recipe.resultIndex:
-#                knownRecipes.add(y = key)
+            for key, recipe in recipesList.pairs:
+              if recipe.resultIndex == recipe.resultIndex:
+                updateCraftingOrders(index = key)
+                break
+          else:
+            for key, recipe in recipesList.pairs:
+              if recipe.resultIndex == recipe.resultIndex:
+                knownRecipes.add(y = key)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
