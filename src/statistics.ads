@@ -134,8 +134,7 @@ package Statistics is
       -- Index - Index of crafting order to update
       -- SOURCE
    procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => Index) > 0,
-      Test_Case => (Name => "Test_UpdateCraftingOrders", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Index) > 0;
       -- ****
 
       -- ****f* Statistics/Statistics.Update_Killed_Mobs
