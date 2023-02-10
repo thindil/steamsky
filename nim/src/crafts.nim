@@ -468,6 +468,17 @@ proc manufacturing*(minutes: Positive) =
             for key, recipe in recipesList.pairs:
               if recipe.resultIndex == recipe.resultIndex:
                 knownRecipes.add(y = key)
+        module.craftingTime = recipeTime
+        if craftedAmount > 0:
+          if recipe.resultAmount > 0:
+            if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+              addMessage(message = playerShip.crew[crafterIndex].name &
+                  " has recovered " & $craftedAmount & " " & itemsList[
+                  recipe.resultIndex].name & ".", mType = craftMessage, color = green)
+            else:
+              addMessage(message = playerShip.crew[crafterIndex].name &
+                  " has manufactured " & $craftedAmount & " " & itemsList[
+                  recipe.resultIndex].name & ".", mType = craftMessage, color = green)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
