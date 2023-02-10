@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Order Go Rest for the whole player's ship's crew
 - Column with coordinates to the list of available missions in the bases and
   to the list of accepted missions in the knowledge screen
+- Close the list of available missions in bases when the player reached the
+  limit of missions to get
 
 ### Changed
 - Updated icon for checked and unchecked options, for example, the random
