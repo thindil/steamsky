@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -33,6 +33,13 @@ package Messages is
      (DEFAULT, COMBATMESSAGE, TRADEMESSAGE, ORDERMESSAGE, CRAFTMESSAGE,
       OTHERMESSAGE, MISSIONMESSAGE) with
       Default_Value => DEFAULT;
+      -- ****
+
+      -- ****d* Messages/Messages.Default_Message_Type
+      -- FUNCTION
+      -- The default type of the in-game messages
+      -- SOURCE
+   Default_Message_Type: constant Message_Type := DEFAULT;
    -- ****
 
    -- ****t* Messages/Messages.Message_Color
@@ -41,6 +48,13 @@ package Messages is
    -- SOURCE
    type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN) with
       Default_Value => WHITE;
+      -- ****
+
+      -- ****d* Messages/Messages.Default_Message_Color
+      -- FUNCTION
+      -- The default color of the in-game messages
+      -- SOURCE
+   Default_Message_Color: constant Message_Color := WHITE;
    -- ****
 
    -- ****s* Messages/Messages.Message_Data
@@ -56,6 +70,15 @@ package Messages is
       M_Type: Message_Type;
       Color: Message_Color;
    end record;
+   -- ****
+
+   -- ****d* Messages/Messages.Empty_Message
+   -- FUNCTION
+   -- The empty in-game message
+   -- SOURCE
+   Empty_Message: constant Message_Data :=
+     (Message => Null_Unbounded_String, M_Type => Default_Message_Type,
+      Color => Default_Message_Color);
    -- ****
 
    -- ****f* Messages/Messages.Formated_Time
