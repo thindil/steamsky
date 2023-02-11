@@ -664,7 +664,7 @@ package body Missions.UI is
           (pathName => Buttons_Frame & ".button1",
            options =>
              "-text Show -image showicon -command {CloseDialog " &
-             Mission_Dialog & ";ShowOnMap " &
+             Mission_Dialog & ";set mappreview 1;ShowOnMap " &
              Map_X_Range'Image
                (Sky_Bases(Base_Index).Missions(Mission_Index).Target_X) &
              Map_Y_Range'Image
