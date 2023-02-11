@@ -615,8 +615,8 @@ package body Knowledge.Missions is
                Text =>
                  "X:" & Natural'Image(Accepted_Missions(I).Target_X) & " Y:" &
                  Natural'Image(Accepted_Missions(I).Target_Y),
-               Tooltip => "Show more info about the mission",
-               Command => "MissionMoreInfo" & Positive'Image(I), Column => 3);
+               Tooltip => "The coordinates of the mission on the map",
+               Command => "ShowMissionMenu" & Positive'Image(I), Column => 3);
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date
               (Minutes => Accepted_Missions(I).Time,
