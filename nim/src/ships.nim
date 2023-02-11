@@ -334,11 +334,15 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
   var index, secondIndex = 1
   for member in nimCrew:
     secondIndex = 1
+    for attribute in crew[index].attributes.mitems:
+      attribute = [0.cint, 0.cint]
     for attribute in member.attributes:
       crew[index].attributes[secondIndex] = [attribute.level.cint,
           attribute.experience.cint]
       secondIndex.inc
     secondIndex = 1
+    for skill in crew[index].skills.mitems:
+      skill = [0.cint, 0.cint, 0.cint]
     for skill in member.skills:
       crew[index].skills[secondIndex] = [skill.index.cint, skill.level.cint,
           skill.experience.cint]
