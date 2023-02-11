@@ -97,7 +97,7 @@ package Goals is
    -- FUNCTION
    -- Reader - XML Reader from which goals data will be read
    -- SOURCE
-   procedure Load_Goals(Reader: Tree_Reader);
+   procedure Load_Goals(Reader: Tree_Reader; File_Name: String);
    -- ****
 
    -- ****f* Goals/Goals.Goal_Text

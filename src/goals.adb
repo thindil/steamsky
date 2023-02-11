@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -33,7 +34,8 @@ with Game; use Game;
 
 package body Goals is
 
-   procedure Load_Goals(Reader: Tree_Reader) is
+   procedure Load_Goals(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C.Strings;
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
@@ -45,7 +47,12 @@ package body Goals is
       Action: Data_Action := ADD;
       Goal_Index: Natural := 0;
       Goal_Node: Node;
+      procedure Load_Ada_Goals(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaGoals";
    begin
+      Load_Ada_Goals(Name => New_String(Str => File_Name));
       Goals_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
