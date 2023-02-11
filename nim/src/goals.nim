@@ -83,6 +83,37 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           GoalData(multiplier: 1)
       else:
         GoalData(multiplier: 1)
+    var attribute = goalNode.attr(name = "type")
+    if attribute.len() > 0:
+      goal.goalType = try:
+          parseEnum[GoalTypes](attribute.toLowerAscii)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid type of goal.")
+    attribute = goalNode.attr(name = "amount")
+    if attribute.len() > 0:
+      goal.amount = try:
+          attribute.parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for amount.")
+    attribute = goalNode.attr(name = "target")
+    if attribute.len() > 0:
+      goal.targetIndex = attribute
+    attribute = goalNode.attr(name = "multiplier")
+    if attribute.len() > 0:
+      goal.multiplier = try:
+          attribute.parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for multiplier.")
+    if goalAction == DataAction.add:
+      logMessage(message = "Goal added: '" & $goalIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Goal updated: '" & $goalIndex & "'",
+          debugType = everything)
+    goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
     amount: Positive = 1) =
@@ -92,3 +123,9 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       currentGoal.targetIndex.len > 0:
     return
   currentGoal.amount = (if amount > currentGoal.amount: 0 else: currentGoal.amount - amount)
+
+# Temporary code for interfacing with Ada
+
+proc loadAdaGoals(fileName: cstring) {.sideEffect,
+    raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  loadGoals(fileName = $fileName)
