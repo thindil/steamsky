@@ -24,6 +24,7 @@ with DOM.Core.Nodes;
 with DOM.Core.Elements;
 with Bases;
 with Crafts; use Crafts;
+with Events;
 with Factions;
 with Log;
 with Maps; use Maps;
@@ -1717,6 +1718,8 @@ package body Ships is
    end Set_Ada_Modules;
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
+      use Events;
+
       Nim_Cargo: constant Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
       Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
@@ -1726,6 +1729,21 @@ package body Ships is
          Visited => (if Map_Cell.Visited then 1 else 0),
          Event_Index => Map_Cell.Event_Index,
          Mission_Index => Map_Cell.Mission_Index);
+      if Map_Cell.Event_Index > 0 then
+         Get_Ada_Event
+           (Index => Map_Cell.Event_Index, X => Ship.Sky_X, Y => Ship.Sky_Y,
+            Time => Events_List(Map_Cell.Event_Index).Time,
+            E_Type =>
+              Events_Types'Pos(Events_List(Map_Cell.Event_Index).E_Type),
+            Data =>
+              (case Events_List(Map_Cell.Event_Index).E_Type is
+                 when DOUBLEPRICE =>
+                   Events_List(Map_Cell.Event_Index).Item_Index,
+                 when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
+                   FRIENDLYSHIP =>
+                   Events_List(Map_Cell.Event_Index).Ship_Index,
+                 when others => Events_List(Map_Cell.Event_Index).Data));
+      end if;
       Get_Ada_Ship(Ship => Ship);
       Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo
