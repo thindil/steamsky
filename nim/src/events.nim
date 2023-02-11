@@ -42,7 +42,7 @@ var eventsList* = initTable[Positive, EventData]() ## The list of available even
 
 # Temporary code for interfacing with Ada
 
-proc getAdaEvent(index, x, y, time, eType, data: cint) {.exportc.} =
+proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
   var event = EventData(skyX: x, skyY: y, time: time, eType: eType.EventsTypes)
   case event.eType
     of doublePrice:
