@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   to the list of accepted missions in the knowledge screen
 - Close the list of available missions in bases when the player reached the
   limit of missions to get
+- Showing all missions available in the base during previewing them on the map
 
 ### Changed
 - Updated icon for checked and unchecked options, for example, the random
