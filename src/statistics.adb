@@ -19,7 +19,6 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Goals; use Goals;
 with Ships; use Ships;
 with Config; use Config;
 
@@ -91,6 +90,19 @@ package body Statistics is
                         (Source => Game_Stats.Crafting_Orders(I).Index)),
                Amount => Game_Stats.Crafting_Orders(I).Amount);
          end loop Get_Crafting_Orders_Loop;
+      elsif Name = "finishedGoals" then
+         Get_Finished_Goals_Loop :
+         for I in
+           Game_Stats.Finished_Goals.First_Index ..
+             Game_Stats.Finished_Goals.Last_Index loop
+            Nim_List(I - 1) :=
+              (Index =>
+                 New_String
+                   (Str =>
+                      To_String
+                        (Source => Game_Stats.Finished_Goals(I).Index)),
+               Amount => Game_Stats.Finished_Goals(I).Amount);
+         end loop Get_Finished_Goals_Loop;
       end if;
       Get_Ada_Game_Stats_List
         (N => New_String(Str => Name), Stats_List => Nim_List);
@@ -119,6 +131,17 @@ package body Statistics is
                     To_Unbounded_String(Source => Value(Item => Order.Index)),
                   Amount => Order.Amount));
          end loop Set_Crafting_Orders_Loop;
+      elsif Name = "finishedGoals" then
+         Game_Stats.Finished_Goals.Clear;
+         Set_Finished_Goals_Loop :
+         for Goal of Nim_List loop
+            exit Set_Finished_Goals_Loop when Strlen(Item => Goal.Index) = 0;
+            Game_Stats.Finished_Goals.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String(Source => Value(Item => Goal.Index)),
+                  Amount => Goal.Amount));
+         end loop Set_Finished_Goals_Loop;
       end if;
    end Set_Game_Stats_List;
 
@@ -173,34 +196,17 @@ package body Statistics is
    end Clear_Game_Stats;
 
    procedure Update_Finished_Goals(Index: Unbounded_String) is
-      Updated: Boolean := False;
+      procedure Update_Ada_Finished_Goals(I: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaFinishedGoals";
    begin
-      Find_Goal_Index_Loop :
-      for Goal of Goals_List loop
-         if Goal.Index = Index then
-            Game_Stats.Points :=
-              Game_Stats.Points + (Goal.Amount * Goal.Multiplier);
-            exit Find_Goal_Index_Loop;
-         end if;
-      end loop Find_Goal_Index_Loop;
-      Update_Finished_Goals_Loop :
-      for FinishedGoal of Game_Stats.Finished_Goals loop
-         if FinishedGoal.Index = Index then
-            FinishedGoal.Amount := FinishedGoal.Amount + 1;
-            Updated := True;
-            exit Update_Finished_Goals_Loop;
-         end if;
-      end loop Update_Finished_Goals_Loop;
-      if not Updated then
-         Add_Finished_Goal_Loop :
-         for Goal of Goals_List loop
-            if Goal.Index = Index then
-               Game_Stats.Finished_Goals.Append
-                 (New_Item => (Index => Goal.Index, Amount => 1));
-               exit Add_Finished_Goal_Loop;
-            end if;
-         end loop Add_Finished_Goal_Loop;
-      end if;
+      Get_Game_Stats;
+      Get_Game_Stats_List(Name => "finishedGoals");
+      Update_Ada_Finished_Goals
+        (I => New_String(Str => To_String(Source => Index)));
+      Set_Game_Stats_List(Name => "finishedGoals");
+      Set_Game_Stats;
    end Update_Finished_Goals;
 
    procedure Update_Finished_Missions(M_Type: Unbounded_String) is
