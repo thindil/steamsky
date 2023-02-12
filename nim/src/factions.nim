@@ -331,9 +331,13 @@ type
     description: cstring
     name: cstring
 
-proc loadAdaFactions*(fileName: cstring) {.sideEffect, raises: [
-    DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  loadFactions(fileName = $fileName)
+proc loadAdaFactions*(fileName: cstring): cstring {.sideEffect, raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadFactions(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
 
 proc getAdaFactionIndex(index: cint): cstring {.exportc.} =
   var factionNumber: Positive = 1
