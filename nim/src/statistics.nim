@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import types
+import std/tables
+import goals, types
 
 type
   StatisticsData = object
@@ -53,6 +54,22 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [].} =
   if not updated:
     gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
   gameStats.points = gameStats.points + 5
+
+proc updateFinishedGoals*(index: string) =
+  var updated = false
+  for goal in goalsList.values:
+    if goal.index == index:
+      gameStats.points = gameStats.points + (goal.amount * goal.multiplier)
+      break
+  for goal in gameStats.finishedGoals.mitems:
+    if goal.index == index:
+      goal.amount.inc
+      updated = true
+      break
+  if not updated:
+    for goal in goalsList.values:
+      if goal.index == index:
+        gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
 
 # Temporary code for interfacing with Ada
 
@@ -134,3 +151,6 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
   for index, stat in list.pairs:
     statsList[index] = AdaStatisticsData(index: stat.index.cstring,
         amount: stat.amount.cint)
+
+proc updateAdaFinishedGoals(index: cstring) {.exportc.} =
+  updateFinishedGoals(index = $index)
