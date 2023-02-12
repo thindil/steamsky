@@ -25,12 +25,12 @@ type
 
   GoalData = object
     ## Used to store information about the in-game goals
-    index: string       ## The index of the goal prototype
-    goalType: GoalTypes ## The type of the goal
-    amount: Natural     ## The amount of targets needed for finishe the goal
-    targetIndex: string ## The index of the target needed for finish the goal. If empty
-                        ## means all targets of the selected type (bases, ships, etc.)
-    multiplier: Positive ## The muliplier for points awarded for finishing the goal
+    index*: string       ## The index of the goal prototype
+    goalType*: GoalTypes ## The type of the goal
+    amount*: Natural     ## The amount of targets needed for finishe the goal
+    targetIndex*: string ## The index of the target needed for finish the goal. If empty
+                         ## means all targets of the selected type (bases, ships, etc.)
+    multiplier*: Positive ## The muliplier for points awarded for finishing the goal
 
 var
   currentGoal* = GoalData(multiplier: 1) ## The player's current goal
@@ -83,6 +83,7 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           GoalData(multiplier: 1)
       else:
         GoalData(multiplier: 1)
+    goal.index = $goalIndex
     var attribute = goalNode.attr(name = "type")
     if attribute.len() > 0:
       goal.goalType = try:
@@ -126,6 +127,29 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaGoalData = object
+    index: cstring
+    goalType: cint
+    amount: cint
+    targetIndex: cstring
+    multiplier: cint
+
 proc loadAdaGoals(fileName: cstring) {.sideEffect,
     raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   loadGoals(fileName = $fileName)
+
+proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
+  adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
+      targetIndex: "".cstring, multiplier: 0)
+  if index > goalsList.len:
+    return
+  let goal = try:
+      goalsList[index]
+    except KeyError:
+      return
+  adaGoal.index = goal.index.cstring
+  adaGoal.goalType = goal.goalType.ord.cint
+  adaGoal.amount = goal.amount.cint
+  adaGoal.targetIndex = goal.targetIndex.cstring
+  adaGoal.multiplier = goal.multiplier.cint
