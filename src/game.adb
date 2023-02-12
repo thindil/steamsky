@@ -938,8 +938,7 @@ package body Game is
                     (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "goals" then
                   Load_Goals
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "help" then
                   Load_Help(Reader => Reader);
                elsif To_String(Source => Data_Type) = "items" then

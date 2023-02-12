@@ -17,11 +17,6 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Interfaces.C.Strings;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes;
-with DOM.Core.Elements;
-with Log;
 with Ships;
 with Crafts;
 with Items;
@@ -30,114 +25,46 @@ with Statistics;
 with Messages;
 with Missions;
 with Factions;
-with Game; use Game;
+with Game;
 
 package body Goals is
 
-   procedure Load_Goals(Reader: Tree_Reader; File_Name: String) is
+   procedure Load_Goals(File_Name: String) is
+      use Interfaces.C;
       use Interfaces.C.Strings;
-      use DOM.Core;
-      use DOM.Core.Elements;
-      use DOM.Core.Nodes;
-      use Log;
 
-      Temp_Record: Goal_Data; --## rule line off IMPROPER_INITIALIZATION
-      Nodes_List: Node_List;
-      Goals_Data: Document;
-      Action: Data_Action := ADD;
-      Goal_Index: Natural := 0;
-      Goal_Node: Node;
+      type Nim_Goal_Data is record
+         Index: chars_ptr;
+         G_Type: Integer;
+         Amount: Natural;
+         Target_Index: chars_ptr;
+         Multiplier: Positive;
+      end record;
+      Nim_Goal: Nim_Goal_Data;
       procedure Load_Ada_Goals(Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaGoals";
+      procedure Get_Ada_Goal(Index: Natural; Goal: out Nim_Goal_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGoal";
    begin
       Load_Ada_Goals(Name => New_String(Str => File_Name));
-      Goals_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Goals_Data, Tag_Name => "goal");
       Load_Goals_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Goal_Node := Item(List => Nodes_List, Index => I);
-         Temp_Record :=
-           (Index =>
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Goal_Node, Name => "index")),
-            G_Type => RANDOM, Amount => 0,
-            Target_Index => Null_Unbounded_String, Multiplier => 1);
-         Action :=
-           (if Get_Attribute(Elem => Goal_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Goal_Node, Name => "action"))
-            else ADD);
-         Goal_Index := 0;
-         Get_Goal_Index_Loop :
-         for J in Goals_List.Iterate loop
-            if Goals_List(J).Index = Temp_Record.Index then
-               Goal_Index := Goals_Container.To_Index(Position => J);
-               exit Get_Goal_Index_Loop;
-            end if;
-         end loop Get_Goal_Index_Loop;
-         if Action in UPDATE | REMOVE then
-            if Goal_Index = 0 then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " goal '" & To_String(Source => Temp_Record.Index) &
-                 "', there is no goal with that index.";
-            end if;
-         elsif Goal_Index > 0 then
-            raise Data_Loading_Error
-              with "Can't add goal '" &
-              To_String(Source => Temp_Record.Index) &
-              "', there is already a goal with that index.";
-         end if;
-         if Action = REMOVE then
-            Goals_List.Delete(Index => Goal_Index);
-            Log_Message
-              (Message =>
-                 "Goal removed: " & To_String(Source => Temp_Record.Index),
-               Message_Type => EVERYTHING);
-         else
-            if Action = UPDATE then
-               Temp_Record := Goals_List(Goal_Index);
-            end if;
-            if Get_Attribute(Elem => Goal_Node, Name => "type") /= "" then
-               Temp_Record.G_Type :=
-                 Goal_Types'Value
-                   (Get_Attribute(Elem => Goal_Node, Name => "type"));
-            end if;
-            if Get_Attribute(Elem => Goal_Node, Name => "amount") /= "" then
-               Temp_Record.Amount :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Goal_Node, Name => "amount"));
-            end if;
-            if Get_Attribute(Elem => Goal_Node, Name => "target") /= "" then
-               Temp_Record.Target_Index :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Goal_Node, Name => "target"));
-            end if;
-            if Get_Attribute(Elem => Goal_Node, Name => "multiplier") /=
-              "" then
-               Temp_Record.Multiplier :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Goal_Node, Name => "multiplier"));
-            end if;
-            if Action = UPDATE then
-               Goals_List(Goal_Index) := Temp_Record;
-               Log_Message
-                 (Message =>
-                    "Goal updated: " & To_String(Source => Temp_Record.Index),
-                  Message_Type => EVERYTHING);
-            else
-               Goals_List.Append(New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Goal added: " & To_String(Source => Temp_Record.Index),
-                  Message_Type => EVERYTHING);
-            end if;
+      for I in 1 .. 256 loop
+         Get_Ada_Goal(Index => I, Goal => Nim_Goal);
+         if Strlen(Item => Nim_Goal.Index) > 0 then
+            Goals_List.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+                  G_Type => Goal_Types'Val(Nim_Goal.G_Type),
+                  Amount => Nim_Goal.Amount,
+                  Target_Index =>
+                    To_Unbounded_String
+                      (Source => Value(Item => Nim_Goal.Target_Index)),
+                  Multiplier => Nim_Goal.Multiplier));
          end if;
       end loop Load_Goals_Loop;
    end Load_Goals;
@@ -145,7 +72,7 @@ package body Goals is
    function Goal_Text(Index: Goals_Container.Extended_Index) return String is
       use Crafts;
       use Missions;
-      use Tiny_String;
+      use Game.Tiny_String;
 
       Text: Unbounded_String := Null_Unbounded_String;
       Goal: Goal_Data;

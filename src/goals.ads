@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with DOM.Readers; use DOM.Readers;
 
 -- ****h* Goals/Goals
 -- FUNCTION
@@ -95,9 +94,9 @@ package Goals is
    -- FUNCTION
    -- Load player goals from files
    -- FUNCTION
-   -- Reader - XML Reader from which goals data will be read
+   -- File_Name - The full path to the goals file which will be read
    -- SOURCE
-   procedure Load_Goals(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Goals(File_Name: String);
    -- ****
 
    -- ****f* Goals/Goals.Goal_Text
