@@ -596,7 +596,6 @@ package body Maps.UI is
          end if;
       end loop Draw_Map_Y_Loop;
       configure(Widgt => Map_View, options => "-state disable");
-      Tcl_Eval(Get_Context, "puts here");
    end Draw_Map;
 
    procedure Update_Map_Info
