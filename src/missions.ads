@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -32,6 +32,13 @@ package Missions is
    -- SOURCE
    type Missions_Types is (DELIVER, DESTROY, PATROL, EXPLORE, PASSENGER) with
       Default_Value => DELIVER;
+      -- ****
+
+      -- ****d* Missions/Missions.Default_Mission_Type
+      -- FUNCTION
+      -- Default type of missions
+      -- SOURCE
+   Default_Mission_Type: constant Missions_Types := DELIVER;
    -- ****
 
    -- ****t* Missions/Missions.Reward_Multiplier
@@ -40,6 +47,13 @@ package Missions is
    -- SOURCE
    type Reward_Multiplier is digits 2 range 0.0 .. 2.0 with
       Default_Value => 1.0;
+      -- ****
+
+      -- ****d* Missions/Missions.Default_Multiplier
+      -- FUNCTION
+      -- Default multiplier for missions reward
+      -- SOURCE
+   Default_Multiplier: constant Reward_Multiplier := 1.0;
    -- ****
 
    -- ****s* Missions/Missions.Mission_Data:
@@ -79,6 +93,13 @@ package Missions is
             Target: Natural := 0;
       end case;
    end record;
+   -- ****
+
+   -- ****d* Missions/Missions.Empty_Mission
+   -- FUNCTION
+   -- Default, empty mission data
+   -- SOURCE
+   Empty_Mission: constant Mission_Data := (M_Type => Default_Mission_Type, others => <>);
    -- ****
 
    -- ****t* Missions/Missions.Mission_Container
