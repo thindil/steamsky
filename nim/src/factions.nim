@@ -339,7 +339,7 @@ proc loadAdaFactions*(fileName: cstring): cstring {.sideEffect, raises: [],
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaFactionIndex(index: cint): cstring {.exportc.} =
+proc getAdaFactionIndex(index: cint): cstring {.raises: [], tags: [], exportc.} =
   var factionNumber: Positive = 1
   for factionIndex in factionsList.keys:
     if index == factionNumber:
@@ -446,16 +446,24 @@ proc getAdaFactionBase(factionIndex: cstring; index: cint;
   except KeyError:
     return ""
 
-proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.exportc.} =
-  return getReputation(sourceFaction = $sourceFaction,
-      targetFaction = $targetFaction).cint
+proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.raises: [],
+    tags: [], exportc.} =
+  try:
+    return getReputation(sourceFaction = $sourceFaction,
+        targetFaction = $targetFaction).cint
+  except KeyError:
+    return 0
 
-proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.exportc.} =
-  return isFriendly(sourceFaction = $sourceFaction,
-      targetFaction = $targetFaction).ord.cint
+proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.raises: [],
+    tags: [], exportc.} =
+  try:
+    return isFriendly(sourceFaction = $sourceFaction,
+        targetFaction = $targetFaction).ord.cint
+  except KeyError:
+    return 0
 
-proc getAdaRandomFaction(): cstring {.exportc.} =
+proc getAdaRandomFaction(): cstring {.raises: [], tags: [], exportc.} =
   return getRandomFaction().cstring
 
-proc getAdaFactionsAmount(): cint {.exportc.} =
+proc getAdaFactionsAmount(): cint {.raises: [], tags: [], exportc.} =
   return factionsList.len.cint
