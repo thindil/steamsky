@@ -17,18 +17,15 @@ package Statistics.Test_Data.Tests is
    procedure Test_Clear_Game_Stats_b75ef6_2f902c(Gnattest_T: in out Test);
    --  statistics.ads:103:4:Clear_Game_Stats:Test_ClearGameStats
 
-   procedure Test_Update_Finished_Goals_77cad5_51796d(Gnattest_T: in out Test);
-   --  statistics.ads:114:4:Update_Finished_Goals:Test_UpdateFinishedGoals
-
    procedure Test_Update_Finished_Missions_dc1df6_dab6ba
      (Gnattest_T: in out Test);
-   --  statistics.ads:125:4:Update_Finished_Missions:Test_UpdateFinishedMissions
+   --  statistics.ads:124:4:Update_Finished_Missions:Test_UpdateFinishedMissions
 
    procedure Test_Update_Killed_Mobs_d347f4_3672b4(Gnattest_T: in out Test);
-   --  statistics.ads:147:4:Update_Killed_Mobs:Test_UpdateKilledMobs
+   --  statistics.ads:146:4:Update_Killed_Mobs:Test_UpdateKilledMobs
 
    procedure Test_Get_Game_Points_9ad2e4_4eed1d(Gnattest_T: in out Test);
-   --  statistics.ads:159:4:Get_Game_Points:Test_GetGamePoints
+   --  statistics.ads:158:4:Get_Game_Points:Test_GetGamePoints
 
 end Statistics.Test_Data.Tests;
 --  end read only
