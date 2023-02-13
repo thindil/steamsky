@@ -55,7 +55,7 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [].} =
     gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
   gameStats.points = gameStats.points + 5
 
-proc updateFinishedGoals*(index: string) =
+proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [].} =
   var updated = false
   for goal in goalsList.values:
     if goal.index == index:
