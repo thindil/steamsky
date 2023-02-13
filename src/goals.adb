@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Interfaces.C.Strings;
 with Ships;
 with Crafts;
@@ -33,6 +33,7 @@ package body Goals is
       use Interfaces.C;
       use Interfaces.C.Strings;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Goal_Data is record
          Index: chars_ptr;
          G_Type: Integer;
@@ -40,7 +41,10 @@ package body Goals is
          Target_Index: chars_ptr;
          Multiplier: Positive;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Goal: Nim_Goal_Data;
+      --## rule on IMPROPER_INITIALIZATION
       procedure Load_Ada_Goals(Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -305,6 +309,7 @@ package body Goals is
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
+      use Ada.Characters.Handling;
       use Messages;
       use Statistics;
       use Utils;
