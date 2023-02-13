@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -112,8 +112,7 @@ package Statistics is
       -- Index - Index of goal to update
       -- SOURCE
    procedure Update_Finished_Goals(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String,
-      Test_Case => (Name => "Test_UpdateFinishedGoals", Mode => Nominal);
+      Pre => Index /= Null_Unbounded_String;
       -- ****
 
       -- ****f* Statistics/Statistics.Update_Finished_Missions
