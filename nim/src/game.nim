@@ -97,6 +97,7 @@ var
   skyBases*: array[BasesRange, BaseRecord] ## The list of all bases in the game
   modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
   recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
+  goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =

@@ -62,10 +62,14 @@ type
     deliver, destroy, patrol, explore, passenger
 
   ModuleType* {.pure.} = enum
+    ## Types of available prototypes of ships modules
     any, engine, cabin, cockpit, turret, gun, cargo, hull, armor, batteringRam,
     alchemyLab, furnace, waterCollector, workshop, greenhouse, medicalRoom,
     harpoonGun, trainingRoom
-    ## Types of available prototypes of ships modules
+
+  GoalTypes* {.pure.} = enum
+    ## Types of in-game goals
+    random, reputation, destroy, discover, visit, craft, mission, kill
 
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
@@ -331,6 +335,15 @@ type
     tool*: string               ## The type of item used as a tool in crafting
     reputation*: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
     toolQuality*: Positive      ## The minimal quality of tool used in crafting
+
+  GoalData* = object
+    ## Used to store information about the in-game goals
+    index*: string       ## The index of the goal prototype
+    goalType*: GoalTypes ## The type of the goal
+    amount*: Natural     ## The amount of targets needed for finishe the goal
+    targetIndex*: string ## The index of the target needed for finish the goal. If empty
+                         ## means all targets of the selected type (bases, ships, etc.)
+    multiplier*: Positive ## The muliplier for points awarded for finishing the goal
 
 # Temporary code for interfacing with Ada
 

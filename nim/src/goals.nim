@@ -16,25 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, log, types
 
-type
-  GoalTypes = enum
-    ## Types of in-game goals
-    random, reputation, destroy, discover, visit, craft, mission, kill
-
-  GoalData = object
-    ## Used to store information about the in-game goals
-    index*: string       ## The index of the goal prototype
-    goalType*: GoalTypes ## The type of the goal
-    amount*: Natural     ## The amount of targets needed for finishe the goal
-    targetIndex*: string ## The index of the target needed for finish the goal. If empty
-                         ## means all targets of the selected type (bases, ships, etc.)
-    multiplier*: Positive ## The muliplier for points awarded for finishing the goal
-
-var
-  currentGoal* = GoalData(multiplier: 1) ## The player's current goal
-  goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
+var currentGoal* = GoalData(multiplier: 1) ## The player's current goal
 
 proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
