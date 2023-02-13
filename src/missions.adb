@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -44,11 +44,13 @@ package body Missions is
       Mission_X, Mission_Y: Positive range 1 .. 1_024;
       Missions_Amount: Positive range 1 .. 26;
       Tmp_Base_Index: Bases_Range;
+      --## rule off IMPROPER_INITIALIZATION
       Mission: Mission_Data;
       Missions_Items: Positive_Container.Vector;
       Bases_In_Range: Positive_Container.Vector;
-      Min_X, Min_Y, Max_X, Max_Y: Integer;
       Enemies: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      Min_X, Min_Y, Max_X, Max_Y: Integer;
       M_Type: Missions_Types;
       Diff_X, Diff_Y: Natural;
       Qualities_Array: constant array(1 .. 10) of Positive :=
