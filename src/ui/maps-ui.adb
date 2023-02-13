@@ -1048,9 +1048,11 @@ package body Maps.UI is
       Messages_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Paned & ".controls.messages");
       Paned_Position: Natural;
+      New_Start: Boolean := False;
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
       if Winfo_Get(Widgt => Map_View, Info => "exists") = "0" then
+         New_Start := True;
          Load_Keys_Block :
          declare
             Keys_File: File_Type;
@@ -1411,7 +1413,9 @@ package body Maps.UI is
         (Interp => Get_Context, Sequence => "<Escape>",
          Script => "{InvokeButton " & Close_Button & "}");
       Update_Messages;
-      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
+      if not New_Start then
+         Tcl_Eval(interp => Get_Context, strng => "DrawMap");
+      end if;
       Update_Move_Buttons;
       Update_Map_Info;
       if not Game_Settings.Show_Last_Messages then
