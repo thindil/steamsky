@@ -56,6 +56,9 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [].} =
   gameStats.points = gameStats.points + 5
 
 proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [].} =
+  ## Update the list of finished goals in the game statistics
+  ##
+  ## * index - the index of the goal to update
   var updated = false
   for goal in goalsList.values:
     if goal.index == index:
