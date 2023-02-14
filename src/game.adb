@@ -740,7 +740,8 @@ package body Game is
                --## rule on TYPE_INITIAL_VALUES
                Nim_Strings: Nim_Strings_Array;
                Nim_Integers: Nim_Integers_Array := (others => 0);
-               procedure Load_Ada_Data(Name: chars_ptr) with
+               Result: chars_ptr;
+               function Load_Ada_Data(Name: chars_ptr) return chars_ptr with
                   Import => True,
                   Convention => C,
                   External_Name => "loadAdaData";
@@ -755,7 +756,10 @@ package body Game is
                   Convention => C,
                   External_Name => "getAdaGameIntegers";
             begin
-               Load_Ada_Data(Name => New_String(Str => Data_File_Name));
+               Result := Load_Ada_Data(Name => New_String(Str => Data_File_Name));
+               if Strlen(Item => Result) > 0 then
+                  raise Data_Loading_Error with Value(Item => Result);
+               end if;
                Item_Index := 0;
                Fill_Attributes_Block :
                declare
