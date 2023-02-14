@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, types
+import game, log, messages, statistics, types, utils
 
 var currentGoal* = GoalData(multiplier: 1) ## The player's current goal
 
@@ -108,6 +108,11 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       currentGoal.targetIndex.len > 0:
     return
   currentGoal.amount = (if amount > currentGoal.amount: 0 else: currentGoal.amount - amount)
+  if currentGoal.amount == 0:
+    updateFinishedGoals(index = currentGoal.index)
+    addMessage(message = "You finished your goal. New goal is set.",
+        mType = otherMessage, color = blue)
+    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
 
 # Temporary code for interfacing with Ada
 
@@ -137,3 +142,8 @@ proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], e
   adaGoal.amount = goal.amount.cint
   adaGoal.targetIndex = goal.targetIndex.cstring
   adaGoal.multiplier = goal.multiplier.cint
+
+proc updateAdaGoal(goalType: cint; targetIndex: cstring;
+    amount: cint) {.exportc.} =
+  updateGoal(goalType = goalType.GoalTypes, targetIndex = $targetIndex,
+      amount = amount.Positive)
