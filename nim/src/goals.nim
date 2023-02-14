@@ -147,3 +147,14 @@ proc updateAdaGoal(goalType: cint; targetIndex: cstring;
     amount: cint) {.exportc.} =
   updateGoal(goalType = goalType.GoalTypes, targetIndex = $targetIndex,
       amount = amount.Positive)
+
+proc getCurrentGoal(goal: AdaGoalData) {.exportc.} =
+  currentGoal = GoalData(index: $goal.index, goalType: goal.goalType.GoalTypes,
+      amount: goal.amount.Positive, targetIndex: $goal.targetIndex,
+      multiplier: goal.multiplier.Positive)
+
+proc setCurrentGoal(goal: var AdaGoalData) {.exportc.} =
+  goal = AdaGoalData(index: currentGoal.index.cstring,
+      goalType: currentGoal.goalType.ord.cint, amount: currentGoal.amount.cint,
+      targetIndex: currentGoal.targetIndex.cstring,
+      multiplier: currentGoal.multiplier.cint)
