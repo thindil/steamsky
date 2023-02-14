@@ -251,7 +251,10 @@ package body Maps.UI.Commands is
         (Widgt => Map_View,
          options =>
            "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
-      Draw_Map;
+      if Tcl_GetVar(interp => Interp, varName => "refreshmap") = "1" then
+         Draw_Map;
+         Tcl_UnsetVar(interp => Interp, varName => "refreshmap");
+      end if;
       return TCL_OK;
    end Draw_Map_Command;
 
@@ -677,6 +680,8 @@ package body Maps.UI.Commands is
          strng =>
            "font configure MapFont -size" &
            Positive'Image(Game_Settings.Map_Font_Size));
+      Tcl_SetVar
+        (interp => Interp, varName => "refreshmap", newValue => "1");
       return
         Draw_Map_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,

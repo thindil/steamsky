@@ -1343,6 +1343,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Pack.Pack
            (Slave => Game_Frame, Options => "-fill both -expand true");
       end if;
+      Tcl_SetVar
+        (interp => Get_Context, varName => "refreshmap", newValue => "1");
       Wm_Set
         (Widgt => Get_Main_Window(Interp => Get_Context), Action => "title",
          Options => "{Steam Sky}");
@@ -1430,13 +1432,17 @@ package body Maps.UI is
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
    begin
+      Tcl_SetVar
+        (interp => Get_Context, varName => "refreshmap", newValue => "1");
       if Clear then
          Show_Screen(New_Screen_Name => "mapframe");
       end if;
       Tcl_SetVar
         (interp => Get_Context, varName => "gamestate", newValue => "general");
       Update_Header;
-      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
+      if Tcl_GetVar(interp => Get_Context, varName => "refreshmap") = "1" then
+         Tcl_Eval(interp => Get_Context, strng => "DrawMap");
+      end if;
       Update_Move_Buttons;
       Tcl_Eval(interp => Get_Context, strng => "update");
       Update_Messages;
