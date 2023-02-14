@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[goals, statistics]
+import ../../src/[game, goals, statistics]
 
 if goalsList.len == 0:
   loadGoals("../bin/data/goals.dat")
