@@ -102,6 +102,12 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
     amount: Positive = 1) {.sideEffect, raises: [], tags: [].} =
+  ## Update the player's current goal. If the goal is finished, select randomly
+  ## a new one
+  ##
+  ## * goalType    - the type of the goal which was finished
+  ## * targetIndex - the target of the goal which was finished
+  ## * amount      - the amount in the goal which was finished
   if goalType != currentGoal.goalType:
     return
   if targetIndex.toLowerAscii != currentGoal.targetIndex.toLowerAscii and
