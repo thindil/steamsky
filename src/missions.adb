@@ -41,18 +41,18 @@ package body Missions is
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Mission_X, Mission_Y: Positive range 1 .. 1_024;
+      Mission_X, Mission_Y: Positive range 1 .. 1_024 := 1;
       Missions_Amount: Positive range 1 .. 26;
-      Tmp_Base_Index: Bases_Range;
+      Tmp_Base_Index: Bases_Range := 1;
       --## rule off IMPROPER_INITIALIZATION
       Mission: Mission_Data;
       Missions_Items: Positive_Container.Vector;
       Bases_In_Range: Positive_Container.Vector;
       Enemies: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
-      Min_X, Min_Y, Max_X, Max_Y: Integer;
-      M_Type: Missions_Types;
-      Diff_X, Diff_Y: Natural;
+      Min_X, Min_Y, Max_X, Max_Y: Integer := 0;
+      M_Type: Missions_Types := Default_Mission_Type;
+      Diff_X, Diff_Y: Natural := 0;
       Qualities_Array: constant array(1 .. 10) of Positive :=
         (1 => 1, 2 => 11, 3 => 21, 4 => 31, 5 => 41, 6 => 51, 7 => 61, 8 => 71,
          9 => 81, 10 => 91);
