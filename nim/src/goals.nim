@@ -101,7 +101,7 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
-    amount: Positive = 1) =
+    amount: Positive = 1) {.sideEffect, raises: [], tags: [].} =
   if goalType != currentGoal.goalType:
     return
   if targetIndex.toLowerAscii != currentGoal.targetIndex.toLowerAscii and
@@ -112,7 +112,11 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
     updateFinishedGoals(index = currentGoal.index)
     addMessage(message = "You finished your goal. New goal is set.",
         mType = otherMessage, color = blue)
-    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+    while currentGoal.amount == 0:
+      try:
+        currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+      except KeyError:
+        discard
 
 # Temporary code for interfacing with Ada
 
@@ -144,16 +148,16 @@ proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], e
   adaGoal.multiplier = goal.multiplier.cint
 
 proc updateAdaGoal(goalType: cint; targetIndex: cstring;
-    amount: cint) {.exportc.} =
+    amount: cint) {.raises: [], tags: [], exportc.} =
   updateGoal(goalType = goalType.GoalTypes, targetIndex = $targetIndex,
       amount = amount.Positive)
 
-proc getAdaCurrentGoal(goal: AdaGoalData) {.exportc.} =
+proc getAdaCurrentGoal(goal: AdaGoalData) {.raises: [], tags: [], exportc.} =
   currentGoal = GoalData(index: $goal.index, goalType: goal.goalType.GoalTypes,
       amount: goal.amount.Natural, targetIndex: $goal.targetIndex,
       multiplier: goal.multiplier.Positive)
 
-proc setAdaCurrentGoal(goal: var AdaGoalData) {.exportc.} =
+proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
   goal = AdaGoalData(index: currentGoal.index.cstring,
       goalType: currentGoal.goalType.ord.cint, amount: currentGoal.amount.cint,
       targetIndex: currentGoal.targetIndex.cstring,
