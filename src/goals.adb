@@ -15,33 +15,29 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships;
 with Crafts;
 with Items;
-with Utils;
-with Statistics;
-with Messages;
 with Missions;
 with Factions;
 with Game;
 
 package body Goals is
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Goal_Data is record
+      Index: chars_ptr;
+      G_Type: Integer;
+      Amount: Natural;
+      Target_Index: chars_ptr;
+      Multiplier: Positive;
+   end record;
+   --## rule on TYPE_INITIAL_VALUES
+
    procedure Load_Goals(File_Name: String) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Goal_Data is record
-         Index: chars_ptr;
-         G_Type: Integer;
-         Amount: Natural;
-         Target_Index: chars_ptr;
-         Multiplier: Positive;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Nim_Goal: Nim_Goal_Data;
       --## rule on IMPROPER_INITIALIZATION
@@ -62,7 +58,8 @@ package body Goals is
             Goals_List.Append
               (New_Item =>
                  (Index =>
-                    To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+                    To_Unbounded_String
+                      (Source => Value(Item => Nim_Goal.Index)),
                   G_Type => Goal_Types'Val(Nim_Goal.G_Type),
                   Amount => Nim_Goal.Amount,
                   Target_Index =>
@@ -309,33 +306,39 @@ package body Goals is
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
-      use Ada.Characters.Handling;
-      use Messages;
-      use Statistics;
-      use Utils;
-
+      Nim_Goal: Nim_Goal_Data :=
+        (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
+         G_Type => Goal_Types'Pos(Current_Goal.G_Type),
+         Amount => Current_Goal.Amount,
+         Target_Index =>
+           New_String(Str => To_String(Source => Current_Goal.Target_Index)),
+         Multiplier => Current_Goal.Multiplier);
+      procedure Get_Ada_Current_Goal(Goal: Nim_Goal_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCurrentGoal";
+      procedure Update_Ada_Goal
+        (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaGoal";
+      procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaCurrentGoal";
    begin
-      if G_Type /= Current_Goal.G_Type then
-         return;
-      end if;
-      if To_Lower(Item => To_String(Source => Target_Index)) /=
-        To_Lower(Item => To_String(Source => Current_Goal.Target_Index)) and
-        Current_Goal.Target_Index /= Null_Unbounded_String then
-         return;
-      end if;
-      Current_Goal.Amount :=
-        (if Amount >= Current_Goal.Amount then 0
-         else Current_Goal.Amount - Amount);
-      if Current_Goal.Amount = 0 then
-         Update_Finished_Goals(Index => Current_Goal.Index);
-         Add_Message
-           (Message => "You finished your goal. New goal is set.",
-            M_Type => OTHERMESSAGE, Color => BLUE);
-         Current_Goal :=
-           Goals_List
-             (Get_Random
-                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
-      end if;
+      Get_Ada_Current_Goal(Goal => Nim_Goal);
+      Update_Ada_Goal
+        (Goal_Type => Goal_Types'Pos(G_Type),
+         Target => New_String(Str => To_String(Source => Target_Index)),
+         A => Amount);
+      Set_Ada_Current_Goal(Goal => Nim_Goal);
+      Current_Goal :=
+        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
+         Target_Index =>
+           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
+         Multiplier => Nim_Goal.Multiplier);
    end Update_Goal;
 
 end Goals;
