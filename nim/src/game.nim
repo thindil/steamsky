@@ -300,23 +300,26 @@ proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaItemType(itemIndex: cint): cstring {.exportc.} =
+proc getAdaItemType(itemIndex: cint): cstring {.raises: [], tags: [], exportc.} =
   if itemIndex >= itemsTypesList.len():
     return ""
   return itemsTypesList[itemIndex].cstring
 
 proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
-    cstring]) {.exportc.} =
+    cstring]) {.raises: [], tags: [], exportc.} =
   attribute = ["".cstring, "".cstring]
   if itemIndex >= attributesList.len():
     return
   attribute = [attributesList[itemIndex].name.cstring, attributesList[
       itemIndex].description.cstring]
 
-proc getAdaSkillToolsAmount(skillIndex: cint): cint {.exportc.} =
+proc getAdaSkillToolsAmount(skillIndex: cint): cint {.raises: [], tags: [], exportc.} =
   if not skillsList.contains(key = skillIndex):
     return 0
-  return skillsList[skillIndex].toolsQuality.len().cint
+  try:
+    return skillsList[skillIndex].toolsQuality.len().cint
+  except KeyError:
+    return 0
 
 type AdaSkillRecord = object
   name: cstring
@@ -324,36 +327,43 @@ type AdaSkillRecord = object
   description: cstring
   tool: cstring
 
-proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.exportc.} =
+proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.raises: [],
+    tags: [], exportc.} =
   skill = AdaSkillRecord(name: "".cstring, attribute: 0,
       description: "".cstring, tool: "".cstring)
   if not skillsList.contains(key = skillIndex):
     return
-  skill.name = skillsList[skillIndex].name.cstring
-  skill.attribute = skillsList[skillIndex].attribute.cint
-  skill.description = skillsList[skillIndex].description.cstring
-  skill.tool = skillsList[skillIndex].tool.cstring
+  try:
+    skill.name = skillsList[skillIndex].name.cstring
+    skill.attribute = skillsList[skillIndex].attribute.cint
+    skill.description = skillsList[skillIndex].description.cstring
+    skill.tool = skillsList[skillIndex].tool.cstring
+  except KeyError:
+    return
 
 proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
-    cint]]) {.exportc.} =
+    cint]]) {.raises: [], tags: [], exportc.} =
   tools[0] = [-1.cint, -1.cint]
   if not skillsList.contains(key = skillIndex):
     return
   var index = 0
-  for toolQuality in skillsList[skillIndex].toolsQuality:
-    tools[index] = [toolQuality.level.cint, toolQuality.quality.cint]
-    index.inc()
+  try:
+    for toolQuality in skillsList[skillIndex].toolsQuality:
+      tools[index] = [toolQuality.level.cint, toolQuality.quality.cint]
+      index.inc()
+  except KeyError:
+    return
 
-proc findAdaSkillIndex(skillName: cstring): cint {.exportc.} =
+proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [], exportc.} =
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..11, cstring]) {.exportc.} =
+proc getAdaGameStrings(values: var array[0..11, cstring]) {.raises: [], tags: [], exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
       headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
       legsArmor.cstring, shieldType.cstring, weaponType.cstring]
 
-proc getAdaGameIntegers(values: var array[0..10, cint]) {.exportc.} =
+proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [], exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
       (strengthIndex + 1).cint, pilotingSkill.cint, engineeringSkill.cint,
       gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
