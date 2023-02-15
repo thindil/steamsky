@@ -58,6 +58,10 @@ package body Game is
       use Tiny_String;
       use Utils;
 
+      procedure Get_Ada_Game_String(Name, Value: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameString";
       Random_Base: Positive := Positive'First;
       Player_Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
@@ -494,6 +498,9 @@ package body Game is
       Generate_Save_Name;
       -- Set player career
       Player_Career := New_Game_Settings.Player_Career;
+      Get_Ada_Game_String
+        (Name => New_String(Str => "playerCareer"),
+         Value => New_String(Str => To_String(Source => Player_Career)));
       -- Add welcoming message
       Add_Message
         (Message =>
@@ -756,7 +763,8 @@ package body Game is
                   Convention => C,
                   External_Name => "getAdaGameIntegers";
             begin
-               Result := Load_Ada_Data(Name => New_String(Str => Data_File_Name));
+               Result :=
+                 Load_Ada_Data(Name => New_String(Str => Data_File_Name));
                if Strlen(Item => Result) > 0 then
                   raise Data_Loading_Error with Value(Item => Result);
                end if;

@@ -98,6 +98,7 @@ var
   modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
   recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
   goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
+  playerCareer*: string ## Index of the career of the player selected when starting a new game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
@@ -368,3 +369,10 @@ proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [], 
       (strengthIndex + 1).cint, pilotingSkill.cint, engineeringSkill.cint,
       gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
       dodgeSkill.cint, unarmedSkill.cint]
+
+proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "playerCareer":
+    playerCareer = $value
+  else:
+    discard
