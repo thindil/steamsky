@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -962,6 +962,10 @@ package body Utils.UI is
          Convention => C,
          External_Name => "showScreen";
    begin
+      if Tcl_GetVar(interp => Get_Context, varName => "mappreview") = "1" and
+        New_Screen_Name /= "mapframe" then
+         Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
+      end if;
       Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
    end Show_Screen;
 

@@ -405,6 +405,10 @@ package body Maps.UI is
          then True
          else False);
    begin
+      if Preview and Player_Ship.Speed /= DOCKED then
+         Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
+         Preview := False;
+      end if;
       configure(Widgt => Map_View, options => "-state normal");
       Delete(TextWidget => Map_View, StartIndex => "1.0", Indexes => "end");
       Map_Height :=
@@ -548,41 +552,34 @@ package body Maps.UI is
                end if;
             end if;
             if Preview then
-               if Player_Ship.Speed = DOCKED then
-                  Preview_Mission_Loop :
-                  for Mission of Sky_Bases
-                    (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-                    .Missions loop
-                     if Mission.Target_X = X and Mission.Target_Y = Y then
-                        case Mission.M_Type is
-                           when DELIVER =>
-                              Map_Char := Current_Theme.Deliver_Icon;
-                              Map_Tag :=
-                                To_Unbounded_String(Source => "yellow");
-                           when DESTROY =>
-                              Map_Char := Current_Theme.Destroy_Icon;
-                              Map_Tag := To_Unbounded_String(Source => "red");
-                           when PATROL =>
-                              Map_Char := Current_Theme.Patrol_Icon;
-                              Map_Tag := To_Unbounded_String(Source => "lime");
-                           when EXPLORE =>
-                              Map_Char := Current_Theme.Explore_Icon;
-                              Map_Tag :=
-                                To_Unbounded_String(Source => "green");
-                           when PASSENGER =>
-                              Map_Char := Current_Theme.Passenger_Icon;
-                              Map_Tag := To_Unbounded_String(Source => "cyan");
-                        end case;
-                        if not Sky_Map(X, Y).Visited then
-                           Append(Source => Map_Tag, New_Item => " unvisited");
-                        end if;
-                        exit Preview_Mission_Loop;
+               Preview_Mission_Loop :
+               for Mission of Sky_Bases
+                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+                 .Missions loop
+                  if Mission.Target_X = X and Mission.Target_Y = Y then
+                     case Mission.M_Type is
+                        when DELIVER =>
+                           Map_Char := Current_Theme.Deliver_Icon;
+                           Map_Tag := To_Unbounded_String(Source => "yellow");
+                        when DESTROY =>
+                           Map_Char := Current_Theme.Destroy_Icon;
+                           Map_Tag := To_Unbounded_String(Source => "red");
+                        when PATROL =>
+                           Map_Char := Current_Theme.Patrol_Icon;
+                           Map_Tag := To_Unbounded_String(Source => "lime");
+                        when EXPLORE =>
+                           Map_Char := Current_Theme.Explore_Icon;
+                           Map_Tag := To_Unbounded_String(Source => "green");
+                        when PASSENGER =>
+                           Map_Char := Current_Theme.Passenger_Icon;
+                           Map_Tag := To_Unbounded_String(Source => "cyan");
+                     end case;
+                     if not Sky_Map(X, Y).Visited then
+                        Append(Source => Map_Tag, New_Item => " unvisited");
                      end if;
-                  end loop Preview_Mission_Loop;
-               else
-                  Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
-                  Preview := False;
-               end if;
+                     exit Preview_Mission_Loop;
+                  end if;
+               end loop Preview_Mission_Loop;
             end if;
             Insert
               (TextWidget => Map_View, Index => "end",
