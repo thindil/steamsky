@@ -68,6 +68,7 @@ package body Missions is
            when 1 .. 149 => Get_Random(Min => 1, Max => 5),
            when 150 .. 299 => Get_Random(Min => 1, Max => 10),
            when others => Get_Random(Min => 1, Max => 15));
+      --## rule off ASSIGNMENTS
       Missions_Amount :=
         (case Sky_Bases(Base_Index).Reputation.Level is
            when 1 .. 25 => Missions_Amount + 1,
@@ -75,6 +76,7 @@ package body Missions is
            when 51 .. 75 => Missions_Amount + 5,
            when 76 .. 100 => Missions_Amount + 10,
            when others => Missions_Amount);
+      --## rule on ASSIGNMENTS
       Find_Mission_Items_Loop :
       for I in 1 .. Get_Proto_Amount loop
          if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
@@ -219,6 +221,7 @@ package body Missions is
          Mission.Target_Y := Mission_Y;
          Diff_X := abs (Player_Ship.Sky_X - Mission_X);
          Diff_Y := abs (Player_Ship.Sky_Y - Mission_Y);
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          case Mission.M_Type is
             when DELIVER =>
                Mission.Time :=
@@ -233,6 +236,7 @@ package body Missions is
                  Positive(180.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
                Mission.Reward := (Mission.Time / 5);
          end case;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Mission.Start_Base := Base_Index;
          Mission.Finished := False;
          Sky_Bases(Base_Index).Missions.Append(New_Item => Mission);
