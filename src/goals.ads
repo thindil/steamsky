@@ -133,8 +133,7 @@ package Goals is
       -- SOURCE
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
-      Amount: Positive := 1) with
-      Test_Case => (Name => "Test_UpdateGoal", Mode => Nominal);
+      Amount: Positive := 1);
       -- ****
 
 end Goals;
