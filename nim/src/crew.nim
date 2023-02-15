@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import game, utils, ships, types
+import careers, game, utils, ships, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -74,6 +74,23 @@ proc getTrainingToolQuality*(memberIndex: Natural;
       for quality in skillsList[skillIndex].toolsQuality:
         if skill.level <= quality.level:
           return quality.quality
+
+proc gainExp*(amount: Natural; skillNumber: Positive; crewIndex: Natural) =
+  let attributeIndex = skillsList[skillNumber].attribute
+  var skillExp, newAmount, skillIndex, skillLevel = 0
+
+  proc gainExpInAttribute(attribute: Positive) =
+    var memberAttribute = playerShip.crew[crewIndex].attributes[attribute]
+    if memberAttribute.level == 50:
+      return
+    var
+      attributeExp = memberAttribute.experience + newAmount
+      attributeLevel = memberAttribute.level
+    if attributeExp >= attributeLevel * 250:
+      attributeExp = attributeExp - (attributeLevel * 250)
+      attributeLevel.inc
+    playerShip.crew[crewIndex].attributes[attribute].level = attributeLevel
+    playerShip.crew[crewIndex].attributes[attribute].experience = attributeExp
 
 # Temporary code for interfacing with Ada
 
