@@ -22,7 +22,7 @@ type
   CareerData = object
     ## Used to store data about available player's careers
     name*: string       ## The name of the career
-    skills: seq[string] ## The list of skills which have bonuses from the career
+    skills*: seq[string] ## The list of skills which have bonuses from the career
 
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game

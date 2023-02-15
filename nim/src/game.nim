@@ -30,9 +30,9 @@ type
 
   SkillRecord* = object
     ## Store data releated to the skills
-    name: string                    ## The name of the skill
+    name*: string                    ## The name of the skill
     attribute*: Positive            ## The index of the attribute related to the skill
-    description: string             ## The description of the skill
+    description*: string             ## The description of the skill
     tool*: string                   ## The type of items used to train the skill
     toolsQuality*: seq[ToolQuality] ## The quality of tool needed for training
 
