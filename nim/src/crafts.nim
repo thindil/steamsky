@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crewinventory, game, items, log, messages, ships, shipscargo, shipscrew,
-    statistics, trades, types
+import crewinventory, game, goals, items, log, messages, ships, shipscargo,
+    shipscrew, statistics, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -460,8 +460,8 @@ proc manufacturing*(minutes: Positive) =
             else:
               updateCargo(ship = playerShip, protoIndex = recipesList[
                   module.craftingIndex].resultIndex, amount = resultAmount)
-            for key, recipe in recipesList.pairs:
-              if recipe.resultIndex == recipe.resultIndex:
+            for key, protoRecipe in recipesList.pairs:
+              if protoRecipe.resultIndex == recipe.resultIndex:
                 updateCraftingOrders(index = key)
                 break
           else:
@@ -479,6 +479,27 @@ proc manufacturing*(minutes: Positive) =
               addMessage(message = playerShip.crew[crafterIndex].name &
                   " has manufactured " & $craftedAmount & " " & itemsList[
                   recipe.resultIndex].name & ".", mType = craftMessage, color = green)
+            for key, protoRecipe in recipesList.pairs:
+              if protoRecipe.resultIndex == recipe.resultIndex:
+                updateGoal(goalType = GoalTypes.craft, targetIndex = key,
+                    amount = craftedAmount)
+                break
+            if currentGoal.targetIndex.len > 0:
+              updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+                  recipe.resultIndex].itemType, amount = craftedAmount)
+              if itemsList[recipe.resultIndex].showType.len > 0:
+                updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+                    recipe.resultIndex].showType, amount = craftedAmount)
+          else:
+            addMessage(message = playerShip.crew[crafterIndex].name &
+                " has discovered recipe for " & itemsList[
+                recipe.resultIndex].name, mType = craftMessage, color = green)
+            updateGoal(goalType = GoalTypes.craft, targetIndex = "")
+        if playerShip.crew[crafterIndex].order == craft:
+          var gainedExp = 0
+          while workTime <= 0:
+            gainedExp.inc
+            workTime = workTime + 15
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
