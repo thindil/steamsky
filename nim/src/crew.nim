@@ -77,6 +77,12 @@ proc getTrainingToolQuality*(memberIndex: Natural;
 
 proc gainExp*(amount: Natural; skillNumber: Positive;
     crewIndex: Natural) {.sideEffect, raises: [], tags: [].} =
+  ## Raise the crew member experience in the selected skill and associated
+  ## attribute
+  ##
+  ## * amount      - the amount of experience gained by the crew mmeber
+  ## * skillNumber - the index of the skill in which the experience is gained
+  ## * crewIndex   - the index of the crew member who gains experience
   let attributeIndex = try:
       skillsList[skillNumber].attribute
     except KeyError:
