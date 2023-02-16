@@ -150,4 +150,4 @@ proc getAdaTrainingToolQuality(memberIndex, skillIndex: cint): cint {.raises: [
 
 proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [], exportc.} =
   gainExp(amount = amount.Natural, skillNumber = skillNumber.Positive,
-      crewIndex = crewIndex.Natural)
+      crewIndex = crewIndex.Natural - 1)

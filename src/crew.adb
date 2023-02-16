@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Bases;
-with Careers;
 with Config; use Config;
 with Combat;
 with Crew.Inventory;
@@ -35,121 +34,16 @@ package body Crew is
    procedure Gain_Exp
      (Amount: Natural; Skill_Number: Skills_Amount_Range;
       Crew_Index: Positive) is
-      use Careers;
-      use Tiny_String;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
-      --## rule on IMPROPER_INITIALIZATION
-      Attribute_Index: constant Skills_Container.Extended_Index :=
-        Count_Type
-          (SkillsData_Container.Element
-             (Container => Skills_List, Index => Skill_Number)
-             .Attribute);
-      Skill_Index: Skills_Container.Extended_Index := 0;
-      Skill_Level: Skill_Range := 0;
-      procedure Gain_Exp_In_Attribute(Attribute: Positive) is
-         Attribute_To_Check: Mob_Attribute_Record :=
-           Player_Ship.Crew(Crew_Index).Attributes(Attribute);
-      begin
-         if Attribute_To_Check.Level = 50 then
-            return;
-         end if;
-         Attribute_Exp := Attribute_To_Check.Experience + New_Amount;
-         Attribute_Level := Attribute_To_Check.Level;
-         if Attribute_Exp >= Attribute_Level * 250 then
-            --## rule off SIMPLIFIABLE_EXPRESSIONS
-            Attribute_Exp := Attribute_Exp - (Attribute_Level * 250);
-            --## rule on SIMPLIFIABLE_EXPRESSIONS
-            Attribute_Level := Attribute_Level + 1;
-         end if;
-         Attribute_To_Check.Level := Attribute_Level;
-         Attribute_To_Check.Experience := Attribute_Exp;
-         Player_Ship.Crew(Crew_Index).Attributes(Attribute) :=
-           Attribute_To_Check;
-      end Gain_Exp_In_Attribute;
+      procedure Gain_Ada_Exp(A, S_Number, C_Index: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "gainAdaExp";
    begin
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      New_Amount :=
-        (if
-           Careers_List(Player_Career).Skills.Contains
-             (Item =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
-                          SkillsData_Container.Element
-                            (Container => Skills_List, Index => Skill_Number)
-                            .Name)))
-         then Amount + (Amount / 2)
-         else Amount);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      --## rule off ASSIGNMENTS
-      New_Amount :=
-        Natural(Float(New_Amount) * New_Game_Settings.Experience_Bonus);
-      --## rule on ASSIGNMENTS
-      if New_Amount = 0 then
-         return;
-      end if;
-      -- Gain experience in condition assigned attribute
-      Gain_Exp_In_Attribute(Attribute => Positive(Condition_Index));
-      -- Gain experience in associated attribute
-      Gain_Exp_In_Attribute(Attribute => Natural(Attribute_Index));
-      -- Gain experience in skill
-      Experience_In_Skill_Loop :
-      for I in
-        Skills_Container.First_Index
-          (Container => Player_Ship.Crew(Crew_Index).Skills) ..
-          Skills_Container.Last_Index
-            (Container => Player_Ship.Crew(Crew_Index).Skills) loop
-         if Skills_Container.Element
-             (Container => Player_Ship.Crew(Crew_Index).Skills, Index => I)
-             .Index =
-           Skill_Number then
-            Skill_Index := I;
-            exit Experience_In_Skill_Loop;
-         end if;
-      end loop Experience_In_Skill_Loop;
-      if Skill_Index > 0 then
-         if Skills_Container.Element
-             (Container => Player_Ship.Crew(Crew_Index).Skills,
-              Index => Skill_Index)
-             .Level =
-           Skill_Range'Last then
-            return;
-         end if;
-         Skill_Level :=
-           Skills_Container.Element
-             (Container => Player_Ship.Crew(Crew_Index).Skills,
-              Index => Skill_Index)
-             .Level;
-         Skill_Exp :=
-           Skills_Container.Element
-             (Container => Player_Ship.Crew(Crew_Index).Skills,
-              Index => Skill_Index)
-             .Experience +
-           New_Amount;
-      end if;
-      if Skill_Exp >= Skill_Level * 25 then
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         Skill_Exp := Skill_Exp - (Skill_Level * 25);
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         Skill_Level := Skill_Level + 1;
-      end if;
-      if Skill_Index > 0 then
-         Skills_Container.Replace_Element
-           (Container => Player_Ship.Crew(Crew_Index).Skills,
-            Index => Skill_Index,
-            New_Item =>
-              (Index => Skill_Number, Level => Skill_Level,
-               Experience => Skill_Exp));
-      else
-         Skills_Container.Append
-           (Container => Player_Ship.Crew(Crew_Index).Skills,
-            New_Item =>
-              (Index => Skill_Number, Level => Skill_Level,
-               Experience => Skill_Exp));
-      end if;
+      Get_Ada_Crew;
+      Gain_Ada_Exp
+        (A => Amount, S_Number => Integer(Skill_Number),
+         C_Index => Crew_Index);
+      Set_Ada_Crew(Ship => Player_Ship);
    end Gain_Exp;
 
    function Generate_Member_Name
