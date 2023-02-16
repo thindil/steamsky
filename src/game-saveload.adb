@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -408,6 +408,7 @@ package body Game.SaveLoad is
       Set_Attribute
         (Elem => Category_Node, Name => "target",
          Value => To_String(Source => Current_Goal.Target_Index));
+      Save_Number(Value => Current_Goal.Multiplier, Name => "multiplier");
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -979,6 +980,16 @@ package body Game.SaveLoad is
              Get_Attribute
                (Elem => Item(List => Nodes_List, Index => 0),
                 Name => "target"));
+      if Get_Attribute
+          (Elem => Item(List => Nodes_List, Index => 0),
+           Name => "multiplier") /=
+        "" then
+         Current_Goal.Multiplier :=
+           Integer'Value
+             (Get_Attribute
+                (Elem => Item(List => Nodes_List, Index => 0),
+                 Name => "multiplier"));
+      end if;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
