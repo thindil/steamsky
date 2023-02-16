@@ -250,7 +250,7 @@ package body Missions is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Mission: Mission_Data := Sky_Bases(Base_Index).Missions(Mission_Index);
-      Accept_Message: Unbounded_String;
+      Accept_Message: Unbounded_String := Null_Unbounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
    begin
