@@ -75,7 +75,8 @@ proc getTrainingToolQuality*(memberIndex: Natural;
         if skill.level <= quality.level:
           return quality.quality
 
-proc gainExp*(amount: Natural; skillNumber: Positive; crewIndex: Natural) =
+proc gainExp*(amount: Natural; skillNumber: Positive;
+    crewIndex: Natural) {.sideEffect, raises: [], tags: [].} =
   let attributeIndex = try:
       skillsList[skillNumber].attribute
     except KeyError:
