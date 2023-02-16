@@ -248,8 +248,7 @@ package Crew is
    procedure Gain_Exp
      (Amount: Natural; Skill_Number: Skills_Amount_Range;
       Crew_Index: Positive) with
-      Pre => Skill_Number <= Skills_Amount,
-      Test_Case => (Name => "Test_GainExp", Mode => Nominal);
+      Pre => Skill_Number <= Skills_Amount;
       -- ****
 
       -- ****f* Crew/Crew.Generate_Member_Name
