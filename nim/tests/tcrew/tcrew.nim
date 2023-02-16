@@ -14,7 +14,14 @@ if itemsList.len == 0:
 assert generateMemberName('M', "POLEIS").len() > 0
 
 playerShip.crew = @[]
-playerShip.crew.add(MemberData(skills: @[SkillInfo(index: 4, level: 1,
-    experience: 0)], homeBase: 1))
+playerCareer = "general"
+playerShip.crew.add(MemberData(skills: @[SkillInfo(index: 4, level: 4,
+    experience: 0), SkillInfo(index: 2, level: 4, experience: 0)], homeBase: 1,
+    attributes: @[MobAttributeRecord(level: 3, experience: 0),
+    MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+    experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
 
 assert getTrainingToolQuality(0, 1) == 100
+
+gainExp(10, 4, 0)
+assert playerShip.crew[0].skills[0].experience == 10
