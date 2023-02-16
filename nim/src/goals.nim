@@ -134,9 +134,13 @@ type
     targetIndex: cstring
     multiplier: cint
 
-proc loadAdaGoals(fileName: cstring) {.sideEffect,
-    raises: [DataLoadingError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  loadGoals(fileName = $fileName)
+proc loadAdaGoals(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadGoals(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
 
 proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
   adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
