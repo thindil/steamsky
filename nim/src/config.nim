@@ -36,44 +36,44 @@ type
 
   GameSettingsRecord* = object
     ## Used to store the game's configuration
-    autoRest*: cint ## If true, auto rest when pilot or engineer need a rest
-    undockSpeed*: cstring ## The default speed of the player's ship after undock from a base
+    autoRest*: cint          ## If true, auto rest when pilot or engineer need a rest
+    undockSpeed*: cstring    ## The default speed of the player's ship after undock from a base
     autoCenter*: cint ## If true, back to the player's ship after setting destination for it
     autoReturn*: cint ## If true, set the destination for the player's ship to the base after
-                        ## finishing a mission
+                             ## finishing a mission
     autoFinish*: cint ## If true, automatically finish the mission if the player's ships is in
-                        ## the proper base
-    lowFuel*: cint ## The amount of fuel at which the game will show the warning
-                     ## about it
-    lowDrinks*: cint ## The amount of drinks at which the game will show the warning
-                       ## about it
-    lowFood*: cint ## The amount of food at which the game will show the warning
-                     ## about it
-    autoMoveStop*: cstring ## When stop the player's ship's auto movement
-    windowWidth*: cint ## The game window default width
-    windowHeight*: cint ## The game window default height
-    messagesLimit*: cint ## The max amount of messages to show in the game
-    savedMessages*: cint ## The max amount of messages to save to a file
-    helpFontSize*: cint ## The size of a font used in help
-    mapFontSize*: cint ## The size of a font used on the map
+                             ## the proper base
+    lowFuel*: cint           ## The amount of fuel at which the game will show the warning
+                             ## about it
+    lowDrinks*: cint         ## The amount of drinks at which the game will show the warning
+                             ## about it
+    lowFood*: cint           ## The amount of food at which the game will show the warning
+                             ## about it
+    autoMoveStop*: cstring   ## When stop the player's ship's auto movement
+    windowWidth*: cint       ## The game window default width
+    windowHeight*: cint      ## The game window default height
+    messagesLimit*: cint     ## The max amount of messages to show in the game
+    savedMessages*: cint     ## The max amount of messages to save to a file
+    helpFontSize*: cint      ## The size of a font used in help
+    mapFontSize*: cint       ## The size of a font used on the map
     interfaceFontSize*: cint ## The size of a font used in the game interface
     interfaceTheme*: cstring ## The name of the current theme of the game interface
-    messagesOrder*: cstring ## In what order the messages should be shown
-    autoAskForBases*: cint ## If true, auto ask for new bases when the player's ship is
+    messagesOrder*: cstring  ## In what order the messages should be shown
+    autoAskForBases*: cint   ## If true, auto ask for new bases when the player's ship is
                              ## docked to a base
-    autoAskForEvents*: cint ## If true, auto ask for new events when the player's ship is
-                              ## docked to a base
-    showTooltips*: cint ## Show the in-game tooltips with help information
-    showLastMessages*: cint ## Show the last messages window below the map
-    messagesPosition*: cint ## The height of the last messages window
-    fullScreen*: cint ## Run the game in full screen mode
+    autoAskForEvents*: cint  ## If true, auto ask for new events when the player's ship is
+                             ## docked to a base
+    showTooltips*: cint      ## Show the in-game tooltips with help information
+    showLastMessages*: cint  ## Show the last messages window below the map
+    messagesPosition*: cint  ## The height of the last messages window
+    fullScreen*: cint        ## Run the game in full screen mode
     autoCloseMessagesTime*: cint ## The amount of seconds after which messages' dialogs
-                                   ## wil be closed
-    autoSave*: cstring ## How often the game should save itself automatically
-    topicsPosition*: cint ## The height of the topics' window position in help window
-    showNumbers*: cint ## If true, show numbers for speed, skills, attributes, etc.
+                             ## wil be closed
+    autoSave*: cstring       ## How often the game should save itself automatically
+    topicsPosition*: cint    ## The height of the topics' window position in help window
+    showNumbers*: cint       ## If true, show numbers for speed, skills, attributes, etc.
     rightButton*: cint ## If true, use the right mouse button for show menus in various lists
-    listsLimit*: cint ## The amount of items displayed in various lists
+    listsLimit*: cint        ## The amount of items displayed in various lists
 
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
@@ -85,22 +85,22 @@ type
 
   NewGameRecord* = object
     ## Used to store the default settings for the new game
-    playerName*: cstring ## The player's character name
-    playerGender*: char ## The player's character gender
-    shipName*: cstring ## The player's ship name
-    playerFaction*: cstring ## The player's character faction
-    playerCareer*: cstring ## The player's character career
-    startingBase*: cstring ## The type of the starting base
+    playerName*: cstring      ## The player's character name
+    playerGender*: char       ## The player's character gender
+    shipName*: cstring        ## The player's ship name
+    playerFaction*: cstring   ## The player's character faction
+    playerCareer*: cstring    ## The player's character career
+    startingBase*: cstring    ## The type of the starting base
     enemyDamageBonus*: cfloat ## The bonus to damage for enemies in ship to ship combat
     playerDamageBonus*: cfloat ## The bonus to damage for the player's character and crew in
-                                 ## ship to ship combat
+                              ## ship to ship combat
     enemyMeleeDamageBonus*: cfloat ## The bonus to damage for enemies in melee combat
     playerMeleeDamageBonus*: cfloat ## The bonus to damage for the player's character and crew
-                                      ## in melee combat
+                              ## in melee combat
     experienceBonus*: cfloat ## The bonus to the gained by player's character and crew experience
     reputationBonus*: cfloat ## The bonus to the gained the player's character reputation in bases
     upgradeCostBonus*: cfloat ## The bonus to costs of upgrades the player's ship
-    pricesBonus*: cfloat ## The bonus to prices in bases
+    pricesBonus*: cfloat      ## The bonus to prices in bases
     difficultyLevel*: cstring ## The preset level of difficulty for the game
 
 const
@@ -273,7 +273,9 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
 
-proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
+# Temporary code for interfacing with Ada
+
+proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
     adaGameSettings: var GameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   ## Temporary code to load the game configuration and copy it to the Ada
@@ -286,3 +288,7 @@ proc loadAdaConfig*(adaNewGameSettings: var NewGameRecord;
   loadConfig()
   adaNewGameSettings = newGameSettings
   adaGameSettings = gameSettings
+
+proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  newGameSettings = adaNewGameSettings

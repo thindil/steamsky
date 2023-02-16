@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -302,5 +302,9 @@ package Config is
    -- SOURCE
    procedure Save_Config;
    -- ****
+
+-- Temporary code to interact with Nim
+
+   procedure Get_New_Game_Settings;
 
 end Config;
