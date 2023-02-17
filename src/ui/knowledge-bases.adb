@@ -301,7 +301,7 @@ package body Knowledge.Bases is
               (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
                else "ShowBases {" & Base_Name & "}" &
                  Positive'Image(Page + 1)));
-      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 2 then
          Add_Pagination
            (Table => Bases_Table, Previous_Command => "",
             Next_Command =>
