@@ -22,17 +22,20 @@ package body Items is
 
    procedure Load_Items(File_Name: String) is
       use Ada.Strings.Unbounded;
+      use Interfaces.C;
 
-      function Load_Ada_Items(Name: chars_ptr) return chars_ptr with
+      type Result_Array is array(0 .. 1) of chars_ptr;
+      Result: Result_Array;
+      procedure Load_Ada_Items(Name: chars_ptr; R: out Result_Array) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaItems";
    begin
-      Money_Name :=
-        To_Unbounded_String
-          (Source =>
-             Value
-               (Item => Load_Ada_Items(Name => New_String(Str => File_Name))));
+      Load_Ada_Items(Name => New_String(Str => File_Name), R => Result);
+      if Strlen(Item => Result(0)) = 0 then
+         raise Data_Loading_Error with Value(Item => Result(1));
+      end if;
+      Money_Name := To_Unbounded_String(Source => Value(Item => Result(0)));
    end Load_Items;
 
    function Find_Proto_Item
