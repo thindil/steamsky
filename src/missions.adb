@@ -266,8 +266,8 @@ package body Missions is
               when others => 0);
       begin
          Count_Missions_Limit_Loop :
-         for Mission of Accepted_Missions loop
-            if Mission.Start_Base = Base_Index then
+         for Accepted_Mission of Accepted_Missions loop
+            if Accepted_Mission.Start_Base = Base_Index then
                Missions_Limit := Missions_Limit - 1;
             end if;
             exit Count_Missions_Limit_Loop when Missions_Limit <= 0;
