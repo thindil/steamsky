@@ -289,10 +289,12 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
         recipe.resultAmount)) < 0:
       raise newException(exceptn = TradeNoFreeCargoError, message = "")
 
-proc manufacturing*(minutes: Positive) =
+proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
+    Exception], tags: [RootEffect].} =
   var toolIndex, crafterIndex: int
 
-  proc resetOrder(module: var ModuleData; moduleOwner: int) =
+  proc resetOrder(module: var ModuleData; moduleOwner: int) {.sideEffect,
+      raises: [KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
     if toolIndex in 0..playerShip.crew[crafterIndex].inventory.high:
       updateCargo(ship = playerShip, protoIndex = playerShip.crew[
           crafterIndex].inventory[toolIndex].protoIndex, amount = 1,
