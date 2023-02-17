@@ -291,10 +291,20 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
 
 proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
     Exception], tags: [RootEffect].} =
+  ## Execute the currently set crafting orders in the player's ship
+  ##
+  ## * minutes - the amount of minutes passed in the game time
   var toolIndex, crafterIndex: int
 
   proc resetOrder(module: var ModuleData; moduleOwner: int) {.sideEffect,
       raises: [KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
+    ## Reset the crafting order for the crafter and for the ship's module
+    ##
+    ## * module      - the player's ship's module which setting will be resetted
+    ## * moduleOwner - the index of the crafter in the player's ship's cargo who
+    ##                 will have order resetted
+    ##
+    ## Returns the modified parameter module
     if toolIndex in 0..playerShip.crew[crafterIndex].inventory.high:
       updateCargo(ship = playerShip, protoIndex = playerShip.crew[
           crafterIndex].inventory[toolIndex].protoIndex, amount = 1,
