@@ -501,6 +501,7 @@ package body Game is
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
          Value => New_String(Str => To_String(Source => Player_Career)));
+      Get_New_Game_Settings;
       -- Add welcoming message
       Add_Message
         (Message =>
