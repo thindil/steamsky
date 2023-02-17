@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Updating the player's ship's crew member orders
 - Starting crew for players from Independent faction
 - Reputation with other factions for Independent faction
+- Not showing pagination buttons on the list of known bases
 
 ## [8.3] - 2023-01-22
 
