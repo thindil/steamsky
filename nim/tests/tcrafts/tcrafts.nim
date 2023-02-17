@@ -25,3 +25,5 @@ assert playerShip.modules[0].craftingIndex == "1"
 
 assert checkRecipe("1") == 10
 
+manufacturing(15)
+
