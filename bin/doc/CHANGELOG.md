@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Not showing pagination buttons on the list of known bases
+
 ## [8.0.4] - 2023-02-05
 
 ### Fixed
