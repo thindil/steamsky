@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -284,7 +284,7 @@ package body Knowledge.Bases is
               (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
                else "ShowBases {" & Base_Name & "}" &
                  Positive'Image(Page + 1)));
-      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 2 then
          Add_Pagination
            (Table => Bases_Table, Previous_Command => "",
             Next_Command =>
