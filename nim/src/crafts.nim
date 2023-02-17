@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crewinventory, game, goals, items, log, messages, ships, shipscargo,
-    shipscrew, statistics, trades, types
+import crew, crewinventory, game, goals, items, log, messages, ships,
+    shipscargo, shipscrew, statistics, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -325,8 +325,8 @@ proc manufacturing*(minutes: Positive) =
       crafterIndex = owner
       if playerShip.crew[crafterIndex].order == craft:
         var
-          currentMinutes = minutes
-          recipeTime = module.craftingTime
+          currentMinutes: int = minutes
+          recipeTime: int = module.craftingTime
           recipeName = ""
         let recipe = setRecipeData(recipeIndex = module.craftingIndex)
         if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
@@ -439,7 +439,7 @@ proc manufacturing*(minutes: Positive) =
                   if toolIndex > cargoIndex:
                     toolIndex.dec
                   break
-            cargoIndex.inc
+              cargoIndex.inc
           if toolIndex > -1:
             damageItem(inventory = playerShip.crew[crafterIndex].inventory,
                 itemIndex = toolIndex, skillLevel = getSkillLevel(
@@ -500,6 +500,12 @@ proc manufacturing*(minutes: Positive) =
           while workTime <= 0:
             gainedExp.inc
             workTime = workTime + 15
+          if gainedExp > 0:
+            gainExp(amount = gainedExp, skillNumber = recipe.skill,
+                crewIndex = crafterIndex)
+          playerShip.crew[crafterIndex].orderTime = workTime
+          if module.craftingAmount == 0:
+            resetOrder(module = module, moduleOwner = owner)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
@@ -665,3 +671,9 @@ proc checkAdaRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], exportc.
     return -3
   except CraftingNoToolsError:
     return -4
+
+proc adaManufacturing(minutes: cint) {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    manufacturing(minutes = minutes.Positive)
+  except ValueError, Exception:
+    discard
