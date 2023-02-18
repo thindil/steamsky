@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Not showing pagination buttons on the list of known bases
+- Getting wrong amount of points for finishing the current in-game goal
 
 ## [8.0.4] - 2023-02-05
 
