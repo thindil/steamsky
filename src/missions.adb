@@ -356,18 +356,20 @@ package body Missions is
                   else Get_Random
                       (Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
-               Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-               Inventory: Inventory_Container.Vector (Capacity => 32);
                Max_Attribute_Level, Morale: Integer;
+               Faction: constant Faction_Record :=
+                 Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
+               --## rule off IMPROPER_INITIALIZATION
                Attributes: Mob_Attributes
                  (1 ..
                       Positive
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
-               Faction: constant Faction_Record :=
-                 Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
+               Inventory: Inventory_Container.Vector (Capacity => 32);
+               Skills: Skills_Container.Vector (Capacity => Skills_Amount);
             begin
                Inventory_Container.Delete_Last(Container => Inventory);
+               --## rule on IMPROPER_INITIALIZATION
                if not Faction.Flags.Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
                   Gender :=
