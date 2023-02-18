@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -117,8 +117,7 @@ package Crafts is
    -- PARAMETERS
    -- Minutes - How many in game minutes passed
    -- SOURCE
-   procedure Manufacturing(Minutes: Positive) with
-      Test_Case => (Name => "Test_Manufacturing", Mode => Robustness);
+   procedure Manufacturing(Minutes: Positive);
       -- ****
 
    -- ****f* Crafts/Crafts.Set_Recipe_Data
