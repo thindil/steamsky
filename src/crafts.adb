@@ -41,6 +41,12 @@ package body Crafts is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
+   procedure Get_Ada_Craft
+     (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaCraftData";
+
    function Convert_Recipe_From_Nim
      (Crafting_Data: Craft_Nim_Data) return Craft_Data is
       use Tiny_String;
@@ -93,11 +99,6 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "loadAdaRecipes";
-      procedure Get_Ada_Craft
-        (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaCraftData";
    begin
       Result := Load_Ada_Recipes(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
@@ -210,5 +211,16 @@ package body Crafts is
       Get_Ada_Modules;
       return Value(Item => Get_Ada_Workshop_Recipe_Name(W => Workshop - 1));
    end Get_Workshop_Recipe_Name;
+
+   function Get_Recipe
+     (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
+      Nim_Recipe: Craft_Nim_Data;
+   begin
+      Get_Ada_Craft
+        (C_Index =>
+           New_String(Str => Tiny_String.To_String(Source => Recipe_Index)),
+         Ada_Craft => Nim_Recipe);
+      return Convert_Recipe_From_Nim(Crafting_Data => Nim_Recipe);
+   end Get_Recipe;
 
 end Crafts;
