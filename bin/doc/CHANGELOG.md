@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Starting crew for players from Independent faction
 - Reputation with other factions for Independent faction
 - Not showing pagination buttons on the list of known bases
+- Getting wrong amount of points for finishing the current in-game goal
 
 ## [8.3] - 2023-01-22
 
