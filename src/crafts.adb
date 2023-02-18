@@ -18,7 +18,7 @@
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Items; use Items;
+with Items;
 with Trades;
 
 package body Crafts is
@@ -144,6 +144,7 @@ package body Crafts is
 
    function Check_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Positive is
+      use Items;
       use Trades;
 
       Max_Amount: Integer;
@@ -175,13 +176,13 @@ package body Crafts is
    end Check_Recipe;
 
    procedure Manufacturing(Minutes: Positive) is
-      procedure Ada_Manufacturing(Minutes: Positive) with
+      procedure Ada_Manufacturing(M: Positive) with
          Import => True,
          Convention => C,
          External_Name => "adaManufacturing";
    begin
       Set_Ship_In_Nim;
-      Ada_Manufacturing(Minutes => Minutes);
+      Ada_Manufacturing(M => Minutes);
       Get_Ship_From_Nim(Ship => Player_Ship);
    end Manufacturing;
 
