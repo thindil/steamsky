@@ -24,7 +24,9 @@ package body Items is
       use Ada.Strings.Unbounded;
       use Interfaces.C;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Result_Array is array(0 .. 1) of chars_ptr;
+      --## rule on TYPE_INITIAL_VALUES
       Result: Result_Array;
       procedure Load_Ada_Items(Name: chars_ptr; R: out Result_Array) with
          Import => True,
