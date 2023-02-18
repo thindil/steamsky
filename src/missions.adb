@@ -281,7 +281,7 @@ package body Missions is
         and then
           Free_Cargo
             (Amount =>
-               (0 - Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
+               -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
