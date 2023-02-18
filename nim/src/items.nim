@@ -323,8 +323,8 @@ type
     description: cstring
     reputation: cint
 
-proc loadAdaItems(fileName: cstring, r: var array[2, cstring]) {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+proc loadAdaItems(fileName: cstring; r: var array[2, cstring]) {.sideEffect,
+    raises: [], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
     loadItems(fileName = $fileName)
   except DataLoadingError:
@@ -380,12 +380,14 @@ proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], expo
     return 1
   return 0
 
-proc getAdaProtoAmount(): cint {.exportc.} =
+proc getAdaProtoAmount(): cint {.raises: [], tags: [], exportc.} =
   return itemsList.len.cint
 
 proc findAdaTools(memberIndex: cint; itemType: cstring; order,
-    toolQuality: cint): cint {.exportc.} =
-  return findTools(memberIndex = (memberIndex - 1).Natural,
-      itemType = $itemType,
-
-order = order.CrewOrders, toolQuality = toolQuality.Positive).cint + 1
+    toolQuality: cint): cint {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    return findTools(memberIndex = (memberIndex - 1).Natural,
+        itemType = $itemType, order = order.CrewOrders,
+        toolQuality = toolQuality.Positive).cint + 1
+  except KeyError, Exception:
+    return 0
