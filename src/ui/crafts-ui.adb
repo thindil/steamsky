@@ -15,7 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Containers.Generic_Array_Sort;
+with Ada.Containers.Generic_Array_Sort; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -308,17 +308,17 @@ package body Crafts.UI is
       Find_Possible_Recipes_Loop :
       for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
-         for J in Recipes_List.Iterate loop
-            if Recipes_List(J).Result_Index = Item.Proto_Index then
+         for J in 1 .. Get_Recipes_Amount loop
+            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Result_Index = Item.Proto_Index then
                if Known_Recipes.Find_Index
-                   (Item => Recipes_Container.Key(Position => J)) =
+                   (Item => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
                   Studies.Append(New_Item => Item.Proto_Index);
                end if;
-               if Recipes_List(J).Material_Amounts(1) > 1 and
-                 Recipes_List(J).Result_Amount = 1 then
+               if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Material_Amounts(1) > 1 and
+                 Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Result_Amount = 1 then
                   Deconstructs.Append(New_Item => Item.Proto_Index);
                end if;
             end if;
@@ -372,7 +372,7 @@ package body Crafts.UI is
                          (Source =>
                             Get_Proto_Item
                               (Index =>
-                                 Recipes_List
+                                 Get_Recipe
                                    (To_Bounded_String
                                       (Source =>
                                          To_String
@@ -388,7 +388,7 @@ package body Crafts.UI is
             goto End_Of_Loop;
          end if;
          Recipe :=
-           Recipes_List
+           Get_Recipe
              (To_Bounded_String
                 (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
@@ -406,7 +406,7 @@ package body Crafts.UI is
                 (Source =>
                    Get_Proto_Item
                      (Index =>
-                        Recipes_List
+                        Get_Recipe
                           (To_Bounded_String
                              (Source =>
                                 To_String(Source => Recipes_Indexes(I))))
@@ -702,7 +702,7 @@ package body Crafts.UI is
               else To_String
                   (Source =>
                      Get_Proto_Item
-                       (Index => Recipes_List(Recipe_Index).Result_Index)
+                       (Index => Get_Recipe(Recipe_Index => Recipe_Index).Result_Index)
                        .Name)),
            Title_Width => 275, Columns => 2);
       Max_Amount: constant Positive :=
@@ -784,7 +784,7 @@ package body Crafts.UI is
       if Recipe_Type in "Study" | "Deconstruct" then
          M_Type := ALCHEMY_LAB;
       else
-         M_Type := Recipes_List(Recipe_Index).Workplace;
+         M_Type := Get_Recipe(Recipe_Index).Workplace;
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
@@ -1006,7 +1006,7 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (Index => Recipes_List(Recipe_Index).Result_Index)
+                       (Index => Get_Recipe(Recipe_Index => Recipe_Index).Result_Index)
                        .Name)),
            Title_Width => 275);
       Workplace_Name: Bounded_String := Null_Bounded_String;
@@ -1049,10 +1049,10 @@ package body Crafts.UI is
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Study_Recipe_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Recipe.Result_Index then
-               Recipe.Skill := ProtoRecipe.Skill;
-               Recipe.Time := ProtoRecipe.Difficulty * 15;
+         for I in 1 .. Get_Recipes_Amount loop
+            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index = Recipe.Result_Index then
+               Recipe.Skill := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Skill;
+               Recipe.Time := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 15;
                exit Set_Study_Recipe_Loop;
             end if;
          end loop Set_Study_Recipe_Loop;
@@ -1078,18 +1078,18 @@ package body Crafts.UI is
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Deconstruct_Recipe_Loop :
-         for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = Recipe.Result_Index then
-               Recipe.Skill := ProtoRecipe.Skill;
-               Recipe.Time := ProtoRecipe.Difficulty * 15;
-               Recipe.Difficulty := ProtoRecipe.Difficulty;
+         for I in 1 .. Get_Recipes_Amount loop
+            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index = Recipe.Result_Index then
+               Recipe.Skill := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Skill;
+               Recipe.Time := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 15;
+               Recipe.Difficulty := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty;
                Recipe.Result_Index :=
-                 Find_Proto_Item(Item_Type => ProtoRecipe.Material_Types(1));
+                 Find_Proto_Item(Item_Type => Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Material_Types(1));
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
                       (Float
-                         (ProtoRecipe.Material_Amounts.Element(Index => 1)) *
+                         (Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Material_Amounts.Element(Index => 1)) *
                        0.8));
                exit Set_Deconstruct_Recipe_Loop;
             end if;
@@ -1097,7 +1097,7 @@ package body Crafts.UI is
          Recipe.Tool := Alchemy_Tools;
          Recipe.Tool_Quality := 100;
       else
-         Recipe := Recipes_List(Recipe_Index);
+         Recipe := Get_Recipe(Recipe_Index => Recipe_Index);
          Insert
            (TextWidget => Recipe_Text, Index => "end",
             Text =>
@@ -1580,8 +1580,8 @@ package body Crafts.UI is
          for I in Known_Recipes.Iterate loop
             Is_Craftable
               (Recipe =>
-                 Recipes_List
-                   (To_Bounded_String
+                 Get_Recipe
+                   (Recipe_Index => To_Bounded_String
                       (Source => To_String(Source => Known_Recipes(I)))),
                Can_Craft => Can_Craft, Has_Workplace => Has_Workplace,
                Has_Tool => Has_Tool, Has_Materials => Has_Materials);
@@ -1593,8 +1593,8 @@ package body Crafts.UI is
                         (Source =>
                            Get_Proto_Item
                              (Index =>
-                                Recipes_List
-                                  (To_Bounded_String
+                                Get_Recipe
+                                  (Recipe_Index => To_Bounded_String
                                      (Source =>
                                         To_String(Source => Known_Recipes(I))))
                                   .Result_Index)

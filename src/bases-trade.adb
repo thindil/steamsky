@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -150,8 +150,8 @@ package body Bases.Trade is
           (Source =>
              Get_Proto_Item
                (Index =>
-                  Recipes_List
-                    (To_Bounded_String
+                  Get_Recipe
+                    (Recipe_Index => To_Bounded_String
                        (Source => To_String(Source => Recipe_Index)))
                     .Result_Index)
                .Name);
@@ -174,26 +174,26 @@ package body Bases.Trade is
       if Get_Price
           (Base_Type => Sky_Bases(Base_Index).Base_Type,
            Item_Index =>
-             Recipes_List
-               (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             Get_Recipe
+               (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
                .Result_Index) >
         0 then
          Cost :=
            Get_Price
              (Base_Type => Sky_Bases(Base_Index).Base_Type,
               Item_Index =>
-                Recipes_List
-                  (To_Bounded_String
+                Get_Recipe
+                  (Recipe_Index => To_Bounded_String
                      (Source => To_String(Source => Recipe_Index)))
                   .Result_Index) *
-           Recipes_List
-             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+           Get_Recipe
+             (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Difficulty *
            10;
       else
          Cost :=
-           Recipes_List
-             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+           Get_Recipe
+             (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Difficulty *
            10;
       end if;

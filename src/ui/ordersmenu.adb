@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -270,16 +270,15 @@ package body OrdersMenu is
                   Command => "ShowShipyard", Shortcut => "i", Underline => 2);
             end if;
             Add_Buy_Recipes_Menu_Loop :
-            for I in Recipes_List.Iterate loop
+            for I in 1 .. Get_Recipes_Amount loop
                if Known_Recipes.Find_Index
-                   (Item => Recipes_Container.Key(Position => I)) =
+                   (Item => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))) =
                  UnboundedString_Container.No_Index and
                  Has_Recipe
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
                     Recipe =>
-                      To_String
-                        (Source => Recipes_Container.Key(Position => I))) and
-                 Recipes_List(I).Reputation <=
+                      Trim(Source => I'Img, Side => Both)) and
+                 Get_Recipe(To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Reputation <=
                    Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button
                     (Name => ".recipes", Label => "Buy recipes",

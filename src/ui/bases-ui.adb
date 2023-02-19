@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers.Generic_Array_Sort;
+with Ada.Strings; use Ada.Strings;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -259,16 +260,15 @@ package body Bases.UI is
                 Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
               Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
               Tooltip => "Press mouse button to sort the recipes.");
-         if Items_Indexes.Length /= Recipes_List.Length then
+         if Natural(Items_Indexes.Length) /= Get_Recipes_Amount then
             Items_Indexes.Clear;
             Fill_Recipes_Indexes_Loop :
-            for I in Recipes_List.Iterate loop
+            for I in 1 .. Get_Recipes_Amount loop
                Items_Indexes.Append
                  (New_Item =>
                     To_Unbounded_String
                       (Source =>
-                         To_String
-                           (Source => Recipes_Container.Key(Position => I))));
+                         Trim(Source => I'Img, Side => Both)));
             end loop Fill_Recipes_Indexes_Loop;
          end if;
       end if;
@@ -829,7 +829,7 @@ package body Bases.UI is
       Local_Items: Items_Array
         (1 ..
              (if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
-                Positive(Recipes_List.Length)
+                Get_Recipes_Amount
               elsif CArgv.Arg(Argv => Argv, N => 1) = "heal" then
                 Positive(Player_Ship.Crew.Length) + 1
               else Positive(Player_Ship.Modules.Length) +
@@ -980,19 +980,19 @@ package body Bases.UI is
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
          Fill_Recipes_Items_Loop :
-         for I in Recipes_List.Iterate loop
+         for I in 1 .. Get_Recipes_Amount loop
             Cost :=
               (if
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Item_Index => Get_Recipe(Recipe_Index => I).Result_Index) >
+                    Item_Index => Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index) >
                  0
                then
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Item_Index => Get_Recipe(Recipe_Index => I).Result_Index) *
-                 Get_Recipe(Recipe_Index => I).Difficulty * 10
-               else Get_Recipe(Recipe_Index => I).Difficulty * 10);
+                    Item_Index => Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index) *
+                 Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 10
+               else Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 10);
             Cost :=
               Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
             if Cost = 0 then
@@ -1007,14 +1007,13 @@ package body Bases.UI is
                       To_String
                         (Source =>
                            Get_Proto_Item
-                             (Index => Get_Recipe(Recipe_Index => I).Result_Index)
+                             (Index => Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index)
                              .Name)),
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String
                    (Source =>
-                      To_String
-                        (Source => Recipes_Container.Key(Position => I))));
+                      Trim(Source => I'Img, Side => Both)));
             Index := Index + 1;
          end loop Fill_Recipes_Items_Loop;
       end if;
