@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.4] - 2023-02-19
 
 ### Added
 - Icon for sending all ship's crew member to rest. Author: Delapouite
