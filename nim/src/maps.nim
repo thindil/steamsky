@@ -48,6 +48,7 @@ func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
 
 # Temporary code for interfacing with Ada
 
-proc getAdaMapCell(x, y, baseIndex, visited, eventIndex, missionIndex: cint) {.exportc.} =
+proc getAdaMapCell(x, y, baseIndex, visited, eventIndex,
+    missionIndex: cint) {.raises: [], tags: [], exportc.} =
   skyMap[x][y] = SkyCell(baseIndex: baseIndex, visited: (if visited ==
       1: true else: false), eventIndex: eventIndex, missionIndex: missionIndex)
