@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Ships; use Ships;
@@ -59,20 +58,6 @@ package Crafts is
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
-
-   -- ****t* Crafts/Crafts.Recipes_Container
-   -- SOURCE
-   package Recipes_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Craft_Data,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
-   -- ****
-
-   -- ****v* Crafts/Crafts.Recipes_List
-   -- FUNCTION
-   -- List of recipes available in game
-   -- SOURCE
-   Recipes_List: Recipes_Container.Map;
-   -- ****
 
    -- ****v* Crafts/Crafts.Known_Recipes
    -- FUNCTION
