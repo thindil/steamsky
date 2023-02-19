@@ -689,3 +689,6 @@ proc adaManufacturing(minutes: cint) {.raises: [], tags: [RootEffect], exportc.}
     manufacturing(minutes = minutes.Positive)
   except ValueError, Exception:
     discard
+
+proc getAdaRecipesAmount(): cint {.raises: [], tags: [], exportc.} =
+  return recipesList.len.cint
