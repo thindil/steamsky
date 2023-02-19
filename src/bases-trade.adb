@@ -151,8 +151,9 @@ package body Bases.Trade is
              Get_Proto_Item
                (Index =>
                   Get_Recipe
-                    (Recipe_Index => To_Bounded_String
-                       (Source => To_String(Source => Recipe_Index)))
+                    (Recipe_Index =>
+                       To_Bounded_String
+                         (Source => To_String(Source => Recipe_Index)))
                     .Result_Index)
                .Name);
       Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
@@ -175,7 +176,9 @@ package body Bases.Trade is
           (Base_Type => Sky_Bases(Base_Index).Base_Type,
            Item_Index =>
              Get_Recipe
-               (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+               (Recipe_Index =>
+                  To_Bounded_String
+                    (Source => To_String(Source => Recipe_Index)))
                .Result_Index) >
         0 then
          Cost :=
@@ -183,17 +186,20 @@ package body Bases.Trade is
              (Base_Type => Sky_Bases(Base_Index).Base_Type,
               Item_Index =>
                 Get_Recipe
-                  (Recipe_Index => To_Bounded_String
-                     (Source => To_String(Source => Recipe_Index)))
+                  (Recipe_Index =>
+                     To_Bounded_String
+                       (Source => To_String(Source => Recipe_Index)))
                   .Result_Index) *
            Get_Recipe
-             (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             (Recipe_Index =>
+                To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Difficulty *
            10;
       else
          Cost :=
            Get_Recipe
-             (Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             (Recipe_Index =>
+                To_Bounded_String(Source => To_String(Source => Recipe_Index)))
              .Difficulty *
            10;
       end if;

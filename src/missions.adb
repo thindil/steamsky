@@ -280,8 +280,7 @@ package body Missions is
       if Mission.M_Type = DELIVER
         and then
           Free_Cargo
-            (Amount =>
-               -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
+            (Amount => -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";

@@ -212,17 +212,22 @@ package body Goals is
                        " ");
                end if;
             when CRAFT =>
-               if Get_Recipe(Recipe_Index => To_Bounded_String
-                        (Source =>
-                           To_String(Source => Goal.Target_Index))).Result_Index > 0 then
+               if Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => To_String(Source => Goal.Target_Index)))
+                   .Result_Index >
+                 0 then
                   Get_Item_Name_Block :
                   declare
                      use Items;
 
                      Item_Index: constant Natural :=
                        Get_Recipe
-                         (Recipe_Index => To_Bounded_String
-                            (Source => To_String(Source => Goal.Target_Index)))
+                         (Recipe_Index =>
+                            To_Bounded_String
+                              (Source =>
+                                 To_String(Source => Goal.Target_Index)))
                          .Result_Index;
                   begin
                      Append

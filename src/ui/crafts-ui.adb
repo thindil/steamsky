@@ -309,16 +309,34 @@ package body Crafts.UI is
       for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
          for J in 1 .. Get_Recipes_Amount loop
-            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Result_Index = Item.Proto_Index then
+            if Get_Recipe
+                (Recipe_Index =>
+                   To_Bounded_String
+                     (Source => Trim(Source => J'Img, Side => Both)))
+                .Result_Index =
+              Item.Proto_Index then
                if Known_Recipes.Find_Index
-                   (Item => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))) =
+                   (Item =>
+                      To_Bounded_String
+                        (Source => Trim(Source => J'Img, Side => Both))) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
                   Studies.Append(New_Item => Item.Proto_Index);
                end if;
-               if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Material_Amounts(1) > 1 and
-                 Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => J'Img, Side => Both))).Result_Amount = 1 then
+               if Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => J'Img, Side => Both)))
+                   .Material_Amounts
+                   (1) >
+                 1 and
+                 Get_Recipe
+                     (Recipe_Index =>
+                        To_Bounded_String
+                          (Source => Trim(Source => J'Img, Side => Both)))
+                     .Result_Amount =
+                   1 then
                   Deconstructs.Append(New_Item => Item.Proto_Index);
                end if;
             end if;
@@ -702,7 +720,9 @@ package body Crafts.UI is
               else To_String
                   (Source =>
                      Get_Proto_Item
-                       (Index => Get_Recipe(Recipe_Index => Recipe_Index).Result_Index)
+                       (Index =>
+                          Get_Recipe(Recipe_Index => Recipe_Index)
+                            .Result_Index)
                        .Name)),
            Title_Width => 275, Columns => 2);
       Max_Amount: constant Positive :=
@@ -1006,7 +1026,9 @@ package body Crafts.UI is
                 To_String
                   (Source =>
                      Get_Proto_Item
-                       (Index => Get_Recipe(Recipe_Index => Recipe_Index).Result_Index)
+                       (Index =>
+                          Get_Recipe(Recipe_Index => Recipe_Index)
+                            .Result_Index)
                        .Name)),
            Title_Width => 275);
       Workplace_Name: Bounded_String := Null_Bounded_String;
@@ -1050,9 +1072,25 @@ package body Crafts.UI is
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Study_Recipe_Loop :
          for I in 1 .. Get_Recipes_Amount loop
-            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index = Recipe.Result_Index then
-               Recipe.Skill := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Skill;
-               Recipe.Time := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 15;
+            if Get_Recipe
+                (Recipe_Index =>
+                   To_Bounded_String
+                     (Source => Trim(Source => I'Img, Side => Both)))
+                .Result_Index =
+              Recipe.Result_Index then
+               Recipe.Skill :=
+                 Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => I'Img, Side => Both)))
+                   .Skill;
+               Recipe.Time :=
+                 Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => I'Img, Side => Both)))
+                   .Difficulty *
+                 15;
                exit Set_Study_Recipe_Loop;
             end if;
          end loop Set_Study_Recipe_Loop;
@@ -1079,17 +1117,52 @@ package body Crafts.UI is
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Deconstruct_Recipe_Loop :
          for I in 1 .. Get_Recipes_Amount loop
-            if Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Result_Index = Recipe.Result_Index then
-               Recipe.Skill := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Skill;
-               Recipe.Time := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty * 15;
-               Recipe.Difficulty := Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Difficulty;
+            if Get_Recipe
+                (Recipe_Index =>
+                   To_Bounded_String
+                     (Source => Trim(Source => I'Img, Side => Both)))
+                .Result_Index =
+              Recipe.Result_Index then
+               Recipe.Skill :=
+                 Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => I'Img, Side => Both)))
+                   .Skill;
+               Recipe.Time :=
+                 Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => I'Img, Side => Both)))
+                   .Difficulty *
+                 15;
+               Recipe.Difficulty :=
+                 Get_Recipe
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => Trim(Source => I'Img, Side => Both)))
+                   .Difficulty;
                Recipe.Result_Index :=
-                 Find_Proto_Item(Item_Type => Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Material_Types(1));
+                 Find_Proto_Item
+                   (Item_Type =>
+                      Get_Recipe
+                        (Recipe_Index =>
+                           To_Bounded_String
+                             (Source => Trim(Source => I'Img, Side => Both)))
+                        .Material_Types
+                        (1));
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
                       (Float
-                         (Get_Recipe(Recipe_Index => To_Bounded_String(Source => Trim(Source => I'Img, Side => Both))).Material_Amounts.Element(Index => 1)) *
+                         (Get_Recipe
+                            (Recipe_Index =>
+                               To_Bounded_String
+                                 (Source =>
+                                    Trim(Source => I'Img, Side => Both)))
+                            .Material_Amounts
+                            .Element
+                            (Index => 1)) *
                        0.8));
                exit Set_Deconstruct_Recipe_Loop;
             end if;
@@ -1581,8 +1654,9 @@ package body Crafts.UI is
             Is_Craftable
               (Recipe =>
                  Get_Recipe
-                   (Recipe_Index => To_Bounded_String
-                      (Source => To_String(Source => Known_Recipes(I)))),
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source => To_String(Source => Known_Recipes(I)))),
                Can_Craft => Can_Craft, Has_Workplace => Has_Workplace,
                Has_Tool => Has_Tool, Has_Materials => Has_Materials);
             Local_Recipes(TinyString_Container.To_Index(Position => I)) :=
@@ -1594,9 +1668,11 @@ package body Crafts.UI is
                            Get_Proto_Item
                              (Index =>
                                 Get_Recipe
-                                  (Recipe_Index => To_Bounded_String
-                                     (Source =>
-                                        To_String(Source => Known_Recipes(I))))
+                                  (Recipe_Index =>
+                                     To_Bounded_String
+                                       (Source =>
+                                          To_String
+                                            (Source => Known_Recipes(I))))
                                   .Result_Index)
                              .Name)),
                Workplace => Has_Workplace, Tool => Has_Tool,

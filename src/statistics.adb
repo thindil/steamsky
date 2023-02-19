@@ -99,8 +99,7 @@ package body Statistics is
               (Index =>
                  New_String
                    (Str =>
-                      To_String
-                        (Source => Game_Stats.Finished_Goals(I).Index)),
+                      To_String(Source => Game_Stats.Finished_Goals(I).Index)),
                Amount => Game_Stats.Finished_Goals(I).Amount);
          end loop Get_Finished_Goals_Loop;
       end if;

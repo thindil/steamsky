@@ -99,7 +99,8 @@ package Missions is
    -- FUNCTION
    -- Default, empty mission data
    -- SOURCE
-   Empty_Mission: constant Mission_Data := (M_Type => Default_Mission_Type, others => <>);
+   Empty_Mission: constant Mission_Data :=
+     (M_Type => Default_Mission_Type, others => <>);
    -- ****
 
    -- ****t* Missions/Missions.Mission_Container

@@ -680,8 +680,7 @@ package body Maps.UI.Commands is
          strng =>
            "font configure MapFont -size" &
            Positive'Image(Game_Settings.Map_Font_Size));
-      Tcl_SetVar
-        (interp => Interp, varName => "refreshmap", newValue => "1");
+      Tcl_SetVar(interp => Interp, varName => "refreshmap", newValue => "1");
       return
         Draw_Map_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
