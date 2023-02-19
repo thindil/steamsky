@@ -370,12 +370,12 @@ package body Missions is
             begin
                Inventory_Container.Delete_Last(Container => Inventory);
                --## rule on IMPROPER_INITIALIZATION
-               if not Faction.Flags.Contains
+               if Faction.Flags.Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
+                  Gender := 'M';
+               else
                   Gender :=
                     (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
-               else
-                  Gender := 'M';
                end if;
                if Faction.Flags.Contains
                    (Item => To_Unbounded_String(Source => "nomorale")) then
