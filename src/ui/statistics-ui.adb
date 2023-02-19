@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -231,8 +231,8 @@ package body Statistics.UI is
                    (Source =>
                       Get_Proto_Item
                         (Index =>
-                           Recipes_List
-                             (To_Bounded_String
+                           Get_Recipe
+                             (Recipe_Index => To_Bounded_String
                                 (Source =>
                                    To_String
                                      (Source =>
@@ -712,8 +712,8 @@ package body Statistics.UI is
                      (Source =>
                         Get_Proto_Item
                           (Index =>
-                             Recipes_List
-                               (To_Bounded_String
+                             Get_Recipe
+                               (Recipe_Index => To_Bounded_String
                                   (Source =>
                                      To_String
                                        (Source =>

@@ -212,19 +212,16 @@ package body Goals is
                        " ");
                end if;
             when CRAFT =>
-               if Recipes_Container.Contains
-                   (Container => Recipes_List,
-                    Key =>
-                      To_Bounded_String
+               if Get_Recipe(Recipe_Index => To_Bounded_String
                         (Source =>
-                           To_String(Source => Goal.Target_Index))) then
+                           To_String(Source => Goal.Target_Index))).Result_Index > 0 then
                   Get_Item_Name_Block :
                   declare
                      use Items;
 
                      Item_Index: constant Natural :=
-                       Recipes_List
-                         (To_Bounded_String
+                       Get_Recipe
+                         (Recipe_Index => To_Bounded_String
                             (Source => To_String(Source => Goal.Target_Index)))
                          .Result_Index;
                   begin

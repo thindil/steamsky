@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
-with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Items;
 with Trades;
@@ -84,16 +82,8 @@ package body Crafts is
    end Convert_Recipe_From_Nim;
 
    procedure Load_Recipes(File_Name: String) is
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
       use Interfaces.C;
-      use Tiny_String;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Craft_Data;
-      Temp_Nim_Record: Craft_Nim_Data;
-      --## rule on IMPROPER_INITIALIZATION
-      Index: Positive := 1;
       Result: chars_ptr;
       function Load_Ada_Recipes(Name: chars_ptr) return chars_ptr with
          Import => True,
@@ -104,21 +94,6 @@ package body Crafts is
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Recipes_Loop :
-      loop
-         Get_Ada_Craft
-           (C_Index => New_String(Str => Index'Img),
-            Ada_Craft => Temp_Nim_Record);
-         exit Load_Recipes_Loop when Temp_Nim_Record.Result_Index = 0;
-         Temp_Record :=
-           Convert_Recipe_From_Nim(Crafting_Data => Temp_Nim_Record);
-         Recipes_List.Include
-           (Key =>
-              To_Bounded_String
-                (Source => Trim(Source => Index'Img, Side => Left)),
-            New_Item => Temp_Record);
-         Index := Index + 1;
-      end loop Load_Recipes_Loop;
    end Load_Recipes;
 
    function Set_Recipe_Data

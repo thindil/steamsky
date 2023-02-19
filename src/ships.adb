@@ -891,7 +891,7 @@ package body Ships is
                       Get_Attribute
                         (Elem => Item(List => Child_Nodes, Index => J),
                          Name => "index"));
-               if not Recipes_List.Contains(Key => Recipe_Index) then
+               if Get_Recipe(Recipe_Index => Recipe_Index).Result_Index = 0 then
                   raise Ships_Invalid_Data
                     with "Invalid recipe index: |" &
                     Get_Attribute

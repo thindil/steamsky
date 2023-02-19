@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -413,7 +413,7 @@ package body Bases.UI is
                   (Item =>
                      To_Bounded_String(Source => To_String(Source => I))) /=
                 Positive_Container.No_Index or
-              Recipes_List(To_Bounded_String(Source => To_String(Source => I)))
+              Get_Recipe(Recipe_Index => To_Bounded_String(Source => To_String(Source => I)))
                   .Reputation >
                 Sky_Bases(Base_Index).Reputation.Level then
                goto End_Of_Recipes_Loop;
@@ -428,8 +428,8 @@ package body Bases.UI is
                             (Source =>
                                Get_Proto_Item
                                  (Index =>
-                                    Recipes_List
-                                      (To_Bounded_String
+                                    Get_Recipe
+                                      (Recipe_Index => To_Bounded_String
                                          (Source => To_String(Source => I)))
                                       .Result_Index)
                                  .Name)),
@@ -452,8 +452,8 @@ package body Bases.UI is
                    (Source =>
                       Get_Proto_Item
                         (Index =>
-                           Recipes_List
-                             (To_Bounded_String
+                           Get_Recipe
+                             (Recipe_Index => To_Bounded_String
                                 (Source => To_String(Source => I)))
                              .Result_Index)
                         .Name),
@@ -466,23 +466,23 @@ package body Bases.UI is
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
                     Item_Index =>
-                      Recipes_List
-                        (To_Bounded_String(Source => To_String(Source => I)))
+                      Get_Recipe
+                        (Recipe_Index => To_Bounded_String(Source => To_String(Source => I)))
                         .Result_Index) >
                  0
                then
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
                     Item_Index =>
-                      Recipes_List
-                        (To_Bounded_String(Source => To_String(Source => I)))
+                      Get_Recipe
+                        (Recipe_Index => To_Bounded_String(Source => To_String(Source => I)))
                         .Result_Index) *
-                 Recipes_List
-                   (To_Bounded_String(Source => To_String(Source => I)))
+                 Get_Recipe
+                   (Recipe_Index => To_Bounded_String(Source => To_String(Source => I)))
                    .Difficulty *
                  10
-               else Recipes_List
-                   (To_Bounded_String(Source => To_String(Source => I)))
+               else Get_Recipe
+                   (Recipe_Index => To_Bounded_String(Source => To_String(Source => I)))
                    .Difficulty *
                  10);
             Cost :=
@@ -704,19 +704,19 @@ package body Bases.UI is
               Get_Price
                 (Base_Type => Sky_Bases(Base_Index).Base_Type,
                  Item_Index =>
-                   Recipes_List(To_Bounded_String(Source => Item_Index))
+                   Get_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index))
                      .Result_Index) >
               0
             then
               Get_Price
                 (Base_Type => Sky_Bases(Base_Index).Base_Type,
                  Item_Index =>
-                   Recipes_List(To_Bounded_String(Source => Item_Index))
+                   Get_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index))
                      .Result_Index) *
-              Recipes_List(To_Bounded_String(Source => Item_Index))
+              Get_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index))
                 .Difficulty *
               10
-            else Recipes_List(To_Bounded_String(Source => Item_Index))
+            else Get_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index))
                 .Difficulty *
               10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
@@ -985,14 +985,14 @@ package body Bases.UI is
               (if
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Item_Index => Recipes_List(I).Result_Index) >
+                    Item_Index => Get_Recipe(Recipe_Index => I).Result_Index) >
                  0
                then
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Item_Index => Recipes_List(I).Result_Index) *
-                 Recipes_List(I).Difficulty * 10
-               else Recipes_List(I).Difficulty * 10);
+                    Item_Index => Get_Recipe(Recipe_Index => I).Result_Index) *
+                 Get_Recipe(Recipe_Index => I).Difficulty * 10
+               else Get_Recipe(Recipe_Index => I).Difficulty * 10);
             Cost :=
               Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
             if Cost = 0 then
@@ -1007,7 +1007,7 @@ package body Bases.UI is
                       To_String
                         (Source =>
                            Get_Proto_Item
-                             (Index => Recipes_List(I).Result_Index)
+                             (Index => Get_Recipe(Recipe_Index => I).Result_Index)
                              .Name)),
                Cost => Cost, Time => 1,
                Id =>

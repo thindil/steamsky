@@ -2223,8 +2223,8 @@ package body Ships.UI.Crew is
                                   (Source =>
                                      Get_Proto_Item
                                        (Index =>
-                                          Recipes_List
-                                            (To_Bounded_String
+                                          Get_Recipe
+                                            (Recipe_Index => To_Bounded_String
                                                (Source =>
                                                   To_String
                                                     (Source =>
