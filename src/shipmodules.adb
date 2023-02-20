@@ -26,12 +26,16 @@ package body ShipModules is
       use Interfaces.C;
       use Interfaces.C.Strings;
 
-      procedure Load_Ada_Items(Name: chars_ptr) with
+      Result: chars_ptr; --## rule line off IMPROPER_INITIALIZATION
+      function Load_Ada_Items(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaModules";
    begin
-      Load_Ada_Items(Name => New_String(Str => File_Name));
+      Result := Load_Ada_Items(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
    end Load_Ship_Modules;
 
    function Get_Module_Type(Module_Index: Positive) return String is
