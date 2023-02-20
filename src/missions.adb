@@ -279,8 +279,10 @@ package body Missions is
       end Count_Missions_Limit_Block;
       if Mission.M_Type = DELIVER
         and then
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
           Free_Cargo
             (Amount => -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
@@ -396,12 +398,14 @@ package body Missions is
                if Max_Attribute_Level > 50 then
                   Max_Attribute_Level := 50;
                end if;
+               --## rule off SIMPLIFIABLE_STATEMENTS
                Set_Attributes_Loop :
                for J in 1 .. Attributes_Amount loop
                   Attributes(J) :=
                     (Level => Get_Random(Min => 3, Max => Max_Attribute_Level),
                      Experience => 0);
                end loop Set_Attributes_Loop;
+               --## rule on SIMPLIFIABLE_STATEMENTS
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,
