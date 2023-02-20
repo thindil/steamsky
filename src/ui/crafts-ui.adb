@@ -391,10 +391,11 @@ package body Crafts.UI is
                             Get_Proto_Item
                               (Index =>
                                  Get_Recipe
-                                   (To_Bounded_String
-                                      (Source =>
-                                         To_String
-                                           (Source => Recipes_Indexes(I))))
+                                   (Recipe_Index =>
+                                      To_Bounded_String
+                                        (Source =>
+                                           To_String
+                                             (Source => Recipes_Indexes(I))))
                                    .Result_Index)
                               .Name)),
                 Pattern => To_Lower(Item => Recipe_Name), From => 1) =
@@ -407,8 +408,9 @@ package body Crafts.UI is
          end if;
          Recipe :=
            Get_Recipe
-             (To_Bounded_String
-                (Source => To_String(Source => Recipes_Indexes(I))));
+             (Recipe_Index =>
+                To_Bounded_String
+                  (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
            (Recipe => Recipe, Can_Craft => Can_Craft,
             Has_Workplace => Has_Workplace, Has_Tool => Has_Tool,
@@ -425,9 +427,10 @@ package body Crafts.UI is
                    Get_Proto_Item
                      (Index =>
                         Get_Recipe
-                          (To_Bounded_String
-                             (Source =>
-                                To_String(Source => Recipes_Indexes(I))))
+                          (Recipe_Index =>
+                             To_Bounded_String
+                               (Source =>
+                                  To_String(Source => Recipes_Indexes(I))))
                           .Result_Index)
                      .Name),
             Tooltip => "Show recipe's details",
@@ -804,7 +807,7 @@ package body Crafts.UI is
       if Recipe_Type in "Study" | "Deconstruct" then
          M_Type := ALCHEMY_LAB;
       else
-         M_Type := Get_Recipe(Recipe_Index).Workplace;
+         M_Type := Get_Recipe(Recipe_Index => Recipe_Index).Workplace;
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop

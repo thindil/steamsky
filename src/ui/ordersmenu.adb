@@ -280,8 +280,9 @@ package body OrdersMenu is
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
                     Recipe => Trim(Source => I'Img, Side => Both)) and
                  Get_Recipe
-                     (To_Bounded_String
-                        (Source => Trim(Source => I'Img, Side => Both)))
+                     (Recipe_Index =>
+                        To_Bounded_String
+                          (Source => Trim(Source => I'Img, Side => Both)))
                      .Reputation <=
                    Sky_Bases(Base_Index).Reputation.Level then
                   Add_Button
