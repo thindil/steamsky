@@ -71,6 +71,15 @@ type
     ## Types of in-game goals
     random, reputation, destroy, discover, visit, craft, mission, kill
 
+  MessageType* = enum
+    ## Type of an in-game message
+    default, combatMessage, tradeMessage, orderMessage, craftMessage,
+        otherMessage, missionMessage
+
+  MessageColor* = enum
+    ## The color used to show a message
+    white, yellow, green, red, blue, cyan
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
@@ -344,6 +353,12 @@ type
     targetIndex*: string ## The index of the target needed for finish the goal. If empty
                          ## means all targets of the selected type (bases, ships, etc.)
     multiplier*: Positive ## The muliplier for points awarded for finishing the goal
+
+  MessageData* = object
+    ## Used to store data about the game's messages
+    message*: string     ## The message itself
+    kind*: MessageType   ## The type of message
+    color*: MessageColor ## The color used to show the message
 
 # Temporary code for interfacing with Ada
 

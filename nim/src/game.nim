@@ -100,6 +100,7 @@ var
   goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
   playerCareer*: string ## Index of the career of the player selected when starting a new game
   knownRecipes*: seq[string] ## The list of known recipes by the player
+  messagesList*: seq[MessageData] ## The list of in-game messages
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =

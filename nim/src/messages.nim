@@ -15,30 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import config
+import config, game, types
 
 type
-  MessageType* = enum
-    ## Type of an in-game message
-    default, combatMessage, tradeMessage, orderMessage, craftMessage,
-        otherMessage, missionMessage
-
-  MessageColor* = enum
-    ## The color used to show a message
-    white, yellow, green, red, blue, cyan
-
-  MessageData = object
-    ## Used to store data about the game's messages
-    message: string     ## The message itself
-    kind: MessageType   ## The type of message
-    color: MessageColor ## The color used to show the message
-
   MessageDataC* = object
     message*: cstring
     kind: cint
     color: cint
-
-var messagesList: seq[MessageData] ## The list of in-game messages
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
@@ -115,7 +98,7 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
   var index: cint
   if messageIndex < 1:
     if messagesList.len() + messageIndex > 0:
-      if kind == ord(default):
+      if kind == ord(MessageType.default):
         index = messagesList.len().cint + messageIndex - 1
         return MessageDataC(message: messagesList[index].message.cstring,
             kind: ord(messagesList[index].kind).cint, color: ord(messagesList[
@@ -129,7 +112,7 @@ proc getMessage*(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
         if index == messageIndex:
           return message
     return
-  if kind == ord(default):
+  if kind == ord(MessageType.default):
     index = messageIndex - 1
     return MessageDataC(message: messagesList[index].message.cstring, kind: ord(
         messagesList[index].kind).cint, color: ord(messagesList[
@@ -153,15 +136,16 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
   ## * kind - The type of messages which amount will be get
   ##
   ## Returns the amount of the selected type of messages
-  if kind == ord(default):
+  if kind == ord(MessageType.default):
     return messagesList.len().cint
   result = 0
   for message in messagesList:
     if ord(message.kind).cint == kind:
       result.inc()
 
-proc restoreMessage*(message: cstring; kind: cint = ord(default).cint;
-    color: cint = ord(white).cint) {.raises: [], tags: [], exportc.} =
+proc restoreMessage*(message: cstring; kind: cint = ord(
+    MessageType.default).cint; color: cint = ord(white).cint) {.raises: [],
+    tags: [], exportc.} =
   ## Restore the selected message from the save file
   ##
   ## * message - The text of the message to restore
