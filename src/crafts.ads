@@ -175,4 +175,7 @@ package Crafts is
       Convention => C,
       External_Name => "getAdaRecipesAmount";
 
+   function Is_Known_Recipe
+     (Recipe_Index: Tiny_String.Bounded_String) return Boolean;
+
 end Crafts;

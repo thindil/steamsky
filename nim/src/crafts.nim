@@ -692,3 +692,8 @@ proc adaManufacturing(minutes: cint) {.raises: [], tags: [RootEffect], exportc.}
 
 proc getAdaRecipesAmount(): cint {.raises: [], tags: [], exportc.} =
   return recipesList.len.cint
+
+proc isAdaKnownRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], exportc.} =
+  if $recipeIndex in knownRecipes:
+    return 1
+  return 0
