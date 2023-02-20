@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing too much columns in the buying recipes in bases menu
+
 ## [8.4] - 2023-02-19
 
 ### Added
