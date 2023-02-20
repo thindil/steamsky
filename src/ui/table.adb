@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -88,6 +88,8 @@ package body Table is
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
+         exit Create_Headers_Loop when Length(Source => Headers(I)) = 0 and
+           I = Headers'Last;
          Header_Id :=
            To_Unbounded_String
              (Source =>
