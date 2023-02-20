@@ -39,12 +39,6 @@ package body Crafts is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Ada_Craft
-     (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaCraftData";
-
    function Convert_Recipe_From_Nim
      (Crafting_Data: Craft_Nim_Data) return Craft_Data is
       use Tiny_String;
@@ -190,6 +184,11 @@ package body Crafts is
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
       Nim_Recipe: Craft_Nim_Data;
+      procedure Get_Ada_Craft
+        (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCraftData";
    begin
       Get_Ada_Craft
         (C_Index =>
@@ -197,5 +196,22 @@ package body Crafts is
          Ada_Craft => Nim_Recipe);
       return Convert_Recipe_From_Nim(Crafting_Data => Nim_Recipe);
    end Get_Recipe;
+
+   function Is_Known_Recipe
+     (Recipe_Index: Tiny_String.Bounded_String) return Boolean is
+      function Is_Ada_Known_Recipe(R_Index: chars_ptr) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "isAdaKnownRecipe";
+   begin
+      if Is_Ada_Known_Recipe
+          (R_Index =>
+             New_String
+               (Str => Tiny_String.To_String(Source => Recipe_Index))) =
+        1 then
+         return True;
+      end if;
+      return False;
+   end Is_Known_Recipe;
 
 end Crafts;
