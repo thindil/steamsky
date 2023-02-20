@@ -29,8 +29,6 @@ type
   CraftingNoToolsError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper crafting tools
 
-var knownRecipes: seq[string] ## The list of known recipes by the player
-
 proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the crafting recipes data from the file

@@ -99,6 +99,7 @@ var
   recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
   goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
   playerCareer*: string ## Index of the career of the player selected when starting a new game
+  knownRecipes*: seq[string] ## The list of known recipes by the player
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
