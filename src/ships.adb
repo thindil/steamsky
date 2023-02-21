@@ -436,7 +436,7 @@ package body Ships is
       -- Set known crafting recipes
       Set_Known_Recipes_Loop :
       for Recipe of Proto_Ship.Known_Recipes loop
-         Known_Recipes.Append(New_Item => Recipe);
+         Add_Known_Recipe(Recipe_Index => Recipe);
       end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
       if Sky_Map(X, Y).Base_Index > 0 then

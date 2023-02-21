@@ -315,11 +315,9 @@ package body Crafts.UI is
                      (Source => Trim(Source => J'Img, Side => Both)))
                 .Result_Index =
               Item.Proto_Index then
-               if Known_Recipes.Find_Index
-                   (Item =>
+               if not Is_Known_Recipe(Recipe_Index =>
                       To_Bounded_String
-                        (Source => Trim(Source => J'Img, Side => Both))) =
-                 Positive_Container.No_Index and
+                        (Source => Trim(Source => J'Img, Side => Both))) and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
                   Studies.Append(New_Item => Item.Proto_Index);

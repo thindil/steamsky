@@ -408,10 +408,9 @@ package body Bases.UI is
          for I of Items_Indexes loop
             if not Has_Recipe
                 (Base_Type => Base_Type, Recipe => To_String(Source => I)) or
-              Known_Recipes.Find_Index
-                  (Item =>
-                     To_Bounded_String(Source => To_String(Source => I))) /=
-                Positive_Container.No_Index or
+              Is_Known_Recipe
+                (Recipe_Index =>
+                   To_Bounded_String(Source => To_String(Source => I))) or
               Get_Recipe
                   (Recipe_Index =>
                      To_Bounded_String(Source => To_String(Source => I)))

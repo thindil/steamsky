@@ -242,9 +242,13 @@ package body Game.SaveLoad is
          use Tiny_String;
 
          Recipe_Node: DOM.Core.Element;
+         Recipe: Bounded_String;
+         Index: Natural := 0;
       begin
          Save_Known_Recipes_Loop :
-         for Recipe of Known_Recipes loop
+         while True loop
+            Recipe := Get_Known_Recipe(Index => Index);
+            exit Save_Known_Recipes_Loop when Length(Source => Recipe) = 0;
             Recipe_Node :=
               Append_Child
                 (N => Main_Node,
@@ -253,6 +257,7 @@ package body Game.SaveLoad is
             Set_Attribute
               (Elem => Recipe_Node, Name => "index",
                Value => To_String(Source => Recipe));
+            Index := Index + 1;
          end loop Save_Known_Recipes_Loop;
       end Save_Known_Recipes_Block;
       Log_Message
@@ -739,14 +744,13 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Loading known recipes...", Message_Type => EVERYTHING,
          New_Line => False);
-      Known_Recipes.Clear;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "recipe");
       Load_Known_Recipes_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Known_Recipes.Append
-           (New_Item =>
+         Add_Known_Recipe
+           (Recipe_Index =>
               To_Bounded_String
                 (Source =>
                    Get_Attribute
