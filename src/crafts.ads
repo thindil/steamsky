@@ -180,4 +180,6 @@ package Crafts is
 
    procedure Add_Known_Recipe(Recipe_Index: Tiny_String.Bounded_String);
 
+   function Get_Known_Recipe(Index: Integer) return Tiny_String.Bounded_String;
+
 end Crafts;

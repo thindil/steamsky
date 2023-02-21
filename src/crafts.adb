@@ -225,4 +225,16 @@ package body Crafts is
            New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
    end Add_Known_Recipe;
 
+   function Get_Known_Recipe
+     (Index: Integer) return Tiny_String.Bounded_String is
+      function Get_Ada_Known_Recipe(I: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaKnownRecipe";
+   begin
+      return
+        Tiny_String.To_Bounded_String
+          (Source => Value(Item => Get_Ada_Known_Recipe(I => Index)));
+   end Get_Known_Recipe;
+
 end Crafts;

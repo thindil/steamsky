@@ -698,3 +698,8 @@ proc isAdaKnownRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], export
 
 proc addAdaKnownRecipe(recipeIndex: cstring) {.raises: [], tags: [], exportc.} =
   knownRecipes.add(y = $recipeIndex)
+
+proc getAdaKnownRecipe(index: cint): cstring {.raises: [], tags: [], exportc} =
+  if index < knownRecipes.len:
+    return knownRecipes[index].cstring
+  return "".cstring
