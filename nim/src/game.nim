@@ -294,6 +294,18 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     of "unarmedskill":
       unarmedSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
 
+proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
+  ## Save or not the game and clear the temporary data
+  ##
+  ## * save - if true, save the current game
+  messagesList = @[]
+  knownRecipes = @[]
+  {.warning[ProveInit]: off.}
+  {.warning[UnsafeDefault]: off.}
+  eventsList.clear()
+  {.warning[ProveInit]: on.}
+  {.warning[UnsafeDefault]: on.}
+
 # Temporary code for interfacing with Ada
 
 proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
@@ -379,3 +391,6 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
     playerCareer = $value
   else:
     discard
+
+proc endAdaGame(save: cint) {.raises: [], tags: [], exportc} =
+  endGame(save = (if save == 1: true else: false))

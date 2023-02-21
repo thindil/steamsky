@@ -638,6 +638,10 @@ package body Game is
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
+      procedure End_Ada_Game(S: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "endAdaGame";
    begin
       if Save then
          Save_Game;
@@ -650,10 +654,9 @@ package body Game is
                null;
          end Delete_Save_Block;
       end if;
-      Clear_Messages;
+      End_Ada_Game(S => (if Save then 1 else 0));
       Events_List.Clear;
       Clear_Game_Stats;
-      Known_Recipes.Clear;
       Clear_Current_Goal;
       Accepted_Missions.Clear;
       Save_Config;
