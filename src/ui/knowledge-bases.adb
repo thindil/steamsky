@@ -57,7 +57,7 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Table with info about the know bases
    -- SOURCE
-   Bases_Table: Table_Widget (Amount => 7);
+   Bases_Table: Table_Widget (Amount => 8);
    -- ****
 
    -- ****iv* KBases/KBases.Modules_Indexes
@@ -135,11 +135,12 @@ package body Knowledge.Bases is
            Headers =>
              (1 => To_Unbounded_String(Source => "Name"),
               2 => To_Unbounded_String(Source => "Distance"),
-              3 => To_Unbounded_String(Source => "Population"),
-              4 => To_Unbounded_String(Source => "Size"),
-              5 => To_Unbounded_String(Source => "Owner"),
-              6 => To_Unbounded_String(Source => "Type"),
-              7 => To_Unbounded_String(Source => "Reputation")),
+              3 => To_Unbounded_String(Source => "Coordinates"),
+              4 => To_Unbounded_String(Source => "Population"),
+              5 => To_Unbounded_String(Source => "Size"),
+              6 => To_Unbounded_String(Source => "Owner"),
+              7 => To_Unbounded_String(Source => "Type"),
+              8 => To_Unbounded_String(Source => "Reputation")),
            Scrollbar =>
              Get_Widget
                (pathName => ".gameframe.paned.knowledgeframe.bases.scrolly"),
@@ -222,6 +223,14 @@ package body Knowledge.Bases is
             Tooltip => "The distance to the base",
             Command => "ShowBaseInfo" & Positive'Image(I), Column => 2,
             Color => To_String(Source => Color));
+         Add_Button
+           (Table => Bases_Table,
+            Text =>
+              "X:" & Natural'Image(Sky_Bases(I).Sky_X) & " Y:" &
+              Natural'Image(Sky_Bases(I).Sky_Y),
+            Tooltip => "The coordinates of the base",
+            Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
+            Color => To_String(Source => Color));
          if Sky_Bases(I).Visited.Year > 0 then
             Add_Button
               (Table => Bases_Table,
@@ -230,13 +239,13 @@ package body Knowledge.Bases is
                     when 1 .. 150 => "small", when 151 .. 299 => "medium",
                     when others => "large"),
                Tooltip => "The population size of the base",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text => To_Lower(Item => Bases_Size'Image(Sky_Bases(I).Size)),
                Tooltip => "The size of the base",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
@@ -244,13 +253,13 @@ package body Knowledge.Bases is
                  To_String
                    (Source => Get_Faction(Index => Sky_Bases(I).Owner).Name),
                Tooltip => "The faction which own the base",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
                Text => Get_Base_Type_Name(Base_Type => Sky_Bases(I).Base_Type),
                Tooltip => "The type of the base",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
                Color => To_String(Source => Color));
             Add_Button
               (Table => Bases_Table,
@@ -258,33 +267,33 @@ package body Knowledge.Bases is
                  Get_Reputation_Text
                    (Reputation_Level => Sky_Bases(I).Reputation.Level),
                Tooltip => "Your reputation in the base",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 8,
                New_Row => True, Color => To_String(Source => Color));
          else
             Add_Button
               (Table => Bases_Table, Text => "not",
                Tooltip => "Show the base's details",
-               Command => "ShowBaseInfo" & Positive'Image(I), Column => 3,
-               Color => To_String(Source => Color));
-            Add_Button
-              (Table => Bases_Table, Text => "",
-               Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 4,
                Color => To_String(Source => Color));
             Add_Button
-              (Table => Bases_Table, Text => "visited",
+              (Table => Bases_Table, Text => "",
                Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 5,
                Color => To_String(Source => Color));
             Add_Button
-              (Table => Bases_Table, Text => "",
+              (Table => Bases_Table, Text => "visited",
                Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 6,
                Color => To_String(Source => Color));
             Add_Button
-              (Table => Bases_Table, Text => "yet",
+              (Table => Bases_Table, Text => "",
                Tooltip => "Show the base's details",
                Command => "ShowBaseInfo" & Positive'Image(I), Column => 7,
+               Color => To_String(Source => Color));
+            Add_Button
+              (Table => Bases_Table, Text => "yet",
+               Tooltip => "Show the base's details",
+               Command => "ShowBaseInfo" & Positive'Image(I), Column => 8,
                Color => To_String(Source => Color), New_Row => True);
          end if;
          Rows := Rows + 1;
@@ -622,14 +631,17 @@ package body Knowledge.Bases is
    -- TYPEDESC       - Sort bases by type descending
    -- REPUTATIONASC  - Sort bases by reputation ascending
    -- REPUTATIONDESC - Sort bases by reputation descending
+   -- COORDASC       - Sort bases by coordinates ascending
+   -- COORDDESC      - Sort bases by coordinates descending
    -- NONE           - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 8.4 - Added sorting by coordinates
    -- SOURCE
    type Bases_Sort_Orders is
      (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, POPULATIONASC,
       POPULATIONDESC, SIZEASC, SIZEDESC, OWNERASC, OWNERDESC, TYPEASC,
-      TYPEDESC, REPUTATIONASC, REPUTATIONDESC, NONE) with
+      TYPEDESC, REPUTATIONASC, REPUTATIONDESC, COORDASC, COORDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -684,6 +696,7 @@ package body Knowledge.Bases is
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
+         Coords: Unbounded_String;
          Population: Integer;
          Size: Bases_Size;
          Owner: Bounded_String;
@@ -745,6 +758,14 @@ package body Knowledge.Bases is
            and then Left.Reputation > Right.Reputation then
             return True;
          end if;
+         if Bases_Sort_Order = COORDASC
+           and then Left.Coords < Right.Coords then
+            return True;
+         end if;
+         if Bases_Sort_Order = COORDDESC
+           and then Left.Coords > Right.Coords then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Bases is new Ada.Containers.Generic_Array_Sort
@@ -765,30 +786,36 @@ package body Knowledge.Bases is
                Bases_Sort_Order := DISTANCEASC;
             end if;
          when 3 =>
+            if Bases_Sort_Order = COORDASC then
+               Bases_Sort_Order := COORDDESC;
+            else
+               Bases_Sort_Order := COORDASC;
+            end if;
+         when 4 =>
             if Bases_Sort_Order = POPULATIONASC then
                Bases_Sort_Order := POPULATIONDESC;
             else
                Bases_Sort_Order := POPULATIONASC;
             end if;
-         when 4 =>
+         when 5 =>
             if Bases_Sort_Order = SIZEASC then
                Bases_Sort_Order := SIZEDESC;
             else
                Bases_Sort_Order := SIZEASC;
             end if;
-         when 5 =>
+         when 6 =>
             if Bases_Sort_Order = OWNERASC then
                Bases_Sort_Order := OWNERDESC;
             else
                Bases_Sort_Order := OWNERASC;
             end if;
-         when 6 =>
+         when 7 =>
             if Bases_Sort_Order = TYPEASC then
                Bases_Sort_Order := TYPEDESC;
             else
                Bases_Sort_Order := TYPEASC;
             end if;
-         when 7 =>
+         when 8 =>
             if Bases_Sort_Order = REPUTATIONASC then
                Bases_Sort_Order := REPUTATIONDESC;
             else
@@ -808,6 +835,11 @@ package body Knowledge.Bases is
               Count_Distance
                 (Destination_X => Sky_Bases(I).Sky_X,
                  Destination_Y => Sky_Bases(I).Sky_Y),
+            Coords =>
+              To_Unbounded_String
+                (Source =>
+                   "X:" & Natural'Image(Sky_Bases(I).Sky_X) & " Y:" &
+                   Natural'Image(Sky_Bases(I).Sky_Y)),
             Population =>
               (if Sky_Bases(I).Visited = (others => 0) then -1
                else Sky_Bases(I).Population),
