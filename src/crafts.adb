@@ -214,4 +214,15 @@ package body Crafts is
       return False;
    end Is_Known_Recipe;
 
+   procedure Add_Known_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
+      procedure Add_Ada_Known_Recipe(R_Index: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaKnownRecipe";
+   begin
+      Add_Ada_Known_Recipe
+        (R_Index =>
+           New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
+   end Add_Known_Recipe;
+
 end Crafts;

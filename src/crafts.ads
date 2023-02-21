@@ -178,4 +178,6 @@ package Crafts is
    function Is_Known_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Boolean;
 
+   procedure Add_Known_Recipe(Recipe_Index: Tiny_String.Bounded_String);
+
 end Crafts;
