@@ -280,9 +280,11 @@ package body Missions is
       if Mission.M_Type = DELIVER
         and then
          --## rule off SIMPLIFIABLE_EXPRESSIONS
+
           Free_Cargo
             (Amount => -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
          --## rule on SIMPLIFIABLE_EXPRESSIONS
+
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
@@ -450,7 +452,7 @@ package body Missions is
    end Accept_Mission;
 
    procedure Update_Missions(Minutes: Positive) is
-      Time: Integer;
+      Time: Integer := 0;
       I: Mission_Container.Extended_Index := Accepted_Missions.First_Index;
    begin
       Update_Missions_Loop :
@@ -468,7 +470,7 @@ package body Missions is
    procedure Finish_Mission(Mission_Index: Positive) is
       use Tiny_String;
 
-      Message: Unbounded_String;
+      Message: Unbounded_String := Null_Unbounded_String;
       Missions_Amount: constant Positive := Positive(Accepted_Missions.Length);
    begin
       if Player_Ship.Speed /= DOCKED then
