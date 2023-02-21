@@ -59,13 +59,6 @@ package Crafts is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****v* Crafts/Crafts.Known_Recipes
-   -- FUNCTION
-   -- List of all know by player recipes
-   -- SOURCE
-   Known_Recipes: TinyString_Container.Vector;
-   -- ****
-
    -- ****e* Crafts/Crafts.Crafting_No_Materials
    -- FUNCTION
    -- Raised when no materials needed for selected recipe
