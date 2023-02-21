@@ -2,7 +2,7 @@ discard """
   exitcode: 0
 """
 
-import ../../src/messages
+import ../../src/[types, messages]
 
 let messageIndex = getLastMessageIndex()
 addMessage("my message", ord(MessageType.default), ord(white))
