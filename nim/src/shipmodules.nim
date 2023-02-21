@@ -219,7 +219,8 @@ proc loadAdaModules(fileName: cstring): cstring {.sideEffect, raises: [],
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.exportc.} =
+proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.raises: [],
+    tags: [], exportc.} =
   adaModule = AdaBaseModuleData(name: "".cstring, mType: 0, weight: 0, value: 0,
       maxValue: 0, durability: 0, repairMaterial: "".cstring, repairSkill: 0,
       price: 0, installTime: 0, unique: 0, size: 0, description: "".cstring,
@@ -247,5 +248,5 @@ proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.exportc.} =
   adaModule.speed = module.speed.cint
   adaModule.reputation = module.reputation.cint
 
-proc getAdaModulesAmount(): cint {.exportc.} =
+proc getAdaModulesAmount(): cint {.raises: [], tags: [], exportc.} =
   return modulesList.len.cint
