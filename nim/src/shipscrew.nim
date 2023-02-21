@@ -16,8 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crew, crewinventory, events, game, maps, messages, ships, shipscargo,
-    types, utils
+import crew, crewinventory, game, maps, messages, ships, shipscargo, types, utils
 
 proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
     raises: [KeyError], tags: [].} =

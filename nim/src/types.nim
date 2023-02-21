@@ -80,6 +80,11 @@ type
     ## The color used to show a message
     white, yellow, green, red, blue, cyan
 
+  EventsTypes* {.pure.} = enum
+    ## Possible types of events on map
+    none, enemyShip, attackOnBase, disease, doublePrice, baseRecovery,
+        fullDocks, enemyPatrol, trader, friendlyShip
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
@@ -359,6 +364,19 @@ type
     message*: string     ## The message itself
     kind*: MessageType   ## The type of message
     color*: MessageColor ## The color used to show the message
+
+  EventData* = object
+    ## Used to store data about an event
+    skyX*: MapXRange         ## The X coordinate of the event on the map
+    skyY*: MapYRange         ## The Y coordinate of the event on the map
+    time*: Positive          ## The time in minutes by how long the event will be available
+    case eType*: EventsTypes ## The type of the event
+    of doublePrice:
+      itemIndex*: int         ## The index of the prototype item used by the event
+    of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
+      shipIndex*: int         ## The index of the prototype ship used by the event
+    else:
+      data*: int              ## General data of the event
 
 # Temporary code for interfacing with Ada
 

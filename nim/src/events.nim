@@ -16,29 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import types
-
-type
-  EventsTypes* = enum
-    ## Possible types of events on map
-    none, enemyShip, attackOnBase, disease, doublePrice, baseRecovery,
-        fullDocks, enemyPatrol, trader, friendlyShip
-
-  EventData* = object
-    ## Used to store data about an event
-    skyX*: MapXRange         ## The X coordinate of the event on the map
-    skyY*: MapYRange         ## The Y coordinate of the event on the map
-    time*: Positive          ## The time in minutes by how long the event will be available
-    case eType*: EventsTypes ## The type of the event
-    of doublePrice:
-      itemIndex: int         ## The index of the prototype item used by the event
-    of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      shipIndex: int         ## The index of the prototype ship used by the event
-    else:
-      data: int              ## General data of the event
-
-var eventsList* = initTable[Positive, EventData]() ## The list of available events in the game
-
+import game, types
 
 # Temporary code for interfacing with Ada
 

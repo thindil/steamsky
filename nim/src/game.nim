@@ -101,6 +101,7 @@ var
   playerCareer*: string ## Index of the career of the player selected when starting a new game
   knownRecipes*: seq[string] ## The list of known recipes by the player
   messagesList*: seq[MessageData] ## The list of in-game messages
+  eventsList* = initTable[Positive, EventData]() ## The list of available events in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
