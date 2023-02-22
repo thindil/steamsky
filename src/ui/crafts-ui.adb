@@ -315,7 +315,8 @@ package body Crafts.UI is
                      (Source => Trim(Source => J'Img, Side => Both)))
                 .Result_Index =
               Item.Proto_Index then
-               if not Is_Known_Recipe(Recipe_Index =>
+               if not Is_Known_Recipe
+                   (Recipe_Index =>
                       To_Bounded_String
                         (Source => Trim(Source => J'Img, Side => Both))) and
                  Studies.Find_Index(Item => Item.Proto_Index) =
@@ -341,7 +342,8 @@ package body Crafts.UI is
          end loop Add_Recipes_Loop;
       end loop Find_Possible_Recipes_Loop;
       if Natural(Recipes_Indexes.Length) /=
-        Get_Known_Recipes_Amount + Natural(Studies.Length + Deconstructs.Length) then
+        Get_Known_Recipes_Amount +
+          Natural(Studies.Length + Deconstructs.Length) then
          Recipes_Indexes.Clear;
          Fill_Known_Recipes_Loop :
          for I in 0 .. Get_Known_Recipes_Amount - 1 loop
@@ -462,8 +464,7 @@ package body Crafts.UI is
         (Can_Craft => Can_Craft, Has_Tool => Has_Tool,
          Has_Workplace => Has_Workplace);
       Set_Study_Recipes_Loop :
-      for I in
-        Get_Known_Recipes_Amount + 1 .. Recipes_Indexes.Last_Index loop
+      for I in Get_Known_Recipes_Amount + 1 .. Recipes_Indexes.Last_Index loop
          exit Set_Study_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1 or
            I > Positive(Studies.Length);
@@ -1657,7 +1658,8 @@ package body Crafts.UI is
                  Get_Recipe
                    (Recipe_Index =>
                       To_Bounded_String
-                        (Source => To_String(Source => Get_Known_Recipe(Index => I)))),
+                        (Source =>
+                           To_String(Source => Get_Known_Recipe(Index => I)))),
                Can_Craft => Can_Craft, Has_Workplace => Has_Workplace,
                Has_Tool => Has_Tool, Has_Materials => Has_Materials);
             Local_Recipes(I) :=
@@ -1673,7 +1675,8 @@ package body Crafts.UI is
                                      To_Bounded_String
                                        (Source =>
                                           To_String
-                                            (Source => Get_Known_Recipe(Index => I))))
+                                            (Source =>
+                                               Get_Known_Recipe(Index => I))))
                                   .Result_Index)
                              .Name)),
                Workplace => Has_Workplace, Tool => Has_Tool,
