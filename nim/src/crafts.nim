@@ -703,3 +703,6 @@ proc getAdaKnownRecipe(index: cint): cstring {.raises: [], tags: [], exportc} =
   if index < knownRecipes.len:
     return knownRecipes[index].cstring
   return "".cstring
+
+proc getAdaKnownRecipesAmount(): cint {.raises: [], tags: [], exportc.} =
+  return knownRecipes.len.cint

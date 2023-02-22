@@ -175,4 +175,9 @@ package Crafts is
 
    function Get_Known_Recipe(Index: Integer) return Tiny_String.Bounded_String;
 
+   function Get_Known_Recipes_Amount return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaKnownRecipesAmount";
+
 end Crafts;
