@@ -551,10 +551,12 @@ package body Missions is
       if Reputation < 2 then
          Reputation := 2;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Reputation :=
         Natural
           (Float(Reputation) +
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Failed then
          Gain_Rep(Base_Index => Mission.Start_Base, Points => -Reputation);
          Update_Morale
