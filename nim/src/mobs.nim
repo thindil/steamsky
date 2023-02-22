@@ -83,6 +83,58 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           ProtoMobRecord()
       else:
         ProtoMobRecord()
+    for skill in mobNode.findAll(tag = "skill"):
+      let skillName = skill.attr(name = "name")
+      var skillIndex = if skillName == "WeaponSkill":
+          Natural.high
+        else:
+          findSkillIndex(skillName = skillName)
+      if skillIndex == 0:
+        raise newException(exceptn = DataLoadingError, message = "Can't " &
+            $mobAction & " mob '" & $mobIndex & "', there no skill named '" &
+            skillName & "'.")
+      let skillAction: DataAction = try:
+          parseEnum[DataAction](skill.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+      var skillLevel, minLevel, maxLevel = 0
+      if skillAction in [DataAction.add, DataAction.update]:
+        skillLevel = try:
+          skill.attr(name = "level").parseInt()
+        except ValueError:
+          0
+        if skillLevel == 0:
+          minLevel = try:
+            skill.attr(name = "minlevel").parseInt()
+          except ValueError:
+            0
+          maxLevel = try:
+            skill.attr(name = "maxlevel").parseInt()
+          except ValueError:
+            0
+          if minLevel >= maxLevel:
+            raise newException(exceptn = DataLoadingError, message = "Can't " &
+                $mobAction & " mob '" & $mobIndex &
+                "', invalid range for skill '" & skillName & "'.")
+      case skillAction
+      of DataAction.add:
+        if skillLevel > 0:
+          mob.skills.add(y = SkillInfo(index: skillIndex, level: skillLevel,
+              experience: 0))
+        else:
+          mob.skills.add(y = SkillInfo(index: skillIndex, level: minLevel,
+              experience: maxLevel))
+      of DataAction.update:
+        for mskill in mob.skills.mitems:
+          if mskill.index == skillIndex:
+            if skillLevel > 0:
+              mskill.level = skillLevel
+            else:
+              mskill.level = minLevel
+              mskill.experience = maxLevel
+            break
+      of DataAction.remove:
+        mob.skills.delete(i = skillIndex)
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
