@@ -242,11 +242,11 @@ package body Game.SaveLoad is
          use Tiny_String;
 
          Recipe_Node: DOM.Core.Element;
-         Recipe: Bounded_String;
+         Recipe: Bounded_String := Null_Bounded_String;
          Index: Natural := 0;
       begin
          Save_Known_Recipes_Loop :
-         while True loop
+         loop
             Recipe := Get_Known_Recipe(Index => Index);
             exit Save_Known_Recipes_Loop when Length(Source => Recipe) = 0;
             Recipe_Node :=
