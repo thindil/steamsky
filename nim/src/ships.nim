@@ -125,7 +125,8 @@ proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
   return generateShipName(factionIndex = $factionIndex).cstring
 
-proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.exportc.} =
+proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
+    tags: [], exportc.} =
   if getPlayerShip == 1:
     playerShip.name = $shipData.name
     playerShip.skyX = shipData.skyX
@@ -150,7 +151,7 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.exportc.} =
     npcShip.homeBase = shipData.homeBase
 
 proc getAdaShipModules(modules: array[1..75, AdaModuleData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   if getPlayerShip == 1:
     playerShip.modules = @[]
   else:
@@ -219,7 +220,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
       npcShip.modules.add(y = module)
 
 proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   if getPlayerShip == 1:
     playerShip.cargo = @[]
   else:
@@ -237,7 +238,7 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
           durability: adaItem.durability, price: adaItem.price))
 
 proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   let nimCargo = if getPlayerShip == 1:
       playerShip.cargo
     else:
@@ -277,7 +278,7 @@ func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [
   result.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
 
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   if getPlayerShip == 1:
     playerShip.crew = @[]
   else:
@@ -291,7 +292,7 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
       npcShip.crew.add(y = adaMemberToNim(adaMember = adaMember))
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
-    memberIndex: cint; getPlayerShip: cint = 1) {.exportc.} =
+    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   if getPlayerShip == 1:
     playerShip.crew[memberIndex - 1].inventory = @[]
   else:
@@ -311,7 +312,7 @@ proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
           durability: adaItem.durability, price: adaItem.price))
 
 proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
-    memberIndex: cint; getPlayerShip: cint = 1) {.exportc.} =
+    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   let nimInventory = if getPlayerShip == 1:
       playerShip.crew[memberIndex - 1].inventory
     else:
@@ -326,7 +327,7 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
       inventory[index] = AdaInventoryData(protoIndex: 0)
 
 proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   let nimCrew = if getPlayerShip == 1:
       playerShip.crew
     else:
@@ -372,8 +373,8 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     index.inc
   crew[index].name = "".cstring
 
-proc setAdaShip(shipData: var AdaShipData;
-    getPlayerShip: cint = 1) {.exportc.} =
+proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [],
+    tags: [], exportc.} =
   let nimShip = if getPlayerShip == 1:
       playerShip
     else:
@@ -390,7 +391,7 @@ proc setAdaShip(shipData: var AdaShipData;
   shipData.homeBase = nimShip.homeBase.cint
 
 proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
-    getPlayerShip: cint = 1) {.exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   for i in modules.low..modules.high:
     modules[i] = AdaModuleData(name: "".cstring)
   let nimModules = if getPlayerShip == 1:
