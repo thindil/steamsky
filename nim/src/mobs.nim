@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import game, items, types, utils
+import std/[strutils, tables, xmlparser, xmltree]
+import game, items, log, types, utils
 
 type
   MobInventoryRecord = object
@@ -35,6 +35,54 @@ type
     equipment: array[EquipmentLocations, int]         ## The equipment of the mob
 
 var protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
+
+proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## Load the Mobs data from the file
+  ##
+  ## * fileName - the name of the file to load
+  let mobsXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load mobs data file. Reason: " &
+          getCurrentExceptionMsg())
+  for mobNode in mobsXml:
+    if mobNode.kind != xnElement:
+      continue
+    let
+      mobIndex: Natural = try:
+          mobNode.attr(name = "index").parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add mob '" & mobNode.attr(name = "index") & "', invalid index.")
+      mobAction: DataAction = try:
+          parseEnum[DataAction](mobNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if mobAction in [update, remove]:
+      if mobIndex > protoMobsList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $mobAction & " mob '" & $mobIndex & "', there is no mob with that index.")
+    elif mobIndex < protoMobsList.len():
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add mob '" & $mobIndex & "', there is an mob with that index.")
+    if mobAction == DataAction.remove:
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      protoMobsList.del(key = mobIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
+      logMessage(message = "Mob removed: '" & $mobIndex & "'",
+          debugType = everything)
+      continue
+    var mob: ProtoMobRecord = if mobAction == DataAction.update:
+        try:
+          protoMobsList[mobIndex]
+        except ValueError:
+          ProtoMobRecord()
+      else:
+        ProtoMobRecord()
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
