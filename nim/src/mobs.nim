@@ -18,6 +18,24 @@
 import std/tables
 import game, items, types, utils
 
+type
+  MobInventoryRecord = object
+    ## Used to store data about the inventory of the mob's prototype
+    protoIndex: Natural ## The index of the item's prototype
+    minAmount: Natural  ## The minimal amount of the item
+    maxAmount: Natural  ## The maximum amount of the item
+
+  ProtoMobRecord = object
+    ## Used to store data about mobs prototypes
+    attributes: seq[MobAttributeRecord]               ## The mob's attributes
+    skills: seq[SkillInfo]                            ## The mob's skills
+    order: CrewOrders                                 ## The current order of the mob
+    priorities: array[1..12, Natural]                 ## The orders priorities of the mob
+    inventory: seq[MobInventoryRecord]                ## The inventory of the mob
+    equipment: array[EquipmentLocations, int]         ## The equipment of the mob
+
+var protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
+
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
     factionIndex: string): Natural {.sideEffect, raises: [], tags: [].} =
