@@ -340,12 +340,12 @@ package body Crafts.UI is
             end if;
          end loop Add_Recipes_Loop;
       end loop Find_Possible_Recipes_Loop;
-      if Recipes_Indexes.Length /=
-        Known_Recipes.Length + Studies.Length + Deconstructs.Length then
+      if Natural(Recipes_Indexes.Length) /=
+        Get_Known_Recipes_Amount + Natural(Studies.Length + Deconstructs.Length) then
          Recipes_Indexes.Clear;
          Fill_Known_Recipes_Loop :
-         for I in Known_Recipes.Iterate loop
-            Recipes_Indexes.Append(New_Item => Known_Recipes(I));
+         for I in 0 .. Get_Known_Recipes_Amount - 1 loop
+            Recipes_Indexes.Append(New_Item => Get_Known_Recipe(Index => I));
          end loop Fill_Known_Recipes_Loop;
          Fill_Studies_Loop :
          for I in Studies.Iterate loop
@@ -377,7 +377,7 @@ package body Crafts.UI is
       end if;
       Show_Recipes_Loop :
       for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
-         exit Show_Recipes_Loop when I > Positive(Known_Recipes.Length);
+         exit Show_Recipes_Loop when I > Get_Known_Recipes_Amount;
          if Recipe_Name'Length > 0
            and then
              Index
@@ -463,7 +463,7 @@ package body Crafts.UI is
          Has_Workplace => Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
-        Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
+        Get_Known_Recipes_Amount + 1 .. Recipes_Indexes.Last_Index loop
          exit Set_Study_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1 or
            I > Positive(Studies.Length);
@@ -528,7 +528,7 @@ package body Crafts.UI is
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
       for I in
-        Positive(Known_Recipes.Length + Studies.Length + 1) ..
+        Positive(Get_Known_Recipes_Amount + Natural(Studies.Length) + 1) ..
           Recipes_Indexes.Last_Index loop
          exit Set_Deconstruct_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -1645,22 +1645,22 @@ package body Crafts.UI is
       end if;
       Sort_Known_Recipes_Block :
       declare
-         Local_Recipes: Recipes_Array(1 .. Positive(Known_Recipes.Length));
+         Local_Recipes: Recipes_Array(0 .. Get_Known_Recipes_Amount - 1);
          procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
          Set_Local_Recipes_Loop :
-         for I in Known_Recipes.Iterate loop
+         for I in Local_Recipes'Range loop
             Is_Craftable
               (Recipe =>
                  Get_Recipe
                    (Recipe_Index =>
                       To_Bounded_String
-                        (Source => To_String(Source => Known_Recipes(I)))),
+                        (Source => To_String(Source => Get_Known_Recipe(Index => I)))),
                Can_Craft => Can_Craft, Has_Workplace => Has_Workplace,
                Has_Tool => Has_Tool, Has_Materials => Has_Materials);
-            Local_Recipes(TinyString_Container.To_Index(Position => I)) :=
+            Local_Recipes(I) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
@@ -1673,11 +1673,11 @@ package body Crafts.UI is
                                      To_Bounded_String
                                        (Source =>
                                           To_String
-                                            (Source => Known_Recipes(I))))
+                                            (Source => Get_Known_Recipe(Index => I))))
                                   .Result_Index)
                              .Name)),
                Workplace => Has_Workplace, Tool => Has_Tool,
-               Materials => Has_Materials, Id => Known_Recipes(I));
+               Materials => Has_Materials, Id => Get_Known_Recipe(Index => I));
          end loop Set_Local_Recipes_Loop;
          Sort_Recipes(Container => Local_Recipes);
          Recipes_Indexes.Clear;

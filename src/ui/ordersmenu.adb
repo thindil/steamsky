@@ -271,11 +271,10 @@ package body OrdersMenu is
             end if;
             Add_Buy_Recipes_Menu_Loop :
             for I in 1 .. Get_Recipes_Amount loop
-               if Known_Recipes.Find_Index
-                   (Item =>
+               if not Is_Known_Recipe
+                   (Recipe_Index =>
                       To_Bounded_String
-                        (Source => Trim(Source => I'Img, Side => Both))) =
-                 UnboundedString_Container.No_Index and
+                        (Source => Trim(Source => I'Img, Side => Both))) and
                  Has_Recipe
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
                     Recipe => Trim(Source => I'Img, Side => Both)) and
