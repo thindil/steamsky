@@ -598,12 +598,14 @@ package body Missions is
             M_Type => MISSIONMESSAGE, Color => RED);
       else
          if Mission.M_Type in DELIVER | PASSENGER then
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Gain_Rep
               (Base_Index =>
                  Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
                Points => (Reputation / 2));
             Gain_Rep
               (Base_Index => Mission.Start_Base, Points => (Reputation / 2));
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
          else
             Gain_Rep(Base_Index => Mission.Start_Base, Points => Reputation);
          end if;
@@ -623,7 +625,9 @@ package body Missions is
                  (Amount => 1, Skill_Number => Talking_Skill,
                   Crew_Index => Trader_Index);
             end if;
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Free_Space := Free_Cargo(Amount => -(Reward_Amount));
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             if Free_Space < 0 then
                Reward_Amount := Reward_Amount + Free_Space;
             end if;
