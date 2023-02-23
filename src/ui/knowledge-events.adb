@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ package body Knowledge.Events is
    -- FUNCTION
    -- Table with info about the known events
    -- SOURCE
-   Events_Table: Table_Widget (Amount => 3);
+   Events_Table: Table_Widget (Amount => 4);
    -- ****
 
    -- ****o* KEvents/KEvents.Show_Event_Info_Command
@@ -198,13 +198,16 @@ package body Knowledge.Events is
    -- DISTANCEDESC - Sort events by distance descending
    -- DETAILSASC   - Sort events by details ascending
    -- DETAILSDESC  - Sort events by details descending
+   -- COORDASC     - Sort events by coordinates ascending
+   -- COORDDESC    - Sort events by coordinates descending
    -- NONE         - No sorting events (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 8.4 - Added sorting by coordinates
    -- SOURCE
    type Events_Sort_Orders is
      (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
-      NONE) with
+      COORDASC, COORDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -266,6 +269,7 @@ package body Knowledge.Events is
       type Local_Event_Data is record
          E_Type: Events_Types;
          Distance: Natural;
+         Coords: Unbounded_String;
          Details: Unbounded_String;
          Id: Positive;
       end record;
@@ -297,6 +301,14 @@ package body Knowledge.Events is
            and then Left.Details > Right.Details then
             return True;
          end if;
+         if Events_Sort_Order = COORDASC
+           and then Left.Coords < Right.Coords then
+            return True;
+         end if;
+         if Events_Sort_Order = COORDDESC
+           and then Left.Coords > Right.Coords then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Events is new Ada.Containers.Generic_Array_Sort
@@ -317,6 +329,12 @@ package body Knowledge.Events is
                Events_Sort_Order := DISTANCEASC;
             end if;
          when 3 =>
+            if Events_Sort_Order = COORDASC then
+               Events_Sort_Order := COORDDESC;
+            else
+               Events_Sort_Order := COORDASC;
+            end if;
+         when 4 =>
             if Events_Sort_Order = DETAILSASC then
                Events_Sort_Order := DETAILSDESC;
             else
@@ -336,6 +354,11 @@ package body Knowledge.Events is
               Count_Distance
                 (Destination_X => Events_List(I).Sky_X,
                  Destination_Y => Events_List(I).Sky_Y),
+            Coords =>
+              To_Unbounded_String
+                (Source =>
+                   "X:" & Natural'Image(Events_List(I).Sky_X) & " Y:" &
+                   Natural'Image(Events_List(I).Sky_Y)),
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
@@ -438,7 +461,8 @@ package body Knowledge.Events is
               Headers =>
                 (1 => To_Unbounded_String(Source => "Name"),
                  2 => To_Unbounded_String(Source => "Distance"),
-                 3 => To_Unbounded_String(Source => "Details")),
+                 3 => To_Unbounded_String(Source => "Coordinates"),
+                 4 => To_Unbounded_String(Source => "Details")),
               Scrollbar =>
                 Get_Widget
                   (pathName => Main_Paned & ".knowledgeframe.events.scrolly"),
@@ -570,6 +594,16 @@ package body Knowledge.Events is
                Color =>
                  Style_Lookup
                    (Name => "Map", Option => To_String(Source => Color)));
+            Add_Button
+              (Table => Events_Table,
+               Text =>
+                 "X:" & Natural'Image(Events_List(Event).Sky_X) & " Y:" &
+                 Natural'Image(Events_List(Event).Sky_Y),
+               Tooltip => "The coordinates of the event on the map",
+               Command => "ShowEventInfo" & Positive'Image(Event), Column => 3,
+               Color =>
+                 Style_Lookup
+                   (Name => "Map", Option => To_String(Source => Color)));
             case Events_List(Event).E_Type is
                when DOUBLEPRICE =>
                   Add_Button
@@ -591,7 +625,7 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show the event's details",
                      Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 3, New_Row => True,
+                     Column => 4, New_Row => True,
                      Color => To_String(Source => Color));
                when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                   Add_Button
@@ -607,7 +641,7 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show the event's details",
                      Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 3, New_Row => True,
+                     Column => 4, New_Row => True,
                      Color => To_String(Source => Color));
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Add_Button
@@ -619,7 +653,7 @@ package body Knowledge.Events is
                               .Name),
                      Tooltip => "Show the event's details",
                      Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 3, New_Row => True,
+                     Column => 4, New_Row => True,
                      Color => To_String(Source => Color));
                when NONE | BASERECOVERY =>
                   null;
