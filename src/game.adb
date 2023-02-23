@@ -961,7 +961,9 @@ package body Game is
                   Load_Items
                     (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "mobiles" then
-                  Load_Mobs(Reader => Reader);
+                  Load_Mobs
+                    (Reader => Reader,
+                     File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "recipes" then
                   Load_Recipes
                     (File_Name => To_String(Source => Local_File_Name));

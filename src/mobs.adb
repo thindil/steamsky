@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,7 +28,9 @@ with Factions;
 
 package body Mobs is
 
-   procedure Load_Mobs(Reader: Tree_Reader) is
+   procedure Load_Mobs(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C;
+
       Mobs_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
       Temp_Record: Proto_Mob_Record
@@ -64,7 +66,18 @@ package body Mobs is
       Delete_Index: Skills_Amount_Range;
       Mob_Index: Positive;
       Item_Index: Natural;
+      --## rule off IMPROPER_INITIALIZATION
+      Result: chars_ptr;
+      --## rule on IMPROPER_INITIALIZATION
+      function Load_Ada_Mobs(Name: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaMobs";
    begin
+      Result := Load_Ada_Mobs(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
       Mobs_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

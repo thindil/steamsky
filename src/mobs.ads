@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -139,7 +139,7 @@ package Mobs is
    -- PARAMETERS
    -- Reader - XML Reader from which data will be read
    -- SOURCE
-   procedure Load_Mobs(Reader: Tree_Reader) with
+   procedure Load_Mobs(Reader: Tree_Reader; File_Name: String) with
       Post => ProtoMobs_Container.Length(Container => Proto_Mobs_List) > 0;
    -- ****
 
