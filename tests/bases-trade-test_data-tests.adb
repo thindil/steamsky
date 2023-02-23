@@ -109,7 +109,7 @@ package body Bases.Trade.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
 
-      Amount: constant Positive := Positive(Known_Recipes.Length);
+      Amount: constant Positive := Get_Known_Recipes_Amount;
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recipes: constant array(1 .. 9) of String(1 .. 1) :=
@@ -124,7 +124,7 @@ package body Bases.Trade.Test_Data.Tests is
          end if;
       end loop;
       Assert
-        (Positive(Known_Recipes.Length) = Amount + 1,
+        (Get_Known_Recipes_Amount = Amount + 1,
          "Failed to buy recipe from base.");
 
 --  begin read only
