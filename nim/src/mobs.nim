@@ -41,9 +41,11 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   ## Load the Mobs data from the file
   ##
   ## * fileName - the name of the file to load
-  const orderNames = ["Piloting", "Engineering", "Operating guns",
+  const
+    orderNames = ["Piloting", "Engineering", "Operating guns",
       "Repair ship", "Manufacturing", "Upgrading ship", "Talking in bases",
       "Healing wounded", "Cleaning ship", "Defend ship", "Board enemy ship"]
+    equipmentNames = ["Weapon", "Shield", "Head", "Torso", "Arms", "Legs", "Tool"]
   let mobsXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -218,6 +220,50 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError, message = "Can't " &
                 $mobAction & " mob '" & $mobIndex &
                 "', invalid range for item amount '" & $itemIndex & "'.")
+      case itemAction
+      of DataAction.add:
+        if amount > 0:
+          mob.inventory.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: amount, maxAmount: 0))
+        else:
+          mob.inventory.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: minAmount, maxAmount: maxAmount))
+      of DataAction.update:
+        for mitem in mob.inventory.mitems:
+          if mitem.protoIndex == itemIndex:
+            if amount > 0:
+              mitem = MobInventoryRecord(protoIndex: itemIndex,
+                  minAmount: amount, maxAmount: 0)
+            else:
+              mitem = MobInventoryRecord(protoIndex: itemIndex,
+                  minAmount: minAmount, maxAmount: maxAmount)
+            break
+      of DataAction.remove:
+        var deleteIndex = -1
+        for index, mitem in mob.inventory.pairs:
+          if mitem.protoIndex == itemIndex:
+            deleteIndex = index
+            break
+        if deleteIndex > -1:
+          mob.inventory.delete(i = deleteIndex)
+    for item in mobNode.findAll(tag = "equipment"):
+      let slotName = item.attr(name = "slot")
+      for index, name in equipmentNames.pairs:
+        if name == slotName:
+          mob.equipment[index.EquipmentLocations] = try:
+              item.attr(name = "index").parseInt()
+            except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $mobAction & " mob '" & $mobIndex &
+                  "', invalid equipment index '" & item.attr(name = "index") & "'.")
+          break
+    if mobAction == DataAction.add:
+      logMessage(message = "Mob added: '" & $mobIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Mob updated: '" & $mobIndex & "'",
+          debugType = everything)
+    protoMobsList[mobIndex] = mob
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
