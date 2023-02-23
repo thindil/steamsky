@@ -41,6 +41,9 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   ## Load the Mobs data from the file
   ##
   ## * fileName - the name of the file to load
+  const orderNames = ["Piloting", "Engineering", "Operating guns",
+      "Repair ship", "Manufacturing", "Upgrading ship", "Talking in bases",
+      "Healing wounded", "Cleaning ship", "Defend ship", "Board enemy ship"]
   let mobsXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -137,16 +140,16 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         mob.skills.delete(i = skillIndex)
     let attributes = mobNode.findAll(tag = "attribute")
     for i in attributes.low..attributes.high:
-      let skillLevel = try:
+      let attrLevel = try:
           attributes[i].attr(name = "level").parseInt()
         except ValueError:
           0
-      if skillLevel > 0:
+      if attrLevel > 0:
         if mobAction == DataAction.add:
-          mob.attributes.add(y = MobAttributeRecord(level: skillLevel,
+          mob.attributes.add(y = MobAttributeRecord(level: attrLevel,
               experience: 0))
         else:
-          mob.attributes[i] = MobAttributeRecord(level: skillLevel, experience: 0)
+          mob.attributes[i] = MobAttributeRecord(level: attrLevel, experience: 0)
       else:
         let minLevel = try:
           attributes[i].attr(name = "minlevel").parseInt()
@@ -165,6 +168,56 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         else:
           mob.attributes[i] = MobAttributeRecord(level: minLevel,
               experience: maxLevel)
+    for priority in mobNode.findAll(tag = "priority"):
+      for index, order in orderNames.pairs:
+        if order == priority.attr(name = "name"):
+          mob.priorities[index] = if priority.attr(name = "value") == "Normal":
+              1
+            else:
+              2
+          break
+    var mobOrder = mobNode.attr(name = "order")
+    if mobOrder.len > 0:
+      mob.order = try:
+          parseEnum[CrewOrders](mobOrder.toLowerAscii)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $mobAction & " mob '" &
+                  $mobIndex & "', invalid order for the mob.")
+    for item in mobNode.findAll(tag = "item"):
+      let itemIndex = try:
+            item.attr(name = "index").parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $mobAction & " mob '" &
+                    $mobIndex & "', invalid index of item.")
+      if itemIndex > itemsList.len:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $mobAction & " mob '" &
+                $mobIndex & "', there is no item with index '" & $itemIndex & "'.")
+      let itemAction: DataAction = try:
+          parseEnum[DataAction](item.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+      var amount, minAmount, maxAmount = 0
+      if itemAction in [DataAction.add, DataAction.update]:
+        amount = try:
+            item.attr(name = "amount").parseInt()
+          except ValueError:
+            0
+        if amount == 0:
+          minAmount = try:
+            item.attr(name = "minamount").parseInt()
+          except ValueError:
+            0
+          maxAmount = try:
+            item.attr(name = "maxamount").parseInt()
+          except ValueError:
+            0
+          if minAmount >= maxAmount:
+            raise newException(exceptn = DataLoadingError, message = "Can't " &
+                $mobAction & " mob '" & $mobIndex &
+                "', invalid range for item amount '" & $itemIndex & "'.")
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
