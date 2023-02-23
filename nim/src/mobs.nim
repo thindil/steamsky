@@ -339,6 +339,14 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
 
 # Temporary code for interfacing with Ada
 
+proc loadAdaMobs(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadMobs(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
+
 proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
     weaponSkillLevel: cint; factionIndex: cstring;
         highestSkill: cint): cint {.sideEffect, raises: [], tags: [], exportc.} =
