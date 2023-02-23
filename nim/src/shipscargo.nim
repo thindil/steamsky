@@ -81,8 +81,15 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
 
 # Temporary code for interfacing with Ada
 
-proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.exportc.} =
+proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
+    tags: [], exportc.} =
   if getPlayerShip == 1:
-    return freeCargo(amount = amount).cint
+    try:
+      return freeCargo(amount = amount).cint
+    except KeyError:
+      return 0
   else:
-    return freeCargo(amount = amount, ship = npcShip).cint
+    try:
+      return freeCargo(amount = amount, ship = npcShip).cint
+    except KeyError:
+      return 0
