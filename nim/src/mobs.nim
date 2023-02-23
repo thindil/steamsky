@@ -173,7 +173,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     for priority in mobNode.findAll(tag = "priority"):
       for index, order in orderNames.pairs:
         if order == priority.attr(name = "name"):
-          mob.priorities[index] = if priority.attr(name = "value") == "Normal":
+          mob.priorities[index + 1] = if priority.attr(name = "value") == "Normal":
               1
             else:
               2
