@@ -135,6 +135,36 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             break
       of DataAction.remove:
         mob.skills.delete(i = skillIndex)
+    let attributes = mobNode.findAll(tag = "attribute")
+    for i in attributes.low..attributes.high:
+      let skillLevel = try:
+          attributes[i].attr(name = "level").parseInt()
+        except ValueError:
+          0
+      if skillLevel > 0:
+        if mobAction == DataAction.add:
+          mob.attributes.add(y = MobAttributeRecord(level: skillLevel,
+              experience: 0))
+        else:
+          mob.attributes[i] = MobAttributeRecord(level: skillLevel, experience: 0)
+      else:
+        let minLevel = try:
+          attributes[i].attr(name = "minlevel").parseInt()
+        except ValueError:
+          0
+        let maxLevel = try:
+          attributes[i].attr(name = "maxlevel").parseInt()
+        except ValueError:
+          0
+        if minLevel >= maxLevel:
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $mobAction & " mob '" & $mobIndex & "', invalid range for attribute.")
+        if mobAction == DataAction.add:
+          mob.attributes.add(y = MobAttributeRecord(level: minLevel,
+              experience: maxLevel))
+        else:
+          mob.attributes[i] = MobAttributeRecord(level: minLevel,
+              experience: maxLevel)
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
