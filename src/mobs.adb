@@ -22,8 +22,7 @@ with Factions;
 
 package body Mobs is
 
-   procedure Load_Mobs(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(Reader);
+   procedure Load_Mobs(File_Name: String) is
       use Interfaces.C;
 
       Temp_Record: Proto_Mob_Record

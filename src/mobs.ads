@@ -18,7 +18,6 @@
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
 
@@ -137,9 +136,9 @@ package Mobs is
    -- FUNCTION
    -- Load mobs from files
    -- PARAMETERS
-   -- Reader - XML Reader from which data will be read
+   -- File_Name - The full path to the mobs file which will be read
    -- SOURCE
-   procedure Load_Mobs(Reader: Tree_Reader; File_Name: String) with
+   procedure Load_Mobs(File_Name: String) with
       Post => ProtoMobs_Container.Length(Container => Proto_Mobs_List) > 0;
    -- ****
 
