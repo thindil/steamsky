@@ -339,6 +339,15 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaMobData = object
+    attributes: array[6, array[2, cint]]
+    skills: array[6, array[3, cint]]
+    order: cint
+    priorities: array[1..12, cint]
+    inventory: array[20, array[3, cint]]
+    equipment: array[7, cint]
+
 proc loadAdaMobs(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
@@ -346,6 +355,25 @@ proc loadAdaMobs(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
     return "".cstring
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
+
+proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
+    ], tags: [], exportc.} =
+  adaMob = AdaMobData()
+  if not protoMobsList.hasKey(key = index):
+    return
+  let mob = try:
+      protoMobsList[index]
+    except KeyError:
+      return
+  for attribute in adaMob.attributes.mitems:
+    attribute = [0.cint, 0.cint]
+  for index, attribute in mob.attributes.pairs:
+    adaMob.attributes[index] = [attribute.level.cint, attribute.experience.cint]
+  for skill in adaMob.skills.mitems:
+    skill = [0.cint, 0.cint, 0.cint]
+  for index, skill in mob.skills.pairs:
+    adaMob.skills[index] = [skill.index.cint, skill.level.cint,
+        skill.experience.cint]
 
 proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
     weaponSkillLevel: cint; factionIndex: cstring;
