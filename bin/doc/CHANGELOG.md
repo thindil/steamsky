@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Column with coordinates to the list of known bases
+- Column with coordinates to the lists of known bases and known events
 
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
