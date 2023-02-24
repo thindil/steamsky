@@ -15,13 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
 with Utils; use Utils;
 with Items; use Items;
 with Factions;
@@ -32,8 +26,6 @@ package body Mobs is
       pragma Unreferenced(Reader);
       use Interfaces.C;
 
-      Mobs_Data: Document;
-      Nodes_List, Child_Nodes: Node_List;
       Temp_Record: Proto_Mob_Record
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -41,32 +33,6 @@ package body Mobs is
       Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
       Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
       Temp_Equipment: constant Equipment_Array := (others => 0);
-      Orders_Names: constant array(1 .. 11) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "Piloting"),
-         2 => To_Unbounded_String(Source => "Engineering"),
-         3 => To_Unbounded_String(Source => "Operating guns"),
-         4 => To_Unbounded_String(Source => "Repair ship"),
-         5 => To_Unbounded_String(Source => "Manufacturing"),
-         6 => To_Unbounded_String(Source => "Upgrading ship"),
-         7 => To_Unbounded_String(Source => "Talking in bases"),
-         8 => To_Unbounded_String(Source => "Healing wounded"),
-         9 => To_Unbounded_String(Source => "Cleaning ship"),
-         10 => To_Unbounded_String(Source => "Defend ship"),
-         11 => To_Unbounded_String(Source => "Board enemy ship"));
-      Equipment_Names: constant array(1 .. 7) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "Weapon"),
-         2 => To_Unbounded_String(Source => "Shield"),
-         3 => To_Unbounded_String(Source => "Head"),
-         4 => To_Unbounded_String(Source => "Torso"),
-         5 => To_Unbounded_String(Source => "Arms"),
-         6 => To_Unbounded_String(Source => "Legs"),
-         7 => To_Unbounded_String(Source => "Tool"));
-      Action, Sub_Action: Data_Action;
-      Mob_Node, Child_Node: Node;
-      Child_Index: SkillsData_Container.Extended_Index;
-      Delete_Index: Skills_Amount_Range;
-      Mob_Index: Positive;
-      Item_Index: Natural;
       type Nim_Proto_Attributes_Array is array(0 .. 5, 0 .. 1) of Integer;
       type Nim_Proto_Skills_Array is array(0 .. 5, 0 .. 2) of Integer;
       type Nim_Proto_Inventory_Array is array(0 .. 19, 0 .. 2) of Integer;
@@ -123,6 +89,22 @@ package body Mobs is
                   Experience => Nim_Mob.Skills(J, 2)));
          end loop Load_Skills_Loop;
          Temp_Record.Order := Crew_Orders'Val(Nim_Mob.Order);
+         Temp_Record.Priorities := Nim_Mob.Priorities;
+         Load_Inventory_Loop :
+         for J in 0 .. 19 loop
+            exit Load_Inventory_Loop when Nim_Mob.Inventory(J, 0) = 0;
+            MobInventory_Container.Append
+              (Container => Temp_Record.Inventory,
+               New_Item =>
+                 (Proto_Index => Nim_Mob.Inventory(J, 0),
+                  Min_Amount => Nim_Mob.Inventory(J, 1),
+                  Max_Amount => Nim_Mob.Inventory(J, 2)));
+         end loop Load_Inventory_Loop;
+         Load_Equipment_Loop :
+         for J in 0 .. 6 loop
+            Temp_Record.Equipment(Equipment_Locations'Val(J)) :=
+              Nim_Mob.Equipment(J);
+         end loop Load_Equipment_Loop;
       end loop Load_Mobs_Loop;
 --      Mobs_Data := Get_Tree(Read => Reader);
 --      Nodes_List :=
