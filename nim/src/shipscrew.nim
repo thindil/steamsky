@@ -537,14 +537,18 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
 
 # Temporary code for interfacing with Ada
 
-proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.exportc.} =
-  if isPlayerShip == 1:
-    updateMorale(ship = playerShip, memberIndex = memberIndex - 1, value = value)
-  else:
-    updateMorale(ship = npcShip, memberIndex = memberIndex - 1, value = value)
+proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
+    tags: [], exportc.} =
+  try:
+    if isPlayerShip == 1:
+      updateMorale(ship = playerShip, memberIndex = memberIndex - 1, value = value)
+    else:
+      updateMorale(ship = npcShip, memberIndex = memberIndex - 1, value = value)
+  except KeyError:
+    discard
 
 proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
-  checkPriorities: cint): cstring {.exportc.} =
+  checkPriorities: cint): cstring {.raises: [], tags: [RootEffect], exportc.} =
   try:
     if isPlayerShip == 1:
       giveOrders(ship = playerShip, memberIndex = memberIndex - 1,
@@ -558,13 +562,21 @@ proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
     return getCurrentExceptionMsg().cstring
   return "".cstring
 
-proc updateAdaOrders(isPlayerShip, combat: cint) {.exportc.} =
-  if isPlayerShip == 1:
-    updateOrders(ship = playerShip, combat = (if combat == 1: true else: false))
-  else:
-    updateOrders(ship = npcShip, combat = (if combat == 1: true else: false))
+proc updateAdaOrders(isPlayerShip, combat: cint) {.raises: [], tags: [
+    RootEffect], exportc.} =
+  try:
+    if isPlayerShip == 1:
+      updateOrders(ship = playerShip, combat = (if combat ==
+          1: true else: false))
+    else:
+      updateOrders(ship = npcShip, combat = (if combat == 1: true else: false))
+  except KeyError, Exception:
+    discard
 
 proc getAdaSkillLevel(member: AdaMemberData;
-    skillIndex: cint): cint {.exportc.} =
-  return getSkillLevel(member = adaMemberToNim(adaMember = member),
-      skillIndex = skillIndex.Positive).cint
+    skillIndex: cint): cint {.raises: [], tags: [], exportc.} =
+  try:
+    return getSkillLevel(member = adaMemberToNim(adaMember = member),
+        skillIndex = skillIndex.Positive).cint
+  except KeyError:
+    return 0
