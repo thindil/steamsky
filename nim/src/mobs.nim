@@ -251,7 +251,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       for index, name in equipmentNames.pairs:
         if name == slotName:
           mob.equipment[index.EquipmentLocations] = try:
-              item.attr(name = "index").parseInt()
+              item.attr(name = "index").parseInt() - 1
             except ValueError:
               raise newException(exceptn = DataLoadingError,
                   message = "Can't " & $mobAction & " mob '" & $mobIndex &
@@ -374,6 +374,16 @@ proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
   for index, skill in mob.skills.pairs:
     adaMob.skills[index] = [skill.index.cint, skill.level.cint,
         skill.experience.cint]
+  adaMob.order = mob.order.ord.cint
+  for index, priority in mob.priorities.pairs:
+    adaMob.priorities[index] = priority.cint
+  for item in adaMob.inventory.mitems:
+    item = [0.cint, 0.cint, 0.cint]
+  for index, item in mob.inventory.pairs:
+    adaMob.inventory[index] = [item.protoIndex.cint, item.minAmount.cint,
+        item.maxAmount.cint]
+  for index, item in mob.equipment.pairs:
+    adaMob.equipment[index.ord] = item.cint + 1
 
 proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
     weaponSkillLevel: cint; factionIndex: cstring;
