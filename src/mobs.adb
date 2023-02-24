@@ -105,6 +105,8 @@ package body Mobs is
             Temp_Record.Equipment(Equipment_Locations'Val(J)) :=
               Nim_Mob.Equipment(J);
          end loop Load_Equipment_Loop;
+         ProtoMobs_Container.Append
+           (Container => Proto_Mobs_List, New_Item => Temp_Record);
       end loop Load_Mobs_Loop;
 --      Mobs_Data := Get_Tree(Read => Reader);
 --      Nodes_List :=

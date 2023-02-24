@@ -91,7 +91,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     for skill in mobNode.findAll(tag = "skill"):
       let skillName = skill.attr(name = "name")
       var skillIndex = if skillName == "WeaponSkill":
-          Natural.high
+          skillsList.len + 1
         else:
           findSkillIndex(skillName = skillName)
       if skillIndex == 0:
