@@ -15,28 +15,29 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Numerics.Elementary_Functions;
+with Ada.Exceptions;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
+with Ships.Movement;
 with Maps; use Maps;
 with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
 with Statistics; use Statistics;
 with Utils; use Utils;
-with Config; use Config;
+with Config;
 with Events; use Events;
-with Goals; use Goals;
-with Factions; use Factions;
+with Goals;
+with Factions;
 with Items; use Items;
 with Ada.Text_IO;
 
 package body Missions is
 
    procedure Generate_Missions is
+      use Ada.Numerics.Elementary_Functions;
       use Tiny_String;
 
       Base_Index: constant Natural :=
@@ -354,6 +355,8 @@ package body Missions is
                New_Item => "'Transport passenger to base'.");
             Set_Passenger_Block :
             declare
+               use Factions;
+
                Passenger_Base: constant Bases_Range :=
                  (if Get_Random(Min => 1, Max => 100) < 60 then Base_Index
                   else Get_Random
@@ -468,6 +471,8 @@ package body Missions is
    end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
+      use Goals;
+      use Ships.Movement;
       use Tiny_String;
 
       Message: Unbounded_String := Null_Unbounded_String;
@@ -678,6 +683,7 @@ package body Missions is
    end Delete_Mission;
 
    procedure Update_Mission(Mission_Index: Positive) is
+      use Config;
       use Tiny_String;
 
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
@@ -740,6 +746,8 @@ package body Missions is
    end Update_Mission;
 
    function Auto_Finish_Missions return String is
+      use Ada.Exceptions;
+
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       I: Natural := Accepted_Missions.First_Index;
