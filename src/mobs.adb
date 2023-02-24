@@ -29,6 +29,7 @@ with Factions;
 package body Mobs is
 
    procedure Load_Mobs(Reader: Tree_Reader; File_Name: String) is
+      pragma Unreferenced(Reader);
       use Interfaces.C;
 
       Mobs_Data: Document;
@@ -66,498 +67,543 @@ package body Mobs is
       Delete_Index: Skills_Amount_Range;
       Mob_Index: Positive;
       Item_Index: Natural;
+      type Nim_Proto_Attributes_Array is array(0 .. 5, 0 .. 1) of Integer;
+      type Nim_Proto_Skills_Array is array(0 .. 5, 0 .. 2) of Integer;
+      type Nim_Proto_Inventory_Array is array(0 .. 19, 0 .. 2) of Integer;
+      type Nim_Proto_Mob is record
+         Attributes: Nim_Proto_Attributes_Array;
+         Skills: Nim_Proto_Skills_Array;
+         Order: Integer;
+         Priorities: Natural_Array(1 .. 12);
+         Inventory: Nim_Proto_Inventory_Array;
+         Equipment: Nim_Equipment_Array;
+      end record;
       --## rule off IMPROPER_INITIALIZATION
       Result: chars_ptr;
+      Nim_Mob: Nim_Proto_Mob;
       --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Mobs(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaMobs";
+      procedure Get_Ada_Mob(Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaMob";
    begin
       Result := Load_Ada_Mobs(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Mobs_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Mobs_Data, Tag_Name => "mobile");
       Load_Mobs_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
+      for I in 1 .. 126 loop
+         Get_Ada_Mob(Index => I, Ada_Mob => Nim_Mob);
+         exit Load_Mobs_Loop when Nim_Mob.Attributes(0, 0) = 0;
          Temp_Record :=
            (Amount_Of_Attributes => Attributes_Amount,
             Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
             Attributes => (others => <>), Order => REST,
             Priorities => Temp_Priorities, Inventory => Temp_Inventory,
             Equipment => Temp_Equipment);
-         Mob_Node := Item(List => Nodes_List, Index => I);
-         Mob_Index :=
-           Positive'Value(Get_Attribute(Elem => Mob_Node, Name => "index"));
-         Action :=
-           (if Get_Attribute(Elem => Mob_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Mob_Node, Name => "action"))
-            else ADD);
-         if Action in UPDATE | REMOVE then
-            if Mob_Index not in
-                ProtoMobs_Container.First_Index
-                      (Container => Proto_Mobs_List) ..
-                      ProtoMobs_Container.Last_Index
-                        (Container => Proto_Mobs_List) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " mob '" & Positive'Image(Mob_Index) &
-                 "', there is no mob with that index.";
-            end if;
-         elsif Mob_Index in
-             ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) ..
-                   ProtoMobs_Container.Last_Index
-                     (Container => Proto_Mobs_List) then
-            raise Data_Loading_Error
-              with "Can't add mob '" & Positive'Image(Mob_Index) &
-              "', there is already a mob with that index.";
-         end if;
-         if Action /= REMOVE then
-            if Action = UPDATE then
-               Temp_Record :=
-                 ProtoMobs_Container.Element
-                   (Container => Proto_Mobs_List, Index => Mob_Index);
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Mob_Node, Name => "skill");
-            Load_Skills_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Child_Index :=
-                 Find_Skill_Index
-                   (Skill_Name =>
-                      Get_Attribute(Elem => Child_Node, Name => "name"));
-               if Get_Attribute(Elem => Child_Node, Name => "name") =
-                 "WeaponSkill" then
-                  Child_Index :=
-                    SkillsData_Container.Length(Container => Skills_List) + 1;
-               end if;
-               if Child_Index = 0 then
-                  raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                    Positive'Image(Mob_Index) & "', there no skill named '" &
-                    Get_Attribute(Elem => Child_Node, Name => "name") & "'.";
-               end if;
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               case Sub_Action is
-                  when ADD =>
-                     if Get_Attribute(Elem => Child_Node, Name => "level")'
-                         Length /=
-                       0 then
-                        Skills_Container.Append
-                          (Container => Temp_Record.Skills,
-                           New_Item =>
-                             (Index => Child_Index,
-                              Level =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "level")),
-                              Experience => 0));
-                     else
-                        if Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "minlevel")) >
-                          Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "maxlevel")) then
-                           raise Data_Loading_Error
-                             with "Can't " &
-                             To_Lower(Item => Data_Action'Image(Action)) &
-                             " mob '" & Positive'Image(Mob_Index) &
-                             " invalid range for skill '" &
-                             Get_Attribute
-                               (Elem => Child_Node, Name => "name") &
-                             "'";
-                        end if;
-                        Skills_Container.Append
-                          (Container => Temp_Record.Skills,
-                           New_Item =>
-                             (Index => Child_Index,
-                              Level =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "minlevel")),
-                              Experience =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxlevel"))));
-                     end if;
-                  when UPDATE =>
-                     Update_Skill_Loop :
-                     for K in
-                       Skills_Container.First_Index
-                         (Container => Temp_Record.Skills) ..
-                         Skills_Container.Last_Index
-                           (Container => Temp_Record.Skills) loop
-                        Update_Skill_Block :
-                        declare
-                           New_Skill: Skill_Info;
-                        begin
-                           if Skills_Container.Element
-                               (Container => Temp_Record.Skills, Index => K)
-                               .Index =
-                             Child_Index then
-                              if Get_Attribute
-                                  (Elem => Child_Node, Name => "level")'
-                                  Length /=
-                                0 then
-                                 New_Skill :=
-                                   (Index => Child_Index,
-                                    Level =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "level")),
-                                    Experience => 0);
-                              else
-                                 if Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "minlevel")) >
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "maxlevel")) then
-                                    raise Data_Loading_Error
-                                      with "Can't " &
-                                      To_Lower
-                                        (Item => Data_Action'Image(Action)) &
-                                      " mob '" & Positive'Image(Mob_Index) &
-                                      " invalid range for skill '" &
-                                      Get_Attribute
-                                        (Elem => Child_Node, Name => "name") &
-                                      "'";
-                                 end if;
-                                 New_Skill :=
-                                   (Index => Child_Index,
-                                    Level =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "minlevel")),
-                                    Experience =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "maxlevel")));
-                              end if;
-                              Skills_Container.Replace_Element
-                                (Container => Temp_Record.Skills, Index => K,
-                                 New_Item => New_Skill);
-                              exit Update_Skill_Loop;
-                           end if;
-                        end Update_Skill_Block;
-                     end loop Update_Skill_Loop;
-                  when REMOVE =>
-                     Remove_Skill_Loop :
-                     for K in
-                       Skills_Container.First_Index
-                         (Container => Temp_Record.Skills) ..
-                         Skills_Container.Last_Index
-                           (Container => Temp_Record.Skills) loop
-                        if Skills_Container.Element
-                            (Container => Temp_Record.Skills, Index => K)
-                            .Index =
-                          Child_Index then
-                           Delete_Index := K;
-                           exit Remove_Skill_Loop;
-                        end if;
-                     end loop Remove_Skill_Loop;
-                     Skills_Container.Delete
-                       (Container => Temp_Record.Skills,
-                        Index => Delete_Index);
-               end case;
-            end loop Load_Skills_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Mob_Node, Name => "attribute");
-            if Length(List => Child_Nodes) > 0 and Action = UPDATE then
-               Temp_Record.Attributes := (others => <>);
-            end if;
-            Load_Attributes_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               if Get_Attribute(Elem => Child_Node, Name => "level") /= "" then
-                  Temp_Record.Attributes(J + 1) :=
-                    (Level =>
-                       Integer'Value
-                         (Get_Attribute(Elem => Child_Node, Name => "level")),
-                     Experience => 0);
-               else
-                  if Integer'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "minlevel")) >
-                    Integer'Value
-                      (Get_Attribute
-                         (Elem => Child_Node, Name => "maxlevel")) then
-                     raise Data_Loading_Error
-                       with "Can't " &
-                       To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                       Positive'Image(Mob_Index) &
-                       " invalid range for attribute.";
-                  end if;
-                  Temp_Record.Attributes(J + 1) :=
-                    (Level =>
-                       Integer'Value
-                         (Get_Attribute
-                            (Elem => Child_Node, Name => "minlevel")),
-                     Experience =>
-                       Integer'Value
-                         (Get_Attribute
-                            (Elem => Child_Node, Name => "maxlevel")));
-               end if;
-               exit Load_Attributes_Loop when J + 1 =
-                 Positive
-                   (AttributesData_Container.Length
-                      (Container => Attributes_List));
-            end loop Load_Attributes_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Mob_Node, Name => "priority");
-            Load_Orders_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Set_Priorities_Loop :
-               for K in Orders_Names'Range loop
-                  if Orders_Names(K) =
-                    To_Unbounded_String
-                      (Source =>
-                         Get_Attribute
-                           (Elem => Child_Node, Name => "name")) then
-                     Temp_Record.Priorities(K) :=
-                       (if
-                          Get_Attribute(Elem => Child_Node, Name => "value") =
-                          "Normal"
-                        then 1
-                        else 2);
-                     exit Set_Priorities_Loop;
-                  end if;
-               end loop Set_Priorities_Loop;
-            end loop Load_Orders_Loop;
-            if Get_Attribute(Elem => Mob_Node, Name => "order")'Length > 0 then
-               Temp_Record.Order :=
-                 Crew_Orders'Value
-                   (Get_Attribute(Elem => Mob_Node, Name => "order"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Mob_Node, Name => "item");
-            Load_Items_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Item_Index :=
-                 Positive'Value
-                   (Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in 1 .. Get_Proto_Amount then
-                  raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                    Positive'Image(Mob_Index) &
-                    "', there is no item with index '" &
-                    Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
-               end if;
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               case Sub_Action is
-                  when ADD =>
-                     if Get_Attribute(Elem => Child_Node, Name => "amount")'
-                         Length /=
-                       0 then
-                        MobInventory_Container.Append
-                          (Container => Temp_Record.Inventory,
-                           New_Item =>
-                             (Proto_Index => Item_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "amount")),
-                              Max_Amount => 0));
-                     else
-                        if Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "minamount")) >
-                          Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "maxamount")) then
-                           raise Data_Loading_Error
-                             with "Can't " &
-                             To_Lower(Item => Data_Action'Image(Action)) &
-                             " mob '" & Positive'Image(Mob_Index) &
-                             " invalid range for amount of '" &
-                             Get_Attribute
-                               (Elem => Child_Node, Name => "index") &
-                             "'.";
-                        end if;
-                        MobInventory_Container.Append
-                          (Container => Temp_Record.Inventory,
-                           New_Item =>
-                             (Proto_Index => Item_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minamount")),
-                              Max_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxamount"))));
-                     end if;
-                  when UPDATE =>
-                     Update_Items_Loop :
-                     for I in
-                       MobInventory_Container.First_Index
-                         (Container => Temp_Record.Inventory) ..
-                         MobInventory_Container.Last_Index
-                           (Container => Temp_Record.Inventory) loop
-                        Update_Item_Block :
-                        declare
-                           Item: Mob_Inventory_Record :=
-                             MobInventory_Container.Element
-                               (Container => Temp_Record.Inventory,
-                                Index => I);
-                        begin
-                           if Item.Proto_Index = Item_Index then
-                              if Get_Attribute
-                                  (Elem => Child_Node, Name => "amount")'
-                                  Length /=
-                                0 then
-                                 Item :=
-                                   (Proto_Index => Item_Index,
-                                    Min_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "amount")),
-                                    Max_Amount => 0);
-                              else
-                                 if Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "minamount")) >
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "maxamount")) then
-                                    raise Data_Loading_Error
-                                      with "Can't " &
-                                      To_Lower
-                                        (Item => Data_Action'Image(Action)) &
-                                      " mob '" & Positive'Image(Mob_Index) &
-                                      " invalid range for amount of '" &
-                                      Get_Attribute
-                                        (Elem => Child_Node, Name => "index") &
-                                      "'.";
-                                 end if;
-                                 Item :=
-                                   (Proto_Index => Item_Index,
-                                    Min_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "minamount")),
-                                    Max_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "maxamount")));
-                              end if;
-                              MobInventory_Container.Replace_Element
-                                (Container => Temp_Record.Inventory,
-                                 Index => I, New_Item => Item);
-                              exit Update_Items_Loop;
-                           end if;
-                        end Update_Item_Block;
-                     end loop Update_Items_Loop;
-                  when REMOVE =>
-                     Remove_Items_Block :
-                     declare
-                        Inventory_Index: Inventory_Amount_Range := 1;
-                     begin
-                        Remove_Items_Loop :
-                        while Inventory_Index <=
-                          MobInventory_Container.Last_Index
-                            (Container => Temp_Record.Inventory) loop
-                           if MobInventory_Container.Element
-                               (Container => Temp_Record.Inventory,
-                                Index => Inventory_Index)
-                               .Proto_Index =
-                             Item_Index then
-                              MobInventory_Container.Delete
-                                (Container => Temp_Record.Inventory,
-                                 Index => Inventory_Index);
-                              exit Remove_Items_Loop;
-                           end if;
-                           Inventory_Index := Inventory_Index + 1;
-                        end loop Remove_Items_Loop;
-                     end Remove_Items_Block;
-               end case;
-            end loop Load_Items_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Mob_Node, Name => "equipment");
-            Equipment_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Update_Equipment_Loop :
-               for K in Equipment_Names'Range loop
-                  if Equipment_Names(K) =
-                    To_Unbounded_String
-                      (Source =>
-                         Get_Attribute
-                           (Elem => Child_Node, Name => "slot")) then
-                     Temp_Record.Equipment(Equipment_Locations'Val(K - 1)) :=
-                       Positive'Value
-                         (Get_Attribute(Elem => Child_Node, Name => "index"));
-                     exit Update_Equipment_Loop;
-                  end if;
-               end loop Update_Equipment_Loop;
-            end loop Equipment_Loop;
-            if Action /= UPDATE then
-               ProtoMobs_Container.Append
-                 (Container => Proto_Mobs_List, New_Item => Temp_Record);
-               Log_Message
-                 (Message => "Mob added: " & Positive'Image(Mob_Index),
-                  Message_Type => EVERYTHING);
-            else
-               ProtoMobs_Container.Replace_Element
-                 (Container => Proto_Mobs_List, Index => Mob_Index,
-                  New_Item => Temp_Record);
-               Log_Message
-                 (Message => "Mob updated: " & Positive'Image(Mob_Index),
-                  Message_Type => EVERYTHING);
-            end if;
-         else
-            ProtoMobs_Container.Delete
-              (Container => Proto_Mobs_List, Index => Mob_Index);
-            Log_Message
-              (Message => "Mob removed: " & Positive'Image(Mob_Index),
-               Message_Type => EVERYTHING);
-         end if;
+         Load_Attributes_Loop :
+         for J in 0 .. 5 loop
+            exit Load_Attributes_Loop when Nim_Mob.Attributes(J, 0) = 0;
+            Temp_Record.Attributes(J + 1) :=
+              (Level => Nim_Mob.Attributes(J, 0),
+               Experience => Nim_Mob.Attributes(J, 1));
+         end loop Load_Attributes_Loop;
+         Load_Skills_Loop :
+         for J in 0 .. 5 loop
+            exit Load_Skills_Loop when Nim_Mob.Skills(J, 0) = 0;
+            Skills_Container.Append
+              (Container => Temp_Record.Skills,
+               New_Item =>
+                 (Index => Count_Type(Nim_Mob.Skills(J, 0)),
+                  Level => Nim_Mob.Skills(J, 1),
+                  Experience => Nim_Mob.Skills(J, 2)));
+         end loop Load_Skills_Loop;
+         Temp_Record.Order := Crew_Orders'Val(Nim_Mob.Order);
       end loop Load_Mobs_Loop;
+--      Mobs_Data := Get_Tree(Read => Reader);
+--      Nodes_List :=
+--        DOM.Core.Documents.Get_Elements_By_Tag_Name
+--          (Doc => Mobs_Data, Tag_Name => "mobile");
+--      Load_Mobs_Loop :
+--      for I in 0 .. Length(List => Nodes_List) - 1 loop
+--         Temp_Record :=
+--           (Amount_Of_Attributes => Attributes_Amount,
+--            Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
+--            Attributes => (others => <>), Order => REST,
+--            Priorities => Temp_Priorities, Inventory => Temp_Inventory,
+--            Equipment => Temp_Equipment);
+--         Mob_Node := Item(List => Nodes_List, Index => I);
+--         Mob_Index :=
+--           Positive'Value(Get_Attribute(Elem => Mob_Node, Name => "index"));
+--         Action :=
+--           (if Get_Attribute(Elem => Mob_Node, Name => "action")'Length > 0
+--            then
+--              Data_Action'Value
+--                (Get_Attribute(Elem => Mob_Node, Name => "action"))
+--            else ADD);
+--         if Action in UPDATE | REMOVE then
+--            if Mob_Index not in
+--                ProtoMobs_Container.First_Index
+--                      (Container => Proto_Mobs_List) ..
+--                      ProtoMobs_Container.Last_Index
+--                        (Container => Proto_Mobs_List) then
+--               raise Data_Loading_Error
+--                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+--                 " mob '" & Positive'Image(Mob_Index) &
+--                 "', there is no mob with that index.";
+--            end if;
+--         elsif Mob_Index in
+--             ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) ..
+--                   ProtoMobs_Container.Last_Index
+--                     (Container => Proto_Mobs_List) then
+--            raise Data_Loading_Error
+--              with "Can't add mob '" & Positive'Image(Mob_Index) &
+--              "', there is already a mob with that index.";
+--         end if;
+--         if Action /= REMOVE then
+--            if Action = UPDATE then
+--               Temp_Record :=
+--                 ProtoMobs_Container.Element
+--                   (Container => Proto_Mobs_List, Index => Mob_Index);
+--            end if;
+--            Child_Nodes :=
+--              DOM.Core.Elements.Get_Elements_By_Tag_Name
+--                (Elem => Mob_Node, Name => "skill");
+--            Load_Skills_Loop :
+--            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+--               Child_Node := Item(List => Child_Nodes, Index => J);
+--               Child_Index :=
+--                 Find_Skill_Index
+--                   (Skill_Name =>
+--                      Get_Attribute(Elem => Child_Node, Name => "name"));
+--               if Get_Attribute(Elem => Child_Node, Name => "name") =
+--                 "WeaponSkill" then
+--                  Child_Index :=
+--                    SkillsData_Container.Length(Container => Skills_List) + 1;
+--               end if;
+--               if Child_Index = 0 then
+--                  raise Data_Loading_Error
+--                    with "Can't " &
+--                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+--                    Positive'Image(Mob_Index) & "', there no skill named '" &
+--                    Get_Attribute(Elem => Child_Node, Name => "name") & "'.";
+--               end if;
+--               Sub_Action :=
+--                 (if
+--                    Get_Attribute(Elem => Child_Node, Name => "action")'
+--                      Length >
+--                    0
+--                  then
+--                    Data_Action'Value
+--                      (Get_Attribute(Elem => Child_Node, Name => "action"))
+--                  else ADD);
+--               case Sub_Action is
+--                  when ADD =>
+--                     if Get_Attribute(Elem => Child_Node, Name => "level")'
+--                         Length /=
+--                       0 then
+--                        Skills_Container.Append
+--                          (Container => Temp_Record.Skills,
+--                           New_Item =>
+--                             (Index => Child_Index,
+--                              Level =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node, Name => "level")),
+--                              Experience => 0));
+--                     else
+--                        if Integer'Value
+--                            (Get_Attribute
+--                               (Elem => Child_Node, Name => "minlevel")) >
+--                          Integer'Value
+--                            (Get_Attribute
+--                               (Elem => Child_Node, Name => "maxlevel")) then
+--                           raise Data_Loading_Error
+--                             with "Can't " &
+--                             To_Lower(Item => Data_Action'Image(Action)) &
+--                             " mob '" & Positive'Image(Mob_Index) &
+--                             " invalid range for skill '" &
+--                             Get_Attribute
+--                               (Elem => Child_Node, Name => "name") &
+--                             "'";
+--                        end if;
+--                        Skills_Container.Append
+--                          (Container => Temp_Record.Skills,
+--                           New_Item =>
+--                             (Index => Child_Index,
+--                              Level =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node, Name => "minlevel")),
+--                              Experience =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node,
+--                                      Name => "maxlevel"))));
+--                     end if;
+--                  when UPDATE =>
+--                     Update_Skill_Loop :
+--                     for K in
+--                       Skills_Container.First_Index
+--                         (Container => Temp_Record.Skills) ..
+--                         Skills_Container.Last_Index
+--                           (Container => Temp_Record.Skills) loop
+--                        Update_Skill_Block :
+--                        declare
+--                           New_Skill: Skill_Info;
+--                        begin
+--                           if Skills_Container.Element
+--                               (Container => Temp_Record.Skills, Index => K)
+--                               .Index =
+--                             Child_Index then
+--                              if Get_Attribute
+--                                  (Elem => Child_Node, Name => "level")'
+--                                  Length /=
+--                                0 then
+--                                 New_Skill :=
+--                                   (Index => Child_Index,
+--                                    Level =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "level")),
+--                                    Experience => 0);
+--                              else
+--                                 if Integer'Value
+--                                     (Get_Attribute
+--                                        (Elem => Child_Node,
+--                                         Name => "minlevel")) >
+--                                   Integer'Value
+--                                     (Get_Attribute
+--                                        (Elem => Child_Node,
+--                                         Name => "maxlevel")) then
+--                                    raise Data_Loading_Error
+--                                      with "Can't " &
+--                                      To_Lower
+--                                        (Item => Data_Action'Image(Action)) &
+--                                      " mob '" & Positive'Image(Mob_Index) &
+--                                      " invalid range for skill '" &
+--                                      Get_Attribute
+--                                        (Elem => Child_Node, Name => "name") &
+--                                      "'";
+--                                 end if;
+--                                 New_Skill :=
+--                                   (Index => Child_Index,
+--                                    Level =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "minlevel")),
+--                                    Experience =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "maxlevel")));
+--                              end if;
+--                              Skills_Container.Replace_Element
+--                                (Container => Temp_Record.Skills, Index => K,
+--                                 New_Item => New_Skill);
+--                              exit Update_Skill_Loop;
+--                           end if;
+--                        end Update_Skill_Block;
+--                     end loop Update_Skill_Loop;
+--                  when REMOVE =>
+--                     Remove_Skill_Loop :
+--                     for K in
+--                       Skills_Container.First_Index
+--                         (Container => Temp_Record.Skills) ..
+--                         Skills_Container.Last_Index
+--                           (Container => Temp_Record.Skills) loop
+--                        if Skills_Container.Element
+--                            (Container => Temp_Record.Skills, Index => K)
+--                            .Index =
+--                          Child_Index then
+--                           Delete_Index := K;
+--                           exit Remove_Skill_Loop;
+--                        end if;
+--                     end loop Remove_Skill_Loop;
+--                     Skills_Container.Delete
+--                       (Container => Temp_Record.Skills,
+--                        Index => Delete_Index);
+--               end case;
+--            end loop Load_Skills_Loop;
+--            Child_Nodes :=
+--              DOM.Core.Elements.Get_Elements_By_Tag_Name
+--                (Elem => Mob_Node, Name => "attribute");
+--            if Length(List => Child_Nodes) > 0 and Action = UPDATE then
+--               Temp_Record.Attributes := (others => <>);
+--            end if;
+--            Load_Attributes_Loop :
+--            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+--               Child_Node := Item(List => Child_Nodes, Index => J);
+--               if Get_Attribute(Elem => Child_Node, Name => "level") /= "" then
+--                  Temp_Record.Attributes(J + 1) :=
+--                    (Level =>
+--                       Integer'Value
+--                         (Get_Attribute(Elem => Child_Node, Name => "level")),
+--                     Experience => 0);
+--               else
+--                  if Integer'Value
+--                      (Get_Attribute(Elem => Child_Node, Name => "minlevel")) >
+--                    Integer'Value
+--                      (Get_Attribute
+--                         (Elem => Child_Node, Name => "maxlevel")) then
+--                     raise Data_Loading_Error
+--                       with "Can't " &
+--                       To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+--                       Positive'Image(Mob_Index) &
+--                       " invalid range for attribute.";
+--                  end if;
+--                  Temp_Record.Attributes(J + 1) :=
+--                    (Level =>
+--                       Integer'Value
+--                         (Get_Attribute
+--                            (Elem => Child_Node, Name => "minlevel")),
+--                     Experience =>
+--                       Integer'Value
+--                         (Get_Attribute
+--                            (Elem => Child_Node, Name => "maxlevel")));
+--               end if;
+--               exit Load_Attributes_Loop when J + 1 =
+--                 Positive
+--                   (AttributesData_Container.Length
+--                      (Container => Attributes_List));
+--            end loop Load_Attributes_Loop;
+--            Child_Nodes :=
+--              DOM.Core.Elements.Get_Elements_By_Tag_Name
+--                (Elem => Mob_Node, Name => "priority");
+--            Load_Orders_Loop :
+--            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+--               Child_Node := Item(List => Child_Nodes, Index => J);
+--               Set_Priorities_Loop :
+--               for K in Orders_Names'Range loop
+--                  if Orders_Names(K) =
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Get_Attribute
+--                           (Elem => Child_Node, Name => "name")) then
+--                     Temp_Record.Priorities(K) :=
+--                       (if
+--                          Get_Attribute(Elem => Child_Node, Name => "value") =
+--                          "Normal"
+--                        then 1
+--                        else 2);
+--                     exit Set_Priorities_Loop;
+--                  end if;
+--               end loop Set_Priorities_Loop;
+--            end loop Load_Orders_Loop;
+--            if Get_Attribute(Elem => Mob_Node, Name => "order")'Length > 0 then
+--               Temp_Record.Order :=
+--                 Crew_Orders'Value
+--                   (Get_Attribute(Elem => Mob_Node, Name => "order"));
+--            end if;
+--            Child_Nodes :=
+--              DOM.Core.Elements.Get_Elements_By_Tag_Name
+--                (Elem => Mob_Node, Name => "item");
+--            Load_Items_Loop :
+--            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+--               Child_Node := Item(List => Child_Nodes, Index => J);
+--               Item_Index :=
+--                 Positive'Value
+--                   (Get_Attribute(Elem => Child_Node, Name => "index"));
+--               if Item_Index not in 1 .. Get_Proto_Amount then
+--                  raise Data_Loading_Error
+--                    with "Can't " &
+--                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+--                    Positive'Image(Mob_Index) &
+--                    "', there is no item with index '" &
+--                    Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
+--               end if;
+--               Sub_Action :=
+--                 (if
+--                    Get_Attribute(Elem => Child_Node, Name => "action")'
+--                      Length >
+--                    0
+--                  then
+--                    Data_Action'Value
+--                      (Get_Attribute(Elem => Child_Node, Name => "action"))
+--                  else ADD);
+--               case Sub_Action is
+--                  when ADD =>
+--                     if Get_Attribute(Elem => Child_Node, Name => "amount")'
+--                         Length /=
+--                       0 then
+--                        MobInventory_Container.Append
+--                          (Container => Temp_Record.Inventory,
+--                           New_Item =>
+--                             (Proto_Index => Item_Index,
+--                              Min_Amount =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node, Name => "amount")),
+--                              Max_Amount => 0));
+--                     else
+--                        if Integer'Value
+--                            (Get_Attribute
+--                               (Elem => Child_Node, Name => "minamount")) >
+--                          Integer'Value
+--                            (Get_Attribute
+--                               (Elem => Child_Node, Name => "maxamount")) then
+--                           raise Data_Loading_Error
+--                             with "Can't " &
+--                             To_Lower(Item => Data_Action'Image(Action)) &
+--                             " mob '" & Positive'Image(Mob_Index) &
+--                             " invalid range for amount of '" &
+--                             Get_Attribute
+--                               (Elem => Child_Node, Name => "index") &
+--                             "'.";
+--                        end if;
+--                        MobInventory_Container.Append
+--                          (Container => Temp_Record.Inventory,
+--                           New_Item =>
+--                             (Proto_Index => Item_Index,
+--                              Min_Amount =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node,
+--                                      Name => "minamount")),
+--                              Max_Amount =>
+--                                Integer'Value
+--                                  (Get_Attribute
+--                                     (Elem => Child_Node,
+--                                      Name => "maxamount"))));
+--                     end if;
+--                  when UPDATE =>
+--                     Update_Items_Loop :
+--                     for I in
+--                       MobInventory_Container.First_Index
+--                         (Container => Temp_Record.Inventory) ..
+--                         MobInventory_Container.Last_Index
+--                           (Container => Temp_Record.Inventory) loop
+--                        Update_Item_Block :
+--                        declare
+--                           Item: Mob_Inventory_Record :=
+--                             MobInventory_Container.Element
+--                               (Container => Temp_Record.Inventory,
+--                                Index => I);
+--                        begin
+--                           if Item.Proto_Index = Item_Index then
+--                              if Get_Attribute
+--                                  (Elem => Child_Node, Name => "amount")'
+--                                  Length /=
+--                                0 then
+--                                 Item :=
+--                                   (Proto_Index => Item_Index,
+--                                    Min_Amount =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "amount")),
+--                                    Max_Amount => 0);
+--                              else
+--                                 if Integer'Value
+--                                     (Get_Attribute
+--                                        (Elem => Child_Node,
+--                                         Name => "minamount")) >
+--                                   Integer'Value
+--                                     (Get_Attribute
+--                                        (Elem => Child_Node,
+--                                         Name => "maxamount")) then
+--                                    raise Data_Loading_Error
+--                                      with "Can't " &
+--                                      To_Lower
+--                                        (Item => Data_Action'Image(Action)) &
+--                                      " mob '" & Positive'Image(Mob_Index) &
+--                                      " invalid range for amount of '" &
+--                                      Get_Attribute
+--                                        (Elem => Child_Node, Name => "index") &
+--                                      "'.";
+--                                 end if;
+--                                 Item :=
+--                                   (Proto_Index => Item_Index,
+--                                    Min_Amount =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "minamount")),
+--                                    Max_Amount =>
+--                                      Integer'Value
+--                                        (Get_Attribute
+--                                           (Elem => Child_Node,
+--                                            Name => "maxamount")));
+--                              end if;
+--                              MobInventory_Container.Replace_Element
+--                                (Container => Temp_Record.Inventory,
+--                                 Index => I, New_Item => Item);
+--                              exit Update_Items_Loop;
+--                           end if;
+--                        end Update_Item_Block;
+--                     end loop Update_Items_Loop;
+--                  when REMOVE =>
+--                     Remove_Items_Block :
+--                     declare
+--                        Inventory_Index: Inventory_Amount_Range := 1;
+--                     begin
+--                        Remove_Items_Loop :
+--                        while Inventory_Index <=
+--                          MobInventory_Container.Last_Index
+--                            (Container => Temp_Record.Inventory) loop
+--                           if MobInventory_Container.Element
+--                               (Container => Temp_Record.Inventory,
+--                                Index => Inventory_Index)
+--                               .Proto_Index =
+--                             Item_Index then
+--                              MobInventory_Container.Delete
+--                                (Container => Temp_Record.Inventory,
+--                                 Index => Inventory_Index);
+--                              exit Remove_Items_Loop;
+--                           end if;
+--                           Inventory_Index := Inventory_Index + 1;
+--                        end loop Remove_Items_Loop;
+--                     end Remove_Items_Block;
+--               end case;
+--            end loop Load_Items_Loop;
+--            Child_Nodes :=
+--              DOM.Core.Elements.Get_Elements_By_Tag_Name
+--                (Elem => Mob_Node, Name => "equipment");
+--            Equipment_Loop :
+--            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+--               Child_Node := Item(List => Child_Nodes, Index => J);
+--               Update_Equipment_Loop :
+--               for K in Equipment_Names'Range loop
+--                  if Equipment_Names(K) =
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Get_Attribute
+--                           (Elem => Child_Node, Name => "slot")) then
+--                     Temp_Record.Equipment(Equipment_Locations'Val(K - 1)) :=
+--                       Positive'Value
+--                         (Get_Attribute(Elem => Child_Node, Name => "index"));
+--                     exit Update_Equipment_Loop;
+--                  end if;
+--               end loop Update_Equipment_Loop;
+--            end loop Equipment_Loop;
+--            if Action /= UPDATE then
+--               ProtoMobs_Container.Append
+--                 (Container => Proto_Mobs_List, New_Item => Temp_Record);
+--               Log_Message
+--                 (Message => "Mob added: " & Positive'Image(Mob_Index),
+--                  Message_Type => EVERYTHING);
+--            else
+--               ProtoMobs_Container.Replace_Element
+--                 (Container => Proto_Mobs_List, Index => Mob_Index,
+--                  New_Item => Temp_Record);
+--               Log_Message
+--                 (Message => "Mob updated: " & Positive'Image(Mob_Index),
+--                  Message_Type => EVERYTHING);
+--            end if;
+--         else
+--            ProtoMobs_Container.Delete
+--              (Container => Proto_Mobs_List, Index => Mob_Index);
+--            Log_Message
+--              (Message => "Mob removed: " & Positive'Image(Mob_Index),
+--               Message_Type => EVERYTHING);
+--         end if;
+--      end loop Load_Mobs_Loop;
    end Load_Mobs;
 
    function Generate_Mob
