@@ -88,10 +88,10 @@ type
     index: cstring
     amount: cint
 
-proc updateAdaCraftingOrders(index: cstring) {.exportc.} =
+proc updateAdaCraftingOrders(index: cstring) {.raises: [], tags: [], exportc.} =
   updateCraftingOrders(index = $index)
 
-proc getAdaGameStats(stats: AdaGameStats) {.exportc.} =
+proc getAdaGameStats(stats: AdaGameStats) {.raises: [], tags: [], exportc.} =
   gameStats.basesVisited = stats.basesVisited
   gameStats.mapVisited = stats.mapVisited
   gameStats.distanceTraveled = stats.distanceTraveled
@@ -99,7 +99,7 @@ proc getAdaGameStats(stats: AdaGameStats) {.exportc.} =
   gameStats.points = stats.points
 
 proc getAdaGameStatsList(name: cstring; statsList: array[512,
-    AdaStatisticsData]) {.exportc.} =
+    AdaStatisticsData]) {.raises: [], tags: [], exportc.} =
   var list = case $name
     of "destroyedShips":
       gameStats.destroyedShips
@@ -129,7 +129,7 @@ proc getAdaGameStatsList(name: cstring; statsList: array[512,
   else:
     gameStats.killedMobs = list
 
-proc setAdaGameStats(stats: var AdaGameStats) {.exportc.} =
+proc setAdaGameStats(stats: var AdaGameStats) {.raises: [], tags: [], exportc.} =
   stats.basesVisited = gameStats.basesVisited.cint
   stats.mapVisited = gameStats.mapVisited.cint
   stats.distanceTraveled = gameStats.distanceTraveled.cint
@@ -137,7 +137,7 @@ proc setAdaGameStats(stats: var AdaGameStats) {.exportc.} =
   stats.points = gameStats.points.cint
 
 proc setAdaGameStatsList(name: cstring; statsList: var array[512,
-    AdaStatisticsData]) {.exportc.} =
+    AdaStatisticsData]) {.raises: [], tags: [], exportc.} =
   var list = case $name
     of "destroyedShips":
       gameStats.destroyedShips
@@ -155,5 +155,5 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
     statsList[index] = AdaStatisticsData(index: stat.index.cstring,
         amount: stat.amount.cint)
 
-proc updateAdaFinishedGoals(index: cstring) {.exportc.} =
+proc updateAdaFinishedGoals(index: cstring) {.raises: [], tags: [], exportc.} =
   updateFinishedGoals(index = $index)
