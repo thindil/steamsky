@@ -265,37 +265,6 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     protoMobsList[mobIndex] = mob
 
-proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData =
-  result = MemberData(homeBase: 1)
-  result.faction = (if getRandom(min = 1, max = 100) <
-      99: factionIndex else: getRandomFaction())
-  result.gender = 'M'
-  let faction = factionsList[result.faction]
-  if "nogender" notin faction.flags and getRandom(min = 1,
-      max = 100) > 50:
-    result.gender = 'F'
-  result.name = generateMemberName(gender = result.gender,
-      factionIndex = result.faction)
-  var weaponSkillLevel, highestSkillLevel = 1
-  for skill in protoMobsList[mobIndex].skills:
-    let skillIndex = (if skill.index > skillsList.len: faction.weaponSkill else: skill.index)
-    if skill.experience == 0:
-      result.skills.add(y = SkillInfo(index: skillIndex, level: skill.level,
-          experience: 0))
-    else:
-      result.skills.add(y = SkillInfo(index: skillIndex, level: getRandom(
-          min = skill.level, max = skill.experience), experience: 0))
-    if skillIndex == faction.weaponSkill:
-      weaponSkillLevel = result.skills[^1].level
-    if result.skills[^1].level > highestSkillLevel:
-      highestSkillLevel = result.skills[^1].level
-  for attribute in protoMobsList[mobIndex].attributes:
-    if attribute.experience == 0:
-      result.attributes.add(y = attribute)
-    else:
-      result.attributes.add(y = MobAttributeRecord(level: getRandom(
-          min = attribute.level, max = attribute.experience), experience: 0))
-
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
     factionIndex: string): Natural {.sideEffect, raises: [], tags: [].} =
@@ -368,6 +337,119 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
       return newIndexes[itemIndex]
   return 0
 
+proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData =
+  result = MemberData(homeBase: 1)
+  result.faction = (if getRandom(min = 1, max = 100) <
+      99: factionIndex else: getRandomFaction())
+  result.gender = 'M'
+  let faction = factionsList[result.faction]
+  if "nogender" notin faction.flags and getRandom(min = 1,
+      max = 100) > 50:
+    result.gender = 'F'
+  result.name = generateMemberName(gender = result.gender,
+      factionIndex = result.faction)
+  var weaponSkillLevel, highestSkillLevel = 1
+  let protoMob = protoMobsList[mobIndex]
+  for skill in protoMob.skills:
+    let skillIndex = (if skill.index > skillsList.len: faction.weaponSkill else: skill.index)
+    if skill.experience == 0:
+      result.skills.add(y = SkillInfo(index: skillIndex, level: skill.level,
+          experience: 0))
+    else:
+      result.skills.add(y = SkillInfo(index: skillIndex, level: getRandom(
+          min = skill.level, max = skill.experience), experience: 0))
+    if skillIndex == faction.weaponSkill:
+      weaponSkillLevel = result.skills[^1].level
+    if result.skills[^1].level > highestSkillLevel:
+      highestSkillLevel = result.skills[^1].level
+  for attribute in protoMob.attributes:
+    if attribute.experience == 0:
+      result.attributes.add(y = attribute)
+    else:
+      result.attributes.add(y = MobAttributeRecord(level: getRandom(
+          min = attribute.level, max = attribute.experience), experience: 0))
+  for item in protoMob.inventory:
+    let amount = if item.maxAmount > 0:
+        getRandom(min = item.minAmount, max = item.maxAmount)
+      else:
+        item.minAmount
+    result.inventory.add(y = InventoryData(protoIndex: item.protoIndex,
+        amount: amount, name: "", durability: defaultItemDurability, price: 0))
+  result.equipment = protoMob.equipment
+  for i in weapon .. legs:
+    if result.equipment[i] == -1:
+      var equipmentItemIndex = 0
+      if getRandom(min = 1, max = 100) < 95:
+        let equipmentItemsList = case i
+            of weapon:
+              weaponsList
+            of shield:
+              shieldsList
+            of helmet:
+              headArmorsList
+            of torso:
+              chestArmorsList
+            of arms:
+              armsArmorsList
+            else:
+              legsArmorsList
+        equipmentItemIndex = getRandomItem(itemsIndexes = equipmentItemsList, equipIndex = i, highestLevel = highestSkillLevel, weaponSkillLevel = weaponSkillLevel, factionIndex = result.faction)
+#
+#      Equipment_Loop :
+#      for I in WEAPON .. LEGS loop
+#         Set_Equipment_Block :
+#         declare
+#            Equipment_Items_List: constant String :=
+#              (case I is when WEAPON => "weapon", when SHIELD => "shield",
+#                 when HELMET => "helmet", when TORSO => "torso",
+#                 when ARMS => "arms", when LEGS => "legs");
+#            Equipment_Item_Index: Natural;
+#         begin
+#            if Mob.Equipment(I) = 0 then
+#               Equipment_Item_Index := 0;
+#               if Get_Random(Min => 1, Max => 100) < 95 then
+#                  Equipment_Item_Index :=
+#                    Get_Random_Item
+#                      (Items_Indexes => Equipment_Items_List, Equip_Index => I,
+#                       Highest_Level => Highest_Skill_Level,
+#                       Weapon_Skill_Level => Weapon_Skill_Level,
+#                       Faction_Index => Mob.Faction, Highest_Skill => 1);
+#               end if;
+#               if Equipment_Item_Index > 0 then
+#                  Inventory_Container.Append
+#                    (Container => Mob.Inventory,
+#                     New_Item =>
+#                       (Proto_Index => Equipment_Item_Index, Amount => 1,
+#                        Name => Null_Bounded_String, Durability => 100,
+#                        Price => 0));
+#                  Mob.Equipment(I) :=
+#                    Inventory_Container.Last_Index(Container => Mob.Inventory);
+#               end if;
+#            end if;
+#         end Set_Equipment_Block;
+#      end loop Equipment_Loop;
+#      Mob.Orders := Proto_Mob.Priorities;
+#      Mob.Order := Proto_Mob.Order;
+#      Mob.Order_Time := 15;
+#      Mob.Previous_Order := REST;
+#      Mob.Health := 100;
+#      Mob.Tired := 0;
+#      Mob.Hunger := 0;
+#      Mob.Thirst := 0;
+#      Mob.Payment := (1 => 20, 2 => 0);
+#      Mob.Contract_Length := -1;
+#      Mob.Morale :=
+#        (1 =>
+#           (if
+#              Faction.Flags.Contains
+#                (Item => To_Unbounded_String(Source => "fanaticism"))
+#            then 100
+#            else 50),
+#         2 => 0);
+#      Mob.Loyalty := 100;
+#      Mob.Home_Base := 1;
+#      return Mob;
+#
 # Temporary code for interfacing with Ada
 
 type
