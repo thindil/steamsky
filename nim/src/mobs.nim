@@ -381,75 +381,40 @@ proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData =
       var equipmentItemIndex = 0
       if getRandom(min = 1, max = 100) < 95:
         let equipmentItemsList = case i
-            of weapon:
-              weaponsList
-            of shield:
-              shieldsList
-            of helmet:
-              headArmorsList
-            of torso:
-              chestArmorsList
-            of arms:
-              armsArmorsList
-            else:
-              legsArmorsList
-        equipmentItemIndex = getRandomItem(itemsIndexes = equipmentItemsList, equipIndex = i, highestLevel = highestSkillLevel, weaponSkillLevel = weaponSkillLevel, factionIndex = result.faction)
-#
-#      Equipment_Loop :
-#      for I in WEAPON .. LEGS loop
-#         Set_Equipment_Block :
-#         declare
-#            Equipment_Items_List: constant String :=
-#              (case I is when WEAPON => "weapon", when SHIELD => "shield",
-#                 when HELMET => "helmet", when TORSO => "torso",
-#                 when ARMS => "arms", when LEGS => "legs");
-#            Equipment_Item_Index: Natural;
-#         begin
-#            if Mob.Equipment(I) = 0 then
-#               Equipment_Item_Index := 0;
-#               if Get_Random(Min => 1, Max => 100) < 95 then
-#                  Equipment_Item_Index :=
-#                    Get_Random_Item
-#                      (Items_Indexes => Equipment_Items_List, Equip_Index => I,
-#                       Highest_Level => Highest_Skill_Level,
-#                       Weapon_Skill_Level => Weapon_Skill_Level,
-#                       Faction_Index => Mob.Faction, Highest_Skill => 1);
-#               end if;
-#               if Equipment_Item_Index > 0 then
-#                  Inventory_Container.Append
-#                    (Container => Mob.Inventory,
-#                     New_Item =>
-#                       (Proto_Index => Equipment_Item_Index, Amount => 1,
-#                        Name => Null_Bounded_String, Durability => 100,
-#                        Price => 0));
-#                  Mob.Equipment(I) :=
-#                    Inventory_Container.Last_Index(Container => Mob.Inventory);
-#               end if;
-#            end if;
-#         end Set_Equipment_Block;
-#      end loop Equipment_Loop;
-#      Mob.Orders := Proto_Mob.Priorities;
-#      Mob.Order := Proto_Mob.Order;
-#      Mob.Order_Time := 15;
-#      Mob.Previous_Order := REST;
-#      Mob.Health := 100;
-#      Mob.Tired := 0;
-#      Mob.Hunger := 0;
-#      Mob.Thirst := 0;
-#      Mob.Payment := (1 => 20, 2 => 0);
-#      Mob.Contract_Length := -1;
-#      Mob.Morale :=
-#        (1 =>
-#           (if
-#              Faction.Flags.Contains
-#                (Item => To_Unbounded_String(Source => "fanaticism"))
-#            then 100
-#            else 50),
-#         2 => 0);
-#      Mob.Loyalty := 100;
-#      Mob.Home_Base := 1;
-#      return Mob;
-#
+          of weapon:
+            weaponsList
+          of shield:
+            shieldsList
+          of helmet:
+            headArmorsList
+          of torso:
+            chestArmorsList
+          of arms:
+            armsArmorsList
+          else:
+            legsArmorsList
+        equipmentItemIndex = getRandomItem(itemsIndexes = equipmentItemsList,
+            equipIndex = i, highestLevel = highestSkillLevel,
+            weaponSkillLevel = weaponSkillLevel, factionIndex = result.faction)
+      if equipmentItemIndex > 0:
+        result.inventory.add(y = InventoryData(protoIndex: equipmentItemIndex,
+            amount: 1, name: "", durability: defaultItemDurability, price: 0))
+        result.equipment[i] = result.inventory.high
+  result.orders = protoMob.priorities
+  result.order = protoMob.order
+  result.orderTime = 15
+  result.previousOrder = rest
+  result.health = 100
+  result.tired = 0
+  result.hunger = 0
+  result.thirst = 0
+  result.payment = [1: 20.Natural, 2: 0.Natural]
+  result.contractLength = -1
+  result.morale = [1: (if "fanaticism" in
+      faction.flags: 100.Natural else: 50.Natural), 2: 0.Natural]
+  result.loyalty = 100
+  result.homeBase = 1
+
 # Temporary code for interfacing with Ada
 
 type
