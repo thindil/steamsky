@@ -25,7 +25,6 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -591,9 +590,7 @@ package body Knowledge.Events is
                        Destination_Y => Events_List(Event).Sky_Y)),
                Tooltip => "The distance to the event",
                Command => "ShowEventInfo" & Positive'Image(Event), Column => 2,
-               Color =>
-                 Style_Lookup
-                   (Name => "Map", Option => To_String(Source => Color)));
+               Color => To_String(Source => Color));
             Add_Button
               (Table => Events_Table,
                Text =>
@@ -601,9 +598,7 @@ package body Knowledge.Events is
                  Natural'Image(Events_List(Event).Sky_Y),
                Tooltip => "The coordinates of the event on the map",
                Command => "ShowEventInfo" & Positive'Image(Event), Column => 3,
-               Color =>
-                 Style_Lookup
-                   (Name => "Map", Option => To_String(Source => Color)));
+               Color => To_String(Source => Color));
             case Events_List(Event).E_Type is
                when DOUBLEPRICE =>
                   Add_Button
