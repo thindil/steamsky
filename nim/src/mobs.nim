@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crew, factions, game, items, log, types, utils
+import crew, factions, game, items, log, ships, types, utils
 
 type
   MobInventoryRecord = object
@@ -504,3 +504,13 @@ proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
     return getRandomItem(itemsIndexes = tempToolsList,
         equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
         weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
+
+proc adaGenerateMob*(mobIndex: cint, factionIndex: cstring;
+    adaMember: var AdaMemberData, adaInventory: var array[128,
+    AdaInventoryData]) {.raises: [], tags: [], exportc.} =
+  try:
+    let member = generateMob(mobIndex = mobIndex, factionIndex = $factionIndex)
+    adaMember = adaMemberFromNim(member = member)
+    adaInventory = inventoryToAda(inventory = member.inventory)
+  except KeyError:
+    discard
