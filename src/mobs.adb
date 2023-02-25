@@ -16,9 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Utils; use Utils;
 with Items; use Items;
-with Factions;
 
 package body Mobs is
 
@@ -112,162 +110,27 @@ package body Mobs is
    function Generate_Mob
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data is
-      use Factions;
       use Tiny_String;
 
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      Proto_Mob: constant Proto_Mob_Record :=
-        ProtoMobs_Container.Element
-          (Container => Proto_Mobs_List, Index => Mob_Index);
-      Amount: Natural;
-      Highest_Skill_Level, Weapon_Skill_Level: Skill_Range := 1;
-      Skill_Index: Skills_Container.Extended_Index;
-      Faction: Faction_Record;
+      Nim_Mob: Nim_Member_Data;
+      Nim_Inventory: Nim_Inventory_Array;
+      procedure Ada_Generate_Mob
+        (Index: Integer; F_Index: chars_ptr; N_Mob: out Nim_Member_Data;
+         N_Inventory: out Nim_Inventory_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "adaGenerateMob";
    begin
-      Mob.Faction :=
-        (if Get_Random(Min => 1, Max => 100) < 99 then Faction_Index
-         else Get_Random_Faction);
-      Mob.Gender := 'M';
-      Faction := Get_Faction(Index => Mob.Faction);
-      if not Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "nogender"))
-        and then Get_Random(Min => 1, Max => 100) > 50 then
-         Mob.Gender := 'F';
-      end if;
-      Mob.Name :=
-        Generate_Member_Name
-          (Gender => Mob.Gender, Faction_Index => Mob.Faction);
-      Skills_Loop :
-      for Skill of Proto_Mob.Skills loop
-         Skill_Index :=
-           (if Skill.Index = Skills_Amount + 1 then Faction.Weapon_Skill
-            else Skill.Index);
-         if Skill.Experience = 0 then
-            Skills_Container.Append
-              (Container => Mob.Skills,
-               New_Item =>
-                 (Index => Skill_Index, Level => Skill.Level,
-                  Experience => 0));
-         else
-            Skills_Container.Append
-              (Container => Mob.Skills,
-               New_Item =>
-                 (Index => Skill_Index,
-                  Level =>
-                    Get_Random(Min => Skill.Level, Max => Skill.Experience),
-                  Experience => 0));
-         end if;
-         if Skill_Index = Faction.Weapon_Skill then
-            Weapon_Skill_Level :=
-              Skills_Container.Element
-                (Container => Mob.Skills,
-                 Index => Skills_Container.Last_Index(Container => Mob.Skills))
-                .Level;
-         end if;
-         if Skills_Container.Element
-             (Container => Mob.Skills,
-              Index => Skills_Container.Last_Index(Container => Mob.Skills))
-             .Level >
-           Highest_Skill_Level then
-            Highest_Skill_Level :=
-              Skills_Container.Element
-                (Container => Mob.Skills,
-                 Index => Skills_Container.Last_Index(Container => Mob.Skills))
-                .Level;
-         end if;
-      end loop Skills_Loop;
-      Attributes_Loop :
-      for Attribute in Proto_Mob.Attributes'Range loop
-         if Proto_Mob.Attributes(Attribute).Experience = 0 then
-            Mob.Attributes(Attribute) := Proto_Mob.Attributes(Attribute);
-         else
-            Mob.Attributes(Attribute) :=
-              (Level =>
-                 Get_Random
-                   (Min => Proto_Mob.Attributes(Attribute).Level,
-                    Max => Proto_Mob.Attributes(Attribute).Experience),
-               Experience => 0);
-         end if;
-      end loop Attributes_Loop;
-      Inventory_Loop :
-      for I in
-        MobInventory_Container.First_Index(Container => Proto_Mob.Inventory) ..
-          MobInventory_Container.Last_Index
-            (Container => Proto_Mob.Inventory) loop
-         Fill_Inventory_Block :
-         declare
-            Proto_Item: constant Mob_Inventory_Record :=
-              MobInventory_Container.Element
-                (Container => Proto_Mob.Inventory, Index => I);
-         begin
-            Amount :=
-              (if Proto_Item.Max_Amount > 0 then
-                 Get_Random
-                   (Min => Proto_Item.Min_Amount, Max => Proto_Item.Max_Amount)
-               else Proto_Item.Min_Amount);
-            Inventory_Container.Append
-              (Container => Mob.Inventory,
-               New_Item =>
-                 (Proto_Index => Proto_Item.Proto_Index, Amount => Amount,
-                  Name => Null_Bounded_String, Durability => 100, Price => 0));
-         end Fill_Inventory_Block;
-      end loop Inventory_Loop;
-      Mob.Equipment := Proto_Mob.Equipment;
-      Equipment_Loop :
-      for I in WEAPON .. LEGS loop
-         Set_Equipment_Block :
-         declare
-            Equipment_Items_List: constant String :=
-              (case I is when WEAPON => "weapon", when SHIELD => "shield",
-                 when HELMET => "helmet", when TORSO => "torso",
-                 when ARMS => "arms", when LEGS => "legs");
-            Equipment_Item_Index: Natural;
-         begin
-            if Mob.Equipment(I) = 0 then
-               Equipment_Item_Index := 0;
-               if Get_Random(Min => 1, Max => 100) < 95 then
-                  Equipment_Item_Index :=
-                    Get_Random_Item
-                      (Items_Indexes => Equipment_Items_List, Equip_Index => I,
-                       Highest_Level => Highest_Skill_Level,
-                       Weapon_Skill_Level => Weapon_Skill_Level,
-                       Faction_Index => Mob.Faction, Highest_Skill => 1);
-               end if;
-               if Equipment_Item_Index > 0 then
-                  Inventory_Container.Append
-                    (Container => Mob.Inventory,
-                     New_Item =>
-                       (Proto_Index => Equipment_Item_Index, Amount => 1,
-                        Name => Null_Bounded_String, Durability => 100,
-                        Price => 0));
-                  Mob.Equipment(I) :=
-                    Inventory_Container.Last_Index(Container => Mob.Inventory);
-               end if;
-            end if;
-         end Set_Equipment_Block;
-      end loop Equipment_Loop;
-      Mob.Orders := Proto_Mob.Priorities;
-      Mob.Order := Proto_Mob.Order;
-      Mob.Order_Time := 15;
-      Mob.Previous_Order := REST;
-      Mob.Health := 100;
-      Mob.Tired := 0;
-      Mob.Hunger := 0;
-      Mob.Thirst := 0;
-      Mob.Payment := (1 => 20, 2 => 0);
-      Mob.Contract_Length := -1;
-      Mob.Morale :=
-        (1 =>
-           (if
-              Faction.Flags.Contains
-                (Item => To_Unbounded_String(Source => "fanaticism"))
-            then 100
-            else 50),
-         2 => 0);
-      Mob.Loyalty := 100;
-      Mob.Home_Base := 1;
+      Ada_Generate_Mob
+        (Index => Mob_Index,
+         F_Index => New_String(Str => To_String(Source => Faction_Index)),
+         N_Mob => Nim_Mob, N_Inventory => Nim_Inventory);
+      Member_From_Nim(Member => Nim_Mob, Ada_Member => Mob);
+      Mob.Inventory :=
+        Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       return Mob;
    end Generate_Mob;
 

@@ -17,7 +17,6 @@
 
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Vectors;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
 
