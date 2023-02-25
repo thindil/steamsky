@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, items, log, types, utils
+import crew, factions, game, items, log, types, utils
 
 type
   MobInventoryRecord = object
@@ -264,6 +264,37 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Mob updated: '" & $mobIndex & "'",
           debugType = everything)
     protoMobsList[mobIndex] = mob
+
+proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData =
+  result = MemberData(homeBase: 1)
+  result.faction = (if getRandom(min = 1, max = 100) <
+      99: factionIndex else: getRandomFaction())
+  result.gender = 'M'
+  let faction = factionsList[result.faction]
+  if "nogender" notin faction.flags and getRandom(min = 1,
+      max = 100) > 50:
+    result.gender = 'F'
+  result.name = generateMemberName(gender = result.gender,
+      factionIndex = result.faction)
+  var weaponSkillLevel, highestSkillLevel = 1
+  for skill in protoMobsList[mobIndex].skills:
+    let skillIndex = (if skill.index > skillsList.len: faction.weaponSkill else: skill.index)
+    if skill.experience == 0:
+      result.skills.add(y = SkillInfo(index: skillIndex, level: skill.level,
+          experience: 0))
+    else:
+      result.skills.add(y = SkillInfo(index: skillIndex, level: getRandom(
+          min = skill.level, max = skill.experience), experience: 0))
+    if skillIndex == faction.weaponSkill:
+      weaponSkillLevel = result.skills[^1].level
+    if result.skills[^1].level > highestSkillLevel:
+      highestSkillLevel = result.skills[^1].level
+  for attribute in protoMobsList[mobIndex].attributes:
+    if attribute.experience == 0:
+      result.attributes.add(y = attribute)
+    else:
+      result.attributes.add(y = MobAttributeRecord(level: getRandom(
+          min = attribute.level, max = attribute.experience), experience: 0))
 
 proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
     highestLevel, weaponSkillLevel: Positive,
