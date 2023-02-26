@@ -1203,6 +1203,8 @@ package body Crew is
                  Level => Member.Skills(I, 2),
                  Experience => Member.Skills(I, 3)));
       end loop Convert_Skills_Loop;
+      Ada_Member.Faction :=
+        To_Bounded_String(Source => Value(Item => Member.Faction));
    end Member_From_Nim;
 
 end Crew;
