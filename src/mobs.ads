@@ -173,8 +173,7 @@ package Mobs is
       Faction_Index: Tiny_String.Bounded_String) return Member_Data with
       Pre => Mob_Index > 0 and
       Mob_Index < ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List),
-      Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0,
-      Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
+      Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0;
       -- ****
 
       -- ****f* Mobs/Mobs.Get_Random_Item
