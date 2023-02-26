@@ -337,7 +337,8 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
       return newIndexes[itemIndex]
   return 0
 
-proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData =
+proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData {.sideEffect,
+    raises: [KeyError], tags: [].} =
   result = MemberData(homeBase: 1)
   result.faction = (if getRandom(min = 1, max = 100) <
       99: factionIndex else: getRandomFaction())
