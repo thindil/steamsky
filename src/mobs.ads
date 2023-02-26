@@ -42,6 +42,14 @@ package Mobs is
    end record;
    -- ****
 
+   -- ****d* Mobs/Mobs.Empty_Mob_Item
+   -- FUNCTION
+   -- Empty item for mobs prototype
+   -- SOURCE
+   Empty_Mob_Item: constant Mob_Inventory_Record :=
+     (Proto_Index => 0, Min_Amount => 0, Max_Amount => 0);
+   -- ****
+
      -- ****t* Mobs/Mobs.Inventory_Amount_Range
      -- FUNCTION
      -- Used to set the amount of items in mobs inventories
@@ -87,6 +95,14 @@ package Mobs is
         (Capacity => Default_Inventory_Amount);
       Equipment: Equipment_Array;
    end record;
+   -- ****
+
+   -- ****d* Mobs/Mobs.Empty_Mob
+   -- FUNCTION
+   -- Empty prototype of mob
+   -- SOURCE
+   Empty_Mob: constant Proto_Mob_Record :=
+     (Amount_Of_Attributes => 1, Amount_Of_Skills => 1, others => <>);
    -- ****
 
    -- ****t* Mobs/Mobs.Proto_Mobs_Amount_Range
