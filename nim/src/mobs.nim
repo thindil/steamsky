@@ -339,6 +339,13 @@ proc getRandomItem*(itemsIndexes: seq[Positive], equipIndex: EquipmentLocations,
 
 proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Generate random mob from the selected prototype and the faction.
+  ##
+  ## * mobIndex     - the index of the prototype of the mob from which the new
+  ##                  will be generated
+  ## * factionIndex - the index of the faction to which the mob will be belong
+  ##
+  ## Returns the newly created mob from the selected prototype and faction.
   result = MemberData(homeBase: 1)
   result.faction = (if getRandom(min = 1, max = 100) <
       99: factionIndex else: getRandomFaction())
