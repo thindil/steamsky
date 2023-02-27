@@ -513,7 +513,7 @@ proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
         equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
         weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
 
-proc adaGenerateMob*(mobIndex: cint, factionIndex: cstring;
+proc adaGenerateMob(mobIndex: cint, factionIndex: cstring;
     adaMember: var AdaMemberData, adaInventory: var array[128,
     AdaInventoryData]) {.raises: [], tags: [], exportc.} =
   try:
@@ -522,3 +522,6 @@ proc adaGenerateMob*(mobIndex: cint, factionIndex: cstring;
     adaInventory = inventoryToAda(inventory = member.inventory)
   except KeyError:
     discard
+
+proc adaGetProtoMobsAmount(): cint {.raises: [], tags: [], exportc.} =
+  return protoMobsList.len.cint

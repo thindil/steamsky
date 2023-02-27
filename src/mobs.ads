@@ -196,4 +196,11 @@ package Mobs is
       Pre => Highest_Level < 101 and Weapon_Skill_Level < 101;
       -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_Proto_Mobs_Amount return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaProtoMobsAmount";
+
 end Mobs;
