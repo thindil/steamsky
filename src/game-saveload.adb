@@ -584,13 +584,21 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      Create
-        (File => Save_File, Mode => Out_File,
-         Name => To_String(Source => Save_Name));
-      Write
-        (Stream => Stream(File => Save_File), N => Save_Data,
-         Pretty_Print => Pretty_Print);
-      Close(File => Save_File);
+      Save_To_File_Block :
+      begin
+         Create
+           (File => Save_File, Mode => Out_File,
+            Name => To_String(Source => Save_Name));
+         Write
+           (Stream => Stream(File => Save_File), N => Save_Data,
+            Pretty_Print => Pretty_Print);
+         Close(File => Save_File);
+      exception
+         when others =>
+            Log_Message
+              (Message => "Can't save the game to file.",
+               Message_Type => EVERYTHING);
+      end Save_To_File_Block;
       Log_Message
         (Message => "Finished saving game.", Message_Type => EVERYTHING);
    end Save_Game;
