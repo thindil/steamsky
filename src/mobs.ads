@@ -15,8 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
-with Ada.Containers.Formal_Vectors;
+with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Crew; use Crew;
 with Game; use Game;
 
@@ -125,23 +124,6 @@ package Mobs is
    Default_Proto_Mobs_Amount: constant Proto_Mobs_Amount_Range := 113;
    -- ****
 
-   -- ****t* Mobs/Mobs.ProtoMobs_Container
-   -- FUNCTION
-   -- Used to store mobiles
-   -- SOURCE
-   package ProtoMobs_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Proto_Mobs_Amount_Range, Element_Type => Proto_Mob_Record,
-      Max_Size_In_Storage_Elements => Proto_Mob_Record'Size, Bounded => False);
-   -- ****
-
-   -- ****v* Mobs/Mobs.Proto_Mobs_List
-   -- FUNCTION
-   -- List of prototypes of all mobiles available in the game
-   -- SOURCE
-   Proto_Mobs_List: ProtoMobs_Container.Vector
-     (Capacity => Count_Type(Default_Proto_Mobs_Amount));
-   -- ****
-
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in mobs file
@@ -156,7 +138,7 @@ package Mobs is
    -- File_Name - The full path to the mobs file which will be read
    -- SOURCE
    procedure Load_Mobs(File_Name: String) with
-      Post => ProtoMobs_Container.Length(Container => Proto_Mobs_List) > 0;
+      Post => Get_Proto_Mobs_Amount > 0;
    -- ****
 
    -- ****f* Mobs/Mobs.Generate_Mob
@@ -171,10 +153,9 @@ package Mobs is
    -- Newly generated mob
    -- SOURCE
    function Generate_Mob
-     (Mob_Index: ProtoMobs_Container.Extended_Index;
-      Faction_Index: Tiny_String.Bounded_String) return Member_Data with
-      Pre => Mob_Index > 0 and
-      Mob_Index < Get_Proto_Mobs_Amount,
+     (Mob_Index: Positive; Faction_Index: Tiny_String.Bounded_String)
+      return Member_Data with
+      Pre => Mob_Index > 0 and Mob_Index < Get_Proto_Mobs_Amount,
       Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0;
       -- ****
 
