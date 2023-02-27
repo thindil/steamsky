@@ -172,7 +172,7 @@ package Mobs is
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data with
       Pre => Mob_Index > 0 and
-      Mob_Index < ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List),
+      Mob_Index < Get_Proto_Mobs_Amount,
       Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0;
       -- ****
 
@@ -201,6 +201,6 @@ package Mobs is
    function Get_Proto_Mobs_Amount return Positive with
       Import => True,
       Convention => C,
-      External_Name => "getAdaProtoMobsAmount";
+      External_Name => "adaGetProtoMobsAmount";
 
 end Mobs;
