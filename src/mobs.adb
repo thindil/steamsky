@@ -23,13 +23,16 @@ package body Mobs is
    procedure Load_Mobs(File_Name: String) is
       use Interfaces.C;
 
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Proto_Mob_Record
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
       Temp_Skills: Skills_Container.Vector (Capacity => Skills_Amount);
       Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
+      --## rule on IMPROPER_INITIALIZATION
       Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
       Temp_Equipment: constant Equipment_Array := (others => 0);
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Proto_Attributes_Array is array(0 .. 5, 0 .. 1) of Integer;
       type Nim_Proto_Skills_Array is array(0 .. 5, 0 .. 2) of Integer;
       type Nim_Proto_Inventory_Array is array(0 .. 19, 0 .. 2) of Integer;
@@ -41,6 +44,7 @@ package body Mobs is
          Inventory: Nim_Proto_Inventory_Array;
          Equipment: Nim_Equipment_Array;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Result: chars_ptr;
       Nim_Mob: Nim_Proto_Mob;
@@ -124,11 +128,13 @@ package body Mobs is
          Convention => C,
          External_Name => "adaGenerateMob";
    begin
+      --## rule off IMPROPER_INITIALIZATION
       Ada_Generate_Mob
         (Index => Mob_Index,
          F_Index => New_String(Str => To_String(Source => Faction_Index)),
          N_Mob => Nim_Mob, N_Inventory => Nim_Inventory);
       Member_From_Nim(Member => Nim_Mob, Ada_Member => Mob);
+      --## rule on IMPROPER_INITIALIZATION
       Mob.Inventory :=
         Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       return Mob;
