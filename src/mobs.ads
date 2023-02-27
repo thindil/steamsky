@@ -97,6 +97,8 @@ package Mobs is
    end record;
    -- ****
 
+   function Get_Proto_Mob(Index: Positive) return Proto_Mob_Record;
+
    -- ****d* Mobs/Mobs.Empty_Mob
    -- FUNCTION
    -- Empty prototype of mob

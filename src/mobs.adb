@@ -27,85 +27,20 @@ package body Mobs is
       Temp_Record: Proto_Mob_Record
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      Temp_Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-      Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
-      --## rule on IMPROPER_INITIALIZATION
-      Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
-      Temp_Equipment: constant Equipment_Array := (others => 0);
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Proto_Attributes_Array is array(0 .. 5, 0 .. 1) of Integer;
-      type Nim_Proto_Skills_Array is array(0 .. 5, 0 .. 2) of Integer;
-      type Nim_Proto_Inventory_Array is array(0 .. 19, 0 .. 2) of Integer;
-      type Nim_Proto_Mob is record
-         Attributes: Nim_Proto_Attributes_Array;
-         Skills: Nim_Proto_Skills_Array;
-         Order: Integer;
-         Priorities: Natural_Array(1 .. 12);
-         Inventory: Nim_Proto_Inventory_Array;
-         Equipment: Nim_Equipment_Array;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
       Result: chars_ptr;
-      Nim_Mob: Nim_Proto_Mob;
       --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Mobs(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaMobs";
-      procedure Get_Ada_Mob(Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaMob";
    begin
       Result := Load_Ada_Mobs(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
       Load_Mobs_Loop :
-      for I in 1 .. 126 loop
-         Get_Ada_Mob(Index => I, Ada_Mob => Nim_Mob);
-         exit Load_Mobs_Loop when Nim_Mob.Attributes(0, 0) = 0;
-         Temp_Record :=
-           (Amount_Of_Attributes => Attributes_Amount,
-            Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
-            Attributes => (others => <>), Order => REST,
-            Priorities => Temp_Priorities, Inventory => Temp_Inventory,
-            Equipment => Temp_Equipment);
-         Load_Attributes_Loop :
-         for J in 0 .. 5 loop
-            exit Load_Attributes_Loop when Nim_Mob.Attributes(J, 0) = 0;
-            Temp_Record.Attributes(J + 1) :=
-              (Level => Nim_Mob.Attributes(J, 0),
-               Experience => Nim_Mob.Attributes(J, 1));
-         end loop Load_Attributes_Loop;
-         Load_Skills_Loop :
-         for J in 0 .. 5 loop
-            exit Load_Skills_Loop when Nim_Mob.Skills(J, 0) = 0;
-            Skills_Container.Append
-              (Container => Temp_Record.Skills,
-               New_Item =>
-                 (Index => Count_Type(Nim_Mob.Skills(J, 0)),
-                  Level => Nim_Mob.Skills(J, 1),
-                  Experience => Nim_Mob.Skills(J, 2)));
-         end loop Load_Skills_Loop;
-         Temp_Record.Order := Crew_Orders'Val(Nim_Mob.Order);
-         Temp_Record.Priorities := Nim_Mob.Priorities;
-         Load_Inventory_Loop :
-         for J in 0 .. 19 loop
-            exit Load_Inventory_Loop when Nim_Mob.Inventory(J, 0) = 0;
-            MobInventory_Container.Append
-              (Container => Temp_Record.Inventory,
-               New_Item =>
-                 (Proto_Index => Nim_Mob.Inventory(J, 0),
-                  Min_Amount => Nim_Mob.Inventory(J, 1),
-                  Max_Amount => Nim_Mob.Inventory(J, 2)));
-         end loop Load_Inventory_Loop;
-         Load_Equipment_Loop :
-         for J in 0 .. 6 loop
-            Temp_Record.Equipment(Equipment_Locations'Val(J)) :=
-              Nim_Mob.Equipment(J);
-         end loop Load_Equipment_Loop;
+      for I in 1 .. Get_Proto_Mobs_Amount loop
+         Temp_Record := Get_Proto_Mob(Index => I);
          ProtoMobs_Container.Append
            (Container => Proto_Mobs_List, New_Item => Temp_Record);
       end loop Load_Mobs_Loop;
@@ -161,5 +96,83 @@ package body Mobs is
              New_String(Str => Tiny_String.To_String(Source => Faction_Index)),
            H_Skill => Highest_Skill);
    end Get_Random_Item;
+
+   function Get_Proto_Mob(Index: Positive) return Proto_Mob_Record is
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Record: Proto_Mob_Record
+        (Amount_Of_Attributes => Attributes_Amount,
+         Amount_Of_Skills => Skills_Amount);
+      Temp_Skills: Skills_Container.Vector (Capacity => Skills_Amount);
+      Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
+      --## rule on IMPROPER_INITIALIZATION
+      Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
+      Temp_Equipment: constant Equipment_Array := (others => 0);
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Proto_Attributes_Array is array(0 .. 5, 0 .. 1) of Integer;
+      type Nim_Proto_Skills_Array is array(0 .. 5, 0 .. 2) of Integer;
+      type Nim_Proto_Inventory_Array is array(0 .. 19, 0 .. 2) of Integer;
+      type Nim_Proto_Mob is record
+         Attributes: Nim_Proto_Attributes_Array;
+         Skills: Nim_Proto_Skills_Array;
+         Order: Integer;
+         Priorities: Natural_Array(1 .. 12);
+         Inventory: Nim_Proto_Inventory_Array;
+         Equipment: Nim_Equipment_Array;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Mob: Nim_Proto_Mob;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Ada_Mob(Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaMob";
+   begin
+      Get_Ada_Mob(Index => Index, Ada_Mob => Nim_Mob);
+      Temp_Record :=
+        (Amount_Of_Attributes => Attributes_Amount,
+         Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
+         Attributes => (others => <>), Order => REST,
+         Priorities => Temp_Priorities, Inventory => Temp_Inventory,
+         Equipment => Temp_Equipment);
+      if Nim_Mob.Attributes(0, 0) = 0 then
+         return Temp_Record;
+      end if;
+      Load_Attributes_Loop :
+      for J in 0 .. 5 loop
+         exit Load_Attributes_Loop when Nim_Mob.Attributes(J, 0) = 0;
+         Temp_Record.Attributes(J + 1) :=
+           (Level => Nim_Mob.Attributes(J, 0),
+            Experience => Nim_Mob.Attributes(J, 1));
+      end loop Load_Attributes_Loop;
+      Load_Skills_Loop :
+      for J in 0 .. 5 loop
+         exit Load_Skills_Loop when Nim_Mob.Skills(J, 0) = 0;
+         Skills_Container.Append
+           (Container => Temp_Record.Skills,
+            New_Item =>
+              (Index => Count_Type(Nim_Mob.Skills(J, 0)),
+               Level => Nim_Mob.Skills(J, 1),
+               Experience => Nim_Mob.Skills(J, 2)));
+      end loop Load_Skills_Loop;
+      Temp_Record.Order := Crew_Orders'Val(Nim_Mob.Order);
+      Temp_Record.Priorities := Nim_Mob.Priorities;
+      Load_Inventory_Loop :
+      for J in 0 .. 19 loop
+         exit Load_Inventory_Loop when Nim_Mob.Inventory(J, 0) = 0;
+         MobInventory_Container.Append
+           (Container => Temp_Record.Inventory,
+            New_Item =>
+              (Proto_Index => Nim_Mob.Inventory(J, 0),
+               Min_Amount => Nim_Mob.Inventory(J, 1),
+               Max_Amount => Nim_Mob.Inventory(J, 2)));
+      end loop Load_Inventory_Loop;
+      Load_Equipment_Loop :
+      for J in 0 .. 6 loop
+         Temp_Record.Equipment(Equipment_Locations'Val(J)) :=
+           Nim_Mob.Equipment(J);
+      end loop Load_Equipment_Loop;
+      return Temp_Record;
+   end Get_Proto_Mob;
 
 end Mobs;
