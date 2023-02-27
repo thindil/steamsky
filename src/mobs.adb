@@ -23,10 +23,6 @@ package body Mobs is
    procedure Load_Mobs(File_Name: String) is
       use Interfaces.C;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Proto_Mob_Record
-        (Amount_Of_Attributes => Attributes_Amount,
-         Amount_Of_Skills => Skills_Amount);
       Result: chars_ptr;
       --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Mobs(Name: chars_ptr) return chars_ptr with
@@ -38,16 +34,10 @@ package body Mobs is
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Mobs_Loop :
-      for I in 1 .. Get_Proto_Mobs_Amount loop
-         Temp_Record := Get_Proto_Mob(Index => I);
-         ProtoMobs_Container.Append
-           (Container => Proto_Mobs_List, New_Item => Temp_Record);
-      end loop Load_Mobs_Loop;
    end Load_Mobs;
 
    function Generate_Mob
-     (Mob_Index: ProtoMobs_Container.Extended_Index;
+     (Mob_Index: Positive;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data is
       use Tiny_String;
 
