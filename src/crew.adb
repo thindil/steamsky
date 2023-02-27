@@ -1169,6 +1169,7 @@ package body Crew is
    begin
       Ada_Member.Name :=
         To_Bounded_String(Source => Value(Item => Member.Name));
+      Ada_Member.Gender := Member.Gender;
       Ada_Member.Health := Member.Health;
       Ada_Member.Tired := Member.Tired;
       Ada_Member.Hunger := Member.Hunger;
@@ -1205,6 +1206,7 @@ package body Crew is
       end loop Convert_Skills_Loop;
       Ada_Member.Faction :=
         To_Bounded_String(Source => Value(Item => Member.Faction));
+      Ada_Member.Orders := Member.Orders;
    end Member_From_Nim;
 
 end Crew;
