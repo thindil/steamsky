@@ -10,6 +10,7 @@ if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
+if protoMobsList.len == 0:
   loadMobs("../bin/data/mobs.dat")
 
 let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
