@@ -56,14 +56,12 @@ package body Game.SaveLoad is
    procedure Save_Game(Pretty_Print: Boolean := False) is
       use Ada.Strings.Fixed;
       use Ada.Text_IO;
-      use Ada.Text_IO.Text_Streams;
 
       --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
       --## rule on IMPROPER_INITIALIZATION
       Category_Node, Main_Node: DOM.Core.Element;
       Raw_Value: Unbounded_String := Null_Unbounded_String;
-      Save_File: File_Type;
       Save_Data: Document;
       procedure Save_Statistics
         (Statistics_Vector: in out Statistics_Container.Vector;
@@ -585,6 +583,10 @@ package body Game.SaveLoad is
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
       Save_To_File_Block :
+      declare
+         use Ada.Text_IO.Text_Streams;
+
+         Save_File: File_Type;
       begin
          Create
            (File => Save_File, Mode => Out_File,
