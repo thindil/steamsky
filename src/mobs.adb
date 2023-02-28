@@ -71,7 +71,7 @@ package body Mobs is
       Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
       return Natural is
       function Get_Ada_Random_Item
-        (Items: chars_ptr; E_Index, H_Level, W_Skill_Level: Integer;
+        (I_Indexes: chars_ptr; E_Index, H_Level, W_Skill_Level: Integer;
          F_Index: chars_ptr; H_Skill: Integer) return Integer with
          Import => True,
          Convention => C,
@@ -79,7 +79,7 @@ package body Mobs is
    begin
       return
         Get_Ada_Random_Item
-          (Items => New_String(Str => Items_Indexes),
+          (I_Indexes => New_String(Str => Items_Indexes),
            E_Index => Equipment_Locations'Pos(Equip_Index),
            H_Level => Highest_Level, W_Skill_Level => Weapon_Skill_Level,
            F_Index =>
@@ -110,12 +110,12 @@ package body Mobs is
       end record;
       --## rule on TYPE_INITIAL_VALUES
       Nim_Mob: Nim_Proto_Mob;
-      procedure Get_Ada_Mob(Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
+      procedure Get_Ada_Mob(M_Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
          Import => True,
          Convention => C,
          External_Name => "getAdaMob";
    begin
-      Get_Ada_Mob(Index => Index, Ada_Mob => Nim_Mob);
+      Get_Ada_Mob(M_Index => Index, Ada_Mob => Nim_Mob);
       Temp_Record :=
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
