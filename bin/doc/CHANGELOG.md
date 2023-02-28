@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
 - Color of text for distance column in the list of known events
+- Possible crash when trying to create a save game file
 
 ## [8.4] - 2023-02-19
 
