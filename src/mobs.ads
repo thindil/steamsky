@@ -124,13 +124,6 @@ package Mobs is
    Default_Proto_Mobs_Amount: constant Proto_Mobs_Amount_Range := 113;
    -- ****
 
-   -- ****e* Mobs/Mobs.Mobs_Invalid_Data
-   -- FUNCTION
-   -- Raised when invalid data found in mobs file
-   -- SOURCE
-   Mobs_Invalid_Data: exception;
-   -- ****
-
    -- ****f* Mobs/Mobs.Load_Mobs
    -- FUNCTION
    -- Load mobs from files
