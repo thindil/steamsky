@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crew, crewinventory, game, goals, items, log, messages, ships,
-    shipscargo, shipscrew, statistics, trades, types
+import crew, crewinventory, game, goals, items, log, messages, shipscargo,
+    shipscrew, statistics, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
@@ -699,7 +699,7 @@ proc isAdaKnownRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], export
 proc addAdaKnownRecipe(recipeIndex: cstring) {.raises: [], tags: [], exportc.} =
   knownRecipes.add(y = $recipeIndex)
 
-proc getAdaKnownRecipe(index: cint): cstring {.raises: [], tags: [], exportc} =
+proc getAdaKnownRecipe(index: cint): cstring {.raises: [], tags: [], exportc.} =
   if index < knownRecipes.len:
     return knownRecipes[index].cstring
   return "".cstring

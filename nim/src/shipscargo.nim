@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, ships, types
+import game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex,

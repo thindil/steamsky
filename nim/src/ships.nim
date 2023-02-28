@@ -18,10 +18,6 @@
 import std/tables
 import game, types, utils
 
-var
-  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
-  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
-
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Get the description of quality of the selected cabin in the player's ship
   ##
@@ -99,27 +95,6 @@ type
     mType: cint
     data: array[1..3, cint]
     data2: cstring
-
-  AdaMemberData* = object
-    attributes: array[1..16, array[2, cint]]
-    skills: array[1..64, array[3, cint]]
-    name: cstring
-    gender: char
-    health: cint
-    tired: cint
-    hunger: cint
-    thirst: cint
-    order: cint
-    previousOrder: cint
-    orderTime: cint
-    orders: array[1..12, cint]
-    equipment: array[0..6, cint]
-    payment: array[1..2, cint]
-    contractLength: cint
-    morale: array[1..2, cint]
-    loyalty: cint
-    homeBase: cint
-    faction: cstring
 
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
@@ -251,31 +226,6 @@ proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
           1].durability.cint, price: nimCargo[index - 1].price.cint)
     else:
       cargo[index] = AdaInventoryData(protoIndex: 0)
-
-func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [].} =
-  result = MemberData(name: $adaMember.name, gender: adaMember.gender,
-      health: adaMember.health, tired: adaMember.tired,
-      hunger: adaMember.hunger, thirst: adaMember.thirst,
-      order: adaMember.order.CrewOrders,
-      previousOrder: adaMember.previousOrder.CrewOrders,
-      contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
-      homeBase: adaMember.homeBase, faction: $adaMember.faction)
-  for index, order in adaMember.orders.pairs:
-    result.orders[index] = order
-  for index, item in adaMember.equipment.pairs:
-    result.equipment[index.EquipmentLocations] = item - 1
-  for attribute in adaMember.attributes:
-    if attribute[0] == 0:
-      break
-    result.attributes.add(y = MobAttributeRecord(level: attribute[0],
-        experience: attribute[1]))
-  for skill in adaMember.skills:
-    if skill[0] == 0:
-      break
-    result.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
-        experience: skill[2]))
-  result.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
-  result.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
 
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =

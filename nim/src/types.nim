@@ -387,6 +387,27 @@ type
     durability*: cint
     price*: cint
 
+  AdaMemberData* = object
+    attributes*: array[1..16, array[2, cint]]
+    skills*: array[1..64, array[3, cint]]
+    name*: cstring
+    gender*: char
+    health*: cint
+    tired*: cint
+    hunger*: cint
+    thirst*: cint
+    order*: cint
+    previousOrder*: cint
+    orderTime*: cint
+    orders*: array[1..12, cint]
+    equipment*: array[0..6, cint]
+    payment*: array[1..2, cint]
+    contractLength*: cint
+    morale*: array[1..2, cint]
+    loyalty*: cint
+    homeBase*: cint
+    faction*: cstring
+
 proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
     InventoryData] =
   for item in inventory:
@@ -405,3 +426,29 @@ proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
           durability: inventory[i].durability.cint, price: inventory[i].price.cint)
     else:
       result[i] = AdaInventoryData(protoIndex: 0)
+
+func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [].} =
+  result = MemberData(name: $adaMember.name, gender: adaMember.gender,
+      health: adaMember.health, tired: adaMember.tired,
+      hunger: adaMember.hunger, thirst: adaMember.thirst,
+      order: adaMember.order.CrewOrders,
+      previousOrder: adaMember.previousOrder.CrewOrders,
+      contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
+      homeBase: adaMember.homeBase, faction: $adaMember.faction)
+  for index, order in adaMember.orders.pairs:
+    result.orders[index] = order
+  for index, item in adaMember.equipment.pairs:
+    result.equipment[index.EquipmentLocations] = item - 1
+  for attribute in adaMember.attributes:
+    if attribute[0] == 0:
+      break
+    result.attributes.add(y = MobAttributeRecord(level: attribute[0],
+        experience: attribute[1]))
+  for skill in adaMember.skills:
+    if skill[0] == 0:
+      break
+    result.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
+        experience: skill[2]))
+  result.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
+  result.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
+

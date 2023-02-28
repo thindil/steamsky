@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, ships, shipscargo, types, utils
+import game, shipscargo, types, utils
 
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";

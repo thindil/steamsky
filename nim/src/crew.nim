@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import careers, config, game, utils, ships, types
+import careers, config, game, utils, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =

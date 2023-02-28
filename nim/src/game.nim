@@ -102,6 +102,8 @@ var
   knownRecipes*: seq[string] ## The list of known recipes by the player
   messagesList*: seq[MessageData] ## The list of in-game messages
   eventsList* = initTable[Positive, EventData]() ## The list of available events in the game
+  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
+  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
