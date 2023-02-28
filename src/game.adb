@@ -366,7 +366,8 @@ package body Game is
                    Player_Faction.Careers(New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
-         Proto_Player: constant Proto_Mob_Record := Get_Proto_Mob(Index => Player_Index_2);
+         Proto_Player: constant Proto_Mob_Record :=
+           Get_Proto_Mob(Index => Player_Index_2);
          --## rule off IMPROPER_INITIALIZATION
          Tmp_Inventory: Inventory_Container.Vector (Capacity => 32);
          --## rule on IMPROPER_INITIALIZATION
@@ -380,18 +381,14 @@ package body Game is
          Player_Inventory_Loop :
          for I in
            MobInventory_Container.First_Index
-             (Container =>
-                  Proto_Player.Inventory) ..
+             (Container => Proto_Player.Inventory) ..
              MobInventory_Container.Last_Index
-               (Container =>
-                    Proto_Player.Inventory) loop
+               (Container => Proto_Player.Inventory) loop
             Add_Inventory_Block :
             declare
                Proto_Inventory: constant Mob_Inventory_Record :=
                  MobInventory_Container.Element
-                   (Container =>
-                        Proto_Player.Inventory,
-                    Index => I);
+                   (Container => Proto_Player.Inventory, Index => I);
             begin
                Amount :=
                  (if Proto_Inventory.Max_Amount > 0 then
@@ -416,20 +413,12 @@ package body Game is
                    (Source =>
                       To_String(Source => New_Game_Settings.Player_Name)),
                Gender => New_Game_Settings.Player_Gender, Health => 100,
-               Tired => 0,
-               Skills =>
-                   Proto_Player.Skills,
-               Hunger => 0, Thirst => 0,
-               Order =>
-                   Proto_Player.Order,
+               Tired => 0, Skills => Proto_Player.Skills, Hunger => 0,
+               Thirst => 0, Order => Proto_Player.Order,
                Previous_Order => REST, Order_Time => 15,
-               Orders =>
-                   Proto_Player.Priorities,
-               Attributes =>
-                   Proto_Player.Attributes,
-               Inventory => Tmp_Inventory,
-               Equipment =>
-                   Proto_Player.Equipment,
+               Orders => Proto_Player.Priorities,
+               Attributes => Proto_Player.Attributes,
+               Inventory => Tmp_Inventory, Equipment => Proto_Player.Equipment,
                Payment => (others => 0), Contract_Length => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                Home_Base => Random_Base,

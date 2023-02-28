@@ -37,10 +37,11 @@ package body Mobs is
    end Load_Mobs;
 
    function Generate_Mob
-     (Mob_Index: Positive;
-      Faction_Index: Tiny_String.Bounded_String) return Member_Data is
+     (Mob_Index: Positive; Faction_Index: Tiny_String.Bounded_String)
+      return Member_Data is
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -53,16 +54,15 @@ package body Mobs is
          Convention => C,
          External_Name => "adaGenerateMob";
    begin
-      --## rule off IMPROPER_INITIALIZATION
       Ada_Generate_Mob
         (Index => Mob_Index,
          F_Index => New_String(Str => To_String(Source => Faction_Index)),
          N_Mob => Nim_Mob, N_Inventory => Nim_Inventory);
       Member_From_Nim(Member => Nim_Mob, Ada_Member => Mob);
-      --## rule on IMPROPER_INITIALIZATION
       Mob.Inventory :=
         Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
       return Mob;
+      --## rule on IMPROPER_INITIALIZATION
    end Generate_Mob;
 
    function Get_Random_Item
@@ -94,7 +94,6 @@ package body Mobs is
          Amount_Of_Skills => Skills_Amount);
       Temp_Skills: Skills_Container.Vector (Capacity => Skills_Amount);
       Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
-      --## rule on IMPROPER_INITIALIZATION
       Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
       Temp_Equipment: constant Equipment_Array := (others => 0);
       --## rule off TYPE_INITIAL_VALUES
@@ -110,9 +109,7 @@ package body Mobs is
          Equipment: Nim_Equipment_Array;
       end record;
       --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
       Nim_Mob: Nim_Proto_Mob;
-      --## rule on IMPROPER_INITIALIZATION
       procedure Get_Ada_Mob(Index: Integer; Ada_Mob: out Nim_Proto_Mob) with
          Import => True,
          Convention => C,
@@ -125,6 +122,7 @@ package body Mobs is
          Attributes => (others => <>), Order => REST,
          Priorities => Temp_Priorities, Inventory => Temp_Inventory,
          Equipment => Temp_Equipment);
+      --## rule on IMPROPER_INITIALIZATION
       if Nim_Mob.Attributes(0, 0) = 0 then
          return Temp_Record;
       end if;
