@@ -28,6 +28,7 @@ var hallOfFameArray: array[1..10, HallOfFameData]
 
 proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## Load the game's hall of fame data from file
   if hallOfFameArray[1].name.len > 0:
     return
   for entry in hallOfFameArray.mitems:
