@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Items; use Items;
+with Items;
 
 package body Mobs is
 
@@ -39,6 +39,7 @@ package body Mobs is
    function Generate_Mob
      (Mob_Index: Positive; Faction_Index: Tiny_String.Bounded_String)
       return Member_Data is
+      use Items;
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
