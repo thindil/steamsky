@@ -246,6 +246,8 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             break
         if deleteIndex > -1:
           mob.inventory.delete(i = deleteIndex)
+    for item in mob.equipment.mitems:
+      item = -1
     for item in mobNode.findAll(tag = "equipment"):
       let slotName = item.attr(name = "slot")
       for index, name in equipmentNames.pairs:
