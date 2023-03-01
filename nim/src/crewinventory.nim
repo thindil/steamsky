@@ -89,10 +89,9 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
   ##
   ## * memberIndex - the index of the crew member which will stop using the item
   ## * itemIndex   - the index of the item to stop using
-  for i in playerShip.crew[memberIndex].equipment.low..playerShip.crew[
-      memberIndex].equipment.high:
-    if playerShip.crew[memberIndex].equipment[i] == itemIndex:
-      playerShip.crew[memberIndex].equipment[i] = -1
+  for item in playerShip.crew[memberIndex].equipment.mitems:
+    if item == itemIndex:
+      item = -1
       break
 
 proc updateInventory*(memberIndex: Natural; amount: int;
