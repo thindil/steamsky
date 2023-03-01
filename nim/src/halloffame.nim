@@ -26,7 +26,8 @@ type
 
 var hallOfFameArray: array[1..10, HallOfFameData]
 
-proc loadHallOfFame*() =
+proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect].} =
   if hallOfFameArray[1].name.len > 0:
     return
   for entry in hallOfFameArray.mitems:
