@@ -90,7 +90,6 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
   ## * memberIndex - the index of the crew member which will stop using the item
   ## * itemIndex   - the index of the item to stop using
   for item in playerShip.crew[memberIndex].equipment.mitems:
-    echo item
     if item == itemIndex:
       item = -1
       break
@@ -232,12 +231,6 @@ proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
   for i in 0..6:
     equipment[i] = playerShip.crew[(memberIndex - 1)].equipment[
         i.EquipmentLocations].cint + 1
-
-proc equipmentFromAda(memberIndex: cint; equipment: array[0..6,
-    cint]) {.raises: [], tags: [], exportc.} =
-  for i in 0..6:
-    playerShip.crew[(memberIndex - 1)].equipment[
-        i.EquipmentLocations] = equipment[i] - 1
 
 proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
     inventoryIndex, price, inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
