@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,59 +18,58 @@
 with Ada.Strings.Fixed;
 with Ada.Text_IO;
 with Ada.Text_IO.Text_Streams;
-with Ada.Directories;
+with Interfaces.C.Strings;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers;
-with Input_Sources.File;
 with Game; use Game;
 with Statistics;
 
 package body HallOfFame is
 
    procedure Load_Hall_Of_Fame is
-      use DOM.Readers;
-      use Input_Sources.File;
+      use Interfaces.C;
+      use Interfaces.C.Strings;
 
-      Hof_File: File_Input;
-      Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-      Entries_List: Node_List;
-      Entry_Node: Node;
-      Hof_Data: Document;
-   begin
-      if Hall_Of_Fame_Array(1).Name /= Null_Unbounded_String then
-         return;
-      end if;
-      Open
-        (Filename => To_String(Source => Save_Directory) & "halloffame.dat",
-         Input => Hof_File);
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Hall_Of_Fame_Data is record
+         Name: chars_ptr;
+         Points: Natural := 0;
+         Death_Reason: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
-      Parse(Parser => Reader, Input => Hof_File);
-      Close(Input => Hof_File);
-      Hof_Data := Get_Tree(Read => Reader);
+      Nim_Entry: Nim_Hall_Of_Fame_Data;
+      Result: chars_ptr;
       --## rule on IMPROPER_INITIALIZATION
-      Entries_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Hof_Data, Tag_Name => "entry");
-      Load_Hall_Of_Fame_Loop :
-      for I in 0 .. Length(List => Entries_List) - 1 loop
-         Entry_Node := Item(List => Entries_List, Index => I);
-         Hall_Of_Fame_Array(I + 1).Name :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Entry_Node, Name => "name"));
-         Hall_Of_Fame_Array(I + 1).Points :=
-           Natural'Value(Get_Attribute(Elem => Entry_Node, Name => "points"));
-         Hall_Of_Fame_Array(I + 1).Death_Reason :=
-           To_Unbounded_String
-             (Source =>
-                Get_Attribute(Elem => Entry_Node, Name => "Death_Reason"));
-      end loop Load_Hall_Of_Fame_Loop;
-      Free(Read => Reader);
-   exception
-      when Ada.Directories.Name_Error =>
-         null;
+      function Load_Ada_Hall_Of_Fame return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaHallOfFame";
+      procedure Get_Ada_Hof_Entry
+        (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHofEntry";
+   begin
+      Result := Load_Ada_Hall_Of_Fame;
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
+      Load_Hof_Loop :
+      for I in 1 .. 10 loop
+         Get_Ada_Hof_Entry(Index => I, N_Entry => Nim_Entry);
+         if Strlen(Item => Nim_Entry.Name) > 0 then
+            Hall_Of_Fame_Array(I) :=
+              (Name =>
+                 To_Unbounded_String(Source => Value(Item => Nim_Entry.Name)),
+               Points => Nim_Entry.Points,
+               Death_Reason =>
+                 To_Unbounded_String
+                   (Source => Value(Item => Nim_Entry.Death_Reason)));
+         end if;
+      end loop Load_Hof_Loop;
    end Load_Hall_Of_Fame;
 
    procedure Update_Hall_Of_Fame
