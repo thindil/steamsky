@@ -55,7 +55,6 @@ package body Game.SaveLoad is
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
       use Ada.Strings.Fixed;
-      use Ada.Text_IO;
 
       --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
@@ -584,6 +583,7 @@ package body Game.SaveLoad is
          Time_Stamp => False);
       Save_To_File_Block :
       declare
+         use Ada.Text_IO;
          use Ada.Text_IO.Text_Streams;
 
          Save_File: File_Type;
