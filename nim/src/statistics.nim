@@ -74,7 +74,7 @@ proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [].} =
       if goal.index == index:
         gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
 
-proc getGamePoints*(): Natural =
+proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [].} =
   const malusIndexes = [1, 3, 4, 5]
   let difficultyValues = [newGameSettings.enemyDamageBonus,
       newGameSettings.playerDamageBonus, newGameSettings.enemyMeleeDamageBonus,
