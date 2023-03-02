@@ -36,12 +36,19 @@ package ShipModules is
       Default_Value => ANY;
       -- ****
 
-      -- ****t* ShipModules/ShipModules.Module_Size
+      -- ****d* ShipModules/ShipModules.Default_Module_Type
       -- FUNCTION
-      -- Range of size of ships' modules
-      -- HISTORY
-      -- 7.4 - Added
+      -- Default value for modules type
       -- SOURCE
+   Default_Module_Type: constant Module_Type := ANY;
+   -- ****
+
+   -- ****t* ShipModules/ShipModules.Module_Size
+   -- FUNCTION
+   -- Range of size of ships' modules
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
    subtype Module_Size is Positive range 1 .. 10;
    -- ****
 
@@ -93,6 +100,13 @@ package ShipModules is
       Speed: Integer := 0;
       Reputation: Reputation_Range;
    end record;
+   -- ****
+
+   -- ****d* ShipModules/ShipModules.Empty_Base_Module
+   -- FUNCTION
+   -- Empty prototype module data
+   -- SOURCE
+   Empty_Base_Module: constant Base_Module_Data := (others => <>);
    -- ****
 
    -- ****t* ShipModules/ShipModules.Ship_Modules_Amount_Range
