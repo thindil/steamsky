@@ -75,6 +75,10 @@ proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [].} =
         gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
 
 proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [].} =
+  ## Get the real amount of the player's game's points, multiplied or divided
+  ## by the game's difficulty settings
+  ##
+  ## Returns the real amount of the player's game's points
   const malusIndexes = [1, 3, 4, 5]
   let difficultyValues = [newGameSettings.enemyDamageBonus,
       newGameSettings.playerDamageBonus, newGameSettings.enemyMeleeDamageBonus,
