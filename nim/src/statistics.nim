@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, types
+import config, game, types
 
 type
   StatisticsData = object
@@ -73,6 +73,28 @@ proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [].} =
     for goal in goalsList.values:
       if goal.index == index:
         gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
+
+proc getGamePoints*(): Natural =
+  const malusIndexes = [1, 3, 4, 5]
+  let difficultyValues = [newGameSettings.enemyDamageBonus,
+      newGameSettings.playerDamageBonus, newGameSettings.enemyMeleeDamageBonus,
+      newGameSettings.playerMeleeDamageBonus, newGameSettings.experienceBonus,
+      newGameSettings.reputationBonus, newGameSettings.upgradeCostBonus]
+  var pointsBonus, value = 0.0
+  for index, difficulty in difficultyValues.pairs:
+    value = difficulty.float
+    for malus in malusIndexes:
+      if index == malus:
+        if value < 1.0:
+          value = 1.0 + ((1.0 - value) * 4.0)
+        elif value > 1.0:
+          value = 1.0 - value
+        break
+    pointsBonus = pointsBonus + value
+  pointsBonus = pointsBonus / difficultyValues.len.float
+  if pointsBonus < 0.01:
+    pointsBonus = 0.01
+  return (gameStats.points.float * pointsBonus).Natural
 
 # Temporary code for interfacing with Ada
 
@@ -157,3 +179,6 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
 
 proc updateAdaFinishedGoals(index: cstring) {.raises: [], tags: [], exportc.} =
   updateFinishedGoals(index = $index)
+
+proc getAdaGamePoints(): cint {.raises: [], tags: [], exportc} =
+  return getGamePoints().cint
