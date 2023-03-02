@@ -20,7 +20,6 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
-with Config; use Config;
 
 package body Statistics is
 
@@ -279,39 +278,13 @@ package body Statistics is
    end Update_Killed_Mobs;
 
    function Get_Game_Points return Natural is
-      Malus_Indexes: constant array(1 .. 4) of Positive :=
-        (1 => 2, 2 => 4, 3 => 5, 4 => 6);
-      Difficulty_Values: constant array(1 .. 7) of Bonus_Type :=
-        (1 => New_Game_Settings.Enemy_Damage_Bonus,
-         2 => New_Game_Settings.Player_Damage_Bonus,
-         3 => New_Game_Settings.Enemy_Melee_Damage_Bonus,
-         4 => New_Game_Settings.Player_Melee_Damage_Bonus,
-         5 => New_Game_Settings.Experience_Bonus,
-         6 => New_Game_Settings.Reputation_Bonus,
-         7 => New_Game_Settings.Upgrade_Cost_Bonus);
-      Points_Bonus, Value: Float := 0.0;
+      function Get_Ada_Game_Points return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGamePoints";
    begin
-      Get_Game_Points_Loop :
-      for I in Difficulty_Values'Range loop
-         Value := Float(Difficulty_Values(I));
-         Update_Game_Points_Loop :
-         for J in Malus_Indexes'Range loop
-            if I = Malus_Indexes(J) then
-               if Value < 1.0 then
-                  Value := 1.0 + ((1.0 - Value) * 4.0);
-               elsif Value > 1.0 then
-                  Value := 1.0 - Value;
-               end if;
-               exit Update_Game_Points_Loop;
-            end if;
-         end loop Update_Game_Points_Loop;
-         Points_Bonus := Points_Bonus + Value;
-      end loop Get_Game_Points_Loop;
-      Points_Bonus := Points_Bonus / Float(Difficulty_Values'Length);
-      if Points_Bonus < 0.01 then
-         Points_Bonus := 0.01;
-      end if;
-      return Natural(Float(Game_Stats.Points) * Points_Bonus);
+      Get_Game_Stats;
+      return Get_Ada_Game_Points;
    end Get_Game_Points;
 
 end Statistics;
