@@ -19,10 +19,10 @@ with Ada.Strings.Fixed;
 with Ada.Text_IO;
 with Ada.Text_IO.Text_Streams;
 with Interfaces.C.Strings;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Core;
+with DOM.Core.Documents;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
 with Game; use Game;
 with Statistics;
 
@@ -77,6 +77,10 @@ package body HallOfFame is
       use Ada.Strings.Fixed;
       use Ada.Text_IO;
       use Ada.Text_IO.Text_Streams;
+      use DOM.Core;
+      use DOM.Core.Documents;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
       use Statistics;
 
       New_Index: Natural range 0 .. 10 := 0;
