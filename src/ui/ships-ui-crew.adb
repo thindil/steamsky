@@ -259,9 +259,9 @@ package body Ships.UI.Crew is
          end if;
          Add_Check_Button
            (Table => Crew_Table,
-            Tooltip => "Select the item for move or equip it.",
+            Tooltip => "Select the crew member to give orders to them.",
             Command =>
-              "ToggleInventoryItem" & Positive'Image(I) &
+              "ToggleCrewMember" & Positive'Image(I) &
               Positive'Image(Crew_Indexes(I)),
             Checked =>
               (if
@@ -1783,6 +1783,8 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Sorting orders for the player ship crew list
    -- OPTIONS
+   -- SELECTEDASC - Sort members by selected ascending
+   -- SELETEDDESC - Sort members by selected descending
    -- NAMEASC     - Sort members by name ascending
    -- NAMEDESC    - Sort members by name descending
    -- ORDERASC    - Sort members by order ascending
@@ -1802,11 +1804,13 @@ package body Ships.UI.Crew is
    -- NONE        - No sorting crew (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 8.5 - Added SELECTEDASC and SELECTEDDESC values
    -- SOURCE
    type Crew_Sort_Orders is
-     (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, SKILLASC, SKILLDESC, HEALTHASC,
-      HEALTHDESC, FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC,
-      HUNGERDESC, MORALEASC, MORALEDESC, NONE) with
+     (SELECTEDASC, SELECTEDDESC, NAMEASC, NAMEDESC, ORDERASC, ORDERDESC,
+      SKILLASC, SKILLDESC, HEALTHASC, HEALTHDESC, FATIGUEASC, FATIGUEDESC,
+      THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC, MORALEASC, MORALEDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1865,6 +1869,7 @@ package body Ships.UI.Crew is
       Skill_Index: constant Natural :=
         Natural'Value(Current(ComboBox => Skill_Box));
       type Local_Member_Data is record
+         Selected: Boolean;
          Name: Tiny_String.Bounded_String;
          Order: Crew_Orders;
          Skill: Tiny_String.Bounded_String;
@@ -1879,6 +1884,14 @@ package body Ships.UI.Crew is
       Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length));
       function "<"(Left, Right: Local_Member_Data) return Boolean is
       begin
+         if Crew_Sort_Order = SELECTEDASC
+           and then Left.Selected < Right.Selected then
+            return True;
+         end if;
+         if Crew_Sort_Order = SELECTEDDESC
+           and then Left.Selected > Right.Selected then
+            return True;
+         end if;
          if Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
@@ -1949,48 +1962,54 @@ package body Ships.UI.Crew is
    begin
       case Column is
          when 1 =>
+            if Crew_Sort_Order = SELECTEDASC then
+               Crew_Sort_Order := SELECTEDDESC;
+            else
+               Crew_Sort_Order := SELECTEDASC;
+            end if;
+         when 2 =>
             if Crew_Sort_Order = NAMEASC then
                Crew_Sort_Order := NAMEDESC;
             else
                Crew_Sort_Order := NAMEASC;
             end if;
-         when 2 =>
+         when 3 =>
             if Crew_Sort_Order = ORDERASC then
                Crew_Sort_Order := ORDERDESC;
             else
                Crew_Sort_Order := ORDERASC;
             end if;
-         when 3 =>
+         when 4 =>
             if Crew_Sort_Order = SKILLASC then
                Crew_Sort_Order := SKILLDESC;
             else
                Crew_Sort_Order := SKILLASC;
             end if;
-         when 4 =>
+         when 5 =>
             if Crew_Sort_Order = HEALTHASC then
                Crew_Sort_Order := HEALTHDESC;
             else
                Crew_Sort_Order := HEALTHASC;
             end if;
-         when 5 =>
+         when 6 =>
             if Crew_Sort_Order = FATIGUEASC then
                Crew_Sort_Order := FATIGUEDESC;
             else
                Crew_Sort_Order := FATIGUEASC;
             end if;
-         when 6 =>
+         when 7 =>
             if Crew_Sort_Order = THIRSTASC then
                Crew_Sort_Order := THIRSTDESC;
             else
                Crew_Sort_Order := THIRSTASC;
             end if;
-         when 7 =>
+         when 8 =>
             if Crew_Sort_Order = HUNGERASC then
                Crew_Sort_Order := HUNGERDESC;
             else
                Crew_Sort_Order := HUNGERASC;
             end if;
-         when 8 =>
+         when 9 =>
             if Crew_Sort_Order = MORALEASC then
                Crew_Sort_Order := MORALEDESC;
             else
@@ -2005,7 +2024,19 @@ package body Ships.UI.Crew is
       Fill_Local_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Local_Crew(Crew_Container.To_Index(Position => I)) :=
-           (Name => Player_Ship.Crew(I).Name,
+           (Selected =>
+              (if
+                 Tcl_GetVar
+                   (interp => Interp,
+                    varName =>
+                      "crewindex" &
+                      Trim
+                        (Source => Crew_Container.To_Index(Position => I)'Img,
+                         Side => Left)) =
+                 "1"
+               then True
+               else False),
+            Name => Player_Ship.Crew(I).Name,
             Order => Player_Ship.Crew(I).Order,
             Skill =>
               To_Bounded_String
