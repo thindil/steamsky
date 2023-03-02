@@ -17,3 +17,6 @@ updateFinishedGoals("1")
 assert gameStats.finishedGoals.len == 1
 updateFinishedGoals("Sdfdsf")
 assert gameStats.finishedGoals.len == 1
+
+gameStats.points = 0
+assert getGamePoints() == 0
