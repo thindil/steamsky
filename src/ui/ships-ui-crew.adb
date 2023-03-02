@@ -63,7 +63,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Table with info about the player's ship crew
    -- SOURCE
-   Crew_Table: Table_Widget (Amount => 8);
+   Crew_Table: Table_Widget (Amount => 9);
    -- ****
 
    -- ****iv* SUCrew/SUCrew.Modules_Indexes
@@ -229,14 +229,15 @@ package body Ships.UI.Crew is
         Create_Table
           (Parent => Widget_Image(Win => Crew_Info_Frame),
            Headers =>
-             (1 => To_Unbounded_String(Source => "Name"),
-              2 => To_Unbounded_String(Source => "Order"),
-              3 => To_Unbounded_String(Source => "Skill"),
-              4 => To_Unbounded_String(Source => "Health"),
-              5 => To_Unbounded_String(Source => "Fatigue"),
-              6 => To_Unbounded_String(Source => "Thirst"),
-              7 => To_Unbounded_String(Source => "Hunger"),
-              8 => To_Unbounded_String(Source => "Morale")),
+             (1 => To_Unbounded_String(Source => ""),
+              2 => To_Unbounded_String(Source => "Name"),
+              3 => To_Unbounded_String(Source => "Order"),
+              4 => To_Unbounded_String(Source => "Skill"),
+              5 => To_Unbounded_String(Source => "Health"),
+              6 => To_Unbounded_String(Source => "Fatigue"),
+              7 => To_Unbounded_String(Source => "Thirst"),
+              8 => To_Unbounded_String(Source => "Hunger"),
+              9 => To_Unbounded_String(Source => "Morale")),
            Scrollbar =>
              Get_Widget
                (pathName => ".gameframe.paned.shipinfoframe.crew.scrolly"),
@@ -256,11 +257,30 @@ package body Ships.UI.Crew is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
+         Add_Check_Button
+           (Table => Crew_Table,
+            Tooltip => "Select the item for move or equip it.",
+            Command =>
+              "ToggleInventoryItem" & Positive'Image(I) &
+              Positive'Image(Crew_Indexes(I)),
+            Checked =>
+              (if
+                 Tcl_GetVar
+                   (interp => Get_Context,
+                    varName =>
+                      "crewindex" &
+                      Trim
+                        (Source => Positive'Image(Crew_Indexes(I)),
+                         Side => Left)) =
+                 "1"
+               then True
+               else False),
+            Column => 1, Empty_Unchecked => True);
          Add_Button
            (Table => Crew_Table,
             Text => To_String(Source => Player_Ship.Crew(I).Name),
             Tooltip => "Show available crew member's options",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 1);
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 2);
          Add_Button
            (Table => Crew_Table,
             Text =>
@@ -271,13 +291,13 @@ package body Ships.UI.Crew is
                      (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             Tooltip =>
               "The current order for the selected crew member.\nPress the mouse button to change it.",
-            Command => "ShowCrewOrder" & Positive'Image(I), Column => 2);
+            Command => "ShowCrewOrder" & Positive'Image(I), Column => 3);
          if Skill = 0 then
             Add_Button
               (Table => Crew_Table,
                Text => Get_Highest_Skill(Member_Index => I),
                Tooltip => "The highest skill of the selected crew member",
-               Command => "ShowMemberInfo" & Positive'Image(I), Column => 3);
+               Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
          else
             Add_Button
               (Table => Crew_Table,
@@ -290,13 +310,13 @@ package body Ships.UI.Crew is
                Tooltip =>
                  "The level of the " & Get(Widgt => Skill_Box) &
                  " of the selected crew member",
-               Command => "ShowMemberInfo" & Positive'Image(I), Column => 3);
+               Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
          end if;
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Health,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current health level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 5);
          Tired_Level :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
@@ -307,25 +327,25 @@ package body Ships.UI.Crew is
            (Table => Crew_Table, Value => Tired_Level,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current tired level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 5,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 6,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Thirst,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current thirst level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 6,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 7,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current hunger level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 7,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 8,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1),
             Max_Value => Skill_Range'Last,
             Tooltip => "The current morale level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 8,
+            Command => "ShowMemberInfo" & Positive'Image(I), Column => 9,
             New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -2512,6 +2532,51 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Select_Crew_Order_Command;
 
+   -- ****o* SUCrew/SUCrew.Toggle_Crew_Member_Command
+   -- FUNCTION
+   -- Select or deselect the selected crew member
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleInventoryItem rowindex crewindex
+   -- Rowindex is the index of the row in which is the selected crew member,
+   -- crewindex is the index of the selected crew member.
+   -- SOURCE
+   function Toggle_Crew_Member_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_Crew_Member_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+   begin
+      Toggle_Checked_Button
+        (Table => Crew_Table,
+         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
+      if Is_Checked
+          (Table => Crew_Table,
+           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
+           Column => 1) then
+         Tcl_SetVar
+           (interp => Interp,
+            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2),
+            newValue => "1");
+      else
+         Tcl_UnsetVar
+           (interp => Interp,
+            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
+      end if;
+      return TCL_OK;
+   end Toggle_Crew_Member_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -2545,6 +2610,9 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "SelectCrewOrder",
          Ada_Command => Select_Crew_Order_Command'Access);
+      Add_Command
+        (Name => "ToggleCrewMember",
+         Ada_Command => Toggle_Crew_Member_Command'Access);
       Ships.UI.Crew.Inventory.Add_Commands;
    end Add_Commands;
 
