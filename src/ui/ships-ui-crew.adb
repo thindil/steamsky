@@ -267,7 +267,7 @@ package body Ships.UI.Crew is
          end loop Update_Crew_Indexes_Loop;
       end if;
       Load_Crew_Loop :
-      for I of Crew_Indexes loop
+      for I in Crew_Indexes.Iterate loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -276,7 +276,8 @@ package body Ships.UI.Crew is
            (Table => Crew_Table,
             Tooltip => "Select the crew member to give orders to them.",
             Command =>
-              "ToggleCrewMember" & Positive'Image(I) &
+              "ToggleCrewMember" &
+              Positive'Image(Positive_Container.To_Index(Position => I)) &
               Positive'Image(Crew_Indexes(I)),
             Checked =>
               (if
@@ -293,26 +294,33 @@ package body Ships.UI.Crew is
             Column => 1, Empty_Unchecked => True);
          Add_Button
            (Table => Crew_Table,
-            Text => To_String(Source => Player_Ship.Crew(I).Name),
+            Text =>
+              To_String(Source => Player_Ship.Crew(Crew_Indexes(I)).Name),
             Tooltip => "Show available crew member's options",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 2);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 2);
          Add_Button
            (Table => Crew_Table,
             Text =>
-              Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
+              Crew_Orders'Image(Player_Ship.Crew(Crew_Indexes(I)).Order)(1) &
               To_Lower
                 (Item =>
-                   Crew_Orders'Image(Player_Ship.Crew(I).Order)
-                     (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
+                   Crew_Orders'Image(Player_Ship.Crew(Crew_Indexes(I)).Order)
+                     (2 ..
+                          Crew_Orders'Image
+                            (Player_Ship.Crew(Crew_Indexes(I)).Order)'
+                            Last)),
             Tooltip =>
               "The current order for the selected crew member.\nPress the mouse button to change it.",
-            Command => "ShowCrewOrder" & Positive'Image(I), Column => 3);
+            Command => "ShowCrewOrder" & Positive'Image(Crew_Indexes(I)),
+            Column => 3);
          if Skill = 0 then
             Add_Button
               (Table => Crew_Table,
-               Text => Get_Highest_Skill(Member_Index => I),
+               Text => Get_Highest_Skill(Member_Index => Crew_Indexes(I)),
                Tooltip => "The highest skill of the selected crew member",
-               Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
+               Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+               Column => 4);
          else
             Add_Button
               (Table => Crew_Table,
@@ -320,21 +328,26 @@ package body Ships.UI.Crew is
                  Get_Skill_Level_Name
                    (Skill_Level =>
                       Get_Skill_Level
-                        (Member => Player_Ship.Crew(I),
+                        (Member => Player_Ship.Crew(Crew_Indexes(I)),
                          Skill_Index => Skills_Amount_Range(Skill))),
                Tooltip =>
                  "The level of the " & Get(Widgt => Skill_Box) &
                  " of the selected crew member",
-               Command => "ShowMemberInfo" & Positive'Image(I), Column => 4);
+               Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+               Column => 4);
          end if;
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Health,
+           (Table => Crew_Table,
+            Value => Player_Ship.Crew(Crew_Indexes(I)).Health,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current health level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 5);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 5);
          Tired_Level :=
-           Player_Ship.Crew(I).Tired -
-           Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
+           Player_Ship.Crew(Crew_Indexes(I)).Tired -
+           Player_Ship.Crew(Crew_Indexes(I)).Attributes
+             (Positive(Condition_Index))
+             .Level;
          if Tired_Level < 0 then
             Tired_Level := 0;
          end if;
@@ -342,26 +355,29 @@ package body Ships.UI.Crew is
            (Table => Crew_Table, Value => Tired_Level,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current tired level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 6,
-            New_Row => False, Invert_Colors => True);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 6, New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Thirst,
+           (Table => Crew_Table,
+            Value => Player_Ship.Crew(Crew_Indexes(I)).Thirst,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current thirst level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 7,
-            New_Row => False, Invert_Colors => True);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 7, New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger,
+           (Table => Crew_Table,
+            Value => Player_Ship.Crew(Crew_Indexes(I)).Hunger,
             Max_Value => Skill_Range'Last,
             Tooltip => "The current hunger level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 8,
-            New_Row => False, Invert_Colors => True);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 8, New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1),
+           (Table => Crew_Table,
+            Value => Player_Ship.Crew(Crew_Indexes(I)).Morale(1),
             Max_Value => Skill_Range'Last,
             Tooltip => "The current morale level of the selected crew member",
-            Command => "ShowMemberInfo" & Positive'Image(I), Column => 9,
-            New_Row => True);
+            Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
+            Column => 9, New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
