@@ -2635,7 +2635,7 @@ package body Ships.UI.Crew is
       -- ****
    begin
       Reset_Crew_Selection_Loop :
-      for I in 1 .. Crew_Container.Capacity(Container => Player_Ship.Crew) loop
+      for I in 1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
          if Tcl_GetVar
              (interp => Interp,
               varName => "crewindex" & Trim(Source => I'Img, Side => Left)) =
@@ -2651,7 +2651,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Select or deselect all crew members
    -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command.
@@ -2671,24 +2671,22 @@ package body Ships.UI.Crew is
    function Toggle_All_Crew_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
+      pragma Unreferenced(Client_Data, Argc);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
          Reset_Selection(Interp => Interp);
       else
          Set_Crew_Selection_Loop :
          for I in
-           1 .. Crew_Container.Capacity(Container => Player_Ship.Crew) loop
+           1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
             Tcl_SetVar
               (interp => Interp,
                varName => "crewindex" & Trim(Source => I'Img, Side => Left),
                newValue => "1");
          end loop Set_Crew_Selection_Loop;
       end if;
-      return
-        Sort_Crew_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "SortShipCrew" & "-1");
+      Update_Crew_Info;
+      return TCL_OK;
    end Toggle_All_Crew_Command;
 
    procedure Add_Commands is
