@@ -67,6 +67,7 @@ package body ShipModules is
       use Tiny_String;
 
       Temp_Record: Base_Module_Data;
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Module_Data is record
          Name: chars_ptr;
          Mtype: Integer;
@@ -85,6 +86,7 @@ package body ShipModules is
          Speed: Integer;
          Reputation: Integer;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Temp_Nim_Module: Nim_Module_Data;
       procedure Get_Ada_Module
         (I: Integer; Ada_Module: out Nim_Module_Data) with
