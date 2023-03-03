@@ -1872,9 +1872,10 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Column: constant Positive :=
-        Get_Column_Number
-          (Table => Crew_Table,
-           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
+         else Get_Column_Number
+             (Table => Crew_Table,
+              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       Skill_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
@@ -2671,15 +2672,7 @@ package body Ships.UI.Crew is
    function Toggle_All_Crew_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Skill_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned &
-             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
-           Interp => Interp);
-      Skill_Index: constant Natural :=
-        Natural'Value(Current(ComboBox => Skill_Box));
+      pragma Unreferenced(Argc);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
          Reset_Selection(Interp => Interp);
@@ -2693,8 +2686,10 @@ package body Ships.UI.Crew is
                newValue => "1");
          end loop Set_Crew_Selection_Loop;
       end if;
-      Update_Crew_Info(Skill => Skill_Index);
-      return TCL_OK;
+      return
+        Sort_Crew_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortShipCrew" & "-1");
    end Toggle_All_Crew_Command;
 
    procedure Add_Commands is
