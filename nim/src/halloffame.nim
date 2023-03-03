@@ -62,57 +62,16 @@ proc updateHallOfFame*(playerName, deathReason: string) =
       newIndex .. hallOfFameArray.high - 1]
   hallOfFameArray[newIndex] = HallOfFameData(name: playerName,
       points: getGamePoints(), deathReason: deathReason)
+  var entries: seq[XmlNode]
   for entry in hallOfFameArray:
     var element = newElement("entry")
     let values = {"name": entry.name, "points": $entry.points,
         "Death_Reason": entry.deathReason}.toXmlAttributes
     element.attrs = values
+    entries.add(y = element)
+  let xmlTree = newXmlTree(tag = "halloffame", children = entries)
+  writeFile(filename = saveDirectory & "halloffame.dat", content = $xmlTree)
 
-#   procedure Update_Hall_Of_Fame
-#     (Player_Name, Death_Reason: Unbounded_String) is
-#      New_Index: Natural range 0 .. 10 := 0;
-#      Hof_File: File_Type;
-#      Hall_Of_Fame: DOM_Implementation; --## rule line off IMPROPER_INITIALIZATION
-#      Entry_Node, Main_Node: DOM.Core.Element;
-#      Hof_Data: Document;
-#   begin
-#      Hof_Data := Create_Document(Implementation => Hall_Of_Fame);
-#      Main_Node :=
-#        Append_Child
-#          (N => Hof_Data,
-#           New_Child =>
-#             Create_Element(Doc => Hof_Data, Tag_Name => "halloffame"));
-#      Update_Hall_Of_Fame_Loop :
-#      for Element of Hall_Of_Fame_Array loop
-#         if Element.Name = Null_Unbounded_String then
-#            exit Update_Hall_Of_Fame_Loop;
-#         end if;
-#         Entry_Node :=
-#           Append_Child
-#             (N => Main_Node,
-#              New_Child =>
-#                Create_Element(Doc => Hof_Data, Tag_Name => "entry"));
-#         Set_Attribute
-#           (Elem => Entry_Node, Name => "name",
-#            Value => To_String(Source => Element.Name));
-#         Set_Attribute
-#           (Elem => Entry_Node, Name => "points",
-#            Value =>
-#              Trim
-#                (Source => Integer'Image(Element.Points),
-#                 Side => Ada.Strings.Left));
-#         Set_Attribute
-#           (Elem => Entry_Node, Name => "Death_Reason",
-#            Value => To_String(Source => Element.Death_Reason));
-#      end loop Update_Hall_Of_Fame_Loop;
-#      Create
-#        (File => Hof_File, Mode => Out_File,
-#         Name => To_String(Source => Save_Directory) & "halloffame.dat");
-#      Write
-#        (Stream => Stream(File => Hof_File), N => Hof_Data,
-#         Pretty_Print => True);
-#      Close(File => Hof_File);
-#   end Update_Hall_Of_Fame;
 # Temporary code for interfacing with Ada
 
 type
