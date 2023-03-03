@@ -2672,6 +2672,14 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      Skill_Box: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName =>
+             Main_Paned &
+             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
+           Interp => Interp);
+      Skill_Index: constant Natural :=
+        Natural'Value(Current(ComboBox => Skill_Box));
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
          Reset_Selection(Interp => Interp);
@@ -2685,7 +2693,7 @@ package body Ships.UI.Crew is
                newValue => "1");
          end loop Set_Crew_Selection_Loop;
       end if;
-      Update_Crew_Info;
+      Update_Crew_Info(Skill => Skill_Index);
       return TCL_OK;
    end Toggle_All_Crew_Command;
 
