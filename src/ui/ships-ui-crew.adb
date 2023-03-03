@@ -2590,7 +2590,7 @@ package body Ships.UI.Crew is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ToggleInventoryItem rowindex crewindex
+   -- ToggleCrewMember rowindex crewindex
    -- Rowindex is the index of the row in which is the selected crew member,
    -- crewindex is the index of the selected crew member.
    -- SOURCE
