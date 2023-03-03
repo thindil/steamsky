@@ -224,6 +224,21 @@ package body Ships.UI.Crew is
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Skill_Box, Options => "-row 0 -column 1");
       end Show_Skill_Box_Block;
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".selectallbutton",
+           options =>
+             "-image selectallicon -command {ToggleAllCrew select} -style Small.TButton");
+      Add(Widget => Button, Message => "Select all crew members.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 2}");
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".unselectallbutton",
+           options =>
+             "-image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton");
+      Add(Widget => Button, Message => "Unselect all crew members.");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-sticky w -row 1 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Buttons_Frame, Options => "-sticky w");
       Crew_Table :=
         Create_Table
@@ -2608,6 +2623,74 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Toggle_Crew_Member_Command;
 
+   -- ****if* SUCrew/SUCrew.Reset_Selection
+   -- FUNCTION
+   -- Reset the currently selected crew members
+   -- PARAMETERS
+   -- Interp - The Tcl interpreter in which the selection will be reseted
+   -- HISTORY
+   -- 8.5 - Added
+   -- SOURCE
+   procedure Reset_Selection(Interp: Tcl_Interp) is
+      -- ****
+   begin
+      Reset_Crew_Selection_Loop :
+      for I in 1 .. Crew_Container.Capacity(Container => Player_Ship.Crew) loop
+         if Tcl_GetVar
+             (interp => Interp,
+              varName => "crewindex" & Trim(Source => I'Img, Side => Left)) =
+           "1" then
+            Tcl_UnsetVar
+              (interp => Interp,
+               varName => "crewindex" & Trim(Source => I'Img, Side => Left));
+         end if;
+      end loop Reset_Crew_Selection_Loop;
+   end Reset_Selection;
+
+   -- ****o* SUCrew/SUCrew.Toggle_All_Crew_Command
+   -- FUNCTION
+   -- Select or deselect all crew members
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleAllCrew action
+   -- Action is the action which will be performed. Possible values are
+   -- select or deselect
+   -- SOURCE
+   function Toggle_All_Crew_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_All_Crew_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+   begin
+      if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
+         Reset_Selection(Interp => Interp);
+      else
+         Set_Crew_Selection_Loop :
+         for I in
+           1 .. Crew_Container.Capacity(Container => Player_Ship.Crew) loop
+            Tcl_SetVar
+              (interp => Interp,
+               varName => "crewindex" & Trim(Source => I'Img, Side => Left),
+               newValue => "1");
+         end loop Set_Crew_Selection_Loop;
+      end if;
+      return
+        Sort_Crew_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "SortShipCrew" & "-1");
+   end Toggle_All_Crew_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -2644,6 +2727,9 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "ToggleCrewMember",
          Ada_Command => Toggle_Crew_Member_Command'Access);
+      Add_Command
+        (Name => "ToggleAllCrew",
+         Ada_Command => Toggle_All_Crew_Command'Access);
       Ships.UI.Crew.Inventory.Add_Commands;
    end Add_Commands;
 
