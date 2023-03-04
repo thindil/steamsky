@@ -64,6 +64,8 @@ proc updateHallOfFame*(playerName, deathReason: string) =
       points: getGamePoints(), deathReason: deathReason)
   var entries: seq[XmlNode]
   for entry in hallOfFameArray:
+    if entry.points == 0:
+      break
     var element = newElement("entry")
     let values = {"name": entry.name, "points": $entry.points,
         "Death_Reason": entry.deathReason}.toXmlAttributes
