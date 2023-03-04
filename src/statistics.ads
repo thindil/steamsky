@@ -158,4 +158,8 @@ package Statistics is
    function Get_Game_Points return Natural;
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Game_Stats;
+
 end Statistics;
