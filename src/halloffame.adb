@@ -15,22 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Fixed;
-with Ada.Text_IO;
-with Ada.Text_IO.Text_Streams;
-with Interfaces.C.Strings;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes;
-with DOM.Core.Elements;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
-with Statistics;
 
 package body HallOfFame is
 
    procedure Load_Hall_Of_Fame is
       use Interfaces.C;
-      use Interfaces.C.Strings;
 
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Hall_Of_Fame_Data is record
@@ -74,72 +65,14 @@ package body HallOfFame is
 
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
-      use Ada.Strings.Fixed;
-      use Ada.Text_IO;
-      use Ada.Text_IO.Text_Streams;
-      use DOM.Core;
-      use DOM.Core.Documents;
-      use DOM.Core.Elements;
-      use DOM.Core.Nodes;
-      use Statistics;
-
-      New_Index: Natural range 0 .. 10 := 0;
-      Hof_File: File_Type;
-      Hall_Of_Fame: DOM_Implementation; --## rule line off IMPROPER_INITIALIZATION
-      Entry_Node, Main_Node: DOM.Core.Element;
-      Hof_Data: Document;
+      procedure Update_Ada_Hall_Of_Fame(P_Name, D_Reason: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaHallOfFame";
    begin
-      Find_New_Index_Loop :
-      for I in Hall_Of_Fame_Array'Range loop
-         if Hall_Of_Fame_Array(I).Points < Get_Game_Points then
-            New_Index := I;
-            exit Find_New_Index_Loop;
-         end if;
-      end loop Find_New_Index_Loop;
-      if New_Index = 0 then
-         return;
-      end if;
-      Hall_Of_Fame_Array(New_Index + 1 .. Hall_Of_Fame_Array'Last) :=
-        Hall_Of_Fame_Array(New_Index .. Hall_Of_Fame_Array'Last - 1);
-      Hall_Of_Fame_Array(New_Index) :=
-        (Name => Player_Name, Points => Get_Game_Points,
-         Death_Reason => Death_Reason);
-      Hof_Data := Create_Document(Implementation => Hall_Of_Fame);
-      Main_Node :=
-        Append_Child
-          (N => Hof_Data,
-           New_Child =>
-             Create_Element(Doc => Hof_Data, Tag_Name => "halloffame"));
-      Update_Hall_Of_Fame_Loop :
-      for Element of Hall_Of_Fame_Array loop
-         if Element.Name = Null_Unbounded_String then
-            exit Update_Hall_Of_Fame_Loop;
-         end if;
-         Entry_Node :=
-           Append_Child
-             (N => Main_Node,
-              New_Child =>
-                Create_Element(Doc => Hof_Data, Tag_Name => "entry"));
-         Set_Attribute
-           (Elem => Entry_Node, Name => "name",
-            Value => To_String(Source => Element.Name));
-         Set_Attribute
-           (Elem => Entry_Node, Name => "points",
-            Value =>
-              Trim
-                (Source => Integer'Image(Element.Points),
-                 Side => Ada.Strings.Left));
-         Set_Attribute
-           (Elem => Entry_Node, Name => "Death_Reason",
-            Value => To_String(Source => Element.Death_Reason));
-      end loop Update_Hall_Of_Fame_Loop;
-      Create
-        (File => Hof_File, Mode => Out_File,
-         Name => To_String(Source => Save_Directory) & "halloffame.dat");
-      Write
-        (Stream => Stream(File => Hof_File), N => Hof_Data,
-         Pretty_Print => True);
-      Close(File => Hof_File);
+      Update_Ada_Hall_Of_Fame
+        (P_Name => New_String(Str => To_String(Source => Player_Name)),
+         D_Reason => New_String(Str => To_String(Source => Death_Reason)));
    end Update_Hall_Of_Fame;
 
 end HallOfFame;
