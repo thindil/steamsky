@@ -72,7 +72,7 @@ proc updateHallOfFame*(playerName, deathReason: string) =
     element.attrs = values
     entries.add(y = element)
   let xmlTree = newXmlTree(tag = "halloffame", children = entries)
-  writeFile(filename = saveDirectory & "halloffame.dat", content = $xmlTree)
+  writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
 
 # Temporary code for interfacing with Ada
 
