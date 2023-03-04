@@ -93,3 +93,10 @@ proc getAdaHofEntry(index: cint; entry: var AdaHallOfFameData) {.sideEffect,
   entry = AdaHallOfFameData(name: hallOfFameArray[index].name.cstring,
       points: hallOfFameArray[index].points.cint, deathReason: hallOfFameArray[
       index].deathReason.cstring)
+
+proc updateAdaHallOfFame(playerName, deathReason: cstring) {.sideEffect,
+    raises: [], tags: [WriteIOEffect], exportc.} =
+  try:
+    updateHallOfFame(playerName = $playerName, deathReason = $deathReason)
+  except IOError:
+    discard
