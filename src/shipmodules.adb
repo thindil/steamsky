@@ -15,9 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Containers;
-with Ada.Strings.Maps; use Ada.Strings.Maps;
+with Ada.Strings.Maps;
 with Interfaces.C.Strings;
 
 package body ShipModules is
@@ -39,6 +39,8 @@ package body ShipModules is
    end Load_Ship_Modules;
 
    function Get_Module_Type(Module_Index: Positive) return String is
+      use Ada.Characters.Handling;
+      use Ada.Strings.Maps;
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>
