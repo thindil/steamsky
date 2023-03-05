@@ -18,6 +18,7 @@
 with Ada.Characters.Handling;
 with Ada.Containers;
 with Ada.Strings.Maps;
+with Ada.Strings.Unbounded;
 with Interfaces.C.Strings;
 
 package body ShipModules is
@@ -41,6 +42,8 @@ package body ShipModules is
    function Get_Module_Type(Module_Index: Positive) return String is
       use Ada.Characters.Handling;
       use Ada.Strings.Maps;
+      use Ada.Strings.Unbounded;
+
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>
