@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Game; use Game;
+with Game;
 with Statistics;
 
 package body HallOfFame is
@@ -36,6 +36,7 @@ package body HallOfFame is
 
    procedure Load_Hall_Of_Fame is
       use Interfaces.C;
+      use Game;
 
       --## rule off IMPROPER_INITIALIZATION
       Nim_Entry: Nim_Hall_Of_Fame_Data;
