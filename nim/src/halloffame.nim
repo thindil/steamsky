@@ -52,6 +52,12 @@ proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
 
 proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
     IOError], tags: [WriteIOEffect].} =
+  ## Update the game's hall of fame list with the new entry. If needed, remove
+  ## old one to replace it with the new. If new is too low in points, don't
+  ## insert it to the hall of fame list.
+  ##
+  ## * playerName  - the name of the player to add to the list
+  ## * deathReason - the reason what killed the player
   var newIndex: Natural = 0
   for index, entry in hallOfFameArray.pairs:
     if entry.points < getGamePoints():
