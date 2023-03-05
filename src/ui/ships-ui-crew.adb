@@ -2051,6 +2051,9 @@ package body Ships.UI.Crew is
             null;
       end case;
       if Crew_Sort_Order = NONE then
+         if Column = Positive'Last then
+            Update_Crew_Info(Skill => Skill_Index);
+         end if;
          return TCL_OK;
       end if;
       Fill_Local_Crew_Loop :
