@@ -50,7 +50,8 @@ proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     hallOfFameArray[index].deathReason = hofNode.attr(name = "Death_Reason")
     index.inc
 
-proc updateHallOfFame*(playerName, deathReason: string) =
+proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
+    IOError], tags: [WriteIOEffect].} =
   var newIndex: Natural = 0
   for index, entry in hallOfFameArray.pairs:
     if entry.points < getGamePoints():
