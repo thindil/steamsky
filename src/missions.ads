@@ -223,4 +223,9 @@ package Missions is
       Test_Case => (Name => "Test_Get_Mission_Type", Mode => Nominal);
    -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Accepted_Missions;
+   procedure Set_Accepted_Missions;
+
 end Missions;

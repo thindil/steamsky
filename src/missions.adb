@@ -800,4 +800,59 @@ package body Missions is
       end case;
    end Get_Mission_Type;
 
+   type Nim_Mission_Data is record
+      Time: Natural;
+      Target_X: Natural;
+      Target_Y: Natural;
+      Reward: Natural;
+      Start_Base: Natural;
+      Finished: Natural;
+      Multiplier: Reward_Multiplier := 0.0;
+      M_Type: Natural;
+      Data: Natural;
+   end record;
+
+   type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
+
+   procedure Get_Accepted_Missions is
+      Nim_Missions: Nim_Missions_Array;
+      procedure Get_Ada_Accepted_Missions(Missions: Nim_Missions_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaAcceptedMissions";
+   begin
+      Convert_Accepted_Missions_Loop :
+      for I in Nim_Missions'Range loop
+         if I < Integer(Accepted_Missions.Length - 1) then
+            Nim_Missions(I) :=
+              (Time => Accepted_Missions(I + 1).Time,
+               Target_X => Accepted_Missions(I + 1).Target_X,
+               Target_Y => Accepted_Missions(I + 1).Target_Y,
+               Reward => Accepted_Missions(I + 1).Reward,
+               Start_Base => Accepted_Missions(I + 1).Start_Base,
+               Finished =>
+                 (if Accepted_Missions(I + 1).Finished then 1 else 0),
+               Multiplier => Accepted_Missions(I + 1).Multiplier,
+               M_Type => Missions_Types'Pos(Accepted_Missions(I + 1).M_Type),
+               Data =>
+                 (case Accepted_Missions(I + 1).M_Type is
+                    when DELIVER => Accepted_Missions(I + 1).Item_Index,
+                    when DESTROY => Accepted_Missions(I + 1).Ship_Index,
+                    when PASSENGER => Accepted_Missions(I + 1).Data,
+                    when others => Accepted_Missions(I + 1).Target));
+         else
+            Nim_Missions(I) :=
+              (Time => 0, Target_X => 0, Target_Y => 0, Reward => 0,
+               Start_Base => 0, Finished => 0, Multiplier => 0.0, M_Type => 0,
+               Data => 0);
+         end if;
+      end loop Convert_Accepted_Missions_Loop;
+      Get_Ada_Accepted_Missions(Missions => Nim_Missions);
+   end Get_Accepted_Missions;
+
+   procedure Set_Accepted_Missions is
+   begin
+      null;
+   end Set_Accepted_Missions;
+
 end Missions;
