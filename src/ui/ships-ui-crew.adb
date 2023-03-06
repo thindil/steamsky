@@ -155,35 +155,35 @@ package body Ships.UI.Crew is
               "-text {Orders for " &
               (if Selection then "selected" else "all") & ":}");
          Add
-            (Widget => Button,
+           (Widget => Button,
             Message =>
-            "Give the selected order to the " &
-            (if Selection then "selected crew members" else "whole crew") &
-            ".");
+              "Give the selected order to the " &
+              (if Selection then "selected crew members" else "whole crew") &
+              ".");
       end if;
       Button.Name := New_String(Str => Buttons_Frame & ".rest");
       if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
          Add
-            (Widget => Button,
+           (Widget => Button,
             Message =>
-            "Go rest " &
-            (if Selection then "selected crew members" else "everyone"));
+              "Go rest " &
+              (if Selection then "selected crew members" else "everyone"));
       end if;
       Button.Name := New_String(Str => Buttons_Frame & ".clean");
       if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
          Add
-            (Widget => Button,
+           (Widget => Button,
             Message =>
-            "Clean ship " &
-            (if Selection then "selected crew members" else "everyone"));
+              "Clean ship " &
+              (if Selection then "selected crew members" else "everyone"));
       end if;
       Button.Name := New_String(Str => Buttons_Frame & ".repair");
       if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
          Add
-            (Widget => Button,
+           (Widget => Button,
             Message =>
-            "Repair ship " &
-            (if Selection then "selected crew members" else "everyone"));
+              "Repair ship " &
+              (if Selection then "selected crew members" else "everyone"));
       end if;
    end Update_Tooltips;
 
@@ -226,8 +226,7 @@ package body Ships.UI.Crew is
       Orders_Label :=
         Create
           (pathName => Buttons_Frame & ".label",
-           options =>
-             "-text {Orders for all:}");
+           options => "-text {Orders for all:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
       Button :=
         Create
@@ -491,7 +490,8 @@ package body Ships.UI.Crew is
 
    -- ****o* SUCrew/SUCrew.Order_For_All_Command
    -- FUNCTION
-   -- Set the selected order for the whole crew
+   -- Set the selected order for the whole crew or only to the selected crew
+   -- members if any is selected
    -- PARAMETERS
    -- Client_Data - Custom data send to the command.
    -- Interp      - Tcl interpreter in which command was executed.
@@ -502,7 +502,7 @@ package body Ships.UI.Crew is
    -- COMMANDS
    -- OrderForAll order
    -- Order is the name of the order which will be assigned to the whole
-   -- player ship crew
+   -- player ship crew or to the selected crew members
    -- SOURCE
    function Order_For_All_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -515,13 +515,34 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
    begin
-      Give_Orders_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Give_Orders
-           (Ship => Player_Ship,
-            Member_Index => Crew_Container.To_Index(Position => I),
-            Given_Order => Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      end loop Give_Orders_Loop;
+      if Has_Selection then
+         Give_Orders_To_Selected_Loop :
+         for I in
+           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+            if Tcl_GetVar
+                (interp => Get_Context,
+                 varName =>
+                   "crewindex" &
+                   Trim
+                     (Source => Crew_Container.Extended_Index'Image(I),
+                      Side => Left)) =
+              "1" then
+               Give_Orders
+                 (Ship => Player_Ship, Member_Index => I,
+                  Given_Order =>
+                    Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
+            end if;
+         end loop Give_Orders_To_Selected_Loop;
+      else
+         Give_Orders_To_All_Loop :
+         for I in Player_Ship.Crew.Iterate loop
+            Give_Orders
+              (Ship => Player_Ship,
+               Member_Index => Crew_Container.To_Index(Position => I),
+               Given_Order =>
+                 Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
+         end loop Give_Orders_To_All_Loop;
+      end if;
       Update_Header;
       Update_Messages;
       Update_Crew_Info;
