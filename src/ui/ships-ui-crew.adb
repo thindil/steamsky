@@ -104,6 +104,75 @@ package body Ships.UI.Crew is
                .Name);
    end Get_Highest_Skill;
 
+   -- ****if* SUCrew/SUCrew.Update_Tooltips
+   -- FUNCTION
+   -- Update the tooltips for the orders buttons, depends if there are crew
+   -- members selected on the list or not
+   -- HISTORY
+   -- 8.5 - Added
+   -- SOURCE
+   procedure Update_Tooltips is
+      Selection: Boolean := False;
+      Button: Ttk_Button;
+      Buttons_Frame: constant String :=
+        Main_Paned & ".shipinfoframe.crew.canvas.frame.ordersbuttons";
+   begin
+      Check_Selection_Loop :
+      for I in
+        Crew_Container.First_Index(Container => Player_Ship.Crew) ..
+          Crew_Container.Last_Index(Container => Player_Ship.Crew) loop
+         if Tcl_GetVar
+             (interp => Get_Context,
+              varName =>
+                "crewindex" &
+                Trim
+                  (Source => Crew_Container.Extended_Index'Image(I),
+                   Side => Left)) =
+           "1" then
+            Selection := True;
+            exit Check_Selection_Loop;
+         end if;
+      end loop Check_Selection_Loop;
+      Button := Get_Widget(pathName => Buttons_Frame & ".label");
+      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
+         configure
+           (Widgt => Button,
+            options =>
+              "-text {Orders for " &
+              (if Selection then "selected" else "all") & ":}");
+         Add
+            (Widget => Button,
+            Message =>
+            "Give the selected order to the " &
+            (if Selection then "selected crew members" else "whole crew") &
+            ".");
+      end if;
+      Button.Name := New_String(Str => Buttons_Frame & ".rest");
+      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
+         Add
+            (Widget => Button,
+            Message =>
+            "Go rest " &
+            (if Selection then "selected crew members" else "everyone"));
+      end if;
+      Button.Name := New_String(Str => Buttons_Frame & ".clean");
+      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
+         Add
+            (Widget => Button,
+            Message =>
+            "Clean ship " &
+            (if Selection then "selected crew members" else "everyone"));
+      end if;
+      Button.Name := New_String(Str => Buttons_Frame & ".repair");
+      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
+         Add
+            (Widget => Button,
+            Message =>
+            "Repair ship " &
+            (if Selection then "selected crew members" else "everyone"));
+      end if;
+   end Update_Tooltips;
+
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
       Buttons_Frame: Ttk_Frame;
       Tokens: Slice_Set;
@@ -143,16 +212,13 @@ package body Ships.UI.Crew is
       Orders_Label :=
         Create
           (pathName => Buttons_Frame & ".label",
-           options => "-text {Orders for all:}");
-      Add
-        (Widget => Orders_Label,
-         Message => "Give the selected order to the whole crew.");
+           options =>
+             "-text {Orders for all:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
       Button :=
         Create
           (pathName => Buttons_Frame & ".rest",
            options => "-image goresticon -command {OrderForAll Rest}");
-      Add(Widget => Button, Message => "Go rest everyone");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-row 0 -column 1 -padx {0 2}");
       if Need_Clean then
@@ -160,7 +226,6 @@ package body Ships.UI.Crew is
            Create
              (pathName => Buttons_Frame & ".clean",
               options => "-image cleanordericon -command {OrderForAll Clean}");
-         Add(Widget => Button, Message => "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button, Options => "-row 0 -column 2 -padx {0 2}");
       end if;
@@ -170,7 +235,6 @@ package body Ships.UI.Crew is
              (pathName => Buttons_Frame & ".repair",
               options =>
                 "-image repairordericon -command {OrderForAll Repair}");
-         Add(Widget => Button, Message => "Repair ship everyone");
          if Need_Clean then
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Button, Options => "-row 0 -column 3");
@@ -179,6 +243,7 @@ package body Ships.UI.Crew is
               (Slave => Button, Options => "-row 0 -column 2");
          end if;
       end if;
+      Update_Tooltips;
       Tcl.Tk.Ada.Grid.Grid(Slave => Buttons_Frame, Options => "-sticky w");
       Buttons_Frame := Create(pathName => Crew_Info_Frame & ".selectskill");
       Orders_Label :=
@@ -2640,6 +2705,7 @@ package body Ships.UI.Crew is
            (interp => Interp,
             varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
       end if;
+      Update_Tooltips;
       return TCL_OK;
    end Toggle_Crew_Member_Command;
 
