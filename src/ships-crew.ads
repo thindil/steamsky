@@ -54,9 +54,8 @@ package Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) with
-      Pre =>
-      (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-       Reason /= Null_Unbounded_String),
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+      Reason /= Null_Unbounded_String,
       Test_Case => (Name => "Test_Death", Mode => Nominal);
       -- ****
 
@@ -111,9 +110,8 @@ package Ships.Crew is
       Given_Order: Crew_Orders;
       Module_Index: Modules_Container.Extended_Index := 0;
       Check_Priorities: Boolean := True) with
-      Pre =>
-      (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-       Module_Index <= Ship.Modules.Last_Index);
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+      Module_Index <= Ship.Modules.Last_Index;
       -- ****
 
       -- ****f* SCrew/SCrew.Update_Orders
