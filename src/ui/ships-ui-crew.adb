@@ -104,18 +104,16 @@ package body Ships.UI.Crew is
                .Name);
    end Get_Highest_Skill;
 
-   -- ****if* SUCrew/SUCrew.Update_Tooltips
+   -- ****if* SUCrew/SUCrew.Has_Selection
    -- FUNCTION
-   -- Update the tooltips for the orders buttons, depends if there are crew
-   -- members selected on the list or not
+   -- Check if there are any crew members selected on the list
+   -- RESULT
+   -- True if some members are selected on the list, otherwise false
    -- HISTORY
    -- 8.5 - Added
    -- SOURCE
-   procedure Update_Tooltips is
-      Selection: Boolean := False;
-      Button: Ttk_Button;
-      Buttons_Frame: constant String :=
-        Main_Paned & ".shipinfoframe.crew.canvas.frame.ordersbuttons";
+   function Has_Selection return Boolean is
+      -- ****
    begin
       Check_Selection_Loop :
       for I in
@@ -129,10 +127,26 @@ package body Ships.UI.Crew is
                   (Source => Crew_Container.Extended_Index'Image(I),
                    Side => Left)) =
            "1" then
-            Selection := True;
-            exit Check_Selection_Loop;
+            return True;
          end if;
       end loop Check_Selection_Loop;
+      return False;
+   end Has_Selection;
+
+   -- ****if* SUCrew/SUCrew.Update_Tooltips
+   -- FUNCTION
+   -- Update the tooltips for the orders buttons, depends if there are crew
+   -- members selected on the list or not
+   -- HISTORY
+   -- 8.5 - Added
+   -- SOURCE
+   procedure Update_Tooltips is
+      -- ****
+      Selection: constant Boolean := Has_Selection;
+      Button: Ttk_Button;
+      Buttons_Frame: constant String :=
+        Main_Paned & ".shipinfoframe.crew.canvas.frame.ordersbuttons";
+   begin
       Button := Get_Widget(pathName => Buttons_Frame & ".label");
       if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
          configure
