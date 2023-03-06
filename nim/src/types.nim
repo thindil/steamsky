@@ -287,15 +287,15 @@ type
     startBase*: BasesRange ## The index of the starting base for the mission
     finished*: bool ## If true, the mission is ready to return, otherwise false
     multiplier*: RewardMultiplier ## The multiplier for the mission reward money and reputation
-    case mType: MissionsTypes
+    case mType*: MissionsTypes
     of deliver:
-      itemIndex: Natural ## The index of the proto item to deliver
+      itemIndex*: Natural ## The index of the proto item to deliver
     of passenger:
-      data: Natural ## The minumum quality of the cabin (in bases) or passenger index (in accepted)
+      data*: Natural ## The minumum quality of the cabin (in bases) or passenger index (in accepted)
     of destroy:
-      shipIndex: Natural ## The index of the prototype ship to destroy
+      shipIndex*: Natural ## The index of the prototype ship to destroy
     else:
-      target: Natural ## The target for the mission (ship, item)
+      target*: Natural ## The target for the mission (ship, item)
 
   BaseRecord* = object
     ## Used to store information about bases
