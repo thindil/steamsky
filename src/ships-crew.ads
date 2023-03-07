@@ -85,9 +85,9 @@ package Ships.Crew is
    -- Crew index of crew member with selected order or 0 if nothing was found
    -- SOURCE
    function Find_Member
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
+     (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index with
-      Post => Find_Member'Result <= Crew.Last_Index,
+      Post => Find_Member'Result <= Ship_Crew.Last_Index,
       Test_Case => (Name => "Test_FindMember", Mode => Nominal);
       -- ****
 
@@ -132,13 +132,13 @@ package Ships.Crew is
       -- PARAMETERS
       -- Ship         - Ship on which crew member will be have updated morale
       -- Member_Index - Crew index of member to update morale
-      -- Value        - Amount of morale to add or substract
+      -- Amount       - Amount of morale to add or substract
       -- RESULT
       -- Parameter Ship with modified crew info
       -- SOURCE
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
-      Value: Integer) with
+      Amount: Integer) with
       Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index;
       -- ****
 
