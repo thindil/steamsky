@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, utils, types
+import config, game, goals, utils, types
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -42,8 +42,32 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
         basesSyllablesPostList.len - 1))]
 
+proc gainRep*(baseIndex: BasesRange; points: int) =
+  if skyBases[baseIndex].reputation.level == -100 or skyBases[
+      baseIndex].reputation.level == 100:
+    return
+  var newPoints = skyBases[baseIndex].reputation.experience + (points.float *
+      newGameSettings.reputationBonus).int
+  if baseIndex == playerShip.homeBase:
+    newPoints = newPoints + points
+  while newPoints < 0:
+    skyBases[baseIndex].reputation.level.dec
+    newPoints = newPoints + abs(x = skyBases[baseIndex].reputation.level * 5)
+    if newPoints >= 0:
+      skyBases[baseIndex].reputation.experience = newPoints
+      return
+  while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
+    newPoints = newPoints - abs(x = skyBases[baseIndex].reputation.level * 5)
+    skyBases[baseIndex].reputation.level.inc
+  skyBases[baseIndex].reputation.experience = newPoints
+  if skyBases[baseIndex].reputation.level == 100:
+    updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
     tags: [].} =
   return generateBaseName(factionIndex = $factionIndex).cstring
+
+proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
+  gainRep(baseIndex = baseIndex, points = points)
