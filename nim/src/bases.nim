@@ -44,6 +44,11 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
 
 proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
     tags: [].} =
+  ## Change the player reputation in the selected sky base
+  ##
+  ## * baseIndex - the index of the base in which the reputation will change
+  ## * points    - the amount of reputation points about which the reputation
+  ##               will change
   if skyBases[baseIndex].reputation.level == -100 or skyBases[
       baseIndex].reputation.level == 100:
     return
