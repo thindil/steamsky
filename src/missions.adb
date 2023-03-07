@@ -566,7 +566,7 @@ package body Missions is
          Gain_Rep(Base_Index => Mission.Start_Base, Points => -Reputation);
          Update_Morale
            (Ship => Player_Ship, Member_Index => 1,
-            Value => Get_Random(Min => -10, Max => -5));
+            Amount => Get_Random(Min => -10, Max => -5));
          case Mission.M_Type is
             when DELIVER =>
                Append
@@ -614,7 +614,7 @@ package body Missions is
          else
             Gain_Rep(Base_Index => Mission.Start_Base, Points => Reputation);
          end if;
-         Update_Morale(Ship => Player_Ship, Member_Index => 1, Value => 1);
+         Update_Morale(Ship => Player_Ship, Member_Index => 1, Amount => 1);
          Get_Mission_Reward_Block :
          declare
             Free_Space: Integer;
@@ -800,6 +800,7 @@ package body Missions is
       end case;
    end Get_Mission_Type;
 
+   --## rule off TYPE_INITIAL_VALUES
    type Nim_Mission_Data is record
       Time: Natural;
       Target_X: Natural;
@@ -813,10 +814,13 @@ package body Missions is
    end record;
 
    type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
+   --## rule on TYPE_INITIAL_VALUES
 
    procedure Get_Accepted_Missions is
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Missions: Nim_Missions_Array;
-      procedure Get_Ada_Accepted_Missions(Missions: Nim_Missions_Array) with
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Ada_Accepted_Missions(N_Missions: Nim_Missions_Array) with
          Import => True,
          Convention => C,
          External_Name => "getAdaAcceptedMissions";
@@ -847,12 +851,89 @@ package body Missions is
                Data => 0);
          end if;
       end loop Convert_Accepted_Missions_Loop;
-      Get_Ada_Accepted_Missions(Missions => Nim_Missions);
+      Get_Ada_Accepted_Missions(N_Missions => Nim_Missions);
    end Get_Accepted_Missions;
 
    procedure Set_Accepted_Missions is
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Missions: Nim_Missions_Array;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Set_Ada_Accepted_Missions
+        (N_Missions: out Nim_Missions_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaAcceptedMissions";
    begin
-      null;
+      Set_Ada_Accepted_Missions(N_Missions => Nim_Missions);
+      Accepted_Missions.Clear;
+      Convert_Accepted_Missions_Loop :
+      for I in Nim_Missions'Range loop
+         exit Convert_Accepted_Missions_Loop when Nim_Missions(I).Time = 0;
+         case Nim_Missions(I).M_Type is
+            when 0 =>
+               Accepted_Missions.Append
+                 (New_Item =>
+                    (M_Type => DELIVER, Time => Nim_Missions(I).Time,
+                     Target_X => Nim_Missions(I).Target_X,
+                     Target_Y => Nim_Missions(I).Target_Y,
+                     Reward => Nim_Missions(I).Reward,
+                     Start_Base => Nim_Missions(I).Start_Base,
+                     Finished =>
+                       (if Nim_Missions(I).Finished = 1 then True else False),
+                     Multiplier => Nim_Missions(I).Multiplier,
+                     Item_Index => Nim_Missions(I).Data));
+            when 1 =>
+               Accepted_Missions.Append
+                 (New_Item =>
+                    (M_Type => DESTROY, Time => Nim_Missions(I).Time,
+                     Target_X => Nim_Missions(I).Target_X,
+                     Target_Y => Nim_Missions(I).Target_Y,
+                     Reward => Nim_Missions(I).Reward,
+                     Start_Base => Nim_Missions(I).Start_Base,
+                     Finished =>
+                       (if Nim_Missions(I).Finished = 1 then True else False),
+                     Multiplier => Nim_Missions(I).Multiplier,
+                     Ship_Index => Nim_Missions(I).Data));
+            when 2 =>
+               Accepted_Missions.Append
+                 (New_Item =>
+                    (M_Type => PATROL, Time => Nim_Missions(I).Time,
+                     Target_X => Nim_Missions(I).Target_X,
+                     Target_Y => Nim_Missions(I).Target_Y,
+                     Reward => Nim_Missions(I).Reward,
+                     Start_Base => Nim_Missions(I).Start_Base,
+                     Finished =>
+                       (if Nim_Missions(I).Finished = 1 then True else False),
+                     Multiplier => Nim_Missions(I).Multiplier,
+                     Target => Nim_Missions(I).Data));
+            when 3 =>
+               Accepted_Missions.Append
+                 (New_Item =>
+                    (M_Type => EXPLORE, Time => Nim_Missions(I).Time,
+                     Target_X => Nim_Missions(I).Target_X,
+                     Target_Y => Nim_Missions(I).Target_Y,
+                     Reward => Nim_Missions(I).Reward,
+                     Start_Base => Nim_Missions(I).Start_Base,
+                     Finished =>
+                       (if Nim_Missions(I).Finished = 1 then True else False),
+                     Multiplier => Nim_Missions(I).Multiplier,
+                     Target => Nim_Missions(I).Data));
+            when 4 =>
+               Accepted_Missions.Append
+                 (New_Item =>
+                    (M_Type => PASSENGER, Time => Nim_Missions(I).Time,
+                     Target_X => Nim_Missions(I).Target_X,
+                     Target_Y => Nim_Missions(I).Target_Y,
+                     Reward => Nim_Missions(I).Reward,
+                     Start_Base => Nim_Missions(I).Start_Base,
+                     Finished =>
+                       (if Nim_Missions(I).Finished = 1 then True else False),
+                     Multiplier => Nim_Missions(I).Multiplier,
+                     Data => Nim_Missions(I).Data));
+            when others =>
+               null;
+         end case;
+      end loop Convert_Accepted_Missions_Loop;
    end Set_Accepted_Missions;
 
 end Missions;
