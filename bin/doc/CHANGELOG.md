@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Column with coordinates to the lists of known bases and known events
 - Ability to select crew members on the player's ship's crew members list
+- Ability to give orders to the selected crew members on the player's ship's
+  crew members list
 
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
