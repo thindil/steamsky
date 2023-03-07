@@ -21,7 +21,6 @@ with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
-with Goals;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
@@ -31,47 +30,14 @@ with Factions; use Factions;
 package body Bases is
 
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
-      use Tiny_String;
-      use Goals;
-
-      New_Points: Integer;
+      procedure Gain_Ada_Rep(B_Index, Pnts: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "gainAdaRep";
    begin
-      if Sky_Bases(Base_Index).Reputation.Level = -100 or
-        Sky_Bases(Base_Index).Reputation.Level = 100 then
-         return;
-      end if;
-      New_Points :=
-        Sky_Bases(Base_Index).Reputation.Experience +
-        Integer(Float(Points) * New_Game_Settings.Reputation_Bonus);
-      if Base_Index = Player_Ship.Home_Base then
-         New_Points := New_Points + Points;
-      end if;
-      Reduce_Reputation_Loop :
-      while New_Points < 0 loop
-         Sky_Bases(Base_Index).Reputation.Level :=
-           Sky_Bases(Base_Index).Reputation.Level - 1;
-         New_Points :=
-           New_Points + abs (Sky_Bases(Base_Index).Reputation.Level * 5);
-         if New_Points >= 0 then
-            Sky_Bases(Base_Index).Reputation.Experience := New_Points;
-            return;
-         end if;
-      end loop Reduce_Reputation_Loop;
-      Raise_Reputation_Loop :
-      while New_Points > abs (Sky_Bases(Base_Index).Reputation.Level * 5) loop
-         New_Points :=
-           New_Points - abs (Sky_Bases(Base_Index).Reputation.Level * 5);
-         Sky_Bases(Base_Index).Reputation.Level :=
-           Sky_Bases(Base_Index).Reputation.Level + 1;
-      end loop Raise_Reputation_Loop;
-      Sky_Bases(Base_Index).Reputation.Experience := New_Points;
-      if Sky_Bases(Base_Index).Reputation.Level = 100 then
-         Update_Goal
-           (G_Type => REPUTATION,
-            Target_Index =>
-              To_Unbounded_String
-                (Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
-      end if;
+      Get_Base_Reputation(Base_Index => Base_Index);
+      Gain_Ada_Rep(B_Index => Base_Index, Pnts => Points);
+      Set_Base_Reputation(Base_Index => Base_Index);
    end Gain_Rep;
 
    procedure Count_Price
@@ -820,7 +786,8 @@ package body Bases is
    end Update_Prices;
 
    procedure Get_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Get_Ada_Base_Reputation(B_Index, Level, Experience: Integer) with
+      procedure Get_Ada_Base_Reputation
+        (B_Index, Level, Experience: Integer) with
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseReputation";
@@ -832,7 +799,8 @@ package body Bases is
    end Get_Base_Reputation;
 
    procedure Set_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Reputation(B_Index: Integer; Level, Experience: out Integer) with
+      procedure Set_Ada_Base_Reputation
+        (B_Index: Integer; Level, Experience: out Integer) with
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseReputation";
