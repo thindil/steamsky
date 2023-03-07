@@ -535,6 +535,18 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
   if updatePosition(ship = ship, order = train, maxPriority = false):
     updateOrders(ship = ship)
 
+proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) =
+  {.warning[UnsafeSetLen]: off.}
+  ship.crew.delete(i = memberIndex)
+  {.warning[UnsafeSetLen]: on.}
+  for module in ship.modules.mitems:
+    for owner in module.owner.mitems:
+      if owner == memberIndex:
+        owner = -1
+      elif owner > memberIndex:
+        owner.dec
+  # TODO: continue work
+
 # Temporary code for interfacing with Ada
 
 proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
