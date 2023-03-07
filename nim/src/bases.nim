@@ -42,7 +42,8 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
         basesSyllablesPostList.len - 1))]
 
-proc gainRep*(baseIndex: BasesRange; points: int) =
+proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
+    tags: [].} =
   if skyBases[baseIndex].reputation.level == -100 or skyBases[
       baseIndex].reputation.level == 100:
     return
@@ -72,11 +73,12 @@ proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
 proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
   gainRep(baseIndex = baseIndex, points = points)
 
-proc getAdaBaseReputation(baseIndex, level, experience: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseReputation(baseIndex, level, experience: cint) {.raises: [],
+    tags: [], exportc.} =
   skyBases[baseIndex].reputation = ReputationData(level: level,
       experience: experience)
 
-proc setAdaBaseReputation(baseIndex: cint; level, experience: var cint) {.raises: [],
-    tags: [], exportc.} =
+proc setAdaBaseReputation(baseIndex: cint; level,
+    experience: var cint) {.raises: [], tags: [], exportc.} =
   level = skyBases[baseIndex].reputation.level
   experience = skyBases[baseIndex].reputation.experience.cint
