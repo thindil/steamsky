@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -818,5 +818,29 @@ package body Bases is
             New_Item => Item);
       end loop Update_Prices_Loop;
    end Update_Prices;
+
+   procedure Get_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Get_Ada_Base_Reputation(B_Index, Level, Experience: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseReputation";
+   begin
+      Get_Ada_Base_Reputation
+        (B_Index => Base_Index,
+         Level => Sky_Bases(Base_Index).Reputation.Level,
+         Experience => Sky_Bases(Base_Index).Reputation.Experience);
+   end Get_Base_Reputation;
+
+   procedure Set_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Reputation(B_Index: Integer; Level, Experience: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseReputation";
+   begin
+      Set_Ada_Base_Reputation
+        (B_Index => Base_Index,
+         Level => Sky_Bases(Base_Index).Reputation.Level,
+         Experience => Sky_Bases(Base_Index).Reputation.Experience);
+   end Set_Base_Reputation;
 
 end Bases;

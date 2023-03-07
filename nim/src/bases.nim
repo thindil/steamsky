@@ -71,3 +71,12 @@ proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
 
 proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
   gainRep(baseIndex = baseIndex, points = points)
+
+proc getAdaBaseReputation(baseIndex, level, experience: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].reputation = ReputationData(level: level,
+      experience: experience)
+
+proc setAdaBaseReputation(baseIndex: cint; level, experience: var cint) {.raises: [],
+    tags: [], exportc.} =
+  level = skyBases[baseIndex].reputation.level
+  experience = skyBases[baseIndex].reputation.experience.cint

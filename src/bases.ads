@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -263,5 +263,11 @@ package Bases is
    procedure Update_Prices with
       Test_Case => (Name => "Test_UpdatePrices", Mode => Robustness);
       -- ****
+
+-- Temporary code to interact with Nim
+
+   procedure Get_Base_Reputation(Base_Index: Bases_Range);
+
+   procedure Set_Base_Reputation(Base_Index: Bases_Range);
 
 end Bases;
