@@ -623,7 +623,7 @@ package body Utils.UI is
                Update_Morale
                  (Ship => Player_Ship,
                   Member_Index => Crew_Container.To_Index(Position => I),
-                  Value => Get_Random(Min => -5, Max => -1));
+                  Amount => Get_Random(Min => -5, Max => -1));
             end loop Update_Morale_Loop;
             Update_Crew_Info;
             Update_Header;

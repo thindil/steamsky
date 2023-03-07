@@ -89,7 +89,7 @@ package body Ships.Crew is
          Update_Morale
            (Ship => Ship,
             Member_Index => Crew_Container.To_Index(Position => I),
-            Value => Get_Random(Min => -25, Max => -10));
+            Amount => Get_Random(Min => -25, Max => -10));
       end loop Reduce_Morale_Loop;
    end Death;
 
@@ -132,12 +132,12 @@ package body Ships.Crew is
    end Delete_Member;
 
    function Find_Member
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
+     (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Natural is
    begin
       Find_Member_Loop :
-      for I in Crew.Iterate loop
-         if Crew(I).Order = Order then
+      for I in Ship_Crew.Iterate loop
+         if Ship_Crew(I).Order = Order then
             return Crew_Container.To_Index(Position => I);
          end if;
       end loop Find_Member_Loop;
@@ -193,7 +193,7 @@ package body Ships.Crew is
 
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
-      Value: Integer) is
+      Amount: Integer) is
       procedure Update_Ada_Morale
         (Is_Player_Ship, M_Index, N_Value: Integer) with
          Import => True,
@@ -203,7 +203,7 @@ package body Ships.Crew is
       Get_Ada_Crew(Ship => Ship);
       Update_Ada_Morale
         (Is_Player_Ship => (if Ship = Player_Ship then 1 else 0),
-         M_Index => Member_Index, N_Value => Value);
+         M_Index => Member_Index, N_Value => Amount);
       Set_Ada_Crew(Ship => Ship);
    end Update_Morale;
 

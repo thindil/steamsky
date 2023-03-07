@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -273,7 +273,7 @@ package body Trades is
             Update_Morale
               (Ship => Player_Ship,
                Member_Index => Crew_Container.To_Index(Position => I),
-               Value => Get_Random(Min => -25, Max => -5));
+               Amount => Get_Random(Min => -25, Max => -5));
             Add_Message
               (Message =>
                  To_String(Source => Player_Ship.Crew(I).Name) &
@@ -293,7 +293,7 @@ package body Trades is
                Update_Morale
                  (Ship => Player_Ship,
                   Member_Index => Crew_Container.To_Index(Position => I),
-                  Value => Get_Random(Min => -12, Max => -2));
+                  Amount => Get_Random(Min => -12, Max => -2));
                Add_Message
                  (Message =>
                     To_String(Source => Player_Ship.Crew(I).Name) &

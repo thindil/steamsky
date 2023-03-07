@@ -151,7 +151,7 @@ package body Crew is
                    0 then
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
-                     Value =>
+                     Amount =>
                        Get_Proto_Item
                          (Index =>
                             Inventory_Container.Element
@@ -194,7 +194,7 @@ package body Crew is
                  0 then
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
-                     Value =>
+                     Amount =>
                        Get_Proto_Item
                          (Index =>
                             Inventory_Container.Element
@@ -262,7 +262,7 @@ package body Crew is
                     " returns to work fully rested.",
                   M_Type => ORDERMESSAGE, Color => YELLOW);
                Update_Morale
-                 (Ship => Player_Ship, Member_Index => I, Value => 1);
+                 (Ship => Player_Ship, Member_Index => I, Amount => 1);
             end if;
             Member.Previous_Order := REST;
          end if;
@@ -337,7 +337,7 @@ package body Crew is
                      M_Type => ORDERMESSAGE, Color => RED);
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
-                     Value => Get_Random(Min => -5, Max => -1));
+                     Amount => Get_Random(Min => -5, Max => -1));
                end if;
             end Member_Rest_Block;
          end if;
@@ -361,7 +361,7 @@ package body Crew is
                   M_Type => OTHERMESSAGE, Color => RED);
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
-                  Value => Get_Random(Min => -10, Max => -5));
+                  Amount => Get_Random(Min => -10, Max => -5));
             end if;
          end if;
          Normalize_Stat(Stat => Hunger_Level);
@@ -384,7 +384,7 @@ package body Crew is
                   M_Type => OTHERMESSAGE, Color => RED);
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
-                  Value => Get_Random(Min => -20, Max => -10));
+                  Amount => Get_Random(Min => -20, Max => -10));
             end if;
          end if;
          Normalize_Stat(Stat => Thirst_Level);
@@ -466,7 +466,7 @@ package body Crew is
             if Player_Ship.Crew(I).Morale(1) < 50 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
-                  Value => Times + Rest_Amount);
+                  Amount => Times + Rest_Amount);
                if Player_Ship.Crew(I).Morale(1) > 50 then
                   Player_Ship.Crew(I).Morale := (1 => 50, 2 => 0);
                end if;
@@ -491,7 +491,7 @@ package body Crew is
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
-                  Value => ((Times / 5) * (-1)));
+                  Amount => ((Times / 5) * (-1)));
                --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
             case Player_Ship.Crew(I).Order is
@@ -842,7 +842,7 @@ package body Crew is
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
-                     Value => -(Tired_Points));
+                     Amount => -(Tired_Points));
                   --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
@@ -861,7 +861,7 @@ package body Crew is
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => I,
-                     Value => -(Tired_Points));
+                     Amount => -(Tired_Points));
                   --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
@@ -1058,13 +1058,13 @@ package body Crew is
                      M_Type => TRADEMESSAGE);
                   Update_Morale
                     (Ship => Player_Ship, Member_Index => Member_Index,
-                     Value => Get_Random(Min => 1, Max => 5));
+                     Amount => Get_Random(Min => 1, Max => 5));
                end if;
             end if;
             if not Have_Money then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => Member_Index,
-                  Value => Get_Random(Min => -50, Max => -10));
+                  Amount => Get_Random(Min => -50, Max => -10));
             end if;
          end if;
          Member_Index := Member_Index + 1;

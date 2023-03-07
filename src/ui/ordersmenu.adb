@@ -842,7 +842,7 @@ package body OrdersMenu is
          Update_Morale
            (Ship => Player_Ship,
             Member_Index => Crew_Container.To_Index(Position => I),
-            Value => 10);
+            Amount => 10);
       end loop Update_Morale_Loop;
       Add_Message
         (Message =>

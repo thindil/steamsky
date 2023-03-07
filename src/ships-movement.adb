@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -281,7 +281,7 @@ package body Ships.Movement is
                           (Ship => Player_Ship,
                            Member_Index =>
                              Crew_Container.To_Index(Position => I),
-                           Value => Get_Random(Min => -5, Max => -1));
+                           Amount => Get_Random(Min => -5, Max => -1));
                      end loop Drop_Morale_Loop;
                   else
                      Member_Index := Member_Index + 1;

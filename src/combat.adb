@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -1496,7 +1496,7 @@ package body Combat is
          Evade_Bonus := -10;
       end if;
       Enemy_Pilot_Index :=
-        Find_Member(Order => PILOT, Crew => Enemy.Ship.Crew);
+        Find_Member(Order => PILOT, Ship_Crew => Enemy.Ship.Crew);
       if Enemy_Pilot_Index > 0 then
          Accuracy_Bonus :=
            Accuracy_Bonus -
