@@ -1425,13 +1425,22 @@ package body DebugUI is
          options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
-      Load_Modules_Prototypes_Loop :
-      for I in 1 .. Get_Modules_Amount loop
-         Append
-           (Source => Values_List,
-            New_Item =>
-              " {" & To_String(Source => Get_Module(Index => I).Name) & "}");
-      end loop Load_Modules_Prototypes_Loop;
+      Load_Proto_Modules_Block :
+      declare
+         Module: Base_Module_Data;
+      begin
+         Load_Modules_Prototypes_Loop :
+         for I in 1 .. Get_Modules_Amount loop
+            Module := Get_Module(Index => I);
+            if Length(Source => Module.Name) > 0 then
+               Append
+                 (Source => Values_List,
+                  New_Item =>
+                    " {" & To_String(Source => Get_Module(Index => I).Name) &
+                    "}");
+            end if;
+         end loop Load_Modules_Prototypes_Loop;
+      end Load_Proto_Modules_Block;
       configure
         (Widgt => Combo_Box,
          options => "-values [list" & To_String(Source => Values_List) & "]");
