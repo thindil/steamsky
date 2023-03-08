@@ -29,14 +29,14 @@ package body Ships.Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Death_af2fea_e5df10
+   procedure Wrap_Test_Death_af2fea_eed6aa
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
    begin
       begin
          pragma Assert
-           ((Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-             Reason /= Null_Unbounded_String));
+           (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+            Reason /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -55,19 +55,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_Death test commitment violated");
       end;
-   end Wrap_Test_Death_af2fea_e5df10;
+   end Wrap_Test_Death_af2fea_eed6aa;
 --  end read only
 
 --  begin read only
    procedure Test_Death_test_death(Gnattest_T: in out Test);
-   procedure Test_Death_af2fea_e5df10(Gnattest_T: in out Test) renames
+   procedure Test_Death_af2fea_eed6aa(Gnattest_T: in out Test) renames
      Test_Death_test_death;
 --  id:2.2/af2fea911992db88/Death/1/0/test_death/
    procedure Test_Death_test_death(Gnattest_T: in out Test) is
       procedure Death
         (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
          Ship: in out Ship_Record; Create_Body: Boolean := True) renames
-        Wrap_Test_Death_af2fea_e5df10;
+        Wrap_Test_Death_af2fea_eed6aa;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -147,8 +147,8 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Member_4eb5a6_a89aa1
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
+   function Wrap_Test_Find_Member_4eb5a6_da4669
+     (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index is
    begin
       begin
@@ -161,14 +161,14 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_FindMember test requirement violated");
       end;
       declare
-         Test_Find_Member_4eb5a6_a89aa1_Result: constant Crew_Container
+         Test_Find_Member_4eb5a6_da4669_Result: constant Crew_Container
            .Extended_Index :=
            GNATtest_Generated.GNATtest_Standard.Ships.Crew.Find_Member
-             (Order, Crew);
+             (Order, Ship_Crew);
       begin
          begin
             pragma Assert
-              (Test_Find_Member_4eb5a6_a89aa1_Result <= Crew.Last_Index);
+              (Test_Find_Member_4eb5a6_da4669_Result <= Ship_Crew.Last_Index);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -176,21 +176,22 @@ package body Ships.Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-crew.ads:0:):Test_FindMember test commitment violated");
          end;
-         return Test_Find_Member_4eb5a6_a89aa1_Result;
+         return Test_Find_Member_4eb5a6_da4669_Result;
       end;
-   end Wrap_Test_Find_Member_4eb5a6_a89aa1;
+   end Wrap_Test_Find_Member_4eb5a6_da4669;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Member_test_findmember(Gnattest_T: in out Test);
-   procedure Test_Find_Member_4eb5a6_a89aa1(Gnattest_T: in out Test) renames
+   procedure Test_Find_Member_4eb5a6_da4669(Gnattest_T: in out Test) renames
      Test_Find_Member_test_findmember;
 --  id:2.2/4eb5a63fb81e1abd/Find_Member/1/0/test_findmember/
    procedure Test_Find_Member_test_findmember(Gnattest_T: in out Test) is
       function Find_Member
-        (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
+        (Order: Crew_Orders;
+         Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
          return Crew_Container.Extended_Index renames
-        Wrap_Test_Find_Member_4eb5a6_a89aa1;
+        Wrap_Test_Find_Member_4eb5a6_da4669;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

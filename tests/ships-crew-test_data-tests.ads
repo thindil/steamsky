@@ -10,14 +10,14 @@ package Ships.Crew.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Death_af2fea_e5df10(Gnattest_T: in out Test);
+   procedure Test_Death_af2fea_eed6aa(Gnattest_T: in out Test);
    --  ships-crew.ads:54:4:Death:Test_Death
 
    procedure Test_Delete_Member_f48a2f_e91d14(Gnattest_T: in out Test);
-   --  ships-crew.ads:72:4:Delete_Member:Test_DeleteMember
+   --  ships-crew.ads:71:4:Delete_Member:Test_DeleteMember
 
-   procedure Test_Find_Member_4eb5a6_a89aa1(Gnattest_T: in out Test);
-   --  ships-crew.ads:88:4:Find_Member:Test_FindMember
+   procedure Test_Find_Member_4eb5a6_da4669(Gnattest_T: in out Test);
+   --  ships-crew.ads:87:4:Find_Member:Test_FindMember
 
 end Ships.Crew.Test_Data.Tests;
 --  end read only
