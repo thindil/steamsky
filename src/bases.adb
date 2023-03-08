@@ -21,7 +21,7 @@ with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
-with Config; use Config;
+with Config;
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
 with Mobs;
@@ -111,6 +111,7 @@ package body Bases is
    end Generate_Base_Name;
 
    procedure Generate_Recruits is
+      use Config;
       use Tiny_String;
 
       Base_Index: constant Bases_Range :=
