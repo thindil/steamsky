@@ -867,69 +867,69 @@ package body Missions is
       Set_Ada_Accepted_Missions(N_Missions => Nim_Missions);
       Accepted_Missions.Clear;
       Convert_Accepted_Missions_Loop :
-      for I in Nim_Missions'Range loop
-         exit Convert_Accepted_Missions_Loop when Nim_Missions(I).Time = 0;
-         case Nim_Missions(I).M_Type is
+      for Nim_Mission of Nim_Missions loop
+         exit Convert_Accepted_Missions_Loop when Nim_Mission.Time = 0;
+         case Nim_Mission.M_Type is
             when 0 =>
                Accepted_Missions.Append
                  (New_Item =>
-                    (M_Type => DELIVER, Time => Nim_Missions(I).Time,
-                     Target_X => Nim_Missions(I).Target_X,
-                     Target_Y => Nim_Missions(I).Target_Y,
-                     Reward => Nim_Missions(I).Reward,
-                     Start_Base => Nim_Missions(I).Start_Base,
+                    (M_Type => DELIVER, Time => Nim_Mission.Time,
+                     Target_X => Nim_Mission.Target_X,
+                     Target_Y => Nim_Mission.Target_Y,
+                     Reward => Nim_Mission.Reward,
+                     Start_Base => Nim_Mission.Start_Base,
                      Finished =>
-                       (if Nim_Missions(I).Finished = 1 then True else False),
-                     Multiplier => Nim_Missions(I).Multiplier,
-                     Item_Index => Nim_Missions(I).Data));
+                       (if Nim_Mission.Finished = 1 then True else False),
+                     Multiplier => Nim_Mission.Multiplier,
+                     Item_Index => Nim_Mission.Data));
             when 1 =>
                Accepted_Missions.Append
                  (New_Item =>
-                    (M_Type => DESTROY, Time => Nim_Missions(I).Time,
-                     Target_X => Nim_Missions(I).Target_X,
-                     Target_Y => Nim_Missions(I).Target_Y,
-                     Reward => Nim_Missions(I).Reward,
-                     Start_Base => Nim_Missions(I).Start_Base,
+                    (M_Type => DESTROY, Time => Nim_Mission.Time,
+                     Target_X => Nim_Mission.Target_X,
+                     Target_Y => Nim_Mission.Target_Y,
+                     Reward => Nim_Mission.Reward,
+                     Start_Base => Nim_Mission.Start_Base,
                      Finished =>
-                       (if Nim_Missions(I).Finished = 1 then True else False),
-                     Multiplier => Nim_Missions(I).Multiplier,
-                     Ship_Index => Nim_Missions(I).Data));
+                       (if Nim_Mission.Finished = 1 then True else False),
+                     Multiplier => Nim_Mission.Multiplier,
+                     Ship_Index => Nim_Mission.Data));
             when 2 =>
                Accepted_Missions.Append
                  (New_Item =>
-                    (M_Type => PATROL, Time => Nim_Missions(I).Time,
-                     Target_X => Nim_Missions(I).Target_X,
-                     Target_Y => Nim_Missions(I).Target_Y,
-                     Reward => Nim_Missions(I).Reward,
-                     Start_Base => Nim_Missions(I).Start_Base,
+                    (M_Type => PATROL, Time => Nim_Mission.Time,
+                     Target_X => Nim_Mission.Target_X,
+                     Target_Y => Nim_Mission.Target_Y,
+                     Reward => Nim_Mission.Reward,
+                     Start_Base => Nim_Mission.Start_Base,
                      Finished =>
-                       (if Nim_Missions(I).Finished = 1 then True else False),
-                     Multiplier => Nim_Missions(I).Multiplier,
-                     Target => Nim_Missions(I).Data));
+                       (if Nim_Mission.Finished = 1 then True else False),
+                     Multiplier => Nim_Mission.Multiplier,
+                     Target => Nim_Mission.Data));
             when 3 =>
                Accepted_Missions.Append
                  (New_Item =>
-                    (M_Type => EXPLORE, Time => Nim_Missions(I).Time,
-                     Target_X => Nim_Missions(I).Target_X,
-                     Target_Y => Nim_Missions(I).Target_Y,
-                     Reward => Nim_Missions(I).Reward,
-                     Start_Base => Nim_Missions(I).Start_Base,
+                    (M_Type => EXPLORE, Time => Nim_Mission.Time,
+                     Target_X => Nim_Mission.Target_X,
+                     Target_Y => Nim_Mission.Target_Y,
+                     Reward => Nim_Mission.Reward,
+                     Start_Base => Nim_Mission.Start_Base,
                      Finished =>
-                       (if Nim_Missions(I).Finished = 1 then True else False),
-                     Multiplier => Nim_Missions(I).Multiplier,
-                     Target => Nim_Missions(I).Data));
+                       (if Nim_Mission.Finished = 1 then True else False),
+                     Multiplier => Nim_Mission.Multiplier,
+                     Target => Nim_Mission.Data));
             when 4 =>
                Accepted_Missions.Append
                  (New_Item =>
-                    (M_Type => PASSENGER, Time => Nim_Missions(I).Time,
-                     Target_X => Nim_Missions(I).Target_X,
-                     Target_Y => Nim_Missions(I).Target_Y,
-                     Reward => Nim_Missions(I).Reward,
-                     Start_Base => Nim_Missions(I).Start_Base,
+                    (M_Type => PASSENGER, Time => Nim_Mission.Time,
+                     Target_X => Nim_Mission.Target_X,
+                     Target_Y => Nim_Mission.Target_Y,
+                     Reward => Nim_Mission.Reward,
+                     Start_Base => Nim_Mission.Start_Base,
                      Finished =>
-                       (if Nim_Missions(I).Finished = 1 then True else False),
-                     Multiplier => Nim_Missions(I).Multiplier,
-                     Data => Nim_Missions(I).Data));
+                       (if Nim_Mission.Finished = 1 then True else False),
+                     Multiplier => Nim_Mission.Multiplier,
+                     Data => Nim_Mission.Data));
             when others =>
                null;
          end case;
