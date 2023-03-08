@@ -48,13 +48,7 @@ package body Ships.Crew is
       Member_Name: Bounded_String := Ship.Crew(Member_Index).Name;
    begin
       if Ship = Player_Ship then
-         if Member_Index > 1 then
-            Add_Message
-              (Message =>
-                 To_String(Source => Member_Name) & " died from " &
-                 To_String(Source => Reason) & ".",
-               M_Type => COMBATMESSAGE, Color => RED);
-         else
+         if Member_Index = 1 then
             Add_Message
               (Message => "You died from " & To_String(Source => Reason) & ".",
                M_Type => COMBATMESSAGE, Color => RED);
@@ -69,6 +63,11 @@ package body Ships.Crew is
                Death_Reason => Reason);
             return;
          end if;
+         Add_Message
+           (Message =>
+              To_String(Source => Member_Name) & " died from " &
+              To_String(Source => Reason) & ".",
+            M_Type => COMBATMESSAGE, Color => RED);
       end if;
       if Create_Body then
          if Length(Source => Member_Name) > 54 then
