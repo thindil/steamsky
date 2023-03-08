@@ -537,6 +537,15 @@ package body Ships.UI.Modules is
         (Master => Module_Dialog, Slave => Module_Canvas,
          Options => "-weight 1");
       Autoscroll(Scroll => Y_Scroll);
+      Label :=
+        Create
+          (pathName => Module_Frame & ".namelbl",
+           options =>
+             "-text {Name: " & To_String(Source => Module.Name) & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       if Module.Durability < Module.Max_Durability then
          Label := Create(pathName => Module_Frame & ".damagelbl");
          Damage_Percent :=
