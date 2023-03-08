@@ -100,6 +100,10 @@ package body ShipModules is
          External_Name => "getAdaModule";
    begin
       Get_Ada_Module(I => Index, Ada_Module => Temp_Nim_Module);
+      if Temp_Nim_Module.Install_Time = 0 then
+         Temp_Record.Name := Null_Bounded_String;
+         return Temp_Record;
+      end if;
       Temp_Record :=
         (Name =>
            To_Bounded_String
