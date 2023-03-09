@@ -491,6 +491,8 @@ package body Ships.UI.Modules is
           (pathName => Module_Frame & ".info",
            options => "-wrap char -height 15 -width 40");
       Height: Positive := 10;
+      Close_Dialog_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Module_Frame & ".button");
       procedure Add_Owners_Info(Owners_Name: String) is
          Have_Owner: Boolean := False;
       begin
@@ -558,7 +560,7 @@ package body Ships.UI.Modules is
            Create
              (pathName => Name_Box & ".button",
               options =>
-                "-image editicon -command {" & Close_Button &
+                "-image editicon -command {" & Close_Dialog_Button &
                 " invoke;GetString {Enter a new name for the " &
                 To_String(Source => Player_Ship.Modules(Module_Index).Name) &
                 ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
@@ -575,8 +577,7 @@ package body Ships.UI.Modules is
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Name_Box, Options => "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Name_Box, Options => "-sticky w");
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
