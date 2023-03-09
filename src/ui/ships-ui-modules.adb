@@ -468,6 +468,7 @@ package body Ships.UI.Modules is
       Progress_Bar: Ttk_ProgressBar;
       Label: Ttk_Label;
       Module_Info, Progress_Bar_Style: Unbounded_String;
+      Info_Button: Ttk_Button;
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
@@ -537,15 +538,52 @@ package body Ships.UI.Modules is
         (Master => Module_Dialog, Slave => Module_Canvas,
          Options => "-weight 1");
       Autoscroll(Scroll => Y_Scroll);
-      Label :=
-        Create
-          (pathName => Module_Frame & ".namelbl",
-           options =>
-             "-text {Name: " & To_String(Source => Module.Name) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+      Add_Name_Info_Block :
+      declare
+         Name_Box: constant Ttk_Frame :=
+           Create
+             (pathName => Module_Frame & ".nameinfo", options => "-width 360");
+      begin
+         Label :=
+           Create
+             (pathName => Name_Box & ".info",
+              options =>
+                "-text {Name: " & To_String(Source => Module.Name) &
+                " } -wraplength 325");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+         Info_Button :=
+           Create
+             (pathName => Name_Box & ".button",
+              options =>
+                "-image editicon -command {" & Close_Button &
+                " invoke;GetString {Enter a new name for the " &
+                To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+                ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
+                " {Renaming the module} {Rename}} -style Small.TButton");
+         Add
+           (Widget => Info_Button,
+            Message => "Set a new name for the crew member");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button,
+            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Name_Box, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
+         Height :=
+           Height +
+           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+      end Add_Name_Info_Block;
       if Module.Durability < Module.Max_Durability then
          Label := Create(pathName => Module_Frame & ".damagelbl");
          Damage_Percent :=
