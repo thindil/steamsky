@@ -117,7 +117,7 @@ proc setAdaBaseReputation(baseIndex: cint; level,
   level = skyBases[baseIndex].reputation.level
   experience = skyBases[baseIndex].reputation.experience.cint
 
-proc coutAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
+proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
     raises: [], tags: [].} =
   try:
     var newPrice: Natural = price
