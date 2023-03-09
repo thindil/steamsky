@@ -69,7 +69,8 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
 
-proc countPrice*(price: var Natural; traderIndex: int; reduce: bool = true) =
+proc countPrice*(price: var Natural; traderIndex: int;
+    reduce: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
   if price == 0:
     return
   var bonus: int = 0
