@@ -71,6 +71,13 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
 
 proc countPrice*(price: var Natural; traderIndex: int;
     reduce: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Count the price of the action, like selling, buying, docking in a base
+  ##
+  ## * price       - the price which will be checked for bonuses or maluses
+  ## * traderIndex - the index of the crew member who is on the trader position
+  ## * reduce      - if true, reduce the price, otherwise increase it
+  ##
+  ## Returns the updated parameter price as a new price
   if price == 0:
     return
   var bonus: int = 0
@@ -122,7 +129,7 @@ proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
     raises: [], tags: [].} =
   try:
     var newPrice: Natural = price
-    countPrice(price = newPrice, traderIndex = traderIndex, reduce = (
+    countPrice(price = newPrice, traderIndex = traderIndex - 1, reduce = (
         if reduce == 1: true else: false))
     price = newPrice.cint
   except KeyError:
