@@ -573,7 +573,7 @@ package body Ships.UI.Modules is
             Options => "-row 0 -column 1 -sticky n -padx {5 0}");
          Bind
            (Widgt => Info_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
+            Script => "{" & Close_Dialog_Button & " invoke;break}");
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
@@ -1114,6 +1114,9 @@ package body Ships.UI.Modules is
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
          Row => 5);
+      Bind
+        (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
+         Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
       Height :=
         Height +
         Positive'Value
