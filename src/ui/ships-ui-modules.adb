@@ -136,13 +136,6 @@ package body Ships.UI.Modules is
          end if;
       end Add_Button;
    begin
-      Add_Button
-        (Name => ".newname", Label => "Rename module",
-         Command =>
-           "GetString {Enter a new name for the " &
-           To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-           ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
-           " {Renaming the module} {Rename}");
       if Player_Ship.Repair_Module /= Module_Index then
          Add_Button
            (Name => ".repair",
