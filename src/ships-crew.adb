@@ -94,7 +94,7 @@ package body Ships.Crew is
 
    procedure Delete_Member
      (Member_Index: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
-      Temp_Value: Integer;
+      Temp_Value: Integer := 0;
    begin
       Ship.Crew.Delete(Index => Member_Index);
       Module_Loop :
