@@ -43,50 +43,19 @@ package body Bases is
    procedure Count_Price
      (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
-      Bonus: Integer := 0;
+      procedure Count_Ada_Price(P: in out Integer; T_Index, R: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "countAdaPrice";
    begin
-      if Price = 0 then
-         return;
-      end if;
-      if Trader_Index /= Crew_Container.No_Index then
-         Bonus :=
-           Integer
-             (Float'Floor
-                (Float(Price) *
-                 (Float
-                    (Get_Skill_Level
-                       (Member => Player_Ship.Crew(Trader_Index),
-                        Skill_Index => Talking_Skill)) /
-                  200.0)));
-      end if;
+      Get_Ada_Crew;
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         case Sky_Bases
-           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-           .Reputation
-           .Level is
-            when -24 .. -1 =>
-               Bonus := Bonus - Integer(Float'Floor(Float(Price) * 0.05));
-            when 26 .. 50 =>
-               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.05));
-            when 51 .. 75 =>
-               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.1));
-            when 76 .. 100 =>
-               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.15));
-            when others =>
-               null;
-         end case;
+         Get_Base_Reputation
+           (Base_Index =>
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index);
       end if;
-      if Bonus < 0 then
-         Bonus := 0;
-      end if;
-      if Reduce then
-         if Bonus >= Price then
-            Bonus := Price - 1;
-         end if;
-         Price := Price - Bonus;
-      else
-         Price := Price + Bonus;
-      end if;
+      Count_Ada_Price
+        (P => Price, T_Index => Trader_Index, R => (if Reduce then 1 else 0));
    end Count_Price;
 
    function Generate_Base_Name
