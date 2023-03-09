@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import config, game, goals, utils, types
+import config, game, goals, maps, shipscrew, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -69,6 +69,35 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
 
+proc countPrice*(price: var Natural; traderIndex: int; reduce: bool = true) =
+  if price == 0:
+    return
+  var bonus: int = 0
+  if traderIndex > -1:
+    bonus = (price.float * (getSkillLevel(member = playerShip.crew[traderIndex],
+        skillIndex = talkingSkill).float / 200.0)).int
+  if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
+    case skyBases[skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex].reputation.level
+    of -24 .. -1:
+      bonus = bonus - (price.float * 0.05).int
+    of 26 .. 50:
+      bonus = bonus + (price.float * 0.05).int
+    of 51 .. 75:
+      bonus = bonus + (price.float * 0.1).int
+    of 76 .. 100:
+      bonus = bonus + (price.float * 0.15).int
+    else:
+      discard
+  if bonus < 0:
+    bonus = 0
+  if reduce:
+    if bonus >= price:
+      bonus = price - 1
+    price = price - bonus
+  else:
+    price = price + bonus
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
@@ -87,3 +116,13 @@ proc setAdaBaseReputation(baseIndex: cint; level,
     experience: var cint) {.raises: [], tags: [], exportc.} =
   level = skyBases[baseIndex].reputation.level
   experience = skyBases[baseIndex].reputation.experience.cint
+
+proc coutAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
+    raises: [], tags: [].} =
+  try:
+    var newPrice: Natural = price
+    countPrice(price = newPrice, traderIndex = traderIndex, reduce = (
+        if reduce == 1: true else: false))
+    price = newPrice.cint
+  except KeyError:
+    discard
