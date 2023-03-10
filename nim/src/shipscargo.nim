@@ -19,7 +19,7 @@ import std/tables
 import game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
-    durability: ItemsDurability = defaultItemDurability; cargoIndex,
+    durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
     price: Natural = 0) {.sideEffect, raises: [], tags: [].} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
@@ -33,17 +33,17 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   ## * price      - The price of the item which will be modified
   ##
   ## Returns the modified ship parameter
-  var itemIndex: Natural = 0
-  if protoIndex > 0 and cargoIndex == 0:
+  var itemIndex: int = -1
+  if protoIndex > 0 and cargoIndex < 0:
     for index, item in ship.cargo.pairs:
       if item.protoIndex == protoIndex and item.durability == durability:
         itemIndex = index
         break
   else:
     itemIndex = cargoIndex
-  if itemIndex == 0 and (protoIndex == 0 or amount < 0):
+  if itemIndex == -1 and (protoIndex == 0 or amount < 0):
     return
-  if itemIndex == 0:
+  if itemIndex == -1:
     ship.cargo.add(y = InventoryData(protoIndex: protoIndex, amount: amount,
         name: "", durability: durability, price: price))
     return
@@ -57,7 +57,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
         if module.ammoIndex > itemIndex:
           module.ammoIndex.dec
         elif module.ammoIndex == itemIndex:
-          module.ammoIndex = 0
+          module.ammoIndex = -1
     return
   ship.cargo[itemIndex].amount = newAmount
   ship.cargo[itemIndex].price = price
@@ -80,6 +80,15 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
   result = result + amount
 
 # Temporary code for interfacing with Ada
+
+proc updateAdaCargo(protoIndex, amount, durability, cargoIndex, price,
+    getPlayerShip: cint) {.raises: [], tags: [], exportc.} =
+  if getPlayerShip == 1:
+    updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
+        durability = durability, cargoIndex = cargoIndex - 1, price = price)
+  else:
+    updateCargo(ship = npcShip, protoIndex = protoIndex, amount = amount,
+        durability = durability, cargoIndex = cargoIndex - 1, price = price)
 
 proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
     tags: [], exportc.} =
