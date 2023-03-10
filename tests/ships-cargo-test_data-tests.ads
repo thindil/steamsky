@@ -10,14 +10,11 @@ package Ships.Cargo.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Update_Cargo_9816c2_08c386(Gnattest_T: in out Test);
-   --  ships-cargo.ads:42:4:Update_Cargo:Test_UpdateCargo
-
    procedure Test_Get_Item_Amount_a81592_e03f36(Gnattest_T: in out Test);
-   --  ships-cargo.ads:75:4:Get_Item_Amount:Test_GetItemAmount
+   --  ships-cargo.ads:74:4:Get_Item_Amount:Test_GetItemAmount
 
    procedure Test_Get_Items_Amount_da377d_75c143(Gnattest_T: in out Test);
-   --  ships-cargo.ads:89:4:Get_Items_Amount:Test_GetItemsAmount
+   --  ships-cargo.ads:88:4:Get_Items_Amount:Test_GetItemsAmount
 
 end Ships.Cargo.Test_Data.Tests;
 --  end read only
