@@ -122,8 +122,7 @@ package body Ships.Crew is
          for Mission of Accepted_Missions loop
             if Mission.M_Type = PASSENGER
               and then Mission.Data > Member_Index then
-               Temp_Value := Mission.Data;
-               Temp_Value := Temp_Value - 1;
+               Temp_Value := Mission.Data - 1;
                Mission.Data := Temp_Value;
             end if;
          end loop Update_Missions_Loop;
