@@ -44,8 +44,7 @@ package Ships.Cargo is
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) with
       Pre => Cargo_Index <=
-      Inventory_Container.Last_Index(Container => Ship.Cargo),
-      Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);
+      Inventory_Container.Last_Index(Container => Ship.Cargo);
       -- ****
 
       -- ****f* SCargo/SCargo.Free_Cargo
