@@ -24,68 +24,29 @@ package body Ships.Cargo is
      (Ship: in out Ship_Record; Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) is
-      use Tiny_String;
-
-      Item_Index: Inventory_Container.Extended_Index := 0;
+      Nim_Cargo: Nim_Inventory_Array :=
+        Inventory_To_Nim(Inventory => Ship.Cargo);
+      procedure Update_Ada_Cargo
+        (P_Index, A, Dur, C_Index, P, Get_Player_Ship: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaCargo";
    begin
-      if Proto_Index > 0 and Cargo_Index = 0 then
-         Find_Item_Index_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Ship.Cargo) ..
-             Inventory_Container.Last_Index(Container => Ship.Cargo) loop
-            if Inventory_Container.Element(Container => Ship.Cargo, Index => I)
-                .Proto_Index =
-              Proto_Index and
-              Inventory_Container.Element(Container => Ship.Cargo, Index => I)
-                  .Durability =
-                Durability then
-               Item_Index := I;
-               exit Find_Item_Index_Loop;
-            end if;
-         end loop Find_Item_Index_Loop;
-      else
-         Item_Index := Cargo_Index;
-      end if;
-      if Item_Index = 0 and (Proto_Index = 0 or Amount < 0) then
-         return;
-      end if;
-      if Item_Index = 0 then
-         Inventory_Container.Append
-           (Container => Ship.Cargo,
-            New_Item =>
-              (Proto_Index => Proto_Index, Amount => Amount,
-               Name => Null_Bounded_String, Durability => Durability,
-               Price => Price));
-      else
-         Add_Item_Block :
-         declare
-            Item: Inventory_Data :=
-              Inventory_Container.Element
-                (Container => Ship.Cargo, Index => Item_Index);
-            New_Amount: constant Integer := Item.Amount + Amount;
-         begin
-            if New_Amount < 1 then
-               Inventory_Container.Delete
-                 (Container => Ship.Cargo, Index => Item_Index);
-               Update_Ammo_Index_Loop :
-               for Module of Ship.Modules loop
-                  if Module.M_Type = GUN then
-                     if Module.Ammo_Index > Item_Index then
-                        Module.Ammo_Index := Module.Ammo_Index - 1;
-                     elsif Module.Ammo_Index = Item_Index then
-                        Module.Ammo_Index := 0;
-                     end if;
-                  end if;
-               end loop Update_Ammo_Index_Loop;
-            else
-               Item.Amount := New_Amount;
-               Item.Price := Price;
-               Inventory_Container.Replace_Element
-                 (Container => Ship.Cargo, Index => Item_Index,
-                  New_Item => Item);
-            end if;
-         end Add_Item_Block;
-      end if;
+      Get_Ada_Modules(Ship => Ship);
+      Get_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Update_Ada_Cargo
+        (P_Index => Proto_Index, A => Amount, Dur => Durability,
+         C_Index => Cargo_Index, P => Price,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Set_Ada_Ship_Cargo
+        (Cargo => Nim_Cargo,
+         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Inventory_Container.Assign
+        (Target => Ship.Cargo,
+         Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
+      Set_Ada_Modules(Ship => Ship);
    end Update_Cargo;
 
    function Free_Cargo
