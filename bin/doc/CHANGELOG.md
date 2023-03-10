@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Ability to select crew members on the player's ship's crew members list
 - Ability to give orders to the selected crew members on the player's ship's
   crew members list
+- Ability to change a module's name in the module's info dialog
 
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
