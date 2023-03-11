@@ -19,12 +19,6 @@ import std/[strutils, tables, xmlparser, xmltree]
 import crew, factions, game, items, log, ships, types, utils
 
 type
-  MobInventoryRecord = object
-    ## Used to store data about the inventory of the mob's prototype
-    protoIndex: Natural ## The index of the item's prototype
-    minAmount: Natural  ## The minimal amount of the item
-    maxAmount: Natural  ## The maximum amount of the item
-
   ProtoMobRecord = object
     ## Used to store data about mobs prototypes
     attributes: seq[MobAttributeRecord]               ## The mob's attributes

@@ -85,6 +85,10 @@ type
     none, enemyShip, attackOnBase, disease, doublePrice, baseRecovery,
         fullDocks, enemyPatrol, trader, friendlyShip
 
+  ShipCombatAi* {.pure.} = enum
+    ## Possible types of NPC's ships combat behaviour
+    none, berserker, attacker, coward, disarmer
+
   MapXRange* = range[1..1_024] ## The size of the game map in X axis
   MapYRange* = range[1..1_024] ## The size of the game map in Y axis
   ItemsDurability* = range[0..101] ## The range of the items durability
@@ -377,6 +381,12 @@ type
       shipIndex*: int         ## The index of the prototype ship used by the event
     else:
       data*: int              ## General data of the event
+
+  MobInventoryRecord* = object
+    ## Used to store data about the inventory of the mob's prototype
+    protoIndex*: Natural ## The index of the item's prototype
+    minAmount*: Natural  ## The minimal amount of the item
+    maxAmount*: Natural  ## The maximum amount of the item
 
 # Temporary code for interfacing with Ada
 
