@@ -168,9 +168,8 @@ package body Ships.Crew is
       if Strlen(Item => Message) > 0 then
          if Ship = Player_Ship then
             raise Crew_Order_Error with Value(Item => Message);
-         else
-            return;
          end if;
+         return;
       end if;
       Get_Ship_From_Nim(Ship => Ship);
    end Give_Orders;
