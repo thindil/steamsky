@@ -94,8 +94,30 @@ package body Ships.Crew is
 
    procedure Delete_Member
      (Member_Index: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
-      Temp_Value: Integer := 0;
+      Deleted: Boolean := False;
    begin
+      if Ship = Player_Ship then
+         Delete_Missions_Loop :
+         for I in
+           Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
+            if Accepted_Missions(I).M_Type = PASSENGER
+              and then Accepted_Missions(I).Data = Member_Index then
+               Delete_Mission(Mission_Index => I);
+               Deleted := True;
+               exit Delete_Missions_Loop;
+            end if;
+         end loop Delete_Missions_Loop;
+         Update_Missions_Loop :
+         for Mission of Accepted_Missions loop
+            if Mission.M_Type = PASSENGER
+              and then Mission.Data > Member_Index then
+               Mission.Data := Mission.Data - 1;
+            end if;
+         end loop Update_Missions_Loop;
+         if Deleted then
+            return;
+         end if;
+      end if;
       Ship.Crew.Delete(Index => Member_Index);
       Module_Loop :
       for Module of Ship.Modules loop
@@ -108,25 +130,6 @@ package body Ships.Crew is
             end if;
          end loop Owners_Loop;
       end loop Module_Loop;
-      if Ship = Player_Ship then
-         Delete_Missions_Loop :
-         for I in
-           Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
-            if Accepted_Missions(I).M_Type = PASSENGER
-              and then Accepted_Missions(I).Data = Member_Index then
-               Delete_Mission(Mission_Index => I);
-               exit Delete_Missions_Loop;
-            end if;
-         end loop Delete_Missions_Loop;
-         Update_Missions_Loop :
-         for Mission of Accepted_Missions loop
-            if Mission.M_Type = PASSENGER
-              and then Mission.Data > Member_Index then
-               Temp_Value := Mission.Data - 1;
-               Mission.Data := Temp_Value;
-            end if;
-         end loop Update_Missions_Loop;
-      end if;
    end Delete_Member;
 
    function Find_Member
