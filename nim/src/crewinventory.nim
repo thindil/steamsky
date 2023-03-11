@@ -183,7 +183,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     item.durability.dec
   # Item destroyed
   if item.durability == 0:
-    if memberIndex == 0:
+    if memberIndex == -1:
       updateCargo(ship = ship, cargoIndex = itemIndex, amount = -1)
     else:
       updateInventory(memberIndex = memberIndex, amount = -1,
