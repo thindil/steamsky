@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Color of text for distance column in the list of known events
 - Possible crash when trying to create a save game file
 - Crash when starting the game with debug menu
+- Deleting damaged items from a crew member's inventory
 
 ## [8.4] - 2023-02-19
 
