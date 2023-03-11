@@ -15,9 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import types
+import std/tables
+import bases, game, shipscrew, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
+
+proc deleteMission*(missionIndex: Natural; failed: bool = true) =
+  let mission = acceptedMissions[missionIndex]
+  var reputation: Natural = (mission.reward / 50).Natural
+  if reputation < 2:
+    reputation = 2
+  reputation = (reputation.float + (reputation.float * (mission.multiplier - 1.0))).Natural
+  if failed:
+    gainRep(baseIndex = mission.startBase, points = -reputation)
+    updateMorale(ship = playerShip, memberIndex = 0, value = getRandom(
+        min = -10, max = -5))
+    var messageText = "You failed your mission to "
+    case mission.mType
+    of deliver:
+      messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
