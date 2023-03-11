@@ -662,7 +662,25 @@ package body Missions is
             Amount => -1);
       elsif Mission.M_Type = PASSENGER
         and then Mission.Data <= Positive(Player_Ship.Crew.Length) then
-         Delete_Member(Member_Index => Mission.Data, Ship => Player_Ship);
+         Player_Ship.Crew.Delete(Index => Mission.Data);
+         Module_Loop :
+         for Module of Player_Ship.Modules loop
+            Owners_Loop :
+            for Owner of Module.Owner loop
+               if Owner = Mission.Data then
+                  Owner := 0;
+               elsif Owner > Mission.Data then
+                  Owner := Owner - 1;
+               end if;
+            end loop Owners_Loop;
+         end loop Module_Loop;
+         Update_Missions_Loop :
+         for Accepted_Mission of Accepted_Missions loop
+            if Accepted_Mission.M_Type = PASSENGER
+              and then Accepted_Mission.Data > Mission.Data then
+               Accepted_Mission.Data := Accepted_Mission.Data - 1;
+            end if;
+         end loop Update_Missions_Loop;
       end if;
       Update_Map_Loop :
       for I in
