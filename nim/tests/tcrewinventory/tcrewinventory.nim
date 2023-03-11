@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[crewinventory, game, items, ships, types]
+import ../../src/[crewinventory, game, items, types]
 
 if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
@@ -12,8 +12,8 @@ playerShip.crew = @[]
 var member = MemberData(homeBase: 1)
 const attribute = MobAttributeRecord(level: 1, experience: 0)
 member.attributes = @[attribute, attribute, attribute, attribute]
-member.inventory.add(InventoryData(amount: 1, protoIndex: 1))
-member.inventory.add(InventoryData(amount: 1, protoIndex: 2))
+member.inventory.add(InventoryData(amount: 1, protoIndex: 1, durability: 100))
+member.inventory.add(InventoryData(amount: 1, protoIndex: 2, durability: 100))
 for index, _ in member.equipment.mpairs:
   member.equipment[index] = -1
 member.equipment[weapon] = 1
@@ -38,6 +38,8 @@ except CrewNoSpaceError:
 assert playerShip.crew[0].inventory[0].amount == 1
 
 for i in 1..100:
+  if playerShip.crew[0].inventory.len == 0:
+    break
   damageItem(playerShip.crew[0].inventory, 0, 0, 0, playerShip)
 
 block:
