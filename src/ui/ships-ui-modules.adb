@@ -578,38 +578,38 @@ package body Ships.UI.Modules is
            Height +
            Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       end Add_Name_Info_Block;
-      if Module.Durability < Module.Max_Durability then
-         Label := Create(pathName => Module_Frame & ".damagelbl");
-         Damage_Percent :=
-           (Float(Module.Durability) / Float(Module.Max_Durability));
-         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-            configure
-              (Widgt => Label, options => "-text {Status: Slightly damaged}");
-         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
-            configure(Widgt => Label, options => "-text {Status: Damaged}");
-         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-            configure
-              (Widgt => Label, options => "-text {Status: Heavily damaged}");
-         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-            configure
-              (Widgt => Label, options => "-text {Status: Almost destroyed}");
-         elsif Damage_Percent = 0.0 then
-            configure(Widgt => Label, options => "-text {Status: Destroyed}");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-         Height :=
-           Height +
-           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
-         Module_Max_Value :=
-           Positive
-             (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
-         if Module.Max_Durability = Module_Max_Value then
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {" & cget(Widgt => Label, option => "-text") &
-                 " (max upgrade)}");
-         end if;
+      Label := Create(pathName => Module_Frame & ".damagelbl");
+      Damage_Percent :=
+        (Float(Module.Durability) / Float(Module.Max_Durability));
+      if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
+         configure
+           (Widgt => Label, options => "-text {Status: Slightly damaged}");
+      elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
+         configure(Widgt => Label, options => "-text {Status: Damaged}");
+      elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
+         configure
+           (Widgt => Label, options => "-text {Status: Heavily damaged}");
+      elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
+         configure
+           (Widgt => Label, options => "-text {Status: Almost destroyed}");
+      elsif Damage_Percent = 0.0 then
+         configure(Widgt => Label, options => "-text {Status: Destroyed}");
+      else
+         configure(Widgt => Label, options => "-text {Status: Not damaged}");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+      Module_Max_Value :=
+        Positive
+          (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
+      if Module.Max_Durability = Module_Max_Value then
+         configure
+           (Widgt => Label,
+            options =>
+              "-text {" & cget(Widgt => Label, option => "-text") &
+              " (max upgrade)}");
       end if;
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
@@ -778,10 +778,10 @@ package body Ships.UI.Modules is
                  (Widget => Progress_Bar,
                   Message => "Cleanliness of the selected cabin");
                Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Label, Options => "-row 1 -sticky w");
+                 (Slave => Label, Options => "-row 2 -sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
-                  Options => "-row 1 -column 1 -sticky we");
+                  Options => "-row 2 -column 1 -sticky we");
                Height :=
                  Height +
                  Positive'Value
@@ -814,10 +814,10 @@ package body Ships.UI.Modules is
                     " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Label, Options => "-row 2 -sticky w");
+              (Slave => Label, Options => "-row 3 -sticky w");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Bar,
-               Options => "-row 2 -column 1 -sticky we");
+               Options => "-row 3 -column 1 -sticky we");
             Height :=
               Height +
               Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
