@@ -30,9 +30,9 @@ type
 
   SkillRecord* = object
     ## Store data releated to the skills
-    name*: string                    ## The name of the skill
+    name*: string                   ## The name of the skill
     attribute*: Positive            ## The index of the attribute related to the skill
-    description*: string             ## The description of the skill
+    description*: string            ## The description of the skill
     tool*: string                   ## The type of items used to train the skill
     toolsQuality*: seq[ToolQuality] ## The quality of tool needed for training
 
@@ -99,11 +99,12 @@ var
   recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
   goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
   playerCareer*: string ## Index of the career of the player selected when starting a new game
-  knownRecipes*: seq[string] ## The list of known recipes by the player
-  messagesList*: seq[MessageData] ## The list of in-game messages
+  knownRecipes*: seq[string]               ## The list of known recipes by the player
+  messagesList*: seq[MessageData]          ## The list of in-game messages
   eventsList* = initTable[Positive, EventData]() ## The list of available events in the game
   playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
+  protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
@@ -394,5 +395,5 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
   else:
     discard
 
-proc endAdaGame(save: cint) {.raises: [], tags: [], exportc} =
+proc endAdaGame(save: cint) {.raises: [], tags: [], exportc.} =
   endGame(save = (if save == 1: true else: false))
