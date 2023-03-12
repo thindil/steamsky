@@ -142,6 +142,61 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           if pModule == moduleIndex:
             ship.modules.delete(i = mIndex)
             break
+    attribute = shipNode.attr(name = "accuracy")
+    if attribute.len() > 0:
+      ship.accuracy.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus accuracy.")
+      ship.accuracy.maxValue = 0
+    attribute = shipNode.attr(name = "minaccuracy")
+    if attribute.len() > 0:
+      ship.accuracy.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum accuracy.")
+      attribute = shipNode.attr(name = "maxaccuracy")
+      ship.accuracy.maxValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum accuracy.")
+      if ship.accuracy.maxValue < ship.accuracy.minValue:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus accuracy.")
+    attribute = shipNode.attr(name = "combatai")
+    if attribute.len() > 0:
+      ship.combatAi = try:
+          parseEnum[ShipCombatAi](attribute)
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship combat AI.")
+    attribute = shipNode.attr(name = "evasion")
+    if attribute.len() > 0:
+      ship.evasion.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus evasion.")
+      ship.evasion.maxValue = 0
+    attribute = shipNode.attr(name = "minevasion")
+    if attribute.len() > 0:
+      ship.evasion.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum evasion.")
+      attribute = shipNode.attr(name = "maxevasion")
+      ship.evasion.maxValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum evasion.")
+      if ship.evasion.maxValue < ship.evasion.minValue:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus evasion.")
 
 # Temporary code for interfacing with Ada
 
@@ -356,7 +411,8 @@ func adaMemberFromNim*(member: MemberData): AdaMemberData {.raises: [], tags: []
   for attribute in result.attributes.mitems:
     attribute = [0.cint, 0.cint]
   for index, attribute in member.attributes.pairs:
-    result.attributes[index + 1] = [attribute.level.cint, attribute.experience.cint]
+    result.attributes[index + 1] = [attribute.level.cint,
+        attribute.experience.cint]
   for skill in result.skills.mitems:
     skill = [0.cint, 0.cint, 0.cint]
   for index, skill in member.skills.pairs:
