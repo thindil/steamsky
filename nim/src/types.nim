@@ -388,6 +388,30 @@ type
     minAmount*: Natural  ## The minimal amount of the item
     maxAmount*: Natural  ## The maximum amount of the item
 
+  ShipBonusData* = object
+    minValue*: Natural
+    maxValue*: Natural
+
+  ProtoMemberData* = object
+    protoIndex*: Positive
+    minAmount*: Positive
+    maxAmount*: Natural
+
+  ProtoShipData* = object
+    name*: string
+    modules*: seq[Positive]
+    accuracy*: ShipBonusData
+    combatAi*: ShipCombatAi
+    evasion*: ShipBonusData
+    loot*: ShipBonusData
+    perception*: ShipBonusData
+    cargo*: seq[MobInventoryRecord]
+    combatValue*: Positive
+    crew*: seq[ProtoMemberData]
+    description*: string
+    owner*: string
+    knownRecipes*: seq[string]
+
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object
