@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
   crew members list
 - Ability to change a module's name in the module's info dialog
 
+### Changed
+- Always show the status of the module in the module info dialog
+
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
 - Color of text for distance column in the list of known events
