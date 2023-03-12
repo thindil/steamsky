@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import game, types, utils
+import std/[strutils, tables, xmlparser, xmltree]
+import game, log, types, utils
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Get the description of quality of the selected cabin in the player's ship
@@ -67,6 +67,57 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
         shipsSyllablesMiddleList.len - 1))]
   result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
       shipsSyllablesEndList.len - 1))]
+
+proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## Load the ships data from the file
+  ##
+  ## * fileName - the name of the file to load
+  let shipsXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load ships data file. Reason: " &
+          getCurrentExceptionMsg())
+  for shipNode in shipsXml:
+    if shipNode.kind != xnElement:
+      continue
+    let
+      shipIndex: Natural = try:
+          shipNode.attr(name = "index").parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't add ship '" & shipNode.attr(name = "index") & "', invalid index.")
+      shipAction: DataAction = try:
+          parseEnum[DataAction](shipNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if shipAction in [update, remove]:
+      if shipIndex > protoShipsList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', there is no ship with that index.")
+    elif shipIndex < protoShipsList.len():
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add ship '" & $shipIndex & "', there is an ship with that index.")
+    if shipAction == DataAction.remove:
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      protoShipsList.del(key = shipIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
+      logMessage(message = "Ship removed: '" & $shipIndex & "'",
+          debugType = everything)
+      continue
+    var ship: ProtoShipData = if shipAction == DataAction.update:
+        try:
+          protoShipsList[shipIndex]
+        except ValueError:
+          ProtoShipData(combatValue: 1)
+      else:
+        ProtoShipData(combatValue: 1)
+    var attribute = shipNode.attr(name = "name")
+    if attribute.len() > 0:
+      ship.name = attribute
 
 # Temporary code for interfacing with Ada
 
