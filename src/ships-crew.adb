@@ -17,11 +17,10 @@
 
 with Interfaces.C.Strings;
 with Crafts;
-with Messages; use Messages;
-with HallOfFame; use HallOfFame;
-with Events; use Events;
-with Utils; use Utils;
-with Missions; use Missions;
+with HallOfFame;
+with Messages;
+with Missions;
+with Utils;
 
 package body Ships.Crew is
 
@@ -43,6 +42,9 @@ package body Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
+      use HallOfFame;
+      use Messages;
+      use Utils;
       use Tiny_String;
 
       Member_Name: Bounded_String := Ship.Crew(Member_Index).Name;
@@ -94,6 +96,8 @@ package body Ships.Crew is
 
    procedure Delete_Member
      (Member_Index: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
+      use Missions;
+
       Deleted: Boolean := False;
    begin
       if Ship = Player_Ship then
