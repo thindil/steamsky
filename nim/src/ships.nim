@@ -118,6 +118,30 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     var attribute = shipNode.attr(name = "name")
     if attribute.len() > 0:
       ship.name = attribute
+    for module in shipNode.findAll(tag = "module"):
+      let
+        moduleAmount = try:
+            module.attr(name = "amount").parseInt()
+          except ValueError:
+            1
+        moduleIndex = try:
+            module.attr(name = "index").parseInt()
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for module index.")
+        moduleAction: DataAction = try:
+            parseEnum[DataAction](module.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if moduleAction == DataAction.add:
+        for i in 1 .. moduleAmount:
+          ship.modules.add(y = moduleIndex)
+      else:
+        for mIndex, pModule in ship.modules.pairs:
+          if pModule == moduleIndex:
+            ship.modules.delete(i = mIndex)
+            break
 
 # Temporary code for interfacing with Ada
 
