@@ -578,39 +578,74 @@ package body Ships.UI.Modules is
            Height +
            Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       end Add_Name_Info_Block;
-      Label := Create(pathName => Module_Frame & ".damagelbl");
-      Damage_Percent :=
-        (Float(Module.Durability) / Float(Module.Max_Durability));
-      if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-         configure
-           (Widgt => Label, options => "-text {Status: Slightly damaged}");
-      elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
-         configure(Widgt => Label, options => "-text {Status: Damaged}");
-      elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-         configure
-           (Widgt => Label, options => "-text {Status: Heavily damaged}");
-      elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-         configure
-           (Widgt => Label, options => "-text {Status: Almost destroyed}");
-      elsif Damage_Percent = 0.0 then
-         configure(Widgt => Label, options => "-text {Status: Destroyed}");
-      else
-         configure(Widgt => Label, options => "-text {Status: Not damaged}");
-      end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
-      Module_Max_Value :=
-        Positive
-          (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
-      if Module.Max_Durability = Module_Max_Value then
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & cget(Widgt => Label, option => "-text") &
-              " (max upgrade)}");
-      end if;
+      Add_Status_Info_Block :
+      declare
+         Status_Box: constant Ttk_Frame :=
+           Create
+             (pathName => Module_Frame & ".statusinfo",
+              options => "-width 360");
+         Status_Tooltip: Unbounded_String;
+      begin
+         Label :=
+           Create
+             (pathName => Status_Box & ".damagelbl",
+              options => "-text {Status:}");
+         Damage_Percent :=
+           (Float(Module.Durability) / Float(Module.Max_Durability));
+         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style green.Horizontal.TProgressbar");
+            Status_Tooltip :=
+              To_Unbounded_String(Source => "Slightly damaged");
+         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style yellow.Horizontal.TProgressbar");
+            Status_Tooltip := To_Unbounded_String(Source => "Damaged");
+         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style yellow.Horizontal.TProgressbar");
+            Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
+         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
+            Progress_Bar_Style := Null_Unbounded_String;
+            Status_Tooltip :=
+              To_Unbounded_String(Source => "Almost destroyed");
+         elsif Damage_Percent = 0.0 then
+            Progress_Bar_Style := Null_Unbounded_String;
+            Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
+         else
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style green.Horizontal.TProgressbar");
+            Status_Tooltip := To_Unbounded_String(Source => "Not damaged");
+         end if;
+         Module_Max_Value :=
+           Positive
+             (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
+         if Module.Max_Durability = Module_Max_Value then
+            Append(Source => Status_Tooltip, New_Item => " (max upgrade)");
+         end if;
+         Progress_Bar :=
+           Create
+             (pathName => Status_Box & ".bar",
+              options =>
+                "-orient horizontal -maximum 1.0 -value {" &
+                Float'Image(Damage_Percent) & "}" &
+                To_String(Source => Progress_Bar_Style));
+         Add
+           (Widget => Progress_Bar,
+            Message => To_String(Source => Status_Tooltip));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Progress_Bar,
+            Options => "-row 0 -column 1 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
+         Height :=
+           Height +
+           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+      end Add_Status_Info_Block;
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
