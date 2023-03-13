@@ -245,6 +245,53 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       if ship.perception.maxValue < ship.perception.minValue:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
+    for item in shipNode.findAll(tag = "cargo"):
+      let itemIndex = try:
+            item.attr(name = "index").parseInt()
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item index.")
+      if not itemsList.contains(key = itemIndex):
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for cargo item index.")
+      let
+        itemAction: DataAction = try:
+            parseEnum[DataAction](item.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+        itemAmount = try:
+            item.attr(name = "amount").parseInt()
+          except ValueError:
+            0
+      case itemAction
+      of DataAction.add:
+        if itemAmount > 0:
+          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: itemAmount, maxAmount: 0))
+        else:
+          let
+            minAmount = try:
+                item.attr(name = "minamount").parseInt()
+              except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                    "', invalid value for cargo item minamount.")
+            maxAmount = try:
+                item.attr(name = "maxamount").parseInt()
+              except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                    "', invalid value for cargo item maxamount.")
+          if minAmount > maxAmount:
+              raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                    "', invalid value for cargo item amount range.")
+          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: minAmount, maxAmount: maxAmount))
+      else:
+        discard
 
 # Temporary code for interfacing with Ada
 
