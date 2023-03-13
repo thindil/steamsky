@@ -29,7 +29,9 @@ package body Ships.Repairs is
 
       Order_Time, Current_Minutes, Repair_Points: Integer;
       Repair_Needed, Repair_Stopped: Boolean := False;
+      --## rule off IMPROPER_INITIALIZATION
       Crew_Repair_Points: Natural_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       procedure Repair_Module(Module_Index: Positive) is
          Points_Index, Points_Bonus, Repair_Value: Natural;
          Repair_Material, Tools_Index: Inventory_Container.Extended_Index;
