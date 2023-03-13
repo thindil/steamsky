@@ -197,6 +197,54 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       if ship.evasion.maxValue < ship.evasion.minValue:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus evasion.")
+    attribute = shipNode.attr(name = "loot")
+    if attribute.len() > 0:
+      ship.loot.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship loot.")
+      ship.loot.maxValue = 0
+    attribute = shipNode.attr(name = "minloot")
+    if attribute.len() > 0:
+      ship.loot.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship minimum loot.")
+      attribute = shipNode.attr(name = "maxloot")
+      ship.loot.maxValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship maximum loot.")
+      if ship.loot.maxValue < ship.loot.minValue:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship loot.")
+    attribute = shipNode.attr(name = "perception")
+    if attribute.len() > 0:
+      ship.perception.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus perception.")
+      ship.perception.maxValue = 0
+    attribute = shipNode.attr(name = "minperception")
+    if attribute.len() > 0:
+      ship.perception.minValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus minimum perception.")
+      attribute = shipNode.attr(name = "maxperception")
+      ship.perception.maxValue = try:
+          attribute.parseInt()
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship bonus maximum perception.")
+      if ship.perception.maxValue < ship.perception.minValue:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
 
 # Temporary code for interfacing with Ada
 
