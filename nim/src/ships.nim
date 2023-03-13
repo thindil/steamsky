@@ -140,7 +140,9 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       else:
         for mIndex, pModule in ship.modules.pairs:
           if pModule == moduleIndex:
+            {.warning[UnsafeSetLen]: off.}
             ship.modules.delete(i = mIndex)
+            {.warning[UnsafeSetLen]: on.}
             break
     attribute = shipNode.attr(name = "accuracy")
     if attribute.len() > 0:
@@ -267,22 +269,22 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             0
       var minAmount, maxAmount = 0
       if itemAmount == 0:
-          minAmount = try:
+        minAmount = try:
               item.attr(name = "minamount").parseInt()
             except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex &
                   "', invalid value for cargo item minamount.")
-          maxAmount = try:
-              item.attr(name = "maxamount").parseInt()
-            except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for cargo item maxamount.")
-          if minAmount > maxAmount:
-              raise newException(exceptn = DataLoadingError,
-                message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                    "', invalid value for cargo item amount range.")
+        maxAmount = try:
+            item.attr(name = "maxamount").parseInt()
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item maxamount.")
+        if minAmount > maxAmount:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item amount range.")
       case itemAction
       of DataAction.add:
         if itemAmount > 0:
@@ -329,6 +331,71 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           if knownRecipe == recipeIndex:
             ship.knownRecipes.delete(i = rIndex)
             break
+    for member in shipNode.findAll(tag = "member"):
+      let memberIndex = try:
+            member.attr(name = "index").parseInt()
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for crew member index.")
+      if not protoMobsList.contains(key = memberIndex):
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for crew member index.")
+      let
+        memberAction: DataAction = try:
+            parseEnum[DataAction](member.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+        memberAmount = try:
+            member.attr(name = "amount").parseInt()
+          except ValueError:
+            0
+      var minAmount, maxAmount = 0
+      if memberAmount == 0:
+        minAmount = try:
+              member.attr(name = "minamount").parseInt()
+            except ValueError:
+            raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                  "', invalid value for crew member minamount.")
+        maxAmount = try:
+            member.attr(name = "maxamount").parseInt()
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for crew member maxamount.")
+        if minAmount > maxAmount:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for crew member amount range.")
+      case memberAction
+      of DataAction.add:
+        if memberAmount > 0:
+          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
+              minAmount: memberAmount, maxAmount: 0))
+        else:
+          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
+              minAmount: minAmount, maxAmount: maxAmount))
+      of DataAction.update:
+        for crewMember in ship.crew.mitems:
+          if crewMember.protoIndex == memberIndex:
+            if memberAmount > 0:
+              crewMember.minAmount = memberAmount
+              crewMember.maxAmount = 0
+            else:
+              crewMember.minAmount = minAmount
+              crewMember.maxAmount = maxAmount
+            break
+      of DataAction.remove:
+        var crewIndex = 0
+        while crewIndex < ship.crew.len:
+          if ship.crew[crewIndex].protoIndex == memberIndex:
+            {.warning[UnsafeSetLen]: off.}
+            ship.crew.delete(i = crewIndex)
+            {.warning[UnsafeSetLen]: on.}
+            break
+          crewIndex.inc
 
 # Temporary code for interfacing with Ada
 
