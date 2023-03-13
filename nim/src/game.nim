@@ -105,6 +105,7 @@ var
   playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
   protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
+  protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =

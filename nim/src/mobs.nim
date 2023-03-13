@@ -18,8 +18,6 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import crew, factions, game, items, log, ships, types, utils
 
-var protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
-
 proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the Mobs data from the file
