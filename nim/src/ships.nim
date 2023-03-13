@@ -311,6 +311,24 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     attribute = shipNode.attr(name = "owner")
     if attribute.len() > 0:
       ship.owner = attribute
+    for recipe in shipNode.findAll(tag = "recipe"):
+      let recipeIndex = recipe.attr(name = "index")
+      if not recipesList.contains(key = recipeIndex):
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for known recipe index.")
+      let
+        recipeAction: DataAction = try:
+            parseEnum[DataAction](recipe.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if recipeAction == DataAction.add:
+        ship.knownRecipes.add(y = recipeIndex)
+      else:
+        for rIndex, knownRecipe in ship.knownRecipes.pairs:
+          if knownRecipe == recipeIndex:
+            ship.knownRecipes.delete(i = rIndex)
+            break
 
 # Temporary code for interfacing with Ada
 
