@@ -18,16 +18,6 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import crew, factions, game, items, log, ships, types, utils
 
-type
-  ProtoMobRecord = object
-    ## Used to store data about mobs prototypes
-    attributes: seq[MobAttributeRecord]               ## The mob's attributes
-    skills: seq[SkillInfo]                            ## The mob's skills
-    order: CrewOrders                                 ## The current order of the mob
-    priorities: array[1..12, Natural]                 ## The orders priorities of the mob
-    inventory: seq[MobInventoryRecord]                ## The inventory of the mob
-    equipment: array[EquipmentLocations, int]         ## The equipment of the mob
-
 var protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
 
 proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],

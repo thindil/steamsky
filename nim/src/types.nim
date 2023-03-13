@@ -415,6 +415,15 @@ type
     owner*: string                  ## The faction to which the ship belongs
     knownRecipes*: seq[string] ## The list of known recipes (used only by the player's ship)
 
+  ProtoMobRecord* = object
+    ## Used to store data about mobs prototypes
+    attributes*: seq[MobAttributeRecord] ## The mob's attributes
+    skills*: seq[SkillInfo]              ## The mob's skills
+    order*: CrewOrders                   ## The current order of the mob
+    priorities*: array[1..12, Natural]   ## The orders priorities of the mob
+    inventory*: seq[MobInventoryRecord]  ## The inventory of the mob
+    equipment*: array[EquipmentLocations, int] ## The equipment of the mob
+
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object
