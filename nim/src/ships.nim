@@ -396,6 +396,41 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             {.warning[UnsafeSetLen]: on.}
             break
           crewIndex.inc
+    for description in shipNode.findAll(tag = "description"):
+      ship.description = description.innerText()
+
+    proc countAmmoValue(itemTypeIndex, multiple: Positive) =
+      for item in ship.cargo.items:
+        if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex - 1]:
+          ship.combatValue = ship.combatValue + (itemsList[item.protoIndex].value[1] * multiple)
+
+    for moduleIndex in ship.modules.items:
+      try:
+        let module = modulesList[moduleIndex]
+        case module.mType
+        of ModuleType.hull, ModuleType.gun, ModuleType.batteringRam:
+          ship.combatValue = ship.combatValue + module.durability + (module.maxValue * 10)
+          if module.mType == ModuleType.gun:
+            countAmmoValue(itemTypeIndex = module.value, multiple = 10)
+        of ModuleType.armor:
+          ship.combatValue = ship.combatValue + module.durability
+        of ModuleType.harpoonGun:
+          ship.combatValue = ship.combatValue + module.durability + (module.maxValue * 5)
+          countAmmoValue(itemTypeIndex = module.value, multiple = 5)
+        else:
+          discard
+      except KeyError:
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid index for module during counting the ship's combat value.")
+    ship.combatValue.dec
+    if shipAction == DataAction.add:
+      logMessage(message = "Ship added: '" & $shipIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Ship updated: '" & $shipIndex & "'",
+          debugType = everything)
+    protoShipsList[shipIndex] = ship
 
 # Temporary code for interfacing with Ada
 
