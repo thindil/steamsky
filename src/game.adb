@@ -946,7 +946,8 @@ package body Game is
                   Load_Ship_Modules
                     (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "ships" then
-                  Load_Ships(Reader => Reader);
+                  Load_Ships
+                    (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "stories" then
                   Load_Stories(Reader => Reader);
                elsif To_String(Source => Data_Type) = "data" then
