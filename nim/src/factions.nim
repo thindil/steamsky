@@ -331,7 +331,7 @@ type
     description: cstring
     name: cstring
 
-proc loadAdaFactions*(fileName: cstring): cstring {.sideEffect, raises: [],
+proc loadAdaFactions(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
     loadFactions(fileName = $fileName)
