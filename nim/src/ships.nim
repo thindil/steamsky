@@ -402,20 +402,23 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     proc countAmmoValue(itemTypeIndex, multiple: Positive) =
       for item in ship.cargo.items:
         if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex - 1]:
-          ship.combatValue = ship.combatValue + (itemsList[item.protoIndex].value[1] * multiple)
+          ship.combatValue = ship.combatValue + (itemsList[
+              item.protoIndex].value[1] * multiple)
 
     for moduleIndex in ship.modules.items:
       try:
         let module = modulesList[moduleIndex]
         case module.mType
         of ModuleType.hull, ModuleType.gun, ModuleType.batteringRam:
-          ship.combatValue = ship.combatValue + module.durability + (module.maxValue * 10)
+          ship.combatValue = ship.combatValue + module.durability + (
+              module.maxValue * 10)
           if module.mType == ModuleType.gun:
             countAmmoValue(itemTypeIndex = module.value, multiple = 10)
         of ModuleType.armor:
           ship.combatValue = ship.combatValue + module.durability
         of ModuleType.harpoonGun:
-          ship.combatValue = ship.combatValue + module.durability + (module.maxValue * 5)
+          ship.combatValue = ship.combatValue + module.durability + (
+              module.maxValue * 5)
           countAmmoValue(itemTypeIndex = module.value, multiple = 5)
         else:
           discard
@@ -459,6 +462,17 @@ type
     mType: cint
     data: array[1..3, cint]
     data2: cstring
+
+  AdaProtoShipData = object
+    name: cstring
+    accuracy: array[2, cint]
+    combatAi: cint
+    evasion: array[2, cint]
+    loot: array[2, cint]
+    perception: array[2, cint]
+    combatValue: cint
+    description: cstring
+    owner: cstring
 
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc.} =
@@ -748,3 +762,36 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
       secondIndex.inc
     modules[index] = adaModule
     index.inc
+
+proc loadAdaShips(fileName: cstring): cstring {.sideEffect, raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadShips(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
+
+proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  adaProtoShip = AdaProtoShipData(name: "".cstring, accuracy: [0.cint, 0.cint],
+      combatAi: -1, evasion: [0.cint, 0.cint], loot: [0.cint, 0.cint],
+      perception: [0.cint, 0.cint], combatValue: -1, description: "".cstring,
+      owner: "".cstring)
+  if not protoShipsList.hasKey(key = index):
+    return
+  let ship = try:
+      protoShipsList[index]
+    except KeyError:
+      return
+  adaProtoShip.name = ship.name.cstring
+  adaProtoShip.accuracy = [ship.accuracy.minValue.cint,
+      ship.accuracy.maxValue.cint]
+  adaProtoShip.combatAi = ship.combatAi.ord.cint
+  adaProtoShip.evasion = [ship.evasion.minValue.cint,
+      ship.evasion.maxValue.cint]
+  adaProtoShip.loot = [ship.loot.minValue.cint, ship.loot.maxValue.cint]
+  adaProtoShip.perception = [ship.perception.minValue.cint,
+      ship.perception.maxValue.cint]
+  adaProtoShip.combatValue = ship.combatValue.cint
+  adaProtoShip.description = ship.description.cstring
+  adaProtoShip.owner = ship.owner.cstring
