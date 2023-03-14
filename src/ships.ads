@@ -17,7 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
-with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
 with Items; use Items;
@@ -407,9 +406,9 @@ package Ships is
       -- FUNCTION
       -- Load ships from files
       -- PARAMETERS
-      -- Reader - XML Reader from which ships data will be read
+      -- File_Name - The full path to the ships file which will be read
       -- SOURCE
-   procedure Load_Ships(Reader: Tree_Reader);
+   procedure Load_Ships(File_Name: String);
    -- ****
 
    -- ****f* Ships/Ships.Count_Ship_Weight

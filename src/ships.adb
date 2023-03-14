@@ -488,641 +488,73 @@ package body Ships is
       return Tmp_Ship;
    end Create_Ship;
 
-   procedure Load_Ships(Reader: Tree_Reader) is
-      use Ada.Characters.Handling;
-      use DOM.Core;
-      use DOM.Core.Elements;
-      use DOM.Core.Nodes;
-      use Factions;
-      use Log;
-      use Short_String;
+   procedure Load_Ships(File_Name: String) is
+      use Interfaces.C;
       use Tiny_String;
 
-      Nodes_List: constant Node_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Get_Tree(Read => Reader), Tag_Name => "ship");
-      Child_Nodes: Node_List; --## rule line off IMPROPER_INITIALIZATION
-      Temp_Record: Proto_Ship_Data := Empty_Proto_Ship;
-      Module_Amount, Delete_Index, Mob_Index: Positive := 1;
-      Action, Sub_Action: Data_Action := Default_Data_Action;
-      Ship_Node, Child_Node: Node;
-      Module_Index: Natural := 0;
-      Item_Index: Natural := 0;
-      Recipe_Index: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
-      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
-      --## rule off IMPROPER_INITIALIZATION
-      Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
-      Empty_Known_Recipes: TinyString_Formal_Container.Vector (Capacity => 16);
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
-      begin
-         Count_Ammo_Value_Loop :
-         for I in
-           MobInventory_Container.First_Index
-             (Container => Temp_Record.Cargo) ..
-             MobInventory_Container.Last_Index
-               (Container => Temp_Record.Cargo) loop
-            Count_Ammo_Value_Block :
-            declare
-               Temp_Cargo: constant Mob_Inventory_Record :=
-                 MobInventory_Container.Element
-                   (Container => Temp_Record.Cargo, Index => I);
-            begin
-               if Get_Proto_Item(Index => Temp_Cargo.Proto_Index).I_Type =
-                 Get_Ada_Item_Type(Item_Index => Item_Type_Index - 1) then
-                  --## rule off SIMPLIFIABLE_EXPRESSIONS
-                  Temp_Record.Combat_Value :=
-                    Temp_Record.Combat_Value +
-                    (Get_Proto_Item(Index => Temp_Cargo.Proto_Index).Value(1) *
-                     Multiple);
-                     --## rule on SIMPLIFIABLE_EXPRESSIONS
-               end if;
-            end Count_Ammo_Value_Block;
-         end loop Count_Ammo_Value_Loop;
-      end Count_Ammo_Value;
+      type Nim_Proto_Data_Array is array(0 .. 1) of Integer;
+      type Nim_Proto_Ship_Data is record
+         Name: chars_ptr;
+         Accuracy: Nim_Proto_Data_Array;
+         Combat_Ai: Integer;
+         Evasion: Nim_Proto_Data_Array;
+         Loot: Nim_Proto_Data_Array;
+         Perception: Nim_Proto_Data_Array;
+         Combat_Value: Integer;
+         Description: chars_ptr;
+         Owner: chars_ptr;
+      end record;
+      type Nim_Proto_Ship_Data_Array is array(0 .. 14, 0 .. 2) of Integer;
+      Result: chars_ptr;
+      Nim_Proto_Ship: Nim_Proto_Ship_Data;
+      Temp_Record: Proto_Ship_Data;
+      Nim_Proto_Data: Nim_Proto_Ship_Data_Array;
+      function Load_Ada_Ships(Name: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaShips";
+      procedure Get_Ada_Proto_Ship
+        (Index: Integer; Ada_Proto_Ship: out Nim_Proto_Ship_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaProtoShip";
+      procedure Get_Ada_Proto_Ship_Data
+        (Index, Get_Crew: Integer; Ada_Proto_Ship_Data: out Nim_Proto_Ship_Data_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaProtoShipData";
    begin
+      Result := Load_Ada_Ships(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
       Load_Proto_Ships_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Temp_Record :=
-           (Name => Tiny_String.Null_Bounded_String,
-            Modules => Positive_Container.Empty_Vector,
-            Accuracy => No_Ship_Bonus, Combat_Ai => NONE,
-            Evasion => No_Ship_Bonus, Loot => No_Ship_Bonus,
-            Perception => No_Ship_Bonus, Cargo => Empty_Cargo,
-            Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
-            Description => Short_String.Null_Bounded_String,
-            Owner => Get_Faction_Index(Number => 1),
-            Known_Recipes => Empty_Known_Recipes);
-         Ship_Node := Item(List => Nodes_List, Index => I);
-         Ship_Index :=
-           Proto_Ships_Container.Extended_Index'Value
-             (Get_Attribute(Elem => Ship_Node, Name => "index"));
-         Action :=
-           (if Get_Attribute(Elem => Ship_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Ship_Node, Name => "action"))
-            else ADD);
-         if Action in UPDATE | REMOVE then
-            if Ship_Index > Proto_Ships_List.Last_Index then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " ship '" & Ship_Index'Img &
-                 "', there is no ship with that index.";
-            end if;
-         elsif Ship_Index <= Proto_Ships_List.Last_Index then
-            raise Data_Loading_Error
-              with "Can't add ship '" & Ship_Index'Img &
-              "', there is already a ship with that index.";
-         end if;
-         if Action = REMOVE then
-            Proto_Ships_List.Delete(Index => Ship_Index);
-            Log_Message
-              (Message => "Ship removed: " & Ship_Index'Img,
-               Message_Type => EVERYTHING);
-         else
-            if Action = UPDATE then
-               Temp_Record := Proto_Ships_List(Ship_Index);
-            end if;
-            if Get_Attribute(Elem => Ship_Node, Name => "name")'Length > 0 then
-               Temp_Record.Name :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Ship_Node, Name => "name"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Ship_Node, Name => "module");
-            Load_Modules_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Module_Amount :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "amount") /= ""
-                  then
-                    Positive'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "amount"))
-                  else 1);
-               Module_Index :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Child_Node, Name => "index"));
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               if Sub_Action = ADD then
-                  Temp_Record.Modules.Append
-                    (New_Item => Module_Index,
-                     Count => Count_Type(Module_Amount));
-               else
-                  Find_Delete_Module_Loop :
-                  for K in Temp_Record.Modules.Iterate loop
-                     if Temp_Record.Modules(K) = Module_Index then
-                        Delete_Index :=
-                          Positive_Container.To_Index(Position => K);
-                        exit Find_Delete_Module_Loop;
-                     end if;
-                  end loop Find_Delete_Module_Loop;
-                  Temp_Record.Modules.Delete
-                    (Index => Delete_Index,
-                     Count => Count_Type(Module_Amount));
-               end if;
-            end loop Load_Modules_Loop;
-            if Get_Attribute(Elem => Ship_Node, Name => "accuracy") /= "" then
-               Temp_Record.Accuracy.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "accuracy"));
-               Temp_Record.Accuracy.Max_Value := 0;
-            elsif Get_Attribute(Elem => Ship_Node, Name => "minaccuracy") /=
-              "" then
-               Temp_Record.Accuracy.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "minaccuracy"));
-               Temp_Record.Accuracy.Max_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "maxaccuracy"));
-               if Temp_Record.Accuracy.Max_Value <
-                 Temp_Record.Accuracy.Min_Value then
-                  raise Ships_Invalid_Data
-                    with "Can't add ship '" & Ship_Index'Img &
-                    "', invalid range for accuracy.";
-               end if;
-            end if;
-            if Get_Attribute(Elem => Ship_Node, Name => "combatai") /= "" then
-               Temp_Record.Combat_Ai :=
-                 Ship_Combat_Ai'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "combatai"));
-            end if;
-            if Get_Attribute(Elem => Ship_Node, Name => "evasion") /= "" then
-               Temp_Record.Evasion.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "evasion"));
-               Temp_Record.Evasion.Max_Value := 0;
-            elsif Get_Attribute(Elem => Ship_Node, Name => "minevasion") /=
-              "" then
-               Temp_Record.Evasion.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "minevasion"));
-               Temp_Record.Evasion.Max_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
-               if Temp_Record.Evasion.Max_Value <
-                 Temp_Record.Evasion.Min_Value then
-                  raise Ships_Invalid_Data
-                    with "Can't add ship '" & Ship_Index'Img &
-                    "', invalid range for evasion.";
-               end if;
-            end if;
-            if Get_Attribute(Elem => Ship_Node, Name => "loot") /= "" then
-               Temp_Record.Loot.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "loot"));
-               Temp_Record.Loot.Max_Value := 0;
-            elsif Get_Attribute(Elem => Ship_Node, Name => "minloot") /=
-              "" then
-               Temp_Record.Loot.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "minloot"));
-               Temp_Record.Loot.Max_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "maxloot"));
-               if Temp_Record.Loot.Max_Value < Temp_Record.Loot.Min_Value then
-                  raise Ships_Invalid_Data
-                    with "Can't add ship '" & Ship_Index'Img &
-                    "', invalid range for loot.";
-               end if;
-            end if;
-            if Get_Attribute(Elem => Ship_Node, Name => "perception") /=
-              "" then
-               Temp_Record.Perception.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "perception"));
-               Temp_Record.Perception.Max_Value := 0;
-            elsif Get_Attribute(Elem => Ship_Node, Name => "minperception") /=
-              "" then
-               Temp_Record.Perception.Min_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "minperception"));
-               Temp_Record.Perception.Max_Value :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Ship_Node, Name => "maxperception"));
-               if Temp_Record.Perception.Max_Value <
-                 Temp_Record.Perception.Min_Value then
-                  raise Ships_Invalid_Data
-                    with "Can't add ship '" & Ship_Index'Img &
-                    "', invalid range for perception.";
-               end if;
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Ship_Node, Name => "cargo");
-            Load_Cargo_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Item_Index :=
-                 Natural'Value
-                   (Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in 1 .. Get_Proto_Amount then
-                  raise Ships_Invalid_Data
-                    with "Invalid item index: |" &
-                    Get_Attribute(Elem => Child_Node, Name => "index") &
-                    "| in " & To_String(Source => Temp_Record.Name) & ".";
-               end if;
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               case Sub_Action is
-                  when ADD =>
-                     if Get_Attribute(Elem => Child_Node, Name => "amount")'
-                         Length =
-                       0 then
-                        if Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "maxamount")) <
-                          Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "minamount")) then
-                           raise Ships_Invalid_Data
-                             with "Invalid amount range for item : |" &
-                             Get_Attribute
-                               (Elem => Child_Node, Name => "index") &
-                             "| in " & To_String(Source => Temp_Record.Name) &
-                             ".";
-                        end if;
-                        MobInventory_Container.Append
-                          (Container => Temp_Record.Cargo,
-                           New_Item =>
-                             (Proto_Index => Item_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minamount")),
-                              Max_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxamount"))));
-                     else
-                        MobInventory_Container.Append
-                          (Container => Temp_Record.Cargo,
-                           New_Item =>
-                             (Proto_Index => Item_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "amount")),
-                              Max_Amount => 0));
-                     end if;
-                  when UPDATE =>
-                     Update_Cargo_Loop :
-                     for K in
-                       MobInventory_Container.First_Index
-                         (Container => Temp_Record.Cargo) ..
-                         MobInventory_Container.Last_Index
-                           (Container => Temp_Record.Cargo) loop
-                        Update_Proto_Cargo_Block :
-                        declare
-                           Item: Mob_Inventory_Record :=
-                             MobInventory_Container.Element
-                               (Container => Temp_Record.Cargo, Index => K);
-                        begin
-                           if Item.Proto_Index = Item_Index then
-                              if Get_Attribute
-                                  (Elem => Child_Node, Name => "amount")'
-                                  Length =
-                                0 then
-                                 if Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "maxamount")) <
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "minamount")) then
-                                    raise Ships_Invalid_Data
-                                      with "Invalid amount range for item : |" &
-                                      Get_Attribute
-                                        (Elem => Child_Node, Name => "index") &
-                                      "| in " &
-                                      To_String(Source => Temp_Record.Name) &
-                                      ".";
-                                 end if;
-                                 Item :=
-                                   (Proto_Index => Item_Index,
-                                    Min_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "minamount")),
-                                    Max_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "maxamount")));
-                              else
-                                 Item :=
-                                   (Proto_Index => Item_Index,
-                                    Min_Amount =>
-                                      Integer'Value
-                                        (Get_Attribute
-                                           (Elem => Child_Node,
-                                            Name => "amount")),
-                                    Max_Amount => 0);
-                              end if;
-                              MobInventory_Container.Replace_Element
-                                (Container => Temp_Record.Cargo, Index => K,
-                                 New_Item => Item);
-                              exit Update_Cargo_Loop;
-                           end if;
-                        end Update_Proto_Cargo_Block;
-                     end loop Update_Cargo_Loop;
-                  when REMOVE =>
-                     Remove_Cargo_Block :
-                     declare
-                        Cargo_Index: Inventory_Amount_Range := 1;
-                     begin
-                        --## rule off SIMPLIFIABLE_STATEMENTS
-                        Delete_Cargo_Loop :
-                        while Cargo_Index <=
-                          MobInventory_Container.Last_Index
-                            (Container => Temp_Record.Cargo) loop
-                           if MobInventory_Container.Element
-                               (Container => Temp_Record.Cargo,
-                                Index => Cargo_Index)
-                               .Proto_Index =
-                             Item_Index then
-                              MobInventory_Container.Delete
-                                (Container => Temp_Record.Cargo,
-                                 Index => Cargo_Index);
-                              exit Delete_Cargo_Loop;
-                           end if;
-                           Cargo_Index := Cargo_Index + 1;
-                        end loop Delete_Cargo_Loop;
-                     end Remove_Cargo_Block;
-                        --## rule on SIMPLIFIABLE_STATEMENTS
-               end case;
-            end loop Load_Cargo_Loop;
-            if Get_Attribute(Elem => Ship_Node, Name => "owner") /= "" then
-               Temp_Record.Owner :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Ship_Node, Name => "owner"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Ship_Node, Name => "recipe");
-            Load_Known_Recipes_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Recipe_Index :=
-                 To_Bounded_String
-                   (Source =>
-                      Get_Attribute
-                        (Elem => Item(List => Child_Nodes, Index => J),
-                         Name => "index"));
-               if Get_Recipe(Recipe_Index => Recipe_Index).Result_Index =
-                 0 then
-                  raise Ships_Invalid_Data
-                    with "Invalid recipe index: |" &
-                    Get_Attribute
-                      (Elem => Item(List => Child_Nodes, Index => J),
-                       Name => "index") &
-                    "| in " & To_String(Source => Temp_Record.Name) & ".";
-               end if;
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               if Sub_Action = ADD then
-                  TinyString_Formal_Container.Append
-                    (Container => Temp_Record.Known_Recipes,
-                     New_Item => Recipe_Index);
-               else
-                  Find_Delete_Recipe_Loop :
-                  for K in
-                    TinyString_Formal_Container.First_Index
-                      (Container => Temp_Record.Known_Recipes) ..
-                      TinyString_Formal_Container.Last_Index
-                        (Container => Temp_Record.Known_Recipes) loop
-                     if To_String
-                         (Source =>
-                            TinyString_Formal_Container.Element
-                              (Container => Temp_Record.Known_Recipes,
-                               Index => K)) =
-                       To_String(Source => Recipe_Index) then
-                        Delete_Index := K;
-                        exit Find_Delete_Recipe_Loop;
-                     end if;
-                  end loop Find_Delete_Recipe_Loop;
-                  TinyString_Formal_Container.Delete
-                    (Container => Temp_Record.Known_Recipes,
-                     Index => Delete_Index);
-               end if;
-            end loop Load_Known_Recipes_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Ship_Node, Name => "member");
-            Load_Crew_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Mob_Index :=
-                 Positive'Value
-                   (Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Mob_Index > Get_Proto_Mobs_Amount then
-                  raise Ships_Invalid_Data
-                    with "Invalid mob index: |" &
-                    Get_Attribute(Elem => Child_Node, Name => "index") &
-                    "| in " & To_String(Source => Temp_Record.Name) & ".";
-               end if;
-               Sub_Action :=
-                 (if
-                    Get_Attribute(Elem => Child_Node, Name => "action")'
-                      Length >
-                    0
-                  then
-                    Data_Action'Value
-                      (Get_Attribute(Elem => Child_Node, Name => "action"))
-                  else ADD);
-               case Sub_Action is
-                  when ADD =>
-                     if Get_Attribute(Elem => Child_Node, Name => "amount") /=
-                       "" then
-                        Temp_Record.Crew.Append
-                          (New_Item =>
-                             (Proto_Index => Mob_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "amount")),
-                              Max_Amount => 0));
-                     elsif Get_Attribute
-                         (Elem => Child_Node, Name => "minamount") /=
-                       "" then
-                        if Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "maxamount")) <
-                          Integer'Value
-                            (Get_Attribute
-                               (Elem => Child_Node, Name => "minamount")) then
-                           raise Ships_Invalid_Data
-                             with "Invalid amount range for member : |" &
-                             Get_Attribute
-                               (Elem => Child_Node, Name => "index") &
-                             "| in " & To_String(Source => Temp_Record.Name) &
-                             ".";
-                        end if;
-                        Temp_Record.Crew.Append
-                          (New_Item =>
-                             (Proto_Index => Mob_Index,
-                              Min_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minamount")),
-                              Max_Amount =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxamount"))));
-                     else
-                        Temp_Record.Crew.Append
-                          (New_Item =>
-                             (Proto_Index => Mob_Index, Min_Amount => 1,
-                              Max_Amount => 0));
-                     end if;
-                  when UPDATE =>
-                     Update_Crew_Loop :
-                     for Member of Temp_Record.Crew loop
-                        if Member.Proto_Index = Mob_Index then
-                           if Get_Attribute
-                               (Elem => Child_Node, Name => "amount") /=
-                             "" then
-                              Member.Min_Amount :=
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node, Name => "amount"));
-                              Member.Max_Amount := 0;
-                           elsif Get_Attribute
-                               (Elem => Child_Node, Name => "minamount") /=
-                             "" then
-                              if Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxamount")) <
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minamount")) then
-                                 raise Ships_Invalid_Data
-                                   with "Invalid amount range for member : |" &
-                                   Get_Attribute
-                                     (Elem => Child_Node, Name => "index") &
-                                   "| in " &
-                                   To_String(Source => Temp_Record.Name) & ".";
-                              end if;
-                              Member.Min_Amount :=
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minamount"));
-                              Member.Max_Amount :=
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxamount"));
-                           else
-                              Member.Min_Amount := 1;
-                              Member.Max_Amount := 0;
-                           end if;
-                           exit Update_Crew_Loop;
-                        end if;
-                     end loop Update_Crew_Loop;
-                  when REMOVE =>
-                     Find_Delete_Crew_Loop :
-                     for K in Temp_Record.Crew.Iterate loop
-                        if Temp_Record.Crew(K).Proto_Index = Mob_Index then
-                           Delete_Index :=
-                             Proto_Crew_Container.To_Index(Position => K);
-                           exit Find_Delete_Crew_Loop;
-                        end if;
-                     end loop Find_Delete_Crew_Loop;
-                     Temp_Record.Crew.Delete(Index => Delete_Index);
-               end case;
-            end loop Load_Crew_Loop;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Ship_Node, Name => "description");
-            if Length(List => Child_Nodes) > 0 then
-               Temp_Record.Description :=
-                 To_Bounded_String
-                   (Source =>
-                      Node_Value
-                        (N =>
-                           First_Child
-                             (N => Item(List => Child_Nodes, Index => 0))));
-            end if;
-            Count_Combat_Value_Loop :
-            for Module_Index2 of Temp_Record.Modules loop
-               case Get_Module(Index => Module_Index2).M_Type is
-                  when HULL | GUN | BATTERING_RAM =>
-                     --## rule off SIMPLIFIABLE_EXPRESSIONS
-                     Temp_Record.Combat_Value :=
-                       Temp_Record.Combat_Value +
-                       Get_Module(Index => Module_Index2).Durability +
-                       (Get_Module(Index => Module_Index2).Max_Value * 10);
-                     --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     if Get_Module(Index => Module_Index2).M_Type = GUN then
-                        Count_Ammo_Value
-                          (Item_Type_Index =>
-                             Get_Module(Index => Module_Index2).Value,
-                           Multiple => 10);
-                     end if;
-                  when ARMOR =>
-                     Temp_Record.Combat_Value :=
-                       Temp_Record.Combat_Value +
-                       Get_Module(Index => Module_Index2).Durability;
-                  when HARPOON_GUN =>
-                     --## rule off SIMPLIFIABLE_EXPRESSIONS
-                     Temp_Record.Combat_Value :=
-                       Temp_Record.Combat_Value +
-                       Get_Module(Index => Module_Index2).Durability +
-                       (Get_Module(Index => Module_Index2).Max_Value * 5);
-                     --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     Count_Ammo_Value
-                       (Item_Type_Index =>
-                          Get_Module(Index => Module_Index2).Value,
-                        Multiple => 5);
-                  when others =>
-                     null;
-               end case;
-            end loop Count_Combat_Value_Loop;
-            Temp_Record.Combat_Value := Temp_Record.Combat_Value - 1;
-            if Action = UPDATE then
-               Proto_Ships_List(Ship_Index) := Temp_Record;
-            else
-               Proto_Ships_List.Append(New_Item => Temp_Record);
-               Log_Message
-                 (Message =>
-                    "Ship added: " & To_String(Source => Temp_Record.Name),
-                  Message_Type => EVERYTHING);
-            end if;
-         end if;
+      for I in 1 .. 400 loop
+         Get_Ada_Proto_Ship(Index => I, Ada_Proto_Ship => Nim_Proto_Ship);
+         exit Load_Proto_Ships_Loop when Nim_Proto_Ship.Combat_Value = -1;
+         Temp_Record.Name :=
+           To_Bounded_String(Source => Value(Item => Nim_Proto_Ship.Name));
+         Temp_Record.Accuracy :=
+           (Min_Value => Nim_Proto_Ship.Accuracy(0),
+            Max_Value => Nim_Proto_Ship.Accuracy(1));
+         Temp_Record.Combat_Ai := Ship_Combat_Ai'Val(Nim_Proto_Ship.Combat_Ai);
+         Temp_Record.Evasion :=
+           (Min_Value => Nim_Proto_Ship.Evasion(0),
+            Max_Value => Nim_Proto_Ship.Evasion(1));
+         Temp_Record.Loot :=
+           (Min_Value => Nim_Proto_Ship.Loot(0),
+            Max_Value => Nim_Proto_Ship.Loot(1));
+         Temp_Record.Perception :=
+           (Min_Value => Nim_Proto_Ship.Perception(0),
+            Max_Value => Nim_Proto_Ship.Perception(1));
+         Temp_Record.Combat_Value := Nim_Proto_Ship.Combat_Value;
+         Temp_Record.Description :=
+           Short_String.To_Bounded_String
+             (Source => Value(Item => Nim_Proto_Ship.Description));
+         Temp_Record.Owner :=
+           To_Bounded_String(Source => Value(Item => Nim_Proto_Ship.Owner));
+         Get_Ada_Proto_Ship_Data(Index => I, Get_Crew => 1, Ada_Proto_Ship_Data => Nim_Proto_Data);
+         Proto_Ships_List.Append(New_Item => Temp_Record);
       end loop Load_Proto_Ships_Loop;
    end Load_Ships;
 
