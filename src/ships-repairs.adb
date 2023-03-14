@@ -27,14 +27,14 @@ package body Ships.Repairs is
    procedure Repair_Ship(Minutes: Positive) is
       use Tiny_String;
 
-      Order_Time, Current_Minutes, Repair_Points: Integer;
+      Order_Time, Current_Minutes, Repair_Points: Integer := 0;
       Repair_Needed, Repair_Stopped: Boolean := False;
       --## rule off IMPROPER_INITIALIZATION
       Crew_Repair_Points: Natural_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       procedure Repair_Module(Module_Index: Positive) is
-         Points_Index, Points_Bonus, Repair_Value: Natural;
-         Repair_Material, Tools_Index: Inventory_Container.Extended_Index;
+         Points_Index, Points_Bonus, Repair_Value: Natural := 0;
+         Repair_Material, Tools_Index: Inventory_Container.Extended_Index := 0;
       begin
          Points_Index := 0;
          Repair_Needed := True;
