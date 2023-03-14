@@ -15,18 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes;
-with DOM.Core.Elements;
 with Bases;
 with Crafts; use Crafts;
 with Events;
-with Factions;
-with Log;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships.Crew;
