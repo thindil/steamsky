@@ -795,3 +795,48 @@ proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffe
   adaProtoShip.combatValue = ship.combatValue.cint
   adaProtoShip.description = ship.description.cstring
   adaProtoShip.owner = ship.owner.cstring
+
+proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
+    array[3, cint]]) {.sideEffect, raises: [], tags: [], exportc.} =
+  for data in adaData.mitems:
+    data = [0.cint, 0.cint, 0.cint]
+  if not protoShipsList.hasKey(key = index):
+    return
+  let ship = try:
+      protoShipsList[index]
+    except KeyError:
+      return
+  if crew == 1:
+    for index, mob in ship.crew.pairs:
+      adaData[index] = [mob.protoIndex.cint, mob.minAmount.cint,
+          mob.maxAmount.cint]
+  else:
+    for index, cargo in ship.cargo.pairs:
+      adaData[index] = [cargo.protoIndex.cint, cargo.minAmount.cint,
+          cargo.maxAmount.cint]
+
+proc getAdaProtoShipModules(index: cint; adaModules: var array[15,
+    cint]) {.sideEffect, raises: [], tags: [], exportc.} =
+  for module in adaModules.mitems:
+    module = 0.cint
+  if not protoShipsList.hasKey(key = index):
+    return
+  let ship = try:
+      protoShipsList[index]
+    except KeyError:
+      return
+  for index, module in ship.modules.pairs:
+    adaModules[index] = module.cint
+
+proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
+    cstring]) {.sideEffect, raises: [], tags: [], exportc.} =
+  for recipe in adaRecipes.mitems:
+    recipe = "".cstring
+  if not protoShipsList.hasKey(key = index):
+    return
+  let ship = try:
+      protoShipsList[index]
+    except KeyError:
+      return
+  for index, recipe in ship.knownRecipes.pairs:
+    adaRecipes[index] = recipe.cstring
