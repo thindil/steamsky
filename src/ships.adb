@@ -505,10 +505,14 @@ package body Ships is
          Owner: chars_ptr;
       end record;
       type Nim_Proto_Ship_Data_Array is array(0 .. 14, 0 .. 2) of Integer;
+      type Nim_Proto_Ship_Modules_Array is array(0 .. 14) of Integer;
+      type Nim_Proto_Ship_Recipes_Array is array(0 .. 14) of chars_ptr;
       Result: chars_ptr;
       Nim_Proto_Ship: Nim_Proto_Ship_Data;
       Temp_Record: Proto_Ship_Data;
       Nim_Proto_Data: Nim_Proto_Ship_Data_Array;
+      Nim_Proto_Modules: Nim_Proto_Ship_Modules_Array;
+      Nim_Proto_Recipes: Nim_Proto_Ship_Recipes_Array;
       function Load_Ada_Ships(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
@@ -519,10 +523,23 @@ package body Ships is
          Convention => C,
          External_Name => "getAdaProtoShip";
       procedure Get_Ada_Proto_Ship_Data
-        (Index, Get_Crew: Integer; Ada_Proto_Ship_Data: out Nim_Proto_Ship_Data_Array) with
+        (Index, Get_Crew: Integer;
+         Ada_Proto_Ship_Data: out Nim_Proto_Ship_Data_Array) with
          Import => True,
          Convention => C,
          External_Name => "getAdaProtoShipData";
+      procedure Get_Ada_Proto_Ship_Modules
+        (Index: Integer;
+         Ada_Proto_Ship_Modules: out Nim_Proto_Ship_Modules_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaProtoShipModules";
+      procedure Get_Ada_Proto_Ship_Recipes
+        (Index: Integer;
+         Ada_Proto_Ship_Recipes: out Nim_Proto_Ship_Recipes_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaProtoShipRecipes";
    begin
       Result := Load_Ada_Ships(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
@@ -553,7 +570,48 @@ package body Ships is
              (Source => Value(Item => Nim_Proto_Ship.Description));
          Temp_Record.Owner :=
            To_Bounded_String(Source => Value(Item => Nim_Proto_Ship.Owner));
-         Get_Ada_Proto_Ship_Data(Index => I, Get_Crew => 1, Ada_Proto_Ship_Data => Nim_Proto_Data);
+         Temp_Record.Crew.Clear;
+         Get_Ada_Proto_Ship_Data
+           (Index => I, Get_Crew => 1, Ada_Proto_Ship_Data => Nim_Proto_Data);
+         Load_Proto_Crew_Loop :
+         for I in Nim_Proto_Ship_Data_Array'Range(1) loop
+            exit Load_Proto_Crew_Loop when Nim_Proto_Data(I, 0) = 0;
+            Temp_Record.Crew.Append
+              (New_Item =>
+                 (Proto_Index => Nim_Proto_Data(I, 0),
+                  Min_Amount => Nim_Proto_Data(I, 1),
+                  Max_Amount => Nim_Proto_Data(I, 2)));
+         end loop Load_Proto_Crew_Loop;
+         MobInventory_Container.Clear(Container => Temp_Record.Cargo);
+         Get_Ada_Proto_Ship_Data
+           (Index => I, Get_Crew => 0, Ada_Proto_Ship_Data => Nim_Proto_Data);
+         Load_Proto_Cargo_Loop :
+         for I in Nim_Proto_Ship_Data_Array'Range(1) loop
+            exit Load_Proto_Cargo_Loop when Nim_Proto_Data(I, 0) = 0;
+            MobInventory_Container.Append
+              (Container => Temp_Record.Cargo,
+               New_Item =>
+                 (Proto_Index => Nim_Proto_Data(I, 0),
+                  Min_Amount => Nim_Proto_Data(I, 1),
+                  Max_Amount => Nim_Proto_Data(I, 2)));
+         end loop Load_Proto_Cargo_Loop;
+         Temp_Record.Modules.Clear;
+         Get_Ada_Proto_Ship_Modules
+           (Index => I, Ada_Proto_Ship_Modules => Nim_Proto_Modules);
+         Load_Proto_Modules_Loop :
+         for Module of Nim_Proto_Modules loop
+            Temp_Record.Modules.Append(New_Item => Module);
+         end loop Load_Proto_Modules_Loop;
+         TinyString_Formal_Container.Clear
+           (Container => Temp_Record.Known_Recipes);
+         Get_Ada_Proto_Ship_Recipes
+           (Index => I, Ada_Proto_Ship_Recipes => Nim_Proto_Recipes);
+         Load_Proto_Recipes_Loop :
+         for Recipe of Nim_Proto_Recipes loop
+            TinyString_Formal_Container.Append
+              (Container => Temp_Record.Known_Recipes,
+               New_Item => To_Bounded_String(Source => Value(Item => Recipe)));
+         end loop Load_Proto_Recipes_Loop;
          Proto_Ships_List.Append(New_Item => Temp_Record);
       end loop Load_Proto_Ships_Loop;
    end Load_Ships;
