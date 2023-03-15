@@ -148,6 +148,7 @@ package Themes is
    -- Inventory_Icon        - Icon used for show inventory button
    -- Dismiss_Icon          - Icon used for dismiss crew member button
    -- Go_Rest_Icon          - Icon used for give order to go rest for the whole crew
+   -- Repair_Priority_Icon  - Icon used for set the repair priority button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -239,6 +240,7 @@ package Themes is
       Inventory_Icon: Unbounded_String;
       Dismiss_Icon: Unbounded_String;
       Go_Rest_Icon: Unbounded_String;
+      Repair_Priority_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -338,7 +340,9 @@ package Themes is
       Destination_Icon => Default_Theme_Icons_Path & "destination.svg",
       Inventory_Icon => Default_Theme_Icons_Path & "unequip.svg",
       Dismiss_Icon => Default_Theme_Icons_Path & "dismiss.svg",
-      Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg");
+      Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg",
+      Repair_Priority_Icon =>
+        Default_Theme_Icons_Path & "repair-priority.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
