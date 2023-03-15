@@ -498,7 +498,7 @@ package body Ships is
          Owner: chars_ptr;
       end record;
       type Nim_Proto_Ship_Data_Array is array(0 .. 14, 0 .. 2) of Integer;
-      type Nim_Proto_Ship_Modules_Array is array(0 .. 14) of Integer;
+      type Nim_Proto_Ship_Modules_Array is array(0 .. 64) of Integer;
       type Nim_Proto_Ship_Recipes_Array is array(0 .. 14) of chars_ptr;
       Result: chars_ptr;
       Nim_Proto_Ship: Nim_Proto_Ship_Data;
@@ -593,6 +593,7 @@ package body Ships is
            (Index => I, Ada_Proto_Ship_Modules => Nim_Proto_Modules);
          Load_Proto_Modules_Loop :
          for Module of Nim_Proto_Modules loop
+            exit Load_Proto_Modules_Loop when Module = 0;
             Temp_Record.Modules.Append(New_Item => Module);
          end loop Load_Proto_Modules_Loop;
          TinyString_Formal_Container.Clear
@@ -601,6 +602,7 @@ package body Ships is
            (Index => I, Ada_Proto_Ship_Recipes => Nim_Proto_Recipes);
          Load_Proto_Recipes_Loop :
          for Recipe of Nim_Proto_Recipes loop
+            exit Load_Proto_Recipes_Loop when Strlen(Item => Recipe) = 0;
             TinyString_Formal_Container.Append
               (Container => Temp_Record.Known_Recipes,
                New_Item => To_Bounded_String(Source => Value(Item => Recipe)));

@@ -171,7 +171,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     attribute = shipNode.attr(name = "combatai")
     if attribute.len() > 0:
       ship.combatAi = try:
-          parseEnum[ShipCombatAi](attribute)
+          parseEnum[ShipCombatAi](attribute.toLowerAscii)
       except ValueError:
         raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship combat AI.")
@@ -342,12 +342,11 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         raise newException(exceptn = DataLoadingError,
           message = "Can't " & $shipAction & " ship '" & $shipIndex &
               "', invalid value for crew member index.")
-      let
-        memberAction: DataAction = try:
+      let memberAction: DataAction = try:
             parseEnum[DataAction](member.attr(name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
-        memberAmount = try:
+      var memberAmount = try:
             member.attr(name = "amount").parseInt()
           except ValueError:
             0
@@ -356,19 +355,17 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         minAmount = try:
               member.attr(name = "minamount").parseInt()
             except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for crew member minamount.")
+              0
         maxAmount = try:
             member.attr(name = "maxamount").parseInt()
           except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                "', invalid value for crew member maxamount.")
+            1
         if minAmount > maxAmount:
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex &
                 "', invalid value for crew member amount range.")
+        if minAmount == 0:
+          memberAmount = 1
       case memberAction
       of DataAction.add:
         if memberAmount > 0:
@@ -815,7 +812,7 @@ proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
       adaData[index] = [cargo.protoIndex.cint, cargo.minAmount.cint,
           cargo.maxAmount.cint]
 
-proc getAdaProtoShipModules(index: cint; adaModules: var array[15,
+proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
     cint]) {.sideEffect, raises: [], tags: [], exportc.} =
   for module in adaModules.mitems:
     module = 0.cint
@@ -825,8 +822,8 @@ proc getAdaProtoShipModules(index: cint; adaModules: var array[15,
       protoShipsList[index]
     except KeyError:
       return
-  for index, module in ship.modules.pairs:
-    adaModules[index] = module.cint
+  for mIndex, module in ship.modules.pairs:
+    adaModules[mIndex] = module.cint
 
 proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
     cstring]) {.sideEffect, raises: [], tags: [], exportc.} =
@@ -838,5 +835,5 @@ proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
       protoShipsList[index]
     except KeyError:
       return
-  for index, recipe in ship.knownRecipes.pairs:
-    adaRecipes[index] = recipe.cstring
+  for rIndex, recipe in ship.knownRecipes.pairs:
+    adaRecipes[rIndex] = recipe.cstring
