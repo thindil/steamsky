@@ -33,7 +33,8 @@ package body Ships.Repairs is
       Crew_Repair_Points: Natural_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       procedure Repair_Module(Module_Index: Positive) is
-         Points_Index, Points_Bonus, Repair_Value: Natural := 0;
+         Points_Index: Natural;
+         Points_Bonus, Repair_Value: Natural := 0;
          Repair_Material, Tools_Index: Inventory_Container.Extended_Index := 0;
       begin
          Points_Index := 0;
