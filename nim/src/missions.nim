@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, game, shipscrew, types, utils
+import bases, game, maps, messages, shipscrew, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
@@ -34,8 +34,22 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) =
     case mission.mType
     of deliver:
       messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
+    of destroy:
+      messageText.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+    of patrol:
+      messageText.add(y = "'Patrol selected area.'.")
+    of explore:
+      messageText.add(y = "'Explore selected area'.")
+    of passenger:
+      messageText.add(y = "'Transport passenger to base'.")
+    addMessage(message = messageText, mType = missionMessage, color = red)
+  else:
+    if mission.mType in {deliver, passenger}:
+      gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = (reputation / 2).int)
+      gainRep(baseIndex = mission.startBase, points = (reputation / 2).int)
     else:
-      discard
+      gainRep(baseIndex = mission.startBase, points = reputation)
+    updateMorale(ship = playerShip, memberIndex = 0, value = 1)
 
 # Temporary code for interfacing with Ada
 
