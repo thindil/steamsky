@@ -535,6 +535,13 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
   if updatePosition(ship = ship, order = train, maxPriority = false):
     updateOrders(ship = ship)
 
+proc findMember*(order: CrewOrders; shipCrew: seq[
+    MemberData] = playerShip.crew): int =
+  for index, member in shipCrew.pairs:
+    if member.order == order:
+      return index
+  return -1
+
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) =
   {.warning[UnsafeSetLen]: off.}
   ship.crew.delete(i = memberIndex)
@@ -592,3 +599,9 @@ proc getAdaSkillLevel(member: AdaMemberData;
         skillIndex = skillIndex.Positive).cint
   except KeyError:
     return 0
+
+proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
+  if inPlayerShip == 1:
+    return findMember(order = order.CrewOrders).cint + 1
+  else:
+    return findMember(order = order.CrewOrders, shipCrew = npcShip.crew).cint + 1
