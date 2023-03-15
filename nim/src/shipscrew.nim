@@ -536,7 +536,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     updateOrders(ship = ship)
 
 proc findMember*(order: CrewOrders; shipCrew: seq[
-    MemberData] = playerShip.crew): int =
+    MemberData] = playerShip.crew): int {.sideEffect, raises: [], tags: [].} =
   for index, member in shipCrew.pairs:
     if member.order == order:
       return index
