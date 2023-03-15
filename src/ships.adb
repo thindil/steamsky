@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
-with Crafts; use Crafts;
+with Crafts;
 with Events;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
@@ -33,6 +33,7 @@ package body Ships is
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Bases;
+      use Crafts;
       use Tiny_String;
       use Utils;
 
@@ -485,6 +486,7 @@ package body Ships is
       use Interfaces.C;
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Proto_Data_Array is array(0 .. 1) of Integer;
       type Nim_Proto_Ship_Data is record
          Name: chars_ptr;
@@ -500,12 +502,15 @@ package body Ships is
       type Nim_Proto_Ship_Data_Array is array(0 .. 14, 0 .. 2) of Integer;
       type Nim_Proto_Ship_Modules_Array is array(0 .. 64) of Integer;
       type Nim_Proto_Ship_Recipes_Array is array(0 .. 14) of chars_ptr;
+      --## rule on TYPE_INITIAL_VALUES
       Result: chars_ptr;
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Proto_Ship: Nim_Proto_Ship_Data;
       Temp_Record: Proto_Ship_Data;
       Nim_Proto_Data: Nim_Proto_Ship_Data_Array;
       Nim_Proto_Modules: Nim_Proto_Ship_Modules_Array;
       Nim_Proto_Recipes: Nim_Proto_Ship_Recipes_Array;
+      --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Ships(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
@@ -567,26 +572,26 @@ package body Ships is
          Get_Ada_Proto_Ship_Data
            (Index => I, Get_Crew => 1, Ada_Proto_Ship_Data => Nim_Proto_Data);
          Load_Proto_Crew_Loop :
-         for I in Nim_Proto_Ship_Data_Array'Range(1) loop
-            exit Load_Proto_Crew_Loop when Nim_Proto_Data(I, 0) = 0;
+         for J in Nim_Proto_Ship_Data_Array'Range(1) loop
+            exit Load_Proto_Crew_Loop when Nim_Proto_Data(J, 0) = 0;
             Temp_Record.Crew.Append
               (New_Item =>
-                 (Proto_Index => Nim_Proto_Data(I, 0),
-                  Min_Amount => Nim_Proto_Data(I, 1),
-                  Max_Amount => Nim_Proto_Data(I, 2)));
+                 (Proto_Index => Nim_Proto_Data(J, 0),
+                  Min_Amount => Nim_Proto_Data(J, 1),
+                  Max_Amount => Nim_Proto_Data(J, 2)));
          end loop Load_Proto_Crew_Loop;
          MobInventory_Container.Clear(Container => Temp_Record.Cargo);
          Get_Ada_Proto_Ship_Data
            (Index => I, Get_Crew => 0, Ada_Proto_Ship_Data => Nim_Proto_Data);
          Load_Proto_Cargo_Loop :
-         for I in Nim_Proto_Ship_Data_Array'Range(1) loop
-            exit Load_Proto_Cargo_Loop when Nim_Proto_Data(I, 0) = 0;
+         for J in Nim_Proto_Ship_Data_Array'Range(1) loop
+            exit Load_Proto_Cargo_Loop when Nim_Proto_Data(J, 0) = 0;
             MobInventory_Container.Append
               (Container => Temp_Record.Cargo,
                New_Item =>
-                 (Proto_Index => Nim_Proto_Data(I, 0),
-                  Min_Amount => Nim_Proto_Data(I, 1),
-                  Max_Amount => Nim_Proto_Data(I, 2)));
+                 (Proto_Index => Nim_Proto_Data(J, 0),
+                  Min_Amount => Nim_Proto_Data(J, 1),
+                  Max_Amount => Nim_Proto_Data(J, 2)));
          end loop Load_Proto_Cargo_Loop;
          Temp_Record.Modules.Clear;
          Get_Ada_Proto_Ship_Modules
