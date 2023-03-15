@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Ability to give orders to the selected crew members on the player's ship's
   crew members list
 - Ability to change a module's name in the module's info dialog
+- Icon for setting the repair priority for modules. Author: Lorc
+  (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Always show the status of the module in the module info dialog
