@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, factions, game, maps, items, ships, shipscrew, types]
+import ../../src/[careers, factions, game, maps, items, shipscrew, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
@@ -45,3 +45,6 @@ assert playerShip.crew[0].order == talk
 
 assert getSkillLevel(playerShip.crew[0], 1) == 0
 assert getSkillLevel(playerShip.crew[0], 4) == 1
+
+assert findMember(talk) == 0
+assert findMember(defend) == -1
