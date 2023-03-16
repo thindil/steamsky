@@ -786,7 +786,8 @@ package body Ships is
       end if;
    end Damage_Module;
 
-   procedure Get_Ada_Crew(Ship: Ship_Record := Player_Ship) is
+   procedure Get_Ada_Crew
+     (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew) is
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
       --## rule on TYPE_INITIAL_VALUES
@@ -799,13 +800,14 @@ package body Ships is
          External_Name => "getAdaShipCrew";
    begin
       Convert_Crew_Loop :
-      for Member of Ship.Crew loop
+      for Member of Ship_Crew loop
          Nim_Crew(Index) := Member_To_Nim(Member => Member);
          Index := Index + 1;
       end loop Convert_Crew_Loop;
       Get_Ada_Ship_Crew
         (N_Crew => Nim_Crew,
-         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+         Is_Player_Ship =>
+           (if Ship_Crew(1) = Player_Ship.Crew(1) then 1 else 0));
    end Get_Ada_Crew;
 
    procedure Set_Ada_Crew(Ship: in out Ship_Record) is
@@ -1236,7 +1238,7 @@ package body Ships is
       Get_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew(Ship_Crew => Ship.Crew);
       Get_Ada_Crew_Loop :
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
          Get_Ada_Crew_Inventory

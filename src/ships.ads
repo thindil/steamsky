@@ -479,7 +479,8 @@ package Ships is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Ada_Crew(Ship: Ship_Record := Player_Ship);
+   procedure Get_Ada_Crew
+     (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew);
 
    procedure Set_Ada_Crew(Ship: in out Ship_Record);
 
