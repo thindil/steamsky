@@ -11,16 +11,16 @@ package Ships.Test_Data.Tests is
    null record;
 
    procedure Test_Create_Ship_eef2e6_bbdb4d(Gnattest_T: in out Test);
-   --  ships.ads:397:4:Create_Ship:Test_CreateShip
+   --  ships.ads:396:4:Create_Ship:Test_CreateShip
 
    procedure Test_Count_Ship_Weight_dec0b9_0591fd(Gnattest_T: in out Test);
-   --  ships.ads:423:4:Count_Ship_Weight:Test_CountShipWeight
+   --  ships.ads:422:4:Count_Ship_Weight:Test_CountShipWeight
 
    procedure Test_Count_Combat_Value_145322_424a30(Gnattest_T: in out Test);
-   --  ships.ads:446:4:Count_Combat_Value:Test_CountCombatValue
+   --  ships.ads:445:4:Count_Combat_Value:Test_CountCombatValue
 
    procedure Test_Damage_Module_222cf0_819b51(Gnattest_T: in out Test);
-   --  ships.ads:472:4:Damage_Module:Test_DamageModule
+   --  ships.ads:471:4:Damage_Module:Test_DamageModule
 
 end Ships.Test_Data.Tests;
 --  end read only
