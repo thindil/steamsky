@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, game, maps, messages, shipscrew, types, utils
+import bases, crew, game, maps, messages, shipscrew, shipscargo, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
@@ -45,11 +45,50 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) =
     addMessage(message = messageText, mType = missionMessage, color = red)
   else:
     if mission.mType in {deliver, passenger}:
-      gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = (reputation / 2).int)
+      gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex,
+          points = (reputation / 2).int)
       gainRep(baseIndex = mission.startBase, points = (reputation / 2).int)
     else:
       gainRep(baseIndex = mission.startBase, points = reputation)
     updateMorale(ship = playerShip, memberIndex = 0, value = 1)
+    let traderIndex = findMember(order = talk)
+    var rewardAmount = (mission.reward.float * mission.multiplier).Natural
+    countPrice(price = rewardAmount, traderIndex = traderIndex, reduce = false)
+    if traderIndex > -1:
+      gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    let freeSpace = freeCargo(amount = -(rewardAmount))
+    if freeSpace < 0:
+      rewardAmount = rewardAmount + freeSpace
+    if rewardAmount > 0:
+      addMessage(message = "You received " & $rewardAmount & " " & moneyName &
+          " for finishing your mission.", mType = missionMessage)
+      updateCargo(ship = playerShip, protoIndex = moneyIndex,
+          amount = rewardAmount)
+  skyMap[mission.targetX][mission.targetY].missionIndex = 0
+  skyMap[skyBases[mission.startBase].skyX][skyBases[
+      mission.startBase].skyY].missionIndex = 0
+  {.warning[UnsafeSetLen]: off.}
+  acceptedMissions.delete(i = missionIndex)
+  {.warning[UnsafeSetLen]: on.}
+  if mission.mType == deliver:
+    updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = -1)
+  elif mission.mType == passenger and mission.data < playerShip.crew.len:
+    playerShip.crew.delete(i = mission.data)
+    for module in playerShip.modules.mitems:
+      for owner in module.owner.mitems:
+        if owner == mission.data:
+          owner = 0
+        elif owner > mission.data:
+          owner.dec
+    for aMission in acceptedMissions.mitems:
+      if aMission.mType == passenger and aMission.data > mission.data:
+        aMission.data.dec
+  for index, aMission in acceptedMissions.pairs:
+    if aMission.finished:
+      skyMap[skyBases[aMission.startBase].skyX][skyBases[
+          aMission.startBase].skyY].missionIndex = index
+    else:
+      skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
 # Temporary code for interfacing with Ada
 
@@ -128,3 +167,10 @@ proc setAdaAcceptedMissions(adaMissions: var array[50,
         mission.data.cint
       else:
         mission.target.cint
+
+proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    deleteMission(missionIndex = missionIndex - 1, failed = (if failed ==
+        1: true else: false))
+  except KeyError:
+    discard

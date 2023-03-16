@@ -39,7 +39,7 @@ package body Crew.Inventory is
          Convention => C,
          External_Name => "updateAdaInventory";
    begin
-      Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew(Ship_Crew => Ship.Crew);
       Get_Ada_Crew_Inventory
         (Inventory => Nim_Inventory, Member_Index => Member_Index,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
