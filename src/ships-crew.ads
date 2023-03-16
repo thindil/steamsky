@@ -87,8 +87,7 @@ package Ships.Crew is
    function Find_Member
      (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index with
-      Post => Find_Member'Result <= Ship_Crew.Last_Index,
-      Test_Case => (Name => "Test_FindMember", Mode => Nominal);
+      Post => Find_Member'Result <= Ship_Crew.Last_Index;
       -- ****
 
       -- ****f* SCrew/SCrew.Give_Orders
