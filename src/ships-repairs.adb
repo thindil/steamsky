@@ -132,9 +132,11 @@ package body Ships.Repairs is
                  Tools_Index > Repair_Material then
                   Tools_Index := Tools_Index - 1;
                end if;
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Update_Cargo
                  (Ship => Player_Ship, Cargo_Index => Repair_Material,
                   Amount => (0 - Repair_Value));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
                Player_Ship.Modules(Module_Index).Durability :=
                  Player_Ship.Modules(Module_Index).Durability + Repair_Value;
                if Repair_Value > Crew_Repair_Points(Points_Index) then
