@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Always show the status of the module in the module info dialog
 - Updated look of the module info dialog
+- Updated modding guide
 
 ### Fixed
 - Showing too much columns in the buying recipes in bases menu
