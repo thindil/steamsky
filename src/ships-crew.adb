@@ -139,31 +139,13 @@ package body Ships.Crew is
    function Find_Member
      (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Natural is
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
-      --## rule on TYPE_INITIAL_VALUES
-      Nim_Crew: Nim_Crew_Array; --## rule line off IMPROPER_INITIALIZATION
-      Index: Positive := 1;
-      procedure Get_Ada_Ship_Crew
-        (N_Crew: Nim_Crew_Array; Is_Player_Ship: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaShipCrew";
       function Find_Ada_Member
         (Ord, In_Player_Ship: Integer) return Integer with
          Import => True,
          Convention => C,
          External_Name => "findAdaMember";
    begin
-      Convert_Crew_Loop :
-      for Member of Ship_Crew loop
-         Nim_Crew(Index) := Member_To_Nim(Member => Member);
-         Index := Index + 1;
-      end loop Convert_Crew_Loop;
-      Get_Ada_Ship_Crew
-        (N_Crew => Nim_Crew,
-         Is_Player_Ship =>
-           (if Ship_Crew(1) = Player_Ship.Crew(1) then 1 else 0));
+      Get_Ada_Crew(Ship_Crew => Ship_Crew);
       if Ship_Crew(1) = Player_Ship.Crew(1) then
          return
            Find_Ada_Member(Ord => Crew_Orders'Pos(Order), In_Player_Ship => 1);
@@ -227,7 +209,7 @@ package body Ships.Crew is
          Convention => C,
          External_Name => "updateAdaMorale";
    begin
-      Get_Ada_Crew(Ship => Ship);
+      Get_Ada_Crew(Ship_Crew => Ship.Crew);
       Update_Ada_Morale
         (Is_Player_Ship => (if Ship = Player_Ship then 1 else 0),
          M_Index => Member_Index, N_Value => Amount);
