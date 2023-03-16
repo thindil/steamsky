@@ -537,6 +537,13 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
 
 proc findMember*(order: CrewOrders; shipCrew: seq[
     MemberData] = playerShip.crew): int {.sideEffect, raises: [], tags: [].} =
+  ## Find the first member of the selected crew with the selected order
+  ##
+  ## * order    - the order for which looking for
+  ## * shipCrew - the crew in which the crew member will be looking for
+  ##
+  ## Returns the index of the crew member with the selected order or -1 if
+  ## nothing found.
   for index, member in shipCrew.pairs:
     if member.order == order:
       return index
