@@ -64,9 +64,9 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) =
           " for finishing your mission.", mType = missionMessage)
       updateCargo(ship = playerShip, protoIndex = moneyIndex,
           amount = rewardAmount)
-  skyMap[mission.targetX][mission.targetY].missionIndex = 0
+  skyMap[mission.targetX][mission.targetY].missionIndex = -1
   skyMap[skyBases[mission.startBase].skyX][skyBases[
-      mission.startBase].skyY].missionIndex = 0
+      mission.startBase].skyY].missionIndex = -1
   {.warning[UnsafeSetLen]: off.}
   acceptedMissions.delete(i = missionIndex)
   {.warning[UnsafeSetLen]: on.}
