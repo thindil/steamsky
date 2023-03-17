@@ -639,8 +639,34 @@ package body Ships.UI.Modules is
             Message => To_String(Source => Status_Tooltip));
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar,
-            Options => "-row 0 -column 1 -padx {5 0}");
+           (Slave => Progress_Bar, Options => "-row 0 -column 1 -padx {5 0}");
+         if Player_Ship.Repair_Module = Module_Index then
+            Info_Button :=
+              Create
+                (pathName => Status_Box & ".button",
+                 options =>
+                   "-image cancelicon -command {" & Close_Dialog_Button &
+                   " invoke;SetRepair remove} -style Small.TButton");
+            Add
+              (Widget => Info_Button, Message => "Remove the repair priority");
+         else
+            Info_Button :=
+              Create
+                (pathName => Status_Box & ".button",
+                 options =>
+                   "-image repairpriorityicon -command {" &
+                   Close_Dialog_Button & " invoke;SetRepair assign" &
+                   Module_Index'Img & "} -style Small.TButton");
+            Add
+              (Widget => Info_Button,
+               Message => "Repair selected module as first when damaged");
+         end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button,
+            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Dialog_Button & " invoke;break}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
          Height :=
            Height +
