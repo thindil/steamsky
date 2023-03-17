@@ -701,7 +701,7 @@ package body Missions is
    begin
       Convert_Accepted_Missions_Loop :
       for I in Nim_Missions'Range loop
-         if I < Integer(Accepted_Missions.Length - 1) then
+         if I <= Integer(Accepted_Missions.Length - 1) then
             Nim_Missions(I) :=
               (Time => Accepted_Missions(I + 1).Time,
                Target_X => Accepted_Missions(I + 1).Target_X,
