@@ -788,6 +788,8 @@ package body Ships is
 
    procedure Get_Ada_Crew
      (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew) is
+      use Ships.Crew_Container;
+
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
       --## rule on TYPE_INITIAL_VALUES
@@ -806,8 +808,7 @@ package body Ships is
       end loop Convert_Crew_Loop;
       Get_Ada_Ship_Crew
         (N_Crew => Nim_Crew,
-         Is_Player_Ship =>
-           (if Ship_Crew(1) = Player_Ship.Crew(1) then 1 else 0));
+         Is_Player_Ship => (if Ship_Crew = Player_Ship.Crew then 1 else 0));
    end Get_Ada_Crew;
 
    procedure Set_Ada_Crew(Ship: in out Ship_Record) is
@@ -1021,7 +1022,7 @@ package body Ships is
       Set_Ada_Ship_Modules
         (N_Modules => Nim_Modules,
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Count_Modules_Loop:
+      Count_Modules_Loop :
       for Module of Nim_Modules loop
          exit Count_Modules_Loop when Strlen(Item => Module.Name) = 0;
          Modules_Amount := Modules_Amount + 1;

@@ -139,6 +139,8 @@ package body Ships.Crew is
    function Find_Member
      (Order: Crew_Orders; Ship_Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Natural is
+      use Ships.Crew_Container;
+
       function Find_Ada_Member
         (Ord, In_Player_Ship: Integer) return Integer with
          Import => True,
@@ -146,7 +148,7 @@ package body Ships.Crew is
          External_Name => "findAdaMember";
    begin
       Get_Ada_Crew(Ship_Crew => Ship_Crew);
-      if Ship_Crew(1) = Player_Ship.Crew(1) then
+      if Ship_Crew = Player_Ship.Crew then
          return
            Find_Ada_Member(Ord => Crew_Orders'Pos(Order), In_Player_Ship => 1);
       end if;
