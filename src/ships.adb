@@ -1009,6 +1009,9 @@ package body Ships is
 
       Nim_Modules: Nim_Modules_Array :=
         (others => Nim_Module_Data'(others => <>));
+      Modules_Amount: Natural := 0;
+      Module_Index: Positive := 1;
+      Add_Module: Boolean := False;
       procedure Set_Ada_Ship_Modules
         (N_Modules: in out Nim_Modules_Array; Is_Player_Ship: Integer) with
          Import => True,
@@ -1018,7 +1021,15 @@ package body Ships is
       Set_Ada_Ship_Modules
         (N_Modules => Nim_Modules,
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Ship.Modules.Clear;
+      Count_Modules_Loop:
+      for Module of Nim_Modules loop
+         exit Count_Modules_Loop when Strlen(Item => Module.Name) = 0;
+         Modules_Amount := Modules_Amount + 1;
+      end loop Count_Modules_Loop;
+      if Modules_Amount /= Positive(Ship.Modules.Length) then
+         Ship.Modules.Clear;
+         Add_Module := True;
+      end if;
       Convert_Modules_Loop :
       for Module of Nim_Modules loop
          exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
@@ -1201,7 +1212,12 @@ package body Ships is
                when others =>
                   null;
             end case;
-            Ship.Modules.Append(New_Item => Temp_Module);
+            if Add_Module then
+               Ship.Modules.Append(New_Item => Temp_Module);
+            else
+               Ship.Modules(Module_Index) := Temp_Module;
+               Module_Index := Module_Index + 1;
+            end if;
          end Convert_Module_Block;
       end loop Convert_Modules_Loop;
    end Set_Ada_Modules;
