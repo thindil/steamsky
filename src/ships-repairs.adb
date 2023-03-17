@@ -15,17 +15,17 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Crew.Inventory; use Crew.Inventory;
-with ShipModules; use ShipModules;
+with Crew.Inventory;
+with Messages;
+with ShipModules;
+with Ships.Cargo;
+with Ships.Crew;
 
 package body Ships.Repairs is
 
    procedure Repair_Ship(Minutes: Positive) is
-      use Tiny_String;
+      use Messages;
+      use Ships.Crew;
 
       Order_Time, Current_Minutes, Repair_Points: Integer := 0;
       Repair_Needed, Repair_Stopped: Boolean := False;
@@ -33,6 +33,11 @@ package body Ships.Repairs is
       Crew_Repair_Points: Natural_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       procedure Repair_Module(Module_Index: Positive) is
+         use Inventory;
+         use ShipModules;
+         use Ships.Cargo;
+         use Tiny_String;
+
          Points_Index: Natural;
          Points_Bonus, Repair_Value: Natural := 0;
          Repair_Material, Tools_Index: Inventory_Container.Extended_Index := 0;
