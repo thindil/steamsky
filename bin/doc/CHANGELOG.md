@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when trying to create a save game file
 - Crash when starting the game with debug menu
 - Deleting damaged items from a crew member's inventory
+- Crash when shooting to enemies in ships combat
 
 ## [8.4] - 2023-02-19
 
