@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Crash when starting the game with debug menu
 - Deleting damaged items from a crew member's inventory
 - Crash when shooting to enemies in ships combat
+- Crash when the player's ship crew member gains level in a skill
 
 ## [8.4] - 2023-02-19
 
