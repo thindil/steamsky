@@ -134,3 +134,7 @@ proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
     price = newPrice.cint
   except KeyError:
     discard
+
+proc getAdaBaseLocation(baseIndex, x, y: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].skyX = x
+  skyBases[baseIndex].skyY = y

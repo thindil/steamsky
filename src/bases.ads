@@ -268,4 +268,10 @@ package Bases is
 
    procedure Set_Base_Reputation(Base_Index: Bases_Range);
 
+   procedure Get_Ada_Base_Location
+     (Base_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBaseLocation";
+
 end Bases;
