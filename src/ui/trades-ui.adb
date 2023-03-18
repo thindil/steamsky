@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -483,10 +483,17 @@ package body Trades.UI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index
-             (Source => Items_Types,
-              Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 then
+         if Is_Buyable
+             (Base_Type => Base_Type, Item_Index => Proto_Index,
+              Base_Index => Base_Index) and
+           BaseCargo_Container.Element
+               (Container => Base_Cargo, Index => Items_Indexes(I))
+               .Amount >
+             0 and
+           Index
+               (Source => Items_Types,
+                Pattern => To_String(Source => "{" & Item_Type & "}")) =
+             0 then
             Append
               (Source => Items_Types,
                New_Item => " {" & To_String(Source => Item_Type) & "}");
