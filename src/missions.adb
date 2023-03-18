@@ -18,7 +18,7 @@
 with Ada.Numerics.Elementary_Functions;
 with Ada.Exceptions;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement;
 with Maps; use Maps;
@@ -246,6 +246,7 @@ package body Missions is
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
+      use Ships.Cargo;
       use Tiny_String;
 
       Base_Index: constant Bases_Range :=
@@ -545,15 +546,41 @@ package body Missions is
 
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
+      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
+      Base_Index: constant Bases_Range := Mission.Start_Base;
       procedure Delete_Ada_Mission(M_Index, Fail: Integer) with
          Import => True,
          Convention => C,
          External_Name => "deleteAdaMission";
    begin
       Get_Accepted_Missions;
+      Get_Ada_Ship;
+      Get_Ada_Base_Location
+        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+         Y => Sky_Bases(Base_Index).Sky_Y);
       Delete_Ada_Mission
         (M_Index => Mission_Index, Fail => (if Failed then 1 else 0));
       Set_Accepted_Missions;
+      Set_Ada_Ship(Ship => Player_Ship);
+      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
+      Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+        .Mission_Index :=
+        0;
+      Update_Map_Loop :
+      for I in Accepted_Missions.Iterate loop
+         if Accepted_Missions(I).Finished then
+            Sky_Map
+              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
+               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
+              .Mission_Index :=
+              Mission_Container.To_Index(Position => I);
+         else
+            Sky_Map
+              (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
+              .Mission_Index :=
+              Mission_Container.To_Index(Position => I);
+         end if;
+      end loop Update_Map_Loop;
    end Delete_Mission;
 
    procedure Update_Mission(Mission_Index: Positive) is
