@@ -96,4 +96,6 @@ package Maps is
       Convention => C,
       External_Name => "getAdaMapCell";
 
+   procedure Set_Map_Cell(X, Y: Integer);
+
 end Maps;

@@ -51,4 +51,12 @@ func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
 proc getAdaMapCell(x, y, baseIndex, visited, eventIndex,
     missionIndex: cint) {.raises: [], tags: [], exportc.} =
   skyMap[x][y] = SkyCell(baseIndex: baseIndex, visited: (if visited ==
-      1: true else: false), eventIndex: eventIndex, missionIndex: missionIndex)
+      1: true else: false), eventIndex: eventIndex - 1,
+      missionIndex: missionIndex - 1)
+
+proc setAdaMapCell(x, y: cint; baseIndex, visited, eventIndex,
+    missionIndex: var cint) {.raises: [], tags: [], exportc.} =
+  baseIndex = skyMap[x][y].baseIndex
+  visited = skyMap[x][y].visited.ord.cint
+  eventIndex = skyMap[x][y].eventIndex.cint + 1
+  missionIndex = skyMap[x][y].missionIndex.cint + 1
