@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -39,10 +39,9 @@ package Ships.Upgrade is
    procedure Start_Upgrading
      (Module_Index: Modules_Container.Extended_Index;
       Upgrade_Type: Positive) with
-      Pre =>
-      (Module_Index in
-         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index and
-       Upgrade_Type < 5),
+      Pre => Module_Index in
+        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index and
+      Upgrade_Type < 5,
       Test_Case => (Name => "Test_StartUpgrading", Mode => Nominal);
       -- ****
 
