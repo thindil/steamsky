@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Deleting damaged items from a crew member's inventory
 - Crash when shooting to enemies in ships combat
 - Crash when the player's ship crew member gains level in a skill
+- Showing empty categories of items in the trade screen
 
 ## [8.4] - 2023-02-19
 
