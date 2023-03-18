@@ -20,7 +20,8 @@ import bases, crew, game, maps, messages, shipscrew, shipscargo, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
-proc deleteMission*(missionIndex: Natural; failed: bool = true) =
+proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
+    raises: [KeyError], tags: [].} =
   let mission = acceptedMissions[missionIndex]
   var reputation: Natural = (mission.reward / 50).Natural
   if reputation < 2:
