@@ -136,12 +136,6 @@ package body Ships.UI.Modules is
          end if;
       end Add_Button;
    begin
-      if Player_Ship.Repair_Module /= Module_Index then
-         Add_Button
-           (Name => ".repair",
-            Label => "Repair selected module as first when damaged",
-            Command => "SetRepair assign " & CArgv.Arg(Argv => Argv, N => 1));
-      end if;
       Module_Max_Value :=
         Natural
           (Float
