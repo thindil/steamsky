@@ -22,6 +22,11 @@ var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the 
 
 proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Delete the selected accepted mission, update the player's repuration in
+  ## connected bases and update the sky map
+  ##
+  ## * missionIndex - the index of the mission to delete
+  ## * failed       - if true, mission failed, default value is true
   let mission = acceptedMissions[missionIndex]
   var reputation: Natural = (mission.reward / 50).Natural
   if reputation < 2:
