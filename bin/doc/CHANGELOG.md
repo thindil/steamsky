@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.5] - 2023-03-19
 
 ### Added
 - Column with coordinates to the lists of known bases and known events
