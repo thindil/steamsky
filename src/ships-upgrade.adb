@@ -30,8 +30,8 @@ package body Ships.Upgrade is
       Upgrade_Type: Positive) is
       use Tiny_String;
 
-      Local_Max_Value, Upgrade_Progress: Natural;
-      Upgrade_Action: Ship_Upgrade;
+      Local_Max_Value, Upgrade_Progress: Natural := 0;
+      Upgrade_Action: Ship_Upgrade := NONE;
    begin
       if Player_Ship.Modules(Module_Index).Durability = 0 and
         Upgrade_Type /= 3 then
