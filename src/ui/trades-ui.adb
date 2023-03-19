@@ -464,6 +464,9 @@ package body Trades.UI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
+      if Items_Indexes(Current_Item_Index) = 0 then
+         Current_Item_Index := Current_Item_Index + 1;
+      end if;
       Fill_Trader_Types_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
