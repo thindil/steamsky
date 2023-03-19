@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing empty categories of items in the trade screen
+- Crash in the trade screen when the player's ship cargo is the same length
+  as the table's page
 
 ## [8.0.5] - 2023-02-26
 
