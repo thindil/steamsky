@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Ability to change a module's name in the module's info dialog
 - Icon for setting the repair priority for modules. Author: Lorc
   (https://game-icons.net), license CC BY 3.0
+- Ability to set the repair's priority in the module info dialog
 
 ### Changed
 - Always show the status of the module in the module info dialog
