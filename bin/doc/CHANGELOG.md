@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
 - Crash when shooting to enemies in ships combat
 - Crash when the player's ship crew member gains level in a skill
 - Showing empty categories of items in the trade screen
+- Crash in the trade screen when the player's ship cargo is the same length
+  as the table's page
 
 ## [8.4] - 2023-02-19
 
