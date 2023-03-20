@@ -63,7 +63,7 @@ package body Ships.Upgrade is
                    (Get_Module
                       (Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Durability) *
-                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                 New_Game_Settings.Upgrade_Cost_Bonus);
          when 2 => -- Upgrade various max value of selected module
             Local_Max_Value :=
               Natural
@@ -92,7 +92,7 @@ package body Ships.Upgrade is
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value /
                           20) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when CABIN =>
                   if Player_Ship.Modules(Module_Index).Quality =
                     Local_Max_Value then
@@ -109,7 +109,7 @@ package body Ships.Upgrade is
                             (Index =>
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when GUN | BATTERING_RAM =>
                   Update_Damage_Block :
                   declare
@@ -135,7 +135,7 @@ package body Ships.Upgrade is
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           2) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when HULL =>
                   if Player_Ship.Modules(Module_Index).Max_Modules =
                     Local_Max_Value then
@@ -153,7 +153,7 @@ package body Ships.Upgrade is
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           40) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when HARPOON_GUN =>
                   if Player_Ship.Modules(Module_Index).Duration =
                     Local_Max_Value then
@@ -171,7 +171,7 @@ package body Ships.Upgrade is
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           10) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String
@@ -211,7 +211,7 @@ package body Ships.Upgrade is
                                Player_Ship.Modules(Module_Index).Proto_Index)
                             .Value *
                           20) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String
@@ -266,8 +266,7 @@ package body Ships.Upgrade is
         Upgrade_Action then
          Player_Ship.Modules(Module_Index).Upgrade_Progress :=
            Integer
-             (Float(Upgrade_Progress) *
-              Float(New_Game_Settings.Upgrade_Cost_Bonus));
+             (Float(Upgrade_Progress) * New_Game_Settings.Upgrade_Cost_Bonus);
          if Player_Ship.Modules(Module_Index).Upgrade_Progress = 0 then
             Player_Ship.Modules(Module_Index).Upgrade_Progress := 1;
          end if;
