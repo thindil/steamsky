@@ -1110,6 +1110,8 @@ story.
   go rest for the whole the player's ship's crew button. Optional.
 * Key `RepairPriorityIcon`: Path to the SVG image which will be used for set
   the repair priority for the selected module button. Optional.
+* Key `UpgradeButtonIcon`: Path to the SVG image which will be used for setting
+  upgrades for the player's ship modules button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
