@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -350,6 +350,9 @@ package body Bases.LootUI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
+      if Items_Indexes(Current_Item_Index) = 0 then
+         Current_Item_Index := Current_Item_Index + 1;
+      end if;
       Fill_Types_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
