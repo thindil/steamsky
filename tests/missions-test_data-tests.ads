@@ -22,17 +22,14 @@ package Missions.Test_Data.Tests is
    procedure Test_Finish_Mission_03361e_685cb8(Gnattest_T: in out Test);
    --  missions.ads:171:4:Finish_Mission:Test_FinishMission
 
-   procedure Test_Delete_Mission_29ff6f_7d785b(Gnattest_T: in out Test);
-   --  missions.ads:184:4:Delete_Mission:Test_DeleteMission
-
    procedure Test_Update_Mission_edbb9b_cfdd9a(Gnattest_T: in out Test);
-   --  missions.ads:197:4:Update_Mission:Test_UpdateMission
+   --  missions.ads:196:4:Update_Mission:Test_UpdateMission
 
    procedure Test_Auto_Finish_Missions_3ccc57_527254(Gnattest_T: in out Test);
-   --  missions.ads:209:4:Auto_Finish_Missions:Test_AutoFinishMissions
+   --  missions.ads:208:4:Auto_Finish_Missions:Test_AutoFinishMissions
 
    procedure Test_Get_Mission_Type_0b70ab_fb18a6(Gnattest_T: in out Test);
-   --  missions.ads:221:4:Get_Mission_Type:Test_Get_Mission_Type
+   --  missions.ads:220:4:Get_Mission_Type:Test_Get_Mission_Type
 
 end Missions.Test_Data.Tests;
 --  end read only
