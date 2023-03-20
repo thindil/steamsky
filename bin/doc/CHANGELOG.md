@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Icon for setting the upgrades for modules. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ### Fixed
 - Crash in the bases loot screen when the player's ship cargo is the same
   length as the table's page
