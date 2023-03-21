@@ -285,12 +285,12 @@ package body Ships.Upgrade is
 
       Result_Amount, Upgrade_Points, Upgrade_Progress, Material_Cost,
       Local_Max_Value: Natural := 0;
-      Upgrade_Value: Positive;
-      Weight_Gain: Natural;
+      Upgrade_Value: Positive := 1;
+      Weight_Gain: Natural := 0;
       Times: Natural := 0;
       Order_Time, Current_Minutes: Integer;
       Upgraded_Module: Module_Data;
-      Upgrade_Material, Upgrade_Tools: Inventory_Container.Extended_Index;
+      Upgrade_Material, Upgrade_Tools: Inventory_Container.Extended_Index := 0;
       Worker_Index: Crew_Container.Extended_Index;
       procedure Find_Mats_And_Tools is
       begin
