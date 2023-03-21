@@ -335,9 +335,7 @@ package body Bases.LootUI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
-      if Items_Indexes(Current_Item_Index) = 0 then
-         Current_Item_Index := Current_Item_Index + 1;
-      end if;
+      Current_Item_Index := Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) + 2;
       Fill_Types_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
