@@ -661,6 +661,39 @@ package body Ships.UI.Modules is
          Bind
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
+         if Module.Max_Durability < Module_Max_Value then
+            if Module.Upgrade_Action = DURABILITY then
+               Info_Button :=
+                 Create
+                   (pathName => Status_Box & ".button2",
+                    options =>
+                      "-image cancelicon -command {" & Close_Dialog_Button &
+                      " invoke;StopUpgrading " &
+                      CArgv.Arg(Argv => Argv, N => 1) &
+                      "} -style Small.TButton");
+               Add
+                 (Widget => Info_Button,
+                  Message => "Stop upgrading the module durability:");
+            else
+               Info_Button :=
+                 Create
+                   (pathName => Status_Box & ".button2",
+                    options =>
+                      "-image upgradebuttonicon -command {" &
+                      Close_Dialog_Button & " invoke;SetUpgrade 1 " &
+                      CArgv.Arg(Argv => Argv, N => 1) &
+                      "} -style Small.TButton");
+               Add
+                 (Widget => Info_Button,
+                  Message => "Start upgrading module durability");
+            end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button,
+               Options => "-row 0 -column 3 -sticky n -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Dialog_Button & " invoke;break}");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
          Height :=
            Height +
