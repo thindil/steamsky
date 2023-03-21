@@ -818,6 +818,8 @@ package body Ships is
       --## rule on TYPE_INITIAL_VALUES
       Nim_Crew: Nim_Crew_Array; --## rule line off IMPROPER_INITIALIZATION
       Index: Positive := 1;
+      Add_Member: Boolean := False;
+      Crew_Amount: Natural := 0;
       procedure Set_Ada_Ship_Crew
         (N_Crew: in out Nim_Crew_Array; Is_Player_Ship: Integer) with
          Import => True,
@@ -829,11 +831,33 @@ package body Ships is
         (N_Crew => Nim_Crew,
          Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
       --## rule on IMPROPER_INITIALIZATION
+      Count_Crew_Loop :
+      for Member of Nim_Crew loop
+         exit Count_Crew_Loop when Strlen(Item => Member.Name) = 0;
+         Crew_Amount := Crew_Amount + 1;
+      end loop Count_Crew_Loop;
+      if Crew_Amount /= Natural(Ship.Crew.Length) then
+         Ship.Crew.Clear;
+         Add_Member := True;
+      end if;
       Convert_Crew_Loop :
       for Member of Nim_Crew loop
          exit Convert_Crew_Loop when Strlen(Item => Member.Name) = 0;
-         Member_From_Nim(Member => Member, Ada_Member => Ship.Crew(Index));
-         Index := Index + 1;
+         Convert_Member_Block :
+         declare
+            Temp_Member: Member_Data :=
+              Member_Data'
+                (Amount_Of_Attributes => Attributes_Amount,
+                 Amount_Of_Skills => Skills_Amount, others => <>);
+         begin
+            Member_From_Nim(Member => Member, Ada_Member => Temp_Member);
+            if Add_Member then
+               Ship.Crew.Append(New_Item => Temp_Member);
+            else
+               Ship.Crew(Index) := Temp_Member;
+               Index := Index + 1;
+            end if;
+         end Convert_Member_Block;
       end loop Convert_Crew_Loop;
    end Set_Ada_Crew;
 
