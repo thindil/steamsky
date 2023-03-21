@@ -79,7 +79,9 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
   if mission.mType == deliver:
     updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = -1)
   elif mission.mType == passenger and mission.data < playerShip.crew.len:
+    {.warning[UnsafeSetLen]: off.}
     playerShip.crew.delete(i = mission.data)
+    {.warning[UnsafeSetLen]: on.}
     for module in playerShip.modules.mitems:
       for owner in module.owner.mitems:
         if owner == mission.data:
