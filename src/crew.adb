@@ -1207,6 +1207,7 @@ package body Crew is
       Ada_Member.Faction :=
         To_Bounded_String(Source => Value(Item => Member.Faction));
       Ada_Member.Orders := Member.Orders;
+      Ada_Member.Home_Base := Member.Home_Base;
    end Member_From_Nim;
 
 end Crew;
