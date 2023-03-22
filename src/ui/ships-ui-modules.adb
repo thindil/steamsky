@@ -147,12 +147,6 @@ package body Ships.UI.Modules is
         Player_Ship.Upgrade_Module = Module_Index then
          Module_Max_Value := 1;
       end if;
-      if Player_Ship.Modules(Module_Index).Max_Durability <
-        Module_Max_Value then
-         Add_Button
-           (Name => ".upgrade", Label => "Start upgrading module durability",
-            Command => "SetUpgrade 1 " & CArgv.Arg(Argv => Argv, N => 1));
-      end if;
       case Player_Ship.Modules(Module_Index).M_Type is
          when ENGINE =>
             Module_Max_Value :=
