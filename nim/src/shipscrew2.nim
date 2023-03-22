@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import game, missions, types
+import game, halloffame, messages, missions, shipscrew, types, utils
 
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
     raises: [KeyError], tags: [].} =
@@ -47,6 +47,27 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
       elif owner > memberIndex:
         owner.dec
 
+proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
+    createBody: bool = true) =
+  let memberName = ship.crew[memberIndex].name
+  if ship.crew == playerShip.crew:
+    if memberIndex == 0:
+      addMessage(message = "You died from " & reason & ".",
+          mType = combatMessage, color = red)
+      playerShip.crew[memberIndex].order = rest
+      playerShip.crew[memberIndex].health = 0
+      updateHallOfFame(playerName = playerShip.crew[memberIndex].name,
+          deathReason = reason)
+      return
+    addMessage(message = memberName & " died from " & reason & ".",
+        mType = combatMessage, color = red)
+  if createBody:
+    ship.cargo.add(y = InventoryData(protoIndex: corpseIndex, amount: 1,
+        name: memberName & "'s corpse", durability: 100, price: 0))
+  deleteMember(memberIndex = memberIndex, ship = ship)
+  for index, _ in ship.crew.pairs:
+    updateMorale(ship = ship, memberIndex = index, value = getRandom(min = -25, max = -10))
+
 # Temporary code for interfacing with Ada
 
 proc deleteAdaMember(memberIndex, inPlayerShip: cint) {.raises: [], tags: [], exportc.} =
@@ -56,4 +77,16 @@ proc deleteAdaMember(memberIndex, inPlayerShip: cint) {.raises: [], tags: [], ex
     else:
       deleteMember(memberIndex = memberIndex - 1, ship = npcShip)
   except KeyError:
+    discard
+
+proc deathAda(memberIndex: cint; reason: cstring; inPlayerShip,
+    createBody: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
+  try:
+    if inPlayerShip == 1:
+      death(memberIndex = memberIndex - 1, reason = $reason, ship = playerShip,
+          createBody = (if createBody == 1: true else: false))
+    else:
+      death(memberIndex = memberIndex - 1, reason = $reason, ship = npcShip,
+          createBody = (if createBody == 1: true else: false))
+  except IOError, KeyError:
     discard
