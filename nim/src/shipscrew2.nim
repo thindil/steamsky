@@ -19,6 +19,14 @@ import game, missions, types
 
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Delete the selected member from the selected ship crew list, update
+  ## the ship modules with the new crew list and delete accepted missions
+  ## if neccessary.
+  ##
+  ## * memberIndex - the crew index of the member to delete
+  ## * ship        - the ship from which the crew member will be deleted
+  ##
+  ## Returns parameter ship with the updated list of crew members and modules
   var deleted = false
   if ship.crew == playerShip.crew:
     for index, mission in acceptedMissions.pairs:
