@@ -17,7 +17,8 @@
 
 import game, missions, types
 
-proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) =
+proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
+    raises: [KeyError], tags: [].} =
   var deleted = false
   if ship.crew == playerShip.crew:
     for index, mission in acceptedMissions.pairs:
