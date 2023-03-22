@@ -15,11 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Crafts;
-with HallOfFame;
-with Messages;
-with Utils;
+with Statistics;
 
 package body Ships.Crew is
 
@@ -41,56 +39,25 @@ package body Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
-      use HallOfFame;
-      use Messages;
-      use Utils;
-      use Tiny_String;
+      use Statistics;
 
-      Member_Name: Bounded_String := Ship.Crew(Member_Index).Name;
+      procedure Death_Ada
+        (M_Index: Integer; Reas: chars_ptr;
+         In_Player_Ship, C_Body: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "deathAda";
    begin
-      if Ship = Player_Ship then
-         if Member_Index = 1 then
-            Add_Message
-              (Message => "You died from " & To_String(Source => Reason) & ".",
-               M_Type => COMBATMESSAGE, Color => RED);
-            Player_Ship.Crew(Member_Index).Order := REST;
-            Player_Ship.Crew(Member_Index).Health := 0;
-            Update_Hall_Of_Fame
-              (Player_Name =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source => Player_Ship.Crew(Member_Index).Name)),
-               Death_Reason => Reason);
-            return;
-         end if;
-         Add_Message
-           (Message =>
-              To_String(Source => Member_Name) & " died from " &
-              To_String(Source => Reason) & ".",
-            M_Type => COMBATMESSAGE, Color => RED);
-      end if;
-      if Create_Body then
-         if Length(Source => Member_Name) > 54 then
-            Delete
-              (Source => Member_Name, From => 55,
-               Through => Length(Source => Member_Name));
-         end if;
-         Inventory_Container.Append
-           (Container => Ship.Cargo,
-            New_Item =>
-              (Proto_Index => Corpse_Index, Amount => 1,
-               Name => Member_Name & "'s corpse", Durability => 100,
-               Price => 0));
-      end if;
-      Delete_Member(Member_Index => Member_Index, Ship => Ship);
-      Reduce_Morale_Loop :
-      for I in Ship.Crew.Iterate loop
-         Update_Morale
-           (Ship => Ship,
-            Member_Index => Crew_Container.To_Index(Position => I),
-            Amount => Get_Random(Min => -25, Max => -10));
-      end loop Reduce_Morale_Loop;
+      Get_Game_Stats;
+      Get_Ada_Crew(Ship_Crew => Ship.Crew);
+      Get_Ada_Modules(Ship => Ship);
+      Death_Ada
+        (M_Index => Member_Index,
+         Reas => New_String(Str => To_String(Source => Reason)),
+         In_Player_Ship => (if Ship = Player_Ship then 1 else 0),
+         C_Body => (if Create_Body then 1 else 0));
+      Set_Ada_Crew(Ship => Ship);
+      Set_Ada_Modules(Ship => Ship);
    end Death;
 
    procedure Delete_Member
@@ -135,7 +102,6 @@ package body Ships.Crew is
       Module_Index: Modules_Container.Extended_Index := 0;
       Check_Priorities: Boolean := True) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
 
       Message: chars_ptr;
       function Give_Ada_Orders
