@@ -459,7 +459,9 @@ package body Trades.UI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
-      Current_Item_Index := Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) + 2;
+      Current_Item_Index :=
+        Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) +
+        2;
       Fill_Trader_Types_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
