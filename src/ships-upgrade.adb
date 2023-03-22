@@ -394,107 +394,111 @@ package body Ships.Upgrade is
                Given_Order => REST);
             exit Upgrade_Loop;
          end if;
-         if Upgraded_Module.Upgrade_Action = MAX_VALUE then
-            case Upgraded_Module.M_Type is
-               when ENGINE =>
-                  if Result_Amount >
-                    Inventory_Container.Element
-                        (Container => Player_Ship.Cargo,
-                         Index => Upgrade_Material)
-                        .Amount *
-                      200 then
-                     Result_Amount :=
+         case Upgraded_Module.Upgrade_Action is
+            when MAX_VALUE =>
+               case Upgraded_Module.M_Type is
+                  when ENGINE =>
+                     if Result_Amount >
+                       Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Upgrade_Material)
+                           .Amount *
+                         200 then
+                        Result_Amount :=
+                          Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Upgrade_Material)
+                            .Amount *
+                          200;
+                     end if;
+                     Material_Cost := Result_Amount / 200;
+                  when CABIN =>
+                     if Result_Amount >
+                       Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Upgrade_Material)
+                           .Amount *
+                         20 then
+                        Result_Amount :=
+                          Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Upgrade_Material)
+                            .Amount *
+                          20;
+                     end if;
+                     Material_Cost := Result_Amount / 20;
+                  when GUN | BATTERING_RAM | HARPOON_GUN =>
+                     if Result_Amount >
+                       Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Upgrade_Material)
+                           .Amount *
+                         10 then
+                        Result_Amount :=
+                          Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Upgrade_Material)
+                            .Amount *
+                          10;
+                     end if;
+                     Material_Cost := Result_Amount / 10;
+                  when HULL =>
+                     if Result_Amount >
+                       Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Upgrade_Material)
+                           .Amount *
+                         2 then
+                        Result_Amount :=
+                          Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Upgrade_Material)
+                            .Amount *
+                          2;
+                     end if;
+                     Material_Cost := Result_Amount / 2;
+                  when others =>
+                     if Result_Amount >
                        Inventory_Container.Element
                          (Container => Player_Ship.Cargo,
                           Index => Upgrade_Material)
-                         .Amount *
-                       200;
-                  end if;
-                  Material_Cost := Result_Amount / 200;
-               when CABIN =>
-                  if Result_Amount >
-                    Inventory_Container.Element
-                        (Container => Player_Ship.Cargo,
-                         Index => Upgrade_Material)
-                        .Amount *
-                      20 then
-                     Result_Amount :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo,
-                          Index => Upgrade_Material)
-                         .Amount *
-                       20;
-                  end if;
-                  Material_Cost := Result_Amount / 20;
-               when GUN | BATTERING_RAM | HARPOON_GUN =>
-                  if Result_Amount >
-                    Inventory_Container.Element
-                        (Container => Player_Ship.Cargo,
-                         Index => Upgrade_Material)
-                        .Amount *
-                      10 then
-                     Result_Amount :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo,
-                          Index => Upgrade_Material)
-                         .Amount *
-                       10;
-                  end if;
-                  Material_Cost := Result_Amount / 10;
-               when HULL =>
-                  if Result_Amount >
-                    Inventory_Container.Element
-                        (Container => Player_Ship.Cargo,
-                         Index => Upgrade_Material)
-                        .Amount *
-                      2 then
-                     Result_Amount :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo,
-                          Index => Upgrade_Material)
-                         .Amount *
-                       2;
-                  end if;
-                  Material_Cost := Result_Amount / 2;
-               when others =>
-                  if Result_Amount >
+                         .Amount then
+                        Result_Amount :=
+                          Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Upgrade_Material)
+                            .Amount;
+                     end if;
+                     Material_Cost := Result_Amount;
+               end case;
+            when DURABILITY =>
+               if Result_Amount >
+                 Inventory_Container.Element
+                     (Container => Player_Ship.Cargo,
+                      Index => Upgrade_Material)
+                     .Amount *
+                   10 then
+                  Result_Amount :=
                     Inventory_Container.Element
                       (Container => Player_Ship.Cargo,
                        Index => Upgrade_Material)
-                      .Amount then
-                     Result_Amount :=
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo,
-                          Index => Upgrade_Material)
-                         .Amount;
-                  end if;
-                  Material_Cost := Result_Amount;
-            end case;
-         elsif Upgraded_Module.Upgrade_Action = DURABILITY then
-            if Result_Amount >
-              Inventory_Container.Element
-                  (Container => Player_Ship.Cargo, Index => Upgrade_Material)
-                  .Amount *
-                10 then
-               Result_Amount :=
+                      .Amount *
+                    10;
+               end if;
+               Material_Cost := Result_Amount / 10;
+            when others =>
+               if Result_Amount >
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Upgrade_Material)
-                   .Amount *
-                 10;
-            end if;
-            Material_Cost := Result_Amount / 10;
-         else
-            if Result_Amount >
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Upgrade_Material)
-                .Amount then
-               Result_Amount :=
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Upgrade_Material)
-                   .Amount;
-            end if;
-            Material_Cost := Result_Amount;
-         end if;
+                   .Amount then
+                  Result_Amount :=
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo,
+                       Index => Upgrade_Material)
+                      .Amount;
+               end if;
+               Material_Cost := Result_Amount;
+         end case;
          if Material_Cost < Times then
             Material_Cost := Times;
          end if;
