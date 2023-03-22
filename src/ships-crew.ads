@@ -71,8 +71,7 @@ package Ships.Crew is
    procedure Delete_Member
      (Member_Index: Crew_Container.Extended_Index;
       Ship: in out Ship_Record) with
-      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
-      Test_Case => (Name => "Test_DeleteMember", Mode => Nominal);
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index;
       -- ****
 
    -- ****f* SCrew/SCrew.Find_Member
