@@ -357,6 +357,7 @@ package body Ships.Upgrade is
       if Times = 0 then
          return;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Upgrade_Points :=
         ((Get_Skill_Level
             (Member => Player_Ship.Crew(Worker_Index),
@@ -365,6 +366,7 @@ package body Ships.Upgrade is
           10) *
          Times) +
         Times;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Upgrade_Loop :
       while Upgrade_Points > 0 and Upgraded_Module.Upgrade_Progress > 0 loop
          Result_Amount := Upgrade_Points;
@@ -529,6 +531,7 @@ package body Ships.Upgrade is
          Find_Mats_And_Tools;
          Upgrade_Progress := Upgraded_Module.Upgrade_Progress - Result_Amount;
          Upgrade_Points := Upgrade_Points - Result_Amount;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Update_Cargo
            (Ship => Player_Ship,
             Proto_Index =>
@@ -536,6 +539,7 @@ package body Ships.Upgrade is
                 (Container => Player_Ship.Cargo, Index => Upgrade_Material)
                 .Proto_Index,
             Amount => -(Material_Cost));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          if Upgrade_Progress = 0 then
             Weight_Gain :=
               Get_Module(Index => Upgraded_Module.Proto_Index).Weight /
@@ -545,6 +549,7 @@ package body Ships.Upgrade is
             end if;
             case Upgraded_Module.Upgrade_Action is
                when DURABILITY =>
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   if
                     (Get_Module(Index => Upgraded_Module.Proto_Index)
                        .Durability /
@@ -567,6 +572,7 @@ package body Ships.Upgrade is
                      Upgraded_Module.Weight :=
                        Upgraded_Module.Weight + Weight_Gain;
                   end if;
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   Add_Message
                     (Message =>
                        To_String
