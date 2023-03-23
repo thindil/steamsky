@@ -17,6 +17,7 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Crafts;
+with HallOfFame;
 with Statistics;
 
 package body Ships.Crew is
@@ -39,6 +40,7 @@ package body Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
+      use HallOfFame;
       use Statistics;
 
       procedure Death_Ada
@@ -58,6 +60,7 @@ package body Ships.Crew is
          C_Body => (if Create_Body then 1 else 0));
       Set_Ada_Crew(Ship => Ship);
       Set_Ada_Modules(Ship => Ship);
+      Load_Hof_From_Nim;
    end Death;
 
    procedure Delete_Member
