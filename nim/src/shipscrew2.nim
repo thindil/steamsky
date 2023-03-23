@@ -48,7 +48,8 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
         owner.dec
 
 proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
-    createBody: bool = true) =
+    createBody: bool = true) {.sideEffect, raises: [KeyError, IOError], tags: [
+    WriteIOEffect].} =
   let memberName = ship.crew[memberIndex].name
   if ship.crew == playerShip.crew:
     if memberIndex == 0:
