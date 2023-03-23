@@ -50,6 +50,15 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
 proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
     createBody: bool = true) {.sideEffect, raises: [KeyError, IOError], tags: [
     WriteIOEffect].} =
+  ## Handle the death of a crew member in ships
+  ##
+  ## * memberIndex - the crew index of the member which died
+  ## * reason      - the reason of death of the crew member
+  ## * ship        - the ship to which the crew member belongs
+  ## * createBody  - if true, create the body for the crew member. Default
+  ##                 value is true
+  ##
+  ## Returns the parameter ship with updated crew, modules and cargo lists
   let memberName = ship.crew[memberIndex].name
   if ship.crew == playerShip.crew:
     if memberIndex == 0:
