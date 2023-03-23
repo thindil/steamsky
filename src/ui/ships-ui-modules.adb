@@ -667,7 +667,7 @@ package body Ships.UI.Modules is
                       "} -style Small.TButton");
                Add
                  (Widget => Info_Button,
-                  Message => "Stop upgrading the module durability:");
+                  Message => "Stop upgrading the module durability");
             else
                Info_Button :=
                  Create
