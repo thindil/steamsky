@@ -76,4 +76,8 @@ package HallOfFame is
       Death_Reason /= Null_Unbounded_String;
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Load_Hof_From_Nim;
+
 end HallOfFame;

@@ -39,7 +39,6 @@ package body HallOfFame is
       use Game;
 
       --## rule off IMPROPER_INITIALIZATION
-      Nim_Entry: Nim_Hall_Of_Fame_Data;
       Result: chars_ptr;
       --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Hall_Of_Fame return chars_ptr with
@@ -51,29 +50,13 @@ package body HallOfFame is
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Hof_Loop :
-      for I in 1 .. 10 loop
-         Get_Ada_Hof_Entry(Index => I, N_Entry => Nim_Entry);
-         if Strlen(Item => Nim_Entry.Name) > 0 then
-            Hall_Of_Fame_Array(I) :=
-              (Name =>
-                 To_Unbounded_String(Source => Value(Item => Nim_Entry.Name)),
-               Points => Nim_Entry.Points,
-               Death_Reason =>
-                 To_Unbounded_String
-                   (Source => Value(Item => Nim_Entry.Death_Reason)));
-         end if;
-      end loop Load_Hof_Loop;
+      Load_Hof_From_Nim;
    end Load_Hall_Of_Fame;
 
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
-      use Interfaces.C;
       use Statistics;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Entry: Nim_Hall_Of_Fame_Data;
-      --## rule on IMPROPER_INITIALIZATION
       procedure Update_Ada_Hall_Of_Fame(P_Name, D_Reason: chars_ptr) with
          Import => True,
          Convention => C,
@@ -83,6 +66,15 @@ package body HallOfFame is
       Update_Ada_Hall_Of_Fame
         (P_Name => New_String(Str => To_String(Source => Player_Name)),
          D_Reason => New_String(Str => To_String(Source => Death_Reason)));
+      Load_Hof_From_Nim;
+   end Update_Hall_Of_Fame;
+
+   procedure Load_Hof_From_Nim is
+      use Interfaces.C;
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Entry: Nim_Hall_Of_Fame_Data;
+      --## rule on IMPROPER_INITIALIZATION
+   begin
       Load_Hof_Loop :
       for I in 1 .. 10 loop
          Get_Ada_Hof_Entry(Index => I, N_Entry => Nim_Entry);
@@ -96,6 +88,6 @@ package body HallOfFame is
                    (Source => Value(Item => Nim_Entry.Death_Reason)));
          end if;
       end loop Load_Hof_Loop;
-   end Update_Hall_Of_Fame;
+   end Load_Hof_From_Nim;
 
 end HallOfFame;
