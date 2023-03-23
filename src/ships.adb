@@ -809,6 +809,14 @@ package body Ships is
       Get_Ada_Ship_Crew
         (N_Crew => Nim_Crew,
          Is_Player_Ship => (if Ship_Crew = Player_Ship.Crew then 1 else 0));
+      Get_Ada_Crew_Loop :
+      for I in Ship_Crew.First_Index .. Ship_Crew.Last_Index loop
+         Get_Ada_Crew_Inventory
+           (Inventory => Inventory_To_Nim(Inventory => Ship_Crew(I).Inventory),
+            Member_Index => I,
+            Get_Player_Ship =>
+              (if Ship_Crew = Player_Ship.Crew then 1 else 0));
+      end loop Get_Ada_Crew_Loop;
    end Get_Ada_Crew;
 
    procedure Set_Ada_Crew(Ship: in out Ship_Record) is
@@ -816,7 +824,10 @@ package body Ships is
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
       --## rule on TYPE_INITIAL_VALUES
-      Nim_Crew: Nim_Crew_Array; --## rule line off IMPROPER_INITIALIZATION
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Crew: Nim_Crew_Array;
+      Nim_Inventory: Nim_Inventory_Array;
+      --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
       Add_Member: Boolean := False;
       Crew_Amount: Natural := 0;
@@ -859,6 +870,14 @@ package body Ships is
             end if;
          end Convert_Member_Block;
       end loop Convert_Crew_Loop;
+      Set_Ada_Crew_Loop :
+      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         Set_Ada_Crew_Inventory
+           (Inventory => Nim_Inventory, Member_Index => I,
+            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+         Ship.Crew(I).Inventory :=
+           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
+      end loop Set_Ada_Crew_Loop;
    end Set_Ada_Crew;
 
    --## rule off TYPE_INITIAL_VALUES
@@ -1280,18 +1299,10 @@ package body Ships is
         (Cargo => Nim_Cargo,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
       Get_Ada_Crew(Ship_Crew => Ship.Crew);
-      Get_Ada_Crew_Loop :
-      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         Get_Ada_Crew_Inventory
-           (Inventory => Inventory_To_Nim(Inventory => Ship.Crew(I).Inventory),
-            Member_Index => I,
-            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      end loop Get_Ada_Crew_Loop;
    end Set_Ship_In_Nim;
 
    procedure Get_Ship_From_Nim(Ship: in out Ship_Record) is
       --## rule off IMPROPER_INITIALIZATION
-      Nim_Inventory: Nim_Inventory_Array;
       Nim_Cargo: Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
       --## rule on IMPROPER_INITIALIZATION
@@ -1303,14 +1314,6 @@ package body Ships is
         (Target => Ship.Cargo,
          Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
       Set_Ada_Crew(Ship => Ship);
-      Set_Ada_Crew_Loop :
-      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         Set_Ada_Crew_Inventory
-           (Inventory => Nim_Inventory, Member_Index => I,
-            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-         Ship.Crew(I).Inventory :=
-           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
-      end loop Set_Ada_Crew_Loop;
       Set_Ada_Modules(Ship => Ship);
       Set_Ada_Ship(Ship => Ship);
    end Get_Ship_From_Nim;
