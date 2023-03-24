@@ -823,52 +823,69 @@ package body Ships.UI.Modules is
               Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when CABIN =>
             Add_Owners_Info(Owners_Name => "Owner");
-            if Module.Cleanliness /= Module.Quality then
-               Label := Create(pathName => Module_Frame & ".cleanlbl");
+            Add_Cleanliness_Info_Block :
+            declare
+               Clean_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".cleaninfo",
+                    options => "-width 360");
+               Status_Tooltip: Unbounded_String;
+            begin
+               Label :=
+                 Create
+                   (pathName => Clean_Box & ".cleanlbl",
+                    options => "-text {Cleanliness:}");
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
-               if Damage_Percent > 0.0 and Damage_Percent < 0.2 then
-                  configure(Widgt => Label, options => "-text {Bit dusty}");
+               if Damage_Percent = 0.0 then
+                  Status_Tooltip := To_Unbounded_String(Source => "Clean");
+                  Progress_Bar_Style :=
+                    To_Unbounded_String
+                      (Source => " -style green.Horizontal.TProgressbar");
+               elsif Damage_Percent > 0.0 and Damage_Percent < 0.2 then
+                  Status_Tooltip := To_Unbounded_String(Source => "Bit dusty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style green.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.19 and Damage_Percent < 0.5 then
-                  configure(Widgt => Label, options => "-text {Dusty}");
+                  Status_Tooltip := To_Unbounded_String(Source => "Dusty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.49 and Damage_Percent < 0.8 then
-                  configure(Widgt => Label, options => "-text {Dirty}");
+                  Status_Tooltip := To_Unbounded_String(Source => "Dirty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.79 and Damage_Percent < 1.0 then
-                  configure(Widgt => Label, options => "-text {Very dirty}");
+                  Status_Tooltip :=
+                    To_Unbounded_String(Source => "Very dirty");
                   Progress_Bar_Style := Null_Unbounded_String;
                else
-                  configure(Widgt => Label, options => "-text {Ruined}");
+                  Status_Tooltip := To_Unbounded_String(Source => "Ruined");
                   Progress_Bar_Style := Null_Unbounded_String;
                end if;
                Progress_Bar :=
                  Create
-                   (pathName => Module_Frame & ".clean",
+                   (pathName => Clean_Box & ".clean",
                     options =>
                       "-orient horizontal -maximum 1.0 -value {" &
-                      Float'Image(Damage_Percent) & "}" &
+                      Float'Image(1.0 - Damage_Percent) & "}" &
                       To_String(Source => Progress_Bar_Style));
                Add
                  (Widget => Progress_Bar,
-                  Message => "Cleanliness of the selected cabin");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Label, Options => "-row 2 -sticky w");
+                  Message => To_String(Source => Status_Tooltip));
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
-                  Options => "-row 2 -column 1 -sticky we");
+                  Options => "-row 0 -column 1 -padx {5 0}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Clean_Box, Options => "-sticky w");
                Height :=
                  Height +
                  Positive'Value
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
-            end if;
+            end Add_Cleanliness_Info_Block;
             Progress_Bar :=
               Create
                 (pathName => Module_Frame & ".quality",
