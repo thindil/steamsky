@@ -15,14 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
 with Crafts;
 with Events;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
-with Ships.Crew;
 with Utils;
 
 package body Ships is
@@ -722,68 +720,19 @@ package body Ships is
    procedure Damage_Module
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
-      use Ada.Strings.Unbounded;
-      use Ships.Crew;
-
-      Real_Damage: Natural := Damage;
-      Weapon_Index: Natural := 0;
-      procedure Remove_Gun(Module_Index2: Positive) is
-      begin
-         if Ship.Modules(Module_Index2).Owner(1) > 0 then
-            Death
-              (Member_Index => Ship.Modules(Module_Index2).Owner(1),
-               Reason => To_Unbounded_String(Source => Death_Reason),
-               Ship => Ship);
-         end if;
-      end Remove_Gun;
+      procedure Damage_Ada_Module
+        (In_Player_Ship: Integer; M_Index: Natural; D: Positive;
+         D_Reason: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "damageAdaModule";
    begin
-      if Damage > Ship.Modules(Module_Index).Durability then
-         Real_Damage := Ship.Modules(Module_Index).Durability;
-      end if;
-      Ship.Modules(Module_Index).Durability :=
-        Ship.Modules(Module_Index).Durability - Real_Damage;
-      if Ship.Modules(Module_Index).Durability = 0 then
-         case Get_Module(Index => Ship.Modules(Module_Index).Proto_Index)
-           .M_Type is
-            when HULL | ENGINE =>
-               if Ship = Player_Ship then
-                  Death
-                    (Member_Index => 1,
-                     Reason => To_Unbounded_String(Source => Death_Reason),
-                     Ship => Player_Ship);
-               end if;
-            when TURRET =>
-               Weapon_Index := Ship.Modules(Module_Index).Gun_Index;
-               if Weapon_Index > 0 then
-                  Ship.Modules(Weapon_Index).Durability := 0;
-                  Remove_Gun(Module_Index2 => Weapon_Index);
-               end if;
-            when GUN =>
-               Remove_Gun(Module_Index2 => Module_Index);
-            when CABIN =>
-               Kill_Owners_Loop :
-               for Owner of Ship.Modules(Module_Index).Owner loop
-                  if Owner > 0 and then Ship.Crew(Owner).Order = REST then
-                     Death
-                       (Member_Index => Owner,
-                        Reason => To_Unbounded_String(Source => Death_Reason),
-                        Ship => Ship);
-                  end if;
-               end loop Kill_Owners_Loop;
-            when others =>
-               if Ship.Modules(Module_Index).Owner.Length > 0 then
-                  if Ship.Modules(Module_Index).Owner(1) > 0
-                    and then
-                      Ship.Crew(Ship.Modules(Module_Index).Owner(1)).Order /=
-                      REST then
-                     Death
-                       (Member_Index => Ship.Modules(Module_Index).Owner(1),
-                        Reason => To_Unbounded_String(Source => Death_Reason),
-                        Ship => Ship);
-                  end if;
-               end if;
-         end case;
-      end if;
+      Set_Ship_In_Nim(Ship => Ship);
+      Damage_Ada_Module
+        (In_Player_Ship => (if Ship = Player_Ship then 1 else 0),
+         M_Index => Module_Index, D => Damage,
+         D_Reason => New_String(Str => Death_Reason));
+      Get_Ship_From_Nim(Ship => Ship);
    end Damage_Module;
 
    procedure Get_Ada_Crew
