@@ -435,6 +435,15 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
     deathReason: string) {.sideEffect, raises: [KeyError, IOError], tags: [
     WriteIOEffect].} =
+  ## Damage the selected module, kill its owner if the module was destroyed
+  ##
+  ## * ship        - the ship in which the module will be damaged
+  ## * moduleIndex - the index of the module to damage
+  ## * damage      - the amount of damage which the module will taken
+  ## * deathReason - the reason of damage, used to inform about the module's
+  ##                 owner death
+  ##
+  ## Returns the updated parameter ship
 
   proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) =
     if ship.modules[moduleIndex2].owner[0] > -1:
