@@ -433,7 +433,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     protoShipsList[shipIndex] = ship
 
 proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
-    deathReason: string) =
+    deathReason: string) {.sideEffect, raises: [KeyError, IOError], tags: [
+    WriteIOEffect].} =
 
   proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) =
     if ship.modules[moduleIndex2].owner[0] > -1:
