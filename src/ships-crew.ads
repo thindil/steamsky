@@ -55,8 +55,7 @@ package Ships.Crew is
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) with
       Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-      Reason /= Null_Unbounded_String,
-      Test_Case => (Name => "Test_Death", Mode => Nominal);
+      Reason /= Null_Unbounded_String;
       -- ****
 
       -- ****f* SCrew/SCrew.Delete_Member
