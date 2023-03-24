@@ -591,14 +591,13 @@ package body Ships.Upgrade is
                        (Message_Text =>
                           "You've reached the maximum durability for ");
                      return;
-                  else
-                     Upgraded_Module.Upgrade_Progress :=
-                       Integer
-                         (Float
-                            (Get_Module(Index => Upgraded_Module.Proto_Index)
-                               .Durability) *
-                          Float(New_Game_Settings.Upgrade_Cost_Bonus));
                   end if;
+                  Upgraded_Module.Upgrade_Progress :=
+                    Integer
+                      (Float
+                         (Get_Module(Index => Upgraded_Module.Proto_Index)
+                            .Durability) *
+                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when MAX_VALUE =>
                   case Upgraded_Module.M_Type is
                      when HULL =>
