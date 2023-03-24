@@ -28,11 +28,6 @@ package body HallOfFame is
       Death_Reason: chars_ptr;
    end record;
    --## rule on TYPE_INITIAL_VALUES
-   procedure Get_Ada_Hof_Entry
-     (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaHofEntry";
 
    procedure Load_Hall_Of_Fame is
       use Interfaces.C;
@@ -74,6 +69,11 @@ package body HallOfFame is
       --## rule off IMPROPER_INITIALIZATION
       Nim_Entry: Nim_Hall_Of_Fame_Data;
       --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Ada_Hof_Entry
+         (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHofEntry";
    begin
       Load_Hof_Loop :
       for I in 1 .. 10 loop
