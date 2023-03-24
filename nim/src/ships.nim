@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, types, utils
+import game, log, shipscrew2, types, utils
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Get the description of quality of the selected cabin in the player's ship
@@ -432,6 +432,42 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     protoShipsList[shipIndex] = ship
 
+proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
+    deathReason: string) =
+
+  proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) =
+    if ship.modules[moduleIndex2].owner[0] > -1:
+      death(memberIndex = ship.modules[moduleIndex2].owner[0],
+          reason = deathReason, ship = ship)
+
+  let realDamage = if damage > ship.modules[moduleIndex].durability:
+      ship.modules[moduleIndex].durability
+    else:
+      damage
+  ship.modules[moduleIndex].durability = ship.modules[moduleIndex].durability - realDamage
+  if ship.modules[moduleIndex].durability == 0:
+    case modulesList[ship.modules[moduleIndex].protoIndex].mType
+    of ModuleType.hull, ModuleType.engine:
+      if ship.crew == playerShip.crew:
+        death(memberIndex = 0, reason = deathReason, ship = playerShip)
+    of ModuleType.turret:
+      let weaponIndex = ship.modules[moduleIndex].gunIndex
+      if weaponIndex > -1:
+        ship.modules[weaponIndex].durability = 0
+        removeGun(moduleIndex2 = weaponIndex, ship = ship)
+    of ModuleType.gun:
+      removeGun(moduleIndex2 = moduleIndex, ship = ship)
+    of ModuleType.cabin:
+      for owner in ship.modules[moduleIndex].owner:
+        if owner > -1 and ship.crew[owner].order == rest:
+          death(memberIndex = owner, reason = deathReason, ship = ship)
+    else:
+      if ship.modules[moduleIndex].owner.len > 0:
+        if ship.modules[moduleIndex].owner[0] > -1 and ship.crew[ship.modules[
+            moduleIndex].owner[0]].order != rest:
+          death(memberIndex = ship.modules[moduleIndex].owner[0],
+              reason = deathReason, ship = ship)
+
 # Temporary code for interfacing with Ada
 
 type
@@ -837,3 +873,15 @@ proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
       return
   for rIndex, recipe in ship.knownRecipes.pairs:
     adaRecipes[rIndex] = recipe.cstring
+
+proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
+    deathReason: cstring) {.raises: [], tags: [WriteIOEffect], exportc.} =
+  try:
+    if inPlayerShip == 1:
+      damageModule(ship = playerShip, moduleIndex = moduleIndex - 1,
+          damage = damage, deathReason = $deathReason)
+    else:
+      damageModule(ship = npcShip, moduleIndex = moduleIndex - 1,
+          damage = damage, deathReason = $deathReason)
+  except KeyError, IOError:
+    discard
