@@ -21,14 +21,6 @@ with Statistics;
 
 package body HallOfFame is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Hall_Of_Fame_Data is record
-      Name: chars_ptr;
-      Points: Natural := 0;
-      Death_Reason: chars_ptr;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    procedure Load_Hall_Of_Fame is
       use Interfaces.C;
       use Game;
@@ -66,6 +58,14 @@ package body HallOfFame is
 
    procedure Load_Hof_From_Nim is
       use Interfaces.C;
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Hall_Of_Fame_Data is record
+         Name: chars_ptr;
+         Points: Natural := 0;
+         Death_Reason: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Nim_Entry: Nim_Hall_Of_Fame_Data;
       --## rule on IMPROPER_INITIALIZATION
