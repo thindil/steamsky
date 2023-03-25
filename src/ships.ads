@@ -473,8 +473,7 @@ package Ships is
       Damage: Positive; Death_Reason: String) with
       Pre => Module_Index in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index and
-      Death_Reason'Length > 0,
-      Test_Case => (Name => "Test_DamageModule", Mode => Nominal);
+      Death_Reason'Length > 0;
       -- ****
 
 -- Temporary code to interact with Nim
