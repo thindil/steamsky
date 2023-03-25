@@ -19,8 +19,5 @@ package Ships.Test_Data.Tests is
    procedure Test_Count_Combat_Value_145322_424a30(Gnattest_T: in out Test);
    --  ships.ads:445:4:Count_Combat_Value:Test_CountCombatValue
 
-   procedure Test_Damage_Module_222cf0_819b51(Gnattest_T: in out Test);
-   --  ships.ads:471:4:Damage_Module:Test_DamageModule
-
 end Ships.Test_Data.Tests;
 --  end read only
