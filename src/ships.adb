@@ -651,61 +651,13 @@ package body Ships is
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is
-      Combat_Value: Natural := 0;
-      procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
-         use Tiny_String;
-
-      begin
-         Count_Ammo_Value_Loop :
-         for Item of Player_Ship.Cargo loop
-            if Get_Proto_Item(Index => Item.Proto_Index).I_Type =
-              Get_Ada_Item_Type(Item_Index => Item_Type_Index - 1) then
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               Combat_Value :=
-                 Combat_Value +
-                 (Get_Proto_Item(Index => Item.Proto_Index).Value(1) *
-                  Multiple);
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
-            end if;
-         end loop Count_Ammo_Value_Loop;
-      end Count_Ammo_Value;
+      function Count_Ada_Combat_Value return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "countAdaCombatValue";
    begin
-      Count_Combat_Value_Loop :
-      for Module of Player_Ship.Modules loop
-         case Get_Module(Index => Module.Proto_Index).M_Type is
-            when BATTERING_RAM =>
-               Combat_Value := Combat_Value + Module.Damage2;
-            when GUN =>
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               Combat_Value :=
-                 Combat_Value + Module.Max_Durability + (Module.Damage * 10);
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
-               Count_Ammo_Value
-                 (Item_Type_Index =>
-                    Get_Module(Index => Module.Proto_Index).Value,
-                  Multiple => 10);
-            when ARMOR =>
-               Combat_Value := Combat_Value + Module.Max_Durability;
-            when HARPOON_GUN =>
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               Combat_Value :=
-                 Combat_Value + Module.Max_Durability + (Module.Duration * 5);
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
-               Count_Ammo_Value
-                 (Item_Type_Index =>
-                    Get_Module(Index => Module.Proto_Index).Value,
-                  Multiple => 5);
-            when HULL =>
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               Combat_Value :=
-                 Combat_Value + Module.Max_Durability +
-                 (Module.Max_Modules * 10);
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
-            when others =>
-               null;
-         end case;
-      end loop Count_Combat_Value_Loop;
-      return Combat_Value;
+      Set_Ship_In_Nim;
+      return Count_Ada_Combat_Value;
    end Count_Combat_Value;
 
    function Get_Cabin_Quality(Quality: Natural) return String is
