@@ -478,7 +478,7 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
           death(memberIndex = ship.modules[moduleIndex].owner[0],
               reason = deathReason, ship = ship)
 
-proc countCombatValue*(): Natural =
+proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
 
   proc countAmmoValue(itemTypeIndex: Natural; multiple: Positive): Natural =
     for item in playerShip.cargo.items:
