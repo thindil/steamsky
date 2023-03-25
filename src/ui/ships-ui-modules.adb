@@ -886,40 +886,45 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end Add_Cleanliness_Info_Block;
-            Progress_Bar :=
-              Create
-                (pathName => Module_Frame & ".quality",
-                 options =>
-                   "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
-                   Float'Image(Float(Module.Quality) / 100.0) & "}");
-            Add
-              (Widget => Progress_Bar,
-               Message => "Quality of the selected cabin");
-            Label :=
-              Create
-                (pathName => Module_Frame & ".qualitylbl",
-                 options =>
-                   "-text {" & Get_Cabin_Quality(Quality => Module.Quality) &
-                   "}");
-            Module_Max_Value :=
-              Positive
-                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                 1.5);
-            if Module.Quality = Module_Max_Value then
-               configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" & cget(Widgt => Label, option => "-text") &
-                    " (max upgrade)}");
-            end if;
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Label, Options => "-row 3 -sticky w");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Bar,
-               Options => "-row 3 -column 1 -sticky we");
-            Height :=
-              Height +
-              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+            Add_Quality_Info_Block :
+            declare
+               Quality_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".qualityinfo",
+                    options => "-width 360");
+            begin
+               Progress_Bar :=
+                 Create
+                   (pathName => Quality_Box & ".quality",
+                    options =>
+                      "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+                      Float'Image(Float(Module.Quality) / 100.0) & "}");
+               Label :=
+                 Create
+                   (pathName => Quality_Box & ".qualitylbl",
+                    options => "-text {Quality:}");
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                    1.5);
+               Add
+                 (Widget => Progress_Bar,
+                  Message =>
+                    Get_Cabin_Quality(Quality => Module.Quality) &
+                    (if Module.Quality = Module_Max_Value then " (max upgrade)"
+                     else ""));
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Label, Options => "-sticky w");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Progress_Bar,
+                  Options => "-row 0 -column 1 -padx {5 0}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Quality_Box, Options => "-sticky w");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end Add_Quality_Info_Block;
          when GUN | HARPOON_GUN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
