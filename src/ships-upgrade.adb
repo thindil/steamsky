@@ -597,7 +597,7 @@ package body Ships.Upgrade is
                       (Float
                          (Get_Module(Index => Upgraded_Module.Proto_Index)
                             .Durability) *
-                       Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                       New_Game_Settings.Upgrade_Cost_Bonus);
                when MAX_VALUE =>
                   case Upgraded_Module.M_Type is
                      when HULL =>
