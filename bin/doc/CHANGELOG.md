@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Updated look of the module info dialog
 
 ### Fixed
 - Crash in the bases loot screen when the player's ship cargo is the same
