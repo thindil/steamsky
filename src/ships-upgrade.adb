@@ -607,9 +607,9 @@ package body Ships.Upgrade is
                         Upgrade_Value := Upgraded_Module.Max_Modules;
                      when ENGINE =>
                         Weight_Gain :=
-                          (Get_Module(Index => Upgraded_Module.Proto_Index)
-                             .Max_Value /
-                           40);
+                          Get_Module(Index => Upgraded_Module.Proto_Index)
+                            .Max_Value /
+                          40;
                         Upgraded_Module.Power :=
                           Upgraded_Module.Power +
                           (Get_Module(Index => Upgraded_Module.Proto_Index)
@@ -624,10 +624,9 @@ package body Ships.Upgrade is
                            20);
                         Upgrade_Value := Upgraded_Module.Quality;
                      when GUN =>
-                        if
-                          (Get_Module(Index => Upgraded_Module.Proto_Index)
-                             .Max_Value /
-                           20) >
+                        if Get_Module(Index => Upgraded_Module.Proto_Index)
+                            .Max_Value /
+                          20 >
                           0 then
                            Upgraded_Module.Damage :=
                              Upgraded_Module.Damage +
@@ -640,10 +639,9 @@ package body Ships.Upgrade is
                         end if;
                         Upgrade_Value := Upgraded_Module.Damage;
                      when BATTERING_RAM =>
-                        if
-                          (Get_Module(Index => Upgraded_Module.Proto_Index)
-                             .Max_Value /
-                           20) >
+                        if Get_Module(Index => Upgraded_Module.Proto_Index)
+                            .Max_Value /
+                          20 >
                           0 then
                            Upgraded_Module.Damage2 :=
                              Upgraded_Module.Damage2 +
@@ -656,10 +654,9 @@ package body Ships.Upgrade is
                         end if;
                         Upgrade_Value := Upgraded_Module.Damage2;
                      when HARPOON_GUN =>
-                        if
-                          (Get_Module(Index => Upgraded_Module.Proto_Index)
-                             .Max_Value /
-                           20) >
+                        if Get_Module(Index => Upgraded_Module.Proto_Index)
+                            .Max_Value /
+                          20 >
                           0 then
                            Upgraded_Module.Duration :=
                              Upgraded_Module.Duration +
