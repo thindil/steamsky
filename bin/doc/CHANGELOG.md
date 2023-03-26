@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.0.6] - 2023-03-26
 
 ### Fixed
 - Showing empty categories of items in the trade screen
