@@ -479,7 +479,10 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
               reason = deathReason, ship = ship)
 
 proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
-
+  ## Count the combat value of the player's ship based on its modules,
+  ## weapons and ammunition.
+  ##
+  ## Returns the combat value of the player's ship.
   proc countAmmoValue(itemTypeIndex: Natural; multiple: Positive): Natural =
     for item in playerShip.cargo.items:
       if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex]:
