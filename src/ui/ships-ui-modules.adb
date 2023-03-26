@@ -1218,9 +1218,9 @@ package body Ships.UI.Modules is
            Create
              (pathName => Module_Frame & ".upgradelbl",
               options => "-text {" & To_String(Source => Module_Info) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 3 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 4 -sticky w");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar, Options => "-row 3 -column 1 -sticky we");
+           (Slave => Progress_Bar, Options => "-row 4 -column 1 -sticky we");
          Height :=
            Height +
            Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
@@ -1244,7 +1244,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
-         Row => 5);
+         Row => 6);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
