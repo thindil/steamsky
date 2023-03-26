@@ -21,3 +21,5 @@ playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
     durability: 100))
 damageModule(playerShip, 0, 10, "during tests")
 assert playerShip.modules[0].durability == 90
+
+discard countCombatValue()
