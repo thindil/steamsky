@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Crash in the bases loot screen when the player's ship cargo is the same
   length as the table's page
 - Crash when cleaning ship in open space
+- Showing info about the module's upgrade progress in the module' info dialog
 
 ## [8.5] - 2023-03-19
 
