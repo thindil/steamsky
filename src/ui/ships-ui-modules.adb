@@ -656,7 +656,8 @@ package body Ships.UI.Modules is
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
          if Module.Max_Durability < Module_Max_Value then
-            if Module.Upgrade_Action = DURABILITY then
+            if Module.Upgrade_Action = DURABILITY and
+              Player_Ship.Upgrade_Module = Module_Index then
                Info_Button :=
                  Create
                    (pathName => Status_Box & ".button2",
@@ -913,11 +914,44 @@ package body Ships.UI.Modules is
                     Get_Cabin_Quality(Quality => Module.Quality) &
                     (if Module.Quality = Module_Max_Value then " (max upgrade)"
                      else ""));
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Label, Options => "-sticky w");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
                   Options => "-row 0 -column 1 -padx {5 0}");
+               if Module.Quality < Module_Max_Value then
+                  if Module.Upgrade_Action = MAX_VALUE and
+                    Player_Ship.Upgrade_Module = Module_Index then
+                     Info_Button :=
+                       Create
+                         (pathName => Quality_Box & ".button",
+                          options =>
+                            "-image cancelicon -command {" &
+                            Close_Dialog_Button & " invoke;StopUpgrading " &
+                            CArgv.Arg(Argv => Argv, N => 1) &
+                            "} -style Small.TButton");
+                     Add
+                       (Widget => Info_Button,
+                        Message => "Stop upgrading cabin quality");
+                  else
+                     Info_Button :=
+                       Create
+                         (pathName => Quality_Box & ".button",
+                          options =>
+                            "-image upgradebuttonicon -command {" &
+                            Close_Dialog_Button & " invoke;SetUpgrade 2 " &
+                            CArgv.Arg(Argv => Argv, N => 1) &
+                            "} -style Small.TButton");
+                     Add
+                       (Widget => Info_Button,
+                        Message => "Start upgrading cabin quality");
+                  end if;
+                  Tcl.Tk.Ada.Grid.Grid
+                    (Slave => Info_Button,
+                     Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+                  Bind
+                    (Widgt => Info_Button, Sequence => "<Escape>",
+                     Script => "{" & Close_Dialog_Button & " invoke;break}");
+               end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Quality_Box, Options => "-sticky w");
                Height :=
