@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Showing empty categories of items in the trade screen
 - Crash in the trade screen and bases loot screen when the player's ship
   cargo is the same length as the table's page
+- Showing info about the module's upgrade progress in the module' info dialog
 
 ## [8.0.5] - 2023-02-26
 
