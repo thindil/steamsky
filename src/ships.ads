@@ -442,8 +442,7 @@ package Ships is
       -- RESULT
       -- Numeric level of combat value of player ship
       -- SOURCE
-   function Count_Combat_Value return Natural with
-      Test_Case => (Name => "Test_CountCombatValue", Mode => Robustness);
+   function Count_Combat_Value return Natural;
       -- ****
 
       -- ****f* Ships/Ships.Get_Cabin_Quality
