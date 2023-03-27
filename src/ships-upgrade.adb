@@ -610,29 +610,35 @@ package body Ships.Upgrade is
                           Get_Module(Index => Upgraded_Module.Proto_Index)
                             .Max_Value /
                           40;
+                        --## rule off SIMPLIFIABLE_EXPRESSIONS
                         Upgraded_Module.Power :=
                           Upgraded_Module.Power +
                           (Get_Module(Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20);
+                        --## rule on SIMPLIFIABLE_EXPRESSIONS
                         Upgrade_Value := Upgraded_Module.Power;
                      when CABIN =>
+                        --## rule off SIMPLIFIABLE_EXPRESSIONS
                         Upgraded_Module.Quality :=
                           Upgraded_Module.Quality +
                           (Get_Module(Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20);
+                        --## rule on SIMPLIFIABLE_EXPRESSIONS
                         Upgrade_Value := Upgraded_Module.Quality;
                      when GUN =>
                         if Get_Module(Index => Upgraded_Module.Proto_Index)
                             .Max_Value /
                           20 >
                           0 then
+                           --## rule off SIMPLIFIABLE_EXPRESSIONS
                            Upgraded_Module.Damage :=
                              Upgraded_Module.Damage +
                              (Get_Module(Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
+                           --## rule on SIMPLIFIABLE_EXPRESSIONS
                         else
                            Upgraded_Module.Damage :=
                              Upgraded_Module.Damage + 1;
@@ -643,11 +649,13 @@ package body Ships.Upgrade is
                             .Max_Value /
                           20 >
                           0 then
+                           --## rule off SIMPLIFIABLE_EXPRESSIONS
                            Upgraded_Module.Damage2 :=
                              Upgraded_Module.Damage2 +
                              (Get_Module(Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
+                           --## rule on SIMPLIFIABLE_EXPRESSIONS
                         else
                            Upgraded_Module.Damage2 :=
                              Upgraded_Module.Damage2 + 1;
@@ -658,11 +666,13 @@ package body Ships.Upgrade is
                             .Max_Value /
                           20 >
                           0 then
+                           --## rule off SIMPLIFIABLE_EXPRESSIONS
                            Upgraded_Module.Duration :=
                              Upgraded_Module.Duration +
                              (Get_Module(Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
+                           --## rule on SIMPLIFIABLE_EXPRESSIONS
                         else
                            Upgraded_Module.Duration :=
                              Upgraded_Module.Duration + 1;
