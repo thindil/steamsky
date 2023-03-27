@@ -509,6 +509,11 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
 
 proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
     KeyError], tags: [].} =
+  ## Count the weight of the ship, its modules and cargo
+  ##
+  ## * ship - the ship which weight will be counted
+  ##
+  ## Returns the total weight of the ship
   for module in ship.modules:
     result = result + module.weight
   for item in ship.cargo:
