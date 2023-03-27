@@ -419,8 +419,7 @@ package Ships is
    -- RESULT
    -- Ship weight in kilograms
    -- SOURCE
-   function Count_Ship_Weight(Ship: Ship_Record) return Positive with
-      Test_Case => (Name => "Test_CountShipWeight", Mode => Robustness);
+   function Count_Ship_Weight(Ship: Ship_Record) return Positive;
       -- ****
 
       -- ****f* Ships/Ships.Generate_Ship_Name
