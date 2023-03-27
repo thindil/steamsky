@@ -615,20 +615,16 @@ package body Ships is
    end Load_Ships;
 
    function Count_Ship_Weight(Ship: Ship_Record) return Positive is
-      Weight: Natural := 0;
-      Cargo_Weight: Positive := 1;
+      function Count_Ada_Ship_Weight
+        (In_Player_Ship: Integer) return Positive with
+         Import => True,
+         Convention => C,
+         External_Name => "countAdaShipWeight";
    begin
-      Count_Ship_Weight_Loop :
-      for Module of Ship.Modules loop
-         Weight := Weight + Module.Weight;
-      end loop Count_Ship_Weight_Loop;
-      Count_Cargo_Weight_Loop :
-      for Item of Ship.Cargo loop
-         Cargo_Weight :=
-           Item.Amount * Get_Proto_Item(Index => Item.Proto_Index).Weight;
-         Weight := Weight + Cargo_Weight;
-      end loop Count_Cargo_Weight_Loop;
-      return Weight;
+      Set_Ship_In_Nim(Ship => Ship);
+      return
+        Count_Ada_Ship_Weight
+          (In_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Count_Ship_Weight;
 
    function Generate_Ship_Name
