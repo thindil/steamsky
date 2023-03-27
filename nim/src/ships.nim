@@ -519,6 +519,44 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
   for item in ship.cargo:
     result = result + (item.amount * itemsList[item.protoIndex].weight)
 
+proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
+    speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
+  let protoShip = protoShipsList[protoIndex]
+  var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
+      max = protoShip.modules.len) else: 0)
+  for moduleIndex in protoShip.modules:
+    var module = modulesList[moduleIndex]
+    if upgradesAmount > 0 or getRandom(min = 1, max = 100) > 50:
+      var weightGain = (module.weight / module.durability).Natural
+      if weightGain < 1:
+        weightGain = 1
+      let roll = getRandom(min = 1, max = 100)
+      case roll
+      of 1 .. 50:
+        let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
+        module.durability = getRandom(min = module.durability,
+            max = maxUpgradeValue)
+        module.weight = module.weight + (weightGain * module.durability -
+            modulesList[moduleIndex].durability)
+      of 51 .. 75:
+        if modulesList[moduleIndex].mType == ModuleType.engine:
+          weightGain = weightGain * 10
+          let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
+          module.value = getRandom(min = maxUpgradeValue, max = modulesList[
+              moduleIndex].value)
+          module.weight = module.weight + (weightGain * modulesList[
+              moduleIndex].value - module.value)
+      of 76 .. 100:
+        case modulesList[moduleIndex].mType
+        of ModuleType.hull:
+          weightGain = weightGain * 10
+        of ModuleType.engine:
+          weightGain = 1
+        else:
+          discard
+      else:
+        discard
+
 # Temporary code for interfacing with Ada
 
 type
