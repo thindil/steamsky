@@ -507,7 +507,8 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
     else:
       discard
 
-proc countShipWeight*(ship: ShipRecord): Natural =
+proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
+    KeyError], tags: [].} =
   for module in ship.modules:
     result = result + module.weight
   for item in ship.cargo:
