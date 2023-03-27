@@ -13,8 +13,5 @@ package Ships.Test_Data.Tests is
    procedure Test_Create_Ship_eef2e6_bbdb4d(Gnattest_T: in out Test);
    --  ships.ads:396:4:Create_Ship:Test_CreateShip
 
-   procedure Test_Count_Ship_Weight_dec0b9_0591fd(Gnattest_T: in out Test);
-   --  ships.ads:422:4:Count_Ship_Weight:Test_CountShipWeight
-
 end Ships.Test_Data.Tests;
 --  end read only
