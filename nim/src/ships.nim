@@ -507,6 +507,12 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
     else:
       discard
 
+proc countShipWeight*(ship: ShipRecord): Natural =
+  for module in ship.modules:
+    result = result + module.weight
+  for item in ship.cargo:
+    result = result + (item.amount * itemsList[item.protoIndex].weight)
+
 # Temporary code for interfacing with Ada
 
 type
@@ -930,3 +936,12 @@ proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc.} =
     return countCombatValue().cint
   except KeyError:
     return 0
+
+proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
+  try:
+    if inPlayerShip == 1:
+      return countShipWeight(ship = playerShip).cint
+    else:
+      return countShipWeight(ship = npcShip).cint
+  except KeyError:
+    return 1
