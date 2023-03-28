@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   (https://game-icons.net), license CC BY 3.0
 - Ability to start the upgrade of the player's ship's module's durability in
   the module info dialog
+- Ability to start the upgrade of the player's ship's cabin's quality in the
+  module info dialog
 
 ### Changed
 - Updated modding guide
