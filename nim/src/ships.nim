@@ -522,11 +522,11 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
   let protoShip = protoShipsList[protoIndex]
+  result = ShipRecord(skyX: x, skyY: y, name: (if name.len == 0: protoShip.name else: name))
   # Add modules to ship
   var
     upgradesAmount = (if randomUpgrades: getRandom(min = 0,
       max = protoShip.modules.len) else: 0)
-    modules: seq[ModuleData]
   for moduleIndex in protoShip.modules:
     var module = modulesList[moduleIndex]
     if upgradesAmount > 0 or getRandom(min = 1, max = 100) > 50:
@@ -573,85 +573,82 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
         owners.add(y = -1)
     case module.mType
     of ModuleType.engine:
-      modules.add(y = ModuleData(mType: ModuleType2.engine, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.engine, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           fuelUsage: module.value, power: module.maxValue, disabled: false))
     of ModuleType.cabin:
-      modules.add(y = ModuleData(mType: ModuleType2.cabin, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.cabin, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           cleanliness: module.value, quality: module.maxValue))
     of ModuleType.alchemyLab .. ModuleType.greenhouse:
-      modules.add(y = ModuleData(mType: ModuleType2.workshop, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.workshop, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           craftingTime: 0, craftingAmount: 0))
     of ModuleType.medicalRoom:
-      modules.add(y = ModuleData(mType: ModuleType2.medicalRoom,
+      result.modules.add(y = ModuleData(mType: ModuleType2.medicalRoom,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.cockpit:
-      modules.add(y = ModuleData(mType: ModuleType2.cockpit, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.cockpit, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.trainingRoom:
-      modules.add(y = ModuleData(mType: ModuleType2.trainingRoom,
+      result.modules.add(y = ModuleData(mType: ModuleType2.trainingRoom,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           trainedSkill: 0))
     of ModuleType.turret:
-      modules.add(y = ModuleData(mType: ModuleType2.turret, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.turret, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           gunIndex: -1))
     of ModuleType.gun:
-      modules.add(y = ModuleData(mType: ModuleType2.gun, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.gun, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           damage: module.maxValue, ammoIndex: -1))
     of ModuleType.cargo:
-      modules.add(y = ModuleData(mType: ModuleType2.cargoRoom,
+      result.modules.add(y = ModuleData(mType: ModuleType2.cargoRoom,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.hull:
-      modules.add(y = ModuleData(mType: ModuleType2.hull, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.hull, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           installedModules: module.value, maxModules: module.maxValue))
     of ModuleType.armor:
-      modules.add(y = ModuleData(mType: ModuleType2.armor, name: module.name,
+      result.modules.add(y = ModuleData(mType: ModuleType2.armor, name: module.name,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.batteringRam:
-      modules.add(y = ModuleData(mType: ModuleType2.batteringRam,
+      result.modules.add(y = ModuleData(mType: ModuleType2.batteringRam,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           damage2: module.maxValue, coolingDown: false))
     of ModuleType.harpoonGun:
-      modules.add(y = ModuleData(mType: ModuleType2.harpoonGun,
+      result.modules.add(y = ModuleData(mType: ModuleType2.harpoonGun,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           duration: module.maxValue, harpoonIndex: -1))
     of ModuleType.any:
       discard
-  # Set the ship name
-  let newName = (if name.len == 0: protoShip.name else: name)
   # Set the ship crew
-  var members: seq[MemberData]
   for protoMember in protoShip.crew:
     let amount = (if protoMember.maxAmount ==
         0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
@@ -659,23 +656,29 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     for i in 1 .. amount:
       let member = generateMob(mobIndex = protoMember.protoIndex,
           factionIndex = protoShip.owner)
-      members.add(y = member)
-      for module in modules.mitems:
+      result.crew.add(y = member)
+      for module in result.modules.mitems:
         if module.mType == ModuleType2.cabin:
           for index, owner in module.owner.mpairs:
             if owner == -1:
-              owner = members.len - 1
+              owner = result.crew.len - 1
               if index == 0:
                 module.name = member.name & "'s Cabin"
               break
-      for module in modules.mitems:
+      for module in result.modules.mitems:
         if module.owner.len > 0:
           if module.owner[0] == -1 and module.mType in {ModuleType2.gun,
               ModuleType2.harpoonGun} and member.order == gunner:
-            module.owner[0] = members.len - 1
+            module.owner[0] = result.crew.len - 1
             break
           elif module.mType == ModuleType2.cockpit and member.order == pilot:
-            module.owner[0] = members.len - 1
+            module.owner[0] = result.crew.len - 1
+  # Set ship cargo
+  for item in protoShip.cargo:
+    let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
+        max = item.maxAmount) else: item.minAmount)
+    result.cargo.add(y = InventoryData(protoIndex: item.protoIndex, amount: amount,
+        name: "", durability: 100, price: 0))
 
 # Temporary code for interfacing with Ada
 
