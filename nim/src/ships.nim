@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, shipscrew2, types, utils
+import game, log, mobs, shipscrew2, types, utils
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Get the description of quality of the selected cabin in the player's ship
@@ -522,6 +522,7 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
   let protoShip = protoShipsList[protoIndex]
+  # Add modules to ship
   var
     upgradesAmount = (if randomUpgrades: getRandom(min = 0,
       max = protoShip.modules.len) else: 0)
@@ -590,8 +591,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           craftingTime: 0, craftingAmount: 0))
     of ModuleType.medicalRoom:
-      modules.add(y = ModuleData(mType: ModuleType2.medicalRoom, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      modules.add(y = ModuleData(mType: ModuleType2.medicalRoom,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.cockpit:
@@ -600,8 +601,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.trainingRoom:
-      modules.add(y = ModuleData(mType: ModuleType2.trainingRoom, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      modules.add(y = ModuleData(mType: ModuleType2.trainingRoom,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           trainedSkill: 0))
@@ -618,8 +619,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           damage: module.maxValue, ammoIndex: -1))
     of ModuleType.cargo:
-      modules.add(y = ModuleData(mType: ModuleType2.cargoRoom, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      modules.add(y = ModuleData(mType: ModuleType2.cargoRoom,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.hull:
@@ -634,19 +635,47 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.batteringRam:
-      modules.add(y = ModuleData(mType: ModuleType2.batteringRam, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      modules.add(y = ModuleData(mType: ModuleType2.batteringRam,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           damage2: module.maxValue, coolingDown: false))
     of ModuleType.harpoonGun:
-      modules.add(y = ModuleData(mType: ModuleType2.harpoonGun, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      modules.add(y = ModuleData(mType: ModuleType2.harpoonGun,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           duration: module.maxValue, harpoonIndex: -1))
     of ModuleType.any:
       discard
+  # Set the ship name
+  let newName = (if name.len == 0: protoShip.name else: name)
+  # Set the ship crew
+  var members: seq[MemberData]
+  for protoMember in protoShip.crew:
+    let amount = (if protoMember.maxAmount ==
+        0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
+        max = protoMember.maxAmount))
+    for i in 1 .. amount:
+      let member = generateMob(mobIndex = protoMember.protoIndex,
+          factionIndex = protoShip.owner)
+      members.add(y = member)
+      for module in modules.mitems:
+        if module.mType == ModuleType2.cabin:
+          for index, owner in module.owner.mpairs:
+            if owner == -1:
+              owner = members.len - 1
+              if index == 0:
+                module.name = member.name & "'s Cabin"
+              break
+      for module in modules.mitems:
+        if module.owner.len > 0:
+          if module.owner[0] == -1 and module.mType in {ModuleType2.gun,
+              ModuleType2.harpoonGun} and member.order == gunner:
+            module.owner[0] = members.len - 1
+            break
+          elif module.mType == ModuleType2.cockpit and member.order == pilot:
+            module.owner[0] = members.len - 1
 
 # Temporary code for interfacing with Ada
 
