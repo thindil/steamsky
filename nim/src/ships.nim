@@ -522,8 +522,10 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
   let protoShip = protoShipsList[protoIndex]
-  var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
+  var
+    upgradesAmount = (if randomUpgrades: getRandom(min = 0,
       max = protoShip.modules.len) else: 0)
+    modules: seq[ModuleData]
   for moduleIndex in protoShip.modules:
     var module = modulesList[moduleIndex]
     if upgradesAmount > 0 or getRandom(min = 1, max = 100) > 50:
@@ -554,8 +556,29 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           weightGain = 1
         else:
           discard
+        if module.mType in {ModuleType.engine, ModuleType.cabin, ModuleType.gun,
+            ModuleType.batteringRam, ModuleType.hull, ModuleType.harpoonGun}:
+          let maxUpgradeValue: Positive = (module.maxValue.float * 1.5).Positive
+          module.maxValue = getRandom(min = module.maxValue,
+              max = maxUpgradeValue)
+          module.weight = module.weight + (weightGain * module.maxValue -
+              modulesList[moduleIndex].maxValue)
       else:
         discard
+      upgradesAmount.dec
+    var owners: seq[int] = @[]
+    if module.maxOwners > 0:
+      for i in 1 .. module.maxOwners:
+        owners.add(y = -1)
+    case module.mType
+    of ModuleType.engine:
+      modules.add(y = ModuleData(mType: ModuleType2.engine, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          fuelUsage: module.value, power: module.maxValue, disabled: false))
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
