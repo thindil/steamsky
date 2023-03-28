@@ -577,6 +577,40 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           fuelUsage: module.value, power: module.maxValue, disabled: false))
+    of ModuleType.cabin:
+      modules.add(y = ModuleData(mType: ModuleType2.cabin, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          cleanliness: module.value, quality: module.maxValue))
+    of ModuleType.alchemyLab .. ModuleType.greenhouse:
+      modules.add(y = ModuleData(mType: ModuleType2.workshop, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          craftingTime: 0, craftingAmount: 0))
+    of ModuleType.medicalRoom:
+      modules.add(y = ModuleData(mType: ModuleType2.medicalRoom, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+    of ModuleType.cockpit:
+      modules.add(y = ModuleData(mType: ModuleType2.cockpit, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+    of ModuleType.trainingRoom:
+      modules.add(y = ModuleData(mType: ModuleType2.trainingRoom, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          trainedSkill: 0))
+    of ModuleType.turret:
+      modules.add(y = ModuleData(mType: ModuleType2.turret, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          gunIndex: 0))
     else:
       discard
 
