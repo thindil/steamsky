@@ -701,74 +701,73 @@ package body Ships.Upgrade is
                        (Message_Text =>
                           "You've reached the maximum upgrade for ");
                      return;
-                  else
-                     case Get_Module(Index => Upgraded_Module.Proto_Index)
-                       .M_Type is
-                        when ENGINE =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Max_Value /
-                                   20) *
-                                Float(New_Game_Settings.Upgrade_Cost_Bonus));
-                        when HARPOON_GUN =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Max_Value *
-                                   10) *
-                                Float(New_Game_Settings.Upgrade_Cost_Bonus));
-                        when GUN | BATTERING_RAM =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Max_Value *
-                                   2) *
-                                Float(New_Game_Settings.Upgrade_Cost_Bonus));
-                        when CABIN =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Max_Value) *
-                                Float(New_Game_Settings.Upgrade_Cost_Bonus));
-                        when HULL =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Max_Value *
-                                   40) *
-                                Float(New_Game_Settings.Upgrade_Cost_Bonus));
-                        when others =>
-                           null;
-                     end case;
-                     if Upgraded_Module.Upgrade_Progress = 0 then
-                        Upgraded_Module.Upgrade_Progress := 1;
-                     end if;
+                  end if;
+                  case Get_Module(Index => Upgraded_Module.Proto_Index)
+                    .M_Type is
+                     when ENGINE =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Max_Value /
+                                20) *
+                             Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                     when HARPOON_GUN =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Max_Value *
+                                10) *
+                             Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                     when GUN | BATTERING_RAM =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Max_Value *
+                                2) *
+                             Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                     when CABIN =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Max_Value) *
+                             Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                     when HULL =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Max_Value *
+                                40) *
+                             Float(New_Game_Settings.Upgrade_Cost_Bonus));
+                     when others =>
+                        null;
+                  end case;
+                  if Upgraded_Module.Upgrade_Progress = 0 then
+                     Upgraded_Module.Upgrade_Progress := 1;
                   end if;
                when VALUE =>
                   if Upgraded_Module.M_Type = ENGINE then
