@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crew, factions, game, items, log, ships, types, utils
+import crew, factions, game, items, log, types, utils
 
 proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
