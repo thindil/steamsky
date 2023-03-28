@@ -899,38 +899,6 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
     else:
       inventory[index] = AdaInventoryData(protoIndex: 0)
 
-func adaMemberFromNim*(member: MemberData): AdaMemberData {.raises: [], tags: [].} =
-  result = AdaMemberData()
-  for attribute in result.attributes.mitems:
-    attribute = [0.cint, 0.cint]
-  for index, attribute in member.attributes.pairs:
-    result.attributes[index + 1] = [attribute.level.cint,
-        attribute.experience.cint]
-  for skill in result.skills.mitems:
-    skill = [0.cint, 0.cint, 0.cint]
-  for index, skill in member.skills.pairs:
-    result.skills[index + 1] = [skill.index.cint, skill.level.cint,
-        skill.experience.cint]
-  result.name = member.name.cstring
-  result.gender = member.gender
-  result.health = member.health.cint
-  result.tired = member.tired.cint
-  result.hunger = member.hunger.cint
-  result.thirst = member.thirst.cint
-  result.order = member.order.ord.cint
-  result.previousOrder = member.previousOrder.ord.cint
-  result.orderTime = member.orderTime.cint
-  for index, order in member.orders.pairs:
-    result.orders[index] = order.ord.cint
-  for index, item in member.equipment:
-    result.equipment[index.ord.cint] = item.cint
-  result.payment = [1: member.payment[1].cint, 2: member.payment[2].cint]
-  result.contractLength = member.contractLength.cint
-  result.morale = [1: member.morale[1].cint, 2: member.morale[2].cint]
-  result.loyalty = member.loyalty.cint
-  result.homeBase = member.homeBase
-  result.faction = member.faction.cstring
-
 proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
   let nimCrew = if getPlayerShip == 1:
