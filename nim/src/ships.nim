@@ -610,8 +610,42 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          gunIndex: 0))
-    else:
+          gunIndex: -1))
+    of ModuleType.gun:
+      modules.add(y = ModuleData(mType: ModuleType2.gun, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          damage: module.maxValue, ammoIndex: -1))
+    of ModuleType.cargo:
+      modules.add(y = ModuleData(mType: ModuleType2.cargoRoom, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+    of ModuleType.hull:
+      modules.add(y = ModuleData(mType: ModuleType2.hull, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          installedModules: module.value, maxModules: module.maxValue))
+    of ModuleType.armor:
+      modules.add(y = ModuleData(mType: ModuleType2.armor, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+    of ModuleType.batteringRam:
+      modules.add(y = ModuleData(mType: ModuleType2.batteringRam, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          damage2: module.maxValue, coolingDown: false))
+    of ModuleType.harpoonGun:
+      modules.add(y = ModuleData(mType: ModuleType2.harpoonGun, name: module.name,
+          protoIndex: moduleIndex, weight: module.weight,
+          durability: module.durability, maxDurability: module.durability,
+          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+          duration: module.maxValue, harpoonIndex: -1))
+    of ModuleType.any:
       discard
 
 # Temporary code for interfacing with Ada
