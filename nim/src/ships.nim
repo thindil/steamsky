@@ -522,7 +522,8 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
   let protoShip = protoShipsList[protoIndex]
-  result = ShipRecord(skyX: x, skyY: y, name: (if name.len == 0: protoShip.name else: name))
+  result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
+      0: protoShip.name else: name))
   # Add modules to ship
   var
     upgradesAmount = (if randomUpgrades: getRandom(min = 0,
@@ -573,20 +574,20 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
         owners.add(y = -1)
     case module.mType
     of ModuleType.engine:
-      result.modules.add(y = ModuleData(mType: ModuleType2.engine, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.engine,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           fuelUsage: module.value, power: module.maxValue, disabled: false))
     of ModuleType.cabin:
-      result.modules.add(y = ModuleData(mType: ModuleType2.cabin, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.cabin,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           cleanliness: module.value, quality: module.maxValue))
     of ModuleType.alchemyLab .. ModuleType.greenhouse:
-      result.modules.add(y = ModuleData(mType: ModuleType2.workshop, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.workshop,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           craftingTime: 0, craftingAmount: 0))
@@ -596,8 +597,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.cockpit:
-      result.modules.add(y = ModuleData(mType: ModuleType2.cockpit, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.cockpit,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.trainingRoom:
@@ -607,14 +608,14 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           trainedSkill: 0))
     of ModuleType.turret:
-      result.modules.add(y = ModuleData(mType: ModuleType2.turret, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.turret,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           gunIndex: -1))
     of ModuleType.gun:
-      result.modules.add(y = ModuleData(mType: ModuleType2.gun, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.gun,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           damage: module.maxValue, ammoIndex: -1))
@@ -624,14 +625,14 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.hull:
-      result.modules.add(y = ModuleData(mType: ModuleType2.hull, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.hull,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
           installedModules: module.value, maxModules: module.maxValue))
     of ModuleType.armor:
-      result.modules.add(y = ModuleData(mType: ModuleType2.armor, name: module.name,
-          protoIndex: moduleIndex, weight: module.weight,
+      result.modules.add(y = ModuleData(mType: ModuleType2.armor,
+          name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
     of ModuleType.batteringRam:
@@ -677,8 +678,32 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   for item in protoShip.cargo:
     let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
         max = item.maxAmount) else: item.minAmount)
-    result.cargo.add(y = InventoryData(protoIndex: item.protoIndex, amount: amount,
-        name: "", durability: 100, price: 0))
+    result.cargo.add(y = InventoryData(protoIndex: item.protoIndex,
+        amount: amount, name: "", durability: 100, price: 0))
+  var
+    gunAssigned = false
+    amount = 0
+    hullIndex = -1
+  for index, module in result.modules.mpairs:
+    if module.mType == ModuleType2.turret:
+      for index2, module2 in result.modules.pairs:
+        if module2.mType in {ModuleType2.gun, ModuleType2.harpoonGun}:
+          gunAssigned = false
+          for module3 in result.modules:
+            if module2.mType == ModuleType2.turret and module3.gunIndex == index2:
+              gunAssigned = true
+              break
+          if not gunAssigned:
+            module.gunIndex = index2
+    elif module.mType == ModuleType2.hull:
+      hullIndex = index
+    if modulesList[module.protoIndex].mType notin {ModuleType.gun,
+        ModuleType.harpoonGun, ModuleType.armor, ModuleType.hull}:
+      amount = amount + modulesList[module.protoIndex].size
+  result.modules[hullIndex].installedModules = amount
+  # Set known crafting recipes
+  for recipe in protoShip.knownRecipes:
+    knownRecipes.add(y = recipe)
 
 # Temporary code for interfacing with Ada
 
