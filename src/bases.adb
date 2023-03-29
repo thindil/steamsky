@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Elementary_Functions;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
@@ -61,7 +61,6 @@ package body Bases is
    function Generate_Base_Name
      (Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String is
-      use Interfaces.C.Strings;
       use Tiny_String;
       function Generate_Ada_Base_Name(F_Index: chars_ptr) return chars_ptr with
          Import => True,
@@ -780,5 +779,19 @@ package body Bases is
          Level => Sky_Bases(Base_Index).Reputation.Level,
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Set_Base_Reputation;
+
+   procedure Get_Base_Owner(Base_Index: Bases_Range) is
+      procedure Get_Ada_Base_Owner(B_Index: Integer; Owner: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseOwner";
+   begin
+      Get_Ada_Base_Owner
+        (B_Index => Base_Index,
+         Owner =>
+           New_String
+             (Str =>
+                Tiny_String.To_String(Source => Sky_Bases(Base_Index).Owner)));
+   end Get_Base_Owner;
 
 end Bases;

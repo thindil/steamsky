@@ -138,3 +138,6 @@ proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
 proc getAdaBaseLocation(baseIndex, x, y: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].skyX = x
   skyBases[baseIndex].skyY = y
+
+proc getAdaBaseOwner(baseIndex: cint; owner: cstring) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].owner = $owner

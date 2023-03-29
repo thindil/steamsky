@@ -274,4 +274,6 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseLocation";
 
+   procedure Get_Base_Owner(Base_Index: Bases_Range);
+
 end Bases;
