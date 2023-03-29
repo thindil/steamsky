@@ -533,7 +533,7 @@ package body Ships is
          exit Count_Modules_Loop when Strlen(Item => Module.Name) = 0;
          Modules_Amount := Modules_Amount + 1;
       end loop Count_Modules_Loop;
-      if Modules_Amount /= Positive(Ship.Modules.Length) then
+      if Modules_Amount /= Natural(Ship.Modules.Length) then
          Ship.Modules.Clear;
          Add_Module := True;
       end if;

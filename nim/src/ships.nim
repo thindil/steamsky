@@ -523,7 +523,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
   let protoShip = protoShipsList[protoIndex]
   result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
-      0: protoShip.name else: name))
+      0: protoShip.name else: name), upgradeModule: -1, repairModule: -1)
   # Add modules to ship
   var
     upgradesAmount = (if randomUpgrades: getRandom(min = 0,
@@ -584,7 +584,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
           durability: module.durability, maxDurability: module.durability,
           owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          cleanliness: module.value, quality: module.maxValue))
+          cleanliness: module.value, quality: module.value))
     of ModuleType.alchemyLab .. ModuleType.greenhouse:
       result.modules.add(y = ModuleData(mType: ModuleType2.workshop,
           name: module.name, protoIndex: moduleIndex, weight: module.weight,
@@ -1139,7 +1139,14 @@ proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], export
 proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
     randomUpgrades: cint) {.raises: [], tags: [], exportc.} =
   try:
-    npcShip = createShip(protoIndex = protoIndex.Positive, name = $name, x = x,
-        y = y, speed = speed.ShipSpeed, randomUpgrades = randomUpgrades == 1)
+    if playerShip.homeBase == 0:
+      playerShip = createShip(protoIndex = protoIndex.Positive, name = $name,
+          x = x, y = y, speed = speed.ShipSpeed,
+              randomUpgrades = randomUpgrades == 1)
+      npcShip = playerShip
+    else:
+      npcShip = createShip(protoIndex = protoIndex.Positive, name = $name,
+          x = x, y = y, speed = speed.ShipSpeed,
+              randomUpgrades = randomUpgrades == 1)
   except KeyError:
     discard
