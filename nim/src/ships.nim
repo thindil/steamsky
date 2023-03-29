@@ -1135,3 +1135,17 @@ proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], export
       return countShipWeight(ship = npcShip).cint
   except KeyError:
     return 1
+
+proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed, randomUpgrades,
+    asPlayerShip: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    if asPlayerShip == 1:
+      playerShip = createShip(protoIndex = protoIndex.Positive, name = $name,
+          x = x, y = y, speed = speed.ShipSpeed,
+          randomUpgrades = randomUpgrades == 1)
+    else:
+      npcShip = createShip(protoIndex = protoIndex.Positive, name = $name,
+          x = x, y = y, speed = speed.ShipSpeed,
+          randomUpgrades = randomUpgrades == 1)
+  except KeyError:
+    discard
