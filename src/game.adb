@@ -326,6 +326,7 @@ package body Game is
                Get_Ada_Map_Cell
                  (X => Pos_X, Y => Pos_Y, Base_Index => FactionBases(I),
                   Visited => 0, Event_Index => 0, Mission_Index => 0);
+               Get_Base_Owner(Base_Index => FactionBases(I));
             end loop Place_Faction_Bases_Loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
