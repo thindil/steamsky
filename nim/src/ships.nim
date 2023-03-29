@@ -525,12 +525,11 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
       0: protoShip.name else: name), upgradeModule: -1, repairModule: -1)
   # Add modules to ship
-  var
-    upgradesAmount = (if randomUpgrades: getRandom(min = 0,
+  var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
       max = protoShip.modules.len) else: 0)
   for moduleIndex in protoShip.modules:
     var module = modulesList[moduleIndex]
-    if upgradesAmount > 0 or getRandom(min = 1, max = 100) > 50:
+    if upgradesAmount > 0 and getRandom(min = 1, max = 100) > 50:
       var weightGain = (module.weight / module.durability).Natural
       if weightGain < 1:
         weightGain = 1
