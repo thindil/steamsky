@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, mobs, shipscrew2, types, utils
+import game, log, maps, mobs, shipscrew2, types, utils
 
 func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Get the description of quality of the selected cabin in the player's ship
@@ -704,6 +704,36 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   # Set known crafting recipes
   for recipe in protoShip.knownRecipes:
     knownRecipes.add(y = recipe)
+  # Set home base for ship
+  if skyMap[x][y].baseIndex > 0:
+    result.homeBase = skyMap[x][y].baseIndex
+  else:
+    var startX, startY, endX, endY: cint
+    startX = x.cint - 100
+    normalizeCoord(coord = startX)
+    startY = y.cint - 100
+    normalizeCoord(coord = startY, isXAxis = 0)
+    endX = x.cint + 100
+    normalizeCoord(coord = endX)
+    endY = y.cint + 100
+    normalizeCoord(coord = endY, isXAxis = 0)
+    block basesLoop:
+      for skyX in startX .. endX:
+        for skyY in startY .. endY:
+          if skyMap[skyX][skyY].baseIndex > 0:
+            if skyBases[skyMap[skyX][skyY].baseIndex].owner == protoShip.owner:
+              result.homeBase = skyMap[skyX][skyY].baseIndex
+              break basesLoop
+    if result.homeBase == 0:
+      for index, base in skyBases.pairs:
+        if base.owner == protoShip.owner:
+          result.homeBase = index
+          break
+  # Set home base for crew members
+  for member in result.crew.mitems:
+    member.homeBase = (if getRandom(min = 1, max = 100) <
+        99: result.homeBase else: getRandom(min = BasesRange.low,
+        max = BasesRange.high))
 
 # Temporary code for interfacing with Ada
 
