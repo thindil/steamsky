@@ -1124,87 +1124,121 @@ package body Ships.UI.Modules is
               "}");
       end if;
       if Module.Upgrade_Action /= NONE then
-         Module_Info := To_Unbounded_String(Source => "Upgrading: ");
-         case Module.Upgrade_Action is
-            when DURABILITY =>
-               Append(Source => Module_Info, New_Item => "durability");
-               Max_Upgrade :=
-                 Get_Module(Index => Module.Proto_Index).Durability;
-            when MAX_VALUE =>
-               case Get_Module(Index => Module.Proto_Index).M_Type is
-                  when ENGINE =>
-                     Append(Source => Module_Info, New_Item => "power");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Max_Value / 20;
-                  when CABIN =>
-                     Append(Source => Module_Info, New_Item => "quality");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Max_Value;
-                  when GUN | BATTERING_RAM =>
-                     Append(Source => Module_Info, New_Item => "damage");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Max_Value * 2;
-                  when HULL =>
-                     Append(Source => Module_Info, New_Item => "enlarge");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Max_Value * 40;
-                  when HARPOON_GUN =>
-                     Append(Source => Module_Info, New_Item => "strength");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Max_Value * 10;
-                  when others =>
-                     null;
-               end case;
-            when VALUE =>
-               case Get_Module(Index => Module.Proto_Index).M_Type is
-                  when ENGINE =>
-                     Append(Source => Module_Info, New_Item => "fuel usage");
-                     Max_Upgrade :=
-                       Get_Module(Index => Module.Proto_Index).Value * 20;
-                  when others =>
-                     null;
-               end case;
-            when others =>
-               null;
-         end case;
-         Max_Upgrade :=
-           Integer
-             (Float(Max_Upgrade) *
-              Float(New_Game_Settings.Upgrade_Cost_Bonus));
-         if Max_Upgrade = 0 then
-            Max_Upgrade := 1;
-         end if;
-         Upgrade_Percent :=
-           1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
-         Progress_Bar_Style :=
-           (if Upgrade_Percent > 0.74 then
-              To_Unbounded_String
-                (Source => " -style green.Horizontal.TProgressbar")
-            elsif Upgrade_Percent > 0.24 then
-              To_Unbounded_String
-                (Source => " -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String
-                (Source => " -style Horizontal.TProgressbar"));
-         Progress_Bar :=
-           Create
-             (pathName => Module_Frame & ".upgrade",
-              options =>
-                "-orient horizontal -maximum 1.0 -value {" &
-                Float'Image(Upgrade_Percent) & "}" &
-                To_String(Source => Progress_Bar_Style));
-         Add
-           (Widget => Progress_Bar,
-            Message => "The progress of the current upgrade of the module");
-         Label :=
-           Create
-             (pathName => Module_Frame & ".upgradelbl",
-              options => "-text {" & To_String(Source => Module_Info) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 4 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar, Options => "-row 4 -column 1 -sticky we");
-         Height :=
-           Height +
-           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         Add_Upgrade_Info_Block :
+         declare
+            Upgrade_Box: constant Ttk_Frame :=
+              Create
+                (pathName => Module_Frame & ".upgradeinfo",
+                 options => "-width 360");
+         begin
+            Module_Info := To_Unbounded_String(Source => "");
+            case Module.Upgrade_Action is
+               when DURABILITY =>
+                  Append(Source => Module_Info, New_Item => "Durability");
+                  Max_Upgrade :=
+                    Get_Module(Index => Module.Proto_Index).Durability;
+               when MAX_VALUE =>
+                  case Get_Module(Index => Module.Proto_Index).M_Type is
+                     when ENGINE =>
+                        Append(Source => Module_Info, New_Item => "Power");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Max_Value /
+                          20;
+                     when CABIN =>
+                        Append(Source => Module_Info, New_Item => "Quality");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Max_Value;
+                     when GUN | BATTERING_RAM =>
+                        Append(Source => Module_Info, New_Item => "Damage");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Max_Value *
+                          2;
+                     when HULL =>
+                        Append(Source => Module_Info, New_Item => "Enlarge");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Max_Value *
+                          40;
+                     when HARPOON_GUN =>
+                        Append(Source => Module_Info, New_Item => "Strength");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Max_Value *
+                          10;
+                     when others =>
+                        null;
+                  end case;
+               when VALUE =>
+                  case Get_Module(Index => Module.Proto_Index).M_Type is
+                     when ENGINE =>
+                        Append
+                          (Source => Module_Info, New_Item => "Fuel usage");
+                        Max_Upgrade :=
+                          Get_Module(Index => Module.Proto_Index).Value * 20;
+                     when others =>
+                        null;
+                  end case;
+               when others =>
+                  null;
+            end case;
+            Max_Upgrade :=
+              Integer
+                (Float(Max_Upgrade) *
+                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
+            if Max_Upgrade = 0 then
+               Max_Upgrade := 1;
+            end if;
+            Upgrade_Percent :=
+              1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
+            Progress_Bar_Style :=
+              (if Upgrade_Percent > 0.74 then
+                 To_Unbounded_String
+                   (Source => " -style green.Horizontal.TProgressbar")
+               elsif Upgrade_Percent > 0.24 then
+                 To_Unbounded_String
+                   (Source => " -style yellow.Horizontal.TProgressbar")
+               else To_Unbounded_String
+                   (Source => " -style Horizontal.TProgressbar"));
+            Progress_Bar :=
+              Create
+                (pathName => Upgrade_Box & ".upgrade",
+                 options =>
+                   "-orient horizontal -maximum 1.0 -value {" &
+                   Float'Image(Upgrade_Percent) & "}" &
+                   To_String(Source => Progress_Bar_Style));
+            Add
+              (Widget => Progress_Bar,
+               Message => To_String(Source => Module_Info));
+            Label :=
+              Create
+                (pathName => Upgrade_Box & ".upgradelbl",
+                 options => "-text {Upgrade progress:}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Bar,
+               Options => "-row 0 -column 1 -padx {5 0}");
+            if Player_Ship.Upgrade_Module = Module_Index then
+               Info_Button :=
+                 Create
+                   (pathName => Upgrade_Box & ".button",
+                    options =>
+                      "-image cancelicon -command {" & Close_Dialog_Button &
+                      " invoke;StopUpgrading " & CArgv.Arg(Argv => Argv, N => 1) &
+                      "} -style Small.TButton");
+               Add
+                 (Widget => Info_Button,
+                  Message => "Stop upgrading cabin quality");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Info_Button,
+                  Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Escape>",
+                  Script => "{" & Close_Dialog_Button & " invoke;break}");
+            end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Upgrade_Box, Options => "-sticky w -row 4");
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         end Add_Upgrade_Info_Block;
       end if;
       configure
         (Widgt => Module_Text,
