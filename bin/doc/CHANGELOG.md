@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
   the module info dialog
 - Ability to start the upgrade of the player's ship's cabin's quality in the
   module info dialog
+- Ability to cancel the upgrade of the player's ship's module in the module
+  info dialog
 
 ### Changed
 - Updated modding guide
