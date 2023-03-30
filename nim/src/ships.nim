@@ -522,6 +522,18 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Create a new ship from the selected prototype
+  ##
+  ## * protoIndex     - the index of the ships' prototype used as base for the new
+  ##                    ship
+  ## * name           - the name of the ship. if empty, use the name of the prototype
+  ## * x              - the X position on the map where the ship will be created
+  ## * y              - the Y position on the map whene thw ship will be created
+  ## * speed          - the speed level with which the ship will be created
+  ## * randomUpgrades - if true, create the ship with random upgrades, otherwise
+  ##                    use default values for modules. Default value is true
+  ##
+  ## Returns the newly created ship with the selected parameters
   let protoShip = protoShipsList[protoIndex]
   result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
       0: protoShip.name else: name), upgradeModule: -1, repairModule: -1)
