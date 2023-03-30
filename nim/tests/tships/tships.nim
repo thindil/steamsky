@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, factions, game, items, ships, shipmodules, types]
+import ../../src/[careers, crafts, factions, game, items, maps, mobs, ships, shipmodules, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
@@ -11,6 +11,9 @@ if itemsList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadModules("../bin/data/shipmodules.dat")
+  loadRecipes("../bin/data/recipes.dat")
+  loadMobs("../bin/data/mobs.dat")
+  loadShips("../bin/data/ships.dat")
 
 assert getCabinQuality(10) == "Empty room"
 
@@ -25,3 +28,11 @@ assert playerShip.modules[0].durability == 90
 discard countCombatValue()
 
 discard countShipWeight(playerShip)
+
+for base in skyBases.mitems:
+  base.owner = "POLEIS"
+for x in MapXRange.low .. MapXRange.high:
+  for y in MapYRange.low .. MapYRange.high:
+    skyMap[x][y].baseIndex = 1
+let newShip = createShip(2, "", 5, 5, fullSpeed)
+assert newShip.name == "Tiny pirates ship"
