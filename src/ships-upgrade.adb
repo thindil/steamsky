@@ -799,28 +799,27 @@ package body Ships.Upgrade is
                        (Message_Text =>
                           "You've reached the maximum upgrade for ");
                      return;
-                  else
-                     case Get_Module(Index => Upgraded_Module.Proto_Index)
-                       .M_Type is
-                        when ENGINE =>
-                           Upgraded_Module.Upgrade_Progress :=
-                             Integer
-                               (Float
-                                  (Get_Module
-                                     (Index =>
-                                        Player_Ship.Modules
-                                          (Player_Ship.Upgrade_Module)
-                                          .Proto_Index)
-                                     .Value *
-                                   20) *
-                                New_Game_Settings.Upgrade_Cost_Bonus);
-                           if Upgraded_Module.Upgrade_Progress = 0 then
-                              Upgraded_Module.Upgrade_Progress := 1;
-                           end if;
-                        when others =>
-                           null;
-                     end case;
                   end if;
+                  case Get_Module(Index => Upgraded_Module.Proto_Index)
+                    .M_Type is
+                     when ENGINE =>
+                        Upgraded_Module.Upgrade_Progress :=
+                          Integer
+                            (Float
+                               (Get_Module
+                                  (Index =>
+                                     Player_Ship.Modules
+                                       (Player_Ship.Upgrade_Module)
+                                       .Proto_Index)
+                                  .Value *
+                                20) *
+                             New_Game_Settings.Upgrade_Cost_Bonus);
+                        if Upgraded_Module.Upgrade_Progress = 0 then
+                           Upgraded_Module.Upgrade_Progress := 1;
+                        end if;
+                     when others =>
+                        null;
+                  end case;
                when others =>
                   null;
             end case;
