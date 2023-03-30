@@ -398,8 +398,7 @@ package Ships is
       Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record with
-      Pre => Proto_Index <= Proto_Ships_List.Last_Index,
-      Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
+      Pre => Proto_Index <= Proto_Ships_List.Last_Index;
       -- ****
 
       -- ****f* Ships/Ships.Load_Ships
