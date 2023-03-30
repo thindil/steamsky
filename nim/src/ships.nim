@@ -520,7 +520,8 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
     result = result + (item.amount * itemsList[item.protoIndex].weight)
 
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
-    speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord =
+    speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord {.sideEffect,
+    raises: [KeyError], tags: [].} =
   let protoShip = protoShipsList[protoIndex]
   result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
       0: protoShip.name else: name), upgradeModule: -1, repairModule: -1)
