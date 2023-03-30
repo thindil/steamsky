@@ -17,8 +17,8 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Events;
-with Maps; use Maps;
-with ShipModules; use ShipModules;
+with Maps;
+with ShipModules;
 
 package body Ships is
 
@@ -542,6 +542,7 @@ package body Ships is
          exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
          Convert_Module_Block :
          declare
+            use ShipModules;
             use Tiny_String;
 
             M_Type: constant Module_Type_2 := Module_Type_2'Val(Module.M_Type);
@@ -731,6 +732,7 @@ package body Ships is
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
       use Events;
+      use Maps;
 
       Nim_Cargo: constant Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
