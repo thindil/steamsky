@@ -65,7 +65,7 @@ package body Ships is
       Load_Proto_Ships_Loop :
       for I in 1 .. 400 loop
          Temp_Record := Get_Proto_Ship(Proto_Index => I);
-         if Temp_Record.Modules.Length > 0 then
+         if Temp_Record /= Empty_Proto_Ship then
             Proto_Ships_List.Append(New_Item => Temp_Record);
          end if;
       end loop Load_Proto_Ships_Loop;
@@ -729,7 +729,7 @@ package body Ships is
       Get_Ada_Proto_Ship
         (Index => Proto_Index, Ada_Proto_Ship => Nim_Proto_Ship);
       if Nim_Proto_Ship.Combat_Value = -1 then
-         return Temp_Record;
+         return Empty_Proto_Ship;
       end if;
       Temp_Record.Name :=
         To_Bounded_String(Source => Value(Item => Nim_Proto_Ship.Name));
