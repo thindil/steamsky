@@ -378,7 +378,7 @@ package body DebugUI is
                   New_Item =>
                     " {Enemy ship: " &
                     To_String
-                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
                     "}");
             when ATTACKONBASE =>
                Append
@@ -386,7 +386,7 @@ package body DebugUI is
                   New_Item =>
                     " {Attack on base: " &
                     To_String
-                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
                     "}");
             when DISEASE =>
                Append
@@ -427,7 +427,7 @@ package body DebugUI is
                   New_Item =>
                     " {Enemy patrol: " &
                     To_String
-                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
                     "}");
             when TRADER =>
                Append
@@ -435,7 +435,7 @@ package body DebugUI is
                   New_Item =>
                     " {Trader: " &
                     To_String
-                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
                     "}");
             when FRIENDLYSHIP =>
                Append
@@ -443,7 +443,7 @@ package body DebugUI is
                   New_Item =>
                     " {Friendly ship: " &
                     To_String
-                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
                     "}");
             when others =>
                null;
@@ -1121,31 +1121,31 @@ package body DebugUI is
       Ship_Box.Name := New_String(Str => Frame_Name & ".duration");
       Duration := Positive'Value(Get(Widgt => Ship_Box));
       Add_Ship_Event_Loop :
-      for I in Proto_Ships_List.Iterate loop
-         if Proto_Ships_List(I).Name = Ship_Name then
+      for I in 1 .. Get_Proto_Ships_Amount loop
+         if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
             if Traders.Contains
-                (Item => Proto_Ships_Container.To_Index(Position => I)) then
+                (Item => I) then
                Events_List.Append
                  (New_Item =>
                     (E_Type => TRADER, Sky_X => Npc_Ship_X,
                      Sky_Y => Npc_Ship_Y, Time => Duration,
                      Ship_Index =>
-                       Proto_Ships_Container.To_Index(Position => I)));
+                       I));
             elsif Friendly_Ships.Contains
-                (Item => Proto_Ships_Container.To_Index(Position => I)) then
+                (Item => I) then
                Events_List.Append
                  (New_Item =>
                     (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X,
                      Sky_Y => Npc_Ship_Y, Time => Duration,
                      Ship_Index =>
-                       Proto_Ships_Container.To_Index(Position => I)));
+                       I));
             else
                Events_List.Append
                  (New_Item =>
                     (E_Type => ENEMYSHIP, Sky_X => Npc_Ship_X,
                      Sky_Y => Npc_Ship_Y, Time => Duration,
                      Ship_Index =>
-                       Proto_Ships_Container.To_Index(Position => I)));
+                       I));
             end if;
             Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index :=
               Events_List.Last_Index;
@@ -1464,10 +1464,10 @@ package body DebugUI is
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(Str => ".debugdialog.main.world.ship");
       Load_Ships_Loop :
-      for Ship of Proto_Ships_List loop
+      for I in 1 .. Get_Proto_Ships_Amount loop
          Append
            (Source => Values_List,
-            New_Item => " {" & To_String(Source => Ship.Name) & "}");
+            New_Item => " {" & To_String(Source => Get_Proto_Ship(Proto_Index => I).Name) & "}");
       end loop Load_Ships_Loop;
       configure
         (Widgt => Combo_Box,

@@ -98,7 +98,7 @@ package body Knowledge.Events is
                  LF & "Ship type: " &
                  To_String
                    (Source =>
-                      Proto_Ships_List(Events_List(Event_Index).Ship_Index)
+                      Get_Proto_Ship(Proto_Index => Events_List(Event_Index).Ship_Index)
                         .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
@@ -387,7 +387,7 @@ package body Knowledge.Events is
                      (Source =>
                         To_String
                           (Source =>
-                             Proto_Ships_List(Events_List(I).Ship_Index)
+                             Get_Proto_Ship(Proto_Index => Events_List(I).Ship_Index)
                                .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(Position => I));
@@ -644,7 +644,7 @@ package body Knowledge.Events is
                      Text =>
                        To_String
                          (Source =>
-                            Proto_Ships_List(Events_List(Event).Ship_Index)
+                            Get_Proto_Ship(Proto_Index => Events_List(Event).Ship_Index)
                               .Name),
                      Tooltip => "Show the event's details",
                      Command => "ShowEventInfo" & Positive'Image(Event),

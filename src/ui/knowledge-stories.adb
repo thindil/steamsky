@@ -145,8 +145,8 @@ package body Knowledge.Stories is
                        "You must find " &
                        To_String
                          (Source =>
-                            Proto_Ships_List
-                              (Positive'Value(Slice(S => Tokens, Index => 3)))
+                            Get_Proto_Ship
+                              (Proto_Index => Positive'Value(Slice(S => Tokens, Index => 3)))
                               .Name) &
                        " at X:" & Slice(S => Tokens, Index => 1) & " Y:" &
                        Slice(S => Tokens, Index => 2));
@@ -190,13 +190,13 @@ package body Knowledge.Stories is
                      Append(Source => Story_Text, New_Item => " ship.");
                   else
                      Find_Proto_Ship_Loop :
-                     for I in Proto_Ships_List.Iterate loop
-                        if Proto_Ships_Container.To_Index(Position => I) =
+                     for I in 1 .. Get_Proto_Ships_Amount loop
+                        if I =
                           Positive'Value(Slice(S => Tokens, Index => 2)) then
                            Append
                              (Source => Story_Text,
                               New_Item =>
-                                To_String(Source => Proto_Ships_List(I).Name));
+                                To_String(Source => Get_Proto_Ship(Proto_Index => I).Name));
                            Append(Source => Story_Text, New_Item => ".");
                            exit Find_Proto_Ship_Loop;
                         end if;

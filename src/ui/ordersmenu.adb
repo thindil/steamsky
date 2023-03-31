@@ -168,8 +168,8 @@ package body OrdersMenu is
                              "Search for " &
                              To_String
                                (Source =>
-                                  Proto_Ships_List
-                                    (Positive'Value
+                                  Get_Proto_Ship
+                                    (Proto_Index => Positive'Value
                                        (Slice(S => Tokens, Index => 3)))
                                     .Name),
                            Command => "ExecuteStory", Shortcut => "s",
@@ -322,7 +322,7 @@ package body OrdersMenu is
                                    "Complete destroy " &
                                    To_String
                                      (Source =>
-                                        Proto_Ships_List(Mission.Ship_Index)
+                                        Get_Proto_Ship(Proto_Index => Mission.Ship_Index)
                                           .Name),
                                  Command => "CompleteMission", Shortcut => "c",
                                  Underline => 0, Row => 0);
@@ -477,7 +477,7 @@ package body OrdersMenu is
                                       "Complete destroy " &
                                       To_String
                                         (Source =>
-                                           Proto_Ships_List(Mission.Ship_Index)
+                                           Get_Proto_Ship(Proto_Index => Mission.Ship_Index)
                                              .Name),
                                     Command => "CompleteMission",
                                     Shortcut => "c", Underline => 0);
@@ -526,7 +526,7 @@ package body OrdersMenu is
                                    "Search for " &
                                    To_String
                                      (Source =>
-                                        Proto_Ships_List(Mission.Ship_Index)
+                                        Get_Proto_Ship(Proto_Index => Mission.Ship_Index)
                                           .Name),
                                  Command => "StartMission", Shortcut => "s",
                                  Underline => 0);
@@ -572,8 +572,8 @@ package body OrdersMenu is
                if Have_Trader then
                   if Index
                       (Source =>
-                         Proto_Ships_List
-                           (Events_List
+                         Get_Proto_Ship
+                           (Proto_Index => Events_List
                               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                  .Event_Index)
                               .Ship_Index)
