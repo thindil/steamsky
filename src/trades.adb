@@ -413,7 +413,7 @@ package body Trades is
    end Sell_Items;
 
    procedure Generate_Trader_Cargo
-     (Proto_Index: Proto_Ships_Container.Extended_Index) is
+     (Proto_Index: Positive) is
       use Tiny_String;
 
       Trader_Ship: Ship_Record :=

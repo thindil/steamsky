@@ -145,14 +145,14 @@ package body Statistics is
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
-      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
+      Ship_Index: Natural := 0;
    begin
       Proto_Ships_Loop :
-      for I in Proto_Ships_List.Iterate loop
-         if Proto_Ships_List(I).Name = Ship_Name then
-            Ship_Index := Proto_Ships_Container.To_Index(Position => I);
+      for I in 1 .. Get_Proto_Ships_Amount loop
+         if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
+            Ship_Index := I;
             Game_Stats.Points :=
-              Game_Stats.Points + (Proto_Ships_List(I).Combat_Value / 10);
+              Game_Stats.Points + (Get_Proto_Ship(Proto_Index => I).Combat_Value / 10);
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;

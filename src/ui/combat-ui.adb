@@ -506,7 +506,7 @@ package body Combat.UI is
       end loop Show_Guns_Info_Loop;
       -- Show boarding/defending info
       if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
-        Proto_Ships_List(Enemy_Ship_Index).Crew.Length > 0 then
+        Get_Proto_Ship(Proto_Index => Enemy_Ship_Index).Crew.Length > 0 then
          Show_Boarding_Info_Block :
          declare
             Button: Ttk_Button :=
@@ -1962,8 +1962,8 @@ package body Combat.UI is
       if New_Combat then
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
-             Proto_Ships_List
-               (Events_List
+             Get_Proto_Ship
+               (Proto_Index => Events_List
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                   .Ship_Index)
                .Name then

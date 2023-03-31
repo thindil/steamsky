@@ -454,19 +454,19 @@ package body Statistics.UI is
          Count_Destroyed_Ships_Loop :
          for I of Destroyed_Indexes loop
             Get_Proto_Ship_Loop :
-            for J in Proto_Ships_List.Iterate loop
+            for J in 1 .. Get_Proto_Ships_Amount loop
                if To_Unbounded_String
                    (Source =>
                       Trim
                         (Source =>
-                           Proto_Ships_Container.To_Index(Position => J)'Img,
+                           J'Img,
                          Side => Left)) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {" &
-                       To_String(Source => Proto_Ships_List(J).Name) & "} {" &
+                       To_String(Source => Get_Proto_Ship(Proto_Index => J).Name) & "} {" &
                        Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
                        "}]");
                   exit Get_Proto_Ship_Loop;
@@ -989,13 +989,13 @@ package body Statistics.UI is
       Fill_Local_Destroyed_Loop :
       for I in Game_Stats.Destroyed_Ships.Iterate loop
          Get_Proto_Ship_Loop :
-         for J in Proto_Ships_List.Iterate loop
+         for J in 1 .. Get_Proto_Ships_Amount loop
             if To_Unbounded_String
                 (Source =>
                    Trim
                      (Source =>
                         Positive'Image
-                          (Proto_Ships_Container.To_Index(Position => J)),
+                          (J),
                       Side => Left)) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(Position => I)) :=
@@ -1003,7 +1003,7 @@ package body Statistics.UI is
                     To_Unbounded_String
                       (Source =>
                          Tiny_String.To_String
-                           (Source => Proto_Ships_List(J).Name)),
+                           (Source => Get_Proto_Ship(Proto_Index => J).Name)),
                   Amount => Game_Stats.Destroyed_Ships(I).Amount,
                   Id => Statistics_Container.To_Index(Position => I));
                exit Get_Proto_Ship_Loop;

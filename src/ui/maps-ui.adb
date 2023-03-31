@@ -812,8 +812,8 @@ package body Maps.UI is
                        "Destroy " &
                        To_String
                          (Source =>
-                            Proto_Ships_List
-                              (Accepted_Missions(Mission_Index).Ship_Index)
+                            Get_Proto_Ship
+                              (Proto_Index => Accepted_Missions(Mission_Index).Ship_Index)
                               .Name));
                when PATROL =>
                   Append
@@ -878,8 +878,8 @@ package body Maps.UI is
                      New_Item =>
                        To_String
                          (Source =>
-                            Proto_Ships_List
-                              (Events_List(Event_Index).Ship_Index)
+                            Get_Proto_Ship
+                              (Proto_Index => Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green");
                when FRIENDLYSHIP =>
@@ -888,8 +888,8 @@ package body Maps.UI is
                      New_Item =>
                        To_String
                          (Source =>
-                            Proto_Ships_List
-                              (Events_List(Event_Index).Ship_Index)
+                            Get_Proto_Ship
+                              (Proto_Index => Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green2");
                when ENEMYSHIP =>
@@ -898,8 +898,8 @@ package body Maps.UI is
                      New_Item =>
                        To_String
                          (Source =>
-                            Proto_Ships_List
-                              (Events_List(Event_Index).Ship_Index)
+                            Get_Proto_Ship
+                              (Proto_Index => Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>

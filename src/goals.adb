@@ -178,15 +178,15 @@ package body Goals is
                   use Ships;
                begin
                   Destroy_Ship_Loop :
-                  for I in Proto_Ships_List.Iterate loop
-                     if Proto_Ships_Container.To_Index(Position => I) =
+                  for I in 1 .. Get_Proto_Ships_Amount loop
+                     if I =
                        Positive'Value
                          (To_String(Source => Goal.Target_Index)) then
                         Append
                           (Source => Text,
                            New_Item =>
                              ": " &
-                             To_String(Source => Proto_Ships_List(I).Name));
+                             To_String(Source => Get_Proto_Ship(Proto_Index => I).Name));
                         Added := True;
                         exit Destroy_Ship_Loop;
                      end if;

@@ -538,25 +538,25 @@ package body Events is
       --## rule on IMPROPER_INITIALIZATION
    begin
       Count_Traders_Loop :
-      for I in Proto_Ships_List.Iterate loop
+      for I in 1 .. Get_Proto_Ships_Amount loop
          if Index
-             (Source => Proto_Ships_List(I).Name,
+             (Source => Get_Proto_Ship(Proto_Index => I).Name,
               Pattern => To_String(Source => Traders_Name)) >
            0 then
             Traders.Append
-              (New_Item => Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => I);
          end if;
       end loop Count_Traders_Loop;
       Get_Player_Ships(Player_Ships => Player_Ships);
       Count_Friendly_Loop :
-      for I in Proto_Ships_List.Iterate loop
+      for I in 1 .. Get_Proto_Ships_Amount loop
          if Is_Friendly
              (Source_Faction => Player_Ship.Crew(1).Faction,
-              Target_Faction => Proto_Ships_List(I).Owner) and
+              Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
            not Player_Ships.Contains
-             (Item => Proto_Ships_Container.To_Index(Position => I)) then
+             (Item => I) then
             Friendly_Ships.Append
-              (New_Item => Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => I);
          end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
@@ -617,22 +617,22 @@ package body Events is
       Get_Player_Ships(Player_Ships => Player_Ships);
       --## rule on IMPROPER_INITIALIZATION
       Generate_Enemies_Loop :
-      for I in Proto_Ships_List.Iterate loop
-         if Proto_Ships_List(I).Combat_Value <= Player_Value and
+      for I in 1 .. Get_Proto_Ships_Amount loop
+         if Get_Proto_Ship(Proto_Index => I).Combat_Value <= Player_Value and
            (Owner = To_Bounded_String(Source => "Any") or
-            Proto_Ships_List(I).Owner = Owner) and
+            Get_Proto_Ship(Proto_Index => I).Owner = Owner) and
            not Is_Friendly
              (Source_Faction => Player_Ship.Crew(1).Faction,
-              Target_Faction => Proto_Ships_List(I).Owner) and
+              Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
            not Player_Ships.Contains
-             (Item => Proto_Ships_Container.To_Index(Position => I)) and
+             (Item => I) and
            (With_Traders or
             Index
-                (Source => Proto_Ships_List(I).Name,
+                (Source => Get_Proto_Ship(Proto_Index => I).Name,
                  Pattern => To_String(Source => Traders_Name)) =
               0) then
             Enemies.Append
-              (New_Item => Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => I);
          end if;
       end loop Generate_Enemies_Loop;
    end Generate_Enemies;

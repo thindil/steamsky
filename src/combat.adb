@@ -55,7 +55,7 @@ package body Combat is
    -- ****
 
    function Start_Combat
-     (Enemy_Index: Proto_Ships_Container.Extended_Index;
+     (Enemy_Index: Positive;
       New_Combat: Boolean := True) return Boolean is
       use Tiny_String;
 
@@ -107,7 +107,7 @@ package body Combat is
    begin
       Enemy_Ship_Index := Enemy_Index;
       Faction_Name :=
-        Get_Faction(Index => Proto_Ships_List(Enemy_Index).Owner).Name;
+        Get_Faction(Index => Get_Proto_Ship(Proto_Index => Enemy_Index).Owner).Name;
       Harpoon_Duration := 0;
       Boarding_Orders.Clear;
       Enemy_Ship :=
@@ -117,7 +117,7 @@ package body Combat is
            Speed => FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
       if Index
-          (Source => Proto_Ships_List(Enemy_Index).Name,
+          (Source => Get_Proto_Ship(Proto_Index => Enemy_Index).Name,
            Pattern => To_String(Source => Traders_Name)) >
         0 then
          Generate_Trader_Cargo(Proto_Index => Enemy_Index);
@@ -213,7 +213,7 @@ package body Combat is
             if Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index).Speed >
               0 then
                Shooting_Speed :=
-                 (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
+                 (if Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
@@ -225,7 +225,7 @@ package body Combat is
                       .Speed);
             else
                Shooting_Speed :=
-                 (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
+                 (if Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai = DISARMER then
                     Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
                       .Speed -
                     1
@@ -240,40 +240,40 @@ package body Combat is
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
         (Ship => Enemy_Ship, Accuracy => 0, Distance => 10_000,
-         Combat_Ai => Proto_Ships_List(Enemy_Index).Combat_Ai, Evasion => 0,
+         Combat_Ai => Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai, Evasion => 0,
          Loot => 0, Perception => 0, Harpoon_Duration => 0,
          Guns => Enemy_Guns);
       Enemy.Accuracy :=
-        (if Proto_Ships_List(Enemy_Index).Accuracy.Max_Value = 0 then
-           Proto_Ships_List(Enemy_Index).Accuracy.Min_Value
+        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Max_Value = 0 then
+           Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value
          else Get_Random
-             (Min => Proto_Ships_List(Enemy_Index).Accuracy.Min_Value,
-              Max => Proto_Ships_List(Enemy_Index).Accuracy.Max_Value));
+             (Min => Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value,
+              Max => Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Max_Value));
       Enemy.Evasion :=
-        (if Proto_Ships_List(Enemy_Index).Evasion.Max_Value = 0 then
-           Proto_Ships_List(Enemy_Index).Evasion.Min_Value
+        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value = 0 then
+           Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value
          else Get_Random
-             (Min => Proto_Ships_List(Enemy_Index).Evasion.Min_Value,
-              Max => Proto_Ships_List(Enemy_Index).Evasion.Max_Value));
+             (Min => Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value,
+              Max => Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value));
       Enemy.Perception :=
-        (if Proto_Ships_List(Enemy_Index).Perception.Max_Value = 0 then
-           Proto_Ships_List(Enemy_Index).Perception.Min_Value
+        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Max_Value = 0 then
+           Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Min_Value
          else Get_Random
-             (Min => Proto_Ships_List(Enemy_Index).Perception.Min_Value,
-              Max => Proto_Ships_List(Enemy_Index).Perception.Max_Value));
+             (Min => Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Min_Value,
+              Max => Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Max_Value));
       Enemy.Loot :=
-        (if Proto_Ships_List(Enemy_Index).Loot.Max_Value = 0 then
-           Proto_Ships_List(Enemy_Index).Loot.Min_Value
+        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value = 0 then
+           Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value
          else Get_Random
-             (Min => Proto_Ships_List(Enemy_Index).Loot.Min_Value,
-              Max => Proto_Ships_List(Enemy_Index).Loot.Max_Value));
+             (Min => Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value,
+              Max => Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value));
       if Pilot_Order = 0 then
          Pilot_Order := 2;
          Engineer_Order := 3;
       end if;
       End_Combat := False;
       Enemy_Name :=
-        Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner);
+        Generate_Ship_Name(Owner => Get_Proto_Ship(Proto_Index => Enemy_Index).Owner);
       Messages_Starts := Get_Last_Message_Index + 1;
       Set_Player_Guns_List_Block :
       declare
@@ -1966,8 +1966,8 @@ package body Combat is
                .M_Type =
              DESTROY
            and then
-             Proto_Ships_List
-               (Accepted_Missions
+             Get_Proto_Ship
+               (Proto_Index => Accepted_Missions
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
                   .Ship_Index)
                .Name =
@@ -1980,7 +1980,7 @@ package body Combat is
          declare
             Lost_Reputation_Chance: Positive range 10 .. 40 := 10;
          begin
-            if Proto_Ships_List(Enemy_Ship_Index).Owner =
+            if Get_Proto_Ship(Proto_Index => Enemy_Ship_Index).Owner =
               Player_Ship.Crew(1).Faction then
                Lost_Reputation_Chance := 40;
             end if;
@@ -2000,7 +2000,7 @@ package body Combat is
                  To_Unbounded_String
                    (Source =>
                       To_String
-                        (Source => Proto_Ships_List(Enemy_Ship_Index).Owner)));
+                        (Source => Get_Proto_Ship(Proto_Index => Enemy_Ship_Index).Owner)));
          end if;
          if Current_Story.Index /= Null_Unbounded_String then
             Update_Current_Story_Block :
