@@ -348,21 +348,6 @@ package Ships is
    Empty_Proto_Ship: constant Proto_Ship_Data := (others => <>);
    -- ****
 
-   -- ****t* Ships/Ships.Proto_Ships_Container
-   -- FUNCTION
-   -- Used to store prototype ships data
-   -- SOURCE
-   package Proto_Ships_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Proto_Ship_Data);
-   -- ****
-
-   -- ****v* Ships/Ships.Proto_Ships_List
-   -- FUNCTION
-   -- List of all prototypes of ships
-   -- SOURCE
-   Proto_Ships_List: Proto_Ships_Container.Vector;
-   -- ****
-
    -- ****v* Ships/Ships.Player_Ship
    -- FUNCTION
    -- The player ship
@@ -394,11 +379,9 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function Create_Ship
-     (Proto_Index: Proto_Ships_Container.Extended_Index;
-      Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record with
-      Pre => Proto_Index <= Proto_Ships_List.Last_Index;
+     (Proto_Index: Positive; Name: Tiny_String.Bounded_String; X: Map_X_Range;
+      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+      return Ship_Record;
       -- ****
 
       -- ****f* Ships/Ships.Load_Ships
@@ -519,4 +502,5 @@ package Ships is
    procedure Get_Ship_From_Nim(Ship: in out Ship_Record);
 
    function Get_Proto_Ship(Proto_Index: Positive) return Proto_Ship_Data;
+
 end Ships;
