@@ -1162,3 +1162,6 @@ proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
               randomUpgrades = randomUpgrades == 1)
   except KeyError:
     discard
+
+proc getAdaProtoShipsAmount(): cint {.raises: [], tags: [], exportc.} =
+  return protoShipsList.len.cint
