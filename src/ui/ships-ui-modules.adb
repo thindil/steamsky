@@ -741,24 +741,64 @@ package body Ships.UI.Modules is
            "}");
       case Module.M_Type is
          when ENGINE =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
-            Module_Max_Value :=
-              Positive
-                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                 1.5);
-            if Module.Power = Module_Max_Value then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{ (max upgrade)}");
-            end if;
-            if Module.Disabled then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{ (disabled)}");
-            end if;
+            Add_Power_Info_Block :
+            declare
+               Power_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".powerinfo",
+                    options => "-width 360");
+            begin
+               Label :=
+                 Create
+                   (pathName => Power_Box & ".powerlbl",
+                    options =>
+                      "-text {Max power:" & Integer'Image(Module.Power) & "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                    1.5);
+               if Module.Power < Module_Max_Value then
+                  if Module.Upgrade_Action = MAX_VALUE and
+                    Player_Ship.Upgrade_Module = Module_Index then
+                     Info_Button :=
+                       Create
+                         (pathName => Power_Box & ".button",
+                          options =>
+                            "-image cancelicon -command {" &
+                            Close_Dialog_Button & " invoke;StopUpgrading " &
+                            CArgv.Arg(Argv => Argv, N => 1) &
+                            "} -style Small.TButton");
+                     Add
+                       (Widget => Info_Button,
+                        Message => "Stop upgrading the engine's power");
+                  else
+                     Info_Button :=
+                       Create
+                         (pathName => Power_Box & ".button",
+                          options =>
+                            "-image upgradebuttonicon -command {" &
+                            Close_Dialog_Button & " invoke;SetUpgrade 2 " &
+                            CArgv.Arg(Argv => Argv, N => 1) &
+                            "} -style Small.TButton");
+                     Add
+                       (Widget => Info_Button,
+                        Message => "Start upgrading the engine's power");
+                  end if;
+                  Tcl.Tk.Ada.Grid.Grid
+                    (Slave => Info_Button,
+                     Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                  Bind
+                    (Widgt => Info_Button, Sequence => "<Escape>",
+                     Script => "{" & Close_Dialog_Button & " invoke;break}");
+               end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Power_Box, Options => "-sticky w");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end Add_Power_Info_Block;
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text =>
@@ -1221,7 +1261,8 @@ package body Ships.UI.Modules is
                    (pathName => Upgrade_Box & ".button",
                     options =>
                       "-image cancelicon -command {" & Close_Dialog_Button &
-                      " invoke;StopUpgrading " & CArgv.Arg(Argv => Argv, N => 1) &
+                      " invoke;StopUpgrading " &
+                      CArgv.Arg(Argv => Argv, N => 1) &
                       "} -style Small.TButton");
                Add
                  (Widget => Info_Button,
