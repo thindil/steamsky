@@ -70,7 +70,7 @@ package body HallOfFame is
       Nim_Entry: Nim_Hall_Of_Fame_Data;
       --## rule on IMPROPER_INITIALIZATION
       procedure Get_Ada_Hof_Entry
-         (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
+        (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaHofEntry";

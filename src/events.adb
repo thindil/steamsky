@@ -543,8 +543,7 @@ package body Events is
              (Source => Get_Proto_Ship(Proto_Index => I).Name,
               Pattern => To_String(Source => Traders_Name)) >
            0 then
-            Traders.Append
-              (New_Item => I);
+            Traders.Append(New_Item => I);
          end if;
       end loop Count_Traders_Loop;
       Get_Player_Ships(Player_Ships => Player_Ships);
@@ -553,10 +552,8 @@ package body Events is
          if Is_Friendly
              (Source_Faction => Player_Ship.Crew(1).Faction,
               Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
-           not Player_Ships.Contains
-             (Item => I) then
-            Friendly_Ships.Append
-              (New_Item => I);
+           not Player_Ships.Contains(Item => I) then
+            Friendly_Ships.Append(New_Item => I);
          end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
@@ -624,15 +621,13 @@ package body Events is
            not Is_Friendly
              (Source_Faction => Player_Ship.Crew(1).Faction,
               Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
-           not Player_Ships.Contains
-             (Item => I) and
+           not Player_Ships.Contains(Item => I) and
            (With_Traders or
             Index
                 (Source => Get_Proto_Ship(Proto_Index => I).Name,
                  Pattern => To_String(Source => Traders_Name)) =
               0) then
-            Enemies.Append
-              (New_Item => I);
+            Enemies.Append(New_Item => I);
          end if;
       end loop Generate_Enemies_Loop;
    end Generate_Enemies;

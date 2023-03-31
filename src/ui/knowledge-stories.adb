@@ -146,7 +146,9 @@ package body Knowledge.Stories is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Positive'Value(Slice(S => Tokens, Index => 3)))
+                              (Proto_Index =>
+                                 Positive'Value
+                                   (Slice(S => Tokens, Index => 3)))
                               .Name) &
                        " at X:" & Slice(S => Tokens, Index => 1) & " Y:" &
                        Slice(S => Tokens, Index => 2));
@@ -196,7 +198,9 @@ package body Knowledge.Stories is
                            Append
                              (Source => Story_Text,
                               New_Item =>
-                                To_String(Source => Get_Proto_Ship(Proto_Index => I).Name));
+                                To_String
+                                  (Source =>
+                                     Get_Proto_Ship(Proto_Index => I).Name));
                            Append(Source => Story_Text, New_Item => ".");
                            exit Find_Proto_Ship_Loop;
                         end if;

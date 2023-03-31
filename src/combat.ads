@@ -153,8 +153,7 @@ package Combat is
    -- True if combat starts, otherwise false
    -- SOURCE
    function Start_Combat
-     (Enemy_Index: Positive;
-      New_Combat: Boolean := True) return Boolean with
+     (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean with
       Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****
 

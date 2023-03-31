@@ -340,7 +340,8 @@ package body Missions is
                New_Item =>
                  "'Destroy " &
                  To_String
-                   (Source => Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
+                   (Source =>
+                      Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
                  "'.");
          when PATROL =>
             Append
@@ -507,8 +508,9 @@ package body Missions is
                  "You finished mission 'Destroy " &
                  To_String
                    (Source =>
-                     Get_Proto_Ship
-                        (Proto_Index => Accepted_Missions(Mission_Index).Ship_Index)
+                      Get_Proto_Ship
+                        (Proto_Index =>
+                           Accepted_Missions(Mission_Index).Ship_Index)
                         .Name) &
                  "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
@@ -620,7 +622,8 @@ package body Missions is
                  To_String
                    (Source =>
                       Get_Proto_Ship
-                        (Proto_Index => Accepted_Missions(Mission_Index).Ship_Index)
+                        (Proto_Index =>
+                           Accepted_Missions(Mission_Index).Ship_Index)
                         .Name) &
                  "'.");
          when PATROL =>

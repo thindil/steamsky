@@ -23,9 +23,8 @@ with ShipModules;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index: Positive;
-      Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+     (Proto_Index: Positive; Name: Tiny_String.Bounded_String; X: Map_X_Range;
+      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Tiny_String;
 

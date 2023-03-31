@@ -281,7 +281,9 @@ package body Missions.UI is
                  (Table => Missions_Table,
                   Text =>
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => List(I).Ship_Index).Name),
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => List(I).Ship_Index)
+                           .Name),
                   Tooltip => "Show more info about the mission",
                   Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 4);
@@ -612,7 +614,8 @@ package body Missions.UI is
                options =>
                  "-text {Target: " &
                  To_String
-                   (Source => Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
+                   (Source =>
+                      Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
                  To_String(Source => Mission_Info) & "}");
          when EXPLORE =>
             configure
@@ -1116,7 +1119,8 @@ package body Missions.UI is
                         To_String
                           (Source =>
                              Get_Proto_Ship
-                               (Proto_Index => Sky_Bases(Base_Index).Missions(I).Ship_Index)
+                               (Proto_Index =>
+                                  Sky_Bases(Base_Index).Missions(I).Ship_Index)
                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String

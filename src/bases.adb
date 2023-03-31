@@ -359,7 +359,8 @@ package body Bases is
              .Ship_Index;
          Amount :=
            (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 3
-            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 5
+            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
+            then 5
             else 10);
          Add_Message
            (Message =>
@@ -368,7 +369,8 @@ package body Bases is
               To_String
                 (Source =>
                    Generate_Ship_Name
-                     (Owner => Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
+                     (Owner =>
+                        Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
               "' for directions to other bases.",
             M_Type => ORDERMESSAGE);
          Delete_Event
@@ -405,8 +407,10 @@ package body Bases is
             end if;
          else -- asking friendly ship
             Amount :=
-              (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 1
-               elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 2
+              (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5
+               then 1
+               elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
+               then 2
                else 4);
          end if;
          Count_Unknown_Bases_Loop :
@@ -485,7 +489,9 @@ package body Bases is
              .Ship_Index;
          Max_Events :=
            (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 1
-            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 3 else 5);
+            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
+            then 3
+            else 5);
          Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
@@ -493,7 +499,8 @@ package body Bases is
               To_String
                 (Source =>
                    Generate_Ship_Name
-                     (Owner => Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
+                     (Owner =>
+                        Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
               "' for recent events.",
             M_Type => ORDERMESSAGE);
          Delete_Event

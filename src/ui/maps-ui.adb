@@ -813,7 +813,8 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Accepted_Missions(Mission_Index).Ship_Index)
+                              (Proto_Index =>
+                                 Accepted_Missions(Mission_Index).Ship_Index)
                               .Name));
                when PATROL =>
                   Append
@@ -879,7 +880,8 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Events_List(Event_Index).Ship_Index)
+                              (Proto_Index =>
+                                 Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green");
                when FRIENDLYSHIP =>
@@ -889,7 +891,8 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Events_List(Event_Index).Ship_Index)
+                              (Proto_Index =>
+                                 Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green2");
                when ENEMYSHIP =>
@@ -899,7 +902,8 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Events_List(Event_Index).Ship_Index)
+                              (Proto_Index =>
+                                 Events_List(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>

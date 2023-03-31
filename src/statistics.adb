@@ -152,7 +152,8 @@ package body Statistics is
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
             Ship_Index := I;
             Game_Stats.Points :=
-              Game_Stats.Points + (Get_Proto_Ship(Proto_Index => I).Combat_Value / 10);
+              Game_Stats.Points +
+              (Get_Proto_Ship(Proto_Index => I).Combat_Value / 10);
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;

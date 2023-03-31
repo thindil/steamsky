@@ -405,7 +405,9 @@ package body Knowledge.Missions is
                      (Source =>
                         (To_String
                            (Source =>
-                              Get_Proto_Ship(Proto_Index => Accepted_Missions(I).Ship_Index)
+                              Get_Proto_Ship
+                                (Proto_Index =>
+                                   Accepted_Missions(I).Ship_Index)
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
@@ -569,7 +571,8 @@ package body Knowledge.Missions is
                      Text =>
                        To_String
                          (Source =>
-                            Get_Proto_Ship(Proto_Index => Accepted_Missions(I).Ship_Index)
+                            Get_Proto_Ship
+                              (Proto_Index => Accepted_Missions(I).Ship_Index)
                               .Name),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),

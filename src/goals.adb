@@ -186,7 +186,9 @@ package body Goals is
                           (Source => Text,
                            New_Item =>
                              ": " &
-                             To_String(Source => Get_Proto_Ship(Proto_Index => I).Name));
+                             To_String
+                               (Source =>
+                                  Get_Proto_Ship(Proto_Index => I).Name));
                         Added := True;
                         exit Destroy_Ship_Loop;
                      end if;

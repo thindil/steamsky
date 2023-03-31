@@ -378,7 +378,9 @@ package body DebugUI is
                   New_Item =>
                     " {Enemy ship: " &
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => Event.Ship_Index)
+                           .Name) &
                     "}");
             when ATTACKONBASE =>
                Append
@@ -386,7 +388,9 @@ package body DebugUI is
                   New_Item =>
                     " {Attack on base: " &
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => Event.Ship_Index)
+                           .Name) &
                     "}");
             when DISEASE =>
                Append
@@ -427,7 +431,9 @@ package body DebugUI is
                   New_Item =>
                     " {Enemy patrol: " &
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => Event.Ship_Index)
+                           .Name) &
                     "}");
             when TRADER =>
                Append
@@ -435,7 +441,9 @@ package body DebugUI is
                   New_Item =>
                     " {Trader: " &
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => Event.Ship_Index)
+                           .Name) &
                     "}");
             when FRIENDLYSHIP =>
                Append
@@ -443,7 +451,9 @@ package body DebugUI is
                   New_Item =>
                     " {Friendly ship: " &
                     To_String
-                      (Source => Get_Proto_Ship(Proto_Index => Event.Ship_Index).Name) &
+                      (Source =>
+                         Get_Proto_Ship(Proto_Index => Event.Ship_Index)
+                           .Name) &
                     "}");
             when others =>
                null;
@@ -1123,29 +1133,21 @@ package body DebugUI is
       Add_Ship_Event_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
-            if Traders.Contains
-                (Item => I) then
+            if Traders.Contains(Item => I) then
                Events_List.Append
                  (New_Item =>
                     (E_Type => TRADER, Sky_X => Npc_Ship_X,
-                     Sky_Y => Npc_Ship_Y, Time => Duration,
-                     Ship_Index =>
-                       I));
-            elsif Friendly_Ships.Contains
-                (Item => I) then
+                     Sky_Y => Npc_Ship_Y, Time => Duration, Ship_Index => I));
+            elsif Friendly_Ships.Contains(Item => I) then
                Events_List.Append
                  (New_Item =>
                     (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X,
-                     Sky_Y => Npc_Ship_Y, Time => Duration,
-                     Ship_Index =>
-                       I));
+                     Sky_Y => Npc_Ship_Y, Time => Duration, Ship_Index => I));
             else
                Events_List.Append
                  (New_Item =>
                     (E_Type => ENEMYSHIP, Sky_X => Npc_Ship_X,
-                     Sky_Y => Npc_Ship_Y, Time => Duration,
-                     Ship_Index =>
-                       I));
+                     Sky_Y => Npc_Ship_Y, Time => Duration, Ship_Index => I));
             end if;
             Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index :=
               Events_List.Last_Index;
@@ -1467,7 +1469,10 @@ package body DebugUI is
       for I in 1 .. Get_Proto_Ships_Amount loop
          Append
            (Source => Values_List,
-            New_Item => " {" & To_String(Source => Get_Proto_Ship(Proto_Index => I).Name) & "}");
+            New_Item =>
+              " {" &
+              To_String(Source => Get_Proto_Ship(Proto_Index => I).Name) &
+              "}");
       end loop Load_Ships_Loop;
       configure
         (Widgt => Combo_Box,

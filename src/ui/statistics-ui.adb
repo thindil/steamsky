@@ -456,17 +456,15 @@ package body Statistics.UI is
             Get_Proto_Ship_Loop :
             for J in 1 .. Get_Proto_Ships_Amount loop
                if To_Unbounded_String
-                   (Source =>
-                      Trim
-                        (Source =>
-                           J'Img,
-                         Side => Left)) =
+                   (Source => Trim(Source => J'Img, Side => Left)) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {" &
-                       To_String(Source => Get_Proto_Ship(Proto_Index => J).Name) & "} {" &
+                       To_String
+                         (Source => Get_Proto_Ship(Proto_Index => J).Name) &
+                       "} {" &
                        Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
                        "}]");
                   exit Get_Proto_Ship_Loop;
@@ -991,12 +989,7 @@ package body Statistics.UI is
          Get_Proto_Ship_Loop :
          for J in 1 .. Get_Proto_Ships_Amount loop
             if To_Unbounded_String
-                (Source =>
-                   Trim
-                     (Source =>
-                        Positive'Image
-                          (J),
-                      Side => Left)) =
+                (Source => Trim(Source => Positive'Image(J), Side => Left)) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(Position => I)) :=
                  (Name =>
