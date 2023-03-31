@@ -752,7 +752,7 @@ package body Ships is
           (Source => Value(Item => Nim_Proto_Ship.Description));
       Temp_Record.Owner :=
         To_Bounded_String(Source => Value(Item => Nim_Proto_Ship.Owner));
-      Temp_Record.Crew.Clear;
+      Temp_Record.Crew.Clear; --## rule line off IMPROPER_INITIALIZATION
       Get_Ada_Proto_Ship_Data
         (Index => Proto_Index, Get_Crew => 1,
          Ada_Proto_Ship_Data => Nim_Proto_Data);
