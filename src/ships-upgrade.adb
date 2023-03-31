@@ -15,12 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Crew.Inventory; use Crew.Inventory;
 with Config; use Config;
+with Crew.Inventory;
+with Messages; use Messages;
+with Ships.Cargo;
+with Ships.Crew;
 with ShipModules; use ShipModules;
 
 package body Ships.Upgrade is
@@ -281,6 +280,8 @@ package body Ships.Upgrade is
    end Start_Upgrading;
 
    procedure Upgrade_Ship(Minutes: Positive) is
+      use Ships.Cargo;
+      use Ships.Crew;
       use Tiny_String;
 
       Result_Amount, Upgrade_Points, Upgrade_Progress, Material_Cost,
@@ -293,6 +294,7 @@ package body Ships.Upgrade is
       Upgrade_Material, Upgrade_Tools: Inventory_Container.Extended_Index := 0;
       Worker_Index: Crew_Container.Extended_Index;
       procedure Find_Mats_And_Tools is
+         use Inventory;
       begin
          Upgrade_Tools :=
            Find_Tools
