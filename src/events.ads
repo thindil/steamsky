@@ -64,7 +64,7 @@ package Events is
          when DOUBLEPRICE =>
             Item_Index: Positive;
          when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
-            Ship_Index: Proto_Ships_Container.Extended_Index;
+            Ship_Index: Positive;
          when others =>
             Data: Natural := 0;
       end case;

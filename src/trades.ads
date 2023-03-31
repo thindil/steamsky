@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -142,8 +142,7 @@ package Trades is
       --               cargo
       -- SOURCE
    procedure Generate_Trader_Cargo
-     (Proto_Index: Proto_Ships_Container.Extended_Index) with
-      Pre => Proto_Index <= Proto_Ships_List.Last_Index,
+     (Proto_Index: Positive) with
       Test_Case => (Name => "Test_GenerateTraderCargo", Mode => Nominal);
       -- ****
 

@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -140,7 +140,7 @@ package Combat is
    -- FUNCTION
    -- Prototype index of enemy ship
    -- SOURCE
-   Enemy_Ship_Index: Proto_Ships_Container.Extended_Index;
+   Enemy_Ship_Index: Natural;
    -- ****
 
    -- ****f* Combat/Combat.Start_Combat
@@ -153,9 +153,8 @@ package Combat is
    -- True if combat starts, otherwise false
    -- SOURCE
    function Start_Combat
-     (Enemy_Index: Proto_Ships_Container.Extended_Index;
+     (Enemy_Index: Positive;
       New_Combat: Boolean := True) return Boolean with
-      Pre => Enemy_Index <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****
 

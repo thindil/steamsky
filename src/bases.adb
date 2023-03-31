@@ -322,7 +322,7 @@ package body Bases is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Tmp_Base_Index: Extended_Base_Range := 0;
-      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
+      Ship_Index: Natural := 0;
       Unknown_Bases: Extended_Base_Range := 0;
       Trader_Index: constant Natural := Find_Member(Order => TALK);
       Amount: Natural range 0 .. 40;
@@ -358,8 +358,8 @@ package body Bases is
              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .Ship_Index;
          Amount :=
-           (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 3
-            elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 5
+           (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 3
+            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 5
             else 10);
          Add_Message
            (Message =>
@@ -368,7 +368,7 @@ package body Bases is
               To_String
                 (Source =>
                    Generate_Ship_Name
-                     (Owner => Proto_Ships_List(Ship_Index).Owner)) &
+                     (Owner => Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
               "' for directions to other bases.",
             M_Type => ORDERMESSAGE);
          Delete_Event
@@ -405,8 +405,8 @@ package body Bases is
             end if;
          else -- asking friendly ship
             Amount :=
-              (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
-               elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 2
+              (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 1
+               elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 2
                else 4);
          end if;
          Count_Unknown_Bases_Loop :
@@ -455,7 +455,7 @@ package body Bases is
       --## rule on IMPROPER_INITIALIZATION
       Attempts: Natural range 0 .. 10 := 10;
       New_Item_Index: Natural := 0;
-      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
+      Ship_Index: Natural := 0;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;
@@ -484,8 +484,8 @@ package body Bases is
              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .Ship_Index;
          Max_Events :=
-           (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
-            elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 3 else 5);
+           (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 1
+            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10 then 3 else 5);
          Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
@@ -493,7 +493,7 @@ package body Bases is
               To_String
                 (Source =>
                    Generate_Ship_Name
-                     (Owner => Proto_Ships_List(Ship_Index).Owner)) &
+                     (Owner => Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
               "' for recent events.",
             M_Type => ORDERMESSAGE);
          Delete_Event

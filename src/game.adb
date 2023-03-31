@@ -993,7 +993,7 @@ package body Game is
          end if;
       end Load_Selected_Data;
    begin
-      if Proto_Ships_List.Length > 0 then
+      if Get_Proto_Ship(Proto_Index => 1) /= Empty_Proto_Ship then
          return "";
       end if;
       -- Load standard game data

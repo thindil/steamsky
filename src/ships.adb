@@ -23,7 +23,7 @@ with ShipModules;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index: Proto_Ships_Container.Extended_Index;
+     (Proto_Index: Positive;
       Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
@@ -50,9 +50,6 @@ package body Ships is
       use Interfaces.C;
 
       Result: chars_ptr;
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Proto_Ship_Data;
-      --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Ships(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
@@ -62,13 +59,6 @@ package body Ships is
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Proto_Ships_Loop :
-      for I in 1 .. 400 loop
-         Temp_Record := Get_Proto_Ship(Proto_Index => I);
-         if Temp_Record /= Empty_Proto_Ship then
-            Proto_Ships_List.Append(New_Item => Temp_Record);
-         end if;
-      end loop Load_Proto_Ships_Loop;
    end Load_Ships;
 
    function Count_Ship_Weight(Ship: Ship_Record) return Positive is
