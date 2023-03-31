@@ -11,6 +11,7 @@ if itemsList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadModules("../bin/data/shipmodules.dat")
+if protoShipsList.len == 0:
   loadRecipes("../bin/data/recipes.dat")
   loadMobs("../bin/data/mobs.dat")
   loadShips("../bin/data/ships.dat")
