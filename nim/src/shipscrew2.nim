@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import game, halloffame, messages, missions, shipscrew, types, utils
+import game, halloffame, messages, missions, shipscrew3, types, utils
 
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
     raises: [KeyError], tags: [].} =
