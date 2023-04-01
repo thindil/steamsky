@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import careers, crewinventory, config, game, messages, utils, shipscargo,
+import careers, crewinventory, config, game, maps, messages, utils, shipscargo,
     shipscrew3, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
@@ -170,6 +170,27 @@ proc dailyPayment*() =
           addMessage(message = payMessage, mType = tradeMessage)
           updateMorale(ship = playerShip, memberIndex = index,
               value = getRandom(min = 1, max = 5))
+      if not haveMoney:
+        updateMorale(ship = playerShip, memberIndex = index,
+            value = getRandom(min = -50, max = -10))
+  var memberIndex = 1
+  while memberIndex < playerShip.crew.len:
+    if playerShip.crew[memberIndex].contractLength > 0:
+      playerShip.crew[memberIndex].contractLength.dec
+      if playerShip.crew[memberIndex].contractLength == 0:
+        addMessage(message = "Your contract with " & playerShip.crew[
+            memberIndex].name & " has ended.", mType = tradeMessage, color = red)
+        if playerShip.speed == docked:
+#          deleteMember(memberIndex = memberIndex, ship = playerShip)
+          skyBases[skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex].population.inc
+          memberIndex.dec
+        else:
+          for order in playerShip.crew[memberIndex].orders.mitems:
+            order = 0
+ #         giveOrders(ship = playerShip, memberIndex = memberIndex,
+ #             givenOrder = rest)
+          memberIndex.inc
 
 # Temporary code for interfacing with Ada
 
