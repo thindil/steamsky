@@ -41,6 +41,13 @@ package Statistics is
    end record;
    -- ****
 
+   -- ****d* Statistics/Statistics.Empty_Statistics_Data
+   -- FUNCTION
+   -- Empty statistic data
+   -- SOURCE
+   Empty_Statistics_Data: constant Statistics_Data := (others => <>);
+   -- ****
+
    -- ****t* Statistics/Statistics.Statistics_Container
    -- FUNCTION
    -- Used to store game statistics data
@@ -76,6 +83,13 @@ package Statistics is
       Killed_Mobs: Statistics_Container.Vector;
       Points: Natural := 0;
    end record;
+   -- ****
+
+   -- ****d* Statistics/Statistics.Empty_Game_Stats_Data
+   -- FUNCTION
+   -- Empty the game statistics
+   -- SOURCE
+   Empty_Game_Stats_Data: constant Game_Stats_Data := (others => <>);
    -- ****
 
    -- ****v* Statistics/Statistics.Game_Stats
