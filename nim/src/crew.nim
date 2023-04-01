@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import careers, config, game, utils, types
+import careers, crewinventory, config, game, messages, utils, shipscargo,
+    shipscrew3, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -139,6 +140,36 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
   else:
     playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
         level: skillLevel, experience: skillExp))
+
+proc dailyPayment*() =
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  for index, member in playerShip.crew.pairs:
+    if member.payment[1] > 0:
+      var haveMoney = true
+      if moneyIndex2 < playerShip.cargo.low:
+        addMessage(message = "You don't have any " & moneyName &
+            " to pay your crew members.", mType = tradeMessage, color = red)
+        haveMoney = false
+      if haveMoney:
+        if playerShip.cargo[moneyIndex2].amount < member.payment[1]:
+          let moneyNeeded = playerShip.cargo[moneyIndex2].amount
+          updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = (0 - moneyNeeded))
+          addMessage(message = "You don't have enough " & moneyName &
+              " to pay your crew members.", mType = tradeMessage, color = red)
+          haveMoney = false
+        if haveMoney:
+          updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = (0 -
+              member.payment[1]))
+          var payMessage = "You pay " & member.name
+          if member.gender == 'M':
+            payMessage.add(y = " his ")
+          else:
+            payMessage.add(y = " her ")
+          payMessage.add(y = "daily payment.")
+          addMessage(message = payMessage, mType = tradeMessage)
+          updateMorale(ship = playerShip, memberIndex = index,
+              value = getRandom(min = 1, max = 5))
 
 # Temporary code for interfacing with Ada
 
