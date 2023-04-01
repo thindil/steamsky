@@ -207,6 +207,22 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
         break
     i.inc
 
+proc getTrainingToolQuality*(memberIndex: Natural;
+    skillIndex: Positive): Positive {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Get the required tools quality for the selected skill
+  ##
+  ## * memberIndex - the index of the crew member in the player ship
+  ## * skillIndex  - the index of the skill which training tool quality will be get
+  ##
+  ## Returns numeric value for the minimum training tool quality required to
+  ## train the selected skill.
+  result = 100
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.index == skillIndex:
+      for quality in skillsList[skillIndex].toolsQuality:
+        if skill.level <= quality.level:
+          return quality.quality
+
 # Temporary code for interfacing with Ada
 
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
@@ -260,3 +276,11 @@ proc damageAdaItem(inventory: var array[128, AdaInventoryData]; itemIndex,
   except KeyError, CrewNoSpaceError:
     discard
   inventory = inventoryToAda(inventory = nimInventory)
+
+proc getAdaTrainingToolQuality(memberIndex, skillIndex: cint): cint {.raises: [
+    ], tags: [], exportc.} =
+  try:
+    return getTrainingToolQuality(memberIndex = memberIndex - 1,
+        skillIndex = skillIndex).cint
+  except KeyError:
+    return 100
