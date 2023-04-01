@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, factions, game, maps, items, shipscrew, types]
+import ../../src/[careers, factions, game, maps, items, shipscrew3, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
@@ -25,18 +25,10 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     1, 0, 0], order: gunner, loyalty: 100))
 skyMap[1][1].baseIndex = 1
 
-giveOrders(playerShip, 0, rest)
-assert playerShip.crew[0].order == talk
-
-giveOrders(playerShip, 1, rest)
-assert playerShip.crew[1].order == rest
-
-giveOrders(playerShip, 0, rest, -1, false)
-updateOrders(playerShip)
-assert playerShip.crew[0].order == talk
-
-assert getSkillLevel(playerShip.crew[0], 1) == 0
-assert getSkillLevel(playerShip.crew[0], 4) == 1
-
-assert findMember(talk) == 0
-assert findMember(defend) == -1
+let oldMorale = playerShip.crew[0].morale[2]
+let oldLevel = playerShip.crew[0].morale[1]
+updateMorale(playerShip, 0, 1)
+assert playerShip.crew[0].morale[2] == oldMorale + 1 or playerShip.crew[
+    0].morale[1] == oldLevel + 1
+updateMorale(playerShip, 0, -1)
+assert playerShip.crew[0].morale[2] == oldMorale
