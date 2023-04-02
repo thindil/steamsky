@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, crew, factions, game, items, ships, types]
+import ../../src/[careers, crew, factions, game, items, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
@@ -20,8 +20,6 @@ playerShip.crew.add(MemberData(skills: @[SkillInfo(index: 4, level: 4,
     attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
-
-assert getTrainingToolQuality(0, 1) == 100
 
 gainExp(10, 4, 0)
 assert playerShip.crew[0].skills[0].experience == 10

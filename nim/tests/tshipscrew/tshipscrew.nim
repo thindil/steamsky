@@ -25,6 +25,14 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     1, 0, 0], order: gunner, loyalty: 100))
 skyMap[1][1].baseIndex = 1
 
+let oldMorale = playerShip.crew[0].morale[2]
+let oldLevel = playerShip.crew[0].morale[1]
+updateMorale(playerShip, 0, 1)
+assert playerShip.crew[0].morale[2] == oldMorale + 1 or playerShip.crew[
+    0].morale[1] == oldLevel + 1
+updateMorale(playerShip, 0, -1)
+assert playerShip.crew[0].morale[2] == oldMorale
+
 giveOrders(playerShip, 0, rest)
 assert playerShip.crew[0].order == talk
 

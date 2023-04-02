@@ -52,3 +52,5 @@ block:
   assert findItem(inventory = inventory, itemType = "Weapon") == 0
   assert findItem(inventory, 500) == -1
   assert findItem(inventory = inventory, itemType = "asdasdas") == -1
+
+assert getTrainingToolQuality(0, 1) == 100
