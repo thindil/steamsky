@@ -471,6 +471,46 @@ package body Ships.UI.Modules is
               (TextWidget => Module_Text, Index => "end", Text => "{none}");
          end if;
       end Add_Owners_Info;
+      procedure Add_Upgrade_Button
+        (Upgrade: Ship_Upgrade; Tooltip: String; Box: Ttk_Frame;
+         Module: Module_Data; Column: Positive := 1;
+         Button_Name: String := "button") is
+         Upgrade_Number: constant String :=
+           (if Upgrade = MAX_VALUE then "2" else "1");
+      begin
+         if Module.Upgrade_Action = Upgrade and
+           Player_Ship.Upgrade_Module = Module_Index then
+            Info_Button :=
+              Create
+                (pathName => Box & "." & Button_Name,
+                 options =>
+                   "-image cancelicon -command {" & Close_Dialog_Button &
+                   " invoke;StopUpgrading " & CArgv.Arg(Argv => Argv, N => 1) &
+                   "} -style Small.TButton");
+            Add
+              (Widget => Info_Button,
+               Message => "Stop upgrading the " & Tooltip);
+         else
+            Info_Button :=
+              Create
+                (pathName => Box & "." & Button_Name,
+                 options =>
+                   "-image upgradebuttonicon -command {" &
+                   Close_Dialog_Button & " invoke;SetUpgrade " &
+                   Upgrade_Number & " " & CArgv.Arg(Argv => Argv, N => 1) &
+                   "} -style Small.TButton");
+            Add
+              (Widget => Info_Button,
+               Message => "Start upgrading the " & Tooltip);
+         end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button,
+            Options =>
+              "-row 0 -column" & Column'Img & " -sticky n -padx {5 0}");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Dialog_Button & " invoke;break}");
+      end Add_Upgrade_Button;
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
@@ -620,38 +660,10 @@ package body Ships.UI.Modules is
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
          if Module.Max_Durability < Module_Max_Value then
-            if Module.Upgrade_Action = DURABILITY and
-              Player_Ship.Upgrade_Module = Module_Index then
-               Info_Button :=
-                 Create
-                   (pathName => Status_Box & ".button2",
-                    options =>
-                      "-image cancelicon -command {" & Close_Dialog_Button &
-                      " invoke;StopUpgrading " &
-                      CArgv.Arg(Argv => Argv, N => 1) &
-                      "} -style Small.TButton");
-               Add
-                 (Widget => Info_Button,
-                  Message => "Stop upgrading the module durability");
-            else
-               Info_Button :=
-                 Create
-                   (pathName => Status_Box & ".button2",
-                    options =>
-                      "-image upgradebuttonicon -command {" &
-                      Close_Dialog_Button & " invoke;SetUpgrade 1 " &
-                      CArgv.Arg(Argv => Argv, N => 1) &
-                      "} -style Small.TButton");
-               Add
-                 (Widget => Info_Button,
-                  Message => "Start upgrading module durability");
-            end if;
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Info_Button,
-               Options => "-row 0 -column 3 -sticky n -padx {5 0}");
-            Bind
-              (Widgt => Info_Button, Sequence => "<Escape>",
-               Script => "{" & Close_Dialog_Button & " invoke;break}");
+            Add_Upgrade_Button
+              (Upgrade => DURABILITY, Tooltip => "module's durability",
+               Box => Status_Box, Module => Module, Column => 3,
+               Button_Name => "button2");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
          Height :=
@@ -742,38 +754,9 @@ package body Ships.UI.Modules is
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
                if Module.Power < Module_Max_Value then
-                  if Module.Upgrade_Action = MAX_VALUE and
-                    Player_Ship.Upgrade_Module = Module_Index then
-                     Info_Button :=
-                       Create
-                         (pathName => Power_Box & ".button",
-                          options =>
-                            "-image cancelicon -command {" &
-                            Close_Dialog_Button & " invoke;StopUpgrading " &
-                            CArgv.Arg(Argv => Argv, N => 1) &
-                            "} -style Small.TButton");
-                     Add
-                       (Widget => Info_Button,
-                        Message => "Stop upgrading the engine's power");
-                  else
-                     Info_Button :=
-                       Create
-                         (pathName => Power_Box & ".button",
-                          options =>
-                            "-image upgradebuttonicon -command {" &
-                            Close_Dialog_Button & " invoke;SetUpgrade 2 " &
-                            CArgv.Arg(Argv => Argv, N => 1) &
-                            "} -style Small.TButton");
-                     Add
-                       (Widget => Info_Button,
-                        Message => "Start upgrading the engine's power");
-                  end if;
-                  Tcl.Tk.Ada.Grid.Grid
-                    (Slave => Info_Button,
-                     Options => "-row 0 -column 1 -sticky n -padx {5 0}");
-                  Bind
-                    (Widgt => Info_Button, Sequence => "<Escape>",
-                     Script => "{" & Close_Dialog_Button & " invoke;break}");
+                  Add_Upgrade_Button
+                    (Upgrade => MAX_VALUE, Tooltip => "engine's power",
+                     Box => Power_Box, Module => Module);
                end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Power_Box, Options => "-sticky w");
@@ -923,38 +906,9 @@ package body Ships.UI.Modules is
                  (Slave => Progress_Bar,
                   Options => "-row 0 -column 1 -padx {5 0}");
                if Module.Quality < Module_Max_Value then
-                  if Module.Upgrade_Action = MAX_VALUE and
-                    Player_Ship.Upgrade_Module = Module_Index then
-                     Info_Button :=
-                       Create
-                         (pathName => Quality_Box & ".button",
-                          options =>
-                            "-image cancelicon -command {" &
-                            Close_Dialog_Button & " invoke;StopUpgrading " &
-                            CArgv.Arg(Argv => Argv, N => 1) &
-                            "} -style Small.TButton");
-                     Add
-                       (Widget => Info_Button,
-                        Message => "Stop upgrading cabin quality");
-                  else
-                     Info_Button :=
-                       Create
-                         (pathName => Quality_Box & ".button",
-                          options =>
-                            "-image upgradebuttonicon -command {" &
-                            Close_Dialog_Button & " invoke;SetUpgrade 2 " &
-                            CArgv.Arg(Argv => Argv, N => 1) &
-                            "} -style Small.TButton");
-                     Add
-                       (Widget => Info_Button,
-                        Message => "Start upgrading cabin quality");
-                  end if;
-                  Tcl.Tk.Ada.Grid.Grid
-                    (Slave => Info_Button,
-                     Options => "-row 0 -column 2 -sticky n -padx {5 0}");
-                  Bind
-                    (Widgt => Info_Button, Sequence => "<Escape>",
-                     Script => "{" & Close_Dialog_Button & " invoke;break}");
+                  Add_Upgrade_Button
+                    (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
+                     Box => Quality_Box, Module => Module, Column => 2);
                end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Quality_Box, Options => "-sticky w");
