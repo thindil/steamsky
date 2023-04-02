@@ -23,6 +23,7 @@ with Ships; use Ships;
 
 package body Statistics is
 
+   --## rule off TYPE_INITIAL_VALUES
    type Nim_Game_Stats is record
       Bases_Visited: Integer;
       Map_Visited: Integer;
@@ -35,6 +36,7 @@ package body Statistics is
       Amount: Integer;
    end record;
    type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
+   --## rule on TYPE_INITIAL_VALUES
 
    procedure Get_Game_Stats is
       Nim_Stats: constant Nim_Game_Stats :=
@@ -52,9 +54,11 @@ package body Statistics is
    end Get_Game_Stats;
 
    procedure Set_Game_Stats is
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Stats: Nim_Game_Stats :=
         (Bases_Visited => 0, Map_Visited => 0, Distance_Traveled => 0,
          Accepted_Missions => 0, Points => 0);
+      --## rule on IMPROPER_INITIALIZATION
       procedure Set_Ada_Game_Stats(Stats: out Nim_Game_Stats) with
          Import => True,
          Convention => C,
@@ -109,7 +113,9 @@ package body Statistics is
    procedure Set_Game_Stats_List(Name: String) is
       use Interfaces.C;
 
+      --## rule off IMPROPER_INITIALIZATION
       Nim_List: Nim_Stats_List := (others => <>);
+      --## rule on IMPROPER_INITIALIZATION
       procedure Set_Ada_Game_Stats_List
         (N: chars_ptr; Stats_List: out Nim_Stats_List) with
          Import => True,
@@ -151,9 +157,11 @@ package body Statistics is
       for I in 1 .. Get_Proto_Ships_Amount loop
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
             Ship_Index := I;
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Game_Stats.Points :=
               Game_Stats.Points +
               (Get_Proto_Ship(Proto_Index => I).Combat_Value / 10);
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;
