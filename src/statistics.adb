@@ -15,11 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Handling;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Ships; use Ships;
+with Ships;
 
 package body Statistics is
 
@@ -150,6 +150,10 @@ package body Statistics is
    end Set_Game_Stats_List;
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Ships;
+
       Updated: Boolean := False;
       Ship_Index: Natural := 0;
    begin
@@ -250,6 +254,8 @@ package body Statistics is
 
    procedure Update_Killed_Mobs
      (Mob: Member_Data; Fraction_Name: Unbounded_String) is
+      use Ada.Characters.Handling;
+
       Updated: Boolean := False;
    begin
       Get_Attribute_Points_Loop :
