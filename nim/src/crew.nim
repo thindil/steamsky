@@ -17,7 +17,7 @@
 
 import std/[tables]
 import careers, crewinventory, config, game, maps, messages, utils, shipscargo,
-    shipscrew3, types
+    shipscrew, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -172,8 +172,8 @@ proc dailyPayment*() =
         else:
           for order in playerShip.crew[memberIndex].orders.mitems:
             order = 0
- #         giveOrders(ship = playerShip, memberIndex = memberIndex,
- #             givenOrder = rest)
+          giveOrders(ship = playerShip, memberIndex = memberIndex,
+              givenOrder = rest)
           memberIndex.inc
 
 # Temporary code for interfacing with Ada
