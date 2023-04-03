@@ -13,8 +13,9 @@ if itemsList.len == 0:
   loadModules("../bin/data/shipmodules.dat")
 if recipesList.len == 0:
   loadRecipes("../bin/data/recipes.dat")
-if protoShipsList.len == 0:
+if protoMobsList.len == 0:
   loadMobs("../bin/data/mobs.dat")
+if protoShipsList.len == 0:
   loadShips("../bin/data/ships.dat")
 
 assert getCabinQuality(10) == "Empty room"

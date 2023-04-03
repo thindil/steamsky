@@ -11,6 +11,7 @@ if itemsList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
 
+playerCareer = "general"
 playerShip.skyX = 1
 playerShip.skyY = 1
 playerShip.crew = @[]
@@ -48,3 +49,6 @@ assert getSkillLevel(playerShip.crew[0], 4) == 1
 
 assert findMember(talk) == 0
 assert findMember(defend) == -1
+
+gainExp(10, 4, 0)
+assert playerShip.crew[0].skills[0].experience == 10
