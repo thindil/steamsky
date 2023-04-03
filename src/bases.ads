@@ -276,4 +276,12 @@ package Bases is
 
    procedure Get_Base_Owner(Base_Index: Bases_Range);
 
+   procedure Get_Ada_Base_Population
+     (Base_Index: Bases_Range; Population: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBasePopulation";
+
+   procedure Set_Base_Population(Base_Index: Bases_Range);
+
 end Bases;

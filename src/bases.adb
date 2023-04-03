@@ -801,4 +801,16 @@ package body Bases is
                 Tiny_String.To_String(Source => Sky_Bases(Base_Index).Owner)));
    end Get_Base_Owner;
 
+   procedure Set_Base_Population(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Population
+        (B_Index: Integer; Population: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBasePopulation";
+   begin
+      Set_Ada_Base_Population
+        (B_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+   end Set_Base_Population;
+
 end Bases;
