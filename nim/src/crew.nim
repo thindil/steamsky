@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import crewinventory, game, maps, messages, utils, shipscargo, shipscrew, types
+import crewinventory, game, maps, messages, utils, shipscargo, shipscrew,
+    shipscrew2, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -99,7 +100,7 @@ proc dailyPayment*() =
         addMessage(message = "Your contract with " & playerShip.crew[
             memberIndex].name & " has ended.", mType = tradeMessage, color = red)
         if playerShip.speed == docked:
-#          deleteMember(memberIndex = memberIndex, ship = playerShip)
+          deleteMember(memberIndex = memberIndex, ship = playerShip)
           skyBases[skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex].population.inc
           memberIndex.dec
@@ -116,3 +117,9 @@ proc generateAdaMemberName(gender: char;
     factionIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
   return generateMemberName(gender = gender,
       factionIndex = $factionIndex).cstring
+
+proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    dailyPayment()
+  except KeyError, Exception:
+    discard
