@@ -332,21 +332,20 @@ package Crew is
       -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
-   procedure Daily_Payment with
-      Test_Case => (Name => "Test_DailyPayment", Mode => Robustness);
-      -- ****
+   procedure Daily_Payment;
+   -- ****
 
-      -- ****f* Crew/Crew.Get_Training_Tool_Quality
-      -- FUNCTION
-      -- Get minumum required quality for training tool for the selected skill
-      -- for the selected crew member
-      -- PARAMETERS
-      -- Member_Index - Index of crew member which skills will be queried
-      -- Skill_Index  - Index of skill of which tool will be queried
-      -- RESULT
-      -- Minimum required quality of training tool or 100 if not set for this
-      -- skill
-      -- SOURCE
+   -- ****f* Crew/Crew.Get_Training_Tool_Quality
+   -- FUNCTION
+   -- Get minumum required quality for training tool for the selected skill
+   -- for the selected crew member
+   -- PARAMETERS
+   -- Member_Index - Index of crew member which skills will be queried
+   -- Skill_Index  - Index of skill of which tool will be queried
+   -- RESULT
+   -- Minimum required quality of training tool or 100 if not set for this
+   -- skill
+   -- SOURCE
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive with
       Pre => Skill_Index <= Natural(Skills_Amount);
