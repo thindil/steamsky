@@ -60,7 +60,7 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
   result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
       femalesSyllablesEndList.len - 1))]
 
-proc dailyPayment*() =
+proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   for index, member in playerShip.crew.pairs:
