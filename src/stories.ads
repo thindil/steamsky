@@ -1,4 +1,4 @@
---    Copyright 2018-2022 Bartek thindil Jasicki
+--    Copyright 2018-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -110,6 +110,13 @@ package Stories is
    end record;
    -- ****
 
+   -- ****d* Stories/Stories.Empty_Step
+   -- FUNCTION
+   -- Empty story step information
+   -- SOURCE
+   Empty_Step: constant Step_Data := (others => <>);
+   -- ****
+
    -- ****t* Stories/Stories.Steps_Container
    -- FUNCTION
    -- Used to store stories steps
@@ -148,6 +155,13 @@ package Stories is
    end record;
    -- ****
 
+   -- ****d* Stories/Stories.Empty_Story
+   -- FUNCTION
+   -- Empty story inforation
+   -- SOURCE
+   Empty_Story: constant Story_Data := (others => <>);
+   -- ****
+
    -- ****t* Stories/Stories.Stories_Container
    -- FUNCTION
    -- Used to store stories
@@ -182,6 +196,13 @@ package Stories is
    end record;
    -- ****
 
+   -- ****d* Stories/Stories.Empty_Current_Story
+   -- FUNCTION
+   -- Empty current story data
+   -- SOURCE
+   Empty_Current_Story: constant Current_Story_Data := (others => <>);
+   -- ****
+
    -- ****s* Stories/Stories.Finished_Story_Data
    -- FUNCTION
    -- Data structure for finished story/steps
@@ -196,6 +217,13 @@ package Stories is
       Steps_Amount: Positive := 1;
       Steps_Texts: UnboundedString_Container.Vector;
    end record;
+   -- ****
+
+   -- ****d* Stories/Stories.Empty_Finished_Story
+   -- FUNCTION
+   -- Empty finished story data
+   -- SOURCE
+   Empty_Finished_Story: constant Finished_Story_Data := (others => <>);
    -- ****
 
    -- ****t* Stories/Stories.FinishedStories_Container
