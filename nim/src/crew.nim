@@ -93,7 +93,7 @@ proc dailyPayment*() =
         updateMorale(ship = playerShip, memberIndex = index,
             value = getRandom(min = -50, max = -10))
   var memberIndex = 1
-  while memberIndex < playerShip.crew.len:
+  while memberIndex <= playerShip.crew.high:
     if playerShip.crew[memberIndex].contractLength > 0:
       playerShip.crew[memberIndex].contractLength.dec
       if playerShip.crew[memberIndex].contractLength == 0:
@@ -109,7 +109,7 @@ proc dailyPayment*() =
             order = 0
           giveOrders(ship = playerShip, memberIndex = memberIndex,
               givenOrder = rest)
-          memberIndex.inc
+    memberIndex.inc
 
 # Temporary code for interfacing with Ada
 
