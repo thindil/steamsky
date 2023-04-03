@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crew, crewinventory, game, goals, items, log, messages, shipscargo,
-    shipscrew, statistics, trades, types
+import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
+    statistics, trades, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
