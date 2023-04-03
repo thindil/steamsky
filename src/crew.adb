@@ -999,111 +999,29 @@ package body Crew is
 
    procedure Daily_Payment is
       use Bases;
-      use Tiny_String;
 
-      Money_Index_2: constant Inventory_Container.Extended_Index :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Pay_Message: Unbounded_String := Null_Unbounded_String;
-      Member_Index: Crew_Container.Extended_Index;
-      Have_Money: Boolean := True;
-      Money_Needed: Natural := 0;
+      procedure Daily_Ada_Payment with
+         Import => True,
+         Convention => C,
+         External_Name => "dailyAdaPayment";
    begin
-      Member_Index := 1;
-      Daily_Payment_Loop :
-      for Member of Player_Ship.Crew loop
-         if Member.Payment(1) > 0 then
-            if Money_Index_2 = 0 and Have_Money then
-               Add_Message
-                 (Message =>
-                    "You don't have any " & To_String(Source => Money_Name) &
-                    " to pay your crew members.",
-                  M_Type => TRADEMESSAGE, Color => RED);
-               Have_Money := False;
-            end if;
-            if Have_Money then
-               if Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount <
-                 Member.Payment(1) then
-                  Money_Needed :=
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                      .Amount;
-                  Update_Cargo
-                    (Ship => Player_Ship, Proto_Index => Money_Index,
-                     Amount => 0 - Money_Needed);
-                  Add_Message
-                    (Message =>
-                       "You don't have enough " &
-                       To_String(Source => Money_Name) &
-                       " to pay your crew members.",
-                     M_Type => TRADEMESSAGE, Color => RED);
-                  Have_Money := False;
-               end if;
-               if Have_Money then
-                  Update_Cargo
-                    (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-                     Amount => 0 - Member.Payment(1));
-                  Pay_Message :=
-                    To_Unbounded_String(Source => "You pay ") &
-                    To_String(Source => Member.Name);
-                  if Member.Gender = 'M' then
-                     Append(Source => Pay_Message, New_Item => " his ");
-                  else
-                     Append(Source => Pay_Message, New_Item => " her ");
-                  end if;
-                  Append(Source => Pay_Message, New_Item => "daily payment.");
-                  Add_Message
-                    (Message => To_String(Source => Pay_Message),
-                     M_Type => TRADEMESSAGE);
-                  Update_Morale
-                    (Ship => Player_Ship, Member_Index => Member_Index,
-                     Amount => Get_Random(Min => 1, Max => 5));
-               end if;
-            end if;
-            if not Have_Money then
-               Update_Morale
-                 (Ship => Player_Ship, Member_Index => Member_Index,
-                  Amount => Get_Random(Min => -50, Max => -10));
-            end if;
-         end if;
-         Member_Index := Member_Index + 1;
-      end loop Daily_Payment_Loop;
-      Member_Index := 1;
-      Update_Contracts_Loop :
-      while Member_Index <= Player_Ship.Crew.Last_Index loop
-         if Player_Ship.Crew(Member_Index).Contract_Length > 0 then
-            Player_Ship.Crew(Member_Index).Contract_Length :=
-              Player_Ship.Crew(Member_Index).Contract_Length - 1;
-            if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
-               Add_Message
-                 (Message =>
-                    "Your contract with " &
-                    To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                    " has ended.",
-                  M_Type => TRADEMESSAGE, Color => RED);
-               if Player_Ship.Speed = DOCKED then
-                  Delete_Member
-                    (Member_Index => Member_Index, Ship => Player_Ship);
-                  Sky_Bases
-                    (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-                    .Population :=
-                    Sky_Bases
-                      (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                         .Base_Index)
-                      .Population +
-                    1;
-                  Member_Index := Member_Index - 1;
-               else
-                  Player_Ship.Crew(Member_Index).Orders := (others => 0);
-                  Give_Orders
-                    (Ship => Player_Ship, Member_Index => Member_Index,
-                     Given_Order => REST);
-               end if;
-            end if;
-         end if;
-         Member_Index := Member_Index + 1;
-      end loop Update_Contracts_Loop;
+      Set_Ship_In_Nim;
+      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
+         Get_Ada_Base_Population
+           (Base_Index =>
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
+            Population =>
+              Sky_Bases
+                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+                .Population);
+      end if;
+      Daily_Ada_Payment;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
+         Set_Base_Population
+           (Base_Index =>
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index);
+      end if;
    end Daily_Payment;
 
    function Get_Training_Tool_Quality
