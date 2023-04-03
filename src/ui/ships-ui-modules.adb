@@ -476,7 +476,8 @@ package body Ships.UI.Modules is
          Module: Module_Data; Column: Positive := 1;
          Button_Name: String := "button") is
          Upgrade_Number: constant String :=
-           (if Upgrade = MAX_VALUE then "2" else "1");
+           (case Upgrade is when MAX_VALUE => "2", when VALUE => "3",
+              when others => "1");
       begin
          if Module.Upgrade_Action = Upgrade and
            Player_Ship.Upgrade_Module = Module_Index then
@@ -743,16 +744,19 @@ package body Ships.UI.Modules is
                    (pathName => Module_Frame & ".powerinfo",
                     options => "-width 360");
             begin
-               Label :=
-                 Create
-                   (pathName => Power_Box & ".powerlbl",
-                    options =>
-                      "-text {Max power:" & Integer'Image(Module.Power) & "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                Module_Max_Value :=
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
+               Label :=
+                 Create
+                   (pathName => Power_Box & ".powerlbl",
+                    options =>
+                      "-text {Max power:" & Integer'Image(Module.Power) &
+                      (if Module.Power = Module_Max_Value then " (max upgrade)"
+                       else "") &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                if Module.Power < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => MAX_VALUE, Tooltip => "engine's power",
@@ -765,19 +769,38 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end Add_Power_Info_Block;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
-                 "}");
-            Module_Max_Value :=
-              Positive
-                (Float(Get_Module(Index => Module.Proto_Index).Value) / 2.0);
-            if Module.Fuel_Usage = Module_Max_Value then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{ (max upgrade)}");
-            end if;
+            Add_Fuel_Info_Block :
+            declare
+               Fuel_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".fuelinfo",
+                    options => "-width 360");
+            begin
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Value) /
+                    2.0);
+               Label :=
+                 Create
+                   (pathName => Fuel_Box & ".powerlbl",
+                    options =>
+                      "-text {Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
+                      (if Module_Max_Value = Module.Fuel_Usage then
+                         " (max upgrade)"
+                       else "") &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               if Module.Fuel_Usage > Module_Max_Value then
+                  Add_Upgrade_Button
+                    (Upgrade => VALUE, Tooltip => "engine's fuel usage",
+                     Box => Fuel_Box, Module => Module);
+               end if;
+               Tcl.Tk.Ada.Grid.Grid(Slave => Fuel_Box, Options => "-sticky w");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end Add_Fuel_Info_Block;
          when CARGO_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
