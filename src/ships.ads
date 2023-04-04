@@ -355,13 +355,6 @@ package Ships is
    Player_Ship: Ship_Record;
    -- ****
 
-   -- ****e* Ships/Ships.Ships_Invalid_Data
-   -- FUNCTION
-   -- Raised when invalid data in ships file
-   -- SOURCE
-   Ships_Invalid_Data: exception;
-   -- ****
-
    -- ****f* Ships/Ships.CreateShip
    -- FUNCTION
    -- Create new ship
