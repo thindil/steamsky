@@ -37,6 +37,13 @@ package Stories is
       Default_Value => DROPITEM;
    -- ****
 
+      -- ****d* Stories/Stories.Default_Start_Condition
+      -- FUNCTION
+      -- The default type of condition to start stories
+      -- SOURCE
+   Default_Start_Condition: constant Start_Condition_Type := DROPITEM;
+   -- ****
+
    -- ****t* Stories/Stories.Step_Condition_Type
    -- FUNCTION
    -- Types of conditions to finish story step
@@ -44,6 +51,13 @@ package Stories is
    type Step_Condition_Type is
      (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
       Default_Value => ANY;
+      -- ****
+
+      -- ****d* Stories/Stories.Default_Step_Condition
+      -- FUNCTION
+      -- The default type of the condition to finish the story
+      -- SOURCE
+   Default_Step_Condition: constant Step_Condition_Type := ANY;
    -- ****
 
    -- ****s* Stories/Stories.Step_Text_Data
@@ -57,6 +71,13 @@ package Stories is
       Condition: Step_Condition_Type;
       Text: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* Stories/Stories.Empty_Step_Text
+   -- FUNCTION
+   -- Empty data for stories steps texts
+   -- SOURCE
+   Empty_Step_Text: constant Step_Text_Data := (others => <>);
    -- ****
 
    -- ****t* Stories/Stories.StepTexts_Container
@@ -78,6 +99,13 @@ package Stories is
       Name: Unbounded_String;
       Value: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* Stories/Stories.Empty_Finish_Condition
+   -- FUNCTION
+   -- Empty finish condition for a story's step
+   -- SOURCE
+   Empty_Finish_Condition: constant Step_Finish_Data := (others => <>);
    -- ****
 
    -- ****t* Stories/Stories.StepData_Container
