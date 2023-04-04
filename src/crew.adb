@@ -15,19 +15,20 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases;
 with Config; use Config;
 with Combat;
 with Crew.Inventory;
 with Factions;
 with Maps; use Maps;
-with Messages; use Messages;
+with Messages;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Cargo;
+with Ships.Crew;
 with Ships.Movement;
 with ShipModules;
-with Utils; use Utils;
+with Utils;
 
 package body Crew is
 
@@ -88,7 +89,11 @@ package body Crew is
      (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
       use Crew.Inventory;
       use Factions;
+      use Messages;
+      use Ships.Cargo;
+      use Ships.Crew;
       use ShipModules;
+      use Utils;
       use Tiny_String;
 
       Tired_Level, Hunger_Level, Thirst_Level: Integer := 0;
