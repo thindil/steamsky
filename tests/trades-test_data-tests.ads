@@ -16,7 +16,7 @@ package Trades.Test_Data.Tests is
    procedure Test_Sell_Items_51dfd2_132f39(Gnattest_T: in out Test);
    --  trades.ads:127:4:Sell_Items:Test_SellItems
 
-   procedure Test_Generate_Trader_Cargo_49c5d5_cfbd61(Gnattest_T: in out Test);
+   procedure Test_Generate_Trader_Cargo_49c5d5_968cbf(Gnattest_T: in out Test);
    --  trades.ads:144:4:Generate_Trader_Cargo:Test_GenerateTraderCargo
 
 end Trades.Test_Data.Tests;

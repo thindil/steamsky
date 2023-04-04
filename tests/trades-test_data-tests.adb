@@ -164,11 +164,11 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61
-     (Proto_Index: Proto_Ships_Container.Extended_Index) is
+   procedure Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf
+     (Proto_Index: Positive) is
    begin
       begin
-         pragma Assert(Proto_Index <= Proto_Ships_List.Last_Index);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -187,21 +187,20 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_GenerateTraderCargo test commitment violated");
       end;
-   end Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61;
+   end Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Trader_Cargo_test_generatetradercargo
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Trader_Cargo_49c5d5_cfbd61
+   procedure Test_Generate_Trader_Cargo_49c5d5_968cbf
      (Gnattest_T: in out Test) renames
      Test_Generate_Trader_Cargo_test_generatetradercargo;
 --  id:2.2/49c5d50bda1af19f/Generate_Trader_Cargo/1/0/test_generatetradercargo/
    procedure Test_Generate_Trader_Cargo_test_generatetradercargo
      (Gnattest_T: in out Test) is
-      procedure Generate_Trader_Cargo
-        (Proto_Index: Proto_Ships_Container.Extended_Index) renames
-        Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61;
+      procedure Generate_Trader_Cargo(Proto_Index: Positive) renames
+        Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

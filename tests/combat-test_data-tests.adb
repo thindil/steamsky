@@ -29,12 +29,11 @@ package body Combat.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Start_Combat_68a6d6_76cb04
-     (Enemy_Index: Proto_Ships_Container.Extended_Index;
-      New_Combat: Boolean := True) return Boolean is
+   function Wrap_Test_Start_Combat_68a6d6_4a322d
+     (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
    begin
       begin
-         pragma Assert(Enemy_Index <= Proto_Ships_List.Last_Index);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -43,7 +42,7 @@ package body Combat.Test_Data.Tests is
                "req_sloc(combat.ads:0):Test_StartCombat test requirement violated");
       end;
       declare
-         Test_Start_Combat_68a6d6_76cb04_Result: constant Boolean :=
+         Test_Start_Combat_68a6d6_4a322d_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Combat.Start_Combat
              (Enemy_Index, New_Combat);
       begin
@@ -56,21 +55,21 @@ package body Combat.Test_Data.Tests is
                  (False,
                   "ens_sloc(combat.ads:0:):Test_StartCombat test commitment violated");
          end;
-         return Test_Start_Combat_68a6d6_76cb04_Result;
+         return Test_Start_Combat_68a6d6_4a322d_Result;
       end;
-   end Wrap_Test_Start_Combat_68a6d6_76cb04;
+   end Wrap_Test_Start_Combat_68a6d6_4a322d;
 --  end read only
 
 --  begin read only
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test);
-   procedure Test_Start_Combat_68a6d6_76cb04(Gnattest_T: in out Test) renames
+   procedure Test_Start_Combat_68a6d6_4a322d(Gnattest_T: in out Test) renames
      Test_Start_Combat_test_startcombat;
 --  id:2.2/68a6d60d07303858/Start_Combat/1/0/test_startcombat/
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test) is
       function Start_Combat
-        (Enemy_Index: Proto_Ships_Container.Extended_Index;
-         New_Combat: Boolean := True) return Boolean renames
-        Wrap_Test_Start_Combat_68a6d6_76cb04;
+        (Enemy_Index: Positive; New_Combat: Boolean := True)
+         return Boolean renames
+        Wrap_Test_Start_Combat_68a6d6_4a322d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
