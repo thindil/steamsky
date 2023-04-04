@@ -149,26 +149,6 @@ package body Ships.UI.Modules is
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
          when ENGINE =>
-            Module_Max_Value :=
-              Natural
-                (Float
-                   (Get_Module
-                      (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                      .Value) /
-                 2.0);
-            if Player_Ship.Modules(Module_Index).Upgrade_Action = VALUE and
-              Player_Ship.Upgrade_Module = Module_Index then
-               Module_Max_Value :=
-                 Player_Ship.Modules(Module_Index).Fuel_Usage + 1;
-            end if;
-            if Player_Ship.Modules(Module_Index).Fuel_Usage >
-              Module_Max_Value then
-               Add_Button
-                 (Name => ".fuel",
-                  Label => "Start working on reduce fuel usage of this engine",
-                  Command =>
-                    "SetUpgrade 3 " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
             if not Player_Ship.Modules(Module_Index).Disabled then
                Add_Button
                  (Name => ".switch",
