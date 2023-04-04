@@ -61,6 +61,8 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
       femalesSyllablesEndList.len - 1))]
 
 proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
+  ## Pay daily payments to the player's ship crew members and update the lenght
+  ## of their contracts
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   for index, member in playerShip.crew.pairs:
