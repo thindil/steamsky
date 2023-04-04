@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import crewinventory, game, maps, messages, utils, shipscargo, shipscrew,
-    shipscrew2, types
+import config, crewinventory, game, maps, messages, utils, shipscargo,
+    shipscrew, shipscrew2, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -113,6 +113,27 @@ proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEff
               givenOrder = rest)
     memberIndex.inc
 
+proc getAttributeLevelName*(attributeLevel: Positive): string =
+  if gameSettings.showNumbers == 1:
+    return $attributeLevel
+  case attributeLevel
+  of 1 .. 5:
+    return "Very low"
+  of 6 .. 10:
+    return "Low"
+  of 11 .. 15:
+    return "Below average"
+  of 16 .. 30:
+    return "Average"
+  of 31 .. 35:
+    return "Above average"
+  of 36 .. 40:
+    return "High"
+  of 41 .. 49:
+    return "Very high"
+  else:
+    return "Outstanding"
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
@@ -125,3 +146,7 @@ proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc.} =
     dailyPayment()
   except KeyError, Exception:
     discard
+
+proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
+    tags: [], exportc.} =
+  return getAttributeLevelName(attributeLevel = attributeLevel.Positive).cstring
