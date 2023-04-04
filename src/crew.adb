@@ -978,28 +978,15 @@ package body Crew is
 
    function Get_Attribute_Level_Name
      (Attribute_Level: Positive) return String is
+      function Get_Ada_Attribute_Level_Name
+        (A_Level: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaAttributeLevelName";
    begin
-      if Game_Settings.Show_Numbers then
-         return Positive'Image(Attribute_Level);
-      end if;
-      case Attribute_Level is
-         when 1 .. 5 =>
-            return "Very low";
-         when 6 .. 10 =>
-            return "Low";
-         when 11 .. 15 =>
-            return "Below average";
-         when 16 .. 30 =>
-            return "Average";
-         when 31 .. 35 =>
-            return "Above average";
-         when 36 .. 40 =>
-            return "High";
-         when 41 .. 49 =>
-            return "Very high";
-         when others =>
-            return "Outstanding";
-      end case;
+      return
+        Value
+          (Item => Get_Ada_Attribute_Level_Name(A_Level => Attribute_Level));
    end Get_Attribute_Level_Name;
 
    procedure Daily_Payment is
