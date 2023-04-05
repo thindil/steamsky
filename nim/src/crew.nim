@@ -141,6 +141,35 @@ proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
   else:
     return "Outstanding"
 
+proc getSkillLevelName*(skillLevel: SkillRange): string =
+  if gameSettings.showNumbers == 1:
+    return $skillLevel
+  case skillLevel
+  of 0:
+    return "Untrained"
+  of 1 .. 10:
+    return "Beginner"
+  of 11 .. 20:
+    return "Novice"
+  of 21 .. 30:
+    return "Apprentice"
+  of 31 .. 40:
+    return "Practitioner"
+  of 41 .. 50:
+    return "Competent"
+  of 51 .. 60:
+    return "Respected"
+  of 61 .. 70:
+    return "Renowned"
+  of 71 .. 80:
+    return "Master"
+  of 81 .. 90:
+    return "Grand-Master"
+  of 91 .. 99:
+    return "Legendary"
+  else:
+    return "Ultimate"
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
@@ -157,3 +186,6 @@ proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc.} =
 proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
     tags: [], exportc.} =
   return getAttributeLevelName(attributeLevel = attributeLevel.Positive).cstring
+
+proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [], exportc.} =
+  return getSkillLevelName(skillLevel = skillLevel.Positive).cstring
