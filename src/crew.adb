@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded;
 with Bases;
-with Config;
 with Combat;
 with Crew.Inventory;
 with Factions;
@@ -945,37 +944,12 @@ package body Crew is
    end Wait_For_Rest;
 
    function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
-      use Config;
+      function Get_Ada_Skill_Level_Name(S_Level: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaSkillLevelName";
    begin
-      if Game_Settings.Show_Numbers then
-         return Positive'Image(Skill_Level);
-      end if;
-      case Skill_Level is
-         when 0 =>
-            return "Untrained";
-         when 1 .. 10 =>
-            return "Beginner";
-         when 11 .. 20 =>
-            return "Novice";
-         when 21 .. 30 =>
-            return "Apprentice";
-         when 31 .. 40 =>
-            return "Practitioner";
-         when 41 .. 50 =>
-            return "Competent";
-         when 51 .. 60 =>
-            return "Respected";
-         when 61 .. 70 =>
-            return "Renowned";
-         when 71 .. 80 =>
-            return "Master";
-         when 81 .. 90 =>
-            return "Grand-Master";
-         when 91 .. 99 =>
-            return "Legendary";
-         when others =>
-            return "Ultimate";
-      end case;
+      return Value(Item => Get_Ada_Skill_Level_Name(S_Level => Skill_Level));
    end Get_Skill_Level_Name;
 
    function Get_Attribute_Level_Name
