@@ -115,6 +115,12 @@ proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEff
 
 proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
     raises: [], tags: [].} =
+  ## Get the attribute level name for the selected attribute or its numerical
+  ## value if the player set it in the configuration.
+  ##
+  ## * attributeLevel - the level of an attribute which value will be get
+  ##
+  ## Returns the string representation of the selected level of an attribute.
   if gameSettings.showNumbers == 1:
     return $attributeLevel
   case attributeLevel
