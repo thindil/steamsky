@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
   info dialog
 - Ability to start the upgrade of the player's ship's engine's power in the
   module info dialog
+- Ability to start the upgrade of the player's ship's engine's fuel usage in
+  the module info dialog
 
 ### Changed
 - Updated modding guide
