@@ -15,9 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Bases;
-with Config; use Config;
+with Config;
 with Combat;
 with Crew.Inventory;
 with Factions;
@@ -87,6 +87,7 @@ package body Crew is
 
    procedure Update_Crew
      (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
+      use Ada.Strings.Unbounded;
       use Crew.Inventory;
       use Factions;
       use Messages;
@@ -944,6 +945,7 @@ package body Crew is
    end Wait_For_Rest;
 
    function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
+      use Config;
    begin
       if Game_Settings.Show_Numbers then
          return Positive'Image(Skill_Level);
