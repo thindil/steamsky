@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[careers, crew, factions, game, items, maps, types]
+import ../../src/[careers, config, crew, factions, game, items, maps, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
@@ -28,3 +28,12 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 skyMap[1][1].baseIndex = 1
 
 dailyPayment()
+
+gameSettings.showNumbers = 0
+assert getAttributeLevelName(3) == "Very low"
+assert getAttributeLevelName(12) == "Below average"
+assert getAttributeLevelName(48) == "Very high"
+gameSettings.showNumbers = 1
+assert getAttributeLevelName(3) == "3"
+assert getAttributeLevelName(12) == "12"
+assert getAttributeLevelName(48) == "48"
