@@ -17,6 +17,7 @@ with System.Assertions;
 
 with Config; use Config;
 with Ships; use Ships;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 --  begin read only
 --  end read only
@@ -207,81 +208,6 @@ package body Crew.Test_Data.Tests is
 
 --  begin read only
    end Test_Get_Skill_Level_Name_test_getskilllevelname;
---  end read only
-
---  begin read only
-   function Wrap_Test_Get_Attribute_Level_Name_e6c169_3af3bf
-     (Attribute_Level: Positive) return String is
-   begin
-      begin
-         pragma Assert(Attribute_Level <= 50);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "req_sloc(crew.ads:0):Test_GetAttributeLevelName test requirement violated");
-      end;
-      declare
-         Test_Get_Attribute_Level_Name_e6c169_3af3bf_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Crew.Get_Attribute_Level_Name
-             (Attribute_Level);
-      begin
-         begin
-            pragma Assert(True);
-            null;
-         exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "ens_sloc(crew.ads:0:):Test_GetAttributeLevelName test commitment violated");
-         end;
-         return Test_Get_Attribute_Level_Name_e6c169_3af3bf_Result;
-      end;
-   end Wrap_Test_Get_Attribute_Level_Name_e6c169_3af3bf;
---  end read only
-
---  begin read only
-   procedure Test_Get_Attribute_Level_Name_test_getattributelevelname
-     (Gnattest_T: in out Test);
-   procedure Test_Get_Attribute_Level_Name_e6c169_3af3bf
-     (Gnattest_T: in out Test) renames
-     Test_Get_Attribute_Level_Name_test_getattributelevelname;
---  id:2.2/e6c169a9e17af1de/Get_Attribute_Level_Name/1/0/test_getattributelevelname/
-   procedure Test_Get_Attribute_Level_Name_test_getattributelevelname
-     (Gnattest_T: in out Test) is
-      function Get_Attribute_Level_Name
-        (Attribute_Level: Positive) return String renames
-        Wrap_Test_Get_Attribute_Level_Name_e6c169_3af3bf;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Game_Settings.Show_Numbers := False;
-      Assert
-        (Get_Attribute_Level_Name(3) = "Very low",
-         "Failed to get attribute level name for level 3");
-      Assert
-        (Get_Attribute_Level_Name(12) = "Below average",
-         "Failed to get attribute level name for level 12");
-      Assert
-        (Get_Attribute_Level_Name(48) = "Very high",
-         "Failed to get attribute level name for level 48");
-      Game_Settings.Show_Numbers := True;
-      Assert
-        (Get_Attribute_Level_Name(3) = " 3",
-         "Failed to get attribute level name for level 3 (numeric)");
-      Assert
-        (Get_Attribute_Level_Name(12) = " 12",
-         "Failed to get attribute level name for level 12 (numeric)");
-      Assert
-        (Get_Attribute_Level_Name(48) = " 48",
-         "Failed to get attribute level name for level 48 (numeric)");
-
---  begin read only
-   end Test_Get_Attribute_Level_Name_test_getattributelevelname;
 --  end read only
 
 --  begin read only
