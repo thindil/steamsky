@@ -1,4 +1,4 @@
---    Copyright 2018-2022 Bartek thindil Jasicki
+--    Copyright 2018-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -49,10 +49,12 @@ package body Stories is
       Delete_Index, Step_Index: Positive;
    begin
       Clear_Current_Story;
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Step :=
         (Index => Null_Unbounded_String, Finish_Condition => ASKINBASE,
          Finish_Data => Temp_Data, Fail_Text => Null_Unbounded_String,
          Texts => Temp_Texts);
+      --## rule off IMPROPER_INITIALIZATION
       Start_Step := Null_Unbounded_String;
       Stories_Data := Get_Tree(Read => Reader);
       Nodes_List :=
