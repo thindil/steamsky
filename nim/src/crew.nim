@@ -113,7 +113,8 @@ proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEff
               givenOrder = rest)
     memberIndex.inc
 
-proc getAttributeLevelName*(attributeLevel: Positive): string =
+proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
+    raises: [], tags: [].} =
   if gameSettings.showNumbers == 1:
     return $attributeLevel
   case attributeLevel
