@@ -141,7 +141,8 @@ proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
   else:
     return "Outstanding"
 
-proc getSkillLevelName*(skillLevel: SkillRange): string =
+proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [],
+    tags: [].} =
   if gameSettings.showNumbers == 1:
     return $skillLevel
   case skillLevel
