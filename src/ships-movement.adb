@@ -601,54 +601,12 @@ package body Ships.Movement is
    end Count_Fuel_Needed;
 
    procedure Wait_In_Place(Minutes: Positive) is
-      Base_Fuel_Needed, Fuel_Needed: Integer := 0;
-      Fuel_Index: Natural;
+      procedure Wait_Ada_In_Place(M: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "waitAdaInPlace";
    begin
-      if Player_Ship.Speed = DOCKED then
-         return;
-      end if;
-      Needed_Fuel_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = ENGINE and then not Module.Disabled then
-            Base_Fuel_Needed := Base_Fuel_Needed - 1;
-         end if;
-      end loop Needed_Fuel_Loop;
-      Fuel_Needed := Base_Fuel_Needed * (Minutes / 10);
-      if Get_Random(Min => 1, Max => 10) < (Minutes rem 10) then
-         Fuel_Needed := Fuel_Needed + Base_Fuel_Needed;
-      end if;
-      Fuel_Index :=
-        Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-      if Fuel_Index = 0 then
-         Add_Message
-           (Message => "Ship falls from the sky due to a lack of fuel.",
-            M_Type => OTHERMESSAGE, Color => RED);
-         Death
-           (Member_Index => 1,
-            Reason => To_Unbounded_String(Source => "fall of the ship"),
-            Ship => Player_Ship);
-         return;
-      end if;
-      if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => Fuel_Index)
-          .Amount <=
-        abs (Fuel_Needed) then
-         Add_Message
-           (Message => "Ship falls from the sky due to a lack of fuel.",
-            M_Type => OTHERMESSAGE, Color => RED);
-         Death
-           (Member_Index => 1,
-            Reason => To_Unbounded_String(Source => "fall of the ship"),
-            Ship => Player_Ship);
-         return;
-      end if;
-      Update_Cargo
-        (Ship => Player_Ship,
-         Proto_Index =>
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Fuel_Index)
-             .Proto_Index,
-         Amount => Fuel_Needed);
+      Wait_Ada_In_Place(M => Minutes);
    end Wait_In_Place;
 
 end Ships.Movement;
