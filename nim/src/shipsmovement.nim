@@ -17,7 +17,8 @@
 
 import game, crewinventory, messages, shipscargo, shipscrew2, types, utils
 
-proc waitInPlace*(minutes: Positive) =
+proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
+    tags: [WriteIOEffect].} =
   if playerShip.speed == docked:
     return
   var baseFuelNeeded: int = 0
