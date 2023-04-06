@@ -781,6 +781,28 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end Add_Fuel_Info_Block;
+            Add_State_Info_Block :
+            declare
+               State_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".stateinfo",
+                    options => "-width 360");
+            begin
+               Label :=
+                 Create
+                   (pathName => State_Box & ".statelbl",
+                    options =>
+                      "-text {State: " &
+                      (if Module.Disabled then "Disabled" else "Enabled") &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => State_Box, Options => "-sticky w");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end Add_State_Info_Block;
          when CARGO_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
