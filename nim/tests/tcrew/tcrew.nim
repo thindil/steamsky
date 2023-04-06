@@ -37,3 +37,12 @@ gameSettings.showNumbers = 1
 assert getAttributeLevelName(3) == "3"
 assert getAttributeLevelName(12) == "12"
 assert getAttributeLevelName(48) == "48"
+
+gameSettings.showNumbers = 0
+assert getSkillLevelName(9) == "Beginner"
+assert getSkillLevelName(54) == "Respected"
+assert getSkillLevelName(92) == "Legendary"
+gameSettings.showNumbers = 1
+assert getSkillLevelName(9) == "9"
+assert getSkillLevelName(54) == "54"
+assert getSkillLevelName(92) == "92"
