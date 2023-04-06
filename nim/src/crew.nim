@@ -143,6 +143,12 @@ proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
 
 proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [],
     tags: [].} =
+  ## Get the skill level name for the selected skill or its numerical
+  ## value if the player set it in the configuration.
+  ##
+  ## * attributeLevel - the level of a skill which value will be get
+  ##
+  ## Returns the string representation of the selected level of a skill.
   if gameSettings.showNumbers == 1:
     return $skillLevel
   case skillLevel
