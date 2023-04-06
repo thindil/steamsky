@@ -19,8 +19,5 @@ package Crew.Test_Data.Tests is
    procedure Test_Wait_For_Rest_2f3023_b046aa(Gnattest_T: in out Test);
    --  crew.ads:300:4:Wait_For_Rest:Test_WaitForRest
 
-   procedure Test_Get_Skill_Level_Name_ac7e2a_35c4c0(Gnattest_T: in out Test);
-   --  crew.ads:312:4:Get_Skill_Level_Name:Test_GetSkillLevelName
-
 end Crew.Test_Data.Tests;
 --  end read only
