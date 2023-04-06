@@ -309,8 +309,7 @@ package Crew is
       -- RESULT
       -- Name (as words) of skill level
       -- SOURCE
-   function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String with
-      Test_Case => (Name => "Test_GetSkillLevelName", Mode => Nominal);
+   function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String;
       -- ****
 
       -- ****f* Crew/Crew.Get_Attribute_Level_Name
