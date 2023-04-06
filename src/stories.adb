@@ -41,12 +41,14 @@ package body Stories is
       Temp_Value: UnboundedString_Container.Vector;
       Temp_Step: Step_Data;
       Temp_Steps: Steps_Container.Vector;
-      Start_Step, Final_Step, Value, Story_Index: Unbounded_String;
+      Start_Step: Unbounded_String;
+      Final_Step, Value, Story_Index: Unbounded_String :=
+        Null_Unbounded_String;
       Temp_Texts: StepTexts_Container.Vector;
       Temp_Data: StepData_Container.Vector;
-      Action, Sub_Action, Sub_Sub_Action: Data_Action;
+      Action, Sub_Action, Sub_Sub_Action: Data_Action := ADD;
       Story_Node, Child_Node, Step_Node: Node;
-      Delete_Index, Step_Index: Positive;
+      Delete_Index, Step_Index: Positive := 1;
    begin
       Clear_Current_Story;
       --## rule off IMPROPER_INITIALIZATION
