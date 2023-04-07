@@ -150,6 +150,7 @@ package Themes is
    -- Go_Rest_Icon          - Icon used for give order to go rest for the whole crew
    -- Repair_Priority_Icon  - Icon used for set the repair priority button
    -- Upgrade_Button_Icon   - Icon used for the upgrade button
+   -- Power_Icon            - Icon used for the enable or disable engine button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -243,6 +244,7 @@ package Themes is
       Go_Rest_Icon: Unbounded_String;
       Repair_Priority_Icon: Unbounded_String;
       Upgrade_Button_Icon: Unbounded_String;
+      Power_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -344,7 +346,8 @@ package Themes is
       Dismiss_Icon => Default_Theme_Icons_Path & "dismiss.svg",
       Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg",
       Repair_Priority_Icon => Default_Theme_Icons_Path & "repair-priority.svg",
-      Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg");
+      Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg",
+      Power_Icon => Default_Theme_Icons_Path & "power.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

@@ -450,6 +450,9 @@ package body Themes is
                  To_Unbounded_String(Source => "UpgradeButtonIcon") then
                   Temp_Record.Upgrade_Button_Icon :=
                     Convert_Path(Old_Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "PowerIcon") then
+                  Temp_Record.Power_Icon := Convert_Path(Old_Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -633,7 +636,8 @@ package body Themes is
          64 => To_Unbounded_String(Source => "dismissicon"),
          65 => To_Unbounded_String(Source => "goresticon"),
          66 => To_Unbounded_String(Source => "repairpriorityicon"),
-         67 => To_Unbounded_String(Source => "upgradebuttonicon"));
+         67 => To_Unbounded_String(Source => "upgradebuttonicon"),
+         68 => To_Unbounded_String(Source => "powericon"));
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -669,7 +673,8 @@ package body Themes is
          60 => Theme.No_Pilot_Icon, 61 => Theme.No_Engineer_Icon,
          62 => Theme.Destination_Icon, 63 => Theme.Inventory_Icon,
          64 => Theme.Dismiss_Icon, 65 => Theme.Go_Rest_Icon,
-         66 => Theme.Repair_Priority_Icon, 67 => Theme.Upgrade_Button_Icon);
+         66 => Theme.Repair_Priority_Icon, 67 => Theme.Upgrade_Button_Icon,
+         68 => Theme.Power_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
