@@ -606,7 +606,9 @@ package body Ships.Movement is
          Convention => C,
          External_Name => "waitAdaInPlace";
    begin
+      Set_Ship_In_Nim;
       Wait_Ada_In_Place(M => Minutes);
+      Get_Ship_From_Nim(Ship => Player_Ship);
    end Wait_In_Place;
 
 end Ships.Movement;
