@@ -19,6 +19,9 @@ import game, crewinventory, messages, shipscargo, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
     tags: [WriteIOEffect].} =
+  ## Count the fuel usage when the player waits in the open space
+  ##
+  ## * minutes - the amount of minutes passed
   if playerShip.speed == docked:
     return
   var baseFuelNeeded: int = 0
