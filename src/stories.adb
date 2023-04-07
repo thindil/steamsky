@@ -35,17 +35,19 @@ with Ships.Crew; use Ships.Crew;
 package body Stories is
 
    procedure Load_Stories(Reader: Tree_Reader) is
+      Stories_Data: Document;
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Story_Data;
       Nodes_List, Child_Nodes, Step_Data_Nodes: Node_List;
-      Stories_Data: Document;
       Temp_Value: UnboundedString_Container.Vector;
-      Temp_Step: Step_Data;
       Temp_Steps: Steps_Container.Vector;
+      Temp_Texts: StepTexts_Container.Vector;
+      Temp_Data: StepData_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      Temp_Step: Step_Data;
       Start_Step: Unbounded_String;
       Final_Step, Value, Story_Index: Unbounded_String :=
         Null_Unbounded_String;
-      Temp_Texts: StepTexts_Container.Vector;
-      Temp_Data: StepData_Container.Vector;
       Action, Sub_Action, Sub_Sub_Action: Data_Action := ADD;
       Story_Node, Child_Node, Step_Node: Node;
       Delete_Index, Step_Index: Positive := 1;
