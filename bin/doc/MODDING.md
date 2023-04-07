@@ -1112,6 +1112,9 @@ story.
   the repair priority for the selected module button. Optional.
 * Key `UpgradeButtonIcon`: Path to the SVG image which will be used for setting
   upgrades for the player's ship modules button. Optional.
+* Key `PowerIcon`: Path to the SVG image which will be used for enable or
+  disable the player's ship's engine button in the module info dialog.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
