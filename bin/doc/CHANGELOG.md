@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Icon for setting the upgrades for modules. Author: Delapouite
-  (https://game-icons.net), license CC BY 3.0
+- Icons for setting the upgrades for modules and enabling or disabling engines.
+  Authors: Delapouite, Lord Berandas (https://game-icons.net),
+  license CC BY 3.0
 - Ability to start the upgrade of the player's ship's module's durability in
   the module info dialog
 - Ability to start the upgrade of the player's ship's cabin's quality in the
