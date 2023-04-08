@@ -249,6 +249,19 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
                   backToWork = true
                   owner = i
                   break moduleLoop
+      if backToWork:
+        member.order = member.previousOrder
+        member.orderTime = 15
+        addMessage(message = member.name & " returns to work fully rested.",
+            mType = orderMessage, color = yellow)
+        updateMorale(ship = playerShip, memberIndex = i, value = 1)
+      member.previousOrder = rest
+    if (tiredLevel > 80 + member.attributes[conditionIndex].level) and
+        member.order != rest and not inCombat:
+      var canRest: bool = true
+#      if member.order == boarding and harpoonDuration == 0 and
+#          enemy.harpoonDuration == 0:
+#        canRest = false
 
 # Temporary code for interfacing with Ada
 
