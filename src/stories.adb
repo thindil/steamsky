@@ -96,7 +96,13 @@ package body Stories is
               with "Can't add story '" & To_String(Source => Story_Index) &
               "', there is one with that index.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            Stories_Container.Exclude
+              (Container => Stories_List, Key => Story_Index);
+            Log_Message
+              (Message => "Story removed: " & To_String(Source => Story_Index),
+               Message_Type => EVERYTHING);
+         else
             if Action = UPDATE then
                Temp_Record := Stories_List(Story_Index);
                Start_Step := Null_Unbounded_String;
@@ -432,12 +438,6 @@ package body Stories is
                     "Story updated: " & To_String(Source => Story_Index),
                   Message_Type => EVERYTHING);
             end if;
-         else
-            Stories_Container.Exclude
-              (Container => Stories_List, Key => Story_Index);
-            Log_Message
-              (Message => "Story removed: " & To_String(Source => Story_Index),
-               Message_Type => EVERYTHING);
          end if;
       end loop Load_Stories_Loop;
    end Load_Stories;
