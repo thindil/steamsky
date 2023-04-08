@@ -796,6 +796,25 @@ package body Ships.UI.Modules is
                       (if Module.Disabled then "Disabled" else "Enabled") &
                       "}");
                Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Info_Button :=
+                 Create
+                   (pathName => State_Box & ".button",
+                    options =>
+                      "-image powericon -command {" & Close_Dialog_Button &
+                      " invoke;DisableEngine " &
+                      CArgv.Arg(Argv => Argv, N => 1) &
+                      "} -style Small.TButton");
+               Add
+                 (Widget => Info_Button,
+                  Message =>
+                    "Turn" & (if Module.Disabled then " on " else " off ") &
+                    "the engine.");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Info_Button,
+                  Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Escape>",
+                  Script => "{" & Close_Dialog_Button & " invoke;break}");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => State_Box, Options => "-sticky w");
                Height :=
