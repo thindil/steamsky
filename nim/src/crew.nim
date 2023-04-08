@@ -141,8 +141,8 @@ proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
   else:
     return "Outstanding"
 
-proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [],
-    tags: [].} =
+proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
+    ], tags: [].} =
   ## Get the skill level name for the selected skill or its numerical
   ## value if the player set it in the configuration.
   ##
@@ -176,6 +176,49 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: []
     return "Legendary"
   else:
     return "Ultimate"
+
+proc updateCrew*(minutes: Positive; tiredPoints: Natural;
+    inCombat: bool = false) =
+
+  var i: Natural = 0
+
+  proc updateMember(member: var MemberData) =
+
+    func normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
+        tags: [].} =
+      if stat > maxValue:
+        stat = maxValue
+      elif stat < 0:
+        stat = 0
+
+    proc consume(itemType: string): Natural =
+      var
+        itemIndex: int = findItem(inventory = playerShip.cargo,
+            itemType = itemType)
+        consumeValue: Natural = 0
+      if itemIndex > 0:
+        consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
+        if itemsList[playerShip.cargo[itemIndex].protoIndex].value.len > 1 and
+            itemsList[playerShip.cargo[itemIndex].protoIndex].value[2] != 0:
+          updateMorale(ship = playerShip, memberIndex = i, value = itemsList[
+              playerShip.cargo[itemIndex].protoIndex].value[2])
+        updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+            itemIndex].protoIndex, amount = -1)
+        return consumeValue
+      itemIndex = findItem(inventory = playerShip.crew[i].inventory,
+          itemType = itemType)
+      if itemIndex > 0:
+        consumeValue = itemsList[playerShip.crew[i].inventory[
+            itemIndex].protoIndex].value[1]
+        if itemsList[playerShip.crew[i].inventory[
+            itemIndex].protoIndex].value.len > 1 and itemsList[playerShip.crew[
+            i].inventory[itemIndex].protoIndex].value[2] != 0:
+          updateMorale(ship = playerShip, memberIndex = i, value = itemsList[
+              playerShip.crew[i].inventory[itemIndex].protoIndex].value[2])
+        updateInventory(memberIndex = i, amount = -1,
+            inventoryIndex = itemIndex, ship = playerShip)
+        return consumeValue
+      return 0
 
 # Temporary code for interfacing with Ada
 
