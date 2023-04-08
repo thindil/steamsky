@@ -165,4 +165,8 @@ package Combat is
       Test_Case => (Name => "Test_CombatTurn", Mode => Robustness);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Harpoon_Duration;
+
 end Combat;

@@ -2059,4 +2059,16 @@ package body Combat is
       end if;
    end Combat_Turn;
 
+   procedure Get_Harpoon_Duration is
+      procedure Get_Ada_Harpoon_Duration
+        (Player_Duration, Enemy_Duration: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHarpoonDuration";
+   begin
+      Get_Ada_Harpoon_Duration
+        (Player_Duration => Harpoon_Duration,
+         Enemy_Duration => Enemy.Harpoon_Duration);
+   end Get_Harpoon_Duration;
+
 end Combat;

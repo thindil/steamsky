@@ -32,3 +32,9 @@ type
 var
   harpoonDuration*: Natural = 0
   enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1, skyY: 1));
+
+# Temporary code for interfacing with Ada
+
+proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [], tags: [], exportc.} =
+  harpoonDuration = playerDuration
+  enemy.harpoonDuration = enemyDuration
