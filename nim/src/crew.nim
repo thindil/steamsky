@@ -180,7 +180,9 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) =
 
-  var i: Natural = 0
+  var
+    i: Natural = 0
+    tiredLevel: int = 0
 
   proc updateMember(member: var MemberData) =
 
@@ -219,6 +221,34 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
             inventoryIndex = itemIndex, ship = playerShip)
         return consumeValue
       return 0
+
+    if "nofatigue" in factionsList[member.faction].flags:
+      tiredLevel = 0
+    var backToWork = true
+    if tiredLevel == 0 and member.order == rest and member.previousOrder != rest:
+      if member.previousOrder notin [repair, clean] and findMember(
+          order = member.previousOrder) > -1:
+        backToWork = false
+      if member.previousOrder in [gunner, craft]:
+        block moduleLoop:
+          for module in playerShip.modules.mitems:
+            if (member.previousOrder == gunner and module.mType ==
+                ModuleType2.gun) and module.owner[0] in [i, -1]:
+              backToWork = true
+              module.owner[0] = i
+              break moduleLoop
+            elif (member.previousOrder == craft and module.mType ==
+                ModuleType2.workshop) and module.craftingIndex.len > 0:
+              for owner in module.owner.mitems:
+                if owner == i:
+                  backToWork = true
+                  owner = i
+                  break moduleLoop
+              for owner in module.owner.mitems:
+                if owner == -1:
+                  backToWork = true
+                  owner = i
+                  break moduleLoop
 
 # Temporary code for interfacing with Ada
 
