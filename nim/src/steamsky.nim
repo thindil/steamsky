@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parseopt, strutils]
-import bases, basestypes, careers, crafts, config, crew, crewinventory,
+import bases, basestypes, careers, crafts, combat, config, crew, crewinventory,
     events, factions, game, goals, halloffame, items, log, maps, messages,
     missions, mobs, shipmodules, ships, shipscargo, shipscrew, shipscrew2,
     shipsmovement, statistics, tk, utils
