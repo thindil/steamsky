@@ -26,8 +26,8 @@ type
     evasion*: Natural
     loot*: Natural
     perception*: Natural
-    harpoonDuration: Natural
-    guns: seq[array[3, Natural]]
+    harpoonDuration*: Natural
+    guns*: seq[array[3, Natural]]
 
 var
   harpoonDuration*: Natural = 0
