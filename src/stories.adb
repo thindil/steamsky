@@ -225,15 +225,14 @@ package body Stories is
                 (Elem => Story_Node, Name => "step");
             Load_Steps_Data_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Temp_Step :=
-                 (Index => Null_Unbounded_String,
+                 (Index =>
+                    To_Unbounded_String
+                      (Source =>
+                         Get_Attribute(Elem => Child_Node, Name => "index")),
                   Finish_Condition => ASKINBASE, Finish_Data => Temp_Data,
                   Fail_Text => Null_Unbounded_String, Texts => Temp_Texts);
-               Child_Node := Item(List => Child_Nodes, Index => J);
-               Temp_Step.Index :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
                  (if
                     Get_Attribute(Elem => Child_Node, Name => "action")'
