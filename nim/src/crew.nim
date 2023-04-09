@@ -177,6 +177,14 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
   else:
     return "Ultimate"
 
+proc findCabin*(memberIndex: Natural): int =
+  for index, module in playerShip.modules.pairs:
+    if module.mType == ModuleType2.cabin:
+      for owner in module.owner:
+        if owner == memberIndex:
+          return index
+  return -1
+
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) =
 
@@ -296,3 +304,6 @@ proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
 
 proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [], exportc.} =
   return getSkillLevelName(skillLevel = skillLevel.Positive).cstring
+
+proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc.} =
+  return findCabin(memberIndex = memberIndex - 1).cint - 1
