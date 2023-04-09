@@ -148,20 +148,6 @@ package body Ships.UI.Modules is
          Module_Max_Value := 1;
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
-         when ENGINE =>
-            if not Player_Ship.Modules(Module_Index).Disabled then
-               Add_Button
-                 (Name => ".switch",
-                  Label => "Turn off engine so it stop using fuel",
-                  Command =>
-                    "DisableEngine " & CArgv.Arg(Argv => Argv, N => 1));
-            else
-               Add_Button
-                 (Name => ".switch",
-                  Label => "Turn on engine so ship will be fly faster",
-                  Command =>
-                    "DisableEngine " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
          when CABIN =>
             Missions_Loop :
             for Mission of Accepted_Missions loop
