@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import config, crewinventory, game, maps, messages, utils, shipscargo,
+import combat, config, crewinventory, game, maps, messages, utils, shipscargo,
     shipscrew, shipscrew2, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
@@ -259,9 +259,23 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     if (tiredLevel > 80 + member.attributes[conditionIndex].level) and
         member.order != rest and not inCombat:
       var canRest: bool = true
-#      if member.order == boarding and harpoonDuration == 0 and
-#          enemy.harpoonDuration == 0:
-#        canRest = false
+      if member.order == boarding and harpoonDuration == 0 and
+          combat.enemy.harpoonDuration == 0:
+        canRest = false
+      if canRest:
+        member.previousOrder = member.order
+        member.order = rest
+        member.orderTime = 15
+        if member.equipment[tool] > -1:
+          updateCargo(ship = playerShip, protoIndex = member.inventory[
+              member.equipment[tool]].protoIndex, amount = 1,
+              durability = member.inventory[member.equipment[tool]].durability)
+          updateInventory(memberIndex = i, amount = -1,
+              inventoryIndex = member.equipment[tool], ship = playerShip)
+          member.equipment[tool] = -1
+        addMessage(message = member.name &
+            " is too tired to work, they're going to rest.",
+            mType = orderMessage, color = yellow)
 
 # Temporary code for interfacing with Ada
 
