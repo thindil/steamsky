@@ -177,7 +177,7 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
   else:
     return "Ultimate"
 
-proc findCabin*(memberIndex: Natural): int =
+proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [].} =
   for index, module in playerShip.modules.pairs:
     if module.mType == ModuleType2.cabin:
       for owner in module.owner:
