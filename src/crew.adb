@@ -68,22 +68,6 @@ package body Crew is
                          (Str => To_String(Source => Faction_Index)))));
    end Generate_Member_Name;
 
-   function Find_Cabin(Member_Index: Positive) return Natural is
-   begin
-      Find_Cabin_Loop :
-      for I in Player_Ship.Modules.Iterate loop
-         if Player_Ship.Modules(I).M_Type = CABIN then
-            Check_Owner_Loop :
-            for Owner of Player_Ship.Modules(I).Owner loop
-               if Owner = Member_Index then
-                  return Modules_Container.To_Index(Position => I);
-               end if;
-            end loop Check_Owner_Loop;
-         end if;
-      end loop Find_Cabin_Loop;
-      return 0;
-   end Find_Cabin;
-
    procedure Update_Crew
      (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
       use Ada.Strings.Unbounded;

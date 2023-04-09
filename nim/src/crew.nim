@@ -306,4 +306,4 @@ proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [], exp
   return getSkillLevelName(skillLevel = skillLevel.Positive).cstring
 
 proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc.} =
-  return findCabin(memberIndex = memberIndex - 1).cint - 1
+  return findCabin(memberIndex = memberIndex - 1).cint + 1
