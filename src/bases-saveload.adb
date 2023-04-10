@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -352,6 +352,7 @@ package body Bases.SaveLoad is
          Sky_Bases(Base_Index).Owner :=
            To_Bounded_String
              (Source => Get_Attribute(Elem => Base_Node, Name => "owner"));
+         Get_Base_Owner(Base_Index => Base_Index);
          if Get_Attribute(Elem => Base_Node, Name => "known") = "Y" then
             Sky_Bases(Base_Index).Known := True;
          end if;
