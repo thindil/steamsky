@@ -388,6 +388,41 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
             tiredLevel = tiredLevel - times
           if tiredLevel < 0:
             tiredLevel = 0
+        if "nofatigue" notin factionsList[playerShip.crew[i].faction].flags and
+            healthLevel in 1 .. 99 and cabinIndex > 0:
+          healthLevel = healthLevel + times
+          if healthLevel > 100:
+            healthLevel = 100
+        if playerShip.crew[i].morale[1] < 50:
+          updateMorale(ship = playerShip, memberIndex = i, value = times + restAmount)
+          if playerShip.crew[i].morale[1] > 50:
+            playerShip.crew[i].morale = [1: 50.Natural, 2: 0]
+      else:
+        if playerShip.crew[i].order != talk:
+          tiredLevel = tiredLevel + times
+        if tiredLevel > 100 + playerShip.crew[i].attributes[
+            conditionIndex].level:
+          tiredLevel = 100 + playerShip.crew[i].attributes[conditionIndex].level
+        if tiredLevel >= 50 + playerShip.crew[i].attributes[
+            conditionIndex].level:
+          updateMorale(ship = playerShip, memberIndex = i, value = ((times /
+              5) * (-1)).int)
+        case playerShip.crew[i].order
+        of pilot:
+          if playerShip.speed == docked:
+            tiredLevel = playerShip.crew[i].tired
+          else:
+            gainExp(amount = times, skillNumber = pilotingSkill, crewIndex = i)
+        of engineer:
+          if playerShip.speed == docked:
+            tiredLevel = playerShip.crew[i].tired
+          else:
+            gainExp(amount = times, skillNumber = engineeringSkill, crewIndex = i)
+        of gunner:
+          if playerShip.speed == docked:
+            tiredLevel = playerShip.crew[i].tired
+        else:
+          discard
 
 # Temporary code for interfacing with Ada
 
