@@ -249,7 +249,9 @@ package body Stories is
                      exit Find_Step_Index_Loop;
                   end if;
                end loop Find_Step_Index_Loop;
-               if Sub_Action /= REMOVE then
+               if Sub_Action = REMOVE then
+                  Temp_Record.Steps.Delete(Index => Step_Index);
+               else
                   if Sub_Action = UPDATE then
                      Temp_Step := Temp_Record.Steps(Step_Index);
                   end if;
@@ -406,8 +408,6 @@ package body Stories is
                         Temp_Record.Steps(Step_Index) := Temp_Step;
                      end if;
                   end if;
-               else
-                  Temp_Record.Steps.Delete(Index => Step_Index);
                end if;
             end loop Load_Steps_Data_Loop;
             Child_Nodes :=
@@ -422,19 +422,19 @@ package body Stories is
                            First_Child
                              (N => Item(List => Child_Nodes, Index => 0))));
             end if;
-            if Action /= UPDATE then
+            if Action = UPDATE then
+               Stories_List(Story_Index) := Temp_Record;
+               Log_Message
+                 (Message =>
+                    "Story updated: " & To_String(Source => Story_Index),
+                  Message_Type => EVERYTHING);
+            else
                Stories_Container.Include
                  (Container => Stories_List, Key => Story_Index,
                   New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Story added: " & To_String(Source => Story_Index),
-                  Message_Type => EVERYTHING);
-            else
-               Stories_List(Story_Index) := Temp_Record;
-               Log_Message
-                 (Message =>
-                    "Story updated: " & To_String(Source => Story_Index),
                   Message_Type => EVERYTHING);
             end if;
          end if;
