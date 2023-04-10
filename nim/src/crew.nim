@@ -197,7 +197,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
   var
     i: Natural = 0
-    tiredLevel: int = 0
+    tiredLevel, hungerLevel, thirstLevel: int = 0
 
   proc updateMember(member: var MemberData) =
 
@@ -291,6 +291,59 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         addMessage(message = member.name &
             " is too tired to work, they're going to rest.",
             mType = orderMessage, color = yellow)
+        block findNewCabin:
+          if findCabin(memberIndex = i) == -1:
+            for module in playerShip.modules.mitems:
+              if module.mType == ModuleType2.cabin and module.durability > 0:
+                for owner in module.owner.mitems:
+                  if owner == -1:
+                    owner = i
+                    addMessage(message = member.name & " take " & module.name &
+                        " as own cabin.", mType = otherMessage)
+                    break findNewCabin
+      else:
+        addMessage(message = member.name &
+            " is very tired but they can't go to rest.", mType = orderMessage, color = red)
+        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
+            min = -5, max = -1))
+    normalizeStat(stat = tiredLevel, maxValue = 150)
+    member.tired = tiredLevel
+    if hungerLevel > 80:
+      var consumeResult = 0
+      for foodType in factionsList[member.faction].foodTypes.items:
+        consumeResult = consume(itemType = foodType)
+        if consumeResult > 0:
+          break
+      if hungerLevel - consumeResult < SkillRange.low:
+        hungerLevel = SkillRange.low
+      else:
+        hungerLevel = hungerLevel - consumeResult
+      if consumeResult == 0:
+        addMessage(message = member.name &
+            " is hungry, but they can't find anything to eat.",
+            mType = otherMessage, color = red)
+        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
+            min = -10, max = -5))
+    normalizeStat(stat = hungerLevel)
+    member.hunger = hungerLevel
+    if thirstLevel > 40:
+      var consumeResult = 0
+      for drinksType in factionsList[member.faction].drinksTypes.items:
+        consumeResult = consume(itemType = drinksType)
+        if consumeResult > 0:
+          break
+      if thirstLevel - consumeResult < SkillRange.low:
+        thirstLevel = SkillRange.low
+      else:
+        thirstLevel = thirstLevel - consumeResult
+      if consumeResult == 0:
+        addMessage(message = member.name &
+            " is thirsty, but they can't find anything to drink.",
+            mType = otherMessage, color = red)
+        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
+            min = -20, max = -10))
+    normalizeStat(stat = thirstLevel)
+    member.thirst = thirstLevel
 
 # Temporary code for interfacing with Ada
 
