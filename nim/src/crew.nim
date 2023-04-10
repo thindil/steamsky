@@ -374,7 +374,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         let cabinIndex = findCabin(memberIndex = i)
         var restAmount = 0
         if playerShip.crew[i].tired > 0:
-          if cabinIndex > 0:
+          if cabinIndex > -1:
             var damage = 1.0 - (playerShip.modules[
                 cabinIndex].durability.float / playerShip.modules[
                 cabinIndex].maxDurability.float)
@@ -421,6 +421,45 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         of gunner:
           if playerShip.speed == docked:
             tiredLevel = playerShip.crew[i].tired
+        of heal:
+          var haveMedicalRoom = false
+          for module in playerShip.modules.items:
+            if modulesList[module.protoIndex].mType ==
+                ModuleType.medicalRoom and module.durability > 0 and i in module.owner:
+              haveMedicalRoom = true
+              break
+          for member in playerShip.crew.items:
+            let faction = factionsList[member.faction]
+            if member.name != playerShip.crew[i].name and member.health < 100:
+              var healAmount: int = times * (getSkillLevel(
+                  member = playerShip.crew[i],
+                  skillIndex = faction.healingSkill) / 20).int
+              if healAmount < times:
+                healAmount = times
+              if not haveMedicalRoom:
+                healAmount = (healAmount / 2).int
+              if healAmount > 0:
+                healAmount = healAmount * (-1)
+                var toolIndex = findItem(inventory = playerShip.cargo,
+                    itemType = faction.healingTools)
+                if toolIndex > -1:
+                  if playerShip.cargo[toolIndex].amount < healAmount.abs:
+                    healAmount = playerShip.cargo[toolIndex].amount
+                  else:
+                    healAmount = healAmount.abs
+                  updateCargo(ship = playerShip, amount = -(healAmount))
+                else:
+                  toolIndex = findItem(inventory = playerShip.crew[i].inventory,
+                      itemType = faction.healingTools)
+                  if toolIndex > -1:
+                    if playerShip.crew[i].inventory[toolIndex].amount <
+                        healAmount.abs:
+                      healAmount = playerShip.crew[i].inventory[
+                          toolIndex].amount
+                    else:
+                      healAmount = healAmount.abs
+                    updateInventory(memberIndex = i, amount = -(healAmount),
+                        inventoryIndex = toolIndex, ship = playerShip)
         else:
           discard
 
