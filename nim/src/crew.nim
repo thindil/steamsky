@@ -197,7 +197,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
   var
     i: Natural = 0
-    tiredLevel, hungerLevel, thirstLevel: int = 0
+    tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
 
   proc updateMember(member: var MemberData) =
 
@@ -344,6 +344,50 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
             min = -20, max = -10))
     normalizeStat(stat = thirstLevel)
     member.thirst = thirstLevel
+    normalizeStat(stat = healthLevel)
+    member.health = healthLevel
+    if member.order notin [repair, craft, upgrading]:
+      member.orderTime = orderTime
+    if member.skills.len == 0:
+      member.contractLength = member.contractLength - minutes
+      if member.contractLength < 0:
+        member.contractLength = 0
+
+  while i < playerShip.crew.high:
+    var currentMinutes = minutes
+    orderTime = playerShip.crew[i].orderTime
+    var times = 0
+    while currentMinutes > 0:
+      if currentMinutes >= orderTime:
+        currentMinutes = currentMinutes - orderTime
+        times.inc
+        orderTime = 15
+      else:
+        orderTime = orderTime - currentMinutes
+        currentMinutes = 0
+    healthLevel = playerShip.crew[i].health
+    hungerLevel = playerShip.crew[i].hunger
+    thirstLevel = playerShip.crew[i].thirst
+    tiredLevel = playerShip.crew[i].tired
+    if times > 0:
+      if playerShip.crew[i].order == rest:
+        let cabinIndex = findCabin(memberIndex = i)
+        var restAmount = 0
+        if playerShip.crew[i].tired > 0:
+          if cabinIndex > 0:
+            var damage = 1.0 - (playerShip.modules[
+                cabinIndex].durability.float / playerShip.modules[
+                cabinIndex].maxDurability.float)
+            restAmount = playerShip.modules[cabinIndex].cleanliness - (
+                playerShip.modules[cabinIndex].cleanliness.float *
+                damage).Natural
+            if restAmount == 0:
+              restAmount = 1
+            tiredLevel = tiredLevel - (times * restAmount)
+          else:
+            tiredLevel = tiredLevel - times
+          if tiredLevel < 0:
+            tiredLevel = 0
 
 # Temporary code for interfacing with Ada
 
