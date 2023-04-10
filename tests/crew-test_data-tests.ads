@@ -10,14 +10,11 @@ package Crew.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Find_Cabin_6a58e0_006804(Gnattest_T: in out Test);
-   --  crew.ads:278:4:Find_Cabin:Test_FindCabin
-
    procedure Test_Update_Crew_f9e489_011eae(Gnattest_T: in out Test);
-   --  crew.ads:290:4:Update_Crew:Test_UpdateCrew
+   --  crew.ads:292:4:Update_Crew:Test_UpdateCrew
 
    procedure Test_Wait_For_Rest_2f3023_b046aa(Gnattest_T: in out Test);
-   --  crew.ads:300:4:Wait_For_Rest:Test_WaitForRest
+   --  crew.ads:302:4:Wait_For_Rest:Test_WaitForRest
 
 end Crew.Test_Data.Tests;
 --  end read only
