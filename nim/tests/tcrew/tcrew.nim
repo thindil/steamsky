@@ -25,6 +25,9 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
     1, 0, 0], order: gunner, loyalty: 100))
+playerShip.modules = @[]
+playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
+    durability: 100, owner: @[0]))
 skyMap[1][1].baseIndex = 1
 
 dailyPayment()
@@ -46,3 +49,6 @@ gameSettings.showNumbers = 1
 assert getSkillLevelName(9) == "9"
 assert getSkillLevelName(54) == "54"
 assert getSkillLevelName(92) == "92"
+
+assert findCabin(0) == 0
+assert findCabin(100) == -1
