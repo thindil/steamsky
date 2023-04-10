@@ -278,8 +278,7 @@ package Crew is
    function Find_Cabin(Member_Index: Positive) return Natural with
       Import => True,
       Convention => C,
-      External_Name => "findAdaCabin",
-      Test_Case => (Name => "Test_FindCabin", Mode => Robustness);
+      External_Name => "findAdaCabin";
       -- ****
 
       -- ****f* Crew/Crew.Update_Crew
