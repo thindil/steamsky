@@ -21,6 +21,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
 with Ada.Containers.Formal_Vectors;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -834,5 +835,12 @@ package Game is
       -- SOURCE
    function Load_Game_Data return String;
    -- ****
+
+-- Temporary code to interact with Nim
+
+   procedure Get_Ada_Game_String(Name, Value: chars_ptr) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaGameString";
 
 end Game;

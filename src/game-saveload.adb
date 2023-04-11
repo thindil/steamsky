@@ -1250,6 +1250,9 @@ package body Game.SaveLoad is
          Player_Career :=
            Careers_Container.Key(Position => Careers_List.First);
       end if;
+      Get_Ada_Game_String
+        (Name => New_String(Str => "playerCareer"),
+         Value => New_String(Str => To_String(Source => Player_Career)));
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);

@@ -18,7 +18,6 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -58,10 +57,6 @@ package body Game is
       use Tiny_String;
       use Utils;
 
-      procedure Get_Ada_Game_String(Name, Value: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGameString";
       Random_Base: Positive := Positive'First;
       Player_Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
