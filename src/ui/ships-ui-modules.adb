@@ -533,9 +533,10 @@ package body Ships.UI.Modules is
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
+         Tcl_Eval(interp => Interp, strng => "update");
          Height :=
            Height +
-           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+           Positive'Value(Winfo_Get(Widgt => Name_Box, Info => "reqheight"));
       end Add_Name_Info_Block;
       Add_Status_Info_Block :
       declare
@@ -633,9 +634,10 @@ package body Ships.UI.Modules is
                Button_Name => "button2");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
+         Tcl_Eval(interp => Interp, strng => "update");
          Height :=
            Height +
-           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+           Positive'Value(Winfo_Get(Widgt => Status_Box, Info => "reqheight"));
       end Add_Status_Info_Block;
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
@@ -730,10 +732,11 @@ package body Ships.UI.Modules is
                end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Power_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Power_Box, Info => "reqheight"));
             end Add_Power_Info_Block;
             Add_Fuel_Info_Block :
             declare
@@ -762,10 +765,11 @@ package body Ships.UI.Modules is
                      Box => Fuel_Box, Module => Module);
                end if;
                Tcl.Tk.Ada.Grid.Grid(Slave => Fuel_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Fuel_Box, Info => "reqheight"));
             end Add_Fuel_Info_Block;
             Add_State_Info_Block :
             declare
@@ -803,10 +807,11 @@ package body Ships.UI.Modules is
                   Script => "{" & Close_Dialog_Button & " invoke;break}");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => State_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   (Winfo_Get(Widgt => State_Box, Info => "reqheight"));
             end Add_State_Info_Block;
          when CARGO_ROOM =>
             Insert
@@ -899,10 +904,11 @@ package body Ships.UI.Modules is
                   Options => "-row 0 -column 1 -padx {5 0}");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Clean_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Clean_Box, Info => "reqheight"));
             end Add_Cleanliness_Info_Block;
             Add_Quality_Info_Block :
             declare
@@ -942,10 +948,11 @@ package body Ships.UI.Modules is
                end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Quality_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Quality_Box, Info => "reqheight"));
             end Add_Quality_Info_Block;
          when GUN | HARPOON_GUN =>
             Insert
@@ -1243,6 +1250,7 @@ package body Ships.UI.Modules is
             end if;
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Upgrade_Box, Options => "-sticky w -row 4");
+            Tcl_Eval(interp => Interp, strng => "update");
             Height :=
               Height +
               Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
