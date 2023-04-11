@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
   length as the table's page
 - Crash when cleaning ship in open space
 - Showing info about the module's upgrade progress in the module' info dialog
+- The player's ship's module's info dialog size
 
 ## [8.5] - 2023-03-19
 
