@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import combat, config, crewinventory, game, maps, messages, utils, shipscargo,
-    shipscrew, shipscrew2, types
+import combat, config, crewinventory, game, items, maps, messages, utils,
+    shipscargo, shipscrew, shipscrew2, types
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -504,6 +504,39 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
                 " finished healing the wounded.", mType = orderMessage, color = green)
           if healAmount != 0:
             giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
+        of clean:
+          var
+            toolIndex = findTools(memberIndex = i, itemType = cleaningTools, order = clean)
+            needCleaning = false
+          if toolIndex > -1:
+            for module in playerShip.modules.mitems:
+              if module.mType == ModuleType2.cabin and module.cleanliness <
+                  module.quality:
+                if module.cleanliness + times > module.quality:
+                  module.cleanliness = module.quality
+                else:
+                  module.cleanliness = module.cleanliness + times
+                damageItem(inventory = playerShip.crew[i].inventory,
+                    itemIndex = toolIndex, memberIndex = i, ship = playerShip)
+                break
+          for module in playerShip.modules.items:
+            if module.mType == ModuleType2.cabin and module.cleanliness <
+                module.quality:
+              needCleaning = true
+              if toolIndex == -1:
+                addMessage(message = playerShip.crew[i].name &
+                    " can't continue cleaning the ship because don't have any cleaning tools.",
+                    mtype = orderMessage, color = red)
+                giveOrders(ship = playerShip, memberIndex = i,
+                    givenOrder = rest)
+              break
+          if not needCleaning:
+            addMessage(message = "Cleaning the ship have been finished.",
+                mType = orderMessage, color = green)
+            for index, member in playerShip.crew.pairs:
+              if member.order == clean:
+                giveOrders(ship = playerShip, memberIndex = index,
+                    givenOrder = rest)
         else:
           discard
 
