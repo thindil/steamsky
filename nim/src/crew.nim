@@ -564,8 +564,41 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
                     skillIndex].tool, order = train)
                 if toolIndex == -1:
                   break
+              addMessage(message = playerShip.crew[i].name &
+                  " trained a little " & skillsList[skillIndex].name & ".",
+                  mType = orderMessage)
+            if toolIndex == -1:
+              addMessage(message = playerShip.crew[i].name &
+                  " can't continue training because they don't have the proper tools.",
+                  mType = orderMessage, color = red)
+              giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
         else:
           discard
+    if tiredPoints > 0:
+      let faction = factionsList[playerShip.crew[i].faction]
+      var deathReason = ""
+      if faction.foodTypes.len > 0:
+        if hungerLevel + tiredPoints > SkillRange.high:
+          hungerLevel = SkillRange.high
+        else:
+          hungerLevel = hungerLevel + tiredPoints
+        if playerShip.crew[i].hunger == SkillRange.high:
+          healthLevel = healthLevel - tiredPoints
+          updateMorale(ship = playerShip, memberIndex = i, value = -(tiredPoints))
+          if healthLevel < 1:
+            healthLevel = SkillRange.low
+            deathReason = "starvation"
+      if faction.drinksTypes.len > 0:
+        if thirstLevel + tiredPoints > SkillRange.high:
+          thirstLevel = SkillRange.high
+        else:
+          thirstLevel = thirstLevel + tiredPoints
+        if playerShip.crew[i].thirst == SkillRange.high:
+          healthLevel = healthLevel - tiredPoints
+          updateMorale(ship = playerShip, memberIndex = i, value = -(tiredPoints))
+          if healthLevel < 1:
+            healthLevel = SkillRange.low
+            deathReason = "dehydration"
 
 # Temporary code for interfacing with Ada
 
