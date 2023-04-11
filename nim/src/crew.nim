@@ -196,7 +196,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) =
 
   var
-    i: Natural = 0
+    i: int = 0
     tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
 
   proc updateMember(member: var MemberData) =
@@ -354,7 +354,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         member.contractLength = 0
 
   while i < playerShip.crew.high:
-    var currentMinutes = minutes
+    var currentMinutes: int = minutes
     orderTime = playerShip.crew[i].orderTime
     var times = 0
     while currentMinutes > 0:
@@ -599,6 +599,15 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           if healthLevel < 1:
             healthLevel = SkillRange.low
             deathReason = "dehydration"
+      if healthLevel == SkillRange.low:
+        if deathReason.len == 0:
+          deathReason = "debugging"
+        death(memberIndex = i, reason = deathReason, ship = playerShip)
+        if i == 0:
+          break
+    if healthLevel > SkillRange.low:
+      updateMember(member = playerShip.crew[i])
+      i.inc
 
 # Temporary code for interfacing with Ada
 
@@ -622,3 +631,11 @@ proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [], exp
 
 proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc.} =
   return findCabin(memberIndex = memberIndex - 1).cint + 1
+
+proc updateAdaCrew(minutes, tiredPoints, inCombat: cint) {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    updateCrew(minutes = minutes, tiredPoints = tiredPoints,
+        inCombat = inCombat == 1)
+  except KeyError, IOError, Exception:
+    discard
