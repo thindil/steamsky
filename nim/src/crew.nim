@@ -537,6 +537,33 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
               if member.order == clean:
                 giveOrders(ship = playerShip, memberIndex = index,
                     givenOrder = rest)
+        of talk:
+          if skyMap[playerShip.skyX][playerShip.skyY].baseIndex == 0:
+            giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
+        of train:
+          var skillIndex: int = 0
+          block findSkillIndex:
+            for module in playerShip.modules.items:
+              if module.mType == ModuleType2.trainingRoom:
+                for owner in module.owner.items:
+                  if owner == i:
+                    skillIndex = module.trainedSkill
+                    break findSkillIndex
+          if skillsList[skillIndex].tool.len > 0:
+            var toolIndex = findTools(memberIndex = i, itemType = skillsList[
+                skillIndex].tool, order = train,
+                toolQuality = getTrainingToolQuality(memberIndex = i,
+                skillIndex = skillIndex))
+            if toolIndex > -1:
+              for j in 1 .. times:
+                gainExp(amount = getRandom(min = 1, max = 5),
+                    skillNumber = skillIndex, crewIndex = i)
+                damageItem(inventory = playerShip.crew[i].inventory,
+                    itemIndex = toolIndex, memberIndex = i, ship = playerShip)
+                toolIndex = findTools(memberIndex = i, itemType = skillsList[
+                    skillIndex].tool, order = train)
+                if toolIndex == -1:
+                  break
         else:
           discard
 
