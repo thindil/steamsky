@@ -721,60 +721,59 @@ package body Stories is
         and then Get_Random(Min => 1, Max => Max_Random) > 1 then
          Update_Game(Minutes => 10);
          return False;
-      else
-         Chance := 0;
-         case Step.Finish_Condition is
-            when ASKINBASE =>
-               Count_Ask_Chance_Block :
-               declare
-                  Trader_Index: constant Natural := Find_Member(Order => TALK);
-               begin
-                  if Trader_Index > 0 then
-                     Chance :=
-                       Get_Skill_Level
-                         (Member => Player_Ship.Crew(Trader_Index),
-                          Skill_Index =>
-                            Find_Skill_Index
-                              (Skill_Name =>
-                                 To_String(Source => Finish_Condition)));
-                  end if;
-               end Count_Ask_Chance_Block;
-            when DESTROYSHIP | EXPLORE =>
-               Count_Explore_Chance_Loop :
-               for Member of Player_Ship.Crew loop
-                  if Member.Order in PILOT | GUNNER then
-                     Chance :=
-                       Chance +
-                       Get_Skill_Level
-                         (Member => Member,
-                          Skill_Index =>
-                            Find_Skill_Index
-                              (Skill_Name =>
-                                 To_String(Source => Finish_Condition)));
-                  end if;
-               end loop Count_Explore_Chance_Loop;
-            when LOOT =>
-               Count_Loot_Chance_Loop :
-               for Member of Player_Ship.Crew loop
-                  if Member.Order = BOARDING then
-                     Chance :=
-                       Chance +
-                       Get_Skill_Level
-                         (Member => Member,
-                          Skill_Index =>
-                            Find_Skill_Index
-                              (Skill_Name =>
-                                 To_String(Source => Finish_Condition)));
-                  end if;
-               end loop Count_Loot_Chance_Loop;
-            when ANY =>
-               null;
-         end case;
-         Chance := Chance + Get_Random(Min => 1, Max => 100);
-         if Chance < Max_Random then
-            Update_Game(Minutes => 10);
-            return False;
-         end if;
+      end if;
+      Chance := 0;
+      case Step.Finish_Condition is
+         when ASKINBASE =>
+            Count_Ask_Chance_Block :
+            declare
+               Trader_Index: constant Natural := Find_Member(Order => TALK);
+            begin
+               if Trader_Index > 0 then
+                  Chance :=
+                    Get_Skill_Level
+                      (Member => Player_Ship.Crew(Trader_Index),
+                       Skill_Index =>
+                         Find_Skill_Index
+                           (Skill_Name =>
+                              To_String(Source => Finish_Condition)));
+               end if;
+            end Count_Ask_Chance_Block;
+         when DESTROYSHIP | EXPLORE =>
+            Count_Explore_Chance_Loop :
+            for Member of Player_Ship.Crew loop
+               if Member.Order in PILOT | GUNNER then
+                  Chance :=
+                    Chance +
+                    Get_Skill_Level
+                      (Member => Member,
+                       Skill_Index =>
+                         Find_Skill_Index
+                           (Skill_Name =>
+                              To_String(Source => Finish_Condition)));
+               end if;
+            end loop Count_Explore_Chance_Loop;
+         when LOOT =>
+            Count_Loot_Chance_Loop :
+            for Member of Player_Ship.Crew loop
+               if Member.Order = BOARDING then
+                  Chance :=
+                    Chance +
+                    Get_Skill_Level
+                      (Member => Member,
+                       Skill_Index =>
+                         Find_Skill_Index
+                           (Skill_Name =>
+                              To_String(Source => Finish_Condition)));
+               end if;
+            end loop Count_Loot_Chance_Loop;
+         when ANY =>
+            null;
+      end case;
+      Chance := Chance + Get_Random(Min => 1, Max => 100);
+      if Chance < Max_Random then
+         Update_Game(Minutes => 10);
+         return False;
       end if;
       if Step.Finish_Condition = DESTROYSHIP and not Next_Step then
          return True;
