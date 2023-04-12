@@ -52,3 +52,7 @@ assert getSkillLevelName(92) == "92"
 
 assert findCabin(0) == 0
 assert findCabin(100) == -1
+
+updateCrew(1, 1)
+playerShip.crew[0].health = 0
+updateCrew(1, 1)
