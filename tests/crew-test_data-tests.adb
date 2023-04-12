@@ -33,45 +33,6 @@ package body Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Update_Crew_f9e489_011eae
-     (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Crew.Update_Crew
-        (Minutes, Tired_Points, In_Combat);
-   end Wrap_Test_Update_Crew_f9e489_011eae;
---  end read only
-
---  begin read only
-   procedure Test_Update_Crew_test_updatecrew(Gnattest_T: in out Test);
-   procedure Test_Update_Crew_f9e489_011eae(Gnattest_T: in out Test) renames
-     Test_Update_Crew_test_updatecrew;
---  id:2.2/f9e4895418584c1b/Update_Crew/1/0/test_updatecrew/
-   procedure Test_Update_Crew_test_updatecrew(Gnattest_T: in out Test) is
-      procedure Update_Crew
-        (Minutes: Positive; Tired_Points: Natural;
-         In_Combat: Boolean := False) renames
-        Wrap_Test_Update_Crew_f9e489_011eae;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
-
-   begin
-
-      Update_Crew(1, 1);
-      Player_Ship.Crew(1).Health := 0;
-      Update_Crew(1, 1);
-      New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
-      New_Game_Settings.Player_Career := To_Unbounded_String("general");
-      New_Game_Settings.Starting_Base := To_Bounded_String("1");
-      New_Game;
-      Assert(True, "This tests can only crash.");
-
---  begin read only
-   end Test_Update_Crew_test_updatecrew;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Wait_For_Rest_2f3023_b046aa is
    begin
       GNATtest_Generated.GNATtest_Standard.Crew.Wait_For_Rest;
@@ -96,6 +57,31 @@ package body Crew.Test_Data.Tests is
 
 --  begin read only
    end Test_Wait_For_Rest_test_waitforrest;
+--  end read only
+
+--  begin read only
+   --  procedure Test_Update_Crew_test_updatecrew (Gnattest_T : in out Test_);
+   --  procedure Test_Update_Crew_f9e489_test_updatecrew (Gnattest_T : in out Test_) renames Test_Update_Crew_test_updatecrew;
+--  id:2.2/f9e4895418584c1b/Update_Crew/1/1/test_updatecrew/
+   --  procedure Test_Update_Crew_test_updatecrew (Gnattest_T : in out Test_) is
+--  end read only
+--
+--        pragma Unreferenced(Gnattest_T);
+--        use Tiny_String;
+--
+--     begin
+--
+--        Update_Crew(1, 1);
+--        Player_Ship.Crew(1).Health := 0;
+--        Update_Crew(1, 1);
+--        New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
+--        New_Game_Settings.Player_Career := To_Unbounded_String("general");
+--        New_Game_Settings.Starting_Base := To_Bounded_String("1");
+--        New_Game;
+--        Assert(True, "This tests can only crash.");
+--
+--  begin read only
+   --  end Test_Update_Crew_test_updatecrew;
 --  end read only
 
 --  begin read only
