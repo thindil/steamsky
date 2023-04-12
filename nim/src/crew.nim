@@ -193,7 +193,8 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [].} 
   return -1
 
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
-    inCombat: bool = false) =
+    inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
+    Exception], tags: [WriteIOEffect, RootEffect].} =
 
   var
     i: int = 0
