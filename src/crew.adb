@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Bases;
-with Maps; use Maps;
+with Maps;
 with Ships; use Ships;
 with Ships.Movement;
 
@@ -147,6 +147,7 @@ package body Crew is
 
    procedure Daily_Payment is
       use Bases;
+      use Maps;
 
       procedure Daily_Ada_Payment with
          Import => True,
