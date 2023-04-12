@@ -404,25 +404,28 @@ package body Ships.UI.Modules is
       Height: Positive := 10;
       Close_Dialog_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Frame & ".button");
-      procedure Add_Owners_Info(Owners_Name: String) is
+      procedure Add_Owners_Info
+        (Owners_Name: String; Add_Button: Boolean := False) is
          Have_Owner: Boolean := False;
+         Owner_Box: constant Ttk_Frame :=
+           Create
+             (pathName => Module_Frame & ".ownerinfo",
+              options => "-width 360");
+         Owners_Text: Unbounded_String := Null_Unbounded_String;
       begin
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & Owners_Name & "}");
+         Append(Source => Owners_Text, New_Item => Owners_Name);
          if Module.Owner.Length > 1 then
-            Insert(TextWidget => Module_Text, Index => "end", Text => "s");
+            Append(Source => Owners_Text, New_Item => "s");
          end if;
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{ (max" & Count_Type'Image(Module.Owner.Length) & "): }");
+         Append
+           (Source => Owners_Text,
+            New_Item =>
+              " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
          Add_Owners_Info_Loop :
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
                if Have_Owner then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{, }");
+                  Append(Source => Owners_Text, New_Item => ", ");
                end if;
                Have_Owner := True;
                Insert
@@ -433,9 +436,48 @@ package body Ships.UI.Modules is
             end if;
          end loop Add_Owners_Info_Loop;
          if not Have_Owner then
-            Insert
-              (TextWidget => Module_Text, Index => "end", Text => "{none}");
+            Append(Source => Owners_Text, New_Item => "none");
          end if;
+         Label :=
+           Create
+             (pathName => Owner_Box & ".info",
+              options =>
+                "-text {" & To_String(Source => Owners_Text) &
+                " } -wraplength 325");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+         if Add_Button then
+            Info_Button :=
+              Create
+                (pathName => Owner_Box & ".button",
+                 options =>
+                   "-image giveordericon -command {" & Close_Dialog_Button &
+                   " invoke;ShowAssignCrew " &
+                   CArgv.Arg(Argv => Argv, N => 1) & "} -style Small.TButton");
+            Add
+              (Widget => Info_Button,
+               Message => "Assign crew members to the module.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button,
+               Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Dialog_Button & " invoke;break}");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(Slave => Owner_Box, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Owner_Box & " " & Y_Scroll);
+         Tcl_Eval(interp => Interp, strng => "update");
+         Height :=
+           Height +
+           Positive'Value(Winfo_Get(Widgt => Owner_Box, Info => "reqheight"));
       end Add_Owners_Info;
       procedure Add_Upgrade_Button
         (Upgrade: Ship_Upgrade; Tooltip: String; Box: Ttk_Frame;
@@ -845,7 +887,25 @@ package body Ships.UI.Modules is
               Height +
               Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when CABIN =>
-            Add_Owners_Info(Owners_Name => "Owner");
+            Cabin_Owner_Info_Block :
+            declare
+               Is_Passenger: Boolean := False;
+            begin
+               Missions_Loop :
+               for Mission of Accepted_Missions loop
+                  if Mission.M_Type = PASSENGER then
+                     Check_Passenger_Loop :
+                     for Owner of Player_Ship.Modules(Module_Index).Owner loop
+                        if Mission.Data = Owner then
+                           Is_Passenger := True;
+                           exit Missions_Loop;
+                        end if;
+                     end loop Check_Passenger_Loop;
+                  end if;
+               end loop Missions_Loop;
+               Add_Owners_Info
+                 (Owners_Name => "Owner", Add_Button => not Is_Passenger);
+            end Cabin_Owner_Info_Block;
             Add_Cleanliness_Info_Block :
             declare
                Clean_Box: constant Ttk_Frame :=
