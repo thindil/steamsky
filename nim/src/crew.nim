@@ -195,7 +195,11 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [].} 
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect].} =
-
+  ## Update the player's ship crew
+  ##
+  ## * minutes     - the amount of minutes which passed
+  ## * tiredPoints - the amount of tired points which each crew member will get
+  ## * inCombat    - if true, the player is in combat.
   var
     i: int = 0
     tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
