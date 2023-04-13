@@ -453,7 +453,7 @@ package body Ships.UI.Modules is
               Create
                 (pathName => Owner_Box & ".button",
                  options =>
-                   "-image giveordericon -command {" & Close_Dialog_Button &
+                   "-image assigncrewicon -command {" & Close_Dialog_Button &
                    " invoke;ShowAssignCrew " &
                    CArgv.Arg(Argv => Argv, N => 1) & "} -style Small.TButton");
             Add
