@@ -95,3 +95,33 @@ proc repairShip*(minutes: Positive) =
               ship = playerShip)
           if not repairNeeded:
             break
+
+  var currentMinutes, orderTime = 0
+  for member in playerShip.crew.mitems:
+    if member.order == repair:
+      currentMinutes = minutes
+      orderTime = member.orderTime
+      repairPoints = 0
+      while currentMinutes > 0:
+        if currentMinutes >= orderTime:
+          currentMinutes = currentMinutes - orderTime
+          repairPoints.inc
+          orderTime = 15
+        else:
+          orderTime = orderTime - currentMinutes
+          currentMinutes = 0
+      crewRepairPoints.add(y = repairPoints)
+      member.orderTime = orderTime
+  if crewRepairPoints.len == 0:
+    return
+  if playerShip.repairModule > -1 and playerShip.modules[
+      playerShip.repairModule].durability < playerShip.modules[
+      playerShip.repairModule].maxDurability:
+    repairModule(moduleIndex = playerShip.repairModule)
+  for index, module in playerShip.modules.pairs:
+    if module.durability < module.maxDurability:
+      repairModule(moduleIndex = index)
+  if not repairNeeded or repairStopped:
+    if not repairNeeded:
+      addMessage(message = "All repairs have been finished.",
+          mType = orderMessage, color = green)
