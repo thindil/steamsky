@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crewinventory, game, items, messages, shipscrew, types
+import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc repairShip*(minutes: Positive) =
 
@@ -24,13 +24,14 @@ proc repairShip*(minutes: Positive) =
     crewRepairPoints: seq[Natural]
     repairPoints: int = 0
     repairStopped = false
+    repairNeeded = true
 
   proc repairModule(moduleIndex: Natural) =
     var
       pointsIndex = -1
       pointsBonus: int
     repairStopped = false
-    for index, member in playerShip.crew.pairs:
+    for index, member in playerShip.crew.mpairs:
       if member.order == repair:
         pointsIndex.inc
         if crewRepairPoints[pointsIndex] > 0:
@@ -39,7 +40,7 @@ proc repairShip*(minutes: Positive) =
               moduleIndex].protoIndex].repairSkill) / 10).int *
               crewRepairPoints[pointsIndex]
           repairPoints = crewRepairPoints[pointsIndex] + pointsBonus
-          let toolsIndex = findTools(memberIndex = index,
+          var toolsIndex = findTools(memberIndex = index,
               itemType = repairTools, order = repair)
           if toolsIndex == -1:
             if pointsIndex == 0:
@@ -63,3 +64,34 @@ proc repairShip*(minutes: Positive) =
                 mType = orderMessage, color = red)
             repairStopped = true
             return
+          var repairValue = 0
+          if playerShip.modules[moduleIndex].durability + repairPoints >
+              playerShip.modules[moduleIndex].maxDurability:
+            repairValue = playerShip.modules[moduleIndex].maxDurability -
+                playerShip.modules[moduleIndex].durability
+            repairNeeded = false
+          else:
+            repairValue = repairPoints
+          if repairValue == playerShip.cargo[repairMaterial].amount and
+              toolsIndex > repairMaterial:
+            toolsIndex.dec
+          updateCargo(ship = playerShip, cargoIndex = repairMaterial,
+              amount = -(repairValue))
+          playerShip.modules[moduleIndex].durability = playerShip.modules[
+              moduleIndex].durability + repairValue
+          if repairValue > crewRepairPoints[pointsIndex]:
+            repairValue = crewRepairPoints[pointsIndex]
+            repairPoints = 0
+          else:
+            repairPoints = crewRepairPoints[pointsIndex] - repairValue
+          gainExp(amount = repairValue, skillNumber = modulesList[
+              playerShip.modules[moduleIndex].protoIndex].repairSkill,
+              crewIndex = index)
+          crewRepairPoints[pointsIndex] = repairPoints
+          damageItem(inventory = member.inventory, itemIndex = toolsIndex,
+              skillLevel = getSkillLevel(member = member,
+              skillIndex = modulesList[playerShip.modules[
+              moduleIndex].protoIndex].repairSkill), memberIndex = index,
+              ship = playerShip)
+          if not repairNeeded:
+            break
