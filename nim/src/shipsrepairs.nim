@@ -125,3 +125,14 @@ proc repairShip*(minutes: Positive) =
     if not repairNeeded:
       addMessage(message = "All repairs have been finished.",
           mType = orderMessage, color = green)
+    for index, member in playerShip.crew.mpairs:
+      if member.order == repair:
+        giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+
+# Temporary code for interfacing with Ada
+
+proc repairAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    repairShip(minutes = minutes)
+  except KeyError, Exception:
+    discard
