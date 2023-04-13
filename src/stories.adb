@@ -910,7 +910,10 @@ package body Stories is
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
       Tokens: Slice_Set;
    begin
-      if Current_Story.Data /= Null_Unbounded_String then
+      if Current_Story.Data = Null_Unbounded_String then
+         Story_X := Player_Ship.Sky_X;
+         Story_Y := Player_Ship.Sky_Y;
+      else
          Create
            (S => Tokens, From => To_String(Source => Current_Story.Data),
             Separators => ";");
@@ -928,9 +931,6 @@ package body Stories is
             Story_X := Integer'Value(Slice(S => Tokens, Index => 1));
             Story_Y := Integer'Value(Slice(S => Tokens, Index => 2));
          end if;
-      else
-         Story_X := Player_Ship.Sky_X;
-         Story_Y := Player_Ship.Sky_Y;
       end if;
    end Get_Story_Location;
 
