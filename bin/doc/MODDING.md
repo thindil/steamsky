@@ -1115,6 +1115,9 @@ story.
 * Key `PowerIcon`: Path to the SVG image which will be used for enable or
   disable the player's ship's engine button in the module info dialog.
   Optional.
+* Key `AssignCrewIcon`: Path to the SVG image which will be used for assign a
+  crew member to a cabin in the player' ship in the module info dialog.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
