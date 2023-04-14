@@ -65,7 +65,7 @@ proc repairShip*(minutes: Positive) =
             repairStopped = true
             return
           var repairValue = 0
-          if playerShip.modules[moduleIndex].durability + repairPoints >
+          if playerShip.modules[moduleIndex].durability + repairPoints >=
               playerShip.modules[moduleIndex].maxDurability:
             repairValue = playerShip.modules[moduleIndex].maxDurability -
                 playerShip.modules[moduleIndex].durability
