@@ -102,7 +102,6 @@ package body Ships.UI.Modules is
       use Tiny_String;
 
       Module_Max_Value: Positive;
-      Is_Passenger: Boolean := False;
       Module_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Menu: constant Ttk_Frame :=
@@ -148,26 +147,6 @@ package body Ships.UI.Modules is
          Module_Max_Value := 1;
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
-         when CABIN =>
-            Missions_Loop :
-            for Mission of Accepted_Missions loop
-               if Mission.M_Type = PASSENGER then
-                  Check_Passenger_Loop :
-                  for Owner of Player_Ship.Modules(Module_Index).Owner loop
-                     if Mission.Data = Owner then
-                        Is_Passenger := True;
-                        exit Missions_Loop;
-                     end if;
-                  end loop Check_Passenger_Loop;
-               end if;
-            end loop Missions_Loop;
-            if not Is_Passenger then
-               Add_Button
-                 (Name => ".assigncrew",
-                  Label => "Assign a crew member as owner of cabin...",
-                  Command =>
-                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
          when GUN | HARPOON_GUN =>
             Set_Gun_Upgrade_Block :
             declare
