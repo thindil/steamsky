@@ -20,6 +20,9 @@ import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
     tags: [RootEffect].} =
+  ## Repair the players's ship
+  ##
+  ## * minutes - the amount of minutes spent on repairs
 
   var
     crewRepairPoints: seq[Natural]
@@ -29,6 +32,9 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
 
   proc repairModule(moduleIndex: Natural) {.sideEffect, raises: [KeyError,
       Exception], tags: [RootEffect].} =
+    ## Repair the selected module in the player's ship
+    ##
+    ## * moduleIndex - the index of the module in the player's ship to repair
     var
       pointsIndex = -1
       pointsBonus: int
