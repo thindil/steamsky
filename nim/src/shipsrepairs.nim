@@ -18,7 +18,8 @@
 import std/tables
 import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
-proc repairShip*(minutes: Positive) =
+proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
+    tags: [RootEffect].} =
 
   var
     crewRepairPoints: seq[Natural]
@@ -26,7 +27,8 @@ proc repairShip*(minutes: Positive) =
     repairStopped = false
     repairNeeded = true
 
-  proc repairModule(moduleIndex: Natural) =
+  proc repairModule(moduleIndex: Natural) {.sideEffect, raises: [KeyError,
+      Exception], tags: [RootEffect].} =
     var
       pointsIndex = -1
       pointsBonus: int
