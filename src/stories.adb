@@ -919,11 +919,11 @@ package body Stories is
             Separators => ";");
          if Slice_Count(S => Tokens) < 3 then
             Get_Story_Location_Loop :
-            for I in Sky_Bases'Range loop
-               if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
+            for Sky_Base of Sky_Bases loop
+               if Tiny_String.To_String(Source => Sky_Base.Name) =
                  To_String(Source => Current_Story.Data) then
-                  Story_X := Sky_Bases(I).Sky_X;
-                  Story_Y := Sky_Bases(I).Sky_Y;
+                  Story_X := Sky_Base.Sky_X;
+                  Story_Y := Sky_Base.Sky_Y;
                   exit Get_Story_Location_Loop;
                end if;
             end loop Get_Story_Location_Loop;
