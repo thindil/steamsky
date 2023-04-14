@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
   the module info dialog
 - Ability to enable or disable the player's ship's engine's in the module info
   dialog
+- Ability to assing the crew members to the player's ship's cabin's quality in
+  the module info dialog
 
 ### Changed
 - Updated modding guide
