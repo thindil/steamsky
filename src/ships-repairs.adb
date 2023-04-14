@@ -21,7 +21,7 @@ package body Ships.Repairs is
       procedure Repair_Ada_Ship(M: Integer) with
          Import => True,
          Convention => C,
-         External_Name => ("repairAdaShip");
+         External_Name => "repairAdaShip";
    begin
       Set_Ship_In_Nim;
       Repair_Ada_Ship(M => Minutes);
