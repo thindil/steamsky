@@ -994,14 +994,52 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => Quality_Box, Info => "reqheight"));
             end Add_Quality_Info_Block;
          when GUN | HARPOON_GUN =>
+            Add_Strength_Info_Block :
+            declare
+               Strength_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".strengthinfo",
+                    options => "-width 360");
+               Module_Strength: constant Positive :=
+                 (if Get_Module(Index => Module.Proto_Index).M_Type = GUN then
+                    Module.Damage
+                  else Module.Duration);
+            begin
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                    1.5);
+               Label :=
+                 Create
+                   (pathName => Strength_Box & ".strengthlbl",
+                    options =>
+                      "-text {Strength:" & Positive'Image(Module_Strength) &
+                      (if Module_Strength = Module_Max_Value then
+                         " (max upgrade)"
+                       else "") &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               if Module_Strength < Module_Max_Value then
+                  Add_Upgrade_Button
+                    (Upgrade => MAX_VALUE,
+                     Tooltip =>
+                       (if Get_Module(Index => Module.Proto_Index).M_Type = GUN
+                        then "damage"
+                        else "strength") &
+                       " of gun",
+                     Box => Strength_Box, Module => Module);
+               end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Strength_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Strength_Box, Info => "reqheight"));
+            end Add_Strength_Info_Block;
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & "Strength:" &
-                 (if Get_Module(Index => Module.Proto_Index).M_Type = GUN then
-                    Positive'Image(Module.Damage)
-                  else Positive'Image(Module.Duration)) &
-                 LF & "Ammunition: }");
+               Text => "{" & LF & "Ammunition: }");
             Have_Ammo := False;
             Find_Ammo_Block :
             declare
