@@ -137,6 +137,7 @@ proc upgradeShip*(minutes: Positive) =
           modulesList[upgradedModule.protoIndex].durability).int
       if weightGain < 1:
         weightGain = 1
+      var upgradeValue: int = 0
       case upgradedModule.upgradeAction
       of durability:
         if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
@@ -159,7 +160,6 @@ proc upgradeShip*(minutes: Positive) =
             upgradedModule.protoIndex].durability.float *
             newGameSettings.upgradeCostBonus).int
       of maxValue:
-        var upgradeValue: int = 0
         case upgradedModule.mType
         of ModuleType2.hull:
           weightGain = weightGain * 10
@@ -170,7 +170,40 @@ proc upgradeShip*(minutes: Positive) =
           upgradedModule.power = upgradedModule.power + (modulesList[
               upgradedModule.protoIndex].maxValue / 20).int
           upgradeValue = upgradedModule.power
+        of ModuleType2.cabin:
+          upgradedModule.quality = upgradedModule.quality + (modulesList[
+              upgradedModule.protoIndex].maxValue / 20).int
+          upgradeValue = upgradedModule.quality
+        of ModuleType2.gun:
+          if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
+            upgradedModule.damage = upgradedModule.damage + (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
+          else:
+            upgradedModule.damage.inc
+          upgradeValue = upgradedModule.damage
+        of ModuleType2.batteringRam:
+          if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
+            upgradedModule.damage2 = upgradedModule.damage2 + (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
+          else:
+            upgradedModule.damage2.inc
+          upgradeValue = upgradedModule.damage2
+        of ModuleType2.harpoonGun:
+          if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
+            upgradedModule.duration = upgradedModule.duration + (modulesList[
+                upgradedModule.protoIndex].maxValue / 20).int
+          else:
+            upgradedModule.duration.inc
+          upgradeValue = upgradedModule.duration
         else:
           discard
+      of value:
+        if upgradedModule.mType == ModuleType2.engine:
+          weightGain = weightGain * 10
+          upgradedModule.fuelUsage.dec
+          upgradeValue = upgradedModule.fuelUsage
+        upgradedModule.weight = upgradedModule.weight + weightGain
+        addMessage(message = playerShip.crew[workerIndex].name &
+            " has upgraded " & upgradedModule.name & ".", mType = orderMessage, color = green)
       else:
         discard
