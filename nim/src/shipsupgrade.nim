@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crewinventory, game, items, messages, shipscargo, shipscrew, types
+import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc upgradeShip*(minutes: Positive) =
 
@@ -33,7 +33,7 @@ proc upgradeShip*(minutes: Positive) =
     addMessage(message = messageText & upgradedModule.name & ".",
         mtype = orderMessage, color = yellow)
     upgradedModule.upgradeProgress = 0
-    upgradedModule.upgradeAction = none
+    upgradedModule.upgradeAction = ShipUpgrade.none
     playerShip.modules[playerShip.upgradeModule] = upgradedModule
     playerShip.upgradeModule = -1
     giveOrders(ship = playerShip, memberIndex = workerIndex, givenOrder = rest)
@@ -147,5 +147,30 @@ proc upgradeShip*(minutes: Positive) =
         else:
           upgradedModule.maxDurability.inc
           upgradedModule.weight = upgradedModule.weight + weightGain
+        addMessage(message = playerShip.crew[workerIndex].name &
+            " has upgraded the durability of " & upgradedModule.name & ".",
+            mType = orderMessage, color = green)
+        var localMaxValue: int = (modulesList[
+            upgradedModule.protoIndex].durability.float * 1.5).int
+        if upgradedModule.maxDurability == localMaxValue:
+          maxUpgradeReached(messageText = "You've reached the maximum durability for ")
+          return
+        upgradedModule.upgradeProgress = (modulesList[
+            upgradedModule.protoIndex].durability.float *
+            newGameSettings.upgradeCostBonus).int
+      of maxValue:
+        var upgradeValue: int = 0
+        case upgradedModule.mType
+        of ModuleType2.hull:
+          weightGain = weightGain * 10
+          upgradedModule.maxModules.inc
+          upgradeValue = upgradedModule.maxModules
+        of ModuleType2.engine:
+          weightGain = (modulesList[upgradedModule.protoIndex].maxValue / 40).int
+          upgradedModule.power = upgradedModule.power + (modulesList[
+              upgradedModule.protoIndex].maxValue / 20).int
+          upgradeValue = upgradedModule.power
+        else:
+          discard
       else:
         discard
