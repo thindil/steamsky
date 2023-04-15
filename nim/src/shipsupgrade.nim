@@ -84,3 +84,39 @@ proc upgradeShip*(minutes: Positive) =
       giveOrders(ship = playerShip, memberIndex = workerIndex,
           givenOrder = rest)
       break
+    var materialCost = 0
+    case upgradedModule.upgradeAction
+    of maxValue:
+      case upgradedModule.mType
+      of ModuleType2.engine:
+        if resultAmount > playerShip.cargo[upgradeMaterial].amount * 200:
+          resultAmount = playerShip.cargo[upgradeMaterial].amount * 200
+        materialCost = (resultAmount / 200).int
+      of ModuleType2.cabin:
+        if resultAmount > playerShip.cargo[upgradeMaterial].amount * 20:
+          resultAmount = playerShip.cargo[upgradeMaterial].amount * 20
+        materialCost = (resultAmount / 20).int
+      of ModuleType2.gun, ModuleType2.batteringRam, ModuleType2.harpoonGun:
+        if resultAmount > playerShip.cargo[upgradeMaterial].amount * 10:
+          resultAmount = playerShip.cargo[upgradeMaterial].amount * 10
+        materialCost = (resultAmount / 10).int
+      of ModuleType2.hull:
+        if resultAmount > playerShip.cargo[upgradeMaterial].amount * 2:
+          resultAmount = playerShip.cargo[upgradeMaterial].amount * 2
+        materialCost = (resultAmount / 2).int
+      else:
+        if resultAmount > playerShip.cargo[upgradeMaterial].amount:
+          resultAmount = playerShip.cargo[upgradeMaterial].amount
+        materialCost = resultAmount
+    of durability:
+      if resultAmount > playerShip.cargo[upgradeMaterial].amount * 10:
+        resultAmount = playerShip.cargo[upgradeMaterial].amount * 10
+      materialCost = (resultAmount / 10).int
+    else:
+      if resultAmount > playerShip.cargo[upgradeMaterial].amount:
+        resultAmount = playerShip.cargo[upgradeMaterial].amount
+      materialCost = resultAmount
+    if materialCost < times:
+      materialCost = times
+    if materialCost > playerShip.cargo[upgradeMaterial].amount:
+      materialCost = playerShip.cargo[upgradeMaterial].amount
