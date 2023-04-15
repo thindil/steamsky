@@ -52,3 +52,35 @@ proc upgradeShip*(minutes: Positive) =
         " stops upgrading " & upgradedModule.name & " because it's destroyed.",
         mType = orderMessage, color = red)
     giveOrders(ship = playerShip, memberIndex = workerIndex, givenOrder = rest)
+  var times = 0
+  while currentMinutes > 0:
+    if currentMinutes >= orderTime:
+      currentMinutes = currentMinutes - orderTime
+      times.inc
+      orderTime = 15
+    else:
+      orderTime = orderTime - currentMinutes
+      currentMinutes = 0
+  playerShip.crew[workerIndex].orderTime = orderTime
+  if times == 0:
+    return
+  var upgradePoints = ((getSkillLevel(member = playerShip.crew[workerIndex],
+      skillIndex = modulesList[upgradedModule.protoIndex].repairSkill) /
+      10).int * times) + times
+  while upgradePoints > 0 and upgradedModule.upgradeProgress > 0:
+    var resultAmount = upgradePoints
+    if resultAmount > upgradedModule.upgradeProgress:
+      resultAmount = upgradedModule.upgradeProgress
+    findMatsAndTools()
+    if upgradeMaterial == -1:
+      addMessage(message = "You don't have enough materials to upgrade " &
+          upgradedModule.name, mtype = orderMessage, color = red)
+      giveOrders(ship = playerShip, memberIndex = workerIndex,
+          givenOrder = rest)
+      break
+    if upgradeTools == -1:
+      addMessage(message = "You don't have the repair tool to upgrade " &
+          upgradedModule.name, mtype = orderMessage, color = red)
+      giveOrders(ship = playerShip, memberIndex = workerIndex,
+          givenOrder = rest)
+      break
