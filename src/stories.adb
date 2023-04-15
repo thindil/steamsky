@@ -16,25 +16,30 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with GNAT.String_Split; use GNAT.String_Split;
-with DOM.Core; use DOM.Core;
+with GNAT.String_Split;
+with DOM.Core;
 with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
-with Factions; use Factions;
-with Utils; use Utils;
-with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
 with Bases; use Bases;
+with Crew;
 with Events; use Events;
-with Maps; use Maps;
-with Crew; use Crew;
-with Ships.Crew; use Ships.Crew;
+with Factions;
+with Log;
+with Maps;
+with Ships; use Ships;
+with Ships.Cargo;
+with Ships.Crew;
+with Utils; use Utils;
 
 package body Stories is
 
    procedure Load_Stories(Reader: Tree_Reader) is
+      use DOM.Core;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
+      use Log;
+
       Stories_Data: Document;
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Story_Data;
@@ -483,6 +488,8 @@ package body Stories is
    function Select_Location
      (Step: StepData_Container.Vector) return Unbounded_String is
       -- ****
+      use Maps;
+
       Location_Data, Value: Unbounded_String := Null_Unbounded_String;
       Location_X, Location_Y: Positive;
    begin
@@ -592,6 +599,8 @@ package body Stories is
    procedure Start_Story
      (Faction_Name: Tiny_String.Bounded_String;
       Condition: Start_Condition_Type) is
+      use Factions;
+      use Ships.Cargo;
       use Tiny_String;
 
       Faction_Index: Bounded_String := Null_Bounded_String;
@@ -699,6 +708,9 @@ package body Stories is
    end Clear_Current_Story;
 
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
+      use Crew;
+      use Ships.Crew;
+
       Step: Step_Data :=
         (if Current_Story.Current_Step = 0 then
            Stories_List(Current_Story.Index).Starting_Step
@@ -908,6 +920,8 @@ package body Stories is
 
    procedure Get_Story_Location
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
+      use GNAT.String_Split;
+
       Tokens: Slice_Set;
    begin
       if Current_Story.Data = Null_Unbounded_String then
