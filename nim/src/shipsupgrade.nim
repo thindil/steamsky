@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crewinventory, game, items, messages, shipscrew, types
+import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc upgradeShip*(minutes: Positive) =
 
@@ -120,3 +120,32 @@ proc upgradeShip*(minutes: Positive) =
       materialCost = times
     if materialCost > playerShip.cargo[upgradeMaterial].amount:
       materialCost = playerShip.cargo[upgradeMaterial].amount
+    gainExp(amount = resultAmount, skillNumber = modulesList[
+        upgradedModule.protoIndex].repairSkill, crewIndex = workerIndex)
+    damageItem(inventory = playerShip.crew[workerIndex].inventory,
+        itemIndex = upgradeTools, skillLevel = getSkillLevel(
+        member = playerShip.crew[workerIndex], skillIndex = modulesList[
+        upgradedModule.protoIndex].repairSkill), memberIndex = workerIndex,
+        ship = playerShip)
+    findMatsAndTools()
+    var upgradeProgress = upgradedModule.upgradeProgress - resultAmount
+    upgradePoints = upgradePoints - resultAmount
+    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+        upgradeMaterial].protoIndex, amount = -(materialCost))
+    if upgradeProgress == 0:
+      var weightGain: int = (modulesList[upgradedModule.protoIndex].weight /
+          modulesList[upgradedModule.protoIndex].durability).int
+      if weightGain < 1:
+        weightGain = 1
+      case upgradedModule.upgradeAction
+      of durability:
+        if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
+          upgradedModule.maxDurability = upgradedModule.maxDurability + (
+              modulesList[upgradedModule.protoIndex].durability / 20).int
+          upgradedModule.weight = upgradedModule.weight + (weightGain * (
+              modulesList[upgradedModule.protoIndex].durability / 20).int)
+        else:
+          upgradedModule.maxDurability.inc
+          upgradedModule.weight = upgradedModule.weight + weightGain
+      else:
+        discard
