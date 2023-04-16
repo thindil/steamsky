@@ -21,6 +21,8 @@ All notable changes to this project will be documented in this file.
   dialog
 - Ability to assing the crew members to the player's ship's cabin's quality in
   the module info dialog
+- Ability to start the upgrade of the player's ship's gun's damage in the
+  module info dialog
 
 ### Changed
 - Updated modding guide
