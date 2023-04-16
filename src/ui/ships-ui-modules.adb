@@ -148,42 +148,6 @@ package body Ships.UI.Modules is
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
          when GUN | HARPOON_GUN =>
-            Set_Gun_Upgrade_Block :
-            declare
-               Current_Value: constant Positive :=
-                 (if Player_Ship.Modules(Module_Index).M_Type = GUN then
-                    Player_Ship.Modules(Module_Index).Damage
-                  else Player_Ship.Modules(Module_Index).Duration);
-            begin
-               Module_Max_Value :=
-                 Natural
-                   (Float
-                      (Get_Module
-                         (Index =>
-                            Player_Ship.Modules(Module_Index).Proto_Index)
-                         .Max_Value) *
-                    1.5);
-               if Player_Ship.Modules(Module_Index).Upgrade_Action =
-                 MAX_VALUE and
-                 Player_Ship.Upgrade_Module = Module_Index then
-                  Module_Max_Value := 1;
-               end if;
-               if Current_Value < Module_Max_Value then
-                  if Player_Ship.Modules(Module_Index).M_Type = GUN then
-                     Add_Button
-                       (Name => ".upgrade2",
-                        Label => "Start upgrading damage of gun",
-                        Command =>
-                          "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
-                  else
-                     Add_Button
-                       (Name => ".upgrade2",
-                        Label => "Start upgrading strength of gun",
-                        Command =>
-                          "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
-                  end if;
-               end if;
-            end Set_Gun_Upgrade_Block;
             Add_Button
               (Name => ".assigncrew",
                Label => "Assign a crew member as gunner...",
