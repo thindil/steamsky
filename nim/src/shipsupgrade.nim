@@ -45,7 +45,7 @@ proc upgradeShip*(minutes: Positive) =
     return
   upgradedModule = playerShip.modules[playerShip.upgradeModule]
   var
-    currentMinutes = minutes
+    currentMinutes: int = minutes
     orderTime = playerShip.crew[workerIndex].orderTime
   if upgradedModule.durability == 0:
     addMessage(message = playerShip.crew[workerIndex].name &
@@ -137,7 +137,7 @@ proc upgradeShip*(minutes: Positive) =
           modulesList[upgradedModule.protoIndex].durability).int
       if weightGain < 1:
         weightGain = 1
-      var upgradeValue: int = 0
+      var upgradeValue, localMaxValue: int = 0
       case upgradedModule.upgradeAction
       of durability:
         if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
@@ -151,7 +151,7 @@ proc upgradeShip*(minutes: Positive) =
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded the durability of " & upgradedModule.name & ".",
             mType = orderMessage, color = green)
-        var localMaxValue: int = (modulesList[
+        localMaxValue = (modulesList[
             upgradedModule.protoIndex].durability.float * 1.5).int
         if upgradedModule.maxDurability == localMaxValue:
           maxUpgradeReached(messageText = "You've reached the maximum durability for ")
@@ -205,5 +205,31 @@ proc upgradeShip*(minutes: Positive) =
         upgradedModule.weight = upgradedModule.weight + weightGain
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded " & upgradedModule.name & ".", mType = orderMessage, color = green)
+        localMaxValue = (modulesList[upgradedModule.protoIndex].value.float / 2.0).int
+        if localMaxValue < 1:
+          localMaxValue = 1
+        if upgradeValue == localMaxValue:
+          maxUpgradeReached(messageText = "You've reached the maximum upgrade for ")
+          return
+        case modulesList[upgradedModule.protoIndex].mType
+        of ModuleType.engine:
+          upgradedModule.upgradeProgress = ((modulesList[
+              upgradedModule.protoIndex].value * 20).float *
+              newGameSettings.upgradeCostBonus).int
+          if upgradedModule.upgradeProgress == 0:
+            upgradedModule.upgradeProgress = 1
+        else:
+          discard
       else:
         discard
+    else:
+      upgradedModule.upgradeProgress = upgradeProgress
+  playerShip.modules[playerShip.upgradeModule] = upgradedModule
+
+# Temporary code for interfacing with Ada
+
+proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    upgradeShip(minutes = minutes)
+  except KeyError, Exception:
+    discard
