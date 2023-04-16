@@ -47,6 +47,30 @@ package body Dialogs is
    Timer_Id: Unbounded_String := Null_Unbounded_String;
    -- ****
 
+   -- ****if* Dialogs/Dialogs.Get_Timer_Id
+   -- FUNCTION
+   -- Get the Id of the auto close timer
+   -- RETURNS
+   -- The Id of the auto close timer
+   -- SOURCE
+   function Get_Timer_Id return Unbounded_String is
+      -- ****
+   begin
+      return Timer_Id;
+   end Get_Timer_Id;
+
+   -- ****if* Dialogs/Dialogs.Set_Timer_Id
+   -- FUNCTION
+   -- Set the Id of the auto close timer
+   -- PARAMETERS
+   -- New_Value - the new Id for the auto close timer
+   -- SOURCE
+   procedure Set_Timer_Id(New_Value: Unbounded_String) is
+      -- ****
+   begin
+      Timer_Id := New_Value;
+   end Set_Timer_Id;
+
    function Create_Dialog
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
@@ -68,9 +92,9 @@ package body Dialogs is
          Tcl.Tk.Ada.Busy.Busy
            (Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
       end if;
-      if Timer_Id /= Null_Unbounded_String then
-         Cancel(id_or_script => To_String(Source => Timer_Id));
-         Timer_Id := Null_Unbounded_String;
+      if Get_Timer_Id /= Null_Unbounded_String then
+         Cancel(id_or_script => To_String(Source => Get_Timer_Id));
+         Set_Timer_Id(New_Value => Null_Unbounded_String);
       end if;
       Tcl_Eval(interp => Get_Context, strng => "update");
       Tcl.Tk.Ada.Grid.Grid
@@ -136,15 +160,16 @@ package body Dialogs is
            " -rely" & Damage_Factor'Image(Relative_Y));
       Widget_Raise(Widgt => Dialog);
       if With_Timer then
-         Timer_Id :=
-           To_Unbounded_String
-             (Source =>
-                After
-                  (Ms => 1_000,
-                   Script =>
-                     "UpdateDialog " & Dialog &
-                     (if Parent_Frame = ".gameframe" then ""
-                      else " " & Parent_Frame)));
+         Set_Timer_Id
+           (New_Value =>
+              To_Unbounded_String
+                (Source =>
+                   After
+                     (Ms => 1_000,
+                      Script =>
+                        "UpdateDialog " & Dialog &
+                        (if Parent_Frame = ".gameframe" then ""
+                         else " " & Parent_Frame))));
       end if;
    end Show_Dialog;
 
@@ -158,9 +183,9 @@ package body Dialogs is
       Frame: Ttk_Frame :=
         Get_Widget(pathName => ".gameframe.header", Interp => Interp);
    begin
-      if Timer_Id /= Null_Unbounded_String then
-         Cancel(id_or_script => To_String(Source => Timer_Id));
-         Timer_Id := Null_Unbounded_String;
+      if Get_Timer_Id /= Null_Unbounded_String then
+         Cancel(id_or_script => To_String(Source => Get_Timer_Id));
+         Set_Timer_Id(New_Value => Null_Unbounded_String);
       end if;
       if Argc = 3 then
          Frame :=
@@ -239,15 +264,16 @@ package body Dialogs is
       Widgets.configure
         (Widgt => Message_Button,
          options => "-text {Close" & Positive'Image(Seconds) & "}");
-      Timer_Id :=
-        To_Unbounded_String
-          (Source =>
-             After
-               (Ms => 1_000,
-                Script =>
-                  "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
-                  (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
-                   else "")));
+      Set_Timer_Id
+        (New_Value =>
+           To_Unbounded_String
+             (Source =>
+                After
+                  (Ms => 1_000,
+                   Script =>
+                     "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
+                     (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
+                      else ""))));
       return TCL_OK;
    end Update_Dialog_Command;
 
