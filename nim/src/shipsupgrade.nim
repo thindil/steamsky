@@ -18,18 +18,20 @@
 import std/tables
 import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
-proc upgradeShip*(minutes: Positive) =
+proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
+    Exception], tags: [RootEffect].} =
 
   var upgradeMaterial, upgradeTools, workerIndex = -1
   var upgradedModule: ModuleData
 
-  proc findMatsAndTools() =
+  proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
     upgradeTools = findTools(memberIndex = workerIndex, itemType = repairTools,
         order = upgrading)
     upgradeMaterial = findItem(inventory = playerShip.cargo,
         itemType = modulesList[upgradedModule.protoIndex].repairMaterial)
 
-  proc maxUpgradeReached(messageText: string) =
+  proc maxUpgradeReached(messageText: string) {.sideEffect, raises: [KeyError,
+      Exception], tags: [RootEffect].} =
     addMessage(message = messageText & upgradedModule.name & ".",
         mtype = orderMessage, color = yellow)
     upgradedModule.upgradeProgress = 0
