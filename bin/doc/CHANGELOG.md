@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.6] - 2023-04-16
 
 ### Added
 - Icons for setting the upgrades for modules and enabling or disabling engines.
