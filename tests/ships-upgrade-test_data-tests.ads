@@ -14,8 +14,5 @@ package Ships.Upgrade.Test_Data.Tests is
    procedure Test_Start_Upgrading_a08111_0194a2(Gnattest_T: in out Test);
    --  ships-upgrade.ads:39:4:Start_Upgrading:Test_StartUpgrading
 
-   procedure Test_Upgrade_Ship_09fde7_2b44d6(Gnattest_T: in out Test);
-   --  ships-upgrade.ads:54:4:Upgrade_Ship:Test_UpgradeShip
-
 end Ships.Upgrade.Test_Data.Tests;
 --  end read only
