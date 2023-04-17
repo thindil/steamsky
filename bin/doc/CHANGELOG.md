@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Setting the names for cabins in newly created ships
+
 ## [8.6] - 2023-04-16
 
 ### Added
