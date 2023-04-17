@@ -15,15 +15,18 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Config; use Config;
-with Messages; use Messages;
-with ShipModules; use ShipModules;
+with Config;
+with Messages;
+with ShipModules;
 
 package body Ships.Upgrade is
 
    procedure Start_Upgrading
      (Module_Index: Modules_Container.Extended_Index;
       Upgrade_Type: Positive) is
+      use Config;
+      use Messages;
+      use ShipModules;
       use Tiny_String;
 
       Local_Max_Value, Upgrade_Progress: Natural := 0;
