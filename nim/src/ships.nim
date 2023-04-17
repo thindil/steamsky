@@ -670,14 +670,15 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
       let member = generateMob(mobIndex = protoMember.protoIndex,
           factionIndex = protoShip.owner)
       result.crew.add(y = member)
-      for module in result.modules.mitems:
-        if module.mType == ModuleType2.cabin:
-          for index, owner in module.owner.mpairs:
-            if owner == -1:
-              owner = result.crew.len - 1
-              if index == 0:
-                module.name = member.name & "'s Cabin"
-              break
+      block setCabin:
+        for module in result.modules.mitems:
+          if module.mType == ModuleType2.cabin:
+            for index, owner in module.owner.mpairs:
+              if owner == -1:
+                owner = result.crew.len - 1
+                if index == 0:
+                  module.name = member.name & "'s Cabin"
+                break setCabin
       for module in result.modules.mitems:
         if module.owner.len > 0:
           if module.owner[0] == -1 and module.mType in {ModuleType2.gun,
