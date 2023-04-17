@@ -51,8 +51,7 @@ package Ships.Upgrade is
       -- PARAMETERS
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
-   procedure Upgrade_Ship(Minutes: Positive) with
-      Test_Case => (Name => "Test_UpgradeShip", Mode => Robustness);
-      -- ****
+   procedure Upgrade_Ship(Minutes: Positive);
+   -- ****
 
 end Ships.Upgrade;
