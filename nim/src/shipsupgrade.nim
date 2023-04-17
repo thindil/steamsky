@@ -20,11 +20,15 @@ import config, crewinventory, game, items, messages, shipscargo, shipscrew, type
 
 proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
     Exception], tags: [RootEffect].} =
+  ## Upgrade the currently selected module in the player ship
+  ##
+  ## * minutes - the amount of in-game minutes which passed
 
   var upgradeMaterial, upgradeTools, workerIndex = -1
   var upgradedModule: ModuleData
 
   proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
+    ## Find necessary materials and tools for the upgrade
     upgradeTools = findTools(memberIndex = workerIndex, itemType = repairTools,
         order = upgrading)
     upgradeMaterial = findItem(inventory = playerShip.cargo,
@@ -32,6 +36,10 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
 
   proc maxUpgradeReached(messageText: string) {.sideEffect, raises: [KeyError,
       Exception], tags: [RootEffect].} =
+    ## Show message about reaching the maximum allowed level of upgrades and
+    ## clear the player's ship upgrades settings.
+    ##
+    ## * messageText - the message which will be shown to the player
     addMessage(message = messageText & upgradedModule.name & ".",
         mtype = orderMessage, color = yellow)
     upgradedModule.upgradeProgress = 0
