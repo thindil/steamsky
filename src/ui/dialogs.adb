@@ -403,6 +403,30 @@ package body Dialogs is
    Mouse_Y_Position: Natural := 0;
    -- ****
 
+   -- ****if* Dialogs/Dialogs.Get_Mouse_Y_Position
+   -- FUNCTION
+   -- Get the Y position of the mouse pointer
+   -- RESULT
+   -- The Y axis position of the mouse pointer
+   -- SOURCE
+   function Get_Mouse_Y_Position return Natural is
+      -- ****
+   begin
+      return Mouse_Y_Position;
+   end Get_Mouse_Y_Position;
+
+   -- ****if* Dialogs/Set_Mouse_Y_Position
+   -- FUNCTION
+   -- Set the Y position of the mouse pointer
+   -- PARAMETERS
+   -- New_Value - the new value for mouse pointer X position
+   -- SOURCE
+   procedure Set_Mouse_Y_Position(New_Value: Natural) is
+      -- ****
+   begin
+      Mouse_Y_Position := New_Value;
+   end Set_Mouse_Y_Position;
+
    -- ****o* Dialogs/Dialogs.Set_Mouse_Position_Command
    -- FUNCTION
    -- Set the mouse position
@@ -435,13 +459,13 @@ package body Dialogs is
       begin
          Set_Mouse_X_Position
            (New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
-         Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
+         Set_Mouse_Y_Position(New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
       exception
          when Constraint_Error =>
             Set_Mouse_X_Position(New_Value => 0);
-            Mouse_Y_Position := 0;
+            Set_Mouse_Y_Position(New_Value => 0);
       end Assign_Mouse_Position_Block;
-      if Get_Mouse_X_Position > 0 and Mouse_Y_Position > 0 then
+      if Get_Mouse_X_Position > 0 and Get_Mouse_Y_Position > 0 then
          configure(Widgt => Dialog_Header, options => "-cursor fleur");
       else
          configure(Widgt => Dialog_Header, options => "-cursor hand1");
@@ -491,7 +515,7 @@ package body Dialogs is
          return Integer'Value(Tcl_GetResult(interp => Interp));
       end Get_Coordinate;
    begin
-      if Get_Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
+      if Get_Mouse_X_Position = 0 and Get_Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
       Current_X_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
@@ -501,7 +525,7 @@ package body Dialogs is
           5 then
          return TCL_OK;
       end if;
-      if Mouse_Y_Position > Current_Y_Mouse
+      if Get_Mouse_Y_Position > Current_Y_Mouse
         and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) <
           5 then
          return TCL_OK;
@@ -516,7 +540,7 @@ package body Dialogs is
                 Info => "width")) then
          return TCL_OK;
       end if;
-      if Mouse_Y_Position < Current_Y_Mouse
+      if Get_Mouse_Y_Position < Current_Y_Mouse
         and then
           Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) +
             Integer'Value(Winfo_Get(Widgt => Header, Info => "height")) + 5 >
@@ -529,14 +553,14 @@ package body Dialogs is
       New_X :=
         Get_Coordinate(Name => "x") - (Get_Mouse_X_Position - Current_X_Mouse);
       New_Y :=
-        Get_Coordinate(Name => "y") - (Mouse_Y_Position - Current_Y_Mouse);
+        Get_Coordinate(Name => "y") - (Get_Mouse_Y_Position - Current_Y_Mouse);
       Tcl.Tk.Ada.Place.Place_Configure
         (Slave => Dialog,
          Options =>
            "-x " & Trim(Source => Integer'Image(New_X), Side => Left) &
            " -y " & Trim(Source => Integer'Image(New_Y), Side => Left));
       Set_Mouse_X_Position(New_Value => Current_X_Mouse);
-      Mouse_Y_Position := Current_Y_Mouse;
+      Set_Mouse_Y_Position(New_Value => Current_Y_Mouse);
       return TCL_OK;
    end Move_Dialog_Command;
 
