@@ -691,6 +691,13 @@ package body Bases is
          External_Name => "updateAdaPopulation";
    begin
       Get_Game_Date(Current_Date => Game_Date);
+      Get_Ada_Base_Recruit_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
+         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
+         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
+         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,

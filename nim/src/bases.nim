@@ -172,3 +172,8 @@ proc setAdaBasePopulation(baseIndex: cint; population: var cint) {.raises: [],
 
 proc updateAdaPopulation() {.raises: [], tags: [], exportc.} =
   updatePopulation()
+
+proc getAdaBaseRecruitDate(baseIndex, year, month, day, hour,
+    minutes: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].recruitDate = DateRecord(year: year, month: month,
+      day: day, hour: hour, minutes: minutes)

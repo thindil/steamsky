@@ -284,4 +284,10 @@ package Bases is
 
    procedure Set_Base_Population(Base_Index: Bases_Range);
 
+   procedure Get_Ada_Base_Recruit_Date
+     (Base_Index: Bases_Range; Year, Month, Day, Hour, Minutes: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBaseRecruitDate";
+
 end Bases;
