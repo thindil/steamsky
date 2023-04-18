@@ -250,8 +250,7 @@ package Bases is
       -- FUNCTION
       -- Update base population if needed
       -- SOURCE
-   procedure Update_Population with
-      Test_Case => (Name => "Test_UpdatePopulation", Mode => Robustness);
+   procedure Update_Population;
       -- ****
 
       -- ****f* Bases/Bases.Update_Prices
