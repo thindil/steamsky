@@ -685,38 +685,18 @@ package body Bases is
    procedure Update_Population is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Population_Diff: Integer := 0;
+      procedure Update_Ada_Population with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaPopulation";
    begin
-      if Days_Difference
-          (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date) <
-        30 then
-         return;
-      end if;
-      if Sky_Bases(Base_Index).Population > 0 then
-         if Get_Random(Min => 1, Max => 100) > 30 then
-            return;
-         end if;
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         Population_Diff :=
-           (if Get_Random(Min => 1, Max => 100) < 20 then
-              -(Get_Random(Min => 1, Max => 10))
-            else Get_Random(Min => 1, Max => 10));
-         if Sky_Bases(Base_Index).Population + Population_Diff < 0 then
-            Population_Diff := -(Sky_Bases(Base_Index).Population);
-         end if;
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         Sky_Bases(Base_Index).Population :=
-           Sky_Bases(Base_Index).Population + Population_Diff;
-         if Sky_Bases(Base_Index).Population = 0 then
-            Sky_Bases(Base_Index).Reputation := Default_Reputation;
-         end if;
-      else
-         if Get_Random(Min => 1, Max => 100) > 5 then
-            return;
-         end if;
-         Sky_Bases(Base_Index).Population := Get_Random(Min => 5, Max => 10);
-         Sky_Bases(Base_Index).Owner := Get_Random_Faction;
-      end if;
+      Get_Game_Date(Current_Date => Game_Date);
+      Set_Ship_In_Nim;
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Update_Ada_Population;
+      Set_Base_Population(Base_Index => Base_Index);
    end Update_Population;
 
    procedure Update_Prices is
