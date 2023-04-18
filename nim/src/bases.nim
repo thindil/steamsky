@@ -107,6 +107,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
     price = price + bonus
 
 proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
+  ## Update the base population if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate,
       currentDate = gameDate) < 30:
