@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import config, game, goals, maps, shipscrew, types, utils
+import config, factions, game, goals, maps, shipscrew, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -106,6 +106,27 @@ proc countPrice*(price: var Natural; traderIndex: int;
   else:
     price = price + bonus
 
+proc updatePopulation*() =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate,
+      currentDate = gameDate) < 30:
+    return
+  if skyBases[baseIndex].population > 0:
+    if getRandom(min = 1, max = 100) > 30:
+      return
+    var populationDiff = (if getRandom(min = 1, max = 100) < 20: getRandom(
+        min = -10, max = -1) else: getRandom(min = 1, max = 10))
+    if skyBases[baseIndex].population + populationDiff < 0:
+      populationDiff = -(skyBases[baseIndex].population)
+    skyBases[baseIndex].population = skyBases[baseIndex].population + populationDiff
+    if skyBases[baseIndex].population == 0:
+      skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
+  else:
+    if getRandom(min = 1, max = 100) > 5:
+      return
+    skyBases[baseIndex].population = getRandom(min = 5, max = 10)
+    skyBases[baseIndex].owner = getRandomFaction()
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
@@ -148,3 +169,6 @@ proc getAdaBasePopulation(baseIndex, population: cint) {.raises: [], tags: [], e
 proc setAdaBasePopulation(baseIndex: cint; population: var cint) {.raises: [],
     tags: [], exportc.} =
   population = skyBases[baseIndex].population.cint
+
+proc updateAdaPopulation() {.raises: [], tags: [], exportc.} =
+  updatePopulation()
