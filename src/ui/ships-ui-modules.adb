@@ -1075,14 +1075,7 @@ package body Ships.UI.Modules is
                   end if;
                end loop Find_Ammo_Info_Loop;
             end if;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & "Gunner: " &
-                 (if Module.Owner(1) > 0 then
-                    To_String(Source => Player_Ship.Crew(Module.Owner(1)).Name)
-                  else "none") &
-                 "}");
+            Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
             if Module.M_Type = GUN then
                Insert
                  (TextWidget => Module_Text, Index => "end",
