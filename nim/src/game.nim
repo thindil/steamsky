@@ -106,7 +106,7 @@ var
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
   protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
   protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
-  gameDate*: DateRecord ## The current time in the game
+  gameDate*: DateRecord                    ## The current time in the game
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
@@ -399,3 +399,7 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
 
 proc endAdaGame(save: cint) {.raises: [], tags: [], exportc.} =
   endGame(save = (if save == 1: true else: false))
+
+proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [], exportc.} =
+  gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
+      minutes: minutes)

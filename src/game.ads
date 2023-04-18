@@ -843,4 +843,6 @@ package Game is
       Convention => C,
       External_Name => "getAdaGameString";
 
+   procedure Get_Game_Date(Current_Date: Date_Record);
+
 end Game;

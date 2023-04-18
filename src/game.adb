@@ -1025,4 +1025,17 @@ package body Game is
          return Exception_Message(X => An_Exception);
    end Load_Game_Data;
 
+   procedure Get_Game_Date(Current_Date: Date_Record) is
+      procedure Get_Ada_Game_Date
+        (Year, Month, Day, Hour, Minutes: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameDate";
+   begin
+      Get_Ada_Game_Date
+        (Year => Current_Date.Year, Month => Current_Date.Month,
+         Day => Current_Date.Day, Hour => Current_Date.Hour,
+         Minutes => Current_Date.Minutes);
+   end Get_Game_Date;
+
 end Game;
