@@ -34,3 +34,5 @@ assert price > 100
 price = 100
 countPrice(price, 0)
 assert price < 100
+
+updatePopulation()
