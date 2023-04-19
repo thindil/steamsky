@@ -152,40 +152,6 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Update_Population_31557d_10dec8 is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Update_Population;
-   end Wrap_Test_Update_Population_31557d_10dec8;
---  end read only
-
---  begin read only
-   procedure Test_Update_Population_test_updatepopulation
-     (Gnattest_T: in out Test);
-   procedure Test_Update_Population_31557d_10dec8
-     (Gnattest_T: in out Test) renames
-     Test_Update_Population_test_updatepopulation;
---  id:2.2/31557dac2b0606af/Update_Population/1/0/test_updatepopulation/
-   procedure Test_Update_Population_test_updatepopulation
-     (Gnattest_T: in out Test) is
-      procedure Update_Population renames
-        Wrap_Test_Update_Population_31557d_10dec8;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-      BaseIndex: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-
-   begin
-
-      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      Update_Population;
-      Assert(True, "This test can only crash.");
-
---  begin read only
-   end Test_Update_Population_test_updatepopulation;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Update_Prices_56b29f_f6cd8d is
    begin
       GNATtest_Generated.GNATtest_Standard.Bases.Update_Prices;
