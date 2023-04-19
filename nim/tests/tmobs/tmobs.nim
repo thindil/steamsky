@@ -13,9 +13,6 @@ if itemsList.len == 0:
 if protoMobsList.len == 0:
   loadMobs("../bin/data/mobs.dat")
 
-let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
-assert itemIndex > 0 and itemsList.hasKey(itemIndex)
-
 let newMob = generateMob(5, "POLEIS")
 assert newMob.attributes[0].level == 2
 assert newMob.orderTime == 15

@@ -3,10 +3,13 @@ discard """
 """
 
 import std/tables
-import ../../src/[config, game, items, ships, types]
+import ../../src/[careers, config, factions, game, items, types]
 
 if itemsList.len == 0:
+  loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
+  loadCareers("../bin/data/careers.dat")
+  loadFactions("../bin/data/factions.dat")
 
 assert findProtoItem("Iron") > 0
 assert findProtoItem("sfdsfsdfsdf") == 0
@@ -29,7 +32,6 @@ gameSettings.showNumbers = 1
 assert getItemChanceToDamage(3) == " 3%"
 assert getItemChanceToDamage(30) == " 30%"
 
-
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
 playerShip.cargo = @[]
@@ -47,3 +49,6 @@ playerShip.crew.add(member)
 
 assert findTools(0, "Bucket", clean) > -1
 assert findTools(0, "sfewrwer", talk) == -1
+
+let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
+assert itemIndex > 0 and itemsList.hasKey(itemIndex)
