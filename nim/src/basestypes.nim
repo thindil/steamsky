@@ -29,7 +29,7 @@ type
     color: string ## The color used to show a base of that type on the map
     trades: Table[Positive, PricesArray] ## The list of items available to trade in the base type
     recipes: seq[string] ## The list of crafting recipes available on sale in the base type
-    flags: seq[string] ## Additional flags for the base type like SHIPYARD, BARRACKS, etc
+    flags*: seq[string] ## Additional flags for the base type like SHIPYARD, BARRACKS, etc
     description: string ## The description of the base type, show in the new game screen
 
 var basesTypesList* = initTable[string, BaseTypeData]()
