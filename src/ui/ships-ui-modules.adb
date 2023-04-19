@@ -148,10 +148,6 @@ package body Ships.UI.Modules is
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
          when GUN | HARPOON_GUN =>
-            Add_Button
-              (Name => ".assigncrew",
-               Label => "Assign a crew member as gunner...",
-               Command => "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
             Set_Ammo_Block :
             declare
                Ammo_Index: constant Natural :=
