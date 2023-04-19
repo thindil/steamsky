@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import config, factions, game, goals, maps, shipscrew, types, utils
+import basestypes, config, factions, game, goals, items, maps, shipscrew, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -127,6 +127,32 @@ proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
       return
     skyBases[baseIndex].population = getRandom(min = 5, max = 10)
     skyBases[baseIndex].owner = getRandomFaction()
+
+proc generateRecruits*() =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var
+    highestLevel: SkillRange = 0
+    skills: seq[SkillInfo]
+    recruitFaction: string
+    inventory: seq[Positive]
+    equipment: EquipmentArray
+    price, payment: Natural = 0
+
+  proc addInventory(itemsIndexes: seq[Positive];
+      equipIndex: EquipmentLocations) =
+    if getRandom(min = 1, max = 100) > 80:
+      return
+    let itemIndex = getRandomItem(itemsIndexes = itemsIndexes,
+        equipIndex = equipIndex, highestLevel = highestLevel,
+        weaponSkillLevel = skills[0].level, factionIndex = recruitFaction)
+    if itemIndex == 0:
+      return
+    inventory.add(y = itemIndex)
+    equipment[equipIndex] = inventory.high
+    price = price + getPrice(baseType = skyBases[baseIndex].baseType,
+        itemIndex = itemIndex)
+    payment = payment + (getPrice(baseType = skyBases[baseIndex].baseType,
+        itemIndex = itemIndex) / 10).int
 
 # Temporary code for interfacing with Ada
 
