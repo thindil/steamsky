@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to assing the crew members to the player's ship's gun's in the module
+  info dialog
+
 ### Fixed
 - Setting the names for cabins in newly created ships
 
@@ -24,8 +28,8 @@ All notable changes to this project will be documented in this file.
   the module info dialog
 - Ability to enable or disable the player's ship's engine's in the module info
   dialog
-- Ability to assing the crew members to the player's ship's cabin's quality in
-  the module info dialog
+- Ability to assing the crew members to the player's ship's cabin's in the
+  module info dialog
 - Ability to start the upgrade of the player's ship's gun's damage in the
   module info dialog
 
