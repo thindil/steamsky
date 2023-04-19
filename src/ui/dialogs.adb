@@ -889,18 +889,18 @@ package body Dialogs is
       Bind
         (Widgt => Button, Sequence => "<Escape>",
          Script => "{" & Question_Dialog & ".nobutton invoke;break}");
-      if not In_Game then
-         Button :=
-           Create
-             (pathName => Question_Dialog & ".nobutton",
-              options =>
-                "-text No -command {CloseDialog " & Question_Dialog & " .}");
-      else
+      if In_Game then
          Button :=
            Create
              (pathName => Question_Dialog & ".nobutton",
               options =>
                 "-text No -command {CloseDialog " & Question_Dialog & "}");
+      else
+         Button :=
+           Create
+             (pathName => Question_Dialog & ".nobutton",
+              options =>
+                "-text No -command {CloseDialog " & Question_Dialog & " .}");
       end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 2 -pady {0 5} -padx 5");
