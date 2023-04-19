@@ -98,6 +98,7 @@ type
   ExtendedBasesRange* = range[0..1_024] ## The amount of bases in the game with zero value
   ReputationRange* = range[-100..100] ## The range of possible reputation levels
   RewardMultiplier* = range[0.0..2.0] ## The range of multiplier for missions reward
+  EquipmentArray* = array[EquipmentLocations, int] ## The equipment of mobs
 
   ModuleData* = object
     ## Used to store information about ships' modules
@@ -177,7 +178,7 @@ type
     orderTime*: int                      ## The amount of minutes to next check in the order
     orders*: array[1..12, Natural]       ## The orders priorities for the member
     inventory*: seq[InventoryData]       ## The inventory of the member
-    equipment*: array[EquipmentLocations, int] ## The equipment of the member
+    equipment*: EquipmentArray           ## The equipment of the member
     payment*: AttributesArray            ## The payment information for the member
     contractLength*: int                 ## The length of the contract with the member
     morale*: AttributesArray             ## The morale information for the member
@@ -257,7 +258,7 @@ type
     gender*: char                        ## The recruit's gender
     price*: Positive                     ## The cost of hire of the recruit
     inventory*: seq[InventoryData]       ## The inventory of the recruit
-    equipment*: array[EquipmentLocations, int] ## The equipment of the recruit
+    equipment*: EquipmentArray           ## The equipment of the recruit
     payment*: Positive                   ## The payment information for the recruit
     homeBase*: BasesRange                ## The index of the home base
     faction*: string                     ## The faction index to which the recruit belongs
@@ -422,7 +423,7 @@ type
     order*: CrewOrders                   ## The current order of the mob
     priorities*: array[1..12, Natural]   ## The orders priorities of the mob
     inventory*: seq[MobInventoryRecord]  ## The inventory of the mob
-    equipment*: array[EquipmentLocations, int] ## The equipment of the mob
+    equipment*: EquipmentArray           ## The equipment of the mob
 
 # Temporary code for interfacing with Ada
 
