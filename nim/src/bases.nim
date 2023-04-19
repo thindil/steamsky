@@ -154,6 +154,12 @@ proc generateRecruits*() =
     payment = payment + (getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex) / 10).int
 
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate,
+      currentDate = gameDate) < 30 or skyBases[baseIndex].population == 0:
+    return
+  var maxRecruits = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
+      baseIndex].population < 300: 10 else: 15)
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
