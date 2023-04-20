@@ -257,7 +257,7 @@ type
     name*: string                        ## The recruit's name
     gender*: char                        ## The recruit's gender
     price*: Positive                     ## The cost of hire of the recruit
-    inventory*: seq[InventoryData]       ## The inventory of the recruit
+    inventory*: seq[Positive]            ## The inventory of the recruit
     equipment*: EquipmentArray           ## The equipment of the recruit
     payment*: Positive                   ## The payment information for the recruit
     homeBase*: BasesRange                ## The index of the home base
