@@ -211,6 +211,29 @@ proc generateRecruits*() =
             experience: 0))
       elif skillIndex > -1:
         skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
+    for attribute in attributes.mitems:
+      attribute = MobAttributeRecord(level: getRandom(min = 3, max = (
+          maxSkillLevel / 3).int), experience: 0)
+    for skill in skills.items:
+      price = price + skill.level
+      payment = payment + skill.level
+    for attribute in attributes.items:
+      price = price + (attribute.level * 2)
+      payment = payment + (attribute.level * 2)
+    addInventory(itemsIndexes = weaponsList, equipIndex = weapon)
+    addInventory(itemsIndexes = shieldsList, equipIndex = shield)
+    addInventory(itemsIndexes = headArmorsList, equipIndex = helmet)
+    addInventory(itemsIndexes = chestArmorsList, equipIndex = torso)
+    addInventory(itemsIndexes = armsArmorsList, equipIndex = arms)
+    addInventory(itemsIndexes = legsArmorsList, equipIndex = legs)
+    var tempToolsList: seq[Positive]
+    for recipe in recipesList.values:
+      if highestSkill == recipe.skill:
+        for index, item in itemsList.pairs:
+          if item.itemType == recipe.tool:
+            tempToolsList.add(y = index)
+        break
+    addInventory(itemsIndexes = tempToolsList, equipIndex = tool)
 
 # Temporary code for interfacing with Ada
 
