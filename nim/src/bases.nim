@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, config, factions, game, goals, items, maps, shipscrew, types, utils
+import basestypes, config, crew, factions, game, goals, items, maps, shipscrew,
+    types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -164,8 +165,11 @@ proc generateRecruits*() =
   if maxRecruits > (skyBases[baseIndex].population / 10).int:
     maxRecruits = (skyBases[baseIndex].population / 10).int + 1
   let recruitsAmount = getRandom(min = 1, max = maxRecruits)
-  var maxSkillAmount: int = (skillsList.len.float * (skyBases[
+  var
+    maxSkillAmount: int = (skillsList.len.float * (skyBases[
       baseIndex].reputation.level.float / 100.0)).int
+    baseRecruits: seq[RecruitData]
+    gender: char
   for i in 1 .. recruitsAmount:
     skills = @[]
     price = 0
@@ -174,7 +178,7 @@ proc generateRecruits*() =
     highestLevel = 1
     var
       attributes: seq[MobAttributeRecord]
-      tempTools: seq[Positive]
+      tempToolsList: seq[Positive]
     for item in equipment.mitems:
       item = -1
     recruitFaction = (if getRandom(min = 1, max = 100) < 99: skyBases[
@@ -182,9 +186,9 @@ proc generateRecruits*() =
     let faction = factionsList[recruitFaction]
     var highestSkill = 1
     if "nogender" in faction.flags:
-      let gender = 'M'
+      gender = 'M'
     else:
-      let gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
+      gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
     var localSkillAmount = getRandom(min = 1, max = skillsList.len)
     if localSkillAmount > maxSkillAmount:
       localSkillAmount = maxSkillAmount
@@ -226,7 +230,6 @@ proc generateRecruits*() =
     addInventory(itemsIndexes = chestArmorsList, equipIndex = torso)
     addInventory(itemsIndexes = armsArmorsList, equipIndex = arms)
     addInventory(itemsIndexes = legsArmorsList, equipIndex = legs)
-    var tempToolsList: seq[Positive]
     for recipe in recipesList.values:
       if highestSkill == recipe.skill:
         for index, item in itemsList.pairs:
@@ -234,6 +237,19 @@ proc generateRecruits*() =
             tempToolsList.add(y = index)
         break
     addInventory(itemsIndexes = tempToolsList, equipIndex = tool)
+    if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
+      price = (price / 2).int
+      payment = (payment / 2).int
+    price = ((price.float * 100.0) * newGameSettings.pricesBonus).int
+    if price < 1:
+      price = 1
+    let recruitBase = (if getRandom(min = 1, max = 100) <
+        99: baseIndex else: getRandom(min = skyBases.low, max = skyBases.high))
+    baseRecruits.add(y = RecruitData(attributes: attributes, skills: skills,
+        name: generateMemberName(gender = gender,
+        factionIndex = recruitFaction), gender: gender, price: price,
+        inventory: inventory, equipment: equipment, payment: payment,
+        homeBase: recruitBase, faction: recruitFaction))
 
 # Temporary code for interfacing with Ada
 
