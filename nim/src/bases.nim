@@ -179,9 +179,8 @@ proc generateRecruits*() =
       item = -1
     recruitFaction = (if getRandom(min = 1, max = 100) < 99: skyBases[
         baseIndex].owner else: getRandomFaction())
-    let
-      faction = factionsList[recruitFaction]
-      highestSkill = 1
+    let faction = factionsList[recruitFaction]
+    var highestSkill = 1
     if "nogender" in faction.flags:
       let gender = 'M'
     else:
@@ -194,6 +193,24 @@ proc generateRecruits*() =
       maxSkillLevel = 20
     if getRandom(min = 1, max = 100) > 95:
       maxSkillLevel = getRandom(min = maxSkillLevel, max = 100)
+    for j in 1 .. localSkillAmount:
+      let
+        skillNumber = (if j > 1: getRandom(min = 1,
+            max = skillsList.len) else: faction.weaponSkill)
+        skillLevel = getRandom(min = 1, max = maxSkillLevel)
+      if skillLevel > highestLevel:
+        highestLevel = skillLevel
+        highestSkill = skillNumber
+      var skillIndex = -1
+      for index, skill in skills.pairs:
+        if skill.index == skillNumber:
+          skillIndex = (if skills[index].level < skillLevel: index else: -2)
+          break
+      if skillIndex == -1:
+        skills.add(y = SkillInfo(index: skillNumber, level: skillLevel,
+            experience: 0))
+      elif skillIndex > -1:
+        skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
 
 # Temporary code for interfacing with Ada
 
