@@ -159,6 +159,41 @@ proc generateRecruits*() =
     return
   var maxRecruits = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
       baseIndex].population < 300: 10 else: 15)
+  if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
+    maxRecruits = maxRecruits * 2
+  if maxRecruits > (skyBases[baseIndex].population / 10).int:
+    maxRecruits = (skyBases[baseIndex].population / 10).int + 1
+  let recruitsAmount = getRandom(min = 1, max = maxRecruits)
+  var maxSkillAmount: int = (skillsList.len.float * (skyBases[
+      baseIndex].reputation.level.float / 100.0)).int
+  for i in 1 .. recruitsAmount:
+    skills = @[]
+    price = 0
+    inventory = @[]
+    payment = 0
+    highestLevel = 1
+    var
+      attributes: seq[MobAttributeRecord]
+      tempTools: seq[Positive]
+    for item in equipment.mitems:
+      item = -1
+    recruitFaction = (if getRandom(min = 1, max = 100) < 99: skyBases[
+        baseIndex].owner else: getRandomFaction())
+    let
+      faction = factionsList[recruitFaction]
+      highestSkill = 1
+    if "nogender" in faction.flags:
+      let gender = 'M'
+    else:
+      let gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
+    var localSkillAmount = getRandom(min = 1, max = skillsList.len)
+    if localSkillAmount > maxSkillAmount:
+      localSkillAmount = maxSkillAmount
+    var maxSkillLevel = skyBases[baseIndex].reputation.level
+    if maxSkillLevel < 20:
+      maxSkillLevel = 20
+    if getRandom(min = 1, max = 100) > 95:
+      maxSkillLevel = getRandom(min = maxSkillLevel, max = 100)
 
 # Temporary code for interfacing with Ada
 
