@@ -13,9 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Handling;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -24,19 +24,17 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
+with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with CoreUI; use CoreUI;
-with Ships; use Ships;
-with Utils.UI; use Utils.UI;
+with CoreUI;
+with Ships;
+with Utils.UI;
 
 package body Dialogs is
 
@@ -75,6 +73,8 @@ package body Dialogs is
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
       return Ttk_Frame is
+      use CoreUI;
+
       New_Dialog: constant Ttk_Frame :=
         Create(pathName => Name, options => "-style Dialog.TFrame");
       Dialog_Header: constant Ttk_Label :=
@@ -303,6 +303,9 @@ package body Dialogs is
    function Get_String_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkWidget;
+
       pragma Unreferenced(Client_Data, Interp, Argc);
       String_Dialog: constant Ttk_Frame :=
         Create_Dialog
@@ -498,6 +501,10 @@ package body Dialogs is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+
       Dialog: constant Ttk_Frame :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
@@ -565,6 +572,7 @@ package body Dialogs is
    end Move_Dialog_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "CloseDialog", Ada_Command => Close_Dialog_Command'Access);
@@ -706,6 +714,10 @@ package body Dialogs is
      (Title, Command, Action: String;
       Item_Index: Inventory_Container.Extended_Index;
       Max_Amount, Cost: Natural := 0) is
+      use Ada.Characters.Handling;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Ships;
+
       Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".itemdialog", Title => Title, Title_Width => 275,
