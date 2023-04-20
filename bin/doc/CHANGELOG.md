@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Setting the names for cabins in newly created ships
+- Not showing the list of assigned to the module crew members in the module
+  info dialog
 
 ## [8.6] - 2023-04-16
 
