@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, config, crew, factions, game, goals, items, maps, shipscrew,
+import basestypes, config, factions, game, goals, items, maps, shipscrew,
     types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],

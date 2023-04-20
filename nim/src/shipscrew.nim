@@ -18,6 +18,47 @@
 import std/tables
 import careers, config, crewinventory, game, maps, messages, shipscargo, types, utils
 
+proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
+    raises: [], tags: [].} =
+  ## Generate the name for the mob, based on his/her faction. Based on
+  ## libtcod names generator
+  ##
+  ## * gender       - The gender of the mob, M - male, F - female
+  ## * factionIndex - The index of the faction to which the mob belongs
+  ##
+  ## Returns the randomly generated name of the mob
+  try:
+    if factionsList[factionIndex].namesType == robotic:
+      return $generateRoboticName();
+  except KeyError:
+    discard
+  if gender == 'M':
+    result = malesSyllablesStartList[getRandom(min = 0, max = (
+        malesSyllablesStartList.len - 1))]
+    result = result & malesVocalsList[getRandom(min = 0, max = (
+        malesVocalsList.len - 1))]
+    if getRandom(min = 1, max = 100) < 36:
+      result = result & malesSyllablesMiddleList[getRandom(min = 0, max = (
+          malesSyllablesMiddleList.len - 1))]
+    if getRandom(min = 1, max = 100) < 11:
+      result = result & malesConsonantsList[getRandom(min = 0, max = (
+          malesConsonantsList.len - 1))]
+    result = result & malesSyllablesEndList[getRandom(min = 0, max = (
+        malesSyllablesEndList.len - 1))]
+    return
+  result = femalesSyllablesStartList[getRandom(min = 0, max = (
+      femalesSyllablesStartList.len - 1))]
+  result = result & femalesVocalsList[getRandom(min = 0, max = (
+      femalesVocalsList.len - 1))]
+  if getRandom(min = 1, max = 100) < 36:
+    result = result & femalesSyllablesMiddleList[getRandom(min = 0, max = (
+        femalesSyllablesMiddleList.len - 1))]
+  if getRandom(min = 1, max = 100) < 11:
+    result = result & femalesSyllablesMiddleList[getRandom(min = 0, max = (
+        femalesSyllablesMiddleList.len - 1))]
+  result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
+      femalesSyllablesEndList.len - 1))]
+
 proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
     raises: [KeyError], tags: [].} =
   ## Get the real level of the selected skill of the selected crew member.
@@ -615,6 +656,11 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
         level: skillLevel, experience: skillExp))
 
 # Temporary code for interfacing with Ada
+
+proc generateAdaMemberName(gender: char;
+    factionIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
+  return generateMemberName(gender = gender,
+      factionIndex = $factionIndex).cstring
 
 proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
   checkPriorities: cint): cstring {.raises: [], tags: [RootEffect], exportc.} =
