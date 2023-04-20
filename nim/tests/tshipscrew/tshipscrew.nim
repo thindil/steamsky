@@ -11,6 +11,8 @@ if itemsList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
 
+assert generateMemberName('M', "POLEIS").len() > 0
+
 playerCareer = "general"
 playerShip.skyX = 1
 playerShip.skyY = 1
