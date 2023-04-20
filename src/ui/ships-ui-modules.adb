@@ -367,9 +367,9 @@ package body Ships.UI.Modules is
                   Append(Source => Owners_Text, New_Item => ", ");
                end if;
                Have_Owner := True;
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text =>
+               Append
+                 (Source => Owners_Text,
+                  New_Item =>
                     To_String
                       (Source => Player_Ship.Crew(Module.Owner(I)).Name));
             end if;
