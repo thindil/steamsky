@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Ability to assing the crew members to the player's ship's gun's in the module
   info dialog
 
+### Changed
+- Updated look of the module info dialog
+
 ### Fixed
 - Setting the names for cabins in newly created ships
 - Not showing the list of assigned to the module crew members in the module
