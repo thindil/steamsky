@@ -307,4 +307,8 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseRecruitDate";
 
+   procedure Get_Ada_Recruits(Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);
+
+   procedure Set_Ada_Recruits(Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range);
+
 end Bases;

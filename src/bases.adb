@@ -884,7 +884,7 @@ package body Bases is
       --## rule off IMPROPER_INITIALIZATION
       Nim_Recruits: Nim_Recruits_Array;
       --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Ada_Recruits
+      procedure Get_Ada_Base_Recruits
         (N_Recruits: Nim_Recruits_Array; B_Index: Integer) with
          Import => True,
          Convention => C,
@@ -899,67 +899,43 @@ package body Bases is
              (Recruit =>
                 Recruit_Container.Element(Container => Recruits, Index => I));
       end loop Convert_Recruits_Loop;
-      Get_Ada_Recruits(N_Recruits => Nim_Recruits, B_Index => Base_Index);
+      Get_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_Index => Base_Index);
    end Get_Ada_Recruits;
 
-   procedure Set_Ada_Crew(Ship: in out Ship_Record) is
+   procedure Set_Ada_Recruits
+     (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range) is
       use Interfaces.C;
       --## rule off TYPE_INITIAL_VALUES
-      type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
+      type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
       --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
-      Nim_Crew: Nim_Crew_Array;
-      Nim_Inventory: Nim_Inventory_Array;
+      Nim_Recruits: Nim_Recruits_Array;
       --## rule on IMPROPER_INITIALIZATION
-      Index: Positive := 1;
-      Add_Member: Boolean := False;
-      Crew_Amount: Natural := 0;
-      procedure Set_Ada_Ship_Crew
-        (N_Crew: in out Nim_Crew_Array; Is_Player_Ship: Integer) with
+      procedure Set_Ada_Base_Recruits
+        (N_Recruits: in out Nim_Recruits_Array; B_Index: Integer) with
          Import => True,
          Convention => C,
-         External_Name => "setAdaShipCrew";
+         External_Name => "setAdaRecruits";
    begin
       --## rule off IMPROPER_INITIALIZATION
-      Set_Ada_Ship_Crew
-        (N_Crew => Nim_Crew,
-         Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+      Set_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_Index => Base_Index);
+      Recruit_Container.Clear(Container => Recruits);
       --## rule on IMPROPER_INITIALIZATION
-      Count_Crew_Loop :
-      for Member of Nim_Crew loop
-         exit Count_Crew_Loop when Strlen(Item => Member.Name) = 0;
-         Crew_Amount := Crew_Amount + 1;
-      end loop Count_Crew_Loop;
-      if Crew_Amount /= Natural(Ship.Crew.Length) then
-         Ship.Crew.Clear;
-         Add_Member := True;
-      end if;
       Convert_Crew_Loop :
-      for Member of Nim_Crew loop
-         exit Convert_Crew_Loop when Strlen(Item => Member.Name) = 0;
-         Convert_Member_Block :
+      for Recruit of Nim_Recruits loop
+         exit Convert_Crew_Loop when Strlen(Item => Recruit.Name) = 0;
+         Convert_Recruit_Block :
          declare
-            Temp_Member: Member_Data :=
-              Member_Data'
+            Temp_Recruit: Recruit_Data :=
+              Recruit_Data'
                 (Amount_Of_Attributes => Attributes_Amount,
                  Amount_Of_Skills => Skills_Amount, others => <>);
          begin
-            Member_From_Nim(Member => Member, Ada_Member => Temp_Member);
-            if Add_Member then
-               Ship.Crew.Append(New_Item => Temp_Member);
-            else
-               Ship.Crew(Index) := Temp_Member;
-               Index := Index + 1;
-            end if;
-         end Convert_Member_Block;
+            Recruit_From_Nim(Recruit => Recruit, Ada_Recruit => Temp_Recruit);
+            Recruit_Container.Append
+              (Container => Recruits, New_Item => Temp_Recruit);
+         end Convert_Recruit_Block;
       end loop Convert_Crew_Loop;
-      Set_Ada_Crew_Loop :
-      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         Set_Ada_Crew_Inventory
-           (Inventory => Nim_Inventory, Member_Index => I,
-            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-         Ship.Crew(I).Inventory :=
-           Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
-      end loop Set_Ada_Crew_Loop;
-   end Set_Ada_Crew;
+   end Set_Ada_Recruits;
+
 end Bases;
