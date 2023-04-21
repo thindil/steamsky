@@ -372,3 +372,20 @@ proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
   result.price = recruit.price.cint
   result.homeBase = recruit.homeBase
   result.faction = recruit.faction.cstring
+
+proc getAdaRecruit(recruits: array[1..20, AdaRecruitData];
+    baseIndex: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].recruits = @[]
+  for adaRecruit in recruits:
+    if adaRecruit.name.len == 0:
+      return
+    skyBases[baseIndex].recruits.add(y = adaRecruitToNim(
+        adaRecruit = adaRecruit))
+
+proc setAdaRecruit(recruits: var array[1..20, AdaRecruitData];
+    baseIndex: cint) {.raises: [], tags: [], exportc.} =
+  var index = 1
+  for recruit in skyBases[baseIndex].recruits:
+    recruits[index] = adaRecruitFromNim(recruit = recruit)
+    index.inc
+  recruits[index].name = "".cstring
