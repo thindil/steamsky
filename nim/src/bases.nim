@@ -250,6 +250,8 @@ proc generateRecruits*() =
         factionIndex = recruitFaction), gender: gender, price: price,
         inventory: inventory, equipment: equipment, payment: payment,
         homeBase: recruitBase, faction: recruitFaction))
+  skyBases[baseIndex].recruitDate = gameDate
+  skyBases[baseIndex].recruits = baseRecruits
 
 # Temporary code for interfacing with Ada
 
@@ -301,3 +303,70 @@ proc getAdaBaseRecruitDate(baseIndex, year, month, day, hour,
     minutes: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].recruitDate = DateRecord(year: year, month: month,
       day: day, hour: hour, minutes: minutes)
+
+proc generateAdaRecruits() {.raises: [], tags: [], exportc.} =
+  try:
+    generateRecruits()
+  except KeyError:
+    discard
+
+type
+  AdaRecruitData* = object
+    attributes*: array[1..16, array[2, cint]]
+    skills*: array[1..64, array[3, cint]]
+    name*: cstring
+    gender*: char
+    equipment*: array[0..6, cint]
+    payment*: cint
+    homeBase*: cint
+    faction*: cstring
+    price*: cint
+    inventory*: array[1..16, cint]
+
+proc adaRecruitToNim(adaRecruit: AdaRecruitData): RecruitData {.raises: [],
+    tags: [], exportc.} =
+  result = RecruitData(name: $adaRecruit.name, gender: adaRecruit.gender,
+      homeBase: adaRecruit.homeBase, faction: $adaRecruit.faction,
+      payment: adaRecruit.payment, price: adaRecruit.price)
+  for attribute in adaRecruit.attributes:
+    if attribute[0] == 0:
+      break
+    result.attributes.add(y = MobAttributeRecord(level: attribute[0],
+        experience: attribute[1]))
+  for skill in adaRecruit.skills:
+    if skill[0] == 0:
+      break
+    result.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
+        experience: skill[2]))
+  for index, item in adaRecruit.equipment.pairs:
+    result.equipment[index.EquipmentLocations] = item - 1
+  for item in adaRecruit.inventory.items:
+    if item == 0:
+      break
+    result.inventory.add(y = item)
+
+proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
+    tags: [], exportc.} =
+  result = AdaRecruitData()
+  for attribute in result.attributes.mitems:
+    attribute = [0.cint, 0.cint]
+  for index, attribute in recruit.attributes.pairs:
+    result.attributes[index + 1] = [attribute.level.cint,
+        attribute.experience.cint]
+  for skill in result.skills.mitems:
+    skill = [0.cint, 0.cint, 0.cint]
+  for index, skill in recruit.skills.pairs:
+    result.skills[index + 1] = [skill.index.cint, skill.level.cint,
+        skill.experience.cint]
+  result.name = recruit.name.cstring
+  result.gender = recruit.gender
+  for index, item in recruit.equipment:
+    result.equipment[index.ord.cint] = item.cint
+  for item in result.inventory.mitems:
+    item = 0
+  for index, item in recruit.inventory:
+    result.inventory[index] = item.cint
+  result.payment = recruit.payment.cint
+  result.price = recruit.price.cint
+  result.homeBase = recruit.homeBase
+  result.faction = recruit.faction.cstring
