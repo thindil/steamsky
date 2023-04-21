@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@ with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Game; use Game;
+--## rule off REDUCEABLE_SCOPE
 with Items; use Items;
+--## rule on REDUCEABLE_SCOPE
 
 -- ****h* Dialogs/Dialogs
 -- FUNCTION
