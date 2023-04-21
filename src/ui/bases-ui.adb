@@ -17,7 +17,6 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv; use CArgv;
