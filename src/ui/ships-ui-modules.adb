@@ -1000,12 +1000,16 @@ package body Ships.UI.Modules is
             Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
             Show_Ammo_Block :
             declare
+               Ammo_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".ammoinfo",
+                    options => "-width 360");
                Ammo_Index: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
                   else Module.Harpoon_Index);
                Ammo_Text: constant Tk_Text :=
                  Create
-                   (pathName => Module_Frame & ".ammoinfo",
+                   (pathName => Ammo_Box & ".ammoinfo",
                     options => "-wrap char -height 3 -width 36");
             begin
                Tag_Configure
@@ -1085,6 +1089,52 @@ package body Ships.UI.Modules is
                      end if;
                   end loop Find_Ammo_Info_Loop;
                end if;
+               Find_Ammo_Loop :
+               for I in
+                 Inventory_Container.First_Index
+                   (Container => Player_Ship.Cargo) ..
+                   Inventory_Container.Last_Index
+                     (Container => Player_Ship.Cargo) loop
+                  if Get_Proto_Item
+                      (Index =>
+                         Inventory_Container.Element
+                           (Container => Player_Ship.Cargo, Index => I)
+                           .Proto_Index)
+                      .I_Type =
+                    Get_Ada_Item_Type
+                      (Item_Index =>
+                         Get_Module
+                           (Index =>
+                              Player_Ship.Modules(Module_Index).Proto_Index)
+                           .Value -
+                         1) and
+                    I /= Ammo_Index then
+                     Info_Button :=
+                       Create
+                         (pathName => Ammo_Box & ".button",
+                          options =>
+                            "-image assigncrewicon -command {" &
+                            Close_Dialog_Button & " invoke;ShowAssignAmmo " &
+                            CArgv.Arg(Argv => Argv, N => 1) &
+                            "} -style Small.TButton");
+                     Add
+                       (Widget => Info_Button,
+                        Message => "Assign an ammo to the gun.");
+                     Tcl.Tk.Ada.Grid.Grid
+                       (Slave => Info_Button,
+                        Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                     Bind
+                       (Widgt => Info_Button, Sequence => "<Escape>",
+                        Script =>
+                          "{" & Close_Dialog_Button & " invoke;break}");
+                     Tcl_Eval
+                       (interp => Interp,
+                        strng =>
+                          "SetScrollbarBindings " & Info_Button & " " &
+                          Y_Scroll);
+                     exit Find_Ammo_Loop;
+                  end if;
+               end loop Find_Ammo_Loop;
                configure
                  (Widgt => Ammo_Text,
                   options =>
@@ -1101,11 +1151,13 @@ package body Ships.UI.Modules is
                              Option => "-linespace")) -
                        2));
                Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Ammo_Text, Options => "-sticky w");
+                 (Slave => Ammo_Text, Options => "-sticky w -row 0 -column 0");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Ammo_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Ammo_Text, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Ammo_Box, Info => "reqheight"));
             end Show_Ammo_Block;
             if Module.M_Type = GUN then
                Insert
