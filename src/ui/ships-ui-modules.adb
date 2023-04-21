@@ -997,16 +997,31 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Strength_Box, Info => "reqheight"));
             end Add_Strength_Info_Block;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Ammunition: }");
-            Have_Ammo := False;
-            Find_Ammo_Block :
+            Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
+            Show_Ammo_Block :
             declare
                Ammo_Index: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
                   else Module.Harpoon_Index);
+               Ammo_Text: constant Tk_Text :=
+                 Create
+                   (pathName => Module_Frame & ".ammoinfo",
+                    options => "-wrap char -height 3 -width 36");
             begin
+               Tag_Configure
+                 (TextWidget => Ammo_Text, TagName => "red",
+                  Options =>
+                    "-foreground " &
+                    Tcl_GetVar
+                      (interp => Interp,
+                       varName =>
+                         "ttk::theme::" &
+                         To_String(Source => Game_Settings.Interface_Theme) &
+                         "::colors(-red)"));
+               Insert
+                 (TextWidget => Ammo_Text, Index => "end",
+                  Text => "{Ammunition: }");
+               Have_Ammo := False;
                if Ammo_Index in
                    Inventory_Container.First_Index
                          (Container => Player_Ship.Cargo) ..
@@ -1023,7 +1038,7 @@ package body Ships.UI.Modules is
                      (Item_Index =>
                         Get_Module(Index => Module.Proto_Index).Value - 1) then
                   Insert
-                    (TextWidget => Module_Text, Index => "end",
+                    (TextWidget => Ammo_Text, Index => "end",
                      Text =>
                        "{" &
                        To_String
@@ -1038,40 +1053,60 @@ package body Ships.UI.Modules is
                        " (assigned)}");
                   Have_Ammo := True;
                end if;
-            end Find_Ammo_Block;
-            if not Have_Ammo then
-               M_Amount := 0;
-               Find_Ammo_Info_Loop :
-               for I in 1 .. Get_Proto_Amount loop
-                  if Get_Proto_Item(Index => I).I_Type =
-                    Get_Ada_Item_Type
-                      (Item_Index =>
-                         Get_Module(Index => Module.Proto_Index).Value -
-                         1) then
-                     if M_Amount > 0 then
+               if not Have_Ammo then
+                  M_Amount := 0;
+                  Find_Ammo_Info_Loop :
+                  for I in 1 .. Get_Proto_Amount loop
+                     if Get_Proto_Item(Index => I).I_Type =
+                       Get_Ada_Item_Type
+                         (Item_Index =>
+                            Get_Module(Index => Module.Proto_Index).Value -
+                            1) then
+                        if M_Amount > 0 then
+                           Insert
+                             (TextWidget => Ammo_Text, Index => "end",
+                              Text => "{ or }");
+                        end if;
                         Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text => "{ or }");
+                          (TextWidget => Ammo_Text, Index => "end",
+                           Text =>
+                             "{" &
+                             To_String
+                               (Source => Get_Proto_Item(Index => I).Name) &
+                             "}" &
+                             (if
+                                Find_Item
+                                  (Inventory => Player_Ship.Cargo,
+                                   Proto_Index => I) >
+                                0
+                              then ""
+                              else " [list red]"));
+                        M_Amount := M_Amount + 1;
                      end if;
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{" &
-                          To_String
-                            (Source => Get_Proto_Item(Index => I).Name) &
-                          "}" &
-                          (if
-                             Find_Item
-                               (Inventory => Player_Ship.Cargo,
-                                Proto_Index => I) >
-                             0
-                           then ""
-                           else " [list red]"));
-                     M_Amount := M_Amount + 1;
-                  end if;
-               end loop Find_Ammo_Info_Loop;
-            end if;
-            Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
+                  end loop Find_Ammo_Info_Loop;
+               end if;
+               configure
+                 (Widgt => Ammo_Text,
+                  options =>
+                    "-state disabled -height" &
+                    Positive'Image
+                      (Positive'Value
+                         (Count
+                            (TextWidget => Ammo_Text,
+                             Options => "-displaylines", Index1 => "0.0",
+                             Index2 => "end")) /
+                       Positive'Value
+                         (Metrics
+                            (Font => "InterfaceFont",
+                             Option => "-linespace")) -
+                       2));
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Ammo_Text, Options => "-sticky w");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Ammo_Text, Info => "reqheight"));
+            end Show_Ammo_Block;
             if Module.M_Type = GUN then
                Insert
                  (TextWidget => Module_Text, Index => "end",
