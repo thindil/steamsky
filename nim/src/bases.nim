@@ -316,12 +316,12 @@ type
     skills*: array[1..64, array[3, cint]]
     name*: cstring
     gender*: char
-    equipment*: array[0..6, cint]
+    equipment*: array[7, cint]
     payment*: cint
     homeBase*: cint
     faction*: cstring
     price*: cint
-    inventory*: array[1..16, cint]
+    inventory*: array[7, cint]
 
 proc adaRecruitToNim(adaRecruit: AdaRecruitData): RecruitData {.raises: [],
     tags: [], exportc.} =
@@ -360,6 +360,8 @@ proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
         skill.experience.cint]
   result.name = recruit.name.cstring
   result.gender = recruit.gender
+  for item in result.equipment.mitems:
+    item = 0
   for index, item in recruit.equipment:
     result.equipment[index.ord.cint] = item.cint
   for item in result.inventory.mitems:

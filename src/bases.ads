@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
 with Crew; use Crew;
 with Items; use Items;
@@ -58,7 +59,24 @@ package Bases is
       Faction: Tiny_String.Bounded_String;
    end record;
    -- ****
+
+   type Nim_Recruit_Data is record
+      Attributes: Nim_Attributes_Array;
+      Skills: Nim_Skills_Array;
+      Name: chars_ptr;
+      Gender: Character;
+      Equipment: Nim_Equipment_Array;
+      Inventory: Nim_Equipment_Array;
+      Payment: Integer;
+      Home_Base: Integer;
+      Faction: chars_ptr;
+      Price: Integer;
+   end record;
    --## rule on TYPE_INITIAL_VALUES
+
+   function Recruit_To_Nim(Recruit: Recruit_Data) return Nim_Recruit_Data;
+   procedure Recruit_From_Nim
+     (Recruit: Nim_Recruit_Data; Ada_Recruit: in out Recruit_Data);
 
    -- ****t* Bases/Bases.Recruit_Amount_Range
    -- FUNCTION

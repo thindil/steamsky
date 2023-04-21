@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Elementary_Functions;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
@@ -799,5 +798,82 @@ package body Bases is
         (B_Index => Base_Index,
          Population => Sky_Bases(Base_Index).Population);
    end Set_Base_Population;
+
+   function Recruit_To_Nim(Recruit: Recruit_Data) return Nim_Recruit_Data is
+      use Tiny_String;
+      Nim_Recruit: Nim_Recruit_Data :=
+        (Attributes => (others => (others => 0)),
+         Skills => (others => (others => 0)),
+         Name => New_String(Str => To_String(Source => Recruit.Name)),
+         Gender => Recruit.Gender,
+         Equipment => (others => 0), Payment => Recruit.Payment,
+         Inventory => (others => 0),
+         Home_Base => Recruit.Home_Base,
+         Price => Recruit.Price,
+         Faction => New_String(Str => To_String(Source => Recruit.Faction)));
+   begin
+      Convert_Equipment_Loop :
+      for I in Recruit.Equipment'Range loop
+         Nim_Recruit.Equipment(Equipment_Locations'Pos(I)) :=
+           Recruit.Equipment(I);
+      end loop Convert_Equipment_Loop;
+      Convert_Atrributes_Loop :
+      for I in Recruit.Attributes'Range loop
+         Nim_Recruit.Attributes(I, 1) := Recruit.Attributes(I).Level;
+         Nim_Recruit.Attributes(I, 2) := Recruit.Attributes(I).Experience;
+      end loop Convert_Atrributes_Loop;
+      Convert_Skills_Loop :
+      for I in
+        Skills_Container.First_Index(Container => Recruit.Skills) ..
+          Skills_Container.Last_Index(Container => Recruit.Skills) loop
+         Convert_Skill_Block :
+         declare
+            Skill: constant Skill_Info :=
+              Skills_Container.Element(Container => Recruit.Skills, Index => I);
+         begin
+            Nim_Recruit.Skills(Integer(I), 1) := Integer(Skill.Index);
+            Nim_Recruit.Skills(Integer(I), 2) := Skill.Level;
+            Nim_Recruit.Skills(Integer(I), 3) := Skill.Experience;
+         end Convert_Skill_Block;
+      end loop Convert_Skills_Loop;
+      return Nim_Recruit;
+   end Recruit_To_Nim;
+
+   procedure Recruit_From_Nim
+     (Recruit: Nim_Recruit_Data; Ada_Recruit: in out Recruit_Data) is
+      use Tiny_String;
+   begin
+      Ada_Recruit.Name :=
+        To_Bounded_String(Source => Value(Item => Recruit.Name));
+      Ada_Recruit.Gender := Recruit.Gender;
+      Ada_Recruit.Payment := Recruit.Payment;
+      Ada_Recruit.Price := Recruit.Price;
+      Convert_Equipment_Loop :
+      for I in Recruit.Equipment'Range loop
+         Ada_Recruit.Equipment(Equipment_Locations'Val(I)) :=
+           Recruit.Equipment(I) + 1;
+      end loop Convert_Equipment_Loop;
+      Convert_Atrributes_Loop :
+      for I in Recruit.Attributes'Range(1) loop
+         exit Convert_Atrributes_Loop when I > Attributes_Amount;
+         Ada_Recruit.Attributes(I).Level := Recruit.Attributes(I, 1);
+         Ada_Recruit.Attributes(I).Experience := Recruit.Attributes(I, 2);
+      end loop Convert_Atrributes_Loop;
+      Skills_Container.Clear(Container => Ada_Recruit.Skills);
+      Convert_Skills_Loop :
+      for I in Recruit.Skills'Range(1) loop
+         exit Convert_Skills_Loop when Recruit.Skills(I, 1) = 0;
+         Skills_Container.Append
+           (Container => Ada_Recruit.Skills,
+            New_Item =>
+              Skill_Info'
+                (Index => Skills_Amount_Range(Recruit.Skills(I, 1)),
+                 Level => Recruit.Skills(I, 2),
+                 Experience => Recruit.Skills(I, 3)));
+      end loop Convert_Skills_Loop;
+      Ada_Recruit.Faction :=
+        To_Bounded_String(Source => Value(Item => Recruit.Faction));
+      Ada_Recruit.Home_Base := Recruit.Home_Base;
+   end Recruit_From_Nim;
 
 end Bases;
