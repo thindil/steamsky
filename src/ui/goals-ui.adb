@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ package body Goals.UI is
       Button_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
       Goal_Button: constant Ttk_Button :=
         Get_Widget(pathName => Button_Name, Interp => Interp);
-      Button_Text: Unbounded_String;
+      Button_Text: Unbounded_String := Null_Unbounded_String;
    begin
       Selected_Goal := Natural'Value(Selection(TreeViewWidget => Goals_View));
       Clear_Current_Goal;
