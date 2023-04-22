@@ -147,43 +147,6 @@ package body Ships.UI.Modules is
          Module_Max_Value := 1;
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
-         when GUN | HARPOON_GUN =>
-            Set_Ammo_Block :
-            declare
-               Ammo_Index: constant Natural :=
-                 (if Player_Ship.Modules(Module_Index).M_Type = GUN then
-                    Player_Ship.Modules(Module_Index).Ammo_Index
-                  else Player_Ship.Modules(Module_Index).Harpoon_Index);
-            begin
-               Find_Ammo_Loop :
-               for I in
-                 Inventory_Container.First_Index
-                   (Container => Player_Ship.Cargo) ..
-                   Inventory_Container.Last_Index
-                     (Container => Player_Ship.Cargo) loop
-                  if Get_Proto_Item
-                      (Index =>
-                         Inventory_Container.Element
-                           (Container => Player_Ship.Cargo, Index => I)
-                           .Proto_Index)
-                      .I_Type =
-                    Get_Ada_Item_Type
-                      (Item_Index =>
-                         Get_Module
-                           (Index =>
-                              Player_Ship.Modules(Module_Index).Proto_Index)
-                           .Value -
-                         1) and
-                    I /= Ammo_Index then
-                     Add_Button
-                       (Name => ".assignammo",
-                        Label => "Assign an ammo to gun...",
-                        Command =>
-                          "ShowAssignAmmo " & CArgv.Arg(Argv => Argv, N => 1));
-                     exit Find_Ammo_Loop;
-                  end if;
-               end loop Find_Ammo_Loop;
-            end Set_Ammo_Block;
          when BATTERING_RAM =>
             Module_Max_Value :=
               Natural
