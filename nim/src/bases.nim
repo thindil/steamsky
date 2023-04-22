@@ -170,6 +170,8 @@ proc generateRecruits*() =
       baseIndex].reputation.level.float / 100.0)).int
     baseRecruits: seq[RecruitData]
     gender: char
+  if maxSkillAmount < 5:
+    maxSkillAmount = 5
   for i in 1 .. recruitsAmount:
     skills = @[]
     price = 0
@@ -235,8 +237,8 @@ proc generateRecruits*() =
         for index, item in itemsList.pairs:
           if item.itemType == recipe.tool:
             tempToolsList.add(y = index)
+        addInventory(itemsIndexes = tempToolsList, equipIndex = tool)
         break
-    addInventory(itemsIndexes = tempToolsList, equipIndex = tool)
     if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
       price = (price / 2).int
       payment = (payment / 2).int
