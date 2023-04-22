@@ -129,7 +129,7 @@ proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
     skyBases[baseIndex].population = getRandom(min = 5, max = 10)
     skyBases[baseIndex].owner = getRandomFaction()
 
-proc generateRecruits*() =
+proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var
     highestLevel: SkillRange = 0
