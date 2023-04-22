@@ -603,6 +603,12 @@ package body Bases is
          Home_Base => Recruit.Home_Base, Price => Recruit.Price,
          Faction => New_String(Str => To_String(Source => Recruit.Faction)));
    begin
+      Convert_Inventory_Loop :
+      for I in Nim_Recruit.Inventory'Range loop
+         Nim_Recruit.Equipment(I) :=
+           Positive_Formal_Container.Element
+             (Container => Recruit.Inventory, Index => I + 1);
+      end loop Convert_Inventory_Loop;
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
          Nim_Recruit.Equipment(Equipment_Locations'Pos(I)) :=
@@ -640,6 +646,12 @@ package body Bases is
       Ada_Recruit.Gender := Recruit.Gender;
       Ada_Recruit.Payment := Recruit.Payment;
       Ada_Recruit.Price := Recruit.Price;
+      Convert_Inventory_Loop :
+      for I in Recruit.Inventory'Range loop
+         Positive_Formal_Container.Append
+           (Container => Ada_Recruit.Inventory,
+            New_Item => Recruit.Inventory(I) + 1);
+      end loop Convert_Inventory_Loop;
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
          Ada_Recruit.Equipment(Equipment_Locations'Val(I)) :=
