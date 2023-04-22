@@ -304,6 +304,14 @@ proc getAdaBaseRecruitDate(baseIndex, year, month, day, hour,
   skyBases[baseIndex].recruitDate = DateRecord(year: year, month: month,
       day: day, hour: hour, minutes: minutes)
 
+proc setAdaBaseRecruitDate(baseIndex: cint; year, month, day, hour,
+    minutes: var cint) {.raises: [], tags: [], exportc.} =
+  year = skyBases[baseIndex].recruitDate.year
+  month = skyBases[baseIndex].recruitDate.month
+  day = skyBases[baseIndex].recruitDate.day
+  hour = skyBases[baseIndex].recruitDate.hour
+  minutes = skyBases[baseIndex].recruitDate.minutes
+
 proc generateAdaRecruits() {.raises: [], tags: [], exportc.} =
   try:
     generateRecruits()
@@ -389,3 +397,6 @@ proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
     recruits[index] = adaRecruitFromNim(recruit = recruit)
     index.inc
   recruits[index].name = "".cstring
+
+proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].baseType = $baseType

@@ -15,7 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+--## rule off REDUCEABLE_SCOPE
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+--## rule on REDUCEABLE_SCOPE
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
@@ -307,10 +309,15 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseRecruitDate";
 
-   procedure Set_Ada_Base_Recruit_Date(Base_Index: Bases_Range);
+   procedure Set_Base_Recruit_Date(Base_Index: Bases_Range);
 
-   procedure Get_Ada_Recruits(Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);
+   procedure Get_Ada_Recruits
+     (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);
 
-   procedure Set_Ada_Recruits(Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range);
+   procedure Set_Ada_Recruits
+     (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range);
+
+   procedure Get_Base_Type
+     (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String);
 
 end Bases;

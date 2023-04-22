@@ -20,9 +20,9 @@ with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
-with BasesTypes; use BasesTypes;
+with BasesTypes;
 with Maps; use Maps;
-with Factions; use Factions;
+with Factions;
 
 package body Bases is
 
@@ -85,7 +85,6 @@ package body Bases is
    begin
       Get_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
-      Get_Base_Reputation(Base_Index => Base_Index);
       Get_Game_Date(Current_Date => Game_Date);
       Get_Ada_Base_Recruit_Date
         (Base_Index => Base_Index,
@@ -95,6 +94,13 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
          Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
       Set_Ship_In_Nim;
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Get_Base_Type
+        (Base_Index => Base_Index,
+         Base_Type => Sky_Bases(Base_Index).Base_Type);
+      Get_Base_Reputation(Base_Index => Base_Index);
       Generate_Ada_Recruits;
       Set_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
@@ -231,6 +237,8 @@ package body Bases is
 
    procedure Ask_For_Events is
       use Ada.Numerics.Elementary_Functions;
+      use BasesTypes;
+      use Factions;
       use Tiny_String;
 
       Base_Index: constant Extended_Base_Range :=
@@ -723,9 +731,34 @@ package body Bases is
       end loop Convert_Crew_Loop;
    end Set_Ada_Recruits;
 
-   procedure Set_Ada_Base_Recruit_Date(Base_Index: Bases_Range) is
+   procedure Set_Base_Recruit_Date(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Recruit_Date
+        (B_Index: Bases_Range;
+         Year, Month, Day, Hour, Minutes: out Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseRecruitDate";
    begin
-      null;
-   end Set_Ada_Base_Recruit_Date;
+      Set_Ada_Base_Recruit_Date
+        (B_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
+         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
+         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
+         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
+   end Set_Base_Recruit_Date;
+
+   procedure Get_Base_Type
+     (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String) is
+      procedure Get_Ada_Base_Type(B_Index: Integer; B_Type: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseType";
+   begin
+      Get_Ada_Base_Type
+        (B_Index => Base_Index,
+         B_Type =>
+           New_String(Str => Tiny_String.To_String(Source => Base_Type)));
+   end Get_Base_Type;
 
 end Bases;
