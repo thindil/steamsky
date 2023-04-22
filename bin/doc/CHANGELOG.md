@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Ability to assing the crew members to the player's ship's gun's in the module
+- Ability to assing the crew members to the player's ship's guns in the module
+  info dialog
+- Ability to assing the ammunition to the player's ship's guns in the module
   info dialog
 
 ### Changed
