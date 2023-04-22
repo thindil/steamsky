@@ -115,19 +115,19 @@ package body Bases.Ship is
          raise Trade_No_Money;
       end if;
       Find_Hull_And_Turrets_Loop :
-      for C in Player_Ship.Modules.Iterate loop
-         case Player_Ship.Modules(C).M_Type is
+      for I in Player_Ship.Modules.Iterate loop
+         case Player_Ship.Modules(I).M_Type is
             when HULL =>
-               Hull_Index := Modules_Container.To_Index(Position => C);
-               Modules_Amount := Player_Ship.Modules(C).Installed_Modules;
+               Hull_Index := Modules_Container.To_Index(Position => I);
+               Modules_Amount := Player_Ship.Modules(I).Installed_Modules;
             when TURRET =>
-               if (Player_Ship.Modules(C).Gun_Index = 0 and Install)
+               if (Player_Ship.Modules(I).Gun_Index = 0 and Install)
                  and then
-                   Get_Module(Index => Player_Ship.Modules(C).Proto_Index)
+                   Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                      .Size >=
                    Get_Module(Index => Module_Index).Size then
                   Free_Turret_Index :=
-                    Modules_Container.To_Index(Position => C);
+                    Modules_Container.To_Index(Position => I);
                end if;
             when others =>
                null;
@@ -502,11 +502,11 @@ package body Bases.Ship is
          if Player_Ship.Upgrade_Module = Ship_Module_Index then
             Player_Ship.Upgrade_Module := 0;
             Remove_Upgrade_Order_Loop :
-            for C in Player_Ship.Crew.Iterate loop
-               if Player_Ship.Crew(C).Order = UPGRADING then
+            for Crew_Index in Player_Ship.Crew.Iterate loop
+               if Player_Ship.Crew(Crew_Index).Order = UPGRADING then
                   Give_Orders
                     (Ship => Player_Ship,
-                     Member_Index => Crew_Container.To_Index(Position => C),
+                     Member_Index => Crew_Container.To_Index(Position => Crew_Index),
                      Given_Order => REST);
                   exit Remove_Upgrade_Order_Loop;
                end if;
