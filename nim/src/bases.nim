@@ -217,9 +217,9 @@ proc generateRecruits*() =
             experience: 0))
       elif skillIndex > -1:
         skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
-    for attribute in attributes.mitems:
-      attribute = MobAttributeRecord(level: getRandom(min = 3, max = (
-          maxSkillLevel / 3).int), experience: 0)
+    for j in 1 .. attributesList.len:
+      attributes.add(y = MobAttributeRecord(level: getRandom(min = 3, max = (
+          maxSkillLevel / 3).int), experience: 0))
     for skill in skills.items:
       price = price + skill.level
       payment = payment + skill.level

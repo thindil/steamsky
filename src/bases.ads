@@ -68,11 +68,11 @@ package Bases is
       Name: chars_ptr;
       Gender: Character;
       Equipment: Nim_Equipment_Array;
-      Inventory: Nim_Equipment_Array;
       Payment: Integer;
       Home_Base: Integer;
       Faction: chars_ptr;
       Price: Integer;
+      Inventory: Nim_Equipment_Array;
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
