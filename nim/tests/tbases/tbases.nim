@@ -2,12 +2,13 @@ discard """
   exitcode: 0
 """
 
-import ../../src/[bases, careers, factions, game, items, maps, types]
+import ../../src/[bases, basestypes, careers, factions, game, items, maps, types]
 
 loadData("../bin/data/game.dat")
 loadItems("../bin/data/items.dat")
 loadCareers("../bin/data/careers.dat")
 loadFactions("../bin/data/factions.dat")
+loadBasesTypes("../bin/data/bases.dat")
 
 assert generateBaseName("POLEIS").len() > 0
 
@@ -36,3 +37,21 @@ countPrice(price, 0)
 assert price < 100
 
 updatePopulation()
+
+skyBases[1].population = 100
+skyBases[1].baseType = "1"
+skyBases[1].owner = "POLEIS"
+gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+skyBases[1].recruits = @[]
+generateRecruits()
+assert skyBases[1].recruits.len > 0
+skyBases[1].recruits = @[]
+skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+skyBases[1].reputation.level = -50
+generateRecruits()
+assert skyBases[1].recruits.len > 0
+skyBases[1].recruits = @[]
+skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+skyBases[1].reputation.level = 0
+generateRecruits()
+assert skyBases[1].recruits.len > 0
