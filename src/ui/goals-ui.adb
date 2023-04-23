@@ -13,24 +13,24 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
-with Game; use Game;
-with Utils; use Utils;
-with Utils.UI; use Utils.UI;
+with Tcl.Tklib.Ada.Tooltip;
+with Config;
+with Game;
+with Utils;
+with Utils.UI;
 
 package body Goals.UI is
 
@@ -58,6 +58,13 @@ package body Goals.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings;
+      use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Config;
+      use Game;
+
       Goals_Dialog: constant Ttk_Frame :=
         Get_Widget(pathName => ".goalsdialog", Interp => Interp);
       Goals_View: constant Ttk_Tree_View :=
@@ -133,6 +140,9 @@ package body Goals.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tklib.Ada.Tooltip;
+      use Utils;
+
       Goals_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".goalsdialog.view", Interp => Interp);
       Selected_Goal: Natural;
@@ -173,6 +183,7 @@ package body Goals.UI is
    end Set_Goal_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowGoals", Ada_Command => Show_Goals_Command'Access);
