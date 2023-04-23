@@ -646,12 +646,14 @@ package body Bases is
       Ada_Recruit.Gender := Recruit.Gender;
       Ada_Recruit.Payment := Recruit.Payment;
       Ada_Recruit.Price := Recruit.Price;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Convert_Inventory_Loop :
       for I in Recruit.Inventory'Range loop
          Positive_Formal_Container.Append
            (Container => Ada_Recruit.Inventory,
             New_Item => Recruit.Inventory(I) + 1);
       end loop Convert_Inventory_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
          Ada_Recruit.Equipment(Equipment_Locations'Val(I)) :=
