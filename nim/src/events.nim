@@ -18,6 +18,11 @@
 import std/tables
 import game, types
 
+proc getPlayerShips*(playerShips: var seq[Positive]) =
+  for index, faction in factionsList.pairs:
+    for career in faction.careers.values:
+      playerShips.add(y = career.shipIndex)
+
 # Temporary code for interfacing with Ada
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
@@ -31,3 +36,10 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], e
       event.data = data
   eventsList[index] = event
 
+proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [], exportc.} =
+  for ship in playerShips.mitems:
+    ship = 0
+  var nimShips: seq[Positive]
+  getPlayerShips(playerShips = nimShips)
+  for index, ship in nimShips.pairs:
+    playerShips[index] = ship.cint
