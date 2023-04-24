@@ -39,7 +39,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   getPlayerShips(playerShips = playerShips)
   for index, ship in protoShipsList:
     if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
-        owner) and isFriendly(sourceFaction = playerShip.crew[0].faction,
+        owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips and (
         withTraders or ship.name.startsWith(prefix = tradersName)):
       enemies.add(y = index)
@@ -65,12 +65,14 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
   for index, ship in nimShips.pairs:
     playerShips[index] = ship.cint
 
-proc generateAdaEnemies(enemies: var array[300, cint]) {.raises: [], tags: [], exportc.} =
+proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
+    withTraders: cint) {.raises: [], tags: [], exportc.} =
   for ship in enemies.mitems:
     ship = 0
   var nimShips: seq[Positive]
   try:
-    generateEnemies(enemies = nimShips)
+    generateEnemies(enemies = nimShips, owner = $owner,
+        withTraders = withTraders == 1)
   except KeyError:
     return
   for index, ship in nimShips.pairs:

@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C.Strings;
 with Bases; use Bases;
 with BasesTypes;
 with Combat;
@@ -602,37 +603,25 @@ package body Events is
       Owner: Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
-      use Tiny_String;
+      use Interfaces.C.Strings;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Player_Value: Natural := 0;
-      Player_Ships: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
+      type Nim_Ships_Array is array(0 .. 299) of Natural;
+      Nim_Ships: Nim_Ships_Array;
+      procedure Generate_Ada_Enemies
+        (E: out Nim_Ships_Array; O: chars_ptr; W_Traders: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaEnemies";
    begin
-      Player_Value := Count_Combat_Value;
-      if Get_Random(Min => 1, Max => 100) > 98 then
-         Player_Value := Player_Value * 2;
-      end if;
-      --## rule off IMPROPER_INITIALIZATION
-      Get_Player_Ships(Player_Ships => Player_Ships);
-      --## rule on IMPROPER_INITIALIZATION
-      Generate_Enemies_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         if Get_Proto_Ship(Proto_Index => I).Combat_Value <= Player_Value and
-           (Owner = To_Bounded_String(Source => "Any") or
-            Get_Proto_Ship(Proto_Index => I).Owner = Owner) and
-           not Is_Friendly
-             (Source_Faction => Player_Ship.Crew(1).Faction,
-              Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
-           not Player_Ships.Contains(Item => I) and
-           (With_Traders or
-            Index
-                (Source => Get_Proto_Ship(Proto_Index => I).Name,
-                 Pattern => To_String(Source => Traders_Name)) =
-              0) then
-            Enemies.Append(New_Item => I);
-         end if;
-      end loop Generate_Enemies_Loop;
+      Generate_Ada_Enemies
+        (E => Nim_Ships,
+         O => New_String(Str => Tiny_String.To_String(Source => Owner)),
+         W_Traders => (if With_Traders then 1 else 0));
+      Convert_Ships_Loop :
+      for Ship of Nim_Ships loop
+         exit Convert_Ships_Loop when Ship = 0;
+         Enemies.Append(New_Item => Ship);
+      end loop Convert_Ships_Loop;
    end Generate_Enemies;
 
 end Events;
