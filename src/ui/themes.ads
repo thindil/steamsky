@@ -152,6 +152,7 @@ package Themes is
    -- Upgrade_Button_Icon   - Icon used for the upgrade button
    -- Power_Icon            - Icon used for the enable or disable engine button
    -- Assign_Crew_Icon      - Icon used for assign crew members to ship's modules
+   -- Assign_Ammo_Icon      - Icon used for assign ammo to ship's guns
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -247,6 +248,7 @@ package Themes is
       Upgrade_Button_Icon: Unbounded_String;
       Power_Icon: Unbounded_String;
       Assign_Crew_Icon: Unbounded_String;
+      Assign_Ammo_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -350,7 +352,8 @@ package Themes is
       Repair_Priority_Icon => Default_Theme_Icons_Path & "repair-priority.svg",
       Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg",
       Power_Icon => Default_Theme_Icons_Path & "power.svg",
-      Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg");
+      Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg",
+      Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
