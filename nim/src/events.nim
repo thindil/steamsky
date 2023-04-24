@@ -18,8 +18,14 @@
 import std/tables
 import game, types
 
-proc getPlayerShips*(playerShips: var seq[Positive]) {.sideEffect, raises: [],
+proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
     tags: [].} =
+  ## Get the list of all prototype's ships which are available only for the
+  ## player
+  ##
+  ## * playerShips - the list of ships' prototypes available for the player
+  ##
+  ## Returns the updated parameter playerShips.
   for index, faction in factionsList.pairs:
     for career in faction.careers.values:
       playerShips.add(y = career.shipIndex)
