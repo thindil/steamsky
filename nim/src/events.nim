@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import game, types
+import std/[strutils, tables]
+import factions, game, ships, types, utils
 
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
     tags: [].} =
@@ -29,6 +29,20 @@ proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
   for index, faction in factionsList.pairs:
     for career in faction.careers.values:
       playerShips.add(y = career.shipIndex)
+
+proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
+    withTraders: bool = true) =
+  var playerValue = countCombatValue()
+  if getRandom(min = 1, max = 100) > 98:
+    playerValue = playerValue * 2
+  var playerShips: seq[Positive]
+  getPlayerShips(playerShips = playerShips)
+  for index, ship in protoShipsList:
+    if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
+        owner) and isFriendly(sourceFaction = playerShip.crew[0].faction,
+        targetFaction = ship.owner) and index notin playerShips and (
+        withTraders or ship.name.startsWith(prefix = tradersName)):
+      enemies.add(y = index)
 
 # Temporary code for interfacing with Ada
 
@@ -50,3 +64,14 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
   getPlayerShips(playerShips = nimShips)
   for index, ship in nimShips.pairs:
     playerShips[index] = ship.cint
+
+proc generateAdaEnemies(enemies: var array[300, cint]) {.raises: [], tags: [], exportc.} =
+  for ship in enemies.mitems:
+    ship = 0
+  var nimShips: seq[Positive]
+  try:
+    generateEnemies(enemies = nimShips)
+  except KeyError:
+    return
+  for index, ship in nimShips.pairs:
+    enemies[index] = ship.cint
