@@ -98,6 +98,52 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
     else:
       skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
+proc generateMissions*() =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
+      currentDate = gameDate) < 7 or skyBases[baseIndex].population == 0:
+    return
+  var missionsAmount = case skyBases[baseIndex].population
+    of 1 .. 149:
+      getRandom(min = 1, max = 5)
+    of 150 .. 299:
+      getRandom(min = 1, max = 10)
+    else:
+      getRandom(min = 1, max = 15)
+  missionsAmount = case skyBases[baseIndex].reputation.level
+    of 1 .. 25:
+      missionsAmount + 1
+    of 26 .. 50:
+      missionsAmount + 3
+    of 51 .. 75:
+      missionsAmount + 5
+    of 76 .. 100:
+      missionsAmount + 10
+    else:
+      missionsAmount
+  var missionsItems: seq[Positive]
+  for index, item in itemsList.pairs:
+    if item.itemType == missionItemsType:
+      missionsItems.add(y = index)
+  var minX: cint = playerShip.skyX.cint - 100
+  normalizeCoord(coord = minX)
+  var maxX: cint = playerShip.skyX.cint + 100
+  normalizeCoord(coord = maxX)
+  var minY: cint = playerShip.skyY.cint - 100
+  normalizeCoord(coord = minY, isXAxis = 0)
+  var maxY: cint = playerShip.skyY.cint + 100
+  normalizeCoord(coord = maxY, isXAxis = 0)
+  var basesInRange: seq[Positive]
+  for index, base in skyBases.pairs:
+    if index != baseIndex and skyBases[index].skyX in minX .. maxX and skyBases[
+        index].skyY in minY .. maxY and skyBases[index].population > 0:
+      basesInRange.add(y = index)
+  while missionsAmount > basesInRange.len:
+    let tmpBaseIndex = getRandom(min = 1, max = 1024)
+    if tmpBaseIndex notin basesInRange and skyBases[tmpBaseIndex].population > 0:
+      basesInRange.add(y = tmpBaseIndex)
+  skyBases[baseIndex].missions = @[]
+
 # Temporary code for interfacing with Ada
 
 type
