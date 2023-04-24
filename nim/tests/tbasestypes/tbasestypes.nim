@@ -8,7 +8,8 @@ import ../../src/[basestypes, game, items]
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
-loadBasesTypes("../bin/data/bases.dat")
+if basesTypesList.len == 0:
+  loadBasesTypes("../bin/data/bases.dat")
 
 assert getPrice("0", 1) == 0
 assert getPrice("1", 2) > 0
