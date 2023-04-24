@@ -85,7 +85,7 @@ package body Maps.UI is
       Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
       Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean :=
         False;
-      Item_Amount: Natural := 0;
+      Item_Amount: Natural;
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
       Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combat");
