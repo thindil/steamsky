@@ -18,7 +18,8 @@
 import std/tables
 import game, types
 
-proc getPlayerShips*(playerShips: var seq[Positive]) =
+proc getPlayerShips*(playerShips: var seq[Positive]) {.sideEffect, raises: [],
+    tags: [].} =
   for index, faction in factionsList.pairs:
     for career in faction.careers.values:
       playerShips.add(y = career.shipIndex)
