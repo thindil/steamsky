@@ -41,7 +41,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
     if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
         owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips and (
-        withTraders or ship.name.startsWith(prefix = tradersName)):
+        withTraders or tradersName notin ship.name):
       enemies.add(y = index)
 
 # Temporary code for interfacing with Ada
