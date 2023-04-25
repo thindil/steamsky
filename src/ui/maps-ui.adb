@@ -185,7 +185,7 @@ package body Maps.UI is
          Faction.Flags.Contains
            (Item => To_Unbounded_String(Source => "sentientships"))) and
         (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
-         or else (Winfo_Get(Widgt => Frame, Info => "ismapped") = "0")) then
+         or else Winfo_Get(Widgt => Frame, Info => "ismapped") = "0") then
          Set_Overloaded_Info_Block :
          declare
             type Speed_Type is digits 2;
