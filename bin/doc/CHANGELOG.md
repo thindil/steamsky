@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated look of the module info dialog
+- Updated modding guide
 
 ### Fixed
 - Setting the names for cabins in newly created ships
