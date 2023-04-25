@@ -507,41 +507,31 @@ package body Events is
       end loop Delete_Events_Loop;
    end Delete_Event;
 
-   -- ****if* Events/Events.Get_Player_Ships
-   -- FUNCTION
-   -- Get the list of all prototypes ships which are only for the player
-   -- PARAMETERS
-   -- Player_Ships - The list with all available indexes of prototype player's
-   --               ships
-   -- RESULT
-   -- Parameter Player_Ships
-   -- SOURCE
-   procedure Get_Player_Ships
-     (Player_Ships: in out Positive_Container.Vector) is
-     -- ****
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Ships_Array is array(0 .. 29) of Natural;
-      --## rule on TYPE_INITIAL_VALUES
-      Nim_Ships: Nim_Ships_Array;
-      procedure Get_Ada_Players_Ships(P_Ships: out Nim_Ships_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaPlayerShips";
-   begin
-      Get_Ada_Players_Ships(P_Ships => Nim_Ships);
-      Convert_Ships_Loop :
-      for Ship of Nim_Ships loop
-         exit Convert_Ships_Loop when Ship = 0;
-         Player_Ships.Append(New_Item => Ship);
-      end loop Convert_Ships_Loop;
-   end Get_Player_Ships;
-
    procedure Generate_Traders is
       use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
       Player_Ships: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Player_Ships
+        (Player_Ships: in out Positive_Container.Vector) is
+         -- ****
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Ships_Array is array(0 .. 29) of Natural;
+         --## rule on TYPE_INITIAL_VALUES
+         Nim_Ships: Nim_Ships_Array;
+         procedure Get_Ada_Players_Ships(P_Ships: out Nim_Ships_Array) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaPlayerShips";
+      begin
+         Get_Ada_Players_Ships(P_Ships => Nim_Ships);
+         Convert_Ships_Loop :
+         for Ship of Nim_Ships loop
+            exit Convert_Ships_Loop when Ship = 0;
+            Player_Ships.Append(New_Item => Ship);
+         end loop Convert_Ships_Loop;
+      end Get_Player_Ships;
    begin
       Count_Traders_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
