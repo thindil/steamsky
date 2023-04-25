@@ -1116,7 +1116,10 @@ story.
   disable the player's ship's engine button in the module info dialog.
   Optional.
 * Key `AssignCrewIcon`: Path to the SVG image which will be used for assign a
-  crew member to a cabin in the player' ship in the module info dialog.
+  crew member as an owner to a module in the player' ship in the module info
+  dialog. Optional.
+* Key `AssignAmmoIcon`: Path to the SVG image which will be used for assign an
+  ammunition to a gun in the player' ship in the module info dialog.
   Optional.
 
 ## Debugging
