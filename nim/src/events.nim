@@ -32,6 +32,15 @@ proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
 
 proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
     withTraders: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Create a list of enemy's ships
+  ##
+  ## * enemies     - the list of enemy's ships which will be created
+  ## * owner       - the faction to which the ships should belong. With default
+  ##                 value, any enemy faction
+  ## * withTraders - if true, add traders ships to the list, otherwise only
+  ##                 combat ships. Default value is true
+  ##
+  ## Returns the updated paramater enemies
   var playerValue = countCombatValue()
   if getRandom(min = 1, max = 100) > 98:
     playerValue = playerValue * 2
