@@ -31,7 +31,7 @@ proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
       playerShips.add(y = career.shipIndex)
 
 proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
-    withTraders: bool = true) =
+    withTraders: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
   var playerValue = countCombatValue()
   if getRandom(min = 1, max = 100) > 98:
     playerValue = playerValue * 2
