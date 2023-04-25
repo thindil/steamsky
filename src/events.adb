@@ -519,7 +519,9 @@ package body Events is
    procedure Get_Player_Ships
      (Player_Ships: in out Positive_Container.Vector) is
      -- ****
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Ships_Array is array(0 .. 29) of Natural;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Ships: Nim_Ships_Array;
       procedure Get_Ada_Players_Ships(P_Ships: out Nim_Ships_Array) with
          Import => True,
@@ -605,7 +607,9 @@ package body Events is
       With_Traders: Boolean := True) is
       use Interfaces.C.Strings;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Ships_Array is array(0 .. 299) of Natural;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Ships: Nim_Ships_Array;
       procedure Generate_Ada_Enemies
         (E: out Nim_Ships_Array; O: chars_ptr; W_Traders: Integer) with
