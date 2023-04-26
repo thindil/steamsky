@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[crafts, game, items, shipmodules, ships, shipscargo, types]
+import ../../src/[crafts, game, items, shipmodules, shipscargo, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
