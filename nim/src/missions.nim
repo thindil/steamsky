@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[math, tables]
 import bases, events, game, maps, messages, shipscrew, shipscargo, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
@@ -149,6 +149,7 @@ proc generateMissions*() =
   else:
     generateEnemies(enemies = enemies)
   var missionX, missionY: int = 1
+  const qualitiesArray: array[10, int] = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
   for i in 1 .. missionsAmount:
     var mission: MissionData = MissionData(time: 1, reward: 1, startBase: 1)
     let mType: MissionsTypes = getRandom(min = MissionsTypes.low.int,
@@ -182,8 +183,46 @@ proc generateMissions*() =
           break
       if mission.target == 1:
         continue
-    else:
-      discard
+    of explore:
+      mission = MissionData(mtype: explore, time: 1, targetX: 0, targetY: 0,
+          reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
+      for j in 1 .. 10:
+        missionX = getRandom(min = minX, max = maxX)
+        missionY = getRandom(min = minY, max = maxY)
+        if not skyMap[missionX][missionY].visited and skyMap[missionX][
+            missionY].baseIndex == 0:
+          mission.target = 0
+          break
+      if mission.target == 1:
+        continue
+    of passenger:
+      mission = MissionData(mtype: passenger, time: 1, targetX: 0, targetY: 0,
+          reward: 1, startBase: 1, finished: false, multiplier: 1.0,
+          data: qualitiesArray[getRandom(min = qualitiesArray.low,
+              max = qualitiesArray.high)])
+    if mission.mType in {deliver, passenger}:
+      while true:
+        let tmpBaseIndex = getRandom(min = basesInRange.low,
+            max = basesInRange.high)
+        missionX = skyBases[basesInRange[tmpBaseIndex]].skyX
+        missionY = skyBases[basesInRange[tmpBaseIndex]].skyY
+        if missionX != playerShip.skyX and missionY != playerShip.skyY:
+          break
+    mission.targetX = missionX
+    mission.targetY = missionY
+    let
+      diffX = (playerShip.skyX - missionX).abs
+      diffY = (playerShip.skyY - missionY).abs
+    case mission.mType
+    of deliver:
+      mission.time = (80.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.reward = (mission.time / 4).Positive
+    of destroy, passenger:
+      mission.time = (180.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.reward = (mission.time / 4).Positive
+    of patrol, explore:
+      mission.time = (180.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.reward = (mission.time / 5).Positive
 
 # Temporary code for interfacing with Ada
 
