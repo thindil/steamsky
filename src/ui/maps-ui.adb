@@ -189,6 +189,7 @@ package body Maps.UI is
          Set_Overloaded_Info_Block :
          declare
             type Speed_Type is digits 2;
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Speed: constant Speed_Type :=
               (if Player_Ship.Speed /= DOCKED then
                  (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0)
@@ -196,6 +197,7 @@ package body Maps.UI is
                  (Speed_Type
                     (Real_Speed(Ship => Player_Ship, Info_Only => True)) /
                   1_000.0));
+            --## rule n SIMPLIFIABLE_EXPRESSIONS
          begin
             if Speed < 0.5 then
                Add
