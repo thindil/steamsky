@@ -1076,7 +1076,7 @@ package body Ships.UI.Modules is
                        Create
                          (pathName => Ammo_Box & ".button",
                           options =>
-                            "-image assigncrewicon -command {" &
+                            "-image assignammoicon -command {" &
                             Close_Dialog_Button & " invoke;ShowAssignAmmo " &
                             CArgv.Arg(Argv => Argv, N => 1) &
                             "} -style Small.TButton");
