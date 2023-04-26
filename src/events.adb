@@ -514,7 +514,7 @@ package body Events is
       Player_Ships: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       procedure Get_Player_Ships
-        (Player_Ships: in out Positive_Container.Vector) is
+        (Playerships: in out Positive_Container.Vector) is
          -- ****
          --## rule off TYPE_INITIAL_VALUES
          type Nim_Ships_Array is array(0 .. 29) of Natural;
@@ -529,7 +529,7 @@ package body Events is
          Convert_Ships_Loop :
          for Ship of Nim_Ships loop
             exit Convert_Ships_Loop when Ship = 0;
-            Player_Ships.Append(New_Item => Ship);
+            Playerships.Append(New_Item => Ship);
          end loop Convert_Ships_Loop;
       end Get_Player_Ships;
    begin
@@ -542,7 +542,7 @@ package body Events is
             Traders.Append(New_Item => I);
          end if;
       end loop Count_Traders_Loop;
-      Get_Player_Ships(Player_Ships => Player_Ships);
+      Get_Player_Ships(Playerships => Player_Ships);
       Count_Friendly_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
          if Is_Friendly
