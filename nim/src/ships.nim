@@ -478,35 +478,6 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
           death(memberIndex = ship.modules[moduleIndex].owner[0],
               reason = deathReason, ship = ship)
 
-proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
-  ## Count the combat value of the player's ship based on its modules,
-  ## weapons and ammunition.
-  ##
-  ## Returns the combat value of the player's ship.
-  proc countAmmoValue(itemTypeIndex: Natural; multiple: Positive): Natural =
-    for item in playerShip.cargo.items:
-      if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex]:
-        result = result + itemsList[item.protoIndex].value[1] * multiple
-
-  for module in playerShip.modules:
-    case modulesList[module.protoIndex].mType
-    of ModuleType.batteringRam:
-      result = result + module.damage2
-    of ModuleType.gun:
-      result = result + module.maxDurability + (module.damage * 10)
-      result = result + countAmmoValue(itemTypeIndex = modulesList[
-          module.protoIndex].value, multiple = 10)
-    of ModuleType.armor:
-      result = result + module.maxDurability
-    of ModuleType.harpoonGun:
-      result = result + module.maxDurability + (module.duration * 5)
-      result = result + countAmmoValue(itemTypeIndex = modulesList[
-          module.protoIndex].value, multiple = 5)
-    of ModuleType.hull:
-      result = result + module.maxDurability + (module.maxModules * 10)
-    else:
-      discard
-
 proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
     KeyError], tags: [].} =
   ## Count the weight of the ship, its modules and cargo
@@ -1133,12 +1104,6 @@ proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
           damage = damage, deathReason = $deathReason)
   except KeyError, IOError:
     discard
-
-proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc.} =
-  try:
-    return countCombatValue().cint
-  except KeyError:
-    return 0
 
 proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
   try:
