@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, game, maps, messages, shipscrew, shipscargo, types, utils
+import bases, events, game, maps, messages, shipscrew, shipscargo, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
@@ -143,6 +143,47 @@ proc generateMissions*() =
     if tmpBaseIndex notin basesInRange and skyBases[tmpBaseIndex].population > 0:
       basesInRange.add(y = tmpBaseIndex)
   skyBases[baseIndex].missions = @[]
+  var enemies: seq[Positive]
+  if getRandom(min = 1, max = 100) < 75:
+    generateEnemies(enemies = enemies, withTraders = false)
+  else:
+    generateEnemies(enemies = enemies)
+  var missionX, missionY: int = 1
+  for i in 1 .. missionsAmount:
+    var mission: MissionData = MissionData(time: 1, reward: 1, startBase: 1)
+    let mType: MissionsTypes = getRandom(min = MissionsTypes.low.int,
+        max = MissionsTypes.high.int).MissionsTypes
+    case mType
+    of deliver:
+      mission = MissionData(mtype: deliver, time: 1, targetX: 0, targetY: 0,
+          reward: 1, startBase: 1, finished: false, itemIndex: missionsItems[
+          getRandom(min = 0, max = missionsItems.high)], multiplier: 1.0)
+    of destroy:
+      mission = MissionData(mtype: destroy, time: 1, targetX: 0, targetY: 0,
+          reward: 1, startBase: 1, finished: false, shipIndex: enemies[
+          getRandom(min = 0, max = enemies.high)], multiplier: 1.0)
+      if mission.shipIndex == 0:
+        continue
+      while true:
+        missionX = getRandom(min = minX, max = maxX)
+        missionY = getRandom(min = minY, max = maxY)
+        if skyMap[missionX][missionY].baseIndex == 0 and missionX !=
+            playerShip.skyX and missionY != playerShip.skyY:
+          break
+    of patrol:
+      mission = MissionData(mtype: patrol, time: 1, targetX: 0, targetY: 0,
+          reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
+      for j in 1 .. 10:
+        missionX = getRandom(min = minX, max = maxX)
+        missionY = getRandom(min = minY, max = maxY)
+        if skyMap[missionX][missionY].visited and skyMap[missionX][
+            missionY].baseIndex == 0:
+          mission.target = 0
+          break
+      if mission.target == 1:
+        continue
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
