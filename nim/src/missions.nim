@@ -98,7 +98,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
     else:
       skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
-proc generateMissions*() =
+proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
       currentDate = gameDate) < 7 or skyBases[baseIndex].population == 0:
@@ -242,8 +242,8 @@ type
     mType: cint
     data: cint
 
-proc getAdaMissions(adaMissions: array[50, AdaMissionData]; baseIndex: cint = 0) {.raises: [
-    ], tags: [], exportc.} =
+proc getAdaMissions(adaMissions: array[50, AdaMissionData];
+    baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
   var missionsList: seq[MissionData]
   for mission in adaMissions.items:
     if mission.time == 0:
@@ -286,8 +286,8 @@ proc getAdaMissions(adaMissions: array[50, AdaMissionData]; baseIndex: cint = 0)
   else:
     skyBases[baseIndex].missions = missionsList
 
-proc setAdaMissions(adaMissions: var array[50,
-    AdaMissionData]; baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
+proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
+    baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
   for mission in adaMissions.mitems:
     mission = AdaMissionData(time: 0, targetX: 0, targetY: 0, reward: 0,
         startBase: 0, finished: 0, multiplier: 0.0, mtype: 0, data: 0)
