@@ -775,4 +775,21 @@ package body Bases is
            New_String(Str => Tiny_String.To_String(Source => Base_Type)));
    end Get_Base_Type;
 
+   procedure Set_Base_Missions_Date(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Missions_Date
+        (B_Index: Bases_Range;
+         Year, Month, Day, Hour, Minutes: out Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseMissionsDate";
+   begin
+      Set_Ada_Base_Missions_Date
+        (B_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Missions_Date.Year,
+         Month => Sky_Bases(Base_Index).Missions_Date.Month,
+         Day => Sky_Bases(Base_Index).Missions_Date.Day,
+         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
+   end Set_Base_Missions_Date;
+
 end Bases;
