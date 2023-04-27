@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions;
 with Ada.Exceptions;
 with Ships; use Ships;
 with Ships.Cargo;
@@ -37,212 +36,28 @@ with Ada.Text_IO;
 package body Missions is
 
    procedure Generate_Missions is
-      use Ada.Numerics.Elementary_Functions;
-      use Tiny_String;
-
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Mission_X, Mission_Y: Positive range 1 .. 1_024 := 1;
-      Missions_Amount: Positive range 1 .. 26;
-      Tmp_Base_Index: Bases_Range := 1;
-      --## rule off IMPROPER_INITIALIZATION
-      Mission: Mission_Data;
-      Missions_Items: Positive_Container.Vector;
-      Bases_In_Range: Positive_Container.Vector;
-      Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Min_X, Min_Y, Max_X, Max_Y: Integer := 0;
-      M_Type: Missions_Types := Default_Mission_Type;
-      Diff_X, Diff_Y: Natural := 0;
-      Qualities_Array: constant array(1 .. 10) of Positive :=
-        (1 => 1, 2 => 11, 3 => 21, 4 => 31, 5 => 41, 6 => 51, 7 => 61, 8 => 71,
-         9 => 81, 10 => 91);
+      procedure Generate_Ada_Missions with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaMissions";
    begin
-      if Days_Difference
-          (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date) <
-        7 or
-        Sky_Bases(Base_Index).Population = 0 then
-         return;
-      end if;
-      Missions_Amount :=
-        (case Sky_Bases(Base_Index).Population is
-           when 1 .. 149 => Get_Random(Min => 1, Max => 5),
-           when 150 .. 299 => Get_Random(Min => 1, Max => 10),
-           when others => Get_Random(Min => 1, Max => 15));
-      --## rule off ASSIGNMENTS
-      Missions_Amount :=
-        (case Sky_Bases(Base_Index).Reputation.Level is
-           when 1 .. 25 => Missions_Amount + 1,
-           when 26 .. 50 => Missions_Amount + 3,
-           when 51 .. 75 => Missions_Amount + 5,
-           when 76 .. 100 => Missions_Amount + 10,
-           when others => Missions_Amount);
-      --## rule on ASSIGNMENTS
-      Find_Mission_Items_Loop :
-      for I in 1 .. Get_Proto_Amount loop
-         if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
-           To_String(Source => Mission_Items_Type) then
-            Missions_Items.Append(New_Item => I);
-         end if;
-      end loop Find_Mission_Items_Loop;
-      Min_X := Player_Ship.Sky_X - 100;
-      Normalize_Coord(Coord => Min_X);
-      Max_X := Player_Ship.Sky_X + 100;
-      Normalize_Coord(Coord => Max_X);
-      Min_Y := Player_Ship.Sky_Y - 100;
-      Normalize_Coord(Coord => Min_Y, Is_X_Axis => False);
-      Max_Y := Player_Ship.Sky_Y + 100;
-      Normalize_Coord(Coord => Max_Y, Is_X_Axis => False);
-      Find_Bases_In_Range_Loop :
-      for I in Sky_Bases'Range loop
-         if I /= Base_Index and Sky_Bases(I).Sky_X in Min_X .. Max_X and
-           Sky_Bases(I).Sky_Y in Min_Y .. Max_Y and
-           Sky_Bases(I).Population > 0 then
-            Bases_In_Range.Append(New_Item => I);
-         end if;
-      end loop Find_Bases_In_Range_Loop;
-      Get_Random_Bases_Loop :
-      while Missions_Amount > Positive(Bases_In_Range.Length) loop
-         Tmp_Base_Index := Get_Random(Min => 1, Max => 1_024);
-         if Bases_In_Range.Find_Index(Item => Tmp_Base_Index) =
-           Positive_Container.No_Index and
-           Sky_Bases(Tmp_Base_Index).Population > 0 then
-            Bases_In_Range.Append(New_Item => Tmp_Base_Index);
-         end if;
-      end loop Get_Random_Bases_Loop;
-      Sky_Bases(Base_Index).Missions.Clear;
-      if Get_Random(Min => 1, Max => 100) < 75 then
-         Generate_Enemies(Enemies => Enemies, With_Traders => False);
-      else
-         Generate_Enemies(Enemies => Enemies);
-      end if;
-      Generate_Missions_Loop :
-      for I in 1 .. Missions_Amount loop
-         <<Start_Of_Loop>>
-         M_Type :=
-           Missions_Types'Val
-             (Get_Random
-                (Min => 0, Max => Missions_Types'Pos(Missions_Types'Last)));
-         case M_Type is
-            when DELIVER =>
-               Mission :=
-                 (M_Type => DELIVER, Time => 1, Target_X => 0, Target_Y => 0,
-                  Reward => 1, Start_Base => 1, Finished => False,
-                  Item_Index =>
-                    Missions_Items
-                      (Get_Random
-                         (Min => 1, Max => Positive(Missions_Items.Length))),
-                  Multiplier => 1.0);
-            when DESTROY =>
-               Mission :=
-                 (M_Type => DESTROY, Time => 1, Target_X => 0, Target_Y => 0,
-                  Reward => 1, Start_Base => 1, Finished => False,
-                  Multiplier => 1.0,
-                  Ship_Index =>
-                    Enemies
-                      (Get_Random
-                         (Min => Enemies.First_Index,
-                          Max => Enemies.Last_Index)));
-               if Mission.Ship_Index = 0 then
-                  goto Start_Of_Loop;
-               end if;
-               Find_Mission_Location_Loop :
-               loop
-                  Mission_X := Get_Random(Min => Min_X, Max => Max_X);
-                  Mission_Y := Get_Random(Min => Min_Y, Max => Max_Y);
-                  exit Find_Mission_Location_Loop when Sky_Map
-                      (Mission_X, Mission_Y)
-                      .Base_Index =
-                    0 and
-                    Mission_X /= Player_Ship.Sky_X and
-                    Mission_Y /= Player_Ship.Sky_Y;
-               end loop Find_Mission_Location_Loop;
-            when PATROL =>
-               Mission :=
-                 (M_Type => PATROL, Time => 1, Target_X => 0, Target_Y => 0,
-                  Reward => 1, Start_Base => 1, Finished => False,
-                  Multiplier => 1.0, Target => 1);
-               Find_Patrol_Mission_Location_Loop :
-               for J in 1 .. 10 loop
-                  Mission_X := Get_Random(Min => Min_X, Max => Max_X);
-                  Mission_Y := Get_Random(Min => Min_Y, Max => Max_Y);
-                  if Sky_Map(Mission_X, Mission_Y).Visited and
-                    Sky_Map(Mission_X, Mission_Y).Base_Index = 0 then
-                     Mission.Target := 0;
-                     exit Find_Patrol_Mission_Location_Loop;
-                  end if;
-               end loop Find_Patrol_Mission_Location_Loop;
-               if Mission.Target = 1 then
-                  goto Start_Of_Loop;
-               end if;
-            when EXPLORE =>
-               Mission :=
-                 (M_Type => EXPLORE, Time => 1, Target_X => 0, Target_Y => 0,
-                  Reward => 1, Start_Base => 1, Finished => False,
-                  Multiplier => 1.0, Target => 1);
-               Find_Explore_Location_Loop :
-               for J in 1 .. 10 loop
-                  Mission_X := Get_Random(Min => Min_X, Max => Max_X);
-                  Mission_Y := Get_Random(Min => Min_Y, Max => Max_Y);
-                  if not Sky_Map(Mission_X, Mission_Y).Visited and
-                    Sky_Map(Mission_X, Mission_Y).Base_Index = 0 then
-                     Mission.Target := 0;
-                     exit Find_Explore_Location_Loop;
-                  end if;
-               end loop Find_Explore_Location_Loop;
-               if Mission.Target = 1 then
-                  goto Start_Of_Loop;
-               end if;
-            when PASSENGER =>
-               Mission :=
-                 (M_Type => PASSENGER, Time => 1, Target_X => 0, Target_Y => 0,
-                  Reward => 1, Start_Base => 1, Finished => False,
-                  Multiplier => 1.0,
-                  Data =>
-                    Qualities_Array
-                      (Get_Random
-                         (Min => Qualities_Array'First,
-                          Max => Qualities_Array'Last)));
-         end case;
-         if Mission.M_Type in DELIVER | PASSENGER then
-            Find_Base_Mission_Loop :
-            loop
-               Tmp_Base_Index :=
-                 Get_Random
-                   (Min => Bases_In_Range.First_Index,
-                    Max => Bases_In_Range.Last_Index);
-               Mission_X := Sky_Bases(Bases_In_Range(Tmp_Base_Index)).Sky_X;
-               Mission_Y := Sky_Bases(Bases_In_Range(Tmp_Base_Index)).Sky_Y;
-               exit Find_Base_Mission_Loop when Mission_X /=
-                 Player_Ship.Sky_X and
-                 Mission_Y /= Player_Ship.Sky_Y;
-            end loop Find_Base_Mission_Loop;
-         end if;
-         Mission.Target_X := Mission_X;
-         Mission.Target_Y := Mission_Y;
-         Diff_X := abs (Player_Ship.Sky_X - Mission_X);
-         Diff_Y := abs (Player_Ship.Sky_Y - Mission_Y);
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         case Mission.M_Type is
-            when DELIVER =>
-               Mission.Time :=
-                 Positive(80.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
-               Mission.Reward := (Mission.Time / 4);
-            when DESTROY | PASSENGER =>
-               Mission.Time :=
-                 Positive(180.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
-               Mission.Reward := (Mission.Time / 4);
-            when PATROL | EXPLORE =>
-               Mission.Time :=
-                 Positive(180.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
-               Mission.Reward := (Mission.Time / 5);
-         end case;
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         Mission.Start_Base := Base_Index;
-         Mission.Finished := False;
-         Sky_Bases(Base_Index).Missions.Append(New_Item => Mission);
-      end loop Generate_Missions_Loop;
-      Sky_Bases(Base_Index).Missions_Date := Game_Date;
+      Get_Ada_Base_Missions_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Missions_Date.Year,
+         Month => Sky_Bases(Base_Index).Missions_Date.Month,
+         Day => Sky_Bases(Base_Index).Missions_Date.Day,
+         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
+      Get_Missions(Base_Index => Base_Index);
+      Get_Base_Reputation(Base_Index => Base_Index);
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Generate_Ada_Missions;
+      Set_Missions(Base_Index => Base_Index);
+      Set_Base_Missions_Date(Base_Index => Base_Index);
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
