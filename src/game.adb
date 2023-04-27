@@ -322,6 +322,9 @@ package body Game is
                  (X => Pos_X, Y => Pos_Y, Base_Index => FactionBases(I),
                   Visited => 0, Event_Index => 0, Mission_Index => 0);
                Get_Base_Owner(Base_Index => FactionBases(I));
+               Get_Ada_Base_Population
+                 (Base_Index => FactionBases(I),
+                  Population => Sky_Bases(FactionBases(I)).Population);
             end loop Place_Faction_Bases_Loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
