@@ -223,6 +223,10 @@ proc generateMissions*() =
     of patrol, explore:
       mission.time = (180.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
       mission.reward = (mission.time / 5).Positive
+    mission.startBase = baseIndex
+    mission.finished = false
+    skyBases[baseIndex].missions.add(y = mission)
+  skyBases[baseIndex].missionsDate = gameDate
 
 # Temporary code for interfacing with Ada
 
@@ -306,5 +310,11 @@ proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [], export
   try:
     deleteMission(missionIndex = missionIndex - 1, failed = (if failed ==
         1: true else: false))
+  except KeyError:
+    discard
+
+proc generateAdaMissions() {.raises: [], tags: [], exportc.} =
+  try:
+    generateMissions()
   except KeyError:
     discard
