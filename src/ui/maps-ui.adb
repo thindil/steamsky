@@ -245,17 +245,17 @@ package body Maps.UI is
       if Have_Pilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
-         if not Faction.Flags.Contains
+         if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
-            configure(Widgt => Label, options => "-image piloticon");
-            Add
-              (Widget => Label,
-               Message => "No pilot assigned. Ship can't move.");
-         else
             configure(Widgt => Label, options => "-image nopiloticon");
             Add
               (Widget => Label,
                Message => "No pilot assigned. Ship fly on it own.");
+         else
+            configure(Widgt => Label, options => "-image piloticon");
+            Add
+              (Widget => Label,
+               Message => "No pilot assigned. Ship can't move.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
@@ -263,17 +263,17 @@ package body Maps.UI is
       if Have_Engineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
-         if not Faction.Flags.Contains
+         if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
-            configure(Widgt => Label, options => "-image engineericon");
-            Add
-              (Widget => Label,
-               Message => "No engineer assigned. Ship can't move.");
-         else
             configure(Widgt => Label, options => "-image noengineericon");
             Add
               (Widget => Label,
                Message => "No engineer assigned. Ship fly on it own.");
+         else
+            configure(Widgt => Label, options => "-image engineericon");
+            Add
+              (Widget => Label,
+               Message => "No engineer assigned. Ship can't move.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
