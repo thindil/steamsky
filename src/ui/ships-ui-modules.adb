@@ -1195,9 +1195,41 @@ package body Ships.UI.Modules is
                  ".}");
             Add_Owners_Info(Owners_Name => "Trainee");
          when BATTERING_RAM =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "Strength:" & Positive'Image(Module.Damage2) & "}");
+            Add_Ram_Info_Block :
+            declare
+               Strength_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".strengthinfo",
+                    options => "-width 360");
+            begin
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                    1.5);
+               Label :=
+                 Create
+                   (pathName => Strength_Box & ".strengthlbl",
+                    options =>
+                      "-text {Strength:" & Positive'Image(Module.Damage2) &
+                      (if Module.Damage2 = Module_Max_Value then
+                         " (max upgrade)"
+                       else "") &
+                      "}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               if Module.Damage2 < Module_Max_Value then
+                  Add_Upgrade_Button
+                    (Upgrade => MAX_VALUE,
+                     Tooltip => "damage of battering ram", Box => Strength_Box,
+                     Module => Module);
+               end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Strength_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Strength_Box, Info => "reqheight"));
+            end Add_Ram_Info_Block;
          when others =>
             null;
       end case;
