@@ -224,7 +224,7 @@ package Missions is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Accepted_Missions;
-   procedure Set_Accepted_Missions;
+   procedure Get_Missions(Base_Index: Natural := 0);
+   procedure Set_Missions(Base_Index: Natural := 0);
 
 end Missions;

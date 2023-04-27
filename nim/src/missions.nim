@@ -242,52 +242,60 @@ type
     mType: cint
     data: cint
 
-proc getAdaAcceptedMissions(adaMissions: array[50, AdaMissionData]) {.raises: [
+proc getAdaMissions(adaMissions: array[50, AdaMissionData]; baseIndex: cint = 0) {.raises: [
     ], tags: [], exportc.} =
-  acceptedMissions = @[]
+  var missionsList: seq[MissionData]
   for mission in adaMissions.items:
     if mission.time == 0:
       break
     case mission.mType
     of 0:
-      acceptedMissions.add(y = MissionData(mType: deliver, time: mission.time,
+      missionsList.add(y = MissionData(mType: deliver, time: mission.time,
           targetX: mission.targetX, targetY: mission.targetY,
           reward: mission.reward, startBase: mission.startBase, finished: (
           if mission.finished == 1: true else: false),
           multiplier: mission.multiplier, itemIndex: mission.data))
     of 1:
-      acceptedMissions.add(y = MissionData(mType: destroy, time: mission.time,
+      missionsList.add(y = MissionData(mType: destroy, time: mission.time,
           targetX: mission.targetX, targetY: mission.targetY,
           reward: mission.reward, startBase: mission.startBase, finished: (
           if mission.finished == 1: true else: false),
           multiplier: mission.multiplier, shipIndex: mission.data))
     of 2:
-      acceptedMissions.add(y = MissionData(mType: patrol, time: mission.time,
+      missionsList.add(y = MissionData(mType: patrol, time: mission.time,
           targetX: mission.targetX, targetY: mission.targetY,
           reward: mission.reward, startBase: mission.startBase, finished: (
           if mission.finished == 1: true else: false),
           multiplier: mission.multiplier, target: mission.data))
     of 3:
-      acceptedMissions.add(y = MissionData(mType: explore, time: mission.time,
+      missionsList.add(y = MissionData(mType: explore, time: mission.time,
           targetX: mission.targetX, targetY: mission.targetY,
           reward: mission.reward, startBase: mission.startBase, finished: (
           if mission.finished == 1: true else: false),
           multiplier: mission.multiplier, target: mission.data))
     of 4:
-      acceptedMissions.add(y = MissionData(mType: passenger, time: mission.time,
+      missionsList.add(y = MissionData(mType: passenger, time: mission.time,
           targetX: mission.targetX, targetY: mission.targetY,
           reward: mission.reward, startBase: mission.startBase, finished: (
           if mission.finished == 1: true else: false),
           multiplier: mission.multiplier, data: mission.data))
     else:
       discard
+  if baseIndex == 0:
+    acceptedMissions = missionsList
+  else:
+    skyBases[baseIndex].missions = missionsList
 
-proc setAdaAcceptedMissions(adaMissions: var array[50,
-    AdaMissionData]) {.raises: [], tags: [], exportc.} =
+proc setAdaMissions(adaMissions: var array[50,
+    AdaMissionData]; baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
   for mission in adaMissions.mitems:
     mission = AdaMissionData(time: 0, targetX: 0, targetY: 0, reward: 0,
         startBase: 0, finished: 0, multiplier: 0.0, mtype: 0, data: 0)
-  for index, mission in acceptedMissions.pairs:
+  let missionsList = if baseIndex == 0:
+      acceptedMissions
+    else:
+      skyBases[baseIndex].missions
+  for index, mission in missionsList.pairs:
     adaMissions[index].time = mission.time.cint
     adaMissions[index].targetX = mission.targetX
     adaMissions[index].targetY = mission.targetY
