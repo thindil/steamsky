@@ -1,0 +1,50 @@
+# Copyright 2023 Bartek thindil Jasicki
+#
+# This file is part of Steam Sky.
+#
+# Steam Sky is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Steam Sky is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+import std/tables
+import basestypes, game, maps, types, utils
+
+proc generateCargo*() =
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    population = (if skyBases[baseIndex].population > 0: skyBases[
+        baseIndex].population else: 1)
+  var chance = (if population < 150: 5 elif population < 300: 10 else: 15)
+  chance = chance + daysDifference(dateToCompare = skyBases[baseIndex].visited,
+      currentDate = gameDate)
+  if skyBases[baseIndex].cargo.len == 0:
+    chance = 101
+  if getRandom(min = 1, max = 100) > chance:
+    return
+  if skyBases[baseIndex].cargo.len == 0:
+    skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: moneyIndex,
+        amount: getRandom(min = 50, max = 200) * population,
+        durability: defaultItemDurability, price: 0))
+    for i in itemsList.keys:
+      if isBuyable(baseType = skyBases[baseIndex].baseType, itemIndex = i,
+          checkFlag = false):
+        skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: i,
+            amount: getRandom(min = 0, max = 100) * population,
+            durability: defaultItemDurability, price: getPrice(
+            baseType = skyBases[baseIndex].baseType, itemIndex = i)))
+    if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
+      let amount = (if population < 150: getRandom(min = 1,
+          max = 10) elif population < 300: getRandom(min = 1,
+          max = 20) else: getRandom(min = 1, max = 30))
+      var itemIndex = 0
+      for i in 1 .. amount:
+        itemIndex = getRandom(min = 1, max = itemsList.len)
