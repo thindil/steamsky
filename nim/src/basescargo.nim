@@ -45,6 +45,30 @@ proc generateCargo*() =
       let amount = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
           max = 20) else: getRandom(min = 1, max = 30))
-      var itemIndex = 0
       for i in 1 .. amount:
-        itemIndex = getRandom(min = 1, max = itemsList.len)
+        var itemIndex = getRandom(min = 1, max = itemsList.len)
+        for j in 1 .. amount:
+          itemIndex.dec
+          if itemIndex == 0:
+            if getPrice(baseType = skyBases[baseIndex].baseType,
+                itemIndex = j) > 0:
+              skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: j,
+                  amount: getRandom(min = 0, max = 100) * population,
+                  durability: defaultItemDurability, price: getPrice(
+                  baseType = skyBases[baseIndex].baseType, itemIndex = j)))
+              break
+            itemIndex.inc
+    else:
+      proc getMaxAmount(amount: Positive): Natural =
+        result = (amount / 2).int
+        if result < 1:
+          result = 1
+      for item in skyBases[baseIndex].cargo.mitems:
+        let roll = getRandom(min = 1, max = 100)
+        if roll < 30 and item.amount > 0:
+          item.amount = item.amount - getRandom(min = 1, max = getMaxAmount(
+              amount = item.amount))
+        elif roll < 60 and skyBases[baseIndex].population > 0:
+          item.amount = (if item.amount == 0: getRandom(min = 1, max = 10) *
+              population else: item.amount + getRandom(min = 1,
+              max = getMaxAmount(amount = item.amount)))
