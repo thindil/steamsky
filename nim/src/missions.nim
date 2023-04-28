@@ -99,6 +99,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
       skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
 proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Generate available missions in the selected base if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
       currentDate = gameDate) < 7 or skyBases[baseIndex].population == 0:
