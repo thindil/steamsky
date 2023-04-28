@@ -393,10 +393,10 @@ package body Maps.UI is
    -- ****
 
    procedure Draw_Map is
-      Map_Char: Wide_Character;
+      Map_Char: Wide_Character := Wide_Character'Val(0);
       End_X, End_Y: Integer;
       Map_Height, Map_Width: Positive;
-      Map_Tag: Unbounded_String;
+      Map_Tag: Unbounded_String := Null_Unbounded_String;
       Story_X, Story_Y: Natural := 1;
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
@@ -601,7 +601,8 @@ package body Maps.UI is
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
       use Tiny_String;
 
-      Map_Info_Text, Event_Info_Text, Color: Unbounded_String;
+      Map_Info_Text, Event_Info_Text, Color: Unbounded_String :=
+        Null_Unbounded_String;
       Map_Info: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.info");
       Width: Positive := 1;
