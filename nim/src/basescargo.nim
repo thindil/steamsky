@@ -72,3 +72,11 @@ proc generateCargo*() =
           item.amount = (if item.amount == 0: getRandom(min = 1, max = 10) *
               population else: item.amount + getRandom(min = 1,
               max = getMaxAmount(amount = item.amount)))
+
+# Temporary code for interfacing with Ada
+
+proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
+  try:
+    generateCargo()
+  except KeyError:
+    discard
