@@ -18,7 +18,7 @@ abstract project Gnattest_Common is
    end Builder;
 
    package Linker is
-      for Default_Switches ("ada") use ("-no-pie");
+      for Default_Switches ("ada") use ("-no-pie", "-lm");
    end Linker;
 
    package Binder is
