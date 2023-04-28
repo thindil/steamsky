@@ -136,17 +136,16 @@ package Missions is
    -- FUNCTION
    -- Generate if needed new missions in base
    -- SOURCE
-   procedure Generate_Missions with
-      Test_Case => (Name => "Test_GenerateMissions", Mode => Robustness);
-      -- ****
+   procedure Generate_Missions;
+   -- ****
 
-      -- ****f* Missions/Missions.Accept_Mission
-      -- FUNCTION
-      -- Accept selected mission from base
-      -- PARAMETERS
-      -- Mission_Index - Base list of available missions index of mission to
-      --                 accept
-      -- SOURCE
+   -- ****f* Missions/Missions.Accept_Mission
+   -- FUNCTION
+   -- Accept selected mission from base
+   -- PARAMETERS
+   -- Mission_Index - Base list of available missions index of mission to
+   --                 accept
+   -- SOURCE
    procedure Accept_Mission(Mission_Index: Positive) with
       Test_Case => (Name => "Test_AcceptMission", Mode => Nominal);
       -- ****
