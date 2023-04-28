@@ -147,26 +147,6 @@ package body Ships.UI.Modules is
          Module_Max_Value := 1;
       end if;
       case Player_Ship.Modules(Module_Index).M_Type is
-         when BATTERING_RAM =>
-            Module_Max_Value :=
-              Natural
-                (Float
-                   (Get_Module
-                      (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                      .Max_Value) *
-                 1.5);
-            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = Module_Index then
-               Module_Max_Value := 1;
-            end if;
-            if Player_Ship.Modules(Module_Index).Damage2 <
-              Module_Max_Value then
-               Add_Button
-                 (Name => ".upgrade2",
-                  Label => "Start upgrading damage of battering ram",
-                  Command =>
-                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
          when HULL =>
             Module_Max_Value :=
               Natural
