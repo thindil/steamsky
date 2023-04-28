@@ -25,9 +25,9 @@ with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
 with Statistics; use Statistics;
-with Utils; use Utils;
+with Utils;
 with Config;
-with Events; use Events;
+with Events;
 with Goals;
 with Factions;
 with Items; use Items;
@@ -173,6 +173,7 @@ package body Missions is
             Set_Passenger_Block :
             declare
                use Factions;
+               use Utils;
 
                Passenger_Base: constant Bases_Range :=
                  (if Get_Random(Min => 1, Max => 100) < 60 then Base_Index
@@ -466,6 +467,7 @@ package body Missions is
 
    function Auto_Finish_Missions return String is
       use Ada.Exceptions;
+      use Events;
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
