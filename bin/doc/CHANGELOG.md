@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
   info dialog
 - Ability to assing the ammunition to the player's ship's guns in the module
   info dialog
+- Ability to start the upgrade of the player's ship's battering ram's damage in
+  the module info dialog
 
 ### Changed
 - Updated look of the module info dialog
