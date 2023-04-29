@@ -18,145 +18,31 @@
 with BasesTypes; use BasesTypes;
 with Maps; use Maps;
 with Trades;
-with Utils;
 
 package body Bases.Cargo is
 
    procedure Generate_Cargo is
-      use Utils;
-
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Population: constant Positive :=
-        (if Sky_Bases(Base_Index).Population > 0 then
-           Sky_Bases(Base_Index).Population
-         else 1);
-      Chance: Positive :=
-        (if Population < 150 then 5 elsif Population < 300 then 10 else 15);
+      procedure Generate_Ada_Cargo with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaCargo";
    begin
-      Chance :=
-        Chance +
-        Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited);
-      if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) =
-        0 then
-         Chance := 101;
-      end if;
-      if Get_Random(Min => 1, Max => 100) > Chance then
-         return;
-      end if;
-      if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) =
-        0 then
-         BaseCargo_Container.Append
-           (Container => Sky_Bases(Base_Index).Cargo,
-            New_Item =>
-              (Proto_Index => Money_Index,
-               Amount => Get_Random(Min => 50, Max => 200) * Population,
-               Durability => Default_Item_Durability, Price => 0));
-         Add_Base_Cargo_Loop :
-         for I in 1 .. Get_Proto_Amount loop
-            if Is_Buyable
-                (Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => I,
-                 Check_Flag => False) then
-               BaseCargo_Container.Append
-                 (Container => Sky_Bases(Base_Index).Cargo,
-                  New_Item =>
-                    (Proto_Index => I,
-                     Amount => Get_Random(Min => 0, Max => 100) * Population,
-                     Durability => Default_Item_Durability,
-                     Price =>
-                       Get_Price
-                         (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                          Item_Index => I)));
-            end if;
-         end loop Add_Base_Cargo_Loop;
-         if Has_Flag
-             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-              Flag => "blackmarket") then
-            Add_Black_Market_Cargo_Block :
-            declare
-               Amount: constant Positive range 1 .. 30 :=
-                 (if Population < 150 then Get_Random(Min => 1, Max => 10)
-                  elsif Population < 300 then Get_Random(Min => 1, Max => 20)
-                  else Get_Random(Min => 1, Max => 30));
-               Item_Index: Natural range 0 .. Get_Proto_Amount := 0;
-            begin
-               Add_Black_Market_Cargo_Loop :
-               for I in 1 .. Amount loop
-                  Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
-                  Update_Item_Amount_Loop :
-                  for J in 1 .. Get_Proto_Amount loop
-                     Item_Index := Item_Index - 1;
-                     if Item_Index = 0 then
-                        if Get_Price
-                            (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                             Item_Index => J) >
-                          0 then
-                           BaseCargo_Container.Append
-                             (Container => Sky_Bases(Base_Index).Cargo,
-                              New_Item =>
-                                (Proto_Index => J,
-                                 Amount =>
-                                   Get_Random(Min => 0, Max => 100) *
-                                   Population,
-                                 Durability => Default_Item_Durability,
-                                 Price =>
-                                   Get_Price
-                                     (Base_Type =>
-                                        Sky_Bases(Base_Index).Base_Type,
-                                      Item_Index => J)));
-                           exit Update_Item_Amount_Loop;
-                        end if;
-                        Item_Index := Item_Index + 1;
-                     end if;
-                  end loop Update_Item_Amount_Loop;
-               end loop Add_Black_Market_Cargo_Loop;
-            end Add_Black_Market_Cargo_Block;
-         end if;
-      else
-         Update_Cargo_Block :
-         declare
-            Roll: Positive range 1 .. 100 := 1;
-            Item: Base_Cargo := Empty_Base_Cargo;
-            function Get_Max_Amount(Amount: Positive) return Positive is
-               Max_Amount: Natural;
-            begin
-               Max_Amount := Amount / 2;
-               if Max_Amount < 1 then
-                  Max_Amount := 1;
-               end if;
-               return Max_Amount;
-            end Get_Max_Amount;
-         begin
-            Update_Cargo_Loop :
-            for I in
-              BaseCargo_Container.First_Index
-                (Container => Sky_Bases(Base_Index).Cargo) ..
-                BaseCargo_Container.Last_Index
-                  (Container => Sky_Bases(Base_Index).Cargo) loop
-               Roll := Get_Random(Min => 1, Max => 100);
-               Item :=
-                 BaseCargo_Container.Element
-                   (Container => Sky_Bases(Base_Index).Cargo, Index => I);
-               if Roll < 30 and Item.Amount > 0 then
-                  Item.Amount :=
-                    Item.Amount -
-                    Get_Random
-                      (Min => 1, Max => Get_Max_Amount(Amount => Item.Amount));
-               elsif Roll < 60 and Sky_Bases(Base_Index).Population > 0 then
-                  Item.Amount :=
-                    (if Item.Amount = 0 then
-                       Get_Random(Min => 1, Max => 10) * Population
-                     else Item.Amount +
-                       Get_Random
-                         (Min => 1,
-                          Max => Get_Max_Amount(Amount => Item.Amount)));
-               end if;
-               BaseCargo_Container.Replace_Element
-                 (Container => Sky_Bases(Base_Index).Cargo, Index => I,
-                  New_Item => Item);
-            end loop Update_Cargo_Loop;
-         end Update_Cargo_Block;
-      end if;
+      Get_Ada_Base_Visited_Date
+        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+         Month => Sky_Bases(Base_Index).Visited.Month,
+         Day => Sky_Bases(Base_Index).Visited.Day,
+         Hour => Sky_Bases(Base_Index).Visited.Hour,
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Get_Base_Reputation(Base_Index => Base_Index);
+      Get_Base_Type(Base_Index => Base_Index, Base_Type => Sky_Bases(Base_Index).Base_Type);
+      Generate_Ada_Cargo;
+      Set_Base_Cargo(Base_Index => Base_Index);
    end Generate_Cargo;
 
    procedure Update_Base_Cargo
