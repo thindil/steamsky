@@ -867,4 +867,21 @@ package body Bases is
       Cargo_From_Nim(Cargo => Nim_Cargo, Base_Index => Base_Index);
    end Set_Base_Cargo;
 
+   procedure Set_Base_Visited_Date(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Visited_Date
+        (B_Index: Bases_Range;
+         Year, Month, Day, Hour, Minutes: out Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseVisitedDate";
+   begin
+      Set_Ada_Base_Visited_Date
+        (B_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Visited.Year,
+         Month => Sky_Bases(Base_Index).Visited.Month,
+         Day => Sky_Bases(Base_Index).Visited.Day,
+         Hour => Sky_Bases(Base_Index).Visited.Hour,
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
+   end Set_Base_Visited_Date;
+
 end Bases;

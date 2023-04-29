@@ -445,3 +445,16 @@ proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
           index].price.cint)
     else:
       cargo[index] = AdaBaseCargo(protoIndex: 0)
+
+proc getAdaBaseVisitedDate(baseIndex, year, month, day, hour,
+    minutes: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].visited = DateRecord(year: year, month: month,
+      day: day, hour: hour, minutes: minutes)
+
+proc setAdaBaseVisitedDate(baseIndex: cint; year, month, day, hour,
+    minutes: var cint) {.raises: [], tags: [], exportc.} =
+  year = skyBases[baseIndex].visited.year
+  month = skyBases[baseIndex].visited.month
+  day = skyBases[baseIndex].visited.day
+  hour = skyBases[baseIndex].visited.hour
+  minutes = skyBases[baseIndex].visited.minutes
