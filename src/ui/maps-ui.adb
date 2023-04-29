@@ -607,10 +607,11 @@ package body Maps.UI is
         Get_Widget(pathName => Main_Paned & ".mapframe.info");
       Width: Positive := 1;
       procedure Insert_Text
-        (Text: String; Tag_Name: Unbounded_String := Null_Unbounded_String) is
+        (New_Text: String;
+         Tag_Name: Unbounded_String := Null_Unbounded_String) is
       begin
-         if Text'Length > Width then
-            Width := Text'Length;
+         if New_Text'Length > Width then
+            Width := New_Text'Length;
          end if;
          if Width > 21 then
             Width := 21;
@@ -618,7 +619,7 @@ package body Maps.UI is
          Insert
            (TextWidget => Map_Info, Index => "end",
             Text =>
-              "{" & Text & "}" &
+              "{" & New_Text & "}" &
               (if Length(Source => Tag_Name) = 0 then ""
                else " [list " & To_String(Source => Tag_Name) & "]"));
       end Insert_Text;
@@ -626,7 +627,7 @@ package body Maps.UI is
       configure(Widgt => Map_Info, options => "-state normal");
       Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
       Insert_Text
-        (Text => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+        (New_Text => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          Add_Distance_Info_Block :
          declare
@@ -638,18 +639,18 @@ package body Maps.UI is
             Distance_Text :=
               To_Unbounded_String
                 (Source => LF & "Distance:" & Positive'Image(Distance));
-            Insert_Text(Text => To_String(Source => Distance_Text));
+            Insert_Text(New_Text => To_String(Source => Distance_Text));
             Distance_Text := Null_Unbounded_String;
             Travel_Info(Info_Text => Distance_Text, Distance => Distance);
             New_Line_Index :=
               Index(Source => Distance_Text, Pattern => "" & LF, From => 2);
             Insert_Text
-              (Text =>
+              (New_Text =>
                  Slice
                    (Source => Distance_Text, Low => 1,
                     High => New_Line_Index));
             Insert_Text
-              (Text =>
+              (New_Text =>
                  Slice
                    (Source => Distance_Text, Low => New_Line_Index + 1,
                     High => Length(Source => Distance_Text)));
@@ -663,10 +664,10 @@ package body Maps.UI is
          begin
             if Sky_Bases(Base_Index).Known then
                Insert_Text
-                 (Text => LF & "Base info:",
+                 (New_Text => LF & "Base info:",
                   Tag_Name => To_Unbounded_String(Source => "underline"));
                Insert_Text
-                 (Text =>
+                 (New_Text =>
                     LF & "Name: " &
                     Tiny_String.To_String
                       (Source => Sky_Bases(Base_Index).Name));
@@ -678,9 +679,9 @@ package body Maps.UI is
                     "-foreground #" &
                     Get_Base_Type_Color
                       (Base_Type => Sky_Bases(Base_Index).Base_Type));
-               Insert_Text(Text => LF & "Type: ");
+               Insert_Text(New_Text => LF & "Type: ");
                Insert_Text
-                 (Text =>
+                 (New_Text =>
                     Get_Base_Type_Name
                       (Base_Type => Sky_Bases(Base_Index).Base_Type),
                   Tag_Name => To_Unbounded_String(Source => "basetype"));
@@ -702,9 +703,9 @@ package body Maps.UI is
                     (Source => Base_Info_Text,
                      New_Item => "Population: large");
                end if;
-               Insert_Text(Text => To_String(Source => Base_Info_Text));
+               Insert_Text(New_Text => To_String(Source => Base_Info_Text));
                Insert_Text
-                 (Text =>
+                 (New_Text =>
                     LF & "Size: " &
                     To_Lower
                       (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
@@ -722,7 +723,7 @@ package body Maps.UI is
                   Base_Info_Text :=
                     To_Unbounded_String(Source => "Base is abandoned");
                end if;
-               Insert_Text(Text => To_String(Source => Base_Info_Text));
+               Insert_Text(New_Text => To_String(Source => Base_Info_Text));
                if Sky_Bases(Base_Index).Population > 0 then
                   Base_Info_Text := To_Unbounded_String(Source => "" & LF);
                   case Sky_Bases(Base_Index).Reputation.Level is
@@ -773,12 +774,12 @@ package body Maps.UI is
                         Color := To_Unbounded_String(Source => "green");
                   end case;
                   Insert_Text
-                    (Text => To_String(Source => Base_Info_Text),
+                    (New_Text => To_String(Source => Base_Info_Text),
                      Tag_Name => Color);
                end if;
                if Base_Index = Player_Ship.Home_Base then
                   Insert_Text
-                    (Text => LF & "It is your home base",
+                    (New_Text => LF & "It is your home base",
                      Tag_Name => To_Unbounded_String(Source => "cyan"));
                end if;
             end if;
@@ -830,7 +831,7 @@ package body Maps.UI is
                     (Source => Mission_Info_Text,
                      New_Item => "Transport passenger");
             end case;
-            Insert_Text(Text => To_String(Source => Mission_Info_Text));
+            Insert_Text(New_Text => To_String(Source => Mission_Info_Text));
          end Add_Mission_Info_Block;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
@@ -856,14 +857,14 @@ package body Maps.UI is
                   else Stories_List(Current_Story.Index).Final_Step
                       .Finish_Condition);
                if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Insert_Text(Text => LF & "Story leads you here");
+                  Insert_Text(New_Text => LF & "Story leads you here");
                end if;
             end if;
          end Add_Story_Info_Block;
       end if;
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
          Insert_Text
-           (Text => LF & "You are here",
+           (New_Text => LF & "You are here",
             Tag_Name => To_Unbounded_String(Source => "yellow"));
       end if;
       if Sky_Map(X, Y).Event_Index > 0 then
@@ -942,7 +943,7 @@ package body Maps.UI is
                   null;
             end case;
             Insert_Text
-              (Text => To_String(Source => Event_Info_Text),
+              (New_Text => To_String(Source => Event_Info_Text),
                Tag_Name => Color);
          end Add_Event_Info_Block;
       end if;
@@ -1470,7 +1471,8 @@ package body Maps.UI is
    end Show_Sky_Map;
 
    procedure Set_Keys is
-      Commands: constant array(Map_Accelerators'Range) of Unbounded_String :=
+      Tcl_Commands_Array: constant array
+        (Map_Accelerators'Range) of Unbounded_String :=
         (1 =>
            To_Unbounded_String
              (Source =>
@@ -1529,7 +1531,7 @@ package body Maps.UI is
                 "{" & Main_Paned & ".controls.buttons.box.speed current 3}"));
    begin
       Bind_Commands_Loop :
-      for I in Commands'Range loop
+      for I in Tcl_Commands_Array'Range loop
          Bind_To_Main_Window
            (Interp => Get_Context,
             Sequence =>
@@ -1545,7 +1547,7 @@ package body Maps.UI is
                         1,
                       New_Item => "KeyPress-")) &
               ">",
-            Script => To_String(Source => Commands(I)));
+            Script => To_String(Source => Tcl_Commands_Array(I)));
       end loop Bind_Commands_Loop;
       Bind_To_Main_Window
         (Interp => Get_Context,
