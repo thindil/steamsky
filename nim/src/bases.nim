@@ -416,3 +416,32 @@ proc setAdaBaseMissionsDate(baseIndex: cint; year, month, day, hour,
   day = skyBases[baseIndex].missionsDate.day
   hour = skyBases[baseIndex].missionsDate.hour
   minutes = skyBases[baseIndex].missionsDate.minutes
+
+type
+  AdaBaseCargo = object
+    protoIndex: cint
+    amount: cint
+    durability: cint
+    price: cint
+
+proc getAdaBaseCargo(baseIndex: cint; cargo: array[128,
+    AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].cargo = @[]
+  for adaItem in cargo:
+    if adaItem.protoIndex == 0:
+      return
+    skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: adaItem.protoIndex,
+        amount: adaItem.amount, durability: adaItem.durability,
+        price: adaItem.price))
+
+proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
+    AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
+  for index in cargo.low..cargo.high:
+    if index <= skyBases[baseIndex].cargo.len:
+      cargo[index] = AdaBaseCargo(protoIndex: skyBases[baseIndex].cargo[
+          index].protoIndex.cint, amount: skyBases[baseIndex].cargo[
+          index].amount.cint, durability: skyBases[baseIndex].cargo[
+          index].durability.cint, price: skyBases[baseIndex].cargo[
+          index].price.cint)
+    else:
+      cargo[index] = AdaBaseCargo(protoIndex: 0)

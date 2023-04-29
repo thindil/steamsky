@@ -792,4 +792,79 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
    end Set_Base_Missions_Date;
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Base_Cargo is record
+      Proto_Index: Natural;
+      Amount: Positive := 1;
+      Durability: Items_Durability;
+      Price: Natural := 0;
+   end record;
+   type Nim_Cargo_Array is array(0 .. 127) of Nim_Base_Cargo;
+   --## rule on TYPE_INITIAL_VALUES
+
+   function Cargo_To_Nim
+     (Cargo: BaseCargo_Container.Vector) return Nim_Cargo_Array is
+      Nim_Cargo: Nim_Cargo_Array :=
+        (others =>
+           (Proto_Index => 0, Amount => 1, Durability => 0, Price => 0));
+   begin
+      Fill_Nim_Array_Loop :
+      for I in
+        BaseCargo_Container.First_Index(Container => Cargo) ..
+          BaseCargo_Container.Last_Index(Container => Cargo) loop
+         Set_Item_Block :
+         declare
+            Item: constant Base_Cargo :=
+              BaseCargo_Container.Element(Container => Cargo, Index => I);
+         begin
+            Nim_Cargo(I - 1) :=
+              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+               Durability => Item.Durability, Price => Item.Price);
+         end Set_Item_Block;
+      end loop Fill_Nim_Array_Loop;
+      return Nim_Cargo;
+   end Cargo_To_Nim;
+
+   procedure Get_Base_Cargo(Base_Index: Bases_Range) is
+      procedure Get_Ada_Base_Cargo
+        (B_Index: Integer; Cargo: Nim_Cargo_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseCargo";
+   begin
+      Get_Ada_Base_Cargo
+        (B_Index => Base_Index,
+         Cargo => Cargo_To_Nim(Cargo => Sky_Bases(Base_Index).Cargo));
+   end Get_Base_Cargo;
+
+   procedure Cargo_From_Nim(Cargo: Nim_Cargo_Array; Base_Index: Bases_Range) is
+      --## rule off IMPROPER_INITIALIZATION
+      Ada_Cargo: BaseCargo_Container.Vector (Capacity => 32);
+      --## rule on IMPROPER_INITIALIZATION
+   begin
+      Fill_Ada_Inventory_Loop :
+      for Item of Cargo loop
+         exit Fill_Ada_Inventory_Loop when Item.Proto_Index = 0;
+         BaseCargo_Container.Append
+           (Container => Ada_Cargo,
+            New_Item =>
+              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+               Durability => Item.Durability, Price => Item.Price));
+      end loop Fill_Ada_Inventory_Loop;
+      BaseCargo_Container.Assign
+        (Target => Sky_Bases(Base_Index).Cargo, Source => Ada_Cargo);
+   end Cargo_From_Nim;
+
+   procedure Set_Base_Cargo(Base_Index: Bases_Range) is
+      Nim_Cargo: Nim_Cargo_Array;
+      procedure Set_Ada_Base_Cargo
+        (B_Index: Integer; Cargo: out Nim_Cargo_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseCargo";
+   begin
+      Set_Ada_Base_Cargo(B_Index => Base_Index, Cargo => Nim_Cargo);
+      Cargo_From_Nim(Cargo => Nim_Cargo, Base_Index => Base_Index);
+   end Set_Base_Cargo;
+
 end Bases;
