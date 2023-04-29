@@ -437,7 +437,7 @@ proc getAdaBaseCargo(baseIndex: cint; cargo: array[128,
 proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
     AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
   for index in cargo.low..cargo.high:
-    if index <= skyBases[baseIndex].cargo.len:
+    if index <= skyBases[baseIndex].cargo.len - 1:
       cargo[index] = AdaBaseCargo(protoIndex: skyBases[baseIndex].cargo[
           index].protoIndex.cint, amount: skyBases[baseIndex].cargo[
           index].amount.cint, durability: skyBases[baseIndex].cargo[
