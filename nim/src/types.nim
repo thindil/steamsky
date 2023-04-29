@@ -266,7 +266,7 @@ type
   BaseCargo* = object
     ## Used to store information about items in bases cargo
     protoIndex*: Natural         ## The index of the item's prototype
-    amount*: Positive            ## The amount of the item in the inventory
+    amount*: Natural            ## The amount of the item in the inventory
     durability*: ItemsDurability ## The current durability of the item
     price*: Natural              ## The price for which the item was bought
 
