@@ -19,6 +19,7 @@ import std/tables
 import basestypes, game, maps, types, utils
 
 proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Generate the cargo in the selected sky base if needed
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     population = (if skyBases[baseIndex].population > 0: skyBases[
