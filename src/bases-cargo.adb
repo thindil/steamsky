@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with BasesTypes; use BasesTypes;
+with BasesTypes;
 with Maps; use Maps;
 with Trades;
 
@@ -49,6 +49,8 @@ package body Bases.Cargo is
      (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
+      use BasesTypes;
+
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Item_Index: constant Natural range 0 ..
