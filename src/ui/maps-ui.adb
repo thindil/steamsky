@@ -660,7 +660,7 @@ package body Maps.UI is
          Add_Base_Info_Block :
          declare
             Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
-            Base_Info_Text: Unbounded_String;
+            Base_Info_Text: Unbounded_String := Null_Unbounded_String;
          begin
             if Sky_Bases(Base_Index).Known then
                Insert_Text
@@ -838,7 +838,7 @@ package body Maps.UI is
          Add_Story_Info_Block :
          declare
             Story_X, Story_Y: Natural := 1;
-            Finish_Condition: Step_Condition_Type;
+            Finish_Condition: Step_Condition_Type := ANY;
          begin
             Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
             if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
@@ -975,12 +975,11 @@ package body Maps.UI is
          6 => To_Unbounded_String(Source => "Move ship down and left"),
          7 => To_Unbounded_String(Source => "Move ship down"),
          8 => To_Unbounded_String(Source => "Move ship down and right"));
-      Button: Ttk_Button;
       Frame_Name: constant String := Main_Paned & ".controls.buttons";
+      Button: Ttk_Button := Get_Widget(pathName => Frame_Name & ".wait");
       Speedbox: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".box.speed");
    begin
-      Button.Interp := Get_Context;
       if Player_Ship.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Speedbox);
          Button.Name := New_String(Str => Frame_Name & ".box.moveto");
@@ -1052,7 +1051,7 @@ package body Maps.UI is
         Get_Widget(pathName => Game_Frame & ".header");
       Messages_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Paned & ".controls.messages");
-      Paned_Position: Natural;
+      Paned_Position: Natural := 0;
       New_Start: Boolean := False;
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
