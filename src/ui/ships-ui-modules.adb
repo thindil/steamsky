@@ -746,28 +746,46 @@ package body Ships.UI.Modules is
                    (Get_Module(Index => Module.Proto_Index).Max_Value) &
                  " kg}");
          when HULL =>
-            Label :=
-              Create
-                (pathName => Module_Frame & ".modules",
-                 options =>
-                   "-text {Modules installed:" &
-                   Integer'Image(Module.Installed_Modules) & " /" &
-                   Integer'Image(Module.Max_Modules) & "}");
-            Module_Max_Value :=
-              Positive
-                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                 1.5);
-            if Module.Max_Modules = Module_Max_Value then
-               configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" & cget(Widgt => Label, option => "-text") &
-                    " (max upgrade)}");
-            end if;
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-            Height :=
-              Height +
-              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+            Add_Modules_Info_Block :
+            declare
+               Modules_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".modulesinfo",
+                    options => "-width 360");
+            begin
+               Label :=
+                 Create
+                   (pathName => Modules_Box & ".modules",
+                    options =>
+                      "-text {Modules installed:" &
+                      Integer'Image(Module.Installed_Modules) & " /" &
+                      Integer'Image(Module.Max_Modules) & "}");
+               Module_Max_Value :=
+                 Positive
+                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                    1.5);
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               if Module.Max_Modules = Module_Max_Value then
+                  configure
+                    (Widgt => Label,
+                     options =>
+                       "-text {" & cget(Widgt => Label, option => "-text") &
+                       " (max upgrade)}");
+               else
+                  Add_Upgrade_Button
+                    (Upgrade => MAX_VALUE,
+                     Tooltip =>
+                       "hull's size so it can have more modules installed",
+                     Box => Modules_Box, Module => Module);
+               end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Modules_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Modules_Box, Info => "reqheight"));
+            end Add_Modules_Info_Block;
          when CABIN =>
             Cabin_Owner_Info_Block :
             declare
