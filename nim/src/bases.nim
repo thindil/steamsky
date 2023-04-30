@@ -256,6 +256,21 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
 
+proc updatePrices*() =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if skyBases[baseIndex].population == 0:
+    return
+  var chance = (if skyBases[baseIndex].population < 150: 1 elif skyBases[
+      baseIndex].population < 300: 2 else: 5)
+  chance = chance + (daysDifference(dateToCompare = skyBases[baseIndex].visited,
+      currentDate = gameDate) / 10).int
+  for item in skyBases[baseIndex].cargo.mitems:
+    let roll = getRandom(min = 1, max = 100)
+    if roll < 30 and item.price > 1:
+      item.price.dec
+    elif roll < 60 and item.price > 0:
+      item.price.inc
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
@@ -458,3 +473,6 @@ proc setAdaBaseVisitedDate(baseIndex: cint; year, month, day, hour,
   day = skyBases[baseIndex].visited.day
   hour = skyBases[baseIndex].visited.hour
   minutes = skyBases[baseIndex].visited.minutes
+
+proc updateAdaPrices() {.raises: [], tags: [], exportc.} =
+  updatePrices()
