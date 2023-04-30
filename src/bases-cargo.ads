@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,9 +26,8 @@ package Bases.Cargo is
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE
-   procedure Generate_Cargo with
-      Test_Case => (Name => "Test_GenerateCargo", Mode => Robustness);
-      -- ****
+   procedure Generate_Cargo;
+   -- ****
 
    -- ****f* BCargo/BCargo.Update_Base_Cargo
    -- FUNCTION
@@ -38,8 +37,8 @@ package Bases.Cargo is
    -- Amount      - Amount of item to add or remove
    -- Durability  - Durability of item to add or remove. Can be empty
    -- Cargo_Index - Index of item in sky base cargo. Can be empty if Proto_Index
-      --            is set
-      -- SOURCE
+   --               is set
+   -- SOURCE
    procedure Update_Base_Cargo
      (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
