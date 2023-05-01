@@ -101,7 +101,6 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Module_Max_Value: Positive;
       Module_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Menu: constant Ttk_Frame :=
@@ -135,39 +134,7 @@ package body Ships.UI.Modules is
          end if;
       end Add_Button;
    begin
-      Module_Max_Value :=
-        Natural
-          (Float
-             (Get_Module
-                (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                .Durability) *
-           1.5);
-      if Player_Ship.Modules(Module_Index).Upgrade_Action = DURABILITY and
-        Player_Ship.Upgrade_Module = Module_Index then
-         Module_Max_Value := 1;
-      end if;
       case Player_Ship.Modules(Module_Index).M_Type is
-         when HULL =>
-            Module_Max_Value :=
-              Natural
-                (Float
-                   (Get_Module
-                      (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                      .Max_Value) *
-                 1.5);
-            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = Module_Index then
-               Module_Max_Value := 1;
-            end if;
-            if Player_Ship.Modules(Module_Index).Max_Modules <
-              Module_Max_Value then
-               Add_Button
-                 (Name => ".upgrade2",
-                  Label =>
-                    "Start enlarging hull so it can have more modules installed",
-                  Command =>
-                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
          when WORKSHOP =>
             if Player_Ship.Modules(Module_Index).Crafting_Index /=
               Null_Bounded_String then
