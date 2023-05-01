@@ -55,3 +55,5 @@ skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes
 skyBases[1].reputation.level = 0
 generateRecruits()
 assert skyBases[1].recruits.len > 0
+
+updatePrices()
