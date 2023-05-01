@@ -501,43 +501,25 @@ package body Bases is
    procedure Update_Prices is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Roll: Positive range 1 .. 100 := 1;
-      Chance: Positive :=
-        (if Sky_Bases(Base_Index).Population < 150 then 1
-         elsif Sky_Bases(Base_Index).Population < 300 then 2 else 5);
-      Item: Base_Cargo := Empty_Base_Cargo;
+      procedure Update_Ada_Prices with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaPrices";
    begin
-      if Sky_Bases(Base_Index).Population = 0 then
-         return;
-      end if;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Chance :=
-        Chance +
-        (Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited) /
-         10);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      if Get_Random(Min => 1, Max => 100) > Chance then
-         return;
-      end if;
-      Update_Prices_Loop :
-      for I in
-        BaseCargo_Container.First_Index
-          (Container => Sky_Bases(Base_Index).Cargo) ..
-          BaseCargo_Container.Last_Index
-            (Container => Sky_Bases(Base_Index).Cargo) loop
-         Item :=
-           BaseCargo_Container.Element
-             (Container => Sky_Bases(Base_Index).Cargo, Index => I);
-         Roll := Get_Random(Min => 1, Max => 100);
-         if Roll < 30 and Item.Price > 1 then
-            Item.Price := Item.Price - 1;
-         elsif Roll < 60 and Item.Price > 0 then
-            Item.Price := Item.Price + 1;
-         end if;
-         BaseCargo_Container.Replace_Element
-           (Container => Sky_Bases(Base_Index).Cargo, Index => I,
-            New_Item => Item);
-      end loop Update_Prices_Loop;
+      Get_Game_Date(Current_Date => Game_Date);
+      Set_Ship_In_Nim;
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Get_Ada_Base_Visited_Date
+        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+         Month => Sky_Bases(Base_Index).Visited.Month,
+         Day => Sky_Bases(Base_Index).Visited.Day,
+         Hour => Sky_Bases(Base_Index).Visited.Hour,
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Update_Ada_Prices;
+      Set_Base_Cargo(Base_Index => Base_Index);
    end Update_Prices;
 
    procedure Get_Base_Reputation(Base_Index: Bases_Range) is
@@ -844,7 +826,7 @@ package body Bases is
          Convention => C,
          External_Name => "setAdaBaseCargo";
       procedure Cargo_From_Nim
-        (Cargo: Nim_Cargo_Array; Base_Index: Bases_Range) is
+        (Cargo: Nim_Cargo_Array; B_Index: Bases_Range) is
       --## rule off IMPROPER_INITIALIZATION
          Ada_Cargo: BaseCargo_Container.Vector (Capacity => 32);
       --## rule on IMPROPER_INITIALIZATION
@@ -859,12 +841,12 @@ package body Bases is
                   Durability => Item.Durability, Price => Item.Price));
          end loop Fill_Ada_Inventory_Loop;
          BaseCargo_Container.Assign
-           (Target => Sky_Bases(Base_Index).Cargo, Source => Ada_Cargo);
+           (Target => Sky_Bases(B_Index).Cargo, Source => Ada_Cargo);
       end Cargo_From_Nim;
 
    begin
       Set_Ada_Base_Cargo(B_Index => Base_Index, Cargo => Nim_Cargo);
-      Cargo_From_Nim(Cargo => Nim_Cargo, Base_Index => Base_Index);
+      Cargo_From_Nim(Cargo => Nim_Cargo, B_Index => Base_Index);
    end Set_Base_Cargo;
 
    procedure Set_Base_Visited_Date(Base_Index: Bases_Range) is
