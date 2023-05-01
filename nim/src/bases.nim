@@ -256,7 +256,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
 
-proc updatePrices*() =
+proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
