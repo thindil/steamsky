@@ -837,7 +837,9 @@ package body Maps.UI is
       if Current_Story.Index /= Null_Unbounded_String then
          Add_Story_Info_Block :
          declare
+            --## rule off IMPROPER_INITIALIZATION
             Story_X, Story_Y: Natural := 1;
+            --## rule on IMPROPER_INITIALIZATION
             Finish_Condition: Step_Condition_Type := ANY;
          begin
             Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
