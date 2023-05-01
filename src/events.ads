@@ -180,4 +180,6 @@ package Events is
       Convention => C,
       External_Name => "getAdaEvent";
 
+   procedure Set_Event(Index: Positive);
+
 end Events;

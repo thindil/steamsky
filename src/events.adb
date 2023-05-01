@@ -618,4 +618,64 @@ package body Events is
       end loop Convert_Ships_Loop;
    end Generate_Enemies;
 
+   procedure Set_Event(Index: Positive) is
+      X, Y, Time, E_Type, Data: Integer;
+      procedure Set_Ada_Event
+        (I: Positive; X, Y, Time, E_Type, Data: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaEnemies";
+   begin
+      Set_Ada_Event
+        (I => Index, X => X, Y => Y, Time => Time, E_Type => E_Type,
+         Data => Data);
+      if X = -1 then
+         return;
+      end if;
+      case E_Type is
+         when 1  =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Ship_Index => Data));
+         when 2 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Ship_Index => Data));
+         when 3 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => DISEASE, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Data => Data));
+         when 4 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Item_Index => Data));
+         when 6 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Data => Data));
+         when 7 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Ship_Index => Data));
+         when 8 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => TRADER, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Ship_Index => Data));
+         when 9 =>
+            Events_List.Append
+              (New_Item =>
+                   (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y,
+                    Time => Time, Ship_Index => Data));
+         when others =>
+            null;
+      end case;
+   end Set_Event;
+
 end Events;
