@@ -257,6 +257,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
   skyBases[baseIndex].recruits = baseRecruits
 
 proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
+  ## Random changes to the items' prices in the selected base
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
