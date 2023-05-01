@@ -270,15 +270,14 @@ package Bases is
       -- Update base population if needed
       -- SOURCE
    procedure Update_Population;
-      -- ****
+   -- ****
 
-      -- ****f* Bases/Bases.Update_Prices
-      -- FUNCTION
-      -- Random changes of items prices in base
-      -- SOURCE
-   procedure Update_Prices with
-      Test_Case => (Name => "Test_UpdatePrices", Mode => Robustness);
-      -- ****
+   -- ****f* Bases/Bases.Update_Prices
+   -- FUNCTION
+   -- Random changes of items prices in base
+   -- SOURCE
+   procedure Update_Prices;
+   -- ****
 
 -- Temporary code to interact with Nim
 
