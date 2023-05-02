@@ -392,6 +392,18 @@ package body Maps.UI is
    Map_View: Tk_Text;
    -- ****
 
+   -- ****if* MUI/MUI.Get_Map_View
+   -- FUNCTION
+   -- Get the text widget with the sky map
+   -- RESULT
+   -- Returns text widget with the sky map
+   -- SOURCE
+   function Get_Map_View return Tk_Text is
+      -- ****
+   begin
+      return Map_View;
+   end Get_Map_View;
+
    procedure Draw_Map is
       Map_Char: Wide_Character := Wide_Character'Val(0);
       End_X, End_Y: Integer;
@@ -411,11 +423,11 @@ package body Maps.UI is
          Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
          Preview := False;
       end if;
-      configure(Widgt => Map_View, options => "-state normal");
-      Delete(TextWidget => Map_View, StartIndex => "1.0", Indexes => "end");
+      configure(Widgt => Get_Map_View, options => "-state normal");
+      Delete(TextWidget => Get_Map_View, StartIndex => "1.0", Indexes => "end");
       Map_Height :=
-        Positive'Value(cget(Widgt => Map_View, option => "-height"));
-      Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
+        Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
+      Map_Width := Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
       Start_Y := Center_Y - (Map_Height / 2);
       Start_X := Center_X - (Map_Width / 2);
       End_Y := Center_Y + (Map_Height / 2);
@@ -584,17 +596,17 @@ package body Maps.UI is
                end loop Preview_Mission_Loop;
             end if;
             Insert
-              (TextWidget => Map_View, Index => "end",
+              (TextWidget => Get_Map_View, Index => "end",
                Text =>
                  Encode(Item => "" & Map_Char) & " [list " &
                  To_String(Source => Map_Tag) & "]");
          end loop Draw_Map_X_Loop;
          if Y < End_Y then
             Insert
-              (TextWidget => Map_View, Index => "end", Text => "{" & LF & "}");
+              (TextWidget => Get_Map_View, Index => "end", Text => "{" & LF & "}");
          end if;
       end loop Draw_Map_Y_Loop;
-      configure(Widgt => Map_View, options => "-state disable");
+      configure(Widgt => Get_Map_View, options => "-state disable");
    end Draw_Map;
 
    procedure Update_Map_Info
@@ -1057,7 +1069,7 @@ package body Maps.UI is
       New_Start: Boolean := False;
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
-      if Winfo_Get(Widgt => Map_View, Info => "exists") = "0" then
+      if Winfo_Get(Widgt => Get_Map_View, Info => "exists") = "0" then
          New_Start := True;
          Load_Keys_Block :
          declare
@@ -1322,24 +1334,24 @@ package body Maps.UI is
            (Widgt => Messages_Frame, Sequence => "<Configure>",
             Script => "ResizeLastMessages");
          Bind
-           (Widgt => Map_View, Sequence => "<Configure>", Script => "DrawMap");
+           (Widgt => Get_Map_View, Sequence => "<Configure>", Script => "DrawMap");
          Bind
-           (Widgt => Map_View, Sequence => "<Motion>",
+           (Widgt => Get_Map_View, Sequence => "<Motion>",
             Script => "{UpdateMapInfo %x %y}");
          Bind
-           (Widgt => Map_View,
+           (Widgt => Get_Map_View,
             Sequence =>
               "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
               ">",
             Script => "{ShowDestinationMenu %X %Y}");
          Bind
-           (Widgt => Map_View, Sequence => "<MouseWheel>",
+           (Widgt => Get_Map_View, Sequence => "<MouseWheel>",
             Script => "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
          Bind
-           (Widgt => Map_View, Sequence => "<Button-4>",
+           (Widgt => Get_Map_View, Sequence => "<Button-4>",
             Script => "{ZoomMap raise}");
          Bind
-           (Widgt => Map_View, Sequence => "<Button-5>",
+           (Widgt => Get_Map_View, Sequence => "<Button-5>",
             Script => "{ZoomMap lower}");
          Set_Keys;
          if Log.Debug_Mode = Log.MENU then
@@ -1395,7 +1407,7 @@ package body Maps.UI is
       for Base_Type of Bases_Types loop
          exit Set_Tags_Loop when Length(Source => Base_Type) = 0;
          Tag_Configure
-           (TextWidget => Map_View, TagName => To_String(Source => Base_Type),
+           (TextWidget => Get_Map_View, TagName => To_String(Source => Base_Type),
             Options =>
               "-foreground #" & Get_Base_Type_Color(Base_Type => Base_Type));
       end loop Set_Tags_Loop;
