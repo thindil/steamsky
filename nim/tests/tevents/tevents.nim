@@ -43,3 +43,5 @@ skyMap[1][1].baseIndex = 1
 var enemies: seq[Positive] = @[]
 generateEnemies(enemies)
 assert enemies.len > 0
+
+updateEvents(1)
