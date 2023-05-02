@@ -446,53 +446,40 @@ package body Events is
    end Check_For_Event;
 
    procedure Update_Events(Minutes: Positive) is
-      Current_Index: Events_Container.Extended_Index :=
-        Events_List.First_Index;
-      New_Time: Integer := 0;
-      Events_Amount: constant Natural := Natural(Events_List.Length);
-      Population_Lost: Positive range 1 .. 10 := 1;
-      Base_Index: Bases_Range := 1;
+      procedure Clear_Ada_Events with
+         Import => True,
+         Convention => C,
+         External_Name => "clearAdaEvents";
+      procedure Update_Ada_Events(M: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaEvents";
    begin
-      if Events_Amount = 0 then
+      if Events_List.Length = 0 then
          return;
       end if;
-      Update_Events_Loop :
-      while Current_Index <= Events_List.Last_Index loop
-         New_Time := Events_List(Current_Index).Time - Minutes;
-         if New_Time < 1 then
-            if Events_List(Current_Index).E_Type in DISEASE | ATTACKONBASE and
-              Get_Random(Min => 1, Max => 100) < 10 then
-               Base_Index :=
-                 Sky_Map
-                   (Events_List(Current_Index).Sky_X,
-                    Events_List(Current_Index).Sky_Y)
-                   .Base_Index;
-               Population_Lost := Get_Random(Min => 1, Max => 10);
-               if Population_Lost > Sky_Bases(Base_Index).Population then
-                  Population_Lost := Sky_Bases(Base_Index).Population;
-                  Sky_Bases(Base_Index).Reputation := Default_Reputation;
-               end if;
-               Sky_Bases(Base_Index).Population :=
-                 Sky_Bases(Base_Index).Population - Population_Lost;
-            end if;
-            Sky_Map
-              (Events_List(Current_Index).Sky_X,
-               Events_List(Current_Index).Sky_Y)
-              .Event_Index :=
-              0;
-            Events_List.Delete(Index => Current_Index);
-         else
-            Events_List(Current_Index).Time := New_Time;
-            Current_Index := Current_Index + 1;
-         end if;
-      end loop Update_Events_Loop;
-      if Events_Amount > Natural(Events_List.Length) then
-         Update_Map_Loop :
-         for I in Events_List.First_Index .. Events_List.Last_Index loop
-            Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index :=
-              I;
-         end loop Update_Map_Loop;
-      end if;
+      Clear_Ada_Events;
+      Set_Events_In_Nim_Loop :
+      for I in Events_List.Iterate loop
+         Get_Ada_Event
+           (Index => Events_Container.To_Index(Position => I),
+            X => Events_List(I).Sky_X, Y => Events_List(I).Sky_Y,
+            Time => Events_List(I).Time,
+            E_Type => Events_Types'Pos(Events_List(I).E_Type),
+            Data =>
+              (case Events_List(I).E_Type is
+                 when DOUBLEPRICE => Events_List(I).Item_Index,
+                 when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
+                   FRIENDLYSHIP => Events_List(I).Ship_Index,
+                 when others => Events_List(I).Data));
+         Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := 0;
+      end loop Set_Events_In_Nim_Loop;
+      Update_Ada_Events(M => Minutes);
+      Events_List.Clear;
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. 100 loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
    end Update_Events;
 
    procedure Delete_Event(Event_Index: Positive) is
@@ -620,59 +607,58 @@ package body Events is
 
    procedure Set_Event(Index: Positive) is
       X, Y, Time, E_Type, Data: Integer;
-      procedure Set_Ada_Event
-        (I: Positive; X, Y, Time, E_Type, Data: out Integer) with
+      procedure Set_Ada_Event(I: Positive; X1, Y1, T, E, D: out Integer) with
          Import => True,
          Convention => C,
-         External_Name => "generateAdaEnemies";
+         External_Name => "setAdaEvent";
    begin
       Set_Ada_Event
-        (I => Index, X => X, Y => Y, Time => Time, E_Type => E_Type,
-         Data => Data);
+        (I => Index, X1 => X, Y1 => Y, T => Time, E => E_Type, D => Data);
       if X = -1 then
          return;
       end if;
+      Sky_Map(X, Y).Event_Index := Index;
       case E_Type is
-         when 1  =>
+         when 1 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Ship_Index => Data));
+                 (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data));
          when 2 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Ship_Index => Data));
+                 (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data));
          when 3 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => DISEASE, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Data => Data));
+                 (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Data => Data));
          when 4 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Item_Index => Data));
+                 (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Item_Index => Data));
          when 6 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Data => Data));
+                 (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Data => Data));
          when 7 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Ship_Index => Data));
+                 (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data));
          when 8 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => TRADER, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Ship_Index => Data));
+                 (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data));
          when 9 =>
             Events_List.Append
               (New_Item =>
-                   (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y,
-                    Time => Time, Ship_Index => Data));
+                 (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data));
          when others =>
             null;
       end case;
