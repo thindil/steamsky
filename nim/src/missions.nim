@@ -229,6 +229,16 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
     skyBases[baseIndex].missions.add(y = mission)
   skyBases[baseIndex].missionsDate = gameDate
 
+proc updateMissions*(minutes: Positive) =
+  var i = acceptedMissions.low
+  while i < acceptedMissions.len:
+    let time = acceptedMissions[i].time - minutes
+    if time < 1:
+      deleteMission(i)
+    else:
+      acceptedMissions[i].time = time
+      i.inc
+
 # Temporary code for interfacing with Ada
 
 type
@@ -325,5 +335,11 @@ proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [], export
 proc generateAdaMissions() {.raises: [], tags: [], exportc.} =
   try:
     generateMissions()
+  except KeyError:
+    discard
+
+proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    updateMissions(minutes = minutes)
   except KeyError:
     discard
