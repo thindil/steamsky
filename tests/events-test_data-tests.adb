@@ -68,34 +68,6 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Update_Events_92d91d_646fe5(Minutes: Positive) is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Events.Update_Events(Minutes);
-   end Wrap_Test_Update_Events_92d91d_646fe5;
---  end read only
-
---  begin read only
-   procedure Test_Update_Events_test_updateevents(Gnattest_T: in out Test);
-   procedure Test_Update_Events_92d91d_646fe5(Gnattest_T: in out Test) renames
-     Test_Update_Events_test_updateevents;
---  id:2.2/92d91d371a67ea75/Update_Events/1/0/test_updateevents/
-   procedure Test_Update_Events_test_updateevents(Gnattest_T: in out Test) is
-      procedure Update_Events(Minutes: Positive) renames
-        Wrap_Test_Update_Events_92d91d_646fe5;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Update_Events(1);
-      Assert(True, "This test can only crash.");
-
---  begin read only
-   end Test_Update_Events_test_updateevents;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Delete_Event_626bfb_8845a2(Event_Index: Positive) is
    begin
       begin
