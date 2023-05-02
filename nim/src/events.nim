@@ -53,7 +53,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
         withTraders or tradersName notin ship.name):
       enemies.add(y = index)
 
-proc updateEvents*(minutes: Positive) =
+proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: [].} =
   let eventsAmount = eventsList.len
   if eventsAmount == 0:
     return
