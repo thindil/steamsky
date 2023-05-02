@@ -124,16 +124,15 @@ package Events is
       -- PARAMETERS
       -- Minutes - Amount of in-game minutes which passed
       -- SOURCE
-   procedure Update_Events(Minutes: Positive) with
-      Test_Case => (Name => "Test_UpdateEvents", Mode => Robustness);
-      -- ****
+   procedure Update_Events(Minutes: Positive);
+   -- ****
 
-      -- ****f* Events/Events.Delete_Event
-      -- FUNCTION
-      -- Delete selected event
-      -- PARAMETERS
-      -- EventIndex - Index of the event to delete
-      -- SOURCE
+   -- ****f* Events/Events.Delete_Event
+   -- FUNCTION
+   -- Delete selected event
+   -- PARAMETERS
+   -- EventIndex - Index of the event to delete
+   -- SOURCE
    procedure Delete_Event(Event_Index: Positive) with
       Pre => Event_Index <= Events_List.Last_Index,
       Test_Case => (Name => "Test_DeleteEvent", Mode => Nominal);
