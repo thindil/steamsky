@@ -54,6 +54,9 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
       enemies.add(y = index)
 
 proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Update timer for all known events, delete events if the timers passed
+  ##
+  ## * minutes - the amount of minutes passed in the game
   let eventsAmount = eventsList.len
   if eventsAmount == 0:
     return
