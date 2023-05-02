@@ -57,7 +57,9 @@ proc updateEvents*(minutes: Positive) =
   let eventsAmount = eventsList.len
   if eventsAmount == 0:
     return
-  for key in eventsList.keys:
+  for key in 1 .. eventsAmount:
+    if key notin eventsList:
+      continue
     let newTime = eventsList[key].time - minutes
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
@@ -73,6 +75,8 @@ proc updateEvents*(minutes: Positive) =
       {.warning[UnsafeDefault]: off.}
       eventsList.del(key)
       {.warning[UnsafeDefault]: on.}
+    else:
+      eventsList[key].time = newTime
   if eventsAmount < eventsList.len:
     for key in eventsList.keys:
       skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = key
@@ -133,3 +137,6 @@ proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc.} =
     updateEvents(minutes = minutes)
   except KeyError:
     discard
+
+proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
+  eventsList.clear()
