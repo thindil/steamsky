@@ -273,19 +273,14 @@ package body Missions is
    end Accept_Mission;
 
    procedure Update_Missions(Minutes: Positive) is
-      Time: Integer := 0;
-      I: Mission_Container.Extended_Index := Accepted_Missions.First_Index;
+      procedure Update_Ada_Missions(M: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMissions";
    begin
-      Update_Missions_Loop :
-      while I <= Accepted_Missions.Last_Index loop
-         Time := Accepted_Missions(I).Time - Minutes;
-         if Time < 1 then
-            Delete_Mission(Mission_Index => I);
-         else
-            Accepted_Missions(I).Time := Time;
-            I := I + 1;
-         end if;
-      end loop Update_Missions_Loop;
+      Get_Missions;
+      Update_Ada_Missions(M => Minutes);
+      Set_Missions;
    end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
