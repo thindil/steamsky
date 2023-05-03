@@ -1117,7 +1117,14 @@ package body Ships.UI.Modules is
                   else "none") &
                  "}");
          when WORKSHOP =>
-            Add_Owners_Info(Owners_Name => "Worker");
+            Add_Owners_Info
+              (Owners_Name => "Worker",
+               Add_Button =>
+                 (if
+                    Player_Ship.Modules(Module_Index).Crafting_Index /=
+                    Tiny_String.Null_Bounded_String
+                  then True
+                  else False));
             Insert
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "}");
