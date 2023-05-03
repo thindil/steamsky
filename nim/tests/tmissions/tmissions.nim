@@ -39,3 +39,11 @@ assert acceptedMissions.len == 0
 
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
+
+acceptedMissions = @[]
+acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
+    targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+updateMissions(8)
+assert acceptedMissions[0].time == 2
+updateMissions(2)
+assert acceptedMissions.len == 0
