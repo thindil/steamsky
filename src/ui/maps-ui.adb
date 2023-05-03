@@ -424,10 +424,12 @@ package body Maps.UI is
          Preview := False;
       end if;
       configure(Widgt => Get_Map_View, options => "-state normal");
-      Delete(TextWidget => Get_Map_View, StartIndex => "1.0", Indexes => "end");
+      Delete
+        (TextWidget => Get_Map_View, StartIndex => "1.0", Indexes => "end");
       Map_Height :=
         Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
-      Map_Width := Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
+      Map_Width :=
+        Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
       Start_Y := Center_Y - (Map_Height / 2);
       Start_X := Center_X - (Map_Width / 2);
       End_Y := Center_Y + (Map_Height / 2);
@@ -603,7 +605,8 @@ package body Maps.UI is
          end loop Draw_Map_X_Loop;
          if Y < End_Y then
             Insert
-              (TextWidget => Get_Map_View, Index => "end", Text => "{" & LF & "}");
+              (TextWidget => Get_Map_View, Index => "end",
+               Text => "{" & LF & "}");
          end if;
       end loop Draw_Map_Y_Loop;
       configure(Widgt => Get_Map_View, options => "-state disable");
@@ -1334,7 +1337,8 @@ package body Maps.UI is
            (Widgt => Messages_Frame, Sequence => "<Configure>",
             Script => "ResizeLastMessages");
          Bind
-           (Widgt => Get_Map_View, Sequence => "<Configure>", Script => "DrawMap");
+           (Widgt => Get_Map_View, Sequence => "<Configure>",
+            Script => "DrawMap");
          Bind
            (Widgt => Get_Map_View, Sequence => "<Motion>",
             Script => "{UpdateMapInfo %x %y}");
@@ -1372,7 +1376,7 @@ package body Maps.UI is
             Action => "attributes", Options => "-fullscreen 1");
       end if;
       Set_Accelerators_Loop :
-      for I in Menu_Accelerators'Range loop
+      for Accelerator of Menu_Accelerators loop
          Bind_To_Main_Window
            (Interp => Get_Context,
             Sequence =>
@@ -1380,17 +1384,15 @@ package body Maps.UI is
               To_String
                 (Source =>
                    Insert
-                     (Source => Menu_Accelerators(I),
+                     (Source => Accelerator,
                       Before =>
                         Index
-                          (Source => Menu_Accelerators(I), Pattern => "-",
+                          (Source => Accelerator, Pattern => "-",
                            Going => Backward) +
                         1,
                       New_Item => "KeyPress-")) &
               ">",
-            Script =>
-              "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) &
-              "}");
+            Script => "{InvokeMenu " & To_String(Source => Accelerator) & "}");
       end loop Set_Accelerators_Loop;
       if Index
           (Source =>
@@ -1407,7 +1409,8 @@ package body Maps.UI is
       for Base_Type of Bases_Types loop
          exit Set_Tags_Loop when Length(Source => Base_Type) = 0;
          Tag_Configure
-           (TextWidget => Get_Map_View, TagName => To_String(Source => Base_Type),
+           (TextWidget => Get_Map_View,
+            TagName => To_String(Source => Base_Type),
             Options =>
               "-foreground #" & Get_Base_Type_Color(Base_Type => Base_Type));
       end loop Set_Tags_Loop;
