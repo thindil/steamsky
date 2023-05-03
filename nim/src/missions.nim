@@ -229,7 +229,8 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
     skyBases[baseIndex].missions.add(y = mission)
   skyBases[baseIndex].missionsDate = gameDate
 
-proc updateMissions*(minutes: Positive) =
+proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
+    tags: [].} =
   var i = acceptedMissions.low
   while i < acceptedMissions.len:
     let time = acceptedMissions[i].time - minutes
