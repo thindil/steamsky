@@ -99,44 +99,6 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Update_Missions_dd0e76_60a195(Minutes: Positive) is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Missions.Update_Missions(Minutes);
-   end Wrap_Test_Update_Missions_dd0e76_60a195;
---  end read only
-
---  begin read only
-   procedure Test_Update_Missions_test_updatemissions(Gnattest_T: in out Test);
-   procedure Test_Update_Missions_dd0e76_60a195
-     (Gnattest_T: in out Test) renames
-     Test_Update_Missions_test_updatemissions;
---  id:2.2/dd0e763fefc4ba42/Update_Missions/1/0/test_updatemissions/
-   procedure Test_Update_Missions_test_updatemissions
-     (Gnattest_T: in out Test) is
-      procedure Update_Missions(Minutes: Positive) renames
-        Wrap_Test_Update_Missions_dd0e76_60a195;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Accepted_Missions.Clear;
-      Accepted_Missions.Append
-        ((M_Type => EXPLORE, Time => 10, Target_X => 1, Target_Y => 1,
-          Reward => 1, Start_Base => 1, Finished => True, Multiplier => 0.0,
-          Target => 0));
-      Update_Missions(8);
-      Assert(Accepted_Missions(1).Time = 2, "Missions wrongly updated.");
-      Update_Missions(2);
-      Assert
-        (Accepted_Missions.Length = 0, "Missions not removed after update");
-
---  begin read only
-   end Test_Update_Missions_test_updatemissions;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Finish_Mission_03361e_685cb8(Mission_Index: Positive) is
    begin
       begin
