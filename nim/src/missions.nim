@@ -231,6 +231,9 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
 
 proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## Update accepted missions timers and delete expired ones.
+  ##
+  ## * minutes - the amount of minutes passed in the game
   var i = acceptedMissions.low
   while i < acceptedMissions.len:
     let time = acceptedMissions[i].time - minutes
