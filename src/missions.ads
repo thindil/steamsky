@@ -156,17 +156,16 @@ package Missions is
       -- PARAMETERS
       -- Minutes - Amount of passed minutes
       -- SOURCE
-   procedure Update_Missions(Minutes: Positive) with
-      Test_Case => (Name => "Test_UpdateMissions", Mode => Robustness);
-      -- ****
+   procedure Update_Missions(Minutes: Positive);
+   -- ****
 
-      -- ****f* Missions/Missions.Finish_Mission
-      -- FUNCTION
-      -- Finish selected mission
-      -- PARAMETERS
-      -- Mission_Index - Player ship list of accepted missions index of mission
-      --                 to finish
-      -- SOURCE
+   -- ****f* Missions/Missions.Finish_Mission
+   -- FUNCTION
+   -- Finish selected mission
+   -- PARAMETERS
+   -- Mission_Index - Player ship list of accepted missions index of mission
+   --                 to finish
+   -- SOURCE
    procedure Finish_Mission(Mission_Index: Positive) with
       Pre => Mission_Index <= Accepted_Missions.Last_Index,
       Test_Case => (Name => "Test_FinishMission", Mode => Nominal);
