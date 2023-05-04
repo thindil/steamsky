@@ -139,11 +139,6 @@ package body Ships.UI.Modules is
             if Player_Ship.Modules(Module_Index).Crafting_Index /=
               Null_Bounded_String then
                Add_Button
-                 (Name => ".assigncrew",
-                  Label => "Assign a crew member as worker...",
-                  Command =>
-                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
-               Add_Button
                  (Name => ".cancelorder",
                   Label => "Cancel current crafting order",
                   Command => "CancelOrder " & CArgv.Arg(Argv => Argv, N => 1));
