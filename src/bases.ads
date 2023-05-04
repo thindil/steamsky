@@ -326,9 +326,9 @@ package Bases is
 
    procedure Set_Base_Missions_Date(Base_Index: Bases_Range);
 
-   procedure Get_Base_Cargo(Base_Index: Bases_Range);
+   procedure Get_Base_Cargo(Base_Index: Natural);
 
-   procedure Set_Base_Cargo(Base_Index: Bases_Range);
+   procedure Set_Base_Cargo(Base_Index: Natural);
 
    procedure Get_Ada_Base_Visited_Date
      (Base_Index: Bases_Range; Year, Month, Day, Hour, Minutes: Natural) with

@@ -23,6 +23,7 @@ with Utils; use Utils;
 with BasesTypes;
 with Maps; use Maps;
 with Factions;
+with Trades; use Trades;
 
 package body Bases is
 
@@ -784,7 +785,7 @@ package body Bases is
    type Nim_Cargo_Array is array(0 .. 127) of Nim_Base_Cargo;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Base_Cargo(Base_Index: Bases_Range) is
+   procedure Get_Base_Cargo(Base_Index: Natural) is
       procedure Get_Ada_Base_Cargo
         (B_Index: Integer; Cargo: Nim_Cargo_Array) with
          Import => True,
@@ -815,18 +816,21 @@ package body Bases is
    begin
       Get_Ada_Base_Cargo
         (B_Index => Base_Index,
-         Cargo => Cargo_To_Nim(Cargo => Sky_Bases(Base_Index).Cargo));
+         Cargo =>
+           Cargo_To_Nim
+             (Cargo =>
+                (if Base_Index > 0 then Sky_Bases(Base_Index).Cargo
+                 else Trader_Cargo)));
    end Get_Base_Cargo;
 
-   procedure Set_Base_Cargo(Base_Index: Bases_Range) is
+   procedure Set_Base_Cargo(Base_Index: Natural) is
       Nim_Cargo: Nim_Cargo_Array;
       procedure Set_Ada_Base_Cargo
         (B_Index: Integer; Cargo: out Nim_Cargo_Array) with
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseCargo";
-      procedure Cargo_From_Nim
-        (Cargo: Nim_Cargo_Array; B_Index: Bases_Range) is
+      procedure Cargo_From_Nim(Cargo: Nim_Cargo_Array; B_Index: Bases_Range) is
       --## rule off IMPROPER_INITIALIZATION
          Ada_Cargo: BaseCargo_Container.Vector (Capacity => 32);
       --## rule on IMPROPER_INITIALIZATION
@@ -840,8 +844,13 @@ package body Bases is
                  (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
                   Durability => Item.Durability, Price => Item.Price));
          end loop Fill_Ada_Inventory_Loop;
-         BaseCargo_Container.Assign
-           (Target => Sky_Bases(B_Index).Cargo, Source => Ada_Cargo);
+         if Base_Index > 0 then
+            BaseCargo_Container.Assign
+              (Target => Sky_Bases(B_Index).Cargo, Source => Ada_Cargo);
+         else
+            BaseCargo_Container.Assign
+              (Target => Trader_Cargo, Source => Ada_Cargo);
+         end if;
       end Cargo_From_Nim;
 
    begin

@@ -17,7 +17,7 @@
 
 import std/tables
 import basestypes, config, factions, game, goals, items, maps, shipscrew,
-    types, utils
+    trades, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -442,23 +442,29 @@ type
 
 proc getAdaBaseCargo(baseIndex: cint; cargo: array[128,
     AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
-  skyBases[baseIndex].cargo = @[]
+  var nimCargo: seq[BaseCargo]
   for adaItem in cargo:
     if adaItem.protoIndex == 0:
-      return
-    skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: adaItem.protoIndex,
+      break
+    nimCargo.add(y = BaseCargo(protoIndex: adaItem.protoIndex,
         amount: adaItem.amount, durability: adaItem.durability,
         price: adaItem.price))
+  if baseIndex > 0:
+    skyBases[baseIndex].cargo = nimCargo
+  else:
+    traderCargo = nimCargo
 
 proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
     AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
+  let nimCargo = if baseIndex > 0:
+      skyBases[baseIndex].cargo
+    else:
+      traderCargo
   for index in cargo.low..cargo.high:
-    if index <= skyBases[baseIndex].cargo.len - 1:
-      cargo[index] = AdaBaseCargo(protoIndex: skyBases[baseIndex].cargo[
-          index].protoIndex.cint, amount: skyBases[baseIndex].cargo[
-          index].amount.cint, durability: skyBases[baseIndex].cargo[
-          index].durability.cint, price: skyBases[baseIndex].cargo[
-          index].price.cint)
+    if index <= nimCargo.len - 1:
+      cargo[index] = AdaBaseCargo(protoIndex: nimCargo[index].protoIndex.cint,
+          amount: nimCargo[index].amount.cint, durability: nimCargo[
+          index].durability.cint, price: nimCargo[index].price.cint)
     else:
       cargo[index] = AdaBaseCargo(protoIndex: 0)
 
