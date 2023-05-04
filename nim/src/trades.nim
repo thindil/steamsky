@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import types
+
 type
   TradeNoFreeCargoError* = object of CatchableError
     ## Used to mark problems with free cargo space in the ship
+
+var traderCargo*: seq[BaseCargo]
