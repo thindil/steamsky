@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, game, maps, types, utils
+import basestypes, game, maps, trades, types, utils
 
 proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
   ## Generate the cargo in the selected sky base if needed
@@ -74,6 +74,24 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
               population else: item.amount + getRandom(min = 1,
               max = getMaxAmount(amount = item.amount)))
 
+proc findBaseCargo*(protoIndex: Natural;
+    durability: ItemsDurability = ItemsDurability.high): int =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+
+  proc findCargo(localBaseCargo: seq[BaseCargo]): int =
+    result = -1
+    for index, item in localBaseCargo.pairs:
+      if durability < ItemsDurability.high:
+        if item.protoIndex == protoIndex and item.durability == durability:
+          return index
+      else:
+        if item.protoIndex == protoIndex:
+          return index
+
+  if baseIndex > 0:
+    return findCargo(localBaseCargo = skyBases[baseIndex].cargo)
+  return findCargo(localBaseCargo = traderCargo)
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
@@ -81,3 +99,6 @@ proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
     generateCargo()
   except KeyError:
     discard
+
+proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [], exportc.} =
+  return findBaseCargo(protoIndex = protoIndex, durability = durability).cint + 1
