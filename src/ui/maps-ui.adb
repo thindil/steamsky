@@ -18,10 +18,9 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
-use Ada.Strings.UTF_Encoding.Wide_Strings;
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
@@ -32,13 +31,12 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Bases.LootUI;
@@ -50,24 +48,24 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
-with Crew; use Crew;
+with Crew;
 with Dialogs; use Dialogs;
-with DebugUI; use DebugUI;
+with DebugUI;
 with Factions; use Factions;
 with GameOptions;
-with Help.UI; use Help.UI;
-with Items; use Items;
-with Knowledge; use Knowledge;
+with Help.UI;
+with Items;
+with Knowledge;
 with Log;
 with Maps.UI.Commands;
 with Messages; use Messages;
-with Messages.UI; use Messages.UI;
-with Missions.UI; use Missions.UI;
+with Messages.UI;
+with Missions.UI;
 with OrdersMenu;
-with ShipModules; use ShipModules;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Movement; use Ships.Movement;
-with Ships.UI; use Ships.UI;
+with ShipModules;
+with Ships.Cargo;
+with Ships.Movement;
+with Ships.UI;
 with Statistics; use Statistics;
 with Statistics.UI;
 with Stories; use Stories;
@@ -79,6 +77,11 @@ with WaitMenu;
 package body Maps.UI is
 
    procedure Update_Header is
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Crew;
+      use Ships.Cargo;
+      use Ships.Movement;
+      use ShipModules;
       use Tiny_String;
 
       Have_Worker, Have_Gunner: Boolean := True;
@@ -405,6 +408,8 @@ package body Maps.UI is
    end Get_Map_View;
 
    procedure Draw_Map is
+      use Ada.Strings.UTF_Encoding.Wide_Strings;
+
       Map_Char: Wide_Character := Wide_Character'Val(0);
       End_X, End_Y: Integer;
       Map_Height, Map_Width: Positive;
@@ -614,6 +619,7 @@ package body Maps.UI is
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
+      use Items;
       use Tiny_String;
 
       Map_Info_Text, Event_Info_Text, Color: Unbounded_String :=
@@ -974,6 +980,9 @@ package body Maps.UI is
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkWidget;
+
       Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "nw"),
          2 => To_Unbounded_String(Source => "n"),
@@ -1055,6 +1064,11 @@ package body Maps.UI is
    end Update_Move_Buttons;
 
    procedure Create_Game_Ui is
+      use Ada.Text_IO;
+      use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Wm;
+      use DebugUI;
       use Log;
       use Tiny_String;
 
