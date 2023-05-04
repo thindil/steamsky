@@ -77,6 +77,14 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = ItemsDurability.high): int {.sideEffect,
     raises: [], tags: [].} =
+  ## Find the selected item in the currently visited base's cargo
+  ##
+  ## * protoIndex - the index of the prototype to search
+  ## * durability - the durability of the item to search. Can be empty. If not
+  ##                set, the items will not be checked against it.
+  ##
+  ## The index of the item with the selected prototype index or -1 if nothing
+  ## found.
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
 
   proc findCargo(localBaseCargo: seq[BaseCargo]): int =
