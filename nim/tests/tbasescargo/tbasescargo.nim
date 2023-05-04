@@ -29,3 +29,9 @@ skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 generateCargo()
 assert skyBases[1].cargo.len > 0
+
+skyBases[1].cargo = @[]
+generateCargo()
+assert findBaseCargo(1) == 0
+assert findBaseCargo(40) == -1
+assert findBaseCargo(490) == -1
