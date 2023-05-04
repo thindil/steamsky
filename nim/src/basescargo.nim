@@ -75,7 +75,8 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
               max = getMaxAmount(amount = item.amount)))
 
 proc findBaseCargo*(protoIndex: Natural;
-    durability: ItemsDurability = ItemsDurability.high): int =
+    durability: ItemsDurability = ItemsDurability.high): int {.sideEffect,
+    raises: [], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
 
   proc findCargo(localBaseCargo: seq[BaseCargo]): int =
