@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,7 +17,6 @@
 
 with BasesTypes;
 with Maps; use Maps;
-with Trades;
 
 package body Bases.Cargo is
 
@@ -40,7 +39,9 @@ package body Bases.Cargo is
         (Base_Index => Base_Index,
          Population => Sky_Bases(Base_Index).Population);
       Get_Base_Reputation(Base_Index => Base_Index);
-      Get_Base_Type(Base_Index => Base_Index, Base_Type => Sky_Bases(Base_Index).Base_Type);
+      Get_Base_Type
+        (Base_Index => Base_Index,
+         Base_Type => Sky_Bases(Base_Index).Base_Type);
       Generate_Ada_Cargo;
       Set_Base_Cargo(Base_Index => Base_Index);
    end Generate_Cargo;
@@ -111,44 +112,17 @@ package body Bases.Cargo is
    function Find_Base_Cargo
      (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
-      use Trades;
-
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      function Find_Cargo
-        (Local_Base_Cargo: BaseCargo_Container.Vector) return Natural is
-      begin
-         Find_Cargo_Loop :
-         for I in
-           BaseCargo_Container.First_Index(Container => Local_Base_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Local_Base_Cargo) loop
-            if Durability < Items_Durability'Last then
-               if BaseCargo_Container.Element
-                   (Container => Local_Base_Cargo, Index => I)
-                   .Proto_Index =
-                 Proto_Index and
-                 BaseCargo_Container.Element
-                     (Container => Local_Base_Cargo, Index => I)
-                     .Durability =
-                   Durability then
-                  return I;
-               end if;
-            else
-               if BaseCargo_Container.Element
-                   (Container => Local_Base_Cargo, Index => I)
-                   .Proto_Index =
-                 Proto_Index then
-                  return I;
-               end if;
-            end if;
-         end loop Find_Cargo_Loop;
-         return 0;
-      end Find_Cargo;
+      function Find_Ada_Base_Cargo
+        (P_Index: Natural; D: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "findAdaBaseCargo";
    begin
-      if Base_Index > 0 then
-         return Find_Cargo(Local_Base_Cargo => Sky_Bases(Base_Index).Cargo);
-      end if;
-      return Find_Cargo(Local_Base_Cargo => Trader_Cargo);
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      return Find_Ada_Base_Cargo(P_Index => Proto_Index, D => Durability);
    end Find_Base_Cargo;
 
 end Bases.Cargo;
