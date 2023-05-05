@@ -101,6 +101,31 @@ proc findBaseCargo*(protoIndex: Natural;
     return findCargo(localBaseCargo = skyBases[baseIndex].cargo)
   return findCargo(localBaseCargo = traderCargo)
 
+proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
+    durability: ItemsDurability = defaultItemDurability;
+    cargoIndex: cint = -1) =
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    itemIndex: int = if protoIndex > 0:
+        findBaseCargo(protoIndex = protoIndex, durability = durability)
+      else:
+        cargoIndex
+  if amount > 0:
+    if itemIndex == -1:
+      skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
+          amount: amount, durability: durability, price: getPrice(
+          baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
+    else:
+      skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
+          itemIndex].amount + amount
+  else:
+    skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
+        itemIndex].amount + amount
+    if skyBases[baseIndex].cargo[itemIndex].amount == 0 and not isBuyable(
+        baseType = skyBases[baseIndex].baseType, itemIndex = skyBases[
+        baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
+      skyBases[baseIndex].cargo.delete(itemIndex)
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
@@ -111,3 +136,11 @@ proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
 
 proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [], exportc.} =
   return findBaseCargo(protoIndex = protoIndex, durability = durability).cint + 1
+
+proc updateAdaBaseCargo(protoIndex, amount, durability,
+    cargoIndex: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    updateBaseCargo(protoIndex = protoIndex, amount = amount,
+        durability = durability, cargoIndex = cargoIndex - 1)
+  except KeyError:
+    discard
