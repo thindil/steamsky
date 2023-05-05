@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with BasesTypes;
 with Maps; use Maps;
 
 package body Bases.Cargo is
@@ -50,63 +49,20 @@ package body Bases.Cargo is
      (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
-      use BasesTypes;
-
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Item_Index: constant Natural range 0 ..
-          Natural
-            (BaseCargo_Container.Length
-               (Container => Sky_Bases(Base_Index).Cargo)) :=
-        (if Proto_Index > 0 then
-           Find_Base_Cargo
-             (Proto_Index => Proto_Index, Durability => Durability)
-         else Cargo_Index);
-      Item: Base_Cargo := Empty_Base_Cargo;
+      procedure Update_Ada_Base_Cargo
+        (P_Index: Natural; A, D, C_Index: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaBaseCargo";
    begin
-      if Amount > 0 then
-         if Item_Index = 0 then
-            BaseCargo_Container.Append
-              (Container => Sky_Bases(Base_Index).Cargo,
-               New_Item =>
-                 (Proto_Index => Proto_Index, Amount => Amount,
-                  Durability => Durability,
-                  Price =>
-                    Get_Price
-                      (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                       Item_Index => Proto_Index)));
-         else
-            --## rule off ASSIGNMENTS
-            Item :=
-              BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Item_Index);
-            Item.Amount := Item.Amount + Amount;
-            --## rule on ASSIGNMENTS
-            BaseCargo_Container.Replace_Element
-              (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index,
-               New_Item => Item);
-         end if;
-      else
-         --## rule off ASSIGNMENTS
-         Item :=
-           BaseCargo_Container.Element
-             (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index);
-         Item.Amount := Item.Amount + Amount;
-         --## rule on ASSIGNMENTS
-         if Item.Amount = 0 and
-           not Is_Buyable
-             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-              Item_Index => Item.Proto_Index) and
-           Item_Index > 1 then
-            BaseCargo_Container.Delete
-              (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index);
-         else
-            BaseCargo_Container.Replace_Element
-              (Container => Sky_Bases(Base_Index).Cargo, Index => Item_Index,
-               New_Item => Item);
-         end if;
-      end if;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Update_Ada_Base_Cargo
+        (P_Index => Proto_Index, A => Amount, D => Durability,
+         C_Index => Cargo_Index);
+      Set_Base_Cargo(Base_Index => Base_Index);
    end Update_Base_Cargo;
 
    function Find_Base_Cargo
