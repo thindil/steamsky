@@ -103,7 +103,7 @@ proc findBaseCargo*(protoIndex: Natural;
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: cint = -1) =
+    cargoIndex: cint = -1) {.sideEffect, raises: [KeyError], tags: [].} =
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     itemIndex: int = if protoIndex > 0:
