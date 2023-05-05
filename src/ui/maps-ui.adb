@@ -13,10 +13,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -680,6 +680,8 @@ package body Maps.UI is
       if Sky_Map(X, Y).Base_Index > 0 then
          Add_Base_Info_Block :
          declare
+            use Ada.Characters.Handling;
+
             Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
             Base_Info_Text: Unbounded_String := Null_Unbounded_String;
          begin
@@ -1064,7 +1066,7 @@ package body Maps.UI is
    end Update_Move_Buttons;
 
    procedure Create_Game_Ui is
-      use Ada.Text_IO;
+      use Ada.Strings.Fixed;
       use GNAT.Directory_Operations;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Wm;
@@ -1090,6 +1092,8 @@ package body Maps.UI is
          New_Start := True;
          Load_Keys_Block :
          declare
+            use Ada.Text_IO;
+
             Keys_File: File_Type;
             Raw_Data, Field_Name, Value: Unbounded_String :=
               Null_Unbounded_String;
