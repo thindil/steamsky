@@ -42,19 +42,18 @@ package Bases.Cargo is
    procedure Update_Base_Cargo
      (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      Cargo_Index: Inventory_Container.Extended_Index := 0) with
-      Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
-      -- ****
+      Cargo_Index: Inventory_Container.Extended_Index := 0);
+   -- ****
 
-      -- ****f* BCargo/BCargo.Find_Base_Cargo
-      -- FUNCTION
-      -- Find index of item in base cargo
-      -- PARAMETERS
-      -- Proto_Index - Index of prototype of item to search
-      -- Durability  - Durability of item to search. Can be empty
-      -- RESULT
-      -- Index of item in sky base cargo or 0 if item not found
-      -- SOURCE
+   -- ****f* BCargo/BCargo.Find_Base_Cargo
+   -- FUNCTION
+   -- Find index of item in base cargo
+   -- PARAMETERS
+   -- Proto_Index - Index of prototype of item to search
+   -- Durability  - Durability of item to search. Can be empty
+   -- RESULT
+   -- Index of item in sky base cargo or 0 if item not found
+   -- SOURCE
    function Find_Base_Cargo
      (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last)
