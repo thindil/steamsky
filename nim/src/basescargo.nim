@@ -104,6 +104,18 @@ proc findBaseCargo*(protoIndex: Natural;
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
     cargoIndex: cint = -1) {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Update the selected item amount in the cargo of the base where the player
+  ## is
+  ##
+  ## * protoIndex - the index of the prototype of the item which amount will be
+  ##                upgraded. This argument or cargoIndex argument must always
+  ##                be set, but only one of them.
+  ## * amount     - the amount which will be add or removed from the amount of
+  ##                the selected item
+  ## * durability - the durability of the item to search
+  ## * cargoIndex - the index of the item in the base's cargo which will be
+  ##                updated. This argument or protoIndex argument must always
+  ##                be set, but only one of them.
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     itemIndex: int = if protoIndex > 0:
