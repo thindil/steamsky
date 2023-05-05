@@ -35,3 +35,13 @@ generateCargo()
 assert findBaseCargo(1) == 0
 assert findBaseCargo(40) == -1
 assert findBaseCargo(490) == -1
+
+skyBases[1].cargo = @[]
+generateCargo()
+let
+  amount = skyBases[1].cargo[0].amount - 1
+  protoIndex = skyBases[1].cargo[0].protoIndex
+updateBaseCargo(protoIndex, -1)
+assert skyBases[1].cargo[0].amount == amount
+updateBaseCargo(cargoIndex = 0, amount = -1)
+assert skyBases[1].cargo[0].amount == amount - 1
