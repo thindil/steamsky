@@ -26,7 +26,7 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
     return
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  if moneyIndex2 == 0:
+  if moneyIndex2 == -1:
     gainRep(baseIndex = baseIndex, points = -10)
     addMessage(message = "You don't have " & moneyName &
         " for pay for docking!", mType = otherMessage, color = red)
