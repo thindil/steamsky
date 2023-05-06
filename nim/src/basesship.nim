@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import bases, config, crewinventory, game, maps, messages, shipscargo, shipscrew, types
+import bases, basescargo, config, crewinventory, game, maps, messages,
+    shipscargo, shipscrew, types
 
 proc payForDock*() =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -41,3 +42,16 @@ proc payForDock*() =
   if dockingCost > playerShip.cargo[moneyIndex2].amount:
     dockingCost = playerShip.cargo[moneyIndex].amount
   updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(dockingCost))
+  updateBaseCargo(protoIndex = moneyIndex, amount = dockingCost)
+  addMessage(message = "You pay " & $dockingCost & " " & moneyName &
+      " docking fee.", mType = otherMessage)
+  if traderIndex > -1:
+    gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+
+# Temporary code for interfacing with Ada
+
+proc payAdaForDock() {.raises: [], tags: [], exportc.} =
+  try:
+    payForDock()
+  except KeyError:
+    discard
