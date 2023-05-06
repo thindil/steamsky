@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -85,6 +85,7 @@ package Table is
       Post => Create_Table'Result.Row_Height > 1;
       -- ****
 
+      --## rule off LOCAL_HIDING
       -- ****f* Table/Table.Clear_Table
       -- FUNCTION
       -- Clear data from the table
@@ -274,6 +275,7 @@ package Table is
      -- SOURCE
    procedure Toggle_Checked_Button(Table: Table_Widget; Row, Column: Natural);
    -- ****
+   --## rule on LOCAL_HIDING
 
    -- ****f* Table/Tabel.Add_Commands
    -- FUNCTION
