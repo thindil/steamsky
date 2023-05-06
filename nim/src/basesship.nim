@@ -19,6 +19,8 @@ import bases, basescargo, config, crewinventory, game, maps, messages,
     shipscargo, shipscrew, types
 
 proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Pay daily fee for docking, if the player doesn't have enough money for
+  ## pay, reduce the player's reputation in the base
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
