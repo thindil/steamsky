@@ -1120,28 +1120,39 @@ package body Ships.UI.Modules is
                     Tiny_String.Null_Bounded_String
                   then True
                   else False));
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "}");
             Show_Order_Info_Block :
             declare
+               Order_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".orderinfo",
+                    options => "-width 360");
                Recipe_Name: constant String :=
                  Get_Workshop_Recipe_Name(Workshop => Module_Index);
+               Order_Text: Unbounded_String := Null_Unbounded_String;
             begin
                if Recipe_Name'Length > 0 then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{Order: " & Recipe_Name & "}");
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & LF & "Time to complete current:" &
-                       Positive'Image(Module.Crafting_Time) & " mins}");
+                  Order_Text :=
+                    To_Unbounded_String
+                      (Source =>
+                         "{Order: " & Recipe_Name & LF &
+                         "Time to complete current:" &
+                         Positive'Image(Module.Crafting_Time) & " mins}");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{Order: not set}");
+                  Order_Text :=
+                    To_Unbounded_String(Source => "{Order: not set}");
                end if;
+               Label :=
+                 Create
+                   (pathName => Order_Box & ".statelbl",
+                    options => "-text " & To_String(Source => Order_Text));
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Order_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
             end Show_Order_Info_Block;
          when MEDICAL_ROOM =>
             Add_Owners_Info(Owners_Name => "Medic");
