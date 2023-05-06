@@ -568,60 +568,16 @@ package body Bases.Ship is
    procedure Pay_For_Dock is
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Money_Index_2: constant Inventory_Container.Extended_Index :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Docking_Cost: Natural := 0;
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      procedure Pay_Ada_For_Dock with
+         Import => True,
+         Convention => C,
+         External_Name => "payAdaForDock";
    begin
-      if Sky_Bases(Base_Index).Population = 0 then
-         return;
-      end if;
-      if Money_Index_2 = 0 then
-         Gain_Rep(Base_Index => Base_Index, Points => -10);
-         Add_Message
-           (Message =>
-              "You don't have " & To_String(Source => Money_Name) &
-              " for pay for docking!",
-            M_Type => OTHERMESSAGE, Color => RED);
-         return;
-      end if;
-      Count_Docking_Cost_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = HULL then
-            Docking_Cost := Module.Max_Modules;
-            exit Count_Docking_Cost_Loop;
-         end if;
-      end loop Count_Docking_Cost_Loop;
-      Docking_Cost :=
-        Natural(Float(Docking_Cost) * Float(New_Game_Settings.Prices_Bonus));
-      if Docking_Cost = 0 then
-         Docking_Cost := 1;
-      end if;
-      Count_Price(Price => Docking_Cost, Trader_Index => Trader_Index);
-      if Docking_Cost >
-        Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => Money_Index_2)
-          .Amount then
-         Docking_Cost :=
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Money_Index_2)
-             .Amount;
-      end if;
-      Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-         Amount => -(Docking_Cost));
-      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Docking_Cost);
-      Add_Message
-        (Message =>
-           "You pay" & Positive'Image(Docking_Cost) & " " &
-           To_String(Source => Money_Name) & " docking fee.",
-         M_Type => OTHERMESSAGE);
-      if Trader_Index > 0 then
-         Gain_Exp
-           (Amount => 1, Skill_Number => Talking_Skill,
-            Crew_Index => Trader_Index);
-      end if;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Pay_Ada_For_Dock;
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Get_Ship_From_Nim(Ship => Player_Ship);
    end Pay_For_Dock;
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
