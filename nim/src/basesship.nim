@@ -18,7 +18,7 @@
 import bases, basescargo, config, crewinventory, game, maps, messages,
     shipscargo, shipscrew, types
 
-proc payForDock*() =
+proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
