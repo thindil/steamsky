@@ -80,22 +80,21 @@ package Bases.Ship is
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
-   procedure Pay_For_Dock with
-      Test_Case => (Name => "Test_PayForDock", Mode => Robustness);
-      -- ****
+   procedure Pay_For_Dock;
+   -- ****
 
-      -- ****f* Ship/Ship.Repair_Cost
-      -- FUNCTION
-      -- Count cost and time of repairs of player ship
-      -- PARAMETERS
-      -- Cost         - Overall cost of repair of player ship
-      -- Time         - Time needed for repair of player ship
-      -- Module_Index - Index of module on player ship to repair or 0 to repair
-      --                all damage modules, -1 for fast repair all ship and -2
-      --                for very fast repair all ship
-      -- RESULT
-      -- Parameters Cost and Time
-      -- SOURCE
+   -- ****f* Ship/Ship.Repair_Cost
+   -- FUNCTION
+   -- Count cost and time of repairs of player ship
+   -- PARAMETERS
+   -- Cost         - Overall cost of repair of player ship
+   -- Time         - Time needed for repair of player ship
+   -- Module_Index - Index of module on player ship to repair or 0 to repair
+   --                all damage modules, -1 for fast repair all ship and -2
+   --                for very fast repair all ship
+   -- RESULT
+   -- Parameters Cost and Time
+   -- SOURCE
    procedure Repair_Cost
      (Cost, Time: in out Natural; Module_Index: Integer) with
       Pre => Module_Index in -2 .. Player_Ship.Modules.Last_Index,
