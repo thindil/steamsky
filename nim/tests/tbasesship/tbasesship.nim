@@ -35,5 +35,4 @@ skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 payForDock()
-echo playerShip.cargo[0].amount
 assert playerShip.cargo[0].amount == 90
