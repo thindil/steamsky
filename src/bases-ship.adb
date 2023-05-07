@@ -20,7 +20,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
-with Config; use Config;
+with Config;
 with BasesTypes;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
@@ -582,6 +582,7 @@ package body Bases.Ship is
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
       use BasesTypes;
+      use Config;
 
       Proto_Index: Natural := 0;
       Base_Index: constant Bases_Range :=
