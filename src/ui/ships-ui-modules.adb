@@ -1146,6 +1146,25 @@ package body Ships.UI.Modules is
                    (pathName => Order_Box & ".statelbl",
                     options => "-text " & To_String(Source => Order_Text));
                Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               if Recipe_Name'Length > 0 then
+                  Info_Button :=
+                    Create
+                      (pathName => Order_Box & ".button",
+                       options =>
+                         "-image cancelicon -command {" & Close_Dialog_Button &
+                         " invoke;CancelOrder " &
+                         CArgv.Arg(Argv => Argv, N => 1) &
+                         "} -style Small.TButton");
+                  Add
+                    (Widget => Info_Button,
+                     Message => "Cancel current crafting order");
+                  Tcl.Tk.Ada.Grid.Grid
+                    (Slave => Info_Button,
+                     Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                  Bind
+                    (Widgt => Info_Button, Sequence => "<Escape>",
+                     Script => "{" & Close_Dialog_Button & " invoke;break}");
+               end if;
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Order_Box, Options => "-sticky w");
                Tcl_Eval(interp => Interp, strng => "update");
