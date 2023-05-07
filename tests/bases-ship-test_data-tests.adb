@@ -144,41 +144,6 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Pay_For_Dock_9dddef_d92d34 is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Ship.Pay_For_Dock;
-   end Wrap_Test_Pay_For_Dock_9dddef_d92d34;
---  end read only
-
---  begin read only
-   procedure Test_Pay_For_Dock_test_payfordock(Gnattest_T: in out Test);
-   procedure Test_Pay_For_Dock_9dddef_d92d34(Gnattest_T: in out Test) renames
-     Test_Pay_For_Dock_test_payfordock;
---  id:2.2/9dddef712271b3af/Pay_For_Dock/1/0/test_payfordock/
-   procedure Test_Pay_For_Dock_test_payfordock(Gnattest_T: in out Test) is
-      procedure Pay_For_Dock renames Wrap_Test_Pay_For_Dock_9dddef_d92d34;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-      Money: constant Positive :=
-        Inventory_Container.Element(Container => Player_Ship.Cargo, Index => 1)
-          .Amount;
-
-   begin
-
-      Pay_For_Dock;
-      Assert
-        (Inventory_Container.Element
-           (Container => Player_Ship.Cargo, Index => 1)
-           .Amount <
-         Money,
-         "Failed to pay for docks.");
-
---  begin read only
-   end Test_Pay_For_Dock_test_payfordock;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Repair_Cost_eb3d7e_6cc7b1
      (Cost, Time: in out Natural; Module_Index: Integer) is
    begin
