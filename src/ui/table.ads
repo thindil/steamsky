@@ -31,6 +31,13 @@ package Table is
    type Width_Array is array(Positive range <>) of Positive;
    -- ****
 
+   -- ****d* Table/Table.No_Width_Array
+   -- FUNCTION
+   -- Empty table width array
+   -- SOURCE
+   No_Width_Array: constant Width_Array := (1 => 1);
+   -- ****
+
    -- ****s* Table/Table.Table_Widget
    -- FUNCTION
    -- Store data for each created table
@@ -50,11 +57,25 @@ package Table is
    end record;
    -- ****
 
+   -- ****d* Table/Table.Empty_Table
+   -- FUNCTION
+   -- Empty table widget with default values and one column
+   -- SOURCE
+   Empty_Table: constant Table_Widget := (Amount => 1, others => <>);
+   -- ****
+
    -- ****t* Table/Table.Headers_Array
    -- FUNCTION
    -- Used to store the titles for columns in the selected table
    -- SOURCE
    type Headers_Array is array(Positive range <>) of Unbounded_String;
+   -- ****
+
+   -- ****d* Table/Table.No_Headers
+   -- FUNCTION
+   -- Array of headers with one empty header
+   -- SOURCE
+   No_Headers: constant Headers_Array := (1 => Null_Unbounded_String);
    -- ****
 
    -- ****f* Table/Table.Create_Table
