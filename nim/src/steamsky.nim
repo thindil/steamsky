@@ -16,11 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parseopt, strutils]
-import bases, basescargo, basesship, basestypes, careers, crafts, combat,
-    config, crew, crewinventory, events, factions, game, goals, halloffame,
-    items, log, maps, messages, missions, mobs, shipmodules, ships, shipscargo,
-    shipscrew, shipscrew2, shipsmovement, shipsrepairs, shipsupgrade,
-    statistics, tk, updategame, utils
+import bases, basescargo, basessaveload, basesship, basestypes, careers, crafts,
+    combat, config, crew, crewinventory, events, factions, game, goals,
+    halloffame, items, log, maps, messages, missions, mobs, shipmodules, ships,
+    shipscargo, shipscrew, shipscrew2, shipsmovement, shipsrepairs,
+    shipsupgrade, statistics, tk, updategame, utils
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,

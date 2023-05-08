@@ -20,9 +20,11 @@ import game
 
 proc saveBases*(saveData: var XmlNode) =
   for skyBase in skyBases.items:
-    var baseTree = newXmlTree("base", [], {
-        "name": skyBase.name, "type": $skyBase.baseType,
-        "population": $skyBase.population}.toXmlAttributes)
+    let askedForBases = (if skyBase.askedForBases: "Y" else: "N")
+    var baseTree = newXmlTree("base", [], {"name": skyBase.name,
+        "type": $skyBase.baseType, "population": $skyBase.population,
+        "x": $skyBase.skyX, "y": $skyBase.skyY,
+        "askedforbases": askedForBases}.toXmlAttributes)
     if skyBase.visited.year > 0:
       var saveDate = newElement("visiteddate")
       saveDate.attrs = {"year": $skyBase.visited.year,
@@ -33,7 +35,43 @@ proc saveBases*(saveData: var XmlNode) =
       saveDate = newElement("recruitdate")
       saveDate.attrs = {"year": $skyBase.recruitDate.year,
           "month": $skyBase.recruitDate.month, "day": $skyBase.recruitDate.day,
-          "hour": $skyBase.recruitDate.hour,
-          "minutes": $skyBase.recruitDate.minutes}.toXmlAttributes
+          "hour": "0", "minutes": "0"}.toXmlAttributes
+      baseTree.add(saveDate)
+      if skyBase.reputation.level != 0:
+        var repElement = newElement("reputation")
+        if skyBase.reputation.experience > 0:
+          repElement.attrs = {"level": $skyBase.reputation.level,
+              "progress": $skyBase.reputation.experience}.toXmlAttributes
+        else:
+          repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
+      for recruit in skyBase.recruits:
+        var recruitNode = newXmlTree("recruit", [], {"name": recruit.name,
+            "gender": $recruit.gender, "price": $recruit.price,
+            "payment": $recruit.payment, "homebase": $recruit.homeBase,
+            "faction": recruit.faction}.toXmlAttributes)
+        for skill in recruit.skills:
+          var skillElement = newElement("skill")
+          skillElement.attrs = {"index": $skill.index,
+              "level": $skill.level}.toXmlAttributes
+          recruitNode.add(skillElement)
+        for attribute in recruit.attributes:
+          var attrElement = newElement("attribute")
+          attrElement.attrs = {"level": $attribute.level}.toXmlAttributes
+          recruitNode.add(attrElement)
+        for item in recruit.inventory:
+          var itemElement = newElement("item")
+          itemElement.attrs = {"index": $item}.toXmlAttributes
+          recruitNode.add(itemElement)
+        for index, item in recruit.equipment.pairs:
+          if item > -1:
+            var itemElement = newElement("equipment")
+            itemElement.attrs = {"slot": $(index.int + 1), "index": $(item +
+                1)}.toXmlAttributes
+            recruitNode.add(itemElement)
+      saveDate = newElement("askedforeventsdate")
+      saveDate.attrs = {"year": $skyBase.askedForEvents.year,
+          "month": $skyBase.askedForEvents.month,
+          "day": $skyBase.askedForEvents.day, "hour": "0",
+          "minutes": "0"}.toXmlAttributes
       baseTree.add(saveDate)
     saveData.add(baseTree)
