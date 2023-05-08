@@ -444,7 +444,7 @@ package body MainMenu.Commands is
                  2 => To_Unbounded_String(Source => "Ship name"),
                  3 => To_Unbounded_String(Source => "Last saved")),
               Command => "SortSaves",
-              Tooltip => "Press mouse button to sort the saved games.");
+              Tooltip_Text => "Press mouse button to sort the saved games.");
       else
          Clear_Table(Table => Local_Load_Table);
       end if;

@@ -195,7 +195,7 @@ package body Bases.UI is
               Scrollbar =>
                 Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
               Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
-              Tooltip => "Press mouse button to sort the actions.");
+              Tooltip_Text => "Press mouse button to sort the actions.");
          if CArgv.Arg(Argv => Argv, N => 1) = "heal"
            and then Items_Indexes.Length /= Player_Ship.Crew.Length + 1 then
             Items_Indexes.Clear;
@@ -258,7 +258,7 @@ package body Bases.UI is
               Scrollbar =>
                 Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
               Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
-              Tooltip => "Press mouse button to sort the recipes.");
+              Tooltip_Text => "Press mouse button to sort the recipes.");
          if Natural(Items_Indexes.Length) /= Get_Recipes_Amount then
             Items_Indexes.Clear;
             Fill_Recipes_Indexes_Loop :

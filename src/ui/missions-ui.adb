@@ -481,7 +481,7 @@ package body Missions.UI is
               Scrollbar =>
                 Get_Widget(pathName => Main_Paned & ".missionsframe.scrolly"),
               Command => "SortAvailableMissions",
-              Tooltip => "Press mouse button to sort the missions.");
+              Tooltip_Text => "Press mouse button to sort the missions.");
       elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
         Argc = 1 then
          Show_Sky_Map(Clear => True);

@@ -101,7 +101,7 @@ package Table is
    function Create_Table
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
-      Command, Tooltip: String := "") return Table_Widget with
+      Command, Tooltip_Text: String := "") return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => Create_Table'Result.Row_Height > 1;
       -- ****

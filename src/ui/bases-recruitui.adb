@@ -210,7 +210,7 @@ package body Bases.RecruitUI is
                  5 => To_Unbounded_String(Source => "Highest stat"),
                  6 => To_Unbounded_String(Source => "Highest skill")),
               Command => "SortRecruits",
-              Tooltip => "Press mouse button to sort the recruits.");
+              Tooltip_Text => "Press mouse button to sort the recruits.");
          Bind
            (Widgt => Recruit_Frame, Sequence => "<Configure>",
             Script => "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");

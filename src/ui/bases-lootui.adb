@@ -184,7 +184,7 @@ package body Bases.LootUI is
                   (pathName => ".gameframe.paned.lootframe.scrolly",
                    Interp => Interp),
               Command => "SortLootItems",
-              Tooltip => "Press mouse button to sort the items.");
+              Tooltip_Text => "Press mouse button to sort the items.");
       elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
         Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);

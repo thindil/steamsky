@@ -214,7 +214,7 @@ package body Trades.UI is
               Scrollbar =>
                 Get_Widget(pathName => Main_Paned & ".tradeframe.scrolly"),
               Command => "SortTradeItems",
-              Tooltip => "Press mouse button to sort the items.");
+              Tooltip_Text => "Press mouse button to sort the items.");
       elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
         Argc = 1 then
          Items_Sort_Order := Default_Items_Sort_Order;

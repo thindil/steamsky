@@ -174,7 +174,7 @@ package body Bases.ShipyardUI is
                 Get_Widget
                   (pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "",
-              Tooltip => "Press mouse button to sort the modules.");
+              Tooltip_Text => "Press mouse button to sort the modules.");
          Shipyard_Frame :=
            Get_Widget
              (pathName => Shipyard_Canvas & ".shipyard.remove",
@@ -192,7 +192,7 @@ package body Bases.ShipyardUI is
                 Get_Widget
                   (pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "SortShipyardModules remove 0 {}",
-              Tooltip => "Press mouse button to sort the modules.");
+              Tooltip_Text => "Press mouse button to sort the modules.");
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
          if Argc = 1 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);

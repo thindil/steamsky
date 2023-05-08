@@ -695,7 +695,7 @@ package body Ships.UI.Crew.Inventory is
               5 => To_Unbounded_String(Source => "Amount"),
               6 => To_Unbounded_String(Source => "Weight")),
            Scrollbar => Y_Scroll, Command => "SortCrewInventory",
-           Tooltip => "Press mouse button to sort the inventory.");
+           Tooltip_Text => "Press mouse button to sort the inventory.");
       if Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
            Argv => Argv) =

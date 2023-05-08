@@ -506,7 +506,7 @@ package body Knowledge.Missions is
                   (pathName =>
                      ".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
-              Tooltip => "Press mouse button to sort the missions.");
+              Tooltip_Text => "Press mouse button to sort the missions.");
          if Missions_Indexes.Length /= Accepted_Missions.Length then
             Missions_Indexes.Clear;
             Fill_Missions_Indexes_Loop :

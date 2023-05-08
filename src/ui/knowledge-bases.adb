@@ -145,7 +145,7 @@ package body Knowledge.Bases is
              Get_Widget
                (pathName => ".gameframe.paned.knowledgeframe.bases.scrolly"),
            Command => "SortKnownBases {" & Base_Name & "}",
-           Tooltip => "Press mouse button to sort the bases.");
+           Tooltip_Text => "Press mouse button to sort the bases.");
       if Bases_Indexes.Is_Empty then
          Fill_Bases_Indexes_Loop :
          for I in Sky_Bases'Range loop

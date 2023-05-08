@@ -468,7 +468,7 @@ package body Knowledge.Events is
                 Get_Widget
                   (pathName => Main_Paned & ".knowledgeframe.events.scrolly"),
               Command => "SortKnownEvents",
-              Tooltip => "Press mouse button to sort the events.");
+              Tooltip_Text => "Press mouse button to sort the events.");
          if Events_Indexes.Length /= Events_List.Length then
             Events_Indexes.Clear;
             Fill_Event_Indexes_Loop :

@@ -373,7 +373,7 @@ package body Crafts.UI is
                  4 => To_Unbounded_String(Source => "Materials")),
               Scrollbar => Get_Widget(pathName => Crafts_Frame & ".scrolly"),
               Command => "SortCrafting",
-              Tooltip => "Press mouse button to sort the crafting recipes.");
+              Tooltip_Text => "Press mouse button to sort the crafting recipes.");
       else
          Clear_Table(Table => Recipes_Table);
       end if;

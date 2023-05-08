@@ -335,7 +335,7 @@ package body Ships.UI.Crew is
              Get_Widget
                (pathName => ".gameframe.paned.shipinfoframe.crew.scrolly"),
            Command => "SortShipCrew",
-           Tooltip => "Press mouse button to sort the crew.");
+           Tooltip_Text => "Press mouse button to sort the crew.");
       if Crew_Indexes.Length /= Player_Ship.Crew.Length then
          Crew_Indexes.Clear;
          Update_Crew_Indexes_Loop :
