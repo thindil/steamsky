@@ -38,7 +38,7 @@ package body Table is
    function Create_Table
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
-      Command, Tooltip: String := "") return Table_Widget is
+      Command, Tooltip_Text: String := "") return Table_Widget is
       Canvas: Tk_Canvas;
       Y_Scroll: Ttk_Scrollbar;
       X_Scroll: Ttk_Scrollbar;
@@ -120,9 +120,9 @@ package body Table is
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end if;
-         if Tooltip'Length > 0 then
+         if Tooltip_Text'Length > 0 then
             Add
-              (Widget => Canvas, Message => Tooltip,
+              (Widget => Canvas, Message => Tooltip_Text,
                Options => "-item " & To_String(Source => Header_Id));
          end if;
          Create
@@ -177,9 +177,9 @@ package body Table is
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end if;
-         if Tooltip'Length > 0 then
+         if Tooltip_Text'Length > 0 then
             Add
-              (Widget => Canvas, Message => Tooltip,
+              (Widget => Canvas, Message => Tooltip_Text,
                Options => "-item " & To_String(Source => Header_Id));
          end if;
       end loop Create_Headers_Loop;
