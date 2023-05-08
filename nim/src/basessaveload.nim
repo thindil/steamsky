@@ -18,7 +18,7 @@
 import std/xmltree
 import game, types
 
-proc saveBases*(saveData: var XmlNode) =
+proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
   for skyBase in skyBases.items:
     let
       askedForBases = (if skyBase.askedForBases: "Y" else: "N")
