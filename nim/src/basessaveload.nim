@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/xmltree
-import game
+import game, types
 
 proc saveBases*(saveData: var XmlNode) =
   for skyBase in skyBases.items:
@@ -34,8 +34,8 @@ proc saveBases*(saveData: var XmlNode) =
       baseTree.add(saveDate)
       saveDate = newElement("recruitdate")
       saveDate.attrs = {"year": $skyBase.recruitDate.year,
-          "month": $skyBase.recruitDate.month, "day": $skyBase.recruitDate.day,
-          "hour": "0", "minutes": "0"}.toXmlAttributes
+          "month": $skyBase.recruitDate.month,
+          "day": $skyBase.recruitDate.day}.toXmlAttributes
       baseTree.add(saveDate)
       if skyBase.reputation.level != 0:
         var repElement = newElement("reputation")
@@ -71,7 +71,31 @@ proc saveBases*(saveData: var XmlNode) =
       saveDate = newElement("askedforeventsdate")
       saveDate.attrs = {"year": $skyBase.askedForEvents.year,
           "month": $skyBase.askedForEvents.month,
-          "day": $skyBase.askedForEvents.day, "hour": "0",
-          "minutes": "0"}.toXmlAttributes
+          "day": $skyBase.askedForEvents.day}.toXmlAttributes
       baseTree.add(saveDate)
+      saveDate = newElement("missionsdate")
+      saveDate.attrs = {"year": $skyBase.missionsDate.year,
+          "month": $skyBase.missionsDate.month,
+          "day": $skyBase.missionsDate.day}.toXmlAttributes
+      baseTree.add(saveDate)
+      for mission in skyBase.missions:
+        var
+          missionElement = newElement("mission")
+          target = case mission.mType
+            of deliver:
+              mission.itemIndex
+            of passenger:
+              mission.data
+            of destroy:
+              mission.shipIndex
+            else:
+              mission.target
+    if skyBase.reputation.level != 0:
+      var repElement = newElement("reputation")
+      if skyBase.reputation.experience > 0:
+        repElement.attrs = {"level": $skyBase.reputation.level,
+            "progress": $skyBase.reputation.experience}.toXmlAttributes
+      else:
+        repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
+      baseTree.add(repElement)
     saveData.add(baseTree)
