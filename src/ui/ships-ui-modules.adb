@@ -135,14 +135,6 @@ package body Ships.UI.Modules is
       end Add_Button;
    begin
       case Player_Ship.Modules(Module_Index).M_Type is
-         when WORKSHOP =>
-            if Player_Ship.Modules(Module_Index).Crafting_Index /=
-              Null_Bounded_String then
-               Add_Button
-                 (Name => ".cancelorder",
-                  Label => "Cancel current crafting order",
-                  Command => "CancelOrder " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Loop :
             for Member of Player_Ship.Crew loop
@@ -2396,7 +2388,7 @@ package body Ships.UI.Modules is
                 Get_Widget
                   (pathName => Main_Paned & ".shipinfoframe.modules.scrolly"),
               Command => "SortShipModules",
-              Tooltip => "Press mouse button to sort the modules.");
+              Tooltip_Text => "Press mouse button to sort the modules.");
       end if;
       if Modules_Indexes.Length /= Player_Ship.Modules.Length then
          Modules_Indexes.Clear;
