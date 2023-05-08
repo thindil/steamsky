@@ -20,11 +20,14 @@ import game, types
 
 proc saveBases*(saveData: var XmlNode) =
   for skyBase in skyBases.items:
-    let askedForBases = (if skyBase.askedForBases: "Y" else: "N")
+    let
+      askedForBases = (if skyBase.askedForBases: "Y" else: "N")
+      knownBase = (if skyBase.known: "Y" else: "N")
     var baseTree = newXmlTree("base", [], {"name": skyBase.name,
         "type": $skyBase.baseType, "population": $skyBase.population,
         "x": $skyBase.skyX, "y": $skyBase.skyY,
-        "askedforbases": askedForBases}.toXmlAttributes)
+        "askedforbases": askedForBases, "known": knownBase,
+        "owner": skyBase.owner, "size": $skyBase.size}.toXmlAttributes)
     if skyBase.visited.year > 0:
       var saveDate = newElement("visiteddate")
       saveDate.attrs = {"year": $skyBase.visited.year,
@@ -81,15 +84,19 @@ proc saveBases*(saveData: var XmlNode) =
       for mission in skyBase.missions:
         var
           missionElement = newElement("mission")
-          target = case mission.mType
+          target: string = case mission.mType
             of deliver:
-              mission.itemIndex
+              $mission.itemIndex
             of passenger:
-              mission.data
+              $mission.data
             of destroy:
-              mission.shipIndex
+              $mission.shipIndex
             else:
-              mission.target
+              $mission.target
+        missionElement.attrs = {"type": $mission.mType, "target": target,
+            "time": $mission.time, "targetx": $mission.targetX,
+            "targety": $mission.targetY,
+            "reward": $mission.reward}.toXmlAttributes
     if skyBase.reputation.level != 0:
       var repElement = newElement("reputation")
       if skyBase.reputation.experience > 0:
@@ -98,4 +105,8 @@ proc saveBases*(saveData: var XmlNode) =
       else:
         repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
       baseTree.add(repElement)
+    for item in skyBase.cargo:
+      var itemElement = newElement("item")
+      itemElement.attrs = {"index": $item.protoIndex, "amount": $item.amount,
+          "durability": $item.durability, "price": $item.price}.toXmlAttributes
     saveData.add(baseTree)
