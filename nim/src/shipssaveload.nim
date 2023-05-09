@@ -125,6 +125,23 @@ proc savePlayerShip*(saveData: var XmlNode) =
         member.morale[0], member.morale[1], member.loyalty, member.homeBase]
     for index, name in attributesNames.pairs:
       attrs.add((name, $values[index]))
+    attrs.add(("name", member.name))
+    attrs.add(("gender", $member.gender))
+    attrs.add(("faction", member.faction))
     var memberTree = newXmlTree("member", [], attrs.toXmlAttributes)
+    for skill in member.skills:
+      var skillElement = newElement("skill")
+      skillElement.attrs = {"index": $skill.index, "level": $skill.level,
+          "experience": $skill.experience}.toXmlAttributes
+      memberTree.add(skillElement)
+    for priority in member.orders:
+      var priorityElement = newElement("priority")
+      priorityElement.attrs = {"value": $priority}.toXmlAttributes
+      memberTree.add(priorityElement)
+    for attribute in member.attributes:
+      var attributeElement = newElement("attribute")
+      attributeElement.attrs = {"level": $attribute.level,
+          "experience": $attribute.experience}.toXmlAttributes
+      memberTree.add(attributeElement)
     shipTree.add(memberTree)
   saveData.add(shipTree)
