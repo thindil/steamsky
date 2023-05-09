@@ -18,7 +18,7 @@
 import std/xmltree
 import game, types
 
-proc savePlayerShip*(saveData: var XmlNode) =
+proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
   var shipTree = newXmlTree("playership", [], {"name": playerShip.name,
       "x": $playerShip.skyX, "y": $playerShip.skyY, "speed": $playerShip.speed,
       "upgrademodule": $playerShip.upgradeModule,
