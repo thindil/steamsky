@@ -39,10 +39,10 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
-      Canvas: Tk_Canvas;
+      Canvas_Widget: Tk_Canvas;
       Y_Scroll: Ttk_Scrollbar;
       X_Scroll: Ttk_Scrollbar;
-      Table: Table_Widget (Amount => Headers'Length);
+      New_Table: Table_Widget (Amount => Headers'Length);
       X, Old_X: Natural := 5;
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
@@ -60,7 +60,7 @@ package body Table is
               options =>
                 "-orient horizontal -command [list " & Parent &
                 ".table xview]");
-         Canvas :=
+         Canvas_Widget :=
            Create
              (pathName => Parent & ".table",
               options =>
@@ -70,21 +70,21 @@ package body Table is
          Tcl.Tk.Ada.Pack.Pack
            (Slave => Y_Scroll, Options => "-side right -fill y");
          Tcl.Tk.Ada.Pack.Pack
-           (Slave => Canvas, Options => "-side top -fill both -padx {5 0}");
+           (Slave => Canvas_Widget, Options => "-side top -fill both -padx {5 0}");
          Tcl.Tk.Ada.Pack.Pack
            (Slave => X_Scroll, Options => "-side bottom -fill x");
          Autoscroll(Scroll => X_Scroll);
          Autoscroll(Scroll => Y_Scroll);
-         Table.Scrollbar := Y_Scroll;
+         New_Table.Scrollbar := Y_Scroll;
       else
-         Canvas := Create(pathName => Parent & ".table");
+         Canvas_Widget := Create(pathName => Parent & ".table");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Canvas, Options => "-sticky nwes -padx {5 0}");
+           (Slave => Canvas_Widget, Options => "-sticky nwes -padx {5 0}");
          Tcl.Tk.Ada.Grid.Column_Configure
-           (Master => Master, Slave => Canvas, Options => "-weight 1");
+           (Master => Master, Slave => Canvas_Widget, Options => "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure
-           (Master => Master, Slave => Canvas, Options => "-weight 1");
-         Table.Scrollbar := Scrollbar;
+           (Master => Master, Slave => Canvas_Widget, Options => "-weight 1");
+         New_Table.Scrollbar := Scrollbar;
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
@@ -94,7 +94,7 @@ package body Table is
            To_Unbounded_String
              (Source =>
                 Canvas_Create
-                  (Parent => Canvas, Child_Type => "text",
+                  (Parent => Canvas_Widget, Child_Type => "text",
                    Options =>
                      Trim(Source => Natural'Image(X), Side => Left) &
                      " 2 -anchor nw -text {" &
@@ -106,50 +106,50 @@ package body Table is
                      Trim(Source => Positive'Image(I), Side => Left) & "]"));
          if Command'Length > 0 then
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Enter>",
-               Command => "{" & Canvas & " configure -cursor hand1}");
+               Command => "{" & Canvas_Widget & " configure -cursor hand1}");
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Leave>",
-               Command => "{" & Canvas & " configure -cursor left_ptr}");
+               Command => "{" & Canvas_Widget & " configure -cursor left_ptr}");
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end if;
          if Tooltip_Text'Length > 0 then
             Add
-              (Widget => Canvas, Message => Tooltip_Text,
+              (Widget => Canvas_Widget, Message => Tooltip_Text,
                Options => "-item " & To_String(Source => Header_Id));
          end if;
          Create
            (S => Tokens,
             From =>
               BBox
-                (CanvasWidget => Canvas,
+                (CanvasWidget => Canvas_Widget,
                  TagOrId =>
                    "header" & Trim(Source => Positive'Image(I), Side => Left)),
             Separators => " ");
          Old_X := X - 5;
          X := Positive'Value(Slice(S => Tokens, Index => 3)) + 5;
-         Table.Columns_Width(I) :=
+         New_Table.Columns_Width(I) :=
            X - Positive'Value(Slice(S => Tokens, Index => 1));
          if I = 1 then
-            Table.Row_Height :=
+            New_Table.Row_Height :=
               Positive'Value(Slice(S => Tokens, Index => 4)) + 5;
          end if;
          Header_Id :=
            To_Unbounded_String
              (Source =>
                 Canvas_Create
-                  (Parent => Canvas, Child_Type => "rectangle",
+                  (Parent => Canvas_Widget, Child_Type => "rectangle",
                    Options =>
                      Trim(Source => Natural'Image(Old_X), Side => Left) &
                      " 0" & Positive'Image(X - 2) &
-                     Positive'Image(Table.Row_Height - 3) & " -fill " &
+                     Positive'Image(New_Table.Row_Height - 3) & " -fill " &
                      Style_Lookup
                        (Name => "Table", Option => "-headerbackcolor") &
                      " -outline " &
@@ -158,52 +158,52 @@ package body Table is
                      " -width 2 -tags [list headerback" &
                      Trim(Source => Positive'Image(I), Side => Left) & "]"));
          Lower
-           (CanvasWidget => Canvas,
+           (CanvasWidget => Canvas_Widget,
             TagOrId =>
               "headerback" & Trim(Source => Positive'Image(I), Side => Left));
          if Command'Length > 0 then
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Enter>",
-               Command => "{" & Canvas & " configure -cursor hand1}");
+               Command => "{" & Canvas_Widget & " configure -cursor hand1}");
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Leave>",
-               Command => "{" & Canvas & " configure -cursor left_ptr}");
+               Command => "{" & Canvas_Widget & " configure -cursor left_ptr}");
             Bind
-              (CanvasWidget => Canvas,
+              (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end if;
          if Tooltip_Text'Length > 0 then
             Add
-              (Widget => Canvas, Message => Tooltip_Text,
+              (Widget => Canvas_Widget, Message => Tooltip_Text,
                Options => "-item " & To_String(Source => Header_Id));
          end if;
       end loop Create_Headers_Loop;
-      Table.Canvas := Canvas;
+      New_Table.Canvas := Canvas_Widget;
       Tcl_Eval
         (interp => Get_Context,
          strng =>
-           "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
+           "SetScrollbarBindings " & New_Table.Canvas & " " & New_Table.Scrollbar);
       Bind
-        (Widgt => Table.Canvas, Sequence => "<Up>",
-         Script => "{UpdateCurrentRow " & Table.Canvas & " lower}");
+        (Widgt => New_Table.Canvas, Sequence => "<Up>",
+         Script => "{UpdateCurrentRow " & New_Table.Canvas & " lower}");
       Bind
-        (Widgt => Table.Canvas, Sequence => "<Down>",
-         Script => "{UpdateCurrentRow " & Table.Canvas & " raise}");
+        (Widgt => New_Table.Canvas, Sequence => "<Down>",
+         Script => "{UpdateCurrentRow " & New_Table.Canvas & " raise}");
       Bind
-        (Widgt => Table.Canvas, Sequence => "<Key-space>",
-         Script => "{ExecuteCurrentRow " & Table.Canvas & "}");
+        (Widgt => New_Table.Canvas, Sequence => "<Key-space>",
+         Script => "{ExecuteCurrentRow " & New_Table.Canvas & "}");
       Bind
-        (Widgt => Table.Canvas, Sequence => "<FocusOut>",
-         Script => "{HideCurrentRow " & Table.Canvas & "}");
+        (Widgt => New_Table.Canvas, Sequence => "<FocusOut>",
+         Script => "{HideCurrentRow " & New_Table.Canvas & "}");
       Bind
-        (Widgt => Table.Canvas, Sequence => "<Leave>",
-         Script => "{HideCurrentRow " & Table.Canvas & "}");
-      return Table;
+        (Widgt => New_Table.Canvas, Sequence => "<Leave>",
+         Script => "{HideCurrentRow " & New_Table.Canvas & "}");
+      return New_Table;
    end Create_Table;
 
    procedure Clear_Table(Table: in out Table_Widget) is
