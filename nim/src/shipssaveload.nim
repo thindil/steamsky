@@ -104,4 +104,27 @@ proc savePlayerShip*(saveData: var XmlNode) =
       dataElement.attrs = {"value": $module.duration}.toXmlAttributes
       moduleTree.add(dataElement)
     shipTree.add(moduleTree)
+  for item in playerShip.cargo:
+    var attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
+        "amount", $item.amount), ("durability", $item.durability)]
+    if item.name.len > 0:
+      attrs.add(("name", item.name))
+    if item.price > 0:
+      attrs.add(("price", $item.price))
+    var itemElement = newElement("cargo")
+    itemElement.attrs = attrs.toXmlAttributes
+    shipTree.add(itemElement)
+  const attributesNames = ["health", "tired", "hunger", "thirst", "order",
+      "previousorder", "ordertime", "dailypay", "tradepay", "contractlength",
+      "moralelevel", "moralepoints", "loyalty", "homebase"]
+  for member in playerShip.crew:
+    var attrs: seq[tuple[key, val: string]] = @[]
+    let values = [member.health, member.tired, member.hunger, member.thirst,
+        member.order.ord, member.previousOrder.ord, member.orderTime,
+        member.payment[0], member.payment[1], member.contractLength,
+        member.morale[0], member.morale[1], member.loyalty, member.homeBase]
+    for index, name in attributesNames.pairs:
+      attrs.add((name, $values[index]))
+    var memberTree = newXmlTree("member", [], attrs.toXmlAttributes)
+    shipTree.add(memberTree)
   saveData.add(shipTree)
