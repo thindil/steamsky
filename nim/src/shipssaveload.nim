@@ -19,6 +19,9 @@ import std/xmltree
 import game, types
 
 proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
+  ## Save the player's ship data from the current game into a file
+  ##
+  ## * saveData - the XML structure to which the ship will be saved
   var shipTree = newXmlTree("playership", [], {"name": playerShip.name,
       "x": $playerShip.skyX, "y": $playerShip.skyY, "speed": $playerShip.speed,
       "upgrademodule": $playerShip.upgradeModule,
