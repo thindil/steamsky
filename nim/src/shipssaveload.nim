@@ -67,7 +67,41 @@ proc savePlayerShip*(saveData: var XmlNode) =
       dataElement = newElement("data")
       dataElement.attrs = {"value": (if module.disabled: "1" else: "0")}.toXmlAttributes
       moduleTree.add(dataElement)
-    else:
-      discard
+    of ModuleType2.cabin:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.cleanliness}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.quality}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.turret:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.gunIndex}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.gun:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.ammoIndex}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.damage}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.hull:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.installedModules}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.maxModules}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.batteringRam:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.damage2}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.harpoonGun:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.harpoonIndex}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.duration}.toXmlAttributes
+      moduleTree.add(dataElement)
     shipTree.add(moduleTree)
   saveData.add(shipTree)
