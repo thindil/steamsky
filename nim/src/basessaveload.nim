@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/xmltree
+import std/[strutils, xmltree]
 import game, types
 
 proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
@@ -28,9 +28,9 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
       knownBase = (if skyBase.known: "Y" else: "N")
     var baseTree = newXmlTree("base", [], {"name": skyBase.name,
         "type": $skyBase.baseType, "population": $skyBase.population,
-        "x": $skyBase.skyX, "y": $skyBase.skyY,
-        "askedforbases": askedForBases, "known": knownBase,
-        "owner": skyBase.owner, "size": $skyBase.size}.toXmlAttributes)
+        "x": $skyBase.skyX, "y": $skyBase.skyY, "askedforbases": askedForBases,
+        "known": knownBase, "owner": skyBase.owner.toUpperAscii(),
+        "size": toUpperAscii( $skyBase.size)}.toXmlAttributes)
     if skyBase.visited.year > 0:
       var saveDate = newElement("visiteddate")
       saveDate.attrs = {"year": $skyBase.visited.year,
