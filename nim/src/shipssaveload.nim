@@ -143,5 +143,20 @@ proc savePlayerShip*(saveData: var XmlNode) =
       attributeElement.attrs = {"level": $attribute.level,
           "experience": $attribute.experience}.toXmlAttributes
       memberTree.add(attributeElement)
+    for item in member.inventory:
+      var
+        itemElement = newElement("item")
+        attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
+            "amount", $item.amount), ("durability", $item.durability)]
+      if item.name.len > 0:
+        attrs.add(("name", item.name))
+      if item.price > 0:
+        attrs.add(("price", $item.price))
+      itemElement.attrs = attrs.toXmlAttributes
+      memberTree.add(itemElement)
+    for item in member.equipment:
+      var itemElement = newElement("equipment")
+      itemElement.attrs = {"index": $item}.toXmlAttributes
+      memberTree.add(itemElement)
     shipTree.add(memberTree)
   saveData.add(shipTree)
