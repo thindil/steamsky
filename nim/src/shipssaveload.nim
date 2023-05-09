@@ -35,5 +35,39 @@ proc savePlayerShip*(saveData: var XmlNode) =
     if module.upgradeAction != none:
       attrs.add(("upgradeaction", $module.upgradeAction))
     var moduleTree = newXmlTree("module", [], attrs.toXmlAttributes)
+    for owner in module.owner:
+      var ownerElement = newElement("owner")
+      ownerElement.attrs = {"value": $owner}.toXmlAttributes
+      moduleTree.add(ownerElement)
+    case module.mType
+    of ModuleType2.workshop:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": module.craftingIndex}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.craftingTime}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.craftingAmount}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.trainingRoom:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.trainedSkill}.toXmlAttributes
+      moduleTree.add(dataElement)
+    of ModuleType2.medicalRoom, ModuleType2.cockpit, ModuleType2.armor,
+        ModuleType2.any, ModuleType2.cargoRoom:
+      discard
+    of ModuleType2.engine:
+      var dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.fuelUsage}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": $module.power}.toXmlAttributes
+      moduleTree.add(dataElement)
+      dataElement = newElement("data")
+      dataElement.attrs = {"value": (if module.disabled: "1" else: "0")}.toXmlAttributes
+      moduleTree.add(dataElement)
+    else:
+      discard
     shipTree.add(moduleTree)
   saveData.add(shipTree)
