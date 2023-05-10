@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/xmltree
-import config, log
+import basessaveload, config, game, log, shipssaveload, types
 
 const saveVersion = 5
 
@@ -45,3 +45,30 @@ proc saveGame*(prettyPrint: bool = false) =
   diffElement.attrs = attrs.toXmlAttributes
   saveTree.add(diffElement)
   logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving game time...", debugType = everything)
+  var dateElement = newElement("gamedate")
+  dateElement.attrs = {"year": $gameDate.year, "month": $gameDate.month,
+      "day": $gameDate.day, "hour": $gameDate.hour,
+      "minutes": $gameDate.minutes}.toXmlAttributes
+  saveTree.add(dateElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving map...", debugType = everything)
+  for x in MapXRange.low .. MapXRange.high:
+    for y in MapYRange.low .. MapYRange.high:
+      var fieldElement = newElement("field")
+      fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
+      saveTree.add(fieldElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving bases...", debugType = everything)
+  saveBases(saveTree)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving player ship...", debugType = everything)
+  savePlayerShip(saveTree)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving known recipes...", debugType = everything)
+  for recipe in knownRecipes:
+    var recipeElement = newElement("recipe")
+    recipeElement.attrs = {"index": recipe}.toXmlAttributes
+    saveTree.add(recipeElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving messages...", debugType = everything)
