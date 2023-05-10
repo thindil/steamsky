@@ -42,11 +42,11 @@ package body Table is
       Canvas_Widget: Tk_Canvas;
       Y_Scroll: Ttk_Scrollbar;
       X_Scroll: Ttk_Scrollbar;
+      Tokens: Slice_Set;
       New_Table: Table_Widget (Amount => Headers'Length);
       X, Old_X: Natural := 5;
-      Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
-      Header_Id: Unbounded_String;
+      Header_Id: Unbounded_String := Null_Unbounded_String;
    begin
       if Widget_Image(Win => Scrollbar) = "." then
          Y_Scroll :=
