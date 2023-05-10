@@ -23,7 +23,7 @@ type
     ## Used to store detailed information about some the player's game's
     ## statistics
     index*: string ## The index of the prototype object
-    amount: Positive ## The amount of the object
+    amount*: Positive ## The amount of the object
 
   GameStatsData = object
     ## Used to store information about the player's game's statistics

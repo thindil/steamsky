@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, xmltree]
-import basessaveload, config, game, log, messages, shipssaveload, statistics, types
+import basessaveload, config, game, goals, log, messages, shipssaveload,
+    statistics, types
 
 const saveVersion = 5
 
@@ -100,8 +101,26 @@ proc saveGame*(prettyPrint: bool = false) =
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving game statistics...", debugType = everything)
   var statsElement = newElement("statistics")
-  proc saveStatistics(stats: seq[StatisticsData], statName: string) = 
+  statsElement.attrs = {"visitedbases": $gameStats.basesVisited,
+      "mapdiscovered": $gameStats.mapVisited,
+      "distancetraveled": $gameStats.distanceTraveled,
+      "acceptedmissions": $gameStats.acceptedMissions,
+      "points": $gameStats.points}.toXmlAttributes
+  proc saveStatistics(stats: seq[StatisticsData], statName: string) =
     for statistic in stats:
       var statElement = newElement(statName)
-      statElement.attrs = {"index": statistic.index, "amount": $statistic.amount}.toXmlAttributes
+      statElement.attrs = {"index": statistic.index,
+          "amount": $statistic.amount}.toXmlAttributes
       statsElement.add(statElement)
+  saveStatistics(gameStats.destroyedShips, "destroyedShips")
+  saveStatistics(gameStats.craftingOrders, "finishedcrafts")
+  saveStatistics(gameStats.finishedMissions, "finishedmissions")
+  saveStatistics(gameStats.finishedGoals, "finishedgoals")
+  saveStatistics(gameStats.killedMobs, "killedmobs")
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving current goal...", debugType = everything)
+  var goalElement = newElement("currentgoal")
+  goalElement.attrs = {"index": $currentGoal.index,
+      "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
+      "target": currentGoal.targetIndex,
+      "multiplier": $currentGoal.multiplier}.toXmlAttributes
