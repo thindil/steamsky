@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/xmltree
+import std/[tables, xmltree]
 import basessaveload, config, game, log, messages, shipssaveload, types
 
 const saveVersion = 5
@@ -72,10 +72,25 @@ proc saveGame*(prettyPrint: bool = false) =
     saveTree.add(recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
-  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(0): messagesAmount(0) else: gameSettings.savedMessages)
+  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(
+      0): messagesAmount(0) else: gameSettings.savedMessages)
   for i in (messagesAmount(0) - messagesToSave + 1) .. messagesAmount(0):
-    let
-      message = getMessage(i, 0)
-      kind = message.kind.ord
+    let message = getMessage(i, 0)
     var messageElement = newElement("message")
-    messageElement.attrs = {"type": $message.kind, "color": $message}.toXmlAttributes
+    messageElement.attrs = {"type": $message.kind,
+        "color": $message.color}.toXmlAttributes
+    messageElement.add(newText($message.message))
+    saveTree.add(messageElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving events...", debugType = everything)
+  for event in eventsList.values:
+    var
+      eventElement = newElement("event")
+      eventData: string
+    case event.eType
+    of doublePrice:
+      eventData = $event.itemIndex
+    of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
+      eventData = $event.shipIndex
+    else:
+      eventData = $event.data
