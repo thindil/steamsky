@@ -1166,7 +1166,7 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
             end Show_Order_Info_Block;
          when MEDICAL_ROOM =>
-            Add_Owners_Info(Owners_Name => "Medic");
+            Add_Owners_Info(Owners_Name => "Medic", Add_Button => True);
          when TRAINING_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
