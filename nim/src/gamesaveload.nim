@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/xmltree
-import basessaveload, config, game, log, shipssaveload, types
+import basessaveload, config, game, log, messages, shipssaveload, types
 
 const saveVersion = 5
 
@@ -72,3 +72,10 @@ proc saveGame*(prettyPrint: bool = false) =
     saveTree.add(recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
+  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(0): messagesAmount(0) else: gameSettings.savedMessages)
+  for i in (messagesAmount(0) - messagesToSave + 1) .. messagesAmount(0):
+    let
+      message = getMessage(i, 0)
+      kind = message.kind.ord
+    var messageElement = newElement("message")
+    messageElement.attrs = {"type": $message.kind, "color": $message}.toXmlAttributes
