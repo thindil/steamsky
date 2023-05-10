@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, xmltree]
-import basessaveload, config, game, log, messages, shipssaveload, types
+import basessaveload, config, game, log, messages, shipssaveload, statistics, types
 
 const saveVersion = 5
 
@@ -94,3 +94,14 @@ proc saveGame*(prettyPrint: bool = false) =
       eventData = $event.shipIndex
     else:
       eventData = $event.data
+    eventElement.attrs = {"data": eventData, "type": $event.eType.ord,
+        "x": $event.skyX, "y": $event.skyY, "time": $event.time}.toXmlAttributes
+    saveTree.add(eventElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving game statistics...", debugType = everything)
+  var statsElement = newElement("statistics")
+  proc saveStatistics(stats: seq[StatisticsData], statName: string) = 
+    for statistic in stats:
+      var statElement = newElement(statName)
+      statElement.attrs = {"index": statistic.index, "amount": $statistic.amount}.toXmlAttributes
+      statsElement.add(statElement)
