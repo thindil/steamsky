@@ -1166,7 +1166,26 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
             end Show_Order_Info_Block;
          when MEDICAL_ROOM =>
-            Add_Owners_Info(Owners_Name => "Medic", Add_Button => True);
+            Find_Healing_Tool_Block :
+            declare
+               hasHealingTool: Boolean := False;
+            begin
+               Find_Healing_Tool_Loop :
+               for Member of Player_Ship.Crew loop
+                  if Member.Health < 100 and
+                    Find_Item
+                        (Inventory => Player_Ship.Cargo,
+                         Item_Type =>
+                           Get_Faction(Index => Player_Ship.Crew(1).Faction)
+                             .Healing_Tools) >
+                      0 then
+                     hasHealingTool := True;
+                     exit Find_Healing_Tool_Loop;
+                  end if;
+               end loop Find_Healing_Tool_Loop;
+               Add_Owners_Info
+                 (Owners_Name => "Medic", Add_Button => hasHealingTool);
+            end Find_Healing_Tool_Block;
          when TRAINING_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
