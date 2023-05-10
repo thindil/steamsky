@@ -20,8 +20,8 @@ import config, game, types
 type
   MessageDataC* = object
     message*: cstring
-    kind: cint
-    color: cint
+    kind*: cint
+    color*: cint
 
 func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
