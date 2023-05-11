@@ -17,18 +17,36 @@
 
 type
   StartConditionType = enum
+    ## Types of requirements to start a story
     dropItem
   StepConditionType = enum
+    ## Types of requirements to finish a story step
     askinbase, destroyship, explore, any, loot
 
   StepTextData = object
+    ## Used to store stories' steps' texts
+    ## * condition - the requirement for the previous step of a story
+    ## * text      - uhe text which will be shown to the player when the step starts
     condition: StepConditionType
     text*: string
 
   StepFinishData = object
+    ## Used to store information about requirements to finish a story's step
+    ## * name  - the name of the data
+    ## * value - the data's value
     name, value: string
 
   StepData = object
+    ## Used to store information about stories' steps
+    ## * index           - the index of the step
+    ## * finishCondition - the condition which must be meet to finish the step and
+    ##                     progress to the next step
+    ## * finishData      - the data for the finish condition
+    ## * texts           - the text which will be shown to the player when the step
+    ##                     starts, depends on the finish condition of the previous
+    ##                     step
+    ## * failText        - the text which will be show to the player when the step
+    ##                     fails
     index: string
     finishCondition: StepConditionType
     finishData: seq[StepFinishData]
