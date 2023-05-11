@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
+
 type
   StartConditionType = enum
     ## Types of requirements to start a story
@@ -97,5 +99,7 @@ type
     data*: string
     finishedStep*: StepConditionType
 
-var currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
-    maxSteps: 1) ## Contains data about the current story on which the player is
+var
+  storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
+  currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
+      maxSteps: 1) ## Contains data about the current story on which the player is
