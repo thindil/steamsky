@@ -17,7 +17,7 @@
 
 import std/[tables, xmltree]
 import basessaveload, config, game, goals, log, messages, shipssaveload,
-    statistics, types
+    statistics, stories, types
 
 const saveVersion = 5
 
@@ -124,3 +124,17 @@ proc saveGame*(prettyPrint: bool = false) =
       "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
       "target": currentGoal.targetIndex,
       "multiplier": $currentGoal.multiplier}.toXmlAttributes
+  if currentStory.index.len > 0:
+    logMessage(message = "Saving current story...", debugType = everything)
+    var
+      storyElement = newElement("currentstory")
+      attrs: seq[tuple[key, val: string]] = @[]
+    attrs.add(("index", currentStory.index))
+    case currentStory.currentStep
+    of 0:
+      attrs.add(("currentstep", "start"))
+    of -1:
+      attrs.add(("currentstep", "finish"))
+    else:
+      attrs.add(("currentstep", storiesList[currentStory.index].steps[
+          currentStory.currentStep].index))
