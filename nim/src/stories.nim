@@ -89,13 +89,13 @@ type
     ## * data         - various data for the current step of the story, depends on
     ##                  the step
     ## * finishedStep - the finish condition for the previous step in the story
-    index: string
-    step: Positive
-    currentStep: int
-    maxSteps: Positive
-    showText: bool
-    data: string
-    finishedStep: StepConditionType
+    index*: string
+    step*: Positive
+    currentStep*: int
+    maxSteps*: Positive
+    showText*: bool
+    data*: string
+    finishedStep*: StepConditionType
 
 var currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
     maxSteps: 1) ## Contains data about the current story on which the player is
