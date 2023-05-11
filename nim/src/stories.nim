@@ -54,6 +54,19 @@ type
     failText: string
 
   StoryData = object
+    ## Used to store information about a story
+    ## * startCondition    - the condition which must be meet to start the story
+    ## * startData         - the data of the starting condition
+    ## * minSteps          - the minimal amount of steps in the story
+    ## * maxSteps          - the maximum amount of steps in the story
+    ## * startingStep      - the starting step of the story
+    ## * steps             - contains all steps of the story
+    ## * finalStep         - the final step of the story
+    ## * endText           - the text which will be show to the player when the
+    ##                       story ends
+    ## * name              - the name of the story, show in the game
+    ## * forbiddenFactions - if the player belongs to one of these factions, it
+    ##                       can't start the story
     startCondition: StartConditionType
     startData: seq[string]
     minSteps: Positive
@@ -66,6 +79,16 @@ type
     forbiddenFactions: seq[string]
 
   CurrentStoryData = object
+    ## Used to store information about the current story
+    ## * index        - the index of the story or empty string if no story active
+    ## * step         - the number of the step of the current story
+    ## * currentStep  - the index of the current step of the story, 0 for starting
+    ##                  step, -1 for finishing step
+    ## * maxSteps     - the number of maximum amount of steps in the story
+    ## * showText     - if true, show the text of the current step to the player
+    ## * data         - various data for the current step of the story, depends on
+    ##                  the step
+    ## * finishedStep - the finish condition for the previous step in the story
     index: string
     step: Positive
     currentStep: int
@@ -74,4 +97,5 @@ type
     data: string
     finishedStep: StepConditionType
 
-var currentStory*: CurrentStoryData = CurrentStoryData(step: 1, maxSteps: 1)
+var currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
+    maxSteps: 1) ## Contains data about the current story on which the player is
