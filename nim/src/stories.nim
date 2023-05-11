@@ -34,3 +34,26 @@ type
     finishData: seq[StepFinishData]
     texts: seq[StepTextData]
     failText: string
+
+  StoryData = object
+    startCondition: StartConditionType
+    startData: seq[string]
+    minSteps: Positive
+    maxSteps: Positive
+    startingStep: StepData
+    steps: seq[StepData]
+    finalStep: StepData
+    endText: string
+    name: string
+    forbiddenFactions: seq[string]
+
+  CurrentStoryData = object
+    index: string
+    step: Positive
+    currentStep: int
+    maxSteps: Positive
+    showText: bool
+    data: string
+    finishedStep: StepConditionType
+
+var currentStory*: CurrentStoryData = CurrentStoryData(step: 1, maxSteps: 1)
