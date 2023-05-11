@@ -49,11 +49,11 @@ type
     ##                     step
     ## * failText        - the text which will be show to the player when the step
     ##                     fails
-    index: string
-    finishCondition: StepConditionType
-    finishData: seq[StepFinishData]
-    texts: seq[StepTextData]
-    failText: string
+    index*: string
+    finishCondition*: StepConditionType
+    finishData*: seq[StepFinishData]
+    texts*: seq[StepTextData]
+    failText*: string
 
   StoryData = object
     ## Used to store information about a story
@@ -69,16 +69,16 @@ type
     ## * name              - the name of the story, show in the game
     ## * forbiddenFactions - if the player belongs to one of these factions, it
     ##                       can't start the story
-    startCondition: StartConditionType
-    startData: seq[string]
-    minSteps: Positive
-    maxSteps: Positive
-    startingStep: StepData
-    steps: seq[StepData]
-    finalStep: StepData
-    endText: string
-    name: string
-    forbiddenFactions: seq[string]
+    startCondition*: StartConditionType
+    startData*: seq[string]
+    minSteps*: Positive
+    maxSteps*: Positive
+    startingStep*: StepData
+    steps*: seq[StepData]
+    finalStep*: StepData
+    endText*: string
+    name*: string
+    forbiddenFactions*: seq[string]
 
   CurrentStoryData = object
     ## Used to store information about the current story
