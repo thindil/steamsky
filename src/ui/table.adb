@@ -40,10 +40,12 @@ package body Table is
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
       Canvas_Widget: Tk_Canvas;
+      --## rule off IMPROPER_INITIALIZATION
       Y_Scroll: Ttk_Scrollbar;
       X_Scroll: Ttk_Scrollbar;
       Tokens: Slice_Set;
       New_Table: Table_Widget (Amount => Headers'Length);
+      --## rule on IMPROPER_INITIALIZATION
       X, Old_X: Natural := 5;
       Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
       Header_Id: Unbounded_String := Null_Unbounded_String;
@@ -209,7 +211,9 @@ package body Table is
    procedure Clear_Table(Table: in out Table_Widget) is
       Buttons_Frame: Ttk_Frame :=
         Get_Widget(pathName => Table.Canvas & ".buttonframe");
+      --## rule off IMPROPER_INITIALIZATION
       Button: Ttk_Button;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       if Winfo_Get(Widgt => Buttons_Frame, Info => "exists") = "1" then
          Button := Get_Widget(pathName => Buttons_Frame & ".previous");
