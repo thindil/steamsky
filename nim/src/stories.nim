@@ -167,3 +167,30 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         except ValueError:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid minimal amount of steps.")
+    attribute = storyNode.attr(name = "maxsteps")
+    if attribute.len() > 0:
+      story.maxSteps = try:
+          attribute.parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid maximum amount of steps.")
+    for startData in storyNode.findAll(tag = "startdata"):
+      let
+        value = startData.attr(name = "value")
+        dataAction: DataAction = try:
+            parseEnum[DataAction](startData.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      case dataAction
+      of DataAction.add:
+        story.startData.add(value)
+      of remove:
+        var deleteIndex = -1
+        for index, data in story.startData.pairs:
+          if data == value:
+            deleteIndex = index
+            break
+        if deleteIndex > -1:
+          story.startData.delete(deleteIndex)
+      of update:
+        discard
