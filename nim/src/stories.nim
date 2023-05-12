@@ -194,3 +194,48 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           story.startData.delete(deleteIndex)
       of update:
         discard
+    for faction in storyNode.findAll(tag = "forbiddenfaction"):
+      let
+        value = faction.attr(name = "value")
+        factionAction: DataAction = try:
+            parseEnum[DataAction](faction.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      case factionAction
+      of DataAction.add:
+        story.forbiddenFactions.add(value)
+      of remove:
+        var deleteIndex = -1
+        for index, data in story.forbiddenFactions.pairs:
+          if data == value:
+            deleteIndex = index
+            break
+        if deleteIndex > -1:
+          story.forbiddenFactions.delete(deleteIndex)
+      of update:
+        discard
+    for step in storyNode.findAll(tag = "step"):
+      var tempStep = StepData(index: step.attr(name = "index"),
+          finishCondition: askinbase)
+      let stepAction: DataAction = try:
+            parseEnum[DataAction](step.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      var stepIndex = -1
+      for index, data in story.steps.pairs:
+        if data.index == tempStep.index:
+          stepIndex = index
+          break
+      if stepAction == remove:
+        story.steps.delete(stepIndex)
+      else:
+        if stepAction == update:
+          tempStep = story.steps[stepIndex]
+        attribute = step.attr(name = "finish")
+        if attribute.len() > 0:
+          tempStep.finishCondition = try:
+            parseEnum[StepConditionType](step.attr(
+                name = "finish").toLowerAscii)
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
