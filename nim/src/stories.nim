@@ -273,10 +273,12 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 parseEnum[StepConditionType](text.attr(name = "condition"))
               except ValueError:
                 raise newException(exceptn = DataLoadingError,
-                    message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid text condition.")
+                    message = "Can't " & $storyAction & " story '" &
+                        $storyIndex & "', invalid text condition.")
           case textAction
           of DataAction.add:
-            tempStep.texts.add(StepTextData(condition: condition, text: text.innerText()))
+            tempStep.texts.add(StepTextData(condition: condition,
+                text: text.innerText()))
           of update:
             for stepText in tempStep.texts.mitems:
               if stepText.condition == condition:
@@ -289,6 +291,35 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 break
             if deleteIndex > -1:
               tempStep.texts.delete(deleteIndex)
-        let failText = step.findAll(tag = "failtext")
+        let failText = step.child(name = "failtext").innerText()
         if failText.len() > 0:
-          tempStep.failText = failText[0].innerText()
+          tempStep.failText = failText
+        if tempStep.index == startStep:
+          story.startingStep = tempStep
+        elif tempStep.index == finalStep:
+          story.finalStep = tempStep
+        else:
+          if stepAction == DataAction.add:
+            story.steps.add(tempStep)
+          else:
+            story.steps[stepIndex] = tempStep
+    let endText = storyNode.child(name = "endtext").innerText()
+    if endText.len > 0:
+      story.endText = endText
+    if storyAction == DataAction.add:
+      logMessage(message = "Story added: '" & $storyIndex & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Story updated: '" & $storyIndex & "'",
+          debugType = everything)
+    storiesList[storyIndex] = story
+
+# Temporary code for interfacing with Ada
+
+proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadStories(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
