@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[strutils, tables, xmlparser, xmltree]
+import game, log
 
 type
   StartConditionType = enum
     ## Types of requirements to start a story
-    dropItem
+    dropstory
   StepConditionType = enum
     ## Types of requirements to finish a story step
     askinbase, destroyship, explore, any, loot
@@ -103,3 +104,50 @@ var
   storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
   currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
       maxSteps: 1) ## Contains data about the current story on which the player is
+
+proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+  ## Load the stories data from the file
+  ##
+  ## * fileName - the name of the file to load
+  let storiesXml = try:
+      loadXml(path = fileName)
+    except XmlError, ValueError, IOError, OSError, Exception:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't load stories data file. Reason: " &
+          getCurrentExceptionMsg())
+  for storyNode in storiesXml:
+    if storyNode.kind != xnElement:
+      continue
+    let
+      storyIndex: string = storyNode.attr(name = "index")
+      storyAction: DataAction = try:
+          parseEnum[DataAction](storyNode.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+    if storyAction in [update, remove]:
+      if storyIndex notin storiesList:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $storyAction & " story '" & $storyIndex & "', there is no story with that index.")
+    elif storyIndex in storiesList:
+      raise newException(exceptn = DataLoadingError,
+          message = "Can't add story '" & $storyIndex & "', there is an story with that index.")
+    if storyAction == DataAction.remove:
+      {.warning[ProveInit]: off.}
+      {.warning[UnsafeDefault]: off.}
+      storiesList.del(key = storyIndex)
+      {.warning[ProveInit]: on.}
+      {.warning[UnsafeDefault]: on.}
+      logMessage(message = "story removed: '" & $storyIndex & "'",
+          debugType = everything)
+      continue
+    var story: StoryData = if storyAction == DataAction.update:
+        try:
+          storiesList[storyIndex]
+        except ValueError:
+          StoryData(minSteps: 1, maxSteps: 1)
+      else:
+        StoryData(minSteps: 1, maxSteps: 1)
+    var attribute = storyNode.attr(name = "name")
+    if attribute.len() > 0:
+      story.name = attribute
