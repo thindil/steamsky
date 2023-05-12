@@ -208,7 +208,9 @@ package body Table is
       return New_Table;
    end Create_Table;
 
+   --## rule off LOCAL_HIDING
    procedure Clear_Table(Table: in out Table_Widget) is
+      --## rule on LOCAL_HIDING
       Buttons_Frame: Ttk_Frame :=
         Get_Widget(pathName => Table.Canvas & ".buttonframe");
       --## rule off IMPROPER_INITIALIZATION
@@ -292,6 +294,7 @@ package body Table is
       end if;
    end Add_Bindings;
 
+   --## rule off LOCAL_HIDING
    -- ****if* Table/Table.Add_Background
    -- FUNCTION
    -- Add a proper background color to the item in the table and return the
@@ -309,6 +312,7 @@ package body Table is
    function Add_Background
      (Table: Table_Widget; New_Row: Boolean; Command: String) return String is
      -- ****
+      --## rule on LOCAL_HIDING
       Item_Id: Unbounded_String;
       Color: constant String :=
         (if Table.Row rem 2 > 0 then
@@ -345,9 +349,11 @@ package body Table is
       return Color;
    end Add_Background;
 
+   --## rule off LOCAL_HIDING
    procedure Add_Button
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
       Column: Positive; New_Row: Boolean := False; Color: String := "") is
+      --## rule on LOCAL_HIDING
       X: Natural := 5;
       Item_Id: Unbounded_String;
       Tokens: Slice_Set;
@@ -404,8 +410,10 @@ package body Table is
       end if;
    end Add_Button;
 
+   --## rule off LOCAL_HIDING
    procedure Update_Table
      (Table: in out Table_Widget; Grab_Focus: Boolean := True) is
+      --## rule off LOCAL_HIDING
       Tag: Unbounded_String;
       New_X: Natural := Table.Columns_Width(1) + 20;
       New_Y: Natural := 2;
