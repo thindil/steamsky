@@ -21,10 +21,10 @@ import game, log
 type
   StartConditionType = enum
     ## Types of requirements to start a story
-    dropstory
+    dropStory
   StepConditionType = enum
     ## Types of requirements to finish a story step
-    askinbase, destroyship, explore, any, loot
+    askInBase, destroyShip, explore, any, loot
 
   StepTextData = object
     ## Used to store stories' steps' texts
@@ -216,7 +216,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         discard
     for step in storyNode.findAll(tag = "step"):
       var tempStep = StepData(index: step.attr(name = "index"),
-          finishCondition: askinbase)
+          finishCondition: askInBase)
       let stepAction: DataAction = try:
             parseEnum[DataAction](step.attr(name = "action").toLowerAscii)
           except ValueError:
@@ -239,3 +239,34 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           except ValueError:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
+        for stepData in step.findAll(tag = "finishdata"):
+          let
+            dataAction: DataAction = try:
+                parseEnum[DataAction](stepData.attr(
+                    name = "action").toLowerAscii)
+              except ValueError:
+                DataAction.add
+            name = stepData.attr(name = "name")
+          case dataAction
+          of DataAction.add:
+            tempStep.finishData.add(StepFinishData(name: name,
+                value: stepData.attr(name = "value")))
+          of update:
+            for data in tempStep.finishData.mitems:
+              if data.name == name:
+                data.value = stepData.attr(name = "value")
+          of remove:
+            var deleteIndex = -1
+            for index, data in tempStep.finishData.pairs:
+              if data.name == name:
+                deleteIndex = index
+                break
+            if deleteIndex > -1:
+              tempStep.finishData.delete(deleteIndex)
+        for text in step.findAll(tag = "text"):
+          let
+            dataAction: DataAction = try:
+                parseEnum[DataAction](text.attr(name = "action").toLowerAscii)
+              except ValueError:
+                DataAction.add
+            condition = text.attr(name = "condition")
