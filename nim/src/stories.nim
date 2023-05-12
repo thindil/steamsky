@@ -265,8 +265,30 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               tempStep.finishData.delete(deleteIndex)
         for text in step.findAll(tag = "text"):
           let
-            dataAction: DataAction = try:
+            textAction: DataAction = try:
                 parseEnum[DataAction](text.attr(name = "action").toLowerAscii)
               except ValueError:
                 DataAction.add
-            condition = text.attr(name = "condition")
+            condition = try:
+                parseEnum[StepConditionType](text.attr(name = "condition"))
+              except ValueError:
+                raise newException(exceptn = DataLoadingError,
+                    message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid text condition.")
+          case textAction
+          of DataAction.add:
+            tempStep.texts.add(StepTextData(condition: condition, text: text.innerText()))
+          of update:
+            for stepText in tempStep.texts.mitems:
+              if stepText.condition == condition:
+                stepText.text = text.innerText()
+          of remove:
+            var deleteIndex = -1
+            for index, data in tempStep.texts.pairs:
+              if data.condition == condition:
+                deleteIndex = index
+                break
+            if deleteIndex > -1:
+              tempStep.texts.delete(deleteIndex)
+        let failText = step.findAll(tag = "failtext")
+        if failText.len() > 0:
+          tempStep.failText = failText[0].innerText()
