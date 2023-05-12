@@ -135,24 +135,6 @@ package body Ships.UI.Modules is
       end Add_Button;
    begin
       case Player_Ship.Modules(Module_Index).M_Type is
-         when MEDICAL_ROOM =>
-            Find_Healing_Tool_Loop :
-            for Member of Player_Ship.Crew loop
-               if Member.Health < 100 and
-                 Find_Item
-                     (Inventory => Player_Ship.Cargo,
-                      Item_Type =>
-                        Get_Faction(Index => Player_Ship.Crew(1).Faction)
-                          .Healing_Tools) >
-                   0 then
-                  Add_Button
-                    (Name => ".assigncrew",
-                     Label => "Assign a crew member as medic...",
-                     Command =>
-                       "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
-                  exit Find_Healing_Tool_Loop;
-               end if;
-            end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
             if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
                Add_Button
@@ -1168,7 +1150,7 @@ package body Ships.UI.Modules is
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Block :
             declare
-               hasHealingTool: Boolean := False;
+               Has_Healing_Tool: Boolean := False;
             begin
                Find_Healing_Tool_Loop :
                for Member of Player_Ship.Crew loop
@@ -1179,12 +1161,12 @@ package body Ships.UI.Modules is
                            Get_Faction(Index => Player_Ship.Crew(1).Faction)
                              .Healing_Tools) >
                       0 then
-                     hasHealingTool := True;
+                     Has_Healing_Tool := True;
                      exit Find_Healing_Tool_Loop;
                   end if;
                end loop Find_Healing_Tool_Loop;
                Add_Owners_Info
-                 (Owners_Name => "Medic", Add_Button => hasHealingTool);
+                 (Owners_Name => "Medic", Add_Button => Has_Healing_Tool);
             end Find_Healing_Tool_Block;
          when TRAINING_ROOM =>
             Insert
