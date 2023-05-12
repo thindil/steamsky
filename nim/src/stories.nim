@@ -151,3 +151,19 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     var attribute = storyNode.attr(name = "name")
     if attribute.len() > 0:
       story.name = attribute
+    let startStep = storyNode.attr(name = "startstep")
+    let finalStep = storyNode.attr(name = "finalstep")
+    attribute = storyNode.attr(name = "start")
+    if attribute.len() > 0:
+      story.startCondition = try:
+          parseEnum[StartConditionType](attribute.toLowerAscii)
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid starting condition.")
+    attribute = storyNode.attr(name = "minsteps")
+    if attribute.len() > 0:
+      story.minSteps = try:
+          attribute.parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid minimal amount of steps.")
