@@ -25,12 +25,20 @@ type
 
   BaseTypeData* = object
     ## Used to store informaiton about bases types
-    name: string  ## The name of the base type
-    color: string ## The color used to show a base of that type on the map
-    trades: Table[Positive, PricesArray] ## The list of items available to trade in the base type
-    recipes: seq[string] ## The list of crafting recipes available on sale in the base type
-    flags*: seq[string] ## Additional flags for the base type like SHIPYARD, BARRACKS, etc
-    description: string ## The description of the base type, show in the new game screen
+    ## * name        - the name of the base type
+    ## * color       - the color used to show a base of that type on the map
+    ## * trades      - the list of items available to trade in the base type
+    ## * recipes     - the list of crafting recipes available on sale in the
+    ##                 base type
+    ## * flags       - additional flags for the base type like shipyard, barracs,
+    ##                 etc.
+    ## * description - the description of the base type, show in the new game screen
+    name: string
+    color: string
+    trades: Table[Positive, PricesArray]
+    recipes: seq[string]
+    flags*: seq[string]
+    description: string
 
 var basesTypesList* = initTable[string, BaseTypeData]()
   ## The list of all available bases types in the game
