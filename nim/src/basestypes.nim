@@ -24,7 +24,8 @@ type
     ## 1 - sell price, 2 - buy price
 
   BaseTypeData* = object
-    ## Used to store informaiton about bases types
+    ## Used to store information about bases types
+    ##
     ## * name        - the name of the base type
     ## * color       - the color used to show a base of that type on the map
     ## * trades      - the list of items available to trade in the base type
