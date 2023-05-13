@@ -316,6 +316,33 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaStepTextData = object
+    condition: cint
+    text: cstring
+
+  AdaStepFinishData = object
+    name, value: cstring
+
+  AdaStepData = object
+    index: cstring
+    finishCondition: cint
+    finishData: array[4, AdaStepFinishData]
+    texts: array[4, AdaStepTextData]
+    failText: cstring
+
+  AdaStoryData = object
+    startCondition: cint
+    startData: array[4, cstring]
+    minSteps: cint
+    maxSteps: cint
+    startingStep: AdaStepData
+    steps: array[10, AdaStepData]
+    finalStep: AdaStepData
+    endText: cstring
+    name: cstring
+    forbiddenFactions: array[4, cstring]
+
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
@@ -323,3 +350,21 @@ proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     return "".cstring
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
+
+proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  adaStory = AdaStoryData(startCondition: -1, minSteps: -1, maxSteps: -1)
+  let recipeKey = strip(s = $index)
+  if not storiesList.hasKey(key = recipeKey):
+    return
+  let story = try:
+      storiesList[recipeKey]
+    except KeyError:
+      return
+  adaStory.startCondition = story.startCondition.ord.cint
+  for data in adaStory.startData.mitems:
+    data = "".cstring
+  for index, data in story.startData.pairs:
+    adaStory.startData[index] = data.cstring
+  adaStory.minSteps = story.minSteps.cint
+  adaStory.maxSteps = story.maxSteps.cint
