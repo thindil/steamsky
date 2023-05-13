@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
   module info dialog
 - Ability to cancel the working order of the player's ship's workshops in the
   module info dialog
+- Ability to assing the crew members to the player's ship's medical rooms in
+  the module info dialog
 
 ### Changed
 - Updated look of the module info dialog
