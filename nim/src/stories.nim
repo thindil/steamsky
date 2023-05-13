@@ -368,3 +368,16 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     adaStory.startData[index] = data.cstring
   adaStory.minSteps = story.minSteps.cint
   adaStory.maxSteps = story.maxSteps.cint
+  proc convertStep(step: StepData): AdaStepData =
+    result = AdaStepData(index: step.index.cstring,
+        finishCondition: step.finishCondition.ord.cint,
+        failText: step.failText.cstring)
+    for index, data in result.finishData.mpairs:
+      data = AdaStepFinishData(name: "".cstring, value: "".cstring)
+      result.texts[index] = AdaStepTextData(condition: -1, text: "".cstring)
+    for index, data in step.finishData.pairs:
+      result.finishData[index] = AdaStepFinishData(name: data.name.cstring,
+          value: data.value.cstring)
+    for index, data in step.texts.pairs:
+      result.texts[index] = AdaStepTextData(condition: data.condition.ord.cint,
+          text: data.text.cstring)
