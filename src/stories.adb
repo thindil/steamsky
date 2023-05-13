@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Interfaces.C.Strings;
 with GNAT.String_Split;
 with DOM.Core;
 with DOM.Core.Documents;
@@ -34,7 +35,9 @@ with Utils; use Utils;
 
 package body Stories is
 
-   procedure Load_Stories(Reader: Tree_Reader) is
+   procedure Load_Stories(Reader: Tree_Reader; File_Name: String) is
+      use Interfaces.C;
+      use Interfaces.C.Strings;
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
@@ -56,7 +59,17 @@ package body Stories is
       Action, Sub_Action, Sub_Sub_Action: Data_Action := ADD;
       Story_Node, Child_Node, Step_Node: Node;
       Delete_Index, Step_Index: Positive := 1;
+      Result: chars_ptr;
+      function Load_Ada_Stories(Name: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaStories";
    begin
+      Result := Load_Ada_Stories(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error
+           with Interfaces.C.Strings.Value(Item => Result);
+      end if;
       Clear_Current_Story;
       --## rule off IMPROPER_INITIALIZATION
       Temp_Step :=
