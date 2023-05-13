@@ -254,6 +254,7 @@ package body Table is
       Table.Row := 1;
    end Clear_Table;
 
+   --## rule off LOCAL_HIDING
    -- ****if* Table/Add_Bindings
    -- FUNCTION
    -- Add events to the selected element of the Table_Widget
@@ -268,6 +269,7 @@ package body Table is
    procedure Add_Bindings
      (Canvas: Tk_Canvas; Item_Id, Row, Command, Color: String) is
      -- ****
+      --## rule on LOCAL_HIDING
    begin
       Bind
         (CanvasWidget => Canvas, TagOrId => Item_Id, Sequence => "<Enter>",
