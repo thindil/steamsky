@@ -19,7 +19,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps;
-with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 -- ****h* Stories/Stories
@@ -287,10 +286,9 @@ package Stories is
    -- FUNCTION
    -- Load stories data from files
    -- PARAMETERS
-   -- Reader - XML Reader from which data will be read
    -- File_Name - The full path to the stories file which will be read
    -- SOURCE
-   procedure Load_Stories(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Stories(File_Name: String);
    -- ****
 
    -- ****f* Stories/Stories.Start_Story

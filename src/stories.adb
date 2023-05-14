@@ -30,8 +30,7 @@ with Utils; use Utils;
 
 package body Stories is
 
-   procedure Load_Stories(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(Reader);
+   procedure Load_Stories(File_Name: String) is
       use Interfaces.C;
       use Interfaces.C.Strings;
       --## rule off IMPROPER_INITIALIZATION
