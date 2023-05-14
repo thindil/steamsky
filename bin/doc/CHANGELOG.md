@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.7] - 2023-05-14
 
 ### Added
 - Icon for assigning ammunition to guns. Author: sbed (https://game-icons.net),
