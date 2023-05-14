@@ -59,11 +59,47 @@ package body Stories is
       Action, Sub_Action, Sub_Sub_Action: Data_Action := ADD;
       Story_Node, Child_Node, Step_Node: Node;
       Delete_Index, Step_Index: Positive := 1;
+      type Nim_Step_Text_Data is record
+         Condition: Integer;
+         Text: chars_ptr;
+      end record;
+      type Nim_Step_Finish_Data is record
+         Name: chars_ptr;
+         Value: chars_ptr;
+      end record;
+      type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
+      type Nim_Text_Data_Array is array(0 .. 9) of Nim_Step_Text_Data;
+      type Nim_Step_Data is record
+         Index: chars_ptr;
+         Finish_Condition: Integer;
+         Finish_Data: Nim_Finish_Data_Array;
+         Texts: Nim_Text_Data_Array;
+         Fail_Text: chars_ptr;
+      end record;
+      type Nim_Story_Array is array(0 .. 9) of chars_ptr;
+      type Nim_Steps_Array is array(0 .. 9) of Nim_Step_Data;
+      type Nim_Story_Data is record
+         Start_Condition: Integer;
+         Start_Data: Nim_Story_Array;
+         Min_Steps: Integer;
+         Max_Steps: Integer;
+         Starting_Step: Nim_Step_Data;
+         Steps: Nim_Steps_Array;
+         Final_Step: Nim_Step_Data;
+         End_Text: chars_ptr;
+         Name: chars_ptr;
+         Forbidden_Factions: Nim_Story_Array;
+      end record;
       Result: chars_ptr;
+      Nim_Story: Nim_Story_Data;
       function Load_Ada_Stories(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaStories";
+      procedure Get_Ada_Story(Index: chars_ptr; Story: out Nim_Story_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaStory";
    begin
       Result := Load_Ada_Stories(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
@@ -71,6 +107,12 @@ package body Stories is
            with Interfaces.C.Strings.Value(Item => Result);
       end if;
       Clear_Current_Story;
+      Convert_Stories_Loop :
+      for I in 1 .. 10 loop
+         Get_Ada_Story
+           (Index => New_String(Str => Positive'Image(I)), Story => Nim_Story);
+         exit Convert_Stories_Loop when Nim_Story.Start_Condition = -1;
+      end loop Convert_Stories_Loop;
       --## rule off IMPROPER_INITIALIZATION
       Temp_Step :=
         (Index => Null_Unbounded_String, Finish_Condition => ASKINBASE,

@@ -21,7 +21,7 @@ import game, log
 type
   StartConditionType = enum
     ## Types of requirements to start a story
-    dropStory
+    dropItem
   StepConditionType = enum
     ## Types of requirements to finish a story step
     askInBase, destroyShip, explore, any, loot
@@ -159,7 +159,8 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           parseEnum[StartConditionType](attribute.toLowerAscii)
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid starting condition.")
+            message = "Can't " & $storyAction & " story '" & $storyIndex &
+                "', invalid starting condition: '" & attribute & "'.")
     attribute = storyNode.attr(name = "minsteps")
     if attribute.len() > 0:
       story.minSteps = try:
@@ -327,13 +328,13 @@ type
   AdaStepData = object
     index: cstring
     finishCondition: cint
-    finishData: array[4, AdaStepFinishData]
-    texts: array[4, AdaStepTextData]
+    finishData: array[10, AdaStepFinishData]
+    texts: array[10, AdaStepTextData]
     failText: cstring
 
   AdaStoryData = object
     startCondition: cint
-    startData: array[4, cstring]
+    startData: array[10, cstring]
     minSteps: cint
     maxSteps: cint
     startingStep: AdaStepData
@@ -341,7 +342,7 @@ type
     finalStep: AdaStepData
     endText: cstring
     name: cstring
-    forbiddenFactions: array[4, cstring]
+    forbiddenFactions: array[10, cstring]
 
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
