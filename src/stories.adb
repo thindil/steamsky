@@ -100,6 +100,30 @@ package body Stories is
          Import => True,
          Convention => C,
          External_Name => "getAdaStory";
+      function Convert_Step(Nim_Step: Nim_Step_Data) return Step_Data is
+         Step: Step_Data;
+      begin
+         Step.Index :=
+           To_Unbounded_String
+             (Source => Interfaces.C.Strings.Value(Item => Nim_Step.Index));
+         Step.Finish_Condition :=
+           Step_Condition_Type'Val(Nim_Step.Finish_Condition);
+         Convert_Step_Data_Loop :
+         for Data of Nim_Step.Finish_Data loop
+            exit Convert_Step_Data_Loop when Strlen(Item => Data.Name) = 0;
+            Step.Finish_Data.Append
+              (New_Item =>
+                 (Name =>
+                    To_Unbounded_String
+                      (Source =>
+                         Interfaces.C.Strings.Value(Item => Data.Name)),
+                  Value =>
+                    To_Unbounded_String
+                      (Source =>
+                         Interfaces.C.Strings.Value(Item => Data.Value))));
+         end loop Convert_Step_Data_Loop;
+         return Step;
+      end Convert_Step;
    begin
       Result := Load_Ada_Stories(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
@@ -112,6 +136,21 @@ package body Stories is
          Get_Ada_Story
            (Index => New_String(Str => Positive'Image(I)), Story => Nim_Story);
          exit Convert_Stories_Loop when Nim_Story.Start_Condition = -1;
+         Temp_Record.Steps.Clear;
+         Temp_Record.Start_Data.Clear;
+         Temp_Record.Forbidden_Factions.Clear;
+         Temp_Record.Start_Condition :=
+           Start_Condition_Type'Val(Nim_Story.Start_Condition);
+         Convert_Start_Data_Loop :
+         for Data of Nim_Story.Start_Data loop
+            exit Convert_Start_Data_Loop when Strlen(Item => Data) = 0;
+            Temp_Record.Start_Data.Append
+              (New_Item =>
+                 To_Unbounded_String
+                   (Source => Interfaces.C.Strings.Value(Item => Data)));
+         end loop Convert_Start_Data_Loop;
+         Temp_Record.Min_Steps := Nim_Story.Min_Steps;
+         Temp_Record.Max_Steps := Nim_Story.Max_Steps;
       end loop Convert_Stories_Loop;
       --## rule off IMPROPER_INITIALIZATION
       Temp_Step :=
