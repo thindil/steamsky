@@ -326,6 +326,7 @@ package body Table is
       if not New_Row then
          return Color;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
           (Source =>
@@ -339,6 +340,7 @@ package body Table is
                   " -fill " & Color & " -width 0 -tags [list row" &
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "]"));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Lower
         (CanvasWidget => Table.Canvas,
          TagOrId => To_String(Source => Item_Id));
@@ -371,6 +373,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
           (Source =>
@@ -385,6 +388,7 @@ package body Table is
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Tooltip'Length > 0 then
          Add
            (Widget => Table.Canvas, Message => Tooltip,
@@ -550,10 +554,12 @@ package body Table is
       X: Natural := 0;
       Item_Id: Unbounded_String;
       Tokens: Slice_Set;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Length: constant Natural :=
         Natural
           (100.0 +
            ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Color: Unbounded_String;
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
@@ -562,6 +568,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
           (Source =>
@@ -584,6 +591,7 @@ package body Table is
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "back" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Add_Bindings
         (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
          Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
@@ -638,6 +646,7 @@ package body Table is
                  else Style_Lookup
                      (Name => "TProgressbar", Option => "-background")));
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
           (Source =>
@@ -655,6 +664,7 @@ package body Table is
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "bar" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Add_Bindings
         (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
          Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
