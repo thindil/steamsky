@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.6 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,19 +31,23 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo1014">UUI/UUI.Get_String_Command</a></li>
-<li>2. <a href="#robo848">Dialogs/Dialogs.Update_Dialog_Command</a></li>
-<li>3. <a href="#robo847">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
-<li>4. <a href="#robo846">Dialogs/Dialogs.Move_Dialog_Command</a></li>
-<li>5. <a href="#robo579">Dialogs/Dialogs.Set_Timer_Id</a></li>
-<li>6. <a href="#robo578">Dialogs/Dialogs.Mouse_Y_Position</a></li>
-<li>7. <a href="#robo577">Dialogs/Dialogs.Get_Timer_Id</a></li>
-<li>8. <a href="#robo363">Dialogs/Dialogs.Timer_Id</a></li>
-<li>9. <a href="#robo362">Dialogs/Dialogs.Mouse_X_Position</a></li>
+<li>1. <a href="#robo1021">UUI/UUI.Get_String_Command</a></li>
+<li>2. <a href="#robo855">Dialogs/Dialogs.Update_Dialog_Command</a></li>
+<li>3. <a href="#robo854">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
+<li>4. <a href="#robo853">Dialogs/Dialogs.Move_Dialog_Command</a></li>
+<li>5. <a href="#robo591">Dialogs/Set_Mouse_Y_Position</a></li>
+<li>6. <a href="#robo590">Dialogs/Set_Mouse_X_Position</a></li>
+<li>7. <a href="#robo584">Dialogs/Dialogs.Set_Timer_Id</a></li>
+<li>8. <a href="#robo583">Dialogs/Dialogs.Mouse_Y_Position</a></li>
+<li>9. <a href="#robo582">Dialogs/Dialogs.Get_Timer_Id</a></li>
+<li>10. <a href="#robo581">Dialogs/Dialogs.Get_Mouse_Y_Position</a></li>
+<li>11. <a href="#robo580">Dialogs/Dialogs.Get_Mouse_X_Position</a></li>
+<li>12. <a href="#robo366">Dialogs/Dialogs.Timer_Id</a></li>
+<li>13. <a href="#robo365">Dialogs/Dialogs.Mouse_X_Position</a></li>
 </ul>
 <hr />
 <a name="Dialogs2fDialogs2eMouse5fX5fPosition"></a>
-<a name="robo362"></a><h2>Dialogs/Dialogs.Mouse_X_Position [ Variables ]</h2>
+<a name="robo365"></a><h2>Dialogs/Dialogs.Mouse_X_Position [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -55,7 +59,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eTimer5fId"></a>
-<a name="robo363"></a><h2>Dialogs/Dialogs.Timer_Id [ Variables ]</h2>
+<a name="robo366"></a><h2>Dialogs/Dialogs.Timer_Id [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -66,22 +70,53 @@
 </pre>
 
 <hr />
+<a name="Dialogs2fDialogs2eGet5fMouse5fX5fPosition"></a>
+<a name="robo580"></a><h2>Dialogs/Dialogs.Get_Mouse_X_Position [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get the X position of the mouse pointer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Get_Mouse_X_Position <span class="keyword">return</span> Natural <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The X axis position of the mouse pointer
+</pre>
+
+<hr />
+<a name="Dialogs2fDialogs2eGet5fMouse5fY5fPosition"></a>
+<a name="robo581"></a><h2>Dialogs/Dialogs.Get_Mouse_Y_Position [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get the Y position of the mouse pointer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Get_Mouse_Y_Position <span class="keyword">return</span> Natural <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The Y axis position of the mouse pointer
+</pre>
+
+<hr />
 <a name="Dialogs2fDialogs2eGet5fTimer5fId"></a>
-<a name="robo577"></a><h2>Dialogs/Dialogs.Get_Timer_Id [ Subprograms ]</h2>
+<a name="robo582"></a><h2>Dialogs/Dialogs.Get_Timer_Id [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get the Id of the auto close timer
- RETURNS
- The Id of the auto close timer
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Get_Timer_Id <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
 </pre>
+<p class="item_name">RESULT</p>
+<pre> The Id of the auto close timer
+</pre>
 
 <hr />
 <a name="Dialogs2fDialogs2eMouse5fY5fPosition"></a>
-<a name="robo578"></a><h2>Dialogs/Dialogs.Mouse_Y_Position [ Subprograms ]</h2>
+<a name="robo583"></a><h2>Dialogs/Dialogs.Mouse_Y_Position [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -93,7 +128,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eSet5fTimer5fId"></a>
-<a name="robo579"></a><h2>Dialogs/Dialogs.Set_Timer_Id [ Subprograms ]</h2>
+<a name="robo584"></a><h2>Dialogs/Dialogs.Set_Timer_Id [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -107,8 +142,38 @@
 </pre>
 
 <hr />
+<a name="Dialogs2fSet5fMouse5fX5fPosition"></a>
+<a name="robo590"></a><h2>Dialogs/Set_Mouse_X_Position [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set the X position of the mouse pointer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>Set_Mouse_X_Position</strong><span class="sign">(</span>New_Value<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> New_Value - the new value for mouse pointer X position
+</pre>
+
+<hr />
+<a name="Dialogs2fSet5fMouse5fY5fPosition"></a>
+<a name="robo591"></a><h2>Dialogs/Set_Mouse_Y_Position [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set the Y position of the mouse pointer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>Set_Mouse_Y_Position</strong><span class="sign">(</span>New_Value<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> New_Value - the new value for mouse pointer X position
+</pre>
+
+<hr />
 <a name="Dialogs2fDialogs2eMove5fDialog5fCommand"></a>
-<a name="robo846"></a><h2>Dialogs/Dialogs.Move_Dialog_Command [ Commands ]</h2>
+<a name="robo853"></a><h2>Dialogs/Dialogs.Move_Dialog_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -137,7 +202,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eSet5fMouse5fPosition5fCommand"></a>
-<a name="robo847"></a><h2>Dialogs/Dialogs.Set_Mouse_Position_Command [ Commands ]</h2>
+<a name="robo854"></a><h2>Dialogs/Dialogs.Set_Mouse_Position_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -165,7 +230,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eUpdate5fDialog5fCommand"></a>
-<a name="robo848"></a><h2>Dialogs/Dialogs.Update_Dialog_Command [ Commands ]</h2>
+<a name="robo855"></a><h2>Dialogs/Dialogs.Update_Dialog_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./dialogs_ads.html#robo21">Dialogs</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -194,7 +259,7 @@
 
 <hr />
 <a name="UUI2fUUI2eGet5fString5fCommand"></a>
-<a name="robo1014"></a><h2>UUI/UUI.Get_String_Command [ Commands ]</h2>
+<a name="robo1021"></a><h2>UUI/UUI.Get_String_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -225,7 +290,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/dialogs.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-04-16 03:02:19</p>
+<p>Generated from ./src/ui/dialogs.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-05-14 03:27:43</p>
 </div> <!-- footer -->
 </body>
 </html>
