@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Bases; use Bases;
 with Crew;
@@ -32,10 +32,7 @@ package body Stories is
 
    procedure Load_Stories(File_Name: String) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Story_Data;
-      --## rule on IMPROPER_INITIALIZATION
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Step_Text_Data is record
          Condition: Integer;
          Text: chars_ptr;
@@ -67,8 +64,12 @@ package body Stories is
          Name: chars_ptr;
          Forbidden_Factions: Nim_Story_Array;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Result: chars_ptr;
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Record: Story_Data;
       Nim_Story: Nim_Story_Data;
+      --## rule on IMPROPER_INITIALIZATION
       function Load_Ada_Stories(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
@@ -78,7 +79,7 @@ package body Stories is
          Convention => C,
          External_Name => "getAdaStory";
       function Convert_Step(Nim_Step: Nim_Step_Data) return Step_Data is
-         Step: Step_Data;
+         Step: Step_Data; --## rule line off IMPROPER_INITIALIZATION
       begin
          Step.Index :=
            To_Unbounded_String
@@ -180,7 +181,7 @@ package body Stories is
    -- SOURCE
    function Select_Base(Value: String) return Unbounded_String is
       -- ****
-      Base_Index: Bases_Range;
+      Base_Index: Bases_Range := 1;
    begin
       if Value = "any" then
          return Null_Unbounded_String;
@@ -215,8 +216,9 @@ package body Stories is
       -- ****
       use Maps;
 
-      Location_Data, Value: Unbounded_String := Null_Unbounded_String;
-      Location_X, Location_Y: Positive;
+      Location_Data, Value: Unbounded_String;
+      Location_X: Positive;
+      Location_Y: Positive := 1;
    begin
       Value := Get_Step_Data(Finish_Data => Step, Name => "x");
       if Value = To_Unbounded_String(Source => "random") then
@@ -274,6 +276,7 @@ package body Stories is
          return Enemy_Data & Value;
       end if;
       Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+      --## rule off IMPROPER_INITIALIZATION
       Generate_Enemies
         (Enemies => Enemies,
          Owner =>
@@ -285,6 +288,7 @@ package body Stories is
           (Enemies
              (Get_Random
                 (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+      --## rule on IMPROPER_INITIALIZATION
    end Select_Enemy;
 
    -- ****if* Stories/Stories.Select_Loot
@@ -672,5 +676,33 @@ package body Stories is
          end if;
       end if;
    end Get_Story_Location;
+
+   procedure Get_Current_Story is
+      type Nim_Current_Story_Data is record
+         Index: chars_ptr;
+         Step: Positive;
+         Current_Step: Integer;
+         Max_Steps: Positive;
+         Show_Text: Integer;
+         Data: chars_ptr;
+         Finished_Step: Natural;
+      end record;
+      procedure Get_Ada_Current_Story(Story: Nim_Current_Story_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCurrentStory";
+   begin
+      Get_Ada_Current_Story
+        (Story =>
+           (Index =>
+              New_String(Str => To_String(Source => Current_Story.Index)),
+            Step => Current_Story.Step,
+            Current_Step => Current_Story.Current_Step,
+            Max_Steps => Current_Story.Max_Steps,
+            Show_Text => (if Current_Story.Show_Text then 1 else 0),
+            Data => New_String(Str => To_String(Source => Current_Story.Data)),
+            Finished_Step =>
+              Step_Condition_Type'Pos(Current_Story.Finished_Step)));
+   end Get_Current_Story;
 
 end Stories;
