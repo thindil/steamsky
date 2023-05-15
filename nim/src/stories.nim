@@ -100,10 +100,22 @@ type
     data*: string
     finishedStep*: StepConditionType
 
+  FinishedStoryData = object
+    ## Used to store information about finished story
+    ##
+    ## * index       - the index of the finished story
+    ## * stepsAmount - the amount of steps in the finished story
+    ## * stepsTexts  - the texts of steps done in the story. If less than stepsAmount
+    ##                 then it is the current story
+    index*: string
+    stepsAmount*: Positive
+    stepsTexts*: seq[string]
+
 var
   storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
   currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
       maxSteps: 1) ## Contains data about the current story on which the player is
+  finishedStories*: seq[FinishedStoryData]
 
 proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
