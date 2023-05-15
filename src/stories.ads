@@ -366,4 +366,8 @@ package Stories is
       Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Current_Story;
+
 end Stories;
