@@ -344,6 +344,15 @@ type
     name: cstring
     forbiddenFactions: array[10, cstring]
 
+  AdaCurrentStoryData = object
+    index: cstring
+    step: cint
+    currentStep: cint
+    maxSteps: cint
+    showText: cint
+    data: cstring
+    finishedStep: cint
+
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
@@ -396,3 +405,10 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     faction = "".cstring
   for index, faction in story.forbiddenFactions.pairs:
     adaStory.forbiddenFactions[index] = faction.cstring
+
+proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
+    tags: [], exportc.} =
+  currentStory = CurrentStoryData(index: $story.index, step: story.step,
+      currentStep: story.currentStep, maxSteps: story.maxSteps,
+      showText: story.showText == 1, data: $story.data,
+      finishedStep: story.finishedStep.StepConditionType)
