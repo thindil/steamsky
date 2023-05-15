@@ -6,19 +6,19 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Icon for assigning ammunition to guns. Author: sbed (https://game-icons.net),
   license CC BY 3.0
-- Ability to assing the crew members to the player's ship's guns in the module
+- Ability to assign the crew members to the player's ship's guns in the module
   info dialog
-- Ability to assing the ammunition to the player's ship's guns in the module
+- Ability to assign the ammunition to the player's ship's guns in the module
   info dialog
 - Ability to start the upgrade of the player's ship's battering ram's damage in
   the module info dialog
 - Ability to start the upgrade of the player's ship's hull's size in the module
   info dialog
-- Ability to assing the crew members to the player's ship's workshops in the
+- Ability to assign the crew members to the player's ship's workshops in the
   module info dialog
 - Ability to cancel the working order of the player's ship's workshops in the
   module info dialog
-- Ability to assing the crew members to the player's ship's medical rooms in
+- Ability to assign the crew members to the player's ship's medical rooms in
   the module info dialog
 
 ### Changed
@@ -48,7 +48,7 @@ All notable changes to this project will be documented in this file.
   the module info dialog
 - Ability to enable or disable the player's ship's engine's in the module info
   dialog
-- Ability to assing the crew members to the player's ship's cabin's in the
+- Ability to assign the crew members to the player's ship's cabin's in the
   module info dialog
 - Ability to start the upgrade of the player's ship's gun's damage in the
   module info dialog
