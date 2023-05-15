@@ -36,44 +36,75 @@ type
 
   GameSettingsRecord* = object
     ## Used to store the game's configuration
-    autoRest*: cint          ## If true, auto rest when pilot or engineer need a rest
-    undockSpeed*: cstring    ## The default speed of the player's ship after undock from a base
-    autoCenter*: cint ## If true, back to the player's ship after setting destination for it
-    autoReturn*: cint ## If true, set the destination for the player's ship to the base after
-                             ## finishing a mission
-    autoFinish*: cint ## If true, automatically finish the mission if the player's ships is in
-                             ## the proper base
-    lowFuel*: cint           ## The amount of fuel at which the game will show the warning
-                             ## about it
-    lowDrinks*: cint         ## The amount of drinks at which the game will show the warning
-                             ## about it
-    lowFood*: cint           ## The amount of food at which the game will show the warning
-                             ## about it
-    autoMoveStop*: cstring   ## When stop the player's ship's auto movement
-    windowWidth*: cint       ## The game window default width
-    windowHeight*: cint      ## The game window default height
-    messagesLimit*: cint     ## The max amount of messages to show in the game
-    savedMessages*: cint     ## The max amount of messages to save to a file
-    helpFontSize*: cint      ## The size of a font used in help
-    mapFontSize*: cint       ## The size of a font used on the map
-    interfaceFontSize*: cint ## The size of a font used in the game interface
-    interfaceTheme*: cstring ## The name of the current theme of the game interface
-    messagesOrder*: cstring  ## In what order the messages should be shown
-    autoAskForBases*: cint   ## If true, auto ask for new bases when the player's ship is
-                             ## docked to a base
-    autoAskForEvents*: cint  ## If true, auto ask for new events when the player's ship is
-                             ## docked to a base
-    showTooltips*: cint      ## Show the in-game tooltips with help information
-    showLastMessages*: cint  ## Show the last messages window below the map
-    messagesPosition*: cint  ## The height of the last messages window
-    fullScreen*: cint        ## Run the game in full screen mode
-    autoCloseMessagesTime*: cint ## The amount of seconds after which messages' dialogs
-                             ## wil be closed
-    autoSave*: cstring       ## How often the game should save itself automatically
-    topicsPosition*: cint    ## The height of the topics' window position in help window
-    showNumbers*: cint       ## If true, show numbers for speed, skills, attributes, etc.
-    rightButton*: cint ## If true, use the right mouse button for show menus in various lists
-    listsLimit*: cint        ## The amount of items displayed in various lists
+    ##
+    ## * autoRest              - If true, auto rest when pilot or engineer need a rest
+    ## * undockSpeed           - The default speed of the player's ship after undock from a base
+    ## * autoCenter            - If true, back to the player's ship after setting destination for it
+    ## * autoReturn            - If true, set the destination for the player's ship to the base after
+    ##                           finishing a mission
+    ## * autoFinish            - If true, automatically finish the mission if the player's ships is in
+    ##                           the proper base
+    ## * lowFuel               - The amount of fuel at which the game will show the warning
+    ##                           about it
+    ## * lowDrinks             - The amount of drinks at which the game will show the warning
+    ##                           about it
+    ## * lowFood               - The amount of food at which the game will show the warning
+    ##                           about it
+    ## * autoMoveStop          - When stop the player's ship's auto movement
+    ## * windowWidth           - The game window default width
+    ## * windowHeight          - The game window default height
+    ## * messagesLimit         - The max amount of messages to show in the game
+    ## * savedMessages         - The max amount of messages to save to a file
+    ## * helpFontSize          - The size of a font used in help
+    ## * mapFontSize           - The size of a font used on the map
+    ## * interfaceFontSize     - The size of a font used in the game interface
+    ## * interfaceTheme        - The name of the current theme of the game interface
+    ## * messagesOrder         - In what order the messages should be shown
+    ## * autoAskForBases       - If true, auto ask for new bases when the player's ship is
+    ##                           docked to a base
+    ## * autoAskForEvents      - If true, auto ask for new events when the player's ship is
+    ##                           docked to a base
+    ## * showTooltips          - Show the in-game tooltips with help information
+    ## * showLastMessages      - Show the last messages window below the map
+    ## * messagesPosition      - The height of the last messages window
+    ## * fullScreen            - Run the game in full screen mode
+    ## * autoCloseMessagesTime - The amount of seconds after which messages' dialogs
+    ##                           will be closed
+    ## * autoSave              - How often the game should save itself automatically
+    ## * topicsPosition        - The height of the topics' window position in help window
+    ## * showNumbers           - If true, show numbers for speed, skills, attributes, etc.
+    ## * rightButton           - If true, use the right mouse button for show menus in various lists
+    ## * listsLimit            - The amount of items displayed in various lists
+    autoRest*: cint
+    undockSpeed*: cstring
+    autoCenter*: cint
+    autoReturn*: cint
+    autoFinish*: cint
+    lowFuel*: cint
+    lowDrinks*: cint
+    lowFood*: cint
+    autoMoveStop*: cstring
+    windowWidth*: cint
+    windowHeight*: cint
+    messagesLimit*: cint
+    savedMessages*: cint
+    helpFontSize*: cint
+    mapFontSize*: cint
+    interfaceFontSize*: cint
+    interfaceTheme*: cstring
+    messagesOrder*: cstring
+    autoAskForBases*: cint
+    autoAskForEvents*: cint
+    showTooltips*: cint
+    showLastMessages*: cint
+    messagesPosition*: cint
+    fullScreen*: cint
+    autoCloseMessagesTime*: cint
+    autoSave*: cstring
+    topicsPosition*: cint
+    showNumbers*: cint
+    rightButton*: cint
+    listsLimit*: cint
 
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
