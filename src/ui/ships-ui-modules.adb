@@ -1183,7 +1183,10 @@ package body Ships.UI.Modules is
                            .Name)
                   else "Must be set for training") &
                  ".}");
-            Add_Owners_Info(Owners_Name => "Trainee");
+            Add_Owners_Info
+              (Owners_Name => "Trainee",
+               Add_Button =>
+                 (if Module.Trained_Skill > 0 then True else False));
          when BATTERING_RAM =>
             Add_Ram_Info_Block :
             declare
