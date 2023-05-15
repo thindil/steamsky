@@ -705,4 +705,36 @@ package body Stories is
               Step_Condition_Type'Pos(Current_Story.Finished_Step)));
    end Get_Current_Story;
 
+   procedure Get_Finished_Story(Index: Positive) is
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Steps_Texts is array(0 .. 10) of chars_ptr;
+      type Nim_Finished_Story_Data is record
+         Index: chars_ptr;
+         Steps_Amount: Integer;
+         Steps_Text: Nim_Steps_Texts;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
+      Nim_Story: Nim_Finished_Story_Data;
+      Step_Index: Natural := 0;
+      procedure Get_Ada_Finished_Story
+        (Index: Positive; Story: Nim_Finished_Story_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCurrentStory";
+   begin
+      if Index <= Finished_Stories.Last_Index then
+         Nim_Story.Index :=
+           New_String
+             (Str => To_String(Source => Finished_Stories(Index).Index));
+         Nim_Story.Steps_Amount := Finished_Stories(Index).Steps_Amount;
+         Convert_Steps_Texts_Loop :
+         for Text of Finished_Stories(Index).Steps_Texts loop
+            Nim_Story.Steps_Text(Step_Index) :=
+              New_String(Str => To_String(Source => Text));
+            Step_Index := Step_Index + 1;
+         end loop Convert_Steps_Texts_Loop;
+      end if;
+      Get_Ada_Finished_Story(Index => Index, Story => Nim_Story);
+   end Get_Finished_Story;
+
 end Stories;

@@ -365,6 +365,11 @@ type
     data: cstring
     finishedStep: cint
 
+  AdaFinishedStoryData = object
+    index: string
+    stepsAmount: cint
+    stepsTexts: array[10, string]
+
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   try:
@@ -424,3 +429,16 @@ proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
       currentStep: story.currentStep, maxSteps: story.maxSteps,
       showText: story.showText == 1, data: $story.data,
       finishedStep: story.finishedStep.StepConditionType)
+
+proc getAdaFinishedStory(index: cint; story: AdaFinishedStoryData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  if story.index.len == 0:
+    return
+  var finishedStory = FinishedStoryData(index: story.index,
+      stepsAmount: story.stepsAmount)
+  for text in story.stepsTexts:
+    finishedStory.stepsTexts.add(y = $text)
+  if index <= finishedStories.len:
+    finishedStories[index - 1] = finishedStory
+  else:
+    finishedStories.add(y = finishedStory)
