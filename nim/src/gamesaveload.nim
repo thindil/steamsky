@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, xmltree]
-import basessaveload, config, game, goals, log, messages, shipssaveload,
-    statistics, stories, types
+import basessaveload, config, game, goals, log, messages, missions,
+    shipssaveload, statistics, stories, types
 
 const saveVersion = 5
 
@@ -163,3 +163,37 @@ proc saveGame*(prettyPrint: bool = false) =
       textElement.add(newText(text))
       storyNode.add(textElement)
     saveTree.add(storyNode)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving accepted missions...", debugType = everything)
+  for mission in acceptedMissions:
+    var
+      missionElement = newElement("acceptedmission")
+      attrs: seq[tuple[key, val: string]] = @[]
+    attrs.add(("type", $mission.mtype.ord))
+    case mission.mType
+    of deliver:
+      attrs.add(("target", $mission.itemIndex))
+    of passenger:
+      attrs.add(("target", $mission.data))
+    of destroy:
+      attrs.add(("target", $mission.shipIndex))
+    else:
+      attrs.add(("target", $mission.target))
+    attrs.add(("time", $mission.time))
+    attrs.add(("targetx", $mission.targetx))
+    attrs.add(("targety", $mission.targety))
+    attrs.add(("reward", $mission.reward))
+    attrs.add(("startbase", $mission.startBase))
+    if mission.finished:
+      attrs.add(("finished", "Y"))
+    else:
+      attrs.add(("finished", "N"))
+    if mission.multiplier != 1.0:
+      attrs.add(("multiplier", $mission.multiplier))
+    missionElement.attrs = attrs.toXmlAttributes()
+    saveTree.add(missionElement)
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving player career...", debugType = everything)
+  var careerElement = newElement("playercareer")
+  careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
+  logMessage(message = "done", debugType = everything)
