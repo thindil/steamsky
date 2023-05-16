@@ -124,8 +124,8 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
     var attrs: seq[tuple[key, val: string]] = @[]
     let values = [member.health, member.tired, member.hunger, member.thirst,
         member.order.ord, member.previousOrder.ord, member.orderTime,
-        member.payment[0], member.payment[1], member.contractLength,
-        member.morale[0], member.morale[1], member.loyalty, member.homeBase]
+        member.payment[1], member.payment[2], member.contractLength,
+        member.morale[1], member.morale[2], member.loyalty, member.homeBase]
     for index, name in attributesNames.pairs:
       attrs.add((name, $values[index]))
     attrs.add(("name", member.name))
