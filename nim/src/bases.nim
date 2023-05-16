@@ -483,3 +483,18 @@ proc setAdaBaseVisitedDate(baseIndex: cint; year, month, day, hour,
 
 proc updateAdaPrices() {.raises: [], tags: [], exportc.} =
   updatePrices()
+
+proc getAdaBaseDate(baseIndex, year, month, day, hour,
+    minutes, dateType: cint) {.raises: [], tags: [], exportc.} =
+  let nimDate = DateRecord(year: year, month: month, day: day, hour: hour, minutes: minutes)
+  case dateType
+  of 0:
+    skyBases[baseIndex].visited = nimDate
+  of 1:
+    skyBases[baseIndex].missionsDate = nimDate
+  of 2:
+    skyBases[baseIndex].recruitDate = nimDate
+  of 3:
+    skyBases[baseIndex].askedForEvents = nimDate
+  else:
+    discard
