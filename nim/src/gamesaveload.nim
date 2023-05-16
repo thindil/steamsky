@@ -169,7 +169,7 @@ proc saveGame*(prettyPrint: bool = false) =
     var
       missionElement = newElement("acceptedmission")
       attrs: seq[tuple[key, val: string]] = @[]
-    attrs.add(("type", $mission.mtype.ord))
+    attrs.add(("type", $mission.mType.ord))
     case mission.mType
     of deliver:
       attrs.add(("target", $mission.itemIndex))
@@ -180,8 +180,8 @@ proc saveGame*(prettyPrint: bool = false) =
     else:
       attrs.add(("target", $mission.target))
     attrs.add(("time", $mission.time))
-    attrs.add(("targetx", $mission.targetx))
-    attrs.add(("targety", $mission.targety))
+    attrs.add(("targetx", $mission.targetX))
+    attrs.add(("targety", $mission.targetY))
     attrs.add(("reward", $mission.reward))
     attrs.add(("startbase", $mission.startBase))
     if mission.finished:
@@ -202,3 +202,15 @@ proc saveGame*(prettyPrint: bool = false) =
     saveText = saveText.strip
     saveText.stripLineEnd
   writeFile(saveName, saveText)
+
+# Temporary code for interfacing with Ada
+
+proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc.} =
+  saveName = $name
+
+proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
+    RootEffect], exportc.} =
+  try:
+    saveGame(prettyPrint = prettyPrint == 1)
+  except KeyError, IOError:
+    discard
