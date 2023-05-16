@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Bases; use Bases;
@@ -267,8 +267,10 @@ package body Stories is
    function Select_Enemy
      (Step: StepData_Container.Vector) return Unbounded_String is
       -- ****
+      --## rule off IMPROPER_INITIALIZATION
       Enemies: Positive_Container.Vector;
-      Enemy_Data, Value: Unbounded_String := Null_Unbounded_String;
+      --## rule on IMPROPER_INITIALIZATION
+      Enemy_Data, Value: Unbounded_String;
    begin
       Enemy_Data := Select_Location(Step => Step);
       Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
@@ -302,8 +304,10 @@ package body Stories is
    function Select_Loot
      (Step: StepData_Container.Vector) return Unbounded_String is
       -- ****
+      --## rule off IMPROPER_INITIALIZATION
       Enemies: Positive_Container.Vector;
-      Loot_Data, Value: Unbounded_String := Null_Unbounded_String;
+      --## rule on IMPROPER_INITIALIZATION
+      Loot_Data, Value: Unbounded_String;
    begin
       Loot_Data := Get_Step_Data(Finish_Data => Step, Name => "item");
       Append(Source => Loot_Data, New_Item => ";");
@@ -312,6 +316,7 @@ package body Stories is
          return Loot_Data & Value;
       end if;
       Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+      --## rule off IMPROPER_INITIALIZATION
       Generate_Enemies
         (Enemies => Enemies,
          Owner =>
@@ -323,18 +328,22 @@ package body Stories is
           (Enemies
              (Get_Random
                 (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+      --## rule on IMPROPER_INITIALIZATION
    end Select_Loot;
 
    procedure Start_Story
      (Faction_Name: Tiny_String.Bounded_String;
       Condition: Start_Condition_Type) is
+      use Ada.Characters.Handling;
       use Factions;
       use Ships.Cargo;
       use Tiny_String;
 
       Faction_Index: Bounded_String := Null_Bounded_String;
       Step: Unbounded_String := Null_Unbounded_String;
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Texts: UnboundedString_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       if Current_Story.Index /= Null_Unbounded_String then
          return;
@@ -651,8 +660,12 @@ package body Stories is
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
       use GNAT.String_Split;
 
+      --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
+      --## rule on IMPROPER_INITIALIZATION
    begin
+      Story_X := 1;
+      Story_Y := 1;
       if Current_Story.Data = Null_Unbounded_String then
          Story_X := Player_Ship.Sky_X;
          Story_Y := Player_Ship.Sky_Y;
@@ -678,6 +691,7 @@ package body Stories is
    end Get_Story_Location;
 
    procedure Get_Current_Story is
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Current_Story_Data is record
          Index: chars_ptr;
          Step: Positive;
@@ -687,6 +701,7 @@ package body Stories is
          Data: chars_ptr;
          Finished_Step: Natural;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       procedure Get_Ada_Current_Story(Story: Nim_Current_Story_Data) with
          Import => True,
          Convention => C,
@@ -714,10 +729,12 @@ package body Stories is
          Steps_Text: Nim_Steps_Texts;
       end record;
       --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Story: Nim_Finished_Story_Data;
+      --## rule on IMPROPER_INITIALIZATION
       Step_Index: Natural := 0;
       procedure Get_Ada_Finished_Story
-        (Index: Positive; Story: Nim_Finished_Story_Data) with
+        (I: Positive; Story: Nim_Finished_Story_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaCurrentStory";
@@ -734,7 +751,7 @@ package body Stories is
             Step_Index := Step_Index + 1;
          end loop Convert_Steps_Texts_Loop;
       end if;
-      Get_Ada_Finished_Story(Index => Index, Story => Nim_Story);
+      Get_Ada_Finished_Story(I => Index, Story => Nim_Story);
    end Get_Finished_Story;
 
 end Stories;
