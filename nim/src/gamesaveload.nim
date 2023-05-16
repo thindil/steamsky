@@ -117,6 +117,7 @@ proc saveGame*(prettyPrint: bool = false) =
   saveStatistics(gameStats.finishedMissions, "finishedmissions")
   saveStatistics(gameStats.finishedGoals, "finishedgoals")
   saveStatistics(gameStats.killedMobs, "killedmobs")
+  saveTree.add(statsElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving current goal...", debugType = everything)
   var goalElement = newElement("currentgoal")
@@ -124,6 +125,8 @@ proc saveGame*(prettyPrint: bool = false) =
       "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
       "target": currentGoal.targetIndex,
       "multiplier": $currentGoal.multiplier}.toXmlAttributes
+  saveTree.add(goalElement)
+  logMessage(message = "done", debugType = everything)
   if currentStory.index.len > 0:
     logMessage(message = "Saving current story...", debugType = everything)
     var
@@ -138,3 +141,25 @@ proc saveGame*(prettyPrint: bool = false) =
     else:
       attrs.add(("currentstep", storiesList[currentStory.index].steps[
           currentStory.currentStep].index))
+    attrs.add(("maxsteps", $currentStory.maxSteps))
+    if currentStory.showText:
+      attrs.add(("showText", "Y"))
+    else:
+      attrs.add(("showText", "N"))
+    if currentStory.data.len > 0:
+      attrs.add(("data", currentStory.data))
+    attrs.add(("finishedstep", $currentStory.finishedStep.ord))
+    storyElement.attrs = attrs.toXmlAttributes
+    saveTree.add(storyElement)
+    logMessage(message = "done", debugType = everything)
+  logMessage(message = "Saving finished stories...", debugType = everything)
+  for finishedStory in finishedStories.items:
+    var
+      storyNode = newXmlTree("finishedstory", [], {
+        "index": finishedStory.index,
+        "stepsamount": $finishedStory.stepsAmount}.toXmlAttributes)
+    for text in finishedStory.stepsTexts.items:
+      var textElement = newElement("steptext")
+      textElement.add(newText(text))
+      storyNode.add(textElement)
+    saveTree.add(storyNode)
