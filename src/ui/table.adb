@@ -359,7 +359,7 @@ package body Table is
       Column: Positive; New_Row: Boolean := False; Color: String := "") is
       --## rule on LOCAL_HIDING
       X: Natural := 5;
-      Item_Id: Unbounded_String;
+      Item_Id: Unbounded_String := Null_Unbounded_String;
       Tokens: Slice_Set;
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
