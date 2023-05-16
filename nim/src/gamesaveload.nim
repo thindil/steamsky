@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[tables, xmltree]
+import std/[strutils, tables, xmltree]
 import basessaveload, config, game, goals, log, messages, missions,
     shipssaveload, statistics, stories, types
 
@@ -197,3 +197,8 @@ proc saveGame*(prettyPrint: bool = false) =
   var careerElement = newElement("playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
   logMessage(message = "done", debugType = everything)
+  var saveText = $saveTree
+  if not prettyPrint:
+    saveText = saveText.strip
+    saveText.stripLineEnd
+  writeFile(saveName, saveText)
