@@ -136,13 +136,6 @@ package body Ships.UI.Modules is
    begin
       case Player_Ship.Modules(Module_Index).M_Type is
          when TRAINING_ROOM =>
-            if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
-               Add_Button
-                 (Name => ".assigncrew",
-                  Label => "Assign a crew member as worker...",
-                  Command =>
-                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
-            end if;
             Add_Button
               (Name => ".assignskill",
                Label =>
