@@ -116,23 +116,39 @@ type
 
   NewGameRecord* = object
     ## Used to store the default settings for the new game
-    playerName*: cstring      ## The player's character name
-    playerGender*: char       ## The player's character gender
-    shipName*: cstring        ## The player's ship name
-    playerFaction*: cstring   ## The player's character faction
-    playerCareer*: cstring    ## The player's character career
-    startingBase*: cstring    ## The type of the starting base
-    enemyDamageBonus*: cfloat ## The bonus to damage for enemies in ship to ship combat
-    playerDamageBonus*: cfloat ## The bonus to damage for the player's character and crew in
-                              ## ship to ship combat
-    enemyMeleeDamageBonus*: cfloat ## The bonus to damage for enemies in melee combat
-    playerMeleeDamageBonus*: cfloat ## The bonus to damage for the player's character and crew
-                              ## in melee combat
-    experienceBonus*: cfloat ## The bonus to the gained by player's character and crew experience
-    reputationBonus*: cfloat ## The bonus to the gained the player's character reputation in bases
-    upgradeCostBonus*: cfloat ## The bonus to costs of upgrades the player's ship
-    pricesBonus*: cfloat      ## The bonus to prices in bases
-    difficultyLevel*: cstring ## The preset level of difficulty for the game
+    ##
+    ## * playerName             - The player's character name
+    ## * playerGender           - The player's character gender
+    ## * shipName               - The player's ship name
+    ## * playerFaction          - The player's character faction
+    ## * playerCareer           - The player's character career
+    ## * startingBase           - The type of the starting base
+    ## * enemyDamageBonus       - The bonus to damage for enemies in ship to ship combat
+    ## * playerDamageBonus      - The bonus to damage for the player's character and crew in
+    ##                            ship to ship combat
+    ## * enemyMeleeDamageBonus  - The bonus to damage for enemies in melee combat
+    ## * playerMeleeDamageBonus - The bonus to damage for the player's character and crew
+    ##                            in melee combat
+    ## * experienceBonus        - The bonus to the gained by player's character and crew experience
+    ## * reputationBonus        - The bonus to the gained the player's character reputation in bases
+    ## * upgradeCostBonus       - The bonus to costs of upgrades the player's ship
+    ## * pricesBonus            - The bonus to prices in bases
+    ## * difficultyLevel        - The preset level of difficulty for the game
+    playerName*: cstring
+    playerGender*: char
+    shipName*: cstring
+    playerFaction*: cstring
+    playerCareer*: cstring
+    startingBase*: cstring
+    enemyDamageBonus*: cfloat
+    playerDamageBonus*: cfloat
+    enemyMeleeDamageBonus*: cfloat
+    playerMeleeDamageBonus*: cfloat
+    experienceBonus*: cfloat
+    reputationBonus*: cfloat
+    upgradeCostBonus*: cfloat
+    pricesBonus*: cfloat
+    difficultyLevel*: cstring
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: 1,
