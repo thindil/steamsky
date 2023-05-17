@@ -318,11 +318,6 @@ proc setAdaBasePopulation(baseIndex: cint; population: var cint) {.raises: [],
 proc updateAdaPopulation() {.raises: [], tags: [], exportc.} =
   updatePopulation()
 
-proc getAdaBaseRecruitDate(baseIndex, year, month, day, hour,
-    minutes: cint) {.raises: [], tags: [], exportc.} =
-  skyBases[baseIndex].recruitDate = DateRecord(year: year, month: month,
-      day: day, hour: hour, minutes: minutes)
-
 proc setAdaBaseRecruitDate(baseIndex: cint; year, month, day, hour,
     minutes: var cint) {.raises: [], tags: [], exportc.} =
   year = skyBases[baseIndex].recruitDate.year
@@ -420,11 +415,6 @@ proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
 proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].baseType = $baseType
 
-proc getAdaBaseMissionsDate(baseIndex, year, month, day, hour,
-    minutes: cint) {.raises: [], tags: [], exportc.} =
-  skyBases[baseIndex].missionsDate = DateRecord(year: year, month: month,
-      day: day, hour: hour, minutes: minutes)
-
 proc setAdaBaseMissionsDate(baseIndex: cint; year, month, day, hour,
     minutes: var cint) {.raises: [], tags: [], exportc.} =
   year = skyBases[baseIndex].missionsDate.year
@@ -467,11 +457,6 @@ proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
           index].durability.cint, price: nimCargo[index].price.cint)
     else:
       cargo[index] = AdaBaseCargo(protoIndex: 0)
-
-proc getAdaBaseVisitedDate(baseIndex, year, month, day, hour,
-    minutes: cint) {.raises: [], tags: [], exportc.} =
-  skyBases[baseIndex].visited = DateRecord(year: year, month: month,
-      day: day, hour: hour, minutes: minutes)
 
 proc setAdaBaseVisitedDate(baseIndex: cint; year, month, day, hour,
     minutes: var cint) {.raises: [], tags: [], exportc.} =
