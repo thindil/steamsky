@@ -27,12 +27,12 @@ package body Bases.Cargo is
          Convention => C,
          External_Name => "generateAdaCargo";
    begin
-      Get_Ada_Base_Visited_Date
+      Get_Ada_Base_Date
         (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
          Month => Sky_Bases(Base_Index).Visited.Month,
          Day => Sky_Bases(Base_Index).Visited.Day,
          Hour => Sky_Bases(Base_Index).Visited.Hour,
-         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
       Get_Base_Cargo(Base_Index => Base_Index);
       Get_Ada_Base_Population
         (Base_Index => Base_Index,

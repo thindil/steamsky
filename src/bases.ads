@@ -301,11 +301,12 @@ package Bases is
 
    procedure Set_Base_Population(Base_Index: Bases_Range);
 
-   procedure Get_Ada_Base_Recruit_Date
-     (Base_Index: Bases_Range; Year, Month, Day, Hour, Minutes: Natural) with
+   procedure Get_Ada_Base_Date
+     (Base_Index: Bases_Range;
+      Year, Month, Day, Hour, Minutes, Date_Type: Natural) with
       Import => True,
       Convention => C,
-      External_Name => "getAdaBaseRecruitDate";
+      External_Name => "getAdaBaseDate";
 
    procedure Set_Base_Recruit_Date(Base_Index: Bases_Range);
 
@@ -318,23 +319,11 @@ package Bases is
    procedure Get_Base_Type
      (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String);
 
-   procedure Get_Ada_Base_Missions_Date
-     (Base_Index: Bases_Range; Year, Month, Day, Hour, Minutes: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseMissionsDate";
-
    procedure Set_Base_Missions_Date(Base_Index: Bases_Range);
 
    procedure Get_Base_Cargo(Base_Index: Natural);
 
    procedure Set_Base_Cargo(Base_Index: Natural);
-
-   procedure Get_Ada_Base_Visited_Date
-     (Base_Index: Bases_Range; Year, Month, Day, Hour, Minutes: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseVisitedDate";
 
    procedure Set_Base_Visited_Date(Base_Index: Bases_Range);
 

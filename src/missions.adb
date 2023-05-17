@@ -43,13 +43,13 @@ package body Missions is
          Convention => C,
          External_Name => "generateAdaMissions";
    begin
-      Get_Ada_Base_Missions_Date
+      Get_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Missions_Date.Year,
          Month => Sky_Bases(Base_Index).Missions_Date.Month,
          Day => Sky_Bases(Base_Index).Missions_Date.Day,
          Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
+         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes, Date_Type => 1);
       Get_Missions(Base_Index => Base_Index);
       Get_Base_Reputation(Base_Index => Base_Index);
       Get_Ada_Base_Population

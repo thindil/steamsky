@@ -87,13 +87,13 @@ package body Bases is
       Get_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
       Get_Game_Date(Current_Date => Game_Date);
-      Get_Ada_Base_Recruit_Date
+      Get_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes, Date_Type => 2);
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
@@ -484,13 +484,13 @@ package body Bases is
          External_Name => "updateAdaPopulation";
    begin
       Get_Game_Date(Current_Date => Game_Date);
-      Get_Ada_Base_Recruit_Date
+      Get_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes, Date_Type => 2);
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
@@ -512,12 +512,12 @@ package body Bases is
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
          Population => Sky_Bases(Base_Index).Population);
-      Get_Ada_Base_Visited_Date
+      Get_Ada_Base_Date
         (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
          Month => Sky_Bases(Base_Index).Visited.Month,
          Day => Sky_Bases(Base_Index).Visited.Day,
          Hour => Sky_Bases(Base_Index).Visited.Hour,
-         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
       Get_Base_Cargo(Base_Index => Base_Index);
       Update_Ada_Prices;
       Set_Base_Cargo(Base_Index => Base_Index);
