@@ -360,7 +360,9 @@ package body Table is
       --## rule on LOCAL_HIDING
       X: Natural := 5;
       Item_Id: Unbounded_String := Null_Unbounded_String;
+      --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
+      --## rule on IMPROPER_INITIALIZATION
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
          else Style_Lookup
@@ -553,7 +555,9 @@ package body Table is
       New_Row, Invert_Colors: Boolean := False) is
       X: Natural := 0;
       Item_Id: Unbounded_String;
+      --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
+      --## rule on IMPROPER_INITIALIZATION
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Length: constant Natural :=
         Natural
@@ -684,7 +688,9 @@ package body Table is
       Previous_Command, Next_Command: String := "") is
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Table.Canvas & ".buttonframe");
+      --## rule off IMPROPER_INITIALIZATION
       Button: Ttk_Button;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       if Previous_Command'Length > 0 then
          Button :=
@@ -716,7 +722,9 @@ package body Table is
       Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
       X: Natural := 5;
       Item_Id: Unbounded_String;
+      --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
+      --## rule on IMPROPER_INITIALIZATION
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
       Image_Name: constant String :=
