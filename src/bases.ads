@@ -327,4 +327,6 @@ package Bases is
 
    procedure Set_Base_Visited_Date(Base_Index: Bases_Range);
 
+   procedure Set_Base_In_Nim(Base_Index: Bases_Range);
+
 end Bases;

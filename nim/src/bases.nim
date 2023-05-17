@@ -483,3 +483,6 @@ proc getAdaBaseDate(baseIndex, year, month, day, hour,
     skyBases[baseIndex].askedForEvents = nimDate
   else:
     discard
+
+proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].name = $name

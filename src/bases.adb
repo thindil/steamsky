@@ -876,4 +876,16 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Visited.Minutes);
    end Set_Base_Visited_Date;
 
+   procedure Set_Base_In_Nim(Base_Index: Bases_Range) is
+      procedure Get_Ada_Base_Name(B_Index: Integer; B_Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseName";
+   begin
+      Get_Ada_Base_Name
+        (B_Index => Base_Index,
+         B_Name =>
+           New_String(Str => Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name)));
+   end Set_Base_In_Nim;
+
 end Bases;
