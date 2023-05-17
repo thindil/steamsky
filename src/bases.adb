@@ -881,6 +881,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseName";
+      procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseKnown";
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -911,6 +915,9 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
          Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
          Date_Type => 2);
+      Get_Ada_Base_Known
+        (B_Index => Base_Index,
+         Known => (if Sky_Bases(Base_Index).Known then 1 else 0));
    end Set_Base_In_Nim;
 
 end Bases;

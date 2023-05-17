@@ -471,7 +471,8 @@ proc updateAdaPrices() {.raises: [], tags: [], exportc.} =
 
 proc getAdaBaseDate(baseIndex, year, month, day, hour,
     minutes, dateType: cint) {.raises: [], tags: [], exportc.} =
-  let nimDate = DateRecord(year: year, month: month, day: day, hour: hour, minutes: minutes)
+  let nimDate = DateRecord(year: year, month: month, day: day, hour: hour,
+      minutes: minutes)
   case dateType
   of 0:
     skyBases[baseIndex].visited = nimDate
@@ -486,3 +487,6 @@ proc getAdaBaseDate(baseIndex, year, month, day, hour,
 
 proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].name = $name
+
+proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].known = known == 1
