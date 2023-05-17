@@ -885,7 +885,32 @@ package body Bases is
       Get_Ada_Base_Name
         (B_Index => Base_Index,
          B_Name =>
-           New_String(Str => Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name)));
+           New_String
+             (Str =>
+                Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name)));
+      Get_Ada_Base_Date
+        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+         Month => Sky_Bases(Base_Index).Visited.Month,
+         Day => Sky_Bases(Base_Index).Visited.Day,
+         Hour => Sky_Bases(Base_Index).Visited.Hour,
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
+      Get_Ada_Base_Location
+        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+         Y => Sky_Bases(Base_Index).Sky_Y);
+      Get_Base_Type
+        (Base_Index => Base_Index,
+         Base_Type => Sky_Bases(Base_Index).Base_Type);
+      Get_Ada_Base_Population
+        (Base_Index => Base_Index,
+         Population => Sky_Bases(Base_Index).Population);
+      Get_Ada_Base_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
+         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
+         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
+         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
+         Date_Type => 2);
    end Set_Base_In_Nim;
 
 end Bases;
