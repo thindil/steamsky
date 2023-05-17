@@ -72,7 +72,8 @@ package body Table is
          Tcl.Tk.Ada.Pack.Pack
            (Slave => Y_Scroll, Options => "-side right -fill y");
          Tcl.Tk.Ada.Pack.Pack
-           (Slave => Canvas_Widget, Options => "-side top -fill both -padx {5 0}");
+           (Slave => Canvas_Widget,
+            Options => "-side top -fill both -padx {5 0}");
          Tcl.Tk.Ada.Pack.Pack
            (Slave => X_Scroll, Options => "-side bottom -fill x");
          Autoscroll(Scroll => X_Scroll);
@@ -116,7 +117,8 @@ package body Table is
               (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Leave>",
-               Command => "{" & Canvas_Widget & " configure -cursor left_ptr}");
+               Command =>
+                 "{" & Canvas_Widget & " configure -cursor left_ptr}");
             Bind
               (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
@@ -173,7 +175,8 @@ package body Table is
               (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
                Sequence => "<Leave>",
-               Command => "{" & Canvas_Widget & " configure -cursor left_ptr}");
+               Command =>
+                 "{" & Canvas_Widget & " configure -cursor left_ptr}");
             Bind
               (CanvasWidget => Canvas_Widget,
                TagOrId => To_String(Source => Header_Id),
@@ -189,7 +192,8 @@ package body Table is
       Tcl_Eval
         (interp => Get_Context,
          strng =>
-           "SetScrollbarBindings " & New_Table.Canvas & " " & New_Table.Scrollbar);
+           "SetScrollbarBindings " & New_Table.Canvas & " " &
+           New_Table.Scrollbar);
       Bind
         (Widgt => New_Table.Canvas, Sequence => "<Up>",
          Script => "{UpdateCurrentRow " & New_Table.Canvas & " lower}");

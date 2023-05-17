@@ -462,7 +462,8 @@ package body Dialogs is
       begin
          Set_Mouse_X_Position
            (New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
-         Set_Mouse_Y_Position(New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
+         Set_Mouse_Y_Position
+           (New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
       exception
          when Constraint_Error =>
             Set_Mouse_X_Position(New_Value => 0);

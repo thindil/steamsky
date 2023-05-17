@@ -506,7 +506,8 @@ package body Bases.Ship is
                if Player_Ship.Crew(Crew_Index).Order = UPGRADING then
                   Give_Orders
                     (Ship => Player_Ship,
-                     Member_Index => Crew_Container.To_Index(Position => Crew_Index),
+                     Member_Index =>
+                       Crew_Container.To_Index(Position => Crew_Index),
                      Given_Order => REST);
                   exit Remove_Upgrade_Order_Loop;
                end if;

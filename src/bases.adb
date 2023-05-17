@@ -93,7 +93,8 @@ package body Bases is
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes, Date_Type => 2);
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
+         Date_Type => 2);
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
@@ -490,7 +491,8 @@ package body Bases is
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes, Date_Type => 2);
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
+         Date_Type => 2);
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
