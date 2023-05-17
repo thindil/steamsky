@@ -25,24 +25,36 @@ type
 
   ToolQuality = object
     ## Store data related to quality of tools needed for train a skill
-    level*: Natural   ## The minimal level of a skill which need that quality of tool
-    quality*: Natural ## The level of quality of tool needed for training
+    ##
+    ## * level   - The minimal level of a skill which need that quality of tool
+    ## * quality - The level of quality of tool needed for training
+    level*: Natural
+    quality*: Natural
 
   SkillRecord* = object
     ## Store data releated to the skills
-    name*: string                   ## The name of the skill
-    attribute*: Positive            ## The index of the attribute related to the skill
-    description*: string            ## The description of the skill
-    tool*: string                   ## The type of items used to train the skill
-    toolsQuality*: seq[ToolQuality] ## The quality of tool needed for training
+    ##
+    ## * name         - The name of the skill
+    ## * attribute    - The index of the attribute related to the skill
+    ## * description  - The description of the skill
+    ## * tool         - The type of items used to train the skill
+    ## * toolsQuality - The quality of tool needed for training
+    name*: string
+    attribute*: Positive
+    description*: string
+    tool*: string
+    toolsQuality*: seq[ToolQuality]
 
   DataLoadingError* = object of CatchableError
     ## Used to mark problems during loading the game data from files
 
   AttributeRecord* = object
     ## Store data related to the attributes
-    name: string        ## The name of the attribute
-    description: string ## The description of the attribute
+    ##
+    ## * name        - The name of the attribute
+    ## * description - The description of the attribute
+    name: string
+    description: string
 
 const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
 
