@@ -490,3 +490,7 @@ proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], expo
 
 proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].known = known == 1
+
+proc getAdaBaseAskedForBases(baseIndex, askedForBases: cint) {.raises: [],
+    tags: [], exportc.} =
+  skyBases[baseIndex].askedForBases = askedForBases == 1
