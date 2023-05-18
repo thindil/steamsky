@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in changelog
+- Crash when browsing modules to install in shipyards
 
 ## [8.7] - 2023-05-14
 
