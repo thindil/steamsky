@@ -494,3 +494,6 @@ proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
 proc getAdaBaseAskedForBases(baseIndex, askedForBases: cint) {.raises: [],
     tags: [], exportc.} =
   skyBases[baseIndex].askedForBases = askedForBases == 1
+
+proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc.} =
+  skyBases[baseIndex].size = size.BasesSize

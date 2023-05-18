@@ -890,6 +890,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseAskedForBases";
+      procedure Get_Ada_Base_Size(B_Index, Size: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseSize";
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -947,6 +951,9 @@ package body Bases is
       Get_Missions(Base_Index => Base_Index);
       Get_Base_Owner(Base_Index => Base_Index);
       Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Ada_Base_Size
+        (B_Index => Base_Index,
+         Size => Bases_Size'Pos(Sky_Bases(Base_Index).Size));
    end Set_Base_In_Nim;
 
 end Bases;
