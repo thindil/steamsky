@@ -23,11 +23,12 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
   ##
   ## * saveData - the XML structure to which the ship will be saved
   var shipTree = newXmlTree("playership", [], {"name": playerShip.name,
-      "x": $playerShip.skyX, "y": $playerShip.skyY, "speed": $playerShip.speed,
-      "upgrademodule": $playerShip.upgradeModule,
+      "x": $playerShip.skyX, "y": $playerShip.skyY,
+      "speed": $playerShip.speed.ord,
+      "upgrademodule": $(playerShip.upgradeModule + 1),
       "destinationx": $playerShip.destinationX,
       "destinationy": $playerShip.destinationY,
-      "repairpriority": $playerShip.repairModule,
+      "repairpriority": $(playerShip.repairModule + 1),
       "homebase": $playerShip.homeBase}.toXmlAttributes)
   for module in playerShip.modules:
     var attrs: seq[tuple[key, val: string]] = @[("name", module.name), ("index",
@@ -40,7 +41,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
     var moduleTree = newXmlTree("module", [], attrs.toXmlAttributes)
     for owner in module.owner:
       var ownerElement = newElement("owner")
-      ownerElement.attrs = {"value": $owner}.toXmlAttributes
+      ownerElement.attrs = {"value": $(owner + 1)}.toXmlAttributes
       moduleTree.add(ownerElement)
     case module.mType
     of ModuleType2.workshop:
@@ -79,11 +80,11 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
       moduleTree.add(dataElement)
     of ModuleType2.turret:
       var dataElement = newElement("data")
-      dataElement.attrs = {"value": $module.gunIndex}.toXmlAttributes
+      dataElement.attrs = {"value": $(module.gunIndex + 1)}.toXmlAttributes
       moduleTree.add(dataElement)
     of ModuleType2.gun:
       var dataElement = newElement("data")
-      dataElement.attrs = {"value": $module.ammoIndex}.toXmlAttributes
+      dataElement.attrs = {"value": $(module.ammoIndex + 1)}.toXmlAttributes
       moduleTree.add(dataElement)
       dataElement = newElement("data")
       dataElement.attrs = {"value": $module.damage}.toXmlAttributes
@@ -101,7 +102,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
       moduleTree.add(dataElement)
     of ModuleType2.harpoonGun:
       var dataElement = newElement("data")
-      dataElement.attrs = {"value": $module.harpoonIndex}.toXmlAttributes
+      dataElement.attrs = {"value": $(module.harpoonIndex + 1)}.toXmlAttributes
       moduleTree.add(dataElement)
       dataElement = newElement("data")
       dataElement.attrs = {"value": $module.duration}.toXmlAttributes
@@ -159,7 +160,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
       memberTree.add(itemElement)
     for item in member.equipment:
       var itemElement = newElement("equipment")
-      itemElement.attrs = {"index": $item}.toXmlAttributes
+      itemElement.attrs = {"index": $(item + 1)}.toXmlAttributes
       memberTree.add(itemElement)
     shipTree.add(memberTree)
   saveData.add(shipTree)
