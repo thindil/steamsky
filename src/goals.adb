@@ -312,10 +312,8 @@ package body Goals is
          Target_Index => Null_Unbounded_String, Multiplier => 1);
    end Clear_Current_Goal;
 
-   procedure Update_Goal
-     (G_Type: Goal_Types; Target_Index: Unbounded_String;
-      Amount: Positive := 1) is
-      Nim_Goal: Nim_Goal_Data :=
+   procedure Get_Current_Goal is
+      Nim_Goal: constant Nim_Goal_Data :=
         (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
          G_Type => Goal_Types'Pos(Current_Goal.G_Type),
          Amount => Current_Goal.Amount,
@@ -326,6 +324,20 @@ package body Goals is
          Import => True,
          Convention => C,
          External_Name => "getAdaCurrentGoal";
+   begin
+      Get_Ada_Current_Goal(Goal => Nim_Goal);
+   end Get_Current_Goal;
+
+   procedure Update_Goal
+     (G_Type: Goal_Types; Target_Index: Unbounded_String;
+      Amount: Positive := 1) is
+      Nim_Goal: Nim_Goal_Data :=
+        (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
+         G_Type => Goal_Types'Pos(Current_Goal.G_Type),
+         Amount => Current_Goal.Amount,
+         Target_Index =>
+           New_String(Str => To_String(Source => Current_Goal.Target_Index)),
+         Multiplier => Current_Goal.Multiplier);
       procedure Update_Ada_Goal
         (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
          Import => True,
@@ -336,7 +348,7 @@ package body Goals is
          Convention => C,
          External_Name => "setAdaCurrentGoal";
    begin
-      Get_Ada_Current_Goal(Goal => Nim_Goal);
+      Get_Current_Goal;
       Update_Ada_Goal
         (Goal_Type => Goal_Types'Pos(G_Type),
          Target => New_String(Str => To_String(Source => Target_Index)),

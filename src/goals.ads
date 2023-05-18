@@ -136,4 +136,8 @@ package Goals is
       Amount: Positive := 1);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Current_Goal;
+
 end Goals;
