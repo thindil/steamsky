@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmltree]
-import basessaveload, config, game, goals, log, messages, missions,
+import basessaveload, config, game, goals, log, maps, messages, missions,
     shipssaveload, statistics, stories, types
 
 const saveVersion = 5
@@ -56,9 +56,10 @@ proc saveGame*(prettyPrint: bool = false) =
   logMessage(message = "Saving map...", debugType = everything)
   for x in MapXRange.low .. MapXRange.high:
     for y in MapYRange.low .. MapYRange.high:
-      var fieldElement = newElement("field")
-      fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
-      saveTree.add(fieldElement)
+      if skyMap[x][y].visited:
+        var fieldElement = newElement("field")
+        fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
+        saveTree.add(fieldElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving bases...", debugType = everything)
   saveBases(saveTree)
