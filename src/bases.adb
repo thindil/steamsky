@@ -927,6 +927,26 @@ package body Bases is
         (B_Index => Base_Index,
          Asked_For_Bases =>
            (if Sky_Bases(Base_Index).Asked_For_Bases then 1 else 0));
+      Get_Ada_Base_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Asked_For_Events.Year,
+         Month => Sky_Bases(Base_Index).Asked_For_Events.Month,
+         Day => Sky_Bases(Base_Index).Asked_For_Events.Day,
+         Hour => Sky_Bases(Base_Index).Asked_For_Events.Hour,
+         Minutes => Sky_Bases(Base_Index).Asked_For_Events.Minutes,
+         Date_Type => 3);
+      Get_Base_Reputation(Base_Index => Base_Index);
+      Get_Ada_Base_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Missions_Date.Year,
+         Month => Sky_Bases(Base_Index).Missions_Date.Month,
+         Day => Sky_Bases(Base_Index).Missions_Date.Day,
+         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes,
+         Date_Type => 1);
+      Get_Missions(Base_Index => Base_Index);
+      Get_Base_Owner(Base_Index => Base_Index);
+      Get_Base_Cargo(Base_Index => Base_Index);
    end Set_Base_In_Nim;
 
 end Bases;
