@@ -21,9 +21,13 @@ import game, statistics
 type
   HallOfFameData* = object
     ## Used to store data about the hall of fame entry
-    name*: string        ## The name of the player on the list
-    points*: Natural     ## The amount of points achived by the player
-    deathReason*: string ## The reason of the death of the player
+    ##
+    ## * name        - The name of the player on the list
+    ## * points      - The amount of points achived by the player
+    ## * deathReason - The reason of the death of the player
+    name*: string
+    points*: Natural
+    deathReason*: string
 
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
 
