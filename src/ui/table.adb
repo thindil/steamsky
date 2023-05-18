@@ -375,10 +375,12 @@ package body Table is
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
    begin
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
@@ -572,10 +574,12 @@ package body Table is
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
    begin
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
@@ -737,10 +741,13 @@ package body Table is
          else (if Empty_Unchecked then "unchecked-empty" else "unchecked")) &
         ")}";
    begin
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
         To_Unbounded_String
           (Source =>
@@ -753,6 +760,7 @@ package body Table is
                   Trim(Source => Positive'Image(Table.Row), Side => Left) &
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Tooltip'Length > 0 then
          Add
            (Widget => Table.Canvas, Message => Tooltip,
