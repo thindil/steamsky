@@ -202,6 +202,8 @@ proc saveGame*(prettyPrint: bool = false) =
     saveText = saveText.strip
     saveText.stripLineEnd
   writeFile(saveName, saveText)
+  logMessage(message = "Finished saving game in file " & saveName & ".",
+      debugType = everything)
 
 # Temporary code for interfacing with Ada
 
