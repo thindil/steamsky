@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,17 +23,6 @@ with DOM.Core; use DOM.Core;
 -- SOURCE
 package Bases.SaveLoad is
 -- ****
-
-   -- ****f* BSaveLoad/BSaveLoad.Save_Bases
-   -- FUNCTION
-   -- Save bases from current game in file
-   -- PARAMETERS
-   -- Save+Data - XML structure to which sky bases data will be saved
-   -- Main+Node - XML main node to which sky bases data will be saved
-   -- SOURCE
-   procedure Save_Bases
-     (Save_Data: not null Document; Main_Node: not null DOM.Core.Element);
-   -- ****
 
    -- ****f* BSaveLoad/BSaveLoad.Load_Bases
    -- FUNCTION
