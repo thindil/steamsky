@@ -50,6 +50,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
               "progress": $skyBase.reputation.experience}.toXmlAttributes
         else:
           repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
+        baseTree.add(repElement)
       for recruit in skyBase.recruits:
         var recruitNode = newXmlTree("recruit", [], {"name": recruit.name,
             "gender": $recruit.gender, "price": $recruit.price,
@@ -74,6 +75,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
             itemElement.attrs = {"slot": $(index.int + 1), "index": $(item +
                 1)}.toXmlAttributes
             recruitNode.add(itemElement)
+        baseTree.add(recruitNode)
       saveDate = newElement("askedforeventsdate")
       saveDate.attrs = {"year": $skyBase.askedForEvents.year,
           "month": $skyBase.askedForEvents.month,
@@ -96,10 +98,11 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
               $mission.shipIndex
             else:
               $mission.target
-        missionElement.attrs = {"type": $mission.mType, "target": target,
+        missionElement.attrs = {"type": $mission.mType.ord, "target": target,
             "time": $mission.time, "targetx": $mission.targetX,
             "targety": $mission.targetY,
             "reward": $mission.reward}.toXmlAttributes
+        baseTree.add(missionElement)
     if skyBase.reputation.level != 0:
       var repElement = newElement("reputation")
       if skyBase.reputation.experience > 0:
@@ -112,4 +115,5 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
       var itemElement = newElement("item")
       itemElement.attrs = {"index": $item.protoIndex, "amount": $item.amount,
           "durability": $item.durability, "price": $item.price}.toXmlAttributes
+      baseTree.add(itemElement)
     saveData.add(baseTree)
