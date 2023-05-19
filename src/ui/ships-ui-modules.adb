@@ -1162,24 +1162,48 @@ package body Ships.UI.Modules is
                  (Owners_Name => "Medic", Add_Button => Has_Healing_Tool);
             end Find_Healing_Tool_Block;
          when TRAINING_ROOM =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF &
-                 (if Module.Trained_Skill > 0 then
-                    "Set for training " &
-                    To_String
-                      (Source =>
-                         SkillsData_Container.Element
-                           (Container => Skills_List,
-                            Index => Module.Trained_Skill)
-                           .Name)
-                  else "Must be set for training") &
-                 ".}");
             Add_Owners_Info
               (Owners_Name => "Trainee",
                Add_Button =>
                  (if Module.Trained_Skill > 0 then True else False));
+            Show_Skill_Info_Block :
+            declare
+               Skill_Box: constant Ttk_Frame :=
+                 Create
+                   (pathName => Module_Frame & ".traininfo",
+                    options => "-width 360");
+               Train_Text: Unbounded_String := Null_Unbounded_String;
+            begin
+               if Module.Trained_Skill > 0 then
+                  Train_Text :=
+                    To_Unbounded_String
+                      (Source =>
+                         "{Set for training " &
+                         To_String
+                           (Source =>
+                              SkillsData_Container.Element
+                                (Container => Skills_List,
+                                 Index => Module.Trained_Skill)
+                                .Name) &
+                         ".}");
+               else
+                  Train_Text :=
+                    To_Unbounded_String
+                      (Source => "{Must be set for training.}");
+               end if;
+               Label :=
+                 Create
+                   (pathName => Skill_Box & ".trainlbl",
+                    options => "-text " & To_String(Source => Train_Text));
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Skill_Box, Options => "-sticky w");
+               Tcl_Eval(interp => Interp, strng => "update");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Skill_Box, Info => "reqheight"));
+            end Show_Skill_Info_Block;
          when BATTERING_RAM =>
             Add_Ram_Info_Block :
             declare
