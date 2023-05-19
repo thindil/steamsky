@@ -200,8 +200,10 @@ proc saveGame*(prettyPrint: bool = false) =
   logMessage(message = "done", debugType = everything)
   var saveText = $saveTree
   if not prettyPrint:
-    saveText = saveText.strip
-    saveText.stripLineEnd
+    var lines = saveText.splitLines
+    for line in lines.mitems:
+      line = line.strip
+    saveText = lines.join
   writeFile(saveName, saveText)
   logMessage(message = "Finished saving game in file " & saveName & ".",
       debugType = everything)
