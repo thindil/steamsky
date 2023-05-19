@@ -19,10 +19,15 @@ import types
 
 type SkyCell* = object
   ## Used to store information about the map's cell
-  baseIndex*: ExtendedBasesRange ## The index of the sky base located in the cell
-  visited*: bool                 ## If true, the cell was visited by the player
-  eventIndex*: int               ## Index of the event which happens in the cell
-  missionIndex*: int             ## Index of the mission which takes place in the cell
+  ##
+  ## * baseIndex    - The index of the sky base located in the cell
+  ## * visited      - If true, the cell was visited by the player
+  ## * eventIndex   - Index of the event which happens in the cell
+  ## * missionIndex - Index of the mission which takes place in the cell
+  baseIndex*: ExtendedBasesRange
+  visited*: bool
+  eventIndex*: int
+  missionIndex*: int
 
 var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
 
