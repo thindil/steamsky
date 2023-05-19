@@ -331,13 +331,7 @@ package body Goals is
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
-      Nim_Goal: Nim_Goal_Data :=
-        (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
-         G_Type => Goal_Types'Pos(Current_Goal.G_Type),
-         Amount => Current_Goal.Amount,
-         Target_Index =>
-           New_String(Str => To_String(Source => Current_Goal.Target_Index)),
-         Multiplier => Current_Goal.Multiplier);
+      Nim_Goal: Nim_Goal_Data;
       procedure Update_Ada_Goal
         (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
          Import => True,
