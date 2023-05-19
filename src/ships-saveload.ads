@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,17 +23,6 @@ with DOM.Core; use DOM.Core;
 -- SOURCE
 package Ships.SaveLoad is
 -- ****
-
-   -- ****f* SSaveLoad/SSaveLoad.Save_Player_Ship
-   -- FUNCTION
-   -- Save player ship to file
-   -- PAEAMETERS
-   -- Save_Data - XML structure to which player ship data will be saved
-   -- Main_Node - XML main node to which player ship data will be saved
-   -- SOURCE
-   procedure Save_Player_Ship
-     (Save_Data: Document; Main_Node: DOM.Core.Element);
-   -- ****
 
    -- ****f* SSaveLoad/SSaveLoad.Load_Player_Ship
    -- FUNCTION
