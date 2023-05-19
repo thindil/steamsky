@@ -17,17 +17,13 @@
 
 with Ada.Directories;
 with Ada.Exceptions;
-with Ada.Strings;
-with Ada.Strings.Fixed;
-with Ada.Text_IO.Text_Streams;
-with Ada.Text_IO;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
-with Bases;
+with Bases; use Bases;
 with Bases.SaveLoad; use Bases.SaveLoad;
 with Careers;
 with Config; use Config;
@@ -54,555 +50,44 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
-      use Ada.Strings.Fixed;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Save: DOM_Implementation;
-      --## rule on IMPROPER_INITIALIZATION
-      Category_Node, Main_Node: DOM.Core.Element;
-      Raw_Value: Unbounded_String := Null_Unbounded_String;
-      Save_Data: Document;
-      procedure Save_Statistics
-        (Statistics_Vector: in out Statistics_Container.Vector;
-         Stat_Name: String) is
-         Stat_Node: DOM.Core.Element;
-      begin
-         Save_Statistics_Loop :
-         for Statistic of Statistics_Vector loop
-            Stat_Node :=
-              Append_Child
-                (N => Category_Node,
-                 New_Child =>
-                   Create_Element(Doc => Save_Data, Tag_Name => Stat_Name));
-            Set_Attribute
-              (Elem => Stat_Node, Name => "index",
-               Value => To_String(Source => Statistic.Index));
-            Raw_Value :=
-              To_Unbounded_String(Source => Integer'Image(Statistic.Amount));
-            Set_Attribute
-              (Elem => Stat_Node, Name => "amount",
-               Value =>
-                 To_String
-                   (Source =>
-                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         end loop Save_Statistics_Loop;
-      end Save_Statistics;
-      procedure Save_Number
-        (Value: Integer; Name: String;
-         Node: DOM.Core.Element := Category_Node) is
-         Number_String: constant String :=
-           Trim(Source => Integer'Image(Value), Side => Ada.Strings.Left);
-      begin
-         Set_Attribute(Elem => Node, Name => Name, Value => Number_String);
-      end Save_Number;
-      --## rule off TYPE_INITIAL_VALUES
-      type Difficulty_Data is record
-         Name: Unbounded_String;
-         Value: Bonus_Type;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      Difficulties: constant array(1 .. 8) of Difficulty_Data :=
-        (1 =>
-           (Name => To_Unbounded_String(Source => "enemydamagebonus"),
-            Value => New_Game_Settings.Enemy_Damage_Bonus),
-         2 =>
-           (Name => To_Unbounded_String(Source => "playerdamagebonus"),
-            Value => New_Game_Settings.Player_Damage_Bonus),
-         3 =>
-           (Name => To_Unbounded_String(Source => "enemymeleedamagebonus"),
-            Value => New_Game_Settings.Enemy_Melee_Damage_Bonus),
-         4 =>
-           (Name => To_Unbounded_String(Source => "playermeleedamagebonus"),
-            Value => New_Game_Settings.Player_Melee_Damage_Bonus),
-         5 =>
-           (Name => To_Unbounded_String(Source => "experiencebonus"),
-            Value => New_Game_Settings.Experience_Bonus),
-         6 =>
-           (Name => To_Unbounded_String(Source => "reputationbonus"),
-            Value => New_Game_Settings.Reputation_Bonus),
-         7 =>
-           (Name => To_Unbounded_String(Source => "upgradecostbonus"),
-            Value => New_Game_Settings.Upgrade_Cost_Bonus),
-         8 =>
-           (Name => To_Unbounded_String(Source => "pricesbonus"),
-            Value => New_Game_Settings.Prices_Bonus));
+      procedure Save_Ada_Game(P_Print: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "saveAdaGame";
+      procedure Get_Ada_Save_Name(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaSaveName";
    begin
-      Log_Message
-        (Message =>
-           "Start saving game in file " & To_String(Source => Save_Name) & ".",
-         Message_Type => EVERYTHING);
-      --## rule off IMPROPER_INITIALIZATION
-      Save_Data := Create_Document(Implementation => Save);
-      --## rule on IMPROPER_INITIALIZATION
-      Main_Node :=
-        Append_Child
-          (N => Save_Data,
-           New_Child => Create_Element(Doc => Save_Data, Tag_Name => "save"));
-      -- Write save game version
-      Set_Attribute
-        (Elem => Main_Node, Name => "version",
-         Value =>
-           Trim
-             (Source => Positive'Image(Save_Version),
-              Side => Ada.Strings.Left));
-      -- Save game difficulty settings
-      Log_Message
-        (Message => "Saving game difficulty settings...",
-         Message_Type => EVERYTHING, New_Line => False);
-      Category_Node :=
-        Append_Child
-          (N => Main_Node,
-           New_Child =>
-             Create_Element(Doc => Save_Data, Tag_Name => "difficulty"));
-      Save_Difficulty_Loop :
-      for Difficulty of Difficulties loop
-         Raw_Value :=
-           To_Unbounded_String(Source => Bonus_Type'Image(Difficulty.Value));
-         Set_Attribute
-           (Elem => Category_Node,
-            Name => To_String(Source => Difficulty.Name),
-            Value =>
-              To_String
-                (Source =>
-                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-      end loop Save_Difficulty_Loop;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save game date
-      Log_Message
-        (Message => "Saving game time...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Category_Node :=
-        Append_Child
-          (N => Main_Node,
-           New_Child =>
-             Create_Element(Doc => Save_Data, Tag_Name => "gamedate"));
-      Save_Number(Value => Game_Date.Year, Name => "year");
-      Save_Number(Value => Game_Date.Month, Name => "month");
-      Save_Number(Value => Game_Date.Day, Name => "day");
-      Save_Number(Value => Game_Date.Hour, Name => "hour");
-      Save_Number(Value => Game_Date.Minutes, Name => "minutes");
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save map
-      Log_Message
-        (Message => "Saving map...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Map_Block :
-      declare
-         Field_Node: DOM.Core.Element;
-      begin
-         Save_Map_X_Loop :
-         for X in Sky_Map'Range(1) loop
-            Save_Map_Y_Loop :
-            for Y in Sky_Map'Range(2) loop
-               if Sky_Map(X, Y).Visited then
-                  Field_Node :=
-                    Append_Child
-                      (N => Main_Node,
-                       New_Child =>
-                         Create_Element
-                           (Doc => Save_Data, Tag_Name => "field"));
-                  Save_Number(Value => X, Name => "x", Node => Field_Node);
-                  Save_Number(Value => Y, Name => "y", Node => Field_Node);
-               end if;
-            end loop Save_Map_Y_Loop;
-         end loop Save_Map_X_Loop;
-      end Save_Map_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save bases
-      Log_Message
-        (Message => "Saving bases...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Bases(Save_Data => Save_Data, Main_Node => Main_Node);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save player ship
-      Log_Message
-        (Message => "Saving player ship...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Player_Ship(Save_Data => Save_Data, Main_Node => Main_Node);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save known recipes
-      Log_Message
-        (Message => "Saving known recipes...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Known_Recipes_Block :
-      declare
-         use Tiny_String;
-
-         Recipe_Node: DOM.Core.Element;
-         Recipe: Bounded_String := Null_Bounded_String;
-         Index: Natural := 0;
-      begin
-         Save_Known_Recipes_Loop :
-         loop
-            Recipe := Get_Known_Recipe(Index => Index);
-            exit Save_Known_Recipes_Loop when Length(Source => Recipe) = 0;
-            Recipe_Node :=
-              Append_Child
-                (N => Main_Node,
-                 New_Child =>
-                   Create_Element(Doc => Save_Data, Tag_Name => "recipe"));
-            Set_Attribute
-              (Elem => Recipe_Node, Name => "index",
-               Value => To_String(Source => Recipe));
-            Index := Index + 1;
-         end loop Save_Known_Recipes_Loop;
-      end Save_Known_Recipes_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save messages
-      Log_Message
-        (Message => "Saving messages...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Messages_Block :
-      declare
-         Messages_To_Save: constant Natural :=
-           (if Game_Settings.Saved_Messages > Messages_Amount then
-              Messages_Amount
-            else Game_Settings.Saved_Messages);
-         Start_Loop: Positive := 1;
-         Message_Node: DOM.Core.Element;
-         Message: Message_Data :=
-           (Message => Null_Unbounded_String, M_Type => DEFAULT,
-            Color => WHITE);
-         Message_Text: Text;
-      begin
-         if Messages_To_Save > 0 then
-            Start_Loop := Messages_Amount - Messages_To_Save + 1;
-            Save_Messages_Loop :
-            for I in Start_Loop .. Messages_Amount loop
-               Message := Get_Message(Message_Index => I);
-               Message_Node :=
-                 Append_Child
-                   (N => Main_Node,
-                    New_Child =>
-                      Create_Element(Doc => Save_Data, Tag_Name => "message"));
-               Save_Number
-                 (Value => Message_Type'Pos(Message.M_Type), Name => "type",
-                  Node => Message_Node);
-               Save_Number
-                 (Value => Message_Color'Pos(Message.Color), Name => "color",
-                  Node => Message_Node);
-               --## rule off ASSIGNMENTS
-               Message_Text :=
-                 Create_Text_Node
-                   (Doc => Save_Data,
-                    Data => To_String(Source => Message.Message));
-               Message_Text :=
-                 Append_Child(N => Message_Node, New_Child => Message_Text);
-               --## rule on ASSIGNMENTS
-            end loop Save_Messages_Loop;
-         end if;
-      end Save_Messages_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save events
-      Log_Message
-        (Message => "Saving events...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Save_Known_Events_Block :
-      declare
-         use Ada.Strings;
-
-         Event_Node: DOM.Core.Element;
-      begin
-         Save_Events_Loop :
-         for Event of Events_List loop
-            Event_Node :=
-              Append_Child
-                (N => Main_Node,
-                 New_Child =>
-                   Create_Element(Doc => Save_Data, Tag_Name => "event"));
-            Save_Number
-              (Value => Events_Types'Pos(Event.E_Type), Name => "type",
-               Node => Event_Node);
-            Save_Number(Value => Event.Sky_X, Name => "x", Node => Event_Node);
-            Save_Number(Value => Event.Sky_Y, Name => "y", Node => Event_Node);
-            Save_Number
-              (Value => Event.Time, Name => "time", Node => Event_Node);
-            case Event.E_Type is
-               when DOUBLEPRICE =>
-                  Raw_Value :=
-                    To_Unbounded_String
-                      (Source =>
-                         Trim
-                           (Source => Positive'Image(Event.Item_Index),
-                            Side => Left));
-               when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
-                 FRIENDLYSHIP =>
-                  Raw_Value :=
-                    To_Unbounded_String(Source => Event.Ship_Index'Img);
-               when others =>
-                  Raw_Value :=
-                    To_Unbounded_String(Source => Integer'Image(Event.Data));
-            end case;
-            Set_Attribute
-              (Elem => Event_Node, Name => "data",
-               Value =>
-                 To_String
-                   (Source =>
-                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         end loop Save_Events_Loop;
-      end Save_Known_Events_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save game statistics
-      Log_Message
-        (Message => "Saving game statistics...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Category_Node :=
-        Append_Child
-          (N => Main_Node,
-           New_Child =>
-             Create_Element(Doc => Save_Data, Tag_Name => "statistics"));
-      Save_Statistics
-        (Statistics_Vector => Game_Stats.Destroyed_Ships,
-         Stat_Name => "destroyedships");
-      Save_Number(Value => Game_Stats.Bases_Visited, Name => "visitedbases");
-      Save_Number(Value => Game_Stats.Map_Visited, Name => "mapdiscovered");
-      Save_Number
-        (Value => Game_Stats.Distance_Traveled, Name => "distancetraveled");
-      Save_Statistics
-        (Statistics_Vector => Game_Stats.Crafting_Orders,
-         Stat_Name => "finishedcrafts");
-      Save_Number
-        (Value => Game_Stats.Accepted_Missions, Name => "acceptedmissions");
-      Save_Statistics
-        (Statistics_Vector => Game_Stats.Finished_Missions,
-         Stat_Name => "finishedmissions");
-      Save_Statistics
-        (Statistics_Vector => Game_Stats.Finished_Goals,
-         Stat_Name => "finishedgoals");
-      Save_Statistics
-        (Statistics_Vector => Game_Stats.Killed_Mobs,
-         Stat_Name => "killedmobs");
-      Save_Number(Value => Game_Stats.Points, Name => "points");
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save current goal
-      Log_Message
-        (Message => "Saving current goal...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Category_Node :=
-        Append_Child
-          (N => Main_Node,
-           New_Child =>
-             Create_Element(Doc => Save_Data, Tag_Name => "currentgoal"));
-      Set_Attribute
-        (Elem => Category_Node, Name => "index",
-         Value => To_String(Source => Current_Goal.Index));
-      Save_Number
-        (Value => Goal_Types'Pos(Current_Goal.G_Type), Name => "type");
-      Save_Number(Value => Current_Goal.Amount, Name => "amount");
-      Set_Attribute
-        (Elem => Category_Node, Name => "target",
-         Value => To_String(Source => Current_Goal.Target_Index));
-      Save_Number(Value => Current_Goal.Multiplier, Name => "multiplier");
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Save current story
-      if Current_Story.Index /= Null_Unbounded_String then
-         Log_Message
-           (Message => "Saving current story...", Message_Type => EVERYTHING,
-            New_Line => False);
-         Category_Node :=
-           Append_Child
-             (N => Main_Node,
-              New_Child =>
-                Create_Element(Doc => Save_Data, Tag_Name => "Current_Story"));
-         Set_Attribute
-           (Elem => Category_Node, Name => "index",
-            Value => To_String(Source => Current_Story.Index));
-         Raw_Value :=
-           To_Unbounded_String(Source => Positive'Image(Current_Story.Step));
-         Set_Attribute
-           (Elem => Category_Node, Name => "step",
-            Value =>
-              To_String
-                (Source =>
-                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         case Current_Story.Current_Step is
-            when 0 =>
-               Set_Attribute
-                 (Elem => Category_Node, Name => "currentstep",
-                  Value => "start");
-            when -1 =>
-               Set_Attribute
-                 (Elem => Category_Node, Name => "currentstep",
-                  Value => "finish");
-            when others =>
-               Set_Attribute
-                 (Elem => Category_Node, Name => "currentstep",
-                  Value =>
-                    To_String
-                      (Source =>
-                         Stories_List(Current_Story.Index).Steps
-                           (Current_Story.Current_Step)
-                           .Index));
-         end case;
-         Save_Number(Value => Current_Story.Max_Steps, Name => "maxsteps");
-         if Current_Story.Show_Text then
-            Set_Attribute
-              (Elem => Category_Node, Name => "showtext", Value => "Y");
-         else
-            Set_Attribute
-              (Elem => Category_Node, Name => "showtext", Value => "N");
-         end if;
-         if Current_Story.Data /= Null_Unbounded_String then
-            Set_Attribute
-              (Elem => Category_Node, Name => "data",
-               Value => To_String(Source => Current_Story.Data));
-         end if;
-         Save_Number
-           (Value => Step_Condition_Type'Pos(Current_Story.Finished_Step),
-            Name => "finishedstep");
-         Log_Message
-           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-            Time_Stamp => False);
-      end if;
-      -- Save finished stories data
-      Save_Finished_Stories_Block :
-      declare
-         Step_Node: DOM.Core.Element;
-         Step_Text: Text;
-      begin
-         Log_Message
-           (Message => "Saving finished stories...",
-            Message_Type => EVERYTHING, New_Line => False);
-         Save_Finished_Stories_Loop :
-         for FinishedStory of Finished_Stories loop
-            Category_Node :=
-              Append_Child
-                (N => Main_Node,
-                 New_Child =>
-                   Create_Element
-                     (Doc => Save_Data, Tag_Name => "finishedstory"));
-            Set_Attribute
-              (Elem => Category_Node, Name => "index",
-               Value => To_String(Source => FinishedStory.Index));
-            Save_Number
-              (Value => FinishedStory.Steps_Amount, Name => "stepsamount");
-            Save_Story_Steps_Loop :
-            for Step of FinishedStory.Steps_Texts loop
-               Step_Node :=
-                 Append_Child
-                   (N => Category_Node,
-                    New_Child =>
-                      Create_Element
-                        (Doc => Save_Data, Tag_Name => "steptext"));
-               --## rule off ASSIGNMENTS
-               Step_Text :=
-                 Create_Text_Node
-                   (Doc => Save_Data, Data => To_String(Source => Step));
-               Step_Text :=
-                 Append_Child(N => Step_Node, New_Child => Step_Text);
-               --## rule on ASSIGNMENTS
-            end loop Save_Story_Steps_Loop;
-         end loop Save_Finished_Stories_Loop;
-         Log_Message
-           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-            Time_Stamp => False);
-      end Save_Finished_Stories_Block;
-      -- Save missions accepted by player
-      Save_Missions_Loop :
-      for Mission of Accepted_Missions loop
-         Category_Node :=
-           Append_Child
-             (N => Main_Node,
-              New_Child =>
-                Create_Element
-                  (Doc => Save_Data, Tag_Name => "acceptedmission"));
-         Save_Number
-           (Value => Missions_Types'Pos(Mission.M_Type), Name => "type");
-         Raw_Value :=
-           (if Mission.M_Type = DELIVER then
-              To_Unbounded_String(Source => Positive'Image(Mission.Item_Index))
-            elsif Mission.M_Type = PASSENGER then
-              To_Unbounded_String(Source => Integer'Image(Mission.Data))
-            elsif Mission.M_Type = DESTROY then
-              To_Unbounded_String(Source => Mission.Ship_Index'Img)
-            else To_Unbounded_String(Source => Integer'Image(Mission.Target)));
-         Set_Attribute
-           (Elem => Category_Node, Name => "target",
-            Value =>
-              To_String
-                (Source =>
-                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         Save_Number(Value => Mission.Time, Name => "time");
-         Save_Number(Value => Mission.Target_X, Name => "targetx");
-         Save_Number(Value => Mission.Target_Y, Name => "targety");
-         Save_Number(Value => Mission.Reward, Name => "reward");
-         Save_Number(Value => Mission.Start_Base, Name => "startbase");
-         if Mission.Finished then
-            Set_Attribute
-              (Elem => Category_Node, Name => "finished", Value => "Y");
-         else
-            Set_Attribute
-              (Elem => Category_Node, Name => "finished", Value => "N");
-         end if;
-         if Mission.Multiplier /= 1.0 then
-            Raw_Value :=
-              To_Unbounded_String
-                (Source => Reward_Multiplier'Image(Mission.Multiplier));
-            Set_Attribute
-              (Elem => Category_Node, Name => "multiplier",
-               Value =>
-                 To_String
-                   (Source =>
-                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         end if;
-      end loop Save_Missions_Loop;
-      -- Save player career
-      Log_Message
-        (Message => "Saving player career...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Category_Node :=
-        Append_Child
-          (N => Main_Node,
-           New_Child =>
-             Create_Element(Doc => Save_Data, Tag_Name => "playercareer"));
-      Set_Attribute
-        (Elem => Category_Node, Name => "index",
-         Value => To_String(Source => Player_Career));
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      Save_To_File_Block :
-      declare
-         use Ada.Text_IO;
-         use Ada.Text_IO.Text_Streams;
-
-         Save_File: File_Type;
-      begin
-         Create
-           (File => Save_File, Mode => Out_File,
-            Name => To_String(Source => Save_Name));
-         Write
-           (Stream => Stream(File => Save_File), N => Save_Data,
-            Pretty_Print => Pretty_Print);
-         Close(File => Save_File);
-      exception
-         when others =>
-            Log_Message
-              (Message => "Can't save the game to file.",
-               Message_Type => EVERYTHING);
-      end Save_To_File_Block;
-      Log_Message
-        (Message => "Finished saving game.", Message_Type => EVERYTHING);
+      Get_Ada_Save_Name
+        (Name => New_String(Str => To_String(Source => Save_Name)));
+      Set_Ship_In_Nim;
+      Get_Bases_Loop :
+      for I in Bases_Range loop
+         Set_Base_In_Nim(Base_Index => I);
+      end loop Get_Bases_Loop;
+      Get_Map_Y_Loop :
+      for Y in Map_Y_Range loop
+         Get_Map_X_Loop :
+         for X in Map_X_Range loop
+            Get_Ada_Map_Cell
+              (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
+               Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
+               Event_Index => Sky_Map(X, Y).Event_Index,
+               Mission_Index => Sky_Map(X, Y).Mission_Index);
+         end loop Get_Map_X_Loop;
+      end loop Get_Map_Y_Loop;
+      Get_Current_Goal;
+      Get_Current_Story;
+      Get_Finished_Stories_Loop :
+      for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
+         Get_Finished_Story(Index => I);
+      end loop Get_Finished_Stories_Loop;
+      Get_Missions;
+      Get_Ada_Game_String
+        (Name => New_String(Str => "playerCareer"),
+         Value => New_String(Str => To_String(Source => Player_Career)));
+      Save_Ada_Game(P_Print => (if Pretty_Print then 1 else 0));
    end Save_Game;
 
    procedure Load_Game is
@@ -1113,8 +598,6 @@ package body Game.SaveLoad is
           (Doc => Save_Data, Tag_Name => "acceptedmission");
       Load_Accepted_Missions_Block :
       declare
-         use Bases;
-
          M_Type: Missions_Types;
          Target_X, Target_Y, Start_Base: Natural;
          Time, Reward, M_Index: Positive;
