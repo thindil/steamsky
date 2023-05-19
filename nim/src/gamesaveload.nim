@@ -23,7 +23,8 @@ const saveVersion = 5
 
 var saveName*: string
 
-proc saveGame*(prettyPrint: bool = false) =
+proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
+    IOError], tags: [WriteIOEffect, RootEffect].} =
   logMessage(message = "Start saving game in file " & saveName & ".",
       debugType = everything)
   var saveTree = newXmlTree("save", [], {
