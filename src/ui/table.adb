@@ -560,7 +560,7 @@ package body Table is
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
       X: Natural := 0;
-      Item_Id: Unbounded_String;
+      Item_Id, Color: Unbounded_String := Null_Unbounded_String;
       --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
       --## rule on IMPROPER_INITIALIZATION
@@ -570,7 +570,6 @@ package body Table is
           (100.0 +
            ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
       --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Color: Unbounded_String;
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
    begin
@@ -729,7 +728,7 @@ package body Table is
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
       X: Natural := 5;
-      Item_Id: Unbounded_String;
+      Item_Id: Unbounded_String := Null_Unbounded_String;
       --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
       --## rule on IMPROPER_INITIALIZATION
