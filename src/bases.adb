@@ -730,23 +730,6 @@ package body Bases is
       end loop Convert_Crew_Loop;
    end Set_Ada_Recruits;
 
-   procedure Set_Base_Recruit_Date(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Recruit_Date
-        (B_Index: Bases_Range;
-         Year, Month, Day, Hour, Minutes: out Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseRecruitDate";
-   begin
-      Set_Ada_Base_Recruit_Date
-        (B_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
-         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
-         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
-         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes);
-   end Set_Base_Recruit_Date;
-
    procedure Get_Base_Type
      (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String) is
       procedure Get_Ada_Base_Type(B_Index: Integer; B_Type: chars_ptr) with
@@ -759,23 +742,6 @@ package body Bases is
          B_Type =>
            New_String(Str => Tiny_String.To_String(Source => Base_Type)));
    end Get_Base_Type;
-
-   procedure Set_Base_Missions_Date(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Missions_Date
-        (B_Index: Bases_Range;
-         Year, Month, Day, Hour, Minutes: out Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseMissionsDate";
-   begin
-      Set_Ada_Base_Missions_Date
-        (B_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Missions_Date.Year,
-         Month => Sky_Bases(Base_Index).Missions_Date.Month,
-         Day => Sky_Bases(Base_Index).Missions_Date.Day,
-         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
-   end Set_Base_Missions_Date;
 
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Base_Cargo is record
@@ -859,22 +825,6 @@ package body Bases is
       Set_Ada_Base_Cargo(B_Index => Base_Index, Cargo => Nim_Cargo);
       Cargo_From_Nim(Cargo => Nim_Cargo, B_Index => Base_Index);
    end Set_Base_Cargo;
-
-   procedure Set_Base_Visited_Date(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Visited_Date
-        (B_Index: Bases_Range;
-         Year, Month, Day, Hour, Minutes: out Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseVisitedDate";
-   begin
-      Set_Ada_Base_Visited_Date
-        (B_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
-         Month => Sky_Bases(Base_Index).Visited.Month,
-         Day => Sky_Bases(Base_Index).Visited.Day,
-         Hour => Sky_Bases(Base_Index).Visited.Hour,
-         Minutes => Sky_Bases(Base_Index).Visited.Minutes);
-   end Set_Base_Visited_Date;
 
    procedure Set_Base_In_Nim(Base_Index: Bases_Range) is
       procedure Get_Ada_Base_Name(B_Index: Integer; B_Name: chars_ptr) with

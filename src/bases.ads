@@ -315,8 +315,6 @@ package Bases is
       Convention => C,
       External_Name => "setAdaBaseDate";
 
-   procedure Set_Base_Recruit_Date(Base_Index: Bases_Range);
-
    procedure Get_Ada_Recruits
      (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);
 
@@ -326,13 +324,9 @@ package Bases is
    procedure Get_Base_Type
      (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String);
 
-   procedure Set_Base_Missions_Date(Base_Index: Bases_Range);
-
    procedure Get_Base_Cargo(Base_Index: Natural);
 
    procedure Set_Base_Cargo(Base_Index: Natural);
-
-   procedure Set_Base_Visited_Date(Base_Index: Bases_Range);
 
    procedure Set_Base_In_Nim(Base_Index: Bases_Range);
 

@@ -58,7 +58,13 @@ package body Missions is
          Population => Sky_Bases(Base_Index).Population);
       Generate_Ada_Missions;
       Set_Missions(Base_Index => Base_Index);
-      Set_Base_Missions_Date(Base_Index => Base_Index);
+      Set_Ada_Base_Date
+        (Base_Index => Base_Index, Date_Type => 1,
+         Year => Sky_Bases(Base_Index).Missions_Date.Year,
+         Month => Sky_Bases(Base_Index).Missions_Date.Month,
+         Day => Sky_Bases(Base_Index).Missions_Date.Day,
+         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
