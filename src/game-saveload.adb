@@ -17,26 +17,26 @@
 
 with Ada.Directories;
 with Ada.Exceptions;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core;
+with DOM.Core.Documents;
+with DOM.Core.Elements;
+with DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
-with Bases.SaveLoad; use Bases.SaveLoad;
+with Bases.SaveLoad;
 with Careers;
-with Config; use Config;
-with Crafts; use Crafts;
-with Events; use Events;
+with Config;
+with Crafts;
+with Events;
 with Goals; use Goals;
-with Log; use Log;
+with Log;
 with Maps; use Maps;
-with Messages; use Messages;
+with Messages;
 with Missions; use Missions;
 with Ships; use Ships;
-with Ships.SaveLoad; use Ships.SaveLoad;
-with Statistics; use Statistics;
+with Ships.SaveLoad;
+with Statistics;
 with Stories; use Stories;
 with Utils;
 
@@ -92,9 +92,20 @@ package body Game.SaveLoad is
 
    procedure Load_Game is
       use Ada.Exceptions;
+      use DOM.Core;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
       use DOM.Readers;
       use Input_Sources.File;
+      use Bases.SaveLoad;
       use Careers;
+      use Config;
+      use Crafts;
+      use Events;
+      use Log;
+      use Messages;
+      use Ships.SaveLoad;
+
       use Tiny_String;
 
       Save_File: File_Input;
@@ -391,6 +402,8 @@ package body Game.SaveLoad is
           (Doc => Save_Data, Tag_Name => "statistics");
       Load_Statistics_Block :
       declare
+         use Statistics;
+
          Stat_Index, Nodename: Unbounded_String;
          Stat_Amount: Positive;
       begin
