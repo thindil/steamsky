@@ -956,4 +956,17 @@ package body Bases is
          Size => Bases_Size'Pos(Sky_Bases(Base_Index).Size));
    end Set_Base_In_Nim;
 
+   procedure Get_Base_From_Nim(Base_Index: Bases_Range) is
+      use Tiny_String;
+      Name: chars_ptr;
+      procedure Set_Ada_Base_Name(B_Index: Integer; B_Name: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseName";
+   begin
+      Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
+      Sky_Bases(Base_Index).Name :=
+        To_Bounded_String(Source => Value(Item => Name));
+   end Get_Base_From_Nim;
+
 end Bases;

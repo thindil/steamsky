@@ -488,6 +488,9 @@ proc getAdaBaseDate(baseIndex, year, month, day, hour,
 proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].name = $name
 
+proc setAdaBaseName(baseIndex: cint; name: var cstring) {.raises: [], tags: [], exportc.} =
+  name = skyBases[baseIndex].name.cstring
+
 proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].known = known == 1
 
