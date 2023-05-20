@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Ability to assign the crew members to the player's ship's training rooms in
   the module info dialog
 
+### Changed
+- Updated look of the module info dialog
+
 ### Fixed
 - Typos in changelog
 - Crash when browsing modules to install in shipyards
