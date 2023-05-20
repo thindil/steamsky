@@ -308,6 +308,13 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseDate";
 
+   procedure Set_Ada_Base_Date
+     (Base_Index: Bases_Range; Date_Type: Natural;
+      Year, Month, Day, Hour, Minutes: out Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaBaseDate";
+
    procedure Set_Base_Recruit_Date(Base_Index: Bases_Range);
 
    procedure Get_Ada_Recruits

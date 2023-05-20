@@ -485,6 +485,36 @@ proc getAdaBaseDate(baseIndex, year, month, day, hour,
   else:
     discard
 
+proc setAdaBaseDate(baseIndex, dateType: cint; year, month, day, hour,
+    minutes: var cint) {.raises: [], tags: [], exportc.} =
+  case dateType
+  of 0:
+    year = skyBases[baseIndex].visited.year
+    month = skyBases[baseIndex].visited.month
+    day = skyBases[baseIndex].visited.day
+    hour = skyBases[baseIndex].visited.hour
+    minutes = skyBases[baseIndex].visited.minutes
+  of 1:
+    year = skyBases[baseIndex].missionsDate.year
+    month = skyBases[baseIndex].missionsDate.month
+    day = skyBases[baseIndex].missionsDate.day
+    hour = skyBases[baseIndex].missionsDate.hour
+    minutes = skyBases[baseIndex].missionsDate.minutes
+  of 2:
+    year = skyBases[baseIndex].recruitDate.year
+    month = skyBases[baseIndex].recruitDate.month
+    day = skyBases[baseIndex].recruitDate.day
+    hour = skyBases[baseIndex].recruitDate.hour
+    minutes = skyBases[baseIndex].recruitDate.minutes
+  of 3:
+    year = skyBases[baseIndex].askedForEvents.year
+    month = skyBases[baseIndex].askedForEvents.month
+    day = skyBases[baseIndex].askedForEvents.day
+    hour = skyBases[baseIndex].askedForEvents.hour
+    minutes = skyBases[baseIndex].askedForEvents.minutes
+  else:
+    discard
+
 proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].name = $name
 
