@@ -625,7 +625,21 @@ package body Table is
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
-      if not Invert_Colors then
+      if Invert_Colors then
+         Color :=
+           To_Unbounded_String
+             (Source =>
+                (if Length < 25 then
+                   Style_Lookup
+                     (Name => "green.Horizontal.TProgressbar",
+                      Option => "-background")
+                 elsif Length > 24 and Length < 75 then
+                   Style_Lookup
+                     (Name => "yellow.Horizontal.TProgressbar",
+                      Option => "-background")
+                 else Style_Lookup
+                     (Name => "TProgressbar", Option => "-background")));
+      else
          Color :=
            To_Unbounded_String
              (Source =>
@@ -642,20 +656,6 @@ package body Table is
                      (Name => "TProgressbar", Option => "-background")
                  else Style_Lookup
                      (Name => "TProgressbar", Option => "-troughcolor")));
-      else
-         Color :=
-           To_Unbounded_String
-             (Source =>
-                (if Length < 25 then
-                   Style_Lookup
-                     (Name => "green.Horizontal.TProgressbar",
-                      Option => "-background")
-                 elsif Length > 24 and Length < 75 then
-                   Style_Lookup
-                     (Name => "yellow.Horizontal.TProgressbar",
-                      Option => "-background")
-                 else Style_Lookup
-                     (Name => "TProgressbar", Option => "-background")));
       end if;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Item_Id :=
