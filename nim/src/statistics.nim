@@ -22,21 +22,35 @@ type
   StatisticsData* = object
     ## Used to store detailed information about some the player's game's
     ## statistics
-    index*: string ## The index of the prototype object
-    amount*: Positive ## The amount of the object
+    ##
+    ## * index  - The index of the prototype object
+    ## * amount - The amount of the object
+    index*: string
+    amount*: Positive
 
   GameStatsData = object
     ## Used to store information about the player's game's statistics
-    destroyedShips*: seq[StatisticsData]   ## The list of destroyed ships
-    basesVisited*: BasesRange              ## The amount of visited bases
-    mapVisited*: Positive                  ## The amount of visited map fields
-    distanceTraveled*: Natural             ## The length of the traveled distance
-    craftingOrders*: seq[StatisticsData]   ## The list of finished crafting orders
-    acceptedMissions*: Natural             ## The amount of accepted missions
-    finishedMissions*: seq[StatisticsData] ## The list of finished missions
-    finishedGoals*: seq[StatisticsData]    ## The list of finished goals
-    killedMobs*: seq[StatisticsData]       ## The list of enemies killed
-    points*: Natural                       ## The amount of points gained in the game's session
+    ##
+    ## * destroyedShips   - The list of destroyed ships
+    ## * basesVisited     - The amount of visited bases
+    ## * mapVisited       - The amount of visited map fields
+    ## * distanceTraveled - The length of the traveled distance
+    ## * craftingOrders   - The list of finished crafting orders
+    ## * acceptedMissions - The amount of accepted missions
+    ## * finishedMissions - The list of finished missions
+    ## * finishedGoals    - The list of finished goals
+    ## * killedMobs       - The list of enemies killed
+    ## * points           - The amount of points gained in the game's session
+    destroyedShips*: seq[StatisticsData]
+    basesVisited*: BasesRange
+    mapVisited*: Positive
+    distanceTraveled*: Natural
+    craftingOrders*: seq[StatisticsData]
+    acceptedMissions*: Natural
+    finishedMissions*: seq[StatisticsData]
+    finishedGoals*: seq[StatisticsData]
+    killedMobs*: seq[StatisticsData]
+    points*: Natural
 
 var gameStats* = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
