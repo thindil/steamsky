@@ -19,12 +19,16 @@ import std/[strutils, tables, xmltree]
 import basessaveload, config, game, goals, log, maps, messages, missions,
     shipssaveload, statistics, stories, types
 
-const saveVersion = 5
+const saveVersion = 5 ## The current version of the game saves files
 
-var saveName*: string
+var saveName*: string ## The full path to the game save file with file name
 
 proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     IOError], tags: [WriteIOEffect, RootEffect].} =
+  ## Save the game data to the file.
+  ##
+  ## * prettyPrint - if true, format properly XML before save, default is false,
+  ##                 for reduce size of the file
   logMessage(message = "Start saving game in file " & saveName & ".",
       debugType = everything)
   var saveTree = newXmlTree("save", [], {
