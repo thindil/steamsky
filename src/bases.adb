@@ -882,6 +882,8 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
          Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
          Date_Type => 2);
+      Get_Ada_Recruits
+        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
       Get_Ada_Base_Known
         (B_Index => Base_Index,
          Known => (if Sky_Bases(Base_Index).Known then 1 else 0));
