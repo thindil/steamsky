@@ -28,6 +28,7 @@ type
 
   StepTextData = object
     ## Used to store stories' steps' texts
+    ##
     ## * condition - the requirement for the previous step of a story
     ## * text      - uhe text which will be shown to the player when the step starts
     condition: StepConditionType
@@ -35,12 +36,14 @@ type
 
   StepFinishData = object
     ## Used to store information about requirements to finish a story's step
+    ##
     ## * name  - the name of the data
     ## * value - the data's value
     name, value: string
 
   StepData = object
     ## Used to store information about stories' steps
+    ##
     ## * index           - the index of the step
     ## * finishCondition - the condition which must be meet to finish the step and
     ##                     progress to the next step
@@ -58,6 +61,7 @@ type
 
   StoryData = object
     ## Used to store information about a story
+    ##
     ## * startCondition    - the condition which must be meet to start the story
     ## * startData         - the data of the starting condition
     ## * minSteps          - the minimal amount of steps in the story
@@ -83,6 +87,7 @@ type
 
   CurrentStoryData = object
     ## Used to store information about the current story
+    ##
     ## * index        - the index of the story or empty string if no story active
     ## * step         - the number of the step of the current story
     ## * currentStep  - the index of the current step of the story, 0 for starting
