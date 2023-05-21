@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Saved game doesn't load when training room on the player's ship doesn't
+  have set a skill to train
+
 ## [8.0.6] - 2023-03-26
 
 ### Fixed
