@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in changelog
 - Crash when browsing modules to install in shipyards
+- Saved game doesn't load when training room on the player's ship doesn't
+  have set a skill to train
 
 ## [8.7] - 2023-05-14
 
