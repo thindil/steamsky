@@ -28,10 +28,10 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Table is
 
@@ -39,6 +39,8 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
+      use Tcl.Tklib.Ada.Autoscroll;
+
       Canvas_Widget: Tk_Canvas;
       --## rule off IMPROPER_INITIALIZATION
       Y_Scroll: Ttk_Scrollbar;
@@ -1079,6 +1081,7 @@ package body Table is
    end Toggle_Checked_Button;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "UpdateCurrentRow",
