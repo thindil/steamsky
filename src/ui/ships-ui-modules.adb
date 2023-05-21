@@ -1196,6 +1196,24 @@ package body Ships.UI.Modules is
                    (pathName => Skill_Box & ".trainlbl",
                     options => "-text " & To_String(Source => Train_Text));
                Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Info_Button :=
+                 Create
+                   (pathName => Skill_Box & ".button",
+                    options =>
+                      "-image assigncrewicon -command {" &
+                      Close_Dialog_Button & " invoke;ShowAssignSkill " &
+                      CArgv.Arg(Argv => Argv, N => 1) &
+                      "} -style Small.TButton");
+               Add
+                 (Widget => Info_Button,
+                  Message =>
+                    "Assign a skill which will be trained in the training room.");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Info_Button,
+                  Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+               Bind
+                 (Widgt => Info_Button, Sequence => "<Escape>",
+                  Script => "{" & Close_Dialog_Button & " invoke;break}");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Skill_Box, Options => "-sticky w");
                Tcl_Eval(interp => Interp, strng => "update");
