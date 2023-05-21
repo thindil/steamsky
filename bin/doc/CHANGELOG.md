@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Crash when browsing modules to install in shipyards
 - Saved game doesn't load when training room on the player's ship doesn't
   have set a skill to train
+- Recruits in bases change every time intead of every in-game week
 
 ## [8.7] - 2023-05-14
 
