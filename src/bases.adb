@@ -106,6 +106,14 @@ package body Bases is
       Generate_Ada_Recruits;
       Set_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+      Set_Ada_Base_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
+         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
+         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
+         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
+         Date_Type => 2);
    end Generate_Recruits;
 
    procedure Ask_For_Bases is
