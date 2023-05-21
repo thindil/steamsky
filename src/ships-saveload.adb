@@ -418,8 +418,7 @@ package body Ships.SaveLoad is
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
-                              Trained_Skill =>
-                                Skills_Amount_Range(Trained_Skill)));
+                              Trained_Skill => Count_Type(Trained_Skill)));
                      end Load_Training_Room_Block;
                   when TURRET =>
                      Load_Turret_Block :
