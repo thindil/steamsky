@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -802,8 +802,7 @@ package body Ships.SaveLoad is
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
-                              Trained_Skill =>
-                                Skills_Amount_Range(Trained_Skill)));
+                              Trained_Skill => Count_Type(Trained_Skill)));
                      end Load_Training_Room_Block;
                   when TURRET =>
                      Load_Turret_Block :
