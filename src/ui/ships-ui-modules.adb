@@ -134,17 +134,6 @@ package body Ships.UI.Modules is
          end if;
       end Add_Button;
    begin
-      case Player_Ship.Modules(Module_Index).M_Type is
-         when TRAINING_ROOM =>
-            Add_Button
-              (Name => ".assignskill",
-               Label =>
-                 "Assign a skill which will be trained in the training room...",
-               Command =>
-                 "ShowAssignSkill " & CArgv.Arg(Argv => Argv, N => 1));
-         when others =>
-            null;
-      end case;
       Add_Button
         (Name => ".info", Label => "Show more info about the module",
          Command => "ShowModuleInfo " & CArgv.Arg(Argv => Argv, N => 1));
