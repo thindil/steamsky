@@ -102,66 +102,108 @@ type
 
   ModuleData* = object
     ## Used to store information about ships' modules
-    name*: string                ## The name of the module
-    protoIndex*: Natural         ## The index of the prototype module
-    weight*: Natural             ## The weight of the module
-    durability*: Natural         ## The current durability of the module
-    maxDurability*: Natural      ## The max durability of the module
-    owner*: seq[int]             ## The list of owners of the module
-    upgradeProgress*: int        ## The upgrade progess of the module
-    upgradeAction*: ShipUpgrade  ## The current upgrade type for the module
+    ##
+    ## * mType            - The type of the module
+    ## * name             - The name of the module
+    ## * protoIndex       - The index of the prototype module
+    ## * weight           - The weight of the module
+    ## * durability       - The current durability of the module
+    ## * maxDurability    - The max durability of the module
+    ## * owner            - The list of owners of the module
+    ## * upgradeProgress  - The upgrade progess of the module
+    ## * upgradeAction    - The current upgrade type for the module
+    ## * fuelUsage        - The fuel usage for engines modules
+    ## * power            - The power of the engines modules
+    ## * disabled         - If true, the engine is disabled
+    ## * cleanliness      - The cleanliness level of the cabin
+    ## * quality          - The quality level of the cabin
+    ## * gunIndex         - The index of the module used as gun in the turret
+    ## * damage           - The damage of the gun
+    ## * ammoIndex        - The index of item from ship's cargo used as ammunition
+    ## * installedModules - The amount of installed modules in the hull
+    ## * maxModules       - The max amount of modules which the hull can hold
+    ## * craftingIndex    - The index of currently crafted recipe
+    ## * craftingTime     - The amount of time needed to finish the order
+    ## * craftingAmount   - How many times repeat the crafting order
+    ## * trainedSkill     - The index of trained skill
+    ## * damage2          - The damage of the battering ram
+    ## * coolingDown      - If true, the battering ram can't attack now
+    ## * duration         - The duration bonus of the harpoon gun
+    ## * harpoonIndex     - The index of item from ship's cargo used as harpoon
+    ## * data             - Various data for module, depends on module
+    name*: string
+    protoIndex*: Natural
+    weight*: Natural
+    durability*: Natural
+    maxDurability*: Natural
+    owner*: seq[int]
+    upgradeProgress*: int
+    upgradeAction*: ShipUpgrade
     case mType*: ModuleType2
     of ModuleType2.engine:
-      fuelUsage*: Positive       ## The fuel usage for engines modules
-      power*: Positive           ## The power of the engines modules
-      disabled*: bool            ## If true, the engine is disabled
+      fuelUsage*: Positive
+      power*: Positive
+      disabled*: bool
     of ModuleType2.cabin:
-      cleanliness*: Natural      ## The cleanliness level of the cabin
-      quality*: Natural          ## The quality level of the cabin
+      cleanliness*: Natural
+      quality*: Natural
     of ModuleType2.turret:
-      gunIndex*: int             ## The index of the module used as gun in the turret
+      gunIndex*: int
     of ModuleType2.gun:
-      damage*: Positive          ## The damage of the gun
-      ammoIndex*: int            ## The index of item from ship's cargo used as ammunition
+      damage*: Positive
+      ammoIndex*: int
     of ModuleType2.hull:
-      installedModules*: Natural ## The amount of installed modules in the hull
-      maxModules*: Positive      ## The max amount of modules which the hull can hold
+      installedModules*: Natural
+      maxModules*: Positive
     of ModuleType2.workshop:
-      craftingIndex*: string     ## The index of currently crafted recipe
-      craftingTime*: Natural     ## The amount of time needed to finish the order
-      craftingAmount*: Natural   ## How many times repeat the crafting order
+      craftingIndex*: string
+      craftingTime*: Natural
+      craftingAmount*: Natural
     of ModuleType2.trainingRoom:
-      trainedSkill*: Natural     ## The index of trained skill
+      trainedSkill*: Natural
     of ModuleType2.batteringRam:
-      damage2*: Positive         ## The damage of the battering ram
-      coolingDown*: bool         ## If true, the battering ram can't attack now
+      damage2*: Positive
+      coolingDown*: bool
     of ModuleType2.harpoonGun:
-      duration*: Positive        ## The duration bonus of the harpoon gun
-      harpoonIndex*: int         ## The index of item from ship's cargo used as harpoon
+      duration*: Positive
+      harpoonIndex*: int
     of ModuleType2.any:
-      data*: array[1..3, int]    ## Various data for module, depends on module
+      data*: array[1..3, int]
     else:
       discard
 
   InventoryData* = object
     ## Used to store information about items in various inventories (cargo, crew
     ## inventory, ect)
-    protoIndex*: Natural ## The index of the item's prototype
-    amount*: Positive ## The amount of the item in the inventory
-    name*: string ## The name of the item, if different than the default one
-    durability*: ItemsDurability ## The current durability of the item
-    price*: Natural ## The price for which the item was bought
+    ##
+    ## * protoIndex - The index of the item's prototype
+    ## * amount     - The amount of the item in the inventory
+    ## * name       - The name of the item, if different than the default one
+    ## * durability - The current durability of the item
+    ## * price      - The price for which the item was bought
+    protoIndex*: Natural
+    amount*: Positive
+    name*: string
+    durability*: ItemsDurability
+    price*: Natural
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
-    level*: range[1..50] ## The level of the attribute
-    experience*: Natural ## The amount of experience in the attribute
+    ##
+    ## * level      - The level of the attribute
+    ## * experience - The amount of experience in the attribute
+    level*: range[1..50]
+    experience*: Natural
 
   SkillInfo* = object
     ## Used to store information about the crew member's skills
-    index*: Natural      ## The index of the skill
-    level*: SkillRange   ## The level of the skill
-    experience*: Natural ## The amount of the experience in the skill
+    ##
+    ## * index      - The index of the skill
+    ## * level      - The level of the skill
+    ## * experience - The amount of the experience in the skill
+    index*: Natural
+    level*: SkillRange
+    experience*: Natural
 
   MemberData* = object
     ## Used to store information about the crew member
@@ -266,7 +308,7 @@ type
   BaseCargo* = object
     ## Used to store information about items in bases cargo
     protoIndex*: Natural         ## The index of the item's prototype
-    amount*: Natural            ## The amount of the item in the inventory
+    amount*: Natural             ## The amount of the item in the inventory
     durability*: ItemsDurability ## The current durability of the item
     price*: Natural              ## The price for which the item was bought
 
