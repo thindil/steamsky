@@ -411,6 +411,9 @@ proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
 proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].baseType = $baseType
 
+proc setAdaBaseType(baseIndex: cint; baseType: var cstring) {.raises: [], tags: [], exportc.} =
+  baseType = skyBases[baseIndex].baseType.cstring
+
 type
   AdaBaseCargo = object
     protoIndex: cint

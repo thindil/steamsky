@@ -928,6 +928,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseLocation";
+      procedure Set_Ada_Base_Type(B_Index: Integer; B_Type: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseType";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
@@ -941,6 +945,9 @@ package body Bases is
       Set_Ada_Base_Location
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
+      Set_Ada_Base_Type(B_Index => Base_Index, B_Type => Name);
+      Sky_Bases(Base_Index).Base_Type :=
+        To_Bounded_String(Source => Value(Item => Name));
    end Get_Base_From_Nim;
 
 end Bases;
