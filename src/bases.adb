@@ -948,6 +948,17 @@ package body Bases is
       Set_Ada_Base_Type(B_Index => Base_Index, B_Type => Name);
       Sky_Bases(Base_Index).Base_Type :=
         To_Bounded_String(Source => Value(Item => Name));
+      Set_Base_Population(Base_Index => Base_Index);
+      Set_Ada_Base_Date
+        (Base_Index => Base_Index,
+         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
+         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
+         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
+         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
+         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
+         Date_Type => 2);
+      Set_Ada_Recruits
+        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
    end Get_Base_From_Nim;
 
 end Bases;
