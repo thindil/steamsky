@@ -923,10 +923,24 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseName";
+      procedure Set_Ada_Base_Location
+        (Base_Index: Bases_Range; X: out Map_X_Range; Y: out Map_Y_Range) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseLocation";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
         To_Bounded_String(Source => Value(Item => Name));
+      Set_Ada_Base_Date
+        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+         Month => Sky_Bases(Base_Index).Visited.Month,
+         Day => Sky_Bases(Base_Index).Visited.Day,
+         Hour => Sky_Bases(Base_Index).Visited.Hour,
+         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
+      Set_Ada_Base_Location
+        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+         Y => Sky_Bases(Base_Index).Sky_Y);
    end Get_Base_From_Nim;
 
 end Bases;
