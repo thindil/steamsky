@@ -30,8 +30,8 @@ package body Bases.SaveLoad is
       Base_Recruits: Recruit_Container.Vector (Capacity => 5);
       Base_Missions: Mission_Container.Vector;
       Nodes_List, Base_Data: Node_List;
-      Base_Index: Bases_Range;
-      Base_Node_Name: Unbounded_String;
+      Base_Index: Bases_Range := 1;
+      Base_Node_Name: Unbounded_String := Null_Unbounded_String;
       Base_Node, Child_Node: Node;
    begin
       Recruit_Container.Clear(Container => Base_Recruits);
@@ -121,16 +121,17 @@ package body Bases.SaveLoad is
                Load_Recruits_Block :
                declare
                   Recruit_Data: Node_List;
-                  Recruit_Name, Recruit_Faction: Bounded_String;
+                  Recruit_Name: Bounded_String;
+                  Recruit_Faction: Bounded_String := Null_Bounded_String;
                   Gender: String(1 .. 1);
-                  Home_Base: Bases_Range;
+                  Home_Base: Bases_Range := 1;
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-                  Index: SkillsData_Container.Extended_Index;
+                  Index: SkillsData_Container.Extended_Index := 0;
                   Inventory: Positive_Formal_Container.Vector (Capacity => 7);
                   Equipment: Equipment_Array;
                   Recruit_Node: Node;
-                  Level: Skill_Range;
+                  Level: Skill_Range := 0;
                   Attributes: Mob_Attributes
                     (1 ..
                          Positive
@@ -282,8 +283,8 @@ package body Bases.SaveLoad is
                   M_Type: Missions_Types;
                   Target_X, Target_Y: Natural range 0 .. 1_024;
                   Time, Reward: Positive;
-                  Target: Integer;
-                  Index: Unbounded_String;
+                  Target: Integer := 0;
+                  Index: Unbounded_String := Null_Unbounded_String;
                begin
                   M_Type :=
                     Missions_Types'Val
