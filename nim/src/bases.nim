@@ -411,7 +411,8 @@ proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
 proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].baseType = $baseType
 
-proc setAdaBaseType(baseIndex: cint; baseType: var cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseType(baseIndex: cint; baseType: var cstring) {.raises: [],
+    tags: [], exportc.} =
   baseType = skyBases[baseIndex].baseType.cstring
 
 type
@@ -513,6 +514,10 @@ proc setAdaBaseKnown(baseIndex: cint; known: var cint) {.raises: [], tags: [], e
 proc getAdaBaseAskedForBases(baseIndex, askedForBases: cint) {.raises: [],
     tags: [], exportc.} =
   skyBases[baseIndex].askedForBases = askedForBases == 1
+
+proc setAdaBaseAskedForBases(baseIndex: cint;
+    askedForBases: var cint) {.raises: [], tags: [], exportc.} =
+  askedForBases = skyBases[baseIndex].askedForBases.cint
 
 proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].size = size.BasesSize

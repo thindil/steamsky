@@ -937,6 +937,11 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseKnown";
+      procedure Set_Ada_Base_Asked_For_Bases
+        (B_Index: Integer; Asked_For_Bases: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseAskedForBases";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
@@ -969,6 +974,13 @@ package body Bases is
          Sky_Bases(Base_Index).Known := True;
       else
          Sky_Bases(Base_Index).Known := False;
+      end if;
+      Set_Ada_Base_Asked_For_Bases
+        (B_Index => Base_Index, Asked_For_Bases => Known);
+      if Known = 1 then
+         Sky_Bases(Base_Index).Asked_For_Bases := True;
+      else
+         Sky_Bases(Base_Index).Asked_For_Bases := False;
       end if;
    end Get_Base_From_Nim;
 
