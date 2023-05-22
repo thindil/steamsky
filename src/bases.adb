@@ -919,6 +919,7 @@ package body Bases is
    procedure Get_Base_From_Nim(Base_Index: Bases_Range) is
       use Tiny_String;
       Name: chars_ptr;
+      Known: Integer;
       procedure Set_Ada_Base_Name(B_Index: Integer; B_Name: out chars_ptr) with
          Import => True,
          Convention => C,
@@ -932,6 +933,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseType";
+      procedure Set_Ada_Base_Known(B_Index: Integer; Known: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseKnown";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
@@ -959,6 +964,12 @@ package body Bases is
          Date_Type => 2);
       Set_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+      Set_Ada_Base_Known(B_Index => Base_Index, Known => Known);
+      if Known = 1 then
+         Sky_Bases(Base_Index).Known := True;
+      else
+         Sky_Bases(Base_Index).Known := False;
+      end if;
    end Get_Base_From_Nim;
 
 end Bases;

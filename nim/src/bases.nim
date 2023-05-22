@@ -507,6 +507,9 @@ proc setAdaBaseName(baseIndex: cint; name: var cstring) {.raises: [], tags: [], 
 proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].known = known == 1
 
+proc setAdaBaseKnown(baseIndex: cint; known: var cint) {.raises: [], tags: [], exportc.} =
+  known = skyBases[baseIndex].known.cint
+
 proc getAdaBaseAskedForBases(baseIndex, askedForBases: cint) {.raises: [],
     tags: [], exportc.} =
   skyBases[baseIndex].askedForBases = askedForBases == 1
