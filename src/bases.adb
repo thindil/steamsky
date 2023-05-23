@@ -947,6 +947,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseOwner";
+      procedure Set_Ada_Base_Size(B_Index: Integer; Size: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseSize";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
@@ -1009,6 +1013,8 @@ package body Bases is
       Sky_Bases(Base_Index).Owner :=
         To_Bounded_String(Source => Value(Item => Name));
       Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Ada_Base_Size(B_Index => Base_Index, Size => Known);
+      Sky_Bases(Base_Index).Size := Bases_Size'Val(Known);
    end Get_Base_From_Nim;
 
 end Bases;

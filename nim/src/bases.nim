@@ -524,3 +524,6 @@ proc setAdaBaseAskedForBases(baseIndex: cint;
 
 proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].size = size.BasesSize
+
+proc setAdaBaseSize(baseIndex: cint; size: var cint) {.raises: [], tags: [], exportc.} =
+  size = skyBases[baseIndex].size.ord.cint
