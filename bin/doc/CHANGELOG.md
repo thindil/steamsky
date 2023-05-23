@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to assign the crew members to the player's ship's training rooms in
   the module info dialog
+- Ability to assign the skill to train in the player's ship's training rooms in
+  the module info dialog
 
 ### Changed
 - Updated look of the module info dialog
