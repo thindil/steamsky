@@ -1008,6 +1008,7 @@ package body Bases is
       Set_Ada_Base_Owner(B_Index => Base_Index, B_Owner => Name);
       Sky_Bases(Base_Index).Owner :=
         To_Bounded_String(Source => Value(Item => Name));
+      Set_Base_Cargo(Base_Index => Base_Index);
    end Get_Base_From_Nim;
 
 end Bases;
