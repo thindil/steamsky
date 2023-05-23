@@ -28,8 +28,10 @@ package body Bases.SaveLoad is
       use Tiny_String;
 
       Base_Recruits: Recruit_Container.Vector (Capacity => 5);
+      --## rule off IMPROPER_INITIALIZATION
       Base_Missions: Mission_Container.Vector;
       Nodes_List, Base_Data: Node_List;
+      --## rule on IMPROPER_INITIALIZATION
       Base_Index: Bases_Range := 1;
       Base_Node_Name: Unbounded_String := Null_Unbounded_String;
       Base_Node, Child_Node: Node;
@@ -126,9 +128,11 @@ package body Bases.SaveLoad is
                   Gender: String(1 .. 1);
                   Home_Base: Bases_Range := 1;
                   Price, Payment: Positive;
-                  Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                   Index: SkillsData_Container.Extended_Index := 0;
+                  --## rule off IMPROPER_INITIALIZATION
+                  Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                   Inventory: Positive_Formal_Container.Vector (Capacity => 7);
+                  --## rule on IMPROPER_INITIALIZATION
                   Equipment: Equipment_Array;
                   Recruit_Node: Node;
                   Level: Skill_Range := 0;
@@ -139,9 +143,11 @@ package body Bases.SaveLoad is
                               (Container => Attributes_List)));
                   Attribute_Index: Positive := 1;
                begin
+                  --## rule off IMPROPER_INITIALIZATION
                   Skills_Container.Clear(Container => Skills);
                   Attributes := (others => <>);
                   Positive_Formal_Container.Clear(Container => Inventory);
+                  --## rule on IMPROPER_INITIALIZATION
                   Equipment := (others => 0);
                   Recruit_Name :=
                     To_Bounded_String
