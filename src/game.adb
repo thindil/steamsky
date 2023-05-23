@@ -24,7 +24,6 @@ with DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
-with Bases.Ship;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes;
 with Careers;
@@ -44,9 +43,6 @@ with Missions; use Missions;
 with Mobs; use Mobs;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
-with Ships.Crew;
-with Ships.Repairs;
-with Ships.Upgrade;
 with Statistics; use Statistics;
 with Stories;
 with Utils;
@@ -488,131 +484,32 @@ package body Game is
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
-      use Ships.Crew;
-      use Ships.Upgrade;
-      use Tiny_String;
-
-      Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Tired_Points: Natural := 0;
-      Need_Cleaning, Need_Save_Game: Boolean := False;
-      procedure Update_Day is
-         use Bases.Ship;
-
-      begin
-         Game_Date.Day := Game_Date.Day + 1;
-         Get_Dirty_Loop :
-         for Module of Player_Ship.Modules loop
-            if Module.M_Type = CABIN and then Module.Cleanliness > 0 then
-               Module.Cleanliness := Module.Cleanliness - 1;
-               Need_Cleaning := True;
-            end if;
-         end loop Get_Dirty_Loop;
-         if Need_Cleaning then
-            Update_Orders(Ship => Player_Ship);
-         end if;
-         if Player_Ship.Speed = DOCKED then
-            Pay_For_Dock;
-         end if;
-         Daily_Payment;
-         if Game_Settings.Auto_Save = DAILY then
-            Need_Save_Game := True;
-         end if;
-      end Update_Day;
+      procedure Update_Ada_Game(M, In_C: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaGame";
+      procedure Set_Ada_Game_Date
+        (Year, Month, Day, Hour, Minutes: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGameDate";
    begin
-      Tired_Points_Loop :
-      for I in 1 .. Minutes loop
-         if (Game_Date.Minutes + I) rem 15 = 0 then
-            Tired_Points := Tired_Points + 1;
-         end if;
-      end loop Tired_Points_Loop;
-      -- Update game time
-      Added_Minutes := Minutes rem 60;
-      Added_Hours := Minutes / 60;
-      Game_Date.Minutes := Game_Date.Minutes + Added_Minutes;
-      if Game_Date.Minutes > 59 then
-         Game_Date.Minutes := Game_Date.Minutes - 60;
-         Game_Date.Hour := Game_Date.Hour + 1;
-      end if;
-      Update_Day_Loop :
-      while Added_Hours > 23 loop
-         Added_Hours := Added_Hours - 24;
-         Update_Day;
-      end loop Update_Day_Loop;
-      Game_Date.Hour := Game_Date.Hour + Added_Hours;
-      Update_Game_Hour_Loop :
-      while Game_Date.Hour > 23 loop
-         Game_Date.Hour := Game_Date.Hour - 24;
-         Update_Day;
-      end loop Update_Game_Hour_Loop;
-      if Need_Save_Game then
-         Save_Game;
-      end if;
-      if Game_Date.Day > 30 then
-         Game_Date.Day := 1;
-         Game_Date.Month := Game_Date.Month + 1;
-         if Game_Settings.Auto_Save = MONTHLY then
-            Save_Game;
-         end if;
-      end if;
-      if Game_Date.Month > 12 then
-         Game_Date.Month := 1;
-         Game_Date.Year := Game_Date.Year + 1;
-         if Game_Settings.Auto_Save = YEARLY then
-            Save_Game;
-         end if;
-      end if;
-      -- Update crew
-      Update_Crew
-        (Minutes => Minutes, Tired_Points => Tired_Points,
-         In_Combat => In_Combat);
-      -- Repair ship (if needed)
-      Ships.Repairs.Repair_Ship(Minutes => Minutes);
-      -- Craft items
-      Manufacturing(Minutes => Minutes);
-      -- Upgrade ship module
-      Upgrade_Ship(Minutes => Minutes);
-      -- Update base
+      Get_Game_Date(Current_Date => Game_Date);
+      Set_Ship_In_Nim;
       if Base_Index > 0 then
-         if Sky_Bases(Base_Index).Visited.Year = 0 then
-            Game_Stats.Bases_Visited := Game_Stats.Bases_Visited + 1;
-            Game_Stats.Points := Game_Stats.Points + 1;
-            Update_Goal
-              (G_Type => VISIT,
-               Target_Index =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String(Source => Sky_Bases(Base_Index).Owner)));
-         end if;
-         Sky_Bases(Base_Index).Visited := Game_Date;
-         if not Sky_Bases(Base_Index).Known then
-            Sky_Bases(Base_Index).Known := True;
-            Add_Message
-              (Message =>
-                 "You discovered base " &
-                 To_String(Source => Sky_Bases(Base_Index).Name) & ".",
-               M_Type => OTHERMESSAGE);
-         end if;
-         Update_Population;
-         Generate_Recruits;
-         Generate_Missions;
-         Generate_Cargo;
-         Update_Prices;
-         Update_Orders(Ship => Player_Ship);
+         Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
-      -- Update map cell
-      if not Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
-         Game_Stats.Map_Visited := Game_Stats.Map_Visited + 1;
-         Game_Stats.Points := Game_Stats.Points + 1;
-         Update_Goal
-           (G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
-         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
+      Update_Ada_Game(M => Minutes, In_C => (if In_Combat then 1 else 0));
+      if Base_Index > 0 then
+         Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
-      -- Update events
-      Update_Events(Minutes => Minutes);
-      -- Update accepted missions
-      Update_Missions(Minutes => Minutes);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Ada_Game_Date
+        (Year => Game_Date.Year, Month => Game_Date.Month,
+         Day => Game_Date.Day, Hour => Game_Date.Hour,
+         Minutes => Game_Date.Minutes);
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is

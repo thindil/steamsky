@@ -416,7 +416,7 @@ proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [
   gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
 
-proc setAdaGameDate(year, month, day, hour, minutes: out cint) {.raises: [],
+proc setAdaGameDate(year, month, day, hour, minutes: var cint) {.raises: [],
     tags: [], exportc.} =
   year = gameDate.year
   month = gameDate.month
