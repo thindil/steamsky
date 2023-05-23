@@ -312,6 +312,9 @@ proc setAdaBaseLocation(baseIndex: cint; x, y: var cint) {.raises: [], tags: [],
 proc getAdaBaseOwner(baseIndex: cint; owner: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].owner = $owner
 
+proc setAdaBaseOwner(baseIndex: cint; owner: var cstring) {.raises: [], tags: [], exportc.} =
+  owner = skyBases[baseIndex].owner.cstring
+
 proc getAdaBasePopulation(baseIndex, population: cint) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].population = population
 

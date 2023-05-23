@@ -925,7 +925,7 @@ package body Bases is
          Convention => C,
          External_Name => "setAdaBaseName";
       procedure Set_Ada_Base_Location
-        (Base_Index: Bases_Range; X: out Map_X_Range; Y: out Map_Y_Range) with
+        (B_Index: Bases_Range; X: out Map_X_Range; Y: out Map_Y_Range) with
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseLocation";
@@ -933,7 +933,7 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseType";
-      procedure Set_Ada_Base_Known(B_Index: Integer; Known: out Integer) with
+      procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseKnown";
@@ -942,6 +942,11 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseAskedForBases";
+      procedure Set_Ada_Base_Owner
+        (B_Index: Integer; B_Owner: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseOwner";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
@@ -953,7 +958,7 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Visited.Hour,
          Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
       Set_Ada_Base_Location
-        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+        (B_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Set_Ada_Base_Type(B_Index => Base_Index, B_Type => Name);
       Sky_Bases(Base_Index).Base_Type :=
@@ -969,7 +974,7 @@ package body Bases is
          Date_Type => 2);
       Set_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
-      Set_Ada_Base_Known(B_Index => Base_Index, Known => Known);
+      Set_Ada_Base_Known(B_Index => Base_Index, B_Known => Known);
       if Known = 1 then
          Sky_Bases(Base_Index).Known := True;
       else
@@ -1000,6 +1005,9 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes,
          Date_Type => 1);
       Set_Missions(Base_Index => Base_Index);
+      Set_Ada_Base_Owner(B_Index => Base_Index, B_Owner => Name);
+      Sky_Bases(Base_Index).Owner :=
+        To_Bounded_String(Source => Value(Item => Name));
    end Get_Base_From_Nim;
 
 end Bases;
