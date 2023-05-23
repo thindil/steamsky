@@ -19,7 +19,9 @@ import bases, basescargo, basesship, config, crafts, crew, events, game,
     gamesaveload, goals, maps, messages, missions, shipscrew, shipsrepairs,
     shipsupgrade, statistics, types
 
-proc updateGame*(minutes: Positive; inCombat: bool = false) =
+proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
+    raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   var needCleaning, needSaveGame = false
 
   proc updateDay() =
