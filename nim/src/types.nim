@@ -207,59 +207,105 @@ type
 
   MemberData* = object
     ## Used to store information about the crew member
-    attributes*: seq[MobAttributeRecord] ## The member's attributes
-    skills*: seq[SkillInfo]              ## The member's skills
-    name*: string                        ## The member's name
-    gender*: char                        ## The member's gender
-    health*: SkillRange                  ## The member's health points
-    tired*: range[0..150]                ## The member's tiredness level
-    hunger*: SkillRange                  ## The member's hunger level
-    thirst*: SkillRange                  ## The member's thirst level
-    order*: CrewOrders                   ## The current order of the member
-    previousOrder*: CrewOrders           ## The previous order of the member
-    orderTime*: int                      ## The amount of minutes to next check in the order
-    orders*: array[1..12, Natural]       ## The orders priorities for the member
-    inventory*: seq[InventoryData]       ## The inventory of the member
-    equipment*: EquipmentArray           ## The equipment of the member
-    payment*: AttributesArray            ## The payment information for the member
-    contractLength*: int                 ## The length of the contract with the member
-    morale*: AttributesArray             ## The morale information for the member
-    loyalty*: SkillRange                 ## The loyalty level of the member
-    homeBase*: BasesRange                ## The index of the home base
-    faction*: string                     ## The faction index to which the member belongs
+    ##
+    ## * attributes     - The member's attributes
+    ## * skills         - The member's skills
+    ## * name           - The member's name
+    ## * gender         - The member's gender
+    ## * health         - The member's health points
+    ## * tired          - The member's tiredness level
+    ## * hunger         - The member's hunger level
+    ## * thirst         - The member's thirst level
+    ## * order          - The current order of the member
+    ## * previousOrder  - The previous order of the member
+    ## * orderTime      - The amount of minutes to next check in the order
+    ## * orders         - The orders priorities for the member
+    ## * inventory      - The inventory of the member
+    ## * equipment      - The equipment of the member
+    ## * payment        - The payment information for the member
+    ## * contractLength - The length of the contract with the member
+    ## * morale         - The morale information for the member
+    ## * loyalty        - The loyalty level of the member
+    ## * homeBase       - The index of the home base
+    ## * faction        - The faction index to which the member belongs
+    attributes*: seq[MobAttributeRecord]
+    skills*: seq[SkillInfo]
+    name*: string
+    gender*: char
+    health*: SkillRange
+    tired*: range[0..150]
+    hunger*: SkillRange
+    thirst*: SkillRange
+    order*: CrewOrders
+    previousOrder*: CrewOrders
+    orderTime*: int
+    orders*: array[1..12, Natural]
+    inventory*: seq[InventoryData]
+    equipment*: EquipmentArray
+    payment*: AttributesArray
+    contractLength*: int
+    morale*: AttributesArray
+    loyalty*: SkillRange
+    homeBase*: BasesRange
+    faction*: string
 
   ShipRecord* = object
     ## Used to store information about ships
-    name*: string              ## The name of the ship
-    skyX*: MapXRange           ## The X position of the ship on the map
-    skyY*: MapYRange           ## The Y position of the ship on the map
-    speed*: ShipSpeed          ## The current setting for the ship's speed
-    modules*: seq[ModuleData]  ## The list of modules installed on the ship
-    cargo*: seq[InventoryData] ## The list of items in the ship's cargo
-    crew*: seq[MemberData]     ## The list of the crew members of the ship
-    upgradeModule*: int        ## The index of the currently upgraded module
-    destinationX*: range[0..MapXRange.high] ## The X position to which the ship goes
-    destinationY*: range[0..MapYRange.high] ## The Y position to which the ship goes
-    repairModule*: int         ## The index of module which will be repaired as first
-    description*: string       ## The description of the ship
-    homeBase*: Natural         ## The index of the home base of the ship
+    ##
+    ## * name          - The name of the ship
+    ## * skyX          - The X position of the ship on the map
+    ## * skyY          - The Y position of the ship on the map
+    ## * speed         - The current setting for the ship's speed
+    ## * modules       - The list of modules installed on the ship
+    ## * cargo         - The list of items in the ship's cargo
+    ## * crew          - The list of the crew members of the ship
+    ## * upgradeModule - The index of the currently upgraded module
+    ## * destinationX  - The X position to which the ship goes
+    ## * destinationY  - The Y position to which the ship goes
+    ## * repairModule  - The index of module which will be repaired as first
+    ## * description   - The description of the ship
+    ## * homeBase      - The index of the home base of the ship
+    name*: string
+    skyX*: MapXRange
+    skyY*: MapYRange
+    speed*: ShipSpeed
+    modules*: seq[ModuleData]
+    cargo*: seq[InventoryData]
+    crew*: seq[MemberData]
+    upgradeModule*: int
+    destinationX*: range[0..MapXRange.high]
+    destinationY*: range[0..MapYRange.high]
+    repairModule*: int
+    description*: string
+    homeBase*: Natural
 
   ReputationRanges* = object
     ## Used to store reputation ranges for relation with other factions
-    min*: ReputationRange ## Minimal reputation with the selected faction
-    max*: ReputationRange ## Maximal reputation with the selected faction
+    ##
+    ## * min - Minimal reputation with the selected faction
+    ## * max - Maximal reputation with the selected faction
+    min*: ReputationRange
+    max*: ReputationRange
 
   RelationsData* = object
     ## Used to store data about relation with other faction
-    reputation*: ReputationRanges ## Values of min and max reputation with the faction
-    friendly*: bool ## If true, the selected faction is friendly towards the faction
+    ##
+    ## * reputation - Values of min and max reputation with the faction
+    ## * friendly   - If true, the selected faction is friendly towards the faction
+    reputation*: ReputationRanges
+    friendly*: bool
 
   CareerData* = object
     ## Used to store data about careers available for the faction
-    shipIndex*: Positive ## The index of the starting ship prototype for the career
-    playerIndex*: string ## The index of the starting mob prototype as the player character
-    description*: string ## The description of the career
-    name*: string        ## The name of the career
+    ##
+    ## * shipIndex   - The index of the starting ship prototype for the career
+    ## * playerIndex - The index of the starting mob prototype as the player character
+    ## * description - The description of the career
+    ## * name        - The name of the career
+    shipIndex*: Positive
+    playerIndex*: string
+    description*: string
+    name*: string
 
   FactionData* = object
     ## Used to store data about the selected faction
