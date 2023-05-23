@@ -598,7 +598,7 @@ package body Bases is
    begin
       Convert_Inventory_Loop :
       for I in Nim_Recruit.Inventory'Range loop
-         Nim_Recruit.Equipment(I) :=
+         Nim_Recruit.Inventory(I) :=
            Positive_Formal_Container.Element
              (Container => Recruit.Inventory, Index => I + 1);
       end loop Convert_Inventory_Loop;
