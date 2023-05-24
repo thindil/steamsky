@@ -24,13 +24,13 @@ with DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
-with Bases.Cargo; use Bases.Cargo;
+with Bases.Cargo;
 with BasesTypes;
 with Careers;
 with Config; use Config;
-with Crafts; use Crafts;
-with Crew; use Crew;
-with Events; use Events;
+with Crafts;
+with Crew;
+with Events;
 with Factions; use Factions;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
@@ -38,7 +38,7 @@ with Help;
 with Items; use Items;
 with Log;
 with Maps; use Maps;
-with Messages; use Messages;
+with Messages;
 with Missions; use Missions;
 with Mobs; use Mobs;
 with ShipModules; use ShipModules;
@@ -50,6 +50,8 @@ with Utils;
 package body Game is
 
    procedure New_Game is
+      use Bases.Cargo;
+      use Messages;
       use Tiny_String;
       use Utils;
 
@@ -359,6 +361,8 @@ package body Game is
       -- Add player to ship
       Add_Player_Block :
       declare
+         use Crew;
+
          Player_Index_2: constant Positive :=
            Positive'Value
              (To_String
@@ -490,8 +494,7 @@ package body Game is
          Import => True,
          Convention => C,
          External_Name => "updateAdaGame";
-      procedure Set_Ada_Game_Date
-        (Year, Month, Day, Hour, Minutes: out Integer) with
+      procedure Set_Ada_Game_Date(Year, Month, Day, Hour, M: out Integer) with
          Import => True,
          Convention => C,
          External_Name => "setAdaGameDate";
@@ -508,11 +511,12 @@ package body Game is
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Ada_Game_Date
         (Year => Game_Date.Year, Month => Game_Date.Month,
-         Day => Game_Date.Day, Hour => Game_Date.Hour,
-         Minutes => Game_Date.Minutes);
+         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
+      use Events;
+
       procedure End_Ada_Game(S: Integer) with
          Import => True,
          Convention => C,
@@ -610,6 +614,7 @@ package body Game is
             use DOM.Readers;
             use BasesTypes;
             use Careers;
+            use Crafts;
             use Help;
             use Stories;
 
