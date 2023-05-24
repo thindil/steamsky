@@ -309,47 +309,85 @@ type
 
   FactionData* = object
     ## Used to store data about the selected faction
-    name*: string        ## The name of the faction
-    memberName*: string  ## The name of members of the faction
-    pluralMemberName*: string ## The name for plural amount of members of the faction
-    spawnChance*: Natural ## The chance of the spawn for a base of the selected faction
-    population*: AttributesArray ## The min and max population for new bases of the faction
-    namesType*: NamesTypes ## The type of names for the mobs, bases and ships of the faction
-    relations*: Table[string, RelationsData] ## The faction's relations with other factions
-    description*: string ## The description of the faction
-    foodTypes*: seq[string] ## The types of items used as food for the faction's members
-    drinksTypes*: seq[string] ## The types of items used as drinks for the faction's members
-    healingTools*: string ## The type of items used as healing tools for the faction's members
-    healingSkill*: Natural ## The skill used as healing skill for the faction's members
-    flags*: seq[string]  ## Various flags set for the faction
-    careers*: Table[string, CareerData] ## The list of available careers for the faction
-    baseIcon*: Natural   ## The icon used as icon for the faction's bases on the map
-    basesTypes*: Table[string, Positive] ## The list of available bases types for the faction
-    weaponSkill*: Natural ## The skill used as prefered weapon skill for the faction
+    ##
+    ## * name             - The name of the faction
+    ## * memberName       - The name of members of the faction
+    ## * pluralMemberName - The name for plural amount of members of the faction
+    ## * spawnChance      - The chance of the spawn for a base of the selected faction
+    ## * population       - The min and max population for new bases of the faction
+    ## * namesType        - The type of names for the mobs, bases and ships of the faction
+    ## * relations        - The faction's relations with other factions
+    ## * description      - The description of the faction
+    ## * foodTypes        - The types of items used as food for the faction's members
+    ## * drinksTypes      - The types of items used as drinks for the faction's members
+    ## * healingTools     - The type of items used as healing tools for the faction's members
+    ## * healingSkill     - The skill used as healing skill for the faction's members
+    ## * flags            - Various flags set for the faction
+    ## * careers          - The list of available careers for the faction
+    ## * baseIcon         - The icon used as icon for the faction's bases on the map
+    ## * basesTypes       - The list of available bases types for the faction
+    ## * weaponSkill      - The skill used as prefered weapon skill for the faction
+    name*: string
+    memberName*: string
+    pluralMemberName*: string
+    spawnChance*: Natural
+    population*: AttributesArray
+    namesType*: NamesTypes
+    relations*: Table[string, RelationsData]
+    description*: string
+    foodTypes*: seq[string]
+    drinksTypes*: seq[string]
+    healingTools*: string
+    healingSkill*: Natural
+    flags*: seq[string]
+    careers*: Table[string, CareerData]
+    baseIcon*: Natural
+    basesTypes*: Table[string, Positive]
+    weaponSkill*: Natural
 
   ObjectData* = object
     ## Used to store information about items
-    name*: string        ## The name of the item
-    weight*: Positive    ## The weight of the item
-    itemType*: string    ## The type of the item
-    price*: Natural      ## The base price of the item in bases
-    value*: array[1..5, int] ## Various data related to the item (damage for ammo, etc.)
-    showType*: string    ## The item's type to show to the player instead of the itemType
-    description*: string ## The description of the item
-    reputation*: ReputationRange ## The minumal reputation which is needed to buy that item
+    ##
+    ## * name        - The name of the item
+    ## * weight      - The weight of the item
+    ## * itemType    - The type of the item
+    ## * price       - The base price of the item in bases
+    ## * value       - Various data related to the item (damage for ammo, etc.)
+    ## * showType    - The item's type to show to the player instead of the itemType
+    ## * description - The description of the item
+    ## * reputation  - The minumal reputation which is needed to buy that item
+    name*: string
+    weight*: Positive
+    itemType*: string
+    price*: Natural
+    value*: array[1..5, int]
+    showType*: string
+    description*: string
+    reputation*: ReputationRange
 
   RecruitData* = object
     ## Used to store information about the recruit in bases
-    attributes*: seq[MobAttributeRecord] ## The recruit's attributes
-    skills*: seq[SkillInfo]              ## The recruit's skills
-    name*: string                        ## The recruit's name
-    gender*: char                        ## The recruit's gender
-    price*: Positive                     ## The cost of hire of the recruit
-    inventory*: seq[Positive]            ## The inventory of the recruit
-    equipment*: EquipmentArray           ## The equipment of the recruit
-    payment*: Positive                   ## The payment information for the recruit
-    homeBase*: BasesRange                ## The index of the home base
-    faction*: string                     ## The faction index to which the recruit belongs
+    ##
+    ## * attributes - The recruit's attributes
+    ## * skills     - The recruit's skills
+    ## * name       - The recruit's name
+    ## * gender     - The recruit's gender
+    ## * price      - The cost of hire of the recruit
+    ## * inventory  - The inventory of the recruit
+    ## * equipment  - The equipment of the recruit
+    ## * payment    - The payment information for the recruit
+    ## * homeBase   - The index of the home base
+    ## * faction    - The faction index to which the recruit belongs
+    attributes*: seq[MobAttributeRecord]
+    skills*: seq[SkillInfo]
+    name*: string
+    gender*: char
+    price*: Positive
+    inventory*: seq[Positive]
+    equipment*: EquipmentArray
+    payment*: Positive
+    homeBase*: BasesRange
+    faction*: string
 
   BaseCargo* = object
     ## Used to store information about items in bases cargo
