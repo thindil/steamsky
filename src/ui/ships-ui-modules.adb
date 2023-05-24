@@ -75,73 +75,6 @@ package body Ships.UI.Modules is
    Modules_Indexes: Positive_Container.Vector;
    -- ****
 
-   -- ****if* SUModules/SUModules.Show_Module_Menu_Command
-   -- FUNCTION
-   -- Show the menu with available the selected module options
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowModuleMenu moduleindex
-   -- ModuleIndex is the index of the module's menu to show
-   -- SOURCE
-   function Show_Module_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Module_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tiny_String;
-
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Module_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".modulemmenu",
-           Title =>
-             To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-             " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Module_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Module_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Module_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Module_Menu & ".newname;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".info", Label => "Show more info about the module",
-         Command => "ShowModuleInfo " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Module_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Module_Menu_Command;
-
    -- ****o* SUModules/SUModules.Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
@@ -2437,15 +2370,15 @@ package body Ships.UI.Modules is
            (Table => Modules_Table,
             Text =>
               To_String(Source => Player_Ship.Modules(Module_Index).Name),
-            Tooltip => "Show available module's options",
-            Command => "ShowModuleMenu" & Positive'Image(Module_Index),
+            Tooltip => "Show the module's info",
+            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
             Column => 1);
          Add_Progress_Bar
            (Table => Modules_Table,
             Value => Player_Ship.Modules(Module_Index).Durability,
             Max_Value => Player_Ship.Modules(Module_Index).Max_Durability,
-            Tooltip => "Show available module's options",
-            Command => "ShowModuleMenu" & Positive'Image(Module_Index),
+            Tooltip => "Show the module's info",
+            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
             Column => 2, New_Row => True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when Modules_Table.Row =
@@ -2745,9 +2678,6 @@ package body Ships.UI.Modules is
 
    procedure Add_Commands is
    begin
-      Add_Command
-        (Name => "ShowModuleMenu",
-         Ada_Command => Show_Module_Menu_Command'Access);
       Add_Command
         (Name => "ShowModuleInfo",
          Ada_Command => Show_Module_Info_Command'Access);
