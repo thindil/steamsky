@@ -122,7 +122,7 @@ package body Bases.SaveLoad is
               To_Unbounded_String(Source => "recruit") then
                Load_Recruits_Block :
                declare
-                  Recruit_Data: Node_List;
+                  Recruit_Save_Data: Node_List;
                   Recruit_Name: Bounded_String;
                   Recruit_Faction: Bounded_String := Null_Bounded_String;
                   Gender: String(1 .. 1);
@@ -159,10 +159,10 @@ package body Bases.SaveLoad is
                     Positive'Value
                       (Get_Attribute(Elem => Child_Node, Name => "price"));
                   Payment := 20;
-                  Recruit_Data := Child_Nodes(N => Child_Node);
+                  Recruit_Save_Data := Child_Nodes(N => Child_Node);
                   Load_Recruits_Loop :
-                  for L in 0 .. Length(List => Recruit_Data) - 1 loop
-                     Recruit_Node := Item(List => Recruit_Data, Index => L);
+                  for L in 0 .. Length(List => Recruit_Save_Data) - 1 loop
+                     Recruit_Node := Item(List => Recruit_Save_Data, Index => L);
                      Base_Node_Name :=
                        To_Unbounded_String
                          (Source => Node_Name(N => Recruit_Node));
