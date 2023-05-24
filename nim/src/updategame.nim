@@ -22,6 +22,10 @@ import bases, basescargo, basesship, config, crafts, crew, events, game,
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Update the game (player ship, bases, crafting, etc)
+  ##
+  ## * minutes  - the amount of in-game minutes which passes
+  ## * inCombat - if true, the player is in combat
   var needCleaning, needSaveGame = false
 
   proc updateDay() =
