@@ -32,38 +32,6 @@ package body Game.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Update_Game_25a566_5306b6
-     (Minutes: Positive; In_Combat: Boolean := False) is
-   begin
-      GNATtest_Generated.GNATtest_Standard.Game.Update_Game
-        (Minutes, In_Combat);
-   end Wrap_Test_Update_Game_25a566_5306b6;
---  end read only
-
---  begin read only
-   procedure Test_Update_Game_test_updategame(Gnattest_T: in out Test);
-   procedure Test_Update_Game_25a566_5306b6(Gnattest_T: in out Test) renames
-     Test_Update_Game_test_updategame;
---  id:2.2/25a566d308fb13f6/Update_Game/1/0/test_updategame/
-   procedure Test_Update_Game_test_updategame(Gnattest_T: in out Test) is
-      procedure Update_Game
-        (Minutes: Positive; In_Combat: Boolean := False) renames
-        Wrap_Test_Update_Game_25a566_5306b6;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-      Minutes: constant Natural := Game_Date.Minutes;
-
-   begin
-
-      Update_Game(1);
-      Assert(Minutes + 1 = Game_Date.Minutes, "Failed to update game time.");
-
---  begin read only
-   end Test_Update_Game_test_updategame;
---  end read only
-
---  begin read only
    procedure Wrap_Test_End_Game_29871f_745ef4(Save: Boolean) is
    begin
       GNATtest_Generated.GNATtest_Standard.Game.End_Game(Save);
