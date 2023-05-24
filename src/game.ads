@@ -797,16 +797,15 @@ package Game is
    -- Minutes  - Amount of in-game minutes passed
    -- InCombat - Did player is in combat currently. Default false
    -- SOURCE
-   procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) with
-      Test_Case => (Name => "Test_UpdateGame", Mode => Robustness);
-      -- ****
+   procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False);
+   -- ****
 
-      -- ****f* Game/Game.End_Game
-      -- FUNCTION
-      -- Save (or not) game and clear all temporary data
-      -- PARAMETERS
-      -- Save - Did game should be saved to file or not
-      -- SOURCE
+   -- ****f* Game/Game.End_Game
+   -- FUNCTION
+   -- Save (or not) game and clear all temporary data
+   -- PARAMETERS
+   -- Save - Did game should be saved to file or not
+   -- SOURCE
    procedure End_Game(Save: Boolean) with
       Test_Case => (Name => "Test_EndGame", Mode => Robustness);
       -- ****
