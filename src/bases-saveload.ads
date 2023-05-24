@@ -32,8 +32,8 @@ package Bases.SaveLoad is
    -- SOURCE
    procedure Load_Bases(Save_Data: not null Document) with
       Post =>
-      (for all I in Sky_Bases'Range =>
-         Tiny_String.Length(Source => Sky_Bases(I).Name) > 0);
+      (for all Index in Sky_Bases'Range =>
+         Tiny_String.Length(Source => Sky_Bases(Index).Name) > 0);
    -- ****
 
 end Bases.SaveLoad;
