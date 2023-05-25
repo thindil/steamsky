@@ -15,10 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Bases;
-with Maps;
+with Bases; use Bases;
+with Maps; use Maps;
 with Ships; use Ships;
-with Ships.Movement;
 
 package body Crew is
 
@@ -74,53 +73,26 @@ package body Crew is
    end Update_Crew;
 
    procedure Wait_For_Rest is
-      use Ships.Movement;
-
-      Cabin_Index: Modules_Container.Extended_Index := 0;
-      Time_Needed, Temp_Time_Needed: Natural := 0;
-      Damage: Damage_Factor := 0.0;
-      Cabin_Bonus: Natural := 0;
+      Base_Index: constant Extended_Base_Range :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      procedure Wait_Ada_For_Rest with
+         Import => True,
+         Convention => C,
+         External_Name => "waitAdaForRest";
    begin
-      Wait_For_Rest_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Tired > 0 and
-           Player_Ship.Crew(I).Order = REST then
-            Temp_Time_Needed := 0;
-            Cabin_Index :=
-              Find_Cabin
-                (Member_Index => Crew_Container.To_Index(Position => I));
-            if Cabin_Index > 0 then
-               Damage :=
-                 1.0 -
-                 Damage_Factor
-                   (Float(Player_Ship.Modules(Cabin_Index).Durability) /
-                    Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
-               Cabin_Bonus :=
-                 Player_Ship.Modules(Cabin_Index).Cleanliness -
-                 Natural
-                   (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
-                    Float(Damage));
-               if Cabin_Bonus = 0 then
-                  Cabin_Bonus := 1;
-               end if;
-               Temp_Time_Needed :=
-                 (Player_Ship.Crew(I).Tired / Cabin_Bonus) * 15;
-               if Temp_Time_Needed = 0 then
-                  Temp_Time_Needed := 15;
-               end if;
-            else
-               Temp_Time_Needed := Player_Ship.Crew(I).Tired * 15;
-            end if;
-            Temp_Time_Needed := Temp_Time_Needed + 15;
-            if Temp_Time_Needed > Time_Needed then
-               Time_Needed := Temp_Time_Needed;
-            end if;
-         end if;
-      end loop Wait_For_Rest_Loop;
-      if Time_Needed > 0 then
-         Update_Game(Minutes => Time_Needed);
-         Wait_In_Place(Minutes => Time_Needed);
+      Get_Game_Date(Current_Date => Game_Date);
+      Set_Ship_In_Nim;
+      if Base_Index > 0 then
+         Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
+      Wait_Ada_For_Rest;
+      if Base_Index > 0 then
+         Get_Base_From_Nim(Base_Index => Base_Index);
+      end if;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Ada_Game_Date
+        (Year => Game_Date.Year, Month => Game_Date.Month,
+         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
    end Wait_For_Rest;
 
    function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
@@ -146,9 +118,6 @@ package body Crew is
    end Get_Attribute_Level_Name;
 
    procedure Daily_Payment is
-      use Bases;
-      use Maps;
-
       procedure Daily_Ada_Payment with
          Import => True,
          Convention => C,
