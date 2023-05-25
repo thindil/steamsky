@@ -17,7 +17,8 @@
 
 import crew, game, types, shipsmovement, updategame
 
-proc waitForRest*() =
+proc waitForRest*() {.sideEffect, raises: [KeyError, IOError, Exception],
+    tags: [WriteIOEffect, RootEffect].} =
   var timeNeeded = 0
   for index, member in playerShip.crew.pairs:
     if member.tired > 0 and member.order == rest:
