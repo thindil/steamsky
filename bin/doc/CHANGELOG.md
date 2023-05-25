@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated look of the module info dialog
+- Show the info dialog with available actions instead of menu in the list
+  of installed modules in the player's ship
 
 ### Fixed
 - Typos in changelog
