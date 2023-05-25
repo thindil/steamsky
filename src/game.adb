@@ -505,9 +505,7 @@ package body Game is
          Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Ada_Game_Date
-        (Year => Game_Date.Year, Month => Game_Date.Month,
-         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
+      Set_Game_Date;
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
@@ -941,5 +939,16 @@ package body Game is
          Day => Current_Date.Day, Hour => Current_Date.Hour,
          Minutes => Current_Date.Minutes);
    end Get_Game_Date;
+
+   procedure Set_Game_Date is
+      procedure Set_Ada_Game_Date(Year, Month, Day, Hour, M: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGameDate";
+   begin
+      Set_Ada_Game_Date
+        (Year => Game_Date.Year, Month => Game_Date.Month,
+         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
+   end Set_Game_Date;
 
 end Game;
