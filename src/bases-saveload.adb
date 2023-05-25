@@ -128,7 +128,7 @@ package body Bases.SaveLoad is
                   Gender: String(1 .. 1);
                   Home_Base: Bases_Range := 1;
                   Price, Payment: Positive;
-                  Index: SkillsData_Container.Extended_Index := 0;
+                  Skill_Index: SkillsData_Container.Extended_Index := 0;
                   --## rule off IMPROPER_INITIALIZATION
                   Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                   Inventory: Positive_Formal_Container.Vector (Capacity => 7);
@@ -162,13 +162,14 @@ package body Bases.SaveLoad is
                   Recruit_Save_Data := Child_Nodes(N => Child_Node);
                   Load_Recruits_Loop :
                   for L in 0 .. Length(List => Recruit_Save_Data) - 1 loop
-                     Recruit_Node := Item(List => Recruit_Save_Data, Index => L);
+                     Recruit_Node :=
+                       Item(List => Recruit_Save_Data, Index => L);
                      Base_Node_Name :=
                        To_Unbounded_String
                          (Source => Node_Name(N => Recruit_Node));
                      if Base_Node_Name =
                        To_Unbounded_String(Source => "skill") then
-                        Index :=
+                        Skill_Index :=
                           SkillsData_Container.Extended_Index'Value
                             (Get_Attribute
                                (Elem => Recruit_Node, Name => "index"));
@@ -179,7 +180,7 @@ package body Bases.SaveLoad is
                         Skills_Container.Append
                           (Container => Skills,
                            New_Item =>
-                             (Index => Index, Level => Level,
+                             (Index => Skill_Index, Level => Level,
                               Experience => 0));
                      elsif Base_Node_Name =
                        To_Unbounded_String(Source => "attribute") then
@@ -290,14 +291,14 @@ package body Bases.SaveLoad is
                   Target_X, Target_Y: Natural range 0 .. 1_024;
                   Time, Reward: Positive;
                   Target: Integer := 0;
-                  Index: Unbounded_String := Null_Unbounded_String;
+                  Target_Index: Unbounded_String := Null_Unbounded_String;
                begin
                   M_Type :=
                     Missions_Types'Val
                       (Integer'Value
                          (Get_Attribute(Elem => Child_Node, Name => "type")));
                   if M_Type in DELIVER | DESTROY then
-                     Index :=
+                     Target_Index :=
                        To_Unbounded_String
                          (Source =>
                             Get_Attribute
@@ -325,7 +326,8 @@ package body Bases.SaveLoad is
                           (New_Item =>
                              (M_Type => DELIVER,
                               Item_Index =>
-                                Positive'Value(To_String(Source => Index)),
+                                Positive'Value
+                                  (To_String(Source => Target_Index)),
                               Time => Time, Target_X => Target_X,
                               Target_Y => Target_Y, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
@@ -335,7 +337,8 @@ package body Bases.SaveLoad is
                           (New_Item =>
                              (M_Type => DESTROY,
                               Ship_Index =>
-                                Positive'Value(To_String(Source => Index)),
+                                Positive'Value
+                                  (To_String(Source => Target_Index)),
                               Time => Time, Target_X => Target_X,
                               Target_Y => Target_Y, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
