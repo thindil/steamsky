@@ -844,4 +844,9 @@ package Game is
 
    procedure Get_Game_Date(Current_Date: Date_Record);
 
+   procedure Set_Ada_Game_Date(Year, Month, Day, Hour, M: out Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaGameDate";
+
 end Game;

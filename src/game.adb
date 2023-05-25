@@ -494,10 +494,6 @@ package body Game is
          Import => True,
          Convention => C,
          External_Name => "updateAdaGame";
-      procedure Set_Ada_Game_Date(Year, Month, Day, Hour, M: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameDate";
    begin
       Get_Game_Date(Current_Date => Game_Date);
       Set_Ship_In_Nim;
