@@ -90,9 +90,7 @@ package body Crew is
          Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Ada_Game_Date
-        (Year => Game_Date.Year, Month => Game_Date.Month,
-         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
+      Set_Game_Date;
    end Wait_For_Rest;
 
    function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
