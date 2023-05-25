@@ -19,6 +19,7 @@ import crew, game, types, shipsmovement, updategame
 
 proc waitForRest*() {.sideEffect, raises: [KeyError, IOError, Exception],
     tags: [WriteIOEffect, RootEffect].} =
+  ## Wait until the whole player's ship crew is rested
   var timeNeeded = 0
   for index, member in playerShip.crew.pairs:
     if member.tired > 0 and member.order == rest:
