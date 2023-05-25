@@ -391,62 +391,107 @@ type
 
   BaseCargo* = object
     ## Used to store information about items in bases cargo
-    protoIndex*: Natural         ## The index of the item's prototype
-    amount*: Natural             ## The amount of the item in the inventory
-    durability*: ItemsDurability ## The current durability of the item
-    price*: Natural              ## The price for which the item was bought
+    ##
+    ## * protoIndex - The index of the item's prototype
+    ## * amount     - The amount of the item in the inventory
+    ## * durability - The current durability of the item
+    ## * price      - The price for which the item was bought
+    protoIndex*: Natural
+    amount*: Natural
+    durability*: ItemsDurability
+    price*: Natural
 
   DateRecord* = object
     ## Used to store the game's time
-    year*: range[0..4_000_000] ## The game's year
-    month*: range[0..24]       ## The game's month
-    day*: range[0..62]         ## The game's day
-    hour*: range[0..48]        ## The game's hour
-    minutes*: range[0..120]    ## The game's minutes
+    ##
+    ## * year    - The game's year
+    ## * month   - The game's month
+    ## * day     - The game's day
+    ## * hour    - The game's hour
+    ## * minutes - The game's minutes
+    year*: range[0..4_000_000]
+    month*: range[0..24]
+    day*: range[0..62]
+    hour*: range[0..48]
+    minutes*: range[0..120]
 
   ReputationData* = object
     ## Used to store information about the level of the player's reputation
-    level*: ReputationRange ## The level of the reputation
-    experience*: Natural    ## The current experience gained in the reputation
+    ##
+    ## * level      - The level of the reputation
+    ## * experience - The current experience gained in the reputation
+    level*: ReputationRange
+    experience*: Natural
 
   MissionData* = object
     ## Used to store information about missions
-    time*: Positive                    ## The amount of minutes to finish the mission
-    targetX*: range[0..MapXRange.high] ## The X position of the target on the map
-    targetY*: range[0..MapYRange.high] ## The Y position of the target on the map
-    reward*: Positive                  ## The amount of money as the reward for the mission
-    startBase*: BasesRange             ## The index of the starting base for the mission
-    finished*: bool ## If true, the mission is ready to return, otherwise false
-    multiplier*: RewardMultiplier ## The multiplier for the mission reward money and reputation
+    ##
+    ## * mType      - The type of the mission
+    ## * time       - The amount of minutes to finish the mission
+    ## * targetX    - The X position of the target on the map
+    ## * targetY    - The Y position of the target on the map
+    ## * reward     - The amount of money as the reward for the mission
+    ## * startBase  - The index of the starting base for the mission
+    ## * finished   - If true, the mission is ready to return, otherwise false
+    ## * multiplier - The multiplier for the mission reward money and reputation
+    ## * itemIndex  - The index of the proto item to deliver
+    ## * data       - The minumum quality of the cabin (in bases) or passenger index (in accepted)
+    ## * shipIndex  - The index of the prototype ship to destroy
+    ## * target     - The target for the mission (ship, item)
+    time*: Positive
+    targetX*: range[0..MapXRange.high]
+    targetY*: range[0..MapYRange.high]
+    reward*: Positive
+    startBase*: BasesRange
+    finished*: bool
+    multiplier*: RewardMultiplier
     case mType*: MissionsTypes
     of deliver:
-      itemIndex*: Natural              ## The index of the proto item to deliver
+      itemIndex*: Natural
     of passenger:
-      data*: Natural ## The minumum quality of the cabin (in bases) or passenger index (in accepted)
+      data*: Natural
     of destroy:
-      shipIndex*: Natural              ## The index of the prototype ship to destroy
+      shipIndex*: Natural
     else:
-      target*: Natural                 ## The target for the mission (ship, item)
+      target*: Natural
 
   BaseRecord* = object
     ## Used to store information about bases
-    name*: string               ## The name of the base
-    visited*: DateRecord        ## The date when the base was last visited
-    skyX*: MapXRange            ## The X position of the base on the map
-    skyY*: MapYRange            ## The Y position of the base on the map
-    baseType*: string           ## The type of the base
-    population*: Natural        ## The amount of people living in the base
-    recruitDate*: DateRecord    ## The date when recruits were last checked
-    recruits*: seq[RecruitData] ## The list of recruits available in the base
-    known*: bool                ## If true, the base is known to the player, otherwise false
-    askedForBases*: bool        ## If true, the player asked for other bases in the base
-    askedForEvents*: DateRecord ## The date when the player asked for event last time
-    reputation*: ReputationData ## The player's reputation in the base
-    missionsDate*: DateRecord   ## The date when the player last checked missions in the base
-    missions*: seq[MissionData] ## The list of available missions in the base
-    owner*: string              ## The index of faction which owe the base
-    cargo*: seq[BaseCargo]      ## The base's cargo
-    size*: BasesSize            ## The size of the base
+    ##
+    ## * name           - The name of the base
+    ## * visited        - The date when the base was last visited
+    ## * skyX           - The X position of the base on the map
+    ## * skyY           - The Y position of the base on the map
+    ## * baseType       - The type of the base
+    ## * population     - The amount of people living in the base
+    ## * recruitDate    - The date when recruits were last checked
+    ## * recruits       - The list of recruits available in the base
+    ## * known          - If true, the base is known to the player, otherwise false
+    ## * askedForBases  - If true, the player asked for other bases in the base
+    ## * askedForEvents - The date when the player asked for event last time
+    ## * reputation     - The player's reputation in the base
+    ## * missionsDate   - The date when the player last checked missions in the base
+    ## * missions       - The list of available missions in the base
+    ## * owner          - The index of faction which owe the base
+    ## * cargo          - The base's cargo
+    ## * size           - The size of the base
+    name*: string
+    visited*: DateRecord
+    skyX*: MapXRange
+    skyY*: MapYRange
+    baseType*: string
+    population*: Natural
+    recruitDate*: DateRecord
+    recruits*: seq[RecruitData]
+    known*: bool
+    askedForBases*: bool
+    askedForEvents*: DateRecord
+    reputation*: ReputationData
+    missionsDate*: DateRecord
+    missions*: seq[MissionData]
+    owner*: string
+    cargo*: seq[BaseCargo]
+    size*: BasesSize
 
   BaseModuleData* = object
     ## Used to store information about prototypes of ships' modules
