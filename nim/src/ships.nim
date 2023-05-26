@@ -47,27 +47,6 @@ func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], ex
   else:
     return "Palace room"
 
-proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
-    tags: [].} =
-  ## Generate the name for the ship, based on its owner's faction. Based
-  ## on libtcod names generator
-  ##
-  ## * factionIndex - the index of the faction to which the ship belongs
-  ##
-  ## Returns the randomly generated name of the ship
-  try:
-    if factionsList[factionIndex].namesType == robotic:
-      return $generateRoboticName()
-  except KeyError:
-    discard
-  result = shipsSyllablesStartList[getRandom(min = 0, max = (
-      shipsSyllablesStartList.len - 1))]
-  if getRandom(min = 1, max = 100) < 51:
-    result = result & shipsSyllablesMiddleList[getRandom(min = 0, max = (
-        shipsSyllablesMiddleList.len - 1))]
-  result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
-      shipsSyllablesEndList.len - 1))]
-
 proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the ships data from the file
@@ -757,10 +736,6 @@ type
     combatValue: cint
     description: cstring
     owner: cstring
-
-proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
-    ], tags: [], exportc.} =
-  return generateShipName(factionIndex = $factionIndex).cstring
 
 proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     tags: [], exportc.} =
