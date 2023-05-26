@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, config, factions, game, goals, items, maps, shipscrew,
-    trades, types, utils
+import basestypes, config, factions, game, goals, items, maps, messages, ships2,
+    shipscrew, trades, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -271,6 +271,30 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
       item.price.dec
     elif roll < 60 and item.price > 0:
       item.price.inc
+
+proc askForEvents*() =
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    return
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var maxEvents: Natural
+  # Asking in base
+  if baseIndex > 0:
+    maxEvents = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
+        baseIndex].population < 300: 10 else: 15)
+    skyBases[baseIndex].askedForEvents = gameDate
+    addMessage(message = playerShip.crew[traderIndex].name &
+        " asked for recent events known at base '" & skyBases[baseIndex].name &
+        "'.", mType = orderMessage)
+    gainRep(baseIndex = baseIndex, points = 1)
+  else:
+    let shipIndex = eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex
+    maxEvents = (if protoShipsList[shipIndex].crew.len <
+        5: 1 elif protoShipsList[shipIndex].crew.len < 10: 3 else: 5)
+    addMessage(message = playerShip.crew[traderIndex].name &
+        " asked ship '" & generateShipName(factionIndex = protoShipsList[
+            shipIndex].owner) & "' for recent events.", mType = orderMessage)
 
 # Temporary code for interfacing with Ada
 
