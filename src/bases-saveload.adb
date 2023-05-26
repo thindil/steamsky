@@ -15,16 +15,19 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Core.Documents;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
 with Factions;
-with Maps; use Maps;
+with Maps;
 
 package body Bases.SaveLoad is
 
    procedure Load_Bases(Save_Data: not null Document) is
+      use DOM.Core.Nodes;
+      use DOM.Core.Elements;
       use Factions;
+      use Maps;
       use Tiny_String;
 
       Base_Recruits: Recruit_Container.Vector (Capacity => 5);
