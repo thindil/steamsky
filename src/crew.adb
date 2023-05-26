@@ -80,7 +80,7 @@ package body Crew is
          Convention => C,
          External_Name => "waitAdaForRest";
    begin
-      Get_Game_Date(Current_Date => Game_Date);
+      Get_Game_Date;
       Set_Ship_In_Nim;
       if Base_Index > 0 then
          Set_Base_In_Nim(Base_Index => Base_Index);

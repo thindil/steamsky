@@ -86,7 +86,7 @@ package body Bases is
    begin
       Get_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
-      Get_Game_Date(Current_Date => Game_Date);
+      Get_Game_Date;
       Get_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
@@ -492,7 +492,7 @@ package body Bases is
          Convention => C,
          External_Name => "updateAdaPopulation";
    begin
-      Get_Game_Date(Current_Date => Game_Date);
+      Get_Game_Date;
       Get_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
@@ -517,7 +517,7 @@ package body Bases is
          Convention => C,
          External_Name => "updateAdaPrices";
    begin
-      Get_Game_Date(Current_Date => Game_Date);
+      Get_Game_Date;
       Set_Ship_In_Nim;
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
