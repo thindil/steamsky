@@ -414,6 +414,16 @@ package body Ships.UI.Modules is
            Height +
            Positive'Value(Winfo_Get(Widgt => Status_Box, Info => "reqheight"));
       end Add_Status_Info_Block;
+      Label :=
+        Create
+          (pathName => Module_Frame & ".weightlbl",
+           options =>
+             "-text {Weight:" & Integer'Image(Module.Weight) & " kg}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+      Tcl_Eval(interp => Interp, strng => "update");
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -426,9 +436,7 @@ package body Ships.UI.Modules is
                 "::colors(-red)"));
       Insert
         (TextWidget => Module_Text, Index => "end",
-         Text =>
-           "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
-           "Repair/Upgrade material: }");
+         Text => "{Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
       for I in 1 .. Get_Proto_Amount loop
          if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
@@ -1337,7 +1345,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
-         Row => 6);
+         Row => 7);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
