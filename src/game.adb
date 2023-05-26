@@ -495,7 +495,7 @@ package body Game is
          Convention => C,
          External_Name => "updateAdaGame";
    begin
-      Get_Game_Date(Current_Date => Game_Date);
+      Get_Game_Date;
       Set_Ship_In_Nim;
       if Base_Index > 0 then
          Set_Base_In_Nim(Base_Index => Base_Index);
@@ -927,7 +927,7 @@ package body Game is
          return Exception_Message(X => An_Exception);
    end Load_Game_Data;
 
-   procedure Get_Game_Date(Current_Date: Date_Record) is
+   procedure Get_Game_Date is
       procedure Get_Ada_Game_Date
         (Year, Month, Day, Hour, Minutes: Integer) with
          Import => True,
@@ -935,9 +935,9 @@ package body Game is
          External_Name => "getAdaGameDate";
    begin
       Get_Ada_Game_Date
-        (Year => Current_Date.Year, Month => Current_Date.Month,
-         Day => Current_Date.Day, Hour => Current_Date.Hour,
-         Minutes => Current_Date.Minutes);
+        (Year => Game_Date.Year, Month => Game_Date.Month,
+         Day => Game_Date.Day, Hour => Game_Date.Hour,
+         Minutes => Game_Date.Minutes);
    end Get_Game_Date;
 
    procedure Set_Game_Date is
