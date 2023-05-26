@@ -495,64 +495,111 @@ type
 
   BaseModuleData* = object
     ## Used to store information about prototypes of ships' modules
-    name*: string            ## The name of the module
-    mType*: ModuleType       ## The type of the module
-    weight*: Natural         ## The weight of the module
-    value*: int              ## Additional data for the module, for engines it is power
-    maxValue*: int           ## Additional data for the mode, for guns it is damage
-    durability*: int         ## The base durability of the module
-    repairMaterial*: string  ## The index of the material used to repair the module
-    repairSkill*: Positive   ## The index of the skill used to repair the module
-    price*: Natural          ## The base price of the module in shipyards
-    installTime*: Positive   ## The amount of time needed to install the module
-    unique*: bool            ## If true, only one that module can be installed on the ship
-    size*: range[1..10]      ## The size of the module
-    description*: string     ## The description of the module
-    maxOwners*: range[0..10] ## The amount of users of the module
-    speed*: int              ## How fast the gun shoots in the combat
-    reputation*: ReputationRange ## The minumum amount of reputation needed for buy the module
+    ##
+    ## * name           - The name of the module
+    ## * mType          - The type of the module
+    ## * weight         - The weight of the module
+    ## * value          - Additional data for the module, for engines it is power
+    ## * maxValue       - Additional data for the mode, for guns it is damage
+    ## * durability     - The base durability of the module
+    ## * repairMaterial - The index of the material used to repair the module
+    ## * repairSkill    - The index of the skill used to repair the module
+    ## * price          - The base price of the module in shipyards
+    ## * installTime    - The amount of time needed to install the module
+    ## * unique         - If true, only one that module can be installed on the ship
+    ## * size           - The size of the module
+    ## * description    - The description of the module
+    ## * maxOwners      - The amount of users of the module
+    ## * speed          - How fast the gun shoots in the combat
+    ## * reputation     - The minumum amount of reputation needed for buy the module
+    name*: string
+    mType*: ModuleType
+    weight*: Natural
+    value*: int
+    maxValue*: int
+    durability*: int
+    repairMaterial*: string
+    repairSkill*: Positive
+    price*: Natural
+    installTime*: Positive
+    unique*: bool
+    size*: range[1..10]
+    description*: string
+    maxOwners*: range[0..10]
+    speed*: int
+    reputation*: ReputationRange
 
   CraftData* = object
     ## Used to store information about crafting recipes
-    materialTypes*: seq[string] ## The list of materials types used in crafting
-    materialAmounts*: seq[Positive] ## The list of materials amount used in crafting
-    resultIndex*: Natural       ## The index of proto item which is the result of the recipe
-    resultAmount*: Natural      ## The amount of items produced by one recipe
-    workplace*: ModuleType      ## The type of ship's module used as a workshop for the recipe
-    skill*: Natural             ## The index of the skill used in crafting
-    time*: Positive             ## The amount of minutes needed to finish the recipe
-    difficulty*: Positive       ## The difficulty level of the recipe
-    tool*: string               ## The type of item used as a tool in crafting
-    reputation*: ReputationRange ## The minimal amount of reputation needed to buy the recipe in bases
-    toolQuality*: Positive      ## The minimal quality of tool used in crafting
+    ##
+    ## * materialTypes   - The list of materials types used in crafting
+    ## * materialAmounts - The list of materials amount used in crafting
+    ## * resultIndex     - The index of proto item which is the result of the recipe
+    ## * resultAmount    - The amount of items produced by one recipe
+    ## * workplace       - The type of ship's module used as a workshop for the recipe
+    ## * skill           - The index of the skill used in crafting
+    ## * time            - The amount of minutes needed to finish the recipe
+    ## * difficulty      - The difficulty level of the recipe
+    ## * tool            - The type of item used as a tool in crafting
+    ## * reputation      - The minimal amount of reputation needed to buy the recipe in bases
+    ## * toolQuality     - The minimal quality of tool used in crafting
+    materialTypes*: seq[string]
+    materialAmounts*: seq[Positive]
+    resultIndex*: Natural
+    resultAmount*: Natural
+    workplace*: ModuleType
+    skill*: Natural
+    time*: Positive
+    difficulty*: Positive
+    tool*: string
+    reputation*: ReputationRange
+    toolQuality*: Positive
 
   GoalData* = object
     ## Used to store information about the in-game goals
-    index*: string       ## The index of the goal prototype
-    goalType*: GoalTypes ## The type of the goal
-    amount*: Natural     ## The amount of targets needed for finishe the goal
-    targetIndex*: string ## The index of the target needed for finish the goal. If empty
-                         ## means all targets of the selected type (bases, ships, etc.)
-    multiplier*: Positive ## The muliplier for points awarded for finishing the goal
+    ##
+    ## * index       - The index of the goal prototype
+    ## * goalType    - The type of the goal
+    ## * amount      - The amount of targets needed for finishe the goal
+    ## * targetIndex - The index of the target needed for finish the goal. If empty
+    ##                 means all targets of the selected type (bases, ships, etc.)
+    ## * multiplier  - The muliplier for points awarded for finishing the goal
+    index*: string
+    goalType*: GoalTypes
+    amount*: Natural
+    targetIndex*: string
+    multiplier*: Positive
 
   MessageData* = object
     ## Used to store data about the game's messages
-    message*: string     ## The message itself
-    kind*: MessageType   ## The type of message
-    color*: MessageColor ## The color used to show the message
+    ##
+    ## * message - The message itself
+    ## * kind    - The type of message
+    ## * color   - The color used to show the message
+    message*: string
+    kind*: MessageType
+    color*: MessageColor
 
   EventData* = object
     ## Used to store data about an event
-    skyX*: MapXRange         ## The X coordinate of the event on the map
-    skyY*: MapYRange         ## The Y coordinate of the event on the map
-    time*: Positive          ## The time in minutes by how long the event will be available
-    case eType*: EventsTypes ## The type of the event
+    ##
+    ## * eType     - The type of the event
+    ## * skyX      - The X coordinate of the event on the map
+    ## * skyY      - The Y coordinate of the event on the map
+    ## * time      - The time in minutes by how long the event will be available
+    ## * itemIndex - The index of the prototype item used by the event
+    ## * shipIndex - The index of the prototype ship used by the event
+    ## * data      - General data of the event
+    skyX*: MapXRange
+    skyY*: MapYRange
+    time*: Positive
+    case eType*: EventsTypes
     of doublePrice:
-      itemIndex*: int        ## The index of the prototype item used by the event
+      itemIndex*: int
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      shipIndex*: int        ## The index of the prototype ship used by the event
+      shipIndex*: int
     else:
-      data*: int             ## General data of the event
+      data*: int
 
   MobInventoryRecord* = object
     ## Used to store data about the inventory of the mob's prototype
