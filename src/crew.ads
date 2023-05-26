@@ -297,29 +297,28 @@ package Crew is
       -- FUNCTION
       -- Wait until whole crew is rested
       -- SOURCE
-   procedure Wait_For_Rest with
-      Test_Case => (Name => "Test_WaitForRest", Mode => Robustness);
-      -- ****
+   procedure Wait_For_Rest;
+   -- ****
 
-      -- ****f* Crew/Crew.Get_Skill_Level_Name
-      -- FUNCTION
-      -- Get member skill level name
-      -- PARAMETERS
-      -- Skill_Level - Numeric value of skill level
-      -- RESULT
-      -- Name (as words) of skill level
-      -- SOURCE
+   -- ****f* Crew/Crew.Get_Skill_Level_Name
+   -- FUNCTION
+   -- Get member skill level name
+   -- PARAMETERS
+   -- Skill_Level - Numeric value of skill level
+   -- RESULT
+   -- Name (as words) of skill level
+   -- SOURCE
    function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String;
-      -- ****
+   -- ****
 
-      -- ****f* Crew/Crew.Get_Attribute_Level_Name
-      -- FUNCTION
-      -- Get member attribute level name
-      -- PARAMETERS
-      -- Attribute_Level - Numeric value of attribute level
-      -- RESULT
-      -- Name (as words) of attribute level
-      -- SOURCE
+   -- ****f* Crew/Crew.Get_Attribute_Level_Name
+   -- FUNCTION
+   -- Get member attribute level name
+   -- PARAMETERS
+   -- Attribute_Level - Numeric value of attribute level
+   -- RESULT
+   -- Name (as words) of attribute level
+   -- SOURCE
    function Get_Attribute_Level_Name
      (Attribute_Level: Positive) return String with
       Pre => Attribute_Level <= 50;
