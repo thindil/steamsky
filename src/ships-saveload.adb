@@ -68,16 +68,17 @@ package body Ships.SaveLoad is
          if Node_Name(N => Child_Node) = "module" then
             Load_Modules_Block :
             declare
+               Data: Data_Array;
                Module_Data: Node_List;
+               Owners: Natural_Container.Vector;
                Name: Bounded_String;
-               Data_Index, Proto_Index: Positive;
-               Weight: Natural := 0;
+               Data_Index: Positive := 1;
+               Proto_Index: Positive;
+               Weight: Natural;
                Durability, Max_Durability, Upgrade_Progress: Integer := 0;
                Upgrade_Action: Ship_Upgrade := NONE;
-               Data: Data_Array;
                Module_Node: Node;
-               M_Type: Module_Type_2;
-               Owners: Natural_Container.Vector;
+               M_Type: Module_Type_2 := ANY;
             begin
                Name :=
                  To_Bounded_String
