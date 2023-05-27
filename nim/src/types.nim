@@ -603,45 +603,77 @@ type
 
   MobInventoryRecord* = object
     ## Used to store data about the inventory of the mob's prototype
-    protoIndex*: Natural ## The index of the item's prototype
-    minAmount*: Natural  ## The minimal amount of the item
-    maxAmount*: Natural  ## The maximum amount of the item
+    ##
+    ## * protoIndex - The index of the item's prototype
+    ## * minAmount  - The minimal amount of the item
+    ## * maxAmount  - The maximum amount of the item
+    protoIndex*: Natural
+    minAmount*: Natural
+    maxAmount*: Natural
 
   ShipBonusData* = object
     ## Used to store data for proto ships bonuses, like accuracy, evasion, etc
-    minValue*: Natural ## The minimum value of the bonus
-    maxValue*: Natural ## The maximum value of the bonus
+    ##
+    ## * minValue - The minimum value of the bonus
+    ## * maxValue - The maximum value of the bonus
+    minValue*: Natural
+    maxValue*: Natural
 
   ProtoMemberData* = object
     ## Used to store data about the crew member in prototypes of ships
-    protoIndex*: Positive ## The index of mob's prototype which will be used to create the crew member
-    minAmount*: Positive ## The minimum amount of the mob as crew members on the ship
-    maxAmount*: Natural ## The maximum amount of the mob as crew members on the ship
+    ##
+    ## * protoIndex - The index of mob's prototype which will be used to create the crew member
+    ## * minAmount  - The minimum amount of the mob as crew members on the ship
+    ## * maxAmount  - The maximum amount of the mob as crew members on the ship
+    protoIndex*: Positive
+    minAmount*: Positive
+    maxAmount*: Natural
 
   ProtoShipData* = object
     ## Used to store data about the prototype of the ship
-    name*: string                   ## The name of the prototype
-    modules*: seq[Positive]         ## The list of installed modules
-    accuracy*: ShipBonusData        ## The accuracy bonus for the ship
-    combatAi*: ShipCombatAi         ## The combat behaviour of the ship
-    evasion*: ShipBonusData         ## The evasion bonus for the ship
-    loot*: ShipBonusData            ## The amount of money looted from the ship
-    perception*: ShipBonusData      ## The perception bonus for the ship
-    cargo*: seq[MobInventoryRecord] ## The cargo of the ship
-    combatValue*: Positive ## The combat strength of the ship (used to generate enemies)
-    crew*: seq[ProtoMemberData]     ## The crew of the ship
-    description*: string            ## The ship's description
-    owner*: string                  ## The faction to which the ship belongs
-    knownRecipes*: seq[string] ## The list of known recipes (used only by the player's ship)
+    ##
+    ## * name         - The name of the prototype
+    ## * modules      - The list of installed modules
+    ## * accuracy     - The accuracy bonus for the ship
+    ## * combatAi     - The combat behaviour of the ship
+    ## * evasion      - The evasion bonus for the ship
+    ## * loot         - The amount of money looted from the ship
+    ## * perception   - The perception bonus for the ship
+    ## * cargo        - The cargo of the ship
+    ## * combatValue  - The combat strength of the ship (used to generate enemies)
+    ## * crew         - The crew of the ship
+    ## * description  - The ship's description
+    ## * owner        - The faction to which the ship belongs
+    ## * knownRecipes - The list of known recipes (used only by the player's ship)
+    name*: string
+    modules*: seq[Positive]
+    accuracy*: ShipBonusData
+    combatAi*: ShipCombatAi
+    evasion*: ShipBonusData
+    loot*: ShipBonusData
+    perception*: ShipBonusData
+    cargo*: seq[MobInventoryRecord]
+    combatValue*: Positive
+    crew*: seq[ProtoMemberData]
+    description*: string
+    owner*: string
+    knownRecipes*: seq[string]
 
   ProtoMobRecord* = object
     ## Used to store data about mobs prototypes
-    attributes*: seq[MobAttributeRecord] ## The mob's attributes
-    skills*: seq[SkillInfo]              ## The mob's skills
-    order*: CrewOrders                   ## The current order of the mob
-    priorities*: array[1..12, Natural]   ## The orders priorities of the mob
-    inventory*: seq[MobInventoryRecord]  ## The inventory of the mob
-    equipment*: EquipmentArray           ## The equipment of the mob
+    ##
+    ## * attributes - The mob's attributes
+    ## * skills     - The mob's skills
+    ## * order      - The current order of the mob
+    ## * priorities - The orders priorities of the mob
+    ## * inventory  - The inventory of the mob
+    ## * equipment  - The equipment of the mob
+    attributes*: seq[MobAttributeRecord]
+    skills*: seq[SkillInfo]
+    order*: CrewOrders
+    priorities*: array[1..12, Natural]
+    inventory*: seq[MobInventoryRecord]
+    equipment*: EquipmentArray
 
 # Temporary code for interfacing with Ada
 
