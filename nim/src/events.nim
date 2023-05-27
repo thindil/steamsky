@@ -84,7 +84,8 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: []
     for key in eventsList.keys:
       skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = key
 
-proc deleteEvent*(eventIndex: Positive) =
+proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
+    tags: [].} =
   skyMap[eventsList[eventIndex].skyX][eventsList[
       eventIndex].skyY].eventIndex = 0
   eventsList.del(key = eventIndex)
