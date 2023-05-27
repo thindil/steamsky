@@ -84,6 +84,13 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: []
     for key in eventsList.keys:
       skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = key
 
+proc deleteEvent*(eventIndex: Positive) =
+  skyMap[eventsList[eventIndex].skyX][eventsList[
+      eventIndex].skyY].eventIndex = 0
+  eventsList.del(key = eventIndex)
+  for index, event in eventsList.pairs:
+    skyMap[event.skyX][event.skyY].eventIndex = index
+
 # Temporary code for interfacing with Ada
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
@@ -143,3 +150,9 @@ proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc.} =
 
 proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
   eventsList.clear()
+
+proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    deleteEvent(eventIndex = eventIndex)
+  except KeyError:
+    discard
