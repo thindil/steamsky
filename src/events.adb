@@ -488,7 +488,13 @@ package body Events is
    end Update_Events;
 
    procedure Delete_Event(Event_Index: Positive) is
+      procedure Delete_Ada_Event(E_Index: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "deleteAdaEvent";
    begin
+      Set_Nim_Events;
+      Delete_Ada_Event(E_Index => Event_Index);
       Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
         .Event_Index :=
         0;
