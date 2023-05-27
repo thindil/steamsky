@@ -25,3 +25,6 @@ damageModule(playerShip, 0, 10, "during tests")
 assert playerShip.modules[0].durability == 90
 
 discard countCombatValue()
+
+assert generateShipName("POLEIS").len() > 0
+

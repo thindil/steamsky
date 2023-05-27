@@ -20,8 +20,6 @@ if protoShipsList.len == 0:
 
 assert getCabinQuality(10) == "Empty room"
 
-assert generateShipName("POLEIS").len() > 0
-
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
     durability: 100))
