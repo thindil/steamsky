@@ -597,13 +597,18 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => State_Box, Info => "reqheight"));
             end Add_State_Info_Block;
          when CARGO_ROOM =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & "Max cargo:" &
-                 Integer'Image
-                   (Get_Module(Index => Module.Proto_Index).Max_Value) &
-                 " kg}");
+            Label :=
+              Create
+                (pathName => Module_Frame & ".maxcargolbl",
+                 options =>
+                   "-text {Max cargo:" &
+                   Integer'Image
+                     (Get_Module(Index => Module.Proto_Index).Max_Value) &
+                   " kg}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when HULL =>
             Add_Modules_Info_Block :
             declare
