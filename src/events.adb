@@ -445,19 +445,12 @@ package body Events is
       return False;
    end Check_For_Event;
 
-   procedure Update_Events(Minutes: Positive) is
+   procedure Set_Nim_Events is
       procedure Clear_Ada_Events with
          Import => True,
          Convention => C,
          External_Name => "clearAdaEvents";
-      procedure Update_Ada_Events(M: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaEvents";
    begin
-      if Events_List.Length = 0 then
-         return;
-      end if;
       Clear_Ada_Events;
       Set_Events_In_Nim_Loop :
       for I in Events_List.Iterate loop
@@ -474,6 +467,18 @@ package body Events is
                  when others => Events_List(I).Data));
          Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := 0;
       end loop Set_Events_In_Nim_Loop;
+   end Set_Nim_Events;
+
+   procedure Update_Events(Minutes: Positive) is
+      procedure Update_Ada_Events(M: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaEvents";
+   begin
+      if Events_List.Length = 0 then
+         return;
+      end if;
+      Set_Nim_Events;
       Update_Ada_Events(M => Minutes);
       Events_List.Clear;
       Set_Events_In_Ada_Loop :
