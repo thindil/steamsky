@@ -253,6 +253,17 @@ package body Ships.UI.Modules is
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
       end Add_Upgrade_Button;
+      procedure Add_Label(Name, Text: String) is
+      begin
+         Label :=
+           Create
+             (pathName => Name,
+              options => "-text {" & Text & "} -wraplength 325");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+      end Add_Label;
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
@@ -273,16 +284,9 @@ package body Ships.UI.Modules is
            Create
              (pathName => Module_Frame & ".nameinfo", options => "-width 360");
       begin
-         Label :=
-           Create
-             (pathName => Name_Box & ".info",
-              options =>
-                "-text {Name: " & To_String(Source => Module.Name) &
-                " } -wraplength 325");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+         Add_Label
+           (Name => Name_Box & ".info",
+            Text => "Name: " & To_String(Source => Module.Name));
          Info_Button :=
            Create
              (pathName => Name_Box & ".button",
@@ -321,10 +325,7 @@ package body Ships.UI.Modules is
               options => "-width 360");
          Status_Tooltip: Unbounded_String;
       begin
-         Label :=
-           Create
-             (pathName => Status_Box & ".damagelbl",
-              options => "-text {Status:}");
+         Add_Label(Name => Status_Box & ".damagelbl", Text => "Status:");
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
@@ -372,7 +373,6 @@ package body Ships.UI.Modules is
          Add
            (Widget => Progress_Bar,
             Message => To_String(Source => Status_Tooltip));
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar, Options => "-row 0 -column 1 -padx {5 0}");
          if Player_Ship.Repair_Module = Module_Index then
@@ -414,12 +414,9 @@ package body Ships.UI.Modules is
            Height +
            Positive'Value(Winfo_Get(Widgt => Status_Box, Info => "reqheight"));
       end Add_Status_Info_Block;
-      Label :=
-        Create
-          (pathName => Module_Frame & ".weightlbl",
-           options =>
-             "-text {Weight:" & Integer'Image(Module.Weight) & " kg}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+      Add_Label
+        (Name => Module_Frame & ".weightlbl",
+         Text => "Weight:" & Integer'Image(Module.Weight) & " kg");
       Tcl_Eval(interp => Interp, strng => "update");
       Height :=
         Height +
@@ -499,15 +496,12 @@ package body Ships.UI.Modules is
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
-               Label :=
-                 Create
-                   (pathName => Power_Box & ".powerlbl",
-                    options =>
-                      "-text {Max power:" & Integer'Image(Module.Power) &
-                      (if Module.Power = Module_Max_Value then " (max upgrade)"
-                       else "") &
-                      "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Power_Box & ".powerlbl",
+                  Text =>
+                    "Max power:" & Integer'Image(Module.Power) &
+                    (if Module.Power = Module_Max_Value then " (max upgrade)"
+                     else ""));
                if Module.Power < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => MAX_VALUE, Tooltip => "engine's power",
@@ -532,16 +526,13 @@ package body Ships.UI.Modules is
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Value) /
                     2.0);
-               Label :=
-                 Create
-                   (pathName => Fuel_Box & ".powerlbl",
-                    options =>
-                      "-text {Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
-                      (if Module_Max_Value = Module.Fuel_Usage then
-                         " (max upgrade)"
-                       else "") &
-                      "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Fuel_Box & ".powerlbl",
+                  Text =>
+                    "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
+                    (if Module_Max_Value = Module.Fuel_Usage then
+                       " (max upgrade)"
+                     else ""));
                if Module.Fuel_Usage > Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => VALUE, Tooltip => "engine's fuel usage",
@@ -561,14 +552,11 @@ package body Ships.UI.Modules is
                    (pathName => Module_Frame & ".stateinfo",
                     options => "-width 360");
             begin
-               Label :=
-                 Create
-                   (pathName => State_Box & ".statelbl",
-                    options =>
-                      "-text {State: " &
-                      (if Module.Disabled then "Disabled" else "Enabled") &
-                      "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => State_Box & ".statelbl",
+                  Text =>
+                    "State: " &
+                    (if Module.Disabled then "Disabled" else "Enabled"));
                Info_Button :=
                  Create
                    (pathName => State_Box & ".button",
@@ -597,15 +585,14 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => State_Box, Info => "reqheight"));
             end Add_State_Info_Block;
          when CARGO_ROOM =>
-            Label :=
-              Create
-                (pathName => Module_Frame & ".maxcargolbl",
-                 options =>
-                   "-text {Max cargo:" &
-                   Integer'Image
-                     (Get_Module(Index => Module.Proto_Index).Max_Value) &
-                   " kg}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+            Add_Label
+              (Name => Module_Frame & ".maxcargolbl",
+               Text =>
+                 "Max cargo:" &
+                 Integer'Image
+                   (Get_Module(Index => Module.Proto_Index).Max_Value) &
+                 " kg");
+            Tcl_Eval(interp => Interp, strng => "update");
             Height :=
               Height +
               Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
@@ -617,18 +604,16 @@ package body Ships.UI.Modules is
                    (pathName => Module_Frame & ".modulesinfo",
                     options => "-width 360");
             begin
-               Label :=
-                 Create
-                   (pathName => Modules_Box & ".modules",
-                    options =>
-                      "-text {Modules installed:" &
-                      Integer'Image(Module.Installed_Modules) & " /" &
-                      Integer'Image(Module.Max_Modules) & "}");
+               Add_Label
+                 (Name => Modules_Box & ".modules",
+                  Text =>
+                    "Modules installed:" &
+                    Integer'Image(Module.Installed_Modules) & " /" &
+                    Integer'Image(Module.Max_Modules));
                Module_Max_Value :=
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                if Module.Max_Modules = Module_Max_Value then
                   configure
                     (Widgt => Label,
@@ -678,10 +663,8 @@ package body Ships.UI.Modules is
                     options => "-width 360");
                Status_Tooltip: Unbounded_String;
             begin
-               Label :=
-                 Create
-                   (pathName => Clean_Box & ".cleanlbl",
-                    options => "-text {Cleanliness:}");
+               Add_Label
+                 (Name => Clean_Box & ".cleanlbl", Text => "Cleanliness:");
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if Damage_Percent = 0.0 then
@@ -722,7 +705,6 @@ package body Ships.UI.Modules is
                Add
                  (Widget => Progress_Bar,
                   Message => To_String(Source => Status_Tooltip));
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
                   Options => "-row 0 -column 1 -padx {5 0}");
@@ -747,10 +729,8 @@ package body Ships.UI.Modules is
                     options =>
                       "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                       Float'Image(Float(Module.Quality) / 100.0) & "}");
-               Label :=
-                 Create
-                   (pathName => Quality_Box & ".qualitylbl",
-                    options => "-text {Quality:}");
+               Add_Label
+                 (Name => Quality_Box & ".qualitylbl", Text => "Quality:");
                Module_Max_Value :=
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
@@ -761,7 +741,6 @@ package body Ships.UI.Modules is
                     Get_Cabin_Quality(Quality => Module.Quality) &
                     (if Module.Quality = Module_Max_Value then " (max upgrade)"
                      else ""));
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
                   Options => "-row 0 -column 1 -padx {5 0}");
@@ -794,16 +773,13 @@ package body Ships.UI.Modules is
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
-               Label :=
-                 Create
-                   (pathName => Strength_Box & ".strengthlbl",
-                    options =>
-                      "-text {Strength:" & Positive'Image(Module_Strength) &
-                      (if Module_Strength = Module_Max_Value then
-                         " (max upgrade)"
-                       else "") &
-                      "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Strength_Box & ".strengthlbl",
+                  Text =>
+                    "Strength:" & Positive'Image(Module_Strength) &
+                    (if Module_Strength = Module_Max_Value then
+                       " (max upgrade)"
+                     else ""));
                if Module_Strength < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => MAX_VALUE,
@@ -1043,11 +1019,9 @@ package body Ships.UI.Modules is
                   Order_Text :=
                     To_Unbounded_String(Source => "{Order: not set}");
                end if;
-               Label :=
-                 Create
-                   (pathName => Order_Box & ".statelbl",
-                    options => "-text " & To_String(Source => Order_Text));
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Order_Box & ".statelbl",
+                  Text => To_String(Source => Order_Text));
                if Recipe_Name'Length > 0 then
                   Info_Button :=
                     Create
@@ -1113,24 +1087,21 @@ package body Ships.UI.Modules is
                   Train_Text :=
                     To_Unbounded_String
                       (Source =>
-                         "{Set for training " &
+                         "Set for training " &
                          To_String
                            (Source =>
                               SkillsData_Container.Element
                                 (Container => Skills_List,
                                  Index => Module.Trained_Skill)
                                 .Name) &
-                         ".}");
+                         ".");
                else
                   Train_Text :=
-                    To_Unbounded_String
-                      (Source => "{Must be set for training.}");
+                    To_Unbounded_String(Source => "Must be set for training.");
                end if;
-               Label :=
-                 Create
-                   (pathName => Skill_Box & ".trainlbl",
-                    options => "-text " & To_String(Source => Train_Text));
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Skill_Box & ".trainlbl",
+                  Text => To_String(Source => Train_Text));
                Info_Button :=
                  Create
                    (pathName => Skill_Box & ".button",
@@ -1169,16 +1140,12 @@ package body Ships.UI.Modules is
                  Positive
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
-               Label :=
-                 Create
-                   (pathName => Strength_Box & ".strengthlbl",
-                    options =>
-                      "-text {Strength:" & Positive'Image(Module.Damage2) &
-                      (if Module.Damage2 = Module_Max_Value then
-                         " (max upgrade)"
-                       else "") &
-                      "}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+               Add_Label
+                 (Name => Strength_Box & ".strengthlbl",
+                  Text =>
+                    "Strength:" & Positive'Image(Module.Damage2) &
+                    (if Module.Damage2 = Module_Max_Value then " (max upgrade)"
+                     else ""));
                if Module.Damage2 < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => MAX_VALUE,
@@ -1296,11 +1263,9 @@ package body Ships.UI.Modules is
             Add
               (Widget => Progress_Bar,
                Message => To_String(Source => Module_Info));
-            Label :=
-              Create
-                (pathName => Upgrade_Box & ".upgradelbl",
-                 options => "-text {Upgrade progress:}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+            Add_Label
+              (Name => Upgrade_Box & ".upgradelbl",
+               Text => "Upgrade progress:");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Bar,
                Options => "-row 0 -column 1 -padx {5 0}");
