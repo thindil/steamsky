@@ -68,9 +68,11 @@ package body Ships.SaveLoad is
          if Node_Name(N => Child_Node) = "module" then
             Load_Modules_Block :
             declare
+               --## rule off IMPROPER_INITIALIZATION
                Data: Data_Array;
                Module_Data: Node_List;
                Owners: Natural_Container.Vector;
+               --## rule on IMPROPER_INITIALIZATION
                Name: Bounded_String;
                Data_Index: Positive := 1;
                Proto_Index: Positive;
