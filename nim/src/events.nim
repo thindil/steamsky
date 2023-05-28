@@ -86,6 +86,9 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: []
 
 proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## Delete the selected event and update the map information
+  ##
+  ## * eventIndex - the index of the event to delete
   skyMap[eventsList[eventIndex].skyX][eventsList[
       eventIndex].skyY].eventIndex = 0
   eventsList.del(key = eventIndex)
