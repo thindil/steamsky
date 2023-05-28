@@ -13,14 +13,11 @@ package Events.Test_Data.Tests is
    procedure Test_Check_For_Event_73edc5_e01b25(Gnattest_T: in out Test);
    --  events.ads:117:4:Check_For_Event:Test_CheckForEvent
 
-   procedure Test_Delete_Event_626bfb_8845a2(Gnattest_T: in out Test);
-   --  events.ads:136:4:Delete_Event:Test_DeleteEvent
-
    procedure Test_Generate_Traders_4cda02_5d00a3(Gnattest_T: in out Test);
-   --  events.ads:145:4:Generate_Traders:Test_GenerateTraders
+   --  events.ads:144:4:Generate_Traders:Test_GenerateTraders
 
    procedure Test_Recover_Base_d738af_a032fd(Gnattest_T: in out Test);
-   --  events.ads:155:4:Recover_Base:Test_RecoverBase
+   --  events.ads:154:4:Recover_Base:Test_RecoverBase
 
 end Events.Test_Data.Tests;
 --  end read only
