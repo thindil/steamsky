@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, config, factions, game, goals, items, maps, messages, ships2,
-    shipscrew, trades, types, utils
+import basestypes, config, events, factions, game, goals, items, maps, messages,
+    ships2, shipscrew, trades, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     tags: [].} =
@@ -295,6 +295,37 @@ proc askForEvents*() =
     addMessage(message = playerShip.crew[traderIndex].name &
         " asked ship '" & generateShipName(factionIndex = protoShipsList[
             shipIndex].owner) & "' for recent events.", mType = orderMessage)
+    deleteEvent(eventIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex)
+    updateOrders(ship = playerShip)
+  let eventsAmount = getRandom(min = 1, max = maxEvents)
+  var minX: cint = playerShip.skyX.cint - 100
+  normalizeCoord(coord = minX)
+  var maxX: cint = playerShip.skyX.cint + 100
+  normalizeCoord(coord = maxX)
+  var minY: cint = playerShip.skyY.cint - 100
+  normalizeCoord(coord = minY, isXAxis = 0)
+  var maxY: cint = playerShip.skyY.cint + 100
+  normalizeCoord(coord = maxY, isXAxis = 0)
+  var enemies: seq[Positive]
+  generateEnemies(enemies)
+  for i in 1 .. eventsAmount:
+    let event = getRandom(min = 1, max = 5).EventsTypes
+    var attempts = 10
+    var eventX, eventY = 0
+    while true:
+      if event == enemyShip:
+        eventX = getRandom(min = minX, max = maxX)
+        eventY = getRandom(min = minY, max = maxY)
+        if skyMap[eventX][eventY].baseIndex == 0 and eventX !=
+            playerShip.skyX and eventY != playerShip.skyY and skyMap[eventX][
+            eventY].eventIndex == 0:
+          break
+      else:
+        let tmpBaseIndex = getRandom(min = 1, max = 1024)
+        eventX = skyBases[tmpBaseIndex].skyX
+        eventY = skyBases[tmpBaseIndex].skyY
+        attempts.dec
 
 # Temporary code for interfacing with Ada
 
