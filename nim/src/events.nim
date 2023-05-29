@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import factions, game, maps, ships2, types, utils
+import factions, game, maps, messages, ships2, types, utils
 
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
     tags: [].} =
@@ -95,6 +95,28 @@ proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
   for index, event in eventsList.pairs:
     skyMap[event.skyX][event.skyY].eventIndex = index
 
+proc recoverBase*(baseIndex: BasesRange) =
+  var maxSpawnChance: Natural = 0
+  for faction in factionsList.values:
+    maxSpawnChance = maxSpawnChance + faction.spawnChance
+  var factionRoll = getRandom(min = 1, max = maxSpawnChance)
+  for index, faction in factionsList.pairs:
+    if factionRoll < faction.spawnChance:
+      skyBases[baseIndex].owner = index
+      skyBases[baseIndex].reputation.level = getReputation(
+          sourceFaction = playerShip.crew[1].faction, targetFaction = skyBases[
+          baseIndex].owner)
+      break
+    factionRoll = factionRoll - faction.spawnChance
+  skyBases[baseIndex].population = getRandom(min = 2, max = 50)
+  skyBases[baseIndex].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+  skyBases[baseIndex].recruitDate = DateRecord(year: 0, month: 0, day: 0,
+      hour: 0, minutes: 0)
+  skyBases[baseIndex].missionsDate = DateRecord(year: 0, month: 0, day: 0,
+      hour: 0, minutes: 0)
+  addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
+      mType = otherMessage, color = cyan)
+
 # Temporary code for interfacing with Ada
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
@@ -158,5 +180,11 @@ proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
 proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
   try:
     deleteEvent(eventIndex = eventIndex)
+  except KeyError:
+    discard
+
+proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    recoverBase(baseIndex = baseIndex)
   except KeyError:
     discard
