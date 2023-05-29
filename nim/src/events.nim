@@ -97,6 +97,9 @@ proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
 
 proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## Set a new owner, population and reset dates for the abandoned base
+  ##
+  ## * baseIndex - the index of the base to recover
   var maxSpawnChance: Natural = 0
   for faction in factionsList.values:
     maxSpawnChance = maxSpawnChance + faction.spawnChance
