@@ -10,13 +10,13 @@ loadCareers("../bin/data/careers.dat")
 loadFactions("../bin/data/factions.dat")
 loadBasesTypes("../bin/data/bases.dat")
 
-assert generateBaseName("POLEIS").len() > 0, "Failed generating a base's name."
+assert generateBaseName("POLEIS").len() > 0, "Failed to generate a base's name."
 
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 gainRep(1, 1)
-assert skyBases[1].reputation.experience == 2, "Failed gaining reputation in a base."
+assert skyBases[1].reputation.experience == 2, "Failed to gain reputation in a base."
 gainRep(1, -1)
-assert skyBases[1].reputation.experience == 1, "Failed losing reputation in a base."
+assert skyBases[1].reputation.experience == 1, "Failed to lose reputation in a base."
 
 playerShip.skyX = 1
 playerShip.skyY = 1
@@ -31,10 +31,10 @@ skyMap[1][1].baseIndex = 1
 var price: Natural = 100
 
 countPrice(price, 0, false)
-assert price > 100, "Failed raising a price in base."
+assert price > 100, "Failed to raise a price in a base."
 price = 100
 countPrice(price, 0)
-assert price < 100, "Failed reducing a price in base."
+assert price < 100, "Failed to reduce a price in a base."
 
 updatePopulation()
 
@@ -44,16 +44,16 @@ skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 skyBases[1].recruits = @[]
 generateRecruits()
-assert skyBases[1].recruits.len > 0, "Failed generating recruits in a base."
+assert skyBases[1].recruits.len > 0, "Failed to generate recruits in a base."
 skyBases[1].recruits = @[]
 skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 skyBases[1].reputation.level = -50
 generateRecruits()
-assert skyBases[1].recruits.len > 0, "Failed generating recruits in a base with negative reputation."
+assert skyBases[1].recruits.len > 0, "Failed to generate recruits in a base with negative reputation."
 skyBases[1].recruits = @[]
 skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 skyBases[1].reputation.level = 0
 generateRecruits()
-assert skyBases[1].recruits.len > 0, "Failed generating recruits in a base with zero reputation."
+assert skyBases[1].recruits.len > 0, "Failed to generate recruits in a base with zero reputation."
 
 updatePrices()

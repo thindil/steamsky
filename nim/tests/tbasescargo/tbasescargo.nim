@@ -28,13 +28,13 @@ skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 generateCargo()
-assert skyBases[1].cargo.len > 0
+assert skyBases[1].cargo.len > 0, "Failed to generate cargo for a base."
 
 skyBases[1].cargo = @[]
 generateCargo()
-assert findBaseCargo(1) == 0
-assert findBaseCargo(40) == -1
-assert findBaseCargo(490) == -1
+assert findBaseCargo(1) == 0, "Failed to find an item in a base cargo."
+assert findBaseCargo(40) == -1, "Failed to not find an item in a base cargo."
+assert findBaseCargo(490) == -1, "Failed to not find a non existing item in a base cargo."
 
 skyBases[1].cargo = @[]
 generateCargo()
@@ -42,6 +42,6 @@ let
   amount = skyBases[1].cargo[0].amount - 1
   protoIndex = skyBases[1].cargo[0].protoIndex
 updateBaseCargo(protoIndex, -1)
-assert skyBases[1].cargo[0].amount == amount
+assert skyBases[1].cargo[0].amount == amount, "Failed to remove an item with protoIndex from a base cargo."
 updateBaseCargo(cargoIndex = 0, amount = -1)
-assert skyBases[1].cargo[0].amount == amount - 1
+assert skyBases[1].cargo[0].amount == amount - 1, "Failed to remove an item with amount from a base cargo."
