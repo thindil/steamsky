@@ -258,7 +258,7 @@ package body Ships.UI.Modules is
          Label :=
            Create
              (pathName => Name,
-              options => "-text {" & Text & "} -wraplength 325");
+              options => "-text {" & Text & "} -wraplength 380");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
          Tcl_Eval
            (interp => Interp,
@@ -459,10 +459,10 @@ package body Ships.UI.Modules is
             M_Amount := M_Amount + 1;
          end if;
       end loop Find_Repair_Material_Loop;
-      Insert
-        (TextWidget => Module_Text, Index => "end",
+      Add_Label
+        (Name => Module_Frame & ".upgradeskill",
          Text =>
-           "{" & LF & "Repair/Upgrade skill: " &
+           "Repair/Upgrade skill: " &
            To_String
              (Source =>
                 SkillsData_Container.Element
@@ -481,8 +481,10 @@ package body Ships.UI.Modules is
                         Index =>
                           Get_Module(Index => Module.Proto_Index).Repair_Skill)
                        .Attribute)
-                  .Name) &
-           "}");
+                  .Name));
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       case Module.M_Type is
          when ENGINE =>
             Add_Power_Info_Block :
@@ -961,14 +963,14 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => Ammo_Box, Info => "reqheight"));
             end Show_Ammo_Block;
             if Module.M_Type = GUN then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
+               Add_Label
+                 (Name => Module_Frame & ".lblfirerate",
                   Text =>
-                    "{" & LF & "Max fire rate:" &
+                    "Max fire rate:" &
                     (if Get_Module(Index => Module.Proto_Index).Speed > 0 then
                        Positive'Image
                          (Get_Module(Index => Module.Proto_Index).Speed) &
-                       "/round}"
+                       "/round"
                      else "1/" &
                        Trim
                          (Source =>
@@ -977,18 +979,24 @@ package body Ships.UI.Modules is
                                (Get_Module(Index => Module.Proto_Index)
                                   .Speed)),
                           Side => Left) &
-                       " rounds}"));
+                       " rounds"));
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end if;
          when TURRET =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
+            Add_Label
+              (Name => Module_Frame & ".lblturretgun",
                Text =>
-                 "{" & LF & "Weapon: " &
+                 "Weapon: " &
                  (if Module.Gun_Index > 0 then
                     To_String
                       (Source => Player_Ship.Modules(Module.Gun_Index).Name)
-                  else "none") &
-                 "}");
+                  else "none"));
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when WORKSHOP =>
             Add_Owners_Info
               (Owners_Name => "Worker",
@@ -1163,11 +1171,14 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Insert
-        (TextWidget => Module_Text, Index => "end",
+      Add_Label
+        (Name => Module_Frame & ".lblsize",
          Text =>
-           "{" & LF & "Size:" &
-           Natural'Image(Get_Module(Index => Module.Proto_Index).Size) & "}");
+           "Size:" &
+           Natural'Image(Get_Module(Index => Module.Proto_Index).Size));
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       if Get_Module(Index => Module.Proto_Index).Description /=
         Short_String.Null_Bounded_String then
          Insert
@@ -1306,8 +1317,7 @@ package body Ships.UI.Modules is
                    (TextWidget => Module_Text, Options => "-displaylines",
                     Index1 => "0.0", Index2 => "end")) /
               Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-              1));
+                (Metrics(Font => "InterfaceFont", Option => "-linespace"))));
       Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-columnspan 2");
       Height :=
         Height +
@@ -1315,7 +1325,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
-         Row => 7);
+         Row => 10);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
