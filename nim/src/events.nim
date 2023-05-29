@@ -95,7 +95,8 @@ proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
   for index, event in eventsList.pairs:
     skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc recoverBase*(baseIndex: BasesRange) =
+proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
+    tags: [].} =
   var maxSpawnChance: Natural = 0
   for faction in factionsList.values:
     maxSpawnChance = maxSpawnChance + faction.spawnChance
