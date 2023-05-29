@@ -310,9 +310,10 @@ proc askForEvents*() =
   var enemies: seq[Positive]
   generateEnemies(enemies)
   for i in 1 .. eventsAmount:
-    let event = getRandom(min = 1, max = 5).EventsTypes
-    var attempts = 10
-    var eventX, eventY = 0
+    var
+      event = getRandom(min = 1, max = 5).EventsTypes
+      attempts = 10
+      eventX, eventY = 0
     while true:
       if event == enemyShip:
         eventX = getRandom(min = minX, max = maxX)
@@ -326,6 +327,35 @@ proc askForEvents*() =
         eventX = skyBases[tmpBaseIndex].skyX
         eventY = skyBases[tmpBaseIndex].skyY
         attempts.dec
+        if attempts == 0:
+          event = enemyShip
+          while true:
+            eventX = getRandom(min = minX, max = maxX)
+            eventY = getRandom(min = minY, max = maxY)
+            if skyMap[eventX][eventY].baseIndex == 0 and eventX !=
+                playerShip.skyX and eventY != playerShip.skyY and skyMap[
+                    eventX][
+                eventY].eventIndex == 0:
+              break
+          break
+        if eventX != playerShip.skyX and eventY != playerShip.skyY and skyMap[
+            eventX][eventY].eventIndex == 0 and skyBases[skyMap[eventX][
+            eventY].baseIndex].known:
+          if event == attackOnBase and skyBases[skyMap[eventX][
+              eventY].baseIndex].population > 0:
+            break
+          if event == doublePrice and isFriendly(
+              sourceFaction = playerShip.crew[0].faction,
+              targetFaction = skyBases[skyMap[eventX][eventY].baseIndex].owner):
+            break
+          if event == disease and "diseaseimmnune" in factionsList[skyBases[
+              skyMap[eventX][eventY].baseIndex].owner].flags and isFriendly(
+              sourceFaction = playerShip.crew[0].faction,
+              targetFaction = skyBases[skyMap[eventX][eventY].baseIndex].owner):
+            break
+          if event == baseRecovery and skyBases[skyMap[eventX][
+              eventY].baseIndex].population == 0:
+            break
 
 # Temporary code for interfacing with Ada
 
