@@ -70,14 +70,14 @@ package body Ships.SaveLoad is
             declare
                --## rule off IMPROPER_INITIALIZATION
                Data: Data_Array;
-               Module_Data: Node_List;
+               Ship_Module_Data: Node_List;
                Owners: Natural_Container.Vector;
                --## rule on IMPROPER_INITIALIZATION
                Name: Bounded_String;
                Data_Index: Positive := 1;
                Proto_Index: Positive;
                Weight: Natural;
-               Durability, Max_Durability, Upgrade_Progress: Integer := 0;
+               Ship_Durability, Max_Durability, Upgrade_Progress: Integer := 0;
                Upgrade_Action: Ship_Upgrade := NONE;
                Module_Node: Node;
                M_Type: Module_Type_2 := ANY;
@@ -98,10 +98,10 @@ package body Ships.SaveLoad is
                        Natural'Value
                          (Get_Attribute(Elem => Child_Node, Name => "owner")));
                else
-                  Module_Data := Child_Nodes(N => Child_Node);
+                  Ship_Module_Data := Child_Nodes(N => Child_Node);
                   Load_Owners_Loop :
-                  for K in 0 .. Length(List => Module_Data) - 1 loop
-                     Module_Node := Item(List => Module_Data, Index => K);
+                  for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
+                     Module_Node := Item(List => Ship_Module_Data, Index => K);
                      if Node_Name(N => Module_Node) = "owner" then
                         Owners.Append
                           (New_Item =>
@@ -111,7 +111,7 @@ package body Ships.SaveLoad is
                      end if;
                   end loop Load_Owners_Loop;
                end if;
-               Durability :=
+               Ship_Durability :=
                  Integer'Value
                    (Get_Attribute(Elem => Child_Node, Name => "durability"));
                Max_Durability :=
@@ -202,11 +202,12 @@ package body Ships.SaveLoad is
                case M_Type is
                   when ANY =>
                      Data := (others => 0);
-                     Module_Data := Child_Nodes(N => Child_Node);
+                     Ship_Module_Data := Child_Nodes(N => Child_Node);
                      Data_Index := 1;
                      Load_Module_Data_Loop :
-                     for K in 0 .. Length(List => Module_Data) - 1 loop
-                        Module_Node := Item(List => Module_Data, Index => K);
+                     for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
+                        Module_Node :=
+                          Item(List => Ship_Module_Data, Index => K);
                         if Node_Name(N => Module_Node) = "data" then
                            Data(Data_Index) :=
                              Integer'Value
@@ -219,7 +220,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (M_Type => ANY, Name => Name,
                            Proto_Index => Proto_Index, Weight => Weight,
-                           Durability => Durability,
+                           Durability => Ship_Durability,
                            Max_Durability => Max_Durability, Owner => Owners,
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action, Data => Data));
@@ -229,12 +230,12 @@ package body Ships.SaveLoad is
                         Fuel_Usage, Power: Positive;
                         Disabled: Boolean;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Engine_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -268,7 +269,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => ENGINE, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -281,12 +282,12 @@ package body Ships.SaveLoad is
                      declare
                         Cleanliness, Quality: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Cabin_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -311,7 +312,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => CABIN, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -323,7 +324,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (M_Type => COCKPIT, Name => Name,
                            Proto_Index => Proto_Index, Weight => Weight,
-                           Durability => Durability,
+                           Durability => Ship_Durability,
                            Max_Durability => Max_Durability, Owner => Owners,
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
@@ -333,12 +334,12 @@ package body Ships.SaveLoad is
                         Crafting_Index: Bounded_String;
                         Crafting_Time, Crafting_Amount: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Workshop_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -374,7 +375,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => WORKSHOP, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -388,7 +389,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (M_Type => MEDICAL_ROOM, Name => Name,
                            Proto_Index => Proto_Index, Weight => Weight,
-                           Durability => Durability,
+                           Durability => Ship_Durability,
                            Max_Durability => Max_Durability, Owner => Owners,
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
@@ -397,12 +398,12 @@ package body Ships.SaveLoad is
                      declare
                         Trained_Skill: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Training_Room_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Trained_Skill :=
@@ -416,7 +417,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => TRAINING_ROOM, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -428,12 +429,12 @@ package body Ships.SaveLoad is
                      declare
                         Gun_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Turret_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Gun_Index :=
@@ -447,7 +448,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => TURRET, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -459,12 +460,12 @@ package body Ships.SaveLoad is
                      declare
                         Damage, Ammo_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Gun_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -489,7 +490,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => GUN, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -501,7 +502,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (M_Type => CARGO_ROOM, Name => Name,
                            Proto_Index => Proto_Index, Weight => Weight,
-                           Durability => Durability,
+                           Durability => Ship_Durability,
                            Max_Durability => Max_Durability, Owner => Owners,
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
@@ -510,12 +511,12 @@ package body Ships.SaveLoad is
                      declare
                         Installed_Modules, Max_Modules: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Hull_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -540,7 +541,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => HULL, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -553,7 +554,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (M_Type => ARMOR, Name => Name,
                            Proto_Index => Proto_Index, Weight => Weight,
-                           Durability => Durability,
+                           Durability => Ship_Durability,
                            Max_Durability => Max_Durability, Owner => Owners,
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
@@ -562,12 +563,12 @@ package body Ships.SaveLoad is
                      declare
                         Damage: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Battering_Ram_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Damage :=
@@ -581,7 +582,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => BATTERING_RAM, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
@@ -593,12 +594,12 @@ package body Ships.SaveLoad is
                      declare
                         Duration, Harpoon_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(N => Child_Node);
+                        Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Harpoon_Gun_Data_Loop :
-                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                        for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
                            Module_Node :=
-                             Item(List => Module_Data, Index => K);
+                             Item(List => Ship_Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
@@ -623,7 +624,7 @@ package body Ships.SaveLoad is
                           (New_Item =>
                              (M_Type => HARPOON_GUN, Name => Name,
                               Proto_Index => Proto_Index, Weight => Weight,
-                              Durability => Durability,
+                              Durability => Ship_Durability,
                               Max_Durability => Max_Durability,
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
