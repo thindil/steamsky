@@ -365,6 +365,28 @@ proc askForEvents*() =
       eventsList[eventsList.len] = EventData(eType: enemyShip, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 60),
           shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)])
+    of attackOnBase:
+      generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
+      eventsList[eventsList.len] = EventData(eType: attackOnBase, skyX: eventX,
+          skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 120),
+          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)])
+      generateEnemies(enemies = enemies)
+    of disease:
+      eventsList[eventsList.len] = EventData(eType: disease, skyX: eventX,
+          skyY: eventY, time: getRandom(min = 10_000, max = 12_000), data: 1)
+    of doublePrice:
+      var newItemIndex = 0
+      block setDoublePrice:
+        while true:
+          var itemIndex = getRandom(min = 1, max = itemsList.len)
+          for j in 1 .. itemsList.len:
+            if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
+                eventY].baseIndex].baseType, itemIndex = j) > 0:
+              newItemIndex = j
+              break setDoublePrice
+      eventsList[eventsList.len] = EventData(eType: doublePrice, skyX: eventX,
+          skyY: eventY, time: getRandom(min = eventTime * 3, max = eventTime *
+              4), itemIndex: newItemIndex)
     else:
       discard
 
