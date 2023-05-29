@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[math, tables]
 import basestypes, config, events, factions, game, goals, items, maps, messages,
     ships2, shipscrew, trades, types, utils
 
@@ -356,6 +356,17 @@ proc askForEvents*() =
           if event == baseRecovery and skyBases[skyMap[eventX][
               eventY].baseIndex].population == 0:
             break
+    let
+      diffX = abs(playerShip.skyX - eventX)
+      diffY = abs(playerShip.skyY - eventY)
+      eventTime = (60 * sqrt((diffX ^ 2).float + (diffY ^ 2).float)).Natural
+    case event
+    of enemyShip:
+      eventsList[eventsList.len] = EventData(eType: enemyShip, skyX: eventX,
+          skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 60),
+          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)])
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
