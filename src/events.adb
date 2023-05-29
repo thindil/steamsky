@@ -553,39 +553,14 @@ package body Events is
    end Generate_Traders;
 
    procedure Recover_Base(Base_Index: Bases_Range) is
-      Max_Spawn_Chance: Natural := 0;
-      Faction_Roll: Positive := 1;
-      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
+      procedure Recover_Ada_Base(B_Index: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "recoverAdaBase";
    begin
-      Count_Spawn_Chance_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         Max_Spawn_Chance :=
-           Max_Spawn_Chance + Get_Faction(Number => I).Spawn_Chance;
-      end loop Count_Spawn_Chance_Loop;
-      Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Chance);
-      Choose_Faction_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         Faction := Get_Faction(Number => I);
-         if Faction_Roll < Faction.Spawn_Chance then
-            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
-            Sky_Bases(Base_Index).Reputation.Level :=
-              Get_Reputation
-                (Source_Faction => Player_Ship.Crew(1).Faction,
-                 Target_Faction => Sky_Bases(Base_Index).Owner);
-            exit Choose_Faction_Loop;
-         end if;
-         Faction_Roll := Faction_Roll - Faction.Spawn_Chance;
-      end loop Choose_Faction_Loop;
-      Sky_Bases(Base_Index).Population := Get_Random(Min => 2, Max => 50);
-      Sky_Bases(Base_Index).Visited := (others => 0);
-      Sky_Bases(Base_Index).Recruit_Date := (others => 0);
-      Sky_Bases(Base_Index).Missions_Date := (others => 0);
-      Add_Message
-        (Message =>
-           "Base " &
-           Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name) &
-           " has a new owner.",
-         M_Type => OTHERMESSAGE, Color => CYAN);
+      Set_Base_In_Nim(Base_Index => Base_Index);
+      Recover_Ada_Base(B_Index => Base_Index);
+      Get_Base_From_Nim(Base_Index => Base_Index);
    end Recover_Base;
 
    procedure Generate_Enemies
