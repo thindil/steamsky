@@ -16,8 +16,5 @@ package Events.Test_Data.Tests is
    procedure Test_Generate_Traders_4cda02_5d00a3(Gnattest_T: in out Test);
    --  events.ads:144:4:Generate_Traders:Test_GenerateTraders
 
-   procedure Test_Recover_Base_d738af_a032fd(Gnattest_T: in out Test);
-   --  events.ads:154:4:Recover_Base:Test_RecoverBase
-
 end Events.Test_Data.Tests;
 --  end read only
