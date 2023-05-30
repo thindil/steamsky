@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
-import basestypes, config, events, factions, game, goals, items, maps, messages,
+import basestypes, config, events, factions, gainexp, game, goals, items, maps, messages,
     ships2, shipscrew, trades, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
@@ -387,8 +387,12 @@ proc askForEvents*() =
       eventsList[eventsList.len] = EventData(eType: doublePrice, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime * 3, max = eventTime *
               4), itemIndex: newItemIndex)
+    of baseRecovery:
+      recoverBase(baseIndex = skyMap[eventX][eventY].baseIndex)
     else:
       discard
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  #updateGame(minutes = 30)
 
 # Temporary code for interfacing with Ada
 
@@ -645,3 +649,9 @@ proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc.} =
 
 proc setAdaBaseSize(baseIndex: cint; size: var cint) {.raises: [], tags: [], exportc.} =
   size = skyBases[baseIndex].size.ord.cint
+
+proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    askForEvents()
+  except KeyError, IOError, Exception:
+    discard
