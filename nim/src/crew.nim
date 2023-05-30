@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
-import combat, config, crewinventory, game, items, maps, messages, utils,
+import combat, config, crewinventory, game, gainexp, items, maps, messages, utils,
     shipscargo, shipscrew, shipscrew2, types
 
 proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =

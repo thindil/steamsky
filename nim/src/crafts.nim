@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
+import crewinventory, game, gainexp, goals, items, log, messages, shipscargo, shipscrew,
     statistics, trades, types
 
 type
