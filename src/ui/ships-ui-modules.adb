@@ -1082,8 +1082,7 @@ package body Ships.UI.Modules is
                        Positive'Value
                          (Metrics
                             (Font => "InterfaceFont",
-                             Option => "-linespace")) -
-                       2));
+                             Option => "-linespace"))));
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Ammo_Text, Options => "-sticky w -row 0 -column 0");
                Tcl.Tk.Ada.Grid.Grid(Slave => Ammo_Box, Options => "-sticky w");
