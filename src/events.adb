@@ -23,11 +23,11 @@ with Crew;
 with Factions; use Factions;
 with Items;
 with Maps; use Maps;
-with Messages; use Messages;
+with Messages;
 with Ships.Cargo;
 with Ships.Crew;
 with Ships.Movement;
-with Utils; use Utils;
+with Utils;
 
 package body Events is
 
@@ -35,10 +35,12 @@ package body Events is
       use Combat;
       use Crew;
       use Items;
+      use Messages;
       use Ships.Cargo;
       use Ships.Crew;
       use Ships.Movement;
       use Tiny_String;
+      use Utils;
 
       Time_Passed: Integer := 0;
       Crew_Index: Crew_Container.Extended_Index := 0;
