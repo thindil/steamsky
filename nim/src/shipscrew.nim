@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import careers, config, crewinventory, game, maps, messages, shipscargo, types, utils
+import crewinventory, game, maps, messages, shipscargo, types, utils
 
 proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
     raises: [], tags: [].} =
@@ -590,71 +590,6 @@ proc findMember*(order: CrewOrders; shipCrew: seq[
       return index
   return -1
 
-proc gainExp*(amount: Natural; skillNumber: Positive;
-    crewIndex: Natural) {.sideEffect, raises: [], tags: [].} =
-  ## Raise the crew member experience in the selected skill and associated
-  ## attribute
-  ##
-  ## * amount      - the amount of experience gained by the crew mmeber
-  ## * skillNumber - the index of the skill in which the experience is gained
-  ## * crewIndex   - the index of the crew member who gains experience
-  let attributeIndex = try:
-      skillsList[skillNumber].attribute
-    except KeyError:
-      Positive.high
-  if attributeIndex == Positive.high:
-    return
-  var
-    skillExp, newAmount, skillLevel = 0
-    skillIndex = -1
-
-  proc gainExpInAttribute(attribute: Positive) =
-    var memberAttribute = playerShip.crew[crewIndex].attributes[attribute]
-    if memberAttribute.level == 50:
-      return
-    var
-      attributeExp = memberAttribute.experience + newAmount
-      attributeLevel = memberAttribute.level
-    if attributeExp >= attributeLevel * 250:
-      attributeExp = attributeExp - (attributeLevel * 250)
-      attributeLevel.inc
-    playerShip.crew[crewIndex].attributes[attribute].level = attributeLevel
-    playerShip.crew[crewIndex].attributes[attribute].experience = attributeExp
-
-  newAmount = try:
-      if skillsList[skillNumber].name in careersList[playerCareer].skills:
-        amount + (amount / 2).int
-      else:
-        amount
-    except KeyError:
-      -1
-  if newAmount == -1:
-    return
-  newAmount = (newAmount.float * newGameSettings.experienceBonus).int
-  if newAmount == 0:
-    return
-  gainExpInAttribute(attribute = conditionIndex)
-  gainExpInAttribute(attribute = attributeIndex)
-  for i in playerShip.crew[crewIndex].skills.low..playerShip.crew[
-      crewIndex].skills.high:
-    if playerShip.crew[crewIndex].skills[i].index == skillNumber:
-      skillIndex = i
-      break
-  if skillIndex > -1:
-    if playerShip.crew[crewIndex].skills[skillIndex].level == SkillRange.high:
-      return
-    skillLevel = playerShip.crew[crewIndex].skills[skillIndex].level
-    skillExp = playerShip.crew[crewIndex].skills[skillIndex].experience + newAmount
-  if skillExp >= skillLevel * 25:
-    skillExp = skillExp - (skillLevel * 25)
-    skillLevel.inc
-  if skillIndex > -1:
-    playerShip.crew[crewIndex].skills[skillIndex] = SkillInfo(
-        index: skillNumber, level: skillLevel, experience: skillExp)
-  else:
-    playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
-        level: skillLevel, experience: skillExp))
-
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
@@ -711,7 +646,3 @@ proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
       updateMorale(ship = npcShip, memberIndex = memberIndex - 1, value = value)
   except KeyError:
     discard
-
-proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [], exportc.} =
-  gainExp(amount = amount.Natural, skillNumber = skillNumber.Positive,
-      crewIndex = crewIndex.Natural - 1)
