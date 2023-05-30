@@ -35,4 +35,4 @@ skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 payForDock()
-assert playerShip.cargo[0].amount == 90
+assert playerShip.cargo[0].amount == 90, "Failed to pay for docking in a base."
