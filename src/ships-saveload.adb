@@ -93,10 +93,12 @@ package body Ships.SaveLoad is
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "weight"));
                if Get_Attribute(Elem => Child_Node, Name => "owner") /= "" then
+                  --## rule off IMPROPER_INITIALIZATION
                   Owners.Append
                     (New_Item =>
                        Natural'Value
                          (Get_Attribute(Elem => Child_Node, Name => "owner")));
+                  --## rule on IMPROPER_INITIALIZATION
                else
                   Ship_Module_Data := Child_Nodes(N => Child_Node);
                   Load_Owners_Loop :
