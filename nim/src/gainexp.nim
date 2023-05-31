@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import careers, config, game, types
+import careers, config, game, goals, types
 
 proc gainExp*(amount: Natural; skillNumber: Positive;
     crewIndex: Natural) {.sideEffect, raises: [], tags: [].} =
@@ -83,8 +83,38 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
     playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
         level: skillLevel, experience: skillExp))
 
+proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
+    tags: [].} =
+  ## Change the player reputation in the selected sky base
+  ##
+  ## * baseIndex - the index of the base in which the reputation will change
+  ## * points    - the amount of reputation points about which the reputation
+  ##               will change
+  if skyBases[baseIndex].reputation.level == -100 or skyBases[
+      baseIndex].reputation.level == 100:
+    return
+  var newPoints = skyBases[baseIndex].reputation.experience + (points.float *
+      newGameSettings.reputationBonus).int
+  if baseIndex == playerShip.homeBase:
+    newPoints = newPoints + points
+  while newPoints < 0:
+    skyBases[baseIndex].reputation.level.dec
+    newPoints = newPoints + abs(x = skyBases[baseIndex].reputation.level * 5)
+    if newPoints >= 0:
+      skyBases[baseIndex].reputation.experience = newPoints
+      return
+  while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
+    newPoints = newPoints - abs(x = skyBases[baseIndex].reputation.level * 5)
+    skyBases[baseIndex].reputation.level.inc
+  skyBases[baseIndex].reputation.experience = newPoints
+  if skyBases[baseIndex].reputation.level == 100:
+    updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
+
 # Temporary code for interfacing with Ada
 
 proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [], exportc.} =
   gainExp(amount = amount.Natural, skillNumber = skillNumber.Positive,
       crewIndex = crewIndex.Natural - 1)
+
+proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
+  gainRep(baseIndex = baseIndex, points = points)
