@@ -1150,12 +1150,12 @@ package body Ships.UI.Modules is
                   Order_Text :=
                     To_Unbounded_String
                       (Source =>
-                         "{Order: " & Recipe_Name & LF &
-                         "Time to complete current:" &
-                         Positive'Image(Module.Crafting_Time) & " mins}");
+                         "Order: " & Recipe_Name & LF &
+                         "Time to complete the order:" &
+                         Positive'Image(Module.Crafting_Time) & " mins");
                else
                   Order_Text :=
-                    To_Unbounded_String(Source => "{Order: not set}");
+                    To_Unbounded_String(Source => "Order: not set");
                end if;
                Add_Label
                  (Name => Order_Box & ".statelbl",
