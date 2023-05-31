@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
-import basestypes, config, events, factions, gainexp, game, items, maps, messages,
+import basestypes, config, events, factions, game, goals, items, maps, messages,
     ships2, shipscrew, trades, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
@@ -228,6 +228,33 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
         homeBase: recruitBase, faction: recruitFaction))
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
+
+proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
+    tags: [].} =
+  ## Change the player reputation in the selected sky base
+  ##
+  ## * baseIndex - the index of the base in which the reputation will change
+  ## * points    - the amount of reputation points about which the reputation
+  ##               will change
+  if skyBases[baseIndex].reputation.level == -100 or skyBases[
+      baseIndex].reputation.level == 100:
+    return
+  var newPoints = skyBases[baseIndex].reputation.experience + (points.float *
+      newGameSettings.reputationBonus).int
+  if baseIndex == playerShip.homeBase:
+    newPoints = newPoints + points
+  while newPoints < 0:
+    skyBases[baseIndex].reputation.level.dec
+    newPoints = newPoints + abs(x = skyBases[baseIndex].reputation.level * 5)
+    if newPoints >= 0:
+      skyBases[baseIndex].reputation.experience = newPoints
+      return
+  while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
+    newPoints = newPoints - abs(x = skyBases[baseIndex].reputation.level * 5)
+    skyBases[baseIndex].reputation.level.inc
+  skyBases[baseIndex].reputation.experience = newPoints
+  if skyBases[baseIndex].reputation.level == 100:
+    updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
 
 proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
   ## Random changes to the items' prices in the selected base
@@ -625,3 +652,6 @@ proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.
     askForEvents()
   except KeyError, IOError, Exception:
     discard
+
+proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
+  gainRep(baseIndex = baseIndex, points = points)
