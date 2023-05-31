@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import config, crewinventory, game, gainexp, items, messages, shipscargo, shipscrew, types
+import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
     Exception], tags: [RootEffect].} =

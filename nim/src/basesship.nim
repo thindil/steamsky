@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import bases, basescargo, config, crewinventory, game, gainexp, maps, messages,
+import bases, basescargo, config, crewinventory, game, maps, messages,
     shipscargo, shipscrew, types
 
 proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =

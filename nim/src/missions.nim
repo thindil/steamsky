@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
-import bases, events, game, gainexp, maps, messages, shipscrew, shipscargo, types, utils
+import bases, events, game, maps, messages, shipscrew, shipscargo, types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
