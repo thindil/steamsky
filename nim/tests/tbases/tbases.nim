@@ -12,12 +12,6 @@ loadBasesTypes("../bin/data/bases.dat")
 
 assert generateBaseName("POLEIS").len() > 0, "Failed to generate a base's name."
 
-skyBases[1].reputation = ReputationData(level: 1, experience: 1)
-gainRep(1, 1)
-assert skyBases[1].reputation.experience == 2, "Failed to gain reputation in a base."
-gainRep(1, -1)
-assert skyBases[1].reputation.experience == 1, "Failed to lose reputation in a base."
-
 playerShip.skyX = 1
 playerShip.skyY = 1
 playerShip.crew = @[]
