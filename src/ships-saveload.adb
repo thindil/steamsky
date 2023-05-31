@@ -92,14 +92,7 @@ package body Ships.SaveLoad is
                Weight :=
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "weight"));
-               if Get_Attribute(Elem => Child_Node, Name => "owner") /= "" then
-                  --## rule off IMPROPER_INITIALIZATION
-                  Owners.Append
-                    (New_Item =>
-                       Natural'Value
-                         (Get_Attribute(Elem => Child_Node, Name => "owner")));
-                  --## rule on IMPROPER_INITIALIZATION
-               else
+               if Get_Attribute(Elem => Child_Node, Name => "owner") = "" then
                   Ship_Module_Data := Child_Nodes(N => Child_Node);
                   Load_Owners_Loop :
                   for K in 0 .. Length(List => Ship_Module_Data) - 1 loop
@@ -112,6 +105,13 @@ package body Ships.SaveLoad is
                                   (Elem => Module_Node, Name => "value")));
                      end if;
                   end loop Load_Owners_Loop;
+               else
+                  --## rule off IMPROPER_INITIALIZATION
+                  Owners.Append
+                    (New_Item =>
+                       Natural'Value
+                         (Get_Attribute(Elem => Child_Node, Name => "owner")));
+                  --## rule on IMPROPER_INITIALIZATION
                end if;
                Ship_Durability :=
                  Integer'Value
@@ -136,7 +136,38 @@ package body Ships.SaveLoad is
                       (Get_Attribute
                          (Elem => Child_Node, Name => "upgradeprogress"));
                end if;
-               if Get_Attribute(Elem => Child_Node, Name => "mtype") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "mtype") = "" then
+                  case Get_Module(Index => Proto_Index).M_Type is
+                     when ALCHEMY_LAB .. GREENHOUSE =>
+                        M_Type := WORKSHOP;
+                     when MEDICAL_ROOM =>
+                        M_Type := MEDICAL_ROOM;
+                     when TRAINING_ROOM =>
+                        M_Type := TRAINING_ROOM;
+                     when ENGINE =>
+                        M_Type := ENGINE;
+                     when CABIN =>
+                        M_Type := CABIN;
+                     when COCKPIT =>
+                        M_Type := COCKPIT;
+                     when TURRET =>
+                        M_Type := TURRET;
+                     when GUN =>
+                        M_Type := GUN;
+                     when CARGO =>
+                        M_Type := CARGO_ROOM;
+                     when HULL =>
+                        M_Type := HULL;
+                     when ARMOR =>
+                        M_Type := ARMOR;
+                     when BATTERING_RAM =>
+                        M_Type := BATTERING_RAM;
+                     when HARPOON_GUN =>
+                        M_Type := HARPOON_GUN;
+                     when others =>
+                        M_Type := ANY;
+                  end case;
+               else
                   case Get_Module(Index => Proto_Index)
                     .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
@@ -168,37 +199,6 @@ package body Ships.SaveLoad is
                           Module_Type_2'Value
                             (Get_Attribute
                                (Elem => Child_Node, Name => "mtype"));
-                  end case;
-               else
-                  case Get_Module(Index => Proto_Index).M_Type is
-                     when ALCHEMY_LAB .. GREENHOUSE =>
-                        M_Type := WORKSHOP;
-                     when MEDICAL_ROOM =>
-                        M_Type := MEDICAL_ROOM;
-                     when TRAINING_ROOM =>
-                        M_Type := TRAINING_ROOM;
-                     when ENGINE =>
-                        M_Type := ENGINE;
-                     when CABIN =>
-                        M_Type := CABIN;
-                     when COCKPIT =>
-                        M_Type := COCKPIT;
-                     when TURRET =>
-                        M_Type := TURRET;
-                     when GUN =>
-                        M_Type := GUN;
-                     when CARGO =>
-                        M_Type := CARGO_ROOM;
-                     when HULL =>
-                        M_Type := HULL;
-                     when ARMOR =>
-                        M_Type := ARMOR;
-                     when BATTERING_RAM =>
-                        M_Type := BATTERING_RAM;
-                     when HARPOON_GUN =>
-                        M_Type := HARPOON_GUN;
-                     when others =>
-                        M_Type := ANY;
                   end case;
                end if;
                case M_Type is
