@@ -229,8 +229,8 @@ package body Ships.SaveLoad is
                   when ENGINE =>
                      Load_Engine_Block :
                      declare
-                        Fuel_Usage, Power: Positive;
-                        Disabled: Boolean;
+                        Fuel_Usage, Power: Positive := 1;
+                        Disabled: Boolean := False;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -282,7 +282,7 @@ package body Ships.SaveLoad is
                   when CABIN =>
                      Load_Cabin_Block :
                      declare
-                        Cleanliness, Quality: Natural;
+                        Cleanliness, Quality: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -333,8 +333,8 @@ package body Ships.SaveLoad is
                   when WORKSHOP =>
                      Load_Workshop_Block :
                      declare
-                        Crafting_Index: Bounded_String;
-                        Crafting_Time, Crafting_Amount: Natural;
+                        Crafting_Index: Bounded_String := Null_Bounded_String;
+                        Crafting_Time, Crafting_Amount: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -398,7 +398,7 @@ package body Ships.SaveLoad is
                   when TRAINING_ROOM =>
                      Load_Training_Room_Block :
                      declare
-                        Trained_Skill: Natural;
+                        Trained_Skill: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -429,7 +429,7 @@ package body Ships.SaveLoad is
                   when TURRET =>
                      Load_Turret_Block :
                      declare
-                        Gun_Index: Natural;
+                        Gun_Index: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -460,7 +460,7 @@ package body Ships.SaveLoad is
                   when GUN =>
                      Load_Gun_Block :
                      declare
-                        Damage, Ammo_Index: Natural;
+                        Damage, Ammo_Index: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -511,7 +511,7 @@ package body Ships.SaveLoad is
                   when HULL =>
                      Load_Hull_Block :
                      declare
-                        Installed_Modules, Max_Modules: Natural;
+                        Installed_Modules, Max_Modules: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -563,7 +563,7 @@ package body Ships.SaveLoad is
                   when BATTERING_RAM =>
                      Load_Battering_Ram_Block :
                      declare
-                        Damage: Natural;
+                        Damage: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
@@ -594,7 +594,7 @@ package body Ships.SaveLoad is
                   when HARPOON_GUN =>
                      Load_Harpoon_Gun_Block :
                      declare
-                        Duration, Harpoon_Index: Natural;
+                        Duration, Harpoon_Index: Natural := 0;
                      begin
                         Ship_Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
