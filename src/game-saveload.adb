@@ -28,7 +28,7 @@ with Bases.SaveLoad;
 with Careers;
 with Config;
 with Crafts;
-with Events;
+with Events; use Events;
 with Goals; use Goals;
 with Log;
 with Maps; use Maps;
@@ -50,6 +50,7 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
+      Data: Integer := 0;
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,
          Convention => C,
@@ -84,6 +85,22 @@ package body Game.SaveLoad is
          Get_Finished_Story(Index => I);
       end loop Get_Finished_Stories_Loop;
       Get_Missions;
+      Get_Known_Events_Loop :
+      for I in Events_List.First_Index .. Events_List.Last_Index loop
+         case Events_List(I).E_Type is
+            when DOUBLEPRICE =>
+               Data := Events_List(I).Item_Index;
+            when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
+              FRIENDLYSHIP =>
+               Data := Events_List(I).Ship_Index;
+            when others =>
+               Data := Events_List(I).Data;
+         end case;
+         Get_Ada_Event
+           (Index => I, X => Events_List(I).Sky_X, Y => Events_List(I).Sky_Y,
+            Time => Events_List(I).Time,
+            E_Type => Events_Types'Pos(Events_List(I).E_Type), Data => Data);
+      end loop Get_Known_Events_Loop;
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
          Value => New_String(Str => To_String(Source => Player_Career)));
@@ -101,7 +118,6 @@ package body Game.SaveLoad is
       use Careers;
       use Config;
       use Crafts;
-      use Events;
       use Log;
       use Messages;
       use Ships.SaveLoad;
