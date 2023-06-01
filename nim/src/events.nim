@@ -53,16 +53,14 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
         withTraders or tradersName notin ship.name):
       enemies.add(y = index)
 
-proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: [].} =
+proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
   ## Update timer for all known events, delete events if the timers passed
   ##
   ## * minutes - the amount of minutes passed in the game
   let eventsAmount = eventsList.len
   if eventsAmount == 0:
     return
-  for key in 1 .. eventsAmount:
-    if key notin eventsList:
-      continue
+  for key in 0 .. eventsAmount - 1:
     let newTime = eventsList[key].time - minutes
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
@@ -75,23 +73,23 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [KeyError], tags: []
           skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
         skyBases[baseIndex].population = skyBases[baseIndex].population - populationLost
       skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = 0
-      {.warning[UnsafeDefault]: off.}
-      eventsList.del(key)
-      {.warning[UnsafeDefault]: on.}
+      {.warning[UnsafeSetLen]: off.}
+      eventsList.delete(key)
+      {.warning[UnsafeSetLen]: on.}
     else:
       eventsList[key].time = newTime
   if eventsAmount < eventsList.len:
-    for key in eventsList.keys:
-      skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = key
+    for index, event in eventsList.pairs:
+      skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [KeyError],
+proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [],
     tags: [].} =
   ## Delete the selected event and update the map information
   ##
   ## * eventIndex - the index of the event to delete
   skyMap[eventsList[eventIndex].skyX][eventsList[
       eventIndex].skyY].eventIndex = 0
-  eventsList.del(key = eventIndex)
+  eventsList.delete(eventIndex)
   for index, event in eventsList.pairs:
     skyMap[event.skyX][event.skyY].eventIndex = index
 
@@ -179,13 +177,10 @@ proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc.} =
     discard
 
 proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
-  eventsList.clear()
+  eventsList = @[]
 
 proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
-  try:
-    deleteEvent(eventIndex = eventIndex)
-  except KeyError:
-    discard
+  deleteEvent(eventIndex = eventIndex)
 
 proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
   try:

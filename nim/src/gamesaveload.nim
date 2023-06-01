@@ -90,7 +90,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     saveTree.add(messageElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving events...", debugType = everything)
-  for event in eventsList.values:
+  for event in eventsList:
     var
       eventElement = newElement("event")
       eventData: string

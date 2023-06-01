@@ -317,11 +317,7 @@ proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
   ## * save - if true, save the current game
   messagesList = @[]
   knownRecipes = @[]
-  {.warning[ProveInit]: off.}
-  {.warning[UnsafeDefault]: off.}
   eventsList = @[]
-  {.warning[ProveInit]: on.}
-  {.warning[UnsafeDefault]: on.}
 
 # Temporary code for interfacing with Ada
 
