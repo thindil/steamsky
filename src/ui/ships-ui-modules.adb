@@ -1144,22 +1144,21 @@ package body Ships.UI.Modules is
                     options => "-width 360");
                Recipe_Name: constant String :=
                  Get_Workshop_Recipe_Name(Workshop => Module_Index);
-               Order_Text: Unbounded_String := Null_Unbounded_String;
             begin
                if Recipe_Name'Length > 0 then
-                  Order_Text :=
-                    To_Unbounded_String
-                      (Source =>
-                         "Order: " & Recipe_Name & LF &
-                         "Time to complete the order:" &
-                         Positive'Image(Module.Crafting_Time) & " mins");
+                  Add_Label
+                    (Name => Order_Box & ".orderlbl",
+                     Text => "Order: " & Recipe_Name);
+                  Add_Label
+                    (Name => Order_Box & ".ordertimelbl",
+                     Text =>
+                       "Time to complete the order:" &
+                       Positive'Image(Module.Crafting_Time) & " mins");
                else
-                  Order_Text :=
-                    To_Unbounded_String(Source => "Order: not set");
+                  Add_Label
+                    (Name => Order_Box & ".orderlbl",
+                     Text => "Order: not set");
                end if;
-               Add_Label
-                 (Name => Order_Box & ".statelbl",
-                  Text => To_String(Source => Order_Text));
                if Recipe_Name'Length > 0 then
                   Info_Button :=
                     Create
@@ -1325,7 +1324,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
-         Row => 11);
+         Row => 12);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
