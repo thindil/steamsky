@@ -113,7 +113,7 @@ var
   playerCareer*: string ## Index of the career of the player selected when starting a new game
   knownRecipes*: seq[string]               ## The list of known recipes by the player
   messagesList*: seq[MessageData]          ## The list of in-game messages
-  eventsList* = initTable[Positive, EventData]() ## The list of available events in the game
+  eventsList*: seq[EventData]              ## The list of available events in the game
   playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
   protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
@@ -319,7 +319,7 @@ proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
   knownRecipes = @[]
   {.warning[ProveInit]: off.}
   {.warning[UnsafeDefault]: off.}
-  eventsList.clear()
+  eventsList = @[]
   {.warning[ProveInit]: on.}
   {.warning[UnsafeDefault]: on.}
 
