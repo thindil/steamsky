@@ -20,10 +20,10 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
 updateCargo(playerShip, 6, 10)
 
 setRecipe(0, 10, "1")
-assert playerShip.modules[0].craftingAmount == 10
-assert playerShip.modules[0].craftingIndex == "1"
+assert playerShip.modules[0].craftingAmount == 10, "Failed to set the amount for the crafting order."
+assert playerShip.modules[0].craftingIndex == "1", "Failed to set the index for the crafting order."
 
-assert checkRecipe("1") == 10
+assert checkRecipe("1") == 10, "Failed to check the possible amount of crafted items for the recipe."
 
 manufacturing(15)
 

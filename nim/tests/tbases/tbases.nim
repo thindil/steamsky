@@ -24,6 +24,12 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 skyMap[1][1].baseIndex = 1
 var price: Natural = 100
 
+skyBases[1].reputation = ReputationData(level: 1, experience: 1)
+gainRep(1, 1)
+assert skyBases[1].reputation.experience == 2, "Failed to gain reputation in a base."
+gainRep(1, -1)
+assert skyBases[1].reputation.experience == 1, "Failed to lose reputation in a base."
+
 countPrice(price, 0, false)
 assert price > 100, "Failed to raise a price in a base."
 price = 100
