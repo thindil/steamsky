@@ -130,7 +130,10 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], e
       event.shipIndex = data
     else:
       event.data = data
-  eventsList[index - 1] = event
+  if index < eventsList.len - 1:
+    eventsList[index - 1] = event
+  else:
+    eventsList.add(event)
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
     tags: [], exportc.} =
