@@ -130,22 +130,22 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], e
       event.shipIndex = data
     else:
       event.data = data
-  eventsList[index] = event
+  eventsList[index - 1] = event
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
     tags: [], exportc.} =
   try:
-    x = eventsList[index].skyX
-    y = eventsList[index].skyY
-    time = eventsList[index].time.cint
-    eType = eventsList[index].eType.cint
-    case eventsList[index].eType
+    x = eventsList[index - 1].skyX
+    y = eventsList[index - 1].skyY
+    time = eventsList[index - 1].time.cint
+    eType = eventsList[index - 1].eType.cint
+    case eventsList[index - 1].eType
     of doublePrice:
-      data = eventsList[index].itemIndex.cint
+      data = eventsList[index - 1].itemIndex.cint
     of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      data = eventsList[index].shipIndex.cint
+      data = eventsList[index - 1].shipIndex.cint
     else:
-      data = eventsList[index].data.cint
+      data = eventsList[index - 1].data.cint
   except KeyError:
     x = -1
 
