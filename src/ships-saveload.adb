@@ -253,14 +253,14 @@ package body Ships.SaveLoad is
                                            (Elem => Module_Node,
                                             Name => "value"));
                                  when 3 =>
-                                    if Get_Attribute
-                                        (Elem => Module_Node,
-                                         Name => "value") =
-                                      "0" then
-                                       Disabled := False;
-                                    else
-                                       Disabled := True;
-                                    end if;
+                                    Disabled :=
+                                      (if
+                                         Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value") =
+                                         "1"
+                                       then True
+                                       else False);
                                  when others =>
                                     null;
                               end case;
