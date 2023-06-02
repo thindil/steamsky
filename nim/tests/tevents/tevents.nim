@@ -46,8 +46,8 @@ assert enemies.len > 0
 
 updateEvents(1)
 
-eventsList[1] = EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10)
-deleteEvent(1)
+eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
+deleteEvent(0)
 assert eventsList.len == 0
 
 skyBases[2].population = 0
