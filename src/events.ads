@@ -179,4 +179,6 @@ package Events is
 
    procedure Set_Event(Index: Positive);
 
+   procedure Set_Nim_Events;
+
 end Events;
