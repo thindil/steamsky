@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
 with DOM.Core.Elements;
@@ -24,6 +25,7 @@ with Maps;
 package body Bases.SaveLoad is
 
    procedure Load_Bases(Save_Data: not null Document) is
+      use Ada.Strings.Unbounded;
       use DOM.Core.Nodes;
       use DOM.Core.Elements;
       use Factions;

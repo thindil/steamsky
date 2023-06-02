@@ -18,6 +18,7 @@ with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Interfaces.C; use Interfaces.C;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
