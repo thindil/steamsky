@@ -417,7 +417,14 @@ package body Ships.UI.Modules is
       Add_Label
         (Name => Module_Frame & ".weightlbl",
          Text => "Weight:" & Integer'Image(Module.Weight) & " kg");
-      Tcl_Eval(interp => Interp, strng => "update");
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+      Add_Label
+        (Name => Module_Frame & ".lblsize",
+         Text =>
+           "Size:" &
+           Natural'Image(Get_Module(Index => Module.Proto_Index).Size));
       Height :=
         Height +
         Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
@@ -1300,14 +1307,6 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Add_Label
-        (Name => Module_Frame & ".lblsize",
-         Text =>
-           "Size:" &
-           Natural'Image(Get_Module(Index => Module.Proto_Index).Size));
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       if Get_Module(Index => Module.Proto_Index).Description /=
         Short_String.Null_Bounded_String then
          Add_Label
