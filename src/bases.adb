@@ -15,14 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
-with BasesTypes;
 with Maps; use Maps;
-with Factions;
 with Trades; use Trades;
 
 package body Bases is
@@ -246,71 +243,19 @@ package body Bases is
    end Ask_For_Bases;
 
    procedure Ask_For_Events is
-      use Ada.Numerics.Elementary_Functions;
-      use BasesTypes;
-      use Factions;
-      use Tiny_String;
-
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Event_Time, Diff_X, Diff_Y: Positive := 1;
-      Event: Events_Types := NONE;
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
-      --## rule off IMPROPER_INITIALIZATION
-      Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Attempts: Natural range 0 .. 10 := 10;
-      New_Item_Index: Natural := 0;
-      Ship_Index: Natural := 0;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
-      Max_Events, Events_Amount: Positive range 1 .. 15;
-      Tmp_Base_Index: Bases_Range := 1;
-      Event_X, Event_Y: Positive range 1 .. 1_024 := 1;
-      Item_Index: Integer := 0;
+      procedure Ask_Ada_For_Events with
+         Import => True,
+         Convention => C,
+         External_Name => "askAdaForEvents";
    begin
       if Trader_Index = 0 then
          return;
       end if;
-      if Base_Index > 0 then -- asking in base
-         Max_Events :=
-           (if Sky_Bases(Base_Index).Population < 150 then 5
-            elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
-         Sky_Bases(Base_Index).Asked_For_Events := Game_Date;
-         Add_Message
-           (Message =>
-              To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
-              " asked for recent events known at base '" &
-              To_String(Source => Sky_Bases(Base_Index).Name) & "'.",
-            M_Type => ORDERMESSAGE);
-         Gain_Rep(Base_Index => Base_Index, Points => 1);
-      else -- asking friendly ship
-         Ship_Index :=
-           Events_List
-             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-             .Ship_Index;
-         Max_Events :=
-           (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 1
-            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
-            then 3
-            else 5);
-         Add_Message
-           (Message =>
-              To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
-              " asked ship '" &
-              To_String
-                (Source =>
-                   Generate_Ship_Name
-                     (Owner =>
-                        Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
-              "' for recent events.",
-            M_Type => ORDERMESSAGE);
-         Delete_Event
-           (Event_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
-         Update_Orders(Ship => Player_Ship);
-      end if;
-      Events_Amount := Get_Random(Min => 1, Max => Max_Events);
       Min_X := Player_Ship.Sky_X - 100;
       Normalize_Coord(Coord => Min_X);
       Max_X := Player_Ship.Sky_X + 100;
@@ -319,169 +264,36 @@ package body Bases is
       Normalize_Coord(Coord => Min_Y, Is_X_Axis => False);
       Max_Y := Player_Ship.Sky_Y + 100;
       Normalize_Coord(Coord => Max_Y, Is_X_Axis => False);
-      --## rule off IMPROPER_INITIALIZATION
-      Generate_Enemies(Enemies => Enemies);
-      --## rule on IMPROPER_INITIALIZATION
-      Generate_Events_Loop :
-      for I in 1 .. Events_Amount loop
-         Event := Events_Types'Val(Get_Random(Min => 1, Max => 5));
-         Attempts := 10;
-         Generate_Event_Location_Loop :
-         loop
-            if Event = ENEMYSHIP then
-               Event_X := Get_Random(Min => Min_X, Max => Max_X);
-               Event_Y := Get_Random(Min => Min_Y, Max => Max_Y);
-               exit Generate_Event_Location_Loop when Sky_Map(Event_X, Event_Y)
-                   .Base_Index =
-                 0 and
-                 Event_X /= Player_Ship.Sky_X and
-                 Event_Y /= Player_Ship.Sky_Y and
-                 Sky_Map(Event_X, Event_Y).Event_Index = 0;
-            else
-               Tmp_Base_Index := Get_Random(Min => 1, Max => 1_024);
-               Event_X := Sky_Bases(Tmp_Base_Index).Sky_X;
-               Event_Y := Sky_Bases(Tmp_Base_Index).Sky_Y;
-               Attempts := Attempts - 1;
-               if Attempts = 0 then
-                  Event := ENEMYSHIP;
-                  Regenerate_Event_Location_Loop :
-                  loop
-                     Event_X := Get_Random(Min => Min_X, Max => Max_X);
-                     Event_Y := Get_Random(Min => Min_Y, Max => Max_Y);
-                     exit Regenerate_Event_Location_Loop when Sky_Map
-                         (Event_X, Event_Y)
-                         .Base_Index =
-                       0 and
-                       Event_X /= Player_Ship.Sky_X and
-                       Event_Y /= Player_Ship.Sky_Y and
-                       Sky_Map(Event_X, Event_Y).Event_Index = 0;
-                  end loop Regenerate_Event_Location_Loop;
-                  exit Generate_Event_Location_Loop;
-               end if;
-               if Event_X /= Player_Ship.Sky_X and
-                 Event_Y /= Player_Ship.Sky_Y and
-                 Sky_Map(Event_X, Event_Y).Event_Index = 0 and
-                 Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Known then
-                  if Event = ATTACKONBASE and
-                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
-                        .Population /=
-                      0 then
-                     exit Generate_Event_Location_Loop;
-                  end if;
-                  if Event = DOUBLEPRICE and
-                    Is_Friendly
-                      (Source_Faction => Player_Ship.Crew(1).Faction,
-                       Target_Faction =>
-                         Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
-                           .Owner) then
-                     exit Generate_Event_Location_Loop;
-                  end if;
-                  if Event = DISEASE and
-                    not Get_Faction
-                      (Index =>
-                         Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Owner)
-                      .Flags
-                      .Contains
-                      (Item =>
-                         To_Unbounded_String(Source => "diseaseimmune")) and
-                    Is_Friendly
-                      (Source_Faction => Player_Ship.Crew(1).Faction,
-                       Target_Faction =>
-                         Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
-                           .Owner) then
-                     exit Generate_Event_Location_Loop;
-                  end if;
-                  if Event = BASERECOVERY and
-                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
-                        .Population =
-                      0 then
-                     exit Generate_Event_Location_Loop;
-                  end if;
-               end if;
-            end if;
-         end loop Generate_Event_Location_Loop;
-         Diff_X := abs (Player_Ship.Sky_X - Event_X);
-         Diff_Y := abs (Player_Ship.Sky_Y - Event_Y);
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         Event_Time :=
-           Positive(60.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         case Event is
-            when ENEMYSHIP =>
-               Events_List.Append
-                 (New_Item =>
-                    (E_Type => ENEMYSHIP, Sky_X => Event_X, Sky_Y => Event_Y,
-                     Time =>
-                       Get_Random(Min => Event_Time, Max => Event_Time + 60),
-                     Ship_Index =>
-                       Enemies
-                         (Get_Random
-                            (Min => Enemies.First_Index,
-                             Max => Enemies.Last_Index))));
-            when ATTACKONBASE =>
-               Generate_Enemies
-                 (Enemies => Enemies,
-                  Owner => Tiny_String.To_Bounded_String(Source => "Any"),
-                  With_Traders => False);
-               Events_List.Append
-                 (New_Item =>
-                    (E_Type => ATTACKONBASE, Sky_X => Event_X,
-                     Sky_Y => Event_Y,
-                     Time =>
-                       Get_Random(Min => Event_Time, Max => Event_Time + 120),
-                     Ship_Index =>
-                       Enemies
-                         (Get_Random
-                            (Min => Enemies.First_Index,
-                             Max => Enemies.Last_Index))));
-               Generate_Enemies(Enemies => Enemies);
-            when DISEASE =>
-               Events_List.Append
-                 (New_Item =>
-                    (E_Type => DISEASE, Sky_X => Event_X, Sky_Y => Event_Y,
-                     Time => Get_Random(Min => 10_080, Max => 12_000),
-                     Data => 1));
-            when DOUBLEPRICE =>
-               Set_Double_Price_Event_Loop :
-               loop
-                  Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
-                  Find_Item_Index_Loop :
-                  for J in 1 .. Get_Proto_Amount loop
-                     Item_Index := Item_Index - 1;
-                     if Item_Index <= 0
-                       and then
-                         Get_Price
-                           (Base_Type =>
-                              Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
-                                .Base_Type,
-                            Item_Index => J) >
-                         0 then
-                        New_Item_Index := J;
-                        exit Set_Double_Price_Event_Loop;
-                     end if;
-                  end loop Find_Item_Index_Loop;
-               end loop Set_Double_Price_Event_Loop;
-               Events_List.Append
-                 (New_Item =>
-                    (E_Type => DOUBLEPRICE, Sky_X => Event_X, Sky_Y => Event_Y,
-                     Time =>
-                       Get_Random
-                         (Min => Event_Time * 3, Max => Event_Time * 4),
-                     Item_Index => New_Item_Index));
-            when BASERECOVERY =>
-               Recover_Base
-                 (Base_Index => Sky_Map(Event_X, Event_Y).Base_Index);
-            when others =>
-               null;
-         end case;
-         if Event /= BASERECOVERY then
-            Sky_Map(Event_X, Event_Y).Event_Index := Events_List.Last_Index;
-         end if;
-      end loop Generate_Events_Loop;
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Update_Game(Minutes => 30);
+      Get_Map_Y_Loop :
+      for Y in Min_Y .. Max_Y loop
+         Get_Map_X_Loop :
+         for X in Min_X .. Max_X loop
+            Get_Ada_Map_Cell
+              (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
+               Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
+               Event_Index => Sky_Map(X, Y).Event_Index,
+               Mission_Index => Sky_Map(X, Y).Mission_Index);
+         end loop Get_Map_X_Loop;
+      end loop Get_Map_Y_Loop;
+      Set_Base_In_Nim(Base_Index => Base_Index);
+      Set_Ship_In_Nim;
+      Set_Nim_Events;
+      Ask_Ada_For_Events;
+      Events_List.Clear;
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. 100 loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Get_Base_From_Nim(Base_Index => Base_Index);
+      Set_Map_Y_Loop :
+      for Y in Min_Y .. Max_Y loop
+         Set_Map_X_Loop :
+         for X in Min_X .. Max_X loop
+            Set_Map_Cell
+              (X => X, Y => Y);
+         end loop Set_Map_X_Loop;
+      end loop Set_Map_Y_Loop;
    end Ask_For_Events;
 
    procedure Update_Population is
