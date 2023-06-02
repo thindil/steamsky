@@ -82,7 +82,7 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
     for index, event in eventsList.pairs:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc deleteEvent*(eventIndex: Positive) {.sideEffect, raises: [],
+proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
     tags: [].} =
   ## Delete the selected event and update the map information
   ##
