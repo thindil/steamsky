@@ -137,20 +137,20 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], e
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
     tags: [], exportc.} =
-  try:
-    x = eventsList[index - 1].skyX
-    y = eventsList[index - 1].skyY
-    time = eventsList[index - 1].time.cint
-    eType = eventsList[index - 1].eType.cint
-    case eventsList[index - 1].eType
-    of doublePrice:
-      data = eventsList[index - 1].itemIndex.cint
-    of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-      data = eventsList[index - 1].shipIndex.cint
-    else:
-      data = eventsList[index - 1].data.cint
-  except KeyError:
+  if index > eventsList.len:
     x = -1
+    return
+  x = eventsList[index - 1].skyX
+  y = eventsList[index - 1].skyY
+  time = eventsList[index - 1].time.cint
+  eType = eventsList[index - 1].eType.cint
+  case eventsList[index - 1].eType
+  of doublePrice:
+    data = eventsList[index - 1].itemIndex.cint
+  of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
+    data = eventsList[index - 1].shipIndex.cint
+  else:
+    data = eventsList[index - 1].data.cint
 
 proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [], exportc.} =
   for ship in playerShips.mitems:
