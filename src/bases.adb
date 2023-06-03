@@ -113,6 +113,11 @@ package body Bases is
          Date_Type => 2);
    end Generate_Recruits;
 
+   procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBaseKnown";
+
    procedure Ask_For_Bases is
       use Messages;
       use Utils;
@@ -189,6 +194,7 @@ package body Bases is
             if Tmp_Base_Index > 0
               and then not Sky_Bases(Tmp_Base_Index).Known then
                Sky_Bases(Tmp_Base_Index).Known := True;
+               Get_Ada_Base_Known(B_Index => Tmp_Base_Index, Known => 1);
                Amount := Amount - 1;
                exit Bases_X_Loop when Amount = 0;
             end if;
@@ -225,15 +231,17 @@ package body Bases is
                Tmp_Base_Index := Get_Random(Min => 1, Max => 1_024);
                if not Sky_Bases(Tmp_Base_Index).Known then
                   Sky_Bases(Tmp_Base_Index).Known := True;
+                  Get_Ada_Base_Known(B_Index => Tmp_Base_Index, Known => 1);
                   Amount := Amount - 1;
                end if;
                exit Reveal_Random_Bases_Loop when Amount = 0;
             end loop Reveal_Random_Bases_Loop;
          else
             Reveal_Bases_Loop :
-            for Sky_Base of Sky_Bases loop
-               if not Sky_Base.Known then
-                  Sky_Base.Known := True;
+            for B in Sky_Bases'Range loop
+               if not Sky_Bases(B).Known then
+                  Sky_Bases(B).Known := True;
+                  Get_Ada_Base_Known(B_Index => B, Known => 1);
                end if;
             end loop Reveal_Bases_Loop;
          end if;
@@ -292,8 +300,7 @@ package body Bases is
       for Y in Min_Y .. Max_Y loop
          Set_Map_X_Loop :
          for X in Min_X .. Max_X loop
-            Set_Map_Cell
-              (X => X, Y => Y);
+            Set_Map_Cell(X => X, Y => Y);
          end loop Set_Map_X_Loop;
       end loop Set_Map_Y_Loop;
    end Ask_For_Events;
@@ -653,10 +660,6 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseName";
-      procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseKnown";
       procedure Get_Ada_Base_Asked_For_Bases
         (B_Index, Asked_For_Bases: Integer) with
          Import => True,
