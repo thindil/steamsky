@@ -67,7 +67,7 @@ proc askForEvents*() =
         eventY = getRandom(min = minY, max = maxY)
         if skyMap[eventX][eventY].baseIndex == 0 and eventX !=
             playerShip.skyX and eventY != playerShip.skyY and skyMap[eventX][
-            eventY].eventIndex == 0:
+            eventY].eventIndex == -1:
           break
       else:
         let tmpBaseIndex = getRandom(min = 1, max = 1024)
@@ -82,11 +82,11 @@ proc askForEvents*() =
             if skyMap[eventX][eventY].baseIndex == 0 and eventX !=
                 playerShip.skyX and eventY != playerShip.skyY and skyMap[
                     eventX][
-                eventY].eventIndex == 0:
+                eventY].eventIndex == -1:
               break
           break
         if eventX != playerShip.skyX and eventY != playerShip.skyY and skyMap[
-            eventX][eventY].eventIndex == 0 and skyBases[skyMap[eventX][
+            eventX][eventY].eventIndex == -1 and skyBases[skyMap[eventX][
             eventY].baseIndex].known:
           if event == attackOnBase and skyBases[skyMap[eventX][
               eventY].baseIndex].population > 0:
