@@ -15,10 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Messages; use Messages;
+with Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
-with Utils; use Utils;
+with Utils;
 with Maps; use Maps;
 with Trades; use Trades;
 
@@ -114,6 +114,8 @@ package body Bases is
    end Generate_Recruits;
 
    procedure Ask_For_Bases is
+      use Messages;
+      use Utils;
       use Tiny_String;
 
       Base_Index: constant Natural :=
