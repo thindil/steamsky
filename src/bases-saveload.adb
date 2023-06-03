@@ -407,6 +407,29 @@ package body Bases.SaveLoad is
          Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
            .Base_Index :=
            Base_Index;
+         Get_Ada_Map_Cell
+           (X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_X,
+            Base_Index => Base_Index,
+            Visited =>
+              (if
+                 Sky_Map
+                   (Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+                   .Visited
+               then 1
+               else 0),
+            Event_Index =>
+              Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+                .Event_Index,
+            Mission_Index =>
+              Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+                .Mission_Index);
+         Get_Base_Owner(Base_Index => Base_Index);
+         Get_Ada_Base_Population
+           (Base_Index => Base_Index,
+            Population => Sky_Bases(Base_Index).Population);
+         Get_Ada_Base_Location
+           (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+            Y => Sky_Bases(Base_Index).Sky_Y);
       end loop Load_Bases_Loop;
    end Load_Bases;
 
