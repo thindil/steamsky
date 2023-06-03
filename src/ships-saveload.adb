@@ -641,7 +641,7 @@ package body Ships.SaveLoad is
             declare
                Amount: Positive;
                Name: Bounded_String;
-               Durability, Price: Natural;
+               Item_Durability, Price: Natural;
                Proto_Index: Natural;
             begin
                Proto_Index :=
@@ -654,7 +654,7 @@ package body Ships.SaveLoad is
                  To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
-               Durability :=
+               Item_Durability :=
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "durability"));
                Price :=
@@ -669,7 +669,7 @@ package body Ships.SaveLoad is
                  (Container => Player_Ship.Cargo,
                   New_Item =>
                     (Proto_Index => Proto_Index, Amount => Amount,
-                     Name => Name, Durability => Durability, Price => Price));
+                     Name => Name, Durability => Item_Durability, Price => Price));
             end Load_Cargo_Block;
          elsif Node_Name(N => Child_Node) = "member" then
             Load_Crew_Block :
@@ -692,7 +692,7 @@ package body Ships.SaveLoad is
                Inventory: Inventory_Container.Vector (Capacity => 32);
                Equipment: Equipment_Array;
                Order_Time, Contract_Length: Integer;
-               Amount, Durability, Equipment_Index, Priority_Index,
+               Amount, Item_Durability, Equipment_Index, Priority_Index,
                Home_Base: Positive;
                Payment, Morale: Attributes_Array;
                Member_Node: Node;
@@ -814,7 +814,7 @@ package body Ships.SaveLoad is
                          (Source =>
                             Get_Attribute
                               (Elem => Member_Node, Name => "name"));
-                     Durability :=
+                     Item_Durability :=
                        Integer'Value
                          (Get_Attribute
                             (Elem => Member_Node, Name => "durability"));
@@ -832,7 +832,7 @@ package body Ships.SaveLoad is
                        (Container => Inventory,
                         New_Item =>
                           (Proto_Index => Item_Index, Amount => Amount,
-                           Name => Item_Name, Durability => Durability,
+                           Name => Item_Name, Durability => Item_Durability,
                            Price => Price));
                   elsif Node_Name(N => Member_Node) = "equipment" then
                      Equipment(Equipment_Locations'Val(Equipment_Index - 1)) :=
