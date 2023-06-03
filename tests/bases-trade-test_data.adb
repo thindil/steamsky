@@ -3,6 +3,7 @@
 --  automatically. Contents of this package can be modified in any way
 --  except for sections surrounded by a 'read only' marker.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Config; use Config;
 
 package body Bases.Trade.Test_Data is
