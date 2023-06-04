@@ -42,14 +42,14 @@ skyMap[1][1].baseIndex = 1
 
 var enemies: seq[Positive] = @[]
 generateEnemies(enemies)
-assert enemies.len > 0
+assert enemies.len > 0, "Failed to generate the list of enemy ships."
 
 updateEvents(1)
 
 eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
 deleteEvent(0)
-assert eventsList.len == 0
+assert eventsList.len == 0, "Failed to delete an event."
 
 skyBases[2].population = 0
 recoverBase(2)
-assert skyBases[2].population > 0
+assert skyBases[2].population > 0, "Failed to recover a base."
