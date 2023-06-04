@@ -430,6 +430,9 @@ package body Bases.SaveLoad is
          Get_Ada_Base_Location
            (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
             Y => Sky_Bases(Base_Index).Sky_Y);
+         Get_Base_Type
+           (Base_Index => Base_Index,
+            Base_Type => Sky_Bases(Base_Index).Base_Type);
       end loop Load_Bases_Loop;
    end Load_Bases;
 
