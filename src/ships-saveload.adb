@@ -681,7 +681,10 @@ package body Ships.SaveLoad is
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
+               --## rule off IMPROPER_INITIALIZATION
                Skills: Skills_Container.Vector (Capacity => Skills_Amount);
+               Inventory: Inventory_Container.Vector (Capacity => 32);
+               --## rule on IMPROPER_INITIALIZATION
                Attributes: Mob_Attributes
                  (1 ..
                       Positive
@@ -689,7 +692,6 @@ package body Ships.SaveLoad is
                            (Container => Attributes_List)));
                Order, Previous_Order: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
-               Inventory: Inventory_Container.Vector (Capacity => 32);
                Equipment: Equipment_Array;
                Order_Time, Contract_Length: Integer;
                Amount, Item_Durability, Equipment_Index, Priority_Index,
@@ -698,9 +700,11 @@ package body Ships.SaveLoad is
                Member_Node: Node;
                Attribute_Index: Positive := 1;
             begin
+               --## rule off IMPROPER_INITIALIZATION
                Skills_Container.Clear(Container => Skills);
-               Attributes := (others => <>);
                Inventory_Container.Clear(Container => Inventory);
+               --## rule on IMPROPER_INITIALIZATION
+               Attributes := (others => <>);
                Name :=
                  To_Bounded_String
                    (Source =>
