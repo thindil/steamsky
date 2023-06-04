@@ -114,9 +114,9 @@ proc askForEvents*() =
           shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
     of attackOnBase:
       generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
-      eventsList[eventsList.len] = EventData(eType: attackOnBase, skyX: eventX,
+      eventsList.add(EventData(eType: attackOnBase, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 120),
-          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)])
+          shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
       generateEnemies(enemies = enemies)
     of disease:
       eventsList.add(EventData(eType: disease, skyX: eventX,
@@ -127,6 +127,7 @@ proc askForEvents*() =
         while true:
           var itemIndex = getRandom(min = 1, max = itemsList.len)
           for j in 1 .. itemsList.len:
+            itemIndex.dec
             if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
                 eventY].baseIndex].baseType, itemIndex = j) > 0:
               newItemIndex = j
@@ -138,6 +139,8 @@ proc askForEvents*() =
       recoverBase(baseIndex = skyMap[eventX][eventY].baseIndex)
     else:
       discard
+    if event != baseRecovery:
+      skyMap[eventX][eventY].eventIndex = eventsList.len - 1
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   updateGame(minutes = 30)
 
