@@ -588,7 +588,8 @@ package body Ships.UI.Modules is
          Add_Label
            (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar, Options => "-row" & Current_Row'Img & " -column 1");
+           (Slave => Progress_Bar,
+            Options => "-row" & Current_Row'Img & " -column 1");
          if Player_Ship.Upgrade_Module = Module_Index then
             Info_Button :=
               Create
@@ -602,77 +603,81 @@ package body Ships.UI.Modules is
                Message => "Stop upgrading cabin quality");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
-               Options => "-row" & Current_Row'Img & " -column 2 -sticky n -padx {5 0}");
+               Options =>
+                 "-row" & Current_Row'Img &
+                 " -column 2 -sticky n -padx {5 0}");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Dialog_Button & " invoke;break}");
          end if;
          Height :=
            Height +
-           Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+           Positive'Value
+             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
       end if;
+      -- Show information specific to the module's type
       case Module.M_Type is
+         -- Show information about engine
          when ENGINE =>
-            Add_Power_Info_Block :
-            declare
-               Power_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".powerinfo",
-                    options => "-width 360");
-            begin
-               Module_Max_Value :=
-                 Positive
-                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                    1.5);
-               Add_Label
-                 (Name => Power_Box & ".powerlbl",
-                  Text =>
-                    "Max power:" & Integer'Image(Module.Power) &
-                    (if Module.Power = Module_Max_Value then " (max upgrade)"
-                     else ""));
-               if Module.Power < Module_Max_Value then
-                  Add_Upgrade_Button
-                    (Upgrade => MAX_VALUE, Tooltip => "engine's power",
-                     Box => Power_Box, Module => Module);
-               end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Power_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
+            -- Show the engine power
+            Current_Row := Current_Row + 1;
+            Module_Max_Value :=
+              Positive
+                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                 1.5);
+            Add_Label
+              (Name => Module_Frame & ".powerlbl", Text => "Max power:");
+            Add_Label
+              (Name => Module_Frame & ".powerlbl2",
+               Text =>
+                 Integer'Image(Module.Power) &
+                 (if Module.Power = Module_Max_Value then " (max upgrade)"
+                  else ""),
+               Row => Current_Row, Column => 1);
+            if Module.Power < Module_Max_Value then
+               Add_Upgrade_Button
+                 (Upgrade => MAX_VALUE, Tooltip => "engine's power",
+                  Box => Module_Frame, Module => Module, Column => 3,
+                  Button_Name => "powerbutton", Row => Current_Row);
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Power_Box, Info => "reqheight"));
-            end Add_Power_Info_Block;
-            Add_Fuel_Info_Block :
-            declare
-               Fuel_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".fuelinfo",
-                    options => "-width 360");
-            begin
-               Module_Max_Value :=
-                 Positive
-                   (Float(Get_Module(Index => Module.Proto_Index).Value) /
-                    2.0);
-               Add_Label
-                 (Name => Fuel_Box & ".powerlbl",
-                  Text =>
-                    "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
-                    (if Module_Max_Value = Module.Fuel_Usage then
-                       " (max upgrade)"
-                     else ""));
-               if Module.Fuel_Usage > Module_Max_Value then
-                  Add_Upgrade_Button
-                    (Upgrade => VALUE, Tooltip => "engine's fuel usage",
-                     Box => Fuel_Box, Module => Module);
-               end if;
-               Tcl.Tk.Ada.Grid.Grid(Slave => Fuel_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
+                   (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            else
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Fuel_Box, Info => "reqheight"));
-            end Add_Fuel_Info_Block;
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end if;
+            -- Show the engine fuel usage
+            Current_Row := Current_Row + 1;
+            Module_Max_Value :=
+              Positive
+                (Float(Get_Module(Index => Module.Proto_Index).Value) / 2.0);
+            Add_Label
+              (Name => Module_Frame & ".fuellbl", Text => "Fuel usage:");
+            Add_Label
+              (Name => Module_Frame & ".fuellbl2",
+               Text =>
+                 Integer'Image(Module.Fuel_Usage) &
+                 (if Module_Max_Value = Module.Fuel_Usage then " (max upgrade)"
+                  else ""),
+               Row => Current_Row, Column => 1);
+            if Module.Fuel_Usage > Module_Max_Value then
+               Add_Upgrade_Button
+                 (Upgrade => VALUE, Tooltip => "engine's fuel usage",
+                  Box => Module_Frame, Module => Module, Column => 3,
+                  Button_Name => "fuelbutton", Row => Current_Row);
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            else
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            end if;
             Add_State_Info_Block :
             declare
                State_Box: constant Ttk_Frame :=
