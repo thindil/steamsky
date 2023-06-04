@@ -296,13 +296,7 @@ package body Bases is
       end loop Set_Events_In_Ada_Loop;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Base_From_Nim(Base_Index => Base_Index);
-      Set_Map_Y_Loop :
-      for Y in Min_Y .. Max_Y loop
-         Set_Map_X_Loop :
-         for X in Min_X .. Max_X loop
-            Set_Map_Cell(X => X, Y => Y);
-         end loop Set_Map_X_Loop;
-      end loop Set_Map_Y_Loop;
+      Set_Game_Date;
    end Ask_For_Events;
 
    procedure Update_Population is
