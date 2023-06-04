@@ -137,6 +137,8 @@ package body Ships.UI.Modules is
       Height: Positive := 10;
       Close_Dialog_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Frame & ".button");
+      Current_Row: Natural := 0;
+      Status_Tooltip: Unbounded_String;
       procedure Add_Owners_Info
         (Owners_Name: String; Add_Button: Boolean := False) is
          Have_Owner: Boolean := False;
@@ -215,7 +217,7 @@ package body Ships.UI.Modules is
       procedure Add_Upgrade_Button
         (Upgrade: Ship_Upgrade; Tooltip: String; Box: Ttk_Frame;
          Module: Module_Data; Column: Positive := 1;
-         Button_Name: String := "button") is
+         Button_Name: String := "button"; Row: Natural := 0) is
          Upgrade_Number: constant String :=
            (case Upgrade is when MAX_VALUE => "2", when VALUE => "3",
               when others => "1");
@@ -248,18 +250,21 @@ package body Ships.UI.Modules is
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
             Options =>
-              "-row 0 -column" & Column'Img & " -sticky n -padx {5 0}");
+              "-row" & Row'Img & " -column" & Column'Img &
+              " -sticky n -padx {5 0}");
          Bind
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
       end Add_Upgrade_Button;
-      procedure Add_Label(Name, Text: String) is
+      procedure Add_Label(Name, Text: String; Row, Column: Natural := 0) is
       begin
          Label :=
            Create
              (pathName => Name,
               options => "-text {" & Text & "} -wraplength 380");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label,
+            Options => "-sticky w -row" & Row'Img & " -column" & Column'Img);
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
@@ -278,145 +283,135 @@ package body Ships.UI.Modules is
         (Master => Module_Dialog, Slave => Module_Canvas,
          Options => "-weight 1");
       Autoscroll(Scroll => Y_Scroll);
-      Add_Name_Info_Block :
-      declare
-         Name_Box: constant Ttk_Frame :=
-           Create
-             (pathName => Module_Frame & ".nameinfo", options => "-width 360");
-      begin
-         Add_Label
-           (Name => Name_Box & ".info",
-            Text => "Name: " & To_String(Source => Module.Name));
+      -- Show the module's name
+      Add_Label(Name => Module_Frame & ".nameinfo", Text => "Name:");
+      Add_Label
+        (Name => Module_Frame & ".nameinfo2",
+         Text => To_String(Source => Module.Name), Row => Current_Row,
+         Column => 1);
+      Info_Button :=
+        Create
+          (pathName => Module_Frame & ".namebutton",
+           options =>
+             "-image editicon -command {" & Close_Dialog_Button &
+             " invoke;GetString {Enter a new name for the " &
+             To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+             ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
+             " {Renaming the module} {Rename}} -style Small.TButton");
+      Add
+        (Widget => Info_Button,
+         Message => "Set a new name for the crew member");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Info_Button,
+         Options =>
+           "-row" & Current_Row'Img & " -column 2 -sticky n -padx {5 0}");
+      Bind
+        (Widgt => Info_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+      -- Show the module's damage
+      Current_Row := Current_Row + 1;
+      Add_Label
+        (Name => Module_Frame & ".damagelbl", Text => "Status:",
+         Row => Current_Row);
+      Damage_Percent :=
+        (Float(Module.Durability) / Float(Module.Max_Durability));
+      if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
+         Progress_Bar_Style :=
+           To_Unbounded_String
+             (Source => " -style green.Horizontal.TProgressbar");
+         Status_Tooltip := To_Unbounded_String(Source => "Slightly damaged");
+      elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
+         Progress_Bar_Style :=
+           To_Unbounded_String
+             (Source => " -style yellow.Horizontal.TProgressbar");
+         Status_Tooltip := To_Unbounded_String(Source => "Damaged");
+      elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
+         Progress_Bar_Style :=
+           To_Unbounded_String
+             (Source => " -style yellow.Horizontal.TProgressbar");
+         Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
+      elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
+         Progress_Bar_Style := Null_Unbounded_String;
+         Status_Tooltip := To_Unbounded_String(Source => "Almost destroyed");
+      elsif Damage_Percent = 0.0 then
+         Progress_Bar_Style := Null_Unbounded_String;
+         Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
+      else
+         Progress_Bar_Style :=
+           To_Unbounded_String
+             (Source => " -style green.Horizontal.TProgressbar");
+         Status_Tooltip := To_Unbounded_String(Source => "Not damaged");
+      end if;
+      Module_Max_Value :=
+        Positive
+          (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
+      if Module.Max_Durability = Module_Max_Value then
+         Append(Source => Status_Tooltip, New_Item => " (max upgrade)");
+      end if;
+      Progress_Bar :=
+        Create
+          (pathName => Module_Frame & ".damagebar",
+           options =>
+             "-orient horizontal -maximum 1.0 -value {" &
+             Float'Image(Damage_Percent) & "}" &
+             To_String(Source => Progress_Bar_Style));
+      Add
+        (Widget => Progress_Bar,
+         Message => To_String(Source => Status_Tooltip));
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Progress_Bar,
+         Options => "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
+      if Player_Ship.Repair_Module = Module_Index then
          Info_Button :=
            Create
-             (pathName => Name_Box & ".button",
+             (pathName => Module_Frame & ".repairbutton",
               options =>
-                "-image editicon -command {" & Close_Dialog_Button &
-                " invoke;GetString {Enter a new name for the " &
-                To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-                ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
-                " {Renaming the module} {Rename}} -style Small.TButton");
+                "-image cancelicon -command {" & Close_Dialog_Button &
+                " invoke;SetRepair remove} -style Small.TButton");
+         Add(Widget => Info_Button, Message => "Remove the repair priority");
+      else
+         Info_Button :=
+           Create
+             (pathName => Module_Frame & ".repairbutton",
+              options =>
+                "-image repairpriorityicon -command {" & Close_Dialog_Button &
+                " invoke;SetRepair assign" & Module_Index'Img &
+                "} -style Small.TButton");
          Add
            (Widget => Info_Button,
-            Message => "Set a new name for the crew member");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button,
-            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
-         Bind
-           (Widgt => Info_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Dialog_Button & " invoke;break}");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-         Tcl.Tk.Ada.Grid.Grid(Slave => Name_Box, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
-         Tcl_Eval(interp => Interp, strng => "update");
-         Height :=
-           Height +
-           Positive'Value(Winfo_Get(Widgt => Name_Box, Info => "reqheight"));
-      end Add_Name_Info_Block;
-      Add_Status_Info_Block :
-      declare
-         Status_Box: constant Ttk_Frame :=
-           Create
-             (pathName => Module_Frame & ".statusinfo",
-              options => "-width 360");
-         Status_Tooltip: Unbounded_String;
-      begin
-         Add_Label(Name => Status_Box & ".damagelbl", Text => "Status:");
-         Damage_Percent :=
-           (Float(Module.Durability) / Float(Module.Max_Durability));
-         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style green.Horizontal.TProgressbar");
-            Status_Tooltip :=
-              To_Unbounded_String(Source => "Slightly damaged");
-         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style yellow.Horizontal.TProgressbar");
-            Status_Tooltip := To_Unbounded_String(Source => "Damaged");
-         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style yellow.Horizontal.TProgressbar");
-            Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
-         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-            Progress_Bar_Style := Null_Unbounded_String;
-            Status_Tooltip :=
-              To_Unbounded_String(Source => "Almost destroyed");
-         elsif Damage_Percent = 0.0 then
-            Progress_Bar_Style := Null_Unbounded_String;
-            Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
-         else
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style green.Horizontal.TProgressbar");
-            Status_Tooltip := To_Unbounded_String(Source => "Not damaged");
-         end if;
-         Module_Max_Value :=
-           Positive
-             (Float(Get_Module(Index => Module.Proto_Index).Durability) * 1.5);
-         if Module.Max_Durability = Module_Max_Value then
-            Append(Source => Status_Tooltip, New_Item => " (max upgrade)");
-         end if;
-         Progress_Bar :=
-           Create
-             (pathName => Status_Box & ".bar",
-              options =>
-                "-orient horizontal -maximum 1.0 -value {" &
-                Float'Image(Damage_Percent) & "}" &
-                To_String(Source => Progress_Bar_Style));
-         Add
-           (Widget => Progress_Bar,
-            Message => To_String(Source => Status_Tooltip));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar, Options => "-row 0 -column 1 -padx {5 0}");
-         if Player_Ship.Repair_Module = Module_Index then
-            Info_Button :=
-              Create
-                (pathName => Status_Box & ".button",
-                 options =>
-                   "-image cancelicon -command {" & Close_Dialog_Button &
-                   " invoke;SetRepair remove} -style Small.TButton");
-            Add
-              (Widget => Info_Button, Message => "Remove the repair priority");
-         else
-            Info_Button :=
-              Create
-                (pathName => Status_Box & ".button",
-                 options =>
-                   "-image repairpriorityicon -command {" &
-                   Close_Dialog_Button & " invoke;SetRepair assign" &
-                   Module_Index'Img & "} -style Small.TButton");
-            Add
-              (Widget => Info_Button,
-               Message => "Repair selected module as first when damaged");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button,
-            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
-         Bind
-           (Widgt => Info_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Dialog_Button & " invoke;break}");
-         if Module.Max_Durability < Module_Max_Value then
-            Add_Upgrade_Button
-              (Upgrade => DURABILITY, Tooltip => "module's durability",
-               Box => Status_Box, Module => Module, Column => 3,
-               Button_Name => "button2");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Status_Box, Options => "-sticky w");
-         Tcl_Eval(interp => Interp, strng => "update");
-         Height :=
-           Height +
-           Positive'Value(Winfo_Get(Widgt => Status_Box, Info => "reqheight"));
-      end Add_Status_Info_Block;
+            Message => "Repair selected module as first when damaged");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Info_Button,
+         Options =>
+           "-row" & Current_Row'Img & " -column 2 -sticky n -padx {5 0}");
+      Bind
+        (Widgt => Info_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
+      if Module.Max_Durability < Module_Max_Value then
+         Add_Upgrade_Button
+           (Upgrade => DURABILITY, Tooltip => "module's durability",
+            Box => Module_Frame, Module => Module, Column => 3,
+            Button_Name => "durabilitybutton", Row => Current_Row);
+      end if;
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+      -- Show the module's weight
+      Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".weightlbl",
-         Text => "Weight:" & Integer'Image(Module.Weight) & " kg");
+        (Name => Module_Frame & ".weightlbl", Text => "Weight:",
+         Row => Current_Row);
+      Add_Label
+        (Name => Module_Frame & ".weightlbl2",
+         Text => Integer'Image(Module.Weight) & " kg", Row => Current_Row,
+         Column => 1);
       Height :=
         Height +
         Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
