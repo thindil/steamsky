@@ -669,18 +669,21 @@ package body Ships.SaveLoad is
                  (Container => Player_Ship.Cargo,
                   New_Item =>
                     (Proto_Index => Proto_Index, Amount => Amount,
-                     Name => Name, Durability => Item_Durability, Price => Price));
+                     Name => Name, Durability => Item_Durability,
+                     Price => Price));
             end Load_Cargo_Block;
          elsif Node_Name(N => Child_Node) = "member" then
             Load_Crew_Block :
             declare
                Member_Data: Node_List;
-               Item_Name: Bounded_String;
-               Name, Faction_Index: Tiny_String.Bounded_String;
-               Item_Index: Natural;
+               Item_Name: Bounded_String := Null_Bounded_String;
+               Name: Tiny_String.Bounded_String;
+               Faction_Index: Tiny_String.Bounded_String :=
+                 Tiny_String.Null_Bounded_String;
+               Item_Index: Natural := 0;
                Gender: String(1 .. 1);
-               Health, Tired, Hunger, Thirst, Index, Level, Experience,
-               Loyalty, Price: Natural;
+               Health, Tired, Hunger, Thirst, Loyalty: Natural;
+               Experience, Index, Price, Level: Natural := 0;
                --## rule off IMPROPER_INITIALIZATION
                Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                Inventory: Inventory_Container.Vector (Capacity => 32);
@@ -694,9 +697,10 @@ package body Ships.SaveLoad is
                Orders: Natural_Array(1 .. 12);
                Equipment: Equipment_Array;
                Order_Time, Contract_Length: Integer;
-               Amount, Item_Durability, Equipment_Index, Priority_Index,
-               Home_Base: Positive;
-               Payment, Morale: Attributes_Array;
+               Amount, Item_Durability: Positive := 1;
+               Equipment_Index, Priority_Index: Positive;
+               Home_Base: Positive := 1;
+               Payment, Morale: Attributes_Array := (others => <>);
                Member_Node: Node;
                Attribute_Index: Positive := 1;
             begin
