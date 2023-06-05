@@ -133,20 +133,23 @@ package body Ships.UI.Modules is
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Frame & ".info",
-           options => "-wrap char -height 15 -width 40");
+           options => "-wrap char -height 20 -width 15");
       Height: Positive := 10;
       Close_Dialog_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Frame & ".button");
       Current_Row: Natural := 0;
       Status_Tooltip: Unbounded_String;
       procedure Add_Label
-        (Name, Text: String; Row, Column, Column_Span: Natural := 0;
+        (Name, Text: String;
+         Row, Column, Column_Span, Wrap_Length: Natural := 0;
          Count_Height: Boolean := False) is
       begin
          Label :=
            Create
              (pathName => Name,
-              options => "-text {" & Text & "} -wraplength 380");
+              options =>
+                "-text {" & Text & "} -wraplength" &
+                (if Wrap_Length > 0 then Wrap_Length'Img else " 380"));
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label,
             Options =>
@@ -426,7 +429,8 @@ package body Ships.UI.Modules is
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".lblrepairmaterial",
-         Text => "Repair/Upgrade material:", Row => Current_Row);
+         Text => "Repair/Upgrade material:", Row => Current_Row,
+         Wrap_Length => 150);
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -476,14 +480,25 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
          Options => "-row" & Current_Row'Img & " -column 1");
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
+      Count_Height_Block :
+      declare
+         New_Height: Positive :=
+           Positive'Value
+             (Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
+      begin
+         if New_Height <
+           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight")) then
+            New_Height :=
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         end if;
+         Height := Height + New_Height;
+      end Count_Height_Block;
       -- Show module's upgrade skill
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".upgradeskill",
-         Text => "Repair/Upgrade skill:", Row => Current_Row);
+         Text => "Repair/Upgrade skill:", Row => Current_Row,
+         Wrap_Length => 150, Count_Height => True);
       Add_Label
         (Name => Module_Frame & ".upgradeskill2",
          Text =>
@@ -506,7 +521,7 @@ package body Ships.UI.Modules is
                           Get_Module(Index => Module.Proto_Index).Repair_Skill)
                        .Attribute)
                   .Name),
-         Row => Current_Row, Column => 1, Count_Height => True);
+         Row => Current_Row, Column => 1);
       -- Show the module's upgrade action
       if Module.Upgrade_Action /= NONE then
          Current_Row := Current_Row + 1;
@@ -1327,11 +1342,6 @@ package body Ships.UI.Modules is
       if Height > 500 then
          Height := 500;
       end if;
-      configure
-        (Widgt => Module_Frame,
-         options =>
-           "-height" & Positive'Image(Height) & " -width " &
-           Winfo_Get(Widgt => Module_Text, Info => "reqwidth"));
       Canvas_Create
         (Parent => Module_Canvas, Child_Type => "window",
          Options =>
@@ -1352,9 +1362,10 @@ package body Ships.UI.Modules is
       declare
          Width: Positive;
       begin
+         Tcl_Eval(interp => Interp, strng => "update");
          Width :=
            Positive'Value
-             (Winfo_Get(Widgt => Module_Text, Info => "reqwidth")) +
+             (Winfo_Get(Widgt => Module_Frame, Info => "reqwidth")) +
            Positive'Value(Winfo_Get(Widgt => Y_Scroll, Info => "reqwidth")) +
            5;
          configure
