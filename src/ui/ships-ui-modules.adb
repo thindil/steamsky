@@ -857,11 +857,16 @@ package body Ships.UI.Modules is
                  (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
                   Box => Module_Frame, Module => Module, Column => 2,
                   Row => Current_Row, Button_Name => "qualitybutton");
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            else
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end if;
-            Height :=
-              Height +
-              Positive'Value
-                (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
          -- Show information about guns and harpoon guns
          when GUN | HARPOON_GUN =>
             -- Show information about gun's strength
@@ -881,7 +886,7 @@ package body Ships.UI.Modules is
                  (Name => Module_Frame & ".strengthlbl", Text => "Strength:",
                   Row => Current_Row);
                Add_Label
-                 (Name => Module_Frame & ".strengthlbl",
+                 (Name => Module_Frame & ".strengthlbl2",
                   Text =>
                     Positive'Image(Module_Strength) &
                     (if Module_Strength = Module_Max_Value then
@@ -897,7 +902,7 @@ package body Ships.UI.Modules is
                         else "strength") &
                        " of gun",
                      Box => Module_Frame, Module => Module, Row => Current_Row,
-                     Button_Name => "strentghbutton");
+                     Button_Name => "strentghbutton", Column => 2);
                   Height :=
                     Height +
                     Positive'Value
@@ -909,21 +914,26 @@ package body Ships.UI.Modules is
                       (Winfo_Get(Widgt => Label, Info => "reqheight"));
                end if;
             end Add_Strength_Info_Block;
-            Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
+            -- Show information about gun's owners
+            Current_Row := Current_Row + 1;
+            Add_Owners_Info
+              (Owners_Name => "Gunner", Add_Button => True,
+               Row => Current_Row);
+            -- Show information about gun's ammunition
+            Current_Row := Current_Row + 1;
             Show_Ammo_Block :
             declare
-               Ammo_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".ammoinfo",
-                    options => "-width 360");
                Ammo_Index: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
                   else Module.Harpoon_Index);
                Ammo_Text: constant Tk_Text :=
                  Create
-                   (pathName => Ammo_Box & ".ammoinfo",
+                   (pathName => Module_Frame & ".ammoinfo",
                     options => "-wrap char -height 3 -width 36");
             begin
+               Add_Label
+                 (Name => Module_Frame & ".ammolbl", Text => "Ammunition:",
+                  Row => Current_Row);
                Tag_Configure
                  (TextWidget => Ammo_Text, TagName => "red",
                   Options =>
@@ -934,9 +944,6 @@ package body Ships.UI.Modules is
                          "ttk::theme::" &
                          To_String(Source => Game_Settings.Interface_Theme) &
                          "::colors(-red)"));
-               Insert
-                 (TextWidget => Ammo_Text, Index => "end",
-                  Text => "{Ammunition: }");
                Have_Ammo := False;
                if Ammo_Index in
                    Inventory_Container.First_Index
@@ -1023,7 +1030,7 @@ package body Ships.UI.Modules is
                     I /= Ammo_Index then
                      Info_Button :=
                        Create
-                         (pathName => Ammo_Box & ".button",
+                         (pathName => Module_Frame & ".ammobutton",
                           options =>
                             "-image assignammoicon -command {" &
                             Close_Dialog_Button & " invoke;ShowAssignAmmo " &
@@ -1034,7 +1041,9 @@ package body Ships.UI.Modules is
                         Message => "Assign an ammo to the gun.");
                      Tcl.Tk.Ada.Grid.Grid
                        (Slave => Info_Button,
-                        Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                        Options =>
+                          "-row" & Current_Row'Img &
+                          " -column 2 -sticky n -padx {5 0}");
                      Bind
                        (Widgt => Info_Button, Sequence => "<Escape>",
                         Script =>
@@ -1063,13 +1072,13 @@ package body Ships.UI.Modules is
                              Option => "-linespace")) -
                        2));
                Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Ammo_Text, Options => "-sticky w -row 0 -column 0");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Ammo_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
+                 (Slave => Ammo_Text,
+                  Options =>
+                    "-sticky w -row" & Current_Row'Img & " -column 1");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Ammo_Box, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Ammo_Text, Info => "reqheight"));
             end Show_Ammo_Block;
             if Module.M_Type = GUN then
                Add_Label
@@ -1281,16 +1290,15 @@ package body Ships.UI.Modules is
       end case;
       if Get_Module(Index => Module.Proto_Index).Description /=
         Short_String.Null_Bounded_String then
+         Current_Row := Current_Row + 1;
          Add_Label
            (Name => Module_Frame & ".lbldescription",
             Text =>
               LF &
               To_String
                 (Source =>
-                   Get_Module(Index => Module.Proto_Index).Description));
-         Height :=
-           Height +
-           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+                   Get_Module(Index => Module.Proto_Index).Description),
+            Row => Current_Row, Count_Height => True);
       end if;
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
