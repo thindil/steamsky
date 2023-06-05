@@ -140,7 +140,7 @@ package body Ships.UI.Modules is
       Current_Row: Natural := 0;
       Status_Tooltip: Unbounded_String;
       procedure Add_Label
-        (Name, Text: String; Row, Column: Natural := 0;
+        (Name, Text: String; Row, Column, Column_Span: Natural := 0;
          Count_Height: Boolean := False) is
       begin
          Label :=
@@ -149,7 +149,10 @@ package body Ships.UI.Modules is
               options => "-text {" & Text & "} -wraplength 380");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label,
-            Options => "-sticky w -row" & Row'Img & " -column" & Column'Img);
+            Options =>
+              "-sticky w -row" & Row'Img & " -column" & Column'Img &
+              (if Column_Span > 0 then " -columnspan" & Column_Span'Img
+               else ""));
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
@@ -412,7 +415,7 @@ package body Ships.UI.Modules is
          Column => 1, Count_Height => True);
       -- Show the module's size
       Current_Row := Current_Row + 1;
-      Add_Label(Name => Module_Frame & ".lblsize", Text => "Size:");
+      Add_Label(Name => Module_Frame & ".lblsize", Text => "Size:", Row => Current_Row);
       Add_Label
         (Name => Module_Frame & ".lblsize2",
          Text => Natural'Image(Get_Module(Index => Module.Proto_Index).Size),
@@ -421,7 +424,7 @@ package body Ships.UI.Modules is
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".lblrepairmaterial",
-         Text => "Repair/Upgrade material:");
+         Text => "Repair/Upgrade material:", Row => Current_Row);
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -478,7 +481,7 @@ package body Ships.UI.Modules is
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".upgradeskill",
-         Text => "Repair/Upgrade skill:");
+         Text => "Repair/Upgrade skill:", Row => Current_Row);
       Add_Label
         (Name => Module_Frame & ".upgradeskill2",
          Text =>
@@ -577,7 +580,7 @@ package body Ships.UI.Modules is
            (Widget => Progress_Bar,
             Message => To_String(Source => Module_Info));
          Add_Label
-           (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:");
+           (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:", Row => Current_Row);
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar,
             Options => "-row" & Current_Row'Img & " -column 1");
@@ -617,7 +620,8 @@ package body Ships.UI.Modules is
                 (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                  1.5);
             Add_Label
-              (Name => Module_Frame & ".powerlbl", Text => "Max power:");
+              (Name => Module_Frame & ".powerlbl", Text => "Max power:",
+               Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".powerlbl2",
                Text =>
@@ -628,7 +632,7 @@ package body Ships.UI.Modules is
             if Module.Power < Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade => MAX_VALUE, Tooltip => "engine's power",
-                  Box => Module_Frame, Module => Module, Column => 3,
+                  Box => Module_Frame, Module => Module, Column => 2,
                   Button_Name => "powerbutton", Row => Current_Row);
                Height :=
                  Height +
@@ -646,7 +650,8 @@ package body Ships.UI.Modules is
               Positive
                 (Float(Get_Module(Index => Module.Proto_Index).Value) / 2.0);
             Add_Label
-              (Name => Module_Frame & ".fuellbl", Text => "Fuel usage:");
+              (Name => Module_Frame & ".fuellbl", Text => "Fuel usage:",
+               Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".fuellbl2",
                Text =>
@@ -657,7 +662,7 @@ package body Ships.UI.Modules is
             if Module.Fuel_Usage > Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade => VALUE, Tooltip => "engine's fuel usage",
-                  Box => Module_Frame, Module => Module, Column => 3,
+                  Box => Module_Frame, Module => Module, Column => 2,
                   Button_Name => "fuelbutton", Row => Current_Row);
                Height :=
                  Height +
@@ -671,7 +676,9 @@ package body Ships.UI.Modules is
             end if;
             -- Show the engine state
             Current_Row := Current_Row + 1;
-            Add_Label(Name => Module_Frame & ".statelbl", Text => "State: ");
+            Add_Label
+              (Name => Module_Frame & ".statelbl", Text => "State: ",
+               Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".statelbl2",
                Text => (if Module.Disabled then "Disabled" else "Enabled"),
@@ -692,7 +699,7 @@ package body Ships.UI.Modules is
               (Slave => Info_Button,
                Options =>
                  "-row" & Current_Row'Img &
-                 " -column 1 -sticky n -padx {5 0}");
+                 " -column 2 -sticky n -padx {5 0}");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Dialog_Button & " invoke;break}");
@@ -1298,11 +1305,11 @@ package body Ships.UI.Modules is
               To_String
                 (Source =>
                    Get_Module(Index => Module.Proto_Index).Description),
-            Row => Current_Row, Count_Height => True);
+            Row => Current_Row, Count_Height => True, Column_Span => 4);
       end if;
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog, Column_Span => 2,
+         Command => "CloseDialog " & Module_Dialog, Column_Span => 4,
          Row => 12);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
