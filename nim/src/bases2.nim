@@ -19,7 +19,8 @@ import std/[math, tables]
 import bases, basestypes, factions, events, game, maps, messages, ships2,
     shipscrew, types, updategame, utils
 
-proc askForEvents*() =
+proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
+    WriteIOEffect, RootEffect].} =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     return
