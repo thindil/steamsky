@@ -678,97 +678,91 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end if;
-            Add_State_Info_Block :
-            declare
-               State_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".stateinfo",
-                    options => "-width 360");
-            begin
-               Add_Label
-                 (Name => State_Box & ".statelbl",
-                  Text =>
-                    "State: " &
-                    (if Module.Disabled then "Disabled" else "Enabled"));
-               Info_Button :=
-                 Create
-                   (pathName => State_Box & ".button",
-                    options =>
-                      "-image powericon -command {" & Close_Dialog_Button &
-                      " invoke;DisableEngine " &
-                      CArgv.Arg(Argv => Argv, N => 1) &
-                      "} -style Small.TButton");
-               Add
-                 (Widget => Info_Button,
-                  Message =>
-                    "Turn" & (if Module.Disabled then " on " else " off ") &
-                    "the engine.");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Info_Button,
-                  Options => "-row 0 -column 1 -sticky n -padx {5 0}");
-               Bind
-                 (Widgt => Info_Button, Sequence => "<Escape>",
-                  Script => "{" & Close_Dialog_Button & " invoke;break}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => State_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => State_Box, Info => "reqheight"));
-            end Add_State_Info_Block;
-         when CARGO_ROOM =>
+            -- Show the engine state
+            Current_Row := Current_Row + 1;
+            Add_Label(Name => Module_Frame & ".statelbl", Text => "State: ");
             Add_Label
-              (Name => Module_Frame & ".maxcargolbl",
-               Text =>
-                 "Max cargo:" &
-                 Integer'Image
-                   (Get_Module(Index => Module.Proto_Index).Max_Value) &
-                 " kg");
-            Tcl_Eval(interp => Interp, strng => "update");
+              (Name => Module_Frame & ".statelbl2",
+               Text => (if Module.Disabled then "Disabled" else "Enabled"),
+               Row => Current_Row, Column => 1);
+            Info_Button :=
+              Create
+                (pathName => Module_Frame & ".statebutton",
+                 options =>
+                   "-image powericon -command {" & Close_Dialog_Button &
+                   " invoke;DisableEngine " & CArgv.Arg(Argv => Argv, N => 1) &
+                   "} -style Small.TButton");
+            Add
+              (Widget => Info_Button,
+               Message =>
+                 "Turn" & (if Module.Disabled then " on " else " off ") &
+                 "the engine.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button,
+               Options =>
+                 "-row" & Current_Row'Img &
+                 " -column 1 -sticky n -padx {5 0}");
+            Bind
+              (Widgt => Info_Button, Sequence => "<Escape>",
+               Script => "{" & Close_Dialog_Button & " invoke;break}");
             Height :=
               Height +
-              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+              Positive'Value
+                (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+         -- Show information about cargo room
+         when CARGO_ROOM =>
+            Current_Row := Current_Row + 1;
+            Add_Label
+              (Name => Module_Frame & ".maxcargolbl", Text => "Max cargo:");
+            Add_Label
+              (Name => Module_Frame & ".maxcargolbl2",
+               Text =>
+                 Integer'Image
+                   (Get_Module(Index => Module.Proto_Index).Max_Value) &
+                 " kg",
+               Row => Current_Row, Column => 1, Count_Height => True);
+         -- Show information about hull
          when HULL =>
-            Add_Modules_Info_Block :
-            declare
-               Modules_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".modulesinfo",
-                    options => "-width 360");
-            begin
-               Add_Label
-                 (Name => Modules_Box & ".modules",
-                  Text =>
-                    "Modules installed:" &
-                    Integer'Image(Module.Installed_Modules) & " /" &
-                    Integer'Image(Module.Max_Modules));
-               Module_Max_Value :=
-                 Positive
-                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                    1.5);
-               if Module.Max_Modules = Module_Max_Value then
-                  configure
-                    (Widgt => Label,
-                     options =>
-                       "-text {" & cget(Widgt => Label, option => "-text") &
-                       " (max upgrade)}");
-               else
-                  Add_Upgrade_Button
-                    (Upgrade => MAX_VALUE,
-                     Tooltip =>
-                       "hull's size so it can have more modules installed",
-                     Box => Modules_Box, Module => Module);
-               end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Modules_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
+            Current_Row := Current_Row + 1;
+            Add_Label
+              (Name => Module_Frame & ".modules",
+               Text => "Modules installed:");
+            Add_Label
+              (Name => Module_Frame & ".modules2",
+               Text =>
+                 Integer'Image(Module.Installed_Modules) & " /" &
+                 Integer'Image(Module.Max_Modules),
+               Row => Current_Row, Column => 1);
+            Module_Max_Value :=
+              Positive
+                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                 1.5);
+            if Module.Max_Modules = Module_Max_Value then
+               configure
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & cget(Widgt => Label, option => "-text") &
+                    " (max upgrade)}");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Modules_Box, Info => "reqheight"));
-            end Add_Modules_Info_Block;
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+            else
+               Add_Upgrade_Button
+                 (Upgrade => MAX_VALUE,
+                  Tooltip =>
+                    "hull's size so it can have more modules installed",
+                  Box => Module_Frame, Module => Module, Column => 3,
+                  Button_Name => "resizebutton", Row => Current_Row);
+               Height :=
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            end if;
+         -- Show information about cabin
          when CABIN =>
+            -- Show information about cabin's owners
+            Current_Row := Current_Row + 1;
             Cabin_Owner_Info_Block :
             declare
                Is_Passenger: Boolean := False;
