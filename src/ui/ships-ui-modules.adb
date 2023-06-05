@@ -139,13 +139,30 @@ package body Ships.UI.Modules is
         Get_Widget(pathName => Module_Frame & ".button");
       Current_Row: Natural := 0;
       Status_Tooltip: Unbounded_String;
-      procedure Add_Owners_Info
-        (Owners_Name: String; Add_Button: Boolean := False) is
-         Have_Owner: Boolean := False;
-         Owner_Box: constant Ttk_Frame :=
+      procedure Add_Label
+        (Name, Text: String; Row, Column: Natural := 0;
+         Count_Height: Boolean := False) is
+      begin
+         Label :=
            Create
-             (pathName => Module_Frame & ".ownerinfo",
-              options => "-width 360");
+             (pathName => Name,
+              options => "-text {" & Text & "} -wraplength 380");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label,
+            Options => "-sticky w -row" & Row'Img & " -column" & Column'Img);
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+         if Count_Height then
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         end if;
+      end Add_Label;
+      procedure Add_Owners_Info
+        (Owners_Name: String; Add_Button: Boolean := False;
+         Row: Natural := 0) is
+         Have_Owner: Boolean := False;
          Owners_Text: Unbounded_String := Null_Unbounded_String;
       begin
          Append(Source => Owners_Text, New_Item => Owners_Name);
@@ -155,7 +172,11 @@ package body Ships.UI.Modules is
          Append
            (Source => Owners_Text,
             New_Item =>
-              " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
+              " (max" & Count_Type'Image(Module.Owner.Length) & "):");
+         Add_Label
+           (Name => Module_Frame & ".lblowners",
+            Text => To_String(Source => Owners_Text), Row => Row);
+         Owners_Text := Null_Unbounded_String;
          Add_Owners_Info_Loop :
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
@@ -173,20 +194,13 @@ package body Ships.UI.Modules is
          if not Have_Owner then
             Append(Source => Owners_Text, New_Item => "none");
          end if;
-         Label :=
-           Create
-             (pathName => Owner_Box & ".info",
-              options =>
-                "-text {" & To_String(Source => Owners_Text) &
-                " } -wraplength 325");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
+         Add_Label
+           (Name => Module_Frame & ".lblowners2",
+            Text => To_String(Source => Owners_Text), Row => Row, Column => 1);
          if Add_Button then
             Info_Button :=
               Create
-                (pathName => Owner_Box & ".button",
+                (pathName => Module_Frame & ".ownersbutton",
                  options =>
                    "-image assigncrewicon -command {" & Close_Dialog_Button &
                    " invoke;ShowAssignCrew " &
@@ -196,7 +210,8 @@ package body Ships.UI.Modules is
                Message => "Assign crew members to the module.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
-               Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+               Options =>
+                 "-row" & Row'Img & " -column 2 -sticky n -padx {5 0}");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Dialog_Button & " invoke;break}");
@@ -205,14 +220,10 @@ package body Ships.UI.Modules is
                strng =>
                  "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Owner_Box, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Owner_Box & " " & Y_Scroll);
-         Tcl_Eval(interp => Interp, strng => "update");
          Height :=
            Height +
-           Positive'Value(Winfo_Get(Widgt => Owner_Box, Info => "reqheight"));
+           Positive'Value
+             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
       end Add_Owners_Info;
       procedure Add_Upgrade_Button
         (Upgrade: Ship_Upgrade; Tooltip: String; Box: Ttk_Frame;
@@ -256,26 +267,6 @@ package body Ships.UI.Modules is
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
       end Add_Upgrade_Button;
-      procedure Add_Label
-        (Name, Text: String; Row, Column: Natural := 0;
-         Count_Height: Boolean := False) is
-      begin
-         Label :=
-           Create
-             (pathName => Name,
-              options => "-text {" & Text & "} -wraplength 380");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label,
-            Options => "-sticky w -row" & Row'Img & " -column" & Column'Img);
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Label & " " & Y_Scroll);
-         if Count_Height then
-            Height :=
-              Height +
-              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
-         end if;
-      end Add_Label;
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
@@ -780,7 +771,8 @@ package body Ships.UI.Modules is
                   end if;
                end loop Missions_Loop;
                Add_Owners_Info
-                 (Owners_Name => "Owner", Add_Button => not Is_Passenger);
+                 (Owners_Name => "Owner", Add_Button => not Is_Passenger,
+                  Row => Current_Row);
             end Cabin_Owner_Info_Block;
             Add_Cleanliness_Info_Block :
             declare
