@@ -774,16 +774,15 @@ package body Ships.UI.Modules is
                  (Owners_Name => "Owner", Add_Button => not Is_Passenger,
                   Row => Current_Row);
             end Cabin_Owner_Info_Block;
+            -- Show information about cabin's cleanliness
+            Current_Row := Current_Row + 1;
             Add_Cleanliness_Info_Block :
             declare
-               Clean_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".cleaninfo",
-                    options => "-width 360");
                Status_Tooltip: Unbounded_String;
             begin
                Add_Label
-                 (Name => Clean_Box & ".cleanlbl", Text => "Cleanliness:");
+                 (Name => Module_Frame & ".cleanlbl", Text => "Cleanliness:",
+                  Row => Current_Row, Count_Height => True);
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if Damage_Percent = 0.0 then
@@ -816,7 +815,7 @@ package body Ships.UI.Modules is
                end if;
                Progress_Bar :=
                  Create
-                   (pathName => Clean_Box & ".clean",
+                   (pathName => Module_Frame & ".cleanbar",
                     options =>
                       "-orient horizontal -maximum 1.0 -value {" &
                       Float'Image(1.0 - Damage_Percent) & "}" &
@@ -826,63 +825,49 @@ package body Ships.UI.Modules is
                   Message => To_String(Source => Status_Tooltip));
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
-                  Options => "-row 0 -column 1 -padx {5 0}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Clean_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Clean_Box, Info => "reqheight"));
+                  Options =>
+                    "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
             end Add_Cleanliness_Info_Block;
-            Add_Quality_Info_Block :
-            declare
-               Quality_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".qualityinfo",
-                    options => "-width 360");
-            begin
-               Progress_Bar :=
-                 Create
-                   (pathName => Quality_Box & ".quality",
-                    options =>
-                      "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
-                      Float'Image(Float(Module.Quality) / 100.0) & "}");
-               Add_Label
-                 (Name => Quality_Box & ".qualitylbl", Text => "Quality:");
-               Module_Max_Value :=
-                 Positive
-                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                    1.5);
-               Add
-                 (Widget => Progress_Bar,
-                  Message =>
-                    Get_Cabin_Quality(Quality => Module.Quality) &
-                    (if Module.Quality = Module_Max_Value then " (max upgrade)"
-                     else ""));
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Progress_Bar,
-                  Options => "-row 0 -column 1 -padx {5 0}");
-               if Module.Quality < Module_Max_Value then
-                  Add_Upgrade_Button
-                    (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
-                     Box => Quality_Box, Module => Module, Column => 2);
-               end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Quality_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Quality_Box, Info => "reqheight"));
-            end Add_Quality_Info_Block;
+            -- Show information about cabin's quality
+            Current_Row := Current_Row + 1;
+            Progress_Bar :=
+              Create
+                (pathName => Module_Frame & ".qualitybar",
+                 options =>
+                   "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+                   Float'Image(Float(Module.Quality) / 100.0) & "}");
+            Add_Label
+              (Name => Module_Frame & ".qualitylbl", Text => "Quality:",
+               Row => Current_Row);
+            Module_Max_Value :=
+              Positive
+                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                 1.5);
+            Add
+              (Widget => Progress_Bar,
+               Message =>
+                 Get_Cabin_Quality(Quality => Module.Quality) &
+                 (if Module.Quality = Module_Max_Value then " (max upgrade)"
+                  else ""));
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Bar,
+               Options => "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
+            if Module.Quality < Module_Max_Value then
+               Add_Upgrade_Button
+                 (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
+                  Box => Module_Frame, Module => Module, Column => 2,
+                  Row => Current_Row, Button_Name => "qualitybutton");
+            end if;
+            Height :=
+              Height +
+              Positive'Value
+                (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+         -- Show information about guns and harpoon guns
          when GUN | HARPOON_GUN =>
+            -- Show information about gun's strength
+            Current_Row := Current_Row + 1;
             Add_Strength_Info_Block :
             declare
-               Strength_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".strengthinfo",
-                    options => "-width 360");
                Module_Strength: constant Positive :=
                  (if Get_Module(Index => Module.Proto_Index).M_Type = GUN then
                     Module.Damage
@@ -893,12 +878,16 @@ package body Ships.UI.Modules is
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
                Add_Label
-                 (Name => Strength_Box & ".strengthlbl",
+                 (Name => Module_Frame & ".strengthlbl", Text => "Strength:",
+                  Row => Current_Row);
+               Add_Label
+                 (Name => Module_Frame & ".strengthlbl",
                   Text =>
-                    "Strength:" & Positive'Image(Module_Strength) &
+                    Positive'Image(Module_Strength) &
                     (if Module_Strength = Module_Max_Value then
                        " (max upgrade)"
-                     else ""));
+                     else ""),
+                  Row => Current_Row, Column => 1);
                if Module_Strength < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade => MAX_VALUE,
@@ -907,15 +896,18 @@ package body Ships.UI.Modules is
                         then "damage"
                         else "strength") &
                        " of gun",
-                     Box => Strength_Box, Module => Module);
+                     Box => Module_Frame, Module => Module, Row => Current_Row,
+                     Button_Name => "strentghbutton");
+                  Height :=
+                    Height +
+                    Positive'Value
+                      (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+               else
+                  Height :=
+                    Height +
+                    Positive'Value
+                      (Winfo_Get(Widgt => Label, Info => "reqheight"));
                end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Strength_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Strength_Box, Info => "reqheight"));
             end Add_Strength_Info_Block;
             Add_Owners_Info(Owners_Name => "Gunner", Add_Button => True);
             Show_Ammo_Block :
