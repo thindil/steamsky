@@ -415,7 +415,9 @@ package body Ships.UI.Modules is
          Column => 1, Count_Height => True);
       -- Show the module's size
       Current_Row := Current_Row + 1;
-      Add_Label(Name => Module_Frame & ".lblsize", Text => "Size:", Row => Current_Row);
+      Add_Label
+        (Name => Module_Frame & ".lblsize", Text => "Size:",
+         Row => Current_Row);
       Add_Label
         (Name => Module_Frame & ".lblsize2",
          Text => Natural'Image(Get_Module(Index => Module.Proto_Index).Size),
@@ -580,7 +582,8 @@ package body Ships.UI.Modules is
            (Widget => Progress_Bar,
             Message => To_String(Source => Module_Info));
          Add_Label
-           (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:", Row => Current_Row);
+           (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:",
+            Row => Current_Row);
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar,
             Options => "-row" & Current_Row'Img & " -column 1");
@@ -1310,7 +1313,7 @@ package body Ships.UI.Modules is
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column_Span => 4,
-         Row => 12);
+         Row => Current_Row + 1);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus " & Module_Frame & ".nameinfo.button;break}");
