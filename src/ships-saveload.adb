@@ -15,16 +15,17 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Bases; use Bases;
-with ShipModules; use ShipModules;
+with DOM.Core.Documents;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
+with Bases;
+with ShipModules;
 
 package body Ships.SaveLoad is
 
    procedure Load_Player_Ship(Save_Data: Document) is
+      use DOM.Core.Nodes;
+      use DOM.Core.Elements;
       use Tiny_String;
 
       Ship_Node, Ship_Child_Nodes: Node_List;
@@ -68,6 +69,8 @@ package body Ships.SaveLoad is
          if Node_Name(N => Child_Node) = "module" then
             Load_Modules_Block :
             declare
+               use ShipModules;
+
                --## rule off IMPROPER_INITIALIZATION
                Data: Data_Array;
                Ship_Module_Data: Node_List;
@@ -675,6 +678,8 @@ package body Ships.SaveLoad is
          elsif Node_Name(N => Child_Node) = "member" then
             Load_Crew_Block :
             declare
+               use Bases;
+
                Member_Data: Node_List;
                Item_Name: Bounded_String := Null_Bounded_String;
                Name: Tiny_String.Bounded_String;
