@@ -21,6 +21,8 @@ import bases, basestypes, factions, events, game, maps, messages, ships2,
 
 proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect].} =
+  ## Ask for known events in a base or a friendly ship. Generates new
+  ## events
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     return
