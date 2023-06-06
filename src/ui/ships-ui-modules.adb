@@ -1129,7 +1129,7 @@ package body Ships.UI.Modules is
          when TURRET =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".lblturretgun", Text => "Weapon: ",
+              (Name => Module_Frame & ".lblturretgun", Text => "Weapon:",
                Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".lblturretgun2",
@@ -1150,34 +1150,33 @@ package body Ships.UI.Modules is
                     Player_Ship.Modules(Module_Index).Crafting_Index /=
                     Tiny_String.Null_Bounded_String
                   then True
-                  else False));
+                  else False),
+               Row => Current_Row);
+            -- Show information about workshop's order
             Show_Order_Info_Block :
             declare
-               Order_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".orderinfo",
-                    options => "-width 360");
                Recipe_Name: constant String :=
                  Get_Workshop_Recipe_Name(Workshop => Module_Index);
             begin
+               Current_Row := Current_Row + 1;
                if Recipe_Name'Length > 0 then
                   Add_Label
-                    (Name => Order_Box & ".orderlbl",
-                     Text => "Order: " & Recipe_Name);
+                    (Name => Module_Frame & ".orderlbl", Text => "Order:",
+                     Row => Current_Row);
                   Add_Label
-                    (Name => Order_Box & ".ordertimelbl",
-                     Text =>
-                       "Time to complete the order:" &
-                       Positive'Image(Module.Crafting_Time) & " mins");
-               else
+                    (Name => Module_Frame & ".orderlbl2", Text => Recipe_Name,
+                     Row => Current_Row, Column => 1, Count_Height => True);
+                  Current_Row := Current_Row + 1;
                   Add_Label
-                    (Name => Order_Box & ".orderlbl",
-                     Text => "Order: not set");
-               end if;
-               if Recipe_Name'Length > 0 then
+                    (Name => Module_Frame & ".ordertimelbl",
+                     Text => "Finish order in:", Row => Current_Row);
+                  Add_Label
+                    (Name => Module_Frame & ".ordertimelbl2",
+                     Text => Positive'Image(Module.Crafting_Time) & " mins",
+                     Row => Current_Row, Column => 1, Count_Height => True);
                   Info_Button :=
                     Create
-                      (pathName => Order_Box & ".button",
+                      (pathName => Module_Frame & ".orderbutton",
                        options =>
                          "-image cancelicon -command {" & Close_Dialog_Button &
                          " invoke;CancelOrder " &
@@ -1188,19 +1187,26 @@ package body Ships.UI.Modules is
                      Message => "Cancel current crafting order");
                   Tcl.Tk.Ada.Grid.Grid
                     (Slave => Info_Button,
-                     Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                     Options =>
+                       "-row" & Current_Row'Img &
+                       " -column 2 -sticky n -padx {5 0}");
                   Bind
                     (Widgt => Info_Button, Sequence => "<Escape>",
                      Script => "{" & Close_Dialog_Button & " invoke;break}");
+                  Height :=
+                    Height +
+                    Positive'Value
+                      (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+               else
+                  Add_Label
+                    (Name => Module_Frame & ".orderlbl", Text => "Order:",
+                     Row => Current_Row);
+                  Add_Label
+                    (Name => Module_Frame & ".orderlbl2", Text => "not set",
+                     Row => Current_Row, Column => 1, Count_Height => True);
                end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Order_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Order_Box, Info => "reqheight"));
             end Show_Order_Info_Block;
+         -- Show information about medical rooms
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Block :
             declare
@@ -1219,14 +1225,20 @@ package body Ships.UI.Modules is
                      exit Find_Healing_Tool_Loop;
                   end if;
                end loop Find_Healing_Tool_Loop;
+               Current_Row := Current_Row + 1;
                Add_Owners_Info
-                 (Owners_Name => "Medic", Add_Button => Has_Healing_Tool);
+                 (Owners_Name => "Medic", Add_Button => Has_Healing_Tool,
+                  Row => Current_Row);
             end Find_Healing_Tool_Block;
+         -- Show information about medical rooms
          when TRAINING_ROOM =>
+            -- Show information about trainees
+            Current_Row := Current_Row + 1;
             Add_Owners_Info
               (Owners_Name => "Trainee",
                Add_Button =>
-                 (if Module.Trained_Skill > 0 then True else False));
+                 (if Module.Trained_Skill > 0 then True else False), Row => Current_Row);
+            -- Show information about trained skill
             Show_Skill_Info_Block :
             declare
                Skill_Box: constant Ttk_Frame :=
@@ -1235,6 +1247,7 @@ package body Ships.UI.Modules is
                     options => "-width 360");
                Train_Text: Unbounded_String := Null_Unbounded_String;
             begin
+               Current_Row := Current_Row + 1;
                if Module.Trained_Skill > 0 then
                   Train_Text :=
                     To_Unbounded_String
