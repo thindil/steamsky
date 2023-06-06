@@ -1173,7 +1173,7 @@ package body Ships.UI.Modules is
                   Add_Label
                     (Name => Module_Frame & ".ordertimelbl2",
                      Text => Positive'Image(Module.Crafting_Time) & " mins",
-                     Row => Current_Row, Column => 1, Count_Height => True);
+                     Row => Current_Row, Column => 1);
                   Info_Button :=
                     Create
                       (pathName => Module_Frame & ".orderbutton",
@@ -1230,46 +1230,44 @@ package body Ships.UI.Modules is
                  (Owners_Name => "Medic", Add_Button => Has_Healing_Tool,
                   Row => Current_Row);
             end Find_Healing_Tool_Block;
-         -- Show information about medical rooms
+         -- Show information about training rooms
          when TRAINING_ROOM =>
             -- Show information about trainees
             Current_Row := Current_Row + 1;
             Add_Owners_Info
               (Owners_Name => "Trainee",
                Add_Button =>
-                 (if Module.Trained_Skill > 0 then True else False), Row => Current_Row);
+                 (if Module.Trained_Skill > 0 then True else False),
+               Row => Current_Row);
             -- Show information about trained skill
             Show_Skill_Info_Block :
             declare
-               Skill_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".traininfo",
-                    options => "-width 360");
                Train_Text: Unbounded_String := Null_Unbounded_String;
             begin
-               Current_Row := Current_Row + 1;
                if Module.Trained_Skill > 0 then
                   Train_Text :=
                     To_Unbounded_String
                       (Source =>
-                         "Set for training " &
                          To_String
                            (Source =>
                               SkillsData_Container.Element
                                 (Container => Skills_List,
                                  Index => Module.Trained_Skill)
-                                .Name) &
-                         ".");
+                                .Name));
                else
-                  Train_Text :=
-                    To_Unbounded_String(Source => "Must be set for training.");
+                  Train_Text := To_Unbounded_String(Source => "not set");
                end if;
+               Current_Row := Current_Row + 1;
                Add_Label
-                 (Name => Skill_Box & ".trainlbl",
-                  Text => To_String(Source => Train_Text));
+                 (Name => Module_Frame & ".trainlbl", Text => "Trained skill:",
+                  Row => Current_Row);
+               Add_Label
+                 (Name => Module_Frame & ".trainlbl2",
+                  Text => To_String(Source => Train_Text), Row => Current_Row,
+                  Column => 1);
                Info_Button :=
                  Create
-                   (pathName => Skill_Box & ".button",
+                   (pathName => Module_Frame & ".trainbutton",
                     options =>
                       "-image assigncrewicon -command {" &
                       Close_Dialog_Button & " invoke;ShowAssignSkill " &
@@ -1281,56 +1279,47 @@ package body Ships.UI.Modules is
                     "Assign a skill which will be trained in the training room.");
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Info_Button,
-                  Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+                  Options =>
+                    "-row" & Current_Row'Img &
+                    " -column 2 -sticky n -padx {5 0}");
                Bind
                  (Widgt => Info_Button, Sequence => "<Escape>",
                   Script => "{" & Close_Dialog_Button & " invoke;break}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Skill_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
                Height :=
                  Height +
                  Positive'Value
-                   (Winfo_Get(Widgt => Skill_Box, Info => "reqheight"));
+                   (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
             end Show_Skill_Info_Block;
+         -- Show information about battering rams
          when BATTERING_RAM =>
-            Add_Ram_Info_Block :
-            declare
-               Strength_Box: constant Ttk_Frame :=
-                 Create
-                   (pathName => Module_Frame & ".strengthinfo",
-                    options => "-width 360");
-            begin
-               Module_Max_Value :=
-                 Positive
-                   (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
-                    1.5);
-               Add_Label
-                 (Name => Strength_Box & ".strengthlbl",
-                  Text =>
-                    "Strength:" & Positive'Image(Module.Damage2) &
-                    (if Module.Damage2 = Module_Max_Value then " (max upgrade)"
-                     else ""));
-               if Module.Damage2 < Module_Max_Value then
-                  Add_Upgrade_Button
-                    (Upgrade => MAX_VALUE,
-                     Tooltip => "damage of battering ram", Box => Strength_Box,
-                     Module => Module);
-               end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Strength_Box, Options => "-sticky w");
-               Tcl_Eval(interp => Interp, strng => "update");
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Strength_Box, Info => "reqheight"));
-            end Add_Ram_Info_Block;
+            Current_Row := Current_Row + 1;
+            Module_Max_Value :=
+              Positive
+                (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
+                 1.5);
+            Add_Label
+              (Name => Module_Frame & ".strengthlbl", Text => "Strength:",
+               Row => Current_Row);
+            Add_Label
+              (Name => Module_Frame & ".strengthlbl2",
+               Text =>
+                 Positive'Image(Module.Damage2) &
+                 (if Module.Damage2 = Module_Max_Value then " (max upgrade)"
+                  else ""),
+               Row => Current_Row, Column => 1, Count_Height => True);
+            if Module.Damage2 < Module_Max_Value then
+               Add_Upgrade_Button
+                 (Upgrade => MAX_VALUE, Tooltip => "damage of battering ram",
+                  Box => Module_Frame, Module => Module, Row => Current_Row,
+                  Column => 2, Button_Name => "damagebutton");
+            end if;
          when others =>
             null;
       end case;
       if Get_Module(Index => Module.Proto_Index).Description /=
         Short_String.Null_Bounded_String then
          Current_Row := Current_Row + 1;
+         Tcl_Eval(interp => Interp, strng => "update");
          Add_Label
            (Name => Module_Frame & ".lbldescription",
             Text =>
@@ -1338,7 +1327,10 @@ package body Ships.UI.Modules is
               To_String
                 (Source =>
                    Get_Module(Index => Module.Proto_Index).Description),
-            Row => Current_Row, Count_Height => True, Column_Span => 4);
+            Row => Current_Row, Count_Height => True, Column_Span => 4,
+            Wrap_Length =>
+              Positive'Value
+                (Winfo_Get(Widgt => Module_Frame, Info => "reqwidth")));
       end if;
       Add_Close_Button
         (Name => Module_Frame & ".button", Text => "Close",
