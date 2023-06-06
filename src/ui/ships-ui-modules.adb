@@ -133,7 +133,7 @@ package body Ships.UI.Modules is
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Frame & ".info",
-           options => "-wrap char -height 20 -width 15");
+           options => "-wrap char -height 5 -width 15");
       Height: Positive := 10;
       Close_Dialog_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Frame & ".button");
@@ -851,7 +851,7 @@ package body Ships.UI.Modules is
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
                   Options =>
-                    "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
+                    "-row" & Current_Row'Img & " -column 1 -sticky we");
             end Add_Cleanliness_Info_Block;
             -- Show information about cabin's quality
             Current_Row := Current_Row + 1;
@@ -876,7 +876,7 @@ package body Ships.UI.Modules is
                   else ""));
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Progress_Bar,
-               Options => "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
+               Options => "-row" & Current_Row'Img & " -column 1 -sticky we");
             if Module.Quality < Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
@@ -954,7 +954,7 @@ package body Ships.UI.Modules is
                Ammo_Text: constant Tk_Text :=
                  Create
                    (pathName => Module_Frame & ".ammoinfo",
-                    options => "-wrap char -height 3 -width 36");
+                    options => "-wrap char -height 3 -width 15");
             begin
                Add_Label
                  (Name => Module_Frame & ".ammolbl", Text => "Ammunition:",
@@ -1068,7 +1068,7 @@ package body Ships.UI.Modules is
                        (Slave => Info_Button,
                         Options =>
                           "-row" & Current_Row'Img &
-                          " -column 2 -sticky n -padx {5 0}");
+                          " -column 2 -sticky w -padx {5 0}");
                      Bind
                        (Widgt => Info_Button, Sequence => "<Escape>",
                         Script =>
