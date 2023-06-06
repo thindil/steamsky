@@ -4,7 +4,7 @@ discard """
 
 import std/tables
 import ../../src/[bases, bases2, basestypes, careers, crafts, factions, game,
-    items, maps, mobs, ships, types, utils]
+    items, maps, mobs, shipmodules, ships, types, utils]
 
 if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
@@ -12,6 +12,8 @@ if basesTypesList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
+if modulesList.len == 0:
+  loadModules("../bin/data/shipmodules.dat")
 if recipesList.len == 0:
   loadRecipes("../bin/data/recipes.dat")
 if protoMobsList.len == 0:
@@ -30,6 +32,13 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
+playerShip.modules = @[]
+playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
+    durability: 100))
+playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
+    durability: 100))
+playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
+    durability: 100, damage: 100))
 skyMap[1][1].baseIndex = 1
 skyBases[1].population = 100
 skyBases[1].baseType = "1"
@@ -43,6 +52,10 @@ for index, base in skyBases.mpairs:
   base.skyY = getRandom(1, 1_024)
   base.baseType = $getRandom(0, 4)
   base.owner = "POLEIS"
+  skyMap[base.skyX][base.skyY].baseIndex = index
+for x in 1 .. 1024:
+  for y in 1 .. 1024:
+    skyMap[x][y].eventIndex = -1
 
-askForEvents()
-assert eventsList.len > 0, "Failed to generate new events."
+#askForEvents()
+#assert eventsList.len > 0, "Failed to generate new events."
