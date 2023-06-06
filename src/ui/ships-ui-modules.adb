@@ -370,7 +370,7 @@ package body Ships.UI.Modules is
          Message => To_String(Source => Status_Tooltip));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Progress_Bar,
-         Options => "-row" & Current_Row'Img & " -column 1 -padx {5 0}");
+         Options => "-row" & Current_Row'Img & " -column 1 -sticky we");
       if Player_Ship.Repair_Module = Module_Index then
          Info_Button :=
            Create
@@ -429,8 +429,7 @@ package body Ships.UI.Modules is
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".lblrepairmaterial",
-         Text => "Repair/Upgrade material:", Row => Current_Row,
-         Wrap_Length => 150);
+         Text => "Repair material:", Row => Current_Row, Wrap_Length => 200);
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -479,7 +478,7 @@ package body Ships.UI.Modules is
                 (Metrics(Font => "InterfaceFont", Option => "-linespace"))));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
-         Options => "-row" & Current_Row'Img & " -column 1");
+         Options => "-row" & Current_Row'Img & " -column 1 -sticky nw");
       Count_Height_Block :
       declare
          New_Height: Positive :=
@@ -496,9 +495,8 @@ package body Ships.UI.Modules is
       -- Show module's upgrade skill
       Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".upgradeskill",
-         Text => "Repair/Upgrade skill:", Row => Current_Row,
-         Wrap_Length => 150, Count_Height => True);
+        (Name => Module_Frame & ".upgradeskill", Text => "Repair skill:",
+         Row => Current_Row, Wrap_Length => 200, Count_Height => True);
       Add_Label
         (Name => Module_Frame & ".upgradeskill2",
          Text =>
@@ -601,7 +599,8 @@ package body Ships.UI.Modules is
             Row => Current_Row);
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar,
-            Options => "-row" & Current_Row'Img & " -column 1");
+            Options =>
+              "-row" & Current_Row'Img & " -column 1 -sticky we -padx {5 0}");
          if Player_Ship.Upgrade_Module = Module_Index then
             Info_Button :=
               Create
@@ -729,7 +728,8 @@ package body Ships.UI.Modules is
          when CARGO_ROOM =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".maxcargolbl", Text => "Max cargo:");
+              (Name => Module_Frame & ".maxcargolbl", Text => "Max cargo:",
+               Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".maxcargolbl2",
                Text =>
@@ -741,8 +741,8 @@ package body Ships.UI.Modules is
          when HULL =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".modules",
-               Text => "Modules installed:");
+              (Name => Module_Frame & ".modules", Text => "Modules installed:",
+               Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".modules2",
                Text =>
@@ -768,7 +768,7 @@ package body Ships.UI.Modules is
                  (Upgrade => MAX_VALUE,
                   Tooltip =>
                     "hull's size so it can have more modules installed",
-                  Box => Module_Frame, Module => Module, Column => 3,
+                  Box => Module_Frame, Module => Module, Column => 2,
                   Button_Name => "resizebutton", Row => Current_Row);
                Height :=
                  Height +
