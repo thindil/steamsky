@@ -1105,42 +1105,44 @@ package body Ships.UI.Modules is
                  Positive'Value
                    (Winfo_Get(Widgt => Ammo_Text, Info => "reqheight"));
             end Show_Ammo_Block;
+            -- Show information about guns fire rate
             if Module.M_Type = GUN then
+               Current_Row := Current_Row + 1;
                Add_Label
                  (Name => Module_Frame & ".lblfirerate",
+                  Text => "Max fire rate:", Row => Current_Row);
+               Add_Label
+                 (Name => Module_Frame & ".lblfirerate2",
                   Text =>
-                    "Max fire rate:" &
                     (if Get_Module(Index => Module.Proto_Index).Speed > 0 then
                        Positive'Image
                          (Get_Module(Index => Module.Proto_Index).Speed) &
-                       "/round"
-                     else "1/" &
-                       Trim
-                         (Source =>
-                            Integer'Image
-                              (abs
-                               (Get_Module(Index => Module.Proto_Index)
-                                  .Speed)),
-                          Side => Left) &
-                       " rounds"));
-               Height :=
-                 Height +
-                 Positive'Value
-                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
+                       " each turn"
+                     else "1 every " &
+                       Integer'Image
+                         (abs
+                          (Get_Module(Index => Module.Proto_Index).Speed)) &
+                       " turns"),
+                  Row => Current_Row, Column => 1, Count_Height => True);
             end if;
+         -- Show information about turrets
          when TURRET =>
+            Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".lblturretgun",
+              (Name => Module_Frame & ".lblturretgun", Text => "Weapon: ",
+               Row => Current_Row);
+            Add_Label
+              (Name => Module_Frame & ".lblturretgun2",
                Text =>
-                 "Weapon: " &
                  (if Module.Gun_Index > 0 then
                     To_String
                       (Source => Player_Ship.Modules(Module.Gun_Index).Name)
-                  else "none"));
-            Height :=
-              Height +
-              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+                  else "none"),
+               Row => Current_Row, Column => 1, Count_Height => True);
+         -- Show information about workshops
          when WORKSHOP =>
+            -- Show information about workshop's owners
+            Current_Row := Current_Row + 1;
             Add_Owners_Info
               (Owners_Name => "Worker",
                Add_Button =>
