@@ -147,6 +147,43 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   updateGame(minutes = 30)
 
+proc askForBases*() =
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    return
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var amount, radius: Natural
+  # Asking in base
+  if baseIndex > 0:
+    if skyBases[baseIndex].population < 150:
+      amount = 10
+      radius = 10
+    elif skyBases[baseIndex].population < 300:
+      amount = 20
+      radius = 20
+    else:
+      amount = 40
+      radius = 40
+    skyBases[baseIndex].askedForBases = true
+    addMessage(message = playerShip.crew[traderIndex].name &
+        " asked for directions to other bases in base '" & skyBases[
+            baseIndex].name &
+        "'.", mType = orderMessage)
+    gainRep(baseIndex = baseIndex, points = 1)
+  else:
+    radius = 40
+    let shipIndex = eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex
+    amount = (if protoShipsList[shipIndex].crew.len <
+        5: 3 elif protoShipsList[shipIndex].crew.len < 10: 5 else: 10)
+    addMessage(message = playerShip.crew[traderIndex].name &
+        " asked ship '" & generateShipName(factionIndex = protoShipsList[
+            shipIndex].owner) & "' for directions to other bases.",
+            mType = orderMessage)
+    deleteEvent(eventIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex)
+    updateOrders(ship = playerShip)
+
 # Temporary code for interfacing with Ada
 
 proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
