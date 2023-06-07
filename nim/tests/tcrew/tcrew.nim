@@ -51,6 +51,8 @@ assert getSkillLevelName(92) == "92", "Failed to get skill level number for valu
 assert findCabin(0) == 0, "Failed to find a cabin of the player."
 assert findCabin(100) == -1, "Failed to not find a cabin for a non-existing crew member."
 
+playerShip.crew[0].health = 100
 updateCrew(1, 1)
 playerShip.crew[0].health = 0
+saveDirectory = ""
 updateCrew(1, 1)
