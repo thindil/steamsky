@@ -12,7 +12,7 @@ currentGoal = goalsList[2]
 
 var amount = currentGoal.amount
 updateGoal(GoalTypes.destroy, "PIRATES", 1)
-assert currentGoal.amount == (amount - 1)
+assert currentGoal.amount == (amount - 1), "Failed to update the current goal."
 amount = currentGoal.amount
 updateGoal(reputation, "PIRATES", 1)
-assert currentGoal.amount == amount
+assert currentGoal.amount == amount, "Failed to not update the current goal."
