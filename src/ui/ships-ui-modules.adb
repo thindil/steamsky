@@ -65,7 +65,7 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Table with info about the installed modules on the player ship
    -- SOURCE
-   Modules_Table: Table_Widget (Amount => 2);
+   Modules_Table: Table_Widget (Amount => 3);
    -- ****
 
    -- ****iv* SUModules/SUModules.Modules_Indexes
@@ -2331,6 +2331,7 @@ package body Ships.UI.Modules is
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
+      Info_Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Modules_Table.Row_Height = 1 then
          Modules_Table :=
@@ -2338,7 +2339,8 @@ package body Ships.UI.Modules is
              (Parent => Widget_Image(Win => Ship_Info_Frame),
               Headers =>
                 (1 => To_Unbounded_String(Source => "Name"),
-                 2 => To_Unbounded_String(Source => "Durability")),
+                 2 => To_Unbounded_String(Source => "Durability"),
+                 3 => To_Unbounded_String(Source => "Additional info")),
               Scrollbar =>
                 Get_Widget
                   (pathName => Main_Paned & ".shipinfoframe.modules.scrolly"),
@@ -2373,7 +2375,58 @@ package body Ships.UI.Modules is
             Max_Value => Player_Ship.Modules(Module_Index).Max_Durability,
             Tooltip => "Show the module's info",
             Command => "ShowModuleInfo" & Positive'Image(Module_Index),
-            Column => 2, New_Row => True);
+            Column => 2);
+         case Player_Ship.Modules(Module_Index).M_Type is
+            when GUN =>
+               if Player_Ship.Modules(Module_Index).Ammo_Index in
+                   Inventory_Container.First_Index
+                         (Container => Player_Ship.Cargo) ..
+                         Inventory_Container.Last_Index
+                           (Container => Player_Ship.Cargo)
+                 and then
+                   Get_Proto_Item
+                     (Index =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo,
+                           Index =>
+                             Player_Ship.Modules(Module_Index).Ammo_Index)
+                          .Proto_Index)
+                     .I_Type =
+                   Get_Ada_Item_Type
+                     (Item_Index =>
+                        Get_Module
+                          (Index =>
+                             Player_Ship.Modules(Module_Index).Proto_Index)
+                          .Value -
+                        1) then
+                  Info_Text :=
+                    To_Unbounded_String
+                      (Source =>
+                         "Uses: " &
+                         To_String
+                           (Source =>
+                              Get_Proto_Item
+                                (Index =>
+                                   Inventory_Container.Element
+                                     (Container => Player_Ship.Cargo,
+                                      Index =>
+                                        Player_Ship.Modules(Module_Index)
+                                          .Ammo_Index)
+                                     .Proto_Index)
+                                .Name));
+               else
+                  Info_Text :=
+                    To_Unbounded_String
+                      (Source => "No ammunition assigned to the gun.");
+               end if;
+            when others =>
+               null;
+         end case;
+         Add_Button
+           (Table => Modules_Table, Text => To_String(Source => Info_Text),
+            Tooltip => "Show the module's info",
+            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
+            Column => 3, New_Row => True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when Modules_Table.Row =
            Game_Settings.Lists_Limit + 1;
