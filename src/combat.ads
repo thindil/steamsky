@@ -49,6 +49,13 @@ package Combat is
    -- SOURCE
    type Guns_Info_Array is array(1 .. 3) of Integer with
       Default_Component_Value => 0;
+      -- ****
+
+      -- ****d* Combat/Combat.Empty_Guns
+      -- FUNCTION
+      -- An empty gun info
+      -- SOURCE
+   Empty_Guns: constant Guns_Info_Array := (others => <>);
    -- ****
 
    -- ****t* Combat/Combat.Guns_Container
@@ -99,6 +106,13 @@ package Combat is
       Harpoon_Duration: Natural := 0;
       Guns: Guns_Container.Vector;
    end record;
+   -- ****
+
+   -- ****d* Combat/Combat.Empty_Enemy
+   -- FUNCTION
+   -- Empty enemy info data
+   -- SOURCE
+   Empty_Enemy: constant Enemy_Record := (others => <>);
    -- ****
 
    -- ****v* Combat/Combat.Enemy
