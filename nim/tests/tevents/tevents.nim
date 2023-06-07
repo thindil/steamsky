@@ -44,6 +44,7 @@ var enemies: seq[Positive] = @[]
 generateEnemies(enemies)
 assert enemies.len > 0, "Failed to generate the list of enemy ships."
 
+eventsList = @[]
 updateEvents(1)
 
 eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
