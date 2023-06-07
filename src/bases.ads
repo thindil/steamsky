@@ -258,14 +258,13 @@ package Bases is
       -- FUNCTION
       -- Ask in base for direction for random events
       -- SOURCE
-   procedure Ask_For_Events with
-      Test_Case => (Name => "Test_AskForEvents", Mode => Robustness);
-      -- ****
+   procedure Ask_For_Events;
+   -- ****
 
-      -- ****f* Bases/Bases.Update_Population
-      -- FUNCTION
-      -- Update base population if needed
-      -- SOURCE
+   -- ****f* Bases/Bases.Update_Population
+   -- FUNCTION
+   -- Update base population if needed
+   -- SOURCE
    procedure Update_Population;
    -- ****
 
