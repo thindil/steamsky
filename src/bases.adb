@@ -134,11 +134,22 @@ package body Bases is
       if Trader_Index = 0 then
          return;
       end if;
+      Get_Ada_Map_Cell
+        (X => Player_Ship.Sky_X, Y => Player_Ship.Sky_X,
+         Base_Index =>
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
+         Visited =>
+           (if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then 1
+            else 0),
+         Event_Index =>
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index,
+         Mission_Index =>
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
       Set_Nim_Events;
       Ask_Ada_For_Bases;
-      Update_Known_Bases_Loop:
+      Update_Known_Bases_Loop :
       for I in Sky_Bases'Range loop
          Set_Ada_Base_Known(B_Index => I, B_Known => Known);
          if Known = 1 then

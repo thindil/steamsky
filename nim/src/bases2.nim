@@ -153,8 +153,8 @@ proc askForBases*() =
     return
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    shipIndex = eventsList[skyMap[playerShip.skyX][
-        playerShip.skyY].eventIndex].shipIndex
+    shipIndex = (if baseIndex == 0: eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex else: 0)
   var amount, radius: Natural
   # Asking in base
   if baseIndex > 0:
