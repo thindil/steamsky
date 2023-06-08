@@ -60,7 +60,7 @@ package body Combat is
 
       Enemy_Ship: Ship_Record;
       Enemy_Guns: Guns_Container.Vector;
-      Shooting_Speed: Integer;
+      Shooting_Speed: Integer := 0;
       function Count_Perception
         (Spotter, Spotted: Ship_Record) return Natural is
          Result: Natural := 0;
@@ -141,8 +141,8 @@ package body Combat is
       Add_Enemy_Cargo_Block :
       declare
          Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
-         Item_Amount: Positive;
-         New_Item_Index: Natural;
+         Item_Amount: Positive := 1;
+         New_Item_Index: Natural := 0;
          Item: Inventory_Data;
       begin
          Count_Free_Space_Loop :
