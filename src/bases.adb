@@ -145,6 +145,7 @@ package body Bases is
                Mission_Index => Sky_Map(X, Y).Mission_Index);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
+      Get_Game_Date;
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
       Set_Nim_Events;
@@ -199,6 +200,7 @@ package body Bases is
                Mission_Index => Sky_Map(X, Y).Mission_Index);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
+      Get_Game_Date;
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
       Set_Nim_Events;
