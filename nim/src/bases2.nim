@@ -173,6 +173,7 @@ proc askForBases*() =
         " asked for directions to other bases in base '" & skyBases[
             baseIndex].name &
         "'.", mType = orderMessage)
+  # Asking friendly ship
   else:
     radius = 40
     amount = (if protoShipsList[shipIndex].crew.len <

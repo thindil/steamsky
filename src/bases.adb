@@ -134,17 +134,17 @@ package body Bases is
       if Trader_Index = 0 then
          return;
       end if;
-      Get_Ada_Map_Cell
-        (X => Player_Ship.Sky_X, Y => Player_Ship.Sky_X,
-         Base_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
-         Visited =>
-           (if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then 1
-            else 0),
-         Event_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index,
-         Mission_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+      Get_Map_Y_Loop :
+      for Y in 1 .. 1_024 loop
+         Get_Map_X_Loop :
+         for X in 1 .. 1_024 loop
+            Get_Ada_Map_Cell
+              (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
+               Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
+               Event_Index => Sky_Map(X, Y).Event_Index,
+               Mission_Index => Sky_Map(X, Y).Mission_Index);
+         end loop Get_Map_X_Loop;
+      end loop Get_Map_Y_Loop;
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
       Set_Nim_Events;
