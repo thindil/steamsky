@@ -15,10 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
-with Utils;
 with Maps; use Maps;
 with Trades; use Trades;
 
@@ -113,143 +111,48 @@ package body Bases is
          Date_Type => 2);
    end Generate_Recruits;
 
+   procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaBaseKnown";
+
    procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
       Import => True,
       Convention => C,
       External_Name => "getAdaBaseKnown";
 
    procedure Ask_For_Bases is
-      use Messages;
-      use Utils;
-      use Tiny_String;
-
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Tmp_Base_Index: Extended_Base_Range := 0;
-      Ship_Index: Natural := 0;
-      Unknown_Bases: Extended_Base_Range := 0;
       Trader_Index: constant Natural := Find_Member(Order => TALK);
-      Amount: Natural range 0 .. 40;
-      Radius: Integer range -40 .. 40;
-      Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40 := 0;
+      Known: Natural;
+      procedure Ask_Ada_For_Bases with
+         Import => True,
+         Convention => C,
+         External_Name => "askAdaForBases";
    begin
       if Trader_Index = 0 then
          return;
       end if;
-      if Base_Index > 0 then -- asking in base
-         if Sky_Bases(Base_Index).Population < 150 then
-            Amount := 10;
-            Radius := 10;
-         elsif Sky_Bases(Base_Index).Population < 300 then
-            Amount := 20;
-            Radius := 20;
-         else
-            Amount := 40;
-            Radius := 40;
+      Set_Base_In_Nim(Base_Index => Base_Index);
+      Set_Ship_In_Nim;
+      Set_Nim_Events;
+      Ask_Ada_For_Bases;
+      Update_Known_Bases_Loop:
+      for I in Sky_Bases'Range loop
+         Set_Ada_Base_Known(B_Index => I, B_Known => Known);
+         if Known = 1 then
+            Sky_Bases(I).Known := True;
          end if;
-         Gain_Rep(Base_Index => Base_Index, Points => 1);
-         Sky_Bases(Base_Index).Asked_For_Bases := True;
-         Add_Message
-           (Message =>
-              To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
-              " asked for directions to other bases in base '" &
-              To_String(Source => Sky_Bases(Base_Index).Name) & "'.",
-            M_Type => ORDERMESSAGE);
-      else -- asking friendly ship
-         Radius := 40;
-         Ship_Index :=
-           Events_List
-             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-             .Ship_Index;
-         Amount :=
-           (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5 then 3
-            elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
-            then 5
-            else 10);
-         Add_Message
-           (Message =>
-              To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
-              " asked ship '" &
-              To_String
-                (Source =>
-                   Generate_Ship_Name
-                     (Owner =>
-                        Get_Proto_Ship(Proto_Index => Ship_Index).Owner)) &
-              "' for directions to other bases.",
-            M_Type => ORDERMESSAGE);
-         Delete_Event
-           (Event_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
-         Update_Orders(Ship => Player_Ship);
-      end if;
-      Bases_X_Loop :
-      for X in -Radius .. Radius loop
-         Bases_Y_Loop :
-         for Y in -Radius .. Radius loop
-            Temp_X := Player_Ship.Sky_X + X;
-            Normalize_Coord(Coord => Temp_X);
-            Temp_Y := Player_Ship.Sky_Y + Y;
-            Normalize_Coord(Coord => Temp_Y, Is_X_Axis => False);
-            Tmp_Base_Index := Sky_Map(Temp_X, Temp_Y).Base_Index;
-            if Tmp_Base_Index > 0
-              and then not Sky_Bases(Tmp_Base_Index).Known then
-               Sky_Bases(Tmp_Base_Index).Known := True;
-               Get_Ada_Base_Known(B_Index => Tmp_Base_Index, Known => 1);
-               Amount := Amount - 1;
-               exit Bases_X_Loop when Amount = 0;
-            end if;
-         end loop Bases_Y_Loop;
-      end loop Bases_X_Loop;
-      if Amount > 0 then
-         if Base_Index > 0 then -- asking in base
-            if Sky_Bases(Base_Index).Population < 150 and then Amount > 1 then
-               Amount := 1;
-            elsif Sky_Bases(Base_Index).Population < 300
-              and then Amount > 2 then
-               Amount := 2;
-            elsif Amount > 4 then
-               Amount := 4;
-            end if;
-         else -- asking friendly ship
-            Amount :=
-              (if Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 5
-               then 1
-               elsif Get_Proto_Ship(Proto_Index => Ship_Index).Crew.Length < 10
-               then 2
-               else 4);
-         end if;
-         Count_Unknown_Bases_Loop :
-         for Sky_Base of Sky_Bases loop
-            if not Sky_Base.Known then
-               Unknown_Bases := Unknown_Bases + 1;
-            end if;
-            exit Count_Unknown_Bases_Loop when Unknown_Bases >= Amount;
-         end loop Count_Unknown_Bases_Loop;
-         if Unknown_Bases >= Amount then
-            Reveal_Random_Bases_Loop :
-            loop
-               Tmp_Base_Index := Get_Random(Min => 1, Max => 1_024);
-               if not Sky_Bases(Tmp_Base_Index).Known then
-                  Sky_Bases(Tmp_Base_Index).Known := True;
-                  Get_Ada_Base_Known(B_Index => Tmp_Base_Index, Known => 1);
-                  Amount := Amount - 1;
-               end if;
-               exit Reveal_Random_Bases_Loop when Amount = 0;
-            end loop Reveal_Random_Bases_Loop;
-         else
-            Reveal_Bases_Loop :
-            for B in Sky_Bases'Range loop
-               if not Sky_Bases(B).Known then
-                  Sky_Bases(B).Known := True;
-                  Get_Ada_Base_Known(B_Index => B, Known => 1);
-               end if;
-            end loop Reveal_Bases_Loop;
-         end if;
-      end if;
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Update_Game(Minutes => 30);
+      end loop Update_Known_Bases_Loop;
+      Events_List.Clear;
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. 100 loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Get_Base_From_Nim(Base_Index => Base_Index);
+      Set_Game_Date;
    end Ask_For_Bases;
 
    procedure Ask_For_Events is
@@ -744,10 +647,6 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseType";
-      procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseKnown";
       procedure Set_Ada_Base_Asked_For_Bases
         (B_Index: Integer; Asked_For_Bases: out Integer) with
          Import => True,
