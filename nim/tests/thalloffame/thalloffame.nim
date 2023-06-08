@@ -10,4 +10,4 @@ gameStats.points = 100
 saveDirectory = "."
 
 updateHallOfFame("TestPlayer", "TestDeath")
-assert hallOfFameArray[1].name == "TestPlayer"
+assert hallOfFameArray[1].name == "TestPlayer", "Failed to add entry to Hall of Fame."
