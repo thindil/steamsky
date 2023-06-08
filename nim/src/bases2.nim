@@ -215,12 +215,32 @@ proc askForBases*() =
         unknownBases.inc
       if unknownBases >= amount:
         break
+    if unknownBases >= amount:
+      while true:
+        let tmpBaseIndex = getRandom(min = 1, max = 1_024)
+        if not skyBases[tmpBaseIndex].known:
+          skyBases[tmpBaseIndex].known = true
+          amount.dec
+        if amount == 0:
+          break
+    else:
+      for base in skyBases.mitems:
+        if not base.known:
+          base.known = true
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  updateGame(minutes = 30)
 
 # Temporary code for interfacing with Ada
 
 proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     askForEvents()
+  except KeyError, IOError, Exception:
+    discard
+
+proc askAdaForBases() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    askForBases()
   except KeyError, IOError, Exception:
     discard
 
