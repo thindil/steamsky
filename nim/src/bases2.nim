@@ -151,7 +151,10 @@ proc askForBases*() =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     return
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    shipIndex = eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex
   var amount, radius: Natural
   # Asking in base
   if baseIndex > 0:
@@ -165,15 +168,13 @@ proc askForBases*() =
       amount = 40
       radius = 40
     skyBases[baseIndex].askedForBases = true
+    gainRep(baseIndex = baseIndex, points = 1)
     addMessage(message = playerShip.crew[traderIndex].name &
         " asked for directions to other bases in base '" & skyBases[
             baseIndex].name &
         "'.", mType = orderMessage)
-    gainRep(baseIndex = baseIndex, points = 1)
   else:
     radius = 40
-    let shipIndex = eventsList[skyMap[playerShip.skyX][
-        playerShip.skyY].eventIndex].shipIndex
     amount = (if protoShipsList[shipIndex].crew.len <
         5: 3 elif protoShipsList[shipIndex].crew.len < 10: 5 else: 10)
     addMessage(message = playerShip.crew[traderIndex].name &
@@ -183,6 +184,37 @@ proc askForBases*() =
     deleteEvent(eventIndex = skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex)
     updateOrders(ship = playerShip)
+  block findBases:
+    for x in -radius .. radius:
+      for y in -radius .. radius:
+        var
+          tempX: cint = (playerShip.skyX + x).cint
+          tempY: cint = (playerShip.skyY + y).cint
+        normalizeCoord(coord = tempX)
+        normalizeCoord(coord = tempY, isXAxis = 0)
+        let tmpBaseIndex = skyMap[tempX][tempY].baseIndex
+        if tmpBaseIndex > 0 and not skyBases[tmpBaseIndex].known:
+          skyBases[tmpBaseIndex].known = true
+          amount.dec
+          if amount == 0:
+            break findBases
+  if amount > 0:
+    if baseIndex > 0:
+      if skyBases[baseIndex].population < 150 and amount > 1:
+        amount = 1
+      elif skyBases[baseIndex].population < 300 and amount > 2:
+        amount = 2
+      elif amount > 4:
+        amount = 4
+    else:
+      amount = (if protoShipsList[shipIndex].crew.len <
+          5: 1 elif protoShipsList[shipIndex].crew.len < 10: 2 else: 4)
+    var unknownBases = 0
+    for base in skyBases:
+      if not base.known:
+        unknownBases.inc
+      if unknownBases >= amount:
+        break
 
 # Temporary code for interfacing with Ada
 
