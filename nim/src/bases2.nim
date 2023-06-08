@@ -147,7 +147,8 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   updateGame(minutes = 30)
 
-proc askForBases*() =
+proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
+    WriteIOEffect, RootEffect].} =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     return
