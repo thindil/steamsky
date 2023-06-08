@@ -2402,7 +2402,7 @@ package body Ships.UI.Modules is
                   Info_Text :=
                     To_Unbounded_String
                       (Source =>
-                         "Uses: " &
+                         "Uses " &
                          To_String
                            (Source =>
                               Get_Proto_Item
@@ -2413,11 +2413,25 @@ package body Ships.UI.Modules is
                                         Player_Ship.Modules(Module_Index)
                                           .Ammo_Index)
                                      .Proto_Index)
-                                .Name));
+                                .Name) &
+                         ", ");
                else
                   Info_Text :=
-                    To_Unbounded_String
-                      (Source => "No ammunition assigned to the gun.");
+                    To_Unbounded_String(Source => "No ammunition assigned, ");
+               end if;
+               if Player_Ship.Modules(Module_Index).Owner(1) = 0 then
+                  Append(Source => Info_Text, New_Item => " no gunner.");
+               else
+                  Append
+                    (Source => Info_Text,
+                     New_Item =>
+                       " " &
+                       To_String
+                         (Source =>
+                            Player_Ship.Crew
+                              (Player_Ship.Modules(Module_Index).Owner(1))
+                              .Name) &
+                       " is gunner.");
                end if;
             when others =>
                null;
