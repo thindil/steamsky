@@ -46,6 +46,7 @@ skyBases[1].askedForEvents = DateRecord(year: 0, month: 0, day: 0, hour: 0, minu
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 skyBases[1].visited = gameDate
 skyBases[1].known = true
+skyBases[1].askedForBases = false
 for x in 1 .. 1024:
   for y in 1 .. 1024:
     skyMap[x][y].eventIndex = -1
@@ -63,3 +64,6 @@ for index, base in skyBases.mpairs:
 
 askForEvents()
 assert eventsList.len > 0, "Failed to generate new events."
+
+askForBases()
+assert skyBases[1].askedForBases, "Failed to ask for bases in a base."
