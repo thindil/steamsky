@@ -2433,8 +2433,48 @@ package body Ships.UI.Modules is
                               .Name) &
                        " is gunner.");
                end if;
+            when WORKSHOP =>
+               Show_Order_Info_Block :
+               declare
+                  Recipe_Name: constant String :=
+                    Get_Workshop_Recipe_Name(Workshop => Module_Index);
+                  Has_Workers: Boolean := False;
+               begin
+                  if Recipe_Name'Length > 0 then
+                     Info_Text := To_Unbounded_String(Source => Recipe_Name);
+                     for Owner of Player_Ship.Modules(Module_Index).Owner loop
+                        if Owner > 0 then
+                           if Has_Workers then
+                              Append
+                                (Source => Info_Text,
+                                 New_Item =>
+                                   ", " &
+                                   To_String
+                                     (Source => Player_Ship.Crew(Owner).Name));
+                           else
+                              Append
+                                (Source => Info_Text,
+                                 New_Item =>
+                                   ", workers: " &
+                                   To_String
+                                     (Source => Player_Ship.Crew(Owner).Name));
+                           end if;
+                           Has_Workers := True;
+                        end if;
+                     end loop;
+                     if not Has_Workers then
+                        Append
+                          (Source => Info_Text,
+                           New_Item => ", no workers assigned");
+                     end if;
+                     Append(Source => Info_Text, New_Item => ".");
+                  else
+                     Info_Text :=
+                       To_Unbounded_String(Source => "No crafting order.");
+                  end if;
+               end Show_Order_Info_Block;
             when others =>
-               null;
+               Info_Text := Null_Unbounded_String;
          end case;
          Add_Button
            (Table => Modules_Table, Text => To_String(Source => Info_Text),
