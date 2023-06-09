@@ -149,6 +149,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
 
 proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect].} =
+  ## Ask for known bases in a base or a friendly ship.
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     return
