@@ -116,16 +116,11 @@ package body Bases is
       Convention => C,
       External_Name => "setAdaBaseKnown";
 
-   procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseKnown";
-
    procedure Ask_For_Bases is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Trader_Index: constant Natural := Find_Member(Order => TALK);
-      Known: Natural;
+      Known: Natural := 0;
       procedure Ask_Ada_For_Bases with
          Import => True,
          Convention => C,
@@ -579,6 +574,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseSize";
+      procedure Get_Ada_Base_Known(B_Index, Known: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseKnown";
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
