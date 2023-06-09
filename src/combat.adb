@@ -59,7 +59,9 @@ package body Combat is
       use Tiny_String;
 
       Enemy_Ship: Ship_Record;
+      --## rule off IMPROPER_INITIALIZATION
       Enemy_Guns: Guns_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Shooting_Speed: Integer := 0;
       function Count_Perception
         (Spotter, Spotted: Ship_Record) return Natural is
@@ -143,7 +145,9 @@ package body Combat is
          Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
          Item_Amount: Positive := 1;
          New_Item_Index: Natural := 0;
+         --## rule off IMPROPER_INITIALIZATION
          Item: Inventory_Data;
+         --## rule on IMPROPER_INITIALIZATION
       begin
          Count_Free_Space_Loop :
          for Module of Enemy_Ship.Modules loop
@@ -153,10 +157,12 @@ package body Combat is
                  Get_Module(Index => Module.Proto_Index).Max_Value;
             end if;
          end loop Count_Free_Space_Loop;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Min_Free_Space :=
            Natural
              (Float(Min_Free_Space) *
               (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Add_Enemy_Cargo_Loop :
          loop
             exit Add_Enemy_Cargo_Loop when Free_Cargo
@@ -189,6 +195,7 @@ package body Combat is
                  (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index,
                   New_Item => Item);
             else
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                if Free_Cargo
                    (Amount =>
                       0 -
@@ -202,6 +209,7 @@ package body Combat is
                         Durability => 100, Name => Null_Bounded_String,
                         Price => 0));
                end if;
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Add_Enemy_Cargo_Loop;
       end Add_Enemy_Cargo_Block;
