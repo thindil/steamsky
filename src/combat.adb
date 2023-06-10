@@ -164,10 +164,8 @@ package body Combat is
               (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
          --## rule on SIMPLIFIABLE_EXPRESSIONS
          Add_Enemy_Cargo_Loop :
-         loop
-            exit Add_Enemy_Cargo_Loop when Free_Cargo
-                (Amount => 0, Ship => Enemy_Ship) <=
-              Min_Free_Space;
+         while Free_Cargo(Amount => 0, Ship => Enemy_Ship) >
+           Min_Free_Space loop
             Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
             Find_Item_Index_Loop :
             for I in 1 .. Get_Proto_Amount loop
@@ -253,44 +251,52 @@ package body Combat is
          end if;
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
-        (Ship => Enemy_Ship, Accuracy => 0, Distance => 10_000,
+        (Ship => Enemy_Ship,
+         Accuracy =>
+           (if
+              Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Max_Value = 0
+            then Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value
+            else Get_Random
+                (Min =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy
+                     .Min_Value,
+                 Max =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy
+                     .Max_Value)),
+         Distance => 10_000,
          Combat_Ai => Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai,
-         Evasion => 0, Loot => 0, Perception => 0, Harpoon_Duration => 0,
-         Guns => Enemy_Guns);
-      Enemy.Accuracy :=
-        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Max_Value = 0
-         then Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value
-         else Get_Random
-             (Min =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value,
-              Max =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy
-                  .Max_Value));
-      Enemy.Evasion :=
-        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value = 0
-         then Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value
-         else Get_Random
-             (Min =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value,
-              Max =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value));
-      Enemy.Perception :=
-        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Max_Value = 0
-         then Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Min_Value
-         else Get_Random
-             (Min =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
-                  .Min_Value,
-              Max =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
-                  .Max_Value));
-      Enemy.Loot :=
-        (if Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value = 0 then
-           Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value
-         else Get_Random
-             (Min => Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value,
-              Max =>
-                Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value));
+         Evasion =>
+           (if Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value = 0
+            then Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value
+            else Get_Random
+                (Min =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion
+                     .Min_Value,
+                 Max =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion
+                     .Max_Value)),
+         Loot =>
+           (if Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value = 0
+            then Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value
+            else Get_Random
+                (Min =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value,
+                 Max =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value)),
+         Perception =>
+           (if
+              Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Max_Value =
+              0
+            then
+              Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Min_Value
+            else Get_Random
+                (Min =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
+                     .Min_Value,
+                 Max =>
+                   Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
+                     .Max_Value)),
+         Harpoon_Duration => 0, Guns => Enemy_Guns);
       if Pilot_Order = 0 then
          Pilot_Order := 2;
          Engineer_Order := 3;
