@@ -79,7 +79,8 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
     result = result - (itemsList[item.protoIndex].weight * item.amount)
   result = result + amount
 
-proc getItemAmount*(itemType: string): Natural =
+proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
+    tags: [].} =
   ## Get the amount of items of the selected type in the player's ship's cargo
   ##
   ## * itemType - the type of items which amount will be get
