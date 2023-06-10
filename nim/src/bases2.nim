@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
-import bases, basestypes, factions, events, game, maps, messages, ships2,
-    shipscrew, types, updategame, utils
+import bases, basestypes, factions, events, game, game2, maps, messages, ships2,
+    shipscrew, types, utils
 
 proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect].} =

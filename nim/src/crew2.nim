@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import crew, game, types, shipsmovement, updategame
+import crew, game, game2, types, shipsmovement
 
 proc waitForRest*() {.sideEffect, raises: [KeyError, IOError, Exception],
     tags: [WriteIOEffect, RootEffect].} =
