@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C.Strings;
 with Factions; use Factions;
 with Config; use Config;
 
@@ -69,17 +70,20 @@ package body Ships.Cargo is
 
    function Get_Item_Amount
      (Item_Type: Tiny_String.Bounded_String) return Natural is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
-      Amount: Natural := 0;
+      function Get_Ada_Item_Amount(I_Type: chars_ptr) return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaItemAmount";
    begin
-      Get_Item_Amount_Loop :
-      for Item of Player_Ship.Cargo loop
-         if Get_Proto_Item(Index => Item.Proto_Index).I_Type = Item_Type then
-            Amount := Amount + Item.Amount;
-         end if;
-      end loop Get_Item_Amount_Loop;
-      return Amount;
+      Get_Ada_Ship_Cargo
+        (Cargo => Inventory_To_Nim(Inventory => Player_Ship.Cargo),
+         Get_Player_Ship => 1);
+      return
+        Get_Ada_Item_Amount
+          (I_Type => New_String(Str => To_String(Source => Item_Type)));
    end Get_Item_Amount;
 
    function Get_Items_Amount(I_Type: String) return Natural is
