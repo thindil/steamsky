@@ -2442,6 +2442,7 @@ package body Ships.UI.Modules is
                begin
                   if Recipe_Name'Length > 0 then
                      Info_Text := To_Unbounded_String(Source => Recipe_Name);
+                     Show_Workers_Info_Loop :
                      for Owner of Player_Ship.Modules(Module_Index).Owner loop
                         if Owner > 0 then
                            if Has_Workers then
@@ -2461,7 +2462,7 @@ package body Ships.UI.Modules is
                            end if;
                            Has_Workers := True;
                         end if;
-                     end loop;
+                     end loop Show_Workers_Info_Loop;
                      if not Has_Workers then
                         Append
                           (Source => Info_Text,
@@ -2473,6 +2474,13 @@ package body Ships.UI.Modules is
                        To_Unbounded_String(Source => "No crafting order.");
                   end if;
                end Show_Order_Info_Block;
+            when ENGINE =>
+               if Player_Ship.Modules(Module_Index).Disabled then
+                  Info_Text :=
+                    To_Unbounded_String(Source => "Engine disabled.");
+               else
+                  Info_Text := Null_Unbounded_String;
+               end if;
             when others =>
                Info_Text := Null_Unbounded_String;
          end case;
