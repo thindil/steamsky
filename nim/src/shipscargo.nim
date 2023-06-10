@@ -79,6 +79,12 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
     result = result - (itemsList[item.protoIndex].weight * item.amount)
   result = result + amount
 
+proc getItemAmount*(itemType: string): Natural =
+  result = 0
+  for item in playerShip.cargo:
+    if itemsList[item.protoIndex].itemType == itemType:
+      result = result + item.amount
+
 # Temporary code for interfacing with Ada
 
 proc updateAdaCargo(protoIndex, amount, durability, cargoIndex, price,
@@ -102,3 +108,9 @@ proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
       return freeCargo(amount = amount, ship = npcShip).cint
     except KeyError:
       return 0
+
+proc getAdaItemAmount(itemType: cstring): cint {.raises: [], tags: [], exportc.} =
+  try:
+    return getItemAmount(itemType = $itemType).cint
+  except KeyError:
+    return 0
