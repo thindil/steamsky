@@ -3,7 +3,7 @@ discard """
 """
 
 import std/tables
-import ../../src/[basestypes, careers, factions, game, items, maps, types, updategame]
+import ../../src/[basestypes, careers, factions, game, game2, items, types]
 
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
