@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.8] - 2023-06-11
 
 ### Added
 - Ability to assign the crew members to the player's ship's training rooms in
