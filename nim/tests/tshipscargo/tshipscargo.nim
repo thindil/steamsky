@@ -23,3 +23,5 @@ assert playerShip.cargo[0].amount == 100
 updateCargo(playerShip, 40, -1)
 
 assert freeCargo(1) > freeCargo(0)
+
+assert getItemAmount("Fuel") == 100
