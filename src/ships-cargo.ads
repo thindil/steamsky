@@ -73,8 +73,7 @@ package Ships.Cargo is
       -- SOURCE
    function Get_Item_Amount
      (Item_Type: Tiny_String.Bounded_String) return Natural with
-      Pre => Tiny_String.Length(Source => Item_Type) > 0,
-      Test_Case => (Name => "Test_GetItemAmount", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Item_Type) > 0;
       -- ****
 
       -- ****f* SCargo/SCargo.Get_Items_Amount
