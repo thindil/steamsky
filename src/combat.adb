@@ -214,7 +214,7 @@ package body Combat is
       Enemy_Guns.Clear;
       Count_Enemy_Shooting_Speed_Loop :
       for I in Enemy_Ship.Modules.Iterate loop
-         if (Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
+         if Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN and
            Enemy_Ship.Modules(I).Durability > 0 then
             if Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index).Speed >
               0 then
@@ -314,7 +314,7 @@ package body Combat is
          Guns.Clear;
          Set_Player_Guns_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            if (Player_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
+            if Player_Ship.Modules(I).M_Type in GUN | HARPOON_GUN and
               Player_Ship.Modules(I).Durability > 0 then
                Guns.Append
                  (New_Item =>
@@ -343,15 +343,15 @@ package body Combat is
          declare
             Player_Perception: constant Natural :=
               Count_Perception(Spotter => Player_Ship, Spotted => Enemy.Ship);
-            Enemy_Perception: Natural := 0;
+            Enemy_Perception: Natural;
          begin
             Old_Speed := Player_Ship.Speed;
             Enemy_Perception :=
               (if Enemy.Perception > 0 then Enemy.Perception
                else Count_Perception
                    (Spotter => Enemy.Ship, Spotted => Player_Ship));
-            if (Player_Perception + Get_Random(Min => 1, Max => 50)) >
-              (Enemy_Perception + Get_Random(Min => 1, Max => 50)) then
+            if Player_Perception + Get_Random(Min => 1, Max => 50) >
+              Enemy_Perception + Get_Random(Min => 1, Max => 50) then
                Add_Message
                  (Message =>
                     "You spotted " & To_String(Source => Enemy.Ship.Name) &
@@ -395,18 +395,18 @@ package body Combat is
       Accuracy_Bonus, Evade_Bonus: Integer := 0;
       Pilot_Index, Engineer_Index, Enemy_Weapon_Index, Enemy_Ammo_Index,
       Enemy_Pilot_Index, Ammo_Index_2: Natural := 0;
-      Distance_Traveled, Speed_Bonus: Integer;
-      Shoot_Message, Message: Unbounded_String;
+      Distance_Traveled, Speed_Bonus: Integer := 0;
+      Shoot_Message, Message: Unbounded_String := Null_Unbounded_String;
       Enemy_Pilot_Order: Positive := 2;
       Damage_Range: Positive := 10_000;
       Ship_Free_Space: Integer := 0;
       procedure Attack(Ship, Enemy_Ship: in out Ship_Record) is
-         Gunner_Index: Crew_Container.Extended_Index;
-         Ammo_Index: Inventory_Container.Extended_Index;
+         Gunner_Index: Crew_Container.Extended_Index := 0;
+         Ammo_Index: Inventory_Container.Extended_Index := 0;
          Armor_Index, Weapon_Index: Modules_Container.Extended_Index;
-         Shoots: Natural;
-         Gunner_Order: Positive;
-         Hit_Chance, Hit_Location, Current_Accuracy_Bonus: Integer;
+         Shoots: Natural := 0;
+         Gunner_Order: Positive := 1;
+         Hit_Chance, Hit_Location, Current_Accuracy_Bonus: Integer := 0;
          Damage: Damage_Factor := 0.0;
          Weapon_Damage: Integer;
          Enemy_Name_Owner: constant Unbounded_String :=
