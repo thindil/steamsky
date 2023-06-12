@@ -737,7 +737,7 @@ package body Stories is
         (I: Positive; Story: Nim_Finished_Story_Data) with
          Import => True,
          Convention => C,
-         External_Name => "getAdaCurrentStory";
+         External_Name => "getAdaFinishedStory";
    begin
       if Index <= Finished_Stories.Last_Index then
          Nim_Story.Index :=
