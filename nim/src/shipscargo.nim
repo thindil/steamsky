@@ -92,7 +92,8 @@ proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
     if itemsList[item.protoIndex].itemType == itemType:
       result = result + item.amount
 
-proc getItemsAmount*(iType: string): Natural =
+proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
+    tags: [].} =
   if iType == "Drinks":
     for member in playerShip.crew:
       let faction = factionsList[member.faction]
