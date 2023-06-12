@@ -1,15 +1,27 @@
 discard """
   exitcode: 0
+  output: '''Starting testing bases module.
+Loading the game data.
+Testing generateBaseName.
+Testing gainRep.
+Testing countPrice.
+Testing updatePopulation.
+Testing generateRecruits.
+Testing updatePrices.'''
 """
 
 import ../../src/[bases, basestypes, careers, factions, game, items, maps, types]
 
+echo "Starting testing bases module."
+
+echo "Loading the game data."
 loadData("../bin/data/game.dat")
 loadItems("../bin/data/items.dat")
 loadCareers("../bin/data/careers.dat")
 loadFactions("../bin/data/factions.dat")
 loadBasesTypes("../bin/data/bases.dat")
 
+echo "Testing generateBaseName."
 assert generateBaseName("POLEIS").len() > 0, "Failed to generate a base's name."
 
 playerShip.skyX = 1
@@ -24,20 +36,24 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 skyMap[1][1].baseIndex = 1
 var price: Natural = 100
 
+echo "Testing gainRep."
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 gainRep(1, 1)
 assert skyBases[1].reputation.experience == 2, "Failed to gain reputation in a base."
 gainRep(1, -1)
 assert skyBases[1].reputation.experience == 1, "Failed to lose reputation in a base."
 
+echo "Testing countPrice."
 countPrice(price, 0, false)
 assert price > 100, "Failed to raise a price in a base."
 price = 100
 countPrice(price, 0)
 assert price < 100, "Failed to reduce a price in a base."
 
+echo "Testing updatePopulation."
 updatePopulation()
 
+echo "Testing generateRecruits."
 skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
@@ -56,4 +72,5 @@ skyBases[1].reputation.level = 0
 generateRecruits()
 assert skyBases[1].recruits.len > 0, "Failed to generate recruits in a base with zero reputation."
 
+echo "Testing updatePrices."
 updatePrices()
