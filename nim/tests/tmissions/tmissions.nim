@@ -25,7 +25,8 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
     1, 0, 0], order: gunner, loyalty: 100))
 playerShip.modules = @[]
-playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7, durability: 100))
+playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
+    durability: 100))
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 skyMap[1][1].baseIndex = 1
@@ -35,7 +36,7 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
 deleteMission(0, false)
-assert acceptedMissions.len == 0
+assert acceptedMissions.len == 0, "Failed to delete an accepted mission."
 
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
@@ -44,6 +45,6 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
 updateMissions(8)
-assert acceptedMissions[0].time == 2
+assert acceptedMissions[0].time == 2, "Failed to update accepted missions."
 updateMissions(2)
-assert acceptedMissions.len == 0
+assert acceptedMissions.len == 0, "Failed to remove an accepted mission."
