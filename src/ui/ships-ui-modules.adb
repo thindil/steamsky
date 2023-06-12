@@ -2481,6 +2481,56 @@ package body Ships.UI.Modules is
                else
                   Info_Text := Null_Unbounded_String;
                end if;
+            when TRAINING_ROOM =>
+               if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
+                  Info_Text :=
+                    "Set for training " &
+                    To_Unbounded_String
+                      (Source =>
+                         To_String
+                           (Source =>
+                              SkillsData_Container.Element
+                                (Container => Skills_List,
+                                 Index =>
+                                   Player_Ship.Modules(Module_Index)
+                                     .Trained_Skill)
+                                .Name));
+                  Show_Trainee_Info_Block :
+                  declare
+                     Has_Trainees: Boolean := False;
+                  begin
+                     Show_Trainee_Info_Loop :
+                     for Owner of Player_Ship.Modules(Module_Index).Owner loop
+                        if Owner > 0 then
+                           if Has_Trainees then
+                              Append
+                                (Source => Info_Text,
+                                 New_Item =>
+                                   ", " &
+                                   To_String
+                                     (Source => Player_Ship.Crew(Owner).Name));
+                           else
+                              Append
+                                (Source => Info_Text,
+                                 New_Item =>
+                                   ", trainees: " &
+                                   To_String
+                                     (Source => Player_Ship.Crew(Owner).Name));
+                           end if;
+                           Has_Trainees := True;
+                        end if;
+                     end loop Show_Trainee_Info_Loop;
+                     if not Has_Trainees then
+                        Append
+                          (Source => Info_Text,
+                           New_Item => ", no trainees assigned");
+                     end if;
+                     Append(Source => Info_Text, New_Item => ".");
+                  end Show_Trainee_Info_Block;
+               else
+                  Info_Text :=
+                    To_Unbounded_String(Source => "Not set for training.");
+               end if;
             when others =>
                Info_Text := Null_Unbounded_String;
          end case;
