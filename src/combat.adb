@@ -188,7 +188,9 @@ package body Combat is
                Item :=
                  Inventory_Container.Element
                    (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index);
+               --## rule off ASSIGNMENTS
                Item.Amount := Item.Amount + Item_Amount;
+               --## rule on ASSIGNMENTS
                Inventory_Container.Replace_Element
                  (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index,
                   New_Item => Item);
@@ -490,6 +492,7 @@ package body Combat is
                         if Gun(1) =
                           Modules_Container.To_Index(Position => K) then
                            Gunner_Order := Gun(2);
+                           -- rule off SIMPLIFIABLE_STATEMENTS
                            if Gun(3) > 0 then
                               Shoots := Gun(3);
                               if Gunner_Order /= 3 then
@@ -526,6 +529,7 @@ package body Combat is
                                    Natural'Image(Shoots),
                                  Message_Type => Log.COMBAT);
                            end if;
+                           -- rule on SIMPLIFIABLE_STATEMENTS
                            exit Count_Player_Shoots_Loop;
                         end if;
                      end loop Count_Player_Shoots_Loop;
@@ -554,6 +558,7 @@ package body Combat is
                   Count_Enemy_Shoots_Loop :
                   for Gun of Enemy.Guns loop
                      if Gun(1) = Modules_Container.To_Index(Position => K) then
+                        -- rule off SIMPLIFIABLE_STATEMENTS
                         if Gun(3) > 0 then
                            Shoots := Gun(3);
                         elsif Gun(3) < 0 then
@@ -574,6 +579,7 @@ package body Combat is
                                      .Speed);
                            end if;
                         end if;
+                        -- rule on SIMPLIFIABLE_STATEMENTS
                         exit Count_Enemy_Shoots_Loop;
                      end if;
                   end loop Count_Enemy_Shoots_Loop;
@@ -828,6 +834,8 @@ package body Combat is
                           Ship.Modules(K).Damage2 -
                           Natural
                             (Float(Ship.Modules(K).Damage2) * Float(Damage));
+                        --## rule off ASSIGNMENTS
+                        --## rule off SIMPLIFIABLE_EXPRESSIONS
                         Weapon_Damage :=
                           (if Speed_Bonus < 0 then
                              Weapon_Damage +
@@ -835,6 +843,8 @@ package body Combat is
                               (Count_Ship_Weight(Ship => Ship) / 5_000))
                            else Weapon_Damage +
                              (Count_Ship_Weight(Ship => Ship) / 5_000));
+                        --## rule on SIMPLIFIABLE_EXPRESSIONS
+                        --## rule on ASSIGNMENTS
                      end if;
                      if Weapon_Damage = 0 then
                         Weapon_Damage := 1;
@@ -862,6 +872,7 @@ package body Combat is
                         if Ship.Modules(K).M_Type = HARPOON_GUN then
                            Count_Damage_Loop :
                            for Module of Enemy_Ship.Modules loop
+                              --## rule off SIMPLIFIABLE_EXPRESSIONS
                               if Module.M_Type = HULL then
                                  Weapon_Damage :=
                                    Weapon_Damage - (Module.Max_Modules / 10);
@@ -870,6 +881,7 @@ package body Combat is
                                  end if;
                                  exit Count_Damage_Loop;
                               end if;
+                              --## rule on SIMPLIFIABLE_EXPRESSIONS
                            end loop Count_Damage_Loop;
                            if Ship = Player_Ship then
                               Enemy.Harpoon_Duration :=
@@ -965,7 +977,9 @@ package body Combat is
          Attack_Done, Riposte: Boolean;
          Attacker_Index, Defender_Index: Positive;
          Order_Index: Natural;
+         --## rule off IMPROPER_INITIALIZATION
          Faction: Faction_Record;
+         --## rule on IMPROPER_INITIALIZATION
          function Character_Attack
            (Attacker_Index_2, Defender_Index_2: Positive;
             Player_Attack_2: Boolean) return Boolean is
