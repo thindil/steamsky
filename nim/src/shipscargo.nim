@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, types
+import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
@@ -92,6 +92,30 @@ proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
     if itemsList[item.protoIndex].itemType == itemType:
       result = result + item.amount
 
+proc getItemsAmount*(iType: string): Natural =
+  if iType == "Drinks":
+    for member in playerShip.crew:
+      let faction = factionsList[member.faction]
+      if faction.drinksTypes.len == 0:
+        result = gameSettings.lowDrinks + 1
+      else:
+        result = 0
+        for drinkType in faction.drinksTypes:
+          result = result + getItemAmount(itemType = drinkType)
+        if result < gameSettings.lowDrinks:
+          break
+  else:
+    for member in playerShip.crew:
+      let faction = factionsList[member.faction]
+      if faction.foodTypes.len == 0:
+        result = gameSettings.lowFood + 1
+      else:
+        result = 0
+        for foodType in faction.foodTypes:
+          result = result + getItemAmount(itemType = foodType)
+        if result < gameSettings.lowFood:
+          break
+
 # Temporary code for interfacing with Ada
 
 proc updateAdaCargo(protoIndex, amount, durability, cargoIndex, price,
@@ -119,5 +143,11 @@ proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
 proc getAdaItemAmount(itemType: cstring): cint {.raises: [], tags: [], exportc.} =
   try:
     return getItemAmount(itemType = $itemType).cint
+  except KeyError:
+    return 0
+
+proc getAdaItemsAmount(iType: cstring): cint {.raises: [], tags: [], exportc.} =
+  try:
+    return getItemsAmount(iType = $iType).cint
   except KeyError:
     return 0
