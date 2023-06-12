@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing information about finished stories
+
 ## [8.8] - 2023-06-11
 
 ### Added
