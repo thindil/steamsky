@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 - Crash when browsing modules to install in shipyards
 - Saved game doesn't load when training room on the player's ship doesn't
   have set a skill to train
-- Recruits in bases change every time intead of every in-game week
+- Recruits in bases change every time instead of every in-game week
 - Crash when showing the player's ship's module's info dialog for a gun
   with assigned ammunition
 
