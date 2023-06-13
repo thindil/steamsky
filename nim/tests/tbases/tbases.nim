@@ -1,7 +1,6 @@
 discard """
   exitcode: 0
-  output: '''Starting testing bases module.
-Loading the game data.
+  output: '''Loading the game data.
 Testing generateBaseName.
 Testing gainRep.
 Testing countPrice.
@@ -11,8 +10,6 @@ Testing updatePrices.'''
 """
 
 import ../../src/[bases, basestypes, careers, factions, game, items, maps, types]
-
-echo "Starting testing bases module."
 
 echo "Loading the game data."
 loadData("../bin/data/game.dat")

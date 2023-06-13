@@ -1,11 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing generateBaseName.
+Testing askForEvents.
+Testing askForBases.'''
 """
 
 import std/tables
 import ../../src/[bases, bases2, basestypes, careers, crafts, factions, game,
     items, maps, mobs, shipmodules, ships, types, utils]
 
+echo "Loading the game data."
 if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -21,6 +26,7 @@ if protoMobsList.len == 0:
 if protoShipsList.len == 0:
   loadShips("../bin/data/ships.dat")
 
+echo "Testing generateBaseName."
 assert generateBaseName("POLEIS").len() > 0, "Failed to generate a base's name."
 
 playerShip.skyX = 200
@@ -62,8 +68,10 @@ for index, base in skyBases.mpairs:
   base.population = getRandom(100, 400)
   skyMap[base.skyX][base.skyY].baseIndex = index
 
+echo "Testing askForEvents."
 askForEvents()
 assert eventsList.len > 0, "Failed to generate new events."
 
+echo "Testing askForBases."
 askForBases()
 assert skyBases[1].askedForBases, "Failed to ask for bases in a base."
