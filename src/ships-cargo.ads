@@ -85,8 +85,7 @@ package Ships.Cargo is
       -- Amount of drinks or food, depends on IType on the player ship
       -- SOURCE
    function Get_Items_Amount(I_Type: String) return Natural with
-      Pre => I_Type in "Drinks" | "Food",
-      Test_Case => (Name => "Test_GetItemsAmount", Mode => Nominal);
+      Pre => I_Type in "Drinks" | "Food";
       -- ****
 
 end Ships.Cargo;
