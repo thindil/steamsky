@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing information about finished stories
+- Typo in changelog
 
 ## [8.8] - 2023-06-11
 
