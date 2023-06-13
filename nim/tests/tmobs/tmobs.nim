@@ -14,5 +14,5 @@ if protoMobsList.len == 0:
   loadMobs("../bin/data/mobs.dat")
 
 let newMob = generateMob(5, "POLEIS")
-assert newMob.attributes[0].level == 2
-assert newMob.orderTime == 15
+assert newMob.attributes[0].level == 2, "Failed to set the mob's attributes."
+assert newMob.orderTime == 15, "Failed to set the mob's order's time."
