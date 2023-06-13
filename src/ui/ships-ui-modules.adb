@@ -2320,6 +2320,178 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Get_Active_Button_Command;
 
+   -- ****if* SUModules/SUModules.Get_Module_Info
+   -- FUNCTION
+   -- Get the additional information about the module
+   -- PARAMETERS
+   -- Module_Index - the index of the module in the player's ship to show info
+   -- RESULT
+   -- The string with additional information about the module or empty string
+   -- if no info is available.
+   -- SOURCE
+   function Get_Module_Info(Module_Index: Positive) return String is
+      use Tiny_String;
+
+      Info_Text: Unbounded_String := Null_Unbounded_String;
+   begin
+      case Player_Ship.Modules(Module_Index).M_Type is
+         when GUN =>
+            if Player_Ship.Modules(Module_Index).Ammo_Index in
+                Inventory_Container.First_Index
+                      (Container => Player_Ship.Cargo) ..
+                      Inventory_Container.Last_Index
+                        (Container => Player_Ship.Cargo)
+              and then
+                Get_Proto_Item
+                  (Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo,
+                        Index => Player_Ship.Modules(Module_Index).Ammo_Index)
+                       .Proto_Index)
+                  .I_Type =
+                Get_Ada_Item_Type
+                  (Item_Index =>
+                     Get_Module
+                       (Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                       .Value -
+                     1) then
+               Info_Text :=
+                 To_Unbounded_String
+                   (Source =>
+                      "Uses " &
+                      To_String
+                        (Source =>
+                           Get_Proto_Item
+                             (Index =>
+                                Inventory_Container.Element
+                                  (Container => Player_Ship.Cargo,
+                                   Index =>
+                                     Player_Ship.Modules(Module_Index)
+                                       .Ammo_Index)
+                                  .Proto_Index)
+                             .Name) &
+                      ", ");
+            else
+               Info_Text :=
+                 To_Unbounded_String(Source => "No ammunition assigned, ");
+            end if;
+            if Player_Ship.Modules(Module_Index).Owner(1) = 0 then
+               Append(Source => Info_Text, New_Item => " no gunner.");
+            else
+               Append
+                 (Source => Info_Text,
+                  New_Item =>
+                    " " &
+                    To_String
+                      (Source =>
+                         Player_Ship.Crew
+                           (Player_Ship.Modules(Module_Index).Owner(1))
+                           .Name) &
+                    " is gunner.");
+            end if;
+         when WORKSHOP =>
+            Show_Order_Info_Block :
+            declare
+               Recipe_Name: constant String :=
+                 Get_Workshop_Recipe_Name(Workshop => Module_Index);
+               Has_Workers: Boolean := False;
+            begin
+               if Recipe_Name'Length > 0 then
+                  Info_Text := To_Unbounded_String(Source => Recipe_Name);
+                  Show_Workers_Info_Loop :
+                  for Owner of Player_Ship.Modules(Module_Index).Owner loop
+                     if Owner > 0 then
+                        if Has_Workers then
+                           Append
+                             (Source => Info_Text,
+                              New_Item =>
+                                ", " &
+                                To_String
+                                  (Source => Player_Ship.Crew(Owner).Name));
+                        else
+                           Append
+                             (Source => Info_Text,
+                              New_Item =>
+                                ", workers: " &
+                                To_String
+                                  (Source => Player_Ship.Crew(Owner).Name));
+                        end if;
+                        Has_Workers := True;
+                     end if;
+                  end loop Show_Workers_Info_Loop;
+                  if not Has_Workers then
+                     Append
+                       (Source => Info_Text,
+                        New_Item => ", no workers assigned");
+                  end if;
+                  Append(Source => Info_Text, New_Item => ".");
+               else
+                  Info_Text :=
+                    To_Unbounded_String(Source => "No crafting order.");
+               end if;
+            end Show_Order_Info_Block;
+         when ENGINE =>
+            if Player_Ship.Modules(Module_Index).Disabled then
+               Info_Text := To_Unbounded_String(Source => "Engine disabled.");
+            else
+               Info_Text := Null_Unbounded_String;
+            end if;
+         when TRAINING_ROOM =>
+            if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
+               Info_Text :=
+                 "Set for training " &
+                 To_Unbounded_String
+                   (Source =>
+                      To_String
+                        (Source =>
+                           SkillsData_Container.Element
+                             (Container => Skills_List,
+                              Index =>
+                                Player_Ship.Modules(Module_Index)
+                                  .Trained_Skill)
+                             .Name));
+               Show_Trainee_Info_Block :
+               declare
+                  Has_Trainees: Boolean := False;
+               begin
+                  Show_Trainee_Info_Loop :
+                  for Owner of Player_Ship.Modules(Module_Index).Owner loop
+                     if Owner > 0 then
+                        if Has_Trainees then
+                           Append
+                             (Source => Info_Text,
+                              New_Item =>
+                                ", " &
+                                To_String
+                                  (Source => Player_Ship.Crew(Owner).Name));
+                        else
+                           Append
+                             (Source => Info_Text,
+                              New_Item =>
+                                ", trainees: " &
+                                To_String
+                                  (Source => Player_Ship.Crew(Owner).Name));
+                        end if;
+                        Has_Trainees := True;
+                     end if;
+                  end loop Show_Trainee_Info_Loop;
+                  if not Has_Trainees then
+                     Append
+                       (Source => Info_Text,
+                        New_Item => ", no trainees assigned");
+                  end if;
+                  Append(Source => Info_Text, New_Item => ".");
+               end Show_Trainee_Info_Block;
+            else
+               Info_Text :=
+                 To_Unbounded_String(Source => "Not set for training.");
+            end if;
+         when others =>
+            Info_Text := Null_Unbounded_String;
+      end case;
+      return To_String(Source => Info_Text);
+   end Get_Module_Info;
+
    procedure Update_Modules_Info(Page: Positive := 1) is
       use Tiny_String;
 
@@ -2331,7 +2503,6 @@ package body Ships.UI.Modules is
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
-      Info_Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Modules_Table.Row_Height = 1 then
          Modules_Table :=
@@ -2376,166 +2547,9 @@ package body Ships.UI.Modules is
             Tooltip => "Show the module's info",
             Command => "ShowModuleInfo" & Positive'Image(Module_Index),
             Column => 2);
-         case Player_Ship.Modules(Module_Index).M_Type is
-            when GUN =>
-               if Player_Ship.Modules(Module_Index).Ammo_Index in
-                   Inventory_Container.First_Index
-                         (Container => Player_Ship.Cargo) ..
-                         Inventory_Container.Last_Index
-                           (Container => Player_Ship.Cargo)
-                 and then
-                   Get_Proto_Item
-                     (Index =>
-                        Inventory_Container.Element
-                          (Container => Player_Ship.Cargo,
-                           Index =>
-                             Player_Ship.Modules(Module_Index).Ammo_Index)
-                          .Proto_Index)
-                     .I_Type =
-                   Get_Ada_Item_Type
-                     (Item_Index =>
-                        Get_Module
-                          (Index =>
-                             Player_Ship.Modules(Module_Index).Proto_Index)
-                          .Value -
-                        1) then
-                  Info_Text :=
-                    To_Unbounded_String
-                      (Source =>
-                         "Uses " &
-                         To_String
-                           (Source =>
-                              Get_Proto_Item
-                                (Index =>
-                                   Inventory_Container.Element
-                                     (Container => Player_Ship.Cargo,
-                                      Index =>
-                                        Player_Ship.Modules(Module_Index)
-                                          .Ammo_Index)
-                                     .Proto_Index)
-                                .Name) &
-                         ", ");
-               else
-                  Info_Text :=
-                    To_Unbounded_String(Source => "No ammunition assigned, ");
-               end if;
-               if Player_Ship.Modules(Module_Index).Owner(1) = 0 then
-                  Append(Source => Info_Text, New_Item => " no gunner.");
-               else
-                  Append
-                    (Source => Info_Text,
-                     New_Item =>
-                       " " &
-                       To_String
-                         (Source =>
-                            Player_Ship.Crew
-                              (Player_Ship.Modules(Module_Index).Owner(1))
-                              .Name) &
-                       " is gunner.");
-               end if;
-            when WORKSHOP =>
-               Show_Order_Info_Block :
-               declare
-                  Recipe_Name: constant String :=
-                    Get_Workshop_Recipe_Name(Workshop => Module_Index);
-                  Has_Workers: Boolean := False;
-               begin
-                  if Recipe_Name'Length > 0 then
-                     Info_Text := To_Unbounded_String(Source => Recipe_Name);
-                     Show_Workers_Info_Loop :
-                     for Owner of Player_Ship.Modules(Module_Index).Owner loop
-                        if Owner > 0 then
-                           if Has_Workers then
-                              Append
-                                (Source => Info_Text,
-                                 New_Item =>
-                                   ", " &
-                                   To_String
-                                     (Source => Player_Ship.Crew(Owner).Name));
-                           else
-                              Append
-                                (Source => Info_Text,
-                                 New_Item =>
-                                   ", workers: " &
-                                   To_String
-                                     (Source => Player_Ship.Crew(Owner).Name));
-                           end if;
-                           Has_Workers := True;
-                        end if;
-                     end loop Show_Workers_Info_Loop;
-                     if not Has_Workers then
-                        Append
-                          (Source => Info_Text,
-                           New_Item => ", no workers assigned");
-                     end if;
-                     Append(Source => Info_Text, New_Item => ".");
-                  else
-                     Info_Text :=
-                       To_Unbounded_String(Source => "No crafting order.");
-                  end if;
-               end Show_Order_Info_Block;
-            when ENGINE =>
-               if Player_Ship.Modules(Module_Index).Disabled then
-                  Info_Text :=
-                    To_Unbounded_String(Source => "Engine disabled.");
-               else
-                  Info_Text := Null_Unbounded_String;
-               end if;
-            when TRAINING_ROOM =>
-               if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
-                  Info_Text :=
-                    "Set for training " &
-                    To_Unbounded_String
-                      (Source =>
-                         To_String
-                           (Source =>
-                              SkillsData_Container.Element
-                                (Container => Skills_List,
-                                 Index =>
-                                   Player_Ship.Modules(Module_Index)
-                                     .Trained_Skill)
-                                .Name));
-                  Show_Trainee_Info_Block :
-                  declare
-                     Has_Trainees: Boolean := False;
-                  begin
-                     Show_Trainee_Info_Loop :
-                     for Owner of Player_Ship.Modules(Module_Index).Owner loop
-                        if Owner > 0 then
-                           if Has_Trainees then
-                              Append
-                                (Source => Info_Text,
-                                 New_Item =>
-                                   ", " &
-                                   To_String
-                                     (Source => Player_Ship.Crew(Owner).Name));
-                           else
-                              Append
-                                (Source => Info_Text,
-                                 New_Item =>
-                                   ", trainees: " &
-                                   To_String
-                                     (Source => Player_Ship.Crew(Owner).Name));
-                           end if;
-                           Has_Trainees := True;
-                        end if;
-                     end loop Show_Trainee_Info_Loop;
-                     if not Has_Trainees then
-                        Append
-                          (Source => Info_Text,
-                           New_Item => ", no trainees assigned");
-                     end if;
-                     Append(Source => Info_Text, New_Item => ".");
-                  end Show_Trainee_Info_Block;
-               else
-                  Info_Text :=
-                    To_Unbounded_String(Source => "Not set for training.");
-               end if;
-            when others =>
-               Info_Text := Null_Unbounded_String;
-         end case;
          Add_Button
-           (Table => Modules_Table, Text => To_String(Source => Info_Text),
+           (Table => Modules_Table,
+            Text => Get_Module_Info(Module_Index => Module_Index),
             Tooltip => "Show the module's info",
             Command => "ShowModuleInfo" & Positive'Image(Module_Index),
             Column => 3, New_Row => True);
