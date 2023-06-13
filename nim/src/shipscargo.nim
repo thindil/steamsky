@@ -94,6 +94,12 @@ proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
 
 proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## Get the amount of selected consumable items in the player's ship's cargo
+  ##
+  ## * iType - the type of consumables to check, should be Drinks or Food
+  ##
+  ## Returns the amount of the selected consumable items in the player's ships'
+  ## cargo.
   if iType == "Drinks":
     for member in playerShip.crew:
       let faction = factionsList[member.faction]
