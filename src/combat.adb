@@ -63,48 +63,6 @@ package body Combat is
       Enemy_Guns: Guns_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       Shooting_Speed: Integer := 0;
-      function Count_Perception
-        (Spotter, Spotted: Ship_Record) return Natural is
-         Result: Natural := 0;
-      begin
-         Count_Spotter_Perception_Loop :
-         for I in Spotter.Crew.Iterate loop
-            case Spotter.Crew(I).Order is
-               when PILOT =>
-                  Result :=
-                    Result +
-                    Get_Skill_Level
-                      (Member => Spotter.Crew(I),
-                       Skill_Index => Perception_Skill);
-                  if Spotter = Player_Ship then
-                     Gain_Exp
-                       (Amount => 1, Skill_Number => Perception_Skill,
-                        Crew_Index => Crew_Container.To_Index(Position => I));
-                  end if;
-               when GUNNER =>
-                  Result :=
-                    Result +
-                    Get_Skill_Level
-                      (Member => Spotter.Crew(I),
-                       Skill_Index => Perception_Skill);
-                  if Spotter = Player_Ship then
-                     Gain_Exp
-                       (Amount => 1, Skill_Number => Perception_Skill,
-                        Crew_Index => Crew_Container.To_Index(Position => I));
-                  end if;
-               when others =>
-                  null;
-            end case;
-         end loop Count_Spotter_Perception_Loop;
-         Count_Modules_Loop :
-         for Module of Spotted.Modules loop
-            if Module.M_Type = HULL then
-               Result := Result + Module.Max_Modules;
-               exit Count_Modules_Loop;
-            end if;
-         end loop Count_Modules_Loop;
-         return Result;
-      end Count_Perception;
    begin
       Enemy_Ship_Index := Enemy_Index;
       Faction_Name :=
@@ -343,6 +301,50 @@ package body Combat is
       if New_Combat then
          Start_Combat_Block :
          declare
+            function Count_Perception
+              (Spotter, Spotted: Ship_Record) return Natural is
+               Result: Natural := 0;
+            begin
+               Count_Spotter_Perception_Loop :
+               for I in Spotter.Crew.Iterate loop
+                  case Spotter.Crew(I).Order is
+                     when PILOT =>
+                        Result :=
+                          Result +
+                          Get_Skill_Level
+                            (Member => Spotter.Crew(I),
+                             Skill_Index => Perception_Skill);
+                        if Spotter = Player_Ship then
+                           Gain_Exp
+                             (Amount => 1, Skill_Number => Perception_Skill,
+                              Crew_Index =>
+                                Crew_Container.To_Index(Position => I));
+                        end if;
+                     when GUNNER =>
+                        Result :=
+                          Result +
+                          Get_Skill_Level
+                            (Member => Spotter.Crew(I),
+                             Skill_Index => Perception_Skill);
+                        if Spotter = Player_Ship then
+                           Gain_Exp
+                             (Amount => 1, Skill_Number => Perception_Skill,
+                              Crew_Index =>
+                                Crew_Container.To_Index(Position => I));
+                        end if;
+                     when others =>
+                        null;
+                  end case;
+               end loop Count_Spotter_Perception_Loop;
+               Count_Modules_Loop :
+               for Module of Spotted.Modules loop
+                  if Module.M_Type = HULL then
+                     Result := Result + Module.Max_Modules;
+                     exit Count_Modules_Loop;
+                  end if;
+               end loop Count_Modules_Loop;
+               return Result;
+            end Count_Perception;
             Player_Perception: constant Natural :=
               Count_Perception(Spotter => Player_Ship, Spotted => Enemy.Ship);
             Enemy_Perception: Natural;
