@@ -244,6 +244,11 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
       i.inc
 
 func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
+  ## Get the name of the type of a mission
+  ##
+  ## * mType - the type of missions which name will be get
+  ##
+  ## Returns string with the name of the selected missions' type.
   case mType
   of deliver:
     return "Deliver item to base"
