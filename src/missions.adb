@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
+with Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -508,19 +509,15 @@ package body Missions is
    end Auto_Finish_Missions;
 
    function Get_Mission_Type(M_Type: Missions_Types) return String is
+      use Interfaces.C.Strings;
+
+      function Get_Ada_Mission_Type(M_T: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaMissionType";
    begin
-      case M_Type is
-         when DELIVER =>
-            return "Deliver item to base";
-         when PATROL =>
-            return "Patrol area";
-         when DESTROY =>
-            return "Destroy ship";
-         when EXPLORE =>
-            return "Explore area";
-         when PASSENGER =>
-            return "Transport passenger to base";
-      end case;
+      return
+        Value(Item => Get_Ada_Mission_Type(M_T => Missions_Types'Pos(M_Type)));
    end Get_Mission_Type;
 
    --## rule off TYPE_INITIAL_VALUES
