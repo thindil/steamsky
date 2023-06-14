@@ -2624,12 +2624,15 @@ package body Ships.UI.Modules is
    -- NAMEDESC   - Sort modules by name descending
    -- DAMAGEASC  - Sort modules by damage ascending
    -- DAMAGEDESC - Sort modules by damage descending
+   -- INFOASC    - Sort modules by info ascending
+   -- INFODESC   - Sort modules by info descending
    -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
+   -- 8.9 - Added sorting by info column
    -- SOURCE
    type Modules_Sort_Orders is
-     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, NONE) with
+     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, INFOASC, INFODESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -2685,6 +2688,7 @@ package body Ships.UI.Modules is
          Name: Bounded_String;
          Damage: Float;
          Id: Positive;
+         Info: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
       Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
@@ -2702,6 +2706,12 @@ package body Ships.UI.Modules is
          end if;
          if Modules_Sort_Order = DAMAGEDESC
            and then Left.Damage > Right.Damage then
+            return True;
+         end if;
+         if Modules_Sort_Order = INFOASC and then Left.Info < Right.Info then
+            return True;
+         end if;
+         if Modules_Sort_Order = INFODESC and then Left.Info > Right.Info then
             return True;
          end if;
          return False;
@@ -2723,6 +2733,12 @@ package body Ships.UI.Modules is
             else
                Modules_Sort_Order := DAMAGEASC;
             end if;
+         when 3 =>
+            if Modules_Sort_Order = INFOASC then
+               Modules_Sort_Order := INFODESC;
+            else
+               Modules_Sort_Order := INFOASC;
+            end if;
          when others =>
             null;
       end case;
@@ -2736,7 +2752,13 @@ package body Ships.UI.Modules is
             Damage =>
               Float(Player_Ship.Modules(I).Durability) /
               Float(Player_Ship.Modules(I).Max_Durability),
-            Id => Modules_Container.To_Index(Position => I));
+            Id => Modules_Container.To_Index(Position => I),
+            Info =>
+              To_Unbounded_String
+                (Source =>
+                   Get_Module_Info
+                     (Module_Index =>
+                        Modules_Container.To_Index(Position => I))));
       end loop Fill_Local_Modules_Loop;
       Sort_Modules(Container => Local_Modules);
       Modules_Indexes.Clear;
