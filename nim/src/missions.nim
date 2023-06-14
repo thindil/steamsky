@@ -243,6 +243,19 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
       acceptedMissions[i].time = time
       i.inc
 
+proc getMissionType*(mType: MissionsTypes): string =
+  case mType
+  of deliver:
+    return "Deliver item to base"
+  of patrol:
+    return "Patrol area"
+  of destroy:
+    return "Destroy ship"
+  of explore:
+    return "Explore area"
+  of passenger:
+    return "Transport passenger to base"
+
 # Temporary code for interfacing with Ada
 
 type
@@ -347,3 +360,6 @@ proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc.} =
     updateMissions(minutes = minutes)
   except KeyError:
     discard
+
+proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc.} =
+  return getMissionType(mType.MissionsTypes).cstring
