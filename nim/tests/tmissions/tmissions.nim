@@ -48,3 +48,5 @@ updateMissions(8)
 assert acceptedMissions[0].time == 2, "Failed to update accepted missions."
 updateMissions(2)
 assert acceptedMissions.len == 0, "Failed to remove an accepted mission."
+
+assert getMissionType(patrol) == "Patrol area", "Failed to get the name of the mission's type."
