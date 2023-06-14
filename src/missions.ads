@@ -216,8 +216,7 @@ package Missions is
       -- Name (as words) of the selected mission's type
       -- SOURCE
    function Get_Mission_Type(M_Type: Missions_Types) return String with
-      Post => Get_Mission_Type'Result'Length > 0,
-      Test_Case => (Name => "Test_Get_Mission_Type", Mode => Nominal);
+      Post => Get_Mission_Type'Result'Length > 0;
    -- ****
 
 -- Temporary code to interact with Nim
