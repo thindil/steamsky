@@ -20,6 +20,7 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 skyBases[1].baseType = "1"
+playerShip.crew = @[]
 
 updateGame(1)
 gameDate.minutes = 1
