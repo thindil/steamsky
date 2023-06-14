@@ -407,12 +407,12 @@ package body Combat is
       procedure Attack(Ship, Enemy_Ship: in out Ship_Record) is
          Gunner_Index: Crew_Container.Extended_Index := 0;
          Ammo_Index: Inventory_Container.Extended_Index := 0;
-         Armor_Index, Weapon_Index: Modules_Container.Extended_Index;
+         Armor_Index, Weapon_Index: Modules_Container.Extended_Index := 0;
          Shoots: Natural := 0;
          Gunner_Order: Positive := 1;
          Hit_Chance, Hit_Location, Current_Accuracy_Bonus: Integer := 0;
          Damage: Damage_Factor := 0.0;
-         Weapon_Damage: Integer;
+         Weapon_Damage: Integer := 0;
          Enemy_Name_Owner: constant Unbounded_String :=
            To_String(Source => Enemy_Name) &
            To_Unbounded_String(Source => " (") &
@@ -469,8 +469,8 @@ package body Combat is
          Attack_Loop :
          for K in Ship.Modules.Iterate loop
             if Ship.Modules(K).Durability = 0 or
-              (Ship.Modules(K).M_Type not in GUN | BATTERING_RAM |
-                   HARPOON_GUN) then
+              Ship.Modules(K).M_Type not in GUN | BATTERING_RAM |
+                  HARPOON_GUN then
                goto End_Of_Attack_Loop;
             end if;
             Gunner_Index := 0;
@@ -866,10 +866,10 @@ package body Combat is
                        (if Ship = Player_Ship then
                           Integer
                             (Float(Weapon_Damage) *
-                             Float(New_Game_Settings.Player_Damage_Bonus))
+                             New_Game_Settings.Player_Damage_Bonus)
                         else Integer
                             (Float(Weapon_Damage) *
-                             Float(New_Game_Settings.Enemy_Damage_Bonus)));
+                             New_Game_Settings.Enemy_Damage_Bonus));
                      if Armor_Index = 0 then
                         if Ship.Modules(K).M_Type = HARPOON_GUN then
                            Count_Damage_Loop :
@@ -976,8 +976,9 @@ package body Combat is
       procedure Melee_Combat
         (Attackers, Defenders: in out Crew_Container.Vector;
          Player_Attack: Boolean) is
-         Attack_Done, Riposte: Boolean;
-         Attacker_Index, Defender_Index: Positive;
+         Attack_Done, Riposte: Boolean := False;
+         Attacker_Index: Positive;
+         Defender_Index: Positive := 1;
          Order_Index: Natural;
          --## rule off IMPROPER_INITIALIZATION
          Faction: Faction_Record;
@@ -997,9 +998,10 @@ package body Combat is
                TORSO => To_Unbounded_String(Source => "torso"),
                ARMS => To_Unbounded_String(Source => "arm"),
                LEGS => To_Unbounded_String(Source => "leg"));
-            Attack_Skill, Base_Damage: Natural;
-            Wounds: Damage_Factor := 0.0;
-            Messages_Color: Message_Color;
+            Attack_Skill: Natural := 0;
+            Base_Damage: Natural;
+            Wounds: Damage_Factor;
+            Messages_Color: Message_Color := WHITE;
             Attacker: Member_Data :=
               (if Player_Attack_2 then Player_Ship.Crew(Attacker_Index_2)
                else Enemy.Ship.Crew(Attacker_Index_2));
