@@ -243,7 +243,7 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
       acceptedMissions[i].time = time
       i.inc
 
-proc getMissionType*(mType: MissionsTypes): string =
+func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
   case mType
   of deliver:
     return "Deliver item to base"
