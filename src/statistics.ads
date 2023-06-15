@@ -136,8 +136,7 @@ package Statistics is
       -- M_Type - Type of mission to update
       -- SOURCE
    procedure Update_Finished_Missions(M_Type: Unbounded_String) with
-      Pre => M_Type /= Null_Unbounded_String,
-      Test_Case => (Name => "Test_UpdateFinishedMissions", Mode => Nominal);
+      Pre => M_Type /= Null_Unbounded_String;
       -- ****
 
       -- ****f* Statistics/Statistics.Update_Crafting_Orders
