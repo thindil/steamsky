@@ -494,7 +494,7 @@ package body Combat is
                         if Gun(1) =
                           Modules_Container.To_Index(Position => K) then
                            Gunner_Order := Gun(2);
-                           -- rule off SIMPLIFIABLE_STATEMENTS
+                           --## rule off SIMPLIFIABLE_STATEMENTS
                            if Gun(3) > 0 then
                               Shoots := Gun(3);
                               if Gunner_Order /= 3 then
@@ -531,7 +531,7 @@ package body Combat is
                                    Natural'Image(Shoots),
                                  Message_Type => Log.COMBAT);
                            end if;
-                           -- rule on SIMPLIFIABLE_STATEMENTS
+                           --## rule on SIMPLIFIABLE_STATEMENTS
                            exit Count_Player_Shoots_Loop;
                         end if;
                      end loop Count_Player_Shoots_Loop;
@@ -560,7 +560,7 @@ package body Combat is
                   Count_Enemy_Shoots_Loop :
                   for Gun of Enemy.Guns loop
                      if Gun(1) = Modules_Container.To_Index(Position => K) then
-                        -- rule off SIMPLIFIABLE_STATEMENTS
+                        --## rule off SIMPLIFIABLE_STATEMENTS
                         if Gun(3) > 0 then
                            Shoots := Gun(3);
                         elsif Gun(3) < 0 then
@@ -581,7 +581,7 @@ package body Combat is
                                      .Speed);
                            end if;
                         end if;
-                        -- rule on SIMPLIFIABLE_STATEMENTS
+                        --## rule on SIMPLIFIABLE_STATEMENTS
                         exit Count_Enemy_Shoots_Loop;
                      end if;
                   end loop Count_Enemy_Shoots_Loop;
@@ -1038,17 +1038,23 @@ package body Combat is
             end if;
          -- Count damage based on attacker wounds, fatigue, hunger and thirst
             Wounds := 1.0 - Damage_Factor(Float(Attacker.Health) / 100.0);
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Damage :=
               (Base_Damage - Integer(Float(Base_Damage) * Float(Wounds)));
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             if Attacker.Thirst > 40 then
                Wounds := 1.0 - Damage_Factor(Float(Attacker.Thirst) / 100.0);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Damage :=
                  Damage - (Integer(Float(Base_Damage) * Float(Wounds)));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
             if Attacker.Hunger > 80 then
                Wounds := 1.0 - Damage_Factor(Float(Attacker.Hunger) / 100.0);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Damage :=
                  Damage - (Integer(Float(Base_Damage) * Float(Wounds)));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
             Damage :=
               (if Player_Attack_2 then
