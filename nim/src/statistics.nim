@@ -115,6 +115,9 @@ proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [].} =
   return (gameStats.points.float * pointsBonus).Natural
 
 proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [].} =
+  ## Update the list of finished missions in the game statistics
+  ##
+  ## * mType - the type of missions which will be updated
   var updated = false
   for finishedMission in gameStats.finishedMissions.mitems:
     if finishedMission.index == mType:
