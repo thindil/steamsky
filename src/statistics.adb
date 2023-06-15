@@ -105,6 +105,19 @@ package body Statistics is
                       To_String(Source => Game_Stats.Finished_Goals(I).Index)),
                Amount => Game_Stats.Finished_Goals(I).Amount);
          end loop Get_Finished_Goals_Loop;
+      elsif Name = "finishedMissions" then
+         Get_Finished_Missions_Loop :
+         for I in
+           Game_Stats.Finished_Missions.First_Index ..
+             Game_Stats.Finished_Missions.Last_Index loop
+            Nim_List(I - 1) :=
+              (Index =>
+                 New_String
+                   (Str =>
+                      To_String
+                        (Source => Game_Stats.Finished_Missions(I).Index)),
+               Amount => Game_Stats.Finished_Missions(I).Amount);
+         end loop Get_Finished_Missions_Loop;
       end if;
       Get_Ada_Game_Stats_List
         (N => New_String(Str => Name), Stats_List => Nim_List);
@@ -146,6 +159,20 @@ package body Statistics is
                     To_Unbounded_String(Source => Value(Item => Goal.Index)),
                   Amount => Goal.Amount));
          end loop Set_Finished_Goals_Loop;
+      elsif Name = "finishedMissions" then
+         Game_Stats.Finished_Missions.Clear;
+         Set_Finished_Missions_Loop :
+         for Mission of Nim_List loop
+            exit Set_Finished_Missions_Loop when Strlen
+                (Item => Mission.Index) =
+              0;
+            Game_Stats.Finished_Missions.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String
+                      (Source => Value(Item => Mission.Index)),
+                  Amount => Mission.Amount));
+         end loop Set_Finished_Missions_Loop;
       end if;
    end Set_Game_Stats_List;
 
@@ -221,21 +248,17 @@ package body Statistics is
    end Update_Finished_Goals;
 
    procedure Update_Finished_Missions(M_Type: Unbounded_String) is
-      Updated: Boolean := False;
+      procedure Update_Ada_Finished_Missions(M_T: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaFinishedMissions";
    begin
-      Update_Finished_Missions_Loop :
-      for FinishedMission of Game_Stats.Finished_Missions loop
-         if FinishedMission.Index = M_Type then
-            FinishedMission.Amount := FinishedMission.Amount + 1;
-            Updated := True;
-            exit Update_Finished_Missions_Loop;
-         end if;
-      end loop Update_Finished_Missions_Loop;
-      if not Updated then
-         Game_Stats.Finished_Missions.Append
-           (New_Item => (Index => M_Type, Amount => 1));
-      end if;
-      Game_Stats.Points := Game_Stats.Points + 50;
+      Get_Game_Stats;
+      Get_Game_Stats_List(Name => "finishedMissions");
+      Update_Ada_Finished_Missions
+        (M_T => New_String(Str => To_String(Source => M_Type)));
+      Set_Game_Stats_List(Name => "finishedMissions");
+      Set_Game_Stats;
    end Update_Finished_Missions;
 
    procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
