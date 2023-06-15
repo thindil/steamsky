@@ -114,6 +114,17 @@ proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [].} =
     pointsBonus = 0.01
   return (gameStats.points.float * pointsBonus).Natural
 
+proc updateFinishedMissions*(mType: string) =
+  var updated = false
+  for finishedMission in gameStats.finishedMissions.mitems:
+    if finishedMission.index == mType:
+      finishedMission.amount.inc
+      updated = true
+      break
+  if not updated:
+    gameStats.finishedMissions.add(StatisticsData(index: mType, amount: 1))
+  gameStats.points = gameStats.points + 50
+
 # Temporary code for interfacing with Ada
 
 type
@@ -198,5 +209,8 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
 proc updateAdaFinishedGoals(index: cstring) {.raises: [], tags: [], exportc.} =
   updateFinishedGoals(index = $index)
 
-proc getAdaGamePoints(): cint {.raises: [], tags: [], exportc} =
+proc getAdaGamePoints(): cint {.raises: [], tags: [], exportc.} =
   return getGamePoints().cint
+
+proc updateAdaFinishedMissions(mType: cstring) {.raises: [], tags: [], exportc.} =
+  updateFinishedMissions(mType = $mType)
