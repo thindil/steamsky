@@ -20,3 +20,7 @@ assert gameStats.finishedGoals.len == 1
 
 gameStats.points = 0
 assert getGamePoints() == 0
+
+gameStats.finishedMissions = @[]
+updateFinishedMissions("DESTROY")
+assert gameStats.finishedMissions.len == 1
