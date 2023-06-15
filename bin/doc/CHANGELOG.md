@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Various information about some modules types to the list of the player's
+  ship's modules.
+
 ### Fixed
 - Showing information about finished stories
 - Typo in changelog
