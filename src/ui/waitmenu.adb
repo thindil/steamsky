@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -117,12 +117,14 @@ package body WaitMenu is
           (pathName => Wait_Dialog & ".amount",
            options =>
              "-from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
-             Button & "}");
+             Button & "} -textvariable customwaittime");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-row 7 -column 1");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      Set(SpinBox => Amount_Box, Value => "1");
+      if Tcl_GetVar(Interp, "customwaittime")'Length = 0 then
+         Set(SpinBox => Amount_Box, Value => "1");
+      end if;
       Add
         (Widget => Amount_Box,
          Message =>
