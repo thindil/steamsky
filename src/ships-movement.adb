@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C.Strings;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
@@ -44,47 +45,14 @@ package body Ships.Movement is
    -- SOURCE
    function Have_Order_Requirements return String is
       -- ****
-      Have_Cockpit, Have_Engine, Have_Pilot, Have_Engineer: Boolean := False;
+      use Interfaces.C.Strings;
+
+      function Have_Ada_Order_Requirements return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "haveAdaOrderRequirements";
    begin
-      Find_Modules_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = COCKPIT and Module.Durability > 0 then
-            Have_Cockpit := True;
-         elsif Module.M_Type = ENGINE
-           and then (Module.Durability > 1 and not Module.Disabled) then
-            Have_Engine := True;
-         end if;
-         exit Find_Modules_Loop when Have_Engine and Have_Cockpit;
-      end loop Find_Modules_Loop;
-      if not Have_Engine then
-         return
-           "You don't have a working engine on your ship or all of the engines are destroyed.";
-      end if;
-      if not Have_Cockpit then
-         return
-           "You don't have a cockpit on your ship or the cockpit is destroyed.";
-      end if;
-      if Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
-          (Item => To_Unbounded_String(Source => "sentientships")) then
-         Have_Pilot := True;
-         Have_Engineer := True;
-      end if;
-      Find_Members_Loop :
-      for Member of Player_Ship.Crew loop
-         if Member.Order = PILOT then
-            Have_Pilot := True;
-         elsif Member.Order = ENGINEER then
-            Have_Engineer := True;
-         end if;
-         exit Find_Members_Loop when Have_Pilot and Have_Engineer;
-      end loop Find_Members_Loop;
-      if not Have_Pilot then
-         return "You don't have a pilot on duty.";
-      end if;
-      if not Have_Engineer then
-         return "You don't have an engineer on duty.";
-      end if;
-      return "";
+      return Value(Item => Have_Ada_Order_Requirements);
    end Have_Order_Requirements;
 
    function Move_Ship
