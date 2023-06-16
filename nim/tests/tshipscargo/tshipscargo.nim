@@ -25,13 +25,13 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
 
 updateCargo(playerShip, 1, -1)
-assert playerShip.cargo[0].amount == 99
+assert playerShip.cargo[0].amount == 99, "Failed to remove an item from the player's ship's cargo."
 updateCargo(playerShip, 1, 1)
-assert playerShip.cargo[0].amount == 100
+assert playerShip.cargo[0].amount == 100, "Failed to add an item to the player's ship's cargo."
 updateCargo(playerShip, 40, -1)
 
-assert freeCargo(1) > freeCargo(0)
+assert freeCargo(1) > freeCargo(0), "Failed to count free cargo space in the player's ship."
 
-assert getItemAmount("Fuel") == 100
+assert getItemAmount("Fuel") == 100, "Failed to get amount of fuel in the player's ship's cargo."
 
-assert getItemsAmount("Drinks") == 200
+assert getItemsAmount("Drinks") == 200, "Failed to get amount of drinks in the player's ship's cargo."
