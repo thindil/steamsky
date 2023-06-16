@@ -46,7 +46,11 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
 
-proc haveOrderRequirements*(): string {.sideEffect, raises: [KeyError], tags: [].} =
+proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Check if all requirements for the ship's moving orders are valid
+  ##
+  ## Returns empty string if everything is ok, otherwise the message about the
+  ## missing requirement for the movement order.
   var haveCockpit, haveEngine: bool = false
   for module in playerShip.modules:
     if module.mType == ModuleType2.cockpit and module.durability > 0:
