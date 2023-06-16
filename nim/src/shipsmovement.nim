@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import config, crewinventory, game, gamesaveload, maps, messages, shipscargo,
-    shipscrew2, types, utils
+import std/[strutils, tables]
+import bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
+    shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
     tags: [WriteIOEffect].} =
@@ -102,6 +102,24 @@ proc dockShip*(docking: bool; escape: bool = false): string =
             max = playerShip.crew[memberIndex].loyalty) < 10:
           addMessage(message = playerShip.crew[memberIndex].name &
               " resigns from working for you.", mType = orderMessage)
+          deleteMember(memberIndex = memberIndex, ship = playerShip)
+          skyBases[baseIndex].population.inc
+          for i in playerShip.crew.low .. playerShip.crew.high:
+            updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
+                min = -5, max = -1))
+        else:
+          memberIndex.inc
+      if gameSettings.autoAskForBases == 1:
+        askForBases()
+      if gameSettings.autoAskForEvents == 1:
+        askForEvents()
+    else:
+      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
+          ".", mType = orderMessage)
+    playerShip.speed = docked
+    updateGame(minutes = 10)
+  else:
+    playerShip.speed = parseEnum[ShipSpeed]($gameSettings.undockSpeed)
 
 # Temporary code for interfacing with Ada
 
