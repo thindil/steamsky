@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
 import game, crewinventory, messages, shipscargo, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
@@ -45,6 +46,37 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
 
+proc haveOrderRequirements*(): string =
+  var haveCockpit, haveEngine: bool = false
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.cockpit and module.durability > 0:
+      haveCockpit = true
+    elif module.mType == ModuleType2.engine and (module.durability > 1 and
+        not module.disabled):
+      haveEngine = true
+    if haveCockpit and haveEngine:
+      break
+  if not haveEngine:
+    return "You don't have a working engine on your ship or all of the engines are destroyed."
+  if not haveCockpit:
+    return "You don't have a cockpit on your ship or the cockpit is destroyed."
+  var havePilot, haveEngineer: bool = false
+  if "sentientships" in factionsList[playerShip.crew[0].faction].flags:
+    havePilot = true
+    haveEngineer = true
+  for member in playerShip.crew:
+    if member.order == pilot:
+      havePilot = true
+    elif member.order == engineer:
+      haveEngineer = true
+    if havePilot and haveEngineer:
+      break
+  if not havePilot:
+    return "You don't have a pilot on duty."
+  if not haveEngineer:
+    return "You don't have an engineer on duty."
+  return ""
+
 # Temporary code for interfacing with Ada
 
 proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
@@ -52,3 +84,9 @@ proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.
     waitInPlace(minutes = minutes.Positive)
   except KeyError, IOError:
     discard
+
+proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return haveOrderRequirements().cstring
+  except KeyError:
+    return ""
