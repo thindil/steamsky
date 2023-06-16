@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, crewinventory, messages, shipscargo, shipscrew2, types, utils
+import config, crewinventory, game, gamesaveload, maps, messages, shipscargo,
+    shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
     tags: [WriteIOEffect].} =
@@ -80,6 +81,27 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
   if not haveEngineer:
     return "You don't have an engineer on duty."
   return ""
+
+proc dockShip*(docking: bool; escape: bool = false): string =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  result = haveOrderRequirements()
+  if result.len > 0:
+    return
+  if docking:
+    if skyBases[baseIndex].population > 0:
+      addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
+          mType = orderMessage)
+      if $gameSettings.autoSave == $dock:
+        saveGame()
+      var memberIndex = 0
+      while memberIndex < playerShip.crew.len:
+        if playerShip.crew[memberIndex].contractLength == 0:
+          deleteMember(memberIndex = memberIndex, ship = playerShip)
+          skyBases[baseIndex].population.inc
+        elif playerShip.crew[memberIndex].loyalty < 20 and getRandom(min = 0,
+            max = playerShip.crew[memberIndex].loyalty) < 10:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " resigns from working for you.", mType = orderMessage)
 
 # Temporary code for interfacing with Ada
 
