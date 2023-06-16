@@ -46,7 +46,7 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
 
-proc haveOrderRequirements*(): string =
+proc haveOrderRequirements*(): string {.sideEffect, raises: [KeyError], tags: [].} =
   var haveCockpit, haveEngine: bool = false
   for module in playerShip.modules:
     if module.mType == ModuleType2.cockpit and module.durability > 0:
