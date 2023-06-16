@@ -47,6 +47,16 @@ package body Combat is
    Faction_Name: Tiny_String.Bounded_String;
    -- ****
 
+   -- ****if* Combat/Combat.Get_Faction_Name
+   -- FUNCTION
+   -- Get the name of the faction
+   -- SOURCE
+   function Get_Faction_Name return Tiny_String.Bounded_String is
+      -- ****
+   begin
+      return Faction_Name;
+   end Get_Faction_Name;
+
    -- ****iv* Combat/Combat.Turn_Number
    -- FUNCTION
    -- Number of turn of combat
@@ -416,7 +426,7 @@ package body Combat is
          Enemy_Name_Owner: constant Unbounded_String :=
            To_String(Source => Enemy_Name) &
            To_Unbounded_String(Source => " (") &
-           To_String(Source => Faction_Name) & ")";
+           To_String(Source => Get_Faction_Name) & ")";
          procedure Remove_Gun(Module_Index: Positive) is
          begin
             if Enemy_Ship = Player_Ship then
@@ -1014,11 +1024,11 @@ package body Combat is
                  To_Unbounded_String(Source => " attacks ") &
                  To_String(Source => Defender.Name) &
                  To_Unbounded_String(Source => " (") &
-                 To_String(Source => Faction_Name) &
+                 To_String(Source => Get_Faction_Name) &
                  To_Unbounded_String(Source => ")")
                else To_String(Source => Attacker.Name) &
                  To_Unbounded_String(Source => " (") &
-                 To_String(Source => Faction_Name) &
+                 To_String(Source => Get_Faction_Name) &
                  To_Unbounded_String(Source => ")") &
                  To_Unbounded_String(Source => " attacks ") &
                  To_String(Source => Defender.Name));
@@ -1295,12 +1305,12 @@ package body Combat is
                     (Mob => Defender,
                      Fraction_Name =>
                        To_Unbounded_String
-                         (Source => To_String(Source => Faction_Name)));
+                         (Source => To_String(Source => Get_Faction_Name)));
                   Update_Goal
                     (G_Type => KILL,
                      Target_Index =>
                        To_Unbounded_String
-                         (Source => To_String(Source => Faction_Name)));
+                         (Source => To_String(Source => Get_Faction_Name)));
                   if Enemy.Ship.Crew.Length = 0 then
                      End_Combat := True;
                   end if;
@@ -1980,7 +1990,7 @@ package body Combat is
                   end Story_Loot_Block;
                else
                   Start_Story
-                    (Faction_Name => Faction_Name, Condition => DROPITEM);
+                    (Faction_Name => Get_Faction_Name, Condition => DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
