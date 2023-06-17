@@ -122,7 +122,8 @@ package body WaitMenu is
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      if Tcl_GetVar(Interp, "customwaittime")'Length = 0 then
+      if Tcl_GetVar(interp => Interp, varName => "customwaittime")'Length =
+        0 then
          Set(SpinBox => Amount_Box, Value => "1");
       end if;
       Add
