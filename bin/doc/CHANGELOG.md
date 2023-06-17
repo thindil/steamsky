@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Various information about some modules types to the list of the player's
   ship's modules.
+- Remembering the last entered value of custom wait time in the wait menu.
 
 ### Fixed
 - Showing information about finished stories
