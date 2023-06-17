@@ -111,6 +111,16 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural =
     shipSetSpeed = parseEnum[ShipSpeed]($gameSettings.undockSpeed)
     if shipSetSpeed == fullStop:
       shipSetSpeed = quarterSpeed
+  case shipSetSpeed
+  of quarterSpeed:
+    result = (result.float * 0.25).Natural
+  of halfSpeed:
+    result = (result.float * 0.5).Natural
+  of fullSpeed:
+    discard
+  else:
+    return 0
+  result = (result / 60).Natural
 
 proc dockShip*(docking: bool; escape: bool = false): string =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -164,3 +174,10 @@ proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc.} =
     return haveOrderRequirements().cstring
   except KeyError:
     return ""
+
+proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
+    tags: [], exportc.} =
+  if ofPlayerShip == 1:
+    return realSpeed(playerShip, infoOnly == 1).cint
+  else:
+    return realSpeed(npcShip, infoOnly == 1).cint
