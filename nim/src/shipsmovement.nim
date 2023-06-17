@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
-    shipscargo, shipscrew, shipscrew2, types, utils
+    ships, shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
     tags: [WriteIOEffect].} =
@@ -81,6 +81,20 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
   if not haveEngineer:
     return "You don't have an engineer on duty."
   return ""
+
+proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural =
+  result = 0
+  if ship.name == playerShip.name and not infoOnly:
+    if haveOrderRequirements().len > 0:
+      return
+  var baseSpeed = 0
+  for module in ship.modules:
+    if module.mType == ModuleType2.engine and not module.disabled:
+      baseSpeed = module.power * 10
+      var damage = 1.0 - (module.durability.float / module.maxDurability.float)
+      result = result + (baseSpeed - (baseSpeed.float * damage).Natural)
+  result = ((result.float / countShipWeight(ship = ship).float) *
+      100_000.0).Natural
 
 proc dockShip*(docking: bool; escape: bool = false): string =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
