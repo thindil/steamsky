@@ -450,97 +450,17 @@ package body Ships.Movement is
 
    function Real_Speed
      (Ship: Ship_Record; Info_Only: Boolean := False) return Natural is
-      Base_Speed, Speed: Natural := 0;
-      Ship_Set_Speed: Ship_Speed;
+      function Real_Ada_Speed
+        (Of_Player_Ship, I_Only: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "realAdaSpeed";
    begin
-      if Ship = Player_Ship and not Info_Only then
-         if Have_Order_Requirements'Length > 0 then
-            return 0;
-         end if;
-      end if;
-      Count_Damage_Penalty_Block :
-      declare
-         Damage: Damage_Factor := 0.0;
-      begin
-         Find_Engine_Loop :
-         for Module of Ship.Modules loop
-            if Module.M_Type = ENGINE and then not Module.Disabled then
-               Base_Speed := Module.Power * 10;
-               Damage :=
-                 1.0 -
-                 Damage_Factor
-                   (Float(Module.Durability) / Float(Module.Max_Durability));
-               Speed :=
-                 Speed +
-                 (Base_Speed - Natural(Float(Base_Speed) * Float(Damage)));
-            end if;
-         end loop Find_Engine_Loop;
-      end Count_Damage_Penalty_Block;
-      Speed :=
-        Natural
-          ((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) *
-           100_000.0);
-      if Ship.Crew.Length > 0 then
-         if not Get_Faction(Index => Ship.Crew(1).Faction).Flags.Contains
-             (Item => To_Unbounded_String(Source => "sentientships")) then
-            Sentinent_Ship_Speed_Loop :
-            for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Order = PILOT then
-                  Speed :=
-                    Speed +
-                    Natural
-                      (Float(Speed) *
-                       (Float
-                          (Get_Skill_Level
-                             (Member => Ship.Crew(I),
-                              Skill_Index => Piloting_Skill)) /
-                        300.0));
-               elsif Ship.Crew(I).Order = ENGINEER then
-                  Speed :=
-                    Speed +
-                    Natural
-                      (Float(Speed) *
-                       (Float
-                          (Get_Skill_Level
-                             (Member => Ship.Crew(I),
-                              Skill_Index => Engineering_Skill)) /
-                        300.0));
-               end if;
-            end loop Sentinent_Ship_Speed_Loop;
-         else
-            Normal_Ship_Speed_Loop :
-            for Module of Ship.Modules loop
-               if Module.M_Type = HULL then
-                  Speed :=
-                    Speed +
-                    Natural
-                      (Float(Speed) * (Float(Module.Max_Modules * 2) / 300.0));
-                  exit Normal_Ship_Speed_Loop;
-               end if;
-            end loop Normal_Ship_Speed_Loop;
-         end if;
-      end if;
-      if Ship = Player_Ship and (Ship.Speed in DOCKED | FULL_STOP) and
-        Info_Only then
-         Ship_Set_Speed := Game_Settings.Undock_Speed;
-         if Ship_Set_Speed = FULL_STOP then
-            Ship_Set_Speed := QUARTER_SPEED;
-         end if;
-      else
-         Ship_Set_Speed := Ship.Speed;
-      end if;
-      case Ship_Set_Speed is
-         when QUARTER_SPEED =>
-            Speed := Integer(Float(Speed) * 0.25);
-         when HALF_SPEED =>
-            Speed := Integer(Float(Speed) * 0.5);
-         when FULL_SPEED =>
-            null;
-         when others =>
-            return 0;
-      end case;
-      Speed := (Speed / 60);
-      return Speed;
+      Set_Ship_In_Nim(Ship => Ship);
+      return
+        Real_Ada_Speed
+          (Of_Player_Ship => (if Ship = Player_Ship then 1 else 0),
+           I_Only => (if Info_Only then 1 else 0));
    end Real_Speed;
 
    function Count_Fuel_Needed return Integer is
