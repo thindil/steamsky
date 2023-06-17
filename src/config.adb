@@ -47,7 +47,7 @@ package body Config is
    --## rule off TYPE_INITIAL_VALUES
       type Game_Nim_Settings_Record is record
          Auto_Rest: Integer;
-         Undock_Speed: chars_ptr;
+         Undock_Speed: Integer;
          Auto_Center: Integer;
          Auto_Return: Integer;
          Auto_Finish: Integer;
@@ -128,7 +128,7 @@ package body Config is
       Game_Settings :=
         (Auto_Rest => Get_Bool(Value => Temp_Settings.Auto_Rest),
          Undock_Speed =>
-           Ship_Speed'Value(Value(Item => Temp_Settings.Undock_Speed)),
+           Ship_Speed'Val(Temp_Settings.Undock_Speed),
          Auto_Center => Get_Bool(Value => Temp_Settings.Auto_Center),
          Auto_Return => Get_Bool(Value => Temp_Settings.Auto_Return),
          Auto_Finish => Get_Bool(Value => Temp_Settings.Auto_Finish),
