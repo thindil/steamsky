@@ -1070,10 +1070,10 @@ package body Combat is
               (if Player_Attack_2 then
                  Integer
                    (Float(Damage) *
-                    Float(New_Game_Settings.Player_Melee_Damage_Bonus))
+                    New_Game_Settings.Player_Melee_Damage_Bonus)
                else Integer
                    (Float(Damage) *
-                    Float(New_Game_Settings.Enemy_Melee_Damage_Bonus)));
+                    New_Game_Settings.Enemy_Melee_Damage_Bonus));
             if Attacker.Equipment(WEAPON) > 0 then
                Attack_Skill :=
                  Get_Skill_Level
@@ -1499,7 +1499,7 @@ package body Combat is
       end if;
       Count_Run_From_Combat_Block :
       declare
-         Chance_For_Run: Integer;
+         Chance_For_Run: Integer := 0;
       begin
          Turn_Number := Turn_Number + 1;
          case Enemy.Combat_Ai is
@@ -1592,8 +1592,8 @@ package body Combat is
       Enemy_Weapon_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
          if Enemy.Ship.Modules(I).Durability = 0 or
-           (Enemy.Ship.Modules(I).M_Type not in GUN | BATTERING_RAM |
-                HARPOON_GUN) then
+           Enemy.Ship.Modules(I).M_Type not in GUN | BATTERING_RAM |
+                HARPOON_GUN then
             goto End_Of_Enemy_Weapon_Loop;
          end if;
          if Enemy.Ship.Modules(I).M_Type in GUN | HARPOON_GUN then
@@ -1653,7 +1653,7 @@ package body Combat is
                end loop Enemy_Ammo_Index_Loop;
             end if;
             if Enemy_Ammo_Index = 0 and
-              (Enemy.Combat_Ai in ATTACKER | DISARMER) then
+              Enemy.Combat_Ai in ATTACKER | DISARMER then
                Enemy.Combat_Ai := COWARD;
                exit Enemy_Weapon_Loop;
             end if;
@@ -1664,7 +1664,7 @@ package body Combat is
          <<End_Of_Enemy_Weapon_Loop>>
       end loop Enemy_Weapon_Loop;
       if Enemy_Weapon_Index = 0 and
-        (Enemy.Combat_Ai in ATTACKER | DISARMER) then
+        Enemy.Combat_Ai in ATTACKER | DISARMER then
          Enemy.Combat_Ai := COWARD;
       end if;
       case Enemy.Combat_Ai is
@@ -1890,7 +1890,7 @@ package body Combat is
               (Message => To_String(Source => Enemy_Name) & " is destroyed!",
                M_Type => COMBATMESSAGE);
             Loot_Amount := Enemy.Loot;
-            Ship_Free_Space := Free_Cargo(Amount => (0 - Loot_Amount));
+            Ship_Free_Space := Free_Cargo(Amount => -(Loot_Amount));
             if Ship_Free_Space < 0 then
                Loot_Amount := Loot_Amount + Ship_Free_Space;
             end if;
@@ -1916,7 +1916,7 @@ package body Combat is
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   Loot_Amount := Item.Amount / 5;
-                  Ship_Free_Space := Free_Cargo(Amount => (0 - Loot_Amount));
+                  Ship_Free_Space := Free_Cargo(Amount => -(Loot_Amount));
                   if Ship_Free_Space < 0 then
                      Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
@@ -1950,7 +1950,10 @@ package body Combat is
                Add_Message
                  (Message => To_String(Source => Message) & ".",
                   M_Type => COMBATMESSAGE);
-               if Current_Story.Index /= Null_Unbounded_String then
+               if Current_Story.Index = Null_Unbounded_String then
+                  Start_Story
+                    (Faction_Name => Get_Faction_Name, Condition => DROPITEM);
+               else
                   Story_Loot_Block :
                   declare
                      Step: constant Step_Data :=
@@ -1988,9 +1991,6 @@ package body Combat is
                         end if;
                      end if;
                   end Story_Loot_Block;
-               else
-                  Start_Story
-                    (Faction_Name => Get_Faction_Name, Condition => DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
