@@ -82,7 +82,8 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
     return "You don't have an engineer on duty."
   return ""
 
-proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural =
+proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
+    raises: [KeyError], tags: [].} =
   result = 0
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
