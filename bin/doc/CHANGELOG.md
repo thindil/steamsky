@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing information about finished stories
 - Typo in changelog
+- Look of the base's info's dialog when the player is unknown in the base
 
 ## [8.8] - 2023-06-11
 
