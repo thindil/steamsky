@@ -1100,6 +1100,7 @@ package body Combat is
               (Get_Skill_Level
                  (Member => Defender, Skill_Index => Dodge_Skill) +
                Get_Random(Min => 1, Max => 50));
+            --## rule off SIMPLIFIABLE_STATEMENTS
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
                if Defender.Equipment(I) > 0 then
@@ -1115,6 +1116,7 @@ package body Combat is
                       (3);
                end if;
             end loop Count_Hit_Chance_Loop;
+            --## rule on SIMPLIFIABLE_STATEMENTS
             if Defender.Equipment(Hit_Location) > 0 then
                Damage :=
                  Damage -
@@ -1583,7 +1585,9 @@ package body Combat is
                Color => RED);
          end if;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Speed_Bonus := 20 - (Real_Speed(Ship => Player_Ship) / 100);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
@@ -1750,15 +1754,19 @@ package body Combat is
          when others =>
             null;
       end case;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Speed_Bonus := 20 - (Real_Speed(Ship => Enemy.Ship) / 100);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
       Accuracy_Bonus := Accuracy_Bonus + Speed_Bonus;
       Evade_Bonus := Evade_Bonus - Speed_Bonus;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Distance_Traveled :=
         (if Enemy_Pilot_Order < 4 then -(Real_Speed(Ship => Enemy.Ship))
          else Real_Speed(Ship => Enemy.Ship));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Pilot_Index > 0 then
          case Pilot_Order is
             when 1 | 3 =>
@@ -1784,6 +1792,7 @@ package body Combat is
       if Enemy.Distance < 10 then
          Enemy.Distance := 10;
       end if;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       if Enemy.Distance >= 15_000 then
          if Pilot_Order = 4 then
             Add_Message
@@ -1821,6 +1830,7 @@ package body Combat is
          Log_Message
            (Message => "Distance: short or close", Message_Type => Log.COMBAT);
       end if;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Attack(Ship => Player_Ship, Enemy_Ship => Enemy.Ship); -- Player attack
       if not End_Combat then
          Attack(Ship => Enemy.Ship, Enemy_Ship => Player_Ship); -- Enemy attack
@@ -1890,7 +1900,9 @@ package body Combat is
               (Message => To_String(Source => Enemy_Name) & " is destroyed!",
                M_Type => COMBATMESSAGE);
             Loot_Amount := Enemy.Loot;
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Ship_Free_Space := Free_Cargo(Amount => -(Loot_Amount));
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             if Ship_Free_Space < 0 then
                Loot_Amount := Loot_Amount + Ship_Free_Space;
             end if;
@@ -1916,7 +1928,9 @@ package body Combat is
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   Loot_Amount := Item.Amount / 5;
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Ship_Free_Space := Free_Cargo(Amount => -(Loot_Amount));
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Ship_Free_Space < 0 then
                      Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
@@ -1963,7 +1977,9 @@ package body Combat is
                           Stories_List(Current_Story.Index).Steps
                             (Current_Story.Current_Step)
                         else Stories_List(Current_Story.Index).Final_Step);
+                     --## rule off IMPROPER_INITIALIZATION
                      Tokens: Slice_Set;
+                     --## rule on IMPROPER_INITIALIZATION
                   begin
                      if Step.Finish_Condition = LOOT then
                         Create
