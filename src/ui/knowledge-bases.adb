@@ -577,7 +577,7 @@ package body Knowledge.Bases is
       Add
         (Widget => Base_Button,
          Message => "Set the base as the ship destination");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Base_Button, Options => "-row 3 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Base_Button, Options => "-row 3 -padx 5 -sticky e");
       Bind
         (Widgt => Base_Button, Sequence => "<Tab>",
          Script => "{focus " & Base_Dialog & ".button;break}");
