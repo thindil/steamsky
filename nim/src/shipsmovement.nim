@@ -84,6 +84,12 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
 
 proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Count the real speed of the ship in meters per minute
+  ##
+  ## * ship     - the ship which speed will be count
+  ## * infoOnly - if true, the ship is docked, count with its max speed
+  ##
+  ## Returns the ships' speed in meters per minute
   result = 0
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
