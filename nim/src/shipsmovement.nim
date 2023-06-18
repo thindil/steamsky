@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/tables
 import bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
     ships, shipscargo, shipscrew, shipscrew2, types, utils
 
@@ -108,7 +108,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural =
               300.0)).Natural
   var shipSetSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
-    shipSetSpeed = parseEnum[ShipSpeed]($gameSettings.undockSpeed)
+    shipSetSpeed = gameSettings.undockSpeed.ShipSpeed
     if shipSetSpeed == fullStop:
       shipSetSpeed = quarterSpeed
   case shipSetSpeed
@@ -159,7 +159,7 @@ proc dockShip*(docking: bool; escape: bool = false): string =
     playerShip.speed = docked
     updateGame(minutes = 10)
   else:
-    playerShip.speed = parseEnum[ShipSpeed]($gameSettings.undockSpeed)
+    playerShip.speed = gameSettings.undockSpeed.ShipSpeed
 
 # Temporary code for interfacing with Ada
 
