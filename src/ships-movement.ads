@@ -79,16 +79,15 @@ package Ships.Movement is
       -- The real speed of the selected ship or 0 if the ship can't move
       -- SOURCE
    function Real_Speed
-     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural with
-      Test_Case => (Name => "Test_RealSpeed", Mode => Robustness);
-      -- ****
+     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural;
+     -- ****
 
-      -- ****f* SMovement/SMovement.Count_Fuel_Needed
-      -- FUNCTION
-      -- Count amount of fuel needed by player ship to travel
-      -- RESULT
-      -- Amount of fuel needed by player ship to travel
-      -- SOURCE
+     -- ****f* SMovement/SMovement.Count_Fuel_Needed
+     -- FUNCTION
+     -- Count amount of fuel needed by player ship to travel
+     -- RESULT
+     -- Amount of fuel needed by player ship to travel
+     -- SOURCE
    function Count_Fuel_Needed return Integer with
       Test_Case => (Name => "Test_CountFuelNeeded", Mode => Robustness);
       -- ****
