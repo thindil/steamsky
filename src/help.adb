@@ -23,6 +23,7 @@ with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Elements;
 with DOM.Core.Nodes;
+with Factions;
 with Game;
 with Items;
 with Log;
@@ -37,6 +38,7 @@ package body Help is
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
+      use Factions;
       use Game;
       use Log;
       use Short_String;
@@ -111,6 +113,7 @@ package body Help is
             end if;
          end if;
       end loop Load_Help_Data_Loop;
+      -- Add help page about available statistics and attributes
       Tmp_Help.Index := To_Unbounded_String(Source => "stats");
       Help_Title :=
         To_Unbounded_String
@@ -189,6 +192,40 @@ package body Help is
                  "    " & To_String(Source => Skill.Description) & LF & LF);
          end Load_Skills_Block;
       end loop Load_Skills_Loop;
+      Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
+      Log_Message
+        (Message => "Help added: " & To_String(Source => Help_Title),
+         Message_Type => EVERYTHING);
+      -- Add help page about available careers and factions
+      Tmp_Help.Index := To_Unbounded_String(Source => "factions");
+      Help_Title :=
+        To_Unbounded_String
+          (Source =>
+             Trim
+               (Source => Positive'Image(Positive(Help_List.Length) + 1),
+                Side => Left) &
+             ". Factions and careers");
+      Tmp_Help.Text :=
+        To_Unbounded_String
+          (Source =>
+             "Here you will find information about all available factions and careers in the game" &
+             LF & LF & "{u}Factions{/u}" & LF & LF);
+      Load_Factions_Names_Loop :
+      for I in 1 .. Get_Factions_Amount loop
+         Load_Faction_Block :
+         declare
+            Faction: constant Faction_Record := Get_Faction(Number => I);
+         begin
+            if Faction.Careers.Length > 0 then
+               Append
+                 (Source => Tmp_Help.Text,
+                  New_Item =>
+                    "{b}" & To_String(Source => Faction.Name) & "{/b}" & LF &
+                    "    " & To_String(Source => Faction.Description) & LF &
+                    LF);
+            end if;
+         end Load_Faction_Block;
+      end loop Load_Factions_Names_Loop;
       Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
       Log_Message
         (Message => "Help added: " & To_String(Source => Help_Title),
