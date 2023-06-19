@@ -222,6 +222,13 @@ proc dockShip*(docking: bool; escape: bool = false): string =
         damageModule(ship = playerShip, moduleIndex = moduleIndex,
             damage = getRandom(min = 1, max = 30),
             deathReason = "damage during escaping from the base")
+      addMessage(message = messageText, mType = orderMessage, color = color)
+      gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
+    if playerShip.crew[0].health > 0:
+      playerShip.speed = gameSettings.undockSpeed.ShipSpeed
+      updateGame(minutes = 5)
+      if $gameSettings.autoSave == $undock:
+        saveGame()
 
 # Temporary code for interfacing with Ada
 
@@ -243,3 +250,10 @@ proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
     return realSpeed(playerShip, infoOnly == 1).cint
   else:
     return realSpeed(npcShip, infoOnly == 1).cint
+
+proc dockShip(docking, escape: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    return dockShip(docking = docking == 1, escape = escape == 1).cstring
+  except KeyError, IOError, Exception:
+    discard
