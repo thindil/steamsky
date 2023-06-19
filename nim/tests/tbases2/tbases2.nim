@@ -58,6 +58,7 @@ for x in 1 .. 1024:
     skyMap[x][y].eventIndex = -1
     skyMap[x][y].baseIndex = 0
 skyMap[playerShip.skyX][playerShip.skyY].baseIndex = 1
+skyMap[playerShip.skyX][playerShip.skyY].eventIndex = -1
 for index, base in skyBases.mpairs:
   if index == 1:
     continue
