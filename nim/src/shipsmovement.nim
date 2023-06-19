@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
+import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
     ships, shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
@@ -167,6 +167,24 @@ proc dockShip*(docking: bool; escape: bool = false): string =
     updateGame(minutes = 10)
   else:
     playerShip.speed = gameSettings.undockSpeed.ShipSpeed
+    if (realSpeed(ship = playerShip).float / 1_000.0) < 0.5:
+      return "You can't undock because your ship is overloaded."
+    playerShip.speed = docked
+    if not escape:
+      if skyBases[baseIndex].population > 0:
+        let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+        if moneyIndex2 == -1:
+          return "You can't undock from this base because you don't have any " & moneyName & " to pay for docking."
+        var dockingCost: Natural = 0
+        for module in playerShip.modules:
+          if module.mType == ModuleType2.hull:
+            dockingCost = module.maxModules
+            break
+        dockingCost = (dockingCost.float * newGameSettings.pricesBonus).int
+        if dockingCost == 0:
+          dockingCost = 1
+        let traderIndex = findMember(order = talk)
+        countPrice(price = dockingCost, traderIndex = traderIndex)
 
 # Temporary code for interfacing with Ada
 
