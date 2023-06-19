@@ -567,26 +567,26 @@ package body Game is
            (Name => To_Unbounded_String(Source => "items"),
             File_Name => To_Unbounded_String(Source => "items.dat")),
          3 =>
-           (Name => To_Unbounded_String(Source => "help"),
-            File_Name => To_Unbounded_String(Source => "help.dat")),
-         4 =>
            (Name => To_Unbounded_String(Source => "modules"),
             File_Name => To_Unbounded_String(Source => "shipmodules.dat")),
-         5 =>
+         4 =>
            (Name => To_Unbounded_String(Source => "recipes"),
             File_Name => To_Unbounded_String(Source => "recipes.dat")),
-         6 =>
+         5 =>
            (Name => To_Unbounded_String(Source => "bases"),
             File_Name => To_Unbounded_String(Source => "bases.dat")),
-         7 =>
+         6 =>
            (Name => To_Unbounded_String(Source => "mobiles"),
             File_Name => To_Unbounded_String(Source => "mobs.dat")),
-         8 =>
+         7 =>
            (Name => To_Unbounded_String(Source => "careers"),
             File_Name => To_Unbounded_String(Source => "careers.dat")),
-         9 =>
+         8 =>
            (Name => To_Unbounded_String(Source => "factions"),
             File_Name => To_Unbounded_String(Source => "factions.dat")),
+         9 =>
+           (Name => To_Unbounded_String(Source => "help"),
+            File_Name => To_Unbounded_String(Source => "help.dat")),
          10 =>
            (Name => To_Unbounded_String(Source => "ships"),
             File_Name => To_Unbounded_String(Source => "ships.dat")),
