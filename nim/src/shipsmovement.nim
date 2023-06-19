@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps, messages,
-    ships, shipscargo, shipscrew, shipscrew2, types, utils
+import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
+    messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
     tags: [WriteIOEffect].} =
@@ -172,9 +172,11 @@ proc dockShip*(docking: bool; escape: bool = false): string =
     playerShip.speed = docked
     if not escape:
       if skyBases[baseIndex].population > 0:
-        let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+        let moneyIndex2 = findItem(inventory = playerShip.cargo,
+            protoIndex = moneyIndex)
         if moneyIndex2 == -1:
-          return "You can't undock from this base because you don't have any " & moneyName & " to pay for docking."
+          return "You can't undock from this base because you don't have any " &
+              moneyName & " to pay for docking."
         var dockingCost: Natural = 0
         for module in playerShip.modules:
           if module.mType == ModuleType2.hull:
@@ -185,6 +187,41 @@ proc dockShip*(docking: bool; escape: bool = false): string =
           dockingCost = 1
         let traderIndex = findMember(order = talk)
         countPrice(price = dockingCost, traderIndex = traderIndex)
+        if dockingCost > playerShip.cargo[moneyIndex2].amount:
+          return "You can't undock to this base because you don't have enough " &
+              moneyName & " to pay for docking."
+        updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -(dockingCost))
+        if traderIndex > -1:
+          gainExp(amount = 1, skillNumber = talkingSkill,
+              crewIndex = traderIndex)
+        let fuelIndex = findItem(inventory = playerShip.cargo,
+            itemType = fuelType)
+        if fuelIndex == -1:
+          return "You can't undock from base because you don't have any fuel."
+        addMessage(message = "Ship undocked from base " & skyBases[
+            baseIndex].name & ". You also paid " & $dockingCost & " " &
+            moneyName & " of docking fee.", mType = orderMessage)
+      else:
+        let fuelIndex = findItem(inventory = playerShip.cargo,
+            itemType = fuelType)
+        if fuelIndex == -1:
+          return "You can't undock from base because you don't have any fuel."
+        addMessage(message = "Ship undocked from base " & skyBases[
+            baseIndex].name & ".", mType = orderMessage)
+    else:
+      let roll = getRandom(min = 1, max = 100)
+      var
+        messageText = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
+        color = white
+      if roll in 1 .. 40:
+        let moduleIndex = getRandom(min = playerShip.modules.low,
+            max = playerShip.modules.high)
+        messageText = messageText & " But your ship (" & playerShip.modules[
+            moduleIndex].name & ") takes damage."
+        color = red
+        damageModule(ship = playerShip, moduleIndex = moduleIndex,
+            damage = getRandom(min = 1, max = 30),
+            deathReason = "damage during escaping from the base")
 
 # Temporary code for interfacing with Ada
 
