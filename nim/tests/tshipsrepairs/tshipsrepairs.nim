@@ -15,18 +15,20 @@ if modulesList.len == 0:
 
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
-    durability: 99, fuelUsage: 4, power: 2000, disabled: false, maxDurability: 100))
+    durability: 99, fuelUsage: 4, power: 2000, disabled: false,
+    maxDurability: 100))
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 61, amount: 5, durability: 100))
 playerShip.cargo.add(InventoryData(protoIndex: 5, amount: 100, durability: 100))
 playerShip.crew = @[]
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-    1, 0, 0], order: repair, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
+    1, 0, 0], order: repair, loyalty: 100, skills: @[SkillInfo(index: 4,
+    level: 4,
     experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
 playerShip.crew[0].equipment[tool] = -1
 
 repairShip(15)
-assert playerShip.modules[0].durability == 100
+assert playerShip.modules[0].durability == 100, "Failed to repair the ship's module."
