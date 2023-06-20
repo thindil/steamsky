@@ -222,7 +222,24 @@ package body Help is
                   New_Item =>
                     "{b}" & To_String(Source => Faction.Name) & "{/b}" & LF &
                     "    " & To_String(Source => Faction.Description) & LF &
-                    LF);
+                    "    {i}Relations{/b}" & LF);
+               Show_Relations_Loop :
+               for I in Faction.Relations.Iterate loop
+                  Append
+                    (Source => Tmp_Help.Text,
+                     New_Item =>
+                       "        " &
+                       To_String
+                         (Source =>
+                            Get_Faction
+                              (Index => Relations_Container.Key(Position => I))
+                              .Name) &
+                       ": " &
+                       (if Faction.Relations(I).Friendly then "Friendly"
+                        else "Enemies") &
+                       LF);
+               end loop Show_Relations_Loop;
+               Append(Source => Tmp_Help.Text, New_Item => LF);
             end if;
          end Load_Faction_Block;
       end loop Load_Factions_Names_Loop;
