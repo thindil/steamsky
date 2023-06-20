@@ -129,7 +129,9 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
     return 0
   result = (result / 60).Natural
 
-proc dockShip*(docking: bool; escape: bool = false): string =
+proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
+    raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   result = haveOrderRequirements()
   if result.len > 0:
@@ -251,7 +253,7 @@ proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
   else:
     return realSpeed(npcShip, infoOnly == 1).cint
 
-proc dockShip(docking, escape: cint): cstring {.raises: [], tags: [
+proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc.} =
   try:
     return dockShip(docking = docking == 1, escape = escape == 1).cstring
