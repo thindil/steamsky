@@ -15,18 +15,16 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Bases; use Bases;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
 with Config; use Config;
-with Bases; use Bases;
 with Events; use Events;
-with Utils; use Utils;
 with Factions; use Factions;
-with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
@@ -45,8 +43,6 @@ package body Ships.Movement is
    -- SOURCE
    function Have_Order_Requirements return String is
       -- ****
-      use Interfaces.C.Strings;
-
       function Have_Ada_Order_Requirements return chars_ptr with
          Import => True,
          Convention => C,
@@ -197,231 +193,28 @@ package body Ships.Movement is
 
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
-      use Tiny_String;
-
-      Base_Index: constant Extended_Base_Range :=
+      function Dock_Ada_Ship(D, E: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "dockAdaShip";
+      Message: Unbounded_String := Null_Unbounded_String;
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Message: Unbounded_String;
    begin
-      Message := To_Unbounded_String(Source => Have_Order_Requirements);
-      if Length(Source => Message) > 0 then
-         return To_String(Source => Message);
+      if Base_Index > 0 then
+         Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
-      if Docking then
-         if Sky_Bases(Base_Index).Population > 0 then
-            Add_Message
-              (Message =>
-                 "Ship docked to base " &
-                 To_String(Source => Sky_Bases(Base_Index).Name),
-               M_Type => ORDERMESSAGE);
-            if Game_Settings.Auto_Save = DOCK then
-               Save_Game;
-            end if;
-            Crew_Resignation_Block :
-            declare
-               Member_Index: Positive := 1;
-            begin
-               Resign_Crew_Member_Loop :
-               while Member_Index <= Player_Ship.Crew.Last_Index loop
-                  if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
-                     Delete_Member
-                       (Member_Index => Member_Index, Ship => Player_Ship);
-                     Sky_Bases(Base_Index).Population :=
-                       Sky_Bases(Base_Index).Population + 1;
-                  elsif Player_Ship.Crew(Member_Index).Loyalty < 20 and
-                    Get_Random
-                        (Min => 0,
-                         Max => Player_Ship.Crew(Member_Index).Loyalty) <
-                      10 then
-                     Add_Message
-                       (Message =>
-                          To_String
-                            (Source => Player_Ship.Crew(Member_Index).Name) &
-                          " resigns from working for you.",
-                        M_Type => ORDERMESSAGE);
-                     Delete_Member
-                       (Member_Index => Member_Index, Ship => Player_Ship);
-                     Sky_Bases(Base_Index).Population :=
-                       Sky_Bases(Base_Index).Population + 1;
-                     Drop_Morale_Loop :
-                     for I in Player_Ship.Crew.Iterate loop
-                        Update_Morale
-                          (Ship => Player_Ship,
-                           Member_Index =>
-                             Crew_Container.To_Index(Position => I),
-                           Amount => Get_Random(Min => -5, Max => -1));
-                     end loop Drop_Morale_Loop;
-                  else
-                     Member_Index := Member_Index + 1;
-                  end if;
-               end loop Resign_Crew_Member_Loop;
-            end Crew_Resignation_Block;
-            if Game_Settings.Auto_Ask_For_Bases then
-               Ask_For_Bases;
-            end if;
-            if Game_Settings.Auto_Ask_For_Events then
-               Ask_For_Events;
-            end if;
-         else
-            Add_Message
-              (Message =>
-                 "Ship docked to base " &
-                 To_String(Source => Sky_Bases(Base_Index).Name) & ".",
-               M_Type => ORDERMESSAGE);
-         end if;
-         Player_Ship.Speed := DOCKED;
-         Update_Game(Minutes => 10);
-      else
-         Player_Ship.Speed := Game_Settings.Undock_Speed;
-         Check_Overload_Block :
-         declare
-            Speed: constant Speed_Type :=
-              (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0);
-         begin
-            if Speed < 0.5 then
-               return "You can't undock because your ship is overloaded.";
-            end if;
-         end Check_Overload_Block;
-         Player_Ship.Speed := DOCKED;
-         if not Escape then
-            if Sky_Bases(Base_Index).Population > 0 then
-               Undock_From_Base_Block :
-               declare
-                  Money_Index_2: constant Inventory_Container.Extended_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo,
-                       Proto_Index => Money_Index);
-                  Docking_Cost: Natural;
-                  Fuel_Index: Inventory_Container.Extended_Index;
-                  Trader_Index: constant Crew_Container.Extended_Index :=
-                    Find_Member(Order => TALK);
-               begin
-                  if Money_Index_2 = 0 then
-                     return
-                       "You can't undock from this base because you don't have any " &
-                       To_String(Source => Money_Name) &
-                       " to pay for docking.";
-                  end if;
-                  Count_Cost_Loop :
-                  for Module of Player_Ship.Modules loop
-                     if Module.M_Type = HULL then
-                        Docking_Cost := Module.Max_Modules;
-                        exit Count_Cost_Loop;
-                     end if;
-                  end loop Count_Cost_Loop;
-                  Docking_Cost :=
-                    Natural
-                      (Float(Docking_Cost) *
-                       Float(New_Game_Settings.Prices_Bonus));
-                  if Docking_Cost = 0 then
-                     Docking_Cost := 1;
-                  end if;
-                  Count_Price
-                    (Price => Docking_Cost, Trader_Index => Trader_Index);
-                  if Docking_Cost >
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                      .Amount then
-                     return
-                       "You can't undock to this base because you don't have enough " &
-                       To_String(Source => Money_Name) &
-                       " to pay for docking.";
-                  end if;
-                  Update_Cargo
-                    (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-                     Amount => (0 - Docking_Cost));
-                  if Trader_Index > 0 then
-                     Gain_Exp
-                       (Amount => 1, Skill_Number => Talking_Skill,
-                        Crew_Index => Trader_Index);
-                  end if;
-                  Fuel_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-                  if Fuel_Index = 0 then
-                     return
-                       "You can't undock from base because you don't have any fuel.";
-                  end if;
-                  Add_Message
-                    (Message =>
-                       "Ship undocked from base " &
-                       To_String(Source => Sky_Bases(Base_Index).Name) &
-                       ". You also paid" & Positive'Image(Docking_Cost) & " " &
-                       To_String(Source => Money_Name) & " of docking fee.",
-                     M_Type => ORDERMESSAGE);
-               end Undock_From_Base_Block;
-            else
-               Check_Fuel_Block :
-               declare
-                  Fuel_Index: constant Inventory_Container.Extended_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-               begin
-                  if Fuel_Index = 0 then
-                     return
-                       "You can't undock from base because you don't have any fuel.";
-                  end if;
-                  Add_Message
-                    (Message =>
-                       "Ship undocked from base " &
-                       To_String(Source => Sky_Bases(Base_Index).Name) & ".",
-                     M_Type => ORDERMESSAGE);
-               end Check_Fuel_Block;
-            end if;
-         else
-            Escape_From_Base_Block :
-            declare
-               Roll: constant Integer := Get_Random(Min => 1, Max => 100);
-               Message_Text: Unbounded_String;
-               Color: Message_Color := WHITE;
-               Module_Index: Modules_Container.Extended_Index;
-            begin
-               Message_Text :=
-                 To_Unbounded_String
-                   (Source =>
-                      "Ship escaped from base " &
-                      To_String(Source => Sky_Bases(Base_Index).Name) &
-                      " without paying.");
-               case Roll is
-                  when 1 .. 40 =>
-                     Module_Index :=
-                       Get_Random
-                         (Min => Player_Ship.Modules.First_Index,
-                          Max => Player_Ship.Modules.Last_Index);
-                     Append
-                       (Source => Message_Text,
-                        New_Item =>
-                          " But your ship (" &
-                          To_String
-                            (Source =>
-                               Player_Ship.Modules(Module_Index).Name) &
-                          ") takes damage.");
-                     Color := RED;
-                     Damage_Module
-                       (Ship => Player_Ship, Module_Index => Module_Index,
-                        Damage => Get_Random(Min => 1, Max => 30),
-                        Death_Reason =>
-                          "damage during escaping from the base");
-                  when others =>
-                     null;
-               end case;
-               Add_Message
-                 (Message => To_String(Source => Message_Text),
-                  M_Type => ORDERMESSAGE, Color => Color);
-               Gain_Rep
-                 (Base_Index => Base_Index,
-                  Points => -(Get_Random(Min => 10, Max => 30)));
-            end Escape_From_Base_Block;
-         end if;
-         if Player_Ship.Crew(1).Health > 0 then
-            Player_Ship.Speed := Game_Settings.Undock_Speed;
-            Update_Game(Minutes => 5);
-            if Game_Settings.Auto_Save = UNDOCK then
-               Save_Game;
-            end if;
-         end if;
-      end if;
-      return "";
+      Set_Ship_In_Nim;
+      Message :=
+        To_Unbounded_String
+          (Source =>
+             Value
+               (Item =>
+                  Dock_Ada_Ship
+                    (D => (if Docking then 1 else 0),
+                     E => (if Escape then 1 else 0))));
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      return To_String(Source => Message);
    end Dock_Ship;
 
    function Change_Ship_Speed(Speed_Value: Ship_Speed) return String is
