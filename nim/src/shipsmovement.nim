@@ -132,6 +132,14 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
 proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Dock, undock or escape the player's ship from the currently visited base
+  ##
+  ## * docking - if true, the player is docking to the base
+  ## * escape  - if true, the player is escaping from the base without paying.
+  ##             The default value is false.
+  ##
+  ## Returns empty string if the player successfully docked, undocked or
+  ## escaped from the base. Otherwise return message what goes wrong.
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   result = haveOrderRequirements()
   if result.len > 0:
