@@ -64,6 +64,18 @@ package body Combat is
    Turn_Number: Natural;
    -- ****
 
+   -- ****if* Combat/Combat.Get_Turn_Number
+   -- FUNCTION
+   -- Get the number of the current combat turn
+   -- RESULT
+   -- The number of the current combat turn
+   -- SOURCE
+   function Get_Turn_Number return Natural is
+      -- ****
+   begin
+      return Turn_Number;
+   end Get_Turn_Number;
+
    -- ****if* Combat/Combat.Update_Turn_Number
    -- FUNCTION
    -- Update the number of the current combat turn
@@ -76,7 +88,7 @@ package body Combat is
       if Reset then
          Turn_Number := 0;
       else
-         Turn_Number := Turn_Number + 1;
+         Turn_Number := Get_Turn_Number + 1;
       end if;
    end Update_Turn_Number;
 
@@ -1522,11 +1534,11 @@ package body Combat is
          Update_Turn_Number;
          case Enemy.Combat_Ai is
             when ATTACKER =>
-               Chance_For_Run := Turn_Number - 120;
+               Chance_For_Run := Get_Turn_Number - 120;
             when BERSERKER =>
-               Chance_For_Run := Turn_Number - 200;
+               Chance_For_Run := Get_Turn_Number - 200;
             when DISARMER =>
-               Chance_For_Run := Turn_Number - 60;
+               Chance_For_Run := Get_Turn_Number - 60;
             when others =>
                null;
          end case;
