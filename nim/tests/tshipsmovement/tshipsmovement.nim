@@ -3,8 +3,8 @@ discard """
 """
 
 import std/tables
-import ../../src/[basestypes, careers, crafts, factions, game, items, mobs,
-    ships, shipsmovement, shipmodules, types]
+import ../../src/[basestypes, careers, crafts, factions, game, items, maps,
+    mobs, ships, shipsmovement, shipmodules, types]
 
 if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
@@ -23,7 +23,8 @@ if protoShipsList.len == 0:
 
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
-    durability: 100, fuelUsage: 4, power: 2000, disabled: false, maxDurability: 100))
+    durability: 100, fuelUsage: 4, power: 2000, disabled: false,
+    maxDurability: 100))
 playerShip.modules.add(ModuleData(mType: ModuleType2.cockpit, protoIndex: 5,
     durability: 100, maxDurability: 100))
 playerShip.cargo = @[]
@@ -43,6 +44,10 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+skyMap[1][1].baseIndex = 1
+skyBases[1].population = 100
+skyBases[1].baseType = "1"
+skyBases[1].owner = "POLEIS"
 
 waitInPlace(1)
 
@@ -52,3 +57,6 @@ playerShip.speed = fullSpeed
 assert realSpeed(playerShip) > 0, "Failed to get the real speed of the ship with full speed."
 playerShip.speed = docked
 assert realSpeed(playerShip, true) > 0, "Failed to get info about the real speed of the docked ship."
+
+assert dockShip(false).len == 0, "Failed to undock the player's ships from a base."
+assert dockShip(true).len == 0, "Failed to dock the player's ships from a base."
