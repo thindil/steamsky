@@ -32,6 +32,6 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 playerShip.crew[0].equipment[tool] = -1
 
 upgradeShip(15)
-assert playerShip.modules[0].upgradeProgress < 20
+assert playerShip.modules[0].upgradeProgress < 20, "Failed to progress in the player's ship's upgrade."
 playerShip.upgradeModule = -1
 upgradeShip(15)
