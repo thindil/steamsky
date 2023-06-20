@@ -52,8 +52,7 @@ package Ships.Movement is
       -- wrong
       -- SOURCE
    function Dock_Ship
-     (Docking: Boolean; Escape: Boolean := False) return String with
-      Test_Case => (Name => "Test_DockShip", Mode => Robustness);
+     (Docking: Boolean; Escape: Boolean := False) return String;
       -- ****
 
       -- ****f* SMovement/SMovement.Change_Ship_Speed
