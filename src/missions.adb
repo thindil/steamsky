@@ -16,11 +16,10 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement;
 with Maps; use Maps;
 with Bases; use Bases;
 with Messages; use Messages;
@@ -29,10 +28,8 @@ with Statistics; use Statistics;
 with Utils;
 with Config;
 with Events;
-with Goals;
 with Factions;
 with Items; use Items;
-with Ada.Text_IO;
 
 package body Missions is
 
@@ -292,77 +289,22 @@ package body Missions is
    end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
-      use Goals;
-      use Ships.Movement;
-      use Tiny_String;
+      use Interfaces.C;
 
-      Message: Unbounded_String := Null_Unbounded_String;
-      Missions_Amount: constant Positive := Positive(Accepted_Missions.Length);
+      function Finish_Ada_Mission(M_Index: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "finishAdaMission";
+      Message: chars_ptr;
    begin
-      if Player_Ship.Speed /= DOCKED then
-         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
-         if Length(Source => Message) > 0 then
-            raise Missions_Finishing_Error with To_String(Source => Message);
-         end if;
+      Get_Missions;
+      Get_Ada_Ship;
+      Message := Finish_Ada_Mission(M_Index => Mission_Index);
+      if Strlen(Item => Message) > 0 then
+         raise Missions_Finishing_Error with Value(Item => Message);
       end if;
-      Update_Game(Minutes => 5);
-      if Missions_Amount > Natural(Accepted_Missions.Length) then
-         return;
-      end if;
-      case Accepted_Missions(Mission_Index).M_Type is
-         when DELIVER =>
-            Add_Message
-              (Message =>
-                 "You finished mission 'Deliver " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index => Accepted_Missions(Mission_Index).Item_Index)
-                        .Name) &
-                 "'.",
-               M_Type => MISSIONMESSAGE, Color => GREEN);
-         when DESTROY =>
-            Add_Message
-              (Message =>
-                 "You finished mission 'Destroy " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Ship
-                        (Proto_Index =>
-                           Accepted_Missions(Mission_Index).Ship_Index)
-                        .Name) &
-                 "'.",
-               M_Type => MISSIONMESSAGE, Color => GREEN);
-         when PATROL =>
-            Add_Message
-              (Message => "You finished mission 'Patrol selected area'.",
-               M_Type => MISSIONMESSAGE, Color => GREEN);
-         when EXPLORE =>
-            Add_Message
-              (Message => "You finished mission 'Explore selected area'.",
-               M_Type => MISSIONMESSAGE, Color => GREEN);
-         when PASSENGER =>
-            Add_Message
-              (Message =>
-                 "You finished mission 'Transport passenger to base'.",
-               M_Type => MISSIONMESSAGE, Color => GREEN);
-      end case;
-      Update_Goal
-        (G_Type => MISSION,
-         Target_Index =>
-           To_Unbounded_String
-             (Source =>
-                Missions_Types'Image
-                  (Accepted_Missions(Mission_Index).M_Type)));
-      Update_Finished_Missions
-        (M_Type =>
-           To_Unbounded_String
-             (Source =>
-                Natural'Image
-                  (Missions_Types'Pos
-                     (Accepted_Missions(Mission_Index).M_Type))));
-      Delete_Mission(Mission_Index => Mission_Index, Failed => False);
-      Ada.Text_IO.Put_Line(Item => "");
+      Set_Missions;
+      Set_Ada_Ship(Ship => Player_Ship);
    end Finish_Mission;
 
    procedure Delete_Mission
@@ -509,8 +451,6 @@ package body Missions is
    end Auto_Finish_Missions;
 
    function Get_Mission_Type(M_Type: Missions_Types) return String is
-      use Interfaces.C.Strings;
-
       function Get_Ada_Mission_Type(M_T: Integer) return chars_ptr with
          Import => True,
          Convention => C,

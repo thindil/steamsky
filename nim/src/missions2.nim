@@ -63,3 +63,4 @@ proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
     return getCurrentExceptionMsg().cstring
   except KeyError, IOError, Exception:
     discard
+  return ""
