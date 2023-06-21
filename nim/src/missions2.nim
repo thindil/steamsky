@@ -21,7 +21,9 @@ import game, game2, goals, messages, missions, shipsmovement, statistics, types
 type MissionFinishingError* = object of CatchableError
   ## Raised when there is a problem with finishing an accepted mission
 
-proc finishMission*(missionIndex: Natural) =
+proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
+    MissionFinishingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   let missionsAmount = acceptedMissions.len
   if playerShip.speed == docked:
     let message = dockShip(docking = true)
