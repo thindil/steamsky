@@ -24,6 +24,9 @@ type MissionFinishingError* = object of CatchableError
 proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
     MissionFinishingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Finish the selected accepted mission
+  ##
+  ## * missionIndex - the index of the accepted mission to finish
   let missionsAmount = acceptedMissions.len
   if playerShip.speed == docked:
     let message = dockShip(docking = true)
