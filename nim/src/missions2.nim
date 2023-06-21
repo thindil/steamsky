@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import game, game2, missions, shipsmovement, types
+import std/tables
+import game, game2, goals, messages, missions, shipsmovement, statistics, types
 
 type MissionFinishingError* = object of CatchableError
-    ## Raised when there is a problem with finishing an accepted mission
+  ## Raised when there is a problem with finishing an accepted mission
 
 proc finishMission*(missionIndex: Natural) =
   let missionsAmount = acceptedMissions.len
@@ -29,3 +30,24 @@ proc finishMission*(missionIndex: Natural) =
   updateGame(minutes = 5)
   if missionsAmount > acceptedMissions.len:
     return
+  case acceptedMissions[missionIndex].mType
+  of deliver:
+    addMessage(message = "You finished mission 'Deliver " & itemsList[
+        acceptedMissions[missionIndex].itemIndex].name & "'.",
+        mType = missionMessage, color = green)
+  of destroy:
+    addMessage(message = "You finished mission 'Destroy " & protoShipsList[
+        acceptedMissions[missionIndex].shipIndex].name & ".'",
+        mType = missionMessage, color = green)
+  of patrol:
+    addMessage(message = "You finished mission 'Patrol selected area'.",
+        mType = missionMessage, color = green)
+  of explore:
+    addMessage(message = "You finished mission 'Explore selected area'.",
+        mType = missionMessage, color = green)
+  of passenger:
+    addMessage(message = "You finished mission 'Transport passenger to base'.",
+        mType = missionMessage, color = green)
+  updateGoal(goalType = mission, targetIndex = $acceptedMissions[
+      missionIndex].mType)
+  updateFinishedMissions(mType = $acceptedMissions[missionIndex].mType)
