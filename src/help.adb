@@ -224,7 +224,7 @@ package body Help is
                     "    " & To_String(Source => Faction.Description) & LF &
                     "    {i}Relations{/b}" & LF);
                Show_Relations_Loop :
-               for I in Faction.Relations.Iterate loop
+               for J in Faction.Relations.Iterate loop
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
@@ -232,10 +232,10 @@ package body Help is
                        To_String
                          (Source =>
                             Get_Faction
-                              (Index => Relations_Container.Key(Position => I))
+                              (Index => Relations_Container.Key(Position => J))
                               .Name) &
                        ": " &
-                       (if Faction.Relations(I).Friendly then "Friendly"
+                       (if Faction.Relations(J).Friendly then "Friendly"
                         else "Enemies") &
                        LF);
                end loop Show_Relations_Loop;
