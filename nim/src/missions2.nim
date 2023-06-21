@@ -51,3 +51,15 @@ proc finishMission*(missionIndex: Natural) =
   updateGoal(goalType = mission, targetIndex = $acceptedMissions[
       missionIndex].mType)
   updateFinishedMissions(mType = $acceptedMissions[missionIndex].mType)
+  deleteMission(missionIndex = missionIndex, failed = false)
+
+# Temporary code for interfacing with Ada
+
+proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    finishMission(missionIndex = (missionIndex - 1).Natural)
+  except MissionFinishingError:
+    return getCurrentExceptionMsg().cstring
+  except KeyError, IOError, Exception:
+    discard
