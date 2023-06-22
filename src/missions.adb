@@ -24,7 +24,7 @@ with Maps; use Maps;
 with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
-with Statistics; use Statistics;
+with Statistics;
 with Utils;
 with Config;
 with Events;
@@ -67,6 +67,7 @@ package body Missions is
 
    procedure Accept_Mission(Mission_Index: Positive) is
       use Ships.Cargo;
+      use Statistics;
       use Tiny_String;
 
       Base_Index: constant Bases_Range :=
