@@ -167,8 +167,7 @@ package Missions is
    --                 to finish
    -- SOURCE
    procedure Finish_Mission(Mission_Index: Positive) with
-      Pre => Mission_Index <= Accepted_Missions.Last_Index,
-      Test_Case => (Name => "Test_FinishMission", Mode => Nominal);
+      Pre => Mission_Index <= Accepted_Missions.Last_Index;
       -- ****
 
       -- ****f* Missions/Missions.Delete_Mission
