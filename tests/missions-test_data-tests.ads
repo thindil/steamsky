@@ -13,14 +13,11 @@ package Missions.Test_Data.Tests is
    procedure Test_Accept_Mission_1d4ba5_57ce38(Gnattest_T: in out Test);
    --  missions.ads:149:4:Accept_Mission:Test_AcceptMission
 
-   procedure Test_Finish_Mission_03361e_685cb8(Gnattest_T: in out Test);
-   --  missions.ads:169:4:Finish_Mission:Test_FinishMission
-
    procedure Test_Update_Mission_edbb9b_cfdd9a(Gnattest_T: in out Test);
-   --  missions.ads:194:4:Update_Mission:Test_UpdateMission
+   --  missions.ads:193:4:Update_Mission:Test_UpdateMission
 
    procedure Test_Auto_Finish_Missions_3ccc57_527254(Gnattest_T: in out Test);
-   --  missions.ads:206:4:Auto_Finish_Missions:Test_AutoFinishMissions
+   --  missions.ads:205:4:Auto_Finish_Missions:Test_AutoFinishMissions
 
 end Missions.Test_Data.Tests;
 --  end read only
