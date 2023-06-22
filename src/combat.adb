@@ -66,21 +66,17 @@ package body Combat is
       return Turn_Number;
    end Get_Turn_Number;
 
-   -- ****if* Combat/Combat.Update_Turn_Number
+   -- ****if* Combat/Combat.Set_Turn_Number
    -- FUNCTION
-   -- Update the number of the current combat turn
+   -- Set the new value for Trun_Number
    -- PARAMETERS
-   -- Reset - if true, reset the current turn number, otherwise increment it
+   -- New_Value - the new value of the Turn_Number
    -- SOURCE
-   procedure Update_Turn_Number(Reset: Boolean := False) is
+   procedure Set_Turn_Number(New_Value: Natural) is
       -- ****
    begin
-      if Reset then
-         Turn_Number := 0;
-      else
-         Turn_Number := Get_Turn_Number + 1;
-      end if;
-   end Update_Turn_Number;
+      Turn_Number := New_Value;
+   end Set_Turn_Number;
 
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
@@ -414,7 +410,7 @@ package body Combat is
          end Start_Combat_Block;
          return False;
       end if;
-      Update_Turn_Number(Reset => True);
+      Set_Turn_Number(New_Value => 0);
       Log_Message
         (Message =>
            "Started combat with " & To_String(Source => Enemy.Ship.Name),
@@ -1031,7 +1027,7 @@ package body Combat is
       declare
          Chance_For_Run: Integer := 0;
       begin
-         Update_Turn_Number;
+         Set_Turn_Number(New_Value => Get_Turn_Number + 1);
          case Enemy.Combat_Ai is
             when ATTACKER =>
                Chance_For_Run := Get_Turn_Number - 120;
