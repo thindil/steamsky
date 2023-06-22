@@ -54,6 +54,7 @@ skyBases[1] = BaseRecord(skyX: 1, skyY: 1, population: 100, baseType: "1",
     owner: "POLEIS")
 skyMap[2][2].missionIndex = 0
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+skyBases[1].missionsDate = gameDate
 
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
