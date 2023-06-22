@@ -28,7 +28,7 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
   ##
   ## * missionIndex - the index of the accepted mission to finish
   let missionsAmount = acceptedMissions.len
-  if playerShip.speed == docked:
+  if playerShip.speed != docked:
     let message = dockShip(docking = true)
     if message.len > 0:
       raise newException(MissionFinishingError, message)
