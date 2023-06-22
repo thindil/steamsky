@@ -23,4 +23,4 @@ skyBases[1].baseType = "1"
 playerShip.crew = @[]
 
 updateGame(1)
-gameDate.minutes = 1
+assert gameDate.minutes == 1, "Failed to updated the game"
