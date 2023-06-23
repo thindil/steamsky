@@ -59,7 +59,8 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
   updateFinishedMissions(mType = $acceptedMissions[missionIndex].mType)
   deleteMission(missionIndex = missionIndex, failed = false)
 
-proc autoFinishMission*(): string =
+proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
+    Exception], tags: [WriteIOEffect, RootEffect].} =
   result = ""
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if baseIndex == 0:
@@ -96,6 +97,6 @@ proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
 proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc.} =
   try:
-    return autoFinishMission().cstring
+    return autoFinishMissions().cstring
   except KeyError, IOError, Exception:
     return ""
