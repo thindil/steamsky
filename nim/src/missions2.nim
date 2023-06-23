@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, game2, goals, messages, missions, shipsmovement, statistics, types
+import game, game2, goals, maps, messages, missions, shipscrew, shipsmovement,
+    statistics, types
 
 type MissionFinishingError* = object of CatchableError
   ## Raised when there is a problem with finishing an accepted mission
@@ -58,6 +59,28 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
   updateFinishedMissions(mType = $acceptedMissions[missionIndex].mType)
   deleteMission(missionIndex = missionIndex, failed = false)
 
+proc autoFinishMission*(): string =
+  result = ""
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if baseIndex == 0:
+    return
+  if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and eventsList[
+      skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType != doublePrice:
+    return
+  if findMember(order = talk) == -1:
+    return
+  var i = 0
+  while i < acceptedMissions.high:
+    if (acceptedMissions[i].finished and acceptedMissions[i].startBase ==
+        baseIndex) or (acceptedMissions[i].targetX == playerShip.skyX and
+        acceptedMissions[i].targetY == playerShip.skyY):
+      try:
+        finishMission(missionIndex = i)
+        i.dec
+      except MissionFinishingError:
+        return getCurrentExceptionMsg()
+    i.inc
+
 # Temporary code for interfacing with Ada
 
 proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
@@ -69,3 +92,10 @@ proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
   except KeyError, IOError, Exception:
     discard
   return ""
+
+proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
+    RootEffect], exportc.} =
+  try:
+    return autoFinishMission().cstring
+  except KeyError, IOError, Exception:
+    return ""
