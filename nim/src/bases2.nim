@@ -88,9 +88,9 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
                 eventY].eventIndex == -1:
               break
           break
-        if eventX != playerShip.skyX and eventY != playerShip.skyY and skyMap[
-            eventX][eventY].eventIndex == -1 and skyBases[skyMap[eventX][
-            eventY].baseIndex].known:
+        if eventX != playerShip.skyX and eventY != playerShip.skyY and
+          skyMap[eventX][eventY].eventIndex == -1 and
+          skyBases[skyMap[eventX][eventY].baseIndex].known:
           if event == attackOnBase and skyBases[skyMap[eventX][
               eventY].baseIndex].population > 0:
             break
