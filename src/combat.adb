@@ -40,12 +40,14 @@ with Trades;
 
 package body Combat is
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* Combat/Combat.Faction_Name
    -- FUNCTION
    -- Name of enemy ship (and its crew) faction
    -- SOURCE
    Faction_Name: Tiny_String.Bounded_String;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* Combat/Combat.Turn_Number
    -- FUNCTION
@@ -53,18 +55,6 @@ package body Combat is
    -- SOURCE
    Turn_Number: Natural;
    -- ****
-
-   -- ****if* Combat/Combat.Get_Turn_Number
-   -- FUNCTION
-   -- Get the number of the current combat turn
-   -- RESULT
-   -- The number of the current combat turn
-   -- SOURCE
-   function Get_Turn_Number return Natural is
-      -- ****
-   begin
-      return Turn_Number;
-   end Get_Turn_Number;
 
    -- ****if* Combat/Combat.Set_Turn_Number
    -- FUNCTION
@@ -437,10 +427,12 @@ package body Combat is
       Enemy_Pilot_Order: Positive := 2;
       Damage_Range: Positive := 10_000;
       Ship_Free_Space: Integer := 0;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function Get_Faction_Name return Tiny_String.Bounded_String is
       begin
          return Faction_Name;
       end Get_Faction_Name;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       procedure Attack(Ship, Enemy_Ship: in out Ship_Record) is
          Gunner_Index: Crew_Container.Extended_Index := 0;
          Ammo_Index: Inventory_Container.Extended_Index := 0;
@@ -1026,6 +1018,10 @@ package body Combat is
       Count_Run_From_Combat_Block :
       declare
          Chance_For_Run: Integer := 0;
+         function Get_Turn_Number return Natural is
+         begin
+            return Turn_Number;
+         end Get_Turn_Number;
       begin
          Set_Turn_Number(New_Value => Get_Turn_Number + 1);
          case Enemy.Combat_Ai is
