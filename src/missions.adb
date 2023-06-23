@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo;
@@ -27,7 +26,6 @@ with Crew; use Crew;
 with Statistics;
 with Utils;
 with Config;
-with Events;
 with Factions;
 with Items; use Items;
 
@@ -436,43 +434,44 @@ package body Missions is
    end Update_Mission;
 
    function Auto_Finish_Missions return String is
-      use Ada.Exceptions;
-      use Events;
-
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      I: Natural := Accepted_Missions.First_Index;
+      Message: chars_ptr;
+      function Auto_Ada_Finish_Mission return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "autoAdaFinishMissions";
    begin
       if Base_Index = 0 then
          return "";
       end if;
-      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
-        and then
-          Events_List
-            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-            .E_Type /=
-          DOUBLEPRICE then
-         return "";
-      end if;
-      if Find_Member(Order => TALK) = 0 then
-         return "";
-      end if;
-      Finish_Missions_Loop :
-      while I <= Accepted_Missions.Last_Index loop
-         if
-           (Accepted_Missions(I).Finished and
-            Accepted_Missions(I).Start_Base = Base_Index) or
-           (Accepted_Missions(I).Target_X = Player_Ship.Sky_X and
-            Accepted_Missions(I).Target_Y = Player_Ship.Sky_Y) then
-            Finish_Mission(Mission_Index => I);
-            I := I - 1;
+      Get_Missions;
+      Set_Ship_In_Nim;
+      Get_Ada_Base_Location
+        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+         Y => Sky_Bases(Base_Index).Sky_Y);
+      Message := Auto_Ada_Finish_Mission;
+      Set_Missions;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+        .Mission_Index :=
+        0;
+      Update_Map_Loop :
+      for I in Accepted_Missions.Iterate loop
+         if Accepted_Missions(I).Finished then
+            Sky_Map
+              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
+               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
+              .Mission_Index :=
+              Mission_Container.To_Index(Position => I);
+         else
+            Sky_Map
+              (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
+              .Mission_Index :=
+              Mission_Container.To_Index(Position => I);
          end if;
-         I := I + 1;
-      end loop Finish_Missions_Loop;
-      return "";
-   exception
-      when An_Exception : Missions_Finishing_Error =>
-         return Exception_Message(X => An_Exception);
+      end loop Update_Map_Loop;
+      return Value(Item => Message);
    end Auto_Finish_Missions;
 
    function Get_Mission_Type(M_Type: Missions_Types) return String is
