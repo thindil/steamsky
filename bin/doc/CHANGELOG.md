@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about finished stories
 - Typo in changelog
 - Look of the base's info's dialog when the player is unknown in the base
+- Updating the map after move the player's ship
 
 ## [8.8] - 2023-06-11
 
