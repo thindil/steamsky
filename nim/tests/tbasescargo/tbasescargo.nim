@@ -1,11 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing generateCargo.
+Testing findBaseCargo.
+Testing updateBaseCargo.'''
 """
 
 import std/tables
 import ../../src/[basescargo, basestypes, careers, factions, game, items, maps, types]
 
 if basesTypesList.len == 0:
+  echo "Loading the game data."
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
@@ -27,15 +32,19 @@ skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+
+echo "Testing generateCargo."
 generateCargo()
 assert skyBases[1].cargo.len > 0, "Failed to generate cargo for a base."
 
+echo "Testing findBaseCargo."
 skyBases[1].cargo = @[]
 generateCargo()
 assert findBaseCargo(1) == 0, "Failed to find an item in a base cargo."
 assert findBaseCargo(40) == -1, "Failed to not find an item in a base cargo."
 assert findBaseCargo(490) == -1, "Failed to not find a non existing item in a base cargo."
 
+echo "Testing updateBaseCargo."
 skyBases[1].cargo = @[]
 generateCargo()
 let
