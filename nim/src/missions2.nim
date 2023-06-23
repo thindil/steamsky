@@ -70,7 +70,7 @@ proc autoFinishMission*(): string =
   if findMember(order = talk) == -1:
     return
   var i = 0
-  while i < acceptedMissions.high:
+  while i <= acceptedMissions.high:
     if (acceptedMissions[i].finished and acceptedMissions[i].startBase ==
         baseIndex) or (acceptedMissions[i].targetX == playerShip.skyX and
         acceptedMissions[i].targetY == playerShip.skyY):
