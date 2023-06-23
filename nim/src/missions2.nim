@@ -61,6 +61,10 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
 
 proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Finish all possible missions if the player's ship is on the base.
+  ##
+  ## Returns empty string if finishing was successfull, otherwise returns
+  ## message with information what goes wrong.
   result = ""
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if baseIndex == 0:
