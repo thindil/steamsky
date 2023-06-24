@@ -47,7 +47,6 @@ package body Combat is
    -- SOURCE
    Faction_Name: Tiny_String.Bounded_String;
    -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* Combat/Combat.Turn_Number
    -- FUNCTION
@@ -55,6 +54,7 @@ package body Combat is
    -- SOURCE
    Turn_Number: Natural;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****if* Combat/Combat.Set_Turn_Number
    -- FUNCTION
@@ -1018,10 +1018,12 @@ package body Combat is
       Count_Run_From_Combat_Block :
       declare
          Chance_For_Run: Integer := 0;
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
          function Get_Turn_Number return Natural is
          begin
             return Turn_Number;
          end Get_Turn_Number;
+         --## rule on DIRECTLY_ACCESSED_GLOBALS
       begin
          Set_Turn_Number(New_Value => Get_Turn_Number + 1);
          case Enemy.Combat_Ai is
