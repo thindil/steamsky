@@ -950,7 +950,7 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      Starts_Combat: Boolean := False;
+      Starts_Combat, U_Mission: Boolean := False;
    begin
       Check_Missions_Loop :
       for Mission of Accepted_Missions loop
@@ -976,19 +976,13 @@ package body OrdersMenu is
                   Update_Game(Minutes => Get_Random(Min => 45, Max => 75));
                   Starts_Combat := Check_For_Event;
                   if not Starts_Combat then
-                     Update_Mission
-                       (Mission_Index =>
-                          Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                            .Mission_Index);
+                     U_Mission := True;
                   end if;
                when EXPLORE =>
                   Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
                   Starts_Combat := Check_For_Event;
                   if not Starts_Combat then
-                     Update_Mission
-                       (Mission_Index =>
-                          Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                            .Mission_Index);
+                     U_Mission := True;
                   end if;
             end case;
             exit Check_Missions_Loop;
@@ -997,6 +991,11 @@ package body OrdersMenu is
       if Starts_Combat then
          Show_Combat_Ui;
          return TCL_OK;
+      end if;
+      if U_Mission then
+         Update_Mission
+           (Mission_Index =>
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       end if;
       Update_Header;
       Update_Messages;

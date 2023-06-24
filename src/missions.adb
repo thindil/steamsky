@@ -25,7 +25,6 @@ with Messages; use Messages;
 with Crew;
 with Statistics;
 with Utils;
-with Config;
 with Factions;
 with Items; use Items;
 
@@ -372,67 +371,23 @@ package body Missions is
    end Delete_Mission;
 
    procedure Update_Mission(Mission_Index: Positive) is
-      use Config;
-      use Tiny_String;
-
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
-      Message_Text: Unbounded_String :=
-        To_Unbounded_String(Source => "Return to ") &
-        Tiny_String.To_String(Source => Sky_Bases(Mission.Start_Base).Name) &
-        To_Unbounded_String(Source => " to finish mission ");
+      procedure Update_Ada_Mission(M_Index: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMission";
    begin
+      Get_Missions;
+      Set_Ship_In_Nim;
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
-      Accepted_Missions(Mission_Index).Finished := True;
       Sky_Map
         (Sky_Bases(Mission.Start_Base).Sky_X,
          Sky_Bases(Mission.Start_Base).Sky_Y)
         .Mission_Index :=
         Mission_Index;
-      case Accepted_Missions(Mission_Index).M_Type is
-         when DELIVER =>
-            Append
-              (Source => Message_Text,
-               New_Item =>
-                 "'Deliver " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index => Accepted_Missions(Mission_Index).Item_Index)
-                        .Name) &
-                 "'.");
-         when DESTROY =>
-            Append
-              (Source => Message_Text,
-               New_Item =>
-                 "'Destroy " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Ship
-                        (Proto_Index =>
-                           Accepted_Missions(Mission_Index).Ship_Index)
-                        .Name) &
-                 "'.");
-         when PATROL =>
-            Append
-              (Source => Message_Text, New_Item => "'Patrol selected area'.");
-         when EXPLORE =>
-            Append
-              (Source => Message_Text, New_Item => "'Explore selected area'.");
-         when PASSENGER =>
-            Append
-              (Source => Message_Text,
-               New_Item => "'Transport passenger to base'.");
-      end case;
-      Add_Message
-        (Message => To_String(Source => Message_Text),
-         M_Type => MISSIONMESSAGE);
-      if Game_Settings.Auto_Return then
-         Player_Ship.Destination_X := Sky_Bases(Mission.Start_Base).Sky_X;
-         Player_Ship.Destination_Y := Sky_Bases(Mission.Start_Base).Sky_Y;
-         Add_Message
-           (Message => "You set the travel destination for your ship.",
-            M_Type => ORDERMESSAGE);
-      end if;
+      Update_Ada_Mission(M_Index => Mission_Index);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Missions;
    end Update_Mission;
 
    function Auto_Finish_Missions return String is
