@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
-import bases, events, game, maps, messages, shipscrew, shipscargo, types, utils
+import bases, config, events, game, maps, messages, shipscrew, shipscargo,
+    types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
@@ -261,6 +262,31 @@ func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
   of passenger:
     return "Transport passenger to base"
 
+proc updateMission*(missionIndex: Natural) =
+  let mission = acceptedMissions[missionIndex]
+  skyMap[mission.targetX][mission.targetY].missionIndex = -1
+  acceptedMissions[missionIndex].finished = true
+  skyMap[skyBases[mission.startBase].skyX][skyBases[
+      mission.startBase].skyY].missionIndex = missionIndex
+  var messageText = "Return to " & skyBases[mission.startBase].name & " to finish mission "
+  case mission.mType
+  of deliver:
+    messageText.add("'Deliver " & itemsList[mission.itemIndex].name & "'.")
+  of destroy:
+    messageText.add("'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+  of patrol:
+    messageText.add("'Patrol selected area'.")
+  of explore:
+    messageText.add("'Explore selected area'.")
+  of passenger:
+    messageText.add("'Transport passenger to base'.")
+  addMessage(message = messageText, mType = missionMessage)
+  if gameSettings.autoReturn == 1:
+    playerShip.destinationX = skyBases[mission.startBase].skyX
+    playerShip.destinationY = skyBases[mission.startBase].skyY
+    addMessage(message = "You set the travel destination for your ship.",
+        mType = orderMessage)
+
 # Temporary code for interfacing with Ada
 
 type
@@ -368,3 +394,9 @@ proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc.} =
 
 proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc.} =
   return getMissionType(mType.MissionsTypes).cstring
+
+proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    updateMission(missionIndex = missionIndex - 1)
+  except KeyError:
+    discard
