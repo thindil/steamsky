@@ -23,6 +23,7 @@ with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Elements;
 with DOM.Core.Nodes;
+with Careers;
 with Factions;
 with Game;
 with Items;
@@ -38,6 +39,7 @@ package body Help is
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
+      use Careers;
       use Factions;
       use Game;
       use Log;
@@ -210,7 +212,7 @@ package body Help is
           (Source =>
              "Here you will find information about all available factions and careers in the game" &
              LF & LF & "{u}Factions{/u}" & LF & LF);
-      Load_Factions_Names_Loop :
+      Load_Factions_Info_Loop :
       for I in 1 .. Get_Factions_Amount loop
          Load_Faction_Block :
          declare
@@ -242,7 +244,38 @@ package body Help is
                Append(Source => Tmp_Help.Text, New_Item => LF);
             end if;
          end Load_Faction_Block;
-      end loop Load_Factions_Names_Loop;
+      end loop Load_Factions_Info_Loop;
+      Append
+        (Source => Tmp_Help.Text, New_Item => LF & "{u}Careers{/u}" & LF & LF);
+      Show_Careers_Block :
+      declare
+         Faction: constant Faction_Record :=
+           Get_Faction(Index => To_Bounded_String(Source => "POLEIS"));
+      begin
+         Load_Careers_Info_Loop :
+         for I in Careers_List.Iterate loop
+            Append
+              (Source => Tmp_Help.Text,
+               New_Item =>
+                 "{b}" & To_String(Source => Careers_List(I).Name) & "{/b}" &
+                 LF &
+                 Faction.Careers(Careers.Careers_Container.Key(Position => I))
+                   .Description &
+                 LF);
+            if Careers_List(I).Skills.Length > 0 then
+               Append
+                 (Source => Tmp_Help.Text,
+                  New_Item => "    {i}Bonus to skills{/b}" & LF);
+               Show_Skills_Loop :
+               for Skill of Careers_List(I).Skills loop
+                  Append
+                    (Source => Tmp_Help.Text,
+                     New_Item => "        " & To_String(Source => Skill) & LF);
+               end loop Show_Skills_Loop;
+            end if;
+            Append(Source => Tmp_Help.Text, New_Item => LF);
+         end loop Load_Careers_Info_Loop;
+      end Show_Careers_Block;
       Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
       Log_Message
         (Message => "Help added: " & To_String(Source => Help_Title),
