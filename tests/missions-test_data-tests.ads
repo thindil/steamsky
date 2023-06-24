@@ -16,8 +16,5 @@ package Missions.Test_Data.Tests is
    procedure Test_Update_Mission_edbb9b_cfdd9a(Gnattest_T: in out Test);
    --  missions.ads:193:4:Update_Mission:Test_UpdateMission
 
-   procedure Test_Auto_Finish_Missions_3ccc57_527254(Gnattest_T: in out Test);
-   --  missions.ads:205:4:Auto_Finish_Missions:Test_AutoFinishMissions
-
 end Missions.Test_Data.Tests;
 --  end read only
