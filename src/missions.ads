@@ -202,18 +202,17 @@ package Missions is
       -- Empty string if everything is ok, otherwise message with information
       -- what goes wrong
       -- SOURCE
-   function Auto_Finish_Missions return String with
-      Test_Case => (Name => "Test_AutoFinishMissions", Mode => Robustness);
-      -- ****
+   function Auto_Finish_Missions return String;
+   -- ****
 
-      -- ****f* Missions/Missions.Get_Mission_Type
-      -- FUNCTION
-      -- Get the name of the type of the selected mission
-      -- PARAMETERS
-      -- M_Type - The type of mission which name will be get
-      -- RESULT
-      -- Name (as words) of the selected mission's type
-      -- SOURCE
+   -- ****f* Missions/Missions.Get_Mission_Type
+   -- FUNCTION
+   -- Get the name of the type of the selected mission
+   -- PARAMETERS
+   -- M_Type - The type of mission which name will be get
+   -- RESULT
+   -- Name (as words) of the selected mission's type
+   -- SOURCE
    function Get_Mission_Type(M_Type: Missions_Types) return String with
       Post => Get_Mission_Type'Result'Length > 0;
    -- ****
