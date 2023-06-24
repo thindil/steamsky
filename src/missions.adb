@@ -18,11 +18,11 @@
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Crew;
 with Maps; use Maps;
 with Bases; use Bases;
 with Messages; use Messages;
-with Crew; use Crew;
+with Crew;
 with Statistics;
 with Utils;
 with Config;
@@ -64,7 +64,9 @@ package body Missions is
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
+      use Crew;
       use Ships.Cargo;
+      use Ships.Crew;
       use Statistics;
       use Tiny_String;
 
