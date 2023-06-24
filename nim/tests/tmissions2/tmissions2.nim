@@ -50,6 +50,7 @@ playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 playerShip.speed = docked
 skyMap[1][1].baseIndex = 1
+skyMap[1][1].eventIndex = -1
 skyBases[1] = BaseRecord(skyX: 1, skyY: 1, population: 100, baseType: "1",
     owner: "POLEIS")
 skyMap[2][2].missionIndex = 0
@@ -69,3 +70,8 @@ acceptedMissions.add(y = MissionData(mType: passenger, time: 1000, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: false, multiplier: 1.0, data: 2))
 finishMission(0)
 assert acceptedMissions.len == 0, "Failed to finish an accepted passenger mission."
+
+acceptedMissions = @[]
+acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
+    targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
+assert autoFinishMissions().len == 0 and acceptedMissions.len == 0, "Failed to auto finish accepted missions."
