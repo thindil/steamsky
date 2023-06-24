@@ -9,8 +9,8 @@ Testing updateBaseCargo.'''
 import std/tables
 import ../../src/[basescargo, basestypes, careers, factions, game, items, maps, types]
 
+echo "Loading the game data."
 if basesTypesList.len == 0:
-  echo "Loading the game data."
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")

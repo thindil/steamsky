@@ -1,10 +1,13 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing payForDock.'''
 """
 
 import std/tables
 import ../../src/[basesship, basestypes, careers, factions, game, items, maps, types]
 
+echo "Loading the game data."
 if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -34,5 +37,6 @@ skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
+echo "Testing payForDock."
 payForDock()
 assert playerShip.cargo[0].amount == 90, "Failed to pay for docking in a base."
