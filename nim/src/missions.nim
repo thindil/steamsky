@@ -262,7 +262,8 @@ func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
   of passenger:
     return "Transport passenger to base"
 
-proc updateMission*(missionIndex: Natural) =
+proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
+    tags: [].} =
   let mission = acceptedMissions[missionIndex]
   skyMap[mission.targetX][mission.targetY].missionIndex = -1
   acceptedMissions[missionIndex].finished = true
