@@ -39,7 +39,6 @@ package body Help is
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
-      use Careers;
       use Factions;
       use Game;
       use Log;
@@ -249,6 +248,8 @@ package body Help is
         (Source => Tmp_Help.Text, New_Item => LF & "{u}Careers{/u}" & LF & LF);
       Show_Careers_Block :
       declare
+         use Careers;
+
          Faction: constant Faction_Record :=
            Get_Faction(Index => To_Bounded_String(Source => "POLEIS"));
       begin

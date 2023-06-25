@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
 -- ****h* Missions/Missions

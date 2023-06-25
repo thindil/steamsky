@@ -15,18 +15,19 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew;
 with Maps; use Maps;
 with Bases; use Bases;
-with Messages; use Messages;
+with Messages;
 with Crew;
 with Statistics;
 with Utils;
 with Factions;
-with Items; use Items;
+with Items;
 
 package body Missions is
 
@@ -63,7 +64,10 @@ package body Missions is
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
+      use Ada.Strings.Unbounded;
       use Crew;
+      use Items;
+      use Messages;
       use Ships.Cargo;
       use Ships.Crew;
       use Statistics;
