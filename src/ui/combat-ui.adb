@@ -73,7 +73,7 @@ package body Combat.UI is
    function Get_Gun_Speed(Position: Natural; Index: Positive) return String is
       -- ****
       Gun_Speed: Integer;
-      Firerate: Unbounded_String;
+      Firerate: Unbounded_String := Null_Unbounded_String;
    begin
       Gun_Speed :=
         Get_Module(Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
@@ -227,11 +227,12 @@ package body Combat.UI is
          4 => To_Unbounded_String(Source => "{Aim for their engine "),
          5 => To_Unbounded_String(Source => "{Aim for their weapon "),
          6 => To_Unbounded_String(Source => "{Aim for their hull "));
-      Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String;
-      Have_Ammo: Boolean;
+      Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String :=
+        Null_Unbounded_String;
+      Have_Ammo: Boolean := True;
       Ammo_Amount, Ammo_Index, Row, Rows: Natural := 0;
       Progress_Bar: Ttk_ProgressBar;
-      Damage_Percent: Float;
+      Damage_Percent: Float := 0.0;
       Combat_Canvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
       Faction: constant Faction_Record :=
