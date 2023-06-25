@@ -190,8 +190,7 @@ package Missions is
       --                 to update
       -- SOURCE
    procedure Update_Mission(Mission_Index: Positive) with
-      Pre => Mission_Index <= Accepted_Missions.Last_Index,
-      Test_Case => (Name => "Test_UpdateMission", Mode => Nominal);
+      Pre => Mission_Index <= Accepted_Missions.Last_Index;
       -- ****
 
       -- ****f* Missions/Missions.Auto_Finish_Missions
