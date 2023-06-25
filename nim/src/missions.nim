@@ -264,6 +264,9 @@ func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
 
 proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
     tags: [].} =
+  ## Update the status of the selected mission
+  ##
+  ## * missionIndex - the index of the mission which will be updated
   let mission = acceptedMissions[missionIndex]
   skyMap[mission.targetX][mission.targetY].missionIndex = -1
   acceptedMissions[missionIndex].finished = true
