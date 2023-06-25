@@ -50,3 +50,8 @@ updateMissions(2)
 assert acceptedMissions.len == 0, "Failed to remove an accepted mission."
 
 assert getMissionType(patrol) == "Patrol area", "Failed to get the name of the mission's type."
+
+acceptedMissions = @[]
+acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
+    targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+assert acceptedMissions[0].finished, "Failed to update the accepted mission."
