@@ -15,19 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ships; use Ships;
-with Ships.Cargo;
-with Ships.Crew;
 with Maps; use Maps;
 with Bases; use Bases;
-with Messages;
-with Crew;
-with Statistics;
-with Utils;
-with Factions;
-with Items;
 
 package body Missions is
 
@@ -64,221 +55,32 @@ package body Missions is
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
-      use Ada.Strings.Unbounded;
-      use Crew;
-      use Items;
-      use Messages;
-      use Ships.Cargo;
-      use Ships.Crew;
-      use Statistics;
-      use Tiny_String;
+      use Interfaces.C;
 
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Mission: Mission_Data := Sky_Bases(Base_Index).Missions(Mission_Index);
-      Accept_Message: Unbounded_String := Null_Unbounded_String;
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      Mission: Mission_Data;
+      Message: chars_ptr;
+      function Accept_Ada_Mission(M_Index: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "acceptAdaMission";
    begin
-      if Sky_Bases(Base_Index).Reputation.Level < 0 then
-         raise Missions_Accepting_Error
-           with "Your reputation in this base is too low to receive any mission.";
+      Set_Base_In_Nim(Base_Index => Base_Index);
+      Set_Ship_In_Nim;
+      Get_Missions(Base_Index => Base_Index);
+      Get_Missions;
+      Message := Accept_Ada_Mission(M_Index => Mission_Index);
+      if Strlen(Item => Message) > 0 then
+         raise Missions_Accepting_Error with Value(Item => Message);
       end if;
-      Count_Missions_Limit_Block :
-      declare
-         Missions_Limit: Integer :=
-           (case Sky_Bases(Base_Index).Reputation.Level is when 0 .. 25 => 1,
-              when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
-              when others => 0);
-      begin
-         Count_Missions_Limit_Loop :
-         for Accepted_Mission of Accepted_Missions loop
-            if Accepted_Mission.Start_Base = Base_Index then
-               Missions_Limit := Missions_Limit - 1;
-            end if;
-            exit Count_Missions_Limit_Loop when Missions_Limit <= 0;
-         end loop Count_Missions_Limit_Loop;
-         if Missions_Limit < 1 then
-            raise Missions_Accepting_Error
-              with "You can't take any more missions from this base. ";
-         end if;
-      end Count_Missions_Limit_Block;
-      if Mission.M_Type = DELIVER
-        and then
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-
-          Free_Cargo
-            (Amount => -(Get_Proto_Item(Index => Mission.Item_Index).Weight)) <
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-
-          0 then
-         raise Missions_Accepting_Error
-           with "You don't have enough cargo space for take this mission.";
-      end if;
-      if Mission.M_Type = PASSENGER then
-         Find_Cabin_Block :
-         declare
-            Have_Cabin: Boolean := False;
-         begin
-            Modules_Loop :
-            for Module of Player_Ship.Modules loop
-               if (Module.M_Type = CABIN and not Have_Cabin)
-                 and then Module.Quality >= Mission.Data then
-                  Have_Cabin := False;
-                  Cabin_Owner_Loop :
-                  for Owner of Module.Owner loop
-                     if Owner = 0 then
-                        Have_Cabin := True;
-                        exit Cabin_Owner_Loop;
-                     end if;
-                  end loop Cabin_Owner_Loop;
-                  exit Modules_Loop when Have_Cabin;
-               end if;
-            end loop Modules_Loop;
-            if not Have_Cabin then
-               raise Missions_Accepting_Error
-                 with "You don't have proper (or free) cabin for this passenger.";
-            end if;
-         end Find_Cabin_Block;
-      end if;
-      Mission.Start_Base := Base_Index;
-      Mission.Finished := False;
-      Accept_Message :=
-        To_Unbounded_String(Source => "You accepted the mission to ");
-      case Mission.M_Type is
-         when DELIVER =>
-            Append
-              (Source => Accept_Message,
-               New_Item =>
-                 "'Deliver " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item(Index => Mission.Item_Index).Name) &
-                 "'.");
-            Update_Cargo
-              (Ship => Player_Ship, Proto_Index => Mission.Item_Index,
-               Amount => 1);
-         when DESTROY =>
-            Append
-              (Source => Accept_Message,
-               New_Item =>
-                 "'Destroy " &
-                 To_String
-                   (Source =>
-                      Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
-                 "'.");
-         when PATROL =>
-            Append
-              (Source => Accept_Message,
-               New_Item => "'Patrol selected area'.");
-         when EXPLORE =>
-            Append
-              (Source => Accept_Message,
-               New_Item => "'Explore selected area'.");
-         when PASSENGER =>
-            Append
-              (Source => Accept_Message,
-               New_Item => "'Transport passenger to base'.");
-            Set_Passenger_Block :
-            declare
-               use Factions;
-               use Utils;
-
-               Passenger_Base: constant Bases_Range :=
-                 (if Get_Random(Min => 1, Max => 100) < 60 then Base_Index
-                  else Get_Random
-                      (Min => Sky_Bases'First, Max => Sky_Bases'Last));
-               Gender: Character;
-               Max_Attribute_Level, Morale: Integer;
-               Faction: constant Faction_Record :=
-                 Get_Faction(Index => Sky_Bases(Passenger_Base).Owner);
-               --## rule off IMPROPER_INITIALIZATION
-               Attributes: Mob_Attributes
-                 (1 ..
-                      Positive
-                        (AttributesData_Container.Length
-                           (Container => Attributes_List)));
-               Inventory: Inventory_Container.Vector (Capacity => 32);
-               Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-            begin
-               Inventory_Container.Delete_Last(Container => Inventory);
-               --## rule on IMPROPER_INITIALIZATION
-               if Faction.Flags.Contains
-                   (Item => To_Unbounded_String(Source => "nogender")) then
-                  Gender := 'M';
-               else
-                  Gender :=
-                    (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
-               end if;
-               if Faction.Flags.Contains
-                   (Item => To_Unbounded_String(Source => "nomorale")) then
-                  Morale := 50;
-               else
-                  Morale := 50 + Sky_Bases(Passenger_Base).Reputation.Level;
-                  if Morale < 50 then
-                     Morale := 50;
-                  end if;
-               end if;
-               Max_Attribute_Level := Sky_Bases(Base_Index).Reputation.Level;
-               if Max_Attribute_Level < 10 then
-                  Max_Attribute_Level := 10;
-               end if;
-               if Get_Random(Min => 1, Max => 100) > 90 then
-                  Max_Attribute_Level :=
-                    Get_Random(Min => Max_Attribute_Level, Max => 100);
-               end if;
-               if Max_Attribute_Level > 50 then
-                  Max_Attribute_Level := 50;
-               end if;
-               --## rule off SIMPLIFIABLE_STATEMENTS
-               Set_Attributes_Loop :
-               for J in 1 .. Attributes_Amount loop
-                  Attributes(J) :=
-                    (Level => Get_Random(Min => 3, Max => Max_Attribute_Level),
-                     Experience => 0);
-               end loop Set_Attributes_Loop;
-               --## rule on SIMPLIFIABLE_STATEMENTS
-               Player_Ship.Crew.Append
-                 (New_Item =>
-                    (Amount_Of_Attributes => Attributes_Amount,
-                     Name =>
-                       Generate_Member_Name
-                         (Gender => Gender,
-                          Faction_Index => Sky_Bases(Passenger_Base).Owner),
-                     Amount_Of_Skills => Skills_Amount, Gender => Gender,
-                     Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
-                     Thirst => 0, Order => REST, Previous_Order => REST,
-                     Order_Time => 15, Orders => (others => 0),
-                     Attributes => Attributes, Inventory => Inventory,
-                     Equipment => (others => 0), Payment => (others => 0),
-                     Contract_Length => Mission.Time,
-                     Morale => (1 => Morale, 2 => 0), Loyalty => Morale,
-                     Home_Base => Passenger_Base,
-                     Faction => Sky_Bases(Passenger_Base).Owner));
-            end Set_Passenger_Block;
-            Find_Cabin_Loop :
-            for Module of Player_Ship.Modules loop
-               if Module.M_Type = CABIN
-                 and then
-                 (Module.Quality >= Mission.Data and Module.Owner(1) = 0) then
-                  Module.Owner(1) := Player_Ship.Crew.Last_Index;
-                  exit Find_Cabin_Loop;
-               end if;
-            end loop Find_Cabin_Loop;
-            Mission.Data := Player_Ship.Crew.Last_Index;
-      end case;
-      Sky_Bases(Base_Index).Missions.Delete(Index => Mission_Index);
-      Accepted_Missions.Append(New_Item => Mission);
+      Set_Missions;
+      Set_Missions(Base_Index => Base_Index);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Get_Base_From_Nim(Base_Index => Base_Index);
+      Mission := Accepted_Missions.Last_Element;
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
         Accepted_Missions.Last_Index;
-      Add_Message
-        (Message => To_String(Source => Accept_Message),
-         M_Type => MISSIONMESSAGE);
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Game_Stats.Accepted_Missions := Game_Stats.Accepted_Missions + 1;
-      Update_Game(Minutes => 5);
    end Accept_Mission;
 
    procedure Update_Missions(Minutes: Positive) is
