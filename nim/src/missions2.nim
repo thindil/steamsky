@@ -17,7 +17,7 @@
 
 import std/tables
 import game, game2, goals, maps, messages, missions, shipscrew, shipscargo,
-    shipsmovement, statistics, types
+    shipsmovement, statistics, types, utils
 
 type
   MissionFinishingError* = object of CatchableError
@@ -145,6 +145,34 @@ proc acceptMission*(missionIndex: Natural) =
     acceptMessage.add("'Explore selected area'.")
   of passenger:
     acceptMessage.add("'Transpor passenger to base'.")
+    let
+      passengerBase = (if getRandom(min = 1, max = 100) <
+          60: baseIndex else: getRandom(min = skyBases.low,
+          max = skyBases.high))
+      faction = factionsList[skyBases[passengerBase].owner]
+    var gender: char
+    if "nogender" in faction.flags:
+      gender = 'M'
+    else:
+      gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
+    var morale: int
+    if "nomorale" in faction.flags:
+      morale = 50
+    else:
+      morale = 50 + skyBases[passengerBase].reputation.level
+      if morale < 50:
+        morale = 50
+    var maxAttributeLevel = skyBases[baseIndex].reputation.level
+    if maxAttributeLevel < 10:
+      maxAttributeLevel = 10
+    if getRandom(min = 1, max = 100) > 90:
+      maxAttributeLevel = getRandom(min = maxAttributeLevel, max = 100)
+    if maxAttributeLevel > 50:
+      maxAttributeLevel = 50
+    var attributes: seq[MobAttributeRecord]
+    for j in 1 .. attributesList.len:
+      attributes.add(y = MobAttributeRecord(level: getRandom(min = 3,
+          max = maxAttributeLevel), experience: 0))
 
 # Temporary code for interfacing with Ada
 
