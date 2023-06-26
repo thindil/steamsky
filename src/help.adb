@@ -23,6 +23,7 @@ with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Elements;
 with DOM.Core.Nodes;
+with BasesTypes;
 with Careers;
 with Factions;
 with Game;
@@ -39,6 +40,7 @@ package body Help is
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
+      use BasesTypes;
       use Factions;
       use Game;
       use Log;
@@ -277,6 +279,37 @@ package body Help is
             Append(Source => Tmp_Help.Text, New_Item => LF);
          end loop Load_Careers_Info_Loop;
       end Show_Careers_Block;
+      Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
+      Log_Message
+        (Message => "Help added: " & To_String(Source => Help_Title),
+         Message_Type => EVERYTHING);
+      -- Add help page about available careers and factions
+      Tmp_Help.Index := To_Unbounded_String(Source => "basestypes");
+      Help_Title :=
+        To_Unbounded_String
+          (Source =>
+             Trim
+               (Source => Positive'Image(Positive(Help_List.Length) + 1),
+                Side => Left) &
+             ". Bases Types");
+      Tmp_Help.Text :=
+        To_Unbounded_String
+          (Source =>
+             "Here you will find information about all available bases types in the game" &
+             LF & LF);
+      Load_Bases_Types_Info_Loop :
+      for Index of Bases_Types loop
+         exit Load_Bases_Types_Info_Loop when Get_Base_Type_Name
+             (Base_Type => Index)'
+             Length =
+           0;
+         Append
+           (Source => Tmp_Help.Text,
+            New_Item =>
+              "{b}" & Get_Base_Type_Name(Base_Type => Index) & "{/b}" & LF &
+              "    " & Get_Base_Type_Description(Base_Type => Index) & LF &
+              LF);
+      end loop Load_Bases_Types_Info_Loop;
       Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
       Log_Message
         (Message => "Help added: " & To_String(Source => Help_Title),
