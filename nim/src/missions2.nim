@@ -112,10 +112,39 @@ proc acceptMission*(missionIndex: Natural) =
       break
   if missionsLimit < 1:
     raise newException(MissionAcceptingError, "You can't take any more missions from this base.")
-  let mission = skyBases[baseIndex].missions[missionIndex]
+  var mission = skyBases[baseIndex].missions[missionIndex]
   if mission.mType == deliver and freeCargo(amount = -(itemsList[
       mission.itemIndex].weight)) < 0:
     raise newException(MissionAcceptingError, "You don't have enough cargo space for take this mission.")
+  if mission.mType == passenger:
+    var haveCabin = false
+    for module in playerShip.modules:
+      if module.mType == ModuleType2.cabin and not haveCabin and
+          module.quality >= mission.data:
+        haveCabin = false
+        for owner in module.owner:
+          if owner == -1:
+            haveCabin = true
+            break
+        if haveCabin:
+          break
+    if not haveCabin:
+      raise newException(MissionAcceptingError, "You don't have proper (or free) cabin for this passenger.")
+  mission.startBase = baseIndex
+  mission.finished = false
+  var acceptMessage = "You accepted the mission to "
+  case mission.mType
+  of deliver:
+    acceptMessage.add("'Deliver " & itemsList[mission.itemIndex].name & "'.")
+    updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = 1)
+  of destroy:
+    acceptMessage.add("'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+  of patrol:
+    acceptMessage.add("'Patrol selected area'.")
+  of explore:
+    acceptMessage.add("'Explore selected area'.")
+  of passenger:
+    acceptMessage.add("'Transpor passenger to base'.")
 
 # Temporary code for interfacing with Ada
 
