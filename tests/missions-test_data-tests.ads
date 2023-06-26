@@ -11,10 +11,7 @@ package Missions.Test_Data.Tests is
    null record;
 
    procedure Test_Accept_Mission_1d4ba5_57ce38(Gnattest_T: in out Test);
-   --  missions.ads:149:4:Accept_Mission:Test_AcceptMission
-
-   procedure Test_Update_Mission_edbb9b_cfdd9a(Gnattest_T: in out Test);
-   --  missions.ads:193:4:Update_Mission:Test_UpdateMission
+   --  missions.ads:148:4:Accept_Mission:Test_AcceptMission
 
 end Missions.Test_Data.Tests;
 --  end read only
