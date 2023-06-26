@@ -89,6 +89,7 @@ package body Combat.UI is
                  Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
                else Gun_Speed - 1);
       end case;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       if Gun_Speed > 0 then
          Firerate :=
            To_Unbounded_String
@@ -103,6 +104,7 @@ package body Combat.UI is
                 Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
                 " rounds)");
       end if;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       return To_String(Source => Firerate);
    end Get_Gun_Speed;
 
@@ -218,7 +220,6 @@ package body Combat.UI is
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas.frame");
-      Label: Ttk_Label;
       Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame & ".pilotcrew");
       Gunners_Orders: constant array(1 .. 6) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "{Don't shoot"),
@@ -231,9 +232,12 @@ package body Combat.UI is
         Null_Unbounded_String;
       Have_Ammo: Boolean := True;
       Ammo_Amount, Ammo_Index, Row, Rows: Natural := 0;
-      Progress_Bar: Ttk_ProgressBar;
       Damage_Percent: Float := 0.0;
+      --## rule off IMPROPER_INITIALIZATION
+      Label: Ttk_Label;
+      Progress_Bar: Ttk_ProgressBar;
       Combat_Canvas: Tk_Canvas;
+      --## rule on IMPROPER_INITIALIZATION
       Has_Gunner: Boolean := False;
       Faction: constant Faction_Record :=
         Get_Faction(Index => Player_Ship.Crew(1).Faction);
@@ -788,6 +792,7 @@ package body Combat.UI is
                  Real_Speed(Ship => Enemy.Ship) -
                  Real_Speed(Ship => Player_Ship);
             begin
+               --## rule off SIMPLIFIABLE_STATEMENTS
                if Speed_Diff > 250 then
                   Append(Source => Enemy_Info, New_Item => " (much faster)");
                elsif Speed_Diff > 0 then
@@ -799,6 +804,7 @@ package body Combat.UI is
                else
                   Append(Source => Enemy_Info, New_Item => " (much slower)");
                end if;
+               --## rule on SIMPLIFIABLE_STATEMENTS
             end Show_Enemy_Ship_Speed_Block;
          end if;
       else
@@ -1072,7 +1078,9 @@ package body Combat.UI is
       Combo_Box: Ttk_ComboBox;
       Order_Index: Positive := 1;
       Combat_Canvas: Tk_Canvas;
+      --## rule off IMPROPER_INITIALIZATION
       Button: Ttk_Button;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Bind_To_Main_Window
         (Interp => Get_Context,
