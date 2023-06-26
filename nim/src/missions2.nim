@@ -173,7 +173,29 @@ proc acceptMission*(missionIndex: Natural) =
     for j in 1 .. attributesList.len:
       attributes.add(y = MobAttributeRecord(level: getRandom(min = 3,
           max = maxAttributeLevel), experience: 0))
-    playerShip.crew.add(MemberData(name: generateMemberName(gender = gender, factionIndex = skyBases[passengerBase].owner), gender: gender, health: 100, tired: 100, skills: @[], hunger: 0, thirst: 0, order: rest, previousOrder: rest, orderTime: 15, orders: [0.Natural, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], attributes: attributes, inventory: @[], equipment: [-1, -1, -1, -1, -1, -1, -1]))
+    playerShip.crew.add(MemberData(name: generateMemberName(gender = gender,
+        factionIndex = skyBases[passengerBase].owner), gender: gender,
+        health: 100, tired: 100, skills: @[], hunger: 0, thirst: 0, order: rest,
+        previousOrder: rest, orderTime: 15, orders: [0.Natural, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0], attributes: attributes, inventory: @[], equipment: [
+        -1, -1, -1, -1, -1, -1, -1], payment: [1: 0.Natural, 2: 0],
+        contractLength: mission.time, morale: [1: morale.Natural, 2: 0],
+        loyalty: morale, homeBase: passengerBase, faction: skyBases[
+        passengerBase].owner))
+    for module in playerShip.modules.mitems:
+      if module.mType == ModuleType2.cabin and module.quality >=
+          mission.data and module.owner[0] == -1:
+        module.owner[0] = playerShip.crew.high
+        break
+    mission.data = playerShip.crew.high
+  skyBases[baseIndex].missions.delete(missionIndex)
+  acceptedMissions.add(mission)
+  skyMap[mission.targetX][mission.targetY].missionIndex = acceptedMissions.high
+  addMessage(message = acceptMessage, mType = missionMessage)
+  let traderIndex = findMember(talk)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  gameStats.acceptedMissions.inc
+  updateGame(minutes = 5)
 
 # Temporary code for interfacing with Ada
 
@@ -193,3 +215,13 @@ proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
     return autoFinishMissions().cstring
   except KeyError, IOError, Exception:
     return ""
+
+proc acceptAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    acceptMission(missionIndex = missionIndex)
+    return "".cstring
+  except MissionAcceptingError:
+    return getCurrentExceptionMsg().cstring
+  except KeyError, IOError, Exception:
+    return "".cstring
