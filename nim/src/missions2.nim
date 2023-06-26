@@ -16,11 +16,15 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, game2, goals, maps, messages, missions, shipscrew, shipsmovement,
-    statistics, types
+import game, game2, goals, maps, messages, missions, shipscrew, shipscargo,
+    shipsmovement, statistics, types
 
-type MissionFinishingError* = object of CatchableError
-  ## Raised when there is a problem with finishing an accepted mission
+type
+  MissionFinishingError* = object of CatchableError
+    ## Raised when there is a problem with finishing an accepted mission
+
+  MissionAcceptingError* = object of CatchableError
+    ## Raised when there is a problem with accepting a mission in a base
 
 proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
     MissionFinishingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
@@ -85,6 +89,33 @@ proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
       except MissionFinishingError:
         return getCurrentExceptionMsg()
     i.inc
+
+proc acceptMission*(missionIndex: Natural) =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if skyBases[baseIndex].reputation.level < 0:
+    raise newException(MissionAcceptingError, "Your reputation in this base is too low to receive any mission.")
+  var missionsLimit = case skyBases[baseIndex].reputation.level
+    of 0..25:
+      1
+    of 26..50:
+      3
+    of 51..75:
+      5
+    of 76..100:
+      10
+    else:
+      0
+  for mission in acceptedMissions:
+    if mission.startBase == baseIndex:
+      missionsLimit.dec
+    if missionsLimit <= 0:
+      break
+  if missionsLimit < 1:
+    raise newException(MissionAcceptingError, "You can't take any more missions from this base.")
+  let mission = skyBases[baseIndex].missions[missionIndex]
+  if mission.mType == deliver and freeCargo(amount = -(itemsList[
+      mission.itemIndex].weight)) < 0:
+    raise newException(MissionAcceptingError, "You don't have enough cargo space for take this mission.")
 
 # Temporary code for interfacing with Ada
 
