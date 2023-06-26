@@ -5,6 +5,7 @@ discard """
 import std/tables
 import ../../src/[crafts, game, items, shipmodules, shipscargo, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -19,11 +20,14 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.cargoRoom, protoIndex: 7,
     durability: 100))
 updateCargo(playerShip, 6, 10)
 
+echo "Testing setRecipe."
 setRecipe(0, 10, "1")
 assert playerShip.modules[0].craftingAmount == 10, "Failed to set the amount for the crafting order."
 assert playerShip.modules[0].craftingIndex == "1", "Failed to set the index for the crafting order."
 
+echo "Testing checkRecipe."
 assert checkRecipe("1") == 10, "Failed to check the possible amount of crafted items for the recipe."
 
+echo "Testing manufacturing."
 manufacturing(15)
 
