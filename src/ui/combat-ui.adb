@@ -179,7 +179,7 @@ package body Combat.UI is
          Show_Older_Messages_First_Loop :
          for I in Loop_Start .. -1 loop
             Message := Get_Message(Message_Index => I + 1);
-            if (Get_Last_Message_Index + I + 1) >= Messages_Starts then
+            if Get_Last_Message_Index + I + 1 >= Messages_Starts then
                Show_Message;
                if I < -1 then
                   Insert
@@ -193,8 +193,8 @@ package body Combat.UI is
          Show_New_Messages_First_Loop :
          for I in reverse Loop_Start .. -1 loop
             Message := Get_Message(Message_Index => I + 1);
-            exit Show_New_Messages_First_Loop when
-              (Get_Last_Message_Index + I + 1) <
+            exit Show_New_Messages_First_Loop when Get_Last_Message_Index + I +
+              1 <
               Messages_Starts;
             Show_Message;
             if I > Loop_Start then
@@ -231,7 +231,8 @@ package body Combat.UI is
       Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String :=
         Null_Unbounded_String;
       Have_Ammo: Boolean := True;
-      Ammo_Amount, Ammo_Index, Row, Rows: Natural := 0;
+      Ammo_Amount, Ammo_Index, Row: Natural := 0;
+      Rows: Natural;
       Damage_Percent: Float := 0.0;
       --## rule off IMPROPER_INITIALIZATION
       Label: Ttk_Label;
@@ -326,8 +327,7 @@ package body Combat.UI is
         (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
          Separators => " ");
       Rows := Positive'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets
-        (Start_Index => 4, End_Index => (Rows - 1), Frame => Frame);
+      Delete_Widgets(Start_Index => 4, End_Index => Rows - 1, Frame => Frame);
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          Have_Ammo := False;
@@ -339,12 +339,11 @@ package body Combat.UI is
                  Player_Ship.Modules(Guns(I)(1)).Ammo_Index
                else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
          begin
-            if
-              (Ammo_Index in
-                 Inventory_Container.First_Index
-                       (Container => Player_Ship.Cargo) ..
-                       Inventory_Container.Last_Index
-                         (Container => Player_Ship.Cargo))
+            if Ammo_Index in
+                Inventory_Container.First_Index
+                      (Container => Player_Ship.Cargo) ..
+                      Inventory_Container.Last_Index
+                        (Container => Player_Ship.Cargo)
               and then
                 Get_Proto_Item
                   (Index =>
@@ -420,7 +419,9 @@ package body Combat.UI is
               options =>
                 "-values [list " & Get_Crew_List(Position => 2) &
                 "] -width 10 -state readonly");
-         if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
+         if Player_Ship.Modules(Guns(I)(1)).Owner(1) = 0 then
+            Current(ComboBox => Combo_Box, NewIndex => "0");
+         else
             if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
                 .Order =
               GUNNER then
@@ -432,8 +433,6 @@ package body Combat.UI is
             else
                Current(ComboBox => Combo_Box, NewIndex => "0");
             end if;
-         else
-            Current(ComboBox => Combo_Box, NewIndex => "0");
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Combo_Box,
@@ -519,7 +518,8 @@ package body Combat.UI is
                 (pathName => Frame & ".boarding",
                  options =>
                    "-text {Boarding party:} -command {SetCombatParty boarding}");
-            Boarding_Party, Defenders: Unbounded_String;
+            Boarding_Party, Defenders: Unbounded_String :=
+              Null_Unbounded_String;
             Label_Length: constant Positive :=
               Positive'Value
                 (Winfo_Get
@@ -554,15 +554,18 @@ package body Combat.UI is
                  "Set your ship's defenders against the enemy party.");
             Set_Boarding_And_Defenders_Loop :
             for Member of Player_Ship.Crew loop
-               if Member.Order = BOARDING then
-                  Append
-                    (Source => Boarding_Party,
-                     New_Item => To_String(Source => Member.Name) & ", ");
-               elsif Member.Order = DEFEND then
-                  Append
-                    (Source => Defenders,
-                     New_Item => To_String(Source => Member.Name) & ", ");
-               end if;
+               case Member.Order is
+                  when BOARDING =>
+                     Append
+                       (Source => Boarding_Party,
+                        New_Item => To_String(Source => Member.Name) & ", ");
+                  when DEFEND =>
+                     Append
+                       (Source => Defenders,
+                        New_Item => To_String(Source => Member.Name) & ", ");
+                  when others =>
+                     null;
+               end case;
             end loop Set_Boarding_And_Defenders_Loop;
             if Boarding_Party /= Null_Unbounded_String then
                Boarding_Party :=
@@ -679,7 +682,7 @@ package body Combat.UI is
               "SetScrollbarBindings " & Label &
               " $combatframe.damage.scrolly");
          Damage_Percent :=
-           (Float(Module.Durability) / Float(Module.Max_Durability));
+           Float(Module.Durability) / Float(Module.Max_Durability);
          Progress_Bar :=
            Create
              (pathName =>
@@ -884,8 +887,8 @@ package body Combat.UI is
               "SetScrollbarBindings " & Label &
               " $combatframe.status.scrolly");
          Damage_Percent :=
-           ((Float(Enemy.Ship.Modules(I).Durability) /
-             Float(Enemy.Ship.Modules(I).Max_Durability)));
+           Float(Enemy.Ship.Modules(I).Durability) /
+           Float(Enemy.Ship.Modules(I).Max_Durability);
          Progress_Bar :=
            Create
              (pathName =>
