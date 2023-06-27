@@ -75,3 +75,10 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
 assert autoFinishMissions().len == 0 and acceptedMissions.len == 0, "Failed to auto finish accepted missions."
+
+skyBases[1].missions = @[]
+skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
+    targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
+acceptedMissions = @[]
+acceptMission(0)
+assert acceptedMissions.len == 1, "Failed to accept a mission in a base."
