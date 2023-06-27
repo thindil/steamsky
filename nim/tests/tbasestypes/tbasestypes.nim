@@ -1,5 +1,8 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing getPrice.
+Testing isBuyable.'''
 """
 
 import std/tables

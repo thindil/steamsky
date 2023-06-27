@@ -90,7 +90,9 @@ proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
         return getCurrentExceptionMsg()
     i.inc
 
-proc acceptMission*(missionIndex: Natural) =
+proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
+    MissionAcceptingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].reputation.level < 0:
     raise newException(MissionAcceptingError, "Your reputation in this base is too low to receive any mission.")

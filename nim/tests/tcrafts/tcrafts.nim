@@ -1,5 +1,9 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing setRecipe.
+Testing checkRecipe.
+Testing manufacturing.'''
 """
 
 import std/tables
