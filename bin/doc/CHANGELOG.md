@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Various information about some modules types to the list of the player's
   ship's modules
 - Remembering the last entered value of custom wait time in the wait menu
-- Info about the game's factions and player's careers to the help
+- Info about the game's factions, player's careers and available bases types
+  to the help
 
 ### Fixed
 - Showing information about finished stories
