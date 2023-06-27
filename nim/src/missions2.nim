@@ -219,7 +219,7 @@ proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
 proc acceptAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc.} =
   try:
-    acceptMission(missionIndex = missionIndex)
+    acceptMission(missionIndex = missionIndex - 1)
     return "".cstring
   except MissionAcceptingError:
     return getCurrentExceptionMsg().cstring
