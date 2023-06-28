@@ -790,6 +790,7 @@ package body Ships.UI.Cargo is
         Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Accepted_Mission: Mission_Data;
    begin
       Drop_Amount := Natural'Value(Get(Widgt => Spin_Box));
       Drop_Amount_2 := Drop_Amount;
@@ -805,15 +806,16 @@ package body Ships.UI.Cargo is
          Check_Drop_Items_Loop :
          for J in 1 .. Drop_Amount_2 loop
             Delete_Missions_Loop :
-            for I in Accepted_Missions.Iterate loop
-               if Accepted_Missions(I).M_Type = DELIVER and
-                 Accepted_Missions(I).Item_Index =
+            for I in 1 .. Get_Accepted_Missions_Amount loop
+               Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
+               if Accepted_Mission.M_Type = DELIVER and
+                 Accepted_Mission.Item_Index =
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Proto_Index then
                   Delete_Mission
                     (Mission_Index =>
-                       Mission_Container.To_Index(Position => I));
+                       I);
                   Drop_Amount := Drop_Amount - 1;
                   exit Delete_Missions_Loop;
                end if;

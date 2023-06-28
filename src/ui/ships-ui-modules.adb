@@ -782,9 +782,11 @@ package body Ships.UI.Modules is
             Cabin_Owner_Info_Block :
             declare
                Is_Passenger: Boolean := False;
+               Mission: Mission_Data;
             begin
                Missions_Loop :
-               for Mission of Accepted_Missions loop
+               for I in 1 .. Get_Accepted_Missions_Amount loop
+                  Mission := Get_Accepted_Mission(Mission_Index => I);
                   if Mission.M_Type = PASSENGER then
                      Check_Passenger_Loop :
                      for Owner of Player_Ship.Modules(Module_Index).Owner loop

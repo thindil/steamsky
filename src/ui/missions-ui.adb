@@ -123,6 +123,7 @@ package body Missions.UI is
    function Count_Missions_Amount return Natural is
       -- ****
       Missions_Limit: Natural;
+      Mission: Mission_Data;
    begin
       Missions_Limit :=
         (case Sky_Bases
@@ -132,7 +133,8 @@ package body Missions.UI is
            when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
            when 76 .. 100 => 10, when others => 0);
       Count_Missions_Limit_Loop :
-      for Mission of Accepted_Missions loop
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         Mission := Get_Accepted_Mission(Mission_Index => I);
          if Mission.Start_Base =
            Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index then
             Missions_Limit := Missions_Limit - 1;

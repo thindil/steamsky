@@ -73,11 +73,12 @@ package body Knowledge.Missions is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Accepted_Mission: constant Mission_Data := Get_Accepted_Mission(Mission_Index => Mission_Index);
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missionslistmenu",
            Title =>
-             (case Accepted_Missions(Mission_Index).M_Type is
+             (case Accepted_Mission.M_Type is
                 when DELIVER => "Deliver item",
                 when DESTROY => "Destroy enemy", when PATROL => "Patrol area",
                 when EXPLORE => "Explore area",
@@ -116,8 +117,8 @@ package body Knowledge.Missions is
          Tooltip => "Set the mission as destination for the ship.",
          Command =>
            "SetDestination2 " &
-           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y),
+           Map_X_Range'Image(Accepted_Mission.Target_X) &
+           Map_Y_Range'Image(Accepted_Mission.Target_Y),
          Icon => "destination", Label => "Target", Column => 0);
       Add_Button
         (Name => ".close", Label => "Close", Command => "", Icon => "exit",
@@ -126,8 +127,8 @@ package body Knowledge.Missions is
         (Name => ".show", Tooltip => "Show the mission on map.",
          Command =>
            "ShowOnMap" &
-           Map_X_Range'Image(Accepted_Missions(Mission_Index).Target_X) &
-           Map_Y_Range'Image(Accepted_Missions(Mission_Index).Target_Y),
+           Map_X_Range'Image(Accepted_Mission.Target_X) &
+           Map_Y_Range'Image(Accepted_Mission.Target_Y),
          Icon => "show", Label => "Show", Column => 2);
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
@@ -267,7 +268,8 @@ package body Knowledge.Missions is
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
-      Local_Missions: Missions_Array(1 .. Positive(Accepted_Missions.Length));
+      Local_Missions: Missions_Array(1 .. Get_Accepted_Missions_Amount);
+      Accepted_Mission: Mission_Data;
       function "<"(Left, Right: Local_Mission_Data) return Boolean is
       begin
          if Missions_Sort_Order = TYPEASC
@@ -366,40 +368,41 @@ package body Knowledge.Missions is
          return TCL_OK;
       end if;
       Fill_Local_Missions_Loop :
-      for I in Accepted_Missions.Iterate loop
-         Local_Missions(Mission_Container.To_Index(Position => I)) :=
-           (M_Type => Accepted_Missions(I).M_Type,
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
+         Local_Missions(I) :=
+           (M_Type => Accepted_Mission.M_Type,
             Distance =>
               Count_Distance
-                (Destination_X => Accepted_Missions(I).Target_X,
-                 Destination_Y => Accepted_Missions(I).Target_Y),
+                (Destination_X => Accepted_Mission.Target_X,
+                 Destination_Y => Accepted_Mission.Target_Y),
             Coords =>
               To_Unbounded_String
                 (Source =>
-                   "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                   " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
+                   "X:" & Natural'Image(Accepted_Mission.Target_X) &
+                   " Y:" & Natural'Image(Accepted_Mission.Target_Y)),
             Details =>
-              (case Accepted_Missions(I).M_Type is
+              (case Accepted_Mission.M_Type is
                  when DELIVER =>
                    To_String
                      (Source =>
                         Get_Proto_Item
-                          (Index => Accepted_Missions(I).Item_Index)
+                          (Index => Accepted_Mission.Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
                      (Source =>
                         Sky_Bases
                           (Sky_Map
-                             (Accepted_Missions(I).Target_X,
-                              Accepted_Missions(I).Target_Y)
+                             (Accepted_Mission.Target_X,
+                              Accepted_Mission.Target_Y)
                              .Base_Index)
                           .Name),
                  when PATROL =>
                    To_Unbounded_String
                      (Source =>
-                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
+                        "X:" & Natural'Image(Accepted_Mission.Target_X) &
+                        " Y:" & Natural'Image(Accepted_Mission.Target_Y)),
                  when DESTROY =>
                    To_Unbounded_String
                      (Source =>
@@ -407,26 +410,26 @@ package body Knowledge.Missions is
                            (Source =>
                               Get_Proto_Ship
                                 (Proto_Index =>
-                                   Accepted_Missions(I).Ship_Index)
+                                   Accepted_Mission.Ship_Index)
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
                      (Source =>
-                        "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                        " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
+                        "X:" & Natural'Image(Accepted_Mission.Target_X) &
+                        " Y:" & Natural'Image(Accepted_Mission.Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
                    Tiny_String.To_String
                      (Source =>
                         Sky_Bases
                           (Sky_Map
-                             (Accepted_Missions(I).Target_X,
-                              Accepted_Missions(I).Target_Y)
+                             (Accepted_Mission.Target_X,
+                              Accepted_Mission.Target_Y)
                              .Base_Index)
                           .Name)),
-            Time => Accepted_Missions(I).Time,
-            Reward => Accepted_Missions(I).Reward,
-            Id => Mission_Container.To_Index(Position => I));
+            Time => Accepted_Mission.Time,
+            Reward => Accepted_Mission.Reward,
+            Id => I);
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
       Missions_Indexes.Clear;
@@ -465,6 +468,7 @@ package body Knowledge.Missions is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Mission_Time, Color: Unbounded_String;
+      Accepted_Mission: Mission_Data;
    begin
       Create
         (S => Tokens,
@@ -476,7 +480,7 @@ package body Knowledge.Missions is
       end if;
       Delete_Widgets
         (Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
-      if Accepted_Missions.Length = 0 then
+      if Get_Accepted_Missions_Amount = 0 then
          Label :=
            Create
              (pathName => Missions_Frame & ".nomissions",
@@ -507,12 +511,12 @@ package body Knowledge.Missions is
                      ".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
               Tooltip_Text => "Press mouse button to sort the missions.");
-         if Missions_Indexes.Length /= Accepted_Missions.Length then
+         if Natural(Missions_Indexes.Length) /= Get_Accepted_Missions_Amount then
             Missions_Indexes.Clear;
             Fill_Missions_Indexes_Loop :
-            for I in Accepted_Missions.Iterate loop
+            for I in 1 .. Get_Accepted_Missions_Amount loop
                Missions_Indexes.Append
-                 (New_Item => Mission_Container.To_Index(Position => I));
+                 (New_Item => I);
             end loop Fill_Missions_Indexes_Loop;
          end if;
          Rows := 0;
@@ -522,19 +526,20 @@ package body Knowledge.Missions is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
+            Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
             Color :=
               (if
-                 Accepted_Missions(I).Target_X = Player_Ship.Destination_X and
-                 Accepted_Missions(I).Target_Y = Player_Ship.Destination_Y
+                 Accepted_Mission.Target_X = Player_Ship.Destination_X and
+                 Accepted_Mission.Target_Y = Player_Ship.Destination_Y
                then To_Unbounded_String(Source => "yellow")
                else Null_Unbounded_String);
             Add_Button
               (Table => Missions_Table,
-               Text => Get_Mission_Type(M_Type => Accepted_Missions(I).M_Type),
+               Text => Get_Mission_Type(M_Type => Accepted_Mission.M_Type),
                Tooltip => "Show the mission's menu",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                Column => 1, Color => To_String(Source => Color));
-            case Accepted_Missions(I).M_Type is
+            case Accepted_Mission.M_Type is
                when DELIVER =>
                   Add_Button
                     (Table => Missions_Table,
@@ -542,15 +547,15 @@ package body Knowledge.Missions is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (Index => Accepted_Missions(I).Item_Index)
+                              (Index => Accepted_Mission.Item_Index)
                               .Name) &
                        " to " &
                        Tiny_String.To_String
                          (Source =>
                             Sky_Bases
                               (Sky_Map
-                                 (Accepted_Missions(I).Target_X,
-                                  Accepted_Missions(I).Target_Y)
+                                 (Accepted_Mission.Target_X,
+                                  Accepted_Mission.Target_Y)
                                  .Base_Index)
                               .Name),
                      Tooltip => "Show the mission's menu",
@@ -560,8 +565,8 @@ package body Knowledge.Missions is
                   Add_Button
                     (Table => Missions_Table,
                      Text =>
-                       "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
+                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
+                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 4, Color => To_String(Source => Color));
@@ -572,7 +577,7 @@ package body Knowledge.Missions is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Accepted_Missions(I).Ship_Index)
+                              (Proto_Index => Accepted_Mission.Ship_Index)
                               .Name),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
@@ -581,8 +586,8 @@ package body Knowledge.Missions is
                   Add_Button
                     (Table => Missions_Table,
                      Text =>
-                       "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
-                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
+                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
+                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
                      Tooltip => "Show the mission's menu",
                      Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                      Column => 4, Color => To_String(Source => Color));
@@ -595,8 +600,8 @@ package body Knowledge.Missions is
                          (Source =>
                             Sky_Bases
                               (Sky_Map
-                                 (Accepted_Missions(I).Target_X,
-                                  Accepted_Missions(I).Target_Y)
+                                 (Accepted_Mission.Target_X,
+                                  Accepted_Mission.Target_Y)
                                  .Base_Index)
                               .Name),
                      Tooltip => "Show the mission's menu",
@@ -608,21 +613,21 @@ package body Knowledge.Missions is
                Text =>
                  Natural'Image
                    (Count_Distance
-                      (Destination_X => Accepted_Missions(I).Target_X,
-                       Destination_Y => Accepted_Missions(I).Target_Y)),
+                      (Destination_X => Accepted_Mission.Target_X,
+                       Destination_Y => Accepted_Mission.Target_Y)),
                Tooltip => "The distance to the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
                Column => 2, Color => To_String(Source => Color));
             Add_Button
               (Table => Missions_Table,
                Text =>
-                 "X:" & Natural'Image(Accepted_Missions(I).Target_X) & " Y:" &
-                 Natural'Image(Accepted_Missions(I).Target_Y),
+                 "X:" & Natural'Image(Accepted_Mission.Target_X) & " Y:" &
+                 Natural'Image(Accepted_Mission.Target_Y),
                Tooltip => "The coordinates of the mission on the map",
                Command => "ShowMissionMenu" & Positive'Image(I), Column => 3);
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date
-              (Minutes => Accepted_Missions(I).Time,
+              (Minutes => Accepted_Mission.Time,
                Info_Text => Mission_Time);
             Add_Button
               (Table => Missions_Table,
@@ -635,8 +640,8 @@ package body Knowledge.Missions is
                Text =>
                  Natural'Image
                    (Natural
-                      (Float(Accepted_Missions(I).Reward) *
-                       Float(Accepted_Missions(I).Multiplier))) &
+                      (Float(Accepted_Mission.Reward) *
+                       Float(Accepted_Mission.Multiplier))) &
                  " " & To_String(Source => Money_Name),
                Tooltip => "The base money reward for the mission",
                Command => "ShowMissionMenu" & Positive'Image(Row - 1),
@@ -646,7 +651,7 @@ package body Knowledge.Missions is
             Rows := Rows + 1;
             exit Load_Accepted_Missions_Loop when Rows =
               Game_Settings.Lists_Limit and
-              I /= Accepted_Missions.Last_Index;
+              I /= Get_Accepted_Missions_Amount;
             <<End_Of_Loop>>
          end loop Load_Accepted_Missions_Loop;
          if Page > 1 then

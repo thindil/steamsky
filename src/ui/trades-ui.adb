@@ -49,7 +49,6 @@ with Events; use Events;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;

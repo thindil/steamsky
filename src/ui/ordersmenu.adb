@@ -74,6 +74,7 @@ package body OrdersMenu is
          Button_Name: Unbounded_String;
          Shortcut: Character;
       end record;
+      Mission: Mission_Data;
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Order_Shortcut);
       Shortcuts: Shortcuts_Container.Vector;
@@ -298,7 +299,8 @@ package body OrdersMenu is
                     when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
-               for Mission of Accepted_Missions loop
+               for I in 1 .. Get_Accepted_Missions_Amount loop
+                  Mission := Get_Accepted_Mission(Mission_Index => I);
                   if (Mission.Finished and Mission.Start_Base = Base_Index) or
                     (Mission.Target_X = Player_Ship.Sky_X and
                      Mission.Target_Y = Player_Ship.Sky_Y) then
@@ -453,7 +455,8 @@ package body OrdersMenu is
                      end Show_Docking_Button_Block;
                   end if;
                   Complete_Mission_Menu_Loop :
-                  for Mission of Accepted_Missions loop
+                  for I in 1 .. Get_Accepted_Missions_Amount loop
+                     Mission := Get_Accepted_Mission(Mission_Index => I);
                      if Have_Trader and
                        Mission.Target_X = Player_Ship.Sky_X and
                        Mission.Target_Y = Player_Ship.Sky_Y and
@@ -516,7 +519,8 @@ package body OrdersMenu is
                   end loop Complete_Mission_Menu_Loop;
                else
                   Progress_Mission_Loop :
-                  for Mission of Accepted_Missions loop
+                  for I in 1 .. Get_Accepted_Missions_Amount loop
+                     Mission := Get_Accepted_Mission(Mission_Index => I);
                      if Mission.Target_X = Player_Ship.Sky_X and
                        Mission.Target_Y = Player_Ship.Sky_Y and
                        not Mission.Finished then
@@ -951,9 +955,11 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Starts_Combat, U_Mission: Boolean := False;
+      Mission: Mission_Data;
    begin
       Check_Missions_Loop :
-      for Mission of Accepted_Missions loop
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         Mission := Get_Accepted_Mission(Mission_Index => I);
          if Mission.Target_X = Player_Ship.Sky_X and
            Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
             case Mission.M_Type is
@@ -966,8 +972,8 @@ package body OrdersMenu is
                      Starts_Combat :=
                        Start_Combat
                          (Enemy_Index =>
-                            Accepted_Missions
-                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                            Get_Accepted_Mission
+                              (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                  .Mission_Index)
                               .Ship_Index,
                           New_Combat => False);
