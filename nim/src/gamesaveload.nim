@@ -215,6 +215,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
 proc loadGame*() =
   let savedGame = loadXml(saveName)
+  logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
     var tmpMission = MissionData(mtype: parseEnum[MissionsTypes](mission.attr(
         "type")), time: mission.attr("time").parseInt, targetX: mission.attr(
@@ -232,6 +233,7 @@ proc loadGame*() =
     else:
       tmpMission.target = mission.attr("target").parseInt
     acceptedMissions.add(tmpMission)
+  logMessage(message = "done", debugType = everything)
 
 # Temporary code for interfacing with Ada
 

@@ -49,15 +49,16 @@ package body Game.SaveLoad is
    Save_Version: constant Positive := 5;
    -- ****
 
+   procedure Get_Ada_Save_Name(Name: chars_ptr) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaSaveName";
+
    procedure Save_Game(Pretty_Print: Boolean := False) is
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,
          Convention => C,
          External_Name => "saveAdaGame";
-      procedure Get_Ada_Save_Name(Name: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaSaveName";
    begin
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
@@ -116,6 +117,10 @@ package body Game.SaveLoad is
       Nodes_List: Node_List;
       Saved_Node: Node;
       Save_Data: Document;
+      procedure Load_Ada_Game with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaGame";
    begin
       Log_Message
         (Message =>
@@ -606,130 +611,6 @@ package body Game.SaveLoad is
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
             Time_Stamp => False);
       end Load_Finished_Stories_Block;
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "acceptedmission");
-      Load_Accepted_Missions_Block :
-      declare
-         M_Type: Missions_Types;
-         Target_X, Target_Y, Start_Base: Natural;
-         Time, Reward, M_Index: Positive;
-         Finished: Boolean;
-         Target: Natural;
-         Index: Unbounded_String;
-         Multiplier: Reward_Multiplier;
-      begin
-         Log_Message
-           (Message => "Loading accepted missions...",
-            Message_Type => EVERYTHING, New_Line => False);
-         Load_Missions_Loop :
-         for I in 0 .. Length(List => Nodes_List) - 1 loop
-            Saved_Node := Item(List => Nodes_List, Index => I);
-            M_Type :=
-              Missions_Types'Val
-                (Integer'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
-            if M_Type in DELIVER | DESTROY then
-               Index :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Saved_Node, Name => "target"));
-            else
-               Target :=
-                 Integer'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "target"));
-            end if;
-            Time :=
-              Positive'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "time"));
-            Target_X :=
-              Natural'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "targetx"));
-            Target_Y :=
-              Natural'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "targety"));
-            Reward :=
-              Positive'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "reward"));
-            Start_Base :=
-              Natural'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "startbase"));
-            Multiplier :=
-              (if Get_Attribute(Elem => Saved_Node, Name => "multiplier") /= ""
-               then
-                 Reward_Multiplier'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "multiplier"))
-               else 1.0);
-            Finished :=
-              (if
-                 Get_Attribute
-                   (Elem => Item(List => Nodes_List, Index => I),
-                    Name => "finished") =
-                 "Y"
-               then True
-               else False);
-            case M_Type is
-               when DELIVER =>
-                  Accepted_Missions.Append
-                    (New_Item =>
-                       (M_Type => DELIVER,
-                        Item_Index =>
-                          Positive'Value(To_String(Source => Index)),
-                        Time => Time, Target_X => Target_X,
-                        Target_Y => Target_Y, Reward => Reward,
-                        Start_Base => Start_Base, Finished => Finished,
-                        Multiplier => Multiplier));
-               when DESTROY =>
-                  Accepted_Missions.Append
-                    (New_Item =>
-                       (M_Type => DESTROY,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Index)),
-                        Time => Time, Target_X => Target_X,
-                        Target_Y => Target_Y, Reward => Reward,
-                        Start_Base => Start_Base, Finished => Finished,
-                        Multiplier => Multiplier));
-               when PATROL =>
-                  Accepted_Missions.Append
-                    (New_Item =>
-                       (M_Type => PATROL, Target => Target, Time => Time,
-                        Target_X => Target_X, Target_Y => Target_Y,
-                        Reward => Reward, Start_Base => Start_Base,
-                        Finished => Finished, Multiplier => Multiplier));
-               when EXPLORE =>
-                  Accepted_Missions.Append
-                    (New_Item =>
-                       (M_Type => EXPLORE, Target => Target, Time => Time,
-                        Target_X => Target_X, Target_Y => Target_Y,
-                        Reward => Reward, Start_Base => Start_Base,
-                        Finished => Finished, Multiplier => Multiplier));
-               when PASSENGER =>
-                  if Target > 91 then
-                     Target := 91;
-                  end if;
-                  Accepted_Missions.Append
-                    (New_Item =>
-                       (M_Type => PASSENGER, Data => Target, Time => Time,
-                        Target_X => Target_X, Target_Y => Target_Y,
-                        Reward => Reward, Start_Base => Start_Base,
-                        Finished => Finished, Multiplier => Multiplier));
-            end case;
-            M_Index := Accepted_Missions.Last_Index;
-            if Finished then
-               Sky_Map
-                 (Sky_Bases(Accepted_Missions(M_Index).Start_Base).Sky_X,
-                  Sky_Bases(Accepted_Missions(M_Index).Start_Base).Sky_Y)
-                 .Mission_Index :=
-                 M_Index;
-            else
-               Sky_Map
-                 (Accepted_Missions(M_Index).Target_X,
-                  Accepted_Missions(M_Index).Target_Y)
-                 .Mission_Index :=
-                 M_Index;
-            end if;
-         end loop Load_Missions_Loop;
-      end Load_Accepted_Missions_Block;
       -- Load player career
       Log_Message
         (Message => "Loading player career...", Message_Type => EVERYTHING,
@@ -755,6 +636,9 @@ package body Game.SaveLoad is
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
+      Get_Ada_Save_Name
+        (Name => New_String(Str => To_String(Source => Save_Name)));
+      Load_Ada_Game;
    exception
       when An_Exception : others =>
          Free(Read => Reader);
