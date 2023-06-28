@@ -404,3 +404,6 @@ proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc.} =
     updateMission(missionIndex = missionIndex - 1)
   except KeyError:
     discard
+
+proc getAdaAcceptedMissionsAmount(): cint {.raises: [], tags: [], exportc.} =
+  return acceptedMissions.len.cint
