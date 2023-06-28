@@ -334,12 +334,12 @@ package body Combat.UI is
          Has_Gunner := False;
          Check_Ammo_Block :
          declare
-            Ammo_Index: constant Natural :=
+            A_Index: constant Natural :=
               (if Player_Ship.Modules(Guns(I)(1)).M_Type = GUN then
                  Player_Ship.Modules(Guns(I)(1)).Ammo_Index
                else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
          begin
-            if Ammo_Index in
+            if A_Index in
                 Inventory_Container.First_Index
                       (Container => Player_Ship.Cargo) ..
                       Inventory_Container.Last_Index
@@ -348,7 +348,7 @@ package body Combat.UI is
                 Get_Proto_Item
                   (Index =>
                      Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => Ammo_Index)
+                       (Container => Player_Ship.Cargo, Index => A_Index)
                        .Proto_Index)
                   .I_Type =
                 Get_Ada_Item_Type
@@ -359,7 +359,7 @@ package body Combat.UI is
                      1) then
                Ammo_Amount :=
                  Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Ammo_Index)
+                   (Container => Player_Ship.Cargo, Index => A_Index)
                    .Amount;
                Have_Ammo := True;
             end if;
@@ -968,15 +968,7 @@ package body Combat.UI is
             Order_Index := Order_Index + 1;
          end if;
          if Crew_Container.To_Index(Position => I) = Member_Index then
-            if Player_Ship.Crew(I).Order /= Order then
-               Give_Orders
-                 (Ship => Player_Ship,
-                  Member_Index => Crew_Container.To_Index(Position => I),
-                  Given_Order => Order, Module_Index => 0);
-               if Order = BOARDING then
-                  Boarding_Orders.Append(New_Item => 0);
-               end if;
-            else
+            if Player_Ship.Crew(I).Order = Order then
                Give_Orders
                  (Ship => Player_Ship,
                   Member_Index => Crew_Container.To_Index(Position => I),
@@ -985,6 +977,14 @@ package body Combat.UI is
                   Boarding_Orders.Delete(Index => Order_Index);
                end if;
                Order_Index := Order_Index - 1;
+            else
+               Give_Orders
+                 (Ship => Player_Ship,
+                  Member_Index => Crew_Container.To_Index(Position => I),
+                  Given_Order => Order, Module_Index => 0);
+               if Order = BOARDING then
+                  Boarding_Orders.Append(New_Item => 0);
+               end if;
             end if;
             exit Give_Boarding_Orders_Loop;
          end if;
@@ -1447,8 +1447,13 @@ package body Combat.UI is
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotorder");
          Pilot_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
-         if not Faction.Flags.Contains
+         if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
+            Add_Message
+              (Message =>
+                 "Order for ship was set on: " & Get(Widgt => Combo_Box),
+               M_Type => COMBATMESSAGE);
+         else
             Add_Message
               (Message =>
                  "Order for " &
@@ -1457,17 +1462,17 @@ package body Combat.UI is
                       Player_Ship.Crew(Find_Member(Order => PILOT)).Name) &
                  " was set on: " & Get(Widgt => Combo_Box),
                M_Type => COMBATMESSAGE);
-         else
-            Add_Message
-              (Message =>
-                 "Order for ship was set on: " & Get(Widgt => Combo_Box),
-               M_Type => COMBATMESSAGE);
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineerorder");
          Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
-         if not Faction.Flags.Contains
+         if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
+            Add_Message
+              (Message =>
+                 "Order for ship was set on: " & Get(Widgt => Combo_Box),
+               M_Type => COMBATMESSAGE);
+         else
             Add_Message
               (Message =>
                  "Order for " &
@@ -1475,11 +1480,6 @@ package body Combat.UI is
                    (Source =>
                       Player_Ship.Crew(Find_Member(Order => ENGINEER)).Name) &
                  " was set on: " & Get(Widgt => Combo_Box),
-               M_Type => COMBATMESSAGE);
-         else
-            Add_Message
-              (Message =>
-                 "Order for ship was set on: " & Get(Widgt => Combo_Box),
                M_Type => COMBATMESSAGE);
          end if;
       else
@@ -1636,14 +1636,14 @@ package body Combat.UI is
                 "} -command {SetPartyOrder" &
                 Positive'Image(Crew_Container.To_Index(Position => I)) & " " &
                 CArgv.Arg(Argv => Argv, N => 1) & "}");
-         if Player_Ship.Crew(I).Order /= Order then
-            Tcl_SetVar
-              (interp => Interp, varName => Widget_Image(Win => Crew_Button),
-               newValue => "0");
-         else
+         if Player_Ship.Crew(I).Order = Order then
             Tcl_SetVar
               (interp => Interp, varName => Widget_Image(Win => Crew_Button),
                newValue => "1");
+         else
+            Tcl_SetVar
+              (interp => Interp, varName => Widget_Image(Win => Crew_Button),
+               newValue => "0");
          end if;
          Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
          Height :=
