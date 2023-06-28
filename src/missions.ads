@@ -110,13 +110,6 @@ package Missions is
      (Index_Type => Positive, Element_Type => Mission_Data);
    -- ****
 
-   -- ****v* Missions/Missions.Accepted_Missions
-   -- FUNCTION
-   -- List of missions accepted by player
-   -- SOURCE
-   Accepted_Missions: Mission_Container.Vector;
-   -- ****
-
    -- ****e* Missions/Missions.Missions_Accepting_Error
    -- FUNCTION
    -- Raised when mission can't be accepted
@@ -164,21 +157,19 @@ package Missions is
    -- Mission_Index - Player ship list of accepted missions index of mission
    --                 to finish
    -- SOURCE
-   procedure Finish_Mission(Mission_Index: Positive) with
-      Pre => Mission_Index <= Accepted_Missions.Last_Index;
-      -- ****
+   procedure Finish_Mission(Mission_Index: Positive);
+   -- ****
 
-      -- ****f* Missions/Missions.Delete_Mission
-      -- FUNCTION
-      -- Delete selected mission
-      -- PARAMETERS
-      -- Mission_Index - Player ship list of accepted missions index of mission
-      --                 to delete
-      -- Failed        - If true, it is failed mission. Default is true.
-      -- SOURCE
+   -- ****f* Missions/Missions.Delete_Mission
+   -- FUNCTION
+   -- Delete selected mission
+   -- PARAMETERS
+   -- Mission_Index - Player ship list of accepted missions index of mission
+   --                 to delete
+   -- Failed        - If true, it is failed mission. Default is true.
+   -- SOURCE
    procedure Delete_Mission
-     (Mission_Index: Positive; Failed: Boolean := True) with
-      Pre => Mission_Index <= Accepted_Missions.Last_Index;
+     (Mission_Index: Positive; Failed: Boolean := True);
       -- ****
 
       -- ****f* Missions/Missions.Update_Mission
@@ -188,17 +179,16 @@ package Missions is
       -- Mission_Index - Player ship list of accepted missions index of mission
       --                 to update
       -- SOURCE
-   procedure Update_Mission(Mission_Index: Positive) with
-      Pre => Mission_Index <= Accepted_Missions.Last_Index;
-      -- ****
+   procedure Update_Mission(Mission_Index: Positive);
+   -- ****
 
-      -- ****f* Missions/Missions.Auto_Finish_Missions
-      -- FUNCTION
-      -- Finish all possible missions.
-      -- RESULT
-      -- Empty string if everything is ok, otherwise message with information
-      -- what goes wrong
-      -- SOURCE
+   -- ****f* Missions/Missions.Auto_Finish_Missions
+   -- FUNCTION
+   -- Finish all possible missions.
+   -- RESULT
+   -- Empty string if everything is ok, otherwise message with information
+   -- what goes wrong
+   -- SOURCE
    function Auto_Finish_Missions return String;
    -- ****
 
