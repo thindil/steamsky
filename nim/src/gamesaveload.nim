@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables, xmltree]
+import std/[strutils, tables, xmltree, xmlparser]
 import basessaveload, config, game, goals, log, maps, messages, missions,
     shipssaveload, statistics, stories, types
 
@@ -212,6 +212,16 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   writeFile(saveName, saveText)
   logMessage(message = "Finished saving game in file " & saveName & ".",
       debugType = everything)
+
+proc loadGame*() =
+  let savedGame = loadXml(saveName)
+  for mission in savedGame.findAll("acceptedmission"):
+    var tmpMission = MissionData(mtype: parseEnum[MissionsTypes](mission.attr(
+        "type")), time: mission.attr("time").parseInt, targetX: mission.attr(
+        "targetx").parseInt, targetY: mission.attr("targety").parseInt,
+        reward: mission.attr("reward").parseInt, startBase: mission.attr(
+        "startbase").parseint, finished: mission.attr("finished") == "Y",
+        multiplier: mission.attr("multiplier").parseFloat)
 
 # Temporary code for interfacing with Ada
 
