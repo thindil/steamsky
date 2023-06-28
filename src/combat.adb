@@ -2098,15 +2098,15 @@ package body Combat is
          end if;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index > 0
            and then
-             Accepted_Missions
-               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
+             Get_Accepted_Mission
+               (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
                .M_Type =
              DESTROY
            and then
              Get_Proto_Ship
                (Proto_Index =>
-                  Accepted_Missions
-                    (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                  Get_Accepted_Mission
+                    (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                        .Mission_Index)
                     .Ship_Index)
                .Name =

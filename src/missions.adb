@@ -69,18 +69,15 @@ package body Missions is
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
       Get_Missions(Base_Index => Base_Index);
-      Get_Missions;
       Message := Accept_Ada_Mission(M_Index => Mission_Index);
       if Strlen(Item => Message) > 0 then
          raise Missions_Accepting_Error with Value(Item => Message);
       end if;
-      Set_Missions;
       Set_Missions(Base_Index => Base_Index);
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Base_From_Nim(Base_Index => Base_Index);
-      Mission := Accepted_Missions.Last_Element;
-      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
-        Accepted_Missions.Last_Index;
+      Mission := Get_Accepted_Mission(Mission_Index => Get_Accepted_Missions_Amount);
+      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := Get_Accepted_Missions_Amount;
    end Accept_Mission;
 
    procedure Update_Missions(Minutes: Positive) is
@@ -89,15 +86,13 @@ package body Missions is
          Convention => C,
          External_Name => "updateAdaMissions";
    begin
-      Get_Missions;
       Update_Ada_Missions(M => Minutes);
-      Set_Missions;
    end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
       use Interfaces.C;
 
-      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
+      Mission: constant Mission_Data := Get_Accepted_Mission(Mission_Index => Mission_Index);
       Base_Index: constant Bases_Range := Mission.Start_Base;
       Message: chars_ptr;
       function Finish_Ada_Mission(M_Index: Integer) return chars_ptr with
@@ -105,7 +100,6 @@ package body Missions is
          Convention => C,
          External_Name => "finishAdaMission";
    begin
-      Get_Missions;
       Set_Ship_In_Nim;
       Get_Ada_Base_Location
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
@@ -114,76 +108,72 @@ package body Missions is
       if Strlen(Item => Message) > 0 then
          raise Missions_Finishing_Error with Value(Item => Message);
       end if;
-      Set_Missions;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Mission_Index :=
         0;
       Update_Map_Loop :
-      for I in Accepted_Missions.Iterate loop
-         if Accepted_Missions(I).Finished then
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         if Get_Accepted_Mission(Mission_Index => I).Finished then
             Sky_Map
-              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
-               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
+              (Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_X,
+               Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          else
             Sky_Map
-              (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
+              (Get_Accepted_Mission(Mission_Index => I).Target_X, Get_Accepted_Mission(Mission_Index => I).Target_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          end if;
       end loop Update_Map_Loop;
    end Finish_Mission;
 
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
-      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
+      Mission: constant Mission_Data := Get_Accepted_Mission(Mission_Index => Mission_Index);
       Base_Index: constant Bases_Range := Mission.Start_Base;
       procedure Delete_Ada_Mission(M_Index, Fail: Integer) with
          Import => True,
          Convention => C,
          External_Name => "deleteAdaMission";
    begin
-      Get_Missions;
       Get_Ada_Ship;
       Get_Ada_Base_Location
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Delete_Ada_Mission
         (M_Index => Mission_Index, Fail => (if Failed then 1 else 0));
-      Set_Missions;
       Set_Ada_Ship(Ship => Player_Ship);
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Mission_Index :=
         0;
       Update_Map_Loop :
-      for I in Accepted_Missions.Iterate loop
-         if Accepted_Missions(I).Finished then
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         if Get_Accepted_Mission(Mission_Index => I).Finished then
             Sky_Map
-              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
-               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
+              (Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_X,
+               Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          else
             Sky_Map
-              (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
+              (Get_Accepted_Mission(Mission_Index => I).Target_X, Get_Accepted_Mission(Mission_Index => I).Target_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          end if;
       end loop Update_Map_Loop;
    end Delete_Mission;
 
    procedure Update_Mission(Mission_Index: Positive) is
-      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
+      Mission: constant Mission_Data := Get_Accepted_Mission(Mission_Index => Mission_Index);
       procedure Update_Ada_Mission(M_Index: Positive) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaMission";
    begin
-      Get_Missions;
       Set_Ship_In_Nim;
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Sky_Map
@@ -193,7 +183,6 @@ package body Missions is
         Mission_Index;
       Update_Ada_Mission(M_Index => Mission_Index);
       Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Missions;
    end Update_Mission;
 
    function Auto_Finish_Missions return String is
@@ -208,30 +197,28 @@ package body Missions is
       if Base_Index = 0 then
          return "";
       end if;
-      Get_Missions;
       Set_Ship_In_Nim;
       Get_Ada_Base_Location
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Message := Auto_Ada_Finish_Mission;
-      Set_Missions;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Mission_Index :=
         0;
       Update_Map_Loop :
-      for I in Accepted_Missions.Iterate loop
-         if Accepted_Missions(I).Finished then
+      for I in 1 .. Get_Accepted_Missions_Amount loop
+         if Get_Accepted_Mission(Mission_Index => I).Finished then
             Sky_Map
-              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
-               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
+              (Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_X,
+               Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base).Sky_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          else
             Sky_Map
-              (Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
+              (Get_Accepted_Mission(Mission_Index => I).Target_X, Get_Accepted_Mission(Mission_Index => I).Target_Y)
               .Mission_Index :=
-              Mission_Container.To_Index(Position => I);
+              I;
          end if;
       end loop Update_Map_Loop;
       return Value(Item => Message);
@@ -263,12 +250,10 @@ package body Missions is
    type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Missions(Base_Index: Natural := 0) is
+   procedure Get_Missions(Base_Index: Positive) is
       --## rule off IMPROPER_INITIALIZATION
       Nim_Missions: Nim_Missions_Array;
-      Missions_List: constant Mission_Container.Vector :=
-        (if Base_Index = 0 then Accepted_Missions
-         else Sky_Bases(Base_Index).Missions);
+      Missions_List: constant Mission_Container.Vector := Sky_Bases(Base_Index).Missions;
       --## rule on IMPROPER_INITIALIZATION
       procedure Get_Ada_Missions
         (N_Missions: Nim_Missions_Array; B_Index: Natural) with
@@ -398,14 +383,10 @@ package body Missions is
       return Missions_List;
    end Set_Missions_List;
 
-   procedure Set_Missions(Base_Index: Natural := 0) is
+   procedure Set_Missions(Base_Index: Positive) is
    begin
-      if Base_Index = 0 then
-         Accepted_Missions := Set_Missions_List(Base_Index => Base_Index);
-      else
-         Sky_Bases(Base_Index).Missions :=
-           Set_Missions_List(Base_Index => Base_Index);
-      end if;
+      Sky_Bases(Base_Index).Missions :=
+        Set_Missions_List(Base_Index => Base_Index);
    end Set_Missions;
 
    function Get_Accepted_Mission

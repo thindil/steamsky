@@ -36,7 +36,6 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Missions; use Missions;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;

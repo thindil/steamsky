@@ -490,7 +490,7 @@ package body Maps.UI is
                   Map_Char := Current_Theme.Story_Icon;
                   Map_Tag := To_Unbounded_String(Source => "green");
                elsif Sky_Map(X, Y).Mission_Index > 0 then
-                  case Accepted_Missions(Sky_Map(X, Y).Mission_Index).M_Type is
+                  case Get_Accepted_Mission(Mission_Index => Sky_Map(X, Y).Mission_Index).M_Type is
                      when DELIVER =>
                         Map_Char := Current_Theme.Deliver_Icon;
                         Map_Tag := To_Unbounded_String(Source => "yellow");
@@ -820,7 +820,7 @@ package body Maps.UI is
               Sky_Map(X, Y).Event_Index > 0 then
                Append(Source => Map_Info_Text, New_Item => LF);
             end if;
-            case Accepted_Missions(Mission_Index).M_Type is
+            case Get_Accepted_Mission(Mission_Index => Mission_Index).M_Type is
                when DELIVER =>
                   Append
                     (Source => Mission_Info_Text,
@@ -830,7 +830,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Item
                               (Index =>
-                                 Accepted_Missions(Mission_Index).Item_Index)
+                                 Get_Accepted_Mission(Mission_Index => Mission_Index).Item_Index)
                               .Name));
                when DESTROY =>
                   Append
@@ -841,7 +841,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Accepted_Missions(Mission_Index).Ship_Index)
+                                 Get_Accepted_Mission(Mission_Index => Mission_Index).Ship_Index)
                               .Name));
                when PATROL =>
                   Append

@@ -535,7 +535,6 @@ package body Game is
       Events_List.Clear;
       Clear_Game_Stats;
       Clear_Current_Goal;
-      Accepted_Missions.Clear;
       Save_Config;
    end End_Game;
 

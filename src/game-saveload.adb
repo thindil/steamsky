@@ -33,7 +33,6 @@ with Goals; use Goals;
 with Log;
 with Maps; use Maps;
 with Messages;
-with Missions; use Missions;
 with Ships; use Ships;
 with Ships.SaveLoad;
 with Statistics;
@@ -84,7 +83,6 @@ package body Game.SaveLoad is
       for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
          Get_Finished_Story(Index => I);
       end loop Get_Finished_Stories_Loop;
-      Get_Missions;
       Set_Nim_Events;
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
