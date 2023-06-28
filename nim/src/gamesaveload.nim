@@ -220,8 +220,18 @@ proc loadGame*() =
         "type")), time: mission.attr("time").parseInt, targetX: mission.attr(
         "targetx").parseInt, targetY: mission.attr("targety").parseInt,
         reward: mission.attr("reward").parseInt, startBase: mission.attr(
-        "startbase").parseint, finished: mission.attr("finished") == "Y",
+        "startbase").parseInt, finished: mission.attr("finished") == "Y",
         multiplier: mission.attr("multiplier").parseFloat)
+    case tmpMission.mType
+    of deliver:
+      tmpMission.itemIndex = mission.attr("target").parseInt
+    of passenger:
+      tmpMission.data = mission.attr("target").parseInt
+    of destroy:
+      tmpMission.shipIndex = mission.attr("target").parseInt
+    else:
+      tmpMission.target = mission.attr("target").parseInt
+    acceptedMissions.add(tmpMission)
 
 # Temporary code for interfacing with Ada
 
@@ -233,4 +243,10 @@ proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
   try:
     saveGame(prettyPrint = prettyPrint == 1)
   except KeyError, IOError:
+    discard
+
+proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    loadGame()
+  except XmlError, ValueError, IOError, OSError, Exception:
     discard
