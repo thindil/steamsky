@@ -218,5 +218,6 @@ package Missions is
 
    procedure Get_Missions(Base_Index: Natural := 0);
    procedure Set_Missions(Base_Index: Natural := 0);
+   function Get_Accepted_Mission(Mission_Index: Positive) return Mission_Data;
 
 end Missions;

@@ -304,7 +304,18 @@ package body Missions is
       Get_Ada_Missions(N_Missions => Nim_Missions, B_Index => Base_Index);
    end Get_Missions;
 
-   procedure Set_Missions(Base_Index: Natural := 0) is
+   -- ****if* Missions/Missions.Set_Missions_List
+   -- FUNCTION
+   -- Get the list of missions from Nim
+   -- PARAMETERS
+   -- Base_Index - The index of the base which missions will be get. If set to
+   --              zero, get the list of accepted missions
+   -- RESULT
+   -- The list with the selected missions
+   -- SOURCE
+   function Set_Missions_List
+     (Base_Index: Natural) return Mission_Container.Vector is
+     -- ****
       --## rule off IMPROPER_INITIALIZATION
       Nim_Missions: Nim_Missions_Array;
       Missions_List: Mission_Container.Vector;
@@ -384,11 +395,23 @@ package body Missions is
                null;
          end case;
       end loop Convert_Missions_Loop;
+      return Missions_List;
+   end Set_Missions_List;
+
+   procedure Set_Missions(Base_Index: Natural := 0) is
+   begin
       if Base_Index = 0 then
-         Accepted_Missions := Missions_List;
+         Accepted_Missions := Set_Missions_List(Base_Index => Base_Index);
       else
-         Sky_Bases(Base_Index).Missions := Missions_List;
+         Sky_Bases(Base_Index).Missions :=
+           Set_Missions_List(Base_Index => Base_Index);
       end if;
    end Set_Missions;
+
+   function Get_Accepted_Mission
+     (Mission_Index: Positive) return Mission_Data is
+   begin
+      return Set_Missions_List(Base_Index => 0)(Mission_Index);
+   end Get_Accepted_Mission;
 
 end Missions;
