@@ -1,10 +1,19 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing freeInventory.
+Testing itemIsUsed.
+Testing takeOffItem.
+Testing updateInventory.
+Testing damageItem.
+Testing findItem.
+Testing getTrainingToolQuality.'''
 """
 
 import std/tables
 import ../../src/[crewinventory, game, items, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
 
@@ -19,14 +28,18 @@ for index, _ in member.equipment.mpairs:
 member.equipment[weapon] = 1
 playerShip.crew.add(member)
 
+echo "Testing freeInventory."
 discard freeInventory(0, 0)
 
+echo "Testing itemIsUsed."
 assert not itemIsUsed(0, 0), "Failed to check if an item is not used by the player."
 assert itemIsUsed(0, 1), "Failed to check if an item is used by the player"
 
+echo "Testing takeOffItem."
 takeOffItem(0, 1)
 assert not itemIsUsed(0, 1), "Failed to take off an item from the player."
 
+echo "Testing updateInventory."
 updateInventory(0, 1, 1, ship = playerShip)
 assert playerShip.crew[0].inventory[0].amount == 2, "Failed to add an item to the player's inventory."
 updateInventory(0, -1, 1, ship = playerShip)
@@ -37,11 +50,13 @@ except CrewNoSpaceError:
   discard
 assert playerShip.crew[0].inventory[0].amount == 1, "Failed to add too much items to the player's inventory."
 
+echo "Testing damageItem."
 for i in 1..100:
   if playerShip.crew[0].inventory.len == 0:
     break
   damageItem(playerShip.crew[0].inventory, 0, 0, 0, playerShip)
 
+echo "Testing findItem."
 block:
   var inventory: seq[InventoryData]
   inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
@@ -53,4 +68,5 @@ block:
   assert findItem(inventory, 500) == -1, "Failed to not find an item in an inventory"
   assert findItem(inventory = inventory, itemType = "asdasdas") == -1
 
+echo "Testing getTrainingToolQuality."
 assert getTrainingToolQuality(0, 1) == 100, "Failed to get an tool's quality required by a skill."
