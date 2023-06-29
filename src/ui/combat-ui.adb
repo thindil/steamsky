@@ -1074,14 +1074,14 @@ package body Combat.UI is
       Frame_Name: constant String := Main_Paned & ".combatframe";
       Frame: Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
-      Label: Ttk_Label;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      Progress_Bar: Ttk_ProgressBar;
-      Combo_Box: Ttk_ComboBox;
       Order_Index: Positive := 1;
-      Combat_Canvas: Tk_Canvas;
       --## rule off IMPROPER_INITIALIZATION
+      Progress_Bar: Ttk_ProgressBar;
+      Label: Ttk_Label;
+      Combo_Box: Ttk_ComboBox;
+      Combat_Canvas: Tk_Canvas;
       Button: Ttk_Button;
       --## rule on IMPROPER_INITIALIZATION
    begin
@@ -1436,7 +1436,9 @@ package body Combat.UI is
       pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
+      --## rule off IMPROPER_INITIALIZATION
       Combo_Box: Ttk_ComboBox;
+      --## rule on IMPROPER_INITIALIZATION
       Gun_Index: Positive;
       Frame_Name: constant String :=
         Main_Paned & ".combatframe.crew.canvas.frame";
@@ -1607,7 +1609,9 @@ package body Combat.UI is
              Widget_Image(Win => Crew_Dialog) & "}");
       Height: Positive := 10;
       Width: Positive := 250;
+      --## rule off IMPROPER_INITIALIZATION
       Crew_Button: Ttk_CheckButton;
+      --## rule on IMPROPER_INITIALIZATION
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING
          else DEFEND);
@@ -1717,7 +1721,9 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      --## rule off IMPROPER_INITIALIZATION
       Combo_Box: Ttk_ComboBox;
+      --## rule on IMPROPER_INITIALIZATION
       Gun_Index: Positive;
       Crew_Index: Natural;
       Frame_Name: constant String :=
