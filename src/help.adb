@@ -19,6 +19,7 @@ with Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Interfaces.C.Strings;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Elements;
@@ -33,11 +34,12 @@ with Log;
 package body Help is
 
    procedure Load_Help(Reader: Tree_Reader; File_Name: String) is
-      pragma Unreferenced(File_Name);
       use Ada.Characters.Handling;
       use Ada.Characters.Latin_1;
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Interfaces.C;
+      use Interfaces.C.Strings;
       use DOM.Core;
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
@@ -54,7 +56,16 @@ package body Help is
       Action: Data_Action := ADD;
       Help_Index, Help_Title: Unbounded_String := Null_Unbounded_String;
       Help_Node: Node;
+      Result: chars_ptr;
+      function Load_Ada_Help(Name: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaHelp";
    begin
+      Result := Load_Ada_Help(Name => New_String(Str => File_Name));
+      if Strlen(Item => Result) > 0 then
+         raise Data_Loading_Error with Value(Item => Result);
+      end if;
       Help_Xml_Data := Get_Tree(Read => Reader);
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name

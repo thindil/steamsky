@@ -22,8 +22,7 @@ type HelpData = object
   index: string
   text: string
 
-var
-  helpList* = initTable[string, HelpData]()
+var helpList* = initTable[string, HelpData]()
 
 proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
@@ -86,3 +85,19 @@ proc loadAdaHelp(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
     return "".cstring
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
+
+proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
+    tags: [], exportc.} =
+  helpIndex = ""
+  title = ""
+  text = ""
+  if index > helpList.len:
+    return
+  var i = 0
+  for htitle, help in helpList:
+    if i < index:
+      continue
+    title = htitle.cstring
+    helpIndex = help.index.cstring
+    text = help.text.cstring
+    break
