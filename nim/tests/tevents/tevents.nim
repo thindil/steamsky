@@ -1,11 +1,17 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing generateEnemies.
+Testing updateEvents.
+Testing deleteEvent.
+Testing recoverBase.'''
 """
 
 import std/tables
 import ../../src/[careers, crafts, events, factions, game, items, maps, mobs,
     ships, shipmodules, types]
 
+echo "Loading the game data."
 if factionsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -40,17 +46,21 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
     durability: 100, damage: 100))
 skyMap[1][1].baseIndex = 1
 
+echo "Testing generateEnemies."
 var enemies: seq[Positive] = @[]
 generateEnemies(enemies)
 assert enemies.len > 0, "Failed to generate the list of enemy ships."
 
+echo "Testing updateEvents."
 eventsList = @[]
 updateEvents(1)
 
+echo "Testing deleteEvent."
 eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
 deleteEvent(0)
 assert eventsList.len == 0, "Failed to delete an event."
 
+echo "Testing recoverBase."
 skyBases[2].population = 0
 recoverBase(2)
 assert skyBases[2].population > 0, "Failed to recover a base."
