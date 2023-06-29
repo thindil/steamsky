@@ -217,12 +217,12 @@ proc loadGame*() =
   let savedGame = loadXml(saveName)
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
-    var tmpMission = MissionData(mtype: parseEnum[MissionsTypes](mission.attr(
-        "type")), time: mission.attr("time").parseInt, targetX: mission.attr(
-        "targetx").parseInt, targetY: mission.attr("targety").parseInt,
-        reward: mission.attr("reward").parseInt, startBase: mission.attr(
-        "startbase").parseInt, finished: mission.attr("finished") == "Y",
-        multiplier: mission.attr("multiplier").parseFloat)
+    var tmpMission = MissionData(mtype: mission.attr(
+        "type").parseInt.MissionsTypes, time: mission.attr("time").parseInt,
+        targetX: mission.attr("targetx").parseInt, targetY: mission.attr(
+        "targety").parseInt, reward: mission.attr("reward").parseInt,
+        startBase: mission.attr("startbase").parseInt, finished: mission.attr(
+        "finished") == "Y", multiplier: 1.0)
     case tmpMission.mType
     of deliver:
       tmpMission.itemIndex = mission.attr("target").parseInt
@@ -232,6 +232,9 @@ proc loadGame*() =
       tmpMission.shipIndex = mission.attr("target").parseInt
     else:
       tmpMission.target = mission.attr("target").parseInt
+    let multiplier = mission.attr("multiplier")
+    if multiplier.len > 0:
+      tmpMission.multiplier = multiplier.parseFloat
     acceptedMissions.add(tmpMission)
   logMessage(message = "done", debugType = everything)
 
