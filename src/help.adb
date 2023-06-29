@@ -15,15 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Elements;
-with DOM.Core.Nodes;
 with BasesTypes;
 with Careers;
 with Factions;
@@ -34,15 +29,11 @@ with Log;
 package body Help is
 
    procedure Load_Help(Reader: Tree_Reader; File_Name: String) is
-      use Ada.Characters.Handling;
       use Ada.Characters.Latin_1;
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Interfaces.C;
       use Interfaces.C.Strings;
-      use DOM.Core;
-      use DOM.Core.Elements;
-      use DOM.Core.Nodes;
       use BasesTypes;
       use Factions;
       use Game;
@@ -51,83 +42,38 @@ package body Help is
       use Tiny_String;
 
       Tmp_Help: Help_Data := Empty_Help;
-      Nodes_List: Node_List;
-      Help_Xml_Data: Document;
-      Action: Data_Action := ADD;
-      Help_Index, Help_Title: Unbounded_String := Null_Unbounded_String;
-      Help_Node: Node;
-      Result: chars_ptr;
+      Help_Title: Unbounded_String := Null_Unbounded_String;
+      Result, Help_Index2, Help_Title2, Help_Text: chars_ptr;
+      Index: Natural := 0;
       function Load_Ada_Help(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaHelp";
+      procedure Get_Ada_Help
+        (I: Natural; H_Index, H_Title, H_Text: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHelp";
    begin
       Result := Load_Ada_Help(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Help_Xml_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Help_Xml_Data, Tag_Name => "entry");
-      Load_Help_Data_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
+      Load_Help_Loop :
+      loop
+         Get_Ada_Help
+           (I => Index, H_Index => Help_Index2, H_Title => Help_Title2,
+            H_Text => Help_Text);
+         exit Load_Help_Loop when Strlen(Item => Help_Index2) = 0;
          Tmp_Help :=
-           (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
-         Help_Node := Item(List => Nodes_List, Index => I);
-         Action :=
-           (if Get_Attribute(Elem => Help_Node, Name => "action")'Length > 0
-            then
-              Data_Action'Value
-                (Get_Attribute(Elem => Help_Node, Name => "action"))
-            else ADD);
-         Help_Index :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Help_Node, Name => "index"));
-         Help_Title :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Help_Node, Name => "title"));
-         if Action in UPDATE | REMOVE then
-            if not Help_Container.Contains
-                (Container => Help_List, Key => Help_Title) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " help '" & To_String(Source => Help_Title) &
-                 "', there no help with that title.";
-            end if;
-         elsif Help_Container.Contains
-             (Container => Help_List, Key => Help_Title) then
-            raise Data_Loading_Error
-              with "Can't add help '" & To_String(Source => Help_Title) &
-              "', there is one with that title.";
-         end if;
-         if Action = REMOVE then
-            Help_Container.Exclude(Container => Help_List, Key => Help_Title);
-            Log_Message
-              (Message => "Help removed: " & To_String(Source => Help_Title),
-               Message_Type => EVERYTHING);
-         else
-            Tmp_Help.Index := Help_Index;
-            if Action = UPDATE then
-               Tmp_Help := Help_List(Help_Title);
-            end if;
-            if Has_Child_Nodes(N => Help_Node) then
-               Tmp_Help.Text :=
-                 To_Unbounded_String
-                   (Source => Node_Value(N => First_Child(N => Help_Node)));
-            end if;
-            if Action = UPDATE then
-               Help_List(Help_Title) := Tmp_Help;
-            else
-               Help_Container.Include
-                 (Container => Help_List, Key => Help_Title,
-                  New_Item => Tmp_Help);
-               Log_Message
-                 (Message => "Help added: " & To_String(Source => Help_Title),
-                  Message_Type => EVERYTHING);
-            end if;
-         end if;
-      end loop Load_Help_Data_Loop;
+           (Index => To_Unbounded_String(Source => Value(Item => Help_Index2)),
+            Text => To_Unbounded_String(Source => Value(Item => Help_Text)));
+         Help_Container.Include
+           (Container => Help_List,
+            Key => To_Unbounded_String(Source => Value(Item => Help_Title2)),
+            New_Item => Tmp_Help);
+         Index := Index + 1;
+      end loop Load_Help_Loop;
       -- Add help page about available statistics and attributes
       Tmp_Help.Index := To_Unbounded_String(Source => "stats");
       Help_Title :=
