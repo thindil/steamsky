@@ -67,8 +67,9 @@ package Help is
    -- Load help text from file
    -- PARAMETERS
    -- Reader - XML Reader from which help will be read
+   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Help(Reader: Tree_Reader);
+   procedure Load_Help(Reader: Tree_Reader; File_Name: String);
    -- ****
 
 end Help;

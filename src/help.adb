@@ -32,7 +32,8 @@ with Log;
 
 package body Help is
 
-   procedure Load_Help(Reader: Tree_Reader) is
+   procedure Load_Help(Reader: Tree_Reader; File_Name: String) is
+      pragma Unreferenced(File_Name);
       use Ada.Characters.Handling;
       use Ada.Characters.Latin_1;
       use Ada.Strings;
