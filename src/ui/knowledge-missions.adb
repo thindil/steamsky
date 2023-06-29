@@ -73,13 +73,13 @@ package body Knowledge.Missions is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Accepted_Mission: constant Mission_Data := Get_Accepted_Mission(Mission_Index => Mission_Index);
+      Accepted_Mission: constant Mission_Data :=
+        Get_Accepted_Mission(Mission_Index => Mission_Index);
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missionslistmenu",
            Title =>
-             (case Accepted_Mission.M_Type is
-                when DELIVER => "Deliver item",
+             (case Accepted_Mission.M_Type is when DELIVER => "Deliver item",
                 when DESTROY => "Destroy enemy", when PATROL => "Patrol area",
                 when EXPLORE => "Explore area",
                 when PASSENGER => "Transport passenger") &
@@ -116,8 +116,7 @@ package body Knowledge.Missions is
         (Name => ".destination",
          Tooltip => "Set the mission as destination for the ship.",
          Command =>
-           "SetDestination2 " &
-           Map_X_Range'Image(Accepted_Mission.Target_X) &
+           "SetDestination2 " & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
          Icon => "destination", Label => "Target", Column => 0);
       Add_Button
@@ -126,8 +125,7 @@ package body Knowledge.Missions is
       Add_Button
         (Name => ".show", Tooltip => "Show the mission on map.",
          Command =>
-           "ShowOnMap" &
-           Map_X_Range'Image(Accepted_Mission.Target_X) &
+           "ShowOnMap" & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
          Icon => "show", Label => "Show", Column => 2);
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
@@ -379,15 +377,14 @@ package body Knowledge.Missions is
             Coords =>
               To_Unbounded_String
                 (Source =>
-                   "X:" & Natural'Image(Accepted_Mission.Target_X) &
-                   " Y:" & Natural'Image(Accepted_Mission.Target_Y)),
+                   "X:" & Natural'Image(Accepted_Mission.Target_X) & " Y:" &
+                   Natural'Image(Accepted_Mission.Target_Y)),
             Details =>
               (case Accepted_Mission.M_Type is
                  when DELIVER =>
                    To_String
                      (Source =>
-                        Get_Proto_Item
-                          (Index => Accepted_Mission.Item_Index)
+                        Get_Proto_Item(Index => Accepted_Mission.Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
@@ -409,8 +406,7 @@ package body Knowledge.Missions is
                         (To_String
                            (Source =>
                               Get_Proto_Ship
-                                (Proto_Index =>
-                                   Accepted_Mission.Ship_Index)
+                                (Proto_Index => Accepted_Mission.Ship_Index)
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
@@ -427,8 +423,7 @@ package body Knowledge.Missions is
                               Accepted_Mission.Target_Y)
                              .Base_Index)
                           .Name)),
-            Time => Accepted_Mission.Time,
-            Reward => Accepted_Mission.Reward,
+            Time => Accepted_Mission.Time, Reward => Accepted_Mission.Reward,
             Id => I);
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
@@ -511,12 +506,12 @@ package body Knowledge.Missions is
                      ".gameframe.paned.knowledgeframe.missions.scrolly"),
               Command => "SortAccepted_Missions",
               Tooltip_Text => "Press mouse button to sort the missions.");
-         if Natural(Missions_Indexes.Length) /= Get_Accepted_Missions_Amount then
+         if Natural(Missions_Indexes.Length) /=
+           Get_Accepted_Missions_Amount then
             Missions_Indexes.Clear;
             Fill_Missions_Indexes_Loop :
             for I in 1 .. Get_Accepted_Missions_Amount loop
-               Missions_Indexes.Append
-                 (New_Item => I);
+               Missions_Indexes.Append(New_Item => I);
             end loop Fill_Missions_Indexes_Loop;
          end if;
          Rows := 0;
@@ -627,8 +622,7 @@ package body Knowledge.Missions is
                Command => "ShowMissionMenu" & Positive'Image(I), Column => 3);
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date
-              (Minutes => Accepted_Mission.Time,
-               Info_Text => Mission_Time);
+              (Minutes => Accepted_Mission.Time, Info_Text => Mission_Time);
             Add_Button
               (Table => Missions_Table,
                Text => To_String(Source => Mission_Time),

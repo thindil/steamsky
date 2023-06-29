@@ -127,8 +127,7 @@ package body Config is
              (Value(Item => Temp_New_Game.Difficulty_Level)));
       Game_Settings :=
         (Auto_Rest => Get_Bool(Value => Temp_Settings.Auto_Rest),
-         Undock_Speed =>
-           Ship_Speed'Val(Temp_Settings.Undock_Speed),
+         Undock_Speed => Ship_Speed'Val(Temp_Settings.Undock_Speed),
          Auto_Center => Get_Bool(Value => Temp_Settings.Auto_Center),
          Auto_Return => Get_Bool(Value => Temp_Settings.Auto_Return),
          Auto_Finish => Get_Bool(Value => Temp_Settings.Auto_Finish),

@@ -269,8 +269,8 @@ package body Bases.ShipyardUI is
       Clear_Table(Table => Install_Table);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
-         if Get_Module(Index => I).Price = 0 or else
-           Sky_Bases(Base_Index).Reputation.Level <
+         if Get_Module(Index => I).Price = 0
+           or else Sky_Bases(Base_Index).Reputation.Level <
              Get_Module(Index => I).Reputation then
             goto End_Of_Loop;
          end if;

@@ -973,8 +973,9 @@ package body OrdersMenu is
                        Start_Combat
                          (Enemy_Index =>
                             Get_Accepted_Mission
-                              (Mission_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                 .Mission_Index)
+                              (Mission_Index =>
+                                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                   .Mission_Index)
                               .Ship_Index,
                           New_Combat => False);
                   end if;

@@ -813,9 +813,7 @@ package body Ships.UI.Cargo is
                    Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Proto_Index then
-                  Delete_Mission
-                    (Mission_Index =>
-                       I);
+                  Delete_Mission(Mission_Index => I);
                   Drop_Amount := Drop_Amount - 1;
                   exit Delete_Missions_Loop;
                end if;
