@@ -39,7 +39,7 @@ with Items; use Items;
 with Log;
 with Maps; use Maps;
 with Messages;
-with Missions; use Missions;
+with Missions;
 with Mobs; use Mobs;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
@@ -52,6 +52,7 @@ package body Game is
    procedure New_Game is
       use Bases.Cargo;
       use Messages;
+      use Missions;
       use Tiny_String;
       use Utils;
 
