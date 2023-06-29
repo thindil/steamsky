@@ -41,30 +41,48 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       continue
     let
       helpIndex: string =
-          helpNode.attr(name = "index")
+        helpNode.attr(name = "index")
+      helpTitle: string = helpNode.attr(name = "title")
       helpAction: DataAction = try:
           parseEnum[DataAction](helpNode.attr(name = "action").toLowerAscii)
         except ValueError:
           DataAction.add
     if helpAction in [update, remove]:
-      if helpIndex notin helpList:
+      if helpTitle notin helpList:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $helpAction & " help '" & $helpIndex & "', there is no help with that index.")
-    elif helpIndex in helpList:
+            message = "Can't " & $helpAction & " help '" & $helpTitle & "', there is no help with that title.")
+    elif helpTitle in helpList:
       raise newException(exceptn = DataLoadingError,
-          message = "Can't add help '" & $helpIndex & "', there is an help with that index.")
+          message = "Can't add help '" & $helpTitle & "', there is an help with that title.")
     if helpAction == DataAction.remove:
-      helpList.del(key = helpIndex)
-      logMessage(message = "help removed: '" & $helpIndex & "'",
+      helpList.del(key = helpTitle)
+      logMessage(message = "Help removed: '" & $helpTitle & "'",
           debugType = everything)
       continue
-    var help: HelpData = if helpAction == DataAction.update:
+    var helpEntry: HelpData = if helpAction == DataAction.update:
         try:
-          helpList[helpIndex]
+          helpList[helpTitle]
         except ValueError:
-          HelpData()
+          HelpData(index: helpIndex)
       else:
-        HelpData()
-    var attribute = helpNode.attr(name = "index")
-    if attribute.len() > 0:
-      help.index = attribute
+        HelpData(index: helpIndex)
+    var text = helpNode.innerText()
+    if text.len() > 0:
+      helpEntry.text = text
+    if helpAction == DataAction.add:
+      logMessage(message = "Help added: '" & helpTitle & "'",
+          debugType = everything)
+    else:
+      logMessage(message = "Help updated: '" & helpTitle & "'",
+          debugType = everything)
+    helpList[helpTitle] = helpEntry
+
+# Temporary code for interfacing with Ada
+
+proc loadAdaHelp(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  try:
+    loadHelp(fileName = $fileName)
+    return "".cstring
+  except DataLoadingError:
+    return getCurrentExceptionMsg().cstring
