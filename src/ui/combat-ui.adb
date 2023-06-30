@@ -1070,12 +1070,12 @@ package body Combat.UI is
       -- ****
       use Tiny_String;
 
-      Orders_List, Order_Name: Unbounded_String;
+      Orders_List, Order_Name: Unbounded_String := Null_Unbounded_String;
       Frame_Name: constant String := Main_Paned & ".combatframe";
       Frame: Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
       Tokens: Slice_Set;
-      Rows: Natural := 0;
+      Rows: Natural;
       Order_Index: Positive := 1;
       --## rule off IMPROPER_INITIALIZATION
       Progress_Bar: Ttk_ProgressBar;
@@ -1439,7 +1439,7 @@ package body Combat.UI is
       --## rule off IMPROPER_INITIALIZATION
       Combo_Box: Ttk_ComboBox;
       --## rule on IMPROPER_INITIALIZATION
-      Gun_Index: Positive;
+      Gun_Index: Positive := 1;
       Frame_Name: constant String :=
         Main_Paned & ".combatframe.crew.canvas.frame";
       Faction: constant Faction_Record :=
@@ -1724,7 +1724,7 @@ package body Combat.UI is
       --## rule off IMPROPER_INITIALIZATION
       Combo_Box: Ttk_ComboBox;
       --## rule on IMPROPER_INITIALIZATION
-      Gun_Index: Positive;
+      Gun_Index: Positive := 1;
       Crew_Index: Natural;
       Frame_Name: constant String :=
         ".gameframe.paned.combatframe.crew.canvas.frame";
@@ -1912,7 +1912,30 @@ package body Combat.UI is
         (if CArgv.Arg(Argv => Argv, N => 3) = "combat" then Combat_Frames
          else Boarding_Frames);
    begin
-      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
+      if CArgv.Arg(Argv => Argv, N => 2) = "show" then
+         Hide_Frames_Loop :
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String
+                (Str =>
+                   Main_Paned & ".combatframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) =
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Slave => Frame,
+                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
+            else
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
+            end if;
+         end loop Hide_Frames_Loop;
+         configure
+           (Widgt => Button,
+            options =>
+              "-image movemapdownicon -command {CombatMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " hide " &
+              CArgv.Arg(Argv => Argv, N => 3) & "}");
+      else
          Show_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
@@ -1922,14 +1945,14 @@ package body Combat.UI is
                    To_String(Source => FrameInfo.Name));
             if To_String(Source => FrameInfo.Name) /=
               CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-            else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
                   Options =>
                     "-columnspan 1 -rowspan 1 -column" &
                     Natural'Image(FrameInfo.Column) & " -row" &
                     Natural'Image(FrameInfo.Row));
+            else
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             end if;
          end loop Show_Frames_Loop;
          configure
@@ -1937,29 +1960,6 @@ package body Combat.UI is
             options =>
               "-image movemapupicon -command {CombatMaxMin " &
               CArgv.Arg(Argv => Argv, N => 1) & " show " &
-              CArgv.Arg(Argv => Argv, N => 3) & "}");
-      else
-         Hide_Frames_Loop :
-         for FrameInfo of Frames loop
-            Frame.Name :=
-              New_String
-                (Str =>
-                   Main_Paned & ".combatframe." &
-                   To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
-              CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
-            else
-               Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Slave => Frame,
-                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
-            end if;
-         end loop Hide_Frames_Loop;
-         configure
-           (Widgt => Button,
-            options =>
-              "-image movemapdownicon -command {CombatMaxMin " &
-              CArgv.Arg(Argv => Argv, N => 1) & " hide " &
               CArgv.Arg(Argv => Argv, N => 3) & "}");
       end if;
       return TCL_OK;
@@ -1970,7 +1970,7 @@ package body Combat.UI is
 
       Combat_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe");
-      Combat_Started: Boolean;
+      Combat_Started: Boolean := False;
       Button: constant Ttk_Button :=
         Get_Widget(pathName => Combat_Frame & ".next");
       Enemy_Frame: constant Ttk_Frame :=
