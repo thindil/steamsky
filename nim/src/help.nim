@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, types
+import careers, game, log, types
 
 type HelpData = object
   index: string
@@ -109,6 +109,15 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
         helpEntry.text.add("        " & factionsList[index].name & ": " & (
             if relation.friendly: "Friendly" else: "Enemies") & "\n")
       helpEntry.text.add("\n")
+  helpEntry.text.add("\n{u}Careers{/u}\n\n")
+  for index, career in careersList:
+    helpEntry.text.add("{b}" & career.name & "{/b}\n" & factionsList[
+        "POLEIS"].careers[index].description & "\n")
+    if career.skills.len > 0:
+      helpEntry.text.add("    {i}Bonus to skills{/i}\n")
+      for skill in career.skills:
+        helpEntry.text.add("        " & skill & "\n")
+    helpEntry.text.add("\n")
   helpList[helpTitle] = helpEntry
   logMessage(message = "Help added: '" & helpTitle & "'",
       debugType = everything)
