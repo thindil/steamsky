@@ -53,8 +53,8 @@ type
     ##
     ## * name        - The name of the attribute
     ## * description - The description of the attribute
-    name: string
-    description: string
+    name*: string
+    description*: string
 
 const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
 
