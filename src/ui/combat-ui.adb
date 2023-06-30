@@ -1607,20 +1607,40 @@ package body Combat.UI is
            options =>
              "-text Close -command {CloseDialog " &
              Widget_Image(Win => Crew_Dialog) & "}");
+      Buttons_Frame: constant Ttk_Frame :=
+        Create(pathName => Crew_Dialog & ".selectframe");
       Height: Positive := 10;
       Width: Positive := 250;
       --## rule off IMPROPER_INITIALIZATION
       Crew_Button: Ttk_CheckButton;
+      Button: Ttk_Button;
       --## rule on IMPROPER_INITIALIZATION
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING
          else DEFEND);
    begin
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".selectallbutton",
+           options =>
+             "-image selectallicon -command {ToggleAllCrew select} -style Small.TButton");
+      Add(Widget => Button, Message => "Select all crew members.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 2}");
+      Button :=
+        Create
+          (pathName => Buttons_Frame & ".unselectallbutton",
+           options =>
+             "-image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton");
+      Add(Widget => Button, Message => "Unselect all crew members.");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-sticky w -row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Frame, Options => "-columnspan 2 -sticky w");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Y_Scroll,
-         Options => "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
+         Options => "-sticky ns -padx {0 5} -pady {5 0} -row 2 -column 1");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
       Focus(Widgt => Close_Button);
