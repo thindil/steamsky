@@ -28,7 +28,7 @@ with Log;
 
 package body Help is
 
-   procedure Load_Help(Reader: Tree_Reader; File_Name: String) is
+   procedure Load_Help(File_Name: String) is
       use Ada.Characters.Latin_1;
       use Ada.Strings;
       use Ada.Strings.Fixed;
@@ -256,17 +256,17 @@ package body Help is
              "Here you will find information about all available bases types in the game" &
              LF & LF);
       Load_Bases_Types_Info_Loop :
-      for Index of Bases_Types loop
+      for Base_Index of Bases_Types loop
          exit Load_Bases_Types_Info_Loop when Get_Base_Type_Name
-             (Base_Type => Index)'
+             (Base_Type => Base_Index)'
              Length =
            0;
          Append
            (Source => Tmp_Help.Text,
             New_Item =>
-              "{b}" & Get_Base_Type_Name(Base_Type => Index) & "{/b}" & LF &
-              "    " & Get_Base_Type_Description(Base_Type => Index) & LF &
-              LF);
+              "{b}" & Get_Base_Type_Name(Base_Type => Base_Index) & "{/b}" &
+              LF & "    " &
+              Get_Base_Type_Description(Base_Type => Base_Index) & LF & LF);
       end loop Load_Bases_Types_Info_Loop;
       Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
       Log_Message

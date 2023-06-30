@@ -834,9 +834,7 @@ package body Game is
                   Load_Goals
                     (File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "help" then
-                  Load_Help
-                    (Reader => Reader,
-                     File_Name => To_String(Source => Local_File_Name));
+                  Load_Help(File_Name => To_String(Source => Local_File_Name));
                elsif To_String(Source => Data_Type) = "items" then
                   Load_Items
                     (File_Name => To_String(Source => Local_File_Name));

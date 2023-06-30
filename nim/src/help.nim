@@ -96,6 +96,7 @@ proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
   var i = 0
   for htitle, help in helpList:
     if i < index:
+      i.inc
       continue
     title = htitle.cstring
     helpIndex = help.index.cstring

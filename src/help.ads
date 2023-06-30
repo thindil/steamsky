@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Ordered_Maps; use Ada.Containers;
-with DOM.Readers; use DOM.Readers;
 
 -- ****h* Help/Help
 -- FUNCTION
@@ -66,10 +65,9 @@ package Help is
    -- FUNCTION
    -- Load help text from file
    -- PARAMETERS
-   -- Reader - XML Reader from which help will be read
    -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Help(Reader: Tree_Reader; File_Name: String);
+   procedure Load_Help(File_Name: String);
    -- ****
 
 end Help;
