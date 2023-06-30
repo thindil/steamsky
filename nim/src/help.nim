@@ -81,7 +81,21 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   helpTitle = $(helpList.len + 1) & ". Attributes and skills"
   helpEntry.text = "Here you will find information about all available attributes and skills in the game\n\n{u}Attributes{/u}\n\n"
   for attribute in attributesList:
-    helpEntry.text.add("{b}" & attribute.name & "{/b}\n    " & attribute.description & "\n\n")
+    helpEntry.text.add("{b}" & attribute.name & "{/b}\n    " &
+        attribute.description & "\n\n")
+  helpEntry.text.add("\n{u}Skills{/u}\n\n")
+  for skill in skillsList.values:
+    helpEntry.text.add("{b}" & skill.name &
+        "{/b}\n    {i}Related attribute:{/i} " & attributesList[
+        skill.attribute].name & "\n")
+    for item in itemsList.values:
+      if item.itemType == skill.tool:
+        helpEntry.text.add("   {i}Training tool:{/i} " & (
+            if item.showType.len == 0: item.itemType else: item.showType) & "\n")
+        break
+    helpEntry.text.add("    " & skill.description & "\n\n")
+  helpList[helpTitle] = helpEntry
+  logMessage(message = "Help added: '" & helpTitle & "'", debugType = everything)
 
 # Temporary code for interfacing with Ada
 
