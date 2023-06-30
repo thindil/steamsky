@@ -29,6 +29,9 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   ## Load the help data from the file
   ##
   ## * fileName - the name of the file to load
+  var
+    helpTitle: string
+    helpEntry: HelpData
   let helpXml = try:
       loadXml(path = fileName)
     except XmlError, ValueError, IOError, OSError, Exception:
@@ -38,11 +41,9 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   for helpNode in helpXml:
     if helpNode.kind != xnElement:
       continue
-    let
-      helpIndex: string =
-        helpNode.attr(name = "index")
-      helpTitle: string = helpNode.attr(name = "title")
-      helpAction: DataAction = try:
+    let helpIndex: string = helpNode.attr(name = "index")
+    helpTitle = helpNode.attr(name = "title")
+    let helpAction: DataAction = try:
           parseEnum[DataAction](helpNode.attr(name = "action").toLowerAscii)
         except ValueError:
           DataAction.add
@@ -58,7 +59,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Help removed: '" & $helpTitle & "'",
           debugType = everything)
       continue
-    var helpEntry: HelpData = if helpAction == DataAction.update:
+    helpEntry = if helpAction == DataAction.update:
         try:
           helpList[helpTitle]
         except ValueError:
@@ -75,6 +76,12 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Help updated: '" & helpTitle & "'",
           debugType = everything)
     helpList[helpTitle] = helpEntry
+  # Add help page about available statistics and attributes
+  helpEntry.index = "stats"
+  helpTitle = $(helpList.len + 1) & ". Attributes and skills"
+  helpEntry.text = "Here you will find information about all available attributes and skills in the game\n\n{u}Attributes{/u}\n\n"
+  for attribute in attributesList:
+    helpEntry.text.add("{b}" & attribute.name & "{/b}\n    " & attribute.description & "\n\n")
 
 # Temporary code for interfacing with Ada
 
