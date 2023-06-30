@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, log, types
 
 type HelpData = object
   index: string
@@ -24,8 +24,8 @@ type HelpData = object
 
 var helpList* = initTable[string, HelpData]()
 
-proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
+    KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
   ## Load the help data from the file
   ##
   ## * fileName - the name of the file to load
@@ -95,7 +95,23 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         break
     helpEntry.text.add("    " & skill.description & "\n\n")
   helpList[helpTitle] = helpEntry
-  logMessage(message = "Help added: '" & helpTitle & "'", debugType = everything)
+  logMessage(message = "Help added: '" & helpTitle & "'",
+      debugType = everything)
+  # Add help page about available careers and factions
+  helpEntry.index = "factions"
+  helpTitle = $(helpList.len + 1) & ". Factions and careers"
+  helpEntry.text = "Here you will find information about all available factions and careers in the game\n\n{u}Factions{/u}\n\n"
+  for faction in factionsList.values:
+    if faction.careers.len > 0:
+      helpEntry.text.add("{b}" & faction.name & "{/b}\n    " &
+          faction.description & "\n    {i}Relations{/i}\n")
+      for index, relation in faction.relations:
+        helpEntry.text.add("        " & factionsList[index].name & ": " & (
+            if relation.friendly: "Friendly" else: "Enemies") & "\n")
+      helpEntry.text.add("\n")
+  helpList[helpTitle] = helpEntry
+  logMessage(message = "Help added: '" & helpTitle & "'",
+      debugType = everything)
 
 # Temporary code for interfacing with Ada
 
@@ -104,7 +120,7 @@ proc loadAdaHelp(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
   try:
     loadHelp(fileName = $fileName)
     return "".cstring
-  except DataLoadingError:
+  except DataLoadingError, KeyError:
     return getCurrentExceptionMsg().cstring
 
 proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],

@@ -73,7 +73,7 @@ package body Help is
          Index := Index + 1;
       end loop Load_Help_Loop;
       -- Add help page about available careers and factions
-      Tmp_Help.Index := To_Unbounded_String(Source => "factions");
+      Tmp_Help.Index := To_Unbounded_String(Source => "factions2");
       Help_Title :=
         To_Unbounded_String
           (Source =>
