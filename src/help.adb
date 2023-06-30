@@ -23,7 +23,6 @@ with BasesTypes;
 with Careers;
 with Factions;
 with Game;
-with Items;
 with Log;
 
 package body Help is
@@ -38,7 +37,6 @@ package body Help is
       use Factions;
       use Game;
       use Log;
-      use Short_String;
       use Tiny_String;
 
       Tmp_Help: Help_Data := Empty_Help;
@@ -74,89 +72,6 @@ package body Help is
             New_Item => Tmp_Help);
          Index := Index + 1;
       end loop Load_Help_Loop;
-      -- Add help page about available statistics and attributes
-      Tmp_Help.Index := To_Unbounded_String(Source => "stats");
-      Help_Title :=
-        To_Unbounded_String
-          (Source =>
-             Trim
-               (Source => Positive'Image(Positive(Help_List.Length) + 1),
-                Side => Left) &
-             ". Attributes and skills");
-      Tmp_Help.Text :=
-        To_Unbounded_String
-          (Source =>
-             "Here you will find information about all available attributes and skills in the game" &
-             LF & LF & "{u}Attributes{/u}" & LF & LF);
-      Load_Attributes_Loop :
-      for I in 1 .. Attributes_Amount loop
-         Load_Attributes_Block :
-         declare
-            Attribute: constant Attribute_Record :=
-              AttributesData_Container.Element
-                (Container => Attributes_List, Index => I);
-         begin
-            Append
-              (Source => Tmp_Help.Text,
-               New_Item =>
-                 "{b}" & To_String(Source => Attribute.Name) & "{/b}" & LF &
-                 "    " & To_String(Source => Attribute.Description) & LF &
-                 LF);
-         end Load_Attributes_Block;
-      end loop Load_Attributes_Loop;
-      Append
-        (Source => Tmp_Help.Text, New_Item => LF & "{u}Skills{/u}" & LF & LF);
-      Load_Skills_Loop :
-      for I in 1 .. Skills_Amount loop
-         Load_Skills_Block :
-         declare
-            use Items;
-
-            Skill: constant Skill_Record :=
-              SkillsData_Container.Element
-                (Container => Skills_List, Index => I);
-         begin
-            Append
-              (Source => Tmp_Help.Text,
-               New_Item =>
-                 "{b}" & To_String(Source => Skill.Name) & "{/b}" & LF &
-                 "    {i}Related attribute:{/i} " &
-                 To_String
-                   (Source =>
-                      AttributesData_Container.Element
-                        (Container => Attributes_List,
-                         Index => Skill.Attribute)
-                        .Name) &
-                 LF);
-            Load_Training_Tools_Loop :
-            for J in 1 .. Get_Proto_Amount loop
-               if Get_Proto_Item(Index => J).I_Type = Skill.Tool then
-                  Append
-                    (Source => Tmp_Help.Text,
-                     New_Item =>
-                       "    {i}Training tool:{/i} " &
-                       (if
-                          Get_Proto_Item(Index => J).Show_Type =
-                          Tiny_String.Null_Bounded_String
-                        then
-                          To_String
-                            (Source => Get_Proto_Item(Index => J).I_Type)
-                        else To_String
-                            (Source => Get_Proto_Item(Index => J).Show_Type)) &
-                       LF);
-                  exit Load_Training_Tools_Loop;
-               end if;
-            end loop Load_Training_Tools_Loop;
-            Append
-              (Source => Tmp_Help.Text,
-               New_Item =>
-                 "    " & To_String(Source => Skill.Description) & LF & LF);
-         end Load_Skills_Block;
-      end loop Load_Skills_Loop;
-      Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
-      Log_Message
-        (Message => "Help added: " & To_String(Source => Help_Title),
-         Message_Type => EVERYTHING);
       -- Add help page about available careers and factions
       Tmp_Help.Index := To_Unbounded_String(Source => "factions");
       Help_Title :=
