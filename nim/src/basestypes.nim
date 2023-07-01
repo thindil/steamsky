@@ -34,12 +34,12 @@ type
     ## * flags       - additional flags for the base type like shipyard, barracs,
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
-    name: string
+    name*: string
     color: string
     trades: Table[Positive, PricesArray]
     recipes: seq[string]
     flags*: seq[string]
-    description: string
+    description*: string
 
 var basesTypesList* = initTable[string, BaseTypeData]()
   ## The list of all available bases types in the game
