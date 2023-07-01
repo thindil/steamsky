@@ -53,6 +53,8 @@ gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 skyBases[1].visited = gameDate
 skyBases[1].known = true
 skyBases[1].askedForBases = false
+skyBases[1].skyX = 200
+skyBases[1].skyY = 200
 for x in 1 .. 1024:
   for y in 1 .. 1024:
     skyMap[x][y].eventIndex = -1
