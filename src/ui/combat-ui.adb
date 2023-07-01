@@ -1629,14 +1629,16 @@ package body Combat.UI is
         Create
           (pathName => Buttons_Frame & ".selectallbutton",
            options =>
-             "-image selectallicon -command {ToggleAllCombat select} -style Small.TButton");
+             "-image selectallicon -command {ToggleAllCombat select " &
+             CArgv.Arg(Argv => Argv, N => 1) & "} -style Small.TButton");
       Add(Widget => Button, Message => "Select all crew members.");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 2}");
       Button :=
         Create
           (pathName => Buttons_Frame & ".unselectallbutton",
            options =>
-             "-image unselectallicon -command {ToggleAllCombat unselect} -style Small.TButton");
+             "-image unselectallicon -command {ToggleAllCombat unselect " &
+             CArgv.Arg(Argv => Argv, N => 1) & "} -style Small.TButton");
       Add(Widget => Button, Message => "Unselect all crew members.");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-sticky w -row 0 -column 1");
@@ -2011,9 +2013,10 @@ package body Combat.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ToggleAllCombat action
+   -- ToggleAllCombat action order
    -- Action is the action which will be performed. Possible values are
-   -- select or deselect.
+   -- select or deselect. Order is the order to give to the player's ship
+   -- crew. Possible values are boarding and defending.
    -- SOURCE
    function Toggle_All_Combat_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -2025,20 +2028,39 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      Order: constant Crew_Orders :=
+        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
+         else DEFEND);
    begin
+      Boarding_Orders.Clear;
       Set_Crew_Selection_Loop :
-      for I in 1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
+      for I in Player_Ship.Crew.Iterate loop
          Tcl_SetVar
            (interp => Interp,
-            varName => ".boardingdialog.canvas.frame.crewbutton" &
-                Trim
-                  (Source =>
-                     Count_Type'Image(I),
-                   Side => Left),
+            varName =>
+              ".boardingdialog.canvas.frame.crewbutton" &
+              Trim(Source => Crew_Container.To_Index(I)'Image, Side => Left),
             newValue =>
               (if CArgv.Arg(Argv => Argv, N => 1) = "select" then "1"
                else "0"));
+         if CArgv.Arg(Argv => Argv, N => 1) = "select"
+           and then Player_Ship.Crew(I).Order /= Order then
+            Give_Orders
+              (Ship => Player_Ship,
+               Member_Index => Crew_Container.To_Index(Position => I),
+               Given_Order => Order, Module_Index => 0);
+         elsif CArgv.Arg(Argv => Argv, N => 1) = "unselect"
+           and then Player_Ship.Crew(I).Order = Order then
+            Give_Orders
+              (Ship => Player_Ship,
+               Member_Index => Crew_Container.To_Index(Position => I),
+               Given_Order => REST);
+            if Order = BOARDING then
+               Boarding_Orders.Append(New_Item => 0);
+            end if;
+         end if;
       end loop Set_Crew_Selection_Loop;
+      Update_Combat_Ui;
       return TCL_OK;
    end Toggle_All_Combat_Command;
 
