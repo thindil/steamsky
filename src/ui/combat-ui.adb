@@ -1629,14 +1629,14 @@ package body Combat.UI is
         Create
           (pathName => Buttons_Frame & ".selectallbutton",
            options =>
-             "-image selectallicon -command {ToggleAllCrew select} -style Small.TButton");
+             "-image selectallicon -command {ToggleAllCombat select} -style Small.TButton");
       Add(Widget => Button, Message => "Select all crew members.");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 2}");
       Button :=
         Create
           (pathName => Buttons_Frame & ".unselectallbutton",
            options =>
-             "-image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton");
+             "-image unselectallicon -command {ToggleAllCombat unselect} -style Small.TButton");
       Add(Widget => Button, Message => "Unselect all crew members.");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-sticky w -row 0 -column 1");
@@ -1999,6 +1999,49 @@ package body Combat.UI is
       return TCL_OK;
    end Combat_Max_Min_Command;
 
+   -- ****o* CUI/CUI.Toggle_All_Command
+   -- FUNCTION
+   -- Select or deselect all crew members in boarding and defending party
+   -- setting
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleAllCombat action
+   -- Action is the action which will be performed. Possible values are
+   -- select or deselect.
+   -- SOURCE
+   function Toggle_All_Combat_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_All_Combat_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+   begin
+      Set_Crew_Selection_Loop :
+      for I in 1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
+         Tcl_SetVar
+           (interp => Interp,
+            varName => ".boardingdialog.canvas.frame.crewbutton" &
+                Trim
+                  (Source =>
+                     Count_Type'Image(I),
+                   Side => Left),
+            newValue =>
+              (if CArgv.Arg(Argv => Argv, N => 1) = "select" then "1"
+               else "0"));
+      end loop Set_Crew_Selection_Loop;
+      return TCL_OK;
+   end Toggle_All_Combat_Command;
+
    procedure Show_Combat_Ui(New_Combat: Boolean := True) is
       use Tiny_String;
 
@@ -2066,6 +2109,9 @@ package body Combat.UI is
             Add_Command
               (Name => "CombatMaxMin",
                Ada_Command => Combat_Max_Min_Command'Access);
+            Add_Command
+              (Name => "ToggleAllCombat",
+               Ada_Command => Toggle_All_Combat_Command'Access);
          else
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
             Tcl.Tk.Ada.Grid.Grid(Slave => Enemy_Frame);
