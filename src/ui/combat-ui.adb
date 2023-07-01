@@ -1448,7 +1448,9 @@ package body Combat.UI is
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotorder");
+         --## rule off IMPROPER_INITIALIZATION
          Pilot_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
+         --## rule on IMPROPER_INITIALIZATION
          if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
@@ -1467,7 +1469,9 @@ package body Combat.UI is
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineerorder");
+         --## rule off IMPROPER_INITIALIZATION
          Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
+         --## rule on IMPROPER_INITIALIZATION
          if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
@@ -1490,6 +1494,7 @@ package body Combat.UI is
              (Str =>
                 Frame_Name & ".gunorder" & CArgv.Arg(Argv => Argv, N => 1));
          Gun_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+         --## rule off IMPROPER_INITIALIZATION
          Guns(Gun_Index)(2) :=
            Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          Guns(Gun_Index)(3) :=
@@ -1507,6 +1512,7 @@ package body Combat.UI is
                      .Name) &
               " was set on: " & Get(Widgt => Combo_Box),
             M_Type => COMBATMESSAGE);
+         --## rule on IMPROPER_INITIALIZATION
       end if;
       Update_Messages;
       return TCL_OK;
@@ -1752,7 +1758,9 @@ package body Combat.UI is
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotcrew");
+         --## rule off IMPROPER_INITIALIZATION
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
+         --## rule on IMPROPER_INITIALIZATION
          if Crew_Index > 0 then
             Give_Orders
               (Ship => Player_Ship, Member_Index => Crew_Index,
@@ -1767,7 +1775,9 @@ package body Combat.UI is
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineercrew");
+         --## rule off IMPROPER_INITIALIZATION
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
+         --## rule on IMPROPER_INITIALIZATION
          if Crew_Index > 0 then
             Give_Orders
               (Ship => Player_Ship, Member_Index => Crew_Index,
@@ -1786,7 +1796,9 @@ package body Combat.UI is
              (Str =>
                 Frame_Name & ".guncrew" & CArgv.Arg(Argv => Argv, N => 2));
          Gun_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+         --## rule off IMPROPER_INITIALIZATION
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
+         --## rule on IMPROPER_INITIALIZATION
          if Crew_Index > 0 then
             Give_Orders
               (Ship => Player_Ship, Member_Index => Crew_Index,
@@ -1893,11 +1905,13 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      --## rule off TYPE_INITIAL_VALUES
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       type Frames_Array is array(Positive range <>) of Frame_Info;
       Combat_Frames: constant Frames_Array(1 .. 4) :=
         (1 =>
