@@ -15,30 +15,19 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
 with Ada.Strings;
-with Ada.Strings.Fixed;
 with Interfaces.C.Strings;
-with BasesTypes;
 with Game;
-with Log;
 
 package body Help is
 
    procedure Load_Help(File_Name: String) is
-      use Ada.Characters.Latin_1;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
       use Interfaces.C;
       use Interfaces.C.Strings;
-      use BasesTypes;
       use Game;
-      use Log;
-      use Tiny_String;
 
       Tmp_Help: Help_Data := Empty_Help;
-      Help_Title: Unbounded_String := Null_Unbounded_String;
-      Result, Help_Index2, Help_Title2, Help_Text: chars_ptr;
+      Result, Help_Index, Help_Title, Help_Text: chars_ptr;
       Index: Natural := 0;
       function Load_Ada_Help(Name: chars_ptr) return chars_ptr with
          Import => True,
@@ -57,49 +46,18 @@ package body Help is
       Load_Help_Loop :
       loop
          Get_Ada_Help
-           (I => Index, H_Index => Help_Index2, H_Title => Help_Title2,
+           (I => Index, H_Index => Help_Index, H_Title => Help_Title,
             H_Text => Help_Text);
-         exit Load_Help_Loop when Strlen(Item => Help_Index2) = 0;
+         exit Load_Help_Loop when Strlen(Item => Help_Index) = 0;
          Tmp_Help :=
-           (Index => To_Unbounded_String(Source => Value(Item => Help_Index2)),
+           (Index => To_Unbounded_String(Source => Value(Item => Help_Index)),
             Text => To_Unbounded_String(Source => Value(Item => Help_Text)));
          Help_Container.Include
            (Container => Help_List,
-            Key => To_Unbounded_String(Source => Value(Item => Help_Title2)),
+            Key => To_Unbounded_String(Source => Value(Item => Help_Title)),
             New_Item => Tmp_Help);
          Index := Index + 1;
       end loop Load_Help_Loop;
-      -- Add help page about available careers and factions
-      Tmp_Help.Index := To_Unbounded_String(Source => "basestypes2");
-      Help_Title :=
-        To_Unbounded_String
-          (Source =>
-             Trim
-               (Source => Positive'Image(Positive(Help_List.Length) + 1),
-                Side => Left) &
-             ". Bases Types");
-      Tmp_Help.Text :=
-        To_Unbounded_String
-          (Source =>
-             "Here you will find information about all available bases types in the game" &
-             LF & LF);
-      Load_Bases_Types_Info_Loop :
-      for Base_Index of Bases_Types loop
-         exit Load_Bases_Types_Info_Loop when Get_Base_Type_Name
-             (Base_Type => Base_Index)'
-             Length =
-           0;
-         Append
-           (Source => Tmp_Help.Text,
-            New_Item =>
-              "{b}" & Get_Base_Type_Name(Base_Type => Base_Index) & "{/b}" &
-              LF & "    " &
-              Get_Base_Type_Description(Base_Type => Base_Index) & LF & LF);
-      end loop Load_Bases_Types_Info_Loop;
-      Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
-      Log_Message
-        (Message => "Help added: " & To_String(Source => Help_Title),
-         Message_Type => EVERYTHING);
    end Load_Help;
 
 end Help;
