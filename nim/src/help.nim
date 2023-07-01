@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import careers, game, log, types
+import basestypes, careers, game, log, types
 
 type HelpData = object
   index: string
@@ -118,6 +118,16 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
       for skill in career.skills:
         helpEntry.text.add("        " & skill & "\n")
     helpEntry.text.add("\n")
+  helpList[helpTitle] = helpEntry
+  logMessage(message = "Help added: '" & helpTitle & "'",
+      debugType = everything)
+  # Add help page about available bases types
+  helpEntry.index = "basestypes"
+  helpTitle = $(helpList.len + 1) & ". Bases Types"
+  helpEntry.text = "Here you will find information about all available bases types in the game\n\n"
+  for baseType in basesTypesList.values:
+    helpEntry.text.add("{b}" & baseType.name & "{/b}\n    " &
+        baseType.description & "\n\n")
   helpList[helpTitle] = helpEntry
   logMessage(message = "Help added: '" & helpTitle & "'",
       debugType = everything)
