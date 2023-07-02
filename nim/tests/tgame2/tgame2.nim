@@ -5,6 +5,7 @@ discard """
 import std/tables
 import ../../src/[basestypes, careers, factions, game, game2, items, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -22,5 +23,6 @@ playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 skyBases[1].baseType = "1"
 playerShip.crew = @[]
 
+echo "Testing updateGame."
 updateGame(1)
 assert gameDate.minutes == 1, "Failed to updated the game"
