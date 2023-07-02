@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Remembering the last entered value of custom wait time in the wait menu
 - Info about the game's factions, player's careers and available bases types
   to the help
+- Ability to select or unselect all crew members during setting boarding or
+  defending parties in combat
 
 ### Fixed
 - Showing information about finished stories
