@@ -1979,16 +1979,16 @@ package body Combat.UI is
                 (Str =>
                    Main_Paned & ".combatframe." &
                    To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
+            if To_String(Source => FrameInfo.Name) =
               CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+            else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
                   Options =>
                     "-columnspan 1 -rowspan 1 -column" &
                     Natural'Image(FrameInfo.Column) & " -row" &
                     Natural'Image(FrameInfo.Row));
-            else
-               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             end if;
          end loop Show_Frames_Loop;
          configure
@@ -2039,7 +2039,9 @@ package body Combat.UI is
            (interp => Interp,
             varName =>
               ".boardingdialog.canvas.frame.crewbutton" &
-              Trim(Source => Crew_Container.To_Index(I)'Image, Side => Left),
+              Trim
+                (Source => Crew_Container.To_Index(Position => I)'Image,
+                 Side => Left),
             newValue =>
               (if CArgv.Arg(Argv => Argv, N => 1) = "select" then "1"
                else "0"));
