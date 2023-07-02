@@ -22,7 +22,7 @@ type HelpData = object
   index: string
   text: string
 
-var helpList* = initTable[string, HelpData]()
+var helpList* = initOrderedTable[string, HelpData]()
 
 proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
