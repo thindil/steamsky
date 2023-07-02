@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Ordered_Maps; use Ada.Containers;
 
 -- ****h* Help/Help
 -- FUNCTION
@@ -44,21 +43,6 @@ package Help is
    -- SOURCE
    Empty_Help: constant Help_Data :=
      (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
-   -- ****
-
-   -- ****t* Help/Help.Help_Container
-   -- FUNCTION
-   -- Used to store help data
-   -- SOURCE
-   package Help_Container is new Ordered_Maps
-     (Key_Type => Unbounded_String, Element_Type => Help_Data);
-   -- ****
-
-   -- ****v* Help/Help.Help_List
-   -- FUNCTION
-   -- List of all help topics
-   -- SOURCE
-   Help_List: Help_Container.Map;
    -- ****
 
    -- ****f* Help/Help.Load_Help
