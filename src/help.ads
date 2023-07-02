@@ -70,4 +70,8 @@ package Help is
    procedure Load_Help(File_Name: String);
    -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_Help(Title: Unbounded_String) return Help_Data;
+
 end Help;

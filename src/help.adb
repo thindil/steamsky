@@ -16,14 +16,13 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game;
 
 package body Help is
 
    procedure Load_Help(File_Name: String) is
       use Interfaces.C;
-      use Interfaces.C.Strings;
       use Game;
 
       Tmp_Help: Help_Data := Empty_Help;
@@ -59,5 +58,22 @@ package body Help is
          Index := Index + 1;
       end loop Load_Help_Loop;
    end Load_Help;
+
+   function Get_Help(Title: Unbounded_String) return Help_Data is
+      Text, Index: chars_ptr;
+      procedure Get_Ada_Help(T: chars_ptr; I, Te: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHelp2";
+      Help_Entry: Help_Data;
+   begin
+      Get_Ada_Help
+        (T => New_String(Str => To_String(Source => Title)), I => Index,
+         Te => Text);
+      Help_Entry :=
+        (Text => To_Unbounded_String(Source => Value(Item => Text)),
+         Index => To_Unbounded_String(Source => Value(Item => Index)));
+      return Help_Entry;
+   end Get_Help;
 
 end Help;

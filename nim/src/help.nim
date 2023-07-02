@@ -158,3 +158,12 @@ proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
     helpIndex = help.index.cstring
     text = help.text.cstring
     break
+
+proc getAdaHelp2(title: cstring; index, text: var cstring) {.raises: [],
+    tags: [], exportc.} =
+  try:
+    index = helpList[$title].index.cstring
+    text = helpList[$title].text.cstring
+  except KeyError:
+    index = ""
+    text = ""
