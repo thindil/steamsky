@@ -25,51 +25,43 @@ package body Help is
       use Interfaces.C;
       use Game;
 
-      Tmp_Help: Help_Data := Empty_Help;
-      Result, Help_Index, Help_Title, Help_Text: chars_ptr;
-      Index: Natural := 0;
+      Result: chars_ptr;
       function Load_Ada_Help(Name: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "loadAdaHelp";
-      procedure Get_Ada_Help
-        (I: Natural; H_Index, H_Title, H_Text: out chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaHelp";
    begin
       Result := Load_Ada_Help(Name => New_String(Str => File_Name));
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Help_Loop :
-      loop
-         Get_Ada_Help
-           (I => Index, H_Index => Help_Index, H_Title => Help_Title,
-            H_Text => Help_Text);
-         exit Load_Help_Loop when Strlen(Item => Help_Index) = 0;
-         Tmp_Help :=
-           (Index => To_Unbounded_String(Source => Value(Item => Help_Index)),
-            Text => To_Unbounded_String(Source => Value(Item => Help_Text)));
-         Help_Container.Include
-           (Container => Help_List,
-            Key => To_Unbounded_String(Source => Value(Item => Help_Title)),
-            New_Item => Tmp_Help);
-         Index := Index + 1;
-      end loop Load_Help_Loop;
    end Load_Help;
 
-   function Get_Help(Title: Unbounded_String) return Help_Data is
-      Text, Index: chars_ptr;
-      procedure Get_Ada_Help(T: chars_ptr; I, Te: out chars_ptr) with
+   function Get_Help
+     (Title: out Unbounded_String; Help_Index: Integer := -1)
+      return Help_Data is
+      Text, Index, Help_Title: chars_ptr;
+      Help_Entry: Help_Data;
+      procedure Get_Ada_Help
+        (I: Natural; H_Index, H_Title, H_Text: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHelp";
+      procedure Get_Ada_Help_2(T: chars_ptr; I, Te: out chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "getAdaHelp2";
-      Help_Entry: Help_Data;
    begin
-      Get_Ada_Help
-        (T => New_String(Str => To_String(Source => Title)), I => Index,
-         Te => Text);
+      if Help_Index = -1 then
+         Get_Ada_Help_2
+           (T => New_String(Str => To_String(Source => Title)), I => Index,
+            Te => Text);
+      else
+         Get_Ada_Help
+           (I => Help_Index, H_Index => Index, H_Title => Help_Title,
+            H_Text => Text);
+         Title := To_Unbounded_String(Source => Value(Item => Help_Title));
+      end if;
       Help_Entry :=
         (Text => To_Unbounded_String(Source => Value(Item => Text)),
          Index => To_Unbounded_String(Source => Value(Item => Index)));

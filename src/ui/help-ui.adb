@@ -217,17 +217,20 @@ package body Help.UI is
          2 => To_Unbounded_String(Source => "temple"),
          3 => To_Unbounded_String(Source => "blackmarket"),
          4 => To_Unbounded_String(Source => "barracks"));
-      Bases_With_Flag: Unbounded_String;
+      Bases_With_Flag, Help_Title: Unbounded_String;
       Topics_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
       Help_View: constant Tk_Text :=
         Get_Widget(pathName => ".help.paned.content.view", Interp => Interp);
       Faction: Faction_Record;
+      Help: Help_Data;
    begin
       configure(Widgt => Help_View, options => "-state normal");
       Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
       Find_Help_Text_Loop :
-      for Help of Help_List loop
+      for I in 0 .. 100 loop
+         Help := Get_Help(Title => Help_Title, Help_Index => I);
+         exit Find_Help_Text_Loop when Length(Source => Help.Index) = 0;
          if Help.Index =
            To_Unbounded_String
              (Source => Selection(TreeViewWidget => Topics_View)) then
@@ -462,6 +465,8 @@ package body Help.UI is
         Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
+      Help: Help_Data;
+      Help_Title: Unbounded_String;
    begin
       if Winfo_Get(Widgt => Help_Window, Info => "exists") = "1" then
          return
@@ -531,13 +536,15 @@ package body Help.UI is
         (Paned => Paned, Index => "0",
          NewPos => Natural'Image(Game_Settings.Topics_Position));
       Insert_Topics_Loop :
-      for I in Help_List.Iterate loop
+      for I in 0 .. 100 loop
+         Help := Get_Help(Title => Help_Title, Help_Index => I);
+         exit Insert_Topics_Loop when Length(Source => Help.Index) = 0;
          Insert
            (TreeViewWidget => Topics_View,
             Options =>
-              "{} end -id {" & To_String(Source => Help_List(I).Index) &
+              "{} end -id {" & To_String(Source => Help.Index) &
               "} -text {" &
-              To_String(Source => Help_Container.Key(Position => I)) & "}");
+              To_String(Source => Help_Title) & "}");
       end loop Insert_Topics_Loop;
       Bind
         (Widgt => Topics_View, Sequence => "<<TreeviewSelect>>",
@@ -549,7 +556,7 @@ package body Help.UI is
             Parent_Frame => ".help", Title => "Can't find help topic");
          Selection_Set
            (TreeViewWidget => Topics_View,
-            Items => To_String(Source => Help_List.First_Element.Index));
+            Items => To_String(Source => Get_Help(Title => Help_Title, Help_Index => 0).Index));
          return TCL_OK;
       end if;
       Selection_Set(TreeViewWidget => Topics_View, Items => Topic_Index);

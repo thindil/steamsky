@@ -56,6 +56,7 @@ package Help is
 
 -- Temporary code to interact with Nim
 
-   function Get_Help(Title: Unbounded_String) return Help_Data;
+   function Get_Help
+     (Title: out Unbounded_String; Help_Index: Integer := -1) return Help_Data;
 
 end Help;
