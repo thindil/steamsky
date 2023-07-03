@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   to the help
 - Ability to select or unselect all crew members during setting boarding or
   defending parties in combat
+- Remembering the size of the messages' window
 
 ### Fixed
 - Showing information about finished stories
