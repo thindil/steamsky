@@ -37,6 +37,7 @@ package body Help is
       end if;
    end Load_Help;
 
+   --## rule off IMPROPER_INITIALIZATION
    function Get_Help
      (Title: out Unbounded_String; Help_Index: Integer := -1)
       return Help_Data is
@@ -67,5 +68,6 @@ package body Help is
          Index => To_Unbounded_String(Source => Value(Item => Index)));
       return Help_Entry;
    end Get_Help;
+   --## rule on IMPROPER_INITIALIZATION
 
 end Help;
