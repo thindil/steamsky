@@ -319,6 +319,34 @@ proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
   knownRecipes = @[]
   eventsList = @[]
 
+proc loadGameData*(): string =
+  if protoShipsList.len > 0:
+    return ""
+
+  proc loadSelectedData(dataName, fileName: string) =
+    discard
+
+  type DataTypeRecord = object
+    name: string
+    fileName: string
+  const dataTypes: array[1..12, DataTypeRecord] = [DataTypeRecord(name: "data",
+      fileName: "game.dat"), DataTypeRecord(name: "items",
+      fileName: "items.dat"), DataTypeRecord(name: "modules",
+      fileName: "shipmodules.dat"), DataTypeRecord(name: "recipes",
+      fileName: "recipes.dat"), DataTypeRecord(name: "bases",
+      fileName: "bases.dat"), DataTypeRecord(name: "mobiles",
+      fileName: "mobs.dat"), DataTypeRecord(name: "careers",
+      fileName: "careers.dat"), DataTypeRecord(name: "factions",
+      fileName: "factions.dat"), DataTypeRecord(name: "help",
+      fileName: "help.dat"), DataTypeRecord(name: "ships",
+      fileName: "ships.dat"), DataTypeRecord(name: "goals",
+      fileName: "goals.dat"), DataTypeRecord(name: "stories",
+      fileName: "stories.dat")]
+  # Load the standard game data
+  for dataType in dataTypes:
+    loadSelectedData(dataName = dataType.name, fileName = dataType.fileName)
+  # Load the modifications
+
 # Temporary code for interfacing with Ada
 
 proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
