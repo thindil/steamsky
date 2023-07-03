@@ -348,6 +348,9 @@ proc loadGameData*(): string =
   for dataType in dataTypes:
     loadSelectedData(dataName = dataType.name, fileName = dataType.fileName)
   # Load the modifications
+  for modDirectory in walkDirs(modsDirectory & "*"):
+    loadSelectedData(dataName = modDirectory, fileName = "")
+  setToolsList()
 
 # Temporary code for interfacing with Ada
 
