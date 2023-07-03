@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1217,6 +1217,10 @@ package body Maps.UI.Commands is
       Paned_Position: Positive;
       Sash_Position: constant Natural :=
         Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+      procedure Set_Ada_Messages_Position(New_Value: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaMessagesPosition";
    begin
       Game_Settings.Window_Width :=
         Positive'Value
@@ -1234,6 +1238,8 @@ package body Maps.UI.Commands is
          if Game_Settings.Window_Height - Sash_Position > -1 then
             Game_Settings.Messages_Position :=
               Game_Settings.Window_Height - Sash_Position;
+            Set_Ada_Messages_Position
+              (New_Value => Game_Settings.Messages_Position);
          end if;
          Paned_Position := Sash_Position;
       end if;

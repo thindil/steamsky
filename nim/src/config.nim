@@ -339,3 +339,6 @@ proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
 proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
     raises: [], tags: [], exportc.} =
   newGameSettings = adaNewGameSettings
+
+proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
+  gameSettings.messagesPosition = newValue
