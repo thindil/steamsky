@@ -38,6 +38,9 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
       of "savedir":
         saveDirectory = val & DirSep
         normalizePath(saveDirectory)
+      of "modsdir":
+        modsDirectory = val & DirSep
+        normalizePath(modsDirectory)
       of "debug":
         debugMode = parseEnum[DebugTypes](val)
 

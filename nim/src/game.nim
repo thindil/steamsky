@@ -61,6 +61,8 @@ const defaultItemDurability*: ItemsDurability = 100 ## Default durability for th
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep ## The directory where the saved games and logs are stored
+  modsDirectory*: string = "data" & DirSep & "mods" &
+      DirSep ## The directory where the game's modifications are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string                       ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
