@@ -15,9 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/[os, tables]
 import bases, basescargo, basesship, config, crafts, crew, events, game,
-    gamesaveload, goals, maps, messages, missions, shipscrew, shipsrepairs,
-    shipsupgrade, statistics, types
+    gamesaveload, goals, items, maps, messages, missions, shipscrew,
+    shipsrepairs, shipsupgrade, statistics, types
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
@@ -94,6 +95,37 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     skyMap[playerShip.skyX][playerShip.skyY].visited = true
   updateEvents(minutes = minutes)
   updateMissions(minutes = minutes)
+
+proc loadGameData*(): string =
+  if protoShipsList.len > 0:
+    return ""
+
+  proc loadSelectedData(dataName, fileName: string) =
+    discard
+
+  type DataTypeRecord = object
+    name: string
+    fileName: string
+  const dataTypes: array[1..12, DataTypeRecord] = [DataTypeRecord(name: "data",
+      fileName: "game.dat"), DataTypeRecord(name: "items",
+      fileName: "items.dat"), DataTypeRecord(name: "modules",
+      fileName: "shipmodules.dat"), DataTypeRecord(name: "recipes",
+      fileName: "recipes.dat"), DataTypeRecord(name: "bases",
+      fileName: "bases.dat"), DataTypeRecord(name: "mobiles",
+      fileName: "mobs.dat"), DataTypeRecord(name: "careers",
+      fileName: "careers.dat"), DataTypeRecord(name: "factions",
+      fileName: "factions.dat"), DataTypeRecord(name: "help",
+      fileName: "help.dat"), DataTypeRecord(name: "ships",
+      fileName: "ships.dat"), DataTypeRecord(name: "goals",
+      fileName: "goals.dat"), DataTypeRecord(name: "stories",
+      fileName: "stories.dat")]
+  # Load the standard game data
+  for dataType in dataTypes:
+    loadSelectedData(dataName = dataType.name, fileName = dataType.fileName)
+  # Load the modifications
+  for modDirectory in walkDirs(modsDirectory & "*"):
+    loadSelectedData(dataName = modDirectory, fileName = "")
+  setToolsList()
 
 # Temporary code for interfacing with Ada
 
