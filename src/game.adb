@@ -20,6 +20,7 @@ with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
 with Bases; use Bases;
 with Bases.Cargo;
+with Careers;
 with Config; use Config;
 with Crew;
 with Events;
@@ -542,6 +543,7 @@ package body Game is
 
    function Load_Game_Data return String is
       use Ada.Exceptions;
+      use Careers;
       use Log;
 
       Result: chars_ptr;
@@ -738,6 +740,7 @@ package body Game is
       end if;
       Result := Load_Ada_Game_Data;
       Load_Data;
+      Load_Careers;
       return Value(Item => Result);
    exception
       when An_Exception : others =>

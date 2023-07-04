@@ -19,7 +19,7 @@ with Interfaces.C.Strings;
 
 package body Careers is
 
-   procedure Load_Careers(File_Name: String) is
+   procedure Load_Careers is
       use Interfaces.C;
       use Interfaces.C.Strings;
 
@@ -33,11 +33,6 @@ package body Careers is
       Temp_Nim_Career: Nim_Career_Array;
       Index: Positive := 1;
       Index2: Natural := 0;
-      Result: chars_ptr;
-      function Load_Ada_Careers(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaCareers";
       procedure Get_Ada_Career
         (C_Index: Integer; Ada_Career: out Nim_Career_Array) with
          Import => True,
@@ -49,10 +44,6 @@ package body Careers is
          Convention => C,
          External_Name => "getAdaCareerSkill";
    begin
-      Result := Load_Ada_Careers(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
       Load_Careers_Data_Loop :
       loop
          Get_Ada_Career(C_Index => Index, Ada_Career => Temp_Nim_Career);

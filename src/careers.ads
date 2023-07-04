@@ -62,10 +62,8 @@ package Careers is
    -- ****f* Careers/Careers.Load_Careers
    -- FUNCTION
    -- Load player careers from file
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Careers(File_Name: String);
+   procedure Load_Careers;
    -- ****
 
 end Careers;
