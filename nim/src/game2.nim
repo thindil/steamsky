@@ -16,9 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables, xmlparser, xmltree]
-import bases, basescargo, basesship, basestypes, careers, config, crafts, crew, events, factions, game,
-    gamesaveload, goals, help, items, log, maps, messages, missions, mobs, shipmodules, ships, shipscrew,
-    shipsrepairs, shipsupgrade, statistics, stories,  types
+import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
+    events, factions, game, gamesaveload, goals, help, items, log, maps,
+    messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
+    shipsupgrade, statistics, stories, types
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
@@ -101,14 +102,14 @@ proc loadGameData*(): string =
   if protoShipsList.len > 0:
     return
 
-  proc loadSelectedData(dataName, fileName: string) =
+  proc loadSelectedData(dataName, fileName: string): string =
 
     var localFileName: string
-    proc loadDataFile(localDataName: string) =
+    proc loadDataFile(localDataName: string): string =
       let dataXml = try:
           loadXml(path = localFileName)
         except XmlError, ValueError, IOError, OSError, Exception:
-          return
+          return getCurrentExceptionMsg()
       var dataType: string
       for dataNode in dataXml:
         if dataNode.kind != xnElement:
@@ -116,7 +117,8 @@ proc loadGameData*(): string =
         dataType = dataNode.tag
         break
       if dataType == localDataName or localDataName.len == 0:
-        logMessage(message = "Loading " & dataType & " file: " & localFileName, debugType = everything)
+        logMessage(message = "Loading " & dataType & " file: " & localFileName,
+            debugType = everything)
         case dataType
         of "factions":
           loadFactions(fileName = localFileName)
@@ -143,15 +145,17 @@ proc loadGameData*(): string =
         of "careers":
           loadCareers(fileName = localFileName)
         else:
-          echo "unknown type: " & dataType
+          return "Can't load the game data. Unknown type of data: " & dataType
 
     if fileName.len == 0:
       for file in walkFiles(dataName & DirSep & "*.dat"):
         localFileName = file
-        loadDataFile(localDataName = "")
+        result = loadDataFile(localDataName = "")
+        if result.len > 0:
+          return
     else:
       localFileName = dataDirectory & fileName
-      loadDataFile(localDataName = dataName)
+      result = loadDataFile(localDataName = dataName)
 
   type DataTypeRecord = object
     name: string
@@ -171,10 +175,13 @@ proc loadGameData*(): string =
       fileName: "stories.dat")]
   # Load the standard game data
   for dataType in dataTypes:
-    loadSelectedData(dataName = dataType.name, fileName = dataType.fileName)
+    result = loadSelectedData(dataName = dataType.name,
+        fileName = dataType.fileName)
   # Load the modifications
   for modDirectory in walkDirs(modsDirectory & "*"):
-    loadSelectedData(dataName = modDirectory, fileName = "")
+    result = loadSelectedData(dataName = modDirectory, fileName = "")
+    if result.len > 0:
+      return
   setToolsList()
 
 # Temporary code for interfacing with Ada
@@ -185,3 +192,10 @@ proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
     updateGame(minutes = minutes, inCombat = inCombat == 1)
   except ValueError, IOError, Exception:
     discard
+
+proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    return loadGameData().cstring
+  except DataLoadingError, KeyError:
+    return getCurrentExceptionMsg().cstring
+
