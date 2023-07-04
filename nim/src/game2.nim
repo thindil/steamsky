@@ -16,9 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables, xmlparser, xmltree]
-import bases, basescargo, basesship, config, crafts, crew, events, game,
-    gamesaveload, goals, items, maps, messages, missions, shipscrew,
-    shipsrepairs, shipsupgrade, statistics, types
+import bases, basescargo, basesship, basestypes, careers, config, crafts, crew, events, factions, game,
+    gamesaveload, goals, help, items, log, maps, messages, missions, mobs, shipmodules, ships, shipscrew,
+    shipsrepairs, shipsupgrade, statistics, stories,  types
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
@@ -115,6 +115,35 @@ proc loadGameData*(): string =
           continue
         dataType = dataNode.tag
         break
+      if dataType == localDataName or localDataName.len == 0:
+        logMessage(message = "Loading " & dataType & " file: " & localFileName, debugType = everything)
+        case dataType
+        of "factions":
+          loadFactions(fileName = localFileName)
+        of "goals":
+          loadGoals(fileName = localFileName)
+        of "help":
+          loadHelp(fileName = localFileName)
+        of "items":
+          loadItems(fileName = localFileName)
+        of "mobiles":
+          loadMobs(fileName = localFileName)
+        of "recipes":
+          loadRecipes(fileName = localFileName)
+        of "bases":
+          loadBasesTypes(fileName = localFileName)
+        of "modules":
+          loadModules(fileName = localFileName)
+        of "ships":
+          loadShips(fileName = localFileName)
+        of "stories":
+          loadStories(fileName = localFileName)
+        of "data":
+          loadData(fileName = localFileName)
+        of "careers":
+          loadCareers(fileName = localFileName)
+        else:
+          echo "unknown type: " & dataType
 
     if fileName.len == 0:
       for file in walkFiles(dataName & DirSep & "*.dat"):
