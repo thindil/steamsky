@@ -111,11 +111,7 @@ proc loadGameData*(): string =
         except XmlError, ValueError, IOError, OSError, Exception:
           return getCurrentExceptionMsg()
       var dataType: string
-      for dataNode in dataXml:
-        if dataNode.kind != xnElement:
-          continue
-        dataType = dataNode.tag
-        break
+      dataType = dataXml.tag
       if dataType == localDataName or localDataName.len == 0:
         logMessage(message = "Loading " & dataType & " file: " & localFileName,
             debugType = everything)
@@ -177,6 +173,8 @@ proc loadGameData*(): string =
   for dataType in dataTypes:
     result = loadSelectedData(dataName = dataType.name,
         fileName = dataType.fileName)
+    if result.len > 0:
+      return
   # Load the modifications
   for modDirectory in walkDirs(modsDirectory & "*"):
     result = loadSelectedData(dataName = modDirectory, fileName = "")
