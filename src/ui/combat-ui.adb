@@ -13,12 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
@@ -28,85 +28,37 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
-use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Bases; use Bases;
-with Config; use Config;
+with Bases;
+with Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
-with Events; use Events;
+with Events;
 with Factions; use Factions;
 with Items; use Items;
-with Maps; use Maps;
+with Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
+with Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
-
-   -- ****if* CUI/CUI.Get_Gun_Speed
-   -- FUNCTION
-   -- Get information about fire rate of selected gun with selected order
-   -- PARAMETERS
-   -- Position - Number of gun to check
-   -- Index    - Index of the gunner's order
-   -- RESULT
-   -- String with info about gun fire rate
-   -- SOURCE
-   function Get_Gun_Speed(Position: Natural; Index: Positive) return String is
-      -- ****
-      Gun_Speed: Integer;
-      Firerate: Unbounded_String := Null_Unbounded_String;
-   begin
-      Gun_Speed :=
-        Get_Module(Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
-          .Speed;
-      case Index is
-         when 1 =>
-            Gun_Speed := 0;
-         when 3 =>
-            null;
-         when others =>
-            Gun_Speed :=
-              (if Gun_Speed > 0 then
-                 Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
-               else Gun_Speed - 1);
-      end case;
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      if Gun_Speed > 0 then
-         Firerate :=
-           To_Unbounded_String
-             (Source =>
-                "(" & Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
-                "/round)");
-      elsif Gun_Speed < 0 then
-         Firerate :=
-           To_Unbounded_String
-             (Source =>
-                "(1/" &
-                Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
-                " rounds)");
-      end if;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      return To_String(Source => Firerate);
-   end Get_Gun_Speed;
 
    -- ****if* CUI/CUI.Update_Messages
    -- FUNCTION
@@ -114,6 +66,9 @@ package body Combat.UI is
    -- SOURCE
    procedure Update_Messages is
       -- ****
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Config;
+
       Loop_Start: Integer := 0 - Messages_Amount;
       Message: Message_Data;
       Current_Turn_Time: Unbounded_String :=
@@ -214,6 +169,7 @@ package body Combat.UI is
    -- SOURCE
    procedure Update_Combat_Ui is
       -- ****
+      use Bases;
       use Short_String;
       use Tiny_String;
 
@@ -267,6 +223,45 @@ package body Combat.UI is
          end loop Mark_Skills_Loop;
          return To_String(Source => Crew_List);
       end Get_Crew_List;
+      function Get_Gun_Speed
+        (Position: Natural; Index: Positive) return String is
+         Gun_Speed: Integer;
+         Firerate: Unbounded_String := Null_Unbounded_String;
+      begin
+         Gun_Speed :=
+           Get_Module
+             (Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
+             .Speed;
+         case Index is
+            when 1 =>
+               Gun_Speed := 0;
+            when 3 =>
+               null;
+            when others =>
+               Gun_Speed :=
+                 (if Gun_Speed > 0 then
+                    Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
+                  else Gun_Speed - 1);
+         end case;
+         --## rule off SIMPLIFIABLE_STATEMENTS
+         if Gun_Speed > 0 then
+            Firerate :=
+              To_Unbounded_String
+                (Source =>
+                   "(" &
+                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+                   "/round)");
+         elsif Gun_Speed < 0 then
+            Firerate :=
+              To_Unbounded_String
+                (Source =>
+                   "(1/" &
+                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+                   " rounds)");
+         end if;
+         --## rule on SIMPLIFIABLE_STATEMENTS
+         return To_String(Source => Firerate);
+      end Get_Gun_Speed;
    begin
       Bind_To_Main_Window
         (Interp => Get_Context,
@@ -791,6 +786,8 @@ package body Combat.UI is
          if Enemy.Ship.Speed /= Ships.FULL_STOP then
             Show_Enemy_Ship_Speed_Block :
             declare
+               use Ships.Movement;
+
                Speed_Diff: constant Integer :=
                  Real_Speed(Ship => Enemy.Ship) -
                  Real_Speed(Ship => Player_Ship);
@@ -1068,6 +1065,7 @@ package body Combat.UI is
    -- SOURCE
    procedure Update_Boarding_Ui is
       -- ****
+      use Ada.Characters.Handling;
       use Tiny_String;
 
       Orders_List, Order_Name: Unbounded_String := Null_Unbounded_String;
@@ -1584,6 +1582,9 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tklib.Ada.Autoscroll;
       use Tiny_String;
 
       Crew_Dialog: constant Ttk_Frame :=
@@ -2067,6 +2068,9 @@ package body Combat.UI is
    end Toggle_All_Combat_Command;
 
    procedure Show_Combat_Ui(New_Combat: Boolean := True) is
+      use GNAT.Directory_Operations;
+      use Events;
+      use Maps;
       use Tiny_String;
 
       Combat_Frame: constant Ttk_Frame :=
