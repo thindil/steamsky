@@ -18,23 +18,14 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Nodes;
-with DOM.Readers;
-with Input_Sources.File;
 with Bases; use Bases;
 with Bases.Cargo;
-with BasesTypes;
-with Careers;
 with Config; use Config;
-with Crafts;
 with Crew;
 with Events;
 with Factions; use Factions;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
-with Help;
 with Items; use Items;
 with Log;
 with Maps; use Maps;
@@ -44,7 +35,6 @@ with Mobs; use Mobs;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Statistics; use Statistics;
-with Stories;
 with Utils;
 
 package body Game is
@@ -554,375 +544,201 @@ package body Game is
       use Ada.Exceptions;
       use Log;
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Data_Type_Record is record
-         Name: Unbounded_String;
-         File_Name: Unbounded_String;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      Data_Types: constant array(1 .. 12) of Data_Type_Record :=
-        (1 =>
-           (Name => To_Unbounded_String(Source => "data"),
-            File_Name => To_Unbounded_String(Source => "game.dat")),
-         2 =>
-           (Name => To_Unbounded_String(Source => "items"),
-            File_Name => To_Unbounded_String(Source => "items.dat")),
-         3 =>
-           (Name => To_Unbounded_String(Source => "modules"),
-            File_Name => To_Unbounded_String(Source => "shipmodules.dat")),
-         4 =>
-           (Name => To_Unbounded_String(Source => "recipes"),
-            File_Name => To_Unbounded_String(Source => "recipes.dat")),
-         5 =>
-           (Name => To_Unbounded_String(Source => "bases"),
-            File_Name => To_Unbounded_String(Source => "bases.dat")),
-         6 =>
-           (Name => To_Unbounded_String(Source => "mobiles"),
-            File_Name => To_Unbounded_String(Source => "mobs.dat")),
-         7 =>
-           (Name => To_Unbounded_String(Source => "careers"),
-            File_Name => To_Unbounded_String(Source => "careers.dat")),
-         8 =>
-           (Name => To_Unbounded_String(Source => "factions"),
-            File_Name => To_Unbounded_String(Source => "factions.dat")),
-         9 =>
-           (Name => To_Unbounded_String(Source => "help"),
-            File_Name => To_Unbounded_String(Source => "help.dat")),
-         10 =>
-           (Name => To_Unbounded_String(Source => "ships"),
-            File_Name => To_Unbounded_String(Source => "ships.dat")),
-         11 =>
-           (Name => To_Unbounded_String(Source => "goals"),
-            File_Name => To_Unbounded_String(Source => "goals.dat")),
-         12 =>
-           (Name => To_Unbounded_String(Source => "stories"),
-            File_Name => To_Unbounded_String(Source => "stories.dat")));
-      Mods_Directories: Search_Type;
-      Found_Directory: Directory_Entry_Type;
-      procedure Load_Selected_Data(Data_Name, File_Name: String) is
-         use Input_Sources.File;
+      Result: chars_ptr;
+      function Load_Ada_Game_Data return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "loadAdaGameData";
+      procedure Load_Data is
+         use Interfaces.C;
+         use Tiny_String;
 
-         Files: Search_Type;
-         Found_File: Directory_Entry_Type;
-         Data_File: File_Input;
-         Local_File_Name: Unbounded_String := Null_Unbounded_String;
-         procedure Load_Data_File(Local_Data_Name: String) is
-            use DOM.Core.Documents;
-            use DOM.Core.Nodes;
-            use DOM.Readers;
-            use BasesTypes;
-            use Careers;
-            use Crafts;
-            use Help;
-            use Stories;
-
-            Data_Type: Unbounded_String;
-            Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-            procedure Load_Data(Data_File_Name: String) is
-               use Interfaces.C;
-               use Tiny_String;
-
-               Item_Index: Natural;
-               --## rule off TYPE_INITIAL_VALUES
-               type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
-               type Nim_Integers_Array is array(0 .. 10) of Integer;
-               --## rule on TYPE_INITIAL_VALUES
-               Nim_Strings: Nim_Strings_Array;
-               Nim_Integers: Nim_Integers_Array := (others => 0);
-               Result: chars_ptr;
-               function Load_Ada_Data(Name: chars_ptr) return chars_ptr with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "loadAdaData";
-               procedure Get_Ada_Game_Strings
-                 (Values: out Nim_Strings_Array) with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "getAdaGameStrings";
-               procedure Get_Ada_Game_Integers
-                 (Values: out Nim_Integers_Array) with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "getAdaGameIntegers";
-            begin
-               Result :=
-                 Load_Ada_Data(Name => New_String(Str => Data_File_Name));
-               if Strlen(Item => Result) > 0 then
-                  raise Data_Loading_Error with Value(Item => Result);
-               end if;
-               Item_Index := 0;
-               Fill_Attributes_Block :
-               declare
-                  --## rule off TYPE_INITIAL_VALUES
-                  type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
-                  --## rule on TYPE_INITIAL_VALUES
-                  Attribute_Array: Attribute_Nim_Array;
-                  procedure Get_Ada_Attribute
-                    (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
-                     Import => True,
-                     Convention => C,
-                     External_Name => "getAdaAttribute";
-               begin
-                  Fill_Attributes_Loop :
-                  loop
-                     Get_Ada_Attribute
-                       (I_Index => Attributes_Amount,
-                        Attribute => Attribute_Array);
-                     exit Fill_Attributes_Loop when Strlen
-                         (Item => Attribute_Array(0)) =
-                       0;
-                     AttributesData_Container.Append
-                       (Container => Attributes_List,
-                        New_Item =>
-                          (Name =>
-                             Tiny_String.To_Bounded_String
-                               (Source => Value(Item => Attribute_Array(0))),
-                           Description =>
-                             Short_String.To_Bounded_String
-                               (Source => Value(Item => Attribute_Array(1)))));
-                     Attributes_Amount := Attributes_Amount + 1;
-                  end loop Fill_Attributes_Loop;
-               end Fill_Attributes_Block;
-               Fill_Skills_Block :
-               declare
-                  --## rule off TYPE_INITIAL_VALUES
-                  type Nim_Skill_Record is record
-                     Name: chars_ptr;
-                     Attribute: Integer;
-                     Description: chars_ptr;
-                     Tool: chars_ptr;
-                  end record;
-                  --## rule on TYPE_INITIAL_VALUES
-                  --## rule off IMPROPER_INITIALIZATION
-                  Skill: Nim_Skill_Record;
-                  --## rule on IMPROPER_INITIALIZATION
-                  procedure Get_Ada_Skill
-                    (S_Index: Natural; Nim_Skill: out Nim_Skill_Record) with
-                     Import => True,
-                     Convention => C,
-                     External_Name => "getAdaSkill";
-               begin
-                  Item_Index := 1;
-                  Fill_Skills_Loop :
-                  loop
-                     Get_Ada_Skill(S_Index => Item_Index, Nim_Skill => Skill);
-                     exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
-                     Load_Skill_Block :
-                     declare
-                        --## rule off TYPE_INITIAL_VALUES
-                        type Nim_Tools_Array is
-                          array(0 .. 15, 0 .. 1) of Integer;
-                        --## rule on TYPE_INITIAL_VALUES
-                        function Get_Ada_Skill_Tools_Amount
-                          (S_Index: Natural) return Integer with
-                           Import => True,
-                           Convention => C,
-                           External_Name => "getAdaSkillToolsAmount";
-                        procedure Get_Ada_Skill_Tools
-                          (S_Index: Natural;
-                           Nim_Tools: out Nim_Tools_Array) with
-                           Import => True,
-                           Convention => C,
-                           External_Name => "getAdaSkillTools";
-                        Tools: Nim_Tools_Array;
-                        Tools_Quality: Tool_Quality_Array
-                          (1 ..
-                               (if
-                                  Get_Ada_Skill_Tools_Amount
-                                    (S_Index => Item_Index) >
-                                  0
-                                then
-                                  Get_Ada_Skill_Tools_Amount
-                                    (S_Index => Item_Index)
-                                else 1)) :=
-                          (others => <>);
-                        Tmp_Skill: Skill_Record
-                          (Quality_Amount => Tools_Quality'Length) :=
-                          (Quality_Amount => Tools_Quality'Length,
-                           others => <>);
-                     begin
-                        Get_Ada_Skill_Tools
-                          (S_Index => Item_Index, Nim_Tools => Tools);
-                        Load_Skills_Loop :
-                        for J in Tools_Quality'Range loop
-                           Tools_Quality(J) :=
-                             (Level => Tools(J - 1, 0),
-                              Quality => Tools(J - 1, 1));
-                        end loop Load_Skills_Loop;
-                        if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) =
-                          0 then
-                           Tools_Quality := Empty_Tool_Quality_Array;
-                        end if;
-                        Tmp_Skill :=
-                          (Quality_Amount => Tools_Quality'Length,
-                           Name =>
-                             To_Bounded_String
-                               (Source => Value(Item => Skill.Name)),
-                           Attribute => Skill.Attribute,
-                           Description =>
-                             Short_String.To_Bounded_String
-                               (Source => Value(Item => Skill.Description)),
-                           Tool =>
-                             Tiny_String.To_Bounded_String
-                               (Source => Value(Item => Skill.Tool)),
-                           Tools_Quality => Tools_Quality);
-                        SkillsData_Container.Append
-                          (Container => Skills_List, New_Item => Tmp_Skill);
-                        Skills_Amount := Skills_Amount + 1;
-                     end Load_Skill_Block;
-                     Item_Index := Item_Index + 1;
-                  end loop Fill_Skills_Loop;
-               end Fill_Skills_Block;
-               Get_Ada_Game_Strings(Values => Nim_Strings);
-               Repair_Tools :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(0)));
-               Cleaning_Tools :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(1)));
-               Alchemy_Tools :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(2)));
-               Mission_Items_Type :=
-                 To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
-               Fuel_Type :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
-               Traders_Name :=
-                 To_Unbounded_String(Source => Value(Item => Nim_Strings(5)));
-               Head_Armor :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(6)));
-               Chest_Armor :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(7)));
-               Arms_Armor :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(8)));
-               Legs_Armor :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(9)));
-               Shield_Type :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(10)));
-               Weapon_Type :=
-                 To_Bounded_String(Source => Value(Item => Nim_Strings(11)));
-               Get_Ada_Game_Integers(Values => Nim_Integers);
-               Corpse_Index := Nim_Integers(0);
-               Money_Index := Nim_Integers(1);
-               Condition_Index := Nim_Integers(2);
-               Strength_Index := Nim_Integers(3);
-               Piloting_Skill := Count_Type(Nim_Integers(4));
-               Engineering_Skill := Count_Type(Nim_Integers(5));
-               Gunnery_Skill := Count_Type(Nim_Integers(6));
-               Talking_Skill := Count_Type(Nim_Integers(7));
-               Perception_Skill := Count_Type(Nim_Integers(8));
-               Dodge_Skill := Count_Type(Nim_Integers(9));
-               Unarmed_Skill := Count_Type(Nim_Integers(10));
-            end Load_Data;
-         begin
-            --## rule off IMPROPER_INITIALIZATION
-            Parse(Parser => Reader, Input => Data_File);
-            Data_Type :=
-              To_Unbounded_String
-                (Source =>
-                   Node_Name
-                     (N => Get_Element(Doc => Get_Tree(Read => Reader))));
-            --## rule on IMPROPER_INITIALIZATION
-            if Data_Type = To_Unbounded_String(Source => Local_Data_Name) or
-              Local_Data_Name = "" then
-               Log_Message
-                 (Message =>
-                    "Loading " & To_String(Source => Data_Type) & " file: " &
-                    To_String(Source => Local_File_Name),
-                  Message_Type => EVERYTHING);
-               if To_String(Source => Data_Type) = "factions" then
-                  Load_Factions
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "goals" then
-                  Load_Goals
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "help" then
-                  Load_Help(File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "items" then
-                  Load_Items
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "mobiles" then
-                  Load_Mobs(File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "recipes" then
-                  Load_Recipes
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "bases" then
-                  Load_Bases_Types
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "modules" then
-                  Load_Ship_Modules
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "ships" then
-                  Load_Ships
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "stories" then
-                  Load_Stories
-                    (File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "data" then
-                  Load_Data
-                    (Data_File_Name => To_String(Source => Local_File_Name));
-               elsif To_String(Source => Data_Type) = "careers" then
-                  Load_Careers
-                    (File_Name => To_String(Source => Local_File_Name));
-               end if;
-            end if;
-            Free(Read => Reader); --## rule line off IMPROPER_INITIALIZATION
-         end Load_Data_File;
+         Item_Index: Natural;
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
+         type Nim_Integers_Array is array(0 .. 10) of Integer;
+         --## rule on TYPE_INITIAL_VALUES
+         Nim_Strings: Nim_Strings_Array;
+         Nim_Integers: Nim_Integers_Array := (others => 0);
+         procedure Get_Ada_Game_Strings
+           (Values: out Nim_Strings_Array) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaGameStrings";
+         procedure Get_Ada_Game_Integers
+           (Values: out Nim_Integers_Array) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaGameIntegers";
       begin
-         if File_Name = "" then
-            Start_Search
-              (Search => Files, Directory => Data_Name, Pattern => "*.dat");
-            Load_Data_Files_Loop :
-            while More_Entries(Search => Files) loop
-               Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
-               Open
-                 (Filename => Full_Name(Directory_Entry => Found_File),
-                  Input => Data_File);
-               Local_File_Name :=
-                 To_Unbounded_String
-                   (Source => Full_Name(Directory_Entry => Found_File));
-               Load_Data_File(Local_Data_Name => "");
-               Close(Input => Data_File);
-            end loop Load_Data_Files_Loop;
-            End_Search(Search => Files);
-         else
-            Open
-              (Filename => To_String(Source => Data_Directory) & File_Name,
-               Input => Data_File);
-            Local_File_Name :=
-              To_Unbounded_String
-                (Source => To_String(Source => Data_Directory) & File_Name);
-            Load_Data_File(Local_Data_Name => Data_Name);
-            Close(Input => Data_File);
-         end if;
-      end Load_Selected_Data;
+         Item_Index := 0;
+         Fill_Attributes_Block :
+         declare
+            --## rule off TYPE_INITIAL_VALUES
+            type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
+            --## rule on TYPE_INITIAL_VALUES
+            Attribute_Array: Attribute_Nim_Array;
+            procedure Get_Ada_Attribute
+              (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
+               Import => True,
+               Convention => C,
+               External_Name => "getAdaAttribute";
+         begin
+            Fill_Attributes_Loop :
+            loop
+               Get_Ada_Attribute
+                 (I_Index => Attributes_Amount,
+                  Attribute => Attribute_Array);
+               exit Fill_Attributes_Loop when Strlen
+                   (Item => Attribute_Array(0)) =
+                 0;
+               AttributesData_Container.Append
+                 (Container => Attributes_List,
+                  New_Item =>
+                    (Name =>
+                       Tiny_String.To_Bounded_String
+                         (Source => Value(Item => Attribute_Array(0))),
+                     Description =>
+                       Short_String.To_Bounded_String
+                         (Source => Value(Item => Attribute_Array(1)))));
+               Attributes_Amount := Attributes_Amount + 1;
+            end loop Fill_Attributes_Loop;
+         end Fill_Attributes_Block;
+         Fill_Skills_Block :
+         declare
+            --## rule off TYPE_INITIAL_VALUES
+            type Nim_Skill_Record is record
+               Name: chars_ptr;
+               Attribute: Integer;
+               Description: chars_ptr;
+               Tool: chars_ptr;
+            end record;
+            --## rule on TYPE_INITIAL_VALUES
+            --## rule off IMPROPER_INITIALIZATION
+            Skill: Nim_Skill_Record;
+            --## rule on IMPROPER_INITIALIZATION
+            procedure Get_Ada_Skill
+              (S_Index: Natural; Nim_Skill: out Nim_Skill_Record) with
+               Import => True,
+               Convention => C,
+               External_Name => "getAdaSkill";
+         begin
+            Item_Index := 1;
+            Fill_Skills_Loop :
+            loop
+               Get_Ada_Skill(S_Index => Item_Index, Nim_Skill => Skill);
+               exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
+               Load_Skill_Block :
+               declare
+                  --## rule off TYPE_INITIAL_VALUES
+                  type Nim_Tools_Array is
+                    array(0 .. 15, 0 .. 1) of Integer;
+                  --## rule on TYPE_INITIAL_VALUES
+                  function Get_Ada_Skill_Tools_Amount
+                    (S_Index: Natural) return Integer with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaSkillToolsAmount";
+                  procedure Get_Ada_Skill_Tools
+                    (S_Index: Natural;
+                     Nim_Tools: out Nim_Tools_Array) with
+                     Import => True,
+                     Convention => C,
+                     External_Name => "getAdaSkillTools";
+                  Tools: Nim_Tools_Array;
+                  Tools_Quality: Tool_Quality_Array
+                    (1 ..
+                         (if
+                            Get_Ada_Skill_Tools_Amount
+                              (S_Index => Item_Index) >
+                            0
+                          then
+                            Get_Ada_Skill_Tools_Amount
+                              (S_Index => Item_Index)
+                          else 1)) :=
+                    (others => <>);
+                  Tmp_Skill: Skill_Record
+                    (Quality_Amount => Tools_Quality'Length) :=
+                    (Quality_Amount => Tools_Quality'Length,
+                     others => <>);
+               begin
+                  Get_Ada_Skill_Tools
+                    (S_Index => Item_Index, Nim_Tools => Tools);
+                  Load_Skills_Loop :
+                  for J in Tools_Quality'Range loop
+                     Tools_Quality(J) :=
+                       (Level => Tools(J - 1, 0),
+                        Quality => Tools(J - 1, 1));
+                  end loop Load_Skills_Loop;
+                  if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) =
+                    0 then
+                     Tools_Quality := Empty_Tool_Quality_Array;
+                  end if;
+                  Tmp_Skill :=
+                    (Quality_Amount => Tools_Quality'Length,
+                     Name =>
+                       To_Bounded_String
+                         (Source => Value(Item => Skill.Name)),
+                     Attribute => Skill.Attribute,
+                     Description =>
+                       Short_String.To_Bounded_String
+                         (Source => Value(Item => Skill.Description)),
+                     Tool =>
+                       Tiny_String.To_Bounded_String
+                         (Source => Value(Item => Skill.Tool)),
+                     Tools_Quality => Tools_Quality);
+                  SkillsData_Container.Append
+                    (Container => Skills_List, New_Item => Tmp_Skill);
+                  Skills_Amount := Skills_Amount + 1;
+               end Load_Skill_Block;
+               Item_Index := Item_Index + 1;
+            end loop Fill_Skills_Loop;
+         end Fill_Skills_Block;
+         Get_Ada_Game_Strings(Values => Nim_Strings);
+         Repair_Tools :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(0)));
+         Cleaning_Tools :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(1)));
+         Alchemy_Tools :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(2)));
+         Mission_Items_Type :=
+           To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
+         Fuel_Type :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
+         Traders_Name :=
+           To_Unbounded_String(Source => Value(Item => Nim_Strings(5)));
+         Head_Armor :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(6)));
+         Chest_Armor :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(7)));
+         Arms_Armor :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(8)));
+         Legs_Armor :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(9)));
+         Shield_Type :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(10)));
+         Weapon_Type :=
+           To_Bounded_String(Source => Value(Item => Nim_Strings(11)));
+         Get_Ada_Game_Integers(Values => Nim_Integers);
+         Corpse_Index := Nim_Integers(0);
+         Money_Index := Nim_Integers(1);
+         Condition_Index := Nim_Integers(2);
+         Strength_Index := Nim_Integers(3);
+         Piloting_Skill := Count_Type(Nim_Integers(4));
+         Engineering_Skill := Count_Type(Nim_Integers(5));
+         Gunnery_Skill := Count_Type(Nim_Integers(6));
+         Talking_Skill := Count_Type(Nim_Integers(7));
+         Perception_Skill := Count_Type(Nim_Integers(8));
+         Dodge_Skill := Count_Type(Nim_Integers(9));
+         Unarmed_Skill := Count_Type(Nim_Integers(10));
+      end Load_Data;
    begin
       if Get_Proto_Ship(Proto_Index => 1) /= Empty_Proto_Ship then
          return "";
       end if;
-      -- Load standard game data
-      Load_Standard_Data_Loop :
-      for Data_Type of Data_Types loop
-         Load_Selected_Data
-           (Data_Name => To_String(Source => Data_Type.Name),
-            File_Name => To_String(Source => Data_Type.File_Name));
-      end loop Load_Standard_Data_Loop;
-      -- Load modifications
-      Start_Search
-        (Search => Mods_Directories,
-         Directory => To_String(Source => Mods_Directory), Pattern => "",
-         Filter => (Directory => True, others => False));
-      Load_Modifications_Loop :
-      while More_Entries(Search => Mods_Directories) loop
-         Get_Next_Entry
-           (Search => Mods_Directories, Directory_Entry => Found_Directory);
-         if Simple_Name(Directory_Entry => Found_Directory) not in "." |
-               ".." then
-            Load_Selected_Data
-              (Data_Name => Full_Name(Directory_Entry => Found_Directory),
-               File_Name => "");
-         end if;
-      end loop Load_Modifications_Loop;
-      End_Search(Search => Mods_Directories);
-      Set_Tools_List;
-      return "";
+      Result := Load_Ada_Game_Data;
+      Load_Data;
+      return Value(Item => Result);
    exception
       when An_Exception : others =>
          Log_Message
