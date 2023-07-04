@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, tables, xmlparser, xmltree]
 import bases, basescargo, basesship, config, crafts, crew, events, game,
     gamesaveload, goals, items, maps, messages, missions, shipscrew,
     shipsrepairs, shipsupgrade, statistics, types
@@ -97,11 +97,32 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateMissions(minutes = minutes)
 
 proc loadGameData*(): string =
+  result = ""
   if protoShipsList.len > 0:
-    return ""
+    return
 
   proc loadSelectedData(dataName, fileName: string) =
-    discard
+
+    var localFileName: string
+    proc loadDataFile(localDataName: string) =
+      let dataXml = try:
+          loadXml(path = localFileName)
+        except XmlError, ValueError, IOError, OSError, Exception:
+          return
+      var dataType: string
+      for dataNode in dataXml:
+        if dataNode.kind != xnElement:
+          continue
+        dataType = dataNode.tag
+        break
+
+    if fileName.len == 0:
+      for file in walkFiles(dataName & DirSep & "*.dat"):
+        localFileName = file
+        loadDataFile(localDataName = "")
+    else:
+      localFileName = dataDirectory & fileName
+      loadDataFile(localDataName = dataName)
 
   type DataTypeRecord = object
     name: string
