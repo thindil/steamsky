@@ -1556,7 +1556,7 @@ package body Combat.UI is
         Create
           (pathName => Crew_Dialog & ".buttons.button2",
            options =>
-             "-text Assign -command {Set_Party " &
+             "-text Assign -command {SetParty " &
              CArgv.Arg(Argv => Argv, N => 1) & "; CloseDialog " & Crew_Dialog &
              "} -image giveordericon -style Dialog.TButton");
       Buttons_Frame: constant Ttk_Frame :=
@@ -1991,7 +1991,6 @@ package body Combat.UI is
               (if CArgv.Arg(Argv => Argv, N => 1) = "select" then "1"
                else "0"));
       end loop Set_Crew_Selection_Loop;
-      Update_Combat_Ui;
       return TCL_OK;
    end Toggle_All_Combat_Command;
 
@@ -2021,7 +2020,7 @@ package body Combat.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
+        (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING
          else DEFEND);
       Selected: Boolean;
    begin
