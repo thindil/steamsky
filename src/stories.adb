@@ -30,7 +30,7 @@ with Utils; use Utils;
 
 package body Stories is
 
-   procedure Load_Stories(File_Name: String) is
+   procedure Load_Stories is
       use Interfaces.C;
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Step_Text_Data is record
@@ -65,15 +65,10 @@ package body Stories is
          Forbidden_Factions: Nim_Story_Array;
       end record;
       --## rule on TYPE_INITIAL_VALUES
-      Result: chars_ptr;
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Story_Data;
       Nim_Story: Nim_Story_Data;
       --## rule on IMPROPER_INITIALIZATION
-      function Load_Ada_Stories(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaStories";
       procedure Get_Ada_Story(Index: chars_ptr; Story: out Nim_Story_Data) with
          Import => True,
          Convention => C,
@@ -118,11 +113,6 @@ package body Stories is
          return Step;
       end Convert_Step;
    begin
-      Result := Load_Ada_Stories(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error
-           with Interfaces.C.Strings.Value(Item => Result);
-      end if;
       Clear_Current_Story;
       Convert_Stories_Loop :
       for I in 1 .. 10 loop

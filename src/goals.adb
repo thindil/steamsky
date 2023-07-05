@@ -35,27 +35,17 @@ package body Goals is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Load_Goals(File_Name: String) is
+   procedure Load_Goals is
       use Interfaces.C;
-      use Game;
 
       --## rule off IMPROPER_INITIALIZATION
       Nim_Goal: Nim_Goal_Data;
-      Result: chars_ptr;
       --## rule on IMPROPER_INITIALIZATION
-      function Load_Ada_Goals(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaGoals";
       procedure Get_Ada_Goal(Index: Natural; Goal: out Nim_Goal_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaGoal";
    begin
-      Result := Load_Ada_Goals(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
       Load_Goals_Loop :
       for I in 1 .. 256 loop
          Get_Ada_Goal(Index => I, Goal => Nim_Goal);

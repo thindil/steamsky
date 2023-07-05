@@ -285,10 +285,8 @@ package Stories is
    -- ****f* Stories/Stories.Load_Stories
    -- FUNCTION
    -- Load stories data from files
-   -- PARAMETERS
-   -- File_Name - The full path to the stories file which will be read
    -- SOURCE
-   procedure Load_Stories(File_Name: String);
+   procedure Load_Stories;
    -- ****
 
    -- ****f* Stories/Stories.Start_Story

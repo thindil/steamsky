@@ -15,33 +15,36 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
 with Bases; use Bases;
 with Bases.Cargo;
+with BasesTypes;
 with Careers;
 with Config; use Config;
 with Crew;
 with Events;
-with Factions; use Factions;
+with Factions;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
-with Items; use Items;
+with Items;
 with Log;
 with Maps; use Maps;
 with Messages;
 with Missions;
-with Mobs; use Mobs;
-with ShipModules; use ShipModules;
+with Mobs;
+with ShipModules;
 with Ships; use Ships;
 with Statistics; use Statistics;
+with Stories;
 with Utils;
 
 package body Game is
 
    procedure New_Game is
       use Bases.Cargo;
+      use Factions;
       use Messages;
       use Missions;
       use Tiny_String;
@@ -357,6 +360,8 @@ package body Game is
       Add_Player_Block :
       declare
          use Crew;
+         use Items;
+         use Mobs;
 
          Player_Index_2: constant Positive :=
            Positive'Value
@@ -425,6 +430,8 @@ package body Game is
       end Add_Player_Block;
       Assign_Cabin_Block :
       declare
+         use ShipModules;
+
          Cabin_Assigned: Boolean := False;
       begin
          Player_Ship_Modules_Loop :
@@ -505,6 +512,7 @@ package body Game is
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
+      use Ada.Directories;
       use Events;
 
       procedure End_Ada_Game(S: Integer) with
@@ -543,8 +551,10 @@ package body Game is
 
    function Load_Game_Data return String is
       use Ada.Exceptions;
+      use BasesTypes;
       use Careers;
       use Log;
+      use Stories;
 
       Result: chars_ptr;
       function Load_Ada_Game_Data return chars_ptr with
@@ -557,18 +567,16 @@ package body Game is
 
          Item_Index: Natural;
          --## rule off TYPE_INITIAL_VALUES
-         type Nim_Strings_Array is array(0 .. 11) of chars_ptr;
+         type Nim_Strings_Array is array(0 .. 12) of chars_ptr;
          type Nim_Integers_Array is array(0 .. 10) of Integer;
          --## rule on TYPE_INITIAL_VALUES
          Nim_Strings: Nim_Strings_Array;
          Nim_Integers: Nim_Integers_Array := (others => 0);
-         procedure Get_Ada_Game_Strings
-           (Values: out Nim_Strings_Array) with
+         procedure Get_Ada_Game_Strings(Values: out Nim_Strings_Array) with
             Import => True,
             Convention => C,
             External_Name => "getAdaGameStrings";
-         procedure Get_Ada_Game_Integers
-           (Values: out Nim_Integers_Array) with
+         procedure Get_Ada_Game_Integers(Values: out Nim_Integers_Array) with
             Import => True,
             Convention => C,
             External_Name => "getAdaGameIntegers";
@@ -589,8 +597,7 @@ package body Game is
             Fill_Attributes_Loop :
             loop
                Get_Ada_Attribute
-                 (I_Index => Attributes_Amount,
-                  Attribute => Attribute_Array);
+                 (I_Index => Attributes_Amount, Attribute => Attribute_Array);
                exit Fill_Attributes_Loop when Strlen
                    (Item => Attribute_Array(0)) =
                  0;
@@ -633,8 +640,7 @@ package body Game is
                Load_Skill_Block :
                declare
                   --## rule off TYPE_INITIAL_VALUES
-                  type Nim_Tools_Array is
-                    array(0 .. 15, 0 .. 1) of Integer;
+                  type Nim_Tools_Array is array(0 .. 15, 0 .. 1) of Integer;
                   --## rule on TYPE_INITIAL_VALUES
                   function Get_Ada_Skill_Tools_Amount
                     (S_Index: Natural) return Integer with
@@ -642,8 +648,7 @@ package body Game is
                      Convention => C,
                      External_Name => "getAdaSkillToolsAmount";
                   procedure Get_Ada_Skill_Tools
-                    (S_Index: Natural;
-                     Nim_Tools: out Nim_Tools_Array) with
+                    (S_Index: Natural; Nim_Tools: out Nim_Tools_Array) with
                      Import => True,
                      Convention => C,
                      External_Name => "getAdaSkillTools";
@@ -651,36 +656,30 @@ package body Game is
                   Tools_Quality: Tool_Quality_Array
                     (1 ..
                          (if
-                            Get_Ada_Skill_Tools_Amount
-                              (S_Index => Item_Index) >
+                            Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) >
                             0
                           then
-                            Get_Ada_Skill_Tools_Amount
-                              (S_Index => Item_Index)
+                            Get_Ada_Skill_Tools_Amount(S_Index => Item_Index)
                           else 1)) :=
                     (others => <>);
                   Tmp_Skill: Skill_Record
                     (Quality_Amount => Tools_Quality'Length) :=
-                    (Quality_Amount => Tools_Quality'Length,
-                     others => <>);
+                    (Quality_Amount => Tools_Quality'Length, others => <>);
                begin
                   Get_Ada_Skill_Tools
                     (S_Index => Item_Index, Nim_Tools => Tools);
                   Load_Skills_Loop :
                   for J in Tools_Quality'Range loop
                      Tools_Quality(J) :=
-                       (Level => Tools(J - 1, 0),
-                        Quality => Tools(J - 1, 1));
+                       (Level => Tools(J - 1, 0), Quality => Tools(J - 1, 1));
                   end loop Load_Skills_Loop;
-                  if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) =
-                    0 then
+                  if Get_Ada_Skill_Tools_Amount(S_Index => Item_Index) = 0 then
                      Tools_Quality := Empty_Tool_Quality_Array;
                   end if;
                   Tmp_Skill :=
                     (Quality_Amount => Tools_Quality'Length,
                      Name =>
-                       To_Bounded_String
-                         (Source => Value(Item => Skill.Name)),
+                       To_Bounded_String(Source => Value(Item => Skill.Name)),
                      Attribute => Skill.Attribute,
                      Description =>
                        Short_String.To_Bounded_String
@@ -721,6 +720,8 @@ package body Game is
            To_Bounded_String(Source => Value(Item => Nim_Strings(10)));
          Weapon_Type :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(11)));
+         Money_Name :=
+           To_Unbounded_String(Source => Value(Item => Nim_Strings(12)));
          Get_Ada_Game_Integers(Values => Nim_Integers);
          Corpse_Index := Nim_Integers(0);
          Money_Index := Nim_Integers(1);
@@ -741,6 +742,9 @@ package body Game is
       Result := Load_Ada_Game_Data;
       Load_Data;
       Load_Careers;
+      Load_Goals;
+      Load_Bases_Types;
+      Load_Stories;
       return Value(Item => Result);
    exception
       when An_Exception : others =>

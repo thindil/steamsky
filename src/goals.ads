@@ -93,10 +93,8 @@ package Goals is
    -- ****f* Goals/Goals.Load_Goals
    -- FUNCTION
    -- Load player goals from files
-   -- FUNCTION
-   -- File_Name - The full path to the goals file which will be read
    -- SOURCE
-   procedure Load_Goals(File_Name: String);
+   procedure Load_Goals;
    -- ****
 
    -- ****f* Goals/Goals.Goal_Text

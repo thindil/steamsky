@@ -27,10 +27,8 @@ package BasesTypes is
    -- ****f* BasesTypes/BasesTypes.Load_Bases_Types
    -- FUNCTION
    -- Load bases types from file
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
    -- SOURCE
-   procedure Load_Bases_Types(File_Name: String);
+   procedure Load_Bases_Types;
    -- ****
 
    -- ****f* BasesTypes/BasesTypes.Is_Buyable

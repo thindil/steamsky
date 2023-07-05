@@ -389,11 +389,12 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
 proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [], exportc.} =
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..11, cstring]) {.raises: [], tags: [], exportc.} =
+proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [], exportc.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
       headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
-      legsArmor.cstring, shieldType.cstring, weaponType.cstring]
+      legsArmor.cstring, shieldType.cstring, weaponType.cstring,
+      moneyName.cstring]
 
 proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [], exportc.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
