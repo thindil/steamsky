@@ -194,6 +194,6 @@ proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
 proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     return loadGameData().cstring
-  except DataLoadingError, KeyError:
+  except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
