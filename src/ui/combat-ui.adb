@@ -1608,12 +1608,21 @@ package body Combat.UI is
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
       Crew_Frame: constant Ttk_Frame :=
         Create(pathName => Crew_Canvas & ".frame");
-      Close_Button: constant Ttk_Button :=
+      Buttons_Box2: constant Ttk_Frame :=
+        Create(pathName => Crew_Dialog & ".buttons");
+      Close_Dialog_Button: constant Ttk_Button :=
         Create
-          (pathName => Crew_Dialog & ".button",
+          (pathName => Crew_Dialog & ".buttons.button",
            options =>
-             "-text Close -command {CloseDialog " &
-             Widget_Image(Win => Crew_Dialog) & "}");
+             "-text Cancel -command {CloseDialog " & Crew_Dialog &
+             "} -image cancelicon -style Dialog.TButton");
+      Accept_Button: constant Ttk_Button :=
+        Create
+          (pathName => Crew_Dialog & ".buttons.button2",
+           options =>
+             "-text Assign -command {Set_Party " &
+             CArgv.Arg(Argv => Argv, N => 1) & "; CloseDialog " & Crew_Dialog &
+             "} -image giveordericon -style Dialog.TButton");
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Crew_Dialog & ".selectframe");
       Height: Positive := 10;
@@ -1651,8 +1660,12 @@ package body Combat.UI is
         (Slave => Y_Scroll,
          Options => "-sticky ns -padx {0 5} -pady {5 0} -row 2 -column 1");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
-      Focus(Widgt => Close_Button);
+        (Slave => Buttons_Box2, Options => "-pady {0 5} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Accept_Button, Options => "-padx {5 2}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Dialog_Button,
+         Options => "-sticky w -row 0 -column 1");
+      Focus(Widgt => Close_Dialog_Button);
       Autoscroll(Scroll => Y_Scroll);
       Show_Player_Ship_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -1694,7 +1707,7 @@ package body Combat.UI is
          end if;
          Bind
            (Widgt => Crew_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
+            Script => "{" & Close_Dialog_Button & " invoke;break}");
          Bind
            (Widgt => Crew_Button, Sequence => "<Tab>",
             Script =>
@@ -1717,10 +1730,10 @@ package body Combat.UI is
            BBox(CanvasWidget => Crew_Canvas, TagOrId => "all") & "] -height" &
            Positive'Image(Height) & " -width" & Positive'Image(Width));
       Bind
-        (Widgt => Close_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
+        (Widgt => Close_Dialog_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
       Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
+        (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
          Script => "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Crew_Dialog, Relative_Y => 0.2);
       return TCL_OK;
