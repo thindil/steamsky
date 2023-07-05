@@ -593,14 +593,6 @@ type
     reputation: cint
     toolQuality: cint
 
-proc loadAdaRecipes(fileName: cstring): cstring {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadRecipes(fileName = $fileName)
-    return "".cstring
-  except DataLoadingError:
-    return getCurrentExceptionMsg().cstring
-
 proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,

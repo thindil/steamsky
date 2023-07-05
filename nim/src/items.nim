@@ -395,15 +395,6 @@ type
     description: cstring
     reputation: cint
 
-proc loadAdaItems(fileName: cstring; r: var array[2, cstring]) {.sideEffect,
-    raises: [], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadItems(fileName = $fileName)
-  except DataLoadingError:
-    r = ["".cstring, getCurrentExceptionMsg().cstring]
-    return
-  r = [moneyName.cstring, "".cstring]
-
 proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
     ], tags: [], exportc.} =
   var values: array[5, cint]

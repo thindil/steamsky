@@ -346,14 +346,6 @@ type
     inventory: array[20, array[3, cint]]
     equipment: array[7, cint]
 
-proc loadAdaMobs(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadMobs(fileName = $fileName)
-    return "".cstring
-  except DataLoadingError:
-    return getCurrentExceptionMsg().cstring
-
 proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
     ], tags: [], exportc.} =
   adaMob = AdaMobData()

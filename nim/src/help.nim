@@ -134,14 +134,6 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaHelp(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadHelp(fileName = $fileName)
-    return "".cstring
-  except DataLoadingError, KeyError:
-    return getCurrentExceptionMsg().cstring
-
 proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
     tags: [], exportc.} =
   helpIndex = ""

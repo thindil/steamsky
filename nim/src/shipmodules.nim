@@ -211,14 +211,6 @@ type
     speed: cint
     reputation: cint
 
-proc loadAdaModules(fileName: cstring): cstring {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadModules(fileName = $fileName)
-    return "".cstring
-  except DataLoadingError:
-    return getCurrentExceptionMsg().cstring
-
 proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.raises: [],
     tags: [], exportc.} =
   adaModule = AdaBaseModuleData(name: "".cstring, mType: 0, weight: 0, value: 0,

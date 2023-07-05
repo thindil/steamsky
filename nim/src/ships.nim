@@ -990,14 +990,6 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
     modules[index] = adaModule
     index.inc
 
-proc loadAdaShips(fileName: cstring): cstring {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
-  try:
-    loadShips(fileName = $fileName)
-    return "".cstring
-  except DataLoadingError:
-    return getCurrentExceptionMsg().cstring
-
 proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   adaProtoShip = AdaProtoShipData(name: "".cstring, accuracy: [0.cint, 0.cint],
