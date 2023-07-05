@@ -97,15 +97,19 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateEvents(minutes = minutes)
   updateMissions(minutes = minutes)
 
-proc loadGameData*(): string =
+proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError],
+    tags: [WriteIOEffect, RootEffect].} =
   result = ""
   if protoShipsList.len > 0:
     return
 
-  proc loadSelectedData(dataName, fileName: string): string =
+  proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
+      raises: [DataLoadingError, KeyError], tags: [WriteIOEffect,
+      RootEffect].} =
 
     var localFileName: string
-    proc loadDataFile(localDataName: string): string =
+    proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
+        DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect].} =
       let dataXml = try:
           loadXml(path = localFileName)
         except XmlError, ValueError, IOError, OSError, Exception:
