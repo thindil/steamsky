@@ -926,70 +926,6 @@ package body Combat.UI is
       Update_Messages;
    end Update_Combat_Ui;
 
-   -- ****if* CUI/CUI.Set_Party_Order_Command
-   -- FUNCTION
-   -- Set boarding or defending order for the selected crew member
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetBoarding MemberIndex Order
-   -- MemberIndex is a index of the player ship crew member which will get the
-   -- order. Order is the order to give. Possible values are boarding or
-   -- defend.
-   -- SOURCE
-   function Set_Party_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Party_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Order_Index: Natural := 0;
-      Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
-         else DEFEND);
-   begin
-      Give_Boarding_Orders_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order = BOARDING then
-            Order_Index := Order_Index + 1;
-         end if;
-         if Crew_Container.To_Index(Position => I) = Member_Index then
-            if Player_Ship.Crew(I).Order = Order then
-               Give_Orders
-                 (Ship => Player_Ship,
-                  Member_Index => Crew_Container.To_Index(Position => I),
-                  Given_Order => REST);
-               if Order = BOARDING then
-                  Boarding_Orders.Delete(Index => Order_Index);
-               end if;
-               Order_Index := Order_Index - 1;
-            else
-               Give_Orders
-                 (Ship => Player_Ship,
-                  Member_Index => Crew_Container.To_Index(Position => I),
-                  Given_Order => Order, Module_Index => 0);
-               if Order = BOARDING then
-                  Boarding_Orders.Append(New_Item => 0);
-               end if;
-            end if;
-            exit Give_Boarding_Orders_Loop;
-         end if;
-      end loop Give_Boarding_Orders_Loop;
-      Update_Combat_Ui;
-      return TCL_OK;
-   end Set_Party_Order_Command;
-
    -- ****if* CUI/CUI.ShowCombatFrame
    -- FUNCTION
    -- Show ship to ship combat UI or boarding UI
@@ -1679,9 +1615,7 @@ package body Combat.UI is
                    Side => Left),
               options =>
                 "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
-                "} -command {SetPartyOrder" &
-                Positive'Image(Crew_Container.To_Index(Position => I)) & " " &
-                CArgv.Arg(Argv => Argv, N => 1) & "}");
+                "}");
          if Player_Ship.Crew(I).Order = Order then
             Tcl_SetVar
               (interp => Interp, varName => Widget_Image(Win => Crew_Button),
@@ -2042,9 +1976,6 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
-         else DEFEND);
    begin
       Boarding_Orders.Clear;
       Set_Crew_Selection_Loop :
@@ -2059,14 +1990,54 @@ package body Combat.UI is
             newValue =>
               (if CArgv.Arg(Argv => Argv, N => 1) = "select" then "1"
                else "0"));
-         if CArgv.Arg(Argv => Argv, N => 1) = "select"
-           and then Player_Ship.Crew(I).Order /= Order then
-            Give_Orders
-              (Ship => Player_Ship,
-               Member_Index => Crew_Container.To_Index(Position => I),
-               Given_Order => Order, Module_Index => 0);
-         elsif CArgv.Arg(Argv => Argv, N => 1) = "unselect"
-           and then Player_Ship.Crew(I).Order = Order then
+      end loop Set_Crew_Selection_Loop;
+      Update_Combat_Ui;
+      return TCL_OK;
+   end Toggle_All_Combat_Command;
+
+   -- ****o* CUI/CUI.Set_Party_Command
+   -- FUNCTION
+   -- Set crew members in or out of boarding and defending party
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetParty order
+   -- Order is the order to give to the player's ship crew. Possible
+   -- values are boarding and defending.
+   -- SOURCE
+   function Set_Party_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Party_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Argc);
+      Order: constant Crew_Orders :=
+        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
+         else DEFEND);
+      Selected: Boolean;
+   begin
+      Boarding_Orders.Clear;
+      Set_Crew_Selection_Loop :
+      for I in Player_Ship.Crew.Iterate loop
+         Selected :=
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                ".boardingdialog.canvas.frame.crewbutton" &
+                Trim
+                  (Source => Crew_Container.To_Index(Position => I)'Image,
+                   Side => Left)) =
+           "1";
+         if Player_Ship.Crew(I).Order = Order and then not Selected then
             Give_Orders
               (Ship => Player_Ship,
                Member_Index => Crew_Container.To_Index(Position => I),
@@ -2074,11 +2045,16 @@ package body Combat.UI is
             if Order = BOARDING then
                Boarding_Orders.Append(New_Item => 0);
             end if;
+         elsif Selected and Player_Ship.Crew(I).Order /= Order then
+            Give_Orders
+              (Ship => Player_Ship,
+               Member_Index => Crew_Container.To_Index(Position => I),
+               Given_Order => Order, Module_Index => 0);
          end if;
       end loop Set_Crew_Selection_Loop;
       Update_Combat_Ui;
       return TCL_OK;
-   end Toggle_All_Combat_Command;
+   end Set_Party_Command;
 
    procedure Show_Combat_Ui(New_Combat: Boolean := True) is
       use GNAT.Directory_Operations;
@@ -2125,9 +2101,6 @@ package body Combat.UI is
             Pilot_Order := 2;
             Engineer_Order := 3;
             Add_Command
-              (Name => "SetPartyOrder",
-               Ada_Command => Set_Party_Order_Command'Access);
-            Add_Command
               (Name => "NextTurn", Ada_Command => Next_Turn_Command'Access);
             Add_Command
               (Name => "ShowCombatUI",
@@ -2153,6 +2126,8 @@ package body Combat.UI is
             Add_Command
               (Name => "ToggleAllCombat",
                Ada_Command => Toggle_All_Combat_Command'Access);
+            Add_Command
+              (Name => "SetParty", Ada_Command => Set_Party_Command'Access);
          else
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
             Tcl.Tk.Ada.Grid.Grid(Slave => Enemy_Frame);
