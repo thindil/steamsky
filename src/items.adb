@@ -15,30 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded;
 with Ships; use Ships;
 
 package body Items is
-
-   procedure Load_Items(File_Name: String) is
-      use Ada.Strings.Unbounded;
-      use Interfaces.C;
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Result_Array is array(0 .. 1) of chars_ptr;
-      --## rule on TYPE_INITIAL_VALUES
-      Result: Result_Array;
-      procedure Load_Ada_Items(Name: chars_ptr; R: out Result_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaItems";
-   begin
-      Load_Ada_Items(Name => New_String(Str => File_Name), R => Result);
-      if Strlen(Item => Result(0)) = 0 then
-         raise Data_Loading_Error with Value(Item => Result(1));
-      end if;
-      Money_Name := To_Unbounded_String(Source => Value(Item => Result(0)));
-   end Load_Items;
 
    function Find_Proto_Item
      (Item_Type: Tiny_String.Bounded_String) return Natural is

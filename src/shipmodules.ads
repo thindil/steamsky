@@ -127,15 +127,6 @@ package ShipModules is
    Default_Ship_Modules_Amount: constant Ship_Modules_Amount_Range := 520;
    -- ****
 
-   -- ****f* ShipModules/ShipModules.Load_Ship_Modules
-   -- FUNCTION
-   -- Load modules from files
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
-   -- SOURCE
-   procedure Load_Ship_Modules(File_Name: String);
-   -- ****
-
    -- ****f* ShipModules/ShipModules.Get_Module_Type
    -- FUNCTION
    -- Get type of selected module (replace all underscore with spaces)

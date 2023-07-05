@@ -75,21 +75,6 @@ package body Crafts is
       return Temp_Record;
    end Convert_Recipe_From_Nim;
 
-   procedure Load_Recipes(File_Name: String) is
-      use Interfaces.C;
-
-      Result: chars_ptr;
-      function Load_Ada_Recipes(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaRecipes";
-   begin
-      Result := Load_Ada_Recipes(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
-   end Load_Recipes;
-
    function Set_Recipe_Data
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
       use Tiny_String;

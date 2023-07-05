@@ -45,15 +45,6 @@ package Help is
      (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
    -- ****
 
-   -- ****f* Help/Help.Load_Help
-   -- FUNCTION
-   -- Load help text from file
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
-   -- SOURCE
-   procedure Load_Help(File_Name: String);
-   -- ****
-
 -- Temporary code to interact with Nim
 
    function Get_Help

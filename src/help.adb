@@ -17,25 +17,8 @@
 
 with Ada.Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Game;
 
 package body Help is
-
-   procedure Load_Help(File_Name: String) is
-      use Interfaces.C;
-      use Game;
-
-      Result: chars_ptr;
-      function Load_Ada_Help(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaHelp";
-   begin
-      Result := Load_Ada_Help(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
-   end Load_Help;
 
    --## rule off IMPROPER_INITIALIZATION
    function Get_Help

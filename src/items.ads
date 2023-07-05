@@ -117,15 +117,6 @@ package Items is
      (Index_Type => Positive, Element_Type => Inventory_Data);
    -- ****
 
-   -- ****f* Items/Items.Load_Items
-   -- FUNCTION
-   -- Load items from files
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
-   -- SOURCE
-   procedure Load_Items(File_Name: String);
-   -- ****
-
    -- ****f* Items/Items.Find_Proto_Item
    -- FUNCTION
    -- Search for prototype index of selected item

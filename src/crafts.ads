@@ -80,15 +80,6 @@ package Crafts is
    Crafting_No_Workshop: exception;
    -- ****
 
-   -- ****f* Crafts/Crafts.Load_Recipes
-   -- FUNCTION
-   -- Load recipes from files
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
-   -- SOURCE
-   procedure Load_Recipes(File_Name: String);
-   -- ****
-
    -- ****f* Crafts/Crafts.Manufacturing
    -- FUNCTION
    -- Craft selected items

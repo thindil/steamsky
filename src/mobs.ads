@@ -124,16 +124,6 @@ package Mobs is
    Default_Proto_Mobs_Amount: constant Proto_Mobs_Amount_Range := 113;
    -- ****
 
-   -- ****f* Mobs/Mobs.Load_Mobs
-   -- FUNCTION
-   -- Load mobs from files
-   -- PARAMETERS
-   -- File_Name - The full path to the mobs file which will be read
-   -- SOURCE
-   procedure Load_Mobs(File_Name: String) with
-      Post => Get_Proto_Mobs_Amount > 0;
-   -- ****
-
    -- ****f* Mobs/Mobs.Generate_Mob
    -- FUNCTION
    -- Generate mob from selected prototype and faction.

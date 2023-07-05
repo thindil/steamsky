@@ -45,21 +45,6 @@ package body Ships is
       return Tmp_Ship;
    end Create_Ship;
 
-   procedure Load_Ships(File_Name: String) is
-      use Interfaces.C;
-
-      Result: chars_ptr;
-      function Load_Ada_Ships(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaShips";
-   begin
-      Result := Load_Ada_Ships(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
-   end Load_Ships;
-
    function Count_Ship_Weight(Ship: Ship_Record) return Positive is
       function Count_Ada_Ship_Weight
         (In_Player_Ship: Integer) return Positive with

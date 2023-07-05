@@ -20,22 +20,6 @@ with Items;
 
 package body Mobs is
 
-   procedure Load_Mobs(File_Name: String) is
-      use Interfaces.C;
-
-      Result: chars_ptr;
-      --## rule on IMPROPER_INITIALIZATION
-      function Load_Ada_Mobs(Name: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaMobs";
-   begin
-      Result := Load_Ada_Mobs(Name => New_String(Str => File_Name));
-      if Strlen(Item => Result) > 0 then
-         raise Data_Loading_Error with Value(Item => Result);
-      end if;
-   end Load_Mobs;
-
    function Generate_Mob
      (Mob_Index: Positive; Faction_Index: Tiny_String.Bounded_String)
       return Member_Data is

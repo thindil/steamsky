@@ -377,15 +377,6 @@ package Ships is
       return Ship_Record;
       -- ****
 
-      -- ****f* Ships/Ships.Load_Ships
-      -- FUNCTION
-      -- Load ships from files
-      -- PARAMETERS
-      -- File_Name - The full path to the ships file which will be read
-      -- SOURCE
-   procedure Load_Ships(File_Name: String);
-   -- ****
-
    -- ****f* Ships/Ships.Count_Ship_Weight
    -- FUNCTION
    -- Count weight of ship (with modules and cargo)

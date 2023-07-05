@@ -210,15 +210,6 @@ package Factions is
    Empty_Faction: constant Faction_Record := (others => <>);
    -- ****
 
-   -- ****f* Factions/Factions.Load_Factions
-   -- FUNCTION
-   -- Load NPC factions from file
-   -- PARAMETERS
-   -- File_Name - The full path to the factions file which will be read
-   -- SOURCE
-   procedure Load_Factions(File_Name: String);
-   -- ****
-
    -- ****f* Factions/Factions.Get_Reputation
    -- FUNCTION
    -- Get reputation between Source_Faction and Target_Faction
