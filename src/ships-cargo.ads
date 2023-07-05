@@ -24,6 +24,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Ships.Cargo is
 -- ****
 
+   --## rule off LOCAL_HIDING
    -- ****f* SCargo/SCargo.Update_Cargo
    -- FUNCTION
    -- Update selected item in ship cargo
@@ -46,6 +47,7 @@ package Ships.Cargo is
       Pre => Cargo_Index <=
       Inventory_Container.Last_Index(Container => Ship.Cargo);
       -- ****
+      --## rule on LOCAL_HIDING
 
       -- ****f* SCargo/SCargo.Free_Cargo
       -- FUNCTION

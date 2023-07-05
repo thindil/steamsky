@@ -19,6 +19,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Ships.Cargo is
 
+   --## rule off LOCAL_HIDING
    procedure Update_Cargo
      (Ship: in out Ship_Record; Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
@@ -47,6 +48,7 @@ package body Ships.Cargo is
          Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
       Set_Ada_Modules(Ship => Ship);
    end Update_Cargo;
+   --## rule on LOCAL_HIDING
 
    function Free_Cargo
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
