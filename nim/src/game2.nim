@@ -97,14 +97,18 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateEvents(minutes = minutes)
   updateMissions(minutes = minutes)
 
-proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError],
+proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError, OSError],
     tags: [WriteIOEffect, RootEffect].} =
+  ## Load the game's data from files
+  ##
+  ## Returns empty string if the data loaded properly, otherwise message with
+  ## information what was wrong.
   result = ""
   if protoShipsList.len > 0:
     return
 
   proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
-      raises: [DataLoadingError, KeyError], tags: [WriteIOEffect,
+      raises: [DataLoadingError, KeyError, OSError], tags: [WriteIOEffect,
       RootEffect].} =
 
     var localFileName: string
