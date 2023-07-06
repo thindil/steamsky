@@ -128,7 +128,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [].}
     gameStats.finishedMissions.add(StatisticsData(index: mType, amount: 1))
   gameStats.points = gameStats.points + 50
 
-proc clearGameStats*() =
+proc clearGameStats*() {.sideEffect, raises: [], tags: [].} =
   gameStats.destroyedShips = @[]
   gameStats.basesVisited = 1
   gameStats.mapVisited = 1
