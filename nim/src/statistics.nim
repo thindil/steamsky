@@ -128,6 +128,18 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [].}
     gameStats.finishedMissions.add(StatisticsData(index: mType, amount: 1))
   gameStats.points = gameStats.points + 50
 
+proc clearGameStats*() =
+  gameStats.destroyedShips = @[]
+  gameStats.basesVisited = 1
+  gameStats.mapVisited = 1
+  gameStats.distanceTraveled = 0
+  gameStats.craftingOrders = @[]
+  gameStats.acceptedMissions = 0
+  gameStats.finishedMissions = @[]
+  gameStats.finishedGoals = @[]
+  gameStats.killedMobs = @[]
+  gameStats.points = 0
+
 # Temporary code for interfacing with Ada
 
 type
@@ -217,3 +229,6 @@ proc getAdaGamePoints(): cint {.raises: [], tags: [], exportc.} =
 
 proc updateAdaFinishedMissions(mType: cstring) {.raises: [], tags: [], exportc.} =
   updateFinishedMissions(mType = $mType)
+
+proc clearAdaGameStats() {.raises: [], tags: [], exportc.} =
+  clearGameStats()
