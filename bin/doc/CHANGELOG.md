@@ -13,6 +13,10 @@ All notable changes to this project will be documented in this file.
   defending parties in combat
 - Remembering the size of the messages' window
 
+### Changed
+- Redesigned assigning crew members to boarding and defending parties in
+  combat
+
 ### Fixed
 - Showing information about finished stories
 - Typo in changelog
