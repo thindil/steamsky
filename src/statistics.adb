@@ -220,17 +220,18 @@ package body Statistics is
    end Update_Destroyed_Ships;
 
    procedure Clear_Game_Stats is
+      procedure Clear_Ada_Game_Stats with
+         Import => True,
+         Convention => C,
+         External_Name => "clearAdaGameStats";
    begin
+      Clear_Ada_Game_Stats;
+      Set_Game_Stats;
       Game_Stats.Destroyed_Ships.Clear;
-      Game_Stats.Bases_Visited := 1;
-      Game_Stats.Map_Visited := 1;
-      Game_Stats.Distance_Traveled := 0;
       Game_Stats.Crafting_Orders.Clear;
-      Game_Stats.Accepted_Missions := 0;
       Game_Stats.Finished_Missions.Clear;
       Game_Stats.Finished_Goals.Clear;
       Game_Stats.Killed_Mobs.Clear;
-      Game_Stats.Points := 0;
    end Clear_Game_Stats;
 
    procedure Update_Finished_Goals(Index: Unbounded_String) is
