@@ -512,7 +512,6 @@ package body Game is
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
-      use Ada.Directories;
       use Events;
 
       procedure End_Ada_Game(S: Integer) with
@@ -524,6 +523,8 @@ package body Game is
          Save_Game;
       else
          Delete_Save_Block :
+         declare
+            use Ada.Directories;
          begin
             Delete_File(Name => To_String(Source => Save_Name));
          exception
