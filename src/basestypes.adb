@@ -23,7 +23,6 @@ with Bases;
 package body BasesTypes is
 
    procedure Load_Bases_Types is
-      use Interfaces.C;
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES

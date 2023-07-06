@@ -2022,7 +2022,7 @@ package body Combat.UI is
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING
          else DEFEND);
-      Selected: Boolean;
+      Selected: Boolean := False;
    begin
       Boarding_Orders.Clear;
       Set_Crew_Selection_Loop :
