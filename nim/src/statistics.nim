@@ -129,6 +129,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [].}
   gameStats.points = gameStats.points + 50
 
 proc clearGameStats*() {.sideEffect, raises: [], tags: [].} =
+  ## Reset the game statistics
   gameStats.destroyedShips = @[]
   gameStats.basesVisited = 1
   gameStats.mapVisited = 1
