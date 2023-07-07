@@ -124,7 +124,7 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       except KeyError:
         discard
 
-proc clearCurrentGoal*() =
+proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
