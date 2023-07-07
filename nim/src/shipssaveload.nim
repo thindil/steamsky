@@ -37,7 +37,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
     if module.upgradeProgress > 0:
       attrs.add(("ugpradeprogress", $module.upgradeProgress))
     if module.upgradeAction != none:
-      attrs.add(("upgradeaction", $module.upgradeAction))
+      attrs.add(("upgradeaction", $module.upgradeAction.ord))
     var moduleTree = newXmlTree("module", [], attrs.toXmlAttributes)
     for owner in module.owner:
       var ownerElement = newElement("owner")
