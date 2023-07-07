@@ -295,13 +295,6 @@ package body Goals is
       return To_String(Source => Text);
    end Goal_Text;
 
-   procedure Clear_Current_Goal is
-   begin
-      Current_Goal :=
-        (Index => Null_Unbounded_String, G_Type => RANDOM, Amount => 0,
-         Target_Index => Null_Unbounded_String, Multiplier => 1);
-   end Clear_Current_Goal;
-
    procedure Get_Current_Goal is
       Nim_Goal: constant Nim_Goal_Data :=
         (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
@@ -318,19 +311,38 @@ package body Goals is
       Get_Ada_Current_Goal(Goal => Nim_Goal);
    end Get_Current_Goal;
 
+   procedure Update_Ada_Goal
+     (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaGoal";
+
+   procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaCurrentGoal";
+
+   procedure Clear_Current_Goal is
+      Nim_Goal: Nim_Goal_Data;
+      procedure Clear_Ada_Current_Goal with
+         Import => True,
+         Convention => C,
+         External_Name => "clearAdaCurrentGoal";
+   begin
+      Clear_Ada_Current_Goal;
+      Set_Ada_Current_Goal(Goal => Nim_Goal);
+      Current_Goal :=
+        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
+         Target_Index =>
+           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
+         Multiplier => Nim_Goal.Multiplier);
+   end Clear_Current_Goal;
+
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
       Nim_Goal: Nim_Goal_Data;
-      procedure Update_Ada_Goal
-        (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaGoal";
-      procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaCurrentGoal";
    begin
       Get_Current_Goal;
       Update_Ada_Goal
