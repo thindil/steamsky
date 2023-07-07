@@ -124,6 +124,10 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       except KeyError:
         discard
 
+proc clearCurrentGoal*() =
+  currentGoal = GoalData(index: "", goalType: random, amount: 0,
+      targetIndex: "", multiplier: 1)
+
 # Temporary code for interfacing with Ada
 
 type
@@ -172,3 +176,6 @@ proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc.} 
       goalType: currentGoal.goalType.ord.cint, amount: currentGoal.amount.cint,
       targetIndex: currentGoal.targetIndex.cstring,
       multiplier: currentGoal.multiplier.cint)
+
+proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc.} =
+  clearCurrentGoal()
