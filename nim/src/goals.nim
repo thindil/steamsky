@@ -125,6 +125,7 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
         discard
 
 proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
+  ## Reset the player's current goal
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
