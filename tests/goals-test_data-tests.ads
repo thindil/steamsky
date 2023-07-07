@@ -11,10 +11,10 @@ package Goals.Test_Data.Tests is
    null record;
 
    procedure Test_Goal_Text_2ff075_4fd16a(Gnattest_T: in out Test);
-   --  goals.ads:111:4:Goal_Text:Test_GoalText
+   --  goals.ads:109:4:Goal_Text:Test_GoalText
 
    procedure Test_Clear_Current_Goal_a99ae8_246a19(Gnattest_T: in out Test);
-   --  goals.ads:121:4:Clear_Current_Goal:Test_ClearCurrentGoal
+   --  goals.ads:119:4:Clear_Current_Goal:Test_ClearCurrentGoal
 
 end Goals.Test_Data.Tests;
 --  end read only
