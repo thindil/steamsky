@@ -311,12 +311,6 @@ package body Goals is
       Get_Ada_Current_Goal(Goal => Nim_Goal);
    end Get_Current_Goal;
 
-   procedure Update_Ada_Goal
-     (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "updateAdaGoal";
-
    procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
       Import => True,
       Convention => C,
@@ -343,6 +337,11 @@ package body Goals is
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
       Nim_Goal: Nim_Goal_Data;
+      procedure Update_Ada_Goal
+        (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaGoal";
    begin
       Get_Current_Goal;
       Update_Ada_Goal

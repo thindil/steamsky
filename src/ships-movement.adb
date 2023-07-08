@@ -23,40 +23,17 @@ with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
 with Config; use Config;
-with Events; use Events;
 with Factions; use Factions;
 
 package body Ships.Movement is
-
-   -- ****it* SMovement/SMovement.Speed_Type
-   -- FUNCTION
-   -- Used in counting ships speed
-   -- SOURCE
-   type Speed_Type is digits 2;
-   -- ****
-
-   -- ****if* SMovement/SMovement.Have_Order_Requirements
-   -- FUNCTION
-   -- Check if all requirements for movement orders are valid
-   -- RESULT
-   -- Empty string if everything is ok, otherwise message what is missing
-   -- SOURCE
-   function Have_Order_Requirements return String is
-      -- ****
-      function Have_Ada_Order_Requirements return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "haveAdaOrderRequirements";
-   begin
-      return Value(Item => Have_Ada_Order_Requirements);
-   end Have_Order_Requirements;
 
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       use Tiny_String;
 
+      type Speed_Type is digits 2;
       New_X, New_Y: Integer;
-      Time_Passed, Fuel_Needed: Integer := 0;
+      Time_Passed, Fuel_Needed: Integer;
       Speed: Speed_Type;
       Fuel_Index: Inventory_Container.Extended_Index;
       function Need_Rest(Order: Crew_Orders) return Boolean is
@@ -73,6 +50,14 @@ package body Ships.Movement is
          end if;
          return False;
       end Need_Rest;
+      function Have_Order_Requirements return String is
+         function Have_Ada_Order_Requirements return chars_ptr with
+            Import => True,
+            Convention => C,
+            External_Name => "haveAdaOrderRequirements";
+      begin
+         return Value(Item => Have_Ada_Order_Requirements);
+      end Have_Order_Requirements;
    begin
       case Player_Ship.Speed is
          when DOCKED =>
@@ -197,7 +182,7 @@ package body Ships.Movement is
          Import => True,
          Convention => C,
          External_Name => "dockAdaShip";
-      Message: Unbounded_String := Null_Unbounded_String;
+      Message: Unbounded_String;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
