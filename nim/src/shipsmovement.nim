@@ -266,4 +266,4 @@ proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
   try:
     return dockShip(docking = docking == 1, escape = escape == 1).cstring
   except KeyError, IOError, Exception:
-    discard
+    return getCurrentExceptionMsg().cstring
