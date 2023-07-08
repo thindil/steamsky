@@ -1,7 +1,8 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing updateGoal.'''
+Testing updateGoal.
+Testing clearCurrentGoal.'''
 """
 
 import std/tables
@@ -20,3 +21,8 @@ assert currentGoal.amount == (amount - 1), "Failed to update the current goal."
 amount = currentGoal.amount
 updateGoal(reputation, "PIRATES", 1)
 assert currentGoal.amount == amount, "Failed to not update the current goal."
+
+echo "Testing clearCurrentGoal."
+clearCurrentGoal()
+assert currentGoal.index.len == 0, "Failed to reset the player's current goal."
+currentGoal = goalsList[1]
