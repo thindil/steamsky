@@ -320,6 +320,39 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
 
+proc saveConfig*() =
+  var config = newConfig()
+
+  proc saveAdaBoolean(value: cint, name: string) =
+    ## Temporary function, for backward compatibility with Ada code
+    if value == 1:
+      config.setSectionKey("", name, "Yes")
+    else:
+      config.setSectionKey("", name, "No")
+
+  config.setSectionKey("", "PlayerName", $newGameSettings.playerName)
+  config.setSectionKey("", "PlayerGender", $newGameSettings.playerGender)
+  config.setSectionKey("", "ShipName", $newGameSettings.shipName)
+  config.setSectionKey("", "PlayerFaction", $newGameSettings.playerFaction)
+  config.setSectionKey("", "PlayerCareer", $newGameSettings.playerCareer)
+  config.setSectionKey("", "StartingBase", $newGameSettings.startingBase)
+  config.setSectionKey("", "EnemyDamageBonus",
+      $newGameSettings.enemyDamageBonus)
+  config.setSectionKey("", "PlayerDamageBonus",
+      $newGameSettings.playerDamageBonus)
+  config.setSectionKey("", "enemyMeleeDamageBonus",
+      $newGameSettings.enemyMeleeDamageBonus)
+  config.setSectionKey("", "PlayerMeleeDamageBonus",
+      $newGameSettings.playerMeleeDamageBonus)
+  config.setSectionKey("", "ExperienceBonus", $newGameSettings.experienceBonus)
+  config.setSectionKey("", "ReputationBonus", $newGameSettings.reputationBonus)
+  config.setSectionKey("", "UpgradeCostBonus",
+      $newGameSettings.upgradeCostBonus)
+  config.setSectionKey("", "PricesBonus", $newGameSettings.pricesBonus)
+  config.setSectionKey("", "DifficultyLevel", $newGameSettings.difficultyLevel)
+  saveAdaBoolean(value = gameSettings.autoRest, name = "AutoRest")
+  config.writeConfig(saveDirectory & "game.cfg")
+
 # Temporary code for interfacing with Ada
 
 proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
