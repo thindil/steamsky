@@ -117,8 +117,7 @@ package Goals is
       -- Reset current goal
       -- SOURCE
    procedure Clear_Current_Goal with
-      Post => Current_Goal.Index = Null_Unbounded_String,
-      Test_Case => (Name => "Test_ClearCurrentGoal", Mode => Nominal);
+      Post => Current_Goal.Index = Null_Unbounded_String;
       -- ****
 
       -- ****f* Goals/Goals.Update_Goal
