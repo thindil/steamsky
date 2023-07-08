@@ -349,8 +349,26 @@ proc saveConfig*() =
   config.setSectionKey("", "UpgradeCostBonus",
       $newGameSettings.upgradeCostBonus)
   config.setSectionKey("", "PricesBonus", $newGameSettings.pricesBonus)
-  config.setSectionKey("", "DifficultyLevel", $newGameSettings.difficultyLevel)
+  config.setSectionKey("", "DifficultyLevel", (
+      $newGameSettings.difficultyLevel).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoRest, name = "AutoRest")
+  config.setSectionKey("", "UndockSpeed", (
+      $gameSettings.undockSpeed).toUpperAscii)
+  saveAdaBoolean(value = gameSettings.autoCenter, name = "AutoCenter")
+  saveAdaBoolean(value = gameSettings.autoReturn, name = "AutoReturn")
+  saveAdaBoolean(value = gameSettings.autoFinish, name = "AutoFinish")
+  config.setSectionKey("", "LowFuel", $gameSettings.lowFuel)
+  config.setSectionKey("", "LowDrinks", $gameSettings.lowDrinks)
+  config.setSectionKey("", "LowFood", $gameSettings.lowFood)
+  config.setSectionKey("", "AutoMoveStop", (
+      $gameSettings.autoMoveStop).toUpperAscii)
+  config.setSectionKey("", "WindowWidth", $gameSettings.windowWidth)
+  config.setSectionKey("", "WindowHeight", $gameSettings.windowHeight)
+  config.setSectionKey("", "MessagesLimit", $gameSettings.messagesLimit)
+  config.setSectionKey("", "SavedMessages", $gameSettings.savedMessages)
+  config.setSectionKey("", "HelpFontSize", $gameSettings.helpFontSize)
+  config.setSectionKey("", "MapFontSize", $gameSettings.mapFontSize)
+  config.setSectionKey("", "InterfaceFontSize", $gameSettings.interfaceFontSize)
   config.writeConfig(saveDirectory & "game.cfg")
 
 # Temporary code for interfacing with Ada
