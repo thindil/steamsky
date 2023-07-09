@@ -7,13 +7,13 @@
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <script src="./robodoc.js"></script>
-<title>ships-movement.adb</title>
-<!-- Source: ./src/ships-movement.adb -->
+<title>missions.adb</title>
+<!-- Source: ./src/missions.adb -->
 <!-- Generated with ROBODoc Version 4.99.44 (Jan 23 2022) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 8.8 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 8.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -31,39 +31,31 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo741">SMovement/SMovement.Have_Order_Requirements</a></li>
-<li>2. <a href="#robo169">SMovement/SMovement.Speed_Type</a></li>
+<li>1. <a href="#robo664">Missions/Missions.Set_Missions_List</a></li>
 </ul>
 <hr />
-<a name="SMovement2fSMovement2eSpeed5fType"></a>
-<a name="robo169"></a><h2>SMovement/SMovement.Speed_Type [ Types ]</h2>
+<a name="Missions2fMissions2eSet5fMissions5fList"></a>
+<a name="robo664"></a><h2>Missions/Missions.Set_Missions_List [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-movement_ads.html#robo55">SMovement</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions_ads.html#robo46">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Used in counting ships speed
+<pre> Get the list of missions from Nim
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Speed_Type <span class="keyword">is</span> <span class="keyword">digits</span> 2<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> Set_Missions_List
+     <span class="sign">(</span>Base_Index<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">return</span> Mission_Container<span class="sign">.</span>Vector <span class="keyword">is</span>
 </pre>
-
-<hr />
-<a name="SMovement2fSMovement2eHave5fOrder5fRequirements"></a>
-<a name="robo741"></a><h2>SMovement/SMovement.Have_Order_Requirements [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-movement_ads.html#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Check if all requirements for movement orders are valid
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Have_Order_Requirements <span class="keyword">return</span> String <span class="keyword">is</span>
+<p class="item_name">PARAMETERS</p>
+<pre> Base_Index - The index of the base which missions will be get. If set to
+              zero, get the list of accepted missions
 </pre>
 <p class="item_name">RESULT</p>
-<pre> Empty string if everything is ok, otherwise message what is missing
+<pre> The list with the selected missions
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-movement.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-06-11 03:03:20</p>
+<p>Generated from ./src/missions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-07-09 03:05:04</p>
 </div> <!-- footer -->
 </body>
 </html>
