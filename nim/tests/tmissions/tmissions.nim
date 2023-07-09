@@ -1,10 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing deleteMission.
+Testing updateMission.
+Testing getMissionType.
+Testing updateMission.'''
 """
 
 import std/tables
 import ../../src/[careers, factions, game, items, maps, missions, shipmodules, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -32,6 +38,7 @@ playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 skyMap[1][1].baseIndex = 1
 skyBases[1] = BaseRecord(skyX: 1, skyY: 1)
 
+echo "Testing deleteMission."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
@@ -41,6 +48,7 @@ assert acceptedMissions.len == 0, "Failed to delete an accepted mission."
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
 
+echo "Testing updateMission."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
@@ -49,9 +57,12 @@ assert acceptedMissions[0].time == 2, "Failed to update accepted missions."
 updateMissions(2)
 assert acceptedMissions.len == 0, "Failed to remove an accepted mission."
 
+echo "Testing getMissionType."
 assert getMissionType(patrol) == "Patrol area", "Failed to get the name of the mission's type."
 
+echo "Testing updateMission."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
+updateMission(0)
 assert acceptedMissions[0].finished, "Failed to update the accepted mission."
