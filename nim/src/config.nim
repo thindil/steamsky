@@ -340,7 +340,7 @@ proc saveConfig*() =
       $newGameSettings.enemyDamageBonus)
   config.setSectionKey("", "PlayerDamageBonus",
       $newGameSettings.playerDamageBonus)
-  config.setSectionKey("", "enemyMeleeDamageBonus",
+  config.setSectionKey("", "EnemyMeleeDamageBonus",
       $newGameSettings.enemyMeleeDamageBonus)
   config.setSectionKey("", "PlayerMeleeDamageBonus",
       $newGameSettings.playerMeleeDamageBonus)
@@ -369,6 +369,23 @@ proc saveConfig*() =
   config.setSectionKey("", "HelpFontSize", $gameSettings.helpFontSize)
   config.setSectionKey("", "MapFontSize", $gameSettings.mapFontSize)
   config.setSectionKey("", "InterfaceFontSize", $gameSettings.interfaceFontSize)
+  config.setSectionKey("", "InterfaceTheme", $gameSettings.interfaceTheme)
+  config.setSectionKey("", "MessagesOrder", $gameSettings.messagesOrder)
+  saveAdaBoolean(value = gameSettings.autoAskForBases, name = "AutoAskForBases")
+  saveAdaBoolean(value = gameSettings.autoAskForEvents,
+      name = "AutoAskForEvents")
+  saveAdaBoolean(value = gameSettings.showTooltips, name = "ShowTooltips")
+  saveAdaBoolean(value = gameSettings.showLastMessages,
+      name = "ShowLastMessages")
+  config.setSectionKey("", "MessagesPosition", $gameSettings.messagesPosition)
+  saveAdaBoolean(value = gameSettings.fullScreen, name = "FullScreen")
+  config.setSectionKey("", "AutoCloseMessagesTime",
+      $gameSettings.autoCloseMessagesTime)
+  config.setSectionKey("", "AutoSave", ($gameSettings.autoSave).toUpperAscii)
+  config.setSectionKey("", "TopicsPosition", $gameSettings.topicsPosition)
+  saveAdaBoolean(value = gameSettings.showNumbers, name = "ShowNumbers")
+  saveAdaBoolean(value = gameSettings.rightButton, name = "RightButton")
+  config.setSectionKey("", "ListsLimit", $gameSettings.listsLimit)
   config.writeConfig(saveDirectory & "game.cfg")
 
 # Temporary code for interfacing with Ada
@@ -393,3 +410,15 @@ proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
 
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
+
+
+proc saveAdaConfig(adaNewGameSettings: NewGameRecord;
+    adaGameSettings: GameSettingsRecord) {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
+  # Temporary disabled, enable it after finished Ada code
+  #newGameSettings = adaNewGameSettings
+  #gameSettings = adaGameSettings
+  try:
+    saveConfig()
+  except KeyError, IOError, OSError:
+    discard
