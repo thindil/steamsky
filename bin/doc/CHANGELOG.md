@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.9] - 2023-07-09
 
 ### Added
 - Various information about some modules types to the list of the player's
