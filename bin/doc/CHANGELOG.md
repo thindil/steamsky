@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Updating the map after move the player's ship
 - Saving the player's ship's modules' upgrade action
 - Crash during docking or undocking from bases
+- Saving the player's ship's module's upgrade progress
 
 ## [8.8] - 2023-06-11
 
