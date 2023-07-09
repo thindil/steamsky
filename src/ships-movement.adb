@@ -31,7 +31,9 @@ package body Ships.Movement is
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Speed_Type is digits 2;
+      --## rule on TYPE_INITIAL_VALUES
       New_X, New_Y: Integer;
       Time_Passed, Fuel_Needed: Integer;
       Speed: Speed_Type;
@@ -104,7 +106,9 @@ package body Ships.Movement is
                 ").");
          return 0;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Speed := (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
@@ -253,9 +257,13 @@ package body Ships.Movement is
          if Module.M_Type = ENGINE and then not Module.Disabled then
             case Speed is
                when QUARTER_SPEED =>
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 4);
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                when HALF_SPEED =>
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 2);
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                when FULL_SPEED =>
                   Fuel_Needed := Fuel_Needed - Module.Fuel_Usage;
                when others =>
