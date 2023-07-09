@@ -2332,6 +2332,7 @@ package body Ships.UI.Modules is
    -- if no info is available.
    -- SOURCE
    function Get_Module_Info(Module_Index: Positive) return String is
+      -- ****
       use Tiny_String;
 
       Info_Text: Unbounded_String := Null_Unbounded_String;
