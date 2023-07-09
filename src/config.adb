@@ -39,45 +39,43 @@ package body Config is
       Prices_Bonus: Float;
       Difficulty_Level: chars_ptr;
    end record;
+   type Game_Nim_Settings_Record is record
+      Auto_Rest: Integer;
+      Undock_Speed: Integer;
+      Auto_Center: Integer;
+      Auto_Return: Integer;
+      Auto_Finish: Integer;
+      Low_Fuel: Integer;
+      Low_Drinks: Integer;
+      Low_Food: Integer;
+      Auto_Move_Stop: chars_ptr;
+      Window_Width: Integer;
+      Window_Height: Integer;
+      Messages_Limit: Integer;
+      Saved_Messages: Integer;
+      Help_Font_Size: Integer;
+      Map_Font_Size: Integer;
+      Interface_Font_Size: Integer;
+      Interface_Theme: chars_ptr;
+      Messages_Order: chars_ptr;
+      Auto_Ask_For_Bases: Integer;
+      Auto_Ask_For_Events: Integer;
+      Show_Tooltips: Integer;
+      Show_Last_Messages: Integer;
+      Messages_Position: Integer;
+      Full_Screen: Integer;
+      Auto_Close_Messages_Time: Integer;
+      Auto_Save: chars_ptr;
+      Topics_Position: Integer;
+      Show_Numbers: Integer;
+      Right_Button: Integer;
+      Lists_Limit: Integer;
+   end record;
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Load_Config is
       use Tiny_String;
 
-   --## rule off TYPE_INITIAL_VALUES
-      type Game_Nim_Settings_Record is record
-         Auto_Rest: Integer;
-         Undock_Speed: Integer;
-         Auto_Center: Integer;
-         Auto_Return: Integer;
-         Auto_Finish: Integer;
-         Low_Fuel: Integer;
-         Low_Drinks: Integer;
-         Low_Food: Integer;
-         Auto_Move_Stop: chars_ptr;
-         Window_Width: Integer;
-         Window_Height: Integer;
-         Messages_Limit: Integer;
-         Saved_Messages: Integer;
-         Help_Font_Size: Integer;
-         Map_Font_Size: Integer;
-         Interface_Font_Size: Integer;
-         Interface_Theme: chars_ptr;
-         Messages_Order: chars_ptr;
-         Auto_Ask_For_Bases: Integer;
-         Auto_Ask_For_Events: Integer;
-         Show_Tooltips: Integer;
-         Show_Last_Messages: Integer;
-         Messages_Position: Integer;
-         Full_Screen: Integer;
-         Auto_Close_Messages_Time: Integer;
-         Auto_Save: chars_ptr;
-         Topics_Position: Integer;
-         Show_Numbers: Integer;
-         Right_Button: Integer;
-         Lists_Limit: Integer;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       Temp_New_Game: New_Nim_Game_Record;
       Temp_Settings: Game_Nim_Settings_Record;
       procedure Load_Ada_Config
@@ -180,7 +178,20 @@ package body Config is
             Put_Line(File => Config_File, Item => Name & " = No");
          end if;
       end Save_Boolean;
+      Temp_New_Game: New_Nim_Game_Record;
+      Temp_Settings: Game_Nim_Settings_Record;
+      procedure Save_Ada_Config
+        (Ada_New_Game_Settings: New_Nim_Game_Record;
+         Ada_Game_Settings: Game_Nim_Settings_Record) with
+         Import => True,
+         Convention => C,
+         External_Name => "saveAdaConfig";
    begin
+      Temp_New_Game := (others => <>);
+      Temp_Settings := (others => <>);
+      Save_Ada_Config
+        (Ada_New_Game_Settings => Temp_New_Game,
+         Ada_Game_Settings => Temp_Settings);
       Create
         (File => Config_File, Mode => Append_File,
          Name => To_String(Source => Save_Directory) & "game.cfg");
