@@ -16,19 +16,22 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Bases; use Bases;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Statistics; use Statistics;
-with Maps; use Maps;
-with Messages; use Messages;
+with Bases;
 with Config; use Config;
 with Factions; use Factions;
+with Maps;
+with Messages;
+with Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
+with Statistics;
 
 package body Ships.Movement is
 
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
+      use Messages;
+      use Ships.Cargo;
+      use Statistics;
       use Tiny_String;
 
       --## rule off TYPE_INITIAL_VALUES
@@ -182,6 +185,8 @@ package body Ships.Movement is
 
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
+      use Bases;
+      use Maps;
       function Dock_Ada_Ship(D, E: Integer) return chars_ptr with
          Import => True,
          Convention => C,
