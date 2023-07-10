@@ -486,7 +486,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   ## Returns the newly created ship with the selected parameters
   let protoShip = protoShipsList[protoIndex]
   result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
-      0: protoShip.name else: name), upgradeModule: -1, repairModule: -1)
+    0: protoShip.name else: name), upgradeModule: -1, repairModule: -1, speed: speed)
   # Add modules to ship
   var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
       max = protoShip.modules.len) else: 0)
