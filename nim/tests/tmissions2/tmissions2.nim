@@ -1,11 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing finishMission.
+Testing autoFinishMissions.
+Testing acceptMission.'''
 """
 
 import std/tables
 import ../../src/[basestypes, careers, factions, game, items, maps, missions,
     missions2, shipmodules, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -57,6 +62,7 @@ skyMap[2][2].missionIndex = 0
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 skyBases[1].missionsDate = gameDate
 
+echo "Testing finishMission."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
@@ -71,11 +77,13 @@ acceptedMissions.add(y = MissionData(mType: passenger, time: 1000, targetX: 1,
 finishMission(0)
 assert acceptedMissions.len == 0, "Failed to finish an accepted passenger mission."
 
+echo "Testing autoFinishMissions."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
 assert autoFinishMissions().len == 0 and acceptedMissions.len == 0, "Failed to auto finish accepted missions."
 
+echo "Testing acceptMission."
 skyBases[1].missions = @[]
 skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
