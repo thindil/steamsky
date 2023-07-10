@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Generated NPC's ships start with docked speed, so the player can always
+  escape them
+
 ## [8.9] - 2023-07-09
 
 ### Added
