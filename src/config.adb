@@ -215,7 +215,47 @@ package body Config is
          Prices_Bonus => New_Game_Settings.Prices_Bonus,
          Difficulty_Level =>
            New_String(Str => New_Game_Settings.Difficulty_Level'Image));
-      Temp_Settings := (others => <>);
+      Temp_Settings :=
+        (Auto_Rest => (if Game_Settings.Auto_Rest then 1 else 0),
+         Undock_Speed => Ship_Speed'Pos(Game_Settings.Undock_Speed),
+         Auto_Center => (if Game_Settings.Auto_Center then 1 else 0),
+         Auto_Return => (if Game_Settings.Auto_Return then 1 else 0),
+         Auto_Finish => (if Game_Settings.Auto_Finish then 1 else 0),
+         Low_Fuel => Game_Settings.Low_Fuel,
+         Low_Drinks => Game_Settings.Low_Drinks,
+         Low_Food => Game_Settings.Low_Food,
+         Auto_Move_Stop =>
+           New_String
+             (Str => Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop)),
+         Window_Width => Game_Settings.Window_Width,
+         Window_Height => Game_Settings.Window_Height,
+         Messages_Limit => Game_Settings.Messages_Limit,
+         Saved_Messages => Game_Settings.Saved_Messages,
+         Help_Font_Size => Game_Settings.Help_Font_Size,
+         Map_Font_Size => Game_Settings.Map_Font_Size,
+         Interface_Font_Size => Game_Settings.Interface_Font_Size,
+         Interface_Theme =>
+           New_String
+             (Str => To_String(Source => Game_Settings.Interface_Theme)),
+         Messages_Order =>
+           New_String
+             (Str => Messages_Order_Type'Image(Game_Settings.Messages_Order)),
+         Auto_Ask_For_Bases =>
+           (if Game_Settings.Auto_Ask_For_Bases then 1 else 0),
+         Auto_Ask_For_Events =>
+           (if Game_Settings.Auto_Ask_For_Events then 1 else 0),
+         Show_Tooltips => (if Game_Settings.Show_Tooltips then 1 else 0),
+         Show_Last_Messages =>
+           (if Game_Settings.Show_Last_Messages then 1 else 0),
+         Full_Screen => (if Game_Settings.Full_Screen then 1 else 0),
+         Auto_Close_Messages_Time => Game_Settings.Auto_Close_Messages_Time,
+         Auto_Save =>
+           New_String(Str => Auto_Save_Type'Image(Game_Settings.Auto_Save)),
+         Topics_Position => Game_Settings.Topics_Position,
+         Show_Numbers => (if Game_Settings.Show_Numbers then 1 else 0),
+         Right_Button => (if Game_Settings.Right_Button then 1 else 0),
+         Lists_Limit => Game_Settings.Lists_Limit,
+         Messages_Position => Game_Settings.Messages_Position);
       Save_Ada_Config
         (Ada_New_Game_Settings => Temp_New_Game,
          Ada_Game_Settings => Temp_Settings);
