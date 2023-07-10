@@ -187,7 +187,34 @@ package body Config is
          Convention => C,
          External_Name => "saveAdaConfig";
    begin
-      Temp_New_Game := (others => <>);
+      Temp_New_Game :=
+        (Player_Name =>
+           New_String
+             (Str => To_String(Source => New_Game_Settings.Player_Name)),
+         Player_Gender => New_Game_Settings.Player_Gender,
+         Ship_Name =>
+           New_String(Str => To_String(Source => New_Game_Settings.Ship_Name)),
+         Player_Faction =>
+           New_String
+             (Str => To_String(Source => New_Game_Settings.Player_Faction)),
+         Player_Career =>
+           New_String
+             (Str => To_String(Source => New_Game_Settings.Player_Career)),
+         Starting_Base =>
+           New_String
+             (Str => To_String(Source => New_Game_Settings.Starting_Base)),
+         Enemy_Damage_Bonus => New_Game_Settings.Enemy_Damage_Bonus,
+         Player_Damage_Bonus => New_Game_Settings.Player_Damage_Bonus,
+         Enemy_Melee_Damage_Bonus =>
+           New_Game_Settings.Enemy_Melee_Damage_Bonus,
+         Player_Melee_Damage_Bonus =>
+           New_Game_Settings.Player_Melee_Damage_Bonus,
+         Experience_Bonus => New_Game_Settings.Experience_Bonus,
+         Reputation_Bonus => New_Game_Settings.Reputation_Bonus,
+         Upgrade_Cost_Bonus => New_Game_Settings.Upgrade_Cost_Bonus,
+         Prices_Bonus => New_Game_Settings.Prices_Bonus,
+         Difficulty_Level =>
+           New_String(Str => New_Game_Settings.Difficulty_Level'Image));
       Temp_Settings := (others => <>);
       Save_Ada_Config
         (Ada_New_Game_Settings => Temp_New_Game,
