@@ -416,8 +416,8 @@ proc saveAdaConfig(adaNewGameSettings: NewGameRecord;
     adaGameSettings: GameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   # Temporary disabled, enable it after finished Ada code
-  #newGameSettings = adaNewGameSettings
-  #gameSettings = adaGameSettings
+  newGameSettings = adaNewGameSettings
+  gameSettings = adaGameSettings
   try:
     saveConfig()
   except KeyError, IOError, OSError:

@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Config is
@@ -166,18 +165,8 @@ package body Config is
    end Load_Config;
 
    procedure Save_Config is
-      use Ada.Text_IO;
       use Tiny_String;
 
-      Config_File: File_Type;
-      procedure Save_Boolean(Value: Boolean; Name: String) is
-      begin
-         if Value then
-            Put_Line(File => Config_File, Item => Name & " = Yes");
-         else
-            Put_Line(File => Config_File, Item => Name & " = No");
-         end if;
-      end Save_Boolean;
       Temp_New_Game: New_Nim_Game_Record;
       Temp_Settings: Game_Nim_Settings_Record;
       procedure Save_Ada_Config
@@ -259,175 +248,6 @@ package body Config is
       Save_Ada_Config
         (Ada_New_Game_Settings => Temp_New_Game,
          Ada_Game_Settings => Temp_Settings);
-      Create
-        (File => Config_File, Mode => Append_File,
-         Name => To_String(Source => Save_Directory) & "game.cfg");
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PlayerName = " &
-           To_String(Source => New_Game_Settings.Player_Name));
-      Put_Line
-        (File => Config_File,
-         Item => "PlayerGender = " & New_Game_Settings.Player_Gender);
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "ShipName = " & To_String(Source => New_Game_Settings.Ship_Name));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PlayerFaction = " &
-           To_String(Source => New_Game_Settings.Player_Faction));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PlayerCareer = " &
-           To_String(Source => New_Game_Settings.Player_Career));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "StartingBase = " &
-           To_String(Source => New_Game_Settings.Starting_Base));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "EnemyDamageBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Enemy_Damage_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PlayerDamageBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Player_Damage_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "EnemyMeleeDamageBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Enemy_Melee_Damage_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PlayerMeleeDamageBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Player_Melee_Damage_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "ExperienceBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Experience_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "ReputationBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Reputation_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "UpgradeCostBonus =" &
-           Bonus_Type'Image(New_Game_Settings.Upgrade_Cost_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "PricesBonus =" & Bonus_Type'Image(New_Game_Settings.Prices_Bonus));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "DifficultyLevel = " &
-           Difficulty_Type'Image(New_Game_Settings.Difficulty_Level));
-      Save_Boolean(Value => Game_Settings.Auto_Rest, Name => "AutoRest");
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "UndockSpeed = " & Ship_Speed'Image(Game_Settings.Undock_Speed));
-      Save_Boolean(Value => Game_Settings.Auto_Center, Name => "AutoCenter");
-      Save_Boolean(Value => Game_Settings.Auto_Return, Name => "AutoReturn");
-      Save_Boolean(Value => Game_Settings.Auto_Finish, Name => "AutoFinish");
-      Put_Line
-        (File => Config_File,
-         Item => "LowFuel =" & Positive'Image(Game_Settings.Low_Fuel));
-      Put_Line
-        (File => Config_File,
-         Item => "LowDrinks =" & Positive'Image(Game_Settings.Low_Drinks));
-      Put_Line
-        (File => Config_File,
-         Item => "LowFood =" & Positive'Image(Game_Settings.Low_Food));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "AutoMoveStop = " &
-           Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop));
-      Put_Line
-        (File => Config_File,
-         Item => "WindowWidth =" & Positive'Image(Game_Settings.Window_Width));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "WindowHeight =" & Positive'Image(Game_Settings.Window_Height));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "MessagesLimit =" & Positive'Image(Game_Settings.Messages_Limit));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "SavedMessages =" & Positive'Image(Game_Settings.Saved_Messages));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "HelpFontSize =" & Positive'Image(Game_Settings.Help_Font_Size));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "MapFontSize =" & Positive'Image(Game_Settings.Map_Font_Size));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "InterfaceFontSize =" &
-           Positive'Image(Game_Settings.Interface_Font_Size));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "InterfaceTheme = " &
-           To_String(Source => Game_Settings.Interface_Theme));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "MessagesOrder = " &
-           Messages_Order_Type'Image(Game_Settings.Messages_Order));
-      Save_Boolean
-        (Value => Game_Settings.Auto_Ask_For_Bases, Name => "AutoAskForBases");
-      Save_Boolean
-        (Value => Game_Settings.Auto_Ask_For_Events,
-         Name => "AutoAskForEvents");
-      Save_Boolean
-        (Value => Game_Settings.Show_Tooltips, Name => "ShowTooltips");
-      Save_Boolean
-        (Value => Game_Settings.Show_Last_Messages,
-         Name => "ShowLastMessages");
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "MessagesPosition =" &
-           Natural'Image(Game_Settings.Messages_Position));
-      Save_Boolean(Value => Game_Settings.Full_Screen, Name => "FullScreen");
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "AutoCloseMessagesTime =" &
-           Positive'Image(Game_Settings.Auto_Close_Messages_Time));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "AutoSave = " & Auto_Save_Type'Image(Game_Settings.Auto_Save));
-      Put_Line
-        (File => Config_File,
-         Item =>
-           "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
-      Save_Boolean(Value => Game_Settings.Show_Numbers, Name => "ShowNumbers");
-      Save_Boolean(Value => Game_Settings.Right_Button, Name => "RightButton");
-      Put_Line
-        (File => Config_File,
-         Item => "ListsLimit =" & Positive'Image(Game_Settings.Lists_Limit));
-      Close(File => Config_File);
    end Save_Config;
 
    procedure Get_New_Game_Settings is
