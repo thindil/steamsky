@@ -63,3 +63,5 @@ cpDir("bin" & DirSep & "doc", dirName & "doc")
 cpFile("README.md", dirName & "doc" & DirSep & "README.md")
 echo "Files and directories copied."
 exec "gprclean -P steamsky.gpr --target=" & target
+rmDir("nim" & DirSep & "obj")
+mkDir("nim" & DirSep & "obj")
