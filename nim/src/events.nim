@@ -60,7 +60,8 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
   let eventsAmount = eventsList.len
   if eventsAmount == 0:
     return
-  for key in 0 .. eventsAmount - 1:
+  var key = 0
+  while key < eventsList.len:
     let newTime = eventsList[key].time - minutes
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
@@ -78,6 +79,7 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
       {.warning[UnsafeSetLen]: on.}
     else:
       eventsList[key].time = newTime
+      key.inc
   if eventsAmount < eventsList.len:
     for index, event in eventsList.pairs:
       skyMap[event.skyX][event.skyY].eventIndex = index
