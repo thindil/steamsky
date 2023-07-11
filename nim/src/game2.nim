@@ -97,8 +97,8 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateEvents(minutes = minutes)
   updateMissions(minutes = minutes)
 
-proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError, OSError],
-    tags: [WriteIOEffect, RootEffect].} =
+proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
+    OSError], tags: [WriteIOEffect, RootEffect].} =
   ## Load the game's data from files
   ##
   ## Returns empty string if the data loaded properly, otherwise message with
@@ -190,10 +190,18 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError, 
       return
   setToolsList()
 
-proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
+proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
+    tags: [WriteIOEffect, RootEffect].} =
   ## Save or not the game and clear the temporary data
   ##
   ## * save - if true, save the current game
+  if save:
+    saveGame()
+  else:
+    removeFile(saveName)
+  saveConfig()
+  clearGameStats()
+  clearCurrentGoal()
   messagesList = @[]
   knownRecipes = @[]
   eventsList = @[]
@@ -213,5 +221,8 @@ proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect],
   except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
-proc endAdaGame(save: cint) {.raises: [], tags: [], exportc.} =
-  endGame(save = (if save == 1: true else: false))
+proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    endGame(save = (if save == 1: true else: false))
+  except KeyError, OSError, IOError:
+    discard
