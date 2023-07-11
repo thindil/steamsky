@@ -76,7 +76,7 @@ type
     ## * rightButton           - If true, use the right mouse button for show menus in various lists
     ## * listsLimit            - The amount of items displayed in various lists
     autoRest*: cint
-    undockSpeed*: cint
+    undockSpeed*: cstring
     autoCenter*: cint
     autoReturn*: cint
     autoFinish*: cint
@@ -152,7 +152,7 @@ type
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: 1,
-    undockSpeed: 4, autoCenter: 1, autoReturn: 1,
+    undockSpeed: "full_Speed", autoCenter: 1, autoReturn: 1,
     autoFinish: 1, lowFuel: 100, lowDrinks: 50, lowFood: 25,
     autoMoveStop: "never", windowWidth: 800, windowHeight: 600,
     messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
@@ -243,8 +243,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseAdaBool()
         of "UndockSpeed":
-          gameSettings.undockSpeed = (parseEnum[ShipSpeed](
-              entry.value.toLowerAscii)).ord.cint
+          gameSettings.undockSpeed = ($parseEnum[ShipSpeed](
+              entry.value.toLowerAscii)).cstring
         of "AutoCenter":
           gameSettings.autoCenter = entry.value.parseAdaBool()
         of "AutoReturn":
