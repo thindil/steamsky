@@ -321,6 +321,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         getCurrentExceptionMsg()
 
 proc saveConfig*() =
+  ## Save the new game and the game itself configuration to the file
   var config = newConfig()
 
   proc saveAdaBoolean(value: cint, name: string) =
