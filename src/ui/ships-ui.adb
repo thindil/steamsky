@@ -53,12 +53,14 @@ package body Ships.UI is
       Ship_Info_Frame: Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
-      Label: Ttk_Label;
       Upgrade_Info, Progress_Bar_Style: Unbounded_String;
       Max_Upgrade: Integer;
       Upgrade_Percent: Float;
+      --## rule off IMPROPER_INITIALIZATION
       Upgrade_Progress: Ttk_ProgressBar;
       Cancel_Button: Ttk_Button;
+      Label: Ttk_Label;
+      --## rule on IMPROPER_INITIALIZATION
       Ship_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Ship_Info_Frame & ".general.canvas");
       Type_Box: constant Ttk_ComboBox :=
@@ -248,12 +250,14 @@ package body Ships.UI is
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Upgrade_Percent :=
            1.0 -
            (Float
               (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                  .Upgrade_Progress) /
             Float(Max_Upgrade));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Progress_Bar_Style :=
            (if Upgrade_Percent > 0.74 then
               To_Unbounded_String
@@ -426,11 +430,13 @@ package body Ships.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      --## rule off TYPE_INITIAL_VALUES
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Frames: constant array(1 .. 4) of Frame_Info :=
         (1 =>
            (Name => To_Unbounded_String(Source => "general"), Column => 0,
