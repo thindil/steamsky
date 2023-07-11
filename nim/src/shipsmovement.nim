@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[strutils, tables]
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
     messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
@@ -83,7 +83,7 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
   return ""
 
 proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
-    raises: [KeyError], tags: [].} =
+    raises: [KeyError, ValueError], tags: [].} =
   ## Count the real speed of the ship in meters per minute
   ##
   ## * ship     - the ship which speed will be count
@@ -115,7 +115,8 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
               300.0)).Natural
   var shipSetSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
-    shipSetSpeed = gameSettings.undockSpeed.ShipSpeed
+    shipSetSpeed = parseEnum[ShipSpeed]((
+        $gameSettings.undockSpeed).toLowerAscii)
     if shipSetSpeed == fullStop:
       shipSetSpeed = quarterSpeed
   case shipSetSpeed
@@ -176,7 +177,8 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     playerShip.speed = docked
     updateGame(minutes = 10)
   else:
-    playerShip.speed = gameSettings.undockSpeed.ShipSpeed
+    playerShip.speed = parseEnum[ShipSpeed]((
+        $gameSettings.undockSpeed).toLowerAscii)
     if (realSpeed(ship = playerShip).float / 1_000.0) < 0.5:
       return "You can't undock because your ship is overloaded."
     playerShip.speed = docked
@@ -235,7 +237,8 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
       addMessage(message = messageText, mType = orderMessage, color = color)
       gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
     if playerShip.crew[0].health > 0:
-      playerShip.speed = gameSettings.undockSpeed.ShipSpeed
+      playerShip.speed = parseEnum[ShipSpeed]((
+          $gameSettings.undockSpeed).toLowerAscii)
       updateGame(minutes = 5)
       if $gameSettings.autoSave == $undock:
         saveGame()

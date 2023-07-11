@@ -40,7 +40,7 @@ package body Config is
    end record;
    type Game_Nim_Settings_Record is record
       Auto_Rest: Integer;
-      Undock_Speed: Integer;
+      Undock_Speed: chars_ptr;
       Auto_Center: Integer;
       Auto_Return: Integer;
       Auto_Finish: Integer;
@@ -124,7 +124,8 @@ package body Config is
              (Value(Item => Temp_New_Game.Difficulty_Level)));
       Game_Settings :=
         (Auto_Rest => Get_Bool(Value => Temp_Settings.Auto_Rest),
-         Undock_Speed => Ship_Speed'Val(Temp_Settings.Undock_Speed),
+         Undock_Speed =>
+           Ship_Speed'Value(Value(Item => Temp_Settings.Undock_Speed)),
          Auto_Center => Get_Bool(Value => Temp_Settings.Auto_Center),
          Auto_Return => Get_Bool(Value => Temp_Settings.Auto_Return),
          Auto_Finish => Get_Bool(Value => Temp_Settings.Auto_Finish),
@@ -206,7 +207,8 @@ package body Config is
            New_String(Str => New_Game_Settings.Difficulty_Level'Image));
       Temp_Settings :=
         (Auto_Rest => (if Game_Settings.Auto_Rest then 1 else 0),
-         Undock_Speed => Ship_Speed'Pos(Game_Settings.Undock_Speed),
+         Undock_Speed =>
+           New_String(Str => Ship_Speed'Image(Game_Settings.Undock_Speed)),
          Auto_Center => (if Game_Settings.Auto_Center then 1 else 0),
          Auto_Return => (if Game_Settings.Auto_Return then 1 else 0),
          Auto_Finish => (if Game_Settings.Auto_Finish then 1 else 0),
