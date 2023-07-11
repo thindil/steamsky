@@ -320,7 +320,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
 
-proc saveConfig*() =
+proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
+    WriteIOEffect].} =
   ## Save the new game and the game itself configuration to the file
   var config = newConfig()
 
