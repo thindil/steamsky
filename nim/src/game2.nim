@@ -190,6 +190,14 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError, 
       return
   setToolsList()
 
+proc endGame*(save: bool) {.sideEffect, raises: [], tags: [].} =
+  ## Save or not the game and clear the temporary data
+  ##
+  ## * save - if true, save the current game
+  messagesList = @[]
+  knownRecipes = @[]
+  eventsList = @[]
+
 # Temporary code for interfacing with Ada
 
 proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
@@ -205,3 +213,5 @@ proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect],
   except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
+proc endAdaGame(save: cint) {.raises: [], tags: [], exportc.} =
+  endGame(save = (if save == 1: true else: false))
