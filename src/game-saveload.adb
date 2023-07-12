@@ -48,11 +48,6 @@ package body Game.SaveLoad is
    Save_Version: constant Positive := 5;
    -- ****
 
-   procedure Get_Ada_Save_Name(Name: chars_ptr) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaSaveName";
-
    procedure Save_Game(Pretty_Print: Boolean := False) is
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,

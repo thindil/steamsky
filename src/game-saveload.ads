@@ -64,4 +64,11 @@ package Game.SaveLoad is
       Test_Case => (Name => "Test_GenerateSave_Name", Mode => Nominal);
       -- ****
 
+-- Temporary code to interact with Nim
+
+   procedure Get_Ada_Save_Name(Name: chars_ptr) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaSaveName";
+
 end Game.SaveLoad;
