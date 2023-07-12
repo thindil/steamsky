@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
 with Bases; use Bases;
@@ -37,7 +36,7 @@ with Mobs;
 with ShipModules;
 with Ships; use Ships;
 with Statistics; use Statistics;
-with Stories;
+with Stories; use Stories;
 with Utils;
 
 package body Game is
@@ -519,24 +518,40 @@ package body Game is
          Convention => C,
          External_Name => "endAdaGame";
    begin
+      Get_Ada_Save_Name
+        (Name => New_String(Str => To_String(Source => Save_Name)));
       if Save then
-         Save_Game;
-      else
-         Delete_Save_Block :
-         declare
-            use Ada.Directories;
-         begin
-            Delete_File(Name => To_String(Source => Save_Name));
-         exception
-            when Name_Error =>
-               null;
-         end Delete_Save_Block;
+         Set_Ship_In_Nim;
+         Get_Bases_Loop :
+         for I in Bases_Range loop
+            Set_Base_In_Nim(Base_Index => I);
+         end loop Get_Bases_Loop;
+         Get_Map_Y_Loop :
+         for Y in Map_Y_Range loop
+            Get_Map_X_Loop :
+            for X in Map_X_Range loop
+               Get_Ada_Map_Cell
+                 (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
+                  Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
+                  Event_Index => Sky_Map(X, Y).Event_Index,
+                  Mission_Index => Sky_Map(X, Y).Mission_Index);
+            end loop Get_Map_X_Loop;
+         end loop Get_Map_Y_Loop;
+         Get_Current_Goal;
+         Get_Current_Story;
+         Get_Finished_Stories_Loop :
+         for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
+            Get_Finished_Story(Index => I);
+         end loop Get_Finished_Stories_Loop;
+         Set_Nim_Events;
+         Get_Ada_Game_String
+           (Name => New_String(Str => "playerCareer"),
+            Value => New_String(Str => To_String(Source => Player_Career)));
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Events_List.Clear;
       Clear_Game_Stats;
       Clear_Current_Goal;
-      Save_Config;
    end End_Game;
 
    function Find_Skill_Index
@@ -555,7 +570,6 @@ package body Game is
       use BasesTypes;
       use Careers;
       use Log;
-      use Stories;
 
       Result: chars_ptr;
       function Load_Ada_Game_Data return chars_ptr with
