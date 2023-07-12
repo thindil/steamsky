@@ -285,7 +285,7 @@ proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
   of passenger:
     messageText.add("'Transport passenger to base'.")
   addMessage(message = messageText, mType = missionMessage)
-  if gameSettings.autoReturn == 1:
+  if gameSettings.autoReturn:
     playerShip.destinationX = skyBases[mission.startBase].skyX
     playerShip.destinationY = skyBases[mission.startBase].skyY
     addMessage(message = "You set the travel destination for your ship.",

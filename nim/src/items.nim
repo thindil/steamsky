@@ -212,7 +212,7 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
   ##
   ## Returns the string with textual value for the selected numerical chance for damage
   ## or numerical value if the proper setting of the game is enabled
-  if gameSettings.showNumbers == 1:
+  if gameSettings.showNumbers:
     return " " & $itemData & "%"
   case itemData
   of 1:

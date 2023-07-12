@@ -96,7 +96,7 @@ proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     for widget in tclResult.split():
       discard interp.tclEval(script = "destroy " & widget)
 
-proc showScreen*(newScreenName: cstring) {.exportc, gcsafe, sideEffect,
+proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
     raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
   ##
@@ -117,7 +117,7 @@ proc showScreen*(newScreenName: cstring) {.exportc, gcsafe, sideEffect,
       " -weight 1") == tclError:
     return
   if newScreenName in ["optionsframe".cstring, "messagesframe"] or
-      gameSettings.showLastMessages == 0:
+      not gameSettings.showLastMessages:
     if interp.tclEval(script = "grid remove " & messagesFrame) == tclError:
       return
     if newScreenName != "mapframe":

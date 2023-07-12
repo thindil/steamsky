@@ -79,8 +79,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     saveTree.add(recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
-  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(
-      0): messagesAmount(0) else: gameSettings.savedMessages)
+  let messagesToSave = (if gameSettings.savedMessages.cint > messagesAmount(
+      0): messagesAmount(0) else: gameSettings.savedMessages.cint)
   for i in (messagesAmount(0) - messagesToSave + 1) .. messagesAmount(0):
     let message = getMessage(i, 0)
     var messageElement = newElement("message")

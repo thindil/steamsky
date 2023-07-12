@@ -167,9 +167,9 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
                 min = -5, max = -1))
         else:
           memberIndex.inc
-      if gameSettings.autoAskForBases == 1:
+      if gameSettings.autoAskForBases:
         askForBases()
-      if gameSettings.autoAskForEvents == 1:
+      if gameSettings.autoAskForEvents:
         askForEvents()
     else:
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name &
