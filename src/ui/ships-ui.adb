@@ -53,9 +53,10 @@ package body Ships.UI is
       Ship_Info_Frame: Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
-      Upgrade_Info, Progress_Bar_Style: Unbounded_String;
-      Max_Upgrade: Integer;
-      Upgrade_Percent: Float;
+      Upgrade_Info, Progress_Bar_Style: Unbounded_String :=
+        Null_Unbounded_String;
+      Max_Upgrade: Integer := 0;
+      Upgrade_Percent: Float := 0.0;
       --## rule off IMPROPER_INITIALIZATION
       Upgrade_Progress: Ttk_ProgressBar;
       Cancel_Button: Ttk_Button;
@@ -244,9 +245,7 @@ package body Ships.UI is
                null;
          end case;
          Max_Upgrade :=
-           Integer
-             (Float(Max_Upgrade) *
-              Float(New_Game_Settings.Upgrade_Cost_Bonus));
+           Integer(Float(Max_Upgrade) * New_Game_Settings.Upgrade_Cost_Bonus);
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;
@@ -460,32 +459,7 @@ package body Ships.UI is
              ".canvas.frame.maxmin",
            Interp => Interp);
    begin
-      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
-         Show_Frames_Loop :
-         for FrameInfo of Frames loop
-            Frame.Name :=
-              New_String
-                (Str =>
-                   Main_Paned & ".shipinfoframe." &
-                   To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
-              CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-            else
-               Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Slave => Frame,
-                  Options =>
-                    "-columnspan 1 -rowspan 1 -column" &
-                    Natural'Image(FrameInfo.Column) & " -row" &
-                    Natural'Image(FrameInfo.Row));
-            end if;
-         end loop Show_Frames_Loop;
-         configure
-           (Widgt => Button,
-            options =>
-              "-image movemapupicon -command {ShipMaxMin " &
-              CArgv.Arg(Argv => Argv, N => 1) & " show}");
-      else
+      if CArgv.Arg(Argv => Argv, N => 2) = "show" then
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
@@ -493,13 +467,13 @@ package body Ships.UI is
                 (Str =>
                    Main_Paned & ".shipinfoframe." &
                    To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
+            if To_String(Source => FrameInfo.Name) =
               CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
-            else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
                   Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
+            else
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             end if;
          end loop Hide_Frames_Loop;
          configure
@@ -507,6 +481,31 @@ package body Ships.UI is
             options =>
               "-image movemapdownicon -command {ShipMaxMin " &
               CArgv.Arg(Argv => Argv, N => 1) & " hide}");
+      else
+         Show_Frames_Loop :
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String
+                (Str =>
+                   Main_Paned & ".shipinfoframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) =
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Slave => Frame,
+                  Options =>
+                    "-columnspan 1 -rowspan 1 -column" &
+                    Natural'Image(FrameInfo.Column) & " -row" &
+                    Natural'Image(FrameInfo.Row));
+            else
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+            end if;
+         end loop Show_Frames_Loop;
+         configure
+           (Widgt => Button,
+            options =>
+              "-image movemapupicon -command {ShipMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " show}");
       end if;
       return TCL_OK;
    end Ship_Max_Min_Command;
