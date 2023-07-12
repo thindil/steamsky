@@ -75,36 +75,36 @@ type
     ## * showNumbers           - If true, show numbers for speed, skills, attributes, etc.
     ## * rightButton           - If true, use the right mouse button for show menus in various lists
     ## * listsLimit            - The amount of items displayed in various lists
-    autoRest*: cint
-    undockSpeed*: cstring
-    autoCenter*: cint
-    autoReturn*: cint
-    autoFinish*: cint
-    lowFuel*: cint
-    lowDrinks*: cint
-    lowFood*: cint
-    autoMoveStop*: cstring
-    windowWidth*: cint
-    windowHeight*: cint
-    messagesLimit*: cint
-    savedMessages*: cint
-    helpFontSize*: cint
-    mapFontSize*: cint
-    interfaceFontSize*: cint
-    interfaceTheme*: cstring
-    messagesOrder*: cstring
-    autoAskForBases*: cint
-    autoAskForEvents*: cint
-    showTooltips*: cint
-    showLastMessages*: cint
-    messagesPosition*: cint
-    fullScreen*: cint
-    autoCloseMessagesTime*: cint
-    autoSave*: cstring
-    topicsPosition*: cint
-    showNumbers*: cint
-    rightButton*: cint
-    listsLimit*: cint
+    autoRest*: bool
+    undockSpeed*: ShipSpeed
+    autoCenter*: bool
+    autoReturn*: bool
+    autoFinish*: bool
+    lowFuel*: Natural
+    lowDrinks*: Natural
+    lowFood*: Natural
+    autoMoveStop*: AutoMoveBreak
+    windowWidth*: Positive
+    windowHeight*: Positive
+    messagesLimit*: Natural
+    savedMessages*: Natural
+    helpFontSize*: Positive
+    mapFontSize*: Positive
+    interfaceFontSize*: Positive
+    interfaceTheme*: string
+    messagesOrder*: MessagesOrder
+    autoAskForBases*: bool
+    autoAskForEvents*: bool
+    showTooltips*: bool
+    showLastMessages*: bool
+    messagesPosition*: Natural
+    fullScreen*: bool
+    autoCloseMessagesTime*: Natural
+    autoSave*: AutoSaveTime
+    topicsPosition*: Natural
+    showNumbers*: bool
+    rightButton*: bool
+    listsLimit*: Positive
 
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
@@ -151,17 +151,17 @@ type
     difficultyLevel*: cstring
 
 const
-  defaultGameSettings* = GameSettingsRecord(autoRest: 1,
-    undockSpeed: "full_Speed", autoCenter: 1, autoReturn: 1,
-    autoFinish: 1, lowFuel: 100, lowDrinks: 50, lowFood: 25,
-    autoMoveStop: "never", windowWidth: 800, windowHeight: 600,
+  defaultGameSettings* = GameSettingsRecord(autoRest: true,
+    undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
+    autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
+    autoMoveStop: never, windowWidth: 800, windowHeight: 600,
     messagesLimit: 500, savedMessages: 10, helpFontSize: 14, mapFontSize: 16,
     interfaceFontSize: 14, interfaceTheme: "steamsky",
-    messagesOrder: "older_First", autoAskForBases: 0,
-    autoAskForEvents: 0,
-    showTooltips: 1, showLastMessages: 1, messagesPosition: 213,
-    fullScreen: 0, autoCloseMessagesTime: 6, autoSave: "none",
-    topicsPosition: 200, showNumbers: 0, rightButton: 0, listsLimit: 25)
+    messagesOrder: olderFirst, autoAskForBases: false,
+    autoAskForEvents: false,
+    showTooltips: true, showLastMessages: true, messagesPosition: 213,
+    fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
+    topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25)
     ## The default setting for the game
 
   defaultNewGameSettings* = NewGameRecord(playerName: "Laeran",
@@ -195,11 +195,9 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
     var newValue = value
     newValue.removeSuffix(c = 'E')
     return newValue.parseFloat().cfloat
-  proc parseAdaBool(value: string): cint =
+  proc parseAdaBool(value: string): bool =
     ## Temporary function, for backward compatibility with Ada code
-    if value == "Yes":
-      return 1
-    return 0
+    return value == "Yes"
 
   while true:
     try:
@@ -243,8 +241,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseAdaBool()
         of "UndockSpeed":
-          gameSettings.undockSpeed = ($parseEnum[ShipSpeed](
-              entry.value.toLowerAscii)).cstring
+          gameSettings.undockSpeed = parseEnum[ShipSpeed](
+              entry.value.toLowerAscii)
         of "AutoCenter":
           gameSettings.autoCenter = entry.value.parseAdaBool()
         of "AutoReturn":
@@ -258,8 +256,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "LowFood":
           gameSettings.lowFood = entry.value.parseInt().cint
         of "AutoMoveStop":
-          gameSettings.autoMoveStop = ($parseEnum[AutoMoveBreak](
-              entry.value.toLowerAscii)).cstring
+          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](
+              entry.value.toLowerAscii)
         of "WindowWidth":
           gameSettings.windowWidth = entry.value.parseInt().cint
         of "WindowHeight":
@@ -275,10 +273,10 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "InterfaceFontSize":
           gameSettings.interfaceFontSize = entry.value.parseInt().cint
         of "InterfaceTheme":
-          gameSettings.interfaceTheme = entry.value.cstring
+          gameSettings.interfaceTheme = entry.value
         of "MessagesOrder":
-          gameSettings.messagesOrder = ($parseEnum[MessagesOrder](
-              entry.value.toLowerAscii)).cstring
+          gameSettings.messagesOrder = parseEnum[MessagesOrder](
+              entry.value.toLowerAscii)
         of "AutoAskForBases":
           gameSettings.autoAskForBases = entry.value.parseAdaBool()
         of "AutoAskForEvents":
@@ -294,8 +292,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "AutoCloseMessagesTime":
           gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
         of "AutoSave":
-          gameSettings.autoSave = ($parseEnum[AutoSaveTime](
-              entry.value.toLowerAscii)).cstring
+          gameSettings.autoSave = parseEnum[AutoSaveTime](
+              entry.value.toLowerAscii)
         of "TopicsPosition":
           gameSettings.topicsPosition = entry.value.parseInt().cint
         of "ShowNumbers":
@@ -325,9 +323,9 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
   ## Save the new game and the game itself configuration to the file
   var config = newConfig()
 
-  proc saveAdaBoolean(value: cint, name: string) =
+  proc saveAdaBoolean(value: bool, name: string) =
     ## Temporary function, for backward compatibility with Ada code
-    if value == 1:
+    if value:
       config.setSectionKey("", name, "Yes")
     else:
       config.setSectionKey("", name, "No")
@@ -392,9 +390,42 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaGameSettingsRecord = object
+    autoRest: cint
+    undockSpeed: cstring
+    autoCenter: cint
+    autoReturn: cint
+    autoFinish: cint
+    lowFuel: cint
+    lowDrinks: cint
+    lowFood: cint
+    autoMoveStop: cstring
+    windowWidth: cint
+    windowHeight: cint
+    messagesLimit: cint
+    savedMessages: cint
+    helpFontSize: cint
+    mapFontSize: cint
+    interfaceFontSize: cint
+    interfaceTheme: cstring
+    messagesOrder: cstring
+    autoAskForBases: cint
+    autoAskForEvents: cint
+    showTooltips: cint
+    showLastMessages: cint
+    messagesPosition: cint
+    fullScreen: cint
+    autoCloseMessagesTime: cint
+    autoSave: cstring
+    topicsPosition: cint
+    showNumbers: cint
+    rightButton: cint
+    listsLimit: cint
+
 proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
-    adaGameSettings: var GameSettingsRecord) {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    adaGameSettings: var AdaGameSettingsRecord) {.sideEffect, raises: [],
+    tags: [RootEffect], exportc.} =
   ## Temporary code to load the game configuration and copy it to the Ada
   ## code
   ##
@@ -404,7 +435,37 @@ proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
   ## Returns the updated parameters adaNewGameSettings and adaGameSettings
   loadConfig()
   adaNewGameSettings = newGameSettings
-  adaGameSettings = gameSettings
+  adaGameSettings = AdaGameSettingsRecord(autoRest: (
+      if gameSettings.autoRest: 1 else: 0), undockSpeed: (
+      $gameSettings.undockSpeed).toUpperAscii().cstring, autoCenter: (
+      if gameSettings.autoCenter: 1 else: 0), autoReturn: (
+      if gameSettings.autoReturn: 1 else: 0), autoFinish: (
+      if gameSettings.autoFinish: 1 else: 0),
+      lowFuel: gameSettings.lowFuel.cint,
+      lowDrinks: gameSettings.lowDrinks.cint,
+      lowFood: gameSettings.lowFood.cint, autoMoveStop: (
+      $gameSettings.autoMoveStop).toUpperAscii().cstring,
+      windowWidth: gameSettings.windowWidth.cint,
+      windowHeight: gameSettings.windowHeight.cint,
+      messagesLimit: gameSettings.messagesLimit.cint,
+      savedMessages: gameSettings.savedMessages.cint,
+      helpFontSize: gameSettings.helpFontSize.cint,
+      mapFontSize: gameSettings.mapFontSize.cint,
+      interfaceFontSize: gameSettings.interfaceFontSize.cint,
+      interfaceTheme: gameSettings.interfaceTheme.cstring, messagesOrder: (
+      $gameSettings.messagesOrder).toUpperAscii().cstring, autoAskForBases: (
+      if gameSettings.autoAskForBases: 1 else: 0), autoAskForEvents: (
+      if gameSettings.autoAskForEvents: 1 else: 0), showTooltips: (
+      if gameSettings.showTooltips: 1 else: 0), showLastMessages: (
+      if gameSettings.showLastMessages: 1 else: 0),
+      messagesPosition: gameSettings.messagesPosition.cint, fullScreen: (
+      if gameSettings.fullScreen: 1 else: 0),
+      autoCloseMessagesTime: gameSettings.autoCloseMessagesTime.cint,
+      autoSave: ($gameSettings.autoSave).toUpperAscii().cstring,
+      topicsPosition: gameSettings.topicsPosition.cint, showNumbers: (
+      if gameSettings.showNumbers: 1 else: 0), rightButton: (
+      if gameSettings.rightButton: 1 else: 0),
+      listsLimit: gameSettings.listsLimit.cint)
 
 proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
     raises: [], tags: [], exportc.} =
@@ -412,7 +473,6 @@ proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
 
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
-
 
 proc saveAdaConfig(adaNewGameSettings: NewGameRecord;
     adaGameSettings: GameSettingsRecord) {.sideEffect, raises: [], tags: [
