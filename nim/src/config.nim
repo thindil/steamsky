@@ -475,12 +475,43 @@ proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], 
   gameSettings.messagesPosition = newValue
 
 proc saveAdaConfig(adaNewGameSettings: NewGameRecord;
-    adaGameSettings: GameSettingsRecord) {.sideEffect, raises: [], tags: [
+    adaGameSettings: AdaGameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   # Temporary disabled, enable it after finished Ada code
   newGameSettings = adaNewGameSettings
-  gameSettings = adaGameSettings
   try:
+    gameSettings = GameSettingsRecord(autoRest: adaGameSettings.autoRest == 1,
+        undockSpeed: parseEnum[ShipSpeed]((
+        $adaGameSettings.undockSpeed).toLowerAscii),
+        autoCenter: adaGameSettings.autoCenter == 1,
+        autoReturn: adaGameSettings.autoReturn == 1,
+        autoFinish: adaGameSettings.autoFinish == 1,
+        lowFuel: adaGameSettings.lowFuel, lowDrinks: adaGameSettings.lowDrinks,
+        lowFood: adaGameSettings.lowFood, autoMoveStop: parseEnum[
+        AutoMoveBreak](($adaGameSettings.autoMoveStop).toLowerAscii),
+        windowWidth: adaGameSettings.windowWidth,
+        windowHeight: adaGameSettings.windowHeight,
+        messagesLimit: adaGameSettings.messagesLimit,
+        savedMessages: adaGameSettings.savedMessages,
+        helpFontSize: adaGameSettings.helpFontSize,
+        mapFontSize: adaGameSettings.mapFontSize,
+        interfaceFontSize: adaGameSettings.interfaceFontSize,
+        interfaceTheme: $adaGameSettings.interfaceTheme,
+        messagesOrder: parseEnum[MessagesOrder]((
+        $adaGameSettings.messagesOrder).toLowerAscii),
+        autoAskForBases: adaGameSettings.autoAskForBases == 1,
+        autoAskForEvents: adaGameSettings.autoAskForEvents == 1,
+        showTooltips: adaGameSettings.showTooltips == 1,
+        showLastMessages: adaGameSettings.showLastMessages == 1,
+        messagesPosition: adaGameSettings.messagesPosition,
+        fullScreen: adaGameSettings.fullScreen == 1,
+        autoCloseMessagesTime: adaGameSettings.autoCloseMessagesTime,
+        autoSave: parseEnum[AutoSaveTime]((
+        $adaGameSettings.autoSave).toLowerAscii),
+        topicsPosition: adaGameSettings.topicsPosition,
+        showNumbers: adaGameSettings.showNumbers == 1,
+        rightButton: adaGameSettings.rightButton == 1,
+        listsLimit: adaGameSettings.listsLimit)
     saveConfig()
-  except KeyError, IOError, OSError:
+  except KeyError, IOError, OSError, ValueError:
     discard
