@@ -370,7 +370,8 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
   config.setSectionKey("", "MapFontSize", $gameSettings.mapFontSize)
   config.setSectionKey("", "InterfaceFontSize", $gameSettings.interfaceFontSize)
   config.setSectionKey("", "InterfaceTheme", $gameSettings.interfaceTheme)
-  config.setSectionKey("", "MessagesOrder", $gameSettings.messagesOrder)
+  config.setSectionKey("", "MessagesOrder", (
+      $gameSettings.messagesOrder).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoAskForBases, name = "AutoAskForBases")
   saveAdaBoolean(value = gameSettings.autoAskForEvents,
       name = "AutoAskForEvents")
