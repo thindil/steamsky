@@ -500,19 +500,49 @@ proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord;
       if gameSettings.rightButton: 1 else: 0),
       listsLimit: gameSettings.listsLimit.cint)
 
-proc getAdaNewGameSettings(adaNewGameSettings: NewGameRecord) {.sideEffect,
+proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
     raises: [], tags: [], exportc.} =
-  newGameSettings = adaNewGameSettings
+  try:
+    newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
+          playerGender: adaNewGameSettings.playerGender,
+          shipName: $adaNewGameSettings.shipName,
+          playerFaction: $adaNewGameSettings.playerFaction,
+          playerCareer: $adaNewGameSettings.playerCareer,
+          startingBase: $adaNewGameSettings.startingBase,
+          enemyDamageBonus: adaNewGameSettings.enemyDamageBonus,
+          playerDamageBonus: adaNewGameSettings.playerDamageBonus,
+          enemyMeleeDamageBonus: adaNewGameSettings.enemyMeleeDamageBonus,
+          playerMeleeDamageBonus: adaNewGameSettings.playerMeleeDamageBonus,
+          experienceBonus: adaNewGameSettings.experienceBonus,
+          reputationBonus: adaNewGameSettings.reputationBonus,
+          upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
+          pricesBonus: adaNewGameSettings.pricesBonus, difficultyLevel: parseEnum[
+          DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
+  except ValueError:
+    discard
 
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
 
-proc saveAdaConfig(adaNewGameSettings: NewGameRecord;
+proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord;
     adaGameSettings: AdaGameSettingsRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
-  # Temporary disabled, enable it after finished Ada code
-  newGameSettings = adaNewGameSettings
   try:
+    newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
+        playerGender: adaNewGameSettings.playerGender,
+        shipName: $adaNewGameSettings.shipName,
+        playerFaction: $adaNewGameSettings.playerFaction,
+        playerCareer: $adaNewGameSettings.playerCareer,
+        startingBase: $adaNewGameSettings.startingBase,
+        enemyDamageBonus: adaNewGameSettings.enemyDamageBonus,
+        playerDamageBonus: adaNewGameSettings.playerDamageBonus,
+        enemyMeleeDamageBonus: adaNewGameSettings.enemyMeleeDamageBonus,
+        playerMeleeDamageBonus: adaNewGameSettings.playerMeleeDamageBonus,
+        experienceBonus: adaNewGameSettings.experienceBonus,
+        reputationBonus: adaNewGameSettings.reputationBonus,
+        upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
+        pricesBonus: adaNewGameSettings.pricesBonus, difficultyLevel: parseEnum[
+        DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
     gameSettings = GameSettingsRecord(autoRest: adaGameSettings.autoRest == 1,
         undockSpeed: parseEnum[ShipSpeed]((
         $adaGameSettings.undockSpeed).toLowerAscii),
