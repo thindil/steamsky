@@ -134,21 +134,21 @@ type
     ## * upgradeCostBonus       - The bonus to costs of upgrades the player's ship
     ## * pricesBonus            - The bonus to prices in bases
     ## * difficultyLevel        - The preset level of difficulty for the game
-    playerName*: cstring
+    playerName*: string
     playerGender*: char
-    shipName*: cstring
-    playerFaction*: cstring
-    playerCareer*: cstring
-    startingBase*: cstring
-    enemyDamageBonus*: cfloat
-    playerDamageBonus*: cfloat
-    enemyMeleeDamageBonus*: cfloat
-    playerMeleeDamageBonus*: cfloat
-    experienceBonus*: cfloat
-    reputationBonus*: cfloat
-    upgradeCostBonus*: cfloat
-    pricesBonus*: cfloat
-    difficultyLevel*: cstring
+    shipName*: string
+    playerFaction*: string
+    playerCareer*: string
+    startingBase*: string
+    enemyDamageBonus*: BonusType
+    playerDamageBonus*: BonusType
+    enemyMeleeDamageBonus*: BonusType
+    playerMeleeDamageBonus*: BonusType
+    experienceBonus*: BonusType
+    reputationBonus*: BonusType
+    upgradeCostBonus*: BonusType
+    pricesBonus*: BonusType
+    difficultyLevel*: DifficultyType
 
 const
   defaultGameSettings* = GameSettingsRecord(autoRest: true,
@@ -169,7 +169,7 @@ const
     playerCareer: "general", startingBase: "Any", enemyDamageBonus: 1.0,
     playerDamageBonus: 1.0, enemyMeleeDamageBonus: 1.0,
     playerMeleeDamageBonus: 1.0, experienceBonus: 1.0, reputationBonus: 1.0,
-    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: "normal")
+    upgradeCostBonus: 1.0, pricesBonus: 1.0, difficultyLevel: normal)
     ## The default setting for the new game
 
 var
@@ -208,17 +208,17 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
       of cfgKeyValuePair, cfgOption:
         case entry.key
         of "PlayerName":
-          newGameSettings.playerName = entry.value.cstring
+          newGameSettings.playerName = entry.value
         of "PlayerGender":
           newGameSettings.playerGender = entry.value[0]
         of "ShipName":
-          newGameSettings.shipName = entry.value.cstring
+          newGameSettings.shipName = entry.value
         of "PlayerFaction":
-          newGameSettings.playerFaction = entry.value.cstring
+          newGameSettings.playerFaction = entry.value
         of "PlayerCareer":
-          newGameSettings.playerCareer = entry.value.cstring
+          newGameSettings.playerCareer = entry.value
         of "StartingBase":
-          newGameSettings.startingBase = entry.value.cstring
+          newGameSettings.startingBase = entry.value
         of "EnemyDamageBonus":
           newGameSettings.enemyDamageBonus = entry.value.parseAdaFloat()
         of "PlayerDamageBonus":
@@ -236,8 +236,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         of "PricesBonus":
           newGameSettings.pricesBonus = entry.value.parseAdaFloat()
         of "DifficultyLevel":
-          newGameSettings.difficultyLevel = ($parseEnum[DifficultyType](
-              entry.value.toLowerAscii)).cstring
+          newGameSettings.difficultyLevel = parseEnum[DifficultyType](
+              entry.value.toLowerAscii)
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseAdaBool()
         of "UndockSpeed":
@@ -424,7 +424,24 @@ type
     rightButton: cint
     listsLimit: cint
 
-proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
+  AdaNewGameRecord = object
+    playerName: cstring
+    playerGender: char
+    shipName: cstring
+    playerFaction: cstring
+    playerCareer: cstring
+    startingBase: cstring
+    enemyDamageBonus: cfloat
+    playerDamageBonus: cfloat
+    enemyMeleeDamageBonus: cfloat
+    playerMeleeDamageBonus: cfloat
+    experienceBonus: cfloat
+    reputationBonus: cfloat
+    upgradeCostBonus: cfloat
+    pricesBonus: cfloat
+    difficultyLevel: cstring
+
+proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord;
     adaGameSettings: var AdaGameSettingsRecord) {.sideEffect, raises: [],
     tags: [RootEffect], exportc.} =
   ## Temporary code to load the game configuration and copy it to the Ada
@@ -435,17 +452,32 @@ proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
   ##
   ## Returns the updated parameters adaNewGameSettings and adaGameSettings
   loadConfig()
-  adaNewGameSettings = newGameSettings
+  adaNewGameSettings = AdaNewGameRecord(
+      playerName: newGameSettings.playerName.cstring,
+      playerGender: newGameSettings.playerGender,
+      shipName: newGameSettings.shipName.cstring,
+      playerFaction: newGameSettings.playerFaction.cstring,
+      playerCareer: newGameSettings.playerCareer.cstring,
+      startingBase: newGameSettings.startingBase.cstring,
+      enemyDamageBonus: newGameSettings.enemyDamageBonus,
+      playerDamageBonus: newGameSettings.playerDamageBonus,
+      enemyMeleeDamageBonus: newGameSettings.enemyMeleeDamageBonus,
+      playerMeleeDamageBonus: newGameSettings.playerMeleeDamageBonus,
+      experienceBonus: newGameSettings.experienceBonus,
+      reputationBonus: newGameSettings.reputationBonus,
+      upgradeCostBonus: newGameSettings.upgradeCostBonus,
+      pricesBonus: newGameSettings.pricesBonus, difficultyLevel: (
+      $newGameSettings.difficultyLevel).toUpperAscii.cstring)
   adaGameSettings = AdaGameSettingsRecord(autoRest: (
       if gameSettings.autoRest: 1 else: 0), undockSpeed: (
-      $gameSettings.undockSpeed).toUpperAscii().cstring, autoCenter: (
+      $gameSettings.undockSpeed).toUpperAscii.cstring, autoCenter: (
       if gameSettings.autoCenter: 1 else: 0), autoReturn: (
       if gameSettings.autoReturn: 1 else: 0), autoFinish: (
       if gameSettings.autoFinish: 1 else: 0),
       lowFuel: gameSettings.lowFuel.cint,
       lowDrinks: gameSettings.lowDrinks.cint,
       lowFood: gameSettings.lowFood.cint, autoMoveStop: (
-      $gameSettings.autoMoveStop).toUpperAscii().cstring,
+      $gameSettings.autoMoveStop).toUpperAscii.cstring,
       windowWidth: gameSettings.windowWidth.cint,
       windowHeight: gameSettings.windowHeight.cint,
       messagesLimit: gameSettings.messagesLimit.cint,
@@ -454,7 +486,7 @@ proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
       mapFontSize: gameSettings.mapFontSize.cint,
       interfaceFontSize: gameSettings.interfaceFontSize.cint,
       interfaceTheme: gameSettings.interfaceTheme.cstring, messagesOrder: (
-      $gameSettings.messagesOrder).toUpperAscii().cstring, autoAskForBases: (
+      $gameSettings.messagesOrder).toUpperAscii.cstring, autoAskForBases: (
       if gameSettings.autoAskForBases: 1 else: 0), autoAskForEvents: (
       if gameSettings.autoAskForEvents: 1 else: 0), showTooltips: (
       if gameSettings.showTooltips: 1 else: 0), showLastMessages: (
@@ -462,7 +494,7 @@ proc loadAdaConfig(adaNewGameSettings: var NewGameRecord;
       messagesPosition: gameSettings.messagesPosition.cint, fullScreen: (
       if gameSettings.fullScreen: 1 else: 0),
       autoCloseMessagesTime: gameSettings.autoCloseMessagesTime.cint,
-      autoSave: ($gameSettings.autoSave).toUpperAscii().cstring,
+      autoSave: ($gameSettings.autoSave).toUpperAscii.cstring,
       topicsPosition: gameSettings.topicsPosition.cint, showNumbers: (
       if gameSettings.showNumbers: 1 else: 0), rightButton: (
       if gameSettings.rightButton: 1 else: 0),
