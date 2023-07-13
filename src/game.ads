@@ -806,18 +806,17 @@ package Game is
    -- PARAMETERS
    -- Save - Did game should be saved to file or not
    -- SOURCE
-   procedure End_Game(Save: Boolean) with
-      Test_Case => (Name => "Test_EndGame", Mode => Robustness);
-      -- ****
+   procedure End_Game(Save: Boolean);
+   -- ****
 
-      -- ****f* Game/Game.Find_Skill_Index
-      -- FUNCTION
-      -- Find index of selected skill
-      -- PARAMETERS
-      -- SkillName - Name of the skill to search
-      -- RESULT
-      -- Index of selected skill or 0 if skill was not found
-      -- SOURCE
+   -- ****f* Game/Game.Find_Skill_Index
+   -- FUNCTION
+   -- Find index of selected skill
+   -- PARAMETERS
+   -- SkillName - Name of the skill to search
+   -- RESULT
+   -- Index of selected skill or 0 if skill was not found
+   -- SOURCE
    function Find_Skill_Index
      (Skill_Name: String) return SkillsData_Container.Extended_Index with
       Pre => Skill_Name'Length > 0,
