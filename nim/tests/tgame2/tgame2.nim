@@ -1,11 +1,12 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing updateGame.'''
+Testing updateGame.
+Testing endGame.'''
 """
 
 import std/tables
-import ../../src/[basestypes, careers, factions, game, game2, items, types]
+import ../../src/[basestypes, careers, factions, game, game2, items, messages, types]
 
 echo "Loading the game data."
 if itemsList.len == 0:
@@ -27,4 +28,12 @@ playerShip.crew = @[]
 
 echo "Testing updateGame."
 updateGame(1)
-assert gameDate.minutes == 1, "Failed to updated the game"
+assert gameDate.minutes == 1, "Failed to updated the game."
+
+echo "Testing endGame."
+let oldSaveDir = saveDirectory
+saveDirectory = "."
+addMessage("Test message", otherMessage)
+endGame(false)
+saveDirectory = oldSaveDir
+assert messagesAmount(0) == 0, "Failed to end the game."
