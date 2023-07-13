@@ -37,21 +37,21 @@ skyMap[1][1].baseIndex = 1
 dailyPayment()
 
 echo "Testing getAttributeLevelName."
-gameSettings.showNumbers = 0
+gameSettings.showNumbers = false
 assert getAttributeLevelName(3) == "Very low", "Failed to get attribute level name for value 3."
 assert getAttributeLevelName(12) == "Below average", "Failed to get attribute level name for value 12."
 assert getAttributeLevelName(48) == "Very high", "Failed to get attribute level name for value 48."
-gameSettings.showNumbers = 1
+gameSettings.showNumbers = true
 assert getAttributeLevelName(3) == "3", "Failed to get attribute level number for value 3."
 assert getAttributeLevelName(12) == "12", "Failed to get attribute level number for value 12."
 assert getAttributeLevelName(48) == "48", "Failed to get attribute level number for value 48."
 
 echo "Testing getSkillLevelName."
-gameSettings.showNumbers = 0
+gameSettings.showNumbers = false
 assert getSkillLevelName(9) == "Beginner", "Failed to get skill level name for value 9."
 assert getSkillLevelName(54) == "Respected", "Failed to get skill level name for value 54."
 assert getSkillLevelName(92) == "Legendary", "Failed to get skill level name for value 92."
-gameSettings.showNumbers = 1
+gameSettings.showNumbers = true
 assert getSkillLevelName(9) == "9", "Failed to get skill level number for value 9."
 assert getSkillLevelName(54) == "54", "Failed to get skill level number for value 54."
 assert getSkillLevelName(92) == "92", "Failed to get skill level number for value 92."
