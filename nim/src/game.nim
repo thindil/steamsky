@@ -56,7 +56,10 @@ type
     name*: string
     description*: string
 
-const defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
+const
+  defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
+  startDate*: DateRecord = DateRecord(year: 1600, month: 3, day: 1, hour: 8,
+      minutes: 1) ## The start date for a new game
 
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
