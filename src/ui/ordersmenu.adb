@@ -225,6 +225,7 @@ package body OrdersMenu is
                  (Name => ".recruits", Label => "Recruit",
                   Command => "ShowRecruit", Shortcut => "r", Underline => 0);
             end if;
+            Get_Game_Date;
             if Days_Difference
                 (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) >
               6 then

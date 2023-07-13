@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/random
-import types
+import types, game
 
 proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
@@ -69,6 +69,9 @@ proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
   ## * currentDate   - the current game date to which the date will be compared
   ##
   ## Returns the difference in days between the two dates
-  return (currentDate.day.cint + (30 * currentDate.month.cint) + (
-      currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
-      dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
+  let
+    curDate = (if currentDate.year > gameDate.year: gameDate else: currentDate)
+    compDate = (if dateToCompare.year > 4_000_000: gameDate else: dateToCompare)
+  return (curDate.day.cint + (30 * curDate.month.cint) + (
+      curDate.year.cint * 360)) - (compDate.day.cint + (30 *
+      compDate.month.cint) + (compDate.year.cint * 360))
