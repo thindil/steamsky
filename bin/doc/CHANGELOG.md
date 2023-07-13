@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Generated NPC's ships start with docked speed, so the player can always
   escape them
 - Crash when the game deletes an expired event
+- Showing Ask For Events button even after asking for them
 
 ## [8.9] - 2023-07-09
 
