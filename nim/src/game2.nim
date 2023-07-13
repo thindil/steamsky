@@ -19,7 +19,7 @@ import std/[os, tables, xmlparser, xmltree]
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
-    shipsupgrade, statistics, stories, types
+    shipsupgrade, statistics, stories, types, utils
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
@@ -205,6 +205,28 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   messagesList = @[]
   knownRecipes = @[]
   eventsList = @[]
+
+proc newGame*() =
+  saveConfig()
+  clearGameStats()
+  if newGameSettings.playerFaction == "random":
+    newGameSettings.playerCareer = "random"
+    var index = 1
+    let roll = getRandom(1, factionsList.len)
+    for faction in factionsList.keys:
+      if index == roll:
+        newGameSettings.playerFaction = faction
+        break
+      index.inc
+  let playerFaction = factionsList[newGameSettings.playerFaction]
+  if newGameSettings.playerCareer == "random":
+    let roll = getRandom(1, playerFaction.careers.len)
+    var index = 1
+    for career in playerFaction.careers.keys:
+      if index == roll:
+        newGameSettings.playerCareer = career
+        break
+      index.inc
 
 # Temporary code for interfacing with Ada
 
