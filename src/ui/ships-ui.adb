@@ -15,32 +15,30 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Tcl.Ada; use Tcl.Ada;
+with GNAT.Directory_Operations;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases; use Bases;
-with Config; use Config;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Winfo;
+with Bases;
+with Config;
 with CoreUI; use CoreUI;
-with Maps; use Maps;
-with Maps.UI; use Maps.UI;
+with Maps;
+with Maps.UI;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;
 with Utils.UI; use Utils.UI;
-with ShipModules; use ShipModules;
+with ShipModules;
 
 package body Ships.UI is
 
@@ -48,6 +46,19 @@ package body Ships.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argv);
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Event;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tk.Ada.Winfo;
+      use Bases;
+      use Config;
+      use Maps;
+      use Maps.UI;
+      use ShipModules;
       use Tiny_String;
 
       Ship_Info_Frame: Ttk_Frame :=

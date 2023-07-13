@@ -21,7 +21,7 @@ with Bases; use Bases;
 with Bases.Cargo;
 with BasesTypes;
 with Careers;
-with Config; use Config;
+with Config;
 with Crew;
 with Events;
 with Factions;
@@ -43,6 +43,7 @@ package body Game is
 
    procedure New_Game is
       use Bases.Cargo;
+      use Config;
       use Factions;
       use Messages;
       use Missions;
