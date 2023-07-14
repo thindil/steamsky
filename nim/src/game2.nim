@@ -264,6 +264,31 @@ proc newGame*() =
     baseSize = (if basePopulation == 0: getRandom(0,
         2).BasesSize elif basePopulation < 150: small elif basePopulation <
         300: medium else: big)
+    skyBases[i].name = generateBaseName(factionIndex = baseOwner)
+    skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[i].skyX = 1
+    skyBases[i].skyY = 1
+    skyBases[i].baseType = baseType
+    skyBases[i].population = basePopulation
+    skyBases[i].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[i].known = false
+    skyBases[i].askedForBases = false
+    skyBases[i].askedForEvents = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[i].reputation = ReputationData(level: baseReputation, experience: 0)
+    skyBases[i].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[i].missions = @[]
+    skyBases[i].owner = baseOwner
+    skyBases[i].size = baseSize
+    skyBases[i].recruits = @[]
+    let baseFaction = factionsList[baseOwner]
+    if "loner" in baseFaction.flags:
+      factionRoll = getRandom(min = 1, max = maxSpawnRoll)
+      for index, faction in factionsList:
+        if factionRoll > faction.spawnChance:
+          factionRoll = factionRoll - faction.spawnChance
+        else:
+          baseOwner = index
+    basesArray[baseOwner].add(i)
 
 # Temporary code for interfacing with Ada
 
