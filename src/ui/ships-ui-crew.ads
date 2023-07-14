@@ -34,7 +34,7 @@ package Ships.UI.Crew is
    -- FUNCTION
    -- Add Tcl commands related to the player's ship crew members information
    -- SOURCE
-   procedure Add_Commands;
+   procedure Add_Crew_Commands;
    -- ****
 
 end Ships.UI.Crew;
