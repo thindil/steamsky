@@ -37,10 +37,10 @@ block:
   assert getItemName(item, false) == "New name", "Failed to get an item with new name."
 
 echo "Testing getItemChanceToDamage."
-gameSettings.showNumbers = 0
+gameSettings.showNumbers = false
 assert getItemChanceToDamage(3) == "Small", "Failed to get chance to damage as string for 3."
 assert getItemChanceToDamage(30) == "Very high", "Failed to get chance to damage as string for 10."
-gameSettings.showNumbers = 1
+gameSettings.showNumbers = true
 assert getItemChanceToDamage(3) == " 3%", "Failed to get chance to damage as percent for 3."
 assert getItemChanceToDamage(30) == " 30%", "Failed to get chance to damage as percent for 30."
 
