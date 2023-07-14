@@ -239,15 +239,31 @@ proc newGame*() =
     maxSpawnRoll = maxSpawnRoll + faction.spawnChance
     basesArray[index] = @[]
   for i in skyBases.low .. skyBases.high:
-    let factionRoll = getRandom(1, maxSpawnRoll)
     var
-      baseOwner: string
-      basePopulation: Natural
+      baseOwner, baseType: string
+      basePopulation, baseReputation: Natural
+      factionRoll = getRandom(1, maxSpawnRoll)
+      baseSize: BasesSize
     for index, faction in factionsList:
       if factionRoll < faction.spawnChance:
         baseOwner = index
         basePopulation = (if faction.population[1] == 0: faction.population[
             0] else: getRandom(faction.population[0], faction.population[1]))
+        baseReputation = getReputation(sourceFaction = newGameSettings.playerFaction,
+            targetFaction = index)
+        var maxBaseSpawnRoll = 0
+        for spawnChance in faction.basesTypes.values:
+          maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
+        var baseTypeRoll = getRandom(min = 1, max = maxBaseSpawnRoll)
+        for tindex, baseTypeChance in faction.basesTypes:
+          if baseTypeRoll <= baseTypeChance:
+            baseType = tindex
+            break
+          baseTypeRoll = baseTypeRoll - baseTypeChance
+      factionRoll = factionRoll - faction.spawnChance
+    baseSize = (if basePopulation == 0: getRandom(0,
+        2).BasesSize elif basePopulation < 150: small elif basePopulation <
+        300: medium else: big)
 
 # Temporary code for interfacing with Ada
 
