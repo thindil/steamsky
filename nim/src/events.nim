@@ -185,7 +185,7 @@ proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
   eventsList = @[]
 
 proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
-  deleteEvent(eventIndex = eventIndex)
+  deleteEvent(eventIndex = eventIndex - 1)
 
 proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
   try:
