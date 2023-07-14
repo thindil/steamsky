@@ -227,6 +227,27 @@ proc newGame*() =
         newGameSettings.playerCareer = career
         break
       index.inc
+  gameDate = startDate
+  for x in MapXRange.low .. MapXRange.high:
+    for y in MapYRange.low .. MapYRange.high:
+      skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
+          missionIndex: -1)
+  var
+    maxSpawnRoll = 0
+    basesArray = initTable[string, seq[Positive]]()
+  for index, faction in factionsList:
+    maxSpawnRoll = maxSpawnRoll + faction.spawnChance
+    basesArray[index] = @[]
+  for i in skyBases.low .. skyBases.high:
+    let factionRoll = getRandom(1, maxSpawnRoll)
+    var
+      baseOwner: string
+      basePopulation: Natural
+    for index, faction in factionsList:
+      if factionRoll < faction.spawnChance:
+        baseOwner = index
+        basePopulation = (if faction.population[1] == 0: faction.population[
+            0] else: getRandom(faction.population[0], faction.population[1]))
 
 # Temporary code for interfacing with Ada
 
