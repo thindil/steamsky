@@ -1,10 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing updateCargo.
+Testing freeCargo.
+Testing getItemAmount.
+Testing getItemsAmount.'''
 """
 
 import std/tables
 import ../../src/[careers, factions, game, items, shipscargo, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -24,14 +30,18 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
 
+echo "Testing updateCargo."
 updateCargo(playerShip, 1, -1)
 assert playerShip.cargo[0].amount == 99, "Failed to remove an item from the player's ship's cargo."
 updateCargo(playerShip, 1, 1)
 assert playerShip.cargo[0].amount == 100, "Failed to add an item to the player's ship's cargo."
 updateCargo(playerShip, 40, -1)
 
+echo "Testing freeCargo."
 assert freeCargo(1) > freeCargo(0), "Failed to count free cargo space in the player's ship."
 
+echo "Testing getItemAmount."
 assert getItemAmount("Fuel") == 100, "Failed to get amount of fuel in the player's ship's cargo."
 
+echo "Testing getItemsAmount."
 assert getItemsAmount("Drinks") == 200, "Failed to get amount of drinks in the player's ship's cargo."
