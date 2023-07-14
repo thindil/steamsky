@@ -289,6 +289,26 @@ proc newGame*() =
         else:
           baseOwner = index
     basesArray[baseOwner].add(i)
+  for factionBases in basesArray.values:
+    for index, faction in factionBases:
+      var attempts = 1
+      while true:
+        var
+          validLocation = true
+          posX, posY: cint = 0
+        if index == factionBases.low or ("loner" in factionsList[skyBases[
+            factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
+            faction].owner].flags):
+          posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
+          posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
+        else:
+          posX = getRandom(min = skyBases[factionBases[index - 1]].skyX - 20,
+              max = skyBases[factionBases[index - 1]].skyX + 20).cint
+          normalizeCoord(coord = posX)
+          posY = getRandom(min = skyBases[factionBases[index - 1]].skyY - 20,
+              max = skyBases[factionBases[index - 1]].skyY + 20).cint
+          normalizeCoord(coord = posY, isXAxis = 0)
+          attempts.inc
 
 # Temporary code for interfacing with Ada
 
