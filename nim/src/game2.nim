@@ -291,11 +291,11 @@ proc newGame*() =
     basesArray[baseOwner].add(i)
   for factionBases in basesArray.values:
     for index, faction in factionBases:
-      var attempts = 1
+      var
+        attempts = 1
+        posX, posY: cint = 0
       while true:
-        var
-          validLocation = true
-          posX, posY: cint = 0
+        var validLocation = true
         if index == factionBases.low or ("loner" in factionsList[skyBases[
             factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
             faction].owner].flags):
@@ -309,6 +309,27 @@ proc newGame*() =
               max = skyBases[factionBases[index - 1]].skyY + 20).cint
           normalizeCoord(coord = posY, isXAxis = 0)
           attempts.inc
+          if attempts > 250:
+            posX = getRandom(min = BasesRange.low, max = BasesRange.high).cint
+            posY = getRandom(min = BasesRange.low, max = BasesRange.high).cint
+            attempts = 1
+        for j in -5 .. 5:
+          var tempX: cint = posX + j.cint
+          normalizeCoord(coord = tempX)
+          for k in -5 .. 5:
+            var tempY: cint = posY + k.cint
+            normalizeCoord(coord = tempY, isXAxis = 0)
+            if skyMap[tempX][tempY].baseIndex > 0:
+              validLocation = false
+              break
+          if not validLocation:
+            break
+        if skyMap[posX][posY].baseIndex > 0:
+          validLocation = false
+        if validLocation:
+          break
+      skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
+          eventIndex: -1, missionIndex: -1)
 
 # Temporary code for interfacing with Ada
 
