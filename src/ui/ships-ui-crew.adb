@@ -2812,7 +2812,7 @@ package body Ships.UI.Crew is
            Argv => CArgv.Empty & "SortShipCrew" & "-1");
    end Toggle_All_Crew_Command;
 
-   procedure Add_Commands is
+   procedure Add_Crew_Commands is
    begin
       Add_Command
         (Name => "OrderForAll", Ada_Command => Order_For_All_Command'Access);
@@ -2852,6 +2852,6 @@ package body Ships.UI.Crew is
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);
       Ships.UI.Crew.Inventory.Add_Commands;
-   end Add_Commands;
+   end Add_Crew_Commands;
 
 end Ships.UI.Crew;
