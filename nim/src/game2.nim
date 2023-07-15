@@ -354,12 +354,28 @@ proc newGame*() =
     playerIndex2 = playerFaction.careers[
         newGameSettings.playerCareer].playerIndex.parseInt
     protoPlayer = protoMobsList[playerIndex2]
+    playerMorale: Natural = (if "nomorale" in playerFaction.flags: 50 else: 100)
   var tmpInventory: seq[InventoryData]
   for item in protoPlayer.inventory:
     let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
         max = item.maxAmount) else: item.minAmount)
     tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
         amount: amount, name: "", durability: 100, price: 0))
+  {.warning[UnsafeSetLen]: off.}
+  playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
+      gender: newGameSettings.playerGender, health: 100, tired: 0,
+      skills: protoPlayer.skills, hunger: 0, thirst: 0,
+      order: protoPlayer.order, previousOrder: rest, orderTime: 15,
+      orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
+      inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
+      0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
+      homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
+  {.warning[UnsafeSetLen]: on.}
+  var cabinAssigned = false
+  for module in playerShip.modules.mitems:
+    for owner in module.owner.mitems:
+      if owner > -1:
+        owner.inc
 
 # Temporary code for interfacing with Ada
 
