@@ -191,18 +191,22 @@ package body Ships.UI.Crew is
       Buttons_Frame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
+      --## rule off IMPROPER_INITIALIZATION
       Ship_Canvas: Tk_Canvas;
-      Need_Repair, Need_Clean: Boolean := False;
       Button: Ttk_Button;
+      Orders_Label: Ttk_Label;
+      Skill_Box: Ttk_ComboBox;
+      --## rule on IMPROPER_INITIALIZATION
+      Need_Repair, Need_Clean: Boolean := False;
       Tired_Level: Integer;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Crew_Info_Frame: constant Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame");
-      Orders_Label: Ttk_Label;
-      Skill_Box: Ttk_ComboBox;
    begin
       Create
         (S => Tokens,
@@ -757,13 +761,15 @@ package body Ships.UI.Crew is
         Create(pathName => Member_Dialog & ".buttons");
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
-      Progress_Frame: Ttk_Frame;
       Member_Info: Unbounded_String := Null_Unbounded_String;
-      Member_Label: Ttk_Label;
       Tired_Points: Integer;
-      Progress_Bar: Ttk_ProgressBar;
       Tab_Button: Ttk_RadioButton;
+      --## rule off IMPROPER_INITIALIZATION
       Info_Button, Button: Ttk_Button;
+      Member_Label: Ttk_Label;
+      Progress_Frame: Ttk_Frame;
+      Progress_Bar: Ttk_ProgressBar;
+      --## rule on IMPROPER_INITIALIZATION
       Frame: Ttk_Frame;
       Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
    begin
@@ -1596,7 +1602,7 @@ package body Ships.UI.Crew is
                10 => To_Unbounded_String(Source => "Defend ship"),
                11 => To_Unbounded_String(Source => "Board enemy ship"),
                12 => To_Unbounded_String(Source => "Train skill"));
-            Combo_Box: Ttk_ComboBox;
+            Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
          begin
             Load_Priorities_Loop :
             for I in Member.Orders'Range loop
