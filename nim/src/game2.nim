@@ -46,7 +46,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
 
   var tiredPoints = 0
   for i in 1 .. minutes:
-    if gameDate.minutes + i mod 15 == 0:
+    if (gameDate.minutes + i) mod 15 == 0:
       tiredPoints.inc
   let addedMinutes = minutes mod 60
   gameDate.minutes = gameDate.minutes + addedMinutes
