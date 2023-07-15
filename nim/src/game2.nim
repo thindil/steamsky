@@ -376,6 +376,26 @@ proc newGame*() =
     for owner in module.owner.mitems:
       if owner > -1:
         owner.inc
+    if modulesList[module.protoIndex].mType == ModuleType.cabin and
+        not cabinAssigned:
+      for index, owner in module.owner.mpairs:
+        if owner == -1:
+          owner = 1
+          if index == 0:
+            module.name = newGameSettings.playerName & "'s Cabin"
+          cabinAssigned = true
+          break
+  # Set current map field and sky base info
+  skyBases[randomBase].visited = gameDate
+  skyBases[randomBase].known = true
+  skyMap[playerShip.skyX][playerShip.skyY].visited = true
+  generateRecruits()
+  generateMissions()
+  generateCargo()
+  # Set the player's goal if not set yet
+  if currentGoal.goalType == random:
+    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+  # Set the name of the savegame file
 
 # Temporary code for interfacing with Ada
 
