@@ -207,7 +207,9 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   eventsList = @[]
 
 proc newGame*() =
+  # Save the game configuration
   saveConfig()
+  # Set the game statistics
   clearGameStats()
   if newGameSettings.playerFaction == "random":
     newGameSettings.playerCareer = "random"
@@ -227,7 +229,9 @@ proc newGame*() =
         newGameSettings.playerCareer = career
         break
       index.inc
+  # Set the game time
   gameDate = startDate
+  # Generate the game's world
   for x in MapXRange.low .. MapXRange.high:
     for y in MapYRange.low .. MapYRange.high:
       skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
@@ -330,6 +334,22 @@ proc newGame*() =
           break
       skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
           eventIndex: -1, missionIndex: -1)
+  # Place the player's ship in a random large base
+  var randomBase: Positive
+  while true:
+    randomBase = getRandom(min = 1, max = 1024)
+    if skyBases[randomBase].population > 299:
+      if newGameSettings.startingBase == "Any":
+        break
+      elif skyBases[randomBase].owner == newGameSettings.playerFaction and
+          skyBases[randomBase].baseType == newGameSettings.startingBase:
+        break
+  # Create the player's ship
+  playerShip = createShip(protoIndex = playerFaction.careers[
+      newGameSettings.playerCareer].shipIndex, name = newGameSettings.shipName,
+      x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
+      speed = docked, randomUpgrades = false)
+  # Add the player to the ship
 
 # Temporary code for interfacing with Ada
 
