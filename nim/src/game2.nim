@@ -394,7 +394,10 @@ proc newGame*() =
   generateCargo()
   # Set the player's goal if not set yet
   if currentGoal.goalType == random:
-    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+    var goalIndex = getRandom(min = 1, max = goalsList.len)
+    while not goalsList.hasKey(goalIndex):
+      goalIndex = getRandom(min = 1, max = goalsList.len)
+    currentGoal = goalsList[goalIndex]
   # Set the name of the savegame file
 
 # Temporary code for interfacing with Ada
