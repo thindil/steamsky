@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables, xmlparser, xmltree]
+import std/[os, strutils, tables, xmlparser, xmltree]
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
@@ -350,6 +350,16 @@ proc newGame*() =
       x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
       speed = docked, randomUpgrades = false)
   # Add the player to the ship
+  let
+    playerIndex2 = playerFaction.careers[
+        newGameSettings.playerCareer].playerIndex.parseInt
+    protoPlayer = protoMobsList[playerIndex2]
+  var tmpInventory: seq[InventoryData]
+  for item in protoPlayer.inventory:
+    let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
+        max = item.maxAmount) else: item.minAmount)
+    tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
+        amount: amount, name: "", durability: 100, price: 0))
 
 # Temporary code for interfacing with Ada
 
