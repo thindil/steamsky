@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   escape them
 - Crash when the game deletes an expired event
 - Showing Ask For Events button even after asking for them
+- Crew members don't need to rest or consume anything
 
 ## [8.9] - 2023-07-09
 
