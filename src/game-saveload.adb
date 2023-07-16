@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories;
 with Ada.Exceptions;
 with DOM.Core;
 with DOM.Core.Documents;
@@ -37,7 +36,6 @@ with Ships; use Ships;
 with Ships.SaveLoad;
 with Statistics;
 with Stories; use Stories;
-with Utils;
 
 package body Game.SaveLoad is
 
@@ -641,29 +639,19 @@ package body Game.SaveLoad is
    end Load_Game;
 
    procedure Generate_Save_Name(Rename_Save: Boolean := False) is
-      use Ada.Directories;
-      use Tiny_String;
-      use Utils;
-
-      Old_Save_Name: constant String := To_String(Source => Save_Name);
+      New_Name: chars_ptr;
+      procedure Generate_Ada_Save_Name(R_Save: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaSaveName";
+      procedure Set_Ada_Save_Name(Name: out chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaSaveName";
    begin
-      Generate_Save_Name_Loop :
-      loop
-         Save_Name :=
-           Save_Directory & To_String(Source => Player_Ship.Crew(1).Name) &
-           "_" & Tiny_String.To_String(Source => Player_Ship.Name) & "_" &
-           Positive'Image(Get_Random(Min => 100, Max => 999))(2 .. 4) & ".sav";
-         exit Generate_Save_Name_Loop when not Exists
-             (Name => To_String(Source => Save_Name)) and
-           Save_Name /= Old_Save_Name;
-      end loop Generate_Save_Name_Loop;
-      if Rename_Save then
-         if Exists(Name => Old_Save_Name) then
-            Rename
-              (Old_Name => Old_Save_Name,
-               New_Name => To_String(Source => Save_Name));
-         end if;
-      end if;
+      Generate_Ada_Save_Name(R_Save => (if Rename_Save then 1 else 0));
+      Set_Ada_Save_Name(Name => New_Name);
+      Save_Name := To_Unbounded_String(Source => Value(Item => New_Name));
    end Generate_Save_Name;
 
 end Game.SaveLoad;

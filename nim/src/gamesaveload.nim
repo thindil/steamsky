@@ -254,6 +254,9 @@ proc generateSaveName*(renameSave: bool = false) =
 proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc.} =
   saveName = $name
 
+proc setAdaSaveName(name: var cstring) {.raises: [], tags: [], exportc.} =
+  name = saveName.cstring
+
 proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc.} =
   try:
