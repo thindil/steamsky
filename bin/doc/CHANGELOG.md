@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - Crash when the game deletes an expired event
 - Showing Ask For Events button even after asking for them
 - Crew members don't need to rest or consume anything
+- Resetting the selected type of items after buying or selling something in
+  bases or to traders
 
 ## [8.9] - 2023-07-09
 
