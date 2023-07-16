@@ -238,7 +238,8 @@ proc loadGame*() =
     acceptedMissions.add(tmpMission)
   logMessage(message = "done", debugType = everything)
 
-proc generateSaveName*(renameSave: bool = false) =
+proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
+    IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect].} =
   let oldSaveName = saveName
   while true:
     saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
