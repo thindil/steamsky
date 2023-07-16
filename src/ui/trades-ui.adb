@@ -1698,6 +1698,10 @@ package body Trades.UI is
       Proto_Index: Natural;
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName =>
+             ".gameframe.paned.tradeframe.canvas.trade.options.type");
    begin
       if Item_Index < 0 then
          Base_Cargo_Index := abs (Item_Index);
@@ -1752,6 +1756,11 @@ package body Trades.UI is
       end if;
       Update_Header;
       Update_Messages;
+      Unbind(Widgt => Type_Box, Sequence => "<<ComboBoxSelected>>");
+      Current(ComboBox => Type_Box, NewIndex => "0");
+      Bind
+        (Widgt => Type_Box, Sequence => "<<ComboBoxSelected>>",
+         Script => "{ShowTrade [" & Type_Box & " get]}");
       if Items_Sort_Order /= Default_Items_Sort_Order then
          return
            Sort_Items_Command
