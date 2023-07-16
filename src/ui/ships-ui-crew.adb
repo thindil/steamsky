@@ -190,7 +190,7 @@ package body Ships.UI.Crew is
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
       Buttons_Frame: Ttk_Frame;
       Tokens: Slice_Set;
-      Rows: Natural := 0;
+      Rows: Natural;
       --## rule off IMPROPER_INITIALIZATION
       Ship_Canvas: Tk_Canvas;
       Button: Ttk_Button;
@@ -198,7 +198,7 @@ package body Ships.UI.Crew is
       Skill_Box: Ttk_ComboBox;
       --## rule on IMPROPER_INITIALIZATION
       Need_Repair, Need_Clean: Boolean := False;
-      Tired_Level: Integer;
+      Tired_Level: Integer := 0;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
@@ -280,13 +280,14 @@ package body Ships.UI.Crew is
          for I in 1 .. Skills_Amount loop
             Load_Skills_Block :
             declare
-               Skill: constant Skill_Record :=
+               Member_Skill: constant Skill_Record :=
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => I);
             begin
                Append
                  (Source => Skills,
-                  New_Item => " {" & To_String(Source => Skill.Name) & "}");
+                  New_Item =>
+                    " {" & To_String(Source => Member_Skill.Name) & "}");
             end Load_Skills_Block;
          end loop Load_Skills_Loop;
          Skill_Box :=
@@ -762,7 +763,7 @@ package body Ships.UI.Crew is
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
       Member_Info: Unbounded_String := Null_Unbounded_String;
-      Tired_Points: Integer;
+      Tired_Points: Integer := 0;
       Tab_Button: Ttk_RadioButton;
       --## rule off IMPROPER_INITIALIZATION
       Info_Button, Button: Ttk_Button;
@@ -1320,9 +1321,9 @@ package body Ships.UI.Crew is
                  options =>
                    "-value" &
                    Positive'Image
-                     ((if Member.Attributes(I).Level > 2 then
-                         Member.Attributes(I).Level * 2
-                       else 6)));
+                     (if Member.Attributes(I).Level > 2 then
+                        Member.Attributes(I).Level * 2
+                      else 6));
             Tcl.Tklib.Ada.Tooltip.Add
               (Widget => Progress_Bar,
                Message => "The current level of the attribute.");
@@ -1735,9 +1736,9 @@ package body Ships.UI.Crew is
 
       Skill_Index: constant Skills_Amount_Range :=
         Skills_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Message_Text: Unbounded_String;
-      Item_Index: Natural;
-      Quality: Natural;
+      Message_Text: Unbounded_String := Null_Unbounded_String;
+      Item_Index: Natural := 0;
+      Quality: Natural := 0;
    begin
       Append(Source => Message_Text, New_Item => "Related attribute: ");
       Append
@@ -1766,12 +1767,11 @@ package body Ships.UI.Crew is
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
-                 and then
-                 (Get_Proto_Item(Index => I).Value(1) <=
-                  Get_Training_Tool_Quality
-                    (Member_Index =>
-                       Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
-                     Skill_Index => Natural(Skill_Index))) then
+                 and then Get_Proto_Item(Index => I).Value(1) <=
+                   Get_Training_Tool_Quality
+                     (Member_Index =>
+                        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+                      Skill_Index => Natural(Skill_Index)) then
                   if Get_Proto_Item(Index => I).Value(1) > Quality then
                      Item_Index := I;
                      Quality := Get_Proto_Item(Index => I).Value(1);
@@ -1785,9 +1785,8 @@ package body Ships.UI.Crew is
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => Skill_Index)
                    .Tool
-                 and then
-                 (Get_Proto_Item(Index => I).Value(1) <=
-                  Positive'Value(CArgv.Arg(Argv => Argv, N => 2))) then
+                 and then Get_Proto_Item(Index => I).Value(1) <=
+                   Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) then
                   if Get_Proto_Item(Index => I).Value(1) > Quality then
                      Item_Index := I;
                      Quality := Get_Proto_Item(Index => I).Value(1);
@@ -2019,7 +2018,8 @@ package body Ships.UI.Crew is
          Id: Positive;
       end record;
       type Crew_Array is array(Positive range <>) of Local_Member_Data;
-      Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length));
+      Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length)) :=
+        (others => <>);
       function "<"(Left, Right: Local_Member_Data) return Boolean is
       begin
          if Crew_Sort_Order = SELECTEDASC
