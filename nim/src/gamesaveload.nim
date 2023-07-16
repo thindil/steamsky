@@ -240,6 +240,9 @@ proc loadGame*() =
 
 proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect].} =
+  ## Generate an unique name for the save game file
+  ##
+  ## * renameSave - if true, rename the existing save game file.
   let oldSaveName = saveName
   while true:
     saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
