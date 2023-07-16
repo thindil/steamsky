@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables, xmltree, xmlparser]
+import std/[os, strutils, tables, xmltree, xmlparser]
 import basessaveload, config, game, goals, log, maps, messages, missions,
-    shipssaveload, statistics, stories, types
+    shipssaveload, statistics, stories, types, utils
 
 const saveVersion = 5 ## The current version of the game saves files
 
@@ -238,6 +238,17 @@ proc loadGame*() =
     acceptedMissions.add(tmpMission)
   logMessage(message = "done", debugType = everything)
 
+proc generateSaveName*(renameSave: bool = false) =
+  let oldSaveName = saveName
+  while true:
+    saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
+        "_" & $getRandom(min = 100, max = 999) & ".sav"
+    if not fileExists(saveName):
+      break
+  if renameSave:
+    if fileExists(oldSaveName):
+      moveFile(oldSaveName, saveName)
+
 # Temporary code for interfacing with Ada
 
 proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc.} =
@@ -254,4 +265,11 @@ proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     loadGame()
   except XmlError, ValueError, IOError, OSError, Exception:
+    discard
+
+proc generateAdaSaveName(renameSave: cint) {.raises: [], tags: [WriteIOEffect,
+    ReadIOEffect], exportc.} =
+  try:
+    generateSaveName(renameSave = renameSave == 1)
+  except OSError, IOError, Exception:
     discard
