@@ -336,6 +336,8 @@ proc newGame*() =
           break
       skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
           eventIndex: -1, missionIndex: -1)
+      skyBases[faction].skyX = posX
+      skyBases[faction].skyY = posY
   # Place the player's ship in a random large base
   var randomBase: Positive
   while true:
