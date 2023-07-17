@@ -242,17 +242,18 @@ proc newGame*() =
   for index, faction in factionsList:
     maxSpawnRoll = maxSpawnRoll + faction.spawnChance
     basesArray[index] = @[]
+  var
+    baseOwner, baseType: string
+    basePopulation: Natural
+    baseReputation: ReputationRange
+    factionRoll = getRandom(1, maxSpawnRoll)
+    baseSize: BasesSize
   for i in skyBases.low .. skyBases.high:
-    var
-      baseOwner, baseType: string
-      basePopulation, baseReputation: Natural
-      factionRoll = getRandom(1, maxSpawnRoll)
-      baseSize: BasesSize
     for index, faction in factionsList:
       if factionRoll < faction.spawnChance:
         baseOwner = index
-        basePopulation = (if faction.population[1] == 0: faction.population[
-            0] else: getRandom(faction.population[0], faction.population[1]))
+        basePopulation = (if faction.population[2] == 0: faction.population[
+            1] else: getRandom(faction.population[1], faction.population[2]))
         baseReputation = getReputation(sourceFaction = newGameSettings.playerFaction,
             targetFaction = index)
         var maxBaseSpawnRoll = 0
@@ -264,6 +265,7 @@ proc newGame*() =
             baseType = tindex
             break
           baseTypeRoll = baseTypeRoll - baseTypeChance
+        break
       factionRoll = factionRoll - faction.spawnChance
     baseSize = (if basePopulation == 0: getRandom(0,
         2).BasesSize elif basePopulation < 150: small elif basePopulation <
@@ -399,6 +401,12 @@ proc newGame*() =
       goalIndex = getRandom(min = 1, max = goalsList.len)
     currentGoal = goalsList[goalIndex]
   # Set the name of the savegame file
+  generateSaveName()
+  # Set the player's career
+  playerCareer = newGameSettings.playerCareer
+  # Add the welcoming message
+  addMessage(message = "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
+      mType = otherMessage)
 
 # Temporary code for interfacing with Ada
 
@@ -419,4 +427,10 @@ proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exp
   try:
     endGame(save = (if save == 1: true else: false))
   except KeyError, OSError, IOError:
+    discard
+
+proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc.} =
+  try:
+    newGame()
+  except ValueError, OSError, IOError, Exception:
     discard
