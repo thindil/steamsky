@@ -206,7 +206,8 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   knownRecipes = @[]
   eventsList = @[]
 
-proc newGame*() =
+proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
+    Exception], tags: [WriteIOEffect, ReadIOEffect].} =
   # Save the game configuration
   saveConfig()
   # Set the game statistics
