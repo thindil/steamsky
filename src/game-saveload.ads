@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -60,8 +60,7 @@ package Game.SaveLoad is
    -- Rename_Save - If true, rename existing save game file. Default false.
    -- SOURCE
    procedure Generate_Save_Name(Rename_Save: Boolean := False) with
-      Post => Save_Name /= Save_Name'Old,
-      Test_Case => (Name => "Test_GenerateSave_Name", Mode => Nominal);
+      Post => Save_Name /= Save_Name'Old;
       -- ****
 
 -- Temporary code to interact with Nim
