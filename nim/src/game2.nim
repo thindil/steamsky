@@ -208,6 +208,8 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
 
 proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect].} =
+  ## Start a new game, save configuration, create bases, fill the map, create
+  ## the player's ship and put it on the map
   # Save the game configuration
   saveConfig()
   # Set the game statistics
