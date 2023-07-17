@@ -1514,6 +1514,7 @@ package body Ships.UI.Crew is
               (interp => Interp,
                strng =>
                  "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Progress_Bar :=
               Create
                 (pathName =>
@@ -1532,6 +1533,7 @@ package body Ships.UI.Crew is
                             .Level *
                           25))) &
                    " -maximum 1.0 -style experience.Horizontal.TProgressbar");
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             Tcl.Tklib.Ada.Tooltip.Add
               (Widget => Progress_Bar,
                Message => "Experience need to reach the next level");
@@ -1847,7 +1849,7 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Combo_Box: Ttk_ComboBox;
+      Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
       Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
    begin
