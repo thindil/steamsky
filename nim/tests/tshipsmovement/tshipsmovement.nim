@@ -1,11 +1,16 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing waitInPlace.
+Testing realSpeed.
+Testing dockShip.'''
 """
 
 import std/tables
 import ../../src/[basestypes, careers, crafts, factions, game, items, maps,
     mobs, ships, shipsmovement, shipmodules, types]
 
+echo "Loading the game data."
 if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -49,8 +54,10 @@ skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
 
+echo "Testing waitInPlace."
 waitInPlace(1)
 
+echo "Testing realSpeed."
 playerShip.speed = docked
 assert realSpeed(playerShip) == 0, "Failed to get the real speed of the docked ship."
 playerShip.speed = fullSpeed
@@ -58,5 +65,6 @@ assert realSpeed(playerShip) > 0, "Failed to get the real speed of the ship with
 playerShip.speed = docked
 assert realSpeed(playerShip, true) > 0, "Failed to get info about the real speed of the docked ship."
 
+echo "Testing dockShip."
 assert dockShip(false).len == 0, "Failed to undock the player's ships from a base."
 assert dockShip(true).len == 0, "Failed to dock the player's ships from a base."
