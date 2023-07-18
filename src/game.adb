@@ -21,7 +21,7 @@ with BasesTypes;
 with Careers;
 with Config;
 with Events;
-with Game.SaveLoad; use Game.SaveLoad;
+with Game.SaveLoad;
 with Goals; use Goals;
 with Log;
 with Maps; use Maps;
@@ -83,6 +83,7 @@ package body Game is
 
    procedure End_Game(Save: Boolean) is
       use Events;
+      use Game.SaveLoad;
 
       procedure End_Ada_Game(S: Integer) with
          Import => True,
