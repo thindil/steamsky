@@ -342,15 +342,16 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
       skyBases[faction].skyX = posX
       skyBases[faction].skyY = posY
   # Place the player's ship in a random large base
-  var randomBase: Positive
+  var randomBase, attempts: Positive = 1
   while true:
     randomBase = getRandom(min = 1, max = 1024)
-    if skyBases[randomBase].population > 299:
+    if (attempts < 250 and skyBases[randomBase].population > 299) or attempts > 249:
       if newGameSettings.startingBase == "Any":
         break
       elif skyBases[randomBase].owner == newGameSettings.playerFaction and
           skyBases[randomBase].baseType == newGameSettings.startingBase:
         break
+    attempts.inc
   # Create the player's ship
   playerShip = createShip(protoIndex = playerFaction.careers[
       newGameSettings.playerCareer].shipIndex, name = newGameSettings.shipName,
