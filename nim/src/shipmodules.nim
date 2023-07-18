@@ -192,6 +192,12 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc getModuleType*(moduleIndex: Positive): string {.sideEffect, raises: [
     KeyError], tags: [].} =
+  ## Get the type of the selected module from its name as enumeration
+  ##
+  ## * moduleIndex - the prototype index of the module
+  ##
+  ## Returns the string with the human readable name of the type of the
+  ## selected module
   result = $modulesList[moduleIndex].mType
   let index = result.find({'A'..'Z'})
   if index > 0:
