@@ -190,6 +190,14 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     modulesList[moduleIndex] = module
 
+proc getModuleType*(moduleIndex: Positive): string =
+  result = $modulesList[moduleIndex].mType
+  let index = result.find({'A'..'Z'})
+  if index > 0:
+    result = result[0 .. index - 1] & " " & result[index].toLowerAscii & result[
+        index + 1 .. ^1]
+  result = result.capitalizeAscii
+
 # Temporary code for interfacing with Ada
 
 type
@@ -242,3 +250,9 @@ proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.raises: [],
 
 proc getAdaModulesAmount(): cint {.raises: [], tags: [], exportc.} =
   return modulesList.len.cint
+
+proc getAdaModuleType(moduleIndex: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return getModuleType(moduleIndex = moduleIndex.Positive).cstring
+  except KeyError:
+    return ""
