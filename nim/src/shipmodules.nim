@@ -190,7 +190,8 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     modulesList[moduleIndex] = module
 
-proc getModuleType*(moduleIndex: Positive): string =
+proc getModuleType*(moduleIndex: Positive): string {.sideEffect, raises: [
+    KeyError], tags: [].} =
   result = $modulesList[moduleIndex].mType
   let index = result.find({'A'..'Z'})
   if index > 0:
