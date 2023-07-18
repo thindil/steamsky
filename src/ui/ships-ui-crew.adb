@@ -1994,11 +1994,13 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
              (Table => Crew_Table,
               X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Skill_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
