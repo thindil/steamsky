@@ -15,44 +15,23 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Ada.Containers;
-with Ada.Strings.Maps;
-with Ada.Strings.Unbounded;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body ShipModules is
 
    function Get_Module_Type(Module_Index: Positive) return String is
-      use Ada.Characters.Handling;
-      use Ada.Strings.Maps;
-      use Ada.Strings.Unbounded;
-
-      Module_Type_Name: Unbounded_String :=
-        To_Unbounded_String
-          (Source =>
-             To_Lower
-               (Item =>
-                  Module_Type'Image
-                    (Get_Module(Index => Module_Index).M_Type)));
+      function Get_Ada_Module_Type(M_Index: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaModuleType";
    begin
-      Replace_Element
-        (Source => Module_Type_Name, Index => 1,
-         By =>
-           To_Upper
-             (Item =>
-                Ada.Strings.Unbounded.Element
-                  (Source => Module_Type_Name, Index => 1)));
-      Translate
-        (Source => Module_Type_Name,
-         Mapping => To_Mapping(From => "_", To => " "));
-      return To_String(Source => Module_Type_Name);
+      return Value(Item => Get_Ada_Module_Type(M_Index => Module_Index));
    end Get_Module_Type;
 
    function Get_Module(Index: Positive) return Base_Module_Data is
       use Ada.Containers;
       use Interfaces.C;
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       Temp_Record: Base_Module_Data;
