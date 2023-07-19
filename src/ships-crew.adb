@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Crafts;
 with HallOfFame;
 with Statistics;
 
@@ -162,114 +161,15 @@ package body Ships.Crew is
 
    function Get_Current_Order
      (Member_Index: Positive) return Unbounded_String is
-      use Tiny_String;
-      use Crafts;
-
-      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
-      Member_Info: Unbounded_String := Null_Unbounded_String;
-      function Get_Module_Name(M_Type: Module_Type_2) return String is
-      begin
-         Modules_Loop :
-         for Module of Player_Ship.Modules loop
-            if Module.M_Type = M_Type then
-               Owners_Loop :
-               for Owner of Module.Owner loop
-                  if Owner = Member_Index then
-                     return To_String(Source => Module.Name);
-                  end if;
-               end loop Owners_Loop;
-            end if;
-         end loop Modules_Loop;
-         return "";
-      end Get_Module_Name;
+      function Get_Ada_Current_Order(M_Index: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCurrentOrder";
    begin
-      case Member.Order is
-         when PILOT =>
-            Append(Source => Member_Info, New_Item => "Piloting the ship");
-         when ENGINEER =>
-            Append(Source => Member_Info, New_Item => "Engineering the ship");
-         when GUNNER =>
-            Append
-              (Source => Member_Info,
-               New_Item => "Operating " & Get_Module_Name(M_Type => GUN));
-         when REPAIR =>
-            Append(Source => Member_Info, New_Item => "Repairing the ship");
-         when CRAFT =>
-            Find_Workshop_Loop :
-            for I in Player_Ship.Modules.Iterate loop
-               if Player_Ship.Modules(I).M_Type = WORKSHOP then
-                  Find_Owner_Loop :
-                  for Owner of Player_Ship.Modules(I).Owner loop
-                     if Owner = Member_Index then
-                        Append
-                          (Source => Member_Info,
-                           New_Item =>
-                             Get_Workshop_Recipe_Name
-                               (Workshop =>
-                                  Modules_Container.To_Index(Position => I)) &
-                             " in " &
-                             To_String(Source => Player_Ship.Modules(I).Name));
-                        exit Find_Workshop_Loop;
-                     end if;
-                  end loop Find_Owner_Loop;
-               end if;
-            end loop Find_Workshop_Loop;
-         when UPGRADING =>
-            Append
-              (Source => Member_Info,
-               New_Item =>
-                 "Upgrading " &
-                 To_String
-                   (Source =>
-                      Player_Ship.Modules(Player_Ship.Upgrade_Module).Name));
-         when TALK =>
-            Append(Source => Member_Info, New_Item => "Talking with others");
-         when HEAL =>
-            Append
-              (Source => Member_Info,
-               New_Item =>
-                 "Healing the wounded in " &
-                 Get_Module_Name(M_Type => MEDICAL_ROOM));
-         when CLEAN =>
-            Append(Source => Member_Info, New_Item => "Cleaning the ship");
-         when REST =>
-            Append
-              (Source => Member_Info,
-               New_Item =>
-                 "Resting in " & Get_Module_Name(M_Type => CABIN) &
-                 ", no order");
-         when DEFEND =>
-            Append(Source => Member_Info, New_Item => "Defending the ship");
-         when BOARDING =>
-            Append
-              (Source => Member_Info, New_Item => "Boarding the enemy's ship");
-         when TRAIN =>
-            Find_Training_Room_Loop :
-            for I in Player_Ship.Modules.Iterate loop
-               if Player_Ship.Modules(I).M_Type = TRAINING_ROOM then
-                  Find_Traineer_Loop :
-                  for Owner of Player_Ship.Modules(I).Owner loop
-                     if Owner = Member_Index then
-                        Append
-                          (Source => Member_Info,
-                           New_Item =>
-                             "Training " &
-                             To_String
-                               (Source =>
-                                  SkillsData_Container.Element
-                                    (Container => Skills_List,
-                                     Index =>
-                                       Player_Ship.Modules(I).Trained_Skill)
-                                    .Name) &
-                             " in " &
-                             To_String(Source => Player_Ship.Modules(I).Name));
-                        exit Find_Training_Room_Loop;
-                     end if;
-                  end loop Find_Traineer_Loop;
-               end if;
-            end loop Find_Training_Room_Loop;
-      end case;
-      return Member_Info;
+      return
+        To_Unbounded_String
+          (Source =>
+             Value(Item => Get_Ada_Current_Order(M_Index => Member_Index)));
    end Get_Current_Order;
 
 end Ships.Crew;
