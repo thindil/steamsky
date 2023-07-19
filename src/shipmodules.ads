@@ -136,9 +136,8 @@ package ShipModules is
    -- Formatted type of module
    -- SOURCE
    function Get_Module_Type(Module_Index: Positive) return String with
-      Post => Get_Module_Type'Result'Length > 0,
-      Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
-   -- ****
+      Post => Get_Module_Type'Result'Length > 0;
+      -- ****
 
 -- Temporary code to interact with Nim
 
