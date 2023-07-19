@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import game, halloffame, messages, missions, shipscrew, types, utils
+import crafts, game, halloffame, messages, missions, shipscrew, types, utils
 
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
     raises: [KeyError], tags: [].} =
@@ -77,6 +77,35 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
   deleteMember(memberIndex = memberIndex, ship = ship)
   for index, _ in ship.crew.pairs:
     updateMorale(ship = ship, memberIndex = index, value = getRandom(min = -25, max = -10))
+
+proc getCurrentOrder*(memberIndex: Natural): string =
+  proc getModuleName(mType: ModuleType2): string =
+    result = ""
+    for module in playerShip.modules:
+      if module.mType == mType:
+        for owner in module.owner:
+          if owner == memberIndex:
+            return module.name
+
+  let member = playerShip.crew[memberIndex]
+  case member.order
+  of pilot:
+    result = "Piloting the ship"
+  of engineer:
+    result = "Engineering the ship"
+  of gunner:
+    result = "Operating " & getModuleName(mType = ModuleType2.gun)
+  of repair:
+    result = "Repairing the ship"
+  of craft:
+    for index, module in playerShip.modules:
+      if module.mType == ModuleType2.workshop:
+        for owner in module.owner:
+          if owner == memberIndex:
+            result = getWorkshopRecipeName(workshop = index) & " in " & module.name
+            break
+  else:
+    discard
 
 # Temporary code for interfacing with Ada
 
