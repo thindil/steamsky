@@ -145,7 +145,8 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     newLoyalty = 0
   ship.crew[memberIndex].loyalty = newLoyalty
 
-proc updateOrders*(ship: var ShipRecord; combat: bool = false)
+proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
+    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].}
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
