@@ -1,10 +1,13 @@
 discard """
   exitcode: 0
+  output: '''Loading the game data.
+Testing upgradeShip.'''
 """
 
 import std/tables
 import ../../src/[game, careers, factions, items, shipmodules, shipsupgrade, types]
 
+echo "Loading the game data."
 if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
@@ -31,6 +34,7 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
 playerShip.crew[0].equipment[tool] = -1
 
+echo "Testing upgradeShip."
 upgradeShip(15)
 assert playerShip.modules[0].upgradeProgress < 20, "Failed to progress in the player's ship's upgrade."
 playerShip.upgradeModule = -1
