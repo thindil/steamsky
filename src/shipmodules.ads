@@ -108,25 +108,6 @@ package ShipModules is
    Empty_Base_Module: constant Base_Module_Data := (others => <>);
    -- ****
 
-   -- ****t* ShipModules/ShipModules.Ship_Modules_Amount_Range
-   -- FUNCTION
-   -- Used to set the amount of ships' modules' prototypes available in the
-   -- game
-   -- HISTORY
-   -- 7.4 - Added
-   -- SOURCE
-   subtype Ship_Modules_Amount_Range is Positive range 1 .. 1_024;
-   -- ****
-
-   -- ****d* ShipModules/ShipModules.Default_Ship_Modules_Amount
-   -- FUNCTION
-   -- The default amount of ships' modules' prototypes in the game
-   -- HISTORY
-   -- 7.4 - Added
-   -- SOURCE
-   Default_Ship_Modules_Amount: constant Ship_Modules_Amount_Range := 520;
-   -- ****
-
    -- ****f* ShipModules/ShipModules.Get_Module_Type
    -- FUNCTION
    -- Get type of selected module (replace all underscore with spaces)
