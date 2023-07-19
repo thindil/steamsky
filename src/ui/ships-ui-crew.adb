@@ -1970,6 +1970,18 @@ package body Ships.UI.Crew is
    Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
    -- ****
 
+   -- ****if* SUCrew/SUCrew.Get_Crew_Sort_Order
+   -- FUNCTION
+   -- Get the current sorting order of the player's ship's crew
+   -- RESULT
+   -- The current sorting order of the player's ship's crew
+   -- SOURCE
+   function Get_Crew_Sort_Order return Crew_Sort_Orders is
+      -- ****
+   begin
+      return Crew_Sort_Order;
+   end Get_Crew_Sort_Order;
+
    -- ****o* SUCrew/SUCrew.Sort_Crew_Command
    -- FUNCTION
    -- Sort the player's ship's crew list
@@ -2026,73 +2038,75 @@ package body Ships.UI.Crew is
         (others => <>);
       function "<"(Left, Right: Local_Member_Data) return Boolean is
       begin
-         if Crew_Sort_Order = SELECTEDASC
+         if Get_Crew_Sort_Order = SELECTEDASC
            and then Left.Selected < Right.Selected then
             return True;
          end if;
-         if Crew_Sort_Order = SELECTEDDESC
+         if Get_Crew_Sort_Order = SELECTEDDESC
            and then Left.Selected > Right.Selected then
             return True;
          end if;
-         if Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Crew_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Crew_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Crew_Sort_Order = ORDERASC
+         if Get_Crew_Sort_Order = ORDERASC
            and then Crew_Orders'Image(Left.Order) <
              Crew_Orders'Image(Right.Order) then
             return True;
          end if;
-         if Crew_Sort_Order = ORDERDESC
+         if Get_Crew_Sort_Order = ORDERDESC
            and then Crew_Orders'Image(Left.Order) >
              Crew_Orders'Image(Right.Order) then
             return True;
          end if;
-         if Crew_Sort_Order = SKILLASC and then Left.Skill < Right.Skill then
+         if Get_Crew_Sort_Order = SKILLASC
+           and then Left.Skill < Right.Skill then
             return True;
          end if;
-         if Crew_Sort_Order = SKILLDESC and then Left.Skill > Right.Skill then
+         if Get_Crew_Sort_Order = SKILLDESC
+           and then Left.Skill > Right.Skill then
             return True;
          end if;
-         if Crew_Sort_Order = HEALTHASC
+         if Get_Crew_Sort_Order = HEALTHASC
            and then Left.Health < Right.Health then
             return True;
          end if;
-         if Crew_Sort_Order = HEALTHDESC
+         if Get_Crew_Sort_Order = HEALTHDESC
            and then Left.Health > Right.Health then
             return True;
          end if;
-         if Crew_Sort_Order = FATIGUEASC
+         if Get_Crew_Sort_Order = FATIGUEASC
            and then Left.Fatigue < Right.Fatigue then
             return True;
          end if;
-         if Crew_Sort_Order = FATIGUEDESC
+         if Get_Crew_Sort_Order = FATIGUEDESC
            and then Left.Fatigue > Right.Fatigue then
             return True;
          end if;
-         if Crew_Sort_Order = THIRSTASC
+         if Get_Crew_Sort_Order = THIRSTASC
            and then Left.Thirst < Right.Thirst then
             return True;
          end if;
-         if Crew_Sort_Order = THIRSTDESC
+         if Get_Crew_Sort_Order = THIRSTDESC
            and then Left.Thirst > Right.Thirst then
             return True;
          end if;
-         if Crew_Sort_Order = HUNGERASC
+         if Get_Crew_Sort_Order = HUNGERASC
            and then Left.Hunger < Right.Hunger then
             return True;
          end if;
-         if Crew_Sort_Order = HUNGERDESC
+         if Get_Crew_Sort_Order = HUNGERDESC
            and then Left.Hunger > Right.Hunger then
             return True;
          end if;
-         if Crew_Sort_Order = MORALEASC
+         if Get_Crew_Sort_Order = MORALEASC
            and then Left.Morale < Right.Morale then
             return True;
          end if;
-         if Crew_Sort_Order = MORALEDESC
+         if Get_Crew_Sort_Order = MORALEDESC
            and then Left.Morale > Right.Morale then
             return True;
          end if;
@@ -2104,55 +2118,55 @@ package body Ships.UI.Crew is
    begin
       case Column is
          when 1 =>
-            if Crew_Sort_Order = SELECTEDASC then
+            if Get_Crew_Sort_Order = SELECTEDASC then
                Crew_Sort_Order := SELECTEDDESC;
             else
                Crew_Sort_Order := SELECTEDASC;
             end if;
          when 2 =>
-            if Crew_Sort_Order = NAMEASC then
+            if Get_Crew_Sort_Order = NAMEASC then
                Crew_Sort_Order := NAMEDESC;
             else
                Crew_Sort_Order := NAMEASC;
             end if;
          when 3 =>
-            if Crew_Sort_Order = ORDERASC then
+            if Get_Crew_Sort_Order = ORDERASC then
                Crew_Sort_Order := ORDERDESC;
             else
                Crew_Sort_Order := ORDERASC;
             end if;
          when 4 =>
-            if Crew_Sort_Order = SKILLASC then
+            if Get_Crew_Sort_Order = SKILLASC then
                Crew_Sort_Order := SKILLDESC;
             else
                Crew_Sort_Order := SKILLASC;
             end if;
          when 5 =>
-            if Crew_Sort_Order = HEALTHASC then
+            if Get_Crew_Sort_Order = HEALTHASC then
                Crew_Sort_Order := HEALTHDESC;
             else
                Crew_Sort_Order := HEALTHASC;
             end if;
          when 6 =>
-            if Crew_Sort_Order = FATIGUEASC then
+            if Get_Crew_Sort_Order = FATIGUEASC then
                Crew_Sort_Order := FATIGUEDESC;
             else
                Crew_Sort_Order := FATIGUEASC;
             end if;
          when 7 =>
-            if Crew_Sort_Order = THIRSTASC then
+            if Get_Crew_Sort_Order = THIRSTASC then
                Crew_Sort_Order := THIRSTDESC;
             else
                Crew_Sort_Order := THIRSTASC;
             end if;
          when 8 =>
-            if Crew_Sort_Order = HUNGERASC then
+            if Get_Crew_Sort_Order = HUNGERASC then
                Crew_Sort_Order := HUNGERDESC;
             else
                Crew_Sort_Order := HUNGERASC;
             end if;
          when 9 =>
-            if Crew_Sort_Order = MORALEASC then
+            if Get_Crew_Sort_Order = MORALEASC then
                Crew_Sort_Order := MORALEDESC;
             else
                Crew_Sort_Order := MORALEASC;
@@ -2160,7 +2174,7 @@ package body Ships.UI.Crew is
          when others =>
             null;
       end case;
-      if Crew_Sort_Order = NONE then
+      if Get_Crew_Sort_Order = NONE then
          if Column = Positive'Last then
             Update_Crew_Info(Skill => Skill_Index);
          end if;
