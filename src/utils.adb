@@ -31,4 +31,22 @@ package body Utils is
       return To_Bounded_String(Source => Value(Item => Robotic_Name));
    end Generate_Robotic_Name;
 
+   function Days_Difference
+     (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)
+      return Integer is
+      function Days_Ada_Difference
+        (Y, M, D, H, Mi, Yc, Mc, Dc, Hc, Mic: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "daysAdaDifference";
+   begin
+      return
+        Days_Ada_Difference
+          (Y => Date_To_Compare.Year, M => Date_To_Compare.Month,
+           D => Date_To_Compare.Day, H => Date_To_Compare.Hour,
+           Mi => Date_To_Compare.Minutes, Yc => Current_Date.Year,
+           Mc => Current_Date.Month, Dc => Current_Date.Day,
+           Hc => Current_Date.Hour, Mic => Current_Date.Minutes);
+   end Days_Difference;
+
 end Utils;

@@ -52,10 +52,7 @@ package Utils is
       -- SOURCE
    function Days_Difference
      (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)
-      return Integer with
-      Import => True,
-      Convention => C,
-      External_Name => "daysDifference";
+      return Integer;
       -- ****
 
       -- ****f* Utils/Utils.GenerateRoboticName

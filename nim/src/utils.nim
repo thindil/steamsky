@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/random
-import types, game
+import types
 
 proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
@@ -49,7 +49,7 @@ proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
   randomize()
   return rand(min .. max)
 
-proc getRandom*(min,max: int): int {.gcsafe, sideEffect, raises: [],
+proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
     tags: [].} =
   ## Get the random value from the selected range
   ##
@@ -60,8 +60,8 @@ proc getRandom*(min,max: int): int {.gcsafe, sideEffect, raises: [],
   randomize()
   return rand(min .. max)
 
-proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
-    gcsafe, sideEffect, raises: [], tags: [].} =
+proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.gcsafe,
+    sideEffect, raises: [], tags: [].} =
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game
   ##
@@ -69,9 +69,14 @@ proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.exportc,
   ## * currentDate   - the current game date to which the date will be compared
   ##
   ## Returns the difference in days between the two dates
-  let
-    curDate = (if currentDate.year > gameDate.year: gameDate else: currentDate)
-    compDate = (if dateToCompare.year > 4_000_000: gameDate else: dateToCompare)
-  return (curDate.day.cint + (30 * curDate.month.cint) + (
-      curDate.year.cint * 360)) - (compDate.day.cint + (30 *
-      compDate.month.cint) + (compDate.year.cint * 360))
+  return (currentDate.day.cint + (30 * currentDate.month.cint) + (
+      currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
+      dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
+
+# Temporary code for interfacing with Ada
+
+proc daysAdaDifference(y, m, d, h, mi, yc, mc, dc, hc,
+    mic: cint): cint {.raises: [], tags: [], exportc.} =
+  return daysDifference(dateToCompare = DateRecord(year: y, month: m, day: d,
+      hour: h, minutes: m), currentDate = DateRecord(year: yc, month: mc,
+      day: dc, hour: hc, minutes: mic))
