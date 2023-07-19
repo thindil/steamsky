@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
 import crafts, game, halloffame, messages, missions, shipscrew, types, utils
 
 proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
@@ -104,8 +105,30 @@ proc getCurrentOrder*(memberIndex: Natural): string =
           if owner == memberIndex:
             result = getWorkshopRecipeName(workshop = index) & " in " & module.name
             break
-  else:
-    discard
+  of upgrading:
+    result = "Upgrading " & playerShip.modules[playerShip.upgradeModule].name
+  of talk:
+    result = "Talking with others"
+  of heal:
+    result = "Healig the wounded in " & getModuleName(
+        mType = ModuleType2.medicalRoom)
+  of clean:
+    result = "Cleaning the ship"
+  of rest:
+    result = "Resting in " & getModuleName(mType = ModuleType2.cabin) & ", no order"
+  of defend:
+    result = "Defending the ship"
+  of boarding:
+    result = "Boarding the enemy's ship"
+  of train:
+    block findTrainingRoom:
+      for module in playerShip.modules:
+        if module.mType == ModuleType2.trainingRoom:
+          for owner in module.owner:
+            if owner == memberIndex:
+              result = "Training " & skillsList[module.trainedSkill].name &
+                  " in " & module.name
+              break findTrainingRoom
 
 # Temporary code for interfacing with Ada
 
@@ -129,3 +152,9 @@ proc deathAda(memberIndex: cint; reason: cstring; inPlayerShip,
           createBody = (if createBody == 1: true else: false))
   except IOError, KeyError:
     discard
+
+proc getAdaCurrentOrder(memberIndex: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return getCurrentOrder(memberIndex = memberIndex - 1).cstring
+  except ValueError:
+    return ""
