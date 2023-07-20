@@ -18,6 +18,8 @@
 import std/[strutils, tables]
 import factions, game, maps, messages, ships2, types, utils
 
+var friendlyShips, traders: seq[Positive]
+
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
     tags: [].} =
   ## Get the list of all prototype's ships which are available only for the
@@ -121,6 +123,17 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
+proc generateTraders*() =
+  for index, ship in protoShipsList:
+    if ship.name in tradersName:
+      traders.add(index)
+  var playerShips: seq[Positive]
+  getPlayerShips(playerShips)
+  for index, ship in protoShipsList:
+    if isFriendly(sourceFaction = playerShip.crew[0].faction,
+        targetFaction = ship.owner) and index notin playerShips:
+      friendlyShips.add(index)
+
 # Temporary code for interfacing with Ada
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
@@ -190,5 +203,11 @@ proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
 proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
   try:
     recoverBase(baseIndex = baseIndex)
+  except KeyError:
+    discard
+
+proc generateAdaTraders() {.raises: [], tags: [], exportc.} =
+  try:
+    generateTraders()
   except KeyError:
     discard
