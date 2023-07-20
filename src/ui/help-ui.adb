@@ -542,8 +542,7 @@ package body Help.UI is
          Insert
            (TreeViewWidget => Topics_View,
             Options =>
-              "{} end -id {" & To_String(Source => Help.Index) &
-              "} -text {" &
+              "{} end -id {" & To_String(Source => Help.Index) & "} -text {" &
               To_String(Source => Help_Title) & "}");
       end loop Insert_Topics_Loop;
       Bind
@@ -556,7 +555,10 @@ package body Help.UI is
             Parent_Frame => ".help", Title => "Can't find help topic");
          Selection_Set
            (TreeViewWidget => Topics_View,
-            Items => To_String(Source => Get_Help(Title => Help_Title, Help_Index => 0).Index));
+            Items =>
+              To_String
+                (Source =>
+                   Get_Help(Title => Help_Title, Help_Index => 0).Index));
          return TCL_OK;
       end if;
       Selection_Set(TreeViewWidget => Topics_View, Items => Topic_Index);

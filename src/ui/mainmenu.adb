@@ -183,8 +183,7 @@ package body MainMenu is
         (New_Size => Game_Settings.Interface_Font_Size,
          Font_Type => INTERFACEFONT);
       configure
-        (Widgt => Version_Label,
-         options => "-text {" & Game_Version & "}");
+        (Widgt => Version_Label, options => "-text {" & Game_Version & "}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);
       if Get_Data_Error'Length > 0 then
          Show_Main_Menu;
@@ -225,7 +224,10 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Get_Career(To_String(Source => New_Game_Settings.Player_Career)).Name));
+             (Source =>
+                Get_Career
+                  (To_String(Source => New_Game_Settings.Player_Career))
+                  .Name));
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set
         (ComboBox => Combo_Box,

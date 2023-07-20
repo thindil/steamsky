@@ -45,7 +45,7 @@ package body Game is
       New_Ada_Game;
       -- Get data from Nim
       Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Bases_Loop:
+      Get_Bases_Loop :
       for I in Sky_Bases'Range loop
          Get_Base_From_Nim(Base_Index => I);
       end loop Get_Bases_Loop;
@@ -112,7 +112,8 @@ package body Game is
          Get_Current_Goal;
          Get_Current_Story;
          Get_Finished_Stories_Loop :
-         for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
+         for I in
+           Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
             Get_Finished_Story(Index => I);
          end loop Get_Finished_Stories_Loop;
          Set_Nim_Events;
