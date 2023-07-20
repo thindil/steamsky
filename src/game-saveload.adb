@@ -24,7 +24,6 @@ with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
 with Bases.SaveLoad;
-with Careers;
 with Config;
 with Crafts;
 with Events; use Events;
@@ -91,7 +90,6 @@ package body Game.SaveLoad is
       use DOM.Readers;
       use Input_Sources.File;
       use Bases.SaveLoad;
-      use Careers;
       use Config;
       use Crafts;
       use Log;
@@ -609,15 +607,10 @@ package body Game.SaveLoad is
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "playercareer");
-      if Length(List => Nodes_List) > 0 then
-         Saved_Node := Item(List => Nodes_List, Index => 0);
-         Player_Career :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
-      else
-         Player_Career :=
-           Careers_Container.Key(Position => Careers_List.First);
-      end if;
+      Saved_Node := Item(List => Nodes_List, Index => 0);
+      Player_Career :=
+        To_Unbounded_String
+          (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
          Value => New_String(Str => To_String(Source => Player_Career)));

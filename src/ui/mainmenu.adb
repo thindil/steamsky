@@ -225,7 +225,7 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          Value =>
            To_String
-             (Source => Careers_List(New_Game_Settings.Player_Career).Name));
+             (Source => Get_Career(To_String(Source => New_Game_Settings.Player_Career)).Name));
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set
         (ComboBox => Combo_Box,

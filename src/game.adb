@@ -18,7 +18,6 @@
 with Ada.Exceptions;
 with Bases; use Bases;
 with BasesTypes;
-with Careers;
 with Config;
 with Events;
 with Game.SaveLoad;
@@ -141,7 +140,6 @@ package body Game is
    function Load_Game_Data return String is
       use Ada.Exceptions;
       use BasesTypes;
-      use Careers;
       use Log;
 
       Result: chars_ptr;
@@ -329,7 +327,6 @@ package body Game is
       end if;
       Result := Load_Ada_Game_Data;
       Load_Data;
-      Load_Careers;
       Load_Goals;
       Load_Bases_Types;
       Load_Stories;

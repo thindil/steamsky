@@ -41,13 +41,6 @@ package Careers is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****f* Careers/Careers.Load_Careers
-   -- FUNCTION
-   -- Load player careers from file
-   -- SOURCE
-   procedure Load_Careers;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    function Get_Career(Career_Index: String) return Career_Record;
