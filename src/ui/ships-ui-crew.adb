@@ -2220,10 +2220,12 @@ package body Ships.UI.Crew is
             Id => Crew_Container.To_Index(Position => I));
       end loop Fill_Local_Crew_Loop;
       Sort_Crew(Container => Local_Crew);
-      Crew_Indexes.Clear;
+      Crew_Indexes.Clear; --## rule line off DIRECTLY_ACCESSED_GLOBALS
       Fill_Crew_Indexes_Loop :
       for Member of Local_Crew loop
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
          Crew_Indexes.Append(New_Item => Member.Id);
+         --## rule on DIRECTLY_ACCESSED_GLOBALS
       end loop Fill_Crew_Indexes_Loop;
       Update_Crew_Info(Skill => Skill_Index);
       return TCL_OK;
@@ -2748,6 +2750,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Toggle_Checked_Button
         (Table => Crew_Table,
          Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
@@ -2764,6 +2767,7 @@ package body Ships.UI.Crew is
            (interp => Interp,
             varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Update_Tooltips;
       return TCL_OK;
    end Toggle_Crew_Member_Command;
