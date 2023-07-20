@@ -1,4 +1,4 @@
---    Copyright 2018-2022 Bartek thindil Jasicki
+--    Copyright 2018-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
@@ -42,22 +40,6 @@ package Careers is
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
-
-   -- ****t* Careers/Careers.Careers_Container
-   -- FUNCTION
-   -- Used to store all available careers
-   -- SOURCE
-   package Careers_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Career_Record,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
-   -- ****
-
-   -- ****v* Careers/Careers.Careers_List
-   -- FUNCTION
-   -- List of all available careers for player
-   -- SOURCE
-   Careers_List: Careers_Container.Map;
-   -- ****
 
    -- ****f* Careers/Careers.Load_Careers
    -- FUNCTION
