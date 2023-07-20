@@ -57,6 +57,7 @@ package body Game is
             Set_Map_Cell(X => X, Y => Y);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
+      Set_Game_Date;
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
