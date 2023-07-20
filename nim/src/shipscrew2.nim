@@ -81,6 +81,12 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
 
 proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
     ValueError], tags: [].} =
+  ## Get the full information about the order of the selected crew member
+  ##
+  ## * memberIndex - the crew index of the member which order will be checked
+  ##
+  ## Returns a string with detailed information about the current order of the
+  ## selected player's ship's crew member.
   proc getModuleName(mType: ModuleType2): string =
     result = ""
     for module in playerShip.modules:
