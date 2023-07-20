@@ -79,7 +79,8 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
   for index, _ in ship.crew.pairs:
     updateMorale(ship = ship, memberIndex = index, value = getRandom(min = -25, max = -10))
 
-proc getCurrentOrder*(memberIndex: Natural): string =
+proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
+    ValueError], tags: [].} =
   proc getModuleName(mType: ModuleType2): string =
     result = ""
     for module in playerShip.modules:
