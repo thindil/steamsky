@@ -66,4 +66,8 @@ package Careers is
    procedure Load_Careers;
    -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_Career(Career_Index: String) return Career_Record;
+
 end Careers;

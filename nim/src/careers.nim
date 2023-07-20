@@ -134,3 +134,9 @@ proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
   except KeyError:
     return ""
 
+proc getAdaCareerName(careerIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return careersList[$careerIndex].name.cstring
+  except KeyError:
+    return ""
+
