@@ -124,6 +124,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
       mType = otherMessage, color = cyan)
 
 proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Create the list of traders' ships needed for events
   for index, ship in protoShipsList:
     if ship.name.contains(tradersName):
       traders.add(index)
