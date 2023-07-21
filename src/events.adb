@@ -508,49 +508,29 @@ package body Events is
    end Delete_Event;
 
    procedure Generate_Traders is
-      use Tiny_String;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Player_Ships: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Player_Ships
-        (Playerships: in out Positive_Container.Vector) is
-         -- ****
-         --## rule off TYPE_INITIAL_VALUES
-         type Nim_Ships_Array is array(0 .. 29) of Natural;
-         --## rule on TYPE_INITIAL_VALUES
-         Nim_Ships: Nim_Ships_Array;
-         procedure Get_Ada_Players_Ships(P_Ships: out Nim_Ships_Array) with
-            Import => True,
-            Convention => C,
-            External_Name => "getAdaPlayerShips";
-      begin
-         Get_Ada_Players_Ships(P_Ships => Nim_Ships);
-         Convert_Ships_Loop :
-         for Ship of Nim_Ships loop
-            exit Convert_Ships_Loop when Ship = 0;
-            Playerships.Append(New_Item => Ship);
-         end loop Convert_Ships_Loop;
-      end Get_Player_Ships;
+      Ship_Index: Natural;
+      procedure Generate_Ada_Traders with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaTraders";
+      function Get_Trader_Or_Friendly
+        (Index, Trader: Natural) return Natural with
+         Import => True,
+         Convention => C,
+         External_Name => "getTraderOrFriendly";
    begin
+      Generate_Ada_Traders;
       Count_Traders_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
-         if Index
-             (Source => Get_Proto_Ship(Proto_Index => I).Name,
-              Pattern => To_String(Source => Traders_Name)) >
-           0 then
-            Traders.Append(New_Item => I);
-         end if;
+         Ship_Index := Get_Trader_Or_Friendly(Index => I, Trader => 1);
+         exit Count_Traders_Loop when Ship_Index = 0;
+         Traders.Append(New_Item => I);
       end loop Count_Traders_Loop;
-      Get_Player_Ships(Playerships => Player_Ships);
       Count_Friendly_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
-         if Is_Friendly
-             (Source_Faction => Player_Ship.Crew(1).Faction,
-              Target_Faction => Get_Proto_Ship(Proto_Index => I).Owner) and
-           not Player_Ships.Contains(Item => I) then
-            Friendly_Ships.Append(New_Item => I);
-         end if;
+         Ship_Index := Get_Trader_Or_Friendly(Index => I, Trader => 0);
+         exit Count_Friendly_Loop when Ship_Index = 0;
+         Friendly_Ships.Append(New_Item => I);
       end loop Count_Friendly_Loop;
    end Generate_Traders;
 
