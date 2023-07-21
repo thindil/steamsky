@@ -20,7 +20,6 @@ with Bases; use Bases;
 with BasesTypes;
 with Config;
 with Events;
-with Game.SaveLoad;
 with Goals; use Goals;
 with Log;
 with Maps; use Maps;
@@ -83,15 +82,12 @@ package body Game is
 
    procedure End_Game(Save: Boolean) is
       use Events;
-      use Game.SaveLoad;
 
       procedure End_Ada_Game(S: Integer) with
          Import => True,
          Convention => C,
          External_Name => "endAdaGame";
    begin
-      Get_Ada_Save_Name
-        (Name => New_String(Str => To_String(Source => Save_Name)));
       if Save then
          Set_Ship_In_Nim;
          Get_Bases_Loop :
@@ -117,9 +113,6 @@ package body Game is
             Get_Finished_Story(Index => I);
          end loop Get_Finished_Stories_Loop;
          Set_Nim_Events;
-         Get_Ada_Game_String
-           (Name => New_String(Str => "playerCareer"),
-            Value => New_String(Str => To_String(Source => Player_Career)));
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Events_List.Clear;
