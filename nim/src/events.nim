@@ -123,7 +123,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
-proc generateTraders*() =
+proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [].} =
   for index, ship in protoShipsList:
     if ship.name.contains(tradersName):
       traders.add(index)
