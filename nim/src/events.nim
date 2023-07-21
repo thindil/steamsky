@@ -125,7 +125,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
 
 proc generateTraders*() =
   for index, ship in protoShipsList:
-    if ship.name in tradersName:
+    if ship.name.contains(tradersName):
       traders.add(index)
   var playerShips: seq[Positive]
   getPlayerShips(playerShips)
@@ -211,3 +211,15 @@ proc generateAdaTraders() {.raises: [], tags: [], exportc.} =
     generateTraders()
   except KeyError:
     discard
+
+proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [], exportc.} =
+  if trader == 1:
+    if index < traders.len:
+      return traders[index].cint
+    else:
+      return 0
+  else:
+    if index < friendlyShips.len:
+      return friendlyShips[index].cint
+    else:
+      return 0
