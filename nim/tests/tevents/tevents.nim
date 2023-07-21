@@ -4,7 +4,8 @@ discard """
 Testing generateEnemies.
 Testing updateEvents.
 Testing deleteEvent.
-Testing recoverBase.'''
+Testing recoverBase.
+Testing generateTraders.'''
 """
 
 import std/tables
@@ -64,3 +65,6 @@ echo "Testing recoverBase."
 skyBases[2].population = 0
 recoverBase(2)
 assert skyBases[2].population > 0, "Failed to recover a base."
+
+echo "Testing generateTraders."
+generateTraders()
