@@ -2284,12 +2284,12 @@ package body Ships.UI.Crew is
         Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
       function Is_Working
-        (Owners: Natural_Container.Vector; Member_Index: Positive)
+        (Owners: Natural_Container.Vector; M_Index: Positive)
          return Boolean is
       begin
          Find_Owner_Loop :
          for Owner of Owners loop
-            if Owner = Member_Index then
+            if Owner = M_Index then
                return True;
             end if;
          end loop Find_Owner_Loop;
@@ -2362,7 +2362,7 @@ package body Ships.UI.Crew is
                   when WORKSHOP =>
                      if not Is_Working
                          (Owners => Player_Ship.Modules(J).Owner,
-                          Member_Index => Member_Index) and
+                          M_Index => Member_Index) and
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Bounded_String then
                         Append
@@ -2471,7 +2471,7 @@ package body Ships.UI.Crew is
                   when TRAINING_ROOM =>
                      if not Is_Working
                          (Owners => Player_Ship.Modules(J).Owner,
-                          Member_Index => Member_Index) then
+                          M_Index => Member_Index) then
                         Append
                           (Source => Available_Orders,
                            New_Item =>
