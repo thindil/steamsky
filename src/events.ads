@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 with Ships; use Ships;
 
@@ -141,16 +140,15 @@ package Events is
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE
-   procedure Generate_Traders with
-      Test_Case => (Name => "Test_GenerateTraders", Mode => Robustness);
-      -- ****
+   procedure Generate_Traders;
+   -- ****
 
-      -- ****f* Events/Events.Recover_Base
-      -- FUNCTION
-      -- Recover abandoned base
-      -- PARAMETERS
-      -- Base_Index - Index of the base where recovery happened
-      -- SOURCE
+   -- ****f* Events/Events.Recover_Base
+   -- FUNCTION
+   -- Recover abandoned base
+   -- PARAMETERS
+   -- Base_Index - Index of the base where recovery happened
+   -- SOURCE
    procedure Recover_Base(Base_Index: Bases_Range);
    -- ****
 
