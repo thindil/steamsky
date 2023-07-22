@@ -47,6 +47,8 @@ type
 
   DataLoadingError* = object of CatchableError
     ## Used to mark problems during loading the game data from files
+  TradeNoFreeCargoError* = object of CatchableError
+    ## Used to mark problems with free cargo space in the ship
 
   AttributeRecord* = object
     ## Store data related to the attributes
@@ -125,6 +127,7 @@ var
   protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
   protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
   gameDate*: DateRecord                    ## The current time in the game
+  traderCargo*: seq[BaseCargo]             ## The current trader's ship's cargo
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
