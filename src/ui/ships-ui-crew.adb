@@ -2021,6 +2021,7 @@ package body Ships.UI.Crew is
            Interp => Interp);
       Skill_Index: constant Natural :=
         Natural'Value(Current(ComboBox => Skill_Box));
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Member_Data is record
          Selected: Boolean;
          Name: Tiny_String.Bounded_String;
@@ -2034,6 +2035,7 @@ package body Ships.UI.Crew is
          Id: Positive;
       end record;
       type Crew_Array is array(Positive range <>) of Local_Member_Data;
+      --## rule on TYPE_INITIAL_VALUES
       Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length)) :=
         (others => <>);
       function "<"(Left, Right: Local_Member_Data) return Boolean is
