@@ -13,8 +13,5 @@ package Events.Test_Data.Tests is
    procedure Test_Check_For_Event_73edc5_e01b25(Gnattest_T: in out Test);
    --  events.ads:117:4:Check_For_Event:Test_CheckForEvent
 
-   procedure Test_Generate_Traders_4cda02_5d00a3(Gnattest_T: in out Test);
-   --  events.ads:144:4:Generate_Traders:Test_GenerateTraders
-
 end Events.Test_Data.Tests;
 --  end read only
