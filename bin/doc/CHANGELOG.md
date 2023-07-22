@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Resetting the selected type of items after buying or selling something in
   bases or to traders
 - Game hangs on creating a new game when there are no big bases on the map
+- Saving the player's career
 
 ## [8.9] - 2023-07-09
 
