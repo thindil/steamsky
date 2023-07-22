@@ -15,12 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded;
 with Interfaces.C.Strings;
 with Bases; use Bases;
 with BasesTypes;
 with Combat;
 with Crew;
-with Factions; use Factions;
+with Factions;
 with Items;
 with Maps; use Maps;
 with Messages;
@@ -32,8 +33,10 @@ with Utils;
 package body Events is
 
    function Check_For_Event return Boolean is
+      use Ada.Strings.Unbounded;
       use Combat;
       use Crew;
+      use Factions;
       use Items;
       use Messages;
       use Ships.Cargo;
@@ -508,13 +511,13 @@ package body Events is
    end Delete_Event;
 
    procedure Generate_Traders is
-      Ship_Index: Natural;
+      Ship_Index: Natural := 0;
       procedure Generate_Ada_Traders with
          Import => True,
          Convention => C,
          External_Name => "generateAdaTraders";
       function Get_Trader_Or_Friendly
-        (Index, Trader: Natural) return Natural with
+        (Index, Get_Trader: Natural) return Natural with
          Import => True,
          Convention => C,
          External_Name => "getTraderOrFriendly";
@@ -522,13 +525,13 @@ package body Events is
       Generate_Ada_Traders;
       Count_Traders_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
-         Ship_Index := Get_Trader_Or_Friendly(Index => I, Trader => 1);
+         Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 1);
          exit Count_Traders_Loop when Ship_Index = 0;
          Traders.Append(New_Item => I);
       end loop Count_Traders_Loop;
       Count_Friendly_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
-         Ship_Index := Get_Trader_Or_Friendly(Index => I, Trader => 0);
+         Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 0);
          exit Count_Friendly_Loop when Ship_Index = 0;
          Friendly_Ships.Append(New_Item => I);
       end loop Count_Friendly_Loop;
