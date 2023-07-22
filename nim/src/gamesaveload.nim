@@ -202,6 +202,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving player career...", debugType = everything)
   var careerElement = newElement("playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
+  saveTree.add(careerElement)
   logMessage(message = "done", debugType = everything)
   var saveText = $saveTree
   if not prettyPrint:
