@@ -1279,7 +1279,7 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (E_Type => DISEASE, Sky_X => Sky_Bases(Base_Index).Sky_X,
+                 (E_Type => FULLDOCKS, Sky_X => Sky_Bases(Base_Index).Sky_X,
                   Sky_Y => Sky_Bases(Base_Index).Sky_Y,
                   Time => Positive'Value(Get(Widgt => Duration_Box)),
                   Data => 1));
