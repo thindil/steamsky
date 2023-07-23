@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import crewinventory, game, ships, types, utils
+import crewinventory, game, ships, shipscargo, types, utils
 
 proc generateTraderCargo*(protoIndex: Positive) =
   var traderShip = createShip(protoIndex = protoIndex, name = "",
@@ -41,10 +41,27 @@ proc generateTraderCargo*(protoIndex: Positive) =
       if itemIndex == 0:
         newItemIndex = i
         break
-    let cargoItemIndex = findItem(inventory = traderShip.cargo, protoIndex = newItemIndex)
+    let cargoItemIndex = findItem(inventory = traderShip.cargo,
+        protoIndex = newItemIndex)
     if cargoItemIndex > -1:
       traderCargo[cargoItemIndex].amount = traderCargo[cargoItemIndex].amount + itemAmount
-      traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[cargoItemIndex].amount + itemAmount
+      traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[
+          cargoItemIndex].amount + itemAmount
     else:
-      discard
+      if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
+        traderCargo.add(BaseCargo(protoIndex: newItemIndex, amount: itemAmount,
+            durability: defaultItemDurability, price: itemsList[
+            newItemIndex].price))
+        traderShip.cargo.add(InventoryData(protoIndex: newItemIndex,
+            amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
+      else:
+        cargoAmount = 1
     cargoAmount.dec
+
+# Temporary code for interfacing with Ada
+
+proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    generateTraderCargo(protoIndex = protoIndex)
+  except KeyError:
+    discard
