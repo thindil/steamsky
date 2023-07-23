@@ -16,10 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import game, ships, types, utils
+import crewinventory, game, ships, types, utils
 
 proc generateTraderCargo*(protoIndex: Positive) =
-  let traderShip = createShip(protoIndex = protoIndex, name = "",
+  var traderShip = createShip(protoIndex = protoIndex, name = "",
         x = playerShip.skyX, y = playerShip.skyY, speed = fullStop)
   traderCargo = @[]
   for item in traderShip.cargo:
@@ -30,4 +30,21 @@ proc generateTraderCargo*(protoIndex: Positive) =
       elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
       else: getRandom(min = 1, max = 10)
   while cargoAmount > 0:
+    var
+      itemAmount = if traderShip.crew.len < 5: getRandom(min = 1, max = 100)
+        elif traderShip.crew.len < 10: getRandom(min = 1, max = 500)
+        else: getRandom(min = 1, max = 1000)
+      itemIndex = getRandom(min = 1, max = itemsList.len)
+      newItemIndex = 0
+    for i in 1 .. itemsList.len:
+      itemIndex.dec
+      if itemIndex == 0:
+        newItemIndex = i
+        break
+    let cargoItemIndex = findItem(inventory = traderShip.cargo, protoIndex = newItemIndex)
+    if cargoItemIndex > -1:
+      traderCargo[cargoItemIndex].amount = traderCargo[cargoItemIndex].amount + itemAmount
+      traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[cargoItemIndex].amount + itemAmount
+    else:
+      discard
     cargoAmount.dec
