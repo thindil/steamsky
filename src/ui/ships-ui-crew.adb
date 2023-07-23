@@ -1970,18 +1970,6 @@ package body Ships.UI.Crew is
    Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
    -- ****
 
-   -- ****if* SUCrew/SUCrew.Get_Crew_Sort_Order
-   -- FUNCTION
-   -- Get the current sorting order of the player's ship's crew
-   -- RESULT
-   -- The current sorting order of the player's ship's crew
-   -- SOURCE
-   function Get_Crew_Sort_Order return Crew_Sort_Orders is
-      -- ****
-   begin
-      return Crew_Sort_Order;
-   end Get_Crew_Sort_Order;
-
    -- ****o* SUCrew/SUCrew.Sort_Crew_Command
    -- FUNCTION
    -- Sort the player's ship's crew list
@@ -2038,6 +2026,10 @@ package body Ships.UI.Crew is
       --## rule on TYPE_INITIAL_VALUES
       Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length)) :=
         (others => <>);
+      function Get_Crew_Sort_Order return Crew_Sort_Orders is
+      begin
+         return Crew_Sort_Order;
+      end Get_Crew_Sort_Order;
       function "<"(Left, Right: Local_Member_Data) return Boolean is
       begin
          if Get_Crew_Sort_Order = SELECTEDASC
@@ -2286,8 +2278,7 @@ package body Ships.UI.Crew is
         Null_Unbounded_String;
       Need_Repair, Need_Clean: Boolean := False;
       function Is_Working
-        (Owners: Natural_Container.Vector; M_Index: Positive)
-         return Boolean is
+        (Owners: Natural_Container.Vector; M_Index: Positive) return Boolean is
       begin
          Find_Owner_Loop :
          for Owner of Owners loop
@@ -2774,30 +2765,6 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Toggle_Crew_Member_Command;
 
-   -- ****if* SUCrew/SUCrew.Reset_Selection
-   -- FUNCTION
-   -- Reset the currently selected crew members
-   -- PARAMETERS
-   -- Interp - The Tcl interpreter in which the selection will be reseted
-   -- HISTORY
-   -- 8.5 - Added
-   -- SOURCE
-   procedure Reset_Selection(Interp: Tcl_Interp) is
-      -- ****
-   begin
-      Reset_Crew_Selection_Loop :
-      for I in 1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
-         if Tcl_GetVar
-             (interp => Interp,
-              varName => "crewindex" & Trim(Source => I'Img, Side => Left)) =
-           "1" then
-            Tcl_UnsetVar
-              (interp => Interp,
-               varName => "crewindex" & Trim(Source => I'Img, Side => Left));
-         end if;
-      end loop Reset_Crew_Selection_Loop;
-   end Reset_Selection;
-
    -- ****o* SUCrew/SUCrew.Toggle_All_Crew_Command
    -- FUNCTION
    -- Select or deselect all crew members
@@ -2823,6 +2790,23 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      procedure Reset_Selection(Interp: Tcl_Interp) is
+      begin
+         Reset_Crew_Selection_Loop :
+         for I in
+           1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
+            if Tcl_GetVar
+                (interp => Interp,
+                 varName =>
+                   "crewindex" & Trim(Source => I'Img, Side => Left)) =
+              "1" then
+               Tcl_UnsetVar
+                 (interp => Interp,
+                  varName =>
+                    "crewindex" & Trim(Source => I'Img, Side => Left));
+            end if;
+         end loop Reset_Crew_Selection_Loop;
+      end Reset_Selection;
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
          Reset_Selection(Interp => Interp);
