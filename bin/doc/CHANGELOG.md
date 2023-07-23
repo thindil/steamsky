@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   bases or to traders
 - Game hangs on creating a new game when there are no big bases on the map
 - Saving the player's career
+- Adding full docks event in debug menu
 
 ## [8.9] - 2023-07-09
 
