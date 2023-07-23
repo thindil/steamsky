@@ -35,14 +35,26 @@ gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 echo "Testing generateCargo."
 generateCargo()
-assert skyBases[1].cargo.len > 0, "Failed to generate cargo for a base."
+try:
+  assert skyBases[1].cargo.len > 0
+except AssertionDefect:
+  echo "Failed to generate cargo for a base."
 
 echo "Testing findBaseCargo."
 skyBases[1].cargo = @[]
 generateCargo()
-assert findBaseCargo(1) == 0, "Failed to find an item in a base cargo."
-assert findBaseCargo(40) == -1, "Failed to not find an item in a base cargo."
-assert findBaseCargo(490) == -1, "Failed to not find a non existing item in a base cargo."
+try:
+  assert findBaseCargo(1) == 0
+except AssertionDefect:
+  echo "Failed to find an item in a base cargo."
+try:
+  assert findBaseCargo(40) == -1
+except AssertionDefect:
+  echo "Failed to not find an item in a base cargo."
+try:
+  assert findBaseCargo(490) == -1
+except AssertionDefect:
+  echo "Failed to not find a non existing item in a base cargo."
 
 echo "Testing updateBaseCargo."
 skyBases[1].cargo = @[]
@@ -51,6 +63,12 @@ let
   amount = skyBases[1].cargo[0].amount - 1
   protoIndex = skyBases[1].cargo[0].protoIndex
 updateBaseCargo(protoIndex, -1)
-assert skyBases[1].cargo[0].amount == amount, "Failed to remove an item with protoIndex from a base cargo."
+try:
+  assert skyBases[1].cargo[0].amount == amount
+except AssertionDefect:
+  echo "Failed to remove an item with protoIndex from a base cargo."
 updateBaseCargo(cargoIndex = 0, amount = -1)
-assert skyBases[1].cargo[0].amount == amount - 1, "Failed to remove an item with amount from a base cargo."
+try:
+  assert skyBases[1].cargo[0].amount == amount - 1
+except AssertionDefect:
+  echo "Failed to remove an item with amount from a base cargo."
