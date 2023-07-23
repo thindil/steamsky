@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, game, maps, trades, types, utils
+import basestypes, game, maps, types, utils
 
 proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
   ## Generate the cargo in the selected sky base if needed

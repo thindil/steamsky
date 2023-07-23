@@ -17,7 +17,7 @@
 
 import std/[strutils, tables, xmlparser, xmltree]
 import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
-    statistics, trades, types
+    statistics, types
 
 type
   CraftingNoWorkshopError* = object of CatchableError
