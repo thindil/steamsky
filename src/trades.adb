@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
 with Maps; use Maps;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
@@ -413,92 +412,14 @@ package body Trades is
    end Sell_Items;
 
    procedure Generate_Trader_Cargo(Proto_Index: Positive) is
-      use Tiny_String;
-
-      Trader_Ship: Ship_Record :=
-        Create_Ship
-          (Proto_Index => Proto_Index, Name => Null_Bounded_String,
-           X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y, Speed => FULL_STOP);
-      Cargo_Amount: Natural range 0 .. 10 :=
-        (if Trader_Ship.Crew.Length < 5 then Get_Random(Min => 1, Max => 3)
-         elsif Trader_Ship.Crew.Length < 10 then Get_Random(Min => 1, Max => 5)
-         else Get_Random(Min => 1, Max => 10));
-      Cargo_Item_Index, Item_Index: Inventory_Container.Extended_Index;
-      Item_Amount: Positive range 1 .. 1_000;
-      New_Item_Index: Natural;
-      Item: Inventory_Data;
-      Trader_Item: Base_Cargo;
+      procedure Generate_Ada_Trader_Cargo(P_Index: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "generateAdaTraderCargo";
    begin
       BaseCargo_Container.Clear(Container => Trader_Cargo);
-      Add_Items_To_Cargo_Loop :
-      for Item of Trader_Ship.Cargo loop
-         BaseCargo_Container.Append
-           (Container => Trader_Cargo,
-            New_Item =>
-              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
-               Durability => 100,
-               Price => Get_Proto_Item(Index => Item.Proto_Index).Price));
-      end loop Add_Items_To_Cargo_Loop;
-      Generate_Cargo_Loop :
-      while Cargo_Amount > 0 loop
-         Item_Amount :=
-           (if Trader_Ship.Crew.Length < 5 then
-              Get_Random(Min => 1, Max => 100)
-            elsif Trader_Ship.Crew.Length < 10 then
-              Get_Random(Min => 1, Max => 500)
-            else Get_Random(Min => 1, Max => 1_000));
-         Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
-         Find_Item_Index_Loop :
-         for I in 1 .. Get_Proto_Amount loop
-            Item_Index := Item_Index - 1;
-            if Item_Index = 0 then
-               New_Item_Index := I;
-               exit Find_Item_Index_Loop;
-            end if;
-         end loop Find_Item_Index_Loop;
-         Cargo_Item_Index :=
-           Find_Item
-             (Inventory => Trader_Ship.Cargo, Proto_Index => New_Item_Index);
-         if Cargo_Item_Index > 0 then
-            Trader_Item :=
-              BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => Cargo_Item_Index);
-            Trader_Item.Amount := Trader_Item.Amount + Item_Amount;
-            BaseCargo_Container.Replace_Element
-              (Container => Trader_Cargo, Index => Cargo_Item_Index,
-               New_Item => Trader_Item);
-            Item :=
-              Inventory_Container.Element
-                (Container => Trader_Ship.Cargo, Index => Cargo_Item_Index);
-            Item.Amount := Item.Amount + Item_Amount;
-            Inventory_Container.Replace_Element
-              (Container => Trader_Ship.Cargo, Index => Cargo_Item_Index,
-               New_Item => Item);
-         else
-            if Free_Cargo
-                (Amount =>
-                   0 -
-                   (Get_Proto_Item(Index => New_Item_Index).Weight *
-                    Item_Amount)) >
-              -1 then
-               BaseCargo_Container.Append
-                 (Container => Trader_Cargo,
-                  New_Item =>
-                    (Proto_Index => New_Item_Index, Amount => Item_Amount,
-                     Durability => 100,
-                     Price => Get_Proto_Item(Index => New_Item_Index).Price));
-               Inventory_Container.Append
-                 (Container => Trader_Ship.Cargo,
-                  New_Item =>
-                    (Proto_Index => New_Item_Index, Amount => Item_Amount,
-                     Durability => 100, Name => Null_Bounded_String,
-                     Price => 0));
-            else
-               Cargo_Amount := 1;
-            end if;
-         end if;
-         Cargo_Amount := Cargo_Amount - 1;
-      end loop Generate_Cargo_Loop;
+      Generate_Ada_Trader_Cargo(P_Index => Proto_Index);
+      Set_Base_Cargo(Base_Index => 0);
    end Generate_Trader_Cargo;
 
 end Trades;
