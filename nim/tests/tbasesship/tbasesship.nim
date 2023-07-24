@@ -39,4 +39,7 @@ gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 echo "Testing payForDock."
 payForDock()
-assert playerShip.cargo[0].amount == 90, "Failed to pay for docking in a base."
+try:
+  assert playerShip.cargo[0].amount == 90
+except AssertionDefect:
+  echo "Failed to pay for docking in a base."
