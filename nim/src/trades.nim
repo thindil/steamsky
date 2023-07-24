@@ -18,7 +18,8 @@
 import std/tables
 import crewinventory, game, ships, shipscargo, types, utils
 
-proc generateTraderCargo*(protoIndex: Positive) =
+proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
+    KeyError], tags: [].} =
   var traderShip = createShip(protoIndex = protoIndex, name = "",
         x = playerShip.skyX, y = playerShip.skyY, speed = fullStop)
   traderCargo = @[]
