@@ -141,8 +141,7 @@ package Trades is
       -- Proto_Index - Index of prototype ship which will be used to generate
       --               cargo
       -- SOURCE
-   procedure Generate_Trader_Cargo(Proto_Index: Positive) with
-      Test_Case => (Name => "Test_GenerateTraderCargo", Mode => Nominal);
-      -- ****
+   procedure Generate_Trader_Cargo(Proto_Index: Positive);
+   -- ****
 
 end Trades;
