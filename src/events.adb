@@ -522,6 +522,7 @@ package body Events is
          Convention => C,
          External_Name => "getTraderOrFriendly";
    begin
+      Set_Ship_In_Nim;
       Generate_Ada_Traders;
       Count_Traders_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
