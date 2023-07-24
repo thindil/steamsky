@@ -532,7 +532,7 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseCargo";
-      procedure Cargo_From_Nim(Cargo: Nim_Cargo_Array; B_Index: Bases_Range) is
+      procedure Cargo_From_Nim(Cargo: Nim_Cargo_Array; B_Index: Natural) is
       --## rule off IMPROPER_INITIALIZATION
          Ada_Cargo: BaseCargo_Container.Vector (Capacity => 32);
       --## rule on IMPROPER_INITIALIZATION

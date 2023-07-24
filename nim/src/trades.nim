@@ -20,6 +20,10 @@ import crewinventory, game, ships, shipscargo, types, utils
 
 proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
     KeyError], tags: [].} =
+  ## Generate the list of items for trade.
+  ##
+  ## * protoIndex - the index of the ship's prototype from which the cargo will
+  ##                be generated
   var traderShip = createShip(protoIndex = protoIndex, name = "",
         x = playerShip.skyX, y = playerShip.skyY, speed = fullStop)
   traderCargo = @[]
