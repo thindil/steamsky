@@ -164,56 +164,23 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf
-     (Proto_Index: Positive) is
-   begin
-      begin
-         pragma Assert(True);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "req_sloc(trades.ads:0):Test_GenerateTraderCargo test requirement violated");
-      end;
-      GNATtest_Generated.GNATtest_Standard.Trades.Generate_Trader_Cargo
-        (Proto_Index);
-      begin
-         pragma Assert(True);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "ens_sloc(trades.ads:0:):Test_GenerateTraderCargo test commitment violated");
-      end;
-   end Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf;
+   --  procedure Test_Generate_Trader_Cargo_test_generatetradercargo (Gnattest_T : in out Test_);
+   --  procedure Test_Generate_Trader_Cargo_49c5d5_test_generatetradercargo (Gnattest_T : in out Test_) renames Test_Generate_Trader_Cargo_test_generatetradercargo;
+--  id:2.2/49c5d50bda1af19f/Generate_Trader_Cargo/1/1/test_generatetradercargo/
+   --  procedure Test_Generate_Trader_Cargo_test_generatetradercargo (Gnattest_T : in out Test_) is
 --  end read only
-
+--
+--        pragma Unreferenced(Gnattest_T);
+--
+--     begin
+--
+--        Generate_Trader_Cargo(96);
+--        Assert
+--          (BaseCargo_Container.Length(Trader_Cargo) > 0,
+--           "Failed to generate cargo for trade.");
+--
 --  begin read only
-   procedure Test_Generate_Trader_Cargo_test_generatetradercargo
-     (Gnattest_T: in out Test);
-   procedure Test_Generate_Trader_Cargo_49c5d5_968cbf
-     (Gnattest_T: in out Test) renames
-     Test_Generate_Trader_Cargo_test_generatetradercargo;
---  id:2.2/49c5d50bda1af19f/Generate_Trader_Cargo/1/0/test_generatetradercargo/
-   procedure Test_Generate_Trader_Cargo_test_generatetradercargo
-     (Gnattest_T: in out Test) is
-      procedure Generate_Trader_Cargo(Proto_Index: Positive) renames
-        Wrap_Test_Generate_Trader_Cargo_49c5d5_968cbf;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Generate_Trader_Cargo(96);
-      Assert
-        (BaseCargo_Container.Length(Trader_Cargo) > 0,
-         "Failed to generate cargo for trade.");
-
---  begin read only
-   end Test_Generate_Trader_Cargo_test_generatetradercargo;
+   --  end Test_Generate_Trader_Cargo_test_generatetradercargo;
 --  end read only
 
 --  begin read only

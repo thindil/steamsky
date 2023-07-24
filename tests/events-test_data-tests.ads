@@ -11,7 +11,7 @@ package Events.Test_Data.Tests is
    null record;
 
    procedure Test_Check_For_Event_73edc5_e01b25(Gnattest_T: in out Test);
-   --  events.ads:117:4:Check_For_Event:Test_CheckForEvent
+   --  events.ads:116:4:Check_For_Event:Test_CheckForEvent
 
 end Events.Test_Data.Tests;
 --  end read only
