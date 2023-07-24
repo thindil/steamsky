@@ -2026,10 +2026,12 @@ package body Ships.UI.Crew is
       --## rule on TYPE_INITIAL_VALUES
       Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length)) :=
         (others => <>);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function Get_Crew_Sort_Order return Crew_Sort_Orders is
       begin
          return Crew_Sort_Order;
       end Get_Crew_Sort_Order;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Member_Data) return Boolean is
       begin
          if Get_Crew_Sort_Order = SELECTEDASC
