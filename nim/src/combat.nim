@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, game, ships, shipscargo, trades, types, utils
+import crewinventory, game, messages, ships, ships2, shipscargo, trades, types, utils
 
 type
   EnemyRecord* = object
@@ -44,15 +44,20 @@ type
     loot*: Natural
     perception*: Natural
     harpoonDuration*: Natural
-    guns*: seq[array[3, Natural]]
+    guns*: seq[array[1..3, int]]
 
 var
   harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
   enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
-      skyY: 1))            ## The enemy information
-  enemyShipIndex: Natural  ## The index of the enemy's ship's prototype
-  factionName: string      ## The name of the enemy's faction (ship and its crew)
-  boardingOrders: seq[int] ## The list of orders for the boarding party
+      skyY: 1))               ## The enemy information
+  enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
+  factionName: string         ## The name of the enemy's faction (ship and its crew)
+  boardingOrders: seq[int]    ## The list of orders for the boarding party
+  pilotOrder: Natural = 0     ## The player's ship pilot order
+  engineerOrder: Natural      ## The player's ship engineer order
+  endCombat: bool = false     ## If true, the combat ends
+  enemyName: string           ## The name of the enemy's ship
+  messagesStarts: int = -1 ## The starting index of messages to show
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   enemyShipIndex = enemyIndex
@@ -114,7 +119,30 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
           else:
             modulesList[module.protoIndex].speed
       enemyGuns.add([1: index, 2: 1, 3: shootingSpeed])
-  enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[enemyIndex].accuracy.maxValue == 0: protoShipsList[enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[enemyIndex].accuracy.minValue, max = protoShipsList[enemyIndex].accuracy.maxValue)), distance: 10_000, combatAi: protoShipsList[enemyIndex].combatAi)
+  enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[
+      enemyIndex].accuracy.maxValue == 0: protoShipsList[
+      enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[
+      enemyIndex].accuracy.minValue, max = protoShipsList[
+      enemyIndex].accuracy.maxValue)), distance: 10_000,
+      combatAi: protoShipsList[enemyIndex].combatAi, evasion: (
+      if protoShipsList[enemyIndex].evasion.maxValue == 0: protoShipsList[
+      enemyIndex].evasion.minValue else: getRandom(min = protoShipsList[
+      enemyIndex].evasion.minValue, max = protoShipsList[
+      enemyIndex].evasion.maxValue)), loot: (if protoShipsList[
+      enemyIndex].loot.maxValue == 0: protoShipsList[
+      enemyIndex].loot.minValue else: getRandom(min = protoShipsList[
+      enemyIndex].loot.minValue, max = protoShipsList[
+      enemyIndex].loot.maxValue)), perception: (if protoShipsList[
+      enemyIndex].perception.maxValue == 0: protoShipsList[
+      enemyIndex].perception.minValue else: getRandom(min = protoShipsList[
+      enemyIndex].perception.minValue, max = protoShipsList[
+      enemyIndex].perception.maxValue)), harpoonDuration: 0, guns: enemyGuns)
+  if pilotOrder == 0:
+    pilotOrder = 2
+    engineerOrder = 3
+  endCombat = false
+  enemyName = generateShipName(factionIndex = protoShipsList[enemyIndex].owner)
+  messagesStarts = getLastMessageIndex()
 
 # Temporary code for interfacing with Ada
 
