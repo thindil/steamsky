@@ -19,34 +19,6 @@ import std/[math, strutils, tables]
 import crewinventory, game, log, messages, ships, ships2, shipscargo, shipscrew,
     shipsmovement, trades, types, utils
 
-type
-  EnemyRecord* = object
-    ## Used to store information about the enemy
-    ##
-    ## * ship            - The enemy's ship
-    ## * accuracy        - The enemy's bonus to accuracy
-    ## * distance        - The distance to the enemy's ship in combat
-    ## * combatAi        - The type of enemy's AI
-    ## * evasion         - The enemy's bonus to evasion
-    ## * loot            - The amount of money looted from the enemy after win
-    ##                     the fight with it
-    ## * perception      - The enemy's bonus to perception
-    ## * harpoonDuration - How long in combat rounds the enemy's ship will be
-    ##                     stopped by the player's harpoon
-    ## * guns            - The list of guns on the enemy's ship, 0 - gun index
-    ##                     in ship modules list, 1 - gunner order, 2 - amount
-    ##                     of shoots from the gun, value below zero means that
-    ##                     gun shoot once per that amount of rounds
-    ship*: ShipRecord
-    accuracy*: Natural
-    distance*: int
-    combatAi*: ShipCombatAi
-    evasion*: Natural
-    loot*: Natural
-    perception*: Natural
-    harpoonDuration*: Natural
-    guns*: seq[array[1..3, int]]
-
 var
   harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
   enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
