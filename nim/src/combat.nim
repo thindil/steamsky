@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import game, ships, shipscargo, trades, types, utils
+import crewinventory, game, ships, shipscargo, trades, types, utils
 
 type
   EnemyRecord* = object
@@ -75,7 +75,33 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   minFreeSpace = (minFreeSpace.float * (1.0 - (getRandom(min = 20,
       max = 70).float / 100.0))).Natural
   while freeCargo(amount = 0, ship = enemyShip) > minFreeSpace:
-    var itemIndex = getRandom(min = 1, max = itemsList.len)
+    var
+      itemIndex = getRandom(min = 1, max = itemsList.len)
+      newItemIndex = 0
+    for i in 1 .. itemsList.len:
+      itemIndex.dec
+      if itemIndex == 0:
+        newItemIndex = i
+        break
+    let
+      itemAmount = if enemyShip.crew.len < 5:
+          getRandom(min = 1, max = 100)
+        elif enemyShip.crew.len < 10:
+          getRandom(min = 1, max = 500)
+        else:
+          getRandom(min = 1, max = 1000)
+      cargoItemIndex = findItem(inventory = enemyShip.cargo,
+          protoIndex = newItemIndex)
+    if cargoItemIndex > -1:
+      enemyShip.cargo[cargoItemIndex].amount = enemyShip.cargo[
+          cargoItemIndex].amount + itemAmount
+    else:
+      if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
+        enemyShip.cargo.add(InventoryData(protoIndex: newItemIndex,
+            amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
+  var enemyGuns: seq[array[1..3, int]] = @[]
+  for index, module in enemyShip.modules:
+    if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
 
 # Temporary code for interfacing with Ada
 
