@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, game, messages, ships, ships2, shipscargo, trades, types, utils
+import crewinventory, game, messages, ships, ships2, shipscargo, shipscrew, trades, types, utils
 
 type
   EnemyRecord* = object
@@ -57,7 +57,8 @@ var
   engineerOrder: Natural      ## The player's ship engineer order
   endCombat: bool = false     ## If true, the combat ends
   enemyName: string           ## The name of the enemy's ship
-  messagesStarts: int = -1 ## The starting index of messages to show
+  messagesStarts: int = -1    ## The starting index of messages to show
+  guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   enemyShipIndex = enemyIndex
@@ -143,6 +144,28 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   endCombat = false
   enemyName = generateShipName(factionIndex = protoShipsList[enemyIndex].owner)
   messagesStarts = getLastMessageIndex()
+  let oldGunsList = guns
+  var sameList = true
+  guns = @[]
+  for index, module in playerShip.modules:
+    if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
+      guns.add([1: index, 2: 1, 3: modulesList[module.protoIndex].speed])
+  if oldGunsList.len == guns.len:
+    for index, gun in guns:
+      if gun[1] != oldGunsList[index][1]:
+        sameList = false
+        break
+    if sameList:
+      guns = oldGunsList
+  if newCombat:
+    
+    proc countPerception(spotter, spotted: ShipRecord): Natural =
+      for index, member in spotter.crew:
+        case member.order
+        of pilot:
+          result = result + getSkillLevel(member = member, skillIndex = perceptionSkill)
+          if spotter.crew == playerShip.crew:
+            gainExp(amount = 1, skillNumber = perceptionSkill, crewIndex = index)
 
 # Temporary code for interfacing with Ada
 
