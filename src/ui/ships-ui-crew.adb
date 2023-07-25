@@ -2792,18 +2792,18 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      procedure Reset_Selection(Interp: Tcl_Interp) is
+      procedure Reset_Selection(Interpreter: Tcl_Interp) is
       begin
          Reset_Crew_Selection_Loop :
          for I in
            1 .. Crew_Container.Length(Container => Player_Ship.Crew) loop
             if Tcl_GetVar
-                (interp => Interp,
+                (interp => Interpreter,
                  varName =>
                    "crewindex" & Trim(Source => I'Img, Side => Left)) =
               "1" then
                Tcl_UnsetVar
-                 (interp => Interp,
+                 (interp => Interpreter,
                   varName =>
                     "crewindex" & Trim(Source => I'Img, Side => Left));
             end if;
@@ -2811,7 +2811,7 @@ package body Ships.UI.Crew is
       end Reset_Selection;
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
-         Reset_Selection(Interp => Interp);
+         Reset_Selection(Interpreter => Interp);
       else
          Set_Crew_Selection_Loop :
          for I in
