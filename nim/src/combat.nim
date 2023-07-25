@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[math, strutils, tables]
 import crewinventory, game, ships, shipscargo, trades, types, utils
 
 type
@@ -102,6 +102,19 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
+      var shootingSpeed = 0
+      if modulesList[module.protoIndex].speed > 0:
+        shootingSpeed = if protoShipsList[enemyIndex].combatAi == disarmer:
+            ((modulesList[module.protoIndex].speed.float / 2.0).ceil).Natural
+          else:
+            modulesList[module.protoIndex].speed
+      else:
+        shootingSpeed = if protoShipsList[enemyIndex].combatAi == disarmer:
+            modulesList[module.protoIndex].speed - 1
+          else:
+            modulesList[module.protoIndex].speed
+      enemyGuns.add([1: index, 2: 1, 3: shootingSpeed])
+  enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[enemyIndex].accuracy.maxValue == 0: protoShipsList[enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[enemyIndex].accuracy.minValue, max = protoShipsList[enemyIndex].accuracy.maxValue)), distance: 10_000, combatAi: protoShipsList[enemyIndex].combatAi)
 
 # Temporary code for interfacing with Ada
 
