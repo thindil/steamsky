@@ -527,14 +527,16 @@ package body Events is
       Count_Traders_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
          Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 1);
-         exit Count_Traders_Loop when Ship_Index = 0;
-         Traders.Append(New_Item => I);
+         if Ship_Index > 0 then
+            Traders.Append(New_Item => Ship_Index);
+         end if;
       end loop Count_Traders_Loop;
       Count_Friendly_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
          Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 0);
-         exit Count_Friendly_Loop when Ship_Index = 0;
-         Friendly_Ships.Append(New_Item => I);
+         if Ship_Index > 0 then
+            Friendly_Ships.Append(New_Item => Ship_Index);
+         end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
 
