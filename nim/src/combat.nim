@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, game, messages, ships, ships2, shipscargo, shipscrew, trades, types, utils
+import crewinventory, game, log, messages, ships, ships2, shipscargo, shipscrew,
+    shipsmovement, trades, types, utils
 
 type
   EnemyRecord* = object
@@ -59,6 +60,7 @@ var
   enemyName: string           ## The name of the enemy's ship
   messagesStarts: int = -1    ## The starting index of messages to show
   guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
+  oldSpeed = fullSpeed        ## The speed of the player's ship before combat
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   enemyShipIndex = enemyIndex
@@ -158,14 +160,50 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
     if sameList:
       guns = oldGunsList
   if newCombat:
-    
+
     proc countPerception(spotter, spotted: ShipRecord): Natural =
       for index, member in spotter.crew:
         case member.order
         of pilot:
-          result = result + getSkillLevel(member = member, skillIndex = perceptionSkill)
+          result = result + getSkillLevel(member = member,
+              skillIndex = perceptionSkill)
           if spotter.crew == playerShip.crew:
-            gainExp(amount = 1, skillNumber = perceptionSkill, crewIndex = index)
+            gainExp(amount = 1, skillNumber = perceptionSkill,
+                crewIndex = index)
+        of gunner:
+          result = result + getSkillLevel(member = member,
+              skillIndex = perceptionSkill)
+          if spotter.crew == playerShip.crew:
+            gainExp(amount = 1, skillNumber = perceptionSkill,
+                crewIndex = index)
+        else:
+          discard
+      for module in spotted.modules:
+        if module.mType == ModuleType2.hull:
+          result = result + module.maxModules
+          break
+
+    let
+      playerPerception = countPerception(spotter = playerShip,
+        spotted = enemyShip)
+      enemyPerception = (if enemy.perception >
+          0: enemy.perception else: countPerception(spotter = enemy.ship,
+          spotted = playerShip))
+    oldSpeed = playerShip.speed
+    if playerPerception + getRandom(min = 1, max = 50) > enemyPerception +
+        getRandom(min = 1, max = 50):
+      addMessage(message = "You spotted " & enemy.ship.name & ".",
+          mType = otherMessage)
+    else:
+      if realSpeed(ship = playerShip) < realSpeed(ship = enemy.ship):
+        logMessage(message = ("You were attacked by " &
+            enemy.ship.name).cstring, messageType = DebugTypes.combat)
+        addMessage(message = enemy.ship.name & " intercepted you.",
+            mType = combatMessage)
+        return true
+      addMessage(message = "You spotted " & enemy.ship.name & ".",
+          mType = otherMessage)
+    return false
 
 # Temporary code for interfacing with Ada
 
