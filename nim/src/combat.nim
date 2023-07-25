@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import game, ships, types
+import std/[strutils, tables]
+import game, ships, shipscargo, trades, types, utils
 
 type
   EnemyRecord* = object
@@ -59,9 +59,23 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   factionName = factionsList[protoShipsList[enemyIndex].owner].name
   harpoonDuration = 0
   boardingOrders = @[]
-  let enemyShip = createShip(protoIndex = enemyIndex, name = "",
+  var enemyShip = createShip(protoIndex = enemyIndex, name = "",
       x = playerShip.skyX, y = playerShip.skyY, speed = fullSpeed)
   # Enemy ship is a trader, generate a cargo for it
+  if protoShipsList[enemyIndex].name.contains(tradersName):
+    generateTraderCargo(protoIndex = enemyIndex)
+    for item in traderCargo:
+      updateCargo(ship = enemyShip, protoIndex = item.protoIndex,
+          amount = item.amount)
+    traderCargo = @[]
+  var minFreeSpace = 0
+  for module in enemyShip.modules:
+    if module.mType == ModuleType2.cargoRoom and module.durability > 0:
+      minFreeSpace = minFreeSpace + modulesList[module.protoIndex].maxValue
+  minFreeSpace = (minFreeSpace.float * (1.0 - (getRandom(min = 20,
+      max = 70).float / 100.0))).Natural
+  while freeCargo(amount = 0, ship = enemyShip) > minFreeSpace:
+    var itemIndex = getRandom(min = 1, max = itemsList.len)
 
 # Temporary code for interfacing with Ada
 
