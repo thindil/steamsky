@@ -17,6 +17,7 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Interfaces.C.Strings;
 with GNAT.String_Split;
 with Crew; use Crew;
 with Messages; use Messages;
@@ -70,6 +71,7 @@ package body Combat is
 
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
+      use Interfaces.C.Strings;
       use Trades;
       use Tiny_String;
 
@@ -78,6 +80,28 @@ package body Combat is
       Enemy_Guns: Guns_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       Shooting_Speed: Integer := 0;
+      type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
+      type Nim_Enemy_Record is record
+         Accuracy: Natural := 0;
+         Combat_Ai: Integer := 0;
+         Evasion: Natural := 0;
+         Loot: Natural := 0;
+         Perception: Natural := 0;
+         Guns: Nim_Guns;
+         Name: chars_ptr;
+      end record;
+      Nim_Enemy: Nim_Enemy_Record;
+      Result: Integer;
+      function Start_Ada_Combat
+        (E_Index, N_Combat: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "startAdaCombat";
+      procedure Get_Ada_Enemy
+        (Nim_Enemy: out Nim_Enemy_Record) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaEnemy";
    begin
       Enemy_Ship_Index := Enemy_Index;
       Faction_Name :=
@@ -85,6 +109,22 @@ package body Combat is
           .Name;
       Harpoon_Duration := 0;
       Boarding_Orders.Clear;
+      Enemy.Distance := 10_000;
+      Enemy.Harpoon_Duration := 0;
+      Result := Start_Ada_Combat(E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
+      Get_Ada_Enemy(Nim_Enemy => Nim_Enemy);
+      Enemy.Accuracy := Nim_Enemy.Accuracy;
+      Enemy.Combat_Ai := Ship_Combat_Ai'Val(Nim_Enemy.Combat_Ai);
+      Enemy.Evasion := Nim_Enemy.Evasion;
+      Enemy.Loot := Nim_Enemy.Loot;
+      Enemy.Perception := Nim_Enemy.Perception;
+      End_Combat := False;
+      Enemy_Name := To_Bounded_String(Source => Value(Item => Nim_Enemy.Name));
+      Messages_Starts := Get_Last_Message_Index + 1;
+      Get_Ship_From_Nim(Ship => Enemy.Ship);
+      if Result = 1 then
+         return True;
+      end if;
       Enemy_Ship :=
         Create_Ship
           (Proto_Index => Enemy_Index, Name => Null_Bounded_String,

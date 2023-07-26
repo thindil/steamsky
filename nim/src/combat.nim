@@ -201,6 +201,7 @@ type
     loot: cint
     perception: cint
     guns: array[10, array[3, cint]]
+    name: cstring
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = enemy.accuracy.cint
@@ -208,6 +209,7 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.evasion = enemy.evasion.cint
   adaEnemy.loot = enemy.loot.cint
   adaEnemy.perception = enemy.perception.cint
+  adaEnemy.name = enemyName.cstring
   for index, gun in enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
   if enemy.guns.len < 10:
