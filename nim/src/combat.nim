@@ -20,9 +20,6 @@ import crewinventory, game, log, messages, ships, ships2, shipscargo, shipscrew,
     shipsmovement, trades, types, utils
 
 var
-  harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
-  enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
-      skyY: 1))               ## The enemy information
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
   factionName: string         ## The name of the enemy's faction (ship and its crew)
   boardingOrders: seq[int]    ## The list of orders for the boarding party
@@ -168,8 +165,8 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
           mType = otherMessage)
     else:
       if realSpeed(ship = playerShip) < realSpeed(ship = enemy.ship):
-        logMessage(message = ("You were attacked by " &
-            enemy.ship.name).cstring, messageType = DebugTypes.combat)
+        logMessage(message = "You were attacked by " & enemy.ship.name,
+            debugType = DebugTypes.combat)
         addMessage(message = enemy.ship.name & " intercepted you.",
             mType = combatMessage)
         return true

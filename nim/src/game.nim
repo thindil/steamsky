@@ -128,6 +128,9 @@ var
   protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
   gameDate*: DateRecord                    ## The current time in the game
   traderCargo*: seq[BaseCargo]             ## The current trader's ship's cargo
+  harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
+  enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
+      skyY: 1))                            ## The enemy information
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =
