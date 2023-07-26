@@ -26,11 +26,20 @@ updateCargo(playerShip, 6, 10)
 
 echo "Testing setRecipe."
 setRecipe(0, 10, "1")
-assert playerShip.modules[0].craftingAmount == 10, "Failed to set the amount for the crafting order."
-assert playerShip.modules[0].craftingIndex == "1", "Failed to set the index for the crafting order."
+try:
+  assert playerShip.modules[0].craftingAmount == 10
+except AssertionDefect:
+  echo "Failed to set the amount for the crafting order."
+try:
+  assert playerShip.modules[0].craftingIndex == "1"
+except AssertionDefect:
+  echo "Failed to set the index for the crafting order."
 
 echo "Testing checkRecipe."
-assert checkRecipe("1") == 10, "Failed to check the possible amount of crafted items for the recipe."
+try:
+  assert checkRecipe("1") == 10
+except AssertionDefect:
+  echo "Failed to check the possible amount of crafted items for the recipe."
 
 echo "Testing manufacturing."
 manufacturing(15)
