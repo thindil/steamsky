@@ -370,12 +370,22 @@ package body Trades.UI is
              (Container => Player_Ship.Cargo, Index => I)
              .Price;
          Base_Amount := 0;
-         if Base_Cargo_Index > 0 and
-           Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index) then
-            Base_Amount :=
-              BaseCargo_Container.Element
-                (Container => Base_Cargo, Index => Base_Cargo_Index)
-                .Amount;
+         if Base_Index > 0 then
+            if Base_Cargo_Index > 0 and
+              Is_Buyable
+                (Base_Type => Base_Type, Item_Index => Proto_Index) then
+               Base_Amount :=
+                 BaseCargo_Container.Element
+                   (Container => Base_Cargo, Index => Base_Cargo_Index)
+                   .Amount;
+            end if;
+         else
+            if Base_Cargo_Index > 0 then
+               Base_Amount :=
+                 BaseCargo_Container.Element
+                   (Container => Base_Cargo, Index => Base_Cargo_Index)
+                   .Amount;
+            end if;
          end if;
          Add_Button
            (Table => Trade_Table, Text => To_String(Source => Item_Name),
@@ -1097,7 +1107,9 @@ package body Trades.UI is
          end Count_Sell_Amount_Block;
       end if;
       if Base_Cargo_Index > 0 and Money_Index_2 > 0 and
-        Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index) then
+        ((Base_Index > 0 and
+          Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index)) or
+         (Base_Index = 0)) then
          Max_Buy_Amount :=
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
