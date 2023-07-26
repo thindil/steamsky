@@ -30,6 +30,7 @@ var
   messagesStarts: int = -1    ## The starting index of messages to show
   guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
   oldSpeed = fullSpeed        ## The speed of the player's ship before combat
+  turnNumber: Natural = 0     ## The number of the combat's turn
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
   enemyShipIndex = enemyIndex
@@ -173,6 +174,10 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
       addMessage(message = "You spotted " & enemy.ship.name & ".",
           mType = otherMessage)
     return false
+  turnNumber = 0
+  logMessage(message = "Started combat with " & enemy.ship.name,
+      debugType = DebugTypes.combat)
+  return true
 
 # Temporary code for interfacing with Ada
 
@@ -180,3 +185,10 @@ proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [],
     tags: [], exportc.} =
   harpoonDuration = playerDuration
   enemy.harpoonDuration = enemyDuration
+
+proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
+    RootEffect], exportc.} =
+  try:
+    return startCombat(enemyIndex = enemyIndex, newCombat = newCombat == 1).cint
+  except ValueError:
+    return 0
