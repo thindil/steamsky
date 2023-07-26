@@ -192,3 +192,25 @@ proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
     return startCombat(enemyIndex = enemyIndex, newCombat = newCombat == 1).cint
   except ValueError:
     return 0
+
+type
+  AdaEnemyData = object
+    accuracy: cint
+    combatAi: cint
+    evasion: cint
+    loot: cint
+    perception: cint
+    guns: array[10, array[3, cint]]
+
+proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
+  adaEnemy.accuracy = enemy.accuracy.cint
+  adaEnemy.combatAi = enemy.combatAi.ord.cint
+  adaEnemy.evasion = enemy.evasion.cint
+  adaEnemy.loot = enemy.loot.cint
+  adaEnemy.perception = enemy.perception.cint
+  for index, gun in enemy.guns:
+    adaEnemy.guns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
+  if enemy.guns.len < 10:
+    for index in enemy.guns.len - 1 .. 10:
+      adaEnemy.guns[index] = [-1, -1, -1]
+  npcShip = enemy.ship
