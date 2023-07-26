@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
@@ -36,25 +36,25 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Bases; use Bases;
+with Bases;
 with Config; use Config;
 with CoreUI; use CoreUI;
-with Crafts; use Crafts;
+with Crafts;
 with Dialogs; use Dialogs;
-with Factions; use Factions;
+with Factions;
 with Game; use Game.Tiny_String;
-with Maps; use Maps;
+with Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
 with Table; use Table;
-with Utils; use Utils;
+with Utils;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew is
@@ -188,6 +188,8 @@ package body Ships.UI.Crew is
    end Update_Tooltips;
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
+      use Ada.Characters.Handling;
+
       Buttons_Frame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural;
@@ -742,6 +744,11 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tklib.Ada.Autoscroll;
+      use Bases;
+      use Factions;
+
       Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
@@ -2275,6 +2282,8 @@ package body Ships.UI.Crew is
    procedure Set_Available_Orders
      (Member_Index: Positive; Orders_Box: Ttk_ComboBox; Button: Ttk_Button) is
      -- ****
+      use Crafts;
+
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
       Available_Orders, Tcl_Commands: Unbounded_String :=
         Null_Unbounded_String;
