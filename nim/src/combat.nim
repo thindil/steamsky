@@ -202,6 +202,7 @@ type
     perception: cint
     guns: array[10, array[3, cint]]
     name: cstring
+    playerGuns: array[10, array[3, cint]]
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = enemy.accuracy.cint
@@ -213,6 +214,13 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   for index, gun in enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
   if enemy.guns.len < 10:
-    for index in enemy.guns.len - 1 .. 10:
+    let startIndex = (if enemy.guns.len > 0: enemy.guns.len - 1 else: 0)
+    for index in startIndex .. 9:
       adaEnemy.guns[index] = [-1, -1, -1]
+  for index, gun in guns:
+    adaEnemy.playerGuns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
+  if guns.len < 10:
+    let startIndex = (if guns.len > 0: guns.len - 1 else: 0)
+    for index in startIndex .. 9:
+      adaEnemy.playerGuns[index] = [-1, -1, -1]
   npcShip = enemy.ship

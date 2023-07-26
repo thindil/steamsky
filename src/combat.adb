@@ -37,7 +37,6 @@ with Goals;
 with Factions; use Factions;
 with Stories;
 with Config;
-with Trades;
 
 package body Combat is
 
@@ -72,14 +71,8 @@ package body Combat is
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
       use Interfaces.C.Strings;
-      use Trades;
       use Tiny_String;
 
-      Enemy_Ship: Ship_Record;
-      --## rule off IMPROPER_INITIALIZATION
-      Enemy_Guns: Guns_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Shooting_Speed: Integer := 0;
       type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
       type Nim_Enemy_Record is record
          Accuracy: Natural := 0;
@@ -89,16 +82,15 @@ package body Combat is
          Perception: Natural := 0;
          Guns: Nim_Guns;
          Name: chars_ptr;
+         Player_Guns: Nim_Guns;
       end record;
       Nim_Enemy: Nim_Enemy_Record;
       Result: Integer;
-      function Start_Ada_Combat
-        (E_Index, N_Combat: Integer) return Integer with
+      function Start_Ada_Combat(E_Index, N_Combat: Integer) return Integer with
          Import => True,
          Convention => C,
          External_Name => "startAdaCombat";
-      procedure Get_Ada_Enemy
-        (Nim_Enemy: out Nim_Enemy_Record) with
+      procedure Get_Ada_Enemy(Nim_Enemy: out Nim_Enemy_Record) with
          Import => True,
          Convention => C,
          External_Name => "getAdaEnemy";
@@ -111,7 +103,9 @@ package body Combat is
       Boarding_Orders.Clear;
       Enemy.Distance := 10_000;
       Enemy.Harpoon_Duration := 0;
-      Result := Start_Ada_Combat(E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
+      Result :=
+        Start_Ada_Combat
+          (E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
       Get_Ada_Enemy(Nim_Enemy => Nim_Enemy);
       Enemy.Accuracy := Nim_Enemy.Accuracy;
       Enemy.Combat_Ai := Ship_Combat_Ai'Val(Nim_Enemy.Combat_Ai);
@@ -121,331 +115,25 @@ package body Combat is
       End_Combat := False;
       Enemy_Name := To_Bounded_String(Source => Value(Item => Nim_Enemy.Name));
       Messages_Starts := Get_Last_Message_Index + 1;
+      Enemy.Guns.Clear;
+      Convert_Enemy_Guns_Loop :
+      for I in 0 .. 9 loop
+         exit Convert_Enemy_Guns_Loop when Nim_Enemy.Guns(I, 0) = -1;
+         Enemy.Guns.Append
+           (New_Item =>
+              (1 => Nim_Enemy.Guns(I, 0), 2 => Nim_Enemy.Guns(I, 1),
+               3 => Nim_Enemy.Guns(I, 2)));
+      end loop Convert_Enemy_Guns_Loop;
       Get_Ship_From_Nim(Ship => Enemy.Ship);
-      if Result = 1 then
-         return True;
-      end if;
-      Enemy_Ship :=
-        Create_Ship
-          (Proto_Index => Enemy_Index, Name => Null_Bounded_String,
-           X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y,
-           Speed => FULL_SPEED);
-      -- Enemy ship is trader, generate cargo for it
-      if Index
-          (Source => Get_Proto_Ship(Proto_Index => Enemy_Index).Name,
-           Pattern => To_String(Source => Traders_Name)) >
-        0 then
-         Generate_Trader_Cargo(Proto_Index => Enemy_Index);
-         Update_Cargo_Loop :
-         for I in
-           BaseCargo_Container.First_Index(Container => Trader_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Trader_Cargo) loop
-            Update_Cargo
-              (Ship => Enemy_Ship,
-               Proto_Index =>
-                 BaseCargo_Container.Element
-                   (Container => Trader_Cargo, Index => I)
-                   .Proto_Index,
-               Amount =>
-                 BaseCargo_Container.Element
-                   (Container => Trader_Cargo, Index => I)
-                   .Amount);
-         end loop Update_Cargo_Loop;
-         BaseCargo_Container.Clear(Container => Trader_Cargo);
-      end if;
-      Add_Enemy_Cargo_Block :
-      declare
-         Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
-         Item_Amount: Positive := 1;
-         New_Item_Index: Natural := 0;
-         --## rule off IMPROPER_INITIALIZATION
-         Item: Inventory_Data;
-         --## rule on IMPROPER_INITIALIZATION
-      begin
-         Count_Free_Space_Loop :
-         for Module of Enemy_Ship.Modules loop
-            if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
-               Min_Free_Space :=
-                 Min_Free_Space +
-                 Get_Module(Index => Module.Proto_Index).Max_Value;
-            end if;
-         end loop Count_Free_Space_Loop;
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         Min_Free_Space :=
-           Natural
-             (Float(Min_Free_Space) *
-              (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         Add_Enemy_Cargo_Loop :
-         while Free_Cargo(Amount => 0, Ship => Enemy_Ship) >
-           Min_Free_Space loop
-            Item_Index := Get_Random(Min => 1, Max => Get_Proto_Amount);
-            Find_Item_Index_Loop :
-            for I in 1 .. Get_Proto_Amount loop
-               Item_Index := Item_Index - 1;
-               if Item_Index = 0 then
-                  New_Item_Index := I;
-                  exit Find_Item_Index_Loop;
-               end if;
-            end loop Find_Item_Index_Loop;
-            Item_Amount :=
-              (if Enemy_Ship.Crew.Length < 5 then
-                 Get_Random(Min => 1, Max => 100)
-               elsif Enemy_Ship.Crew.Length < 10 then
-                 Get_Random(Min => 1, Max => 500)
-               else Get_Random(Min => 1, Max => 1_000));
-            Cargo_Item_Index :=
-              Find_Item
-                (Inventory => Enemy_Ship.Cargo, Proto_Index => New_Item_Index);
-            if Cargo_Item_Index > 0 then
-               Item :=
-                 Inventory_Container.Element
-                   (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index);
-               --## rule off ASSIGNMENTS
-               Item.Amount := Item.Amount + Item_Amount;
-               --## rule on ASSIGNMENTS
-               Inventory_Container.Replace_Element
-                 (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index,
-                  New_Item => Item);
-            else
-               --## rule off SIMPLIFIABLE_EXPRESSIONS
-               if Free_Cargo
-                   (Amount =>
-                      0 -
-                      (Get_Proto_Item(Index => New_Item_Index).Weight *
-                       Item_Amount)) >
-                 -1 then
-                  Inventory_Container.Append
-                    (Container => Enemy_Ship.Cargo,
-                     New_Item =>
-                       (Proto_Index => New_Item_Index, Amount => Item_Amount,
-                        Durability => 100, Name => Null_Bounded_String,
-                        Price => 0));
-               end if;
-               --## rule on SIMPLIFIABLE_EXPRESSIONS
-            end if;
-         end loop Add_Enemy_Cargo_Loop;
-      end Add_Enemy_Cargo_Block;
-      Enemy_Guns.Clear;
-      Count_Enemy_Shooting_Speed_Loop :
-      for I in Enemy_Ship.Modules.Iterate loop
-         if Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN and
-           Enemy_Ship.Modules(I).Durability > 0 then
-            if Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index).Speed >
-              0 then
-               Shooting_Speed :=
-                 (if
-                    Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai =
-                    DISARMER
-                  then
-                    Natural
-                      (Float'Ceiling
-                         (Float
-                            (Get_Module
-                               (Index => Enemy_Ship.Modules(I).Proto_Index)
-                               .Speed) /
-                          2.0))
-                  else Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
-                      .Speed);
-            else
-               Shooting_Speed :=
-                 (if
-                    Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai =
-                    DISARMER
-                  then
-                    Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
-                      .Speed -
-                    1
-                  else Get_Module(Index => Enemy_Ship.Modules(I).Proto_Index)
-                      .Speed);
-            end if;
-            Enemy_Guns.Append
-              (New_Item =>
-                 (1 => Modules_Container.To_Index(Position => I), 2 => 1,
-                  3 => Shooting_Speed));
-         end if;
-      end loop Count_Enemy_Shooting_Speed_Loop;
-      Enemy :=
-        (Ship => Enemy_Ship,
-         Accuracy =>
-           (if
-              Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Max_Value = 0
-            then Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy.Min_Value
-            else Get_Random
-                (Min =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy
-                     .Min_Value,
-                 Max =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Accuracy
-                     .Max_Value)),
-         Distance => 10_000,
-         Combat_Ai => Get_Proto_Ship(Proto_Index => Enemy_Index).Combat_Ai,
-         Evasion =>
-           (if Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Max_Value = 0
-            then Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion.Min_Value
-            else Get_Random
-                (Min =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion
-                     .Min_Value,
-                 Max =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Evasion
-                     .Max_Value)),
-         Loot =>
-           (if Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value = 0
-            then Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value
-            else Get_Random
-                (Min =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Min_Value,
-                 Max =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Loot.Max_Value)),
-         Perception =>
-           (if
-              Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Max_Value =
-              0
-            then
-              Get_Proto_Ship(Proto_Index => Enemy_Index).Perception.Min_Value
-            else Get_Random
-                (Min =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
-                     .Min_Value,
-                 Max =>
-                   Get_Proto_Ship(Proto_Index => Enemy_Index).Perception
-                     .Max_Value)),
-         Harpoon_Duration => 0, Guns => Enemy_Guns);
       if Pilot_Order = 0 then
          Pilot_Order := 2;
          Engineer_Order := 3;
       end if;
-      End_Combat := False;
-      Enemy_Name :=
-        Generate_Ship_Name
-          (Owner => Get_Proto_Ship(Proto_Index => Enemy_Index).Owner);
-      Messages_Starts := Get_Last_Message_Index + 1;
-      Set_Player_Guns_List_Block :
-      declare
-         Old_Guns_List: constant Guns_Container.Vector := Guns;
-         Same_Lists: Boolean := True;
-      begin
-         Guns.Clear;
-         Set_Player_Guns_Loop :
-         for I in Player_Ship.Modules.Iterate loop
-            if Player_Ship.Modules(I).M_Type in GUN | HARPOON_GUN and
-              Player_Ship.Modules(I).Durability > 0 then
-               Guns.Append
-                 (New_Item =>
-                    (1 => Modules_Container.To_Index(Position => I), 2 => 1,
-                     3 =>
-                       Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
-                         .Speed));
-            end if;
-         end loop Set_Player_Guns_Loop;
-         if Old_Guns_List.Length > 0 and
-           Old_Guns_List.Length = Guns.Length then
-            Compare_Lists_Loop :
-            for I in Guns.First_Index .. Guns.Last_Index loop
-               if Guns(I)(1) /= Old_Guns_List(I)(1) then
-                  Same_Lists := False;
-                  exit Compare_Lists_Loop;
-               end if;
-            end loop Compare_Lists_Loop;
-            if Same_Lists then
-               Guns := Old_Guns_List;
-            end if;
-         end if;
-      end Set_Player_Guns_List_Block;
-      if New_Combat then
-         Start_Combat_Block :
-         declare
-            function Count_Perception
-              (Spotter, Spotted: Ship_Record) return Natural is
-               Result: Natural := 0;
-            begin
-               Count_Spotter_Perception_Loop :
-               for I in Spotter.Crew.Iterate loop
-                  case Spotter.Crew(I).Order is
-                     when PILOT =>
-                        Result :=
-                          Result +
-                          Get_Skill_Level
-                            (Member => Spotter.Crew(I),
-                             Skill_Index => Perception_Skill);
-                        if Spotter = Player_Ship then
-                           Gain_Exp
-                             (Amount => 1, Skill_Number => Perception_Skill,
-                              Crew_Index =>
-                                Crew_Container.To_Index(Position => I));
-                        end if;
-                     when GUNNER =>
-                        Result :=
-                          Result +
-                          Get_Skill_Level
-                            (Member => Spotter.Crew(I),
-                             Skill_Index => Perception_Skill);
-                        if Spotter = Player_Ship then
-                           Gain_Exp
-                             (Amount => 1, Skill_Number => Perception_Skill,
-                              Crew_Index =>
-                                Crew_Container.To_Index(Position => I));
-                        end if;
-                     when others =>
-                        null;
-                  end case;
-               end loop Count_Spotter_Perception_Loop;
-               Count_Modules_Loop :
-               for Module of Spotted.Modules loop
-                  if Module.M_Type = HULL then
-                     Result := Result + Module.Max_Modules;
-                     exit Count_Modules_Loop;
-                  end if;
-               end loop Count_Modules_Loop;
-               return Result;
-            end Count_Perception;
-            Player_Perception: constant Natural :=
-              Count_Perception(Spotter => Player_Ship, Spotted => Enemy.Ship);
-            Enemy_Perception: Natural;
-         begin
-            Old_Speed := Player_Ship.Speed;
-            Enemy_Perception :=
-              (if Enemy.Perception > 0 then Enemy.Perception
-               else Count_Perception
-                   (Spotter => Enemy.Ship, Spotted => Player_Ship));
-            if Player_Perception + Get_Random(Min => 1, Max => 50) >
-              Enemy_Perception + Get_Random(Min => 1, Max => 50) then
-               Add_Message
-                 (Message =>
-                    "You spotted " & To_String(Source => Enemy.Ship.Name) &
-                    ".",
-                  M_Type => OTHERMESSAGE);
-            else
-               if Real_Speed(Ship => Player_Ship) <
-                 Real_Speed(Ship => Enemy.Ship) then
-                  Log_Message
-                    (Message =>
-                       "You were attacked by " &
-                       To_String(Source => Enemy.Ship.Name),
-                     Message_Type => Log.COMBAT);
-                  Add_Message
-                    (Message =>
-                       To_String(Source => Enemy.Ship.Name) &
-                       " intercepted you.",
-                     M_Type => COMBATMESSAGE);
-                  return True;
-               end if;
-               Add_Message
-                 (Message =>
-                    "You spotted " & To_String(Source => Enemy.Ship.Name) &
-                    ".",
-                  M_Type => OTHERMESSAGE);
-            end if;
-         end Start_Combat_Block;
-         return False;
-      end if;
       Set_Turn_Number(New_Value => 0);
-      Log_Message
-        (Message =>
-           "Started combat with " & To_String(Source => Enemy.Ship.Name),
-         Message_Type => Log.COMBAT);
-      return True;
+      if Result = 1 then
+         return True;
+      end if;
+      return False;
    end Start_Combat;
 
    procedure Combat_Turn is
