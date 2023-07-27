@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Game hangs on creating a new game when there are no big bases on the map
 - Saving the player's career
 - Adding full docks event in debug menu
+- Possible crash when encountering NPC's ship
 
 ## [8.9] - 2023-07-09
 
