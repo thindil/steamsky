@@ -32,7 +32,8 @@ var
   oldSpeed = fullSpeed        ## The speed of the player's ship before combat
   turnNumber: Natural = 0     ## The number of the combat's turn
 
-proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool =
+proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffect,
+    raises: [KeyError, ValueError], tags: [RootEffect].} =
   enemyShipIndex = enemyIndex
   factionName = factionsList[protoShipsList[enemyIndex].owner].name
   harpoonDuration = 0
