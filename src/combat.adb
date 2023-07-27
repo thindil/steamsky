@@ -73,6 +73,7 @@ package body Combat is
       use Interfaces.C.Strings;
       use Tiny_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
       type Nim_Enemy_Record is record
          Accuracy: Natural := 0;
@@ -84,17 +85,19 @@ package body Combat is
          Name: chars_ptr;
          Player_Guns: Nim_Guns;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Enemy: Nim_Enemy_Record;
       Result: Integer;
       function Start_Ada_Combat(E_Index, N_Combat: Integer) return Integer with
          Import => True,
          Convention => C,
          External_Name => "startAdaCombat";
-      procedure Get_Ada_Enemy(Nim_Enemy: out Nim_Enemy_Record) with
+      procedure Get_Ada_Enemy(N_Enemy: out Nim_Enemy_Record) with
          Import => True,
          Convention => C,
          External_Name => "getAdaEnemy";
    begin
+      Set_Ship_In_Nim;
       Enemy_Ship_Index := Enemy_Index;
       Faction_Name :=
         Get_Faction(Index => Get_Proto_Ship(Proto_Index => Enemy_Index).Owner)
@@ -106,7 +109,7 @@ package body Combat is
       Result :=
         Start_Ada_Combat
           (E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
-      Get_Ada_Enemy(Nim_Enemy => Nim_Enemy);
+      Get_Ada_Enemy(N_Enemy => Nim_Enemy);
       Enemy.Accuracy := Nim_Enemy.Accuracy;
       Enemy.Combat_Ai := Ship_Combat_Ai'Val(Nim_Enemy.Combat_Ai);
       Enemy.Evasion := Nim_Enemy.Evasion;
