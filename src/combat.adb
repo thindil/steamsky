@@ -128,6 +128,15 @@ package body Combat is
               (1 => Nim_Enemy.Guns(I, 0), 2 => Nim_Enemy.Guns(I, 1),
                3 => Nim_Enemy.Guns(I, 2)));
       end loop Convert_Enemy_Guns_Loop;
+      Guns.Clear;
+      Convert_Player_Guns_Loop :
+      for I in 0 .. 9 loop
+         exit Convert_Player_Guns_Loop when Nim_Enemy.Player_Guns(I, 0) = -1;
+         Guns.Append
+           (New_Item =>
+              (1 => Nim_Enemy.Player_Guns(I, 0), 2 => Nim_Enemy.Player_Guns(I, 1),
+               3 => Nim_Enemy.Player_Guns(I, 2)));
+      end loop Convert_Player_Guns_Loop;
       Get_Ship_From_Nim(Ship => Enemy.Ship);
       if Pilot_Order = 0 then
          Pilot_Order := 2;

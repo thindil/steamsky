@@ -212,12 +212,12 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.perception = enemy.perception.cint
   adaEnemy.name = enemyName.cstring
   for index, gun in enemy.guns:
-    adaEnemy.guns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
+    adaEnemy.guns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if enemy.guns.len < 10:
     for index in enemy.guns.len .. 9:
       adaEnemy.guns[index] = [-1, -1, -1]
   for index, gun in guns:
-    adaEnemy.playerGuns[index] = [gun[1].cint, gun[2].cint, gun[3].cint]
+    adaEnemy.playerGuns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if guns.len < 10:
     for index in guns.len .. 9:
       adaEnemy.playerGuns[index] = [-1, -1, -1]
