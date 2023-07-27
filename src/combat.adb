@@ -17,6 +17,7 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
 with Interfaces.C.Strings;
 with GNAT.String_Split;
 with Crew;
@@ -140,6 +141,7 @@ package body Combat is
    end Start_Combat;
 
    procedure Combat_Turn is
+      use Ada.Strings.Unbounded;
       use GNAT.String_Split;
       use Bases;
       use Crew;
