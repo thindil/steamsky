@@ -1968,6 +1968,7 @@ package body Ships.UI.Crew is
    Default_Crew_Sort_Order: constant Crew_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUCrew/SUCrew.Crew_Sort_Order
    -- FUNCTION
    -- The current sorting order of the player's ship's crew
@@ -1976,6 +1977,7 @@ package body Ships.UI.Crew is
    -- SOURCE
    Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUCrew/SUCrew.Sort_Crew_Command
    -- FUNCTION
