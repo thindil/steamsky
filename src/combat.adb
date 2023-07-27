@@ -19,20 +19,20 @@ with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings;
 with GNAT.String_Split;
-with Crew; use Crew;
+with Crew;
 with Messages; use Messages;
-with ShipModules; use ShipModules;
-with Items; use Items;
+with ShipModules;
+with Items;
 with Statistics;
 with Events;
 with Maps;
-with Bases; use Bases;
+with Bases;
 with Missions;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
-with Utils; use Utils;
-with Log; use Log;
+with Ships.Cargo;
+with Ships.Crew;
+with Ships.Movement;
+with Utils;
+with Log;
 with Goals;
 with Factions; use Factions;
 with Stories;
@@ -141,14 +141,23 @@ package body Combat is
 
    procedure Combat_Turn is
       use GNAT.String_Split;
+      use Bases;
+      use Crew;
       use Config;
       use Events;
       use Goals;
+      use Items;
+      use Log;
       use Maps;
       use Missions;
+      use ShipModules;
+      use Ships.Cargo;
+      use Ships.Crew;
+      use Ships.Movement;
       use Statistics;
       use Stories;
       use Tiny_String;
+      use Utils;
 
       Accuracy_Bonus, Evade_Bonus: Integer := 0;
       Pilot_Index, Engineer_Index, Enemy_Weapon_Index, Enemy_Ammo_Index,
