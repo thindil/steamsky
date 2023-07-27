@@ -692,6 +692,8 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
         if base.owner == protoShip.owner:
           result.homeBase = index
           break
+      if result.homeBase == 0:
+        result.homeBase = getRandom(min = BasesRange.low, max = BasesRange.high)
   # Set home base for crew members
   for member in result.crew.mitems:
     member.homeBase = (if getRandom(min = 1, max = 100) <
