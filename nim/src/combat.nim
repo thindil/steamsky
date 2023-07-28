@@ -34,6 +34,16 @@ var
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffect,
     raises: [KeyError, ValueError], tags: [RootEffect].} =
+  ## Generate the enemy and start the ship to ship combat if enemy spotted
+  ## the player first
+  ##
+  ## * enemyIndex - the index of the enemy ship's prototype from which the enemy's
+  ##                ship will be generated
+  ## * newCombat  - if true, start a new combat, otherwise regenerate the enemy
+  ##                only
+  ##
+  ## Returns true if the combat started automatically, enemy spotted the player
+  ## as first. Otherwise returns false.
   enemyShipIndex = enemyIndex
   factionName = factionsList[protoShipsList[enemyIndex].owner].name
   harpoonDuration = 0
