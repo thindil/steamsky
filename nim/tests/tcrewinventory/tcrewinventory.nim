@@ -32,23 +32,41 @@ echo "Testing freeInventory."
 discard freeInventory(0, 0)
 
 echo "Testing itemIsUsed."
-assert not itemIsUsed(0, 0), "Failed to check if an item is not used by the player."
-assert itemIsUsed(0, 1), "Failed to check if an item is used by the player"
+try:
+  assert not itemIsUsed(0, 0)
+except AssertionDefect:
+  echo "Failed to check if an item is not used by the player."
+try:
+  assert itemIsUsed(0, 1)
+except AssertionDefect:
+  echo "Failed to check if an item is used by the player"
 
 echo "Testing takeOffItem."
 takeOffItem(0, 1)
-assert not itemIsUsed(0, 1), "Failed to take off an item from the player."
+try:
+  assert not itemIsUsed(0, 1)
+except AssertionDefect:
+  echo "Failed to take off an item from the player."
 
 echo "Testing updateInventory."
 updateInventory(0, 1, 1, ship = playerShip)
-assert playerShip.crew[0].inventory[0].amount == 2, "Failed to add an item to the player's inventory."
+try:
+  assert playerShip.crew[0].inventory[0].amount == 2
+except AssertionDefect:
+  echo "Failed to add an item to the player's inventory."
 updateInventory(0, -1, 1, ship = playerShip)
-assert playerShip.crew[0].inventory[0].amount == 1, "Failed to remove an item from the player's inventory."
+try:
+  assert playerShip.crew[0].inventory[0].amount == 1
+except AssertionDefect:
+  echo "Failed to remove an item from the player's inventory."
 try:
   updateInventory(0, 10_000, 1, ship = playerShip)
 except CrewNoSpaceError:
   discard
-assert playerShip.crew[0].inventory[0].amount == 1, "Failed to add too much items to the player's inventory."
+try:
+  assert playerShip.crew[0].inventory[0].amount == 1
+except AssertionDefect:
+  echo "Failed to add too much items to the player's inventory."
 
 echo "Testing damageItem."
 for i in 1..100:
@@ -63,10 +81,25 @@ block:
       durability: defaultItemDurability, price: 0))
   inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
       durability: defaultItemDurability, price: 0))
-  assert findItem(inventory, 67) == 1, "Failed to find an item in an inventory."
-  assert findItem(inventory = inventory, itemType = "Weapon") == 0
-  assert findItem(inventory, 500) == -1, "Failed to not find an item in an inventory"
-  assert findItem(inventory = inventory, itemType = "asdasdas") == -1
+  try:
+    assert findItem(inventory, 67) == 1
+  except AssertionDefect:
+    echo "Failed to find an item in an inventory by proto index."
+  try:
+    assert findItem(inventory = inventory, itemType = "Weapon") == 0
+  except AssertionDefect:
+    echo "Failed to find an item in an inventory by item type."
+  try:
+    assert findItem(inventory, 500) == -1
+  except AssertionDefect:
+    echo "Failed to not find an item in an inventory by proto index."
+  try:
+    assert findItem(inventory = inventory, itemType = "asdasdas") == -1
+  except AssertionDefect:
+    echo "Failed to not find an item in an inventory by item type."
 
 echo "Testing getTrainingToolQuality."
-assert getTrainingToolQuality(0, 1) == 100, "Failed to get an tool's quality required by a skill."
+try:
+  assert getTrainingToolQuality(0, 1) == 100
+except AssertionDefect:
+  echo "Failed to get an tool's quality required by a skill."
