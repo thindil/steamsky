@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Saving the player's career
 - Adding full docks event in debug menu
 - Possible crash when encountering NPC's ship
+- Updating events after wait in place
 
 ## [8.9] - 2023-07-09
 
