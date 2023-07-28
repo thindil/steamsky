@@ -59,6 +59,8 @@ package body Game is
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
+      use Events;
+
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       procedure Update_Ada_Game(M, In_C: Integer) with
@@ -77,6 +79,11 @@ package body Game is
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Game_Date;
+      Events_List.Clear;
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. 100 loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
    end Update_Game;
 
