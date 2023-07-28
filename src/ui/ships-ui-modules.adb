@@ -2874,7 +2874,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Ammo_Command;
 
-   procedure Add_Commands is
+   procedure Add_Modules_Commands is
    begin
       Add_Command
         (Name => "ShowModuleInfo",
@@ -2916,6 +2916,6 @@ package body Ships.UI.Modules is
       Add_Command
         (Name => "ShowAssignAmmo",
          Ada_Command => Show_Assign_Ammo_Command'Access);
-   end Add_Commands;
+   end Add_Modules_Commands;
 
 end Ships.UI.Modules;

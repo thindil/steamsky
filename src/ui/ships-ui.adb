@@ -529,7 +529,7 @@ package body Ships.UI is
         (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
       Add_Command
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
-      Ships.UI.Modules.Add_Commands;
+      Ships.UI.Modules.Add_Modules_Commands;
       Ships.UI.Crew.Add_Crew_Commands;
       Ships.UI.Cargo.Add_Commands;
    end Add_Commands;
