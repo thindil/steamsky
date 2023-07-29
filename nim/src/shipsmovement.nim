@@ -243,7 +243,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
       if $gameSettings.autoSave == $undock:
         saveGame()
 
-proc countFuelNeeded*(): int =
+proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
   result = 0
   var speed = playerShip.speed
   if speed in {docked, fullStop}:
