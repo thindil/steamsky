@@ -107,6 +107,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
   if protoShipsList.len > 0:
     return
 
+  {.hint[XCannotRaiseY]: off.}
   proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
       raises: [DataLoadingError, KeyError, OSError], tags: [WriteIOEffect,
       RootEffect].} =
@@ -160,6 +161,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
     else:
       localFileName = dataDirectory & fileName
       result = loadDataFile(localDataName = dataName)
+  {.hint[XCannotRaiseY]: on.}
 
   type DataTypeRecord = object
     name: string
