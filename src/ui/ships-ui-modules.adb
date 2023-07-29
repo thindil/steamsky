@@ -106,12 +106,14 @@ package body Ships.UI.Modules is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module: constant Module_Data := Player_Ship.Modules(Module_Index);
       Module_Max_Value: Positive;
-      Have_Ammo: Boolean;
+      Have_Ammo: Boolean := False;
       M_Amount, Max_Upgrade: Natural := 0;
-      Damage_Percent, Upgrade_Percent: Float;
+      Damage_Percent: Float;
+      Upgrade_Percent: Float := 0.0;
       Progress_Bar: Ttk_ProgressBar;
       Label: Ttk_Label;
-      Module_Info, Progress_Bar_Style: Unbounded_String;
+      Module_Info: Unbounded_String := Null_Unbounded_String;
+      Progress_Bar_Style: Unbounded_String;
       Info_Button: Ttk_Button;
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
@@ -140,7 +142,7 @@ package body Ships.UI.Modules is
       Current_Row: Natural := 0;
       Status_Tooltip: Unbounded_String;
       procedure Add_Label
-        (Name, Text: String;
+        (Name, Label_Text: String;
          Row, Column, Column_Span, Wrap_Length: Natural := 0;
          Count_Height: Boolean := False) is
       begin
@@ -148,7 +150,7 @@ package body Ships.UI.Modules is
            Create
              (pathName => Name,
               options =>
-                "-text {" & Text & "} -wraplength" &
+                "-text {" & Label_Text & "} -wraplength" &
                 (if Wrap_Length > 0 then Wrap_Length'Img else " 380"));
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label,
@@ -181,11 +183,11 @@ package body Ships.UI.Modules is
               " (max" & Count_Type'Image(Module.Owner.Length) & "):");
          Add_Label
            (Name => Module_Frame & ".lblowners",
-            Text => To_String(Source => Owners_Text), Row => Row);
+            Label_Text => To_String(Source => Owners_Text), Row => Row);
          Owners_Text := Null_Unbounded_String;
          Add_Owners_Info_Loop :
-         for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
-            if Module.Owner(I) > 0 then
+         for Owner of Module.Owner loop
+            if Owner > 0 then
                if Have_Owner then
                   Append(Source => Owners_Text, New_Item => ", ");
                end if;
@@ -193,8 +195,7 @@ package body Ships.UI.Modules is
                Append
                  (Source => Owners_Text,
                   New_Item =>
-                    To_String
-                      (Source => Player_Ship.Crew(Module.Owner(I)).Name));
+                    To_String(Source => Player_Ship.Crew(Owner).Name));
             end if;
          end loop Add_Owners_Info_Loop;
          if not Have_Owner then
@@ -202,7 +203,8 @@ package body Ships.UI.Modules is
          end if;
          Add_Label
            (Name => Module_Frame & ".lblowners2",
-            Text => To_String(Source => Owners_Text), Row => Row, Column => 1);
+            Label_Text => To_String(Source => Owners_Text), Row => Row,
+            Column => 1);
          if Add_Button then
             Info_Button :=
               Create
@@ -232,14 +234,14 @@ package body Ships.UI.Modules is
              (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
       end Add_Owners_Info;
       procedure Add_Upgrade_Button
-        (Upgrade: Ship_Upgrade; Tooltip: String; Box: Ttk_Frame;
-         Module: Module_Data; Column: Positive := 1;
+        (Upgrade_Type: Ship_Upgrade; Button_Tooltip: String; Box: Ttk_Frame;
+         Ship_Module: Module_Data; Column: Positive := 1;
          Button_Name: String := "button"; Row: Natural := 0) is
          Upgrade_Number: constant String :=
-           (case Upgrade is when MAX_VALUE => "2", when VALUE => "3",
+           (case Upgrade_Type is when MAX_VALUE => "2", when VALUE => "3",
               when others => "1");
       begin
-         if Module.Upgrade_Action = Upgrade and
+         if Ship_Module.Upgrade_Action = Upgrade_Type and
            Player_Ship.Upgrade_Module = Module_Index then
             Info_Button :=
               Create
@@ -250,7 +252,7 @@ package body Ships.UI.Modules is
                    "} -style Small.TButton");
             Add
               (Widget => Info_Button,
-               Message => "Stop upgrading the " & Tooltip);
+               Message => "Stop upgrading the " & Button_Tooltip);
          else
             Info_Button :=
               Create
@@ -262,7 +264,7 @@ package body Ships.UI.Modules is
                    "} -style Small.TButton");
             Add
               (Widget => Info_Button,
-               Message => "Start upgrading the " & Tooltip);
+               Message => "Start upgrading the " & Button_Tooltip);
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
@@ -288,10 +290,10 @@ package body Ships.UI.Modules is
          Options => "-weight 1");
       Autoscroll(Scroll => Y_Scroll);
       -- Show the module's name
-      Add_Label(Name => Module_Frame & ".nameinfo", Text => "Name:");
+      Add_Label(Name => Module_Frame & ".nameinfo", Label_Text => "Name:");
       Add_Label
         (Name => Module_Frame & ".nameinfo2",
-         Text => To_String(Source => Module.Name), Row => Current_Row,
+         Label_Text => To_String(Source => Module.Name), Row => Current_Row,
          Column => 1);
       Info_Button :=
         Create
@@ -321,7 +323,7 @@ package body Ships.UI.Modules is
       -- Show the module's damage
       Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".damagelbl", Text => "Status:",
+        (Name => Module_Frame & ".damagelbl", Label_Text => "Status:",
          Row => Current_Row);
       Damage_Percent :=
         (Float(Module.Durability) / Float(Module.Max_Durability));
@@ -400,8 +402,9 @@ package body Ships.UI.Modules is
          Script => "{" & Close_Dialog_Button & " invoke;break}");
       if Module.Max_Durability < Module_Max_Value then
          Add_Upgrade_Button
-           (Upgrade => DURABILITY, Tooltip => "module's durability",
-            Box => Module_Frame, Module => Module, Column => 3,
+           (Upgrade_Type => DURABILITY,
+            Button_Tooltip => "module's durability", Box => Module_Frame,
+            Ship_Module => Module, Column => 3,
             Button_Name => "durabilitybutton", Row => Current_Row);
       end if;
       Height :=
@@ -410,26 +413,28 @@ package body Ships.UI.Modules is
       -- Show the module's weight
       Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".weightlbl", Text => "Weight:",
+        (Name => Module_Frame & ".weightlbl", Label_Text => "Weight:",
          Row => Current_Row);
       Add_Label
         (Name => Module_Frame & ".weightlbl2",
-         Text => Integer'Image(Module.Weight) & " kg", Row => Current_Row,
-         Column => 1, Count_Height => True);
+         Label_Text => Integer'Image(Module.Weight) & " kg",
+         Row => Current_Row, Column => 1, Count_Height => True);
       -- Show the module's size
       Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".lblsize", Text => "Size:",
+        (Name => Module_Frame & ".lblsize", Label_Text => "Size:",
          Row => Current_Row);
       Add_Label
         (Name => Module_Frame & ".lblsize2",
-         Text => Natural'Image(Get_Module(Index => Module.Proto_Index).Size),
+         Label_Text =>
+           Natural'Image(Get_Module(Index => Module.Proto_Index).Size),
          Row => Current_Row, Column => 1, Count_Height => True);
       -- Show the modules' repair material
       Current_Row := Current_Row + 1;
       Add_Label
         (Name => Module_Frame & ".lblrepairmaterial",
-         Text => "Repair material:", Row => Current_Row, Wrap_Length => 200);
+         Label_Text => "Repair material:", Row => Current_Row,
+         Wrap_Length => 200);
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -495,11 +500,11 @@ package body Ships.UI.Modules is
       -- Show module's upgrade skill
       Current_Row := Current_Row + 1;
       Add_Label
-        (Name => Module_Frame & ".upgradeskill", Text => "Repair skill:",
+        (Name => Module_Frame & ".upgradeskill", Label_Text => "Repair skill:",
          Row => Current_Row, Wrap_Length => 200, Count_Height => True);
       Add_Label
         (Name => Module_Frame & ".upgradeskill2",
-         Text =>
+         Label_Text =>
            To_String
              (Source =>
                 SkillsData_Container.Element
@@ -567,9 +572,7 @@ package body Ships.UI.Modules is
                null;
          end case;
          Max_Upgrade :=
-           Integer
-             (Float(Max_Upgrade) *
-              Float(New_Game_Settings.Upgrade_Cost_Bonus));
+           Integer(Float(Max_Upgrade) * New_Game_Settings.Upgrade_Cost_Bonus);
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;
@@ -595,8 +598,8 @@ package body Ships.UI.Modules is
            (Widget => Progress_Bar,
             Message => To_String(Source => Module_Info));
          Add_Label
-           (Name => Module_Frame & ".upgradelbl", Text => "Upgrade progress:",
-            Row => Current_Row);
+           (Name => Module_Frame & ".upgradelbl",
+            Label_Text => "Upgrade progress:", Row => Current_Row);
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar,
             Options =>
@@ -637,19 +640,20 @@ package body Ships.UI.Modules is
                 (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                  1.5);
             Add_Label
-              (Name => Module_Frame & ".powerlbl", Text => "Max power:",
+              (Name => Module_Frame & ".powerlbl", Label_Text => "Max power:",
                Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".powerlbl2",
-               Text =>
+               Label_Text =>
                  Integer'Image(Module.Power) &
                  (if Module.Power = Module_Max_Value then " (max upgrade)"
                   else ""),
                Row => Current_Row, Column => 1);
             if Module.Power < Module_Max_Value then
                Add_Upgrade_Button
-                 (Upgrade => MAX_VALUE, Tooltip => "engine's power",
-                  Box => Module_Frame, Module => Module, Column => 2,
+                 (Upgrade_Type => MAX_VALUE,
+                  Button_Tooltip => "engine's power", Box => Module_Frame,
+                  Ship_Module => Module, Column => 2,
                   Button_Name => "powerbutton", Row => Current_Row);
                Height :=
                  Height +
@@ -667,19 +671,20 @@ package body Ships.UI.Modules is
               Positive
                 (Float(Get_Module(Index => Module.Proto_Index).Value) / 2.0);
             Add_Label
-              (Name => Module_Frame & ".fuellbl", Text => "Fuel usage:",
+              (Name => Module_Frame & ".fuellbl", Label_Text => "Fuel usage:",
                Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".fuellbl2",
-               Text =>
+               Label_Text =>
                  Integer'Image(Module.Fuel_Usage) &
                  (if Module_Max_Value = Module.Fuel_Usage then " (max upgrade)"
                   else ""),
                Row => Current_Row, Column => 1);
             if Module.Fuel_Usage > Module_Max_Value then
                Add_Upgrade_Button
-                 (Upgrade => VALUE, Tooltip => "engine's fuel usage",
-                  Box => Module_Frame, Module => Module, Column => 2,
+                 (Upgrade_Type => VALUE,
+                  Button_Tooltip => "engine's fuel usage", Box => Module_Frame,
+                  Ship_Module => Module, Column => 2,
                   Button_Name => "fuelbutton", Row => Current_Row);
                Height :=
                  Height +
@@ -694,11 +699,12 @@ package body Ships.UI.Modules is
             -- Show the engine state
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".statelbl", Text => "State: ",
+              (Name => Module_Frame & ".statelbl", Label_Text => "State: ",
                Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".statelbl2",
-               Text => (if Module.Disabled then "Disabled" else "Enabled"),
+               Label_Text =>
+                 (if Module.Disabled then "Disabled" else "Enabled"),
                Row => Current_Row, Column => 1);
             Info_Button :=
               Create
@@ -728,11 +734,11 @@ package body Ships.UI.Modules is
          when CARGO_ROOM =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".maxcargolbl", Text => "Max cargo:",
-               Row => Current_Row);
+              (Name => Module_Frame & ".maxcargolbl",
+               Label_Text => "Max cargo:", Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".maxcargolbl2",
-               Text =>
+               Label_Text =>
                  Integer'Image
                    (Get_Module(Index => Module.Proto_Index).Max_Value) &
                  " kg",
@@ -741,11 +747,11 @@ package body Ships.UI.Modules is
          when HULL =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".modules", Text => "Modules installed:",
-               Row => Current_Row);
+              (Name => Module_Frame & ".modules",
+               Label_Text => "Modules installed:", Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".modules2",
-               Text =>
+               Label_Text =>
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules),
                Row => Current_Row, Column => 1);
@@ -765,10 +771,10 @@ package body Ships.UI.Modules is
                    (Winfo_Get(Widgt => Label, Info => "reqheight"));
             else
                Add_Upgrade_Button
-                 (Upgrade => MAX_VALUE,
-                  Tooltip =>
+                 (Upgrade_Type => MAX_VALUE,
+                  Button_Tooltip =>
                     "hull's size so it can have more modules installed",
-                  Box => Module_Frame, Module => Module, Column => 2,
+                  Box => Module_Frame, Ship_Module => Module, Column => 2,
                   Button_Name => "resizebutton", Row => Current_Row);
                Height :=
                  Height +
@@ -805,39 +811,42 @@ package body Ships.UI.Modules is
             Current_Row := Current_Row + 1;
             Add_Cleanliness_Info_Block :
             declare
-               Status_Tooltip: Unbounded_String;
+               New_Status_Tooltip: Unbounded_String;
             begin
                Add_Label
-                 (Name => Module_Frame & ".cleanlbl", Text => "Cleanliness:",
-                  Row => Current_Row, Count_Height => True);
+                 (Name => Module_Frame & ".cleanlbl",
+                  Label_Text => "Cleanliness:", Row => Current_Row,
+                  Count_Height => True);
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if Damage_Percent = 0.0 then
-                  Status_Tooltip := To_Unbounded_String(Source => "Clean");
+                  New_Status_Tooltip := To_Unbounded_String(Source => "Clean");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style green.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.0 and Damage_Percent < 0.2 then
-                  Status_Tooltip := To_Unbounded_String(Source => "Bit dusty");
+                  New_Status_Tooltip :=
+                    To_Unbounded_String(Source => "Bit dusty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style green.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.19 and Damage_Percent < 0.5 then
-                  Status_Tooltip := To_Unbounded_String(Source => "Dusty");
+                  New_Status_Tooltip := To_Unbounded_String(Source => "Dusty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.49 and Damage_Percent < 0.8 then
-                  Status_Tooltip := To_Unbounded_String(Source => "Dirty");
+                  New_Status_Tooltip := To_Unbounded_String(Source => "Dirty");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.79 and Damage_Percent < 1.0 then
-                  Status_Tooltip :=
+                  New_Status_Tooltip :=
                     To_Unbounded_String(Source => "Very dirty");
                   Progress_Bar_Style := Null_Unbounded_String;
                else
-                  Status_Tooltip := To_Unbounded_String(Source => "Ruined");
+                  New_Status_Tooltip :=
+                    To_Unbounded_String(Source => "Ruined");
                   Progress_Bar_Style := Null_Unbounded_String;
                end if;
                Progress_Bar :=
@@ -849,7 +858,7 @@ package body Ships.UI.Modules is
                       To_String(Source => Progress_Bar_Style));
                Add
                  (Widget => Progress_Bar,
-                  Message => To_String(Source => Status_Tooltip));
+                  Message => To_String(Source => New_Status_Tooltip));
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar,
                   Options =>
@@ -864,7 +873,7 @@ package body Ships.UI.Modules is
                    "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                    Float'Image(Float(Module.Quality) / 100.0) & "}");
             Add_Label
-              (Name => Module_Frame & ".qualitylbl", Text => "Quality:",
+              (Name => Module_Frame & ".qualitylbl", Label_Text => "Quality:",
                Row => Current_Row);
             Module_Max_Value :=
               Positive
@@ -881,9 +890,10 @@ package body Ships.UI.Modules is
                Options => "-row" & Current_Row'Img & " -column 1 -sticky we");
             if Module.Quality < Module_Max_Value then
                Add_Upgrade_Button
-                 (Upgrade => MAX_VALUE, Tooltip => "cabin's quality",
-                  Box => Module_Frame, Module => Module, Column => 2,
-                  Row => Current_Row, Button_Name => "qualitybutton");
+                 (Upgrade_Type => MAX_VALUE,
+                  Button_Tooltip => "cabin's quality", Box => Module_Frame,
+                  Ship_Module => Module, Column => 2, Row => Current_Row,
+                  Button_Name => "qualitybutton");
                Height :=
                  Height +
                  Positive'Value
@@ -910,11 +920,11 @@ package body Ships.UI.Modules is
                    (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                     1.5);
                Add_Label
-                 (Name => Module_Frame & ".strengthlbl", Text => "Strength:",
-                  Row => Current_Row);
+                 (Name => Module_Frame & ".strengthlbl",
+                  Label_Text => "Strength:", Row => Current_Row);
                Add_Label
                  (Name => Module_Frame & ".strengthlbl2",
-                  Text =>
+                  Label_Text =>
                     Positive'Image(Module_Strength) &
                     (if Module_Strength = Module_Max_Value then
                        " (max upgrade)"
@@ -922,14 +932,15 @@ package body Ships.UI.Modules is
                   Row => Current_Row, Column => 1);
                if Module_Strength < Module_Max_Value then
                   Add_Upgrade_Button
-                    (Upgrade => MAX_VALUE,
-                     Tooltip =>
+                    (Upgrade_Type => MAX_VALUE,
+                     Button_Tooltip =>
                        (if Get_Module(Index => Module.Proto_Index).M_Type = GUN
                         then "damage"
                         else "strength") &
                        " of gun",
-                     Box => Module_Frame, Module => Module, Row => Current_Row,
-                     Button_Name => "strentghbutton", Column => 2);
+                     Box => Module_Frame, Ship_Module => Module,
+                     Row => Current_Row, Button_Name => "strentghbutton",
+                     Column => 2);
                   Height :=
                     Height +
                     Positive'Value
@@ -959,8 +970,8 @@ package body Ships.UI.Modules is
                     options => "-wrap char -height 3 -width 15");
             begin
                Add_Label
-                 (Name => Module_Frame & ".ammolbl", Text => "Ammunition:",
-                  Row => Current_Row);
+                 (Name => Module_Frame & ".ammolbl",
+                  Label_Text => "Ammunition:", Row => Current_Row);
                Tag_Configure
                  (TextWidget => Ammo_Text, TagName => "red",
                   Options =>
@@ -1112,10 +1123,10 @@ package body Ships.UI.Modules is
                Current_Row := Current_Row + 1;
                Add_Label
                  (Name => Module_Frame & ".lblfirerate",
-                  Text => "Max fire rate:", Row => Current_Row);
+                  Label_Text => "Max fire rate:", Row => Current_Row);
                Add_Label
                  (Name => Module_Frame & ".lblfirerate2",
-                  Text =>
+                  Label_Text =>
                     (if Get_Module(Index => Module.Proto_Index).Speed > 0 then
                        Positive'Image
                          (Get_Module(Index => Module.Proto_Index).Speed) &
@@ -1131,11 +1142,11 @@ package body Ships.UI.Modules is
          when TURRET =>
             Current_Row := Current_Row + 1;
             Add_Label
-              (Name => Module_Frame & ".lblturretgun", Text => "Weapon:",
+              (Name => Module_Frame & ".lblturretgun", Label_Text => "Weapon:",
                Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".lblturretgun2",
-               Text =>
+               Label_Text =>
                  (if Module.Gun_Index > 0 then
                     To_String
                       (Source => Player_Ship.Modules(Module.Gun_Index).Name)
@@ -1163,18 +1174,20 @@ package body Ships.UI.Modules is
                Current_Row := Current_Row + 1;
                if Recipe_Name'Length > 0 then
                   Add_Label
-                    (Name => Module_Frame & ".orderlbl", Text => "Order:",
-                     Row => Current_Row);
+                    (Name => Module_Frame & ".orderlbl",
+                     Label_Text => "Order:", Row => Current_Row);
                   Add_Label
-                    (Name => Module_Frame & ".orderlbl2", Text => Recipe_Name,
-                     Row => Current_Row, Column => 1, Count_Height => True);
+                    (Name => Module_Frame & ".orderlbl2",
+                     Label_Text => Recipe_Name, Row => Current_Row,
+                     Column => 1, Count_Height => True);
                   Current_Row := Current_Row + 1;
                   Add_Label
                     (Name => Module_Frame & ".ordertimelbl",
-                     Text => "Finish order in:", Row => Current_Row);
+                     Label_Text => "Finish order in:", Row => Current_Row);
                   Add_Label
                     (Name => Module_Frame & ".ordertimelbl2",
-                     Text => Positive'Image(Module.Crafting_Time) & " mins",
+                     Label_Text =>
+                       Positive'Image(Module.Crafting_Time) & " mins",
                      Row => Current_Row, Column => 1);
                   Info_Button :=
                     Create
@@ -1201,11 +1214,12 @@ package body Ships.UI.Modules is
                       (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
                else
                   Add_Label
-                    (Name => Module_Frame & ".orderlbl", Text => "Order:",
-                     Row => Current_Row);
+                    (Name => Module_Frame & ".orderlbl",
+                     Label_Text => "Order:", Row => Current_Row);
                   Add_Label
-                    (Name => Module_Frame & ".orderlbl2", Text => "not set",
-                     Row => Current_Row, Column => 1, Count_Height => True);
+                    (Name => Module_Frame & ".orderlbl2",
+                     Label_Text => "not set", Row => Current_Row, Column => 1,
+                     Count_Height => True);
                end if;
             end Show_Order_Info_Block;
          -- Show information about medical rooms
@@ -1244,7 +1258,7 @@ package body Ships.UI.Modules is
             -- Show information about trained skill
             Show_Skill_Info_Block :
             declare
-               Train_Text: Unbounded_String := Null_Unbounded_String;
+               Train_Text: Unbounded_String;
             begin
                if Module.Trained_Skill > 0 then
                   Train_Text :=
@@ -1261,12 +1275,12 @@ package body Ships.UI.Modules is
                end if;
                Current_Row := Current_Row + 1;
                Add_Label
-                 (Name => Module_Frame & ".trainlbl", Text => "Trained skill:",
-                  Row => Current_Row);
+                 (Name => Module_Frame & ".trainlbl",
+                  Label_Text => "Trained skill:", Row => Current_Row);
                Add_Label
                  (Name => Module_Frame & ".trainlbl2",
-                  Text => To_String(Source => Train_Text), Row => Current_Row,
-                  Column => 1);
+                  Label_Text => To_String(Source => Train_Text),
+                  Row => Current_Row, Column => 1);
                Info_Button :=
                  Create
                    (pathName => Module_Frame & ".trainbutton",
@@ -1300,20 +1314,22 @@ package body Ships.UI.Modules is
                 (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
                  1.5);
             Add_Label
-              (Name => Module_Frame & ".strengthlbl", Text => "Strength:",
-               Row => Current_Row);
+              (Name => Module_Frame & ".strengthlbl",
+               Label_Text => "Strength:", Row => Current_Row);
             Add_Label
               (Name => Module_Frame & ".strengthlbl2",
-               Text =>
+               Label_Text =>
                  Positive'Image(Module.Damage2) &
                  (if Module.Damage2 = Module_Max_Value then " (max upgrade)"
                   else ""),
                Row => Current_Row, Column => 1, Count_Height => True);
             if Module.Damage2 < Module_Max_Value then
                Add_Upgrade_Button
-                 (Upgrade => MAX_VALUE, Tooltip => "damage of battering ram",
-                  Box => Module_Frame, Module => Module, Row => Current_Row,
-                  Column => 2, Button_Name => "damagebutton");
+                 (Upgrade_Type => MAX_VALUE,
+                  Button_Tooltip => "damage of battering ram",
+                  Box => Module_Frame, Ship_Module => Module,
+                  Row => Current_Row, Column => 2,
+                  Button_Name => "damagebutton");
             end if;
          when others =>
             null;
@@ -1324,7 +1340,7 @@ package body Ships.UI.Modules is
          Tcl_Eval(interp => Interp, strng => "update");
          Add_Label
            (Name => Module_Frame & ".lbldescription",
-            Text =>
+            Label_Text =>
               LF &
               To_String
                 (Source =>
@@ -1457,7 +1473,7 @@ package body Ships.UI.Modules is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Assign_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
-      Assigned: Boolean;
+      Assigned: Boolean := False;
       procedure Update_Order(Order: Crew_Orders) is
       begin
          Give_Orders
@@ -1611,7 +1627,15 @@ package body Ships.UI.Modules is
       Module_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      if not Player_Ship.Modules(Module_Index).Disabled then
+      if Player_Ship.Modules(Module_Index).Disabled then
+         Player_Ship.Modules(Module_Index).Disabled := False;
+         Add_Message
+           (Message =>
+              "You enabled " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              ".",
+            M_Type => ORDERMESSAGE);
+      else
          Check_Can_Disable_Loop :
          for I in Player_Ship.Modules.Iterate loop
             if Player_Ship.Modules(I).M_Type = ENGINE
@@ -1633,14 +1657,6 @@ package body Ships.UI.Modules is
          Add_Message
            (Message =>
               "You disabled " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      else
-         Player_Ship.Modules(Module_Index).Disabled := False;
-         Add_Message
-           (Message =>
-              "You enabled " &
               To_String(Source => Player_Ship.Modules(Module_Index).Name) &
               ".",
             M_Type => ORDERMESSAGE);
