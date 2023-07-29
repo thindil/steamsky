@@ -243,6 +243,23 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
       if $gameSettings.autoSave == $undock:
         saveGame()
 
+proc countFuelNeeded*(): int =
+  result = 0
+  var speed = playerShip.speed
+  if speed in {docked, fullStop}:
+    speed = gameSettings.undockSpeed
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.engine and not module.disabled:
+      case speed
+      of quarterSpeed:
+        result = result - (module.fuelUsage / 4).int
+      of halfSpeed:
+        result = result - (module.fuelUsage / 2).int
+      of fullSpeed:
+        result = result - module.fuelUsage
+      else:
+        discard
+
 # Temporary code for interfacing with Ada
 
 proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
@@ -270,3 +287,6 @@ proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
     return dockShip(docking = docking == 1, escape = escape == 1).cstring
   except KeyError, IOError, Exception:
     return getCurrentExceptionMsg().cstring
+
+proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc} =
+  return countFuelNeeded().cint
