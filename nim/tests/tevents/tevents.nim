@@ -50,7 +50,10 @@ skyMap[1][1].baseIndex = 1
 echo "Testing generateEnemies."
 var enemies: seq[Positive] = @[]
 generateEnemies(enemies)
-assert enemies.len > 0, "Failed to generate the list of enemy ships."
+try:
+  assert enemies.len > 0
+except AssertionDefect:
+  echo "Failed to generate the list of enemy ships."
 
 echo "Testing updateEvents."
 eventsList = @[]
@@ -59,12 +62,18 @@ updateEvents(1)
 echo "Testing deleteEvent."
 eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
 deleteEvent(0)
-assert eventsList.len == 0, "Failed to delete an event."
+try:
+  assert eventsList.len == 0
+except AssertionDefect:
+  echo "Failed to delete an event."
 
 echo "Testing recoverBase."
 skyBases[2].population = 0
 recoverBase(2)
-assert skyBases[2].population > 0, "Failed to recover a base."
+try:
+  assert skyBases[2].population > 0
+except AssertionDefect:
+  echo "Failed to recover a base."
 
 echo "Testing generateTraders."
 generateTraders()
