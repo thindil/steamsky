@@ -250,35 +250,6 @@ package body Ships.Movement is
            I_Only => (if Info_Only then 1 else 0));
    end Real_Speed;
 
-   function Count_Fuel_Needed return Integer is
-      Fuel_Needed: Integer := 0;
-      Speed: Ship_Speed := Player_Ship.Speed;
-   begin
-      if Speed in DOCKED | FULL_STOP then
-         Speed := Game_Settings.Undock_Speed;
-      end if;
-      Count_Fuel_Needed_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = ENGINE and then not Module.Disabled then
-            case Speed is
-               when QUARTER_SPEED =>
-                  --## rule off SIMPLIFIABLE_EXPRESSIONS
-                  Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 4);
-                  --## rule on SIMPLIFIABLE_EXPRESSIONS
-               when HALF_SPEED =>
-                  --## rule off SIMPLIFIABLE_EXPRESSIONS
-                  Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 2);
-                  --## rule on SIMPLIFIABLE_EXPRESSIONS
-               when FULL_SPEED =>
-                  Fuel_Needed := Fuel_Needed - Module.Fuel_Usage;
-               when others =>
-                  null;
-            end case;
-         end if;
-      end loop Count_Fuel_Needed_Loop;
-      return Fuel_Needed;
-   end Count_Fuel_Needed;
-
    procedure Wait_In_Place(Minutes: Positive) is
       procedure Wait_Ada_In_Place(M: Positive) with
          Import => True,

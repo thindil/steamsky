@@ -88,6 +88,9 @@ package Ships.Movement is
      -- Amount of fuel needed by player ship to travel
      -- SOURCE
    function Count_Fuel_Needed return Integer with
+      Import => True,
+      Convention => C,
+      External_Name => "countAdaFuelNeeded",
       Test_Case => (Name => "Test_CountFuelNeeded", Mode => Robustness);
       -- ****
 
