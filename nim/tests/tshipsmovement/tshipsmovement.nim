@@ -3,7 +3,8 @@ discard """
   output: '''Loading the game data.
 Testing waitInPlace.
 Testing realSpeed.
-Testing dockShip.'''
+Testing dockShip.
+Testing countFuelNeeded.'''
 """
 
 import std/tables
@@ -68,3 +69,6 @@ assert realSpeed(playerShip, true) > 0, "Failed to get info about the real speed
 echo "Testing dockShip."
 assert dockShip(false).len == 0, "Failed to undock the player's ships from a base."
 assert dockShip(true).len == 0, "Failed to dock the player's ships from a base."
+
+echo "Testing countFuelNeeded."
+assert countFuelNeeded() == -4, "Failed to count the amount of fuel needed for travel."
