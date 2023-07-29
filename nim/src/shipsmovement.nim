@@ -244,6 +244,10 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
         saveGame()
 
 proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
+  ## Count the amount of needed fuel to travel by one map cell by the player's
+  ## ship
+  ##
+  ## Returns the amount of needed fuel.
   result = 0
   var speed = playerShip.speed
   if speed in {docked, fullStop}:
