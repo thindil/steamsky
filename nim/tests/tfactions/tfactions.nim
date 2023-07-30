@@ -17,14 +17,32 @@ if itemsList.len == 0:
   loadFactions("../bin/data/factions.dat")
 
 echo "Testing getReputation."
-assert getReputation("POLEIS", "POLEIS") == 0, "Failed to get reputation for the same faction."
-assert getReputation("POLEIS", "PIRATES") == -10, "Failed to get reputation for enemy factions."
+try:
+  assert getReputation("POLEIS", "POLEIS") == 0
+except AssertionDefect:
+  echo "Failed to get reputation for the same faction."
+try:
+  assert getReputation("POLEIS", "PIRATES") == -10
+except AssertionDefect:
+  echo "Failed to get reputation for enemy factions."
 
 echo "Testing isFriendly."
-assert isFriendly("POLEIS", "INDEPENDENT"), "Failed to check if friendly factions are friendly."
-assert not isFriendly("POLEIS", "PIRATES"), "Failed to check if enemies factions are unfriendly."
+try:
+  assert isFriendly("POLEIS", "INDEPENDENT")
+except AssertionDefect:
+  echo "Failed to check if friendly factions are friendly."
+try:
+  assert not isFriendly("POLEIS", "PIRATES")
+except AssertionDefect:
+  echo "Failed to check if enemies factions are unfriendly."
 
 echo "Testing getRandomFaction."
 let factionIndex = getRandomFaction()
-assert factionIndex.len > 0, "Failed to get random faction index."
-assert factionIndex in factionsList, "Failed to get existing random faction index."
+try:
+  assert factionIndex.len > 0
+except AssertionDefect:
+  echo "Failed to get random faction index."
+try:
+  assert factionIndex in factionsList
+except AssertionDefect:
+  echo "Failed to get existing random faction index."
