@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import combat, game, game2, items, maps, messages, shipscargo, shipscrew, types, utils
+import combat, events, game, game2, items, maps, messages, shipscargo,
+    shipscrew, shipsmovement, types, utils
 
 proc checkForEvent*(): bool =
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -31,6 +32,12 @@ proc checkForEvent*(): bool =
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   # Event outside a sky base
   if baseIndex == 0:
+
+    proc gainPerception() =
+      for index, member in playerShip.crew:
+        if member.order in {pilot, gunner}:
+          gainExp(amount = 1, skillNumber = perceptionSkill, crewIndex = index)
+
     case roll
     # Engine damaged
     of 1 .. 5:
@@ -60,6 +67,7 @@ proc checkForEvent*(): bool =
               " has prevented engine damage.", mType = otherMessage, color = green)
         gainExp(amount = 1, skillNumber = engineeringSkill,
             crewIndex = engineerIndex)
+    # Bad weather
     of 6 .. 20:
       let pilotIndex = findMember(order = pilot)
       if pilotIndex > 0:
@@ -70,9 +78,18 @@ proc checkForEvent*(): bool =
         if timePassed < 1:
           timePassed = 1
         gainExp(amount = 1, skillNumber = pilotingSkill, crewIndex = pilotIndex)
-#        updateCargo(ship = playerShip, protoIndex = findProtoItem(
-#            itemType = fuelType), amount = countFuelNeeded)
+        updateCargo(ship = playerShip, protoIndex = findProtoItem(
+            itemType = fuelType), amount = countFuelNeeded())
         updateGame(minutes = timePassed)
+    # Friendly trader
+    of 21 .. 23:
+      eventsList.add(EventData(eType: trader, skyX: playerShip.skyX,
+          skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
+          shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))
+      skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+      addMessage(message = "You've meet a friendly trader.",
+          mType = otherMessage)
+      gainPerception()
+      updateOrders(ship = playerShip)
     else:
       discard
-
