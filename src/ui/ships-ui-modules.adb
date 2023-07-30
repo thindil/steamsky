@@ -111,7 +111,7 @@ package body Ships.UI.Modules is
       Damage_Percent: Float;
       Upgrade_Percent: Float := 0.0;
       Progress_Bar: Ttk_ProgressBar;
-      Label: Ttk_Label;
+      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Module_Info: Unbounded_String := Null_Unbounded_String;
       Progress_Bar_Style: Unbounded_String;
       Info_Button: Ttk_Button;
@@ -325,8 +325,10 @@ package body Ships.UI.Modules is
       Add_Label
         (Name => Module_Frame & ".damagelbl", Label_Text => "Status:",
          Row => Current_Row);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Damage_Percent :=
         (Float(Module.Durability) / Float(Module.Max_Durability));
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
          Progress_Bar_Style :=
            To_Unbounded_String
@@ -576,8 +578,10 @@ package body Ships.UI.Modules is
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Upgrade_Percent :=
            1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Progress_Bar_Style :=
            (if Upgrade_Percent > 0.74 then
               To_Unbounded_String
@@ -788,7 +792,9 @@ package body Ships.UI.Modules is
             Cabin_Owner_Info_Block :
             declare
                Is_Passenger: Boolean := False;
+               --## rule off IMPROPER_INITIALIZATION
                Mission: Mission_Data;
+               --## rule on IMPROPER_INITIALIZATION
             begin
                Missions_Loop :
                for I in 1 .. Get_Accepted_Missions_Amount loop
@@ -817,8 +823,10 @@ package body Ships.UI.Modules is
                  (Name => Module_Frame & ".cleanlbl",
                   Label_Text => "Cleanliness:", Row => Current_Row,
                   Count_Height => True);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
                if Damage_Percent = 0.0 then
                   New_Status_Tooltip := To_Unbounded_String(Source => "Clean");
                   Progress_Bar_Style :=
@@ -1124,6 +1132,7 @@ package body Ships.UI.Modules is
                Add_Label
                  (Name => Module_Frame & ".lblfirerate",
                   Label_Text => "Max fire rate:", Row => Current_Row);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Add_Label
                  (Name => Module_Frame & ".lblfirerate2",
                   Label_Text =>
@@ -1137,6 +1146,7 @@ package body Ships.UI.Modules is
                           (Get_Module(Index => Module.Proto_Index).Speed)) &
                        " turns"),
                   Row => Current_Row, Column => 1, Count_Height => True);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          -- Show information about turrets
          when TURRET =>
@@ -1825,8 +1835,10 @@ package body Ships.UI.Modules is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Assigned: Natural := 0;
       Frame_Name: constant String := ".moduledialog.canvas.frame";
+      --## rule off IMPROPER_INITIALIZATION
       Crew_Button: Ttk_CheckButton;
       Button_Name: Unbounded_String;
+      --## rule on IMPROPER_INITIALIZATION
       Crew_Index: constant Natural :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
          else 0);
@@ -1977,8 +1989,10 @@ package body Ships.UI.Modules is
              Widget_Image(Win => Module_Dialog) & "}");
       Height: Positive := 10;
       Width: Positive := 250;
+      --## rule off IMPROPER_INITIALIZATION
       Crew_Button: Ttk_CheckButton;
       Info_Label: Ttk_Label;
+      --## rule on IMPROPER_INITIALIZATION
       Assigned: Natural := 0;
       Recipe: constant Craft_Data :=
         (if Module.M_Type = WORKSHOP then
@@ -2307,7 +2321,7 @@ package body Ships.UI.Modules is
       Crew_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Button_Name: Unbounded_String;
-      Button: Ttk_CheckButton;
+      Button: Ttk_CheckButton; --## rule line off IMPROPER_INITIALIZATION
    begin
       Find_Active_Button_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -2519,8 +2533,10 @@ package body Ships.UI.Modules is
       Ship_Info_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Ship_Canvas & ".frame");
       Row: Positive := 2;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
    begin
       if Modules_Table.Row_Height = 1 then
@@ -2699,10 +2715,12 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Modules_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Module_Data is record
          Name: Bounded_String;
          Damage: Float;
@@ -2710,7 +2728,9 @@ package body Ships.UI.Modules is
          Info: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
