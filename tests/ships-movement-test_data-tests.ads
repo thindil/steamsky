@@ -17,8 +17,5 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_Change_Ship_Speed_e4d52a_17b968(Gnattest_T: in out Test);
    --  ships-movement.ads:66:4:Change_Ship_Speed:Test_ChangeShipSpeed
 
-   procedure Test_Count_Fuel_Needed_88966b_18e85d(Gnattest_T: in out Test);
-   --  ships-movement.ads:90:4:Count_Fuel_Needed:Test_CountFuelNeeded
-
 end Ships.Movement.Test_Data.Tests;
 --  end read only
