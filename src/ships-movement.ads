@@ -87,19 +87,15 @@ package Ships.Movement is
      -- RESULT
      -- Amount of fuel needed by player ship to travel
      -- SOURCE
-   function Count_Fuel_Needed return Integer with
-      Import => True,
-      Convention => C,
-      External_Name => "countAdaFuelNeeded",
-      Test_Case => (Name => "Test_CountFuelNeeded", Mode => Robustness);
-      -- ****
+   function Count_Fuel_Needed return Integer;
+   -- ****
 
-      -- ****f* SMovement/SMovement.Wait_In_Place
-      -- FUNCTION
-      -- Use fuel when ship wait in place
-      -- PARAMETERS
-      -- Minutes - Amount of passed in-game minutes
-      -- SOURCE
+   -- ****f* SMovement/SMovement.Wait_In_Place
+   -- FUNCTION
+   -- Use fuel when ship wait in place
+   -- PARAMETERS
+   -- Minutes - Amount of passed in-game minutes
+   -- SOURCE
    procedure Wait_In_Place(Minutes: Positive);
    -- ****
 
