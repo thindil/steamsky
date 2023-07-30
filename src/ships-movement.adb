@@ -17,7 +17,7 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
-with Config; use Config;
+with Config;
 with Factions; use Factions;
 with Maps;
 with Messages;
@@ -29,6 +29,7 @@ package body Ships.Movement is
 
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
+      use Config;
       use Messages;
       use Ships.Cargo;
       use Statistics;
@@ -249,6 +250,16 @@ package body Ships.Movement is
           (Of_Player_Ship => (if Ship = Player_Ship then 1 else 0),
            I_Only => (if Info_Only then 1 else 0));
    end Real_Speed;
+
+   function Count_Fuel_Needed return Integer is
+      function Count_Ada_Fuel_Needed return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "countAdaFuelNeeded";
+   begin
+      Set_Ship_In_Nim;
+      return Count_Ada_Fuel_Needed;
+   end Count_Fuel_Needed;
 
    procedure Wait_In_Place(Minutes: Positive) is
       procedure Wait_Ada_In_Place(M: Positive) with
