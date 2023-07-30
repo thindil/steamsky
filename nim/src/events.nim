@@ -18,7 +18,11 @@
 import std/[strutils, tables]
 import factions, game, maps, messages, ships2, types, utils
 
-var friendlyShips*, traders*: seq[Positive]
+var
+  friendlyShips*: seq[Positive]
+    ## The list of all ships which are friendlytowards the player
+  traders*: seq[Positive]
+    ## The list of all traders' ships
 
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
     tags: [].} =
