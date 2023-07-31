@@ -2151,9 +2151,9 @@ package body Ships.UI.Modules is
            Title_Width => 400);
       Skills_Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".frame");
-      Skill_Name, Tool_Color: Unbounded_String;
-      Proto_Index: Natural;
-      Tool_Name: Bounded_String;
+      Skill_Name, Tool_Color: Unbounded_String := Null_Unbounded_String;
+      Proto_Index: Natural := 0;
+      Tool_Name: Bounded_String := Null_Bounded_String;
       Skills_Table: Table_Widget (Amount => 2) :=
         Create_Table
           (Parent => Widget_Image(Win => Skills_Frame),
@@ -2320,7 +2320,7 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Argc);
       Crew_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Button_Name: Unbounded_String;
+      Button_Name: Unbounded_String := Null_Unbounded_String;
       Button: Ttk_CheckButton; --## rule line off IMPROPER_INITIALIZATION
    begin
       Find_Active_Button_Loop :
@@ -2731,26 +2731,32 @@ package body Ships.UI.Modules is
       --## rule off IMPROPER_INITIALIZATION
       Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
       --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
+      function Get_Modules_Sort_Order return Modules_Sort_Orders is
+      begin
+         return Modules_Sort_Order;
+      end Get_Modules_Sort_Order;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
-         if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Modules_Sort_Order = DAMAGEASC
+         if Get_Modules_Sort_Order = DAMAGEASC
            and then Left.Damage < Right.Damage then
             return True;
          end if;
-         if Modules_Sort_Order = DAMAGEDESC
+         if Get_Modules_Sort_Order = DAMAGEDESC
            and then Left.Damage > Right.Damage then
             return True;
          end if;
-         if Modules_Sort_Order = INFOASC and then Left.Info < Right.Info then
+         if Get_Modules_Sort_Order = INFOASC and then Left.Info < Right.Info then
             return True;
          end if;
-         if Modules_Sort_Order = INFODESC and then Left.Info > Right.Info then
+         if Get_Modules_Sort_Order = INFODESC and then Left.Info > Right.Info then
             return True;
          end if;
          return False;
