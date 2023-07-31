@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import combat, events, game, game2, items, maps, messages, shipscargo,
-    shipscrew, shipscrew2, shipsmovement, types, utils
+import basestypes, combat, events, game, game2, items, maps, messages,
+    shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
 proc checkForEvent*(): bool =
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -175,5 +175,22 @@ proc checkForEvent*(): bool =
             skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
         addMessage(message = "You can't dock to base now, it is closed due to disease.",
             mType = otherMessage)
+      of 22 .. 30:
+        var newItemIndex = 0
+        while true:
+          var itemIndex = getRandom(min = 1, max = itemsList.len)
+          for j in 1 .. itemsList.len:
+            itemIndex.dec
+            if itemIndex == 0 and getPrice(baseType = skyBases[skyMap[
+                playerShip.skyX][playerShip.skyY].baseIndex].baseType,
+                itemIndex = j) > 0:
+              newItemIndex = j
+              break
+          if getPrice(baseType = skyBases[skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex].baseType, itemIndex = newItemIndex) > 0:
+            break
+        eventsList.add(EventData(eType: doublePrice, skyX: playerShip.skyX,
+            skyY: playerShip.skyY, time: getRandom(min = 1_440, max = 2_880),
+            itemIndex: newItemIndex))
       else:
         discard
