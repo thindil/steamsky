@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
 import combat, events, game, game2, items, maps, messages, shipscargo,
     shipscrew, shipscrew2, shipsmovement, types, utils
 
@@ -27,9 +28,8 @@ proc checkForEvent*(): bool =
       return false
   if getRandom(min = 1, max = 100) > 6:
     return false
-  let
-    roll = getRandom(min = 1, max = 100)
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var roll = getRandom(min = 1, max = 100)
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   # Event outside a sky base
   if baseIndex == 0:
 
@@ -111,13 +111,14 @@ proc checkForEvent*(): bool =
           shipIndex: enemies[getRandom(min = enemies.low, max = enemies.high)]))
       skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
       return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
-  # Events inside a sky base
+  # Events at a sky base
   else:
     # Change owner of an abandoned base
     if skyBases[baseIndex].population == 0:
       if roll < 6 and playerShip.speed != docked:
         recoverBase(baseIndex = baseIndex)
       return false
+    # Events inside a base
     if playerShip.speed == docked:
       # Brawl in base, happens only when there is more than 1 crew member
       if roll < 5 and playerShip.crew.len > 1:
@@ -137,3 +138,22 @@ proc checkForEvent*(): bool =
           if playerShip.crew[restingCrew[roll2]].health == 0:
             death(memberIndex = restingCrew[roll2],
                 reason = "injuries in brawl in base", ship = playerShip)
+      # Lost cargo in the base
+      elif roll > 4 and roll < 10:
+        let roll2 = getRandom(min = playerShip.cargo.low,
+            max = playerShip.cargo.high)
+        var lostCargo = getRandom(min = 1, max = 10)
+        if lostCargo > playerShip.cargo[roll2].amount:
+          lostCargo = playerShip.cargo[roll2].amount
+        addMessage(message = "During checking ship's cargo, you noticed that you lost " &
+            $lostCargo & " " & getItemName(item = playerShip.cargo[roll2]) &
+            ".", mType = otherMessage, color = red)
+        updateCargo(ship = playerShip, amount = 0 - lostCargo,
+            cargoIndex = roll2)
+    # Events outside a base
+    else:
+      if roll in 21 .. 30 and skyBases[baseIndex].reputation.level == -100:
+        roll = 31
+      if "diseaseimmune" in factionsList[skyBases[baseIndex].owner].flags and
+          roll == 21:
+        roll = 20
