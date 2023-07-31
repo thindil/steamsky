@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import combat, events, game, game2, items, maps, messages, shipscargo,
-    shipscrew, shipsmovement, types, utils
+    shipscrew, shipscrew2, shipsmovement, types, utils
 
 proc checkForEvent*(): bool =
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -118,3 +118,22 @@ proc checkForEvent*(): bool =
       if roll < 6 and playerShip.speed != docked:
         recoverBase(baseIndex = baseIndex)
       return false
+    if playerShip.speed == docked:
+      # Brawl in base, happens only when there is more than 1 crew member
+      if roll < 5 and playerShip.crew.len > 1:
+        var restingCrew: seq[Positive]
+        for index, member in playerShip.crew:
+          if member.order == rest:
+            restingCrew.add(index)
+        if restingCrew.len > 0:
+          let roll2 = getRandom(min = restingCrew.low, max = restingCrew.high)
+          var injuries = getRandom(min = 1, max = 10)
+          if injuries > playerShip.crew[restingCrew[roll2]].health:
+            injuries = playerShip.crew[restingCrew[roll2]].health
+          playerShip.crew[restingCrew[roll2]].health = playerShip.crew[
+              restingCrew[roll2]].health - injuries
+          addMessage(message = playerShip.crew[restingCrew[roll2]].name &
+              " was injured in a brawl inside the base", mType = otherMessage, color = red)
+          if playerShip.crew[restingCrew[roll2]].health == 0:
+            death(memberIndex = restingCrew[roll2],
+                reason = "injuries in brawl in base", ship = playerShip)
