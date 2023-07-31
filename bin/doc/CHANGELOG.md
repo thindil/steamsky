@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Adding full docks event in debug menu
 - Possible crash when encountering NPC's ship
 - Updating events after wait in place
+- Sky bases at the game's start can be created at the border of the map
 
 ## [8.9] - 2023-07-09
 
