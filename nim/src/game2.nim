@@ -321,8 +321,8 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
           normalizeCoord(coord = posY, isXAxis = 0)
           attempts.inc
           if attempts > 250:
-            posX = getRandom(min = BasesRange.low, max = BasesRange.high).cint
-            posY = getRandom(min = BasesRange.low, max = BasesRange.high).cint
+            posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
+            posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
             attempts = 1
         for j in -5 .. 5:
           var tempX: cint = posX + j.cint
