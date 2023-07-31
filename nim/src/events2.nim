@@ -192,5 +192,34 @@ proc checkForEvent*(): bool =
         eventsList.add(EventData(eType: doublePrice, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 1_440, max = 2_880),
             itemIndex: newItemIndex))
+      # Full docks or enemy patrol
       else:
-        discard
+        # Enemy patrol
+        if roll in 20 .. 40:
+          var enemies: seq[Positive]
+          generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
+              withTraders = false)
+          eventsList.add(EventData(eType: enemyPatrol, skyX: playerShip.skyX,
+              skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
+              shipIndex: enemies[getRandom(min = enemies.low,
+              max = enemies.high)]))
+          skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+          return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
+        # Full docks
+        eventsList.add(EventData(eType: fullDocks, skyX: playerShip.skyX,
+            skyY: playerShip.skyY, time: getRandom(min = 15, max = 30), data: 1))
+        addMessage(message = "You can't dock to base now, because it's docks are full.",
+            mType = otherMessage, color = red)
+      skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+      return false
+
+# Temporary code for interfacing with Ada
+
+proc checkAdaForEvent(): cint {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    if checkForEvent():
+      return 1
+  except ValueError, IOError, Exception:
+    return 0
+  return 0
+
