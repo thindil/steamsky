@@ -91,5 +91,30 @@ proc checkForEvent*(): bool =
           mType = otherMessage)
       gainPerception()
       updateOrders(ship = playerShip)
+    # Friendly ship
+    of 24 .. 30:
+      eventsList.add(EventData(eType: friendlyShip, skyX: playerShip.skyX,
+          skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
+          shipIndex: friendlyShips[getRandom(min = friendlyShips.low,
+          max = friendlyShips.high)]))
+      skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+      addMessage(message = "You've spotted a friendly ship.",
+          mType = otherMessage)
+      gainPerception()
+      updateOrders(ship = playerShip)
+    # Combat
     else:
-      discard
+      var enemies: seq[Positive]
+      generateEnemies(enemies = enemies)
+      eventsList.add(EventData(eType: enemyShip, skyX: playerShip.skyX,
+          skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
+          shipIndex: enemies[getRandom(min = enemies.low, max = enemies.high)]))
+      skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+      return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
+  # Events inside a sky base
+  else:
+    # Change owner of an abandoned base
+    if skyBases[baseIndex].population == 0:
+      if roll < 6 and playerShip.speed != docked:
+        recoverBase(baseIndex = baseIndex)
+      return false
