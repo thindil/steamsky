@@ -157,3 +157,23 @@ proc checkForEvent*(): bool =
       if "diseaseimmune" in factionsList[skyBases[baseIndex].owner].flags and
           roll == 21:
         roll = 20
+      case roll
+      # Base is attacked
+      of 1 .. 20:
+        var enemies: seq[Positive]
+        generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
+        eventsList.add(EventData(eType: attackOnBase, skyX: playerShip.skyX,
+            skyY: playerShip.skyY, time: getRandom(min = 60, max = 90),
+            shipIndex: enemies[getRandom(min = enemies.low,
+            max = enemies.high)]))
+        addMessage(message = "You can't dock to base now, because base is under attack. You can help defend it.",
+            mType = otherMessage)
+        return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
+      # Disease in base
+      of 21:
+        eventsList.add(EventData(eType: disease, skyX: playerShip.skyX,
+            skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
+        addMessage(message = "You can't dock to base now, it is closed due to disease.",
+            mType = otherMessage)
+      else:
+        discard
