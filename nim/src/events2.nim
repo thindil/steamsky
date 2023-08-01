@@ -21,6 +21,9 @@ import basestypes, combat, events, game, game2, items, maps, messages,
 
 proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Check and generate an event happened at the player's position.
+  ##
+  ## Returns true if a combat with another ship started, otherwise false.
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
     if eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == enemyShip:
       return startCombat(enemyIndex = eventsList[skyMap[playerShip.skyX][
