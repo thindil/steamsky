@@ -251,9 +251,9 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     baseOwner, baseType: string
     basePopulation: Natural
     baseReputation: ReputationRange
-    factionRoll = getRandom(1, maxSpawnRoll)
     baseSize: BasesSize
   for i in skyBases.low .. skyBases.high:
+    var factionRoll = getRandom(1, maxSpawnRoll)
     for index, faction in factionsList:
       if factionRoll < faction.spawnChance:
         baseOwner = index
