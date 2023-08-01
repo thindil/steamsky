@@ -2739,10 +2739,12 @@ package body Ships.UI.Modules is
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
-         if Get_Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Modules_Sort_Order = NAMEASC
+           and then Left.Name < Right.Name then
             return True;
          end if;
-         if Get_Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Modules_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
             return True;
          end if;
          if Get_Modules_Sort_Order = DAMAGEASC
@@ -2753,10 +2755,12 @@ package body Ships.UI.Modules is
            and then Left.Damage > Right.Damage then
             return True;
          end if;
-         if Get_Modules_Sort_Order = INFOASC and then Left.Info < Right.Info then
+         if Get_Modules_Sort_Order = INFOASC
+           and then Left.Info < Right.Info then
             return True;
          end if;
-         if Get_Modules_Sort_Order = INFODESC and then Left.Info > Right.Info then
+         if Get_Modules_Sort_Order = INFODESC
+           and then Left.Info > Right.Info then
             return True;
          end if;
          return False;
@@ -2767,19 +2771,19 @@ package body Ships.UI.Modules is
    begin
       case Column is
          when 1 =>
-            if Modules_Sort_Order = NAMEASC then
+            if Get_Modules_Sort_Order = NAMEASC then
                Modules_Sort_Order := NAMEDESC;
             else
                Modules_Sort_Order := NAMEASC;
             end if;
          when 2 =>
-            if Modules_Sort_Order = DAMAGEASC then
+            if Get_Modules_Sort_Order = DAMAGEASC then
                Modules_Sort_Order := DAMAGEDESC;
             else
                Modules_Sort_Order := DAMAGEASC;
             end if;
          when 3 =>
-            if Modules_Sort_Order = INFOASC then
+            if Get_Modules_Sort_Order = INFOASC then
                Modules_Sort_Order := INFODESC;
             else
                Modules_Sort_Order := INFOASC;
@@ -2787,7 +2791,7 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      if Modules_Sort_Order = NONE then
+      if Get_Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
       Fill_Local_Modules_Loop :
