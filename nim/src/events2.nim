@@ -19,7 +19,8 @@ import std/tables
 import basestypes, combat, events, game, game2, items, maps, messages,
     shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
-proc checkForEvent*(): bool =
+proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
+    Exception], tags: [WriteIOEffect, RootEffect].} =
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
     if eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == enemyShip:
       return startCombat(enemyIndex = eventsList[skyMap[playerShip.skyX][
