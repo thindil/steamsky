@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings;
-with Bases; use Bases;
+with Bases;
 with Maps; use Maps;
 
 package body Events is
@@ -105,36 +105,18 @@ package body Events is
    end Delete_Event;
 
    procedure Generate_Traders is
-      Ship_Index: Natural := 0;
       procedure Generate_Ada_Traders with
          Import => True,
          Convention => C,
          External_Name => "generateAdaTraders";
-      function Get_Trader_Or_Friendly
-        (Index, Get_Trader: Natural) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getTraderOrFriendly";
    begin
       Set_Ship_In_Nim;
       Generate_Ada_Traders;
-      Count_Traders_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 1);
-         if Ship_Index > 0 then
-            Traders.Append(New_Item => Ship_Index);
-         end if;
-      end loop Count_Traders_Loop;
-      Count_Friendly_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         Ship_Index := Get_Trader_Or_Friendly(Index => I, Get_Trader => 0);
-         if Ship_Index > 0 then
-            Friendly_Ships.Append(New_Item => Ship_Index);
-         end if;
-      end loop Count_Friendly_Loop;
    end Generate_Traders;
 
    procedure Recover_Base(Base_Index: Bases_Range) is
+      use Bases;
+
       procedure Recover_Ada_Base(B_Index: Integer) with
          Import => True,
          Convention => C,

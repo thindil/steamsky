@@ -1133,12 +1133,12 @@ package body DebugUI is
       Add_Ship_Event_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
-            if Traders.Contains(Item => I) then
+            if Get_Trader_Or_Friendly(Index => I, Get_Trader => 1) > 0 then
                Events_List.Append
                  (New_Item =>
                     (E_Type => TRADER, Sky_X => Npc_Ship_X,
                      Sky_Y => Npc_Ship_Y, Time => Duration, Ship_Index => I));
-            elsif Friendly_Ships.Contains(Item => I) then
+            elsif Get_Trader_Or_Friendly(Index => I, Get_Trader => 0) > 0 then
                Events_List.Append
                  (New_Item =>
                     (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X,
