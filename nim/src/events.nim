@@ -222,3 +222,6 @@ proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [], expo
     return traders.find(index).cint + 1
   else:
     return friendlyShips.find(index).cint + 1
+
+proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc.} =
+  return eventsList.len.cint
