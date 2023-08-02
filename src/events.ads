@@ -93,20 +93,6 @@ package Events is
    Events_List: Events_Container.Vector;
    -- ****
 
-   -- ****v* Events/Events.Traders
-   -- FUNCTION
-   -- List of indexes of all friendly traders in the game
-   -- SOURCE
-   Traders: Positive_Container.Vector;
-   -- ****
-
-   -- ****v* Events/Events.Friendly_Ships
-   -- FUNCTION
-   -- List of indexes of all friendly ships in the game
-   -- SOURCE
-   Friendly_Ships: Positive_Container.Vector;
-   -- ****
-
    -- ****f* Events/Events.Check_For_Event
    -- FUNCTION
    -- Check if event happen
@@ -177,5 +163,11 @@ package Events is
    procedure Set_Event(Index: Positive);
 
    procedure Set_Nim_Events;
+
+   function Get_Trader_Or_Friendly
+     (Index, Get_Trader: Natural) return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "getTraderOrFriendly";
 
 end Events;
