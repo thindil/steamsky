@@ -2721,6 +2721,7 @@ package body Ships.UI.Modules is
           (Table => Modules_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Module_Data is record
          Name: Bounded_String;
          Damage: Float;
@@ -2728,6 +2729,7 @@ package body Ships.UI.Modules is
          Info: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
       --## rule on IMPROPER_INITIALIZATION
@@ -2810,11 +2812,13 @@ package body Ships.UI.Modules is
                         Modules_Container.To_Index(Position => I))));
       end loop Fill_Local_Modules_Loop;
       Sort_Modules(Container => Local_Modules);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Modules_Indexes.Clear;
       Fill_Modules_Indexes_Loop :
       for Module of Local_Modules loop
          Modules_Indexes.Append(New_Item => Module.Id);
       end loop Fill_Modules_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Update_Modules_Info;
       return TCL_OK;
    end Sort_Modules_Command;
