@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when encountering NPC's ship
 - Updating events after wait in place
 - Sky bases at the game's start can be created at the border of the map
+- Typos in messages about started events
 
 ## [8.9] - 2023-07-09
 
