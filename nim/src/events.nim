@@ -219,12 +219,6 @@ proc generateAdaTraders() {.raises: [], tags: [], exportc.} =
 
 proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [], exportc.} =
   if trader == 1:
-    if index < traders.len:
-      return traders[index].cint
-    else:
-      return 0
+    return traders.find(index).cint + 1
   else:
-    if index < friendlyShips.len:
-      return friendlyShips[index].cint
-    else:
-      return 0
+    return friendlyShips.find(index).cint + 1
