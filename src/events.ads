@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 with Ships; use Ships;
 
@@ -82,15 +82,15 @@ package Events is
    -- FUNCTION
    -- Used to store events data
    -- SOURCE
---   package Events_Container is new Vectors
---     (Index_Type => Positive, Element_Type => Event_Data);
+   package Events_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Event_Data);
    -- ****
 
    -- ****v* Events/Events.Events_List
    -- FUNCTION
    -- List of all events in the game
    -- SOURCE
---   Events_List: Events_Container.Vector;
+   Events_List: Events_Container.Vector;
    -- ****
 
    -- ****f* Events/Events.Check_For_Event

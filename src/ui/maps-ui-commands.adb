@@ -43,6 +43,7 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
+with Events; use Events;
 with Factions; use Factions;
 with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;

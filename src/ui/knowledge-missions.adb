@@ -35,7 +35,6 @@ with Bases; use Bases;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
-with Events; use Events;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;

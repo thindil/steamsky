@@ -143,7 +143,6 @@ package body Bases is
       Get_Game_Date;
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
-      Set_Nim_Events;
       Ask_Ada_For_Bases;
       Update_Known_Bases_Loop :
       for I in Sky_Bases'Range loop
@@ -152,6 +151,10 @@ package body Bases is
             Sky_Bases(I).Known := True;
          end if;
       end loop Update_Known_Bases_Loop;
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. Get_Events_Amount loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Base_From_Nim(Base_Index => Base_Index);
       Set_Game_Date;
@@ -193,11 +196,9 @@ package body Bases is
       Get_Game_Date;
       Set_Base_In_Nim(Base_Index => Base_Index);
       Set_Ship_In_Nim;
-      Set_Nim_Events;
       Ask_Ada_For_Events;
-      Events_List.Clear;
       Set_Events_In_Ada_Loop :
-      for I in 1 .. 100 loop
+      for I in 1 .. Get_Events_Amount loop
          Set_Event(Index => I);
       end loop Set_Events_In_Ada_Loop;
       Get_Ship_From_Nim(Ship => Player_Ship);

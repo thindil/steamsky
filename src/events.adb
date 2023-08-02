@@ -33,6 +33,10 @@ package body Events is
       Result := Check_Ada_For_Event;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. Get_Events_Amount loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
       if Result = 1 then
          return True;
       end if;
@@ -40,27 +44,8 @@ package body Events is
    end Check_For_Event;
 
    procedure Set_Nim_Events is
-      procedure Clear_Ada_Events with
-         Import => True,
-         Convention => C,
-         External_Name => "clearAdaEvents";
    begin
-      Clear_Ada_Events;
-      Set_Events_In_Nim_Loop :
-      for I in Events_List.Iterate loop
-         Get_Ada_Event
-           (Index => Events_Container.To_Index(Position => I),
-            X => Events_List(I).Sky_X, Y => Events_List(I).Sky_Y,
-            Time => Events_List(I).Time,
-            E_Type => Events_Types'Pos(Events_List(I).E_Type),
-            Data =>
-              (case Events_List(I).E_Type is
-                 when DOUBLEPRICE => Events_List(I).Item_Index,
-                 when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
-                   FRIENDLYSHIP => Events_List(I).Ship_Index,
-                 when others => Events_List(I).Data));
-         Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := 0;
-      end loop Set_Events_In_Nim_Loop;
+      null;
    end Set_Nim_Events;
 
    procedure Update_Events(Minutes: Positive) is
@@ -69,14 +54,9 @@ package body Events is
          Convention => C,
          External_Name => "updateAdaEvents";
    begin
-      if Events_List.Length = 0 then
-         return;
-      end if;
-      Set_Nim_Events;
       Update_Ada_Events(M => Minutes);
-      Events_List.Clear;
       Set_Events_In_Ada_Loop :
-      for I in 1 .. 100 loop
+      for I in 1 .. Get_Events_Amount loop
          Set_Event(Index => I);
       end loop Set_Events_In_Ada_Loop;
    end Update_Events;
@@ -87,15 +67,13 @@ package body Events is
          Convention => C,
          External_Name => "deleteAdaEvent";
    begin
-      Set_Nim_Events;
       Delete_Ada_Event(E_Index => Event_Index);
-      Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
+      Sky_Map(Get_Event(Event_Index).Sky_X, Get_Event(Event_Index).Sky_Y)
         .Event_Index :=
         0;
-      Events_List.Delete(Index => Event_Index);
       Delete_Events_Loop :
-      for I in Events_List.First_Index .. Events_List.Last_Index loop
-         Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := I;
+      for I in 1 .. Get_Events_Amount loop
+         Sky_Map(Get_Event(I).Sky_X, Get_Event(I).Sky_Y).Event_Index := I;
       end loop Delete_Events_Loop;
    end Delete_Event;
 
@@ -163,50 +141,6 @@ package body Events is
          return;
       end if;
       Sky_Map(X, Y).Event_Index := Index;
-      case E_Type is
-         when 1 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Ship_Index => Data));
-         when 2 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Ship_Index => Data));
-         when 3 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Data => Data));
-         when 4 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Item_Index => Data));
-         when 6 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Data => Data));
-         when 7 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Ship_Index => Data));
-         when 8 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Ship_Index => Data));
-         when 9 =>
-            Events_List.Append
-              (New_Item =>
-                 (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
-                  Ship_Index => Data));
-         when others =>
-            null;
-      end case;
    end Set_Event;
 
    function Get_Event(Index: Positive) return Event_Data is

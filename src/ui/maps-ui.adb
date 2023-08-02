@@ -51,6 +51,7 @@ with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with DebugUI;
+with Events; use Events;
 with Factions; use Factions;
 with GameOptions;
 with Help.UI;
@@ -351,7 +352,7 @@ package body Maps.UI is
             Message => "No trader assigned. You need one to talk/trade.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-         if Events_List
+         if Get_Event
              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .E_Type =
            FRIENDLYSHIP then
@@ -513,10 +514,10 @@ package body Maps.UI is
                      Append(Source => Map_Tag, New_Item => " unvisited");
                   end if;
                elsif Sky_Map(X, Y).Event_Index > 0 then
-                  if Sky_Map(X, Y).Event_Index > Events_List.Last_Index then
+                  if Sky_Map(X, Y).Event_Index > Get_Events_Amount then
                      Sky_Map(X, Y).Event_Index := 0;
                   else
-                     case Events_List(Sky_Map(X, Y).Event_Index).E_Type is
+                     case Get_Event(Sky_Map(X, Y).Event_Index).E_Type is
                         when ENEMYSHIP =>
                            Map_Char := Current_Theme.Enemy_Ship_Icon;
                            Map_Tag := To_Unbounded_String(Source => "red");
@@ -901,13 +902,13 @@ package body Maps.UI is
       if Sky_Map(X, Y).Event_Index > 0 then
          Add_Event_Info_Block :
          declare
-            Event_Index: constant Events_Container.Extended_Index :=
+            Event_Index: constant Natural :=
               Sky_Map(X, Y).Event_Index;
          begin
-            if Events_List(Event_Index).E_Type /= BASERECOVERY then
+            if Get_Event(Event_Index).E_Type /= BASERECOVERY then
                Event_Info_Text := To_Unbounded_String(Source => LF & LF);
             end if;
-            case Events_List(Event_Index).E_Type is
+            case Get_Event(Event_Index).E_Type is
                when TRADER =>
                   Append
                     (Source => Event_Info_Text,
@@ -916,7 +917,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Events_List(Event_Index).Ship_Index)
+                                 Get_Event(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green");
                when FRIENDLYSHIP =>
@@ -927,7 +928,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Events_List(Event_Index).Ship_Index)
+                                 Get_Event(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green2");
                when ENEMYSHIP =>
@@ -938,7 +939,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Events_List(Event_Index).Ship_Index)
+                                 Get_Event(Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>
@@ -967,7 +968,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (Index => Events_List(Event_Index).Item_Index)
+                              (Index => Get_Event(Event_Index).Item_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "lime");
                when NONE | BASERECOVERY =>
