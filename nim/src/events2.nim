@@ -141,7 +141,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
               " was injured in a brawl inside the base", mType = otherMessage, color = red)
           if playerShip.crew[restingCrew[roll2]].health == 0:
             death(memberIndex = restingCrew[roll2],
-                reason = "injuries in brawl in base", ship = playerShip)
+                reason = "injuries in brawl in the base", ship = playerShip)
       # Lost cargo in the base
       elif roll > 4 and roll < 10:
         let roll2 = getRandom(min = playerShip.cargo.low,
@@ -149,7 +149,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         var lostCargo = getRandom(min = 1, max = 10)
         if lostCargo > playerShip.cargo[roll2].amount:
           lostCargo = playerShip.cargo[roll2].amount
-        addMessage(message = "During checking ship's cargo, you noticed that you lost " &
+        addMessage(message = "During checking your ship's cargo, you noticed that you lost " &
             $lostCargo & " " & getItemName(item = playerShip.cargo[roll2]) &
             ".", mType = otherMessage, color = red)
         updateCargo(ship = playerShip, amount = 0 - lostCargo,
@@ -170,14 +170,14 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             skyY: playerShip.skyY, time: getRandom(min = 60, max = 90),
             shipIndex: enemies[getRandom(min = enemies.low,
             max = enemies.high)]))
-        addMessage(message = "You can't dock to base now, because base is under attack. You can help defend it.",
+        addMessage(message = "You can't dock to the base now, because the base is under attack. You can help defend it.",
             mType = otherMessage)
         return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
       # Disease in base
       of 21:
         eventsList.add(EventData(eType: disease, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
-        addMessage(message = "You can't dock to base now, it is closed due to disease.",
+        addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
             mType = otherMessage)
       of 22 .. 30:
         var newItemIndex = 0
@@ -212,7 +212,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         # Full docks
         eventsList.add(EventData(eType: fullDocks, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 15, max = 30), data: 1))
-        addMessage(message = "You can't dock to base now, because it's docks are full.",
+        addMessage(message = "You can't dock to the base now, because its docks are full.",
             mType = otherMessage, color = red)
       skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
       return false
