@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Events; use Events;
 with Game; use Game;
 with Missions; use Missions;
 
@@ -38,7 +37,7 @@ package Maps is
    type Sky_Cell is record
       Base_Index: Extended_Base_Range := 0;
       Visited: Boolean;
-      Event_Index: Events_Container.Extended_Index := 0;
+      Event_Index: Natural := 0;
       Mission_Index: Mission_Container.Extended_Index := 0;
    end record;
    -- ****

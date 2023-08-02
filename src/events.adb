@@ -33,11 +33,6 @@ package body Events is
       Result := Check_Ada_For_Event;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-      Events_List.Clear;
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. 100 loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
       if Result = 1 then
          return True;
       end if;

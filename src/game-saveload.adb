@@ -298,7 +298,6 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Loading events...", Message_Type => EVERYTHING,
          New_Line => False);
-      Events_List.Clear;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "event");
@@ -322,64 +321,11 @@ package body Game.SaveLoad is
             Data :=
               To_Unbounded_String
                 (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
-            case E_Type is
-               when ENEMYSHIP =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when ATTACKONBASE =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when DISEASE =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => DISEASE, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Data => Integer'Value(To_String(Source => Data))));
-               when DOUBLEPRICE =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Item_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when FULLDOCKS =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Data => Integer'Value(To_String(Source => Data))));
-               when ENEMYPATROL =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when TRADER =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when FRIENDLYSHIP =>
-                  Events_List.Append
-                    (New_Item =>
-                       (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y,
-                        Time => Time,
-                        Ship_Index =>
-                          Positive'Value(To_String(Source => Data))));
-               when NONE | BASERECOVERY =>
-                  null;
-            end case;
-            Sky_Map(Events_List(I + 1).Sky_X, Events_List(I + 1).Sky_Y)
+            Get_Ada_Event
+              (Index => Get_Events_Amount + 1, E_Type => Events_Types'Pos(E_Type),
+               X => X, Y => Y, Time => Time,
+               Data => Positive'Value(To_String(Source => Data)));
+            Sky_Map(X, Y)
               .Event_Index :=
               I + 1;
          end loop Load_Events_Loop;

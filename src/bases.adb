@@ -152,11 +152,6 @@ package body Bases is
             Sky_Bases(I).Known := True;
          end if;
       end loop Update_Known_Bases_Loop;
-      Events_List.Clear;
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. 100 loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Base_From_Nim(Base_Index => Base_Index);
       Set_Game_Date;
