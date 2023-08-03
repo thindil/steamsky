@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Added
+- Message about spotted en enemy patrol to the event
+
 ## Changed
 - Made more items available for buy in traders' ships
 
