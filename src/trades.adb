@@ -37,7 +37,7 @@ package body Trades is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Cost: Natural;
       Money_Index_2: Inventory_Container.Extended_Index;
-      Event_Index: constant Events_Container.Extended_Index :=
+      Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Item_Name: Bounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
@@ -63,8 +63,8 @@ package body Trades is
              .Price;
          if Event_Index > 0
            and then
-           (Events_List(Event_Index).E_Type = DOUBLEPRICE and
-            Events_List(Event_Index).Item_Index = Item_Index) then
+           (Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE and
+            Get_Event(Index => Event_Index).Item_Index = Item_Index) then
             Price := Price * 2;
          end if;
       else
@@ -161,6 +161,7 @@ package body Trades is
       Show_Log_Block :
       declare
          Gain: constant Integer := (Buy_Amount * Price) - Cost;
+         Event: Event_Data;
       begin
          Add_Message
            (Message =>
@@ -173,10 +174,12 @@ package body Trades is
                  To_String(Source => Money_Name) &
                  " compared to the base price."),
             M_Type => TRADEMESSAGE);
+         if Base_Index = 0 and Event_Index > 0 then
+            Event := Get_Event(Index => Event_Index);
+            Event.Time := Event.Time + 5;
+            Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, Data => Event.Ship_Index, E_Type => Events_Types'Pos(Event.E_Type));
+         end if;
       end Show_Log_Block;
-      if Base_Index = 0 and Event_Index > 0 then
-         Events_List(Event_Index).Time := Events_List(Event_Index).Time + 5;
-      end if;
       Update_Game(Minutes => 5);
    exception
       when Constraint_Error =>
@@ -197,7 +200,7 @@ package body Trades is
       Item_Name: constant String :=
         To_String(Source => Get_Proto_Item(Index => Proto_Index).Name);
       Price: Positive;
-      Event_Index: constant Events_Container.Extended_Index :=
+      Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Base_Item_Index: Natural := 0;
       Cargo_Added: Boolean := False;
@@ -242,8 +245,8 @@ package body Trades is
                 (Container => Trader_Cargo, Index => Base_Item_Index)
                 .Price);
       end if;
-      if Event_Index > 0 and then Events_List(Event_Index).E_Type = DOUBLEPRICE
-        and then Events_List(Event_Index).Item_Index = Proto_Index then
+      if Event_Index > 0 and then Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+        and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
          Price := Price * 2;
       end if;
       Profit := Price * Sell_Amount;
@@ -389,6 +392,7 @@ package body Trades is
       Show_Log_Block :
       declare
          Gain: constant Integer := Profit - (Sell_Amount * Price);
+         Event: Event_Data;
       begin
          Add_Message
            (Message =>
@@ -401,10 +405,12 @@ package body Trades is
                  To_String(Source => Money_Name) &
                  " compared to the base price."),
             M_Type => TRADEMESSAGE);
+         if Base_Index = 0 and Event_Index > 0 then
+            Event := Get_Event(Index => Event_Index);
+            Event.Time := Event.Time + 5;
+            Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, Data => Event.Ship_Index, E_Type => Events_Types'Pos(Event.E_Type));
+         end if;
       end Show_Log_Block;
-      if Base_Index = 0 and Event_Index > 0 then
-         Events_List(Event_Index).Time := Events_List(Event_Index).Time + 5;
-      end if;
       Update_Game(Minutes => 5);
    exception
       when Constraint_Error =>

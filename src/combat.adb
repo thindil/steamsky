@@ -1834,8 +1834,8 @@ package body Combat is
          Enemy.Ship.Speed := FULL_STOP;
          Player_Ship.Speed := Old_Speed;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-            if Events_List
-                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+            if Get_Event
+                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               ATTACKONBASE then
                Gain_Rep
