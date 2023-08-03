@@ -13,48 +13,48 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Crafts; use Crafts;
 with Dialogs; use Dialogs;
-with Factions; use Factions;
-with Maps; use Maps;
+with Factions;
+with Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
-with Missions; use Missions;
-with Ships.Cargo; use Ships.Cargo;
+with Missions;
+with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew; use Ships.UI.Crew;
-with Ships.Upgrade; use Ships.Upgrade;
+with Ships.Upgrade;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 with ShipModules; use ShipModules;
@@ -99,6 +99,11 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Font;
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
       use Tiny_String;
 
@@ -791,6 +796,8 @@ package body Ships.UI.Modules is
             Current_Row := Current_Row + 1;
             Cabin_Owner_Info_Block :
             declare
+               use Missions;
+
                Is_Passenger: Boolean := False;
                --## rule off IMPROPER_INITIALIZATION
                Mission: Mission_Data;
@@ -1236,6 +1243,8 @@ package body Ships.UI.Modules is
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Block :
             declare
+               use Factions;
+
                Has_Healing_Tool: Boolean := False;
             begin
                Find_Healing_Tool_Loop :
@@ -1438,6 +1447,8 @@ package body Ships.UI.Modules is
    function Set_Upgrade_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+
+      use Ships.Upgrade;
    begin
       Start_Upgrading
         (Module_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
@@ -1477,6 +1488,7 @@ package body Ships.UI.Modules is
    function Assign_Module_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ada.Exceptions;
       use Tiny_String;
 
       Module_Index: constant Positive :=
@@ -1831,6 +1843,8 @@ package body Ships.UI.Modules is
    function Update_Assign_Crew_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Interfaces.C.Strings;
+
       Module_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Assigned: Natural := 0;
@@ -2138,6 +2152,7 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ships.Cargo;
       use Tiny_String;
 
       Module_Index: constant Positive :=
@@ -2526,6 +2541,7 @@ package body Ships.UI.Modules is
    end Get_Module_Info;
 
    procedure Update_Modules_Info(Page: Positive := 1) is
+      use CoreUI;
       use Tiny_String;
 
       Ship_Canvas: constant Tk_Canvas :=
