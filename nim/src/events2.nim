@@ -208,6 +208,8 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
               shipIndex: enemies[getRandom(min = enemies.low,
               max = enemies.high)]))
           skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
+          addMessage(message = "You spotted an enemy patrol.",
+              mType = otherMessage, color = red)
           return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
         # Full docks
         eventsList.add(EventData(eType: fullDocks, skyX: playerShip.skyX,
