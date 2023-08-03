@@ -82,14 +82,16 @@ package body Knowledge.Events is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Event_Info: Unbounded_String;
       Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Get_Event(Index => Event_Index).Sky_X, Get_Event(Index => Event_Index).Sky_Y)
+        Sky_Map
+          (Get_Event(Index => Event_Index).Sky_X,
+           Get_Event(Index => Event_Index).Sky_Y)
           .Base_Index;
    begin
       Event_Info :=
         To_Unbounded_String
           (Source =>
-             "X:" & Positive'Image(Get_Event(Index => Event_Index).Sky_X) & " Y:" &
-             Positive'Image(Get_Event(Index => Event_Index).Sky_Y));
+             "X:" & Positive'Image(Get_Event(Index => Event_Index).Sky_X) &
+             " Y:" & Positive'Image(Get_Event(Index => Event_Index).Sky_Y));
       case Get_Event(Index => Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
@@ -99,7 +101,8 @@ package body Knowledge.Events is
                  To_String
                    (Source =>
                       Get_Proto_Ship
-                        (Proto_Index => Get_Event(Index => Event_Index).Ship_Index)
+                        (Proto_Index =>
+                           Get_Event(Index => Event_Index).Ship_Index)
                         .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
@@ -364,13 +367,16 @@ package body Knowledge.Events is
                  when DOUBLEPRICE =>
                    To_String
                      (Source =>
-                        Get_Proto_Item(Index => Get_Event(Index => I).Item_Index)
+                        Get_Proto_Item
+                          (Index => Get_Event(Index => I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " in ") &
                    To_String
                      (Source =>
                         Sky_Bases
-                          (Sky_Map(Get_Event(Index => I).Sky_X, Get_Event(Index => I).Sky_Y)
+                          (Sky_Map
+                             (Get_Event(Index => I).Sky_X,
+                              Get_Event(Index => I).Sky_Y)
                              .Base_Index)
                           .Name),
                  when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
@@ -380,7 +386,8 @@ package body Knowledge.Events is
                           (Source =>
                              Sky_Bases
                                (Sky_Map
-                                  (Get_Event(Index => I).Sky_X, Get_Event(Index => I).Sky_Y)
+                                  (Get_Event(Index => I).Sky_X,
+                                   Get_Event(Index => I).Sky_Y)
                                   .Base_Index)
                                .Name)),
                  when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
@@ -389,7 +396,8 @@ package body Knowledge.Events is
                         To_String
                           (Source =>
                              Get_Proto_Ship
-                               (Proto_Index => Get_Event(Index => I).Ship_Index)
+                               (Proto_Index =>
+                                  Get_Event(Index => I).Ship_Index)
                                .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => I);
@@ -473,8 +481,7 @@ package body Knowledge.Events is
             Events_Indexes.Clear;
             Fill_Event_Indexes_Loop :
             for I in 1 .. Get_Events_Amount loop
-               Events_Indexes.Append
-                 (New_Item => I);
+               Events_Indexes.Append(New_Item => I);
             end loop Fill_Event_Indexes_Loop;
          end if;
          Load_Known_Events_Loop :
@@ -487,8 +494,10 @@ package body Knowledge.Events is
                when ENEMYSHIP =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "red"));
                   Add_Button
@@ -499,8 +508,10 @@ package body Knowledge.Events is
                when FULLDOCKS =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "cyan"));
                   Add_Button
@@ -511,8 +522,10 @@ package body Knowledge.Events is
                when ATTACKONBASE =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "red"));
                   Add_Button
@@ -523,8 +536,10 @@ package body Knowledge.Events is
                when DISEASE =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "yellow3"));
                   Add_Button
@@ -535,8 +550,10 @@ package body Knowledge.Events is
                when ENEMYPATROL =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "red3"));
                   Add_Button
@@ -547,8 +564,10 @@ package body Knowledge.Events is
                when DOUBLEPRICE =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "lime"));
                   Add_Button
@@ -559,8 +578,10 @@ package body Knowledge.Events is
                when TRADER =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "green"));
                   Add_Button
@@ -571,8 +592,10 @@ package body Knowledge.Events is
                when FRIENDLYSHIP =>
                   Color :=
                     (if
-                       Get_Event(Index => Event).Sky_X = Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y = Player_Ship.Destination_Y
+                       Get_Event(Index => Event).Sky_X =
+                       Player_Ship.Destination_X and
+                       Get_Event(Index => Event).Sky_Y =
+                         Player_Ship.Destination_Y
                      then To_Unbounded_String(Source => "yellow")
                      else To_Unbounded_String(Source => "green2"));
                   Add_Button
@@ -596,8 +619,8 @@ package body Knowledge.Events is
             Add_Button
               (Table => Events_Table,
                Text =>
-                 "X:" & Natural'Image(Get_Event(Index => Event).Sky_X) & " Y:" &
-                 Natural'Image(Get_Event(Index => Event).Sky_Y),
+                 "X:" & Natural'Image(Get_Event(Index => Event).Sky_X) &
+                 " Y:" & Natural'Image(Get_Event(Index => Event).Sky_Y),
                Tooltip => "The coordinates of the event on the map",
                Command => "ShowEventInfo" & Positive'Image(Event), Column => 3,
                Color => To_String(Source => Color));
@@ -647,7 +670,8 @@ package body Knowledge.Events is
                        To_String
                          (Source =>
                             Get_Proto_Ship
-                              (Proto_Index => Get_Event(Index => Event).Ship_Index)
+                              (Proto_Index =>
+                                 Get_Event(Index => Event).Ship_Index)
                               .Name),
                      Tooltip => "Show the event's details",
                      Command => "ShowEventInfo" & Positive'Image(Event),

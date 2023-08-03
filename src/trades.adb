@@ -177,7 +177,10 @@ package body Trades is
          if Base_Index = 0 and Event_Index > 0 then
             Event := Get_Event(Index => Event_Index);
             Event.Time := Event.Time + 5;
-            Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, Data => Event.Ship_Index, E_Type => Events_Types'Pos(Event.E_Type));
+            Get_Ada_Event
+              (Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y,
+               Time => Event.Time, Data => Event.Ship_Index,
+               E_Type => Events_Types'Pos(Event.E_Type));
          end if;
       end Show_Log_Block;
       Update_Game(Minutes => 5);
@@ -245,7 +248,8 @@ package body Trades is
                 (Container => Trader_Cargo, Index => Base_Item_Index)
                 .Price);
       end if;
-      if Event_Index > 0 and then Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+      if Event_Index > 0
+        and then Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
         and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
          Price := Price * 2;
       end if;
@@ -408,7 +412,10 @@ package body Trades is
          if Base_Index = 0 and Event_Index > 0 then
             Event := Get_Event(Index => Event_Index);
             Event.Time := Event.Time + 5;
-            Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, Data => Event.Ship_Index, E_Type => Events_Types'Pos(Event.E_Type));
+            Get_Ada_Event
+              (Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y,
+               Time => Event.Time, Data => Event.Ship_Index,
+               E_Type => Events_Types'Pos(Event.E_Type));
          end if;
       end Show_Log_Block;
       Update_Game(Minutes => 5);

@@ -517,7 +517,8 @@ package body Maps.UI is
                   if Sky_Map(X, Y).Event_Index > Get_Events_Amount then
                      Sky_Map(X, Y).Event_Index := 0;
                   else
-                     case Get_Event(Index => Sky_Map(X, Y).Event_Index).E_Type is
+                     case Get_Event(Index => Sky_Map(X, Y).Event_Index)
+                       .E_Type is
                         when ENEMYSHIP =>
                            Map_Char := Current_Theme.Enemy_Ship_Icon;
                            Map_Tag := To_Unbounded_String(Source => "red");
@@ -902,8 +903,7 @@ package body Maps.UI is
       if Sky_Map(X, Y).Event_Index > 0 then
          Add_Event_Info_Block :
          declare
-            Event_Index: constant Natural :=
-              Sky_Map(X, Y).Event_Index;
+            Event_Index: constant Natural := Sky_Map(X, Y).Event_Index;
          begin
             if Get_Event(Index => Event_Index).E_Type /= BASERECOVERY then
                Event_Info_Text := To_Unbounded_String(Source => LF & LF);
@@ -968,7 +968,8 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (Index => Get_Event(Index => Event_Index).Item_Index)
+                              (Index =>
+                                 Get_Event(Index => Event_Index).Item_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "lime");
                when NONE | BASERECOVERY =>

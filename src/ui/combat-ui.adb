@@ -2077,15 +2077,18 @@ package body Combat.UI is
              Get_Proto_Ship
                (Proto_Index =>
                   Get_Event
-                    (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                    (Index =>
+                       Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                         .Event_Index)
                     .Ship_Index)
                .Name then
             Combat_Started :=
               Start_Combat
                 (Enemy_Index =>
                    Get_Event
-                     (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                        .Event_Index)
+                     (Index =>
+                        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                          .Event_Index)
                      .Ship_Index,
                  New_Combat => False);
             if not Combat_Started then

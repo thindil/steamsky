@@ -360,7 +360,8 @@ package body Trades.UI is
          end if;
          if Event_Index > 0 then
             if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
-              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
+              and then Get_Event(Index => Event_Index).Item_Index =
+                Proto_Index then
                Price := Price * 2;
             end if;
          end if;
@@ -560,7 +561,8 @@ package body Trades.UI is
                 .Price);
          if Event_Index > 0 then
             if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
-              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
+              and then Get_Event(Index => Event_Index).Item_Index =
+                Proto_Index then
                Price := Price * 2;
             end if;
          end if;
@@ -1569,7 +1571,8 @@ package body Trades.UI is
          end if;
          if Event_Index > 0 then
             if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
-              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
+              and then Get_Event(Index => Event_Index).Item_Index =
+                Proto_Index then
                Price := Price * 2;
             end if;
          end if;

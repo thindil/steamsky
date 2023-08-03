@@ -1136,13 +1136,28 @@ package body DebugUI is
       for I in 1 .. Get_Proto_Ships_Amount loop
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
             if Get_Trader_Or_Friendly(Index => I, Get_Trader => 1) > 0 then
-               Get_Ada_Event(Index => Get_Events_Amount + 2, X => Npc_Ship_X, Y => Npc_Ship_Y, Time => Duration, E_Type => Events_Types'Pos(TRADER), Data => I);
+               Get_Ada_Event
+                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                  Y => Npc_Ship_Y, Time => Duration,
+                  E_Type => Events_Types'Pos(TRADER), Data => I);
             elsif Get_Trader_Or_Friendly(Index => I, Get_Trader => 0) > 0 then
-               Get_Ada_Event(Index => Get_Events_Amount + 2, X => Npc_Ship_X, Y => Npc_Ship_Y, Time => Duration, E_Type => Events_Types'Pos(FRIENDLYSHIP), Data => I);
+               Get_Ada_Event
+                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                  Y => Npc_Ship_Y, Time => Duration,
+                  E_Type => Events_Types'Pos(FRIENDLYSHIP), Data => I);
             else
-               Get_Ada_Event(Index => Get_Events_Amount + 2, X => Npc_Ship_X, Y => Npc_Ship_Y, Time => Duration, E_Type => Events_Types'Pos(ENEMYSHIP), Data => I);
+               Get_Ada_Event
+                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                  Y => Npc_Ship_Y, Time => Duration,
+                  E_Type => Events_Types'Pos(ENEMYSHIP), Data => I);
             end if;
-            Get_Ada_Map_Cell(X => Npc_Ship_X, Y => Npc_Ship_Y, Base_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Base_Index, Event_Index => Get_Events_Amount, Mission_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Mission_Index, Visited => (if Sky_Map(Npc_Ship_X, Npc_Ship_Y).Visited then 1 else 0));
+            Get_Ada_Map_Cell
+              (X => Npc_Ship_X, Y => Npc_Ship_Y,
+               Base_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Base_Index,
+               Event_Index => Get_Events_Amount,
+               Mission_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Mission_Index,
+               Visited =>
+                 (if Sky_Map(Npc_Ship_X, Npc_Ship_Y).Visited then 1 else 0));
             return
               Refresh_Events_Command
                 (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
@@ -1242,7 +1257,12 @@ package body DebugUI is
       Event_Type := Natural'Value(Current(ComboBox => Event_Box));
       case Event_Type is
          when 0 =>
-            Get_Ada_Event(Index => Get_Events_Amount + 2, X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)), E_Type => Events_Types'Pos(DISEASE), Data => 1);
+            Get_Ada_Event
+              (Index => Get_Events_Amount + 2,
+               X => Sky_Bases(Base_Index).Sky_X,
+               Y => Sky_Bases(Base_Index).Sky_Y,
+               Time => Positive'Value(Get(Widgt => Duration_Box)),
+               E_Type => Events_Types'Pos(DISEASE), Data => 1);
          when 1 =>
             Event_Box.Name := New_String(Str => Frame_Name & ".item");
             Event_Name :=
@@ -1252,20 +1272,44 @@ package body DebugUI is
             for I in 1 .. Get_Proto_Amount loop
                if To_String(Source => Get_Proto_Item(Index => I).Name) =
                  To_String(Source => Event_Name) then
-                  Get_Ada_Event(Index => Get_Events_Amount + 2, X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)), E_Type => Events_Types'Pos(DOUBLEPRICE), Data => I);
+                  Get_Ada_Event
+                    (Index => Get_Events_Amount + 2,
+                     X => Sky_Bases(Base_Index).Sky_X,
+                     Y => Sky_Bases(Base_Index).Sky_Y,
+                     Time => Positive'Value(Get(Widgt => Duration_Box)),
+                     E_Type => Events_Types'Pos(DOUBLEPRICE), Data => I);
                   Added := True;
                   exit Find_Item_Loop;
                end if;
             end loop Find_Item_Loop;
          when 2 =>
-            Get_Ada_Event(Index => Get_Events_Amount + 2, X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)), E_Type => Events_Types'Pos(FULLDOCKS), Data => 1);
+            Get_Ada_Event
+              (Index => Get_Events_Amount + 2,
+               X => Sky_Bases(Base_Index).Sky_X,
+               Y => Sky_Bases(Base_Index).Sky_Y,
+               Time => Positive'Value(Get(Widgt => Duration_Box)),
+               E_Type => Events_Types'Pos(FULLDOCKS), Data => 1);
          when others =>
             null;
       end case;
       if not Added then
          return TCL_OK;
       end if;
-      Get_Ada_Map_Cell(X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y, Base_Index => Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y).Base_Index, Event_Index => Get_Events_Amount, Mission_Index => Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y).Mission_Index, Visited => (if Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y).Visited then 1 else 0));
+      Get_Ada_Map_Cell
+        (X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y,
+         Base_Index =>
+           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+             .Base_Index,
+         Event_Index => Get_Events_Amount,
+         Mission_Index =>
+           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+             .Mission_Index,
+         Visited =>
+           (if
+              Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+                .Visited
+            then 1
+            else 0));
       return
         Refresh_Events_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,

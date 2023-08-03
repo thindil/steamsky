@@ -385,7 +385,8 @@ package body OrdersMenu is
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             Event :=
               Get_Event
-                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                (Index =>
+                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type;
          end if;
          case Event is
@@ -562,8 +563,9 @@ package body OrdersMenu is
                        "ShowTrader " &
                        Positive'Image
                          (Get_Event
-                            (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .Event_Index)
+                            (Index =>
+                               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                 .Event_Index)
                             .Ship_Index),
                      Shortcut => "t", Underline => 0);
                   Add_Button
@@ -585,8 +587,10 @@ package body OrdersMenu is
                          Get_Proto_Ship
                            (Proto_Index =>
                               Get_Event
-                                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                   .Event_Index)
+                                (Index =>
+                                   Sky_Map
+                                     (Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                     .Event_Index)
                                 .Ship_Index)
                            .Name,
                        Pattern => To_String(Source => Traders_Name)) >
@@ -597,8 +601,9 @@ package body OrdersMenu is
                           "ShowTrader " &
                           Positive'Image
                             (Get_Event
-                               (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                  .Event_Index)
+                               (Index =>
+                                  Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                    .Event_Index)
                                .Ship_Index),
                         Shortcut => "t", Underline => 0);
                      Add_Button
@@ -711,7 +716,8 @@ package body OrdersMenu is
       else
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             if Get_Event
-                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                (Index =>
+                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               FULLDOCKS then
                return
@@ -1181,7 +1187,10 @@ package body OrdersMenu is
       if New_Time < 1 then
          Delete_Event(Event_Index => Event_Index);
       else
-         Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, E_Type => Events_Types'Pos(Event.E_Type), Data => Event.Data);
+         Get_Ada_Event
+           (Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y,
+            Time => Event.Time, E_Type => Events_Types'Pos(Event.E_Type),
+            Data => Event.Data);
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "free" then
          Gain_Rep

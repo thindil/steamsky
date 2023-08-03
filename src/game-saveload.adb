@@ -322,12 +322,11 @@ package body Game.SaveLoad is
               To_Unbounded_String
                 (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
             Get_Ada_Event
-              (Index => Get_Events_Amount + 1, E_Type => Events_Types'Pos(E_Type),
-               X => X, Y => Y, Time => Time,
+              (Index => Get_Events_Amount + 1,
+               E_Type => Events_Types'Pos(E_Type), X => X, Y => Y,
+               Time => Time,
                Data => Positive'Value(To_String(Source => Data)));
-            Sky_Map(X, Y)
-              .Event_Index :=
-              I + 1;
+            Sky_Map(X, Y).Event_Index := I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;
       Log_Message

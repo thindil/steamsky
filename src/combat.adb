@@ -134,7 +134,8 @@ package body Combat is
          exit Convert_Player_Guns_Loop when Nim_Enemy.Player_Guns(I, 0) = -1;
          Guns.Append
            (New_Item =>
-              (1 => Nim_Enemy.Player_Guns(I, 0), 2 => Nim_Enemy.Player_Guns(I, 1),
+              (1 => Nim_Enemy.Player_Guns(I, 0),
+               2 => Nim_Enemy.Player_Guns(I, 1),
                3 => Nim_Enemy.Player_Guns(I, 2)));
       end loop Convert_Player_Guns_Loop;
       Get_Ship_From_Nim(Ship => Enemy.Ship);
@@ -1835,7 +1836,8 @@ package body Combat is
          Player_Ship.Speed := Old_Speed;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             if Get_Event
-                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                (Index =>
+                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               ATTACKONBASE then
                Gain_Rep
