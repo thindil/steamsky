@@ -82,15 +82,15 @@ package body Knowledge.Events is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Event_Info: Unbounded_String;
       Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
+        Sky_Map(Get_Event(Index => Event_Index).Sky_X, Get_Event(Index => Event_Index).Sky_Y)
           .Base_Index;
    begin
       Event_Info :=
         To_Unbounded_String
           (Source =>
-             "X:" & Positive'Image(Events_List(Event_Index).Sky_X) & " Y:" &
-             Positive'Image(Events_List(Event_Index).Sky_Y));
-      case Events_List(Event_Index).E_Type is
+             "X:" & Positive'Image(Get_Event(Index => Event_Index).Sky_X) & " Y:" &
+             Positive'Image(Get_Event(Index => Event_Index).Sky_Y));
+      case Get_Event(Index => Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
               (Source => Event_Info,
@@ -99,7 +99,7 @@ package body Knowledge.Events is
                  To_String
                    (Source =>
                       Get_Proto_Ship
-                        (Proto_Index => Events_List(Event_Index).Ship_Index)
+                        (Proto_Index => Get_Event(Index => Event_Index).Ship_Index)
                         .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
@@ -120,7 +120,7 @@ package body Knowledge.Events is
                  To_String
                    (Source =>
                       Get_Proto_Item
-                        (Index => Events_List(Event_Index).Item_Index)
+                        (Index => Get_Event(Index => Event_Index).Item_Index)
                         .Name));
          when NONE | BASERECOVERY =>
             null;
@@ -135,8 +135,8 @@ package body Knowledge.Events is
               To_Unbounded_String
                 (Source =>
                    "SetDestination2" &
-                   Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-                   Map_Y_Range'Image(Events_List(Event_Index).Sky_Y)),
+                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
+                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
             Icon => To_Unbounded_String(Source => "destinationicon"),
             Text => To_Unbounded_String(Source => "Target")),
          Button_2 =>
@@ -146,8 +146,8 @@ package body Knowledge.Events is
               To_Unbounded_String
                 (Source =>
                    "ShowOnMap" &
-                   Map_X_Range'Image(Events_List(Event_Index).Sky_X) &
-                   Map_Y_Range'Image(Events_List(Event_Index).Sky_Y)),
+                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
+                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
             Icon => To_Unbounded_String(Source => "showicon"),
             Text => To_Unbounded_String(Source => "Show")));
       return TCL_OK;
@@ -274,7 +274,7 @@ package body Knowledge.Events is
          Id: Positive;
       end record;
       type Events_Array is array(Positive range <>) of Local_Event_Data;
-      Local_Events: Events_Array(1 .. Positive(Events_List.Length));
+      Local_Events: Events_Array(1 .. Get_Events_Amount);
       function "<"(Left, Right: Local_Event_Data) return Boolean is
       begin
          if Events_Sort_Order = TYPEASC
@@ -347,9 +347,9 @@ package body Knowledge.Events is
          return TCL_OK;
       end if;
       Fill_Local_Events_Loop :
-      for I in Events_List.Iterate loop
-         Local_Events(Events_Container.To_Index(Position => I)) :=
-           (E_Type => Events_List(I).E_Type,
+      for I in 1 .. Get_Events_Amount loop
+         Local_Events(I) :=
+           (E_Type => Get_Event(Index => I).E_Type,
             Distance =>
               Count_Distance
                 (Destination_X => Events_List(I).Sky_X,

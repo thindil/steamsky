@@ -359,8 +359,8 @@ package body Trades.UI is
                    .Price);
          end if;
          if Event_Index > 0 then
-            if Events_List(Event_Index).E_Type = DOUBLEPRICE
-              and then Events_List(Event_Index).Item_Index = Proto_Index then
+            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
                Price := Price * 2;
             end if;
          end if;
@@ -559,8 +559,8 @@ package body Trades.UI is
                 (Container => Trader_Cargo, Index => Items_Indexes(I))
                 .Price);
          if Event_Index > 0 then
-            if Events_List(Event_Index).E_Type = DOUBLEPRICE
-              and then Events_List(Event_Index).Item_Index = Proto_Index then
+            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
                Price := Price * 2;
             end if;
          end if;
@@ -1568,8 +1568,8 @@ package body Trades.UI is
               Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
          end if;
          if Event_Index > 0 then
-            if Events_List(Event_Index).E_Type = DOUBLEPRICE
-              and then Events_List(Event_Index).Item_Index = Proto_Index then
+            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+              and then Get_Event(Index => Event_Index).Item_Index = Proto_Index then
                Price := Price * 2;
             end if;
          end if;
@@ -1633,8 +1633,8 @@ package body Trades.UI is
               BaseCargo_Container.Element(Container => Base_Cargo, Index => I)
                 .Price;
             if Event_Index > 0 then
-               if Events_List(Event_Index).E_Type = DOUBLEPRICE
-                 and then Events_List(Event_Index).Item_Index =
+               if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+                 and then Get_Event(Index => Event_Index).Item_Index =
                    Proto_Index then
                   Price := Price * 2;
                end if;

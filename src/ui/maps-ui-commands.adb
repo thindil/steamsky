@@ -811,19 +811,19 @@ package body Maps.UI.Commands is
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
-                        if Events_List(Event_Index).E_Type in ENEMYSHIP |
+                        if Get_Event(Index => Event_Index).E_Type in ENEMYSHIP |
                               TRADER | FRIENDLYSHIP | ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when FRIENDLY =>
-                        if Events_List(Event_Index).E_Type in TRADER |
+                        if Get_Event(Index => Event_Index).E_Type in TRADER |
                               FRIENDLYSHIP then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when Config.ENEMY =>
-                        if Events_List(Event_Index).E_Type in ENEMYSHIP |
+                        if Get_Event(Index => Event_Index).E_Type in ENEMYSHIP |
                               ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;

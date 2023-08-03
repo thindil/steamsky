@@ -384,8 +384,8 @@ package body OrdersMenu is
       else
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             Event :=
-              Events_List
-                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+              Get_Event
+                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type;
          end if;
          case Event is
@@ -561,8 +561,8 @@ package body OrdersMenu is
                      Command =>
                        "ShowTrader " &
                        Positive'Image
-                         (Events_List
-                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                         (Get_Event
+                            (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Event_Index)
                             .Ship_Index),
                      Shortcut => "t", Underline => 0);
@@ -584,8 +584,8 @@ package body OrdersMenu is
                       (Source =>
                          Get_Proto_Ship
                            (Proto_Index =>
-                              Events_List
-                                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                              Get_Event
+                                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                    .Event_Index)
                                 .Ship_Index)
                            .Name,
@@ -596,8 +596,8 @@ package body OrdersMenu is
                         Command =>
                           "ShowTrader " &
                           Positive'Image
-                            (Events_List
-                               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                            (Get_Event
+                               (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                   .Event_Index)
                                .Ship_Index),
                         Shortcut => "t", Underline => 0);
@@ -710,8 +710,8 @@ package body OrdersMenu is
          end if;
       else
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-            if Events_List
-                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+            if Get_Event
+                (Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               FULLDOCKS then
                return
@@ -1171,8 +1171,9 @@ package body OrdersMenu is
           (Inventory => Player_Ship.Cargo,
            Item_Type =>
              Get_Faction(Index => Sky_Bases(Base_Index).Owner).Healing_Tools);
+      Event: constant Event_Data := Get_Event(Index => Event_Index);
       New_Time: constant Integer :=
-        Events_List(Event_Index).Time -
+        Event.Time -
         Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => Item_Index)
           .Amount;
@@ -1180,7 +1181,7 @@ package body OrdersMenu is
       if New_Time < 1 then
          Delete_Event(Event_Index => Event_Index);
       else
-         Events_List(Event_Index).Time := New_Time;
+         Get_Ada_Event(Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y, Time => Event.Time, E_Type => Events_Types'Pos(Event.E_Type), Data => Event.Data);
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "free" then
          Gain_Rep
