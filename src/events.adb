@@ -68,12 +68,12 @@ package body Events is
          External_Name => "deleteAdaEvent";
    begin
       Delete_Ada_Event(E_Index => Event_Index);
-      Sky_Map(Get_Event(Event_Index).Sky_X, Get_Event(Event_Index).Sky_Y)
+      Sky_Map(Get_Event(Index => Event_Index).Sky_X, Get_Event(Index => Event_Index).Sky_Y)
         .Event_Index :=
         0;
       Delete_Events_Loop :
       for I in 1 .. Get_Events_Amount loop
-         Sky_Map(Get_Event(I).Sky_X, Get_Event(I).Sky_Y).Event_Index := I;
+         Sky_Map(Get_Event(Index => I).Sky_X, Get_Event(Index => I).Sky_Y).Event_Index := I;
       end loop Delete_Events_Loop;
    end Delete_Event;
 

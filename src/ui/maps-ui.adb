@@ -517,7 +517,7 @@ package body Maps.UI is
                   if Sky_Map(X, Y).Event_Index > Get_Events_Amount then
                      Sky_Map(X, Y).Event_Index := 0;
                   else
-                     case Get_Event(Sky_Map(X, Y).Event_Index).E_Type is
+                     case Get_Event(Index => Sky_Map(X, Y).Event_Index).E_Type is
                         when ENEMYSHIP =>
                            Map_Char := Current_Theme.Enemy_Ship_Icon;
                            Map_Tag := To_Unbounded_String(Source => "red");
@@ -905,10 +905,10 @@ package body Maps.UI is
             Event_Index: constant Natural :=
               Sky_Map(X, Y).Event_Index;
          begin
-            if Get_Event(Event_Index).E_Type /= BASERECOVERY then
+            if Get_Event(Index => Event_Index).E_Type /= BASERECOVERY then
                Event_Info_Text := To_Unbounded_String(Source => LF & LF);
             end if;
-            case Get_Event(Event_Index).E_Type is
+            case Get_Event(Index => Event_Index).E_Type is
                when TRADER =>
                   Append
                     (Source => Event_Info_Text,
@@ -917,7 +917,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Get_Event(Event_Index).Ship_Index)
+                                 Get_Event(Index => Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green");
                when FRIENDLYSHIP =>
@@ -928,7 +928,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Get_Event(Event_Index).Ship_Index)
+                                 Get_Event(Index => Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "green2");
                when ENEMYSHIP =>
@@ -939,7 +939,7 @@ package body Maps.UI is
                          (Source =>
                             Get_Proto_Ship
                               (Proto_Index =>
-                                 Get_Event(Event_Index).Ship_Index)
+                                 Get_Event(Index => Event_Index).Ship_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "red");
                when FULLDOCKS =>
@@ -968,7 +968,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Get_Proto_Item
-                              (Index => Get_Event(Event_Index).Item_Index)
+                              (Index => Get_Event(Index => Event_Index).Item_Index)
                               .Name));
                   Color := To_Unbounded_String(Source => "lime");
                when NONE | BASERECOVERY =>

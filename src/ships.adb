@@ -612,17 +612,17 @@ package body Ships is
          if Map_Cell.Event_Index <= Get_Events_Amount then
             Get_Ada_Event
               (Index => Map_Cell.Event_Index, X => Ship.Sky_X, Y => Ship.Sky_Y,
-               Time => Get_Event(Map_Cell.Event_Index).Time,
+               Time => Get_Event(Index => Map_Cell.Event_Index).Time,
                E_Type =>
-                 Events_Types'Pos(Get_Event(Map_Cell.Event_Index).E_Type),
+                 Events_Types'Pos(Get_Event(Index => Map_Cell.Event_Index).E_Type),
                Data =>
-                 (case Get_Event(Map_Cell.Event_Index).E_Type is
+                 (case Get_Event(Index => Map_Cell.Event_Index).E_Type is
                     when DOUBLEPRICE =>
-                      Get_Event(Map_Cell.Event_Index).Item_Index,
+                      Get_Event(Index => Map_Cell.Event_Index).Item_Index,
                     when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                       FRIENDLYSHIP =>
-                      Get_Event(Map_Cell.Event_Index).Ship_Index,
-                    when others => Get_Event(Map_Cell.Event_Index).Data));
+                      Get_Event(Index => Map_Cell.Event_Index).Ship_Index,
+                    when others => Get_Event(Index => Map_Cell.Event_Index).Data));
          else
             Sky_Map(Ship.Sky_X, Ship.Sky_Y).Event_Index := 0;
          end if;
