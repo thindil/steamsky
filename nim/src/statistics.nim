@@ -142,6 +142,10 @@ proc clearGameStats*() {.sideEffect, raises: [], tags: [].} =
   gameStats.points = 0
 
 proc updateKilledMobs*(mob: MemberData; factionName: string) =
+  ## Update the list of killed mobs in the game statistics
+  ##
+  ## * mob         - the killed mobile data, needed to count the gained points
+  ## * factionName - the name of the faction to which the mob belongs
   for attribute in mob.attributes:
     gameStats.points = gameStats.points + attribute.level
   for skill in mob.skills:
