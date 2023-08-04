@@ -247,3 +247,8 @@ proc updateAdaFinishedMissions(mType: cstring) {.raises: [], tags: [], exportc.}
 
 proc clearAdaGameStats() {.raises: [], tags: [], exportc.} =
   clearGameStats()
+
+proc updateAdaKilledMobs(mob: AdaMemberData; factionName: cstring) {.raises: [],
+    tags: [], exportc.} =
+  updateKilledMobs(mob = adaMemberToNim(adaMember = mob),
+      factionName = $factionName)

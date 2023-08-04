@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -278,42 +277,19 @@ package body Statistics is
 
    procedure Update_Killed_Mobs
      (Mob: Member_Data; Fraction_Name: Unbounded_String) is
-      use Ada.Characters.Handling;
-
-      Updated: Boolean := False;
+      procedure Update_Ada_Killed_Mobs
+        (M: Nim_Member_Data; F_Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaKilledMobs";
    begin
-      Get_Attribute_Points_Loop :
-      for Attribute of Mob.Attributes loop
-         Game_Stats.Points := Game_Stats.Points + Attribute.Level;
-      end loop Get_Attribute_Points_Loop;
-      Get_Skill_Points_Loop :
-      for Skill of Mob.Skills loop
-         Game_Stats.Points := Game_Stats.Points + Skill.Level;
-      end loop Get_Skill_Points_Loop;
-      Update_Killed_Mobs_Loop :
-      for KilledMob of Game_Stats.Killed_Mobs loop
-         if To_Lower(Item => To_String(Source => KilledMob.Index)) =
-           To_Lower(Item => To_String(Source => Fraction_Name)) then
-            KilledMob.Amount := KilledMob.Amount + 1;
-            Updated := True;
-            exit Update_Killed_Mobs_Loop;
-         end if;
-      end loop Update_Killed_Mobs_Loop;
-      if not Updated then
-         Game_Stats.Killed_Mobs.Append
-           (New_Item =>
-              (Index =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_Upper
-                        (Item =>
-                           Slice
-                             (Source => Fraction_Name, Low => 1, High => 1)) &
-                      Slice
-                        (Source => Fraction_Name, Low => 2,
-                         High => Length(Source => Fraction_Name))),
-               Amount => 1));
-      end if;
+      Get_Game_Stats;
+      Get_Game_Stats_List(Name => "killedMobs");
+      Update_Ada_Killed_Mobs
+        (M => Member_To_Nim(Member => Mob),
+         F_Name => New_String(Str => To_String(Source => Fraction_Name)));
+      Set_Game_Stats_List(Name => "killedMobs");
+      Set_Game_Stats;
    end Update_Killed_Mobs;
 
    function Get_Game_Points return Natural is
