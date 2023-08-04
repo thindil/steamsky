@@ -353,7 +353,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
          if Get_Event
-             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+             (Index =>
+                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .E_Type =
            FRIENDLYSHIP then
             Add
