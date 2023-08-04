@@ -141,7 +141,8 @@ proc clearGameStats*() {.sideEffect, raises: [], tags: [].} =
   gameStats.killedMobs = @[]
   gameStats.points = 0
 
-proc updateKilledMobs*(mob: MemberData; factionName: string) =
+proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
+    raises: [], tags: [].} =
   ## Update the list of killed mobs in the game statistics
   ##
   ## * mob         - the killed mobile data, needed to count the gained points
