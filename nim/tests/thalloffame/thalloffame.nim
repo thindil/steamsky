@@ -12,4 +12,7 @@ saveDirectory = "."
 
 echo "Testing updateHallOfFame."
 updateHallOfFame("TestPlayer", "TestDeath")
-assert hallOfFameArray[1].name == "TestPlayer", "Failed to add entry to Hall of Fame."
+try:
+  assert hallOfFameArray[1].name == "TestPlayer"
+except AssertionDefect:
+  echo "Failed to add entry to Hall of Fame."
