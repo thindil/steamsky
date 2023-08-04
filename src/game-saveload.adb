@@ -35,6 +35,7 @@ with Ships; use Ships;
 with Ships.SaveLoad;
 with Statistics;
 with Stories; use Stories;
+with Ada.Text_IO;
 
 package body Game.SaveLoad is
 
@@ -75,7 +76,6 @@ package body Game.SaveLoad is
       for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
          Get_Finished_Story(Index => I);
       end loop Get_Finished_Stories_Loop;
-      Set_Nim_Events;
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
          Value => New_String(Str => To_String(Source => Player_Career)));
@@ -326,6 +326,7 @@ package body Game.SaveLoad is
                E_Type => Events_Types'Pos(E_Type), X => X, Y => Y,
                Time => Time,
                Data => Positive'Value(To_String(Source => Data)));
+            Ada.Text_IO.Put_Line("here");
             Sky_Map(X, Y).Event_Index := I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;

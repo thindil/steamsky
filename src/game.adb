@@ -87,8 +87,6 @@ package body Game is
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
-      use Events;
-
       procedure End_Ada_Game(S: Integer) with
          Import => True,
          Convention => C,
@@ -118,7 +116,6 @@ package body Game is
            Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
             Get_Finished_Story(Index => I);
          end loop Get_Finished_Stories_Loop;
-         Set_Nim_Events;
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Clear_Game_Stats;
