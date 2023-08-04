@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[strutils, tables]
 import config, game, types
 
 type
@@ -140,6 +140,20 @@ proc clearGameStats*() {.sideEffect, raises: [], tags: [].} =
   gameStats.finishedGoals = @[]
   gameStats.killedMobs = @[]
   gameStats.points = 0
+
+proc updateKilledMobs*(mob: MemberData; factionName: string) =
+  for attribute in mob.attributes:
+    gameStats.points = gameStats.points + attribute.level
+  for skill in mob.skills:
+    gameStats.points = gameStats.points + skill.level
+  var updated = false
+  for killedMob in gameStats.killedMobs.mitems:
+    if killedMob.index.toLowerAscii == factionName.tolowerAscii:
+      killedMob.amount.inc
+      updated = true
+      break
+  if not updated:
+    gameStats.killedMobs.add(StatisticsData(index: factionName.capitalizeAscii, amount: 1))
 
 # Temporary code for interfacing with Ada
 
