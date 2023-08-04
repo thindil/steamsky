@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Events;
 with Maps;
 with ShipModules;
 
@@ -596,7 +595,6 @@ package body Ships is
    end Set_Ada_Modules;
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
-      use Events;
       use Maps;
 
       Nim_Cargo: constant Nim_Inventory_Array :=
@@ -608,27 +606,6 @@ package body Ships is
          Visited => (if Map_Cell.Visited then 1 else 0),
          Event_Index => Map_Cell.Event_Index,
          Mission_Index => Map_Cell.Mission_Index);
-      if Map_Cell.Event_Index > 0 then
-         if Map_Cell.Event_Index <= Get_Events_Amount then
-            Get_Ada_Event
-              (Index => Map_Cell.Event_Index, X => Ship.Sky_X, Y => Ship.Sky_Y,
-               Time => Get_Event(Index => Map_Cell.Event_Index).Time,
-               E_Type =>
-                 Events_Types'Pos
-                   (Get_Event(Index => Map_Cell.Event_Index).E_Type),
-               Data =>
-                 (case Get_Event(Index => Map_Cell.Event_Index).E_Type is
-                    when DOUBLEPRICE =>
-                      Get_Event(Index => Map_Cell.Event_Index).Item_Index,
-                    when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
-                      FRIENDLYSHIP =>
-                      Get_Event(Index => Map_Cell.Event_Index).Ship_Index,
-                    when others =>
-                      Get_Event(Index => Map_Cell.Event_Index).Data));
-         else
-            Sky_Map(Ship.Sky_X, Ship.Sky_Y).Event_Index := 0;
-         end if;
-      end if;
       Get_Ada_Ship(Ship => Ship);
       Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo

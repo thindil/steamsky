@@ -1137,17 +1137,17 @@ package body DebugUI is
          if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
             if Get_Trader_Or_Friendly(Index => I, Get_Trader => 1) > 0 then
                Get_Ada_Event
-                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
                   Y => Npc_Ship_Y, Time => Duration,
                   E_Type => Events_Types'Pos(TRADER), Data => I);
             elsif Get_Trader_Or_Friendly(Index => I, Get_Trader => 0) > 0 then
                Get_Ada_Event
-                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
                   Y => Npc_Ship_Y, Time => Duration,
                   E_Type => Events_Types'Pos(FRIENDLYSHIP), Data => I);
             else
                Get_Ada_Event
-                 (Index => Get_Events_Amount + 2, X => Npc_Ship_X,
+                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
                   Y => Npc_Ship_Y, Time => Duration,
                   E_Type => Events_Types'Pos(ENEMYSHIP), Data => I);
             end if;
@@ -1258,7 +1258,7 @@ package body DebugUI is
       case Event_Type is
          when 0 =>
             Get_Ada_Event
-              (Index => Get_Events_Amount + 2,
+              (Index => Get_Events_Amount + 1,
                X => Sky_Bases(Base_Index).Sky_X,
                Y => Sky_Bases(Base_Index).Sky_Y,
                Time => Positive'Value(Get(Widgt => Duration_Box)),
@@ -1273,7 +1273,7 @@ package body DebugUI is
                if To_String(Source => Get_Proto_Item(Index => I).Name) =
                  To_String(Source => Event_Name) then
                   Get_Ada_Event
-                    (Index => Get_Events_Amount + 2,
+                    (Index => Get_Events_Amount + 1,
                      X => Sky_Bases(Base_Index).Sky_X,
                      Y => Sky_Bases(Base_Index).Sky_Y,
                      Time => Positive'Value(Get(Widgt => Duration_Box)),
@@ -1284,7 +1284,7 @@ package body DebugUI is
             end loop Find_Item_Loop;
          when 2 =>
             Get_Ada_Event
-              (Index => Get_Events_Amount + 2,
+              (Index => Get_Events_Amount + 1,
                X => Sky_Bases(Base_Index).Sky_X,
                Y => Sky_Bases(Base_Index).Sky_Y,
                Time => Positive'Value(Get(Widgt => Duration_Box)),
