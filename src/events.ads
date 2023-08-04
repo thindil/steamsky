@@ -161,8 +161,6 @@ package Events is
 
    procedure Set_Event(Index: Positive);
 
-   procedure Set_Nim_Events;
-
    function Get_Trader_Or_Friendly
      (Index, Get_Trader: Natural) return Natural with
       Import => True,

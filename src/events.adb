@@ -29,7 +29,6 @@ package body Events is
          External_Name => "checkAdaForEvent";
    begin
       Set_Ship_In_Nim;
-      Set_Nim_Events;
       Result := Check_Ada_For_Event;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
@@ -42,11 +41,6 @@ package body Events is
       end if;
       return False;
    end Check_For_Event;
-
-   procedure Set_Nim_Events is
-   begin
-      null;
-   end Set_Nim_Events;
 
    procedure Update_Events(Minutes: Positive) is
       procedure Update_Ada_Events(M: Integer) with
