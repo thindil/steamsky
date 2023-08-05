@@ -1334,6 +1334,7 @@ package body Maps.UI is
                     To_Unbounded_String(Source => "Control-Next");
                end if;
          end Load_Keys_Block;
+         Maps.UI.Commands.Add_Commands;
          Tcl_EvalFile
            (interp => Get_Context,
             fileName =>
@@ -1344,7 +1345,6 @@ package body Maps.UI is
          Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
          Set_Theme;
          OrdersMenu.Add_Commands;
-         Maps.UI.Commands.Add_Commands;
          WaitMenu.Add_Commands;
          Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
