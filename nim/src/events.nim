@@ -214,7 +214,7 @@ proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
 proc generateAdaTraders() {.raises: [], tags: [], exportc.} =
   try:
     generateTraders()
-  except KeyError:
+  except:
     discard
 
 proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [], exportc.} =
