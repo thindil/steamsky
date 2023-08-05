@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - Updating events after wait in place
 - Sky bases at the game's start can be created at the border of the map
 - Typos in messages about started events
+- In-game error when starting a new game and move the mouse before the map is
+  shown
 
 ## [8.9] - 2023-07-09
 
