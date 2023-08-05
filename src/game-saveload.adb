@@ -26,7 +26,7 @@ with Bases; use Bases;
 with Bases.SaveLoad;
 with Config;
 with Crafts;
-with Events; use Events;
+with Events;
 with Goals; use Goals;
 with Log;
 with Maps; use Maps;
@@ -35,7 +35,6 @@ with Ships; use Ships;
 with Ships.SaveLoad;
 with Statistics;
 with Stories; use Stories;
-with Ada.Text_IO;
 
 package body Game.SaveLoad is
 
@@ -303,6 +302,8 @@ package body Game.SaveLoad is
           (Doc => Save_Data, Tag_Name => "event");
       Load_Events_Block :
       declare
+         use Events;
+
          E_Type: Events_Types;
          X, Y, Time: Integer;
          Data: Unbounded_String;
@@ -326,7 +327,6 @@ package body Game.SaveLoad is
                E_Type => Events_Types'Pos(E_Type), X => X, Y => Y,
                Time => Time,
                Data => Positive'Value(To_String(Source => Data)));
-            Ada.Text_IO.Put_Line("here");
             Sky_Map(X, Y).Event_Index := I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;
