@@ -5,11 +5,12 @@ Testing updateCraftingOrders.
 Testing updateFinishedGoals.
 Testing getGamePoints.
 Testing updateFinishedMissions.
-Testing clearGameStats.'''
+Testing clearGameStats.
+Testing updateKilledMobs.'''
 """
 
 import std/tables
-import ../../src/[game, goals, statistics]
+import ../../src/[game, goals, statistics, types]
 
 echo "Loading the game data."
 if goalsList.len == 0:
@@ -40,3 +41,14 @@ echo "Testing clearGameStats."
 gameStats.points = 100
 clearGameStats()
 assert gameStats.points == 0, "Failed to clear the game statistics."
+
+echo "Testing updateKilledMobs."
+gameStats.killedMobs = @[]
+updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
+    homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+    1, 0, 0], order: upgrading, loyalty: 100, skills: @[SkillInfo(index: 4,
+    level: 4,
+    experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+    MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+    experience: 0), MobAttributeRecord(level: 3, experience: 0)]), "POLEIS")
+assert gameStats.killedMobs.len == 1, "Failed to update the amount of killed mobs."
