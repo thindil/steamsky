@@ -117,6 +117,18 @@ package body Statistics is
                         (Source => Game_Stats.Finished_Missions(I).Index)),
                Amount => Game_Stats.Finished_Missions(I).Amount);
          end loop Get_Finished_Missions_Loop;
+      elsif Name = "killedMobs" then
+         Get_Killed_Mobs_Loop :
+         for I in
+           Game_Stats.Killed_Mobs.First_Index ..
+             Game_Stats.Killed_Mobs.Last_Index loop
+            Nim_List(I - 1) :=
+              (Index =>
+                 New_String
+                   (Str =>
+                      To_String(Source => Game_Stats.Killed_Mobs(I).Index)),
+               Amount => Game_Stats.Killed_Mobs(I).Amount);
+         end loop Get_Killed_Mobs_Loop;
       end if;
       Get_Ada_Game_Stats_List
         (N => New_String(Str => Name), Stats_List => Nim_List);
@@ -172,6 +184,17 @@ package body Statistics is
                       (Source => Value(Item => Mission.Index)),
                   Amount => Mission.Amount));
          end loop Set_Finished_Missions_Loop;
+      elsif Name = "killedMobs" then
+         Game_Stats.Killed_Mobs.Clear;
+         Set_Killed_Mobs_Loop :
+         for Mob of Nim_List loop
+            exit Set_Killed_Mobs_Loop when Strlen(Item => Mob.Index) = 0;
+            Game_Stats.Killed_Mobs.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String(Source => Value(Item => Mob.Index)),
+                  Amount => Mob.Amount));
+         end loop Set_Killed_Mobs_Loop;
       end if;
    end Set_Game_Stats_List;
 
