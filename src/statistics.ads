@@ -157,8 +157,7 @@ package Statistics is
       -- SOURCE
    procedure Update_Killed_Mobs
      (Mob: Member_Data; Fraction_Name: Unbounded_String) with
-      Pre => Fraction_Name /= Null_Unbounded_String,
-      Test_Case => (Name => "Test_UpdateKilledMobs", Mode => Nominal);
+      Pre => Fraction_Name /= Null_Unbounded_String;
       -- ****
 
       -- ****f* Statistics/Statistics.Get_Game_Points
