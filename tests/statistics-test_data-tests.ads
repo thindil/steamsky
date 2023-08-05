@@ -14,8 +14,5 @@ package Statistics.Test_Data.Tests is
      (Gnattest_T: in out Test);
    --  statistics.ads:108:4:Update_Destroyed_Ships:Test_UpdateDestroyedShips
 
-   procedure Test_Update_Killed_Mobs_d347f4_3672b4(Gnattest_T: in out Test);
-   --  statistics.ads:158:4:Update_Killed_Mobs:Test_UpdateKilledMobs
-
 end Statistics.Test_Data.Tests;
 --  end read only

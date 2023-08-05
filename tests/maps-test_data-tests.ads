@@ -11,7 +11,7 @@ package Maps.Test_Data.Tests is
    null record;
 
    procedure Test_Count_Distance_328204_2a2146(Gnattest_T: in out Test);
-   --  maps.ads:70:4:Count_Distance:Test_CountDistance
+   --  maps.ads:69:4:Count_Distance:Test_CountDistance
 
 end Maps.Test_Data.Tests;
 --  end read only
