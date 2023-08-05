@@ -80,7 +80,7 @@ package body Statistics.UI is
    procedure Show_Statistics(Refresh: Boolean := False) is
       Total_Finished, Total_Destroyed: Natural := 0;
       Stats_Text: Unbounded_String;
-      Proto_Index: Positive;
+      Proto_Index: Positive := 1;
       Stats_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".statsframe");
       Stats_Canvas: constant Tk_Canvas :=
