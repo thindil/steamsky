@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ## Changed
 - Made more items available for buy in traders' ships
+- Updated README.md
 
 ### Fixed
 - Generated NPC's ships start with docked speed, so the player can always
