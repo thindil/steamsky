@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Typos in messages about started events
 - In-game error when starting a new game and move the mouse before the map is
   shown
+- Prices in bases change after every transaction
 
 ## [8.9] - 2023-07-09
 
