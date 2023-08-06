@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0] - 2023-08-06
 
 ## Added
 - Message about spotted en enemy patrol to the event
