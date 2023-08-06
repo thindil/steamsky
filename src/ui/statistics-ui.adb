@@ -87,7 +87,9 @@ package body Statistics.UI is
         Get_Widget(pathName => Stats_Frame & ".canvas");
       Label: Ttk_Label :=
         Get_Widget(pathName => Stats_Canvas & ".stats.left.points");
+      --## rule off IMPROPER_INITIALIZATION
       Tree_View: Ttk_Tree_View;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -114,11 +116,13 @@ package body Statistics.UI is
       Stats_Text := To_Unbounded_String(Source => "Time passed:");
       Add_Time_Info_Block :
       declare
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Minutes_Diff: constant Natural :=
            (Game_Date.Minutes + (Game_Date.Hour * 60) +
             (Game_Date.Day * 1_440) + (Game_Date.Month * 43_200) +
             (Game_Date.Year * 518_400)) -
            829_571_520;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
       begin
          Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Stats_Text);
       end Add_Time_Info_Block;
@@ -131,7 +135,9 @@ package body Statistics.UI is
          Message => "In game time which was passed since it started");
       Add_Visited_Map_Block :
       declare
+         --## rule off TYPE_INITIAL_VALUES
          type Visited_Factor is digits 4 range 0.0 .. 100.0;
+         --## rule on TYPE_INITIAL_VALUES
          Visited_Percent: Visited_Factor;
          Visited_String: String(1 .. 5);
       begin
@@ -673,8 +679,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off IMPROPER_INITIALIZATION
       Local_Crafting: Sorting_Array
         (1 .. Positive(Game_Stats.Crafting_Orders.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -697,8 +705,10 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Set_Sorting_Order
         (Sorting_Order => Crafting_Sort_Order, Column => Column);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
@@ -726,11 +736,13 @@ package body Statistics.UI is
             Id => Statistics_Container.To_Index(Position => I));
       end loop Fill_Local_Crafting_Loop;
       Sort_Crafting(Container => Local_Crafting);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Crafting_Indexes.Clear;
       Fill_Crafting_Indexes_Loop :
       for Order of Local_Crafting loop
          Crafting_Indexes.Append(New_Item => Order.Id);
       end loop Fill_Crafting_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Crafting_Command;
@@ -770,8 +782,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Missions: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Missions.Length));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
