@@ -264,6 +264,8 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
       baseIndex].population < 300: 2 else: 5)
   chance = chance + (daysDifference(dateToCompare = skyBases[baseIndex].visited,
       currentDate = gameDate) / 10).int
+  if getRandom(min = 1, max = 100) > chance:
+    return
   for item in skyBases[baseIndex].cargo.mitems:
     let roll = getRandom(min = 1, max = 100)
     if roll < 30 and item.price > 1:
