@@ -16,9 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Ships;
 
 package body Statistics is
 
@@ -199,46 +197,17 @@ package body Statistics is
    end Set_Game_Stats_List;
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Ships;
-
-      Updated: Boolean := False;
-      Ship_Index: Natural := 0;
+      procedure Update_Ada_Destroyed_Ships(S_Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaDestroyedShips";
    begin
-      Proto_Ships_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
-            Ship_Index := I;
-            --## rule off SIMPLIFIABLE_EXPRESSIONS
-            Game_Stats.Points :=
-              Game_Stats.Points +
-              (Get_Proto_Ship(Proto_Index => I).Combat_Value / 10);
-            --## rule on SIMPLIFIABLE_EXPRESSIONS
-            exit Proto_Ships_Loop;
-         end if;
-      end loop Proto_Ships_Loop;
-      if Ship_Index = 0 then
-         return;
-      end if;
-      Destroyed_Ships_Loop :
-      for DestroyedShip of Game_Stats.Destroyed_Ships loop
-         if DestroyedShip.Index =
-           To_Unbounded_String
-             (Source => Trim(Source => Ship_Index'Img, Side => Left)) then
-            DestroyedShip.Amount := DestroyedShip.Amount + 1;
-            Updated := True;
-            exit Destroyed_Ships_Loop;
-         end if;
-      end loop Destroyed_Ships_Loop;
-      if not Updated then
-         Game_Stats.Destroyed_Ships.Append
-           (New_Item =>
-              (Index =>
-                 To_Unbounded_String
-                   (Source => Trim(Source => Ship_Index'Img, Side => Left)),
-               Amount => 1));
-      end if;
+      Get_Game_Stats;
+      Get_Game_Stats_List(Name => "destroyedShips");
+      Update_Ada_Destroyed_Ships
+        (S_Name => New_String(Str => To_String(Source => Ship_Name)));
+      Set_Game_Stats_List(Name => "destroyedShips");
+      Set_Game_Stats;
    end Update_Destroyed_Ships;
 
    procedure Clear_Game_Stats is
