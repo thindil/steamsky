@@ -683,19 +683,25 @@ package body Statistics.UI is
       Local_Crafting: Sorting_Array
         (1 .. Positive(Game_Stats.Crafting_Orders.Length));
       --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
+      function Get_Crafting_Sort_Order return List_Sort_Orders is
+      begin
+         return Crafting_Sort_Order;
+      end Get_Crafting_Sort_Order;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
-         if Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Crafting_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Crafting_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Crafting_Sort_Order = AMOUNTASC
+         if Get_Crafting_Sort_Order = AMOUNTASC
            and then Left.Amount < Right.Amount then
             return True;
          end if;
-         if Crafting_Sort_Order = AMOUNTDESC
+         if Get_Crafting_Sort_Order = AMOUNTDESC
            and then Left.Amount > Right.Amount then
             return True;
          end if;
@@ -709,7 +715,7 @@ package body Statistics.UI is
       Set_Sorting_Order
         (Sorting_Order => Crafting_Sort_Order, Column => Column);
       --## rule on DIRECTLY_ACCESSED_GLOBALS
-      if Crafting_Sort_Order = NONE then
+      if Get_Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
       Fill_Local_Crafting_Loop :
@@ -785,20 +791,24 @@ package body Statistics.UI is
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Missions: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Missions.Length));
+      function Get_Missions_Sort_Order return List_Sort_Orders is
+      begin
+         return Missions_Sort_Order;
+      end Get_Missions_Sort_Order;
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
-         if Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Missions_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Missions_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Missions_Sort_Order = AMOUNTASC
+         if Get_Missions_Sort_Order = AMOUNTASC
            and then Left.Amount < Right.Amount then
             return True;
          end if;
-         if Missions_Sort_Order = AMOUNTDESC
+         if Get_Missions_Sort_Order = AMOUNTDESC
            and then Left.Amount > Right.Amount then
             return True;
          end if;
@@ -810,7 +820,7 @@ package body Statistics.UI is
    begin
       Set_Sorting_Order
         (Sorting_Order => Missions_Sort_Order, Column => Column);
-      if Missions_Sort_Order = NONE then
+      if Get_Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
       Fill_Local_Missions_Loop :
@@ -880,21 +890,27 @@ package body Statistics.UI is
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Proto_Index: Positive := 1;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Goals: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Goals.Length));
+      function Get_Goals_Sort_Order return List_Sort_Orders is
+      begin
+         return Goals_Sort_Order;
+      end Get_Goals_Sort_Order;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
-         if Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Goals_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Goals_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Goals_Sort_Order = AMOUNTASC
+         if Get_Goals_Sort_Order = AMOUNTASC
            and then Left.Amount < Right.Amount then
             return True;
          end if;
-         if Goals_Sort_Order = AMOUNTDESC
+         if Get_Goals_Sort_Order = AMOUNTDESC
            and then Left.Amount > Right.Amount then
             return True;
          end if;
@@ -905,7 +921,7 @@ package body Statistics.UI is
          Array_Type => Sorting_Array);
    begin
       Set_Sorting_Order(Sorting_Order => Goals_Sort_Order, Column => Column);
-      if Goals_Sort_Order = NONE then
+      if Get_Goals_Sort_Order = NONE then
          return TCL_OK;
       end if;
       Fill_Local_Goals_Loop :
