@@ -127,6 +127,18 @@ package body Statistics is
                       To_String(Source => Game_Stats.Killed_Mobs(I).Index)),
                Amount => Game_Stats.Killed_Mobs(I).Amount);
          end loop Get_Killed_Mobs_Loop;
+      elsif Name = "destroyedShips" then
+         Get_Destroyed_Ships_Loop :
+         for I in
+           Game_Stats.Destroyed_Ships.First_Index ..
+             Game_Stats.Destroyed_Ships.Last_Index loop
+            Nim_List(I - 1) :=
+              (Index =>
+                 New_String
+                   (Str =>
+                      To_String(Source => Game_Stats.Destroyed_Ships(I).Index)),
+               Amount => Game_Stats.Destroyed_Ships(I).Amount);
+         end loop Get_Destroyed_Ships_Loop;
       end if;
       Get_Ada_Game_Stats_List
         (N => New_String(Str => Name), Stats_List => Nim_List);
@@ -193,6 +205,17 @@ package body Statistics is
                     To_Unbounded_String(Source => Value(Item => Mob.Index)),
                   Amount => Mob.Amount));
          end loop Set_Killed_Mobs_Loop;
+      elsif Name = "destroyedShips" then
+         Game_Stats.Destroyed_Ships.Clear;
+         Set_Destroyed_Ships_Loop :
+         for Mob of Nim_List loop
+            exit Set_Destroyed_Ships_Loop when Strlen(Item => Mob.Index) = 0;
+            Game_Stats.Destroyed_Ships.Append
+              (New_Item =>
+                 (Index =>
+                    To_Unbounded_String(Source => Value(Item => Mob.Index)),
+                  Amount => Mob.Amount));
+         end loop Set_Destroyed_Ships_Loop;
       end if;
    end Set_Game_Stats_List;
 
