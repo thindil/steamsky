@@ -160,6 +160,23 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
   if not updated:
     gameStats.killedMobs.add(StatisticsData(index: factionName.capitalizeAscii, amount: 1))
 
+proc updateDestroyedShips*(shipName: string) =
+  var shipIndex = 0
+  for index, ship in protoShipsList:
+    if ship.name == shipName:
+      shipIndex = index
+      gameStats.points = gameStats.points + (ship.combatValue / 10).Natural
+  if shipIndex == 0:
+    return
+  var updated = false
+  for destroyedShip in gameStats.destroyedShips.mitems:
+    if destroyedShip.index == $shipIndex:
+      destroyedShip.amount.inc
+      updated = true
+      break
+  if not updated:
+    gameStats.destroyedShips.add(StatisticsData(index: $shipIndex, amount: 1))
+
 # Temporary code for interfacing with Ada
 
 type
@@ -257,3 +274,6 @@ proc updateAdaKilledMobs(mob: AdaMemberData; factionName: cstring) {.raises: [],
     tags: [], exportc.} =
   updateKilledMobs(mob = adaMemberToNim(adaMember = mob),
       factionName = $factionName)
+
+proc updateAdaDestroyedShips(shipName: cstring) {.raises: [], tags: [], exportc.} =
+  updateDestroyedShips(shipName = $shipName)
