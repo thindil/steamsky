@@ -1,4 +1,4 @@
-name: Continuous Integration - development version
+name: Continuous Integration - stable version
 
 on:
   push:
