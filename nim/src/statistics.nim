@@ -160,7 +160,7 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
   if not updated:
     gameStats.killedMobs.add(StatisticsData(index: factionName.capitalizeAscii, amount: 1))
 
-proc updateDestroyedShips*(shipName: string) =
+proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [].} =
   var shipIndex = 0
   for index, ship in protoShipsList:
     if ship.name == shipName:
