@@ -161,6 +161,9 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
     gameStats.killedMobs.add(StatisticsData(index: factionName.capitalizeAscii, amount: 1))
 
 proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [].} =
+  ## Update the list of destroyed ships in the game statistics
+  ##
+  ## * shipName - the name of the prototype of the destroyed NPC ship
   var shipIndex = 0
   for index, ship in protoShipsList:
     if ship.name == shipName:
