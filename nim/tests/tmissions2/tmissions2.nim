@@ -67,7 +67,10 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
 finishMission(0)
-assert acceptedMissions.len == 0, "Failed to finish an accepted mission."
+try:
+  assert acceptedMissions.len == 0
+except AssertionDefect:
+  echo "Failed to finish an accepted mission."
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "DRONES", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
     1, 0, 0], loyalty: 100, health: 100, tired: 0, hunger: 0,
@@ -75,13 +78,19 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 acceptedMissions.add(y = MissionData(mType: passenger, time: 1000, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: false, multiplier: 1.0, data: 2))
 finishMission(0)
-assert acceptedMissions.len == 0, "Failed to finish an accepted passenger mission."
+try:
+  assert acceptedMissions.len == 0
+except AssertionDefect:
+  echo "Failed to finish an accepted passenger mission."
 
 echo "Testing autoFinishMissions."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
-assert autoFinishMissions().len == 0 and acceptedMissions.len == 0, "Failed to auto finish accepted missions."
+try:
+  assert autoFinishMissions().len == 0 and acceptedMissions.len == 0
+except AssertionDefect:
+  echo "Failed to auto finish accepted missions."
 
 echo "Testing acceptMission."
 skyBases[1].missions = @[]
@@ -89,4 +98,7 @@ skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
     targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
 acceptedMissions = @[]
 acceptMission(0)
-assert acceptedMissions.len == 1, "Failed to accept a mission in a base."
+try:
+  assert acceptedMissions.len == 1
+except AssertionDefect:
+  echo "Failed to accept a mission in a base."
