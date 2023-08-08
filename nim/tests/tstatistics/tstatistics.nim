@@ -6,15 +6,29 @@ Testing updateFinishedGoals.
 Testing getGamePoints.
 Testing updateFinishedMissions.
 Testing clearGameStats.
-Testing updateKilledMobs.'''
+Testing updateKilledMobs.
+Testing updateDestroyedShips.'''
 """
 
 import std/tables
-import ../../src/[game, goals, statistics, types]
+import ../../src/[careers, crafts, factions, game, goals, items, mobs,
+    shipmodules, ships, statistics, types]
 
 echo "Loading the game data."
 if goalsList.len == 0:
   loadGoals("../bin/data/goals.dat")
+if itemsList.len == 0:
+  loadData("../bin/data/game.dat")
+  loadItems("../bin/data/items.dat")
+  loadCareers("../bin/data/careers.dat")
+  loadFactions("../bin/data/factions.dat")
+  loadModules("../bin/data/shipmodules.dat")
+if recipesList.len == 0:
+  loadRecipes("../bin/data/recipes.dat")
+if protoMobsList.len == 0:
+  loadMobs("../bin/data/mobs.dat")
+if protoShipsList.len == 0:
+  loadShips("../bin/data/ships.dat")
 
 echo "Testing updateCraftingOrders."
 gameStats.craftingOrders = @[]
@@ -52,3 +66,10 @@ updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]), "POLEIS")
 assert gameStats.killedMobs.len == 1, "Failed to update the amount of killed mobs."
+
+echo "Testing updateDestroyedShips."
+gameStats.destroyedShips = @[]
+updateDestroyedShips("Tiny pirates ship")
+assert gameStats.destroyedShips.len == 1, "Failed to update the amount of destroyed ships."
+updateDestroyedShips("Sfdsfdsf")
+assert gameStats.destroyedShips.len == 1, "Failed to not update the amount of destroyed ships with non-existing ship."
