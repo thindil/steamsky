@@ -5,3 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - The game date to the in-game messages
+
+### Fixed
+- Typos in old changelog
