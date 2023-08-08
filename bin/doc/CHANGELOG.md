@@ -3,10 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [9.0] - 2023-08-06
 
-## Added
+### Added
 - Message about spotted en enemy patrol to the event
 
-## Changed
+### Changed
 - Made more items available for buy in traders' ships
 - Updated README.md
 
