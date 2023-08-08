@@ -106,8 +106,7 @@ package Statistics is
    -- Ship_Name - Name of the ship to add to destroyed list
    -- SOURCE
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) with
-      Pre => Ship_Name /= Tiny_String.Null_Bounded_String,
-      Test_Case => (Name => "Test_UpdateDestroyedShips", Mode => Nominal);
+      Pre => Ship_Name /= Tiny_String.Null_Bounded_String;
       -- ****
 
       -- ****f* Statistics/Statistics.Clear_Game_Stats
