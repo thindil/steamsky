@@ -789,8 +789,10 @@ package body Statistics.UI is
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       --## rule off DIRECTLY_ACCESSED_GLOBALS
+      --## rule off IMPROPER_INITIALIZATION
       Local_Missions: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Missions.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function Get_Missions_Sort_Order return List_Sort_Orders is
       begin
          return Missions_Sort_Order;
@@ -818,8 +820,10 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Set_Sorting_Order
         (Sorting_Order => Missions_Sort_Order, Column => Column);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Get_Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
@@ -845,11 +849,13 @@ package body Statistics.UI is
             Id => Statistics_Container.To_Index(Position => I));
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Missions_Indexes.Clear;
       Fill_Missions_Indexes_Loop :
       for Mission of Local_Missions loop
          Missions_Indexes.Append(New_Item => Mission.Id);
       end loop Fill_Missions_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Missions_Command;
@@ -891,8 +897,10 @@ package body Statistics.UI is
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Proto_Index: Positive := 1;
       --## rule off DIRECTLY_ACCESSED_GLOBALS
+      --## rule off IMPROPER_INITIALIZATION
       Local_Goals: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Goals.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function Get_Goals_Sort_Order return List_Sort_Orders is
       begin
          return Goals_Sort_Order;
@@ -984,8 +992,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off IMPROPER_INITIALIZATION
       Local_Destroyed: Sorting_Array
         (1 .. Positive(Game_Stats.Destroyed_Ships.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Destroyed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1078,8 +1088,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off IMPROPER_INITIALIZATION
       Local_Killed: Sorting_Array
         (1 .. Positive(Game_Stats.Killed_Mobs.Length));
+      --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Killed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
