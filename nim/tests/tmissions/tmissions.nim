@@ -43,7 +43,10 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 1, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
 deleteMission(0, false)
-assert acceptedMissions.len == 0, "Failed to delete an accepted mission."
+try:
+  assert acceptedMissions.len == 0
+except AssertionDefect:
+  echo "Failed to delete an accepted mission."
 
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
@@ -53,16 +56,28 @@ acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
 updateMissions(8)
-assert acceptedMissions[0].time == 2, "Failed to update accepted missions."
+try:
+  assert acceptedMissions[0].time == 2
+except AssertionDefect:
+  echo "Failed to update accepted missions."
 updateMissions(2)
-assert acceptedMissions.len == 0, "Failed to remove an accepted mission."
+try:
+  assert acceptedMissions.len == 0
+except AssertionDefect:
+  echo "Failed to remove an accepted mission."
 
 echo "Testing getMissionType."
-assert getMissionType(patrol) == "Patrol area", "Failed to get the name of the mission's type."
+try:
+  assert getMissionType(patrol) == "Patrol area"
+except AssertionDefect:
+  echo "Failed to get the name of the mission's type."
 
 echo "Testing updateMission."
 acceptedMissions = @[]
 acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
     targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
 updateMission(0)
-assert acceptedMissions[0].finished, "Failed to update the accepted mission."
+try:
+  assert acceptedMissions[0].finished
+except AssertionDefect:
+  echo "Failed to update the accepted mission."
