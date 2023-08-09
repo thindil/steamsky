@@ -17,7 +17,6 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game;
-with Statistics;
 
 package body HallOfFame is
 
@@ -42,14 +41,12 @@ package body HallOfFame is
 
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
-      use Statistics;
 
       procedure Update_Ada_Hall_Of_Fame(P_Name, D_Reason: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaHallOfFame";
    begin
-      Get_Game_Stats;
       Update_Ada_Hall_Of_Fame
         (P_Name => New_String(Str => To_String(Source => Player_Name)),
          D_Reason => New_String(Str => To_String(Source => Death_Reason)));

@@ -17,7 +17,6 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with HallOfFame;
-with Statistics;
 
 package body Ships.Crew is
 
@@ -40,7 +39,6 @@ package body Ships.Crew is
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
       use HallOfFame;
-      use Statistics;
 
       procedure Death_Ada
         (M_Index: Integer; Reas: chars_ptr;
@@ -49,7 +47,6 @@ package body Ships.Crew is
          Convention => C,
          External_Name => "deathAda";
    begin
-      Get_Game_Stats;
       Get_Ada_Crew(Ship_Crew => Ship.Crew);
       Get_Ada_Modules(Ship => Ship);
       Death_Ada

@@ -33,7 +33,6 @@ with Maps; use Maps;
 with Messages;
 with Ships; use Ships;
 with Ships.SaveLoad;
-with Statistics;
 with Stories; use Stories;
 
 package body Game.SaveLoad is
@@ -330,76 +329,6 @@ package body Game.SaveLoad is
             Sky_Map(X, Y).Event_Index := I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Load game statistics
-      Log_Message
-        (Message => "Loading game statistics...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "statistics");
-      Load_Statistics_Block :
-      declare
-         use Statistics;
-
-         Stat_Index, Nodename: Unbounded_String;
-         Stat_Amount: Positive;
-      begin
-         Saved_Node := Item(List => Nodes_List, Index => 0);
-         Game_Stats.Bases_Visited :=
-           Positive'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "visitedbases"));
-         Game_Stats.Map_Visited :=
-           Positive'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "mapdiscovered"));
-         Game_Stats.Distance_Traveled :=
-           Positive'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "distancetraveled"));
-         Game_Stats.Accepted_Missions :=
-           Natural'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "acceptedmissions"));
-         Game_Stats.Points :=
-           Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "points"));
-         Child_Nodes_List := Child_Nodes(N => Saved_Node);
-         Load_Statistics_Loop :
-         for I in 0 .. Length(List => Child_Nodes_List) - 1 loop
-            Nodename :=
-              To_Unbounded_String
-                (Source =>
-                   Node_Name(N => Item(List => Child_Nodes_List, Index => I)));
-            if To_String(Source => Nodename) /= "#text" then
-               Stat_Index :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute
-                        (Elem => Item(List => Child_Nodes_List, Index => I),
-                         Name => "index"));
-               Stat_Amount :=
-                 Positive'Value
-                   (Get_Attribute
-                      (Elem => Item(List => Child_Nodes_List, Index => I),
-                       Name => "amount"));
-            end if;
-            if To_String(Source => Nodename) = "destroyedships" then
-               Game_Stats.Destroyed_Ships.Append
-                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Source => Nodename) = "finishedcrafts" then
-               Game_Stats.Crafting_Orders.Append
-                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Source => Nodename) = "finishedmissions" then
-               Game_Stats.Finished_Missions.Append
-                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Source => Nodename) = "finishedgoals" then
-               Game_Stats.Finished_Goals.Append
-                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Source => Nodename) = "killedmobs" then
-               Game_Stats.Killed_Mobs.Append
-                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            end if;
-         end loop Load_Statistics_Loop;
-      end Load_Statistics_Block;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);

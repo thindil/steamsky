@@ -35,21 +35,6 @@ package body Statistics is
    type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Game_Stats is
-      Nim_Stats: constant Nim_Game_Stats :=
-        (Bases_Visited => Game_Stats.Bases_Visited,
-         Map_Visited => Game_Stats.Map_Visited,
-         Distance_Traveled => Game_Stats.Distance_Traveled,
-         Accepted_Missions => Game_Stats.Accepted_Missions,
-         Points => Game_Stats.Points);
-      procedure Get_Ada_Game_Stats(Stats: Nim_Game_Stats) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGameStats";
-   begin
-      Get_Ada_Game_Stats(Stats => Nim_Stats);
-   end Get_Game_Stats;
-
    procedure Set_Game_Stats is
       --## rule off IMPROPER_INITIALIZATION
       Temp_Stats: Nim_Game_Stats :=
@@ -225,7 +210,6 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaDestroyedShips";
    begin
-      Get_Game_Stats;
       Get_Game_Stats_List(Name => "destroyedShips");
       Update_Ada_Destroyed_Ships
         (S_Name => New_String(Str => To_String(Source => Ship_Name)));
@@ -254,7 +238,6 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaFinishedGoals";
    begin
-      Get_Game_Stats;
       Get_Game_Stats_List(Name => "finishedGoals");
       Update_Ada_Finished_Goals
         (I => New_String(Str => To_String(Source => Index)));
@@ -268,7 +251,6 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaFinishedMissions";
    begin
-      Get_Game_Stats;
       Get_Game_Stats_List(Name => "finishedMissions");
       Update_Ada_Finished_Missions
         (M_T => New_String(Str => To_String(Source => M_Type)));
@@ -282,7 +264,6 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaCraftingOrders";
    begin
-      Get_Game_Stats;
       Get_Game_Stats_List(Name => "craftingOrders");
       Update_Ada_Crafting_Orders
         (I => New_String(Str => Tiny_String.To_String(Source => Index)));
@@ -298,7 +279,6 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaKilledMobs";
    begin
-      Get_Game_Stats;
       Get_Game_Stats_List(Name => "killedMobs");
       Update_Ada_Killed_Mobs
         (M => Member_To_Nim(Member => Mob),
@@ -313,7 +293,6 @@ package body Statistics is
          Convention => C,
          External_Name => "getAdaGamePoints";
    begin
-      Get_Game_Stats;
       return Get_Ada_Game_Points;
    end Get_Game_Points;
 
