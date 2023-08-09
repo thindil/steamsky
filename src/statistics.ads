@@ -170,8 +170,6 @@ package Statistics is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Game_Stats;
-
    function Get_Game_Stats_Number(Name: String) return Natural;
 
    function Get_Game_Stats_List(Name: String) return Statistics_Container.Vector;
