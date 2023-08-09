@@ -199,6 +199,7 @@ package body Ships.Movement is
       if Base_Index > 0 then
          Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
+      Get_Game_Date;
       Set_Ship_In_Nim;
       Message :=
         To_Unbounded_String
@@ -209,6 +210,7 @@ package body Ships.Movement is
                     (D => (if Docking then 1 else 0),
                      E => (if Escape then 1 else 0))));
       Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Game_Date;
       return To_String(Source => Message);
    end Dock_Ship;
 
