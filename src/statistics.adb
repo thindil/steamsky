@@ -317,4 +317,43 @@ package body Statistics is
       return Get_Ada_Game_Points;
    end Get_Game_Points;
 
+   function Get_Game_Stats_Number(Name: String) return Natural is
+      Value: Natural := 0;
+      procedure Set_Ada_Game_Stats_Number
+        (N: chars_ptr; Stats_Value: out Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGameStatsNumber";
+   begin
+      Set_Ada_Game_Stats_Number(N => New_String(Str => Name), Stats_Value => Value);
+      return Value;
+   end Get_Game_Stats_Number;
+
+   function Get_Game_Stats_List(Name: String) return Statistics_Container.Vector is
+      use Interfaces.C;
+
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_List: Nim_Stats_List := (others => <>);
+      Ada_List: Statistics_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Set_Ada_Game_Stats_List
+        (N: chars_ptr; Stats_List: out Nim_Stats_List) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGameStatsList";
+   begin
+      Set_Ada_Game_Stats_List
+        (N => New_String(Str => Name), Stats_List => Nim_List);
+      Set_List_Loop :
+      for Item of Nim_List loop
+         exit Set_List_Loop when Strlen(Item => Item.Index) = 0;
+         Ada_List.Append
+           (New_Item =>
+              (Index =>
+                 To_Unbounded_String(Source => Value(Item => Item.Index)),
+               Amount => Item.Amount));
+      end loop Set_List_Loop;
+      return Ada_List;
+   end Get_Game_Stats_List;
+
 end Statistics;
