@@ -14,26 +14,26 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Float_Text_IO; use Ada.Float_Text_IO;
+with Ada.Float_Text_IO;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Interfaces.C.Strings;
+with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip;
 with Crafts; use Crafts;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Goals; use Goals;
 with Items; use Items;
 with Missions; use Missions;
@@ -78,6 +78,20 @@ package body Statistics.UI is
    -- ****
 
    procedure Show_Statistics(Refresh: Boolean := False) is
+      use Interfaces.C.Strings;
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Widgets.TtkTreeView;
+      use Tcl.Tk.Ada.Winfo;
+      use Tcl.Tklib.Ada.Tooltip;
+      use CoreUI;
+
       Total_Finished, Total_Destroyed: Natural := 0;
       Stats_Text: Unbounded_String;
       Proto_Index: Positive := 1;
@@ -135,6 +149,8 @@ package body Statistics.UI is
          Message => "In game time which was passed since it started");
       Add_Visited_Map_Block :
       declare
+         use Ada.Float_Text_IO;
+
          --## rule off TYPE_INITIAL_VALUES
          type Visited_Factor is digits 4 range 0.0 .. 100.0;
          --## rule on TYPE_INITIAL_VALUES
