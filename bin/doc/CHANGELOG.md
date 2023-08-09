@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in the changelog
+- Game not update the time during docking or undocking from bases
 
 ## [9.0] - 2023-08-06
 
