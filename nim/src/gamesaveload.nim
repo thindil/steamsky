@@ -216,6 +216,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
 proc loadGame*() =
   let savedGame = loadXml(saveName)
+  # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
     var tmpMission = MissionData(mtype: mission.attr(
@@ -237,6 +238,30 @@ proc loadGame*() =
     if multiplier.len > 0:
       tmpMission.multiplier = multiplier.parseFloat
     acceptedMissions.add(tmpMission)
+  logMessage(message = "done", debugType = everything)
+  # Load game statistics
+  logMessage(message = "Loading game statistics...", debugType = everything)
+  for stat in savedGame.findAll("statistics"):
+    gameStats.basesVisited = stat.attr("visitedbases").parseInt
+    gameStats.mapVisited = stat.attr("mapdiscovered").parseInt
+    gameStats.distanceTraveled = stat.attr("distancetraveled").parseInt
+    gameStats.acceptedMissions = stat.attr("acceptedmissions").parseInt
+    gameStats.points = stat.attr("points").parseInt
+  for item in savedGame.findAll("destroyedships"):
+    gameStats.destroyedShips.add(StatisticsData(index: item.attr("index"),
+        amount: item.attr("amount").parseInt))
+  for item in savedGame.findAll("finishedcrafts"):
+    gameStats.craftingOrders.add(StatisticsData(index: item.attr("index"),
+        amount: item.attr("amount").parseInt))
+  for item in savedGame.findAll("finishedmissions"):
+    gameStats.finishedMissions.add(StatisticsData(index: item.attr("index"),
+        amount: item.attr("amount").parseInt))
+  for item in savedGame.findAll("finishedgoals"):
+    gameStats.finishedGoals.add(StatisticsData(index: item.attr("index"),
+        amount: item.attr("amount").parseInt))
+  for item in savedGame.findAll("killedmobs"):
+    gameStats.killedMobs.add(StatisticsData(index: item.attr("index"),
+        amount: item.attr("amount").parseInt))
   logMessage(message = "done", debugType = everything)
 
 proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
