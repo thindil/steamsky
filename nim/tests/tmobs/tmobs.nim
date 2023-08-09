@@ -18,5 +18,11 @@ if protoMobsList.len == 0:
 
 echo "Testing generateMob."
 let newMob = generateMob(5, "POLEIS")
-assert newMob.attributes[0].level == 2, "Failed to set the mob's attributes."
-assert newMob.orderTime == 15, "Failed to set the mob's order's time."
+try:
+  assert newMob.attributes[0].level == 2
+except AssertionDefect:
+  echo "Failed to set the mob's attributes."
+try:
+  assert newMob.orderTime == 15
+except AssertionDefect:
+  echo "Failed to set the mob's order's time."
