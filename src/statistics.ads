@@ -114,7 +114,7 @@ package Statistics is
       -- Clear game statistics
       -- SOURCE
    procedure Clear_Game_Stats with
-      Post => Game_Stats.Points = 0;
+      Post => Get_Game_Points = 0;
       -- ****
 
       -- ****f* Statistics/Statistics.Update_Finished_Goals
