@@ -242,6 +242,17 @@ proc setAdaGameStats(stats: var AdaGameStats) {.raises: [], tags: [], exportc.} 
   stats.acceptedMissions = gameStats.acceptedMissions.cint
   stats.points = gameStats.points.cint
 
+proc setAdaGameStatsNumber(name: cstring; statsValue: var cint) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "basesVisited":
+    statsValue = gameStats.basesVisited.cint
+  of "mapVisited":
+    statsValue = gameStats.mapVisited.cint
+  of "distanceTraveled":
+    statsValue = gameStats.distanceTraveled.cint
+  of "acceptedMissions":
+    statsValue = gameStats.acceptedMissions.cint
+
 proc setAdaGameStatsList(name: cstring; statsList: var array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc.} =
   var list = case $name
