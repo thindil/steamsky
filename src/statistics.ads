@@ -170,8 +170,14 @@ package Statistics is
 
 -- Temporary code to interact with Nim
 
+   procedure Set_Game_Stats;
+   procedure Set_Game_Stats_List(Name: String);
+   procedure Get_Game_Stats(Distance: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaGameStats";
    function Get_Game_Stats_Number(Name: String) return Natural;
-
-   function Get_Game_Stats_List(Name: String) return Statistics_Container.Vector;
+   function Get_Game_Stats_List
+     (Name: String) return Statistics_Container.Vector;
 
 end Statistics;
