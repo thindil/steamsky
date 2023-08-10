@@ -103,6 +103,7 @@ package body Statistics.UI is
         Get_Widget(pathName => Stats_Canvas & ".stats.left.points");
       --## rule off IMPROPER_INITIALIZATION
       Tree_View: Ttk_Tree_View;
+      Stats_List: Statistics_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
@@ -158,14 +159,14 @@ package body Statistics.UI is
          Visited_String: String(1 .. 5);
       begin
          Visited_Percent :=
-           Visited_Factor((Float(Game_Stats.Bases_Visited) / 1_024.0) * 100.0);
+           Visited_Factor((Float(Get_Game_Stats_Number(Name => "basesVisited")) / 1_024.0) * 100.0);
          Put
            (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
            To_Unbounded_String
              (Source =>
-                "Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
+                "Bases visited:" & Positive'Image(Get_Game_Stats_Number(Name => "basesVisited")) &
                 " (" & Visited_String & "%)");
          Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.bases");
          configure
@@ -177,7 +178,7 @@ package body Statistics.UI is
               "The amount of sky bases visited and total percentage of all bases");
          Visited_Percent :=
            Visited_Factor
-             (Float(Game_Stats.Map_Visited) / (1_024.0 * 1_024.0)) *
+             (Float(Get_Game_Stats_Number(Name => "mapVisited")) / (1_024.0 * 1_024.0)) *
            100.0;
          if Visited_Percent < 0.001 then
             Visited_Percent := 0.001;
@@ -200,7 +201,7 @@ package body Statistics.UI is
         To_Unbounded_String
           (Source =>
              "Distance traveled:" &
-             Natural'Image(Game_Stats.Distance_Traveled));
+             Natural'Image(Get_Game_Stats_Number(Name => "distanceTraveled")));
       Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.distance");
       configure
         (Widgt => Label,
@@ -210,8 +211,9 @@ package body Statistics.UI is
          Message => "The total amount of map's fields visited");
       Stats_Frame.Name := New_String(Str => Stats_Canvas & ".stats");
       Total_Finished := 0;
+      Stats_List := Get_Game_Stats_List(Name => "craftingOrders");
       Count_Finished_Crafting_Loop :
-      for CraftingOrder of Game_Stats.Crafting_Orders loop
+      for CraftingOrder of Stats_List loop
          Total_Finished := Total_Finished + CraftingOrder.Amount;
       end loop Count_Finished_Crafting_Loop;
       Label.Name := New_String(Str => Stats_Frame & ".left.crafts");
@@ -235,10 +237,10 @@ package body Statistics.UI is
               "]");
       end if;
       if Total_Finished > 0 then
-         if Crafting_Indexes.Length /= Game_Stats.Crafting_Orders.Length then
+         if Crafting_Indexes.Length /= Stats_List.Length then
             Crafting_Indexes.Clear;
             Fill_Crafting_Indexes_Loop :
-            for I in Game_Stats.Crafting_Orders.Iterate loop
+            for I in Stats_List.Iterate loop
                Crafting_Indexes.Append
                  (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Crafting_Indexes_Loop;
@@ -259,27 +261,28 @@ package body Statistics.UI is
                                   (Source =>
                                      To_String
                                        (Source =>
-                                          Game_Stats.Crafting_Orders(I)
+                                          Stats_List(I)
                                             .Index)))
                              .Result_Index)
                         .Name) &
-                 "} {" & Positive'Image(Game_Stats.Crafting_Orders(I).Amount) &
+                 "} {" & Positive'Image(Stats_List(I).Amount) &
                  "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
            (Widgt => Tree_View,
             options =>
               "-height" &
-              (if Game_Stats.Crafting_Orders.Length < 10 then
-                 Positive'Image(Positive(Game_Stats.Crafting_Orders.Length))
+              (if Stats_List.Length < 10 then
+                 Positive'Image(Positive(Stats_List.Length))
                else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
       Total_Finished := 0;
+      Stats_List := Get_Game_Stats_List(Name => "finishedMissions");
       Count_Finished_Missions_Loop :
-      for FinishedMission of Game_Stats.Finished_Missions loop
+      for FinishedMission of Stats_List loop
          Total_Finished := Total_Finished + FinishedMission.Amount;
       end loop Count_Finished_Missions_Loop;
       Label.Name := New_String(Str => Stats_Canvas & ".stats.left.missions");
@@ -287,11 +290,11 @@ package body Statistics.UI is
       declare
          Missions_Percent: Natural := 0;
       begin
-         if Game_Stats.Accepted_Missions > 0 then
+         if Get_Game_Stats_Number(Name => "acceptedMissions") > 0 then
             Missions_Percent :=
               Natural
                 ((Float(Total_Finished) /
-                  Float(Game_Stats.Accepted_Missions)) *
+                  Float(Get_Game_Stats_Number(Name => "acceptedMissions"))) *
                  100.0);
          end if;
          configure
@@ -322,10 +325,10 @@ package body Statistics.UI is
               "]");
       end if;
       if Total_Finished > 0 then
-         if Missions_Indexes.Length /= Game_Stats.Finished_Missions.Length then
+         if Missions_Indexes.Length /= Stats_List.Length then
             Missions_Indexes.Clear;
             Fill_Missions_Indexes_Loop :
-            for I in Game_Stats.Finished_Missions.Iterate loop
+            for I in Stats_List.Iterate loop
                Missions_Indexes.Append
                  (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Missions_Indexes_Loop;
@@ -335,41 +338,41 @@ package body Statistics.UI is
             case Missions_Types'Val
               (Integer'Value
                  (To_String
-                    (Source => Game_Stats.Finished_Missions(I).Index))) is
+                    (Source => Stats_List(I).Index))) is
                when DELIVER =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Delivered items} {" &
-                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       Positive'Image(Stats_List(I).Amount) &
                        "}]");
                when PATROL =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Patroled areas} {" &
-                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       Positive'Image(Stats_List(I).Amount) &
                        "}]");
                when DESTROY =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Destroyed ships} {" &
-                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       Positive'Image(Stats_List(I).Amount) &
                        "}]");
                when EXPLORE =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Explored areas} {" &
-                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       Positive'Image(Stats_List(I).Amount) &
                        "}]");
                when PASSENGER =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Passengers transported} {" &
-                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       Positive'Image(Stats_List(I).Amount) &
                        "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
@@ -377,8 +380,8 @@ package body Statistics.UI is
            (Widgt => Tree_View,
             options =>
               "-height" &
-              (if Game_Stats.Finished_Missions.Length < 10 then
-                 Positive'Image(Positive(Game_Stats.Finished_Missions.Length))
+              (if Stats_List.Length < 10 then
+                 Positive'Image(Positive(Stats_List.Length))
                else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else

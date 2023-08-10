@@ -151,7 +151,6 @@ package body Ships.Movement is
             when others =>
                null;
          end case;
-         Game_Stats.Distance_Traveled := Game_Stats.Distance_Traveled + 1;
          Get_Game_Stats(Value => 1, Stat => 0);
          Update_Game(Minutes => Time_Passed);
          Fuel_Index :=
