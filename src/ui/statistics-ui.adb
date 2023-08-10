@@ -613,6 +613,7 @@ package body Statistics.UI is
    Default_List_Sort_Order: constant List_Sort_Orders := NONE;
    -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****is* SUI/SUI.Sorting_Data
    -- FUNCTION
    -- Data structure used to sort various lists
@@ -636,6 +637,7 @@ package body Statistics.UI is
    -- SOURCE
    type Sorting_Array is array(Positive range <>) of Sorting_Data;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****if* SUI/SUI.Set_Sorting_Order
    -- FUNCTION
@@ -660,6 +662,7 @@ package body Statistics.UI is
            when others => NONE);
    end Set_Sorting_Order;
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Crafting_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of finished crafting orders
@@ -668,6 +671,7 @@ package body Statistics.UI is
    -- SOURCE
    Crafting_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUI/SUI.Sort_Crafting_Command
    -- FUNCTION
@@ -769,6 +773,7 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Crafting_Command;
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Missions_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of finished missions
@@ -777,6 +782,7 @@ package body Statistics.UI is
    -- SOURCE
    Missions_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUI/SUI.Sort_Missions_Command
    -- FUNCTION
@@ -876,6 +882,7 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Missions_Command;
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Goals_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of finished goals
@@ -884,6 +891,7 @@ package body Statistics.UI is
    -- SOURCE
    Goals_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUI/SUI.Sort_Goals_Command
    -- FUNCTION
