@@ -152,6 +152,7 @@ package body Ships.Movement is
                null;
          end case;
          Game_Stats.Distance_Traveled := Game_Stats.Distance_Traveled + 1;
+         Get_Game_Stats(Distance => Game_Stats.Distance_Traveled);
          Update_Game(Minutes => Time_Passed);
          Fuel_Index :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
