@@ -21,13 +21,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 package body Statistics is
 
    --## rule off TYPE_INITIAL_VALUES
-   type Nim_Game_Stats is record
-      Bases_Visited: Integer;
-      Map_Visited: Integer;
-      Distance_Traveled: Integer;
-      Accepted_Missions: Integer;
-      Points: Integer;
-   end record;
    type Nim_Statistics_Data is record
       Index: chars_ptr;
       Amount: Integer;
@@ -36,6 +29,15 @@ package body Statistics is
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Set_Game_Stats is
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Game_Stats is record
+         Bases_Visited: Integer;
+         Map_Visited: Integer;
+         Distance_Traveled: Integer;
+         Accepted_Missions: Integer;
+         Points: Integer;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Temp_Stats: Nim_Game_Stats :=
         (Bases_Visited => 0, Map_Visited => 0, Distance_Traveled => 0,
@@ -297,7 +299,7 @@ package body Statistics is
    end Get_Game_Points;
 
    function Get_Game_Stats_Number(Name: String) return Natural is
-      Value: Natural := 0;
+      Value: Natural;
       procedure Set_Ada_Game_Stats_Number
         (N: chars_ptr; Stats_Value: out Natural) with
          Import => True,
