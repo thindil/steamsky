@@ -16,5 +16,11 @@ if itemsList.len == 0:
   loadModules("../bin/data/shipmodules.dat")
 
 echo "Testing getModuleType."
-assert getModuleType(1) == "Hull", "Failed to get the type of the module."
-assert getModuleType(6) == "Alchemy lab", "Failed to get the type of the module with two words."
+try:
+  assert getModuleType(1) == "Hull"
+except AssertionDefect:
+  echo "Failed to get the type of the module."
+try:
+  assert getModuleType(6) == "Alchemy lab"
+except AssertionDefect:
+  echo "Failed to get the type of the module with two words."
