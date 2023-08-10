@@ -172,7 +172,7 @@ package Statistics is
 
    procedure Set_Game_Stats;
    procedure Set_Game_Stats_List(Name: String);
-   procedure Get_Game_Stats(Distance: Natural) with
+   procedure Get_Game_Stats(Value, Stat: Natural) with
       Import => True,
       Convention => C,
       External_Name => "getAdaGameStats";

@@ -197,8 +197,14 @@ type
 proc updateAdaCraftingOrders(index: cstring) {.raises: [], tags: [], exportc.} =
   updateCraftingOrders(index = $index)
 
-proc getAdaGameStats(distance: cint) {.raises: [], tags: [], exportc.} =
-  gameStats.distanceTraveled = distance
+proc getAdaGameStats(value, stat: cint) {.raises: [], tags: [], exportc.} =
+  case stat
+  of 0:
+    gameStats.distanceTraveled = gameStats.distanceTraveled + value
+  of 1:
+    gameStats.points = gameStats.points + value
+  else:
+    discard
 
 proc getAdaGameStatsList(name: cstring; statsList: array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc.} =
