@@ -118,7 +118,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       statElement.attrs = {"index": statistic.index,
           "amount": $statistic.amount}.toXmlAttributes
       statsElement.add(statElement)
-  saveStatistics(gameStats.destroyedShips, "destroyedShips")
+  saveStatistics(gameStats.destroyedShips, "destroyedships")
   saveStatistics(gameStats.craftingOrders, "finishedcrafts")
   saveStatistics(gameStats.finishedMissions, "finishedmissions")
   saveStatistics(gameStats.finishedGoals, "finishedgoals")
