@@ -33,7 +33,6 @@ with Maps; use Maps;
 with Messages;
 with Ships; use Ships;
 with Ships.SaveLoad;
-with Statistics;
 with Stories; use Stories;
 
 package body Game.SaveLoad is
@@ -94,8 +93,6 @@ package body Game.SaveLoad is
       use Log;
       use Messages;
       use Ships.SaveLoad;
-      use Statistics;
-
       use Tiny_String;
 
       Save_File: File_Input;
@@ -502,12 +499,6 @@ package body Game.SaveLoad is
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
-      Set_Game_Stats;
-      Set_Game_Stats_List(Name => "craftingOrders");
-      Set_Game_Stats_List(Name => "finishedGoals");
-      Set_Game_Stats_List(Name => "finishedMissions");
-      Set_Game_Stats_List(Name => "killedMobs");
-      Set_Game_Stats_List(Name => "destroyedShips");
    exception
       when An_Exception : others =>
          Free(Read => Reader);

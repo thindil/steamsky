@@ -28,32 +28,14 @@ package body Statistics is
    type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Set_Game_Stats is
-   begin
-      null;
-   end Set_Game_Stats;
-
-   procedure Get_Game_Stats_List(Name: String) is
-   begin
-      null;
-   end Get_Game_Stats_List;
-
-   procedure Set_Game_Stats_List(Name: String) is
-   begin
-      null;
-   end Set_Game_Stats_List;
-
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       procedure Update_Ada_Destroyed_Ships(S_Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaDestroyedShips";
    begin
-      Get_Game_Stats_List(Name => "destroyedShips");
       Update_Ada_Destroyed_Ships
         (S_Name => New_String(Str => To_String(Source => Ship_Name)));
-      Set_Game_Stats_List(Name => "destroyedShips");
-      Set_Game_Stats;
    end Update_Destroyed_Ships;
 
    procedure Clear_Game_Stats is
@@ -71,11 +53,8 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaFinishedGoals";
    begin
-      Get_Game_Stats_List(Name => "finishedGoals");
       Update_Ada_Finished_Goals
         (I => New_String(Str => To_String(Source => Index)));
-      Set_Game_Stats_List(Name => "finishedGoals");
-      Set_Game_Stats;
    end Update_Finished_Goals;
 
    procedure Update_Finished_Missions(M_Type: Unbounded_String) is
@@ -84,11 +63,8 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaFinishedMissions";
    begin
-      Get_Game_Stats_List(Name => "finishedMissions");
       Update_Ada_Finished_Missions
         (M_T => New_String(Str => To_String(Source => M_Type)));
-      Set_Game_Stats_List(Name => "finishedMissions");
-      Set_Game_Stats;
    end Update_Finished_Missions;
 
    procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
@@ -97,11 +73,8 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaCraftingOrders";
    begin
-      Get_Game_Stats_List(Name => "craftingOrders");
       Update_Ada_Crafting_Orders
         (I => New_String(Str => Tiny_String.To_String(Source => Index)));
-      Set_Game_Stats_List(Name => "craftingOrders");
-      Set_Game_Stats;
    end Update_Crafting_Orders;
 
    procedure Update_Killed_Mobs
@@ -112,12 +85,9 @@ package body Statistics is
          Convention => C,
          External_Name => "updateAdaKilledMobs";
    begin
-      Get_Game_Stats_List(Name => "killedMobs");
       Update_Ada_Killed_Mobs
         (M => Member_To_Nim(Member => Mob),
          F_Name => New_String(Str => To_String(Source => Fraction_Name)));
-      Set_Game_Stats_List(Name => "killedMobs");
-      Set_Game_Stats;
    end Update_Killed_Mobs;
 
    function Get_Game_Points return Natural is
