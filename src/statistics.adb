@@ -29,181 +29,18 @@ package body Statistics is
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Set_Game_Stats is
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Game_Stats is record
-         Bases_Visited: Integer;
-         Map_Visited: Integer;
-         Distance_Traveled: Integer;
-         Accepted_Missions: Integer;
-         Points: Integer;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Stats: Nim_Game_Stats :=
-        (Bases_Visited => 0, Map_Visited => 0, Distance_Traveled => 0,
-         Accepted_Missions => 0, Points => 0);
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Game_Stats(Stats: out Nim_Game_Stats) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameStats";
    begin
-      Set_Ada_Game_Stats(Stats => Temp_Stats);
-      Game_Stats.Bases_Visited := Temp_Stats.Bases_Visited;
-      Game_Stats.Map_Visited := Temp_Stats.Map_Visited;
-      Game_Stats.Distance_Traveled := Temp_Stats.Distance_Traveled;
-      Game_Stats.Accepted_Missions := Temp_Stats.Accepted_Missions;
-      Game_Stats.Points := Temp_Stats.Points;
+      null;
    end Set_Game_Stats;
 
    procedure Get_Game_Stats_List(Name: String) is
-      Nim_List: Nim_Stats_List := (others => <>);
-      procedure Get_Ada_Game_Stats_List
-        (N: chars_ptr; Stats_List: Nim_Stats_List) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGameStatsList";
    begin
-      if Name = "craftingOrders" then
-         Get_Crafting_Orders_Loop :
-         for I in
-           Game_Stats.Crafting_Orders.First_Index ..
-             Game_Stats.Crafting_Orders.Last_Index loop
-            Nim_List(I - 1) :=
-              (Index =>
-                 New_String
-                   (Str =>
-                      To_String
-                        (Source => Game_Stats.Crafting_Orders(I).Index)),
-               Amount => Game_Stats.Crafting_Orders(I).Amount);
-         end loop Get_Crafting_Orders_Loop;
-      elsif Name = "finishedGoals" then
-         Get_Finished_Goals_Loop :
-         for I in
-           Game_Stats.Finished_Goals.First_Index ..
-             Game_Stats.Finished_Goals.Last_Index loop
-            Nim_List(I - 1) :=
-              (Index =>
-                 New_String
-                   (Str =>
-                      To_String(Source => Game_Stats.Finished_Goals(I).Index)),
-               Amount => Game_Stats.Finished_Goals(I).Amount);
-         end loop Get_Finished_Goals_Loop;
-      elsif Name = "finishedMissions" then
-         Get_Finished_Missions_Loop :
-         for I in
-           Game_Stats.Finished_Missions.First_Index ..
-             Game_Stats.Finished_Missions.Last_Index loop
-            Nim_List(I - 1) :=
-              (Index =>
-                 New_String
-                   (Str =>
-                      To_String
-                        (Source => Game_Stats.Finished_Missions(I).Index)),
-               Amount => Game_Stats.Finished_Missions(I).Amount);
-         end loop Get_Finished_Missions_Loop;
-      elsif Name = "killedMobs" then
-         Get_Killed_Mobs_Loop :
-         for I in
-           Game_Stats.Killed_Mobs.First_Index ..
-             Game_Stats.Killed_Mobs.Last_Index loop
-            Nim_List(I - 1) :=
-              (Index =>
-                 New_String
-                   (Str =>
-                      To_String(Source => Game_Stats.Killed_Mobs(I).Index)),
-               Amount => Game_Stats.Killed_Mobs(I).Amount);
-         end loop Get_Killed_Mobs_Loop;
-      elsif Name = "destroyedShips" then
-         Get_Destroyed_Ships_Loop :
-         for I in
-           Game_Stats.Destroyed_Ships.First_Index ..
-             Game_Stats.Destroyed_Ships.Last_Index loop
-            Nim_List(I - 1) :=
-              (Index =>
-                 New_String
-                   (Str =>
-                      To_String(Source => Game_Stats.Destroyed_Ships(I).Index)),
-               Amount => Game_Stats.Destroyed_Ships(I).Amount);
-         end loop Get_Destroyed_Ships_Loop;
-      end if;
-      Get_Ada_Game_Stats_List
-        (N => New_String(Str => Name), Stats_List => Nim_List);
+      null;
    end Get_Game_Stats_List;
 
    procedure Set_Game_Stats_List(Name: String) is
-      use Interfaces.C;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_List: Nim_Stats_List := (others => <>);
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Game_Stats_List
-        (N: chars_ptr; Stats_List: out Nim_Stats_List) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameStatsList";
    begin
-      Set_Ada_Game_Stats_List
-        (N => New_String(Str => Name), Stats_List => Nim_List);
-      if Name = "craftingOrders" then
-         Game_Stats.Crafting_Orders.Clear;
-         Set_Crafting_Orders_Loop :
-         for Order of Nim_List loop
-            exit Set_Crafting_Orders_Loop when Strlen(Item => Order.Index) = 0;
-            Game_Stats.Crafting_Orders.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String(Source => Value(Item => Order.Index)),
-                  Amount => Order.Amount));
-         end loop Set_Crafting_Orders_Loop;
-      elsif Name = "finishedGoals" then
-         Game_Stats.Finished_Goals.Clear;
-         Set_Finished_Goals_Loop :
-         for Goal of Nim_List loop
-            exit Set_Finished_Goals_Loop when Strlen(Item => Goal.Index) = 0;
-            Game_Stats.Finished_Goals.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String(Source => Value(Item => Goal.Index)),
-                  Amount => Goal.Amount));
-         end loop Set_Finished_Goals_Loop;
-      elsif Name = "finishedMissions" then
-         Game_Stats.Finished_Missions.Clear;
-         Set_Finished_Missions_Loop :
-         for Mission of Nim_List loop
-            exit Set_Finished_Missions_Loop when Strlen
-                (Item => Mission.Index) =
-              0;
-            Game_Stats.Finished_Missions.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String
-                      (Source => Value(Item => Mission.Index)),
-                  Amount => Mission.Amount));
-         end loop Set_Finished_Missions_Loop;
-      elsif Name = "killedMobs" then
-         Game_Stats.Killed_Mobs.Clear;
-         Set_Killed_Mobs_Loop :
-         for Mob of Nim_List loop
-            exit Set_Killed_Mobs_Loop when Strlen(Item => Mob.Index) = 0;
-            Game_Stats.Killed_Mobs.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String(Source => Value(Item => Mob.Index)),
-                  Amount => Mob.Amount));
-         end loop Set_Killed_Mobs_Loop;
-      elsif Name = "destroyedShips" then
-         Game_Stats.Destroyed_Ships.Clear;
-         Set_Destroyed_Ships_Loop :
-         for Mob of Nim_List loop
-            exit Set_Destroyed_Ships_Loop when Strlen(Item => Mob.Index) = 0;
-            Game_Stats.Destroyed_Ships.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String(Source => Value(Item => Mob.Index)),
-                  Amount => Mob.Amount));
-         end loop Set_Destroyed_Ships_Loop;
-      end if;
+      null;
    end Set_Game_Stats_List;
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
@@ -226,12 +63,6 @@ package body Statistics is
          External_Name => "clearAdaGameStats";
    begin
       Clear_Ada_Game_Stats;
-      Set_Game_Stats;
-      Game_Stats.Destroyed_Ships.Clear;
-      Game_Stats.Crafting_Orders.Clear;
-      Game_Stats.Finished_Missions.Clear;
-      Game_Stats.Finished_Goals.Clear;
-      Game_Stats.Killed_Mobs.Clear;
    end Clear_Game_Stats;
 
    procedure Update_Finished_Goals(Index: Unbounded_String) is
