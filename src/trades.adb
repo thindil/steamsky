@@ -43,7 +43,7 @@ package body Trades is
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
       Item_Index: Natural;
-      Item: Base_Cargo;
+      Item: Base_Cargo := (others => <>);
    begin
       Buy_Amount := Positive'Value(Amount);
       if Trader_Index = 0 then
@@ -105,7 +105,7 @@ package body Trades is
          raise Trade_Not_Enough_Money with To_String(Source => Item_Name);
       end if;
       Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -Cost);
       if Base_Index > 0 then
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       else
@@ -126,7 +126,7 @@ package body Trades is
                 .Durability,
             Price => Price);
          Update_Base_Cargo
-           (Cargo_Index => Base_Item_Index, Amount => -(Buy_Amount),
+           (Cargo_Index => Base_Item_Index, Amount => -Buy_Amount,
             Durability =>
               BaseCargo_Container.Element
                 (Container => Sky_Bases(Base_Index).Cargo,
@@ -161,7 +161,7 @@ package body Trades is
       Show_Log_Block :
       declare
          Gain: constant Integer := (Buy_Amount * Price) - Cost;
-         Event: Event_Data;
+         Event: Event_Data := (others => <>);
       begin
          Add_Message
            (Message =>
@@ -170,7 +170,7 @@ package body Trades is
               " " & To_String(Source => Money_Name) & "." &
               (if Gain = 0 then ""
                else " You " & (if Gain > 0 then "gain" else "lost") &
-                 Integer'Image(abs (Gain)) & " " &
+                 Integer'Image(abs Gain) & " " &
                  To_String(Source => Money_Name) &
                  " compared to the base price."),
             M_Type => TRADEMESSAGE);
@@ -202,15 +202,15 @@ package body Trades is
           .Proto_Index;
       Item_Name: constant String :=
         To_String(Source => Get_Proto_Item(Index => Proto_Index).Name);
-      Price: Positive;
+      Price: Positive := 1;
       Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Base_Item_Index: Natural := 0;
       Cargo_Added: Boolean := False;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
-      Profit: Integer;
-      Item: Base_Cargo;
+      Profit: Integer := 0;
+      Item: Base_Cargo := (others => <>);
    begin
       Sell_Amount := Positive'Value(Amount);
       if Trader_Index = 0 then
@@ -369,7 +369,7 @@ package body Trades is
       end if;
       Update_Cargo
         (Ship => Player_Ship, Cargo_Index => Item_Index,
-         Amount => (0 - Sell_Amount),
+         Amount => -Sell_Amount,
          Price =>
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Item_Index)
@@ -377,7 +377,7 @@ package body Trades is
       Update_Cargo
         (Ship => Player_Ship, Proto_Index => Money_Index, Amount => Profit);
       if Base_Index > 0 then
-         Update_Base_Cargo(Proto_Index => Money_Index, Amount => -(Profit));
+         Update_Base_Cargo(Proto_Index => Money_Index, Amount => -Profit);
          Gain_Rep(Base_Index => Base_Index, Points => 1);
          if Get_Proto_Item(Index => Proto_Index).Reputation >
            Sky_Bases(Base_Index).Reputation.Level then
