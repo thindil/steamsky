@@ -8,7 +8,7 @@ Testing messagesAmount.
 Testing restoreMessage.'''
 """
 
-import ../../src/[types, messages]
+import ../../src/[game, types, messages]
 
 echo "Testing getLastMessageIndex."
 let messageIndex = getLastMessageIndex()
@@ -32,9 +32,10 @@ except AssertionDefect:
   echo "Failed to format the game's time."
 
 echo "Testing getMessage."
+gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 1)
 addMessage("my message", ord(MessageType.othermessage), ord(green))
 try:
-  assert getMessage(1, 0).message == "my message"
+  assert getMessage(1, 0).message == "[1600-01-01 08:01] - my message"
 except AssertionDefect:
   echo "Failed to get an existing message."
 try:
