@@ -137,11 +137,13 @@ package body Statistics is
          Convention => C,
          External_Name => "setAdaGameStatsNumber";
    begin
-      Set_Ada_Game_Stats_Number(N => New_String(Str => Name), Stats_Value => Value);
+      Set_Ada_Game_Stats_Number
+        (N => New_String(Str => Name), Stats_Value => Value);
       return Value;
    end Get_Game_Stats_Number;
 
-   function Get_Game_Stats_List(Name: String) return Statistics_Container.Vector is
+   function Get_Game_Stats_List
+     (Name: String) return Statistics_Container.Vector is
       use Interfaces.C;
 
       --## rule off IMPROPER_INITIALIZATION

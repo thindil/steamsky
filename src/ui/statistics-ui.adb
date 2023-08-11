@@ -159,14 +159,18 @@ package body Statistics.UI is
          Visited_String: String(1 .. 5);
       begin
          Visited_Percent :=
-           Visited_Factor((Float(Get_Game_Stats_Number(Name => "basesVisited")) / 1_024.0) * 100.0);
+           Visited_Factor
+             ((Float(Get_Game_Stats_Number(Name => "basesVisited")) /
+               1_024.0) *
+              100.0);
          Put
            (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
            To_Unbounded_String
              (Source =>
-                "Bases visited:" & Positive'Image(Get_Game_Stats_Number(Name => "basesVisited")) &
+                "Bases visited:" &
+                Positive'Image(Get_Game_Stats_Number(Name => "basesVisited")) &
                 " (" & Visited_String & "%)");
          Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.bases");
          configure
@@ -178,7 +182,8 @@ package body Statistics.UI is
               "The amount of sky bases visited and total percentage of all bases");
          Visited_Percent :=
            Visited_Factor
-             (Float(Get_Game_Stats_Number(Name => "mapVisited")) / (1_024.0 * 1_024.0)) *
+             (Float(Get_Game_Stats_Number(Name => "mapVisited")) /
+              (1_024.0 * 1_024.0)) *
            100.0;
          if Visited_Percent < 0.001 then
             Visited_Percent := 0.001;
@@ -259,14 +264,10 @@ package body Statistics.UI is
                              (Recipe_Index =>
                                 To_Bounded_String
                                   (Source =>
-                                     To_String
-                                       (Source =>
-                                          Stats_List(I)
-                                            .Index)))
+                                     To_String(Source => Stats_List(I).Index)))
                              .Result_Index)
                         .Name) &
-                 "} {" & Positive'Image(Stats_List(I).Amount) &
-                 "}]");
+                 "} {" & Positive'Image(Stats_List(I).Amount) & "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
            (Widgt => Tree_View,
@@ -336,44 +337,37 @@ package body Statistics.UI is
          Show_Finished_Missions_Loop :
          for I of Missions_Indexes loop
             case Missions_Types'Val
-              (Integer'Value
-                 (To_String
-                    (Source => Stats_List(I).Index))) is
+              (Integer'Value(To_String(Source => Stats_List(I).Index))) is
                when DELIVER =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Delivered items} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       Positive'Image(Stats_List(I).Amount) & "}]");
                when PATROL =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Patroled areas} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       Positive'Image(Stats_List(I).Amount) & "}]");
                when DESTROY =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Destroyed ships} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       Positive'Image(Stats_List(I).Amount) & "}]");
                when EXPLORE =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Explored areas} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       Positive'Image(Stats_List(I).Amount) & "}]");
                when PASSENGER =>
                   Insert
                     (TreeViewWidget => Tree_View,
                      Options =>
                        "{} end -values [list {Passengers transported} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       Positive'Image(Stats_List(I).Amount) & "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
          configure
@@ -444,8 +438,7 @@ package body Statistics.UI is
               (TreeViewWidget => Tree_View,
                Options =>
                  "{} end -values [list {" & Goal_Text(Index => Proto_Index) &
-                 "} {" & Positive'Image(Stats_List(I).Amount) &
-                 "}]");
+                 "} {" & Positive'Image(Stats_List(I).Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
          configure
            (Widgt => Tree_View,
@@ -491,14 +484,11 @@ package body Statistics.UI is
                        "{} end -values [list {" &
                        To_String
                          (Source => Get_Proto_Ship(Proto_Index => J).Name) &
-                       "} {" &
-                       Positive'Image(Stats_List(I).Amount) &
-                       "}]");
+                       "} {" & Positive'Image(Stats_List(I).Amount) & "}]");
                   exit Get_Proto_Ship_Loop;
                end if;
             end loop Get_Proto_Ship_Loop;
-            Total_Destroyed :=
-              Total_Destroyed + Stats_List(I).Amount;
+            Total_Destroyed := Total_Destroyed + Stats_List(I).Amount;
          end loop Count_Destroyed_Ships_Loop;
          configure
            (Widgt => Tree_View,
@@ -705,10 +695,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Crafting_Orders: constant Statistics_Container.Vector := Get_Game_Stats_List(Name => "craftingOrders");
+      Crafting_Orders: constant Statistics_Container.Vector :=
+        Get_Game_Stats_List(Name => "craftingOrders");
       --## rule off IMPROPER_INITIALIZATION
-      Local_Crafting: Sorting_Array
-        (1 .. Positive(Crafting_Orders.Length));
+      Local_Crafting: Sorting_Array(1 .. Positive(Crafting_Orders.Length));
       --## rule on IMPROPER_INITIALIZATION
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       function Get_Crafting_Sort_Order return List_Sort_Orders is
@@ -718,10 +708,12 @@ package body Statistics.UI is
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
-         if Get_Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Crafting_Sort_Order = NAMEASC
+           and then Left.Name < Right.Name then
             return True;
          end if;
-         if Get_Crafting_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Crafting_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
             return True;
          end if;
          if Get_Crafting_Sort_Order = AMOUNTASC
@@ -760,9 +752,7 @@ package body Statistics.UI is
                                   To_Bounded_String
                                     (Source =>
                                        To_String
-                                         (Source =>
-                                            Crafting_Orders(I)
-                                              .Index)))
+                                         (Source => Crafting_Orders(I).Index)))
                                .Result_Index)
                           .Name)),
             Amount => Crafting_Orders(I).Amount,
@@ -817,11 +807,11 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Finished_Missions: constant Statistics_Container.Vector := Get_Game_Stats_List(Name => "finishedMissions");
+      Finished_Missions: constant Statistics_Container.Vector :=
+        Get_Game_Stats_List(Name => "finishedMissions");
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       --## rule off IMPROPER_INITIALIZATION
-      Local_Missions: Sorting_Array
-        (1 .. Positive(Finished_Missions.Length));
+      Local_Missions: Sorting_Array(1 .. Positive(Finished_Missions.Length));
       --## rule on IMPROPER_INITIALIZATION
       function Get_Missions_Sort_Order return List_Sort_Orders is
       begin
@@ -830,10 +820,12 @@ package body Statistics.UI is
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
-         if Get_Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         if Get_Missions_Sort_Order = NAMEASC
+           and then Left.Name < Right.Name then
             return True;
          end if;
-         if Get_Missions_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Missions_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
             return True;
          end if;
          if Get_Missions_Sort_Order = AMOUNTASC
@@ -863,8 +855,7 @@ package body Statistics.UI is
            (Name =>
               (case Missions_Types'Val
                  (Integer'Value
-                    (To_String
-                       (Source => Finished_Missions(I).Index))) is
+                    (To_String(Source => Finished_Missions(I).Index))) is
                  when DELIVER =>
                    To_Unbounded_String(Source => "Delivered items"),
                  when PATROL =>
@@ -928,11 +919,11 @@ package body Statistics.UI is
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Proto_Index: Positive := 1;
-      Finished_Goals: constant Statistics_Container.Vector := Get_Game_Stats_List(Name => "finishedGoals");
+      Finished_Goals: constant Statistics_Container.Vector :=
+        Get_Game_Stats_List(Name => "finishedGoals");
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       --## rule off IMPROPER_INITIALIZATION
-      Local_Goals: Sorting_Array
-        (1 .. Positive(Finished_Goals.Length));
+      Local_Goals: Sorting_Array(1 .. Positive(Finished_Goals.Length));
       --## rule on IMPROPER_INITIALIZATION
       function Get_Goals_Sort_Order return List_Sort_Orders is
       begin
@@ -944,7 +935,8 @@ package body Statistics.UI is
          if Get_Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
-         if Get_Goals_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         if Get_Goals_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
             return True;
          end if;
          if Get_Goals_Sort_Order = AMOUNTASC
@@ -1025,10 +1017,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Destroyed_Ships: constant Statistics_Container.Vector := Get_Game_Stats_List(Name => "destroyedShips");
+      Destroyed_Ships: constant Statistics_Container.Vector :=
+        Get_Game_Stats_List(Name => "destroyedShips");
       --## rule off IMPROPER_INITIALIZATION
-      Local_Destroyed: Sorting_Array
-        (1 .. Positive(Destroyed_Ships.Length));
+      Local_Destroyed: Sorting_Array(1 .. Positive(Destroyed_Ships.Length));
       --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
@@ -1122,10 +1114,10 @@ package body Statistics.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Killed_Mobs: constant Statistics_Container.Vector := Get_Game_Stats_List(Name => "killedMobs");
+      Killed_Mobs: constant Statistics_Container.Vector :=
+        Get_Game_Stats_List(Name => "killedMobs");
       --## rule off IMPROPER_INITIALIZATION
-      Local_Killed: Sorting_Array
-        (1 .. Positive(Killed_Mobs.Length));
+      Local_Killed: Sorting_Array(1 .. Positive(Killed_Mobs.Length));
       --## rule on IMPROPER_INITIALIZATION
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
@@ -1156,8 +1148,7 @@ package body Statistics.UI is
       Fill_Local_Killed_Loop :
       for I in Killed_Mobs.Iterate loop
          Local_Killed(Statistics_Container.To_Index(Position => I)) :=
-           (Name => Killed_Mobs(I).Index,
-            Amount => Killed_Mobs(I).Amount,
+           (Name => Killed_Mobs(I).Index, Amount => Killed_Mobs(I).Amount,
             Id => Statistics_Container.To_Index(Position => I));
       end loop Fill_Local_Killed_Loop;
       Sort_Killed(Container => Local_Killed);
