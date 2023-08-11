@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Typos in the changelog
 - Game not update the time during docking or undocking from bases
 - Saving the list of destroyed enemy's ships
+- Typo in the dialog after finishing a story
 
 ## [9.0] - 2023-08-06
 
