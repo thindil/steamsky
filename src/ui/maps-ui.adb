@@ -1618,7 +1618,7 @@ package body Maps.UI is
       Show_Question
         (Question =>
            To_String(Source => Stories_List(Current_Story.Index).End_Text) &
-           " Are you want to finish game?",
+           " Do you want to finish the game?",
          Result => "retire");
    end Finish_Story;
 
