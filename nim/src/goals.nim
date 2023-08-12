@@ -130,6 +130,53 @@ proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
       targetIndex: "", multiplier: 1)
 
 proc goalText*(index: int): string =
+  let goal = (if index > -1: goalsList[index] else: currentGoal)
+  case goal.goalType
+  of reputation:
+    result = "Gain max reputation in "
+  of GoalTypes.destroy:
+    result = "Destroy "
+  of discover:
+    result = "Discover "
+  of visit:
+    result = "Visit "
+  of GoalTypes.craft:
+    result = "Craft "
+  of mission:
+    result = "Finish "
+  of kill:
+    result = "Kill "
+  of random:
+    discard
+  result = result & $goal.amount
+  case goal.goalType
+  of reputation, visit:
+    result = result & " base"
+  of GoalTypes.destroy:
+    result = result & " ship"
+  of discover:
+    result = result & " field"
+  of GoalTypes.craft:
+    result = result & " item"
+  of mission:
+    result = result & " mission"
+  of kill:
+    result = result & " enem"
+  of random:
+    discard
+  if goal.goalType notin {random, kill} and goal.amount > 1:
+    result = result & "s"
+  case goal.goalType
+  of discover:
+    result = result & " of map"
+  of kill:
+    if goal.amount > 1:
+      result = result & "ies in melee combat"
+    else:
+      result = result & "y in melee combat"
+  else:
+    discard
+
   type FactionNameType = enum
     name, memberName, pluralMemberName
 
@@ -142,25 +189,6 @@ proc goalText*(index: int): string =
       return faction.memberName
     of pluralMemberName:
       return faction.pluralMemberName
-
-  let goal = (if index > -1: goalsList[index] else: currentGoal)
-  case goal.goalType
-  of reputation:
-    result = "Gain max reputation in"
-  of GoalTypes.destroy:
-    result = "Destroy"
-  of discover:
-    result = "Discover"
-  of visit:
-    result = "Visit"
-  of GoalTypes.craft:
-    result = "Craft"
-  of mission:
-    result = "Finish"
-  of kill:
-    result = "Kill"
-  of random:
-    discard
 
 # Temporary code for interfacing with Ada
 
