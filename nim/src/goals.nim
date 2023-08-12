@@ -129,6 +129,39 @@ proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
+proc goalText*(index: int): string =
+  type FactionNameType = enum
+    name, memberName, pluralMemberName
+
+  proc getFactionName(factionIndex: string; factionType: FactionNameType): string =
+    let faction = factionsList[factionIndex]
+    case factionType
+    of name:
+      return faction.name
+    of memberName:
+      return faction.memberName
+    of pluralMemberName:
+      return faction.pluralMemberName
+
+  let goal = (if index > -1: goalsList[index] else: currentGoal)
+  case goal.goalType
+  of reputation:
+    result = "Gain max reputation in"
+  of GoalTypes.destroy:
+    result = "Destroy"
+  of discover:
+    result = "Discover"
+  of visit:
+    result = "Visit"
+  of GoalTypes.craft:
+    result = "Craft"
+  of mission:
+    result = "Finish"
+  of kill:
+    result = "Kill"
+  of random:
+    discard
+
 # Temporary code for interfacing with Ada
 
 type
