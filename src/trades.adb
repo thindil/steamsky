@@ -88,6 +88,7 @@ package body Trades is
       Count_Price(Price => Cost, Trader_Index => Trader_Index);
       Money_Index_2 :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if Free_Cargo
           (Amount =>
              Cost -
@@ -95,6 +96,7 @@ package body Trades is
         0 then
          raise Trade_No_Free_Cargo;
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Money_Index_2 = 0 then
          raise Trade_No_Money with To_String(Source => Item_Name);
       end if;
@@ -111,7 +113,7 @@ package body Trades is
       else
          Item :=
            BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1);
-         Item.Amount := Item.Amount + Cost;
+         Item.Amount := Item.Amount + Cost; --## rule line off ASSIGNMENTS
          BaseCargo_Container.Replace_Element
            (Container => Trader_Cargo, Index => 1, New_Item => Item);
       end if;
@@ -145,7 +147,9 @@ package body Trades is
          Item :=
            BaseCargo_Container.Element
              (Container => Trader_Cargo, Index => Base_Item_Index);
+         --## rule off ASSIGNMENTS
          Item.Amount := Item.Amount - Buy_Amount;
+         --## rule on ASSIGNMENTS
          if Item.Amount = 0 then
             BaseCargo_Container.Delete
               (Container => Trader_Cargo, Index => Base_Item_Index);
@@ -160,7 +164,9 @@ package body Trades is
          Crew_Index => Trader_Index);
       Show_Log_Block :
       declare
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Gain: constant Integer := (Buy_Amount * Price) - Cost;
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Event: Event_Data := (others => <>);
       begin
          Add_Message
@@ -176,7 +182,7 @@ package body Trades is
             M_Type => TRADEMESSAGE);
          if Base_Index = 0 and Event_Index > 0 then
             Event := Get_Event(Index => Event_Index);
-            Event.Time := Event.Time + 5;
+            Event.Time := Event.Time + 5; --## rule line off ASSIGNMENTS
             Get_Ada_Event
               (Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y,
                Time => Event.Time, Data => Event.Ship_Index,
@@ -310,6 +316,7 @@ package body Trades is
          end if;
          <<End_Of_Loop>>
       end loop Pay_Trade_Profit_Loop;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if Free_Cargo
           (Amount =>
              (Get_Proto_Item(Index => Proto_Index).Weight * Sell_Amount) -
@@ -317,6 +324,7 @@ package body Trades is
         0 then
          raise Trade_No_Free_Cargo;
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Base_Index > 0 then
          if Profit >
            BaseCargo_Container.Element
@@ -386,7 +394,7 @@ package body Trades is
       else
          Item :=
            BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1);
-         Item.Amount := Item.Amount - Profit;
+         Item.Amount := Item.Amount - Profit; --## rule line off ASSIGNMENTS
          BaseCargo_Container.Replace_Element
            (Container => Trader_Cargo, Index => 1, New_Item => Item);
       end if;
@@ -395,7 +403,9 @@ package body Trades is
          Crew_Index => Trader_Index);
       Show_Log_Block :
       declare
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Gain: constant Integer := Profit - (Sell_Amount * Price);
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
          Event: Event_Data;
       begin
          Add_Message
@@ -411,7 +421,7 @@ package body Trades is
             M_Type => TRADEMESSAGE);
          if Base_Index = 0 and Event_Index > 0 then
             Event := Get_Event(Index => Event_Index);
-            Event.Time := Event.Time + 5;
+            Event.Time := Event.Time + 5; --## rule line off ASSIGNMENTS
             Get_Ada_Event
               (Index => Event_Index, X => Event.Sky_X, Y => Event.Sky_Y,
                Time => Event.Time, Data => Event.Ship_Index,
