@@ -290,3 +290,9 @@ proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc.} 
 
 proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc.} =
   clearCurrentGoal()
+
+proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return goalText(index = index).cstring
+  except ValueError:
+    return ""
