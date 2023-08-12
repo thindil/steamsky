@@ -190,6 +190,25 @@ proc goalText*(index: int): string =
     of pluralMemberName:
       return faction.pluralMemberName
 
+  if goal.targetIndex.len > 0:
+    var insertPosition = result.len - 4
+    if goal.amount > 1:
+      insertPosition.dec
+    case goal.goalType
+    of reputation, visit:
+      result.insert(getFactionName(goal.targetIndex, name) & " ", insertPosition)
+    of GoalTypes.destroy:
+      var added = false
+      for index, ship in protoShipsList:
+        if index == goal.targetIndex.parseInt:
+          result = result & ": " & ship.name
+          added = true
+          break
+      if not added:
+        result.insert(getFactionName(goal.targetIndex, name) & " ", insertPosition)
+    else:
+      discard
+
 # Temporary code for interfacing with Ada
 
 type
