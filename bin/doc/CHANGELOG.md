@@ -11,3 +11,4 @@ All notable changes to this project will be documented in this file.
 - Game not update the time during docking or undocking from bases
 - Saving the list of destroyed enemy's ships
 - Typo in the dialog after finishing a story
+- Removed empty lines from the map info dialog after finishing an event
