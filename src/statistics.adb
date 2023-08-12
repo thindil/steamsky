@@ -25,7 +25,6 @@ package body Statistics is
       Index: chars_ptr;
       Amount: Integer;
    end record;
-   type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
@@ -116,6 +115,9 @@ package body Statistics is
      (Name: String) return Statistics_Container.Vector is
       use Interfaces.C;
 
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Nim_List: Nim_Stats_List := (others => <>);
       Ada_List: Statistics_Container.Vector;
