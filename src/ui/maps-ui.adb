@@ -906,7 +906,8 @@ package body Maps.UI is
          declare
             Event_Index: constant Natural := Sky_Map(X, Y).Event_Index;
          begin
-            if Get_Event(Index => Event_Index).E_Type /= BASERECOVERY then
+            if Get_Event(Index => Event_Index).E_Type not in BASERECOVERY |
+                  NONE then
                Event_Info_Text := To_Unbounded_String(Source => LF & LF);
             end if;
             case Get_Event(Index => Event_Index).E_Type is
