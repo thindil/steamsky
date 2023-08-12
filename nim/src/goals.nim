@@ -180,7 +180,8 @@ proc goalText*(index: int): string =
   type FactionNameType = enum
     name, memberName, pluralMemberName
 
-  proc getFactionName(factionIndex: string; factionType: FactionNameType): string =
+  proc getFactionName(factionIndex: string;
+      factionType: FactionNameType): string =
     let faction = factionsList[factionIndex]
     case factionType
     of name:
@@ -206,7 +207,36 @@ proc goalText*(index: int): string =
           break
       if not added:
         result.insert(getFactionName(goal.targetIndex, name) & " ", insertPosition)
-    else:
+    of GoalTypes.craft:
+      if recipesList[goal.targetIndex].resultIndex > 0:
+        result = result & ": " & itemsList[recipesList[
+            goal.targetIndex].resultIndex].name
+      else:
+        result = result & ": " & goal.targetIndex
+    of mission:
+      case parseEnum[MissionsTypes](goal.targetIndex)
+      of deliver:
+        result = result & ": Deliver items to bases"
+      of patrol:
+        result = result & ": Patrol areas"
+      of destroy:
+        result = result & ": Destroy ships"
+      of explore:
+        result = result & ": Explore areas"
+      of passenger:
+        result = result & ": Transport passengers to bases"
+    of kill:
+      insertPosition = result.len - 21
+      if goal.amount > 1:
+        insertPosition = insertPosition - 2
+      var stopPosition = insertPosition + 4
+      if goal.amount > 1:
+        result[insertPosition .. stopPosition] = getFactionName(
+            goal.targetIndex, pluralMemberName)
+      else:
+        result[insertPosition .. stopPosition] = getFactionName(
+            goal.targetIndex, memberName)
+    of random, discover:
       discard
 
 # Temporary code for interfacing with Ada
