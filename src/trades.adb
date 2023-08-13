@@ -406,7 +406,7 @@ package body Trades is
          --## rule off SIMPLIFIABLE_EXPRESSIONS
          Gain: constant Integer := Profit - (Sell_Amount * Price);
          --## rule on SIMPLIFIABLE_EXPRESSIONS
-         Event: Event_Data;
+         Event: Event_Data := (others => <>);
       begin
          Add_Message
            (Message =>
@@ -415,7 +415,7 @@ package body Trades is
               To_String(Source => Money_Name) & "." &
               (if Gain = 0 then ""
                else " You " & (if Gain > 0 then "gain" else "lost") &
-                 Integer'Image(abs (Gain)) & " " &
+                 Integer'Image(abs Gain) & " " &
                  To_String(Source => Money_Name) &
                  " compared to the base price."),
             M_Type => TRADEMESSAGE);
