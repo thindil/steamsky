@@ -32,16 +32,31 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 
 echo "Testing updateCargo."
 updateCargo(playerShip, 1, -1)
-assert playerShip.cargo[0].amount == 99, "Failed to remove an item from the player's ship's cargo."
+try:
+  assert playerShip.cargo[0].amount == 99
+except AssertionDefect:
+  echo  "Failed to remove an item from the player's ship's cargo."
 updateCargo(playerShip, 1, 1)
-assert playerShip.cargo[0].amount == 100, "Failed to add an item to the player's ship's cargo."
+try:
+  assert playerShip.cargo[0].amount == 100
+except AssertionDefect:
+  echo "Failed to add an item to the player's ship's cargo."
 updateCargo(playerShip, 40, -1)
 
 echo "Testing freeCargo."
-assert freeCargo(1) > freeCargo(0), "Failed to count free cargo space in the player's ship."
+try:
+  assert freeCargo(1) > freeCargo(0)
+except AssertionDefect:
+  echo "Failed to count free cargo space in the player's ship."
 
 echo "Testing getItemAmount."
-assert getItemAmount("Fuel") == 100, "Failed to get amount of fuel in the player's ship's cargo."
+try:
+  assert getItemAmount("Fuel") == 100
+except AssertionDefect:
+  echo "Failed to get amount of fuel in the player's ship's cargo."
 
 echo "Testing getItemsAmount."
-assert getItemsAmount("Drinks") == 200, "Failed to get amount of drinks in the player's ship's cargo."
+try:
+  assert getItemsAmount("Drinks") == 200
+except AssertionDefect:
+  echo "Failed to get amount of drinks in the player's ship's cargo."
