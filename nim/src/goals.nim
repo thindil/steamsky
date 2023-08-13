@@ -130,7 +130,7 @@ proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
       targetIndex: "", multiplier: 1)
 
 proc goalText*(index: int): string =
-  let goal = (if index > -1: goalsList[index] else: currentGoal)
+  let goal = (if goalsList.hasKey(index): goalsList[index] else: currentGoal)
   case goal.goalType
   of reputation:
     result = "Gain max reputation in "
@@ -201,7 +201,8 @@ proc goalText*(index: int): string =
     of GoalTypes.destroy:
       var added = false
       for index, ship in protoShipsList:
-        if index == goal.targetIndex.parseInt:
+        let shipIndex = try: goal.targetIndex.parseInt except ValueError: -1
+        if index == shipIndex:
           result = result & ": " & ship.name
           added = true
           break
@@ -214,22 +215,26 @@ proc goalText*(index: int): string =
       else:
         result = result & ": " & goal.targetIndex
     of mission:
-      case parseEnum[MissionsTypes](goal.targetIndex)
-      of deliver:
-        result = result & ": Deliver items to bases"
-      of patrol:
-        result = result & ": Patrol areas"
-      of destroy:
-        result = result & ": Destroy ships"
-      of explore:
-        result = result & ": Explore areas"
-      of passenger:
-        result = result & ": Transport passengers to bases"
+      try:
+        let missionType = parseEnum[MissionsTypes](goal.targetIndex)
+        case missionType
+        of deliver:
+          result = result & ": Deliver items to bases"
+        of patrol:
+          result = result & ": Patrol areas"
+        of destroy:
+          result = result & ": Destroy ships"
+        of explore:
+          result = result & ": Explore areas"
+        of passenger:
+          result = result & ": Transport passengers to bases"
+      except ValueError:
+        discard
     of kill:
       insertPosition = result.len - 21
       if goal.amount > 1:
         insertPosition = insertPosition - 2
-      var stopPosition = insertPosition + 4
+      var stopPosition = insertPosition + 6
       if goal.amount > 1:
         result[insertPosition .. stopPosition] = getFactionName(
             goal.targetIndex, pluralMemberName)
@@ -294,5 +299,5 @@ proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc.} =
 proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc.} =
   try:
     return goalText(index = index).cstring
-  except ValueError:
+  except KeyError:
     return ""
