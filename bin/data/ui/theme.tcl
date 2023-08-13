@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -376,7 +376,7 @@ namespace eval ttk::theme::steamsky {
          -cyan $colors(-cyan) -lime $colors(-lime) \
          -red2 $colors(-darkcandyapple) -red3 $colors(-darkred2) \
          -green2 $colors(-lightgreen) -gray $colors(-darkgray) \
-         -black $colors(-black)
+         -black $colors(-black) -pink $colors(-pink)
 
       # Dialogs (like messages, move map options, etc)
       ttk::style configure Dialog.TFrame -relief solid \

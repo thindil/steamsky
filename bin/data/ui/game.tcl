@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -188,6 +188,7 @@ $mapinfo tag configure lime -foreground [ttk::style lookup Map -lime]
 $mapinfo tag configure red2 -foreground [ttk::style lookup Map -red2]
 $mapinfo tag configure red3 -foreground [ttk::style lookup Map -red3]
 $mapinfo tag configure green2 -foreground [ttk::style lookup Map -green2]
+$mapinfo tag configure pink -foreground [ttk::style lookup Map -pink]
 $mapinfo tag configure underline -font UnderlineFont
 grid $mapinfo -column 0 -row 0 -sticky ne
 bind .gameframe.paned.mapframe.info <Enter> MoveMapInfo
