@@ -20,13 +20,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Statistics is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Statistics_Data is record
-      Index: chars_ptr;
-      Amount: Integer;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       procedure Update_Ada_Destroyed_Ships(S_Name: chars_ptr) with
          Import => True,
@@ -116,6 +109,10 @@ package body Statistics is
       use Interfaces.C;
 
       --## rule off TYPE_INITIAL_VALUES
+      type Nim_Statistics_Data is record
+         Index: chars_ptr;
+         Amount: Integer;
+      end record;
       type Nim_Stats_List is array(0 .. 511) of Nim_Statistics_Data;
       --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
