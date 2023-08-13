@@ -91,7 +91,9 @@ package body Goals.UI is
                    Positive'Image(Goals_Container.To_Index(Position => I)),
                  Side => Left) &
               "} -text {" &
-              Goal_Text(Index => Goals_Container.To_Index(Position => I)) &
+              Goal_Text
+                (Index =>
+                   Natural'Value(To_String(Source => Goals_List(I).Index))) &
               "}");
       end loop Load_Goals_Loop;
       configure
