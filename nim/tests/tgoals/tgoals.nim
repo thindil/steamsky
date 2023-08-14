@@ -2,7 +2,8 @@ discard """
   exitcode: 0
   output: '''Loading the game data.
 Testing updateGoal.
-Testing clearCurrentGoal.'''
+Testing clearCurrentGoal.
+Testing goalText.'''
 """
 
 import std/tables
@@ -35,3 +36,9 @@ try:
 except AssertionDefect:
   echo "Failed to reset the player's current goal."
 currentGoal = goalsList[1]
+
+echo "Testing goalText."
+try:
+  assert goalText(1) == "Gain max reputation in 1 base"
+except AssertionDefect:
+  echo "Failed to get text of the goal."
