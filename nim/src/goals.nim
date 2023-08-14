@@ -150,8 +150,6 @@ proc loadAdaGoals(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
 proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
   adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
       targetIndex: "".cstring, multiplier: 0)
-  if index > goalsList.len:
-    return
   let goal = try:
       goalsList[index]
     except KeyError:
