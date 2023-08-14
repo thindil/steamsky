@@ -15,16 +15,16 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Bases.Cargo; use Bases.Cargo;
+with BasesTypes;
+with Crew; use Crew;
+with Events; use Events;
+with Game; use Game;
 with Maps; use Maps;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Events; use Events;
-with Game; use Game;
-with Crew; use Crew;
-with Utils; use Utils;
-with Bases.Cargo; use Bases.Cargo;
-with BasesTypes; use BasesTypes;
+with Utils;
 
 package body Trades is
 
@@ -197,6 +197,8 @@ package body Trades is
 
    procedure Sell_Items
      (Item_Index: Inventory_Container.Extended_Index; Amount: String) is
+      use BasesTypes;
+      use Utils;
       use Tiny_String;
 
       Sell_Amount: Positive;
