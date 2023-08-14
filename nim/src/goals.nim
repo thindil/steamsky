@@ -216,7 +216,8 @@ proc goalText*(index: int): string =
         result = result & ": " & goal.targetIndex
     of mission:
       try:
-        let missionType = parseEnum[MissionsTypes](goal.targetIndex)
+        let missionType = parseEnum[MissionsTypes](
+            goal.targetIndex.toLowerAscii)
         case missionType
         of deliver:
           result = result & ": Deliver items to bases"
