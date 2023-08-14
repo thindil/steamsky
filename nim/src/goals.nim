@@ -130,6 +130,12 @@ proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
       targetIndex: "", multiplier: 1)
 
 proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Get information about the selected goal. If index doesn't exist in the
+  ## list of goals, get information about the current goal of the player.
+  ##
+  ## * index - the index of the goal which description will be get
+  ##
+  ## Returns the string with information about the selected goal
   let goal = (if goalsList.hasKey(index): goalsList[index] else: currentGoal)
   case goal.goalType
   of reputation:
