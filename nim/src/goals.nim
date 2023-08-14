@@ -129,7 +129,7 @@ proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
-proc goalText*(index: int): string =
+proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [].} =
   let goal = (if goalsList.hasKey(index): goalsList[index] else: currentGoal)
   case goal.goalType
   of reputation:
