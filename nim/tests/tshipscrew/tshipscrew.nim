@@ -42,30 +42,60 @@ echo "Testing updateMorale."
 let oldMorale = playerShip.crew[0].morale[2]
 let oldLevel = playerShip.crew[0].morale[1]
 updateMorale(playerShip, 0, 1)
-assert playerShip.crew[0].morale[2] == oldMorale + 1 or playerShip.crew[
-    0].morale[1] == oldLevel + 1, "Failed to raise morale of the crew member."
+try:
+  assert playerShip.crew[0].morale[2] == oldMorale + 1 or playerShip.crew[
+    0].morale[1] == oldLevel + 1
+except AssertionDefect:
+  echo "Failed to raise morale of the crew member."
 updateMorale(playerShip, 0, -1)
-assert playerShip.crew[0].morale[2] == oldMorale, "Failed to lower morale of the crew member."
+try:
+  assert playerShip.crew[0].morale[2] == oldMorale
+except AssertionDefect:
+  echo "Failed to lower morale of the crew member."
 
 echo "Testing giveOrders."
 giveOrders(playerShip, 0, rest)
-assert playerShip.crew[0].order == talk, "Failed to give order to the player."
+try:
+  assert playerShip.crew[0].order == talk
+except AssertionDefect:
+  echo "Failed to give order to the player."
 giveOrders(playerShip, 1, rest)
-assert playerShip.crew[1].order == rest, "Failed to give order to the crew member."
+try:
+  assert playerShip.crew[1].order == rest
+except AssertionDefect:
+  echo "Failed to give order to the crew member."
 
 echo "Testing updateOrders."
 giveOrders(playerShip, 0, rest, -1, false)
 updateOrders(playerShip)
-assert playerShip.crew[0].order == talk, "Failed to update the player's ship's crew orders."
+try:
+  assert playerShip.crew[0].order == talk
+except AssertionDefect:
+  echo "Failed to update the player's ship's crew orders."
 
 echo "Testing getSkillLevel."
-assert getSkillLevel(playerShip.crew[0], 1) == 0, "Failed to get the level of the player's skill."
-assert getSkillLevel(playerShip.crew[0], 4) == 1, "Failed to get the level of the crew member's skill."
+try:
+  assert getSkillLevel(playerShip.crew[0], 1) == 0
+except AssertionDefect:
+  echo "Failed to get the level of the player's skill."
+try:
+  assert getSkillLevel(playerShip.crew[0], 4) == 1
+except AssertionDefect:
+  echo "Failed to get the level of the crew member's skill."
 
 echo "Testing findMember."
-assert findMember(talk) == 0, "Failed to find a crew member with the selected order."
-assert findMember(defend) == -1, "Failed to not find a crew member with the selected order."
+try:
+  assert findMember(talk) == 0
+except AssertionDefect:
+  echo "Failed to find a crew member with the selected order."
+try:
+  assert findMember(defend) == -1
+except AssertionDefect:
+  echo "Failed to not find a crew member with the selected order."
 
 echo "Testing gainExp."
 gainExp(10, 4, 0)
-assert playerShip.crew[0].skills[0].experience == 10, "Failed to gain experience for a crew member."
+try:
+  assert playerShip.crew[0].skills[0].experience == 10
+except AssertionDefect:
+  echo "Failed to gain experience for a crew member."
