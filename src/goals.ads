@@ -108,8 +108,7 @@ package Goals is
    -- SOURCE
    function Goal_Text(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index,
-      Post => Goal_Text'Result'Length > 0,
-      Test_Case => (Name => "Test_GoalText", Mode => Nominal);
+      Post => Goal_Text'Result'Length > 0;
       -- ****
 
       -- ****f* Goals/Goals.Clear_Current_Goal
