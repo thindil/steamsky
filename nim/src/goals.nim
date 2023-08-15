@@ -136,7 +136,7 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [].} 
   ## * index - the index of the goal which description will be get
   ##
   ## Returns the string with information about the selected goal
-  let goal = (if goalsList.hasKey(index): goalsList[index] else: currentGoal)
+  let goal = (if index > 0 and goalsList.hasKey(index): goalsList[index] else: currentGoal)
   case goal.goalType
   of reputation:
     result = "Gain max reputation in "
