@@ -138,14 +138,14 @@ package body Bases.LootUI is
         Get_Widget
           (pathName => Loot_Canvas & ".loot.options.typelabel",
            Interp => Interp);
-      Item_Name, Item_Type: Bounded_String;
-      Item_Durability, Trade_Info: Unbounded_String;
+      Item_Name, Item_Type: Bounded_String := Null_Bounded_String;
+      Item_Durability, Trade_Info: Unbounded_String := Null_Unbounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Combo_Box: Ttk_ComboBox;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
-      Base_Cargo_Index, Base_Amount: Natural;
+      Current_Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
+      Base_Cargo_Index, Base_Amount: Natural := 0;
       Indexes_List: Positive_Container.Vector;
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
@@ -157,7 +157,7 @@ package body Bases.LootUI is
         (if Argc > 1 then "{" & CArgv.Arg(Argv => Argv, N => 1) & "}"
          else "All");
       Current_Item_Index: Positive := 1;
-      Proto_Index: Natural;
+      Proto_Index: Natural := 0;
       Table_Tooltip: constant String := "Show item's description and actions";
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
@@ -195,7 +195,7 @@ package body Bases.LootUI is
       Combo_Box :=
         Get_Widget(pathName => Loot_Frame & ".options.type", Interp => Interp);
       BaseCargo_Container.Assign
-        (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
+        (Target => Current_Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
          Add_Cargo_Indexes_Loop :
@@ -208,8 +208,8 @@ package body Bases.LootUI is
          Items_Indexes.Append(New_Item => 0);
          Add_Base_Indexes_Loop :
          for I in
-           BaseCargo_Container.First_Index(Container => Base_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
+           BaseCargo_Container.First_Index(Container => Current_Base_Cargo) ..
+             BaseCargo_Container.Last_Index(Container => Current_Base_Cargo) loop
             Items_Indexes.Append(New_Item => I);
          end loop Add_Base_Indexes_Loop;
       end if;
@@ -341,7 +341,7 @@ package body Bases.LootUI is
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
            BaseCargo_Container.Element
-             (Container => Base_Cargo, Index => Items_Indexes(I))
+             (Container => Current_Base_Cargo, Index => Items_Indexes(I))
              .Proto_Index;
          Item_Type :=
            (if
@@ -367,7 +367,7 @@ package body Bases.LootUI is
          end if;
          Proto_Index :=
            BaseCargo_Container.Element
-             (Container => Base_Cargo, Index => Items_Indexes(I))
+             (Container => Current_Base_Cargo, Index => Items_Indexes(I))
              .Proto_Index;
          Item_Type :=
            (if
@@ -402,7 +402,7 @@ package body Bases.LootUI is
          Item_Durability :=
            (if
               BaseCargo_Container.Element
-                (Container => Base_Cargo, Index => Items_Indexes(I))
+                (Container => Current_Base_Cargo, Index => Items_Indexes(I))
                 .Durability <
               100
             then
@@ -411,14 +411,14 @@ package body Bases.LootUI is
                    Get_Item_Damage
                      (Item_Durability =>
                         BaseCargo_Container.Element
-                          (Container => Base_Cargo, Index => I)
+                          (Container => Current_Base_Cargo, Index => I)
                           .Durability))
             else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
            (Table => Loot_Table,
             Value =>
               BaseCargo_Container.Element
-                (Container => Base_Cargo, Index => Items_Indexes(I))
+                (Container => Current_Base_Cargo, Index => Items_Indexes(I))
                 .Durability,
             Max_Value => Default_Item_Durability,
             Tooltip => To_String(Source => Item_Durability),
@@ -554,7 +554,7 @@ package body Bases.LootUI is
       use Short_String;
       use Tiny_String;
 
-      Item_Info: Unbounded_String;
+      Item_Info: Unbounded_String := Null_Unbounded_String;
       Proto_Index: Natural;
       Cargo_Index, Base_Cargo_Index: Natural := 0;
       Base_Index: constant Natural :=
@@ -565,7 +565,7 @@ package body Bases.LootUI is
    begin
       Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
       if Item_Index < 0 then
-         Base_Cargo_Index := abs (Item_Index);
+         Base_Cargo_Index := abs Item_Index;
       else
          Cargo_Index := Item_Index;
       end if;
@@ -795,7 +795,7 @@ package body Bases.LootUI is
            Interp => Interp);
    begin
       if Item_Index < 0 then
-         Base_Cargo_Index := abs (Item_Index);
+         Base_Cargo_Index := abs Item_Index;
       else
          Cargo_Index := Item_Index;
       end if;
@@ -838,7 +838,7 @@ package body Bases.LootUI is
          end if;
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Cargo_Index,
-            Amount => (0 - Amount),
+            Amount => -(Amount),
             Durability =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Cargo_Index)
