@@ -263,6 +263,14 @@ proc loadGame*() =
     gameStats.killedMobs.add(StatisticsData(index: item.attr("index"),
         amount: item.attr("amount").parseInt))
   logMessage(message = "done", debugType = everything)
+  # Load the player's current goal
+  logMessage(message = "Loading game current goal...", debugType = everything)
+  var goalNode = savedGame.child("currentgoal")
+  currentGoal = GoalData(index: goalNode.attr("index"), goalType: goalNode.attr(
+      "type").parseInt.GoalTypes, amount: goalNode.attr("amount").parseInt,
+      targetIndex: goalNode.attr("target"), multiplier: goalNode.attr(
+      "multiplier").parseInt)
+  logMessage(message = "done", debugType = everything)
 
 proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect].} =

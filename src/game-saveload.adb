@@ -330,48 +330,6 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      -- Load current goal
-      Log_Message
-        (Message => "Loading current goal...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "currentgoal");
-      Current_Goal.Index :=
-        To_Unbounded_String
-          (Source =>
-             Get_Attribute
-               (Elem => Item(List => Nodes_List, Index => 0),
-                Name => "index"));
-      Current_Goal.G_Type :=
-        Goal_Types'Val
-          (Integer'Value
-             (Get_Attribute
-                (Elem => Item(List => Nodes_List, Index => 0),
-                 Name => "type")));
-      Current_Goal.Amount :=
-        Integer'Value
-          (Get_Attribute
-             (Elem => Item(List => Nodes_List, Index => 0), Name => "amount"));
-      Current_Goal.Target_Index :=
-        To_Unbounded_String
-          (Source =>
-             Get_Attribute
-               (Elem => Item(List => Nodes_List, Index => 0),
-                Name => "target"));
-      if Get_Attribute
-          (Elem => Item(List => Nodes_List, Index => 0),
-           Name => "multiplier") /=
-        "" then
-         Current_Goal.Multiplier :=
-           Integer'Value
-             (Get_Attribute
-                (Elem => Item(List => Nodes_List, Index => 0),
-                 Name => "multiplier"));
-      end if;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       -- Load current story
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
