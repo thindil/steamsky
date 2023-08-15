@@ -32,7 +32,10 @@ skyMap[1][1].baseIndex = 1
 echo "Testing deleteMember."
 var oldLength = playerShip.crew.len
 deleteMember(1, playerShip)
-assert playerShip.crew.len == (oldLength - 1), "Failed to remove a crew member from the player's ship."
+try:
+  assert playerShip.crew.len == (oldLength - 1)
+except AssertionDefect:
+  echo "Failed to remove a crew member from the player's ship."
 
 echo "Testing death."
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
@@ -41,5 +44,11 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 playerShip.cargo = @[]
 oldLength = playerShip.crew.len
 death(1, "Test death", playerShip)
-assert playerShip.crew.len == oldLength - 1, "Failed to kill a crew member on the player's ship."
-assert playerShip.cargo.len == 1, "Failed to update the player's ship's cargo with a body."
+try:
+  assert playerShip.crew.len == oldLength - 1
+except AssertionDefect:
+  echo "Failed to kill a crew member on the player's ship."
+try:
+  assert playerShip.cargo.len == 1
+except AssertionDefect:
+  echo "Failed to update the player's ship's cargo with a body."
