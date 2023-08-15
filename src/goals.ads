@@ -115,18 +115,17 @@ package Goals is
       -- FUNCTION
       -- Reset current goal
       -- SOURCE
-   procedure Clear_Current_Goal with
-      Post => Current_Goal.Index = Null_Unbounded_String;
-      -- ****
+   procedure Clear_Current_Goal;
+   -- ****
 
-      -- ****f* Goals/Goals.Update_Goal
-      -- FUNCTION
-      -- Update current goal
-      -- PARAMETERS
-      -- G_Type       - Type of goal to check
-      -- Target_Index - Index of target to check
-      -- Amount       - Amount for goal to modify if both checks are valid
-      -- SOURCE
+   -- ****f* Goals/Goals.Update_Goal
+   -- FUNCTION
+   -- Update current goal
+   -- PARAMETERS
+   -- G_Type       - Type of goal to check
+   -- Target_Index - Index of target to check
+   -- Amount       - Amount for goal to modify if both checks are valid
+   -- SOURCE
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1);
