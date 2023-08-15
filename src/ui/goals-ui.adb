@@ -157,11 +157,13 @@ package body Goals.UI is
       Clear_Current_Goal;
       if Selected_Goal > 0 then
          Current_Goal := Goals_List(Selected_Goal);
+         Get_Current_Goal;
       elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
          Current_Goal :=
            Goals_List
              (Get_Random
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
+         Get_Current_Goal;
       end if;
       if Selected_Goal > 0 then
          Button_Text :=
