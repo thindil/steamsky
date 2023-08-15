@@ -135,5 +135,6 @@ package Goals is
 -- Temporary code to interact with Nim
 
    procedure Get_Current_Goal;
+   function Get_Current_Goal return Goal_Data;
 
 end Goals;

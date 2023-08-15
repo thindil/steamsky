@@ -130,4 +130,15 @@ package body Goals is
          Multiplier => Nim_Goal.Multiplier);
    end Update_Goal;
 
+   function Get_Current_Goal return Goal_Data is
+      Nim_Goal: Nim_Goal_Data;
+   begin
+      Set_Ada_Current_Goal(Goal => Nim_Goal);
+      return (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
+         Target_Index =>
+           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
+         Multiplier => Nim_Goal.Multiplier);
+   end Get_Current_Goal;
+
 end Goals;
