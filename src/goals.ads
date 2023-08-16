@@ -133,7 +133,7 @@ package Goals is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Current_Goal;
+   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index := 0);
    function Get_Current_Goal return Goal_Data;
 
 end Goals;

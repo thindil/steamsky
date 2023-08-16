@@ -68,14 +68,15 @@ package body Goals is
       return Value(Item => Goal_Ada_Text(I => Index));
    end Goal_Text;
 
-   procedure Get_Current_Goal is
+   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index := 0) is
+      Goal: constant Goal_Data :=
+        (if Index = 0 then Current_Goal else Goals_List(Index));
       Nim_Goal: constant Nim_Goal_Data :=
-        (Index => New_String(Str => To_String(Source => Current_Goal.Index)),
-         G_Type => Goal_Types'Pos(Current_Goal.G_Type),
-         Amount => Current_Goal.Amount,
+        (Index => New_String(Str => To_String(Source => Goal.Index)),
+         G_Type => Goal_Types'Pos(Goal.G_Type), Amount => Goal.Amount,
          Target_Index =>
-           New_String(Str => To_String(Source => Current_Goal.Target_Index)),
-         Multiplier => Current_Goal.Multiplier);
+           New_String(Str => To_String(Source => Goal.Target_Index)),
+         Multiplier => Goal.Multiplier);
       procedure Get_Ada_Current_Goal(Goal: Nim_Goal_Data) with
          Import => True,
          Convention => C,
@@ -134,7 +135,8 @@ package body Goals is
       Nim_Goal: Nim_Goal_Data;
    begin
       Set_Ada_Current_Goal(Goal => Nim_Goal);
-      return (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+      return
+        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
          G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
          Target_Index =>
            To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
