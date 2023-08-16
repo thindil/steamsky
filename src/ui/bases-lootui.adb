@@ -146,12 +146,16 @@ package body Bases.LootUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Current_Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
       Base_Cargo_Index, Base_Amount: Natural := 0;
+      --## rule off IMPROPER_INITIALIZATION
       Indexes_List: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 1 then "{" & CArgv.Arg(Argv => Argv, N => 1) & "}"
@@ -337,6 +341,7 @@ package body Bases.LootUI is
       Current_Item_Index :=
         Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) +
         2;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Fill_Types_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
@@ -358,6 +363,7 @@ package body Bases.LootUI is
                New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
       end loop Fill_Types_Base_Cargo_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Add_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Add_Base_Cargo_Loop when Loot_Table.Row =
@@ -854,6 +860,7 @@ package body Bases.LootUI is
            (if CArgv.Arg(Argv => Argv, N => 1) = "take" then
               Positive'Value(Get(Widgt => Amount_Box))
             else Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          if Free_Cargo
              (Amount =>
                 0 - (Amount * Get_Proto_Item(Index => Proto_Index).Weight)) <
@@ -867,6 +874,7 @@ package body Bases.LootUI is
                Title => "Too much taken");
             return TCL_OK;
          end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          if Cargo_Index > 0 then
             Update_Cargo
               (Ship => Player_Ship, Cargo_Index => Cargo_Index,
