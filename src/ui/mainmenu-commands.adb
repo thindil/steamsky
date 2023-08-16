@@ -1053,9 +1053,8 @@ package body MainMenu.Commands is
         Tcl_GetVar(interp => Interp, varName => "playergender")(1);
       if cget(Widgt => Goal_Button, option => "-text") = "Random" then
          Clear_Current_Goal;
-         Current_Goal :=
-           Goals_List
-             (Get_Random
+         Get_Current_Goal(Index =>
+             Get_Random
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       New_Game_Settings.Player_Name :=

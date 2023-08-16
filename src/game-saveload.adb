@@ -27,7 +27,6 @@ with Bases.SaveLoad;
 with Config;
 with Crafts;
 with Events;
-with Goals;
 with Log;
 with Maps; use Maps;
 with Messages;
@@ -45,8 +44,6 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
-      use Goals;
-
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,
          Convention => C,
@@ -70,7 +67,6 @@ package body Game.SaveLoad is
                Mission_Index => Sky_Map(X, Y).Mission_Index);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
-      Get_Current_Goal;
       Get_Current_Story;
       Get_Finished_Stories_Loop :
       for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop

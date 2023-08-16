@@ -68,9 +68,8 @@ package body Goals is
       return Value(Item => Goal_Ada_Text(I => Index));
    end Goal_Text;
 
-   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index := 0) is
-      Goal: constant Goal_Data :=
-        (if Index = 0 then Current_Goal else Goals_List(Index));
+   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index) is
+      Goal: constant Goal_Data := Goals_List(Index);
       Nim_Goal: constant Nim_Goal_Data :=
         (Index => New_String(Str => To_String(Source => Goal.Index)),
          G_Type => Goal_Types'Pos(Goal.G_Type), Amount => Goal.Amount,
@@ -91,44 +90,27 @@ package body Goals is
       External_Name => "setAdaCurrentGoal";
 
    procedure Clear_Current_Goal is
-      Nim_Goal: Nim_Goal_Data;
       procedure Clear_Ada_Current_Goal with
          Import => True,
          Convention => C,
          External_Name => "clearAdaCurrentGoal";
    begin
       Clear_Ada_Current_Goal;
-      Set_Ada_Current_Goal(Goal => Nim_Goal);
-      Current_Goal :=
-        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
-         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
-         Target_Index =>
-           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
-         Multiplier => Nim_Goal.Multiplier);
    end Clear_Current_Goal;
 
    procedure Update_Goal
      (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
-      Nim_Goal: Nim_Goal_Data;
       procedure Update_Ada_Goal
         (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaGoal";
    begin
-      Get_Current_Goal;
       Update_Ada_Goal
         (Goal_Type => Goal_Types'Pos(G_Type),
          Target => New_String(Str => To_String(Source => Target_Index)),
          A => Amount);
-      Set_Ada_Current_Goal(Goal => Nim_Goal);
-      Current_Goal :=
-        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
-         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
-         Target_Index =>
-           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
-         Multiplier => Nim_Goal.Multiplier);
    end Update_Goal;
 
    function Get_Current_Goal return Goal_Data is

@@ -109,7 +109,6 @@ package body Game is
                   Mission_Index => Sky_Map(X, Y).Mission_Index);
             end loop Get_Map_X_Loop;
          end loop Get_Map_Y_Loop;
-         Get_Current_Goal;
          Get_Current_Story;
          Get_Finished_Stories_Loop :
          for I in

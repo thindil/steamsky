@@ -1887,7 +1887,7 @@ package body Combat is
            (G_Type => DESTROY,
             Target_Index =>
               To_Unbounded_String(Source => Enemy_Ship_Index'Img));
-         if Current_Goal.Target_Index /= Null_Unbounded_String then
+         if Get_Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (G_Type => DESTROY,
                Target_Index =>
