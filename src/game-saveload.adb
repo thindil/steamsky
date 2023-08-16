@@ -27,7 +27,7 @@ with Bases.SaveLoad;
 with Config;
 with Crafts;
 with Events;
-with Goals; use Goals;
+with Goals;
 with Log;
 with Maps; use Maps;
 with Messages;
@@ -45,6 +45,8 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
+      use Goals;
+
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,
          Convention => C,
