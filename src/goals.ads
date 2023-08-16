@@ -83,13 +83,6 @@ package Goals is
    Goals_List: Goals_Container.Vector;
    -- ****
 
-   -- ****v* Goals/Goals.Current_Goal
-   -- FUNCTION
-   -- Player current goal
-   -- SOURCE
-   Current_Goal: Goal_Data;
-   -- ****
-
    -- ****f* Goals/Goals.Load_Goals
    -- FUNCTION
    -- Load player goals from files
@@ -133,7 +126,7 @@ package Goals is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index := 0);
+   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index);
    function Get_Current_Goal return Goal_Data;
 
 end Goals;
