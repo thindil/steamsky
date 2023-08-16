@@ -693,7 +693,7 @@ package body Maps.UI is
             if Sky_Bases(Base_Index).Known then
                Insert_Text
                  (New_Text => LF & "Base info:",
-                  Tag_Name => To_Unbounded_String(Source => "pink"));
+                  Tag_Name => To_Unbounded_String(Source => "pink underline"));
                Insert_Text
                  (New_Text =>
                     LF & "Name: " &
