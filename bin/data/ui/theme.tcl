@@ -378,7 +378,8 @@ namespace eval ttk::theme::steamsky {
          -cyan $colors(-cyan) -lime $colors(-lime) \
          -red2 $colors(-darkcandyapple) -red3 $colors(-darkred2) \
          -green2 $colors(-lightgreen) -gray $colors(-darkgray) \
-         -black $colors(-black) -pink $colors(-pink)
+         -black $colors(-black) -pink $colors(-pink) \
+         -goldenyellow $colors(-goldenyellow)
 
       # Dialogs (like messages, move map options, etc)
       ttk::style configure Dialog.TFrame -relief solid \
