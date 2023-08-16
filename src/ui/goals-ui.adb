@@ -158,8 +158,9 @@ package body Goals.UI is
       if Selected_Goal > 0 then
          Get_Current_Goal(Index => Selected_Goal);
       elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
-         Get_Current_Goal(Index =>
-             Get_Random
+         Get_Current_Goal
+           (Index =>
+              Get_Random
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       if Selected_Goal > 0 then

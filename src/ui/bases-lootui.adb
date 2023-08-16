@@ -213,7 +213,8 @@ package body Bases.LootUI is
          Add_Base_Indexes_Loop :
          for I in
            BaseCargo_Container.First_Index(Container => Current_Base_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Current_Base_Cargo) loop
+             BaseCargo_Container.Last_Index
+               (Container => Current_Base_Cargo) loop
             Items_Indexes.Append(New_Item => I);
          end loop Add_Base_Indexes_Loop;
       end if;
