@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
 
 -- ****h* Goals/Goals
 -- FUNCTION
@@ -68,21 +67,6 @@ package Goals is
    Empty_Goal: constant Goal_Data := (others => <>);
    -- ****
 
-   -- ****t* Goals/Goals.Goals_Container
-   -- FUNCTION
-   -- Used to store goals data
-   -- SOURCE
-   package Goals_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Goal_Data);
-   -- ****
-
-   -- ****v* Goals/Goals.Goals_List
-   -- FUNCTION
-   -- List of player goals available in game
-   -- SOURCE
-   Goals_List: Goals_Container.Vector;
-   -- ****
-
    -- ****f* Goals/Goals.Load_Goals
    -- FUNCTION
    -- Load player goals from files
@@ -99,7 +83,7 @@ package Goals is
    -- RESULT
    -- Info about selected goal
    -- SOURCE
-   function Goal_Text(Index: Goals_Container.Extended_Index) return String with
+   function Goal_Text(Index: Natural) return String with
       Post => Goal_Text'Result'Length > 0;
       -- ****
 
@@ -125,7 +109,7 @@ package Goals is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index);
+   procedure Get_Current_Goal(Index: Positive);
    function Get_Current_Goal return Goal_Data;
    function Get_Goals_Amount return Positive with
       Import => True,
