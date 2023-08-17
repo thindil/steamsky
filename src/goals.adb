@@ -124,4 +124,25 @@ package body Goals is
          Multiplier => Nim_Goal.Multiplier);
    end Get_Current_Goal;
 
+   function Get_Goal(Index: Positive) return Goal_Data is
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Goal: Nim_Goal_Data;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Ada_Goal(I: Natural; Goal: out Nim_Goal_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGoal";
+   begin
+      Get_Ada_Goal(I => Index, Goal => Nim_Goal);
+      return (Index =>
+                    To_Unbounded_String
+                      (Source => Value(Item => Nim_Goal.Index)),
+                  G_Type => Goal_Types'Val(Nim_Goal.G_Type),
+                  Amount => Nim_Goal.Amount,
+                  Target_Index =>
+                    To_Unbounded_String
+                      (Source => Value(Item => Nim_Goal.Target_Index)),
+                  Multiplier => Nim_Goal.Multiplier);
+   end Get_Goal;
+
 end Goals;

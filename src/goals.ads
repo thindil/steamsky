@@ -100,7 +100,6 @@ package Goals is
    -- Info about selected goal
    -- SOURCE
    function Goal_Text(Index: Goals_Container.Extended_Index) return String with
-      Pre => Index <= Goals_List.Last_Index,
       Post => Goal_Text'Result'Length > 0;
       -- ****
 
@@ -132,5 +131,6 @@ package Goals is
       Import => True,
       Convention => C,
       External_Name => "getAdaGoalsAmount";
+   function Get_Goal(Index: Positive) return Goal_Data;
 
 end Goals;
