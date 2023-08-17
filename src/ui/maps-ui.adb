@@ -652,8 +652,14 @@ package body Maps.UI is
    begin
       configure(Widgt => Map_Info, options => "-state normal");
       Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
+      Insert_Text(New_Text => "X:");
       Insert_Text
-        (New_Text => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+        (New_Text => Positive'Image(X),
+         Tag_Name => To_Unbounded_String(Source => "yellow2"));
+      Insert_Text(" Y:");
+      Insert_Text
+        (Positive'Image(Y),
+         Tag_Name => To_Unbounded_String(Source => "yellow2"));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          Add_Distance_Info_Block :
          declare
@@ -662,10 +668,10 @@ package body Maps.UI is
             Distance_Text: Unbounded_String;
             New_Line_Index: Positive;
          begin
-            Distance_Text :=
-              To_Unbounded_String
-                (Source => LF & "Distance:" & Positive'Image(Distance));
-            Insert_Text(New_Text => To_String(Source => Distance_Text));
+            Insert_Text(New_Text => LF & "Distance:");
+            Insert_Text
+              (New_Text => Positive'Image(Distance),
+               Tag_Name => To_Unbounded_String(Source => "yellow2"));
             Distance_Text := Null_Unbounded_String;
             Travel_Info(Info_Text => Distance_Text, Distance => Distance);
             New_Line_Index :=
@@ -694,11 +700,12 @@ package body Maps.UI is
                Insert_Text
                  (New_Text => LF & "Base info:",
                   Tag_Name => To_Unbounded_String(Source => "pink underline"));
+               Insert_Text(New_Text => LF & "Name: ");
                Insert_Text
                  (New_Text =>
-                    LF & "Name: " &
                     Tiny_String.To_String
-                      (Source => Sky_Bases(Base_Index).Name));
+                      (Source => Sky_Bases(Base_Index).Name),
+                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
             end if;
             if Sky_Bases(Base_Index).Visited.Year > 0 then
                Tag_Configure
@@ -714,44 +721,42 @@ package body Maps.UI is
                       (Base_Type => Sky_Bases(Base_Index).Base_Type),
                   Tag_Name => To_Unbounded_String(Source => "basetype"));
                if Sky_Bases(Base_Index).Population > 0 then
-                  Base_Info_Text := To_Unbounded_String(Source => "" & LF);
+                  Insert_Text(New_Text => LF & "Population: ");
                end if;
                if Sky_Bases(Base_Index).Population > 0 and
                  Sky_Bases(Base_Index).Population < 150 then
-                  Append
-                    (Source => Base_Info_Text,
-                     New_Item => "Population: small");
+                  Insert_Text
+                    (New_Text => "small",
+                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
                elsif Sky_Bases(Base_Index).Population > 149 and
                  Sky_Bases(Base_Index).Population < 300 then
-                  Append
-                    (Source => Base_Info_Text,
-                     New_Item => "Population: medium");
+                  Insert_Text
+                    (New_Text => "medium",
+                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
                elsif Sky_Bases(Base_Index).Population > 299 then
-                  Append
-                    (Source => Base_Info_Text,
-                     New_Item => "Population: large");
+                  Insert_Text
+                    (New_Text => "large",
+                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
                end if;
-               Insert_Text(New_Text => To_String(Source => Base_Info_Text));
+               Insert_Text(New_Text => LF & "Size: ");
                Insert_Text
                  (New_Text =>
-                    LF & "Size: " &
                     To_Lower
                       (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
-                    LF);
+                    LF,
+                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
                if Sky_Bases(Base_Index).Population > 0 then
-                  Base_Info_Text :=
-                    To_Unbounded_String
-                      (Source =>
-                         "Owner: " &
-                         Tiny_String.To_String
-                           (Source =>
-                              Get_Faction(Index => Sky_Bases(Base_Index).Owner)
-                                .Name));
+                  Insert_Text(New_Text => "Owner: ");
+                  Insert_Text
+                    (New_Text =>
+                       Tiny_String.To_String
+                         (Source =>
+                            Get_Faction(Index => Sky_Bases(Base_Index).Owner)
+                              .Name),
+                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
                else
-                  Base_Info_Text :=
-                    To_Unbounded_String(Source => "Base is abandoned");
+                  Insert_Text(New_Text => "Base is abandoned");
                end if;
-               Insert_Text(New_Text => To_String(Source => Base_Info_Text));
                if Sky_Bases(Base_Index).Population > 0 then
                   Base_Info_Text := To_Unbounded_String(Source => "" & LF);
                   case Sky_Bases(Base_Index).Reputation.Level is
