@@ -74,6 +74,7 @@ package body Goals.UI is
           (pathName => Goals_Dialog & ".selectbutton", Interp => Interp);
       Dialog_Header: constant Ttk_Label :=
         Get_Widget(pathName => Goals_Dialog & ".header", Interp => Interp);
+      Goal: Goal_Data;
    begin
       Tcl_EvalFile
         (interp => Interp,
@@ -81,20 +82,23 @@ package body Goals.UI is
            To_String(Source => Data_Directory) & "ui" & Dir_Separator &
            "goals.tcl");
       Load_Goals_Loop :
-      for I in Goals_List.Iterate loop
-         Insert
-           (TreeViewWidget => Goals_View,
-            Options =>
-              Goal_Types'Image(Goals_List(I).G_Type) & " end -id {" &
-              Trim
-                (Source =>
-                   Positive'Image(Goals_Container.To_Index(Position => I)),
-                 Side => Left) &
-              "} -text {" &
-              Goal_Text
-                (Index =>
-                   Natural'Value(To_String(Source => Goals_List(I).Index))) &
-              "}");
+      for I in 1 .. 256 loop
+         Goal := Get_Goal(Index => I);
+         if Length(Source => Goal.Index) > 0 then
+            Insert
+              (TreeViewWidget => Goals_View,
+               Options =>
+                 Goal_Types'Image(Goal.G_Type) & " end -id {" &
+                 Trim
+                   (Source =>
+                      Positive'Image(I),
+                    Side => Left) &
+                 "} -text {" &
+                 Goal_Text
+                   (Index =>
+                      Natural'Value(To_String(Source => Goal.Index))) &
+                 "}");
+         end if;
       end loop Load_Goals_Loop;
       configure
         (Widgt => Select_Button,
@@ -161,7 +165,7 @@ package body Goals.UI is
          Get_Current_Goal
            (Index =>
               Get_Random
-                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
+                (Min => 1, Max => Get_Goals_Amount));
       end if;
       if Selected_Goal > 0 then
          Button_Text :=

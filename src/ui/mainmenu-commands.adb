@@ -1056,7 +1056,7 @@ package body MainMenu.Commands is
          Get_Current_Goal
            (Index =>
               Get_Random
-                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
+                (Min => 1, Max => Get_Goals_Amount));
       end if;
       New_Game_Settings.Player_Name :=
         To_Unbounded_String(Source => Get(Widgt => Text_Entry));

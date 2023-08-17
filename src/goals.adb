@@ -30,36 +30,11 @@ package body Goals is
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Load_Goals is
-      use Interfaces.C;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Goal: Nim_Goal_Data;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Ada_Goal(Index: Natural; Goal: out Nim_Goal_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGoal";
    begin
-      Load_Goals_Loop :
-      for I in 1 .. 256 loop
-         Get_Ada_Goal(Index => I, Goal => Nim_Goal);
-         if Strlen(Item => Nim_Goal.Index) > 0 then
-            Goals_List.Append
-              (New_Item =>
-                 (Index =>
-                    To_Unbounded_String
-                      (Source => Value(Item => Nim_Goal.Index)),
-                  G_Type => Goal_Types'Val(Nim_Goal.G_Type),
-                  Amount => Nim_Goal.Amount,
-                  Target_Index =>
-                    To_Unbounded_String
-                      (Source => Value(Item => Nim_Goal.Target_Index)),
-                  Multiplier => Nim_Goal.Multiplier));
-         end if;
-      end loop Load_Goals_Loop;
+      null;
    end Load_Goals;
 
-   function Goal_Text(Index: Goals_Container.Extended_Index) return String is
+   function Goal_Text(Index: Natural) return String is
       function Goal_Ada_Text(I: Natural) return chars_ptr with
          Import => True,
          Convention => C,
@@ -68,20 +43,9 @@ package body Goals is
       return Value(Item => Goal_Ada_Text(I => Index));
    end Goal_Text;
 
-   procedure Get_Current_Goal(Index: Goals_Container.Extended_Index) is
-      Goal: constant Goal_Data := Goals_List(Index);
-      Nim_Goal: constant Nim_Goal_Data :=
-        (Index => New_String(Str => To_String(Source => Goal.Index)),
-         G_Type => Goal_Types'Pos(Goal.G_Type), Amount => Goal.Amount,
-         Target_Index =>
-           New_String(Str => To_String(Source => Goal.Target_Index)),
-         Multiplier => Goal.Multiplier);
-      procedure Get_Ada_Current_Goal(G: Nim_Goal_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaCurrentGoal";
+   procedure Get_Current_Goal(Index: Positive) is
    begin
-      Get_Ada_Current_Goal(G => Nim_Goal);
+      null;
    end Get_Current_Goal;
 
    procedure Clear_Current_Goal is
@@ -125,6 +89,8 @@ package body Goals is
    end Get_Current_Goal;
 
    function Get_Goal(Index: Positive) return Goal_Data is
+      use Interfaces.C;
+
       --## rule off IMPROPER_INITIALIZATION
       Nim_Goal: Nim_Goal_Data;
       --## rule on IMPROPER_INITIALIZATION
@@ -134,6 +100,9 @@ package body Goals is
          External_Name => "getAdaGoal";
    begin
       Get_Ada_Goal(I => Index, Goal => Nim_Goal);
+      if Strlen(Item => Nim_Goal.Index) = 0 then
+         return Empty_Goal;
+      end if;
       return (Index =>
                     To_Unbounded_String
                       (Source => Value(Item => Nim_Goal.Index)),

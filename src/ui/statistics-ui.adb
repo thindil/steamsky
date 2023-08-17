@@ -428,9 +428,9 @@ package body Statistics.UI is
          Show_Finished_Goals_Loop :
          for I of Goals_Indexes loop
             Get_Proto_Goal_Loop :
-            for J in Goals_List.Iterate loop
-               if Goals_List(J).Index = Stats_List(I).Index then
-                  Proto_Index := Goals_Container.To_Index(Position => J);
+            for J in 1 .. 256 loop
+               if Get_Goal(Index => J).Index = Stats_List(I).Index then
+                  Proto_Index := J;
                   exit Get_Proto_Goal_Loop;
                end if;
             end loop Get_Proto_Goal_Loop;
@@ -960,9 +960,9 @@ package body Statistics.UI is
       Fill_Local_Goals_Loop :
       for I in Finished_Goals.Iterate loop
          Get_Proto_Goal_Loop :
-         for J in Goals_List.Iterate loop
-            if Goals_List(J).Index = Finished_Goals(I).Index then
-               Proto_Index := Goals_Container.To_Index(Position => J);
+         for J in 1 .. 256 loop
+            if Get_Goal(Index => J).Index = Finished_Goals(I).Index then
+               Proto_Index := J;
                exit Get_Proto_Goal_Loop;
             end if;
          end loop Get_Proto_Goal_Loop;
