@@ -76,18 +76,13 @@ package body Goals is
          Target_Index =>
            New_String(Str => To_String(Source => Goal.Target_Index)),
          Multiplier => Goal.Multiplier);
-      procedure Get_Ada_Current_Goal(Goal: Nim_Goal_Data) with
+      procedure Get_Ada_Current_Goal(G: Nim_Goal_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaCurrentGoal";
    begin
-      Get_Ada_Current_Goal(Goal => Nim_Goal);
+      Get_Ada_Current_Goal(G => Nim_Goal);
    end Get_Current_Goal;
-
-   procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaCurrentGoal";
 
    procedure Clear_Current_Goal is
       procedure Clear_Ada_Current_Goal with
@@ -115,6 +110,10 @@ package body Goals is
 
    function Get_Current_Goal return Goal_Data is
       Nim_Goal: Nim_Goal_Data;
+      procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaCurrentGoal";
    begin
       Set_Ada_Current_Goal(Goal => Nim_Goal);
       return
