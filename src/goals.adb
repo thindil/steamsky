@@ -29,11 +29,6 @@ package body Goals is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Load_Goals is
-   begin
-      null;
-   end Load_Goals;
-
    function Goal_Text(Index: Natural) return String is
       function Goal_Ada_Text(I: Natural) return chars_ptr with
          Import => True,
@@ -42,11 +37,6 @@ package body Goals is
    begin
       return Value(Item => Goal_Ada_Text(I => Index));
    end Goal_Text;
-
-   procedure Get_Current_Goal(Index: Positive) is
-   begin
-      null;
-   end Get_Current_Goal;
 
    procedure Clear_Current_Goal is
       procedure Clear_Ada_Current_Goal with

@@ -67,13 +67,6 @@ package Goals is
    Empty_Goal: constant Goal_Data := (others => <>);
    -- ****
 
-   -- ****f* Goals/Goals.Load_Goals
-   -- FUNCTION
-   -- Load player goals from files
-   -- SOURCE
-   procedure Load_Goals;
-   -- ****
-
    -- ****f* Goals/Goals.Goal_Text
    -- FUNCTION
    -- Get info about selected goal
@@ -109,7 +102,6 @@ package Goals is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Current_Goal(Index: Positive);
    function Get_Current_Goal return Goal_Data;
    function Get_Goals_Amount return Positive with
       Import => True,
