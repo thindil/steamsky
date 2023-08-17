@@ -534,6 +534,18 @@ package body Bases.LootUI is
    Item_Index: Integer;
    -- ****
 
+   -- ****if* LUI/LUI.Get_Item_Index
+   -- FUNCTION
+   -- Get the index of the currently selected item
+   -- RESULT
+   -- The index of the currently selected item
+   -- SOURCE
+   function Get_Item_Index return Integer is
+      -- ****
+   begin
+      return Item_Index;
+   end Get_Item_Index;
+
    -- ****o* LUI/LUI.Show_Trade_Loot_Info_Command
    -- FUNCTION
    -- Show information about the selected item
@@ -571,10 +583,10 @@ package body Bases.LootUI is
          5 => Legs_Armor, 6 => Shield_Type);
    begin
       Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
-      if Item_Index < 0 then
-         Base_Cargo_Index := abs Item_Index;
+      if Get_Item_Index < 0 then
+         Base_Cargo_Index := abs Get_Item_Index;
       else
-         Cargo_Index := Item_Index;
+         Cargo_Index := Get_Item_Index;
       end if;
       if Cargo_Index >
         Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) or
@@ -801,10 +813,10 @@ package body Bases.LootUI is
           (pathName => Main_Paned & ".lootframe.canvas.loot.options.type",
            Interp => Interp);
    begin
-      if Item_Index < 0 then
-         Base_Cargo_Index := abs Item_Index;
+      if Get_Item_Index < 0 then
+         Base_Cargo_Index := abs Get_Item_Index;
       else
-         Cargo_Index := Item_Index;
+         Cargo_Index := Get_Item_Index;
       end if;
       if Cargo_Index > 0 then
          Proto_Index :=
@@ -962,20 +974,22 @@ package body Bases.LootUI is
               Get_Item_Name
                 (Item =>
                    Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)),
+                     (Container => Player_Ship.Cargo,
+                      Index => Get_Item_Index)),
             Command => "LootItem drop", Action => "drop",
-            Item_Index => Item_Index);
+            Item_Index => Get_Item_Index);
       else
-         if Item_Index > 0 then
+         if Get_Item_Index > 0 then
             Show_Manipulate_Item
               (Title =>
                  "Take " &
                  Get_Item_Name
                    (Item =>
                       Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => Item_Index)),
+                        (Container => Player_Ship.Cargo,
+                         Index => Get_Item_Index)),
                Command => "LootItem take", Action => "take",
-               Item_Index => Item_Index,
+               Item_Index => Get_Item_Index,
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          else
             Show_Manipulate_Item
@@ -987,11 +1001,11 @@ package body Bases.LootUI is
                         (Index =>
                            BaseCargo_Container.Element
                              (Container => Sky_Bases(Base_Index).Cargo,
-                              Index => abs (Item_Index))
+                              Index => abs (Get_Item_Index))
                              .Proto_Index)
                         .Name),
                Command => "LootItem take", Action => "take",
-               Item_Index => abs (Item_Index),
+               Item_Index => abs (Get_Item_Index),
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          end if;
       end if;
