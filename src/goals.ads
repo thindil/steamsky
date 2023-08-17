@@ -108,5 +108,9 @@ package Goals is
       Convention => C,
       External_Name => "getAdaGoalsAmount";
    function Get_Goal(Index: Positive) return Goal_Data;
+   procedure Set_Current_Goal(Index: Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaCurrentGoal2";
 
 end Goals;
