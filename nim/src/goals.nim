@@ -306,3 +306,6 @@ proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc.} =
     return goalText(index = index).cstring
   except KeyError:
     return ""
+
+proc getAdaGoalsAmount(): cint {.raises: [], tags: [], exportc.} =
+  return goalsList.len.cint

@@ -128,5 +128,9 @@ package Goals is
 
    procedure Get_Current_Goal(Index: Goals_Container.Extended_Index);
    function Get_Current_Goal return Goal_Data;
+   function Get_Goals_Amount return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaGoalsAmount";
 
 end Goals;
