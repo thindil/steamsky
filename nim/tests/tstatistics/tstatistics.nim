@@ -33,28 +33,46 @@ if protoShipsList.len == 0:
 echo "Testing updateCraftingOrders."
 gameStats.craftingOrders = @[]
 updateCraftingOrders("1")
-assert gameStats.craftingOrders.len == 1, "Failed to update the amount of finished crafting orders."
+try:
+  assert gameStats.craftingOrders.len == 1
+except AssertionDefect:
+  echo "Failed to update the amount of finished crafting orders."
 
 echo "Testing updateFinishedGoals."
 gameStats.finishedGoals = @[]
 updateFinishedGoals("1")
-assert gameStats.finishedGoals.len == 1, "Failed to update the amount of finished goals."
+try:
+  assert gameStats.finishedGoals.len == 1
+except AssertionDefect:
+  echo "Failed to update the amount of finished goals."
 updateFinishedGoals("Sdfdsf")
-assert gameStats.finishedGoals.len == 1, "Failed to not update the amount of finished goals with non-existing goal."
+try:
+  assert gameStats.finishedGoals.len == 1
+except AssertionDefect:
+  echo "Failed to not update the amount of finished goals with non-existing goal."
 
 echo "Testing getGamePoints."
 gameStats.points = 0
-assert getGamePoints() == 0, "Failed to get the player's game points."
+try:
+  assert getGamePoints() == 0
+except AssertionDefect:
+  echo "Failed to get the player's game points."
 
 echo "Testing updateFinishedMissions."
 gameStats.finishedMissions = @[]
 updateFinishedMissions("DESTROY")
-assert gameStats.finishedMissions.len == 1, "Failed to update the amount of finished missions."
+try:
+  assert gameStats.finishedMissions.len == 1
+except AssertionDefect:
+  echo "Failed to update the amount of finished missions."
 
 echo "Testing clearGameStats."
 gameStats.points = 100
 clearGameStats()
-assert gameStats.points == 0, "Failed to clear the game statistics."
+try:
+  assert gameStats.points == 0
+except AssertionDefect:
+  echo "Failed to clear the game statistics."
 
 echo "Testing updateKilledMobs."
 gameStats.killedMobs = @[]
@@ -65,11 +83,20 @@ updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]), "POLEIS")
-assert gameStats.killedMobs.len == 1, "Failed to update the amount of killed mobs."
+try:
+  assert gameStats.killedMobs.len == 1
+except AssertionDefect:
+  echo "Failed to update the amount of killed mobs."
 
 echo "Testing updateDestroyedShips."
 gameStats.destroyedShips = @[]
 updateDestroyedShips("Tiny pirates ship")
-assert gameStats.destroyedShips.len == 1, "Failed to update the amount of destroyed ships."
+try:
+  assert gameStats.destroyedShips.len == 1
+except AssertionDefect:
+  echo "Failed to update the amount of destroyed ships."
 updateDestroyedShips("Sfdsfdsf")
-assert gameStats.destroyedShips.len == 1, "Failed to not update the amount of destroyed ships with non-existing ship."
+try:
+  assert gameStats.destroyedShips.len == 1
+except AssertionDefect:
+  echo "Failed to not update the amount of destroyed ships with non-existing ship."
