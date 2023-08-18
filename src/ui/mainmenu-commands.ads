@@ -13,9 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+--## rule off REDUCEABLE_SCOPE
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
+--## rule on REDUCEABLE_SCOPE
 
 -- ****h* MainMenu/MCommands
 -- FUNCTION
