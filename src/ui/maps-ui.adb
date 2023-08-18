@@ -656,9 +656,9 @@ package body Maps.UI is
       Insert_Text
         (New_Text => Positive'Image(X),
          Tag_Name => To_Unbounded_String(Source => "yellow2"));
-      Insert_Text(" Y:");
+      Insert_Text(New_Text => " Y:");
       Insert_Text
-        (Positive'Image(Y),
+        (New_Text => Positive'Image(Y),
          Tag_Name => To_Unbounded_String(Source => "yellow2"));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          Add_Distance_Info_Block :
