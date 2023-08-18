@@ -309,3 +309,9 @@ proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc.} =
 
 proc getAdaGoalsAmount(): cint {.raises: [], tags: [], exportc.} =
   return goalsList.len.cint
+
+proc setAdaCurrentGoal2(index: cint) {.raises: [], tags: [], exportc.} =
+  for goal in goalsList.values:
+    if goal.index == $index:
+      currentGoal = goal
+      break
