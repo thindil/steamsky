@@ -322,7 +322,6 @@ package body Game is
       end if;
       Result := Load_Ada_Game_Data;
       Load_Data;
-      Load_Goals;
       Load_Bases_Types;
       Load_Stories;
       return Value(Item => Result);

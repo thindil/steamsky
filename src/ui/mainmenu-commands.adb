@@ -1053,7 +1053,7 @@ package body MainMenu.Commands is
         Tcl_GetVar(interp => Interp, varName => "playergender")(1);
       if cget(Widgt => Goal_Button, option => "-text") = "Random" then
          Clear_Current_Goal;
-         Get_Current_Goal
+         Set_Current_Goal
            (Index =>
               Get_Random
                 (Min => 1, Max => Get_Goals_Amount));

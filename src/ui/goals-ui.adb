@@ -58,7 +58,6 @@ package body Goals.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -88,11 +87,8 @@ package body Goals.UI is
             Insert
               (TreeViewWidget => Goals_View,
                Options =>
-                 Goal_Types'Image(Goal.G_Type) & " end -id {" &
-                 Trim
-                   (Source =>
-                      Positive'Image(I),
-                    Side => Left) &
+                 Goal_Types'Image(Goal.G_Type) & " end -id {" & To_String(Source => Goal.Index)
+                  &
                  "} -text {" &
                  Goal_Text
                    (Index =>
@@ -160,9 +156,9 @@ package body Goals.UI is
       Selected_Goal := Natural'Value(Selection(TreeViewWidget => Goals_View));
       Clear_Current_Goal;
       if Selected_Goal > 0 then
-         Get_Current_Goal(Index => Selected_Goal);
+         Set_Current_Goal(Index => Selected_Goal);
       elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
-         Get_Current_Goal
+         Set_Current_Goal
            (Index =>
               Get_Random
                 (Min => 1, Max => Get_Goals_Amount));
