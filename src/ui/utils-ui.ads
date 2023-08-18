@@ -125,10 +125,12 @@ package Utils.UI is
    -- FUNCTION
    -- Count the ETA and fuel usage for the selected distance
    -- PARAMETERS
-   -- Distance       - Distance in map fields to destination point
+   -- Distance - Distance in map fields to destination point
    -- RESULT
    -- The array with two values, the first is estimated time to travel the
    -- distance, the second is the amount of fuel needed to travel the distance.
+   -- HISTORY
+   -- 9.1 - Changed into function and removed parameters
    -- SOURCE
    function Travel_Info(Distance: Positive) return Travel_Array;
    -- ****
