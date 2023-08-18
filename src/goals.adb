@@ -93,15 +93,12 @@ package body Goals is
       if Strlen(Item => Nim_Goal.Index) = 0 then
          return Empty_Goal;
       end if;
-      return (Index =>
-                    To_Unbounded_String
-                      (Source => Value(Item => Nim_Goal.Index)),
-                  G_Type => Goal_Types'Val(Nim_Goal.G_Type),
-                  Amount => Nim_Goal.Amount,
-                  Target_Index =>
-                    To_Unbounded_String
-                      (Source => Value(Item => Nim_Goal.Target_Index)),
-                  Multiplier => Nim_Goal.Multiplier);
+      return
+        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
+         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
+         Target_Index =>
+           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
+         Multiplier => Nim_Goal.Multiplier);
    end Get_Goal;
 
 end Goals;

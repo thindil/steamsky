@@ -87,12 +87,10 @@ package body Goals.UI is
             Insert
               (TreeViewWidget => Goals_View,
                Options =>
-                 Goal_Types'Image(Goal.G_Type) & " end -id {" & To_String(Source => Goal.Index)
-                  &
-                 "} -text {" &
+                 Goal_Types'Image(Goal.G_Type) & " end -id {" &
+                 To_String(Source => Goal.Index) & "} -text {" &
                  Goal_Text
-                   (Index =>
-                      Natural'Value(To_String(Source => Goal.Index))) &
+                   (Index => Natural'Value(To_String(Source => Goal.Index))) &
                  "}");
          end if;
       end loop Load_Goals_Loop;
@@ -159,9 +157,7 @@ package body Goals.UI is
          Set_Current_Goal(Index => Selected_Goal);
       elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
          Set_Current_Goal
-           (Index =>
-              Get_Random
-                (Min => 1, Max => Get_Goals_Amount));
+           (Index => Get_Random(Min => 1, Max => Get_Goals_Amount));
       end if;
       if Selected_Goal > 0 then
          Button_Text :=

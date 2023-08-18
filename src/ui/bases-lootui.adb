@@ -856,8 +856,7 @@ package body Bases.LootUI is
                    .Durability);
          end if;
          Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => Cargo_Index,
-            Amount => -Amount,
+           (Ship => Player_Ship, Cargo_Index => Cargo_Index, Amount => -Amount,
             Durability =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Cargo_Index)
@@ -1188,7 +1187,8 @@ package body Bases.LootUI is
                Available =>
                  (if Base_Cargo_Index > 0 then
                     BaseCargo_Container.Element
-                      (Container => Local_Base_Cargo, Index => Base_Cargo_Index)
+                      (Container => Local_Base_Cargo,
+                       Index => Base_Cargo_Index)
                       .Amount
                   else 0),
                Id => I));
@@ -1207,7 +1207,8 @@ package body Bases.LootUI is
           BaseCargo_Container.Last_Index(Container => Local_Base_Cargo) loop
          if Indexes_List.Find_Index(Item => I) = 0 then
             Proto_Index :=
-              BaseCargo_Container.Element(Container => Local_Base_Cargo, Index => I)
+              BaseCargo_Container.Element
+                (Container => Local_Base_Cargo, Index => I)
                 .Proto_Index;
             Local_Items.Append
               (New_Item =>
