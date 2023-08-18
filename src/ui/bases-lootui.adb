@@ -857,7 +857,7 @@ package body Bases.LootUI is
          end if;
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Cargo_Index,
-            Amount => -(Amount),
+            Amount => -Amount,
             Durability =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Cargo_Index)
@@ -1053,12 +1053,12 @@ package body Bases.LootUI is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Indexes_List: Positive_Container.Vector;
-      Base_Cargo: BaseCargo_Container.Vector
+      Local_Base_Cargo: BaseCargo_Container.Vector
         (Capacity =>
            BaseCargo_Container.Length
              (Container => Sky_Bases(Base_Index).Cargo));
-      Base_Cargo_Index: Natural;
-      Proto_Index: Natural;
+      Base_Cargo_Index: Natural := 0;
+      Proto_Index: Natural := 0;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;
@@ -1104,7 +1104,7 @@ package body Bases.LootUI is
       package Sort_Items is new Items_Container.Generic_Sorting;
    begin
       BaseCargo_Container.Assign
-        (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
+        (Target => Local_Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
       case Column is
          when 1 =>
             if Items_Sort_Order = NAMEASC then
@@ -1188,7 +1188,7 @@ package body Bases.LootUI is
                Available =>
                  (if Base_Cargo_Index > 0 then
                     BaseCargo_Container.Element
-                      (Container => Base_Cargo, Index => Base_Cargo_Index)
+                      (Container => Local_Base_Cargo, Index => Base_Cargo_Index)
                       .Amount
                   else 0),
                Id => I));
@@ -1203,11 +1203,11 @@ package body Bases.LootUI is
       Local_Items.Clear;
       Add_Base_Items_Loop :
       for I in
-        BaseCargo_Container.First_Index(Container => Base_Cargo) ..
-          BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
+        BaseCargo_Container.First_Index(Container => Local_Base_Cargo) ..
+          BaseCargo_Container.Last_Index(Container => Local_Base_Cargo) loop
          if Indexes_List.Find_Index(Item => I) = 0 then
             Proto_Index :=
-              BaseCargo_Container.Element(Container => Base_Cargo, Index => I)
+              BaseCargo_Container.Element(Container => Local_Base_Cargo, Index => I)
                 .Proto_Index;
             Local_Items.Append
               (New_Item =>
@@ -1226,13 +1226,13 @@ package body Bases.LootUI is
                   Damage =>
                     Float
                       (BaseCargo_Container.Element
-                         (Container => Base_Cargo, Index => I)
+                         (Container => Local_Base_Cargo, Index => I)
                          .Durability) /
                     Float(Default_Item_Durability),
                   Owned => 0,
                   Available =>
                     BaseCargo_Container.Element
-                      (Container => Base_Cargo, Index => I)
+                      (Container => Local_Base_Cargo, Index => I)
                       .Amount,
                   Id => I));
          end if;
