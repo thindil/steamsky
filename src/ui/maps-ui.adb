@@ -667,13 +667,23 @@ package body Maps.UI is
               Count_Distance(Destination_X => X, Destination_Y => Y);
             Distance_Text: Unbounded_String;
             New_Line_Index: Positive;
+            Travel_Values: constant Travel_Array :=
+              Travel_Info(Distance => Distance);
          begin
             Insert_Text(New_Text => LF & "Distance:");
             Insert_Text
               (New_Text => Positive'Image(Distance),
                Tag_Name => To_Unbounded_String(Source => "yellow2"));
-            Distance_Text := Null_Unbounded_String;
-            Travel_Info(Info_Text => Distance_Text, Distance => Distance);
+            if Travel_Values(1) > 0 then
+               Distance_Text := LF & To_Unbounded_String(Source => "ETA:");
+               Minutes_To_Date
+                 (Minutes => Travel_Values(1), Info_Text => Distance_Text);
+               Append
+                 (Source => Distance_Text,
+                  New_Item =>
+                    LF & "Approx fuel usage:" &
+                    Positive'Image(Travel_Values(2)));
+            end if;
             New_Line_Index :=
               Index(Source => Distance_Text, Pattern => "" & LF, From => 2);
             Insert_Text

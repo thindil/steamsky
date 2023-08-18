@@ -572,19 +572,36 @@ package body Missions.UI is
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Mission_Dialog & ".buttons");
       Button: Ttk_Button;
+      Travel_Values: constant Travel_Array :=
+        Travel_Info
+          (Distance =>
+             (if Mission.M_Type in DELIVER | PASSENGER then
+                Count_Distance
+                  (Destination_X => Mission.Target_X,
+                   Destination_Y => Mission.Target_Y)
+              else Count_Distance
+                  (Destination_X => Mission.Target_X,
+                   Destination_Y => Mission.Target_Y) *
+                2));
    begin
-      Travel_Info
-        (Info_Text => Mission_Info,
-         Distance =>
-           (if Mission.M_Type in DELIVER | PASSENGER then
-              Count_Distance
-                (Destination_X => Mission.Target_X,
-                 Destination_Y => Mission.Target_Y)
-            else Count_Distance
-                (Destination_X => Mission.Target_X,
-                 Destination_Y => Mission.Target_Y) *
-              2),
-         Show_Fuel_Name => True);
+      if Travel_Values(1) > 0 then
+         Mission_Info := LF & To_Unbounded_String(Source => "ETA:");
+         Minutes_To_Date
+           (Minutes => Travel_Values(1), Info_Text => Mission_Info);
+         Append
+           (Source => Mission_Info,
+            New_Item =>
+              LF & "Approx fuel usage:" & Positive'Image(Travel_Values(2)) &
+              " ");
+         Append
+           (Source => Mission_Info,
+            New_Item =>
+              To_String
+                (Source =>
+                   Get_Proto_Item
+                     (Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                     .Name));
+      end if;
       case Mission.M_Type is
          when DELIVER =>
             configure
