@@ -771,10 +771,7 @@ package body Utils.UI is
       Info_Text := To_Unbounded_String(Source => Value(Item => New_Text));
    end Minutes_To_Date;
 
-   procedure Travel_Info
-     (Info_Text: in out Unbounded_String; Distance: Positive;
-      Show_Fuel_Name: Boolean := False) is
-      use Tiny_String;
+   function Travel_Info(Distance: Positive) return Travel_Array is
       use Ships.Movement;
 
       type Speed_Type is digits 2;
@@ -785,10 +782,10 @@ package body Utils.UI is
       Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
         0;
       Damage: Damage_Factor := 0.0;
+      Result: Travel_Array := (0, 0);
    begin
       if Speed = 0.0 then
-         Append(Source => Info_Text, New_Item => LF & "ETA: Never");
-         return;
+         return Result;
       end if;
       Minutes_Diff := Integer(100.0 / Speed);
       case Player_Ship.Speed is
@@ -807,7 +804,6 @@ package body Utils.UI is
          when others =>
             null;
       end case;
-      Append(Source => Info_Text, New_Item => LF & "ETA:");
       Minutes_Diff := Minutes_Diff * Distance;
       Count_Rest_Time_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -864,27 +860,11 @@ package body Utils.UI is
          <<End_Of_Count_Loop>>
       end loop Count_Rest_Time_Loop;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
-      Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Info_Text);
-      Append
-        (Source => Info_Text,
-         New_Item =>
-           LF & "Approx fuel usage:" &
-           Natural'Image
-             (abs (Distance * Count_Fuel_Needed) +
-              (Rests * (Rest_Time / 10))) &
-           " ");
-      if Show_Fuel_Name then
-         Append
-           (Source => Info_Text,
-            New_Item =>
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => Find_Proto_Item(Item_Type => Fuel_Type))
-                     .Name));
-      end if;
+      Result(1) := Minutes_Diff + (Rests * Rest_Time);
+      Result(2) :=
+        (abs (Distance * Count_Fuel_Needed) + (Rests * (Rest_Time / 10)));
       --## rule on SIMPLIFIABLE_EXPRESSIONS
+      return Result;
    end Travel_Info;
 
    procedure Update_Messages is

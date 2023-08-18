@@ -32,6 +32,13 @@ with Ships; use Ships;
 package Utils.UI is
 -- ****
 
+   -- ****t* UUI/UUI.Travel_Array
+   -- FUNCTION
+   -- The values returned by Travel_Info function: ETA and fuel usage
+   -- SOURCE
+   type Travel_Array is array (1 .. 2) of Natural;
+   -- ****
+
    -- ****t* UUI/UUI.CreateCommands
    -- FUNCTION
    -- Used to add new Tcl commands to interpreter
@@ -116,17 +123,14 @@ package Utils.UI is
 
    -- ****f* UUI/UUI.Travel_Info
    -- FUNCTION
-   -- Add info about travel eta and approx fuel usage
+   -- Count the ETA and fuel usage for the selected distance
    -- PARAMETERS
-   -- Info_Text      - Text to which info about travel will be added
    -- Distance       - Distance in map fields to destination point
-   -- Show_Fuel_Name - If true, add fuel name to info. Default is false
    -- RESULT
-   -- Parameter InfoText
+   -- The array with two values, the first is estimated time to travel the
+   -- distance, the second is the amount of fuel needed to travel the distance.
    -- SOURCE
-   procedure Travel_Info
-     (Info_Text: in out Unbounded_String; Distance: Positive;
-      Show_Fuel_Name: Boolean := False);
+   function Travel_Info(Distance: Positive) return Travel_Array;
    -- ****
 
    -- ****f* UUI/UUI.Update_Messages
