@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -392,7 +392,9 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.general.autorest"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Auto_Rest then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "autoRest") then "1"
+                    else "0"))),
          2 =>
            (Name =>
               To_Unbounded_String
@@ -888,8 +890,9 @@ package body GameOptions is
    begin
       configure(Widgt => Close_Button, options => "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-      Game_Settings.Auto_Rest :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autorest");
+      Set_Boolean_Setting
+        (Name => "autoRest",
+         Value => Get_Checkbox_Value(Check_Box_Name => ".general.autorest"));
       Game_Settings.Undock_Speed :=
         Ship_Speed'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);

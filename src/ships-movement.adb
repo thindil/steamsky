@@ -169,13 +169,13 @@ package body Ships.Movement is
       if not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          if Need_Rest(Order => PILOT) then
-            if not Game_Settings.Auto_Rest then
+            if not Get_Boolean_Setting(Name => "autoRest") then
                return 6;
             end if;
             return 8;
          end if;
          if Need_Rest(Order => ENGINEER) then
-            if not Game_Settings.Auto_Rest then
+            if not Get_Boolean_Setting(Name => "autoRest") then
                return 7;
             end if;
             return 8;
