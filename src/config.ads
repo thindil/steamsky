@@ -306,5 +306,9 @@ package Config is
 -- Temporary code to interact with Nim
 
    procedure Get_New_Game_Settings;
+   function Get_Boolean_Setting
+     (Name: String; From_Game_Setting: Boolean := True) return Boolean;
+   procedure Set_Boolean_Setting
+     (Name: String; Value: Boolean; In_Game_Setting: Boolean := True);
 
 end Config;

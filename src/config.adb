@@ -299,4 +299,33 @@ package body Config is
                           (New_Game_Settings.Difficulty_Level)))));
    end Get_New_Game_Settings;
 
+   function Get_Boolean_Setting
+     (Name: String; From_Game_Setting: Boolean := True) return Boolean is
+      function Get_Ada_Boolean_Setting
+        (N: chars_ptr; From_Game: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBooleanSetting";
+   begin
+      if Get_Ada_Boolean_Setting
+          (N => New_String(Str => Name),
+           From_Game => (if From_Game_Setting then 1 else 0)) =
+        1 then
+         return True;
+      end if;
+      return False;
+   end Get_Boolean_Setting;
+
+   procedure Set_Boolean_Setting
+     (Name: String; Value: Boolean; In_Game_Setting: Boolean := True) is
+      procedure Set_Ada_Boolean_Setting(N: chars_ptr; V, In_Game: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBooleanSetting";
+   begin
+      Set_Ada_Boolean_Setting
+        (N => New_String(Str => Name), V => (if Value then 1 else 0),
+         In_Game => (if In_Game_Setting then 1 else 0));
+   end Set_Boolean_Setting;
+
 end Config;

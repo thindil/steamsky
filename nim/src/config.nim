@@ -516,7 +516,8 @@ proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
           experienceBonus: adaNewGameSettings.experienceBonus,
           reputationBonus: adaNewGameSettings.reputationBonus,
           upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
-          pricesBonus: adaNewGameSettings.pricesBonus, difficultyLevel: parseEnum[
+          pricesBonus: adaNewGameSettings.pricesBonus,
+          difficultyLevel: parseEnum[
           DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
   except ValueError:
     discard
@@ -577,4 +578,62 @@ proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord;
         listsLimit: adaGameSettings.listsLimit)
     saveConfig()
   except KeyError, IOError, OSError, ValueError:
+    discard
+
+# Temporary code for interfacing with Ada
+
+proc getAdaBooleanSetting(name: cstring;
+    fromGameSetting: cint): cint {.raises: [], tags: [], exportc.} =
+  case $name
+  of "autoRest":
+    result = gameSettings.autoRest.cint
+  of "autoCenter":
+    result = gameSettings.autoCenter.cint
+  of "autoReturn":
+    result = gameSettings.autoReturn.cint
+  of "autoFinish":
+    result = gameSettings.autoFinish.cint
+  of "autoAskForBases":
+    result = gameSettings.autoAskForBases.cint
+  of "autoAskForEvents":
+    result = gameSettings.autoAskForEvents.cint
+  of "showTooltips":
+    result = gameSettings.showTooltips.cint
+  of "showLastMessages":
+    result = gameSettings.showLastMessages.cint
+  of "fullScreen":
+    result = gameSettings.fullScreen.cint
+  of "showNumbers":
+    result = gameSettings.showNumbers.cint
+  of "rightButton":
+    result = gameSettings.rightButton.cint
+  else:
+    result = 0
+
+proc setAdaBooleanSetting(name: cstring; value,
+    fromGameSetting: cint) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "autoRest":
+    gameSettings.autoRest = value == 1
+  of "autoCenter":
+    gameSettings.autoCenter = value == 1
+  of "autoReturn":
+    gameSettings.autoReturn = value == 1
+  of "autoFinish":
+    gameSettings.autoFinish = value == 1
+  of "autoAskForBases":
+    gameSettings.autoAskForBases = value == 1
+  of "autoAskForEvents":
+    gameSettings.autoAskForEvents = value == 1
+  of "showTooltips":
+    gameSettings.showTooltips = value == 1
+  of "showLastMessages":
+    gameSettings.showLastMessages = value == 1
+  of "fullScreen":
+    gameSettings.fullScreen = value == 1
+  of "showNumbers":
+    gameSettings.showNumbers = value == 1
+  of "rightButton":
+    gameSettings.rightButton = value == 1
+  else:
     discard
