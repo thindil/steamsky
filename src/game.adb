@@ -20,7 +20,7 @@ with Bases; use Bases;
 with BasesTypes;
 with Config;
 with Events;
-with Goals; use Goals;
+with Goals;
 with Log;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -87,6 +87,8 @@ package body Game is
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
+      use Goals;
+
       procedure End_Ada_Game(S: Integer) with
          Import => True,
          Convention => C,
