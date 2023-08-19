@@ -665,8 +665,7 @@ package body Maps.UI is
          declare
             Distance: constant Positive :=
               Count_Distance(Destination_X => X, Destination_Y => Y);
-            Distance_Text: Unbounded_String;
-            New_Line_Index: Positive;
+            Distance_Text: Unbounded_String := Null_Unbounded_String;
             Travel_Values: constant Travel_Array :=
               Travel_Info(Distance => Distance);
          begin
@@ -675,27 +674,17 @@ package body Maps.UI is
               (New_Text => Positive'Image(Distance),
                Tag_Name => To_Unbounded_String(Source => "yellow2"));
             if Travel_Values(1) > 0 then
-               Distance_Text := LF & To_Unbounded_String(Source => "ETA:");
+               Insert_Text(New_Text => LF & "ETA:");
                Minutes_To_Date
                  (Minutes => Travel_Values(1), Info_Text => Distance_Text);
-               Append
-                 (Source => Distance_Text,
-                  New_Item =>
-                    LF & "Approx fuel usage:" &
-                    Positive'Image(Travel_Values(2)));
+               Insert_Text
+                 (New_Text => To_String(Source => Distance_Text),
+                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
+               Insert_Text(New_Text => LF & "Approx fuel usage:");
+               Insert_Text
+                 (New_Text => Positive'Image(Travel_Values(2)),
+                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
             end if;
-            New_Line_Index :=
-              Index(Source => Distance_Text, Pattern => "" & LF, From => 2);
-            Insert_Text
-              (New_Text =>
-                 Slice
-                   (Source => Distance_Text, Low => 1,
-                    High => New_Line_Index));
-            Insert_Text
-              (New_Text =>
-                 Slice
-                   (Source => Distance_Text, Low => New_Line_Index + 1,
-                    High => Length(Source => Distance_Text)));
          end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
