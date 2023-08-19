@@ -32,12 +32,14 @@ with Ships; use Ships;
 package Utils.UI is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* UUI/UUI.Travel_Array
    -- FUNCTION
    -- The values returned by Travel_Info function: ETA and fuel usage
    -- SOURCE
    type Travel_Array is array (1 .. 2) of Natural;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* UUI/UUI.CreateCommands
    -- FUNCTION
