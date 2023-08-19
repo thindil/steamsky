@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Interfaces.C;
 with GNAT.Directory_Operations;
 with CArgv;
@@ -73,7 +73,7 @@ package body Goals.UI is
           (pathName => Goals_Dialog & ".selectbutton", Interp => Interp);
       Dialog_Header: constant Ttk_Label :=
         Get_Widget(pathName => Goals_Dialog & ".header", Interp => Interp);
-      Goal: Goal_Data;
+      Goal: Goal_Data := (others => <>);
    begin
       Tcl_EvalFile
         (interp => Interp,
@@ -140,6 +140,7 @@ package body Goals.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings.Fixed;
       use Tcl.Tklib.Ada.Tooltip;
       use Utils;
 
