@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - The game date to the in-game messages
 - Bold font to the game's themes
 
+### Changed
+- Redesigned the map info dialog
+
 ### Fixed
 - Typos in old changelog
 - Game not update the time during docking or undocking from bases
