@@ -782,7 +782,7 @@ package body Utils.UI is
       Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
         0;
       Damage: Damage_Factor := 0.0;
-      Result: Travel_Array := (0, 0);
+      Result: Travel_Array := (1 => 0, 2 => 0);
    begin
       if Speed = 0.0 then
          return Result;
