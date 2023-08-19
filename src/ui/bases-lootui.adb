@@ -1037,10 +1037,12 @@ package body Bases.LootUI is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Loot_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1051,7 +1053,6 @@ package body Bases.LootUI is
       end record;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Indexes_List: Positive_Container.Vector;
       Local_Base_Cargo: BaseCargo_Container.Vector
         (Capacity =>
            BaseCargo_Container.Length
@@ -1060,7 +1061,11 @@ package body Bases.LootUI is
       Proto_Index: Natural := 0;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
+      --## rule off IMPROPER_INITIALIZATION
       Local_Items: Items_Container.Vector;
+      Indexes_List: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1100,6 +1105,7 @@ package body Bases.LootUI is
          end if;
          return False;
       end "<";
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       package Sort_Items is new Items_Container.Generic_Sorting;
    begin
       BaseCargo_Container.Assign
