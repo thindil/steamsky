@@ -22,7 +22,7 @@ echo "Testing generateBaseName."
 try:
   assert generateBaseName("POLEIS").len() > 0
 except AssertionDefect:
-  echo "Failed to generate a base's name."
+  writeLine(stderr, "Failed to generate a base's name.")
 
 playerShip.skyX = 1
 playerShip.skyY = 1
@@ -42,25 +42,25 @@ gainRep(1, 1)
 try:
   assert skyBases[1].reputation.experience == 2
 except AssertionDefect:
-  echo "Failed to gain reputation in a base."
+  writeLine(stderr, "Failed to gain reputation in a base.")
 gainRep(1, -1)
 try:
   assert skyBases[1].reputation.experience == 1
 except AssertionDefect:
-  echo "Failed to lose reputation in a base."
+  writeLine(stderr, "Failed to lose reputation in a base.")
 
 echo "Testing countPrice."
 countPrice(price, 0, false)
 try:
   assert price > 100
 except AssertionDefect:
-  echo "Failed to raise a price in a base."
+  writeLine(stderr, "Failed to raise a price in a base.")
 price = 100
 countPrice(price, 0)
 try:
   assert price < 100
 except AssertionDefect:
-  echo "Failed to reduce a price in a base."
+  writeLine(stderr, "Failed to reduce a price in a base.")
 
 echo "Testing updatePopulation."
 updatePopulation()
@@ -75,7 +75,7 @@ generateRecruits()
 try:
   assert skyBases[1].recruits.len > 0
 except AssertionDefect:
-  echo "Failed to generate recruits in a base."
+  writeLine(stderr, "Failed to generate recruits in a base.")
 skyBases[1].recruits = @[]
 skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 skyBases[1].reputation.level = -50
@@ -83,7 +83,7 @@ generateRecruits()
 try:
   assert skyBases[1].recruits.len > 0
 except AssertionDefect:
-  echo "Failed to generate recruits in a base with negative reputation."
+  writeLine(stderr, "Failed to generate recruits in a base with negative reputation.")
 skyBases[1].recruits = @[]
 skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 skyBases[1].reputation.level = 0
@@ -91,7 +91,7 @@ generateRecruits()
 try:
   assert skyBases[1].recruits.len > 0
 except AssertionDefect:
-  echo "Failed to generate recruits in a base with zero reputation."
+  writeLine(stderr, "Failed to generate recruits in a base with zero reputation.")
 
 echo "Testing updatePrices."
 updatePrices()
