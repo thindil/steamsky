@@ -533,7 +533,7 @@ package body Maps.UI.Commands is
       Add_Message
         (Message => "You set the travel destination for your ship.",
          M_Type => ORDERMESSAGE);
-      if Game_Settings.Auto_Center then
+      if Get_Boolean_Setting(Name => "autoCenter") then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
       end if;
@@ -763,7 +763,7 @@ package body Maps.UI.Commands is
                   M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
-               if Game_Settings.Auto_Finish then
+               if Get_Boolean_Setting(Name => "autoFinish") then
                   Message :=
                     To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
@@ -872,7 +872,7 @@ package body Maps.UI.Commands is
                   M_Type => ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
-               if Game_Settings.Auto_Finish then
+               if Get_Boolean_Setting(Name => "autoFinish") then
                   Message :=
                     To_Unbounded_String(Source => Auto_Finish_Missions);
                end if;
@@ -885,7 +885,8 @@ package body Maps.UI.Commands is
       case Result is
          when 1 => -- Ship moved, check for events
             Starts_Combat := Check_For_Event;
-            if not Starts_Combat and Game_Settings.Auto_Finish then
+            if not Starts_Combat and
+              Get_Boolean_Setting(Name => "autoFinish") then
                Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
@@ -914,7 +915,8 @@ package body Maps.UI.Commands is
                end if;
                Starts_Combat := Check_For_Event;
             end if;
-            if not Starts_Combat and Game_Settings.Auto_Finish then
+            if not Starts_Combat and
+              Get_Boolean_Setting(Name => "autoFinish") then
                Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
          when others =>
@@ -1183,12 +1185,12 @@ package body Maps.UI.Commands is
          Wm_Set
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 1");
-         Game_Settings.Full_Screen := True;
+         Set_Boolean_Setting(Name => "fullScreen", Value => True);
       else
          Wm_Set
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 0");
-         Game_Settings.Full_Screen := False;
+         Set_Boolean_Setting(Name => "fullScreen", Value => False);
       end if;
       return TCL_OK;
    end Toggle_Full_Screen_Command;

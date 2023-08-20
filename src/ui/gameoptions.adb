@@ -401,21 +401,27 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.general.autocenter"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Auto_Center then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "autoCenter") then "1"
+                    else "0"))),
          3 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.general.autoreturn"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Auto_Return then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "autoReturn") then "1"
+                    else "0"))),
          4 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.general.autofinish"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Auto_Finish then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "autoFinish") then "1"
+                    else "0"))),
          5 =>
            (Name =>
               To_Unbounded_String
@@ -424,7 +430,8 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Game_Settings.Auto_Ask_For_Bases then "1" else "0"))),
+                   (if Get_Boolean_Setting(Name => "autoAskForBases") then "1"
+                    else "0"))),
          6 =>
            (Name =>
               To_Unbounded_String
@@ -433,7 +440,8 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Game_Settings.Auto_Ask_For_Events then "1" else "0"))),
+                   (if Get_Boolean_Setting(Name => "autoAskForEvents") then "1"
+                    else "0"))),
          7 =>
            (Name =>
               To_Unbounded_String
@@ -448,7 +456,8 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Game_Settings.Show_Tooltips then "1" else "0"))),
+                   (if Get_Boolean_Setting(Name => "showTooltips") then "1"
+                    else "0"))),
          9 =>
            (Name =>
               To_Unbounded_String
@@ -456,14 +465,17 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Game_Settings.Show_Last_Messages then "1" else "0"))),
+                   (if Get_Boolean_Setting(Name => "showLastMessages") then "1"
+                    else "0"))),
          10 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.interface.fullscreen"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Full_Screen then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "fullScreen") then "1"
+                    else "0"))),
          11 =>
            (Name =>
               To_Unbounded_String
@@ -896,16 +908,23 @@ package body GameOptions is
       Game_Settings.Undock_Speed :=
         Ship_Speed'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);
-      Game_Settings.Auto_Center :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autocenter");
-      Game_Settings.Auto_Return :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autoreturn");
-      Game_Settings.Auto_Finish :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autofinish");
-      Game_Settings.Auto_Ask_For_Bases :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforbases");
-      Game_Settings.Auto_Ask_For_Events :=
-        Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforevents");
+      Set_Boolean_Setting
+        (Name => "autoCenter",
+         Value => Get_Checkbox_Value(Check_Box_Name => ".general.autocenter"));
+      Set_Boolean_Setting
+        (Name => "autoReturn",
+         Value => Get_Checkbox_Value(Check_Box_Name => ".general.autoreturn"));
+      Set_Boolean_Setting
+        (Name => "autoFinish",
+         Value => Get_Checkbox_Value(Check_Box_Name => ".general.autofinish"));
+      Set_Boolean_Setting
+        (Name => "autoAskForBases",
+         Value =>
+           Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforbases"));
+      Set_Boolean_Setting
+        (Name => "autoAskForEvents",
+         Value =>
+           Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforevents"));
       Game_Settings.Low_Fuel :=
         Get_Spinbox_Value(Spin_Box_Name => ".general.fuel");
       Game_Settings.Low_Drinks :=
@@ -957,29 +976,31 @@ package body GameOptions is
           (interp => Interp,
            varName => Root_Name & ".interface.showtooltips") =
         "1" then
-         Game_Settings.Show_Tooltips := True;
+         Set_Boolean_Setting(Name => "showToolips", Value => True);
          Enable;
       else
-         Game_Settings.Show_Tooltips := False;
+         Set_Boolean_Setting(Name => "showToolips", Value => False);
          Disable;
       end if;
-      Game_Settings.Show_Last_Messages :=
-        (if
-           Tcl_GetVar
-             (interp => Interp,
-              varName => Root_Name & ".interface.showmessages") =
-           "1"
-         then True
-         else False);
+      Set_Boolean_Setting
+        (Name => "showLastMessages",
+         Value =>
+           (if
+              Tcl_GetVar
+                (interp => Interp,
+                 varName => Root_Name & ".interface.showmessages") =
+              "1"
+            then True
+            else False));
       if Tcl_GetVar
           (interp => Interp, varName => Root_Name & ".interface.fullscreen") =
         "1" then
-         Game_Settings.Full_Screen := True;
+         Set_Boolean_Setting(Name => "fullScreen", Value => True);
          Wm_Set
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 1");
       else
-         Game_Settings.Full_Screen := False;
+         Set_Boolean_Setting(Name => "fullScreen", Value => False);
          Wm_Set
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 0");

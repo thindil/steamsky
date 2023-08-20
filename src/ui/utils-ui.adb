@@ -522,7 +522,8 @@ package body Utils.UI is
             Starts_Combat: constant Boolean := Check_For_Event;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
-            if not Starts_Combat and Game_Settings.Auto_Finish then
+            if not Starts_Combat and
+              Get_Boolean_Setting(Name => "autoFinish") then
                Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
             if Message /= Null_Unbounded_String then
