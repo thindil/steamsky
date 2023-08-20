@@ -1043,6 +1043,7 @@ package body Bases.LootUI is
           (Table => Loot_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1051,6 +1052,7 @@ package body Bases.LootUI is
          Available: Natural;
          Id: Positive;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Base_Cargo: BaseCargo_Container.Vector
@@ -1110,6 +1112,7 @@ package body Bases.LootUI is
    begin
       BaseCargo_Container.Assign
         (Target => Local_Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       case Column is
          when 1 =>
             if Items_Sort_Order = NAMEASC then
@@ -1147,6 +1150,7 @@ package body Bases.LootUI is
       if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Add_Cargo_Items_Loop :
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
@@ -1200,12 +1204,14 @@ package body Bases.LootUI is
                Id => I));
       end loop Add_Cargo_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Items_Indexes.Clear;
       Fill_Items_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Items_Indexes_Loop;
       Items_Indexes.Append(New_Item => 0);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Items.Clear;
       Add_Base_Items_Loop :
       for I in
@@ -1245,10 +1251,12 @@ package body Bases.LootUI is
          end if;
       end loop Add_Base_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Fill_Items_Indexes_Base_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Items_Indexes_Base_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Loot_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
