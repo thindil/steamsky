@@ -37,7 +37,7 @@ package Utils.UI is
    -- FUNCTION
    -- The values returned by Travel_Info function: ETA and fuel usage
    -- SOURCE
-   type Travel_Array is array (1 .. 2) of Natural;
+   type Travel_Array is array(1 .. 2) of Natural;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
