@@ -1402,7 +1402,7 @@ package body Maps.UI is
       Wm_Set
         (Widgt => Get_Main_Window(Interp => Get_Context), Action => "title",
          Options => "{Steam Sky}");
-      if Game_Settings.Full_Screen then
+      if Get_Boolean_Setting(Name => "fullScreen") then
          Wm_Set
            (Widgt => Get_Main_Window(Interp => Get_Context),
             Action => "attributes", Options => "-fullscreen 1");
@@ -1473,7 +1473,7 @@ package body Maps.UI is
       end if;
       Update_Move_Buttons;
       Update_Map_Info;
-      if not Game_Settings.Show_Last_Messages then
+      if not Get_Boolean_Setting(Name => "showLastMessages") then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Messages_Frame);
       end if;
       Tcl_SetVar

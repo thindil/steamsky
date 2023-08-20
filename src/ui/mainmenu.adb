@@ -162,7 +162,7 @@ package body MainMenu is
       Tcl_EvalFile
         (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");
       Main_Menu_Frame := Get_Widget(pathName => ".mainmenu");
-      if not Game_Settings.Show_Tooltips then
+      if not Get_Boolean_Setting(Name => "showTooltips") then
          Disable;
       end if;
       Default_Fonts_Sizes :=
@@ -341,7 +341,7 @@ package body MainMenu is
       if Y < 0 then
          Y := 0;
       end if;
-      if Game_Settings.Full_Screen then
+      if Get_Boolean_Setting(Name => "fullScreen") then
          Wm_Set
            (Widgt => Main_Window, Action => "attributes",
             Options => "-fullscreen 0");
