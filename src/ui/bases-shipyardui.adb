@@ -1395,10 +1395,7 @@ package body Bases.ShipyardUI is
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
       Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Module_Dialog & ".buttonbox.button",
-           options =>
-             "-text Close -command {CloseDialog " & Module_Dialog & "}");
+        Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
       Install_Button: constant Ttk_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
@@ -1488,8 +1485,9 @@ package body Bases.ShipyardUI is
       Set_Install_Button
         (Install_Button => Install_Button, Money_Index_2 => Money_Index_2,
          Cost => Cost);
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+      Add_Close_Button
+        (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
+         Command => "CloseDialog " & Module_Dialog, Column => 1);
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Bind
@@ -1626,7 +1624,9 @@ package body Bases.ShipyardUI is
           (pathName => Module_Dialog & ".info",
            options => "-height 10 -width 40");
       Label: Ttk_Label := Create(pathName => Module_Dialog & ".damagelbl");
-      Remove_Button, Close_Button: Ttk_Button;
+      Remove_Button: Ttk_Button;
+      Close_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
    begin
@@ -1722,13 +1722,9 @@ package body Bases.ShipyardUI is
              "-text Remove -command {CloseDialog " & Module_Dialog &
              ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
-      Close_Button :=
-        Create
-          (pathName => Module_Dialog & ".buttonbox.button",
-           options =>
-             "-text Close -command {CloseDialog " & Module_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+      Add_Close_Button
+        (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
+         Command => "CloseDialog " & Module_Dialog, Column => 1);
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Bind
