@@ -97,7 +97,7 @@ package body Maps.UI is
         Get_Faction(Index => Player_Ship.Crew(1).Faction);
    begin
       configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
-      if Game_Settings.Show_Numbers then
+      if Get_Boolean_Setting(Name => "showNumbers") then
          configure
            (Widgt => Label,
             options =>
@@ -1377,7 +1377,7 @@ package body Maps.UI is
          Bind
            (Widgt => Get_Map_View,
             Sequence =>
-              "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+              "<Button-" & (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
               ">",
             Script => "{ShowDestinationMenu %X %Y}");
          Bind

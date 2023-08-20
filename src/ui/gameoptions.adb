@@ -448,7 +448,7 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.rightbutton"),
             Value =>
               To_Unbounded_String
-                (Source => (if Game_Settings.Right_Button then "1" else "0"))),
+                (Source => (if Get_Boolean_Setting(Name => "rightButton") then "1" else "0"))),
          8 =>
            (Name =>
               To_Unbounded_String
@@ -483,7 +483,7 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Game_Settings.Show_Numbers then "1" else "0"))));
+                   (if Get_Boolean_Setting(Name => "showNumbers") then "1" else "0"))));
       Spin_Box_Array: constant array(1 .. 10) of Widget_Data :=
         (1 =>
            (Name =>
@@ -960,13 +960,13 @@ package body GameOptions is
       if Tcl_GetVar
           (interp => Interp, varName => Root_Name & ".interface.rightbutton") =
         "1" then
-         Game_Settings.Right_Button := True;
+         Set_Boolean_Setting(Name => "rightButton", Value => True);
          Bind
            (Widgt => Map_View, Sequence => "<Button-3>",
             Script => "{ShowDestinationMenu %X %Y}");
          Unbind(Widgt => Map_View, Sequence => "<Button-1>");
       else
-         Game_Settings.Right_Button := False;
+         Set_Boolean_Setting(Name => "rightButton", Value => False);
          Bind
            (Widgt => Map_View, Sequence => "<Button-1>",
             Script => "{ShowDestinationMenu %X %Y}");
@@ -1007,8 +1007,8 @@ package body GameOptions is
       end if;
       Game_Settings.Auto_Close_Messages_Time :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages");
-      Game_Settings.Show_Numbers :=
-        Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers");
+      Set_Boolean_Setting(Name => "showNumbers", Value =>
+        Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers"));
       Game_Settings.Map_Font_Size :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
       Game_Settings.Help_Font_Size :=

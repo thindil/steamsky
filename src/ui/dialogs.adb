@@ -107,7 +107,7 @@ package body Dialogs is
         (Widgt => Dialog_Header,
          Sequence =>
            "<ButtonPress-" &
-           (if Game_Settings.Right_Button then "3" else "1") & ">",
+           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") & ">",
          Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
       Bind
         (Widgt => Dialog_Header, Sequence => "<Motion>",
@@ -116,7 +116,7 @@ package body Dialogs is
         (Widgt => Dialog_Header,
          Sequence =>
            "<ButtonRelease-" &
-           (if Game_Settings.Right_Button then "3" else "1") & ">",
+           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") & ">",
          Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return New_Dialog;
    end Create_Dialog;

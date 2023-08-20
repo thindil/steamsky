@@ -504,7 +504,7 @@ package body MainMenu.Commands is
             Text => To_String(Source => Save.Player_Name),
             Tooltip =>
               "Press mouse " &
-              (if Game_Settings.Right_Button then "right" else "left") &
+              (if Get_Boolean_Setting(Name => "rightButton") then "right" else "left") &
               " button to show available options",
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
@@ -514,7 +514,7 @@ package body MainMenu.Commands is
             Text => To_String(Source => Save.Ship_Name),
             Tooltip =>
               "Press mouse " &
-              (if Game_Settings.Right_Button then "right" else "left") &
+              (if Get_Boolean_Setting(Name => "rightButton") then "right" else "left") &
               " button to show available options",
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
@@ -524,7 +524,7 @@ package body MainMenu.Commands is
             Text => To_String(Source => Save.Save_Time),
             Tooltip =>
               "Press mouse " &
-              (if Game_Settings.Right_Button then "right" else "left") &
+              (if Get_Boolean_Setting(Name => "rightButton") then "right" else "left") &
               " button to show available options",
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),

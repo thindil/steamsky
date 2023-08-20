@@ -296,7 +296,7 @@ package body Table is
          Bind
            (CanvasWidget => Canvas, TagOrId => Item_Id,
             Sequence =>
-              "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+              "<Button-" & (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
               ">",
             Command => "{" & Command & "}");
       end if;
@@ -995,7 +995,7 @@ package body Table is
              (CanvasWidget => Canvas, TagOrId => "row$currentrow",
               Sequence =>
                 "<Button-" &
-                (if Game_Settings.Right_Button then "3" else "1") & ">"));
+                (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") & ">"));
       return TCL_OK;
    end Execute_Current_Row_Command;
 

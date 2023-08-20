@@ -927,7 +927,7 @@ package body Ships.UI.Crew is
             strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
       end Add_Name_Info_Block;
       if Member.Health < 100 then
-         if Game_Settings.Show_Numbers then
+         if Get_Boolean_Setting(Name => "showNumbers") then
             Member_Label :=
               Create
                 (pathName => Frame & ".health",
@@ -963,7 +963,7 @@ package body Ships.UI.Crew is
          Tired_Points := 0;
       end if;
       if Tired_Points > 0 then
-         if Game_Settings.Show_Numbers then
+         if Get_Boolean_Setting(Name => "showNumbers") then
             Member_Label :=
               Create
                 (pathName => Frame & ".tired",
@@ -1002,7 +1002,7 @@ package body Ships.UI.Crew is
             strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Thirst > 0 then
-         if Game_Settings.Show_Numbers then
+         if Get_Boolean_Setting(Name => "showNumbers") then
             Member_Label :=
               Create
                 (pathName => Frame & ".thirst",
@@ -1041,7 +1041,7 @@ package body Ships.UI.Crew is
             strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Hunger > 0 then
-         if Game_Settings.Show_Numbers then
+         if Get_Boolean_Setting(Name => "showNumbers") then
             Member_Label :=
               Create
                 (pathName => Frame & ".hunger",
@@ -1080,7 +1080,7 @@ package body Ships.UI.Crew is
             strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Morale(1) /= 50 then
-         if Game_Settings.Show_Numbers then
+         if Get_Boolean_Setting(Name => "showNumbers") then
             Member_Label :=
               Create
                 (pathName => Frame & ".morale",
