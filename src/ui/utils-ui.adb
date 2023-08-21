@@ -255,7 +255,7 @@ package body Utils.UI is
                .I_Type) =
         To_String(Source => Fuel_Type) then
          Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
-         if Amount <= Game_Settings.Low_Fuel then
+         if Amount <= Get_Integer_Setting(Name => "lowFuel") then
             Widgets.configure
               (Widgt => Label,
                options =>
@@ -277,7 +277,7 @@ package body Utils.UI is
                        .Proto_Index)
                   .I_Type) then
             Amount := Get_Items_Amount(I_Type => "Drinks") - Value;
-            if Amount <= Game_Settings.Low_Drinks then
+            if Amount <= Get_Integer_Setting(Name => "lowDrinks") then
                Widgets.configure
                  (Widgt => Label,
                   options =>
@@ -297,7 +297,7 @@ package body Utils.UI is
                        .Proto_Index)
                   .I_Type) then
             Amount := Get_Items_Amount(I_Type => "Food") - Value;
-            if Amount <= Game_Settings.Low_Food then
+            if Amount <= Get_Integer_Setting(Name => "lowFood") then
                Widgets.configure
                  (Widgt => Label,
                   options =>

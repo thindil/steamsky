@@ -842,21 +842,21 @@ package body Maps.UI.Commands is
                if Winfo_Get(Widgt => Message_Dialog, Info => "exists") =
                  "0" then
                   if Get_Item_Amount(Item_Type => Fuel_Type) <=
-                    Game_Settings.Low_Fuel then
+                    Get_Integer_Setting(Name => "lowFuel") then
                      Show_Message
                        (Text => "Your fuel level is dangerously low.",
                         Title => "Low fuel level");
                      Result := 4;
                      exit Move_Loop;
                   elsif Get_Items_Amount(I_Type => "Food") <=
-                    Game_Settings.Low_Food then
+                    Get_Integer_Setting(Name => "lowFood") then
                      Show_Message
                        (Text => "Your food level is dangerously low.",
                         Title => "Low amount of food");
                      Result := 4;
                      exit Move_Loop;
                   elsif Get_Items_Amount(I_Type => "Drinks") <=
-                    Game_Settings.Low_Drinks then
+                    Get_Integer_Setting(Name => "lowDrinks") then
                      Show_Message
                        (Text => "Your drinks level is dangerously low.",
                         Title => "Low level of drinks");

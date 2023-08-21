@@ -116,7 +116,7 @@ package body Maps.UI is
             Message =>
               "You can't travel anymore, because you don't have any fuel for ship.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Game_Settings.Low_Fuel then
+      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFuel") then
          configure(Widgt => Label, options => "-image lowfuelicon");
          Add
            (Widget => Label,
@@ -135,7 +135,7 @@ package body Maps.UI is
             Message =>
               "You don't have any drinks in ship but your crew needs them to live.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Game_Settings.Low_Drinks then
+      elsif Item_Amount <= Get_Integer_Setting(Name => "lowDrinks") then
          configure(Widgt => Label, options => "-image lowdrinksicon");
          Add
            (Widget => Label,
@@ -154,7 +154,7 @@ package body Maps.UI is
             Message =>
               "You don't have any food in ship but your crew needs it to live.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Game_Settings.Low_Food then
+      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFood") then
          configure(Widgt => Label, options => "-image lowfoodicon");
          Add
            (Widget => Label,

@@ -494,21 +494,21 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.general.fuel"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Low_Fuel))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "lowFuel")))),
          2 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.general.drinks"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Low_Drinks))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "lowDrinks")))),
          3 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.general.food"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Low_Food))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "lowFood")))),
          4 =>
            (Name =>
               To_Unbounded_String
@@ -928,12 +928,12 @@ package body GameOptions is
         (Name => "autoAskForEvents",
          Value =>
            Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforevents"));
-      Game_Settings.Low_Fuel :=
-        Get_Spinbox_Value(Spin_Box_Name => ".general.fuel");
-      Game_Settings.Low_Drinks :=
-        Get_Spinbox_Value(Spin_Box_Name => ".general.drinks");
-      Game_Settings.Low_Food :=
-        Get_Spinbox_Value(Spin_Box_Name => ".general.food");
+      Set_Integer_Setting(Name => "lowFuel", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".general.fuel"));
+      Set_Integer_Setting(Name => "lowDrinks", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".general.drinks"));
+      Set_Integer_Setting(Name => "lowFood", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".general.food"));
       Game_Settings.Auto_Move_Stop :=
         Auto_Move_Break'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
