@@ -515,14 +515,14 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.general.messageslimit"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Messages_Limit))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "messagesLimit")))),
          5 =>
            (Name =>
               To_Unbounded_String
                 (Source => Options_Canvas & ".options.general.savedmessages"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Saved_Messages))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "savedMessages")))),
          6 =>
            (Name =>
               To_Unbounded_String
@@ -538,7 +538,7 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.mapfont"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Map_Font_Size))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "mapFontSize")))),
          8 =>
            (Name =>
               To_Unbounded_String
@@ -553,7 +553,7 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.helpfont"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Help_Font_Size))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "helpFontSize")))),
          10 =>
            (Name =>
               To_Unbounded_String
@@ -937,10 +937,10 @@ package body GameOptions is
       Game_Settings.Auto_Move_Stop :=
         Auto_Move_Break'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
-      Game_Settings.Messages_Limit :=
-        Get_Spinbox_Value(Spin_Box_Name => ".general.messageslimit");
-      Game_Settings.Saved_Messages :=
-        Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages");
+      Set_Integer_Setting(Name => "messagesLimit", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".general.messageslimit"));
+      Set_Integer_Setting(Name => "savedMessages", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages"));
       Game_Settings.Messages_Order :=
         Messages_Order_Type'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder"));
@@ -1014,10 +1014,10 @@ package body GameOptions is
         (Name => "showNumbers",
          Value =>
            Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers"));
-      Game_Settings.Map_Font_Size :=
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
-      Game_Settings.Help_Font_Size :=
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont");
+      Set_Integer_Setting(Name => "mapFontSize", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont"));
+      Set_Integer_Setting(Name => "helpFontSize", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont"));
       Game_Settings.Interface_Font_Size :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont");
       Game_Settings.Lists_Limit :=

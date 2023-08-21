@@ -667,20 +667,20 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
-      Game_Settings.Map_Font_Size :=
+      Set_Integer_Setting(Name => "mapFontSize", Value =>
         (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
-           Game_Settings.Map_Font_Size + 1
-         else Game_Settings.Map_Font_Size - 1);
-      if Game_Settings.Map_Font_Size < 3 then
-         Game_Settings.Map_Font_Size := 3;
-      elsif Game_Settings.Map_Font_Size > 50 then
-         Game_Settings.Map_Font_Size := 50;
+           Get_Integer_Setting(Name => "mapFontSize") + 1
+         else Get_Integer_Setting(Name => "mapFontSize") - 1));
+      if Get_Integer_Setting(Name => "mapFontSize") < 3 then
+         Set_Integer_Setting(Name => "mapFontSize", Value => 3);
+      elsif Get_Integer_Setting(Name => "mapFontSize") > 50 then
+         Set_Integer_Setting(Name => "mapFontSize", Value => 50);
       end if;
       Tcl_Eval
         (interp => Interp,
          strng =>
            "font configure MapFont -size" &
-           Positive'Image(Game_Settings.Map_Font_Size));
+           Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
       Tcl_SetVar(interp => Interp, varName => "refreshmap", newValue => "1");
       return
         Draw_Map_Command

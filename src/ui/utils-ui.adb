@@ -1193,19 +1193,19 @@ package body Utils.UI is
    begin
       case Font_Type is
          when MAPFONT =>
-            Game_Settings.Map_Font_Size := New_Size;
+            Set_Integer_Setting(Name => "mapFontSize", Value => New_Size);
             Font.Configure
               (FontName => "MapFont",
                Options =>
-                 "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+                 "-size" & Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
          when Help_Font_Type =>
-            Game_Settings.Help_Font_Size := New_Size;
+            Set_Integer_Setting(Name => "helpFontSize", Value => New_Size);
             Set_Fonts_Loop :
             for FontName of Help_Fonts loop
                Font.Configure
                  (FontName => To_String(Source => FontName),
                   Options =>
-                    "-size" & Positive'Image(Game_Settings.Help_Font_Size));
+                    "-size" & Positive'Image(Get_Integer_Setting(Name => "helpFontSize")));
             end loop Set_Fonts_Loop;
          when INTERFACEFONT =>
             Game_Settings.Interface_Font_Size := New_Size;
