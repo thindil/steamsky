@@ -667,10 +667,12 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
-      Set_Integer_Setting(Name => "mapFontSize", Value =>
-        (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
-           Get_Integer_Setting(Name => "mapFontSize") + 1
-         else Get_Integer_Setting(Name => "mapFontSize") - 1));
+      Set_Integer_Setting
+        (Name => "mapFontSize",
+         Value =>
+           (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
+              Get_Integer_Setting(Name => "mapFontSize") + 1
+            else Get_Integer_Setting(Name => "mapFontSize") - 1));
       if Get_Integer_Setting(Name => "mapFontSize") < 3 then
          Set_Integer_Setting(Name => "mapFontSize", Value => 3);
       elsif Get_Integer_Setting(Name => "mapFontSize") > 50 then
@@ -1228,20 +1230,31 @@ package body Maps.UI.Commands is
          Convention => C,
          External_Name => "setAdaMessagesPosition";
    begin
-      Set_Integer_Setting(Name => "windowWidth", Value =>
-        Positive'Value
-          (Winfo_Get
-             (Widgt => Get_Main_Window(Interp => Interp), Info => "width")));
-      Set_Integer_Setting(Name => "windowHeight", Value =>
-        Positive'Value
-          (Winfo_Get
-             (Widgt => Get_Main_Window(Interp => Interp), Info => "height")));
+      Set_Integer_Setting
+        (Name => "windowWidth",
+         Value =>
+           Positive'Value
+             (Winfo_Get
+                (Widgt => Get_Main_Window(Interp => Interp),
+                 Info => "width")));
+      Set_Integer_Setting
+        (Name => "windowHeight",
+         Value =>
+           Positive'Value
+             (Winfo_Get
+                (Widgt => Get_Main_Window(Interp => Interp),
+                 Info => "height")));
       Paned_Position :=
-        (if Get_Integer_Setting(Name => "windowHeight") - Game_Settings.Messages_Position < 0
+        (if
+           Get_Integer_Setting(Name => "windowHeight") -
+           Game_Settings.Messages_Position <
+           0
          then Get_Integer_Setting(Name => "windowHeight")
-         else Get_Integer_Setting(Name => "windowHeight") - Game_Settings.Messages_Position);
+         else Get_Integer_Setting(Name => "windowHeight") -
+           Game_Settings.Messages_Position);
       if Sash_Position > 0 and then Sash_Position /= Paned_Position then
-         if Get_Integer_Setting(Name => "windowHeight") - Sash_Position > -1 then
+         if Get_Integer_Setting(Name => "windowHeight") - Sash_Position >
+           -1 then
             Game_Settings.Messages_Position :=
               Get_Integer_Setting(Name => "windowHeight") - Sash_Position;
             Set_Ada_Messages_Position

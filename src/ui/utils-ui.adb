@@ -1197,7 +1197,8 @@ package body Utils.UI is
             Font.Configure
               (FontName => "MapFont",
                Options =>
-                 "-size" & Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
+                 "-size" &
+                 Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
          when Help_Font_Type =>
             Set_Integer_Setting(Name => "helpFontSize", Value => New_Size);
             Set_Fonts_Loop :
@@ -1205,7 +1206,9 @@ package body Utils.UI is
                Font.Configure
                  (FontName => To_String(Source => FontName),
                   Options =>
-                    "-size" & Positive'Image(Get_Integer_Setting(Name => "helpFontSize")));
+                    "-size" &
+                    Positive'Image
+                      (Get_Integer_Setting(Name => "helpFontSize")));
             end loop Set_Fonts_Loop;
          when INTERFACEFONT =>
             Game_Settings.Interface_Font_Size := New_Size;

@@ -523,11 +523,13 @@ package body Help.UI is
         (Widgt => Help_Window, Action => "geometry",
          Options =>
            Trim
-             (Source => Positive'Image(Get_Integer_Setting(Name => "windowWidth")),
+             (Source =>
+                Positive'Image(Get_Integer_Setting(Name => "windowWidth")),
               Side => Left) &
            "x" &
            Trim
-             (Source => Positive'Image(Get_Integer_Setting(Name => "windowHeight")),
+             (Source =>
+                Positive'Image(Get_Integer_Setting(Name => "windowHeight")),
               Side => Left) &
            "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
            Trim(Source => Positive'Image(Y), Side => Left));

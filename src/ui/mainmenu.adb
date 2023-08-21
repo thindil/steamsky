@@ -175,7 +175,9 @@ package body MainMenu is
          3 =>
            Positive'Value
              (Font.Configure(FontName => "HelpFont", Option => "-size")));
-      Set_Fonts(New_Size => Get_Integer_Setting(Name => "mapFontSize"), Font_Type => MAPFONT);
+      Set_Fonts
+        (New_Size => Get_Integer_Setting(Name => "mapFontSize"),
+         Font_Type => MAPFONT);
       Set_Fonts
         (New_Size => Get_Integer_Setting(Name => "helpFontSize"),
          Font_Type => Help_Font_Type);
