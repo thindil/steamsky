@@ -1099,7 +1099,9 @@ package body Maps.UI.Commands is
          Generate
            (Window => Map_View,
             EventName =>
-              "<Button-" & (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+              "<Button-" &
+              (if Get_Boolean_Setting(Name => "rightButton") then "3"
+               else "1") &
               ">",
             Options =>
               "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " &

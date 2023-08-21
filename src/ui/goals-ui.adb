@@ -102,7 +102,8 @@ package body Goals.UI is
         (Widgt => Dialog_Header,
          Sequence =>
            "<ButtonPress-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") & ">",
+           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+           ">",
          Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
       Bind
         (Widgt => Dialog_Header, Sequence => "<Motion>",
@@ -111,7 +112,8 @@ package body Goals.UI is
         (Widgt => Dialog_Header,
          Sequence =>
            "<ButtonRelease-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") & ">",
+           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+           ">",
          Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return TCL_OK;
    end Show_Goals_Command;

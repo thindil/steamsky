@@ -448,7 +448,9 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.rightbutton"),
             Value =>
               To_Unbounded_String
-                (Source => (if Get_Boolean_Setting(Name => "rightButton") then "1" else "0"))),
+                (Source =>
+                   (if Get_Boolean_Setting(Name => "rightButton") then "1"
+                    else "0"))),
          8 =>
            (Name =>
               To_Unbounded_String
@@ -483,7 +485,8 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   (if Get_Boolean_Setting(Name => "showNumbers") then "1" else "0"))));
+                   (if Get_Boolean_Setting(Name => "showNumbers") then "1"
+                    else "0"))));
       Spin_Box_Array: constant array(1 .. 10) of Widget_Data :=
         (1 =>
            (Name =>
@@ -1007,8 +1010,10 @@ package body GameOptions is
       end if;
       Game_Settings.Auto_Close_Messages_Time :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages");
-      Set_Boolean_Setting(Name => "showNumbers", Value =>
-        Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers"));
+      Set_Boolean_Setting
+        (Name => "showNumbers",
+         Value =>
+           Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers"));
       Game_Settings.Map_Font_Size :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
       Game_Settings.Help_Font_Size :=

@@ -1377,7 +1377,9 @@ package body Maps.UI is
          Bind
            (Widgt => Get_Map_View,
             Sequence =>
-              "<Button-" & (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+              "<Button-" &
+              (if Get_Boolean_Setting(Name => "rightButton") then "3"
+               else "1") &
               ">",
             Script => "{ShowDestinationMenu %X %Y}");
          Bind

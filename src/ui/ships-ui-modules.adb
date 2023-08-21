@@ -2215,7 +2215,8 @@ package body Ships.UI.Modules is
            (Table => Skills_Table, Text => To_String(Source => Skill_Name),
             Tooltip =>
               "Press mouse " &
-              (if Get_Boolean_Setting(Name => "rightButton") then "right" else "left") &
+              (if Get_Boolean_Setting(Name => "rightButton") then "right"
+               else "left") &
               " button to set as trained skill",
             Command =>
               "AssignModule skill" & Positive'Image(Module_Index) &
@@ -2225,7 +2226,8 @@ package body Ships.UI.Modules is
            (Table => Skills_Table, Text => To_String(Source => Tool_Name),
             Tooltip =>
               "Press mouse " &
-              (if Get_Boolean_Setting(Name => "rightButton") then "right" else "left") &
+              (if Get_Boolean_Setting(Name => "rightButton") then "right"
+               else "left") &
               " button to set as trained skill",
             Command =>
               "AssignModule skill" & Positive'Image(Module_Index) &
