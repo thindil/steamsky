@@ -540,7 +540,7 @@ package body Utils.UI is
          end Check_For_Combat_Block;
       elsif Result = "quit" then
          Game_Settings.Messages_Position :=
-           Game_Settings.Window_Height -
+           Get_Integer_Setting(Name => "windowHeight") -
            Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
          End_Game(Save => True);
          Show_Main_Menu;
@@ -573,7 +573,7 @@ package body Utils.UI is
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
          Game_Settings.Messages_Position :=
-           Game_Settings.Window_Height -
+           Get_Integer_Setting(Name => "windowHeight") -
            Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
          End_Game(Save => False);
          Show_Main_Menu;

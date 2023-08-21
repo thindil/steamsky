@@ -506,7 +506,7 @@ package body Help.UI is
       X :=
         (Positive'Value
            (Winfo_Get(Widgt => Help_Window, Info => "vrootwidth")) -
-         Game_Settings.Window_Width) /
+         Get_Integer_Setting(Name => "windowWidth")) /
         2;
       if X < 0 then
          X := 0;
@@ -514,7 +514,7 @@ package body Help.UI is
       Y :=
         (Positive'Value
            (Winfo_Get(Widgt => Help_Window, Info => "vrootheight")) -
-         Game_Settings.Window_Height) /
+         Get_Integer_Setting(Name => "windowHeight")) /
         2;
       if Y < 0 then
          Y := 0;
@@ -523,11 +523,11 @@ package body Help.UI is
         (Widgt => Help_Window, Action => "geometry",
          Options =>
            Trim
-             (Source => Positive'Image(Game_Settings.Window_Width),
+             (Source => Positive'Image(Get_Integer_Setting(Name => "windowWidth")),
               Side => Left) &
            "x" &
            Trim
-             (Source => Positive'Image(Game_Settings.Window_Height),
+             (Source => Positive'Image(Get_Integer_Setting(Name => "windowHeight")),
               Side => Left) &
            "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
            Trim(Source => Positive'Image(Y), Side => Left));
