@@ -1400,8 +1400,8 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
            options =>
-             "-text Install -command {CloseDialog " & Module_Dialog &
-             ";ManipulateModule install}");
+             "-text Install -image buyicon -style Dialog.TButton -command {CloseDialog " &
+             Module_Dialog & ";ManipulateModule install}");
       Compare_Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".compare");
       Compare_Box: constant Ttk_ComboBox :=
@@ -1719,8 +1719,8 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
            options =>
-             "-text Remove -command {CloseDialog " & Module_Dialog &
-             ";ManipulateModule remove}");
+             "-text Remove -image sellicon -style Dialog.TButton -command {CloseDialog " &
+             Module_Dialog & ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
