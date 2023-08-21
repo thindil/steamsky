@@ -30,7 +30,7 @@ echo "Testing generateBaseName."
 try:
   assert generateBaseName("POLEIS").len() > 0
 except AssertionDefect:
-  echo "Failed to generate a base's name."
+  writeLine(stderr, "Failed to generate a base's name.")
 
 playerShip.skyX = 200
 playerShip.skyY = 200
@@ -79,11 +79,11 @@ askForEvents()
 try:
   assert eventsList.len > 0
 except AssertionDefect:
-  echo "Failed to generate new events."
+  writeLine(stderr, "Failed to generate new events.")
 
 echo "Testing askForBases."
 askForBases()
 try:
   assert skyBases[1].askedForBases
 except AssertionDefect:
-  echo "Failed to ask for bases in a base."
+  writeLine(stderr, "Failed to ask for bases in a base.")
