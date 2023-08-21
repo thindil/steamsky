@@ -328,4 +328,30 @@ package body Config is
          In_Game => (if In_Game_Setting then 1 else 0));
    end Set_Boolean_Setting;
 
+   function Get_Integer_Setting
+     (Name: String; From_Game_Setting: Boolean := True) return Integer is
+      function Get_Ada_Integer_Setting
+        (N: chars_ptr; From_Game: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaIntegerSetting";
+   begin
+      return
+        Get_Ada_Integer_Setting
+          (N => New_String(Str => Name),
+           From_Game => (if From_Game_Setting then 1 else 0));
+   end Get_Integer_Setting;
+
+   procedure Set_Integer_Setting
+     (Name: String; Value: Integer; In_Game_Setting: Boolean := True) is
+      procedure Set_Ada_Integer_Setting(N: chars_ptr; V, In_Game: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaIntegerSetting";
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => Name), V => Value,
+         In_Game => (if In_Game_Setting then 1 else 0));
+   end Set_Integer_Setting;
+
 end Config;

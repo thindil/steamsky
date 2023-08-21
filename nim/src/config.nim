@@ -637,3 +637,71 @@ proc setAdaBooleanSetting(name: cstring; value,
     gameSettings.rightButton = value == 1
   else:
     discard
+
+proc getAdaIntegerSetting(name: cstring;
+    fromGameSetting: cint): cint {.raises: [], tags: [], exportc.} =
+  case $name
+  of "lowFuel":
+    result = gameSettings.lowFuel.cint
+  of "lowDrinks":
+    result = gameSettings.lowDrinks.cint
+  of "lowFood":
+    result = gameSettings.lowFood.cint
+  of "windowWidth":
+    result = gameSettings.windowWidth.cint
+  of "windowHeight":
+    result = gameSettings.windowHeight.cint
+  of "messagesLimit":
+    result = gameSettings.messagesLimit.cint
+  of "savedMessages":
+    result = gameSettings.savedMessages.cint
+  of "helpFontSize":
+    result = gameSettings.helpFontSize.cint
+  of "mapFontSize":
+    result = gameSettings.mapFontSize.cint
+  of "interfaceFontSize":
+    result = gameSettings.interfaceFontSize.cint
+  of "messagesPosition":
+    result = gameSettings.messagesPosition.cint
+  of "autoCloseMessagesTime":
+    result = gameSettings.autoCloseMessagesTime.cint
+  of "topicsPosition":
+    result = gameSettings.topicsPosition.cint
+  of "listsLimit":
+    result = gameSettings.listsLimit.cint
+  else:
+    result = 0
+
+proc setAdaIntegerSetting(name: cstring; value,
+    fromGameSetting: cint) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "lowFuel":
+    gameSettings.lowFuel = value
+  of "lowDrinks":
+    gameSettings.lowDrinks = value
+  of "lowFood":
+    gameSettings.lowFood = value
+  of "windowWidth":
+    gameSettings.windowWidth = value
+  of "windowHeight":
+    gameSettings.windowHeight = value
+  of "messagesLimit":
+    gameSettings.messagesLimit = value
+  of "savedMessages":
+    gameSettings.savedMessages = value
+  of "helpFontSize":
+    gameSettings.helpFontSize = value
+  of "mapFontSize":
+    gameSettings.mapFontSize = value
+  of "interfaceFontSize":
+    gameSettings.interfaceFontSize = value
+  of "messagesPosition":
+    gameSettings.messagesPosition = value
+  of "autoCloseMessagesTime":
+    gameSettings.autoCloseMessagesTime = value
+  of "topicsPosition":
+    gameSettings.topicsPosition = value
+  of "listsLimit":
+    gameSettings.listsLimit = value
+  else:
+    discard

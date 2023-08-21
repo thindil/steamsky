@@ -310,5 +310,9 @@ package Config is
      (Name: String; From_Game_Setting: Boolean := True) return Boolean;
    procedure Set_Boolean_Setting
      (Name: String; Value: Boolean; In_Game_Setting: Boolean := True);
+   function Get_Integer_Setting
+     (Name: String; From_Game_Setting: Boolean := True) return Integer;
+   procedure Set_Integer_Setting
+     (Name: String; Value: Integer; In_Game_Setting: Boolean := True);
 
 end Config;
