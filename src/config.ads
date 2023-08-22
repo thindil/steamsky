@@ -314,5 +314,11 @@ package Config is
      (Name: String; From_Game_Setting: Boolean := True) return Integer;
    procedure Set_Integer_Setting
      (Name: String; Value: Integer; In_Game_Setting: Boolean := True);
+   function Get_Undock_Speed return Ship_Speed;
+   procedure Set_Undock_Speed(Value: Ship_Speed);
+   function Get_Auto_Move_Stop return Auto_Move_Break;
+   procedure Set_Auto_Move_Stop(Value: Auto_Move_Break);
+   function Get_Messages_Order return Messages_Order_Type;
+   procedure Set_Messages_Order(Value: Messages_Order_Type);
 
 end Config;

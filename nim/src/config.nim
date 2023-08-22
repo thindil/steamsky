@@ -669,6 +669,12 @@ proc getAdaIntegerSetting(name: cstring;
     result = gameSettings.topicsPosition.cint
   of "listsLimit":
     result = gameSettings.listsLimit.cint
+  of "undockSpeed":
+    result = gameSettings.undockSpeed.ord.cint
+  of "autoMoveStop":
+    result = gameSettings.autoMoveStop.ord.cint
+  of "messagesOrder":
+    result = gameSettings.messagesOrder.ord.cint
   else:
     result = 0
 
@@ -703,5 +709,11 @@ proc setAdaIntegerSetting(name: cstring; value,
     gameSettings.topicsPosition = value
   of "listsLimit":
     gameSettings.listsLimit = value
+  of "undockSpeed":
+    gameSettings.undockSpeed = value.ShipSpeed
+  of "autoMoveStop":
+    gameSettings.autoMoveStop = value.AutoMoveBreak
+  of "messagesOrder":
+    gameSettings.messagesOrder = value.MessagesOrder
   else:
     discard

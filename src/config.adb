@@ -328,13 +328,14 @@ package body Config is
          In_Game => (if In_Game_Setting then 1 else 0));
    end Set_Boolean_Setting;
 
+   function Get_Ada_Integer_Setting
+     (N: chars_ptr; From_Game: Integer) return Integer with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaIntegerSetting";
+
    function Get_Integer_Setting
      (Name: String; From_Game_Setting: Boolean := True) return Integer is
-      function Get_Ada_Integer_Setting
-        (N: chars_ptr; From_Game: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaIntegerSetting";
    begin
       return
         Get_Ada_Integer_Setting
@@ -342,16 +343,54 @@ package body Config is
            From_Game => (if From_Game_Setting then 1 else 0));
    end Get_Integer_Setting;
 
+   procedure Set_Ada_Integer_Setting(N: chars_ptr; V, In_Game: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaIntegerSetting";
+
    procedure Set_Integer_Setting
      (Name: String; Value: Integer; In_Game_Setting: Boolean := True) is
-      procedure Set_Ada_Integer_Setting(N: chars_ptr; V, In_Game: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaIntegerSetting";
    begin
       Set_Ada_Integer_Setting
         (N => New_String(Str => Name), V => Value,
          In_Game => (if In_Game_Setting then 1 else 0));
    end Set_Integer_Setting;
+
+   function Get_Undock_Speed return Ship_Speed is
+   begin
+      return Ship_Speed'Val(Get_Integer_Setting(Name => "undockSpeed"));
+   end Get_Undock_Speed;
+
+   procedure Set_Undock_Speed(Value: Ship_Speed) is
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => "undockSpeed"), V => Ship_Speed'Pos(Value),
+         In_Game => 1);
+   end Set_Undock_Speed;
+
+   function Get_Auto_Move_Stop return Auto_Move_Break is
+   begin
+      return Auto_Move_Break'Val(Get_Integer_Setting(Name => "autoMoveStop"));
+   end Get_Auto_Move_Stop;
+
+   procedure Set_Auto_Move_Stop(Value: Auto_Move_Break) is
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => "autoMoveStop"),
+         V => Auto_Move_Break'Pos(Value), In_Game => 1);
+   end Set_Auto_Move_Stop;
+
+   function Get_Messages_Order return Messages_Order_Type is
+   begin
+      return
+        Messages_Order_Type'Val(Get_Integer_Setting(Name => "messagesOrder"));
+   end Get_Messages_Order;
+
+   procedure Set_Messages_Order(Value: Messages_Order_Type) is
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => "messagesOrder"),
+         V => Messages_Order_Type'Pos(Value), In_Game => 1);
+   end Set_Messages_Order;
 
 end Config;
