@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2023 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton \
 tooltip::tooltip .aboutmenu.website \
    {Visit the game website: https://thindil.itch.io/steam-sky}
 grid [ttk::button .aboutmenu.mail -text {(c)2016-2023 Bartek thindil Jasicki} \
-   -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] \
+   -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl.eu.org}] \
    -row 2 -columnspan 3
 tooltip::tooltip .aboutmenu.mail {Send a mail to the game creator}
 grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
