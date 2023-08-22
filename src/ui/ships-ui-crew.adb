@@ -473,7 +473,9 @@ package body Ships.UI.Crew is
             Previous_Command =>
               "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
             Next_Command =>
-              (if Crew_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+              (if
+                 Crew_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1
+               then ""
                else "ShowCrew" & Positive'Image(Page + 1)) &
               Natural'Image(Skill));
       elsif Crew_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then

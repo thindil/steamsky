@@ -230,10 +230,14 @@ package body Ships.UI.Crew.Inventory is
               "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
               Positive'Image(Page - 1),
             Next_Command =>
-              (if Inventory_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+              (if
+                 Inventory_Table.Row <
+                 Get_Integer_Setting(Name => "listsLimit") + 1
+               then ""
                else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(Page + 1)));
-      elsif Inventory_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Inventory_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Inventory_Table, Previous_Command => "",
             Next_Command =>

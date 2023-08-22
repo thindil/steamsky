@@ -232,9 +232,13 @@ package body Ships.UI.Cargo is
            (Table => Cargo_Table,
             Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
             Next_Command =>
-              (if Cargo_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+              (if
+                 Cargo_Table.Row <
+                 Get_Integer_Setting(Name => "listsLimit") + 1
+               then ""
                else "ShowCargo" & Positive'Image(Page + 1)));
-      elsif Cargo_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Cargo_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Cargo_Table, Previous_Command => "",
             Next_Command => "ShowCargo" & Positive'Image(Page + 1));

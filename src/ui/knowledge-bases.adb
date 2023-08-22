@@ -297,7 +297,8 @@ package body Knowledge.Bases is
                Color => To_String(Source => Color), New_Row => True);
          end if;
          Rows := Rows + 1;
-         exit Load_Bases_Loop when Rows = Get_Integer_Setting(Name => "listsLimit") + 1 and
+         exit Load_Bases_Loop when Rows =
+           Get_Integer_Setting(Name => "listsLimit") + 1 and
            I < Sky_Bases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
@@ -307,10 +308,14 @@ package body Knowledge.Bases is
             Previous_Command =>
               "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
             Next_Command =>
-              (if Bases_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+              (if
+                 Bases_Table.Row <
+                 Get_Integer_Setting(Name => "listsLimit") + 1
+               then ""
                else "ShowBases {" & Base_Name & "}" &
                  Positive'Image(Page + 1)));
-      elsif Bases_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 2 then
+      elsif Bases_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 2 then
          Add_Pagination
            (Table => Bases_Table, Previous_Command => "",
             Next_Command =>

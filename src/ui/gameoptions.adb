@@ -538,7 +538,8 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   Natural'Image(Get_Integer_Setting(Name => "autoCloseMessagesTime")))),
+                   Natural'Image
+                     (Get_Integer_Setting(Name => "autoCloseMessagesTime")))),
          7 =>
            (Name =>
               To_Unbounded_String
@@ -554,7 +555,9 @@ package body GameOptions is
                    Options_Canvas & ".options.interface.interfacefont"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Get_Integer_Setting(Name => "interfaceFontSize")))),
+                (Source =>
+                   Natural'Image
+                     (Get_Integer_Setting(Name => "interfaceFontSize")))),
          9 =>
            (Name =>
               To_Unbounded_String
@@ -570,7 +573,8 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.listslimit"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Get_Integer_Setting(Name => "listsLimit")))));
+                (Source =>
+                   Natural'Image(Get_Integer_Setting(Name => "listsLimit")))));
       Combo_Box_Array: constant array(1 .. 4) of Widget_Data :=
         (1 =>
            (Name =>
@@ -1025,8 +1029,10 @@ package body GameOptions is
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 0");
       end if;
-      Set_Integer_Setting(Name => "autoCloseMessagesTime", Value =>
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages"));
+      Set_Integer_Setting
+        (Name => "autoCloseMessagesTime",
+         Value =>
+           Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages"));
       Set_Boolean_Setting
         (Name => "showNumbers",
          Value =>
@@ -1037,10 +1043,13 @@ package body GameOptions is
       Set_Integer_Setting
         (Name => "helpFontSize",
          Value => Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont"));
-      Set_Integer_Setting(Name => "interfaceFontSize", Value =>
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont"));
-      Set_Integer_Setting(Name => "listsLimit", Value =>
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit"));
+      Set_Integer_Setting
+        (Name => "interfaceFontSize",
+         Value =>
+           Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont"));
+      Set_Integer_Setting
+        (Name => "listsLimit",
+         Value => Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit"));
       Save_Config;
       Key_Entry.Interp := Interp;
       Set_Accelerators_Loop :

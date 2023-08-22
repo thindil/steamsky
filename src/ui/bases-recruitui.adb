@@ -319,7 +319,8 @@ package body Bases.RecruitUI is
          <<End_Of_Loop>>
       end loop Load_Recruits_Loop;
       if Page > 1 then
-         if Recruit_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
+         if Recruit_Table.Row <
+           Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Recruit_Table,
                Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
@@ -330,7 +331,8 @@ package body Bases.RecruitUI is
                Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
                Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
          end if;
-      elsif Recruit_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Recruit_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Recruit_Table, Previous_Command => "",
             Next_Command => "ShowRecruit" & Positive'Image(Page + 1));

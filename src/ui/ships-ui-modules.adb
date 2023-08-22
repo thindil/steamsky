@@ -2612,7 +2612,8 @@ package body Ships.UI.Modules is
          <<End_Of_Loop>>
       end loop Show_Modules_Menu_Loop;
       if Page > 1 then
-         if Modules_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
+         if Modules_Table.Row <
+           Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Modules_Table,
                Previous_Command => "ShowModules" & Positive'Image(Page - 1));
@@ -2622,7 +2623,8 @@ package body Ships.UI.Modules is
                Previous_Command => "ShowModules" & Positive'Image(Page - 1),
                Next_Command => "ShowModules" & Positive'Image(Page + 1));
          end if;
-      elsif Modules_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Modules_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Modules_Table,
             Next_Command => "ShowModules" & Positive'Image(Page + 1));

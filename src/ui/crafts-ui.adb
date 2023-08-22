@@ -595,7 +595,8 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       if Page > 1 then
-         if Recipes_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
+         if Recipes_Table.Row <
+           Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Recipes_Table,
                Previous_Command =>
@@ -615,7 +616,8 @@ package body Crafts.UI is
                  (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                   else ""));
          end if;
-      elsif Recipes_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Recipes_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Recipes_Table, Previous_Command => "",
             Next_Command =>

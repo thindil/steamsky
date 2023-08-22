@@ -518,7 +518,8 @@ package body Bases.UI is
               "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
             else ""),
          Next_Command =>
-           (if Base_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+           (if Base_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1
+            then ""
             else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       Update_Table
         (Table => Base_Table,

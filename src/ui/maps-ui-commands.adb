@@ -1255,8 +1255,10 @@ package body Maps.UI.Commands is
       if Sash_Position > 0 and then Sash_Position /= Paned_Position then
          if Get_Integer_Setting(Name => "windowHeight") - Sash_Position >
            -1 then
-            Set_Integer_Setting(Name => "messagesPosition", Value =>
-              Get_Integer_Setting(Name => "windowHeight") - Sash_Position);
+            Set_Integer_Setting
+              (Name => "messagesPosition",
+               Value =>
+                 Get_Integer_Setting(Name => "windowHeight") - Sash_Position);
             Set_Ada_Messages_Position
               (New_Value => Get_Integer_Setting(Name => "messagesPosition"));
          end if;

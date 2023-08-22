@@ -664,7 +664,8 @@ package body Trades.UI is
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
-         if Trade_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
+         if Trade_Table.Row <
+           Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Trade_Table,
                Previous_Command =>
@@ -678,7 +679,8 @@ package body Trades.UI is
                Next_Command =>
                  "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif Trade_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
+      elsif Trade_Table.Row =
+        Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Trade_Table, Previous_Command => "",
             Next_Command =>

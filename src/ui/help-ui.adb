@@ -422,8 +422,9 @@ package body Help.UI is
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(pathName => Help_Window & ".paned", Interp => Interp);
    begin
-      Set_Integer_Setting(Name => "topicsPosition", Value =>
-        Natural'Value(SashPos(Paned => Paned, Index => "0")));
+      Set_Integer_Setting
+        (Name => "topicsPosition",
+         Value => Natural'Value(SashPos(Paned => Paned, Index => "0")));
       Destroy(Widgt => Help_Window);
       return TCL_OK;
    end Close_Help_Command;
@@ -536,7 +537,8 @@ package body Help.UI is
       Tcl_Eval(interp => Interp, strng => "update");
       SashPos
         (Paned => Paned, Index => "0",
-         NewPos => Natural'Image(Get_Integer_Setting(Name => "topicsPosition")));
+         NewPos =>
+           Natural'Image(Get_Integer_Setting(Name => "topicsPosition")));
       Insert_Topics_Loop :
       for I in 0 .. 100 loop
          Help := Get_Help(Title => Help_Title, Help_Index => I);

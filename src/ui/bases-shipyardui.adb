@@ -364,7 +364,9 @@ package body Bases.ShipyardUI is
               "ShowShipyard " & Arguments & Positive'Image(Page - 1)
             else ""),
          Next_Command =>
-           (if Install_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+           (if
+              Install_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1
+            then ""
             else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table
         (Table => Install_Table,
@@ -460,7 +462,8 @@ package body Bases.ShipyardUI is
               "ShowShipyard " & Arguments & Positive'Image(Page - 1)
             else ""),
          Next_Command =>
-           (if Remove_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
+           (if Remove_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1
+            then ""
             else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table(Table => Remove_Table);
       Tcl.Tk.Ada.Grid.Grid

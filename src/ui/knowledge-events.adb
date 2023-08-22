@@ -686,7 +686,8 @@ package body Knowledge.Events is
             <<End_Of_Loop>>
          end loop Load_Known_Events_Loop;
          if Page > 1 then
-            if Events_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
+            if Events_Table.Row <
+              Get_Integer_Setting(Name => "listsLimit") + 1 then
                Add_Pagination
                  (Table => Events_Table,
                   Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
@@ -697,7 +698,8 @@ package body Knowledge.Events is
                   Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
                   Next_Command => "ShowEvents" & Positive'Image(Page + 1));
             end if;
-         elsif Events_Table.Row > Get_Integer_Setting(Name => "listsLimit") then
+         elsif Events_Table.Row >
+           Get_Integer_Setting(Name => "listsLimit") then
             Add_Pagination
               (Table => Events_Table, Previous_Command => "",
                Next_Command => "ShowEvents" & Positive'Image(Page + 1));
