@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ package body Ships.UI.Crew.Inventory is
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
          else 1);
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
    begin
       Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
@@ -220,7 +220,7 @@ package body Ships.UI.Crew.Inventory is
               "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
             Column => 6, New_Row => True);
          exit Load_Inventory_Loop when Inventory_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
       if Page > 1 then
@@ -230,10 +230,10 @@ package body Ships.UI.Crew.Inventory is
               "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
               Positive'Image(Page - 1),
             Next_Command =>
-              (if Inventory_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+              (if Inventory_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
                else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(Page + 1)));
-      elsif Inventory_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Inventory_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Inventory_Table, Previous_Command => "",
             Next_Command =>

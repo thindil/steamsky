@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -435,7 +435,7 @@ package body Knowledge.Events is
       Label: Ttk_Label;
       Row: Positive;
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
       Color: Unbounded_String;
    begin
@@ -682,11 +682,11 @@ package body Knowledge.Events is
             end case;
             Row := Row + 1;
             exit Load_Known_Events_Loop when Events_Table.Row =
-              Game_Settings.Lists_Limit + 1;
+              Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Loop>>
          end loop Load_Known_Events_Loop;
          if Page > 1 then
-            if Events_Table.Row < Game_Settings.Lists_Limit + 1 then
+            if Events_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
                Add_Pagination
                  (Table => Events_Table,
                   Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
@@ -697,7 +697,7 @@ package body Knowledge.Events is
                   Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
                   Next_Command => "ShowEvents" & Positive'Image(Page + 1));
             end if;
-         elsif Events_Table.Row > Game_Settings.Lists_Limit then
+         elsif Events_Table.Row > Get_Integer_Setting(Name => "listsLimit") then
             Add_Pagination
               (Table => Events_Table, Previous_Command => "",
                Next_Command => "ShowEvents" & Positive'Image(Page + 1));

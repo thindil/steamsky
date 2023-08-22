@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ package body Bases.UI is
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Arguments: constant String :=
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
@@ -338,7 +338,7 @@ package body Bases.UI is
                Command => "ShowBaseMenu heal " & To_String(Source => I),
                Column => 3, New_Row => True);
             exit Show_Wounded_Crew_Loop when Base_Table.Row =
-              Game_Settings.Lists_Limit + 1;
+              Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
@@ -400,7 +400,7 @@ package body Bases.UI is
                Command => "ShowBaseMenu repair " & To_String(Source => I),
                Column => 3, New_Row => True);
             exit Show_Damaged_Modules_Loop when Base_Table.Row =
-              Game_Settings.Lists_Limit + 1;
+              Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
@@ -507,7 +507,7 @@ package body Bases.UI is
                  "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
                Column => 2, New_Row => True, Color => Get_Color(Cost => Cost));
             exit Show_Available_Recipes_Loop when Base_Table.Row =
-              Game_Settings.Lists_Limit + 1;
+              Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
@@ -518,7 +518,7 @@ package body Bases.UI is
               "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
             else ""),
          Next_Command =>
-           (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+           (if Base_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
             else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       Update_Table
         (Table => Base_Table,

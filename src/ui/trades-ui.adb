@@ -178,7 +178,7 @@ package body Trades.UI is
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
@@ -466,7 +466,7 @@ package body Trades.UI is
             Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 8,
             New_Row => True);
          exit Show_Cargo_Items_Loop when Trade_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
       Current_Item_Index :=
@@ -503,7 +503,7 @@ package body Trades.UI is
       Show_Trader_Items_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Show_Trader_Items_Loop when Trade_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 or
            not Is_Buyable
              (Base_Type => Base_Type,
@@ -664,7 +664,7 @@ package body Trades.UI is
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
-         if Trade_Table.Row < Game_Settings.Lists_Limit + 1 then
+         if Trade_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Trade_Table,
                Previous_Command =>
@@ -678,7 +678,7 @@ package body Trades.UI is
                Next_Command =>
                  "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif Trade_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Trade_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Trade_Table, Previous_Command => "",
             Next_Command =>

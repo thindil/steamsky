@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -165,7 +165,7 @@ package body Bases.LootUI is
          else 1);
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Arguments: constant String :=
@@ -347,7 +347,7 @@ package body Bases.LootUI is
             Command => "ShowLootItemInfo" & Positive'Image(I), Column => 5,
             New_Row => True);
          exit Add_Player_Cargo_Loop when Loot_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
       Current_Item_Index :=
@@ -379,7 +379,7 @@ package body Bases.LootUI is
       Add_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Add_Base_Cargo_Loop when Loot_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
@@ -465,7 +465,7 @@ package body Bases.LootUI is
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
       if Page > 1 then
-         if Loot_Table.Row < Game_Settings.Lists_Limit + 1 then
+         if Loot_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Loot_Table,
                Previous_Command =>
@@ -478,7 +478,7 @@ package body Bases.LootUI is
                Next_Command =>
                  "ShowLoot " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif Loot_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Loot_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Loot_Table,
             Next_Command =>

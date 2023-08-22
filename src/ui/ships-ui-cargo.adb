@@ -106,7 +106,7 @@ package body Ships.UI.Cargo is
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
          else 1);
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
       Free_Space_Label: constant Ttk_Label :=
         Get_Widget
@@ -223,7 +223,7 @@ package body Ships.UI.Cargo is
                Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5,
                New_Row => True);
             exit Load_Cargo_Loop when Cargo_Table.Row =
-              Game_Settings.Lists_Limit + 1;
+              Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Loop>>
          end Show_Item_Block;
       end loop Load_Cargo_Loop;
@@ -232,9 +232,9 @@ package body Ships.UI.Cargo is
            (Table => Cargo_Table,
             Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
             Next_Command =>
-              (if Cargo_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+              (if Cargo_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
                else "ShowCargo" & Positive'Image(Page + 1)));
-      elsif Cargo_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Cargo_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Cargo_Table, Previous_Command => "",
             Next_Command => "ShowCargo" & Positive'Image(Page + 1));

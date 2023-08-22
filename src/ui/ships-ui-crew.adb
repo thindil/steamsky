@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -203,7 +203,7 @@ package body Ships.UI.Crew is
       Tired_Level: Integer := 0;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Crew_Info_Frame: constant Ttk_Frame :=
@@ -464,7 +464,7 @@ package body Ships.UI.Crew is
             Command => "ShowMemberInfo" & Positive'Image(Crew_Indexes(I)),
             Column => 9, New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
@@ -473,10 +473,10 @@ package body Ships.UI.Crew is
             Previous_Command =>
               "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
             Next_Command =>
-              (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+              (if Crew_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
                else "ShowCrew" & Positive'Image(Page + 1)) &
               Natural'Image(Skill));
-      elsif Crew_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Crew_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Crew_Table,
             Next_Command =>

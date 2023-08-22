@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -570,7 +570,7 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.interface.listslimit"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Lists_Limit))));
+                (Source => Natural'Image(Get_Integer_Setting(Name => "listsLimit")))));
       Combo_Box_Array: constant array(1 .. 4) of Widget_Data :=
         (1 =>
            (Name =>
@@ -1039,8 +1039,8 @@ package body GameOptions is
          Value => Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont"));
       Set_Integer_Setting(Name => "interfaceFontSize", Value =>
         Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont"));
-      Game_Settings.Lists_Limit :=
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit");
+      Set_Integer_Setting(Name => "listsLimit", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit"));
       Save_Config;
       Key_Entry.Interp := Interp;
       Set_Accelerators_Loop :

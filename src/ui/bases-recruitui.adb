@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -195,7 +195,7 @@ package body Bases.RecruitUI is
          else 1);
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
    begin
