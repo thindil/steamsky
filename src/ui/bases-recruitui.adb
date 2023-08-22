@@ -193,8 +193,10 @@ package body Bases.RecruitUI is
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
    begin
       if Winfo_Get(Widgt => Recruit_Frame, Info => "exists") = "0" then
@@ -394,14 +396,16 @@ package body Bases.RecruitUI is
         Create
           (pathName => Recruit_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      --## rule off IMPROPER_INITIALIZATION
       Dialog_Close_Button, Info_Button, Button: Ttk_Button;
+      Progress_Bar: Ttk_ProgressBar;
+      Progress_Frame: Ttk_Frame;
+      Recruit_Label: Ttk_Label;
+      Tab_Button: Ttk_RadioButton;
+      --## rule on IMPROPER_INITIALIZATION
       Height, New_Height: Positive := 1;
       Width, New_Width: Positive := 1;
-      Progress_Bar: Ttk_ProgressBar;
-      Tab_Button: Ttk_RadioButton;
       Frame: Ttk_Frame := Create(pathName => Recruit_Dialog & ".buttonbox");
-      Recruit_Label: Ttk_Label;
-      Progress_Frame: Ttk_Frame;
       Tab_Names: constant array(1 .. 4) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "General"),
          2 => To_Unbounded_String(Source => "Attributes"),
@@ -807,9 +811,12 @@ package body Bases.RecruitUI is
         (interp => Interp, varName => "percent",
          newValue =>
            Trim(Source => Natural'Image(Trade_Payment), Side => Left));
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Cost :=
         Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
         (Trade_Payment * 5_000);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
+      --## rule off ASSIGNMENTS
       Cost :=
         (case Contract_Length is
            when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
@@ -817,6 +824,7 @@ package body Bases.RecruitUI is
            when 3 => Cost - Integer(Float(Recruit.Price) * 0.75),
            when 4 => Cost - Integer(Float(Recruit.Price) * 0.9),
            when others => Cost);
+      --## rule on ASSIGNMENTS
       if Cost < 1 then
          Cost := 1;
       end if;
@@ -883,9 +891,11 @@ package body Bases.RecruitUI is
       Scale.Name := New_String(Str => Dialog_Name & ".percent");
       Trade_Payment :=
         Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Cost :=
         Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
         (Trade_Payment * 5_000);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       case Contract_Length is
          when 1 =>
             Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
@@ -1256,11 +1266,13 @@ package body Bases.RecruitUI is
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Recruits: Recruits_Array
         (1 ..
              Positive
                (Recruit_Container.Length
                   (Container => Sky_Bases(Base_Index).Recruits)));
+      --## rule off IMPROPER_INITIALIZATION
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
