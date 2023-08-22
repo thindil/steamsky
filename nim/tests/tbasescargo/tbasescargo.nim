@@ -38,7 +38,7 @@ generateCargo()
 try:
   assert skyBases[1].cargo.len > 0
 except AssertionDefect:
-  echo "Failed to generate cargo for a base."
+  writeLine(stderr, "Failed to generate cargo for a base.")
 
 echo "Testing findBaseCargo."
 skyBases[1].cargo = @[]
@@ -46,15 +46,15 @@ generateCargo()
 try:
   assert findBaseCargo(1) == 0
 except AssertionDefect:
-  echo "Failed to find an item in a base cargo."
+  writeLine(stderr, "Failed to find an item in a base cargo.")
 try:
   assert findBaseCargo(40) == -1
 except AssertionDefect:
-  echo "Failed to not find an item in a base cargo."
+  writeLine(stderr, "Failed to not find an item in a base cargo.")
 try:
   assert findBaseCargo(490) == -1
 except AssertionDefect:
-  echo "Failed to not find a non existing item in a base cargo."
+  writeLine(stderr, "Failed to not find a non existing item in a base cargo.")
 
 echo "Testing updateBaseCargo."
 skyBases[1].cargo = @[]
@@ -66,9 +66,9 @@ updateBaseCargo(protoIndex, -1)
 try:
   assert skyBases[1].cargo[0].amount == amount
 except AssertionDefect:
-  echo "Failed to remove an item with protoIndex from a base cargo."
+  writeLine(stderr, "Failed to remove an item with protoIndex from a base cargo.")
 updateBaseCargo(cargoIndex = 0, amount = -1)
 try:
   assert skyBases[1].cargo[0].amount == amount - 1
 except AssertionDefect:
-  echo "Failed to remove an item with amount from a base cargo."
+  writeLine(stderr, "Failed to remove an item with amount from a base cargo.")
