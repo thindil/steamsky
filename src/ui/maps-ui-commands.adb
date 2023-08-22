@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -803,7 +803,7 @@ package body Maps.UI.Commands is
                   exit Move_Loop;
                end if;
             end if;
-            if Game_Settings.Auto_Move_Stop /= NEVER and
+            if Get_Auto_Move_Stop /= NEVER and
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index >
                 0 then
                Get_Event_Block :
@@ -811,7 +811,7 @@ package body Maps.UI.Commands is
                   Event_Index: constant Positive :=
                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
                begin
-                  case Game_Settings.Auto_Move_Stop is
+                  case Get_Auto_Move_Stop is
                      when ANY =>
                         if Get_Event(Index => Event_Index).E_Type in
                             ENEMYSHIP | TRADER | FRIENDLYSHIP |

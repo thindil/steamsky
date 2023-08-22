@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ package body Combat.UI is
              (Source => Message.Message, Low => 1,
               High => Length(Source => Current_Turn_Time));
       end if;
-      if Game_Settings.Messages_Order = OLDER_FIRST then
+      if Get_Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
          for I in Loop_Start .. -1 loop
             Message := Get_Message(Message_Index => I + 1);

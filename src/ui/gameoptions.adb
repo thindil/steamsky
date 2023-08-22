@@ -584,7 +584,7 @@ package body GameOptions is
               To_Unbounded_String
                 (Source =>
                    Natural'Image
-                     (Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
+                     (Ship_Speed'Pos(Get_Undock_Speed) - 1))),
          2 =>
            (Name =>
               To_Unbounded_String
@@ -593,7 +593,7 @@ package body GameOptions is
               To_Unbounded_String
                 (Source =>
                    Natural'Image
-                     (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
+                     (Auto_Move_Break'Pos(Get_Auto_Move_Stop)))),
          3 =>
            (Name =>
               To_Unbounded_String
@@ -602,7 +602,7 @@ package body GameOptions is
               To_Unbounded_String
                 (Source =>
                    Natural'Image
-                     (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
+                     (Messages_Order_Type'Pos(Get_Messages_Order)))),
          4 =>
            (Name =>
               To_Unbounded_String
@@ -922,9 +922,9 @@ package body GameOptions is
       Set_Boolean_Setting
         (Name => "autoRest",
          Value => Get_Checkbox_Value(Check_Box_Name => ".general.autorest"));
-      Game_Settings.Undock_Speed :=
+      Set_Undock_Speed(Value =>
         Ship_Speed'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);
+          (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1));
       Set_Boolean_Setting
         (Name => "autoCenter",
          Value => Get_Checkbox_Value(Check_Box_Name => ".general.autocenter"));
@@ -951,9 +951,9 @@ package body GameOptions is
       Set_Integer_Setting
         (Name => "lowFood",
          Value => Get_Spinbox_Value(Spin_Box_Name => ".general.food"));
-      Game_Settings.Auto_Move_Stop :=
+      Set_Auto_Move_Stop(Value =>
         Auto_Move_Break'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
+          (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop")));
       Set_Integer_Setting
         (Name => "messagesLimit",
          Value =>
@@ -962,9 +962,9 @@ package body GameOptions is
         (Name => "savedMessages",
          Value =>
            Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages"));
-      Game_Settings.Messages_Order :=
+      Set_Messages_Order(Value =>
         Messages_Order_Type'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder"));
+          (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder")));
       Game_Settings.Auto_Save :=
         Auto_Save_Type'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.autosave"));

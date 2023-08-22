@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ package body Messages.UI is
            (TextWidget => Messages_View, Index => "end",
             Text => "{There are no messages of that type.}");
       else
-         if Game_Settings.Messages_Order = OLDER_FIRST then
+         if Get_Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for I in 1 .. Messages_Amount loop
                Show_Message
@@ -289,7 +289,7 @@ package body Messages.UI is
       Delete
         (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Search_Text'Length = 0 then
-         if Game_Settings.Messages_Order = OLDER_FIRST then
+         if Get_Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for I in 1 .. Messages_Amount loop
                Show_Message
@@ -309,7 +309,7 @@ package body Messages.UI is
          Tcl_SetResult(interp => Interp, str => "1");
          return TCL_OK;
       end if;
-      if Game_Settings.Messages_Order = OLDER_FIRST then
+      if Get_Messages_Order = OLDER_FIRST then
          Search_Older_First_Loop :
          for I in 1 .. Messages_Amount loop
             Show_Selected_Messages_Block :
