@@ -583,8 +583,7 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   Natural'Image
-                     (Ship_Speed'Pos(Get_Undock_Speed) - 1))),
+                   Natural'Image(Ship_Speed'Pos(Get_Undock_Speed) - 1))),
          2 =>
            (Name =>
               To_Unbounded_String
@@ -592,8 +591,7 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   Natural'Image
-                     (Auto_Move_Break'Pos(Get_Auto_Move_Stop)))),
+                   Natural'Image(Auto_Move_Break'Pos(Get_Auto_Move_Stop)))),
          3 =>
            (Name =>
               To_Unbounded_String
@@ -922,9 +920,10 @@ package body GameOptions is
       Set_Boolean_Setting
         (Name => "autoRest",
          Value => Get_Checkbox_Value(Check_Box_Name => ".general.autorest"));
-      Set_Undock_Speed(Value =>
-        Ship_Speed'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1));
+      Set_Undock_Speed
+        (Value =>
+           Ship_Speed'Val
+             (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1));
       Set_Boolean_Setting
         (Name => "autoCenter",
          Value => Get_Checkbox_Value(Check_Box_Name => ".general.autocenter"));
@@ -951,9 +950,10 @@ package body GameOptions is
       Set_Integer_Setting
         (Name => "lowFood",
          Value => Get_Spinbox_Value(Spin_Box_Name => ".general.food"));
-      Set_Auto_Move_Stop(Value =>
-        Auto_Move_Break'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop")));
+      Set_Auto_Move_Stop
+        (Value =>
+           Auto_Move_Break'Val
+             (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop")));
       Set_Integer_Setting
         (Name => "messagesLimit",
          Value =>
@@ -962,9 +962,10 @@ package body GameOptions is
         (Name => "savedMessages",
          Value =>
            Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages"));
-      Set_Messages_Order(Value =>
-        Messages_Order_Type'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder")));
+      Set_Messages_Order
+        (Value =>
+           Messages_Order_Type'Val
+             (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder")));
       Game_Settings.Auto_Save :=
         Auto_Save_Type'Val
           (Get_Combobox_Value(Combo_Box_Name => ".general.autosave"));
