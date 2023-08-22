@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -459,7 +459,7 @@ package body Knowledge.Missions is
       Label: Ttk_Label;
       Row: Positive;
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
       Mission_Time, Color: Unbounded_String;
       Accepted_Mission: Mission_Data;
@@ -643,12 +643,12 @@ package body Knowledge.Missions is
             Row := Row + 1;
             Rows := Rows + 1;
             exit Load_Accepted_Missions_Loop when Rows =
-              Game_Settings.Lists_Limit and
+              Get_Integer_Setting(Name => "listsLimit") and
               I /= Get_Accepted_Missions_Amount;
             <<End_Of_Loop>>
          end loop Load_Accepted_Missions_Loop;
          if Page > 1 then
-            if Rows < Game_Settings.Lists_Limit then
+            if Rows < Get_Integer_Setting(Name => "listsLimit") then
                Add_Pagination
                  (Table => Missions_Table,
                   Previous_Command =>
@@ -661,7 +661,7 @@ package body Knowledge.Missions is
                     "ShowMissions" & Positive'Image(Page - 1),
                   Next_Command => "ShowMissions" & Positive'Image(Page + 1));
             end if;
-         elsif Rows > Game_Settings.Lists_Limit - 1 then
+         elsif Rows > Get_Integer_Setting(Name => "listsLimit") - 1 then
             Add_Pagination
               (Table => Missions_Table, Previous_Command => "",
                Next_Command => "ShowMissions" & Positive'Image(Page + 1));

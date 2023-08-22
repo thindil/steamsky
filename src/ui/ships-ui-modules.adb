@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -2553,7 +2553,7 @@ package body Ships.UI.Modules is
       Row: Positive := 2;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
    begin
@@ -2608,11 +2608,11 @@ package body Ships.UI.Modules is
             Column => 3, New_Row => True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when Modules_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Loop>>
       end loop Show_Modules_Menu_Loop;
       if Page > 1 then
-         if Modules_Table.Row < Game_Settings.Lists_Limit + 1 then
+         if Modules_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Modules_Table,
                Previous_Command => "ShowModules" & Positive'Image(Page - 1));
@@ -2622,7 +2622,7 @@ package body Ships.UI.Modules is
                Previous_Command => "ShowModules" & Positive'Image(Page - 1),
                Next_Command => "ShowModules" & Positive'Image(Page + 1));
          end if;
-      elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Modules_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Modules_Table,
             Next_Command => "ShowModules" & Positive'Image(Page + 1));

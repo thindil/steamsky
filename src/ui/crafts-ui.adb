@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ package body Crafts.UI is
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
          else 1);
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
       Recipe_Name: constant String :=
         (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2) else "");
@@ -458,7 +458,7 @@ package body Crafts.UI is
               "} " & Boolean'Image(Can_Craft),
             Checked => Has_Materials, Column => 4, New_Row => True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
       Check_Study_Prerequisites
@@ -467,7 +467,7 @@ package body Crafts.UI is
       Set_Study_Recipes_Loop :
       for I in Get_Known_Recipes_Amount + 1 .. Recipes_Indexes.Last_Index loop
          exit Set_Study_Recipes_Loop when Recipes_Table.Row =
-           Game_Settings.Lists_Limit + 1 or
+           Get_Integer_Setting(Name => "listsLimit") + 1 or
            I > Positive(Studies.Length);
          if Recipe_Name'Length > 0
            and then
@@ -533,7 +533,7 @@ package body Crafts.UI is
         Positive(Get_Known_Recipes_Amount + Natural(Studies.Length) + 1) ..
           Recipes_Indexes.Last_Index loop
          exit Set_Deconstruct_Recipes_Loop when Recipes_Table.Row =
-           Game_Settings.Lists_Limit + 1;
+           Get_Integer_Setting(Name => "listsLimit") + 1;
          if Recipe_Name'Length > 0
            and then
              Index
@@ -595,7 +595,7 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       if Page > 1 then
-         if Recipes_Table.Row < Game_Settings.Lists_Limit + 1 then
+         if Recipes_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
               (Table => Recipes_Table,
                Previous_Command =>
@@ -615,7 +615,7 @@ package body Crafts.UI is
                  (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                   else ""));
          end if;
-      elsif Recipes_Table.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Recipes_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 1 then
          Add_Pagination
            (Table => Recipes_Table, Previous_Command => "",
             Next_Command =>

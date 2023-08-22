@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ package body Knowledge.Bases is
         Get_Widget(pathName => Bases_Frame & ".options.types");
       Bases_Type, Bases_Owner, Bases_Status, Color: Unbounded_String;
       Start_Row: constant Positive :=
-        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
+        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
    begin
       Create
@@ -297,7 +297,7 @@ package body Knowledge.Bases is
                Color => To_String(Source => Color), New_Row => True);
          end if;
          Rows := Rows + 1;
-         exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
+         exit Load_Bases_Loop when Rows = Get_Integer_Setting(Name => "listsLimit") + 1 and
            I < Sky_Bases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
@@ -307,10 +307,10 @@ package body Knowledge.Bases is
             Previous_Command =>
               "ShowBases {" & Base_Name & "}" & Positive'Image(Page - 1),
             Next_Command =>
-              (if Bases_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+              (if Bases_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then ""
                else "ShowBases {" & Base_Name & "}" &
                  Positive'Image(Page + 1)));
-      elsif Bases_Table.Row = Game_Settings.Lists_Limit + 2 then
+      elsif Bases_Table.Row = Get_Integer_Setting(Name => "listsLimit") + 2 then
          Add_Pagination
            (Table => Bases_Table, Previous_Command => "",
             Next_Command =>
