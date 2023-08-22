@@ -182,7 +182,7 @@ package body MainMenu is
         (New_Size => Get_Integer_Setting(Name => "helpFontSize"),
          Font_Type => Help_Font_Type);
       Set_Fonts
-        (New_Size => Game_Settings.Interface_Font_Size,
+        (New_Size => Get_Integer_Setting(Name => "interfaceFontSize"),
          Font_Type => INTERFACEFONT);
       configure
         (Widgt => Version_Label,

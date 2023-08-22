@@ -538,7 +538,7 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
+                   Natural'Image(Get_Integer_Setting(Name => "autoCloseMessagesTime")))),
          7 =>
            (Name =>
               To_Unbounded_String
@@ -554,7 +554,7 @@ package body GameOptions is
                    Options_Canvas & ".options.interface.interfacefont"),
             Value =>
               To_Unbounded_String
-                (Source => Natural'Image(Game_Settings.Interface_Font_Size))),
+                (Source => Natural'Image(Get_Integer_Setting(Name => "interfaceFontSize")))),
          9 =>
            (Name =>
               To_Unbounded_String
@@ -1025,8 +1025,8 @@ package body GameOptions is
            (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
             Options => "-fullscreen 0");
       end if;
-      Game_Settings.Auto_Close_Messages_Time :=
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages");
+      Set_Integer_Setting(Name => "autoCloseMessagesTime", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages"));
       Set_Boolean_Setting
         (Name => "showNumbers",
          Value =>
@@ -1037,8 +1037,8 @@ package body GameOptions is
       Set_Integer_Setting
         (Name => "helpFontSize",
          Value => Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont"));
-      Game_Settings.Interface_Font_Size :=
-        Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont");
+      Set_Integer_Setting(Name => "interfaceFontSize", Value =>
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont"));
       Game_Settings.Lists_Limit :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit");
       Save_Config;

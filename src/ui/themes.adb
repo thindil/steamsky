@@ -695,14 +695,14 @@ package body Themes is
               options =>
                 "-file {" & To_String(Source => Images_Files(I)) &
                 "} -format {svg -scaletoheight" &
-                Positive'Image(Game_Settings.Interface_Font_Size + 8) & "}");
+                Positive'Image(Get_Integer_Setting(Name => "interfaceFontSize") + 8) & "}");
       end loop Load_Images_Loop;
       Tcl_Eval
         (interp => Get_Context,
          strng =>
            "ttk::theme::" & Theme_Use & "::LoadImages " &
            Containing_Directory(Name => To_String(Source => Theme.File_Name)) &
-           Positive'Image(Game_Settings.Interface_Font_Size + 8));
+           Positive'Image(Get_Integer_Setting(Name => "interfaceFontSize") + 8));
    end Load_Theme_Images;
 
 end Themes;

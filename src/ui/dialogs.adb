@@ -607,7 +607,7 @@ package body Dialogs is
       Add_Close_Button
         (Name => Message_Dialog & ".button",
          Text =>
-           "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
+           "Close" & Positive'Image(Get_Integer_Setting(Name => "autoCloseMessagesTime")),
          Command =>
            "CloseDialog " & Message_Dialog &
            (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame),

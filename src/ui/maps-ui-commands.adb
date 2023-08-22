@@ -1247,18 +1247,18 @@ package body Maps.UI.Commands is
       Paned_Position :=
         (if
            Get_Integer_Setting(Name => "windowHeight") -
-           Game_Settings.Messages_Position <
+           Get_Integer_Setting(Name => "messagesPosition") <
            0
          then Get_Integer_Setting(Name => "windowHeight")
          else Get_Integer_Setting(Name => "windowHeight") -
-           Game_Settings.Messages_Position);
+           Get_Integer_Setting(Name => "messagesPosition"));
       if Sash_Position > 0 and then Sash_Position /= Paned_Position then
          if Get_Integer_Setting(Name => "windowHeight") - Sash_Position >
            -1 then
-            Game_Settings.Messages_Position :=
-              Get_Integer_Setting(Name => "windowHeight") - Sash_Position;
+            Set_Integer_Setting(Name => "messagesPosition", Value =>
+              Get_Integer_Setting(Name => "windowHeight") - Sash_Position);
             Set_Ada_Messages_Position
-              (New_Value => Game_Settings.Messages_Position);
+              (New_Value => Get_Integer_Setting(Name => "messagesPosition"));
          end if;
          Paned_Position := Sash_Position;
       end if;

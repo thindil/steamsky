@@ -539,9 +539,9 @@ package body Utils.UI is
             end if;
          end Check_For_Combat_Block;
       elsif Result = "quit" then
-         Game_Settings.Messages_Position :=
+         Set_Integer_Setting(Name => "messagesPosition", Value =>
            Get_Integer_Setting(Name => "windowHeight") -
-           Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+           Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
          End_Game(Save => True);
          Show_Main_Menu;
       elsif Result = "resign" then
@@ -572,9 +572,9 @@ package body Utils.UI is
             End_Game(Save => False);
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
-         Game_Settings.Messages_Position :=
+         Set_Integer_Setting(Name => "messagesPosition", Value =>
            Get_Integer_Setting(Name => "windowHeight") -
-           Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+           Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
          End_Game(Save => False);
          Show_Main_Menu;
       elsif Result = "messages" then
@@ -1211,14 +1211,14 @@ package body Utils.UI is
                       (Get_Integer_Setting(Name => "helpFontSize")));
             end loop Set_Fonts_Loop;
          when INTERFACEFONT =>
-            Game_Settings.Interface_Font_Size := New_Size;
+            Set_Integer_Setting(Name => "interfaceFontSize", Value => New_Size);
             Set_Interface_Fonts_Loop :
             for FontName of Interface_Fonts loop
                Font.Configure
                  (FontName => To_String(Source => FontName),
                   Options =>
                     "-size" &
-                    Positive'Image(Game_Settings.Interface_Font_Size));
+                    Positive'Image(Get_Integer_Setting(Name => "interfaceFontSize")));
             end loop Set_Interface_Fonts_Loop;
       end case;
    end Set_Fonts;

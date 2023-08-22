@@ -1451,11 +1451,11 @@ package body Maps.UI is
       Paned_Position :=
         (if
            Get_Integer_Setting(Name => "windowHeight") -
-           Game_Settings.Messages_Position <
+           Get_Integer_Setting(Name => "messagesPosition") <
            0
          then Get_Integer_Setting(Name => "windowHeight")
          else Get_Integer_Setting(Name => "windowHeight") -
-           Game_Settings.Messages_Position);
+           Get_Integer_Setting(Name => "messagesPosition"));
       SashPos
         (Paned => Paned, Index => "0",
          NewPos => Natural'Image(Paned_Position));
