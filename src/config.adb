@@ -393,4 +393,24 @@ package body Config is
          V => Messages_Order_Type'Pos(Value), In_Game => 1);
    end Set_Messages_Order;
 
+   function Get_Interface_Theme return Unbounded_String is
+      function Get_Ada_Interface_Theme return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaInterfaceTheme";
+   begin
+      return
+        To_Unbounded_String(Source => Value(Item => Get_Ada_Interface_Theme));
+   end Get_Interface_Theme;
+
+   procedure Set_Interface_Theme(Value: Unbounded_String) is
+      procedure Set_Ada_Interface_Theme(V: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaInterfaceTheme";
+   begin
+      Set_Ada_Interface_Theme
+        (V => New_String(Str => To_String(Source => Value)));
+   end Set_Interface_Theme;
+
 end Config;
