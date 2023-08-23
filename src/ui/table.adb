@@ -283,7 +283,7 @@ package body Table is
            "{" & Canvas & " itemconfigure row$currentrow -fill " & Color &
            ";" & Canvas & " itemconfigure row" & Row & " -fill " &
            Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-selectbackground") &
            (if Command'Length > 0 then
               ";" & Canvas & " configure -cursor hand1"
@@ -328,7 +328,7 @@ package body Table is
         (if Table.Row rem 2 > 0 then
            Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-background"));
    begin
       if not New_Row then
@@ -374,7 +374,7 @@ package body Table is
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
          else Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-foreground"));
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
@@ -552,7 +552,7 @@ package body Table is
            "{set maxrows" & Natural'Image(Table.Row) &
            ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
            " itemconfigure row$currentrow -fill [ttk::style lookup " &
-           To_String(Source => Game_Settings.Interface_Theme) &
+           To_String(Source => Get_Interface_Theme) &
            " -selectbackground]}");
       if Grab_Focus then
          Widgets.Focus(Widgt => Table.Canvas);
@@ -925,7 +925,7 @@ package body Table is
         (if Current_Row rem 2 > 0 then
            Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-background"));
       Canvas: constant Tk_Canvas :=
         Get_Widget
@@ -952,7 +952,7 @@ package body Table is
          Options =>
            "-fill " &
            Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-selectbackground"));
       Tcl_SetVar
         (interp => Interp, varName => "currentrow",
@@ -1040,7 +1040,7 @@ package body Table is
            0
          then Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme),
+             (Name => To_String(Source => Get_Interface_Theme),
               Option => "-background"));
    begin
       Item_Configure

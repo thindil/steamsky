@@ -465,7 +465,7 @@ package body Help.UI is
       Help_View: constant Tk_Text :=
         Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
       Current_Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
+        Themes_List(To_String(Source => Get_Interface_Theme));
       Help: Help_Data;
       Help_Title: Unbounded_String;
    begin

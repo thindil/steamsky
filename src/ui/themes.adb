@@ -476,9 +476,9 @@ package body Themes is
       end loop Load_Themes_Loop;
       End_Search(Search => Themes_Directories);
       if not Themes_List.Contains
-          (Key => To_String(Source => Game_Settings.Interface_Theme)) then
-         Game_Settings.Interface_Theme :=
-           To_Unbounded_String(Source => "steamsky");
+          (Key => To_String(Source => Get_Interface_Theme)) then
+         Set_Interface_Theme(Value =>
+           To_Unbounded_String(Source => "steamsky"));
       end if;
    end Load_Themes;
 
@@ -651,7 +651,7 @@ package body Themes is
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
+        Themes_List(To_String(Source => Get_Interface_Theme));
       Images_Files: constant array(Positive range <>) of Unbounded_String :=
         (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon,
          3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon,

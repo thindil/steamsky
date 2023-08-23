@@ -434,14 +434,14 @@ package body Trades.UI is
                    (interp => Interp,
                     varName =>
                       "ttk::theme::" &
-                      To_String(Source => Game_Settings.Interface_Theme) &
+                      To_String(Source => Get_Interface_Theme) &
                       "::colors(-green)")
                elsif Profit < 0 then
                  Tcl_GetVar
                    (interp => Interp,
                     varName =>
                       "ttk::theme::" &
-                      To_String(Source => Game_Settings.Interface_Theme) &
+                      To_String(Source => Get_Interface_Theme) &
                       "::colors(-red)")
                else ""));
          Add_Button
@@ -635,7 +635,7 @@ package body Trades.UI is
                 (interp => Interp,
                  varName =>
                    "ttk::theme::" &
-                   To_String(Source => Game_Settings.Interface_Theme) &
+                   To_String(Source => Get_Interface_Theme) &
                    "::colors(-red)"));
          Add_Button
            (Table => Trade_Table,

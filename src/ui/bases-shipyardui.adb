@@ -1462,7 +1462,7 @@ package body Bases.ShipyardUI is
              (interp => Interp,
               varName =>
                 "ttk::theme::" &
-                To_String(Source => Game_Settings.Interface_Theme) &
+                To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       Tag_Configure
         (TextWidget => Module_Text, TagName => "green",
@@ -1472,7 +1472,7 @@ package body Bases.ShipyardUI is
              (interp => Interp,
               varName =>
                 "ttk::theme::" &
-                To_String(Source => Game_Settings.Interface_Theme) &
+                To_String(Source => Get_Interface_Theme) &
                 "::colors(-green)"));
       Set_Module_Info(Installing => True);
       configure

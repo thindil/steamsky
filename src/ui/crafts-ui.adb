@@ -1055,7 +1055,7 @@ package body Crafts.UI is
              (interp => Interp,
               varName =>
                 "ttk::theme::" &
-                To_String(Source => Game_Settings.Interface_Theme) &
+                To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append

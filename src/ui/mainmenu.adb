@@ -149,7 +149,7 @@ package body MainMenu is
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(Position => I) =
-           Game_Settings.Interface_Theme then
+           Get_Interface_Theme then
             Tcl_EvalFile
               (interp => Get_Context,
                fileName => To_String(Source => Themes_List(I).File_Name));
@@ -157,7 +157,7 @@ package body MainMenu is
          end if;
       end loop Load_Theme_Loop;
       Theme_Use
-        (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
+        (ThemeName => To_String(Source => Get_Interface_Theme));
       Load_Theme_Images;
       Tcl_EvalFile
         (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");

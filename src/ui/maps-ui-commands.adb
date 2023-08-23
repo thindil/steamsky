@@ -245,7 +245,7 @@ package body Maps.UI.Commands is
            Encode
              (Item =>
                 "" &
-                Themes_List(To_String(Source => Game_Settings.Interface_Theme))
+                Themes_List(To_String(Source => Get_Interface_Theme))
                   .Empty_Map_Icon) &
            "}]]");
       configure

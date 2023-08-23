@@ -418,7 +418,7 @@ package body Maps.UI is
       Map_Tag: Unbounded_String := Null_Unbounded_String;
       Story_X, Story_Y: Natural := 1;
       Current_Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
+        Themes_List(To_String(Source => Get_Interface_Theme));
       Preview: Boolean :=
         (if
            Tcl_GetVar(interp => Get_Context, varName => "mappreview")'Length >

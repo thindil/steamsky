@@ -450,7 +450,7 @@ package body Ships.UI.Modules is
              (interp => Interp,
               varName =>
                 "ttk::theme::" &
-                To_String(Source => Game_Settings.Interface_Theme) &
+                To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       Find_Repair_Material_Loop :
       for I in 1 .. Get_Proto_Amount loop
@@ -995,7 +995,7 @@ package body Ships.UI.Modules is
                       (interp => Interp,
                        varName =>
                          "ttk::theme::" &
-                         To_String(Source => Game_Settings.Interface_Theme) &
+                         To_String(Source => Get_Interface_Theme) &
                          "::colors(-red)"));
                Have_Ammo := False;
                if Ammo_Index in
