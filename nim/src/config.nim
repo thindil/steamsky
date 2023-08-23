@@ -675,6 +675,8 @@ proc getAdaIntegerSetting(name: cstring;
     result = gameSettings.autoMoveStop.ord.cint
   of "messagesOrder":
     result = gameSettings.messagesOrder.ord.cint
+  of "autoSave":
+    result = gameSettings.autoSave.ord.cint
   else:
     result = 0
 
@@ -715,6 +717,8 @@ proc setAdaIntegerSetting(name: cstring; value,
     gameSettings.autoMoveStop = value.AutoMoveBreak
   of "messagesOrder":
     gameSettings.messagesOrder = value.MessagesOrder
+  of "autoSave":
+    gameSettings.autoSave = value.AutoSaveTime
   else:
     discard
 

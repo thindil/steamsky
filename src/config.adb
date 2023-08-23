@@ -380,6 +380,18 @@ package body Config is
          V => Auto_Move_Break'Pos(Value), In_Game => 1);
    end Set_Auto_Move_Stop;
 
+   function Get_Auto_Save return Auto_Save_Type is
+   begin
+      return Auto_Save_Type'Val(Get_Integer_Setting(Name => "autoSave"));
+   end Get_Auto_Save;
+
+   procedure Set_Auto_Save(Value: Auto_Save_Type) is
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => "autoSave"), V => Auto_Save_Type'Pos(Value),
+         In_Game => 1);
+   end Set_Auto_Save;
+
    function Get_Messages_Order return Messages_Order_Type is
    begin
       return
