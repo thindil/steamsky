@@ -607,9 +607,7 @@ package body GameOptions is
                 (Source => Options_Canvas & ".options.general.autosave"),
             Value =>
               To_Unbounded_String
-                (Source =>
-                   Natural'Image
-                     (Auto_Save_Type'Pos(Get_Auto_Save)))));
+                (Source => Natural'Image(Auto_Save_Type'Pos(Get_Auto_Save)))));
    begin
       Label.Interp := Interp;
       Combo_Box_Widget.Interp := Interp;
@@ -965,9 +963,10 @@ package body GameOptions is
         (Value =>
            Messages_Order_Type'Val
              (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder")));
-      Set_Auto_Save(Value =>
-        Auto_Save_Type'Val
-          (Get_Combobox_Value(Combo_Box_Name => ".general.autosave")));
+      Set_Auto_Save
+        (Value =>
+           Auto_Save_Type'Val
+             (Get_Combobox_Value(Combo_Box_Name => ".general.autosave")));
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(Widgt => Theme_Combo_Box) then
