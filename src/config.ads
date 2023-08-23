@@ -320,5 +320,7 @@ package Config is
    procedure Set_Auto_Move_Stop(Value: Auto_Move_Break);
    function Get_Messages_Order return Messages_Order_Type;
    procedure Set_Messages_Order(Value: Messages_Order_Type);
+   function Get_Interface_Theme return Unbounded_String;
+   procedure Set_Interface_Theme(Value: Unbounded_String);
 
 end Config;

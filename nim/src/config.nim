@@ -717,3 +717,9 @@ proc setAdaIntegerSetting(name: cstring; value,
     gameSettings.messagesOrder = value.MessagesOrder
   else:
     discard
+
+proc getAdaInterfaceTheme(): cstring {.raises: [], tags: [], exportc.} =
+  return gameSettings.interfaceTheme.cstring
+
+proc setAdaInterfaceTheme(value: cstring) {.raises: [], tags: [], exportc.} =
+  gameSettings.interfaceTheme = $value
