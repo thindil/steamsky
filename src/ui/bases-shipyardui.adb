@@ -301,24 +301,24 @@ package body Bases.ShipyardUI is
          Add_Button
            (Table => Install_Table,
             Text => To_String(Source => Get_Module(Index => I).Name),
-            Tooltip => "Show available options for module",
+            Tooltip => "Show the module's info",
             Command =>
-              "ShowShipyardModuleMenu {" &
-              Trim(Source => I'Img, Side => Left) & "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
+              "} install",
             Column => 1);
          Add_Button
            (Table => Install_Table, Text => Get_Module_Type(Module_Index => I),
-            Tooltip => "Show available options for module",
+            Tooltip => "Show the module's info",
             Command =>
-              "ShowShipyardModuleMenu {" &
-              Trim(Source => I'Img, Side => Left) & "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
+              "} install",
             Column => 2);
          Add_Button
            (Table => Install_Table, Text => Integer'Image(Module_Size),
-            Tooltip => "Show available options for module",
+            Tooltip => "Show the module's info",
             Command =>
-              "ShowShipyardModuleMenu {" &
-              Trim(Source => I'Img, Side => Left) & "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
+              "} install",
             Column => 3, New_Row => False,
             Color =>
               (if Get_Module(Index => I).M_Type = HULL then
@@ -329,20 +329,20 @@ package body Bases.ShipyardUI is
            (Table => Install_Table,
             Text =>
               To_String(Source => Get_Module(Index => I).Repair_Material),
-            Tooltip => "Show available options for module",
+            Tooltip => "Show the module's info",
             Command =>
-              "ShowShipyardModuleMenu {" &
-              Trim(Source => I'Img, Side => Left) & "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
+              "} install",
             Column => 4);
          Cost := Get_Module(Index => I).Price;
          Count_Price
            (Price => Cost, Trader_Index => Find_Member(Order => TALK));
          Add_Button
            (Table => Install_Table, Text => Natural'Image(Cost),
-            Tooltip => "Show available options for module",
+            Tooltip => "Show the module's info",
             Command =>
-              "ShowShipyardModuleMenu {" &
-              Trim(Source => I'Img, Side => Left) & "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
+              "} install",
             Column => 5, New_Row => True,
             Color =>
               (if
@@ -1369,7 +1369,7 @@ package body Bases.ShipyardUI is
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argc        - Number of arguments passed to the command.
    -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Install_Info_Command
@@ -1381,7 +1381,7 @@ package body Bases.ShipyardUI is
    function Show_Install_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
       Cost: Positive;
@@ -1390,7 +1390,11 @@ package body Bases.ShipyardUI is
         Create_Dialog
           (Name => ".moduledialog",
            Title =>
-             To_String(Source => Get_Module(Index => Module_Index).Name));
+             To_String
+               (Source =>
+                  Get_Module
+                    (Index => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)))
+                    .Name));
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Dialog & ".info",
@@ -1417,6 +1421,7 @@ package body Bases.ShipyardUI is
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
    begin
+      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Fill_Compare_Modules_Loop :
       for I in Player_Ship.Modules.Iterate loop
          if Get_Module(Index => Player_Ship.Modules(I).Proto_Index).M_Type =
