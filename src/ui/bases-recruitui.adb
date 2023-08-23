@@ -380,7 +380,7 @@ package body Bases.RecruitUI is
       pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      Recruit_Info: Unbounded_String;
+      Recruit_Info: Unbounded_String := Null_Unbounded_String;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: Recruit_Data
