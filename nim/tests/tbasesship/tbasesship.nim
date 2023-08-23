@@ -42,4 +42,4 @@ payForDock()
 try:
   assert playerShip.cargo[0].amount == 90
 except AssertionDefect:
-  echo "Failed to pay for docking in a base."
+  writeLine(stderr, "Failed to pay for docking in a base.")
