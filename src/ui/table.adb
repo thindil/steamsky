@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -552,8 +552,7 @@ package body Table is
            "{set maxrows" & Natural'Image(Table.Row) &
            ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
            " itemconfigure row$currentrow -fill [ttk::style lookup " &
-           To_String(Source => Get_Interface_Theme) &
-           " -selectbackground]}");
+           To_String(Source => Get_Interface_Theme) & " -selectbackground]}");
       if Grab_Focus then
          Widgets.Focus(Widgt => Table.Canvas);
       end if;

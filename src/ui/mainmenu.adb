@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -148,16 +148,14 @@ package body MainMenu is
          Options => "-default " & Icon);
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(Position => I) =
-           Get_Interface_Theme then
+         if Themes_Container.Key(Position => I) = Get_Interface_Theme then
             Tcl_EvalFile
               (interp => Get_Context,
                fileName => To_String(Source => Themes_List(I).File_Name));
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;
-      Theme_Use
-        (ThemeName => To_String(Source => Get_Interface_Theme));
+      Theme_Use(ThemeName => To_String(Source => Get_Interface_Theme));
       Load_Theme_Images;
       Tcl_EvalFile
         (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");

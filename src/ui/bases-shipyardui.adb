@@ -1461,8 +1461,7 @@ package body Bases.ShipyardUI is
            Tcl_GetVar
              (interp => Interp,
               varName =>
-                "ttk::theme::" &
-                To_String(Source => Get_Interface_Theme) &
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       Tag_Configure
         (TextWidget => Module_Text, TagName => "green",
@@ -1471,8 +1470,7 @@ package body Bases.ShipyardUI is
            Tcl_GetVar
              (interp => Interp,
               varName =>
-                "ttk::theme::" &
-                To_String(Source => Get_Interface_Theme) &
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-green)"));
       Set_Module_Info(Installing => True);
       configure

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -477,8 +477,8 @@ package body Themes is
       End_Search(Search => Themes_Directories);
       if not Themes_List.Contains
           (Key => To_String(Source => Get_Interface_Theme)) then
-         Set_Interface_Theme(Value =>
-           To_Unbounded_String(Source => "steamsky"));
+         Set_Interface_Theme
+           (Value => To_Unbounded_String(Source => "steamsky"));
       end if;
    end Load_Themes;
 

@@ -1054,8 +1054,7 @@ package body Crafts.UI is
            Tcl_GetVar
              (interp => Interp,
               varName =>
-                "ttk::theme::" &
-                To_String(Source => Get_Interface_Theme) &
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append

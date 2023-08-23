@@ -695,8 +695,7 @@ package body GameOptions is
            "{" &
            To_String
              (Source =>
-                Themes_List(To_String(Source => Get_Interface_Theme))
-                  .Name) &
+                Themes_List(To_String(Source => Get_Interface_Theme)).Name) &
            "}");
       Key_Entry.Interp := Interp;
       Options_Frame.Name :=
@@ -972,14 +971,14 @@ package body GameOptions is
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(Widgt => Theme_Combo_Box) then
-            Set_Interface_Theme(Value =>
-              To_Unbounded_String
-                (Source => Themes_Container.Key(Position => I)));
+            Set_Interface_Theme
+              (Value =>
+                 To_Unbounded_String
+                   (Source => Themes_Container.Key(Position => I)));
             exit Set_Theme_Loop;
          end if;
       end loop Set_Theme_Loop;
-      Theme_Use
-        (ThemeName => To_String(Source => Get_Interface_Theme));
+      Theme_Use(ThemeName => To_String(Source => Get_Interface_Theme));
       Set_Theme;
       Map_View := Get_Widget(pathName => ".gameframe.paned.mapframe.map");
       if Tcl_GetVar

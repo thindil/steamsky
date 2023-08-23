@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -634,8 +634,7 @@ package body Trades.UI is
               Tcl_GetVar
                 (interp => Interp,
                  varName =>
-                   "ttk::theme::" &
-                   To_String(Source => Get_Interface_Theme) &
+                   "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                    "::colors(-red)"));
          Add_Button
            (Table => Trade_Table,
