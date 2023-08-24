@@ -38,62 +38,19 @@ package body Config is
       Prices_Bonus: Float;
       Difficulty_Level: chars_ptr;
    end record;
-   type Game_Nim_Settings_Record is record
-      Auto_Rest: Integer;
-      Undock_Speed: chars_ptr;
-      Auto_Center: Integer;
-      Auto_Return: Integer;
-      Auto_Finish: Integer;
-      Low_Fuel: Integer;
-      Low_Drinks: Integer;
-      Low_Food: Integer;
-      Auto_Move_Stop: chars_ptr;
-      Window_Width: Integer;
-      Window_Height: Integer;
-      Messages_Limit: Integer;
-      Saved_Messages: Integer;
-      Help_Font_Size: Integer;
-      Map_Font_Size: Integer;
-      Interface_Font_Size: Integer;
-      Interface_Theme: chars_ptr;
-      Messages_Order: chars_ptr;
-      Auto_Ask_For_Bases: Integer;
-      Auto_Ask_For_Events: Integer;
-      Show_Tooltips: Integer;
-      Show_Last_Messages: Integer;
-      Messages_Position: Integer;
-      Full_Screen: Integer;
-      Auto_Close_Messages_Time: Integer;
-      Auto_Save: chars_ptr;
-      Topics_Position: Integer;
-      Show_Numbers: Integer;
-      Right_Button: Integer;
-      Lists_Limit: Integer;
-   end record;
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Load_Config is
       use Tiny_String;
 
       Temp_New_Game: New_Nim_Game_Record;
-      Temp_Settings: Game_Nim_Settings_Record;
       procedure Load_Ada_Config
-        (Ada_New_Game_Settings: out New_Nim_Game_Record;
-         Ada_Game_Settings: out Game_Nim_Settings_Record) with
+        (Ada_New_Game_Settings: out New_Nim_Game_Record) with
          Import => True,
          Convention => C,
          External_Name => "loadAdaConfig";
-      function Get_Bool(Value: Integer) return Boolean is
-      begin
-         if Value = 1 then
-            return True;
-         end if;
-         return False;
-      end Get_Bool;
    begin
-      Load_Ada_Config
-        (Ada_New_Game_Settings => Temp_New_Game,
-         Ada_Game_Settings => Temp_Settings);
+      Load_Ada_Config(Ada_New_Game_Settings => Temp_New_Game);
       New_Game_Settings :=
         (Player_Name =>
            To_Unbounded_String
@@ -122,57 +79,14 @@ package body Config is
          Difficulty_Level =>
            Difficulty_Type'Value
              (Value(Item => Temp_New_Game.Difficulty_Level)));
-      Game_Settings :=
-        (Auto_Rest => Get_Bool(Value => Temp_Settings.Auto_Rest),
-         Undock_Speed =>
-           Ship_Speed'Value(Value(Item => Temp_Settings.Undock_Speed)),
-         Auto_Center => Get_Bool(Value => Temp_Settings.Auto_Center),
-         Auto_Return => Get_Bool(Value => Temp_Settings.Auto_Return),
-         Auto_Finish => Get_Bool(Value => Temp_Settings.Auto_Finish),
-         Low_Fuel => Temp_Settings.Low_Fuel,
-         Low_Drinks => Temp_Settings.Low_Drinks,
-         Low_Food => Temp_Settings.Low_Food,
-         Auto_Move_Stop =>
-           Auto_Move_Break'Value(Value(Item => Temp_Settings.Auto_Move_Stop)),
-         Window_Width => Temp_Settings.Window_Width,
-         Window_Height => Temp_Settings.Window_Height,
-         Messages_Limit => Temp_Settings.Messages_Limit,
-         Saved_Messages => Temp_Settings.Saved_Messages,
-         Help_Font_Size => Temp_Settings.Help_Font_Size,
-         Map_Font_Size => Temp_Settings.Map_Font_Size,
-         Interface_Font_Size => Temp_Settings.Interface_Font_Size,
-         Interface_Theme =>
-           To_Unbounded_String
-             (Source => Value(Item => Temp_Settings.Interface_Theme)),
-         Messages_Order =>
-           Messages_Order_Type'Value
-             (Value(Item => Temp_Settings.Messages_Order)),
-         Auto_Ask_For_Bases =>
-           Get_Bool(Value => Temp_Settings.Auto_Ask_For_Bases),
-         Auto_Ask_For_Events =>
-           Get_Bool(Value => Temp_Settings.Auto_Ask_For_Events),
-         Show_Tooltips => Get_Bool(Value => Temp_Settings.Show_Tooltips),
-         Show_Last_Messages =>
-           Get_Bool(Value => Temp_Settings.Show_Last_Messages),
-         Messages_Position => Temp_Settings.Messages_Position,
-         Full_Screen => Get_Bool(Value => Temp_Settings.Full_Screen),
-         Auto_Close_Messages_Time => Temp_Settings.Auto_Close_Messages_Time,
-         Auto_Save =>
-           Auto_Save_Type'Value(Value(Item => Temp_Settings.Auto_Save)),
-         Topics_Position => Temp_Settings.Topics_Position,
-         Show_Numbers => Get_Bool(Value => Temp_Settings.Show_Numbers),
-         Right_Button => Get_Bool(Value => Temp_Settings.Right_Button),
-         Lists_Limit => Temp_Settings.Lists_Limit);
    end Load_Config;
 
    procedure Save_Config is
       use Tiny_String;
 
       Temp_New_Game: New_Nim_Game_Record;
-      Temp_Settings: Game_Nim_Settings_Record;
       procedure Save_Ada_Config
-        (Ada_New_Game_Settings: New_Nim_Game_Record;
-         Ada_Game_Settings: Game_Nim_Settings_Record) with
+        (Ada_New_Game_Settings: New_Nim_Game_Record) with
          Import => True,
          Convention => C,
          External_Name => "saveAdaConfig";
@@ -205,51 +119,7 @@ package body Config is
          Prices_Bonus => New_Game_Settings.Prices_Bonus,
          Difficulty_Level =>
            New_String(Str => New_Game_Settings.Difficulty_Level'Image));
-      Temp_Settings :=
-        (Auto_Rest => (if Game_Settings.Auto_Rest then 1 else 0),
-         Undock_Speed =>
-           New_String(Str => Ship_Speed'Image(Game_Settings.Undock_Speed)),
-         Auto_Center => (if Game_Settings.Auto_Center then 1 else 0),
-         Auto_Return => (if Game_Settings.Auto_Return then 1 else 0),
-         Auto_Finish => (if Game_Settings.Auto_Finish then 1 else 0),
-         Low_Fuel => Game_Settings.Low_Fuel,
-         Low_Drinks => Game_Settings.Low_Drinks,
-         Low_Food => Game_Settings.Low_Food,
-         Auto_Move_Stop =>
-           New_String
-             (Str => Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop)),
-         Window_Width => Game_Settings.Window_Width,
-         Window_Height => Game_Settings.Window_Height,
-         Messages_Limit => Game_Settings.Messages_Limit,
-         Saved_Messages => Game_Settings.Saved_Messages,
-         Help_Font_Size => Game_Settings.Help_Font_Size,
-         Map_Font_Size => Game_Settings.Map_Font_Size,
-         Interface_Font_Size => Game_Settings.Interface_Font_Size,
-         Interface_Theme =>
-           New_String
-             (Str => To_String(Source => Game_Settings.Interface_Theme)),
-         Messages_Order =>
-           New_String
-             (Str => Messages_Order_Type'Image(Game_Settings.Messages_Order)),
-         Auto_Ask_For_Bases =>
-           (if Game_Settings.Auto_Ask_For_Bases then 1 else 0),
-         Auto_Ask_For_Events =>
-           (if Game_Settings.Auto_Ask_For_Events then 1 else 0),
-         Show_Tooltips => (if Game_Settings.Show_Tooltips then 1 else 0),
-         Show_Last_Messages =>
-           (if Game_Settings.Show_Last_Messages then 1 else 0),
-         Full_Screen => (if Game_Settings.Full_Screen then 1 else 0),
-         Auto_Close_Messages_Time => Game_Settings.Auto_Close_Messages_Time,
-         Auto_Save =>
-           New_String(Str => Auto_Save_Type'Image(Game_Settings.Auto_Save)),
-         Topics_Position => Game_Settings.Topics_Position,
-         Show_Numbers => (if Game_Settings.Show_Numbers then 1 else 0),
-         Right_Button => (if Game_Settings.Right_Button then 1 else 0),
-         Lists_Limit => Game_Settings.Lists_Limit,
-         Messages_Position => Game_Settings.Messages_Position);
-      Save_Ada_Config
-        (Ada_New_Game_Settings => Temp_New_Game,
-         Ada_Game_Settings => Temp_Settings);
+      Save_Ada_Config(Ada_New_Game_Settings => Temp_New_Game);
    end Save_Config;
 
    procedure Get_New_Game_Settings is
@@ -328,14 +198,13 @@ package body Config is
          In_Game => (if In_Game_Setting then 1 else 0));
    end Set_Boolean_Setting;
 
-   function Get_Ada_Integer_Setting
-     (N: chars_ptr; From_Game: Integer) return Integer with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaIntegerSetting";
-
    function Get_Integer_Setting
      (Name: String; From_Game_Setting: Boolean := True) return Integer is
+      function Get_Ada_Integer_Setting
+        (N: chars_ptr; From_Game: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaIntegerSetting";
    begin
       return
         Get_Ada_Integer_Setting

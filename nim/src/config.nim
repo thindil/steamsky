@@ -392,38 +392,6 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
 # Temporary code for interfacing with Ada
 
 type
-  AdaGameSettingsRecord = object
-    autoRest: cint
-    undockSpeed: cstring
-    autoCenter: cint
-    autoReturn: cint
-    autoFinish: cint
-    lowFuel: cint
-    lowDrinks: cint
-    lowFood: cint
-    autoMoveStop: cstring
-    windowWidth: cint
-    windowHeight: cint
-    messagesLimit: cint
-    savedMessages: cint
-    helpFontSize: cint
-    mapFontSize: cint
-    interfaceFontSize: cint
-    interfaceTheme: cstring
-    messagesOrder: cstring
-    autoAskForBases: cint
-    autoAskForEvents: cint
-    showTooltips: cint
-    showLastMessages: cint
-    messagesPosition: cint
-    fullScreen: cint
-    autoCloseMessagesTime: cint
-    autoSave: cstring
-    topicsPosition: cint
-    showNumbers: cint
-    rightButton: cint
-    listsLimit: cint
-
   AdaNewGameRecord = object
     playerName: cstring
     playerGender: char
@@ -441,8 +409,7 @@ type
     pricesBonus: cfloat
     difficultyLevel: cstring
 
-proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord;
-    adaGameSettings: var AdaGameSettingsRecord) {.sideEffect, raises: [],
+proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord) {.sideEffect, raises: [],
     tags: [RootEffect], exportc.} =
   ## Temporary code to load the game configuration and copy it to the Ada
   ## code
@@ -468,37 +435,6 @@ proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord;
       upgradeCostBonus: newGameSettings.upgradeCostBonus,
       pricesBonus: newGameSettings.pricesBonus, difficultyLevel: (
       $newGameSettings.difficultyLevel).toUpperAscii.cstring)
-  adaGameSettings = AdaGameSettingsRecord(autoRest: (
-      if gameSettings.autoRest: 1 else: 0), undockSpeed: (
-      $gameSettings.undockSpeed).toUpperAscii.cstring, autoCenter: (
-      if gameSettings.autoCenter: 1 else: 0), autoReturn: (
-      if gameSettings.autoReturn: 1 else: 0), autoFinish: (
-      if gameSettings.autoFinish: 1 else: 0),
-      lowFuel: gameSettings.lowFuel.cint,
-      lowDrinks: gameSettings.lowDrinks.cint,
-      lowFood: gameSettings.lowFood.cint, autoMoveStop: (
-      $gameSettings.autoMoveStop).toUpperAscii.cstring,
-      windowWidth: gameSettings.windowWidth.cint,
-      windowHeight: gameSettings.windowHeight.cint,
-      messagesLimit: gameSettings.messagesLimit.cint,
-      savedMessages: gameSettings.savedMessages.cint,
-      helpFontSize: gameSettings.helpFontSize.cint,
-      mapFontSize: gameSettings.mapFontSize.cint,
-      interfaceFontSize: gameSettings.interfaceFontSize.cint,
-      interfaceTheme: gameSettings.interfaceTheme.cstring, messagesOrder: (
-      $gameSettings.messagesOrder).toUpperAscii.cstring, autoAskForBases: (
-      if gameSettings.autoAskForBases: 1 else: 0), autoAskForEvents: (
-      if gameSettings.autoAskForEvents: 1 else: 0), showTooltips: (
-      if gameSettings.showTooltips: 1 else: 0), showLastMessages: (
-      if gameSettings.showLastMessages: 1 else: 0),
-      messagesPosition: gameSettings.messagesPosition.cint, fullScreen: (
-      if gameSettings.fullScreen: 1 else: 0),
-      autoCloseMessagesTime: gameSettings.autoCloseMessagesTime.cint,
-      autoSave: ($gameSettings.autoSave).toUpperAscii.cstring,
-      topicsPosition: gameSettings.topicsPosition.cint, showNumbers: (
-      if gameSettings.showNumbers: 1 else: 0), rightButton: (
-      if gameSettings.rightButton: 1 else: 0),
-      listsLimit: gameSettings.listsLimit.cint)
 
 proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
     raises: [], tags: [], exportc.} =
@@ -525,8 +461,7 @@ proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
 
-proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord;
-    adaGameSettings: AdaGameSettingsRecord) {.sideEffect, raises: [], tags: [
+proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord) {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   try:
     newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
@@ -544,38 +479,6 @@ proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord;
         upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
         pricesBonus: adaNewGameSettings.pricesBonus, difficultyLevel: parseEnum[
         DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
-    gameSettings = GameSettingsRecord(autoRest: adaGameSettings.autoRest == 1,
-        undockSpeed: parseEnum[ShipSpeed]((
-        $adaGameSettings.undockSpeed).toLowerAscii),
-        autoCenter: adaGameSettings.autoCenter == 1,
-        autoReturn: adaGameSettings.autoReturn == 1,
-        autoFinish: adaGameSettings.autoFinish == 1,
-        lowFuel: adaGameSettings.lowFuel, lowDrinks: adaGameSettings.lowDrinks,
-        lowFood: adaGameSettings.lowFood, autoMoveStop: parseEnum[
-        AutoMoveBreak](($adaGameSettings.autoMoveStop).toLowerAscii),
-        windowWidth: adaGameSettings.windowWidth,
-        windowHeight: adaGameSettings.windowHeight,
-        messagesLimit: adaGameSettings.messagesLimit,
-        savedMessages: adaGameSettings.savedMessages,
-        helpFontSize: adaGameSettings.helpFontSize,
-        mapFontSize: adaGameSettings.mapFontSize,
-        interfaceFontSize: adaGameSettings.interfaceFontSize,
-        interfaceTheme: $adaGameSettings.interfaceTheme,
-        messagesOrder: parseEnum[MessagesOrder]((
-        $adaGameSettings.messagesOrder).toLowerAscii),
-        autoAskForBases: adaGameSettings.autoAskForBases == 1,
-        autoAskForEvents: adaGameSettings.autoAskForEvents == 1,
-        showTooltips: adaGameSettings.showTooltips == 1,
-        showLastMessages: adaGameSettings.showLastMessages == 1,
-        messagesPosition: adaGameSettings.messagesPosition,
-        fullScreen: adaGameSettings.fullScreen == 1,
-        autoCloseMessagesTime: adaGameSettings.autoCloseMessagesTime,
-        autoSave: parseEnum[AutoSaveTime]((
-        $adaGameSettings.autoSave).toLowerAscii),
-        topicsPosition: adaGameSettings.topicsPosition,
-        showNumbers: adaGameSettings.showNumbers == 1,
-        rightButton: adaGameSettings.rightButton == 1,
-        listsLimit: adaGameSettings.listsLimit)
     saveConfig()
   except KeyError, IOError, OSError, ValueError:
     discard
