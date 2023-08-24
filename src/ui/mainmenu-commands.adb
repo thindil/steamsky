@@ -1076,8 +1076,8 @@ package body MainMenu.Commands is
             for J in Faction.Careers.Iterate loop
                if Faction.Careers(J).Name =
                  To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
-                  New_Game_Settings.Player_Career :=
-                    Careers_Container.Key(Position => J);
+                  Set_String_Setting(Name => "playerCareer", Value =>
+                    To_String(Source => Careers_Container.Key(Position => J)));
                   exit Find_Faction_Loop;
                end if;
             end loop Find_Career_Loop;
