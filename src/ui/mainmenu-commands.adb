@@ -1069,7 +1069,8 @@ package body MainMenu.Commands is
          Faction := Get_Faction(Number => I);
          if Faction.Name =
            To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
-            New_Game_Settings.Player_Faction := Get_Faction_Index(Number => I);
+            Set_String_Setting(Name => "playerFaction", Value => To_String(Source =>
+            Get_Faction_Index(Number => I)));
             Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
             Find_Career_Loop :
             for J in Faction.Careers.Iterate loop

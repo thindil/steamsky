@@ -218,7 +218,7 @@ package body MainMenu is
          Value =>
            To_String
              (Source =>
-                Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
+                Get_Faction(Index => To_Bounded_String(Source => Get_String_Setting(Name => "playerFaction"))).Name));
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
       Set
