@@ -193,7 +193,7 @@ package body MainMenu is
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert
         (TextEntry => Text_Entry, Index => "0",
-         Text => To_String(Source => New_Game_Settings.Player_Name));
+         Text => Get_String_Setting(Name => "playerName"));
       Tcl_SetVar
         (interp => Get_Context, varName => "playergender",
          newValue => "" & New_Game_Settings.Player_Gender);

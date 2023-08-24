@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1061,8 +1061,7 @@ package body MainMenu.Commands is
          Set_Current_Goal
            (Index => Get_Random(Min => 1, Max => Get_Goals_Amount));
       end if;
-      New_Game_Settings.Player_Name :=
-        To_Unbounded_String(Source => Get(Widgt => Text_Entry));
+      Set_String_Setting(Name => "playerName", Value => Get(Widgt => Text_Entry));
       Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
       New_Game_Settings.Ship_Name :=
         To_Unbounded_String(Source => Get(Widgt => Text_Entry));
