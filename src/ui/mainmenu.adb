@@ -201,7 +201,7 @@ package body MainMenu is
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert
         (TextEntry => Text_Entry, Index => "0",
-         Text => To_String(Source => New_Game_Settings.Ship_Name));
+         Text => Get_String_Setting(Name => "shipName"));
       Load_Factions_Names_Loop :
       for I in 1 .. Get_Factions_Amount loop
          Faction := Get_Faction(Number => I);

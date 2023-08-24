@@ -1063,8 +1063,7 @@ package body MainMenu.Commands is
       end if;
       Set_String_Setting(Name => "playerName", Value => Get(Widgt => Text_Entry));
       Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
-      New_Game_Settings.Ship_Name :=
-        To_Unbounded_String(Source => Get(Widgt => Text_Entry));
+      Set_String_Setting(Name => "shipName", Value => Get(Widgt => Text_Entry));
       Find_Faction_Loop :
       for I in 1 .. Get_Factions_Amount loop
          Faction := Get_Faction(Number => I);
