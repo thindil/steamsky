@@ -216,5 +216,7 @@ package Config is
    procedure Set_Auto_Save(Value: Auto_Save_Type);
    function Get_Interface_Theme return Unbounded_String;
    procedure Set_Interface_Theme(Value: Unbounded_String);
+   function Get_String_Setting(Name: String) return String;
+   procedure Set_String_Setting(Name, Value: String);
 
 end Config;

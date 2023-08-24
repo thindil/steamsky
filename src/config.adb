@@ -294,4 +294,24 @@ package body Config is
         (V => New_String(Str => To_String(Source => Value)));
    end Set_Interface_Theme;
 
+   function Get_String_Setting(Name: String) return String is
+      function Get_Ada_String_Setting(N: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaStringSetting";
+   begin
+      return
+        Value(Item => Get_Ada_String_Setting(N => New_String(Str => Name)));
+   end Get_String_Setting;
+
+   procedure Set_String_Setting(Name, Value: String) is
+      procedure Set_Ada_String_Setting(N, V: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaStringSetting";
+   begin
+      Set_Ada_String_Setting
+        (N => New_String(Str => Name), V => New_String(Str => Value));
+   end Set_String_Setting;
+
 end Config;

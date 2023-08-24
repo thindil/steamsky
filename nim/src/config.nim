@@ -409,8 +409,8 @@ type
     pricesBonus: cfloat
     difficultyLevel: cstring
 
-proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord) {.sideEffect, raises: [],
-    tags: [RootEffect], exportc.} =
+proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord) {.sideEffect,
+    raises: [], tags: [RootEffect], exportc.} =
   ## Temporary code to load the game configuration and copy it to the Ada
   ## code
   ##
@@ -461,8 +461,8 @@ proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
 
-proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord) {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord) {.sideEffect, raises: [
+    ], tags: [RootEffect], exportc.} =
   try:
     newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
         playerGender: adaNewGameSettings.playerGender,
@@ -630,3 +630,29 @@ proc getAdaInterfaceTheme(): cstring {.raises: [], tags: [], exportc.} =
 
 proc setAdaInterfaceTheme(value: cstring) {.raises: [], tags: [], exportc.} =
   gameSettings.interfaceTheme = $value
+
+proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+  case $name
+  of "playerName":
+    return newGameSettings.playerName.cstring
+  of "shipName":
+    return newGameSettings.shipName.cstring
+  of "playerFaction":
+    return newGameSettings.playerFaction.cstring
+  of "playerCareer":
+    return newGameSettings.playerCareer.cstring
+  of "startingBase":
+    return newGameSettings.startingBase.cstring
+
+proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "playerName":
+    newGameSettings.playerName = $value
+  of "shipName":
+    newGameSettings.shipName = $value
+  of "playerFaction":
+    newGameSettings.playerFaction = $value
+  of "playerCareer":
+    newGameSettings.playerCareer = $value
+  of "startingBase":
+    newGameSettings.startingBase = $value
