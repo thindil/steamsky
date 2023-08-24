@@ -19,18 +19,18 @@ echo "Testing getPrice."
 try:
   assert getPrice("0", 1) == 0
 except AssertionDefect:
-  echo "Failed to get the price of a non-buyable item."
+  writeLine(stderr, "Failed to get the price of a non-buyable item.")
 try:
   assert getPrice("1", 2) > 0
 except AssertionDefect:
-  echo "Failed to get the price of a buyable item."
+  writeLine(stderr, "Failed to get the price of a buyable item.")
 
 echo "Testing isBuyable."
 try:
   assert not isBuyable("0", 1)
 except AssertionDefect:
-  echo "Failed to check if an item is non-buyable."
+  writeLine(stderr, "Failed to check if an item is non-buyable.")
 try:
   assert isBuyable("1", 2)
 except AssertionDefect:
-  echo "Failed to check if an item is buyable."
+  writeLine(stderr, "Failed to check if an item is buyable.")
