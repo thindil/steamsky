@@ -354,6 +354,18 @@ package body Bases.RecruitUI is
    Recruit_Index: Positive;
    -- ****
 
+   -- ****if* RecruitUI/RecruitUI.Get_Recruit_Index
+   -- FUNCTION
+   -- Get the index of the currently selected recruit
+   -- RESULT
+   -- The index of the currently selected recruit
+   -- SOURCE
+   function Get_Recruit_Index return Positive is
+      -- ****
+   begin
+      return Recruit_Index;
+   end Get_Recruit_Index;
+
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
    -- Show information about the selected recruit
@@ -419,7 +431,7 @@ package body Bases.RecruitUI is
       Recruit :=
         Recruit_Container.Element
           (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
+           Index => Get_Recruit_Index);
       Faction := Get_Faction(Index => Recruit.Faction);
       Change_Title
         (Dialog => Recruit_Dialog,
@@ -787,7 +799,7 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
           (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
+           Index => Get_Recruit_Index);
       Cost: Integer;
       Daily_Payment: constant Natural :=
         Natural(Float'Value(Tcl_GetVar(interp => Interp, varName => "daily")));
@@ -879,7 +891,7 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
           (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
+           Index => Get_Recruit_Index);
       Scale: Ttk_Scale :=
         Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
       Daily_Payment: constant Natural :=
@@ -918,7 +930,7 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       Hire_Recruit
-        (Recruit_Index => Recruit_Index, Cost => Cost,
+        (Recruit_Index => Get_Recruit_Index, Cost => Cost,
          Daily_Payment => Daily_Payment, Trade_Payment => Trade_Payment,
          Contract_Length => Contract_Length_2);
       Update_Messages;
@@ -1008,7 +1020,7 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
           (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
+           Index => Get_Recruit_Index);
       Negotiate_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".negotiatedialog",
