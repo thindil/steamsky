@@ -303,22 +303,19 @@ package body Bases.ShipyardUI is
             Text => To_String(Source => Get_Module(Index => I).Name),
             Tooltip => "Show the module's info",
             Command =>
-              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
-              "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) & "}",
             Column => 1);
          Add_Button
            (Table => Install_Table, Text => Get_Module_Type(Module_Index => I),
             Tooltip => "Show the module's info",
             Command =>
-              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
-              "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) & "}",
             Column => 2);
          Add_Button
            (Table => Install_Table, Text => Integer'Image(Module_Size),
             Tooltip => "Show the module's info",
             Command =>
-              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
-              "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) & "}",
             Column => 3, New_Row => False,
             Color =>
               (if Get_Module(Index => I).M_Type = HULL then
@@ -331,8 +328,7 @@ package body Bases.ShipyardUI is
               To_String(Source => Get_Module(Index => I).Repair_Material),
             Tooltip => "Show the module's info",
             Command =>
-              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
-              "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) & "}",
             Column => 4);
          Cost := Get_Module(Index => I).Price;
          Count_Price
@@ -341,8 +337,7 @@ package body Bases.ShipyardUI is
            (Table => Install_Table, Text => Natural'Image(Cost),
             Tooltip => "Show the module's info",
             Command =>
-              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) &
-              "} install",
+              "ShowInstallInfo {" & Trim(Source => I'Img, Side => Left) & "}",
             Column => 5, New_Row => True,
             Color =>
               (if
@@ -395,27 +390,24 @@ package body Bases.ShipyardUI is
          Add_Button
            (Table => Remove_Table,
             Text => To_String(Source => Player_Ship.Modules(I).Name),
-            Tooltip => "Show available options for module",
-            Command =>
-              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Tooltip => "Show the module's info",
+            Command => "ShowRemoveInfo {" & Positive'Image(I) & "}",
             Column => 1);
          Add_Button
            (Table => Remove_Table,
             Text =>
               Get_Module_Type
                 (Module_Index => Player_Ship.Modules(I).Proto_Index),
-            Tooltip => "Show available options for module",
-            Command =>
-              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Tooltip => "Show the module's info",
+            Command => "ShowRemoveInfo {" & Positive'Image(I) & "}",
             Column => 2);
          Add_Button
            (Table => Remove_Table,
             Text =>
               Integer'Image
                 (Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Size),
-            Tooltip => "Show available options for module",
-            Command =>
-              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Tooltip => "Show the module's info",
+            Command => "ShowRemoveInfo {" & Positive'Image(I) & "}",
             Column => 3);
          Add_Button
            (Table => Remove_Table,
@@ -424,9 +416,8 @@ package body Bases.ShipyardUI is
                 (Source =>
                    Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
                      .Repair_Material),
-            Tooltip => "Show available options for module",
-            Command =>
-              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Tooltip => "Show the module's info",
+            Command => "ShowRemoveInfo {" & Positive'Image(I) & "}",
             Column => 4);
          Damage :=
            1.0 -
@@ -447,9 +438,8 @@ package body Bases.ShipyardUI is
             Reduce => False);
          Add_Button
            (Table => Remove_Table, Text => Natural'Image(Cost),
-            Tooltip => "Show available options for module",
-            Command =>
-              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Tooltip => "Show the module's info",
+            Command => "ShowRemoveInfo {" & Positive'Image(I) & "}",
             Column => 5, New_Row => True);
          exit Load_Remove_Modules_Loop when Remove_Table.Row =
            Get_Integer_Setting(Name => "listsLimit") + 1;
@@ -1611,13 +1601,14 @@ package body Bases.ShipyardUI is
    function Show_Remove_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
       use Tiny_String;
 
       Cost: Natural;
       Damage: Float;
-      Ship_Module_Index: constant Natural := Module_Index;
+      Ship_Module_Index: constant Natural :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
@@ -1636,6 +1627,7 @@ package body Bases.ShipyardUI is
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
    begin
+      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
       Damage :=
