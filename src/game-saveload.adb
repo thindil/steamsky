@@ -138,9 +138,9 @@ package body Game.SaveLoad is
            (Message => "Loading game difficulty settings...",
             Message_Type => EVERYTHING, New_Line => False);
          Saved_Node := Item(List => Nodes_List, Index => 0);
-         New_Game_Settings.Enemy_Damage_Bonus :=
+         Set_Float_Setting(Name => "enemyDamageBonus", Value =>
            Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "enemydamagebonus"));
+             (Get_Attribute(Elem => Saved_Node, Name => "enemydamagebonus")));
          New_Game_Settings.Player_Damage_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "playerdamagebonus"));

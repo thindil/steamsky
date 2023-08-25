@@ -1106,8 +1106,7 @@ package body MainMenu.Commands is
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
       New_Game_Settings.Difficulty_Level :=
         Difficulty_Type'Val(Natural'Value(Current(ComboBox => Combo_Box)));
-      New_Game_Settings.Enemy_Damage_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "enemyDamageBonus", Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playerdamage");
       New_Game_Settings.Player_Damage_Bonus :=
