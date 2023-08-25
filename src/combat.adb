@@ -647,7 +647,7 @@ package body Combat is
                        (if Ship = Player_Ship then
                           Integer
                             (Float(Weapon_Damage) *
-                             New_Game_Settings.Player_Damage_Bonus)
+                             Get_Float_Setting(Name => "playerDamageBonus"))
                         else Integer
                             (Float(Weapon_Damage) *
                              Get_Float_Setting(Name => "enemyDamageBonus")));

@@ -257,7 +257,7 @@ package body MainMenu is
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
-             (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
+             (Natural(Get_Float_Setting(Name => "playerDamageBonus") * 100.0)));
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".enemymeleedamage");
       Set

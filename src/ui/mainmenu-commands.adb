@@ -1109,8 +1109,8 @@ package body MainMenu.Commands is
       Set_Float_Setting(Name => "enemyDamageBonus", Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playerdamage");
-      New_Game_Settings.Player_Damage_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "playerDamageBonus", Value =>
+        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       --## rule off ASSIGNMENTS
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".enemymeleedamage");
