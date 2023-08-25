@@ -1264,10 +1264,12 @@ package body Bases.RecruitUI is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Recruit_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
@@ -1287,6 +1289,7 @@ package body Bases.RecruitUI is
                (Recruit_Container.Length
                   (Container => Sky_Bases(Base_Index).Recruits)));
       --## rule off IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1337,10 +1340,12 @@ package body Bases.RecruitUI is
          end if;
          return False;
       end "<";
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Module_Data,
          Array_Type => Recruits_Array);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       case Column is
          when 1 =>
             if Recruits_Sort_Order = NAMEASC then
@@ -1381,6 +1386,7 @@ package body Bases.RecruitUI is
          when others =>
             null;
       end case;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
