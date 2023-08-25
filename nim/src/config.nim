@@ -652,3 +652,41 @@ proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc.}
     newGameSettings.playerCareer = $value
   of "startingBase":
     newGameSettings.startingBase = $value
+
+proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc.} =
+  case $name
+  of "enemyDamageBonus":
+    return newGameSettings.enemyDamageBonus.cfloat
+  of "playerDamageBonus":
+    return newGameSettings.playerDamageBonus.cfloat
+  of "enemyMeleeDamageBonus":
+    return newGameSettings.enemyMeleeDamageBonus.cfloat
+  of "playerMeleeDamageBonus":
+    return newGameSettings.playerMeleeDamageBonus.cfloat
+  of "experienceBonus":
+    return newGameSettings.experienceBonus.cfloat
+  of "reputationBonus":
+    return newGameSettings.reputationBonus.cfloat
+  of "upgradeCostBonus":
+    return newGameSettings.upgradeCostBonus.cfloat
+  of "pricesBonus":
+    return newGameSettings.pricesBonus.cfloat
+
+proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [], exportc.} =
+  case $name
+  of "enemyDamageBonus":
+    newGameSettings.enemyDamageBonus = value
+  of "playerDamageBonus":
+    newGameSettings.playerDamageBonus = value
+  of "enemyMeleeDamageBonus":
+    newGameSettings.enemyMeleeDamageBonus = value
+  of "playerMeleeDamageBonus":
+    newGameSettings.playerMeleeDamageBonus = value
+  of "experienceBonus":
+    newGameSettings.experienceBonus = value
+  of "reputationBonus":
+    newGameSettings.reputationBonus = value
+  of "upgradeCostBonus":
+    newGameSettings.upgradeCostBonus = value
+  of "pricesBonus":
+    newGameSettings.pricesBonus = value

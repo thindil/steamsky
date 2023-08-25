@@ -297,4 +297,22 @@ package body Config is
         (N => New_String(Str => Name), V => New_String(Str => Value));
    end Set_String_Setting;
 
+   function Get_Float_Setting(Name: String) return Bonus_Type is
+      function Get_Ada_Float_Setting(N: chars_ptr) return Bonus_Type with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFloatSetting";
+   begin
+      return Get_Ada_Float_Setting(N => New_String(Str => Name));
+   end Get_Float_Setting;
+
+   procedure Set_Float_Setting(Name: String; Value: Bonus_Type) is
+      procedure Set_Ada_Float_Setting(N: chars_ptr; V: Bonus_Type) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaFloatSetting";
+   begin
+      Set_Ada_Float_Setting(N => New_String(Str => Name), V => Value);
+   end Set_Float_Setting;
+
 end Config;

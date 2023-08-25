@@ -214,5 +214,7 @@ package Config is
    procedure Set_Interface_Theme(Value: Unbounded_String);
    function Get_String_Setting(Name: String) return String;
    procedure Set_String_Setting(Name, Value: String);
+   function Get_Float_Setting(Name: String) return Bonus_Type;
+   procedure Set_Float_Setting(Name: String; Value: Bonus_Type);
 
 end Config;
