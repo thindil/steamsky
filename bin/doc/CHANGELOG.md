@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Redesigned the map info dialog
 - Updated look of dialogs in the shipyard screen
+- Updated look of the shipyard screen
 
 ### Fixed
 - Typos in old changelog
