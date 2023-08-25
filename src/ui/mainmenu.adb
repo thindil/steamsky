@@ -235,12 +235,12 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          Value =>
            (if
-              New_Game_Settings.Starting_Base =
-              To_Bounded_String(Source => "Any")
+              Get_String_Setting(Name => "startingBase") =
+              "Any"
             then "Any"
             else "{" &
               Get_Base_Type_Name
-                (Base_Type => New_Game_Settings.Starting_Base) &
+                (Base_Type => To_Bounded_String(Source => Get_String_Setting(Name => "startingBase"))) &
               "}"));
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
