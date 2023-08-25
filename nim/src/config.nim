@@ -485,8 +485,7 @@ proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord) {.sideEffect, raises: [
 
 # Temporary code for interfacing with Ada
 
-proc getAdaBooleanSetting(name: cstring;
-    fromGameSetting: cint): cint {.raises: [], tags: [], exportc.} =
+proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc.} =
   case $name
   of "autoRest":
     result = gameSettings.autoRest.cint
@@ -513,8 +512,7 @@ proc getAdaBooleanSetting(name: cstring;
   else:
     result = 0
 
-proc setAdaBooleanSetting(name: cstring; value,
-    fromGameSetting: cint) {.raises: [], tags: [], exportc.} =
+proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [], exportc.} =
   case $name
   of "autoRest":
     gameSettings.autoRest = value == 1
@@ -541,8 +539,7 @@ proc setAdaBooleanSetting(name: cstring; value,
   else:
     discard
 
-proc getAdaIntegerSetting(name: cstring;
-    fromGameSetting: cint): cint {.raises: [], tags: [], exportc.} =
+proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc.} =
   case $name
   of "lowFuel":
     result = gameSettings.lowFuel.cint
@@ -583,8 +580,7 @@ proc getAdaIntegerSetting(name: cstring;
   else:
     result = 0
 
-proc setAdaIntegerSetting(name: cstring; value,
-    fromGameSetting: cint) {.raises: [], tags: [], exportc.} =
+proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [], exportc.} =
   case $name
   of "lowFuel":
     gameSettings.lowFuel = value

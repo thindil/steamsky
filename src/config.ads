@@ -198,14 +198,10 @@ package Config is
 -- Temporary code to interact with Nim
 
    procedure Get_New_Game_Settings;
-   function Get_Boolean_Setting
-     (Name: String; From_Game_Setting: Boolean := True) return Boolean;
-   procedure Set_Boolean_Setting
-     (Name: String; Value: Boolean; In_Game_Setting: Boolean := True);
-   function Get_Integer_Setting
-     (Name: String; From_Game_Setting: Boolean := True) return Integer;
-   procedure Set_Integer_Setting
-     (Name: String; Value: Integer; In_Game_Setting: Boolean := True);
+   function Get_Boolean_Setting(Name: String) return Boolean;
+   procedure Set_Boolean_Setting(Name: String; Value: Boolean);
+   function Get_Integer_Setting(Name: String) return Integer;
+   procedure Set_Integer_Setting(Name: String; Value: Integer);
    function Get_Undock_Speed return Ship_Speed;
    procedure Set_Undock_Speed(Value: Ship_Speed);
    function Get_Auto_Move_Stop return Auto_Move_Break;

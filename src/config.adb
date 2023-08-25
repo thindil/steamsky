@@ -169,60 +169,45 @@ package body Config is
                           (New_Game_Settings.Difficulty_Level)))));
    end Get_New_Game_Settings;
 
-   function Get_Boolean_Setting
-     (Name: String; From_Game_Setting: Boolean := True) return Boolean is
-      function Get_Ada_Boolean_Setting
-        (N: chars_ptr; From_Game: Integer) return Integer with
+   function Get_Boolean_Setting(Name: String) return Boolean is
+      function Get_Ada_Boolean_Setting(N: chars_ptr) return Integer with
          Import => True,
          Convention => C,
          External_Name => "getAdaBooleanSetting";
    begin
-      if Get_Ada_Boolean_Setting
-          (N => New_String(Str => Name),
-           From_Game => (if From_Game_Setting then 1 else 0)) =
-        1 then
+      if Get_Ada_Boolean_Setting(N => New_String(Str => Name)) = 1 then
          return True;
       end if;
       return False;
    end Get_Boolean_Setting;
 
-   procedure Set_Boolean_Setting
-     (Name: String; Value: Boolean; In_Game_Setting: Boolean := True) is
-      procedure Set_Ada_Boolean_Setting(N: chars_ptr; V, In_Game: Integer) with
+   procedure Set_Boolean_Setting(Name: String; Value: Boolean) is
+      procedure Set_Ada_Boolean_Setting(N: chars_ptr; V: Integer) with
          Import => True,
          Convention => C,
          External_Name => "setAdaBooleanSetting";
    begin
       Set_Ada_Boolean_Setting
-        (N => New_String(Str => Name), V => (if Value then 1 else 0),
-         In_Game => (if In_Game_Setting then 1 else 0));
+        (N => New_String(Str => Name), V => (if Value then 1 else 0));
    end Set_Boolean_Setting;
 
-   function Get_Integer_Setting
-     (Name: String; From_Game_Setting: Boolean := True) return Integer is
-      function Get_Ada_Integer_Setting
-        (N: chars_ptr; From_Game: Integer) return Integer with
+   function Get_Integer_Setting(Name: String) return Integer is
+      function Get_Ada_Integer_Setting(N: chars_ptr) return Integer with
          Import => True,
          Convention => C,
          External_Name => "getAdaIntegerSetting";
    begin
-      return
-        Get_Ada_Integer_Setting
-          (N => New_String(Str => Name),
-           From_Game => (if From_Game_Setting then 1 else 0));
+      return Get_Ada_Integer_Setting(N => New_String(Str => Name));
    end Get_Integer_Setting;
 
-   procedure Set_Ada_Integer_Setting(N: chars_ptr; V, In_Game: Integer) with
+   procedure Set_Ada_Integer_Setting(N: chars_ptr; V: Integer) with
       Import => True,
       Convention => C,
       External_Name => "setAdaIntegerSetting";
 
-   procedure Set_Integer_Setting
-     (Name: String; Value: Integer; In_Game_Setting: Boolean := True) is
+   procedure Set_Integer_Setting(Name: String; Value: Integer) is
    begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => Name), V => Value,
-         In_Game => (if In_Game_Setting then 1 else 0));
+      Set_Ada_Integer_Setting(N => New_String(Str => Name), V => Value);
    end Set_Integer_Setting;
 
    function Get_Undock_Speed return Ship_Speed is
@@ -233,8 +218,7 @@ package body Config is
    procedure Set_Undock_Speed(Value: Ship_Speed) is
    begin
       Set_Ada_Integer_Setting
-        (N => New_String(Str => "undockSpeed"), V => Ship_Speed'Pos(Value),
-         In_Game => 1);
+        (N => New_String(Str => "undockSpeed"), V => Ship_Speed'Pos(Value));
    end Set_Undock_Speed;
 
    function Get_Auto_Move_Stop return Auto_Move_Break is
@@ -246,7 +230,7 @@ package body Config is
    begin
       Set_Ada_Integer_Setting
         (N => New_String(Str => "autoMoveStop"),
-         V => Auto_Move_Break'Pos(Value), In_Game => 1);
+         V => Auto_Move_Break'Pos(Value));
    end Set_Auto_Move_Stop;
 
    function Get_Auto_Save return Auto_Save_Type is
@@ -257,8 +241,7 @@ package body Config is
    procedure Set_Auto_Save(Value: Auto_Save_Type) is
    begin
       Set_Ada_Integer_Setting
-        (N => New_String(Str => "autoSave"), V => Auto_Save_Type'Pos(Value),
-         In_Game => 1);
+        (N => New_String(Str => "autoSave"), V => Auto_Save_Type'Pos(Value));
    end Set_Auto_Save;
 
    function Get_Messages_Order return Messages_Order_Type is
@@ -271,7 +254,7 @@ package body Config is
    begin
       Set_Ada_Integer_Setting
         (N => New_String(Str => "messagesOrder"),
-         V => Messages_Order_Type'Pos(Value), In_Game => 1);
+         V => Messages_Order_Type'Pos(Value));
    end Set_Messages_Order;
 
    function Get_Interface_Theme return Unbounded_String is
