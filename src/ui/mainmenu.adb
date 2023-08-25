@@ -218,7 +218,11 @@ package body MainMenu is
          Value =>
            To_String
              (Source =>
-                Get_Faction(Index => To_Bounded_String(Source => Get_String_Setting(Name => "playerFaction"))).Name));
+                Get_Faction
+                  (Index =>
+                     To_Bounded_String
+                       (Source => Get_String_Setting(Name => "playerFaction")))
+                  .Name));
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
       Set
@@ -227,20 +231,18 @@ package body MainMenu is
            To_String
              (Source =>
                 Get_Career
-                  (Career_Index => Get_String_Setting(Name => "playerCareer")
-                     )
+                  (Career_Index => Get_String_Setting(Name => "playerCareer"))
                   .Name));
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set
         (ComboBox => Combo_Box,
          Value =>
-           (if
-              Get_String_Setting(Name => "startingBase") =
-              "Any"
-            then "Any"
+           (if Get_String_Setting(Name => "startingBase") = "Any" then "Any"
             else "{" &
               Get_Base_Type_Name
-                (Base_Type => To_Bounded_String(Source => Get_String_Setting(Name => "startingBase"))) &
+                (Base_Type =>
+                   To_Bounded_String
+                     (Source => Get_String_Setting(Name => "startingBase"))) &
               "}"));
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");

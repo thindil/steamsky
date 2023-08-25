@@ -1061,23 +1061,29 @@ package body MainMenu.Commands is
          Set_Current_Goal
            (Index => Get_Random(Min => 1, Max => Get_Goals_Amount));
       end if;
-      Set_String_Setting(Name => "playerName", Value => Get(Widgt => Text_Entry));
+      Set_String_Setting
+        (Name => "playerName", Value => Get(Widgt => Text_Entry));
       Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
-      Set_String_Setting(Name => "shipName", Value => Get(Widgt => Text_Entry));
+      Set_String_Setting
+        (Name => "shipName", Value => Get(Widgt => Text_Entry));
       Find_Faction_Loop :
       for I in 1 .. Get_Factions_Amount loop
          Faction := Get_Faction(Number => I);
          if Faction.Name =
            To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
-            Set_String_Setting(Name => "playerFaction", Value => To_String(Source =>
-            Get_Faction_Index(Number => I)));
+            Set_String_Setting
+              (Name => "playerFaction",
+               Value => To_String(Source => Get_Faction_Index(Number => I)));
             Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
             Find_Career_Loop :
             for J in Faction.Careers.Iterate loop
                if Faction.Careers(J).Name =
                  To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
-                  Set_String_Setting(Name => "playerCareer", Value =>
-                    To_String(Source => Careers_Container.Key(Position => J)));
+                  Set_String_Setting
+                    (Name => "playerCareer",
+                     Value =>
+                       To_String
+                         (Source => Careers_Container.Key(Position => J)));
                   exit Find_Faction_Loop;
                end if;
             end loop Find_Career_Loop;
@@ -1090,7 +1096,9 @@ package body MainMenu.Commands is
          exit Set_Starting_Base_Loop when Length(Source => Base_Type) = 0;
          if Get_Base_Type_Name(Base_Type => Base_Type) =
            Get(Widgt => Combo_Box) then
-            Set_String_Setting(Name => "startingBase", Value => To_String(Source => Base_Type));
+            Set_String_Setting
+              (Name => "startingBase",
+               Value => To_String(Source => Base_Type));
             exit Set_Starting_Base_Loop;
          end if;
       end loop Set_Starting_Base_Loop;
