@@ -637,7 +637,7 @@ package body Bases.Ship is
            Flag => "shipyard") then
          Cost := Cost / 2;
       end if;
-      Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+      Cost := Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
       if Cost = 0 then
          Cost := 1;
       end if;

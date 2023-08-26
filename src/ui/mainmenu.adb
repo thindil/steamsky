@@ -294,7 +294,7 @@ package body MainMenu is
       Set
         (SpinBox => Spin_Box,
          Value =>
-           Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
+           Natural'Image(Natural(Get_Float_Setting(Name => "pricesBonus") * 100.0)));
       Tcl_Eval(interp => Get_Context, strng => "SetPoints");
       Show_Main_Menu;
       Current

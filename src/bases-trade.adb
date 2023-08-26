@@ -203,7 +203,7 @@ package body Bases.Trade is
              .Difficulty *
            10;
       end if;
-      Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+      Cost := Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -323,7 +323,7 @@ package body Bases.Trade is
             end if;
          end loop Count_Heal_Cost_Loop;
       end if;
-      Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+      Cost := Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -343,7 +343,7 @@ package body Bases.Trade is
    function Train_Cost
      (Member_Index: Crew_Container.Extended_Index;
       Skill_Index: Skills_Container.Extended_Index) return Natural is
-      Cost: Natural := Natural(100.0 * New_Game_Settings.Prices_Bonus);
+      Cost: Natural := Natural(100.0 * Get_Float_Setting(Name => "pricesBonus"));
    begin
       Count_Train_Cost_Loop :
       for Skill of Player_Ship.Crew(Member_Index).Skills loop
@@ -354,7 +354,7 @@ package body Bases.Trade is
             Cost :=
               Natural
                 (Float((Skill.Level + 1) * 100) *
-                 Float(New_Game_Settings.Prices_Bonus));
+                 Float(Get_Float_Setting(Name => "pricesBonus")));
             if Cost = 0 then
                Cost := 1;
             end if;

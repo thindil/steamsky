@@ -1133,8 +1133,8 @@ package body MainMenu.Commands is
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".prices");
       --## rule on ASSIGNMENTS
-      New_Game_Settings.Prices_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "pricesBonus", Value =>
+        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       New_Game;
       Start_Game;
       return TCL_OK;
