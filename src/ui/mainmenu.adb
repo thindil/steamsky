@@ -257,33 +257,39 @@ package body MainMenu is
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
-             (Natural(Get_Float_Setting(Name => "playerDamageBonus") * 100.0)));
+             (Natural
+                (Get_Float_Setting(Name => "playerDamageBonus") * 100.0)));
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".enemymeleedamage");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
-             (Natural(Get_Float_Setting(Name => "enemyMeleeDamageBonus") * 100.0)));
+             (Natural
+                (Get_Float_Setting(Name => "enemyMeleeDamageBonus") * 100.0)));
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playermeleedamage");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
-             (Natural(Get_Float_Setting(Name => "playerMeleeDamageBonus") * 100.0)));
+             (Natural
+                (Get_Float_Setting(Name => "playerMeleeDamageBonus") *
+                 100.0)));
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".experience");
       Set
         (SpinBox => Spin_Box,
          Value =>
-           Natural'Image(Natural(Get_Float_Setting(Name => "experienceBonus") * 100.0)));
+           Natural'Image
+             (Natural(Get_Float_Setting(Name => "experienceBonus") * 100.0)));
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".reputation");
       Set
         (SpinBox => Spin_Box,
          Value =>
-           Natural'Image(Natural(Get_Float_Setting(Name => "reputationBonus") * 100.0)));
+           Natural'Image
+             (Natural(Get_Float_Setting(Name => "reputationBonus") * 100.0)));
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".upgrade");
       Set
         (SpinBox => Spin_Box,
@@ -294,7 +300,8 @@ package body MainMenu is
       Set
         (SpinBox => Spin_Box,
          Value =>
-           Natural'Image(Natural(Get_Float_Setting(Name => "pricesBonus") * 100.0)));
+           Natural'Image
+             (Natural(Get_Float_Setting(Name => "pricesBonus") * 100.0)));
       Tcl_Eval(interp => Get_Context, strng => "SetPoints");
       Show_Main_Menu;
       Current

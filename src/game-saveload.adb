@@ -138,33 +138,54 @@ package body Game.SaveLoad is
            (Message => "Loading game difficulty settings...",
             Message_Type => EVERYTHING, New_Line => False);
          Saved_Node := Item(List => Nodes_List, Index => 0);
-         Set_Float_Setting(Name => "enemyDamageBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "enemydamagebonus")));
-         Set_Float_Setting(Name => "playerDamageBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "playerdamagebonus")));
-         Set_Float_Setting(Name => "enemyMeleeDamageBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute
-                (Elem => Saved_Node, Name => "enemymeleedamagebonus")));
-         Set_Float_Setting(Name => "playerMeleeDamageBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute
-                (Elem => Saved_Node, Name => "playermeleedamagebonus")));
-         Set_Float_Setting(Name => "experienceBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "experiencebonus")));
-         Set_Float_Setting(Name => "reputationBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "reputationbonus")));
-         Set_Float_Setting(Name => "upgradeCostBonus", Value =>
-           Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "upgradecostbonus")));
-         if Get_Attribute(Elem => Saved_Node, Name => "pricesbonus") /= "" then
-            Set_Float_Setting(Name => "pricesBonus", Value =>
+         Set_Float_Setting
+           (Name => "enemyDamageBonus",
+            Value =>
               Bonus_Type'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "pricesbonus")));
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "enemydamagebonus")));
+         Set_Float_Setting
+           (Name => "playerDamageBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "playerdamagebonus")));
+         Set_Float_Setting
+           (Name => "enemyMeleeDamageBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "enemymeleedamagebonus")));
+         Set_Float_Setting
+           (Name => "playerMeleeDamageBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "playermeleedamagebonus")));
+         Set_Float_Setting
+           (Name => "experienceBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "experiencebonus")));
+         Set_Float_Setting
+           (Name => "reputationBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "reputationbonus")));
+         Set_Float_Setting
+           (Name => "upgradeCostBonus",
+            Value =>
+              Bonus_Type'Value
+                (Get_Attribute
+                   (Elem => Saved_Node, Name => "upgradecostbonus")));
+         if Get_Attribute(Elem => Saved_Node, Name => "pricesbonus") /= "" then
+            Set_Float_Setting
+              (Name => "pricesBonus",
+               Value =>
+                 Bonus_Type'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "pricesbonus")));
          end if;
          Log_Message
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,

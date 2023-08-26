@@ -492,7 +492,9 @@ package body Bases.UI is
                    .Difficulty *
                  10);
             Cost :=
-              Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
+              Natural
+                (Float(Cost) *
+                 Float(Get_Float_Setting(Name => "pricesBonus")));
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -730,7 +732,9 @@ package body Bases.UI is
                 (Recipe_Index => To_Bounded_String(Source => Item_Index))
                 .Difficulty *
               10);
-         Cost := Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
+         Cost :=
+           Natural
+             (Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
          if Cost = 0 then
             Cost := 1;
          end if;
@@ -1025,7 +1029,9 @@ package body Bases.UI is
                    .Difficulty *
                  10);
             Cost :=
-              Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
+              Natural
+                (Float(Cost) *
+                 Float(Get_Float_Setting(Name => "pricesBonus")));
             if Cost = 0 then
                Cost := 1;
             end if;

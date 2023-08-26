@@ -1106,35 +1106,44 @@ package body MainMenu.Commands is
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
       New_Game_Settings.Difficulty_Level :=
         Difficulty_Type'Val(Natural'Value(Current(ComboBox => Combo_Box)));
-      Set_Float_Setting(Name => "enemyDamageBonus", Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "enemyDamageBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playerdamage");
-      Set_Float_Setting(Name => "playerDamageBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "playerDamageBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       --## rule off ASSIGNMENTS
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".enemymeleedamage");
-      Set_Float_Setting(Name => "enemyMeleeDamageBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "enemyMeleeDamageBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playermeleedamage");
-      Set_Float_Setting(Name => "playerMeleeDamageBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "playerMeleeDamageBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".experience");
-      Set_Float_Setting(Name => "experienceBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "experienceBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".reputation");
-      Set_Float_Setting(Name => "reputationBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "reputationBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".upgrade");
-      Set_Float_Setting(Name => "upgradeCostBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "upgradeCostBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".prices");
       --## rule on ASSIGNMENTS
-      Set_Float_Setting(Name => "pricesBonus", Value =>
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
+      Set_Float_Setting
+        (Name => "pricesBonus",
+         Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       New_Game;
       Start_Game;
       return TCL_OK;

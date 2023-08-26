@@ -1463,7 +1463,8 @@ package body Bases.ShipyardUI is
            (Slave => Install_Button, Options => "-padx {0 5}");
       else
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Error_Label, Options => "-padx 5 -columnspan 2 -sticky w");
+           (Slave => Error_Label,
+            Options => "-padx 5 -columnspan 2 -sticky w");
       end if;
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",

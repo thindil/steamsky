@@ -265,7 +265,8 @@ package body Ships.Upgrade is
         Upgrade_Action then
          Player_Ship.Modules(Module_Index).Upgrade_Progress :=
            Integer
-             (Float(Upgrade_Progress) * Get_Float_Setting(Name => "upgradeCostBonus"));
+             (Float(Upgrade_Progress) *
+              Get_Float_Setting(Name => "upgradeCostBonus"));
          if Player_Ship.Modules(Module_Index).Upgrade_Progress = 0 then
             Player_Ship.Modules(Module_Index).Upgrade_Progress := 1;
          end if;
