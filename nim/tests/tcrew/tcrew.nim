@@ -41,66 +41,66 @@ gameSettings.showNumbers = false
 try:
   assert getAttributeLevelName(3) == "Very low"
 except AssertionDefect:
-  echo "Failed to get attribute level name for value 3."
+  writeLine(stderr, "Failed to get attribute level name for value 3.")
 try:
   assert getAttributeLevelName(12) == "Below average"
 except AssertionDefect:
-  echo "Failed to get attribute level name for value 12."
+  writeLine(stderr, "Failed to get attribute level name for value 12.")
 try:
   assert getAttributeLevelName(48) == "Very high"
 except AssertionDefect:
-  echo "Failed to get attribute level name for value 48."
+  writeLine(stderr, "Failed to get attribute level name for value 48.")
 gameSettings.showNumbers = true
 try:
   assert getAttributeLevelName(3) == "3"
 except AssertionDefect:
-  echo "Failed to get attribute level number for value 3."
+  writeLine(stderr, "Failed to get attribute level number for value 3.")
 try:
   assert getAttributeLevelName(12) == "12"
 except AssertionDefect:
-  echo "Failed to get attribute level number for value 12."
+  writeLine(stderr, "Failed to get attribute level number for value 12.")
 try:
   assert getAttributeLevelName(48) == "48"
 except AssertionDefect:
-  echo "Failed to get attribute level number for value 48."
+  writeLine(stderr, "Failed to get attribute level number for value 48.")
 
 echo "Testing getSkillLevelName."
 gameSettings.showNumbers = false
 try:
   assert getSkillLevelName(9) == "Beginner"
 except AssertionDefect:
-  echo "Failed to get skill level name for value 9."
+  writeLine(stderr, "Failed to get skill level name for value 9.")
 try:
   assert getSkillLevelName(54) == "Respected"
 except AssertionDefect:
-  echo "Failed to get skill level name for value 54."
+  writeLine(stderr, "Failed to get skill level name for value 54.")
 try:
   assert getSkillLevelName(92) == "Legendary"
 except AssertionDefect:
-  echo "Failed to get skill level name for value 92."
+  writeLine(stderr, "Failed to get skill level name for value 92.")
 gameSettings.showNumbers = true
 try:
   assert getSkillLevelName(9) == "9"
 except AssertionDefect:
-  echo "Failed to get skill level number for value 9."
+  writeLine(stderr, "Failed to get skill level number for value 9.")
 try:
   assert getSkillLevelName(54) == "54"
 except AssertionDefect:
-  echo "Failed to get skill level number for value 54."
+  writeLine(stderr, "Failed to get skill level number for value 54.")
 try:
   assert getSkillLevelName(92) == "92"
 except AssertionDefect:
-  echo "Failed to get skill level number for value 92."
+  writeLine(stderr, "Failed to get skill level number for value 92.")
 
 echo "Testing findCabin."
 try:
   assert findCabin(0) == 0
 except AssertionDefect:
-  echo "Failed to find a cabin of the player."
+  writeLine(stderr, "Failed to find a cabin of the player.")
 try:
   assert findCabin(100) == -1
 except AssertionDefect:
-  echo "Failed to not find a cabin for a non-existing crew member."
+  writeLine(stderr, "Failed to not find a cabin for a non-existing crew member.")
 
 echo "Testing updateCrew."
 playerShip.crew[0].health = 100
