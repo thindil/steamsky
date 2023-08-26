@@ -1270,6 +1270,7 @@ package body Bases.RecruitUI is
           (Table => Recruit_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
@@ -1280,6 +1281,7 @@ package body Bases.RecruitUI is
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule on TYPE_INITIAL_VALUES
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       --## rule off IMPROPER_INITIALIZATION
@@ -1386,10 +1388,10 @@ package body Bases.RecruitUI is
          when others =>
             null;
       end case;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Recruits_Loop :
       for I in
         Recruit_Container.First_Index
@@ -1421,11 +1423,13 @@ package body Bases.RecruitUI is
             Id => I);
       end loop Fill_Local_Recruits_Loop;
       Sort_Recruits(Container => Local_Recruits);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Recruits_Indexes.Clear;
       Fill_Recruit_Indexes_Loop :
       for Recruit of Local_Recruits loop
          Recruits_Indexes.Append(New_Item => Recruit.Id);
       end loop Fill_Recruit_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Recruit_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
