@@ -155,9 +155,9 @@ package body Game.SaveLoad is
          Set_Float_Setting(Name => "experienceBonus", Value =>
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "experiencebonus")));
-         New_Game_Settings.Reputation_Bonus :=
+         Set_Float_Setting(Name => "reputationBonus", Value =>
            Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "reputationbonus"));
+             (Get_Attribute(Elem => Saved_Node, Name => "reputationbonus")));
          New_Game_Settings.Upgrade_Cost_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "upgradecostbonus"));

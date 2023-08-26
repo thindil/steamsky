@@ -283,7 +283,7 @@ package body MainMenu is
       Set
         (SpinBox => Spin_Box,
          Value =>
-           Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
+           Natural'Image(Natural(Get_Float_Setting(Name => "reputationBonus") * 100.0)));
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".upgrade");
       Set
         (SpinBox => Spin_Box,
