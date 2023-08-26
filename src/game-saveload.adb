@@ -152,9 +152,9 @@ package body Game.SaveLoad is
            Bonus_Type'Value
              (Get_Attribute
                 (Elem => Saved_Node, Name => "playermeleedamagebonus")));
-         New_Game_Settings.Experience_Bonus :=
+         Set_Float_Setting(Name => "experienceBonus", Value =>
            Bonus_Type'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "experiencebonus"));
+             (Get_Attribute(Elem => Saved_Node, Name => "experiencebonus")));
          New_Game_Settings.Reputation_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "reputationbonus"));
