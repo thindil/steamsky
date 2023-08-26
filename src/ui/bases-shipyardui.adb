@@ -42,7 +42,6 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Ship; use Bases.Ship;
 with Config; use Config;
 with CoreUI; use CoreUI;
@@ -1239,12 +1238,12 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Set enabled/disabled state for the install button
    -- PARAMETERS
-   -- Install_Button - The button which state will be set
-   -- Money_Index_2   - The index of money in the player's ship's cargo
+   -- Error_Label   - The error label which will be shown if there is a problem
+   -- Money_Index_2 - The index of money in the player's ship's cargo
    -- Cost          - The cost of the module to install
    -- SOURCE
    procedure Set_Install_Button
-     (Install_Button: Ttk_Button; Money_Index_2, Cost: Natural) is
+     (Error_Label: Ttk_Label; Money_Index_2, Cost: Natural) is
       -- ****
       Used_Space, All_Space, Max_Size: Natural;
       Has_Unique: Boolean := False;
@@ -1282,73 +1281,49 @@ package body Bases.ShipyardUI is
       end loop Check_Unique_Module_Loop;
       if Money_Index_2 = 0 then
          configure
-           (Widgt => Install_Button,
-            options => "-state disabled -text {No money}");
-         Add
-           (Widget => Install_Button,
-            Message => "You don't have any money to buy the module.");
+           (Widgt => Error_Label,
+            options => "-text {You don't have any money to buy the module.}");
       else
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
            Cost then
             configure
-              (Widgt => Install_Button,
-               options => "-state disabled -text {No money}");
-            Add
-              (Widget => Install_Button,
-               Message => "You don't have enough money to buy the module.");
+              (Widgt => Error_Label,
+               options =>
+                 "-text {You don't have enough money to buy the module.}");
          elsif Has_Unique then
             configure
-              (Widgt => Install_Button,
-               options => "-state disabled -text {Unique}");
-            Add
-              (Widget => Install_Button,
-               Message =>
-                 "Only one module of that type can be installed on the ship.");
+              (Widgt => Error_Label,
+               options =>
+                 "-text {Only one module of that type can be installed on the ship.}");
          elsif Get_Module(Index => Module_Index).M_Type not in GUN |
                HARPOON_GUN | HULL then
             if Get_Module(Index => Module_Index).Size > Max_Size then
                configure
-                 (Widgt => Install_Button,
-                  options => "-state disabled -text {Too big}");
-               Add
-                 (Widget => Install_Button,
-                  Message =>
-                    "The selected module is too big for your's ship's hull.");
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {The selected module is too big for your's ship's hull.}");
             elsif (All_Space - Used_Space) <
               Get_Module(Index => Module_Index).Size and
               Get_Module(Index => Module_Index).M_Type /= ARMOR then
                configure
-                 (Widgt => Install_Button,
-                  options => "-state disabled -text {No space}");
-               Add
-                 (Widget => Install_Button,
-                  Message =>
-                    "You don't have enough space in your ship's hull to install the module.");
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {You don't have enough space in your ship's hull to install the module.}");
             end if;
          elsif Get_Module(Index => Module_Index).M_Type = HULL and
            Get_Module(Index => Module_Index).Max_Value < Used_Space then
             configure
-              (Widgt => Install_Button,
-               options => "-state disabled -text {Too small}");
-            Add
-              (Widget => Install_Button,
-               Message =>
-                 "The selected hull is too small to replace your current hull.");
+              (Widgt => Error_Label,
+               options =>
+                 "-text {The selected hull is too small to replace your current hull.}");
          elsif Get_Module(Index => Module_Index).M_Type in GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
             configure
-              (Widgt => Install_Button,
-               options => "-state disabled -text {No turret}");
-            Add
-              (Widget => Install_Button,
-               Message =>
-                 "You don't have a free turret to install the selected gun.");
-         else
-            configure
-              (Widgt => Install_Button,
-               options => "-state !disabled -text Install");
+              (Widgt => Error_Label,
+               options =>
+                 "-text {You don't have a free turret to install the selected gun.}");
          end if;
       end if;
    end Set_Install_Button;
@@ -1408,6 +1383,10 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Compare_Frame & ".label",
            options => "-text {Compare with:}");
+      Error_Label: constant Ttk_Label :=
+        Create
+          (pathName => Module_Dialog & ".errorLabel",
+           options => "-style Headerred.TLabel -wraplength 400 -text {}");
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
    begin
@@ -1473,14 +1452,19 @@ package body Bases.ShipyardUI is
                    (TextWidget => Module_Text, Options => "-displaylines",
                     Index1 => "0.0", Index2 => "end")) /
               Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-              1));
+                (Metrics(Font => "InterfaceFont", Option => "-linespace"))));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Install_Button, Options => "-padx {0 5}");
       Set_Install_Button
-        (Install_Button => Install_Button, Money_Index_2 => Money_Index_2,
+        (Error_Label => Error_Label, Money_Index_2 => Money_Index_2,
          Cost => Cost);
+      if cget(Widgt => Error_Label, option => "-text") = "" then
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Install_Button, Options => "-padx {0 5}");
+      else
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Error_Label, Options => "-padx 5 -columnspan 2 -sticky w");
+      end if;
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column => 1);
