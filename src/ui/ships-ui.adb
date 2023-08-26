@@ -256,7 +256,7 @@ package body Ships.UI is
                null;
          end case;
          Max_Upgrade :=
-           Integer(Float(Max_Upgrade) * New_Game_Settings.Upgrade_Cost_Bonus);
+           Integer(Float(Max_Upgrade) * Get_Float_Setting(Name => "upgradeCostBonus"));
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;

@@ -1129,8 +1129,8 @@ package body MainMenu.Commands is
       Set_Float_Setting(Name => "reputationBonus", Value =>
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".upgrade");
-      New_Game_Settings.Upgrade_Cost_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "upgradeCostBonus", Value =>
+        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".prices");
       --## rule on ASSIGNMENTS
       New_Game_Settings.Prices_Bonus :=

@@ -289,7 +289,7 @@ package body MainMenu is
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
-             (Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
+             (Natural(Get_Float_Setting(Name => "upgradeCostBonus") * 100.0)));
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".prices");
       Set
         (SpinBox => Spin_Box,
