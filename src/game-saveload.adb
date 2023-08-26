@@ -144,10 +144,10 @@ package body Game.SaveLoad is
          Set_Float_Setting(Name => "playerDamageBonus", Value =>
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "playerdamagebonus")));
-         New_Game_Settings.Enemy_Melee_Damage_Bonus :=
+         Set_Float_Setting(Name => "enemyMeleeDamageBonus", Value =>
            Bonus_Type'Value
              (Get_Attribute
-                (Elem => Saved_Node, Name => "enemymeleedamagebonus"));
+                (Elem => Saved_Node, Name => "enemymeleedamagebonus")));
          New_Game_Settings.Player_Melee_Damage_Bonus :=
            Bonus_Type'Value
              (Get_Attribute

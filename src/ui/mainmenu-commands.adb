@@ -1114,8 +1114,8 @@ package body MainMenu.Commands is
       --## rule off ASSIGNMENTS
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".enemymeleedamage");
-      New_Game_Settings.Enemy_Melee_Damage_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "enemyMeleeDamageBonus", Value =>
+        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playermeleedamage");
       New_Game_Settings.Player_Melee_Damage_Bonus :=

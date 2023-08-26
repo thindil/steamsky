@@ -1207,7 +1207,7 @@ package body Combat is
                           New_Game_Settings.Player_Melee_Damage_Bonus)
                      else Integer
                          (Float(Damage) *
-                          New_Game_Settings.Enemy_Melee_Damage_Bonus));
+                          Get_Float_Setting(Name => "enemyMeleeDamageBonus")));
                   if Attacker.Equipment(WEAPON) > 0 then
                      Attack_Skill :=
                        Get_Skill_Level
