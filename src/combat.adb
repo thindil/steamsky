@@ -1204,7 +1204,7 @@ package body Combat is
                     (if Player_Attack_2 then
                        Integer
                          (Float(Damage) *
-                          New_Game_Settings.Player_Melee_Damage_Bonus)
+                          Get_Float_Setting(Name => "playerMeleeDamageBonus"))
                      else Integer
                          (Float(Damage) *
                           Get_Float_Setting(Name => "enemyMeleeDamageBonus")));

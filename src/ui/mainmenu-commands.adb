@@ -1118,8 +1118,8 @@ package body MainMenu.Commands is
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".playermeleedamage");
-      New_Game_Settings.Player_Melee_Damage_Bonus :=
-        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
+      Set_Float_Setting(Name => "playerMeleeDamageBonus", Value =>
+        Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
       Spin_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".experience");
       New_Game_Settings.Experience_Bonus :=
