@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2023 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -78,9 +78,6 @@ namespace eval ttk::theme::steamsky {
    font create OverstrikedFont -family {Amarante} -size 14 -overstrike true
    # Underlined font used for buttons with URL's links
    font create UnderlineFont -family {Amarante} -underline true -size 14
-   # Bold font used for example in map info dialog
-   font create BoldFont -family {Amarante} -size 14 -weight bold
-
 
    #
    # Images
