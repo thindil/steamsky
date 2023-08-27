@@ -5,7 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - The game date to the in-game messages
-- Bold font to the game's themes
 
 ### Changed
 - Redesigned the map info dialog
