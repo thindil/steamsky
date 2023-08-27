@@ -577,6 +577,8 @@ proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc.}
     result = gameSettings.messagesOrder.ord.cint
   of "autoSave":
     result = gameSettings.autoSave.ord.cint
+  of "difficulty":
+    result = newGameSettings.difficultyLevel.ord.cint
   else:
     result = 0
 
@@ -618,6 +620,8 @@ proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [], ex
     gameSettings.messagesOrder = value.MessagesOrder
   of "autoSave":
     gameSettings.autoSave = value.AutoSaveTime
+  of "difficulty":
+    newGameSettings.difficultyLevel = value.DifficultyType
   else:
     discard
 

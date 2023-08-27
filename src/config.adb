@@ -315,4 +315,17 @@ package body Config is
       Set_Ada_Float_Setting(N => New_String(Str => Name), V => Value);
    end Set_Float_Setting;
 
+   function Get_Difficulty return Difficulty_Type is
+   begin
+      return
+        Difficulty_Type'Val(Get_Integer_Setting(Name => "difficulty"));
+   end Get_Difficulty;
+
+   procedure Set_Difficulty(Value: Difficulty_Type) is
+   begin
+      Set_Ada_Integer_Setting
+        (N => New_String(Str => "difficulty"),
+         V => Difficulty_Type'Pos(Value));
+   end Set_Difficulty;
+
 end Config;

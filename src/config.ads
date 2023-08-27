@@ -216,5 +216,7 @@ package Config is
    procedure Set_String_Setting(Name, Value: String);
    function Get_Float_Setting(Name: String) return Bonus_Type;
    procedure Set_Float_Setting(Name: String; Value: Bonus_Type);
+   function Get_Difficulty return Difficulty_Type;
+   procedure Set_Difficulty(Value: Difficulty_Type);
 
 end Config;
