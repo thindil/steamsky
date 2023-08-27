@@ -317,8 +317,7 @@ package body Config is
 
    function Get_Difficulty return Difficulty_Type is
    begin
-      return
-        Difficulty_Type'Val(Get_Integer_Setting(Name => "difficulty"));
+      return Difficulty_Type'Val(Get_Integer_Setting(Name => "difficulty"));
    end Get_Difficulty;
 
    procedure Set_Difficulty(Value: Difficulty_Type) is

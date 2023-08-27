@@ -306,9 +306,7 @@ package body MainMenu is
       Show_Main_Menu;
       Current
         (ComboBox => Combo_Box,
-         NewIndex =>
-           Natural'Image
-             (Difficulty_Type'Pos(Get_Difficulty)));
+         NewIndex => Natural'Image(Difficulty_Type'Pos(Get_Difficulty)));
       Generate(Window => Combo_Box, EventName => "<<Combo_BoxSelected>>");
       configure(Widgt => Button, options => "-image randomicon");
       Button.Name :=
