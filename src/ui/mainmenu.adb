@@ -308,7 +308,7 @@ package body MainMenu is
         (ComboBox => Combo_Box,
          NewIndex =>
            Natural'Image
-             (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
+             (Difficulty_Type'Pos(Get_Difficulty)));
       Generate(Window => Combo_Box, EventName => "<<Combo_BoxSelected>>");
       configure(Widgt => Button, options => "-image randomicon");
       Button.Name :=

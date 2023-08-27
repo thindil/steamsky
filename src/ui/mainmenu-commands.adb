@@ -1104,8 +1104,8 @@ package body MainMenu.Commands is
       end loop Set_Starting_Base_Loop;
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
-      New_Game_Settings.Difficulty_Level :=
-        Difficulty_Type'Val(Natural'Value(Current(ComboBox => Combo_Box)));
+      Set_Difficulty(Value =>
+        Difficulty_Type'Val(Natural'Value(Current(ComboBox => Combo_Box))));
       Set_Float_Setting
         (Name => "enemyDamageBonus",
          Value => Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0);
