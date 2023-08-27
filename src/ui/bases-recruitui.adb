@@ -13,8 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -29,26 +29,25 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
-use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Bases.Trade; use Bases.Trade;
-with Config; use Config;
-with CoreUI; use CoreUI;
+with Bases.Trade;
+with Config;
+with CoreUI;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
@@ -184,6 +183,9 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Config;
+      use CoreUI;
+      use Maps.UI;
       use Tiny_String;
 
       Recruit_Frame: Ttk_Frame :=
@@ -390,6 +392,12 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Characters.Handling;
+      use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tklib.Ada.Autoscroll;
       use Tiny_String;
 
       Recruit_Info: Unbounded_String := Null_Unbounded_String;
@@ -883,6 +891,8 @@ package body Bases.RecruitUI is
    function Hire_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Bases.Trade;
+
       pragma Unreferenced(Argc, Argv);
       Dialog_Name: constant String := ".negotiatedialog";
       Cost, Contract_Length_2: Integer;
@@ -1220,6 +1230,7 @@ package body Bases.RecruitUI is
       Default_Value => NONE;
       -- ****
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       -- ****id* RecruitUI/RecruitUI.Default_Recruits_Sort_Order
       -- FUNCTION
       -- Default sorting order for the available recruits in base
@@ -1228,6 +1239,7 @@ package body Bases.RecruitUI is
       -- SOURCE
    Default_Recruits_Sort_Order: constant Recruits_Sort_Orders := NONE;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* RecruitUI/RecruitUI.Recruits_Sort_Order
    -- FUNCTION
