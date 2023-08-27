@@ -61,7 +61,7 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: "[" & $formattedTime(gameDate.year,
-      gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] - " &
+      gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] " &
       $message, kind: kind.MessageType, color: color.MessageColor))
 
 proc addMessage*(message: string; mType: MessageType;
