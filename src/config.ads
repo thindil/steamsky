@@ -218,5 +218,13 @@ package Config is
    procedure Set_Float_Setting(Name: String; Value: Bonus_Type);
    function Get_Difficulty return Difficulty_Type;
    procedure Set_Difficulty(Value: Difficulty_Type);
+   function Get_Gender return Character with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaGender";
+   procedure Set_Gender(Value: Character) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaGender";
 
 end Config;

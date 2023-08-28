@@ -694,3 +694,9 @@ proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [], ex
     newGameSettings.upgradeCostBonus = value
   of "pricesBonus":
     newGameSettings.pricesBonus = value
+
+proc getAdaGender(): char {.raises: [], tags: [], exportc.} =
+  return newGameSettings.playerGender
+
+proc setAdaGender(value: char) {.raises: [], tags: [], exportc.} =
+  newGameSettings.playerGender = value
