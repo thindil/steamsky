@@ -1239,7 +1239,6 @@ package body Bases.RecruitUI is
       -- SOURCE
    Default_Recruits_Sort_Order: constant Recruits_Sort_Orders := NONE;
    -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* RecruitUI/RecruitUI.Recruits_Sort_Order
    -- FUNCTION
@@ -1249,6 +1248,7 @@ package body Bases.RecruitUI is
    -- SOURCE
    Recruits_Sort_Order: Recruits_Sort_Orders := Default_Recruits_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* RecruitUI/RecruitUI.Sort_Recruits_Command
    -- FUNCTION
