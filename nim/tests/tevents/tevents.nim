@@ -53,7 +53,7 @@ generateEnemies(enemies)
 try:
   assert enemies.len > 0
 except AssertionDefect:
-  echo "Failed to generate the list of enemy ships."
+  writeLine(stderr, "Failed to generate the list of enemy ships.")
 
 echo "Testing updateEvents."
 eventsList = @[]
@@ -65,7 +65,7 @@ deleteEvent(0)
 try:
   assert eventsList.len == 0
 except AssertionDefect:
-  echo "Failed to delete an event."
+  writeLine(stderr, "Failed to delete an event.")
 
 echo "Testing recoverBase."
 skyBases[2].population = 0
@@ -73,7 +73,7 @@ recoverBase(2)
 try:
   assert skyBases[2].population > 0
 except AssertionDefect:
-  echo "Failed to recover a base."
+  writeLine(stderr, "Failed to recover a base.")
 
 echo "Testing generateTraders."
 generateTraders()
