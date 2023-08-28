@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -73,11 +73,11 @@ package body Bases.SchoolUI is
         Get_Widget(pathName => Frame_Name & ".setting.crew", Interp => Interp);
       Member_Index: constant Positive :=
         Natural'Value(Current(ComboBox => Combo_Box)) + 1;
-      Combo_List, Old_Combo_List: Unbounded_String;
+      Combo_List, Old_Combo_List: Unbounded_String := Null_Unbounded_String;
       Spin_Box: constant Ttk_SpinBox :=
         Get_Widget
           (pathName => Frame_Name & ".amountbox.amount", Interp => Interp);
-      Skill_Level: Skill_Range;
+      Skill_Level: Skill_Range := 0;
    begin
       Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
@@ -112,16 +112,16 @@ package body Bases.SchoolUI is
       Old_Combo_List :=
         To_Unbounded_String
           (Source => cget(Widgt => Combo_Box, option => "-values"));
-      if Length(Source => Old_Combo_List) + 1 /=
+      if Length(Source => Old_Combo_List) + 1 =
         Length(Source => Combo_List) then
+         Update_Header;
+      else
          configure
            (Widgt => Combo_Box,
             options =>
               "-values [list" & To_String(Source => Combo_List) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
          Set(SpinBox => Spin_Box, Value => "1");
-      else
-         Update_Header;
       end if;
       Tcl_Eval
         (interp => Interp,
@@ -411,7 +411,7 @@ package body Bases.SchoolUI is
           (pathName =>
              Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost",
            Interp => Interp);
-      Amount, Cost: Natural := 0;
+      Amount, Cost: Natural;
    begin
       if CArgv.Arg(Argv => Argv, N => 2) = "" then
          Tcl_SetResult(interp => Interp, str => "1");
