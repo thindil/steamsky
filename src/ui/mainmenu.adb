@@ -196,7 +196,7 @@ package body MainMenu is
          Text => Get_String_Setting(Name => "playerName"));
       Tcl_SetVar
         (interp => Get_Context, varName => "playergender",
-         newValue => "" & New_Game_Settings.Player_Gender);
+         newValue => "" & Get_Gender);
       Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert

@@ -1054,8 +1054,8 @@ package body MainMenu.Commands is
            Interp => Interp);
       Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
    begin
-      New_Game_Settings.Player_Gender :=
-        Tcl_GetVar(interp => Interp, varName => "playergender")(1);
+      Set_Gender(Value =>
+        Tcl_GetVar(interp => Interp, varName => "playergender")(1));
       if cget(Widgt => Goal_Button, option => "-text") = "Random" then
          Clear_Current_Goal;
          Set_Current_Goal
