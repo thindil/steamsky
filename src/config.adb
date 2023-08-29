@@ -39,11 +39,6 @@ package body Config is
       Save_Ada_Config;
    end Save_Config;
 
-   procedure Get_New_Game_Settings is
-   begin
-      null;
-   end Get_New_Game_Settings;
-
    function Get_Boolean_Setting(Name: String) return Boolean is
       function Get_Ada_Boolean_Setting(N: chars_ptr) return Integer with
          Import => True,

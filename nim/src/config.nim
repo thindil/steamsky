@@ -403,8 +403,6 @@ proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   except KeyError, IOError, OSError, ValueError:
     discard
 
-# Temporary code for interfacing with Ada
-
 proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc.} =
   case $name
   of "autoRest":
