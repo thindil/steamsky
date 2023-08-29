@@ -128,7 +128,6 @@ package Config is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_New_Game_Settings;
    function Get_Boolean_Setting(Name: String) return Boolean;
    procedure Set_Boolean_Setting(Name: String; Value: Boolean);
    function Get_Integer_Setting(Name: String) return Integer;
