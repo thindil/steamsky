@@ -418,11 +418,13 @@ package body Bases.SchoolUI is
          return TCL_OK;
       end if;
       Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+      --## rule off SIMPLIFIABLE_STATEMENTS
       if Amount < 1 then
          Amount := 1;
       elsif Amount > 100 then
          Amount := 100;
       end if;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Cost :=
         Train_Cost
           (Member_Index => Get_Member_Index,
