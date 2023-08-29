@@ -277,6 +277,7 @@ package body MainMenu.Commands is
 
       Hof_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
+      Hall_Of_Fame: constant Hall_Of_Fame_List := Get_Hof_From_Nim;
    begin
       Delete
         (TreeViewWidget => Hof_View,
@@ -284,16 +285,16 @@ package body MainMenu.Commands is
            "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") &
            "]");
       Load_Hall_Of_Fame_Loop :
-      for I in Hall_Of_Fame_Array'Range loop
-         exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame_Array(I).Name =
+      for I in Hall_Of_Fame'Range loop
+         exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame(I).Name =
            Null_Unbounded_String;
          Insert
            (TreeViewWidget => Hof_View,
             Options =>
               "{} end -values [list " & Positive'Image(I) & " " &
-              To_String(Source => Hall_Of_Fame_Array(I).Name) & " " &
-              Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
-              To_String(Source => Hall_Of_Fame_Array(I).Death_Reason) & "]");
+              To_String(Source => Hall_Of_Fame(I).Name) & " " &
+              Natural'Image(Hall_Of_Fame(I).Points) & " " &
+              To_String(Source => Hall_Of_Fame(I).Death_Reason) & "]");
       end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
