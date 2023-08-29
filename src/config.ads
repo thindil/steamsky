@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Game; use Game;
 with Ships; use Ships;
 
 -- ****h* Config/Config
@@ -47,67 +46,6 @@ package Config is
    -- Default difficulty level for the game
    -- SOURCE
    Default_Difficulty_Type: constant Difficulty_Type := NORMAL;
-   -- ****
-
-   -- ****s* Config/Config.New_Game_Record
-   -- FUNCTION
-   -- Data for new game settings
-   -- PARAMETERS
-   -- Player_Name               - Default player name
-   -- Player_Gender             - Default player gender
-   -- Ship_Name                 - Default ship name
-   -- Player_Faction            - Default player faction index
-   -- Player_Career             - Default player career index
-   -- Starting_Base             - Default starting base type
-   -- Enemy_Damage_Bonus        - Default bonus for enemy ship to damage
-   -- Player_Damage_Bonus       - Default bonus for player ship to damage
-   -- Enemy_Melee_Damage_Bonus  - Default bonus for enemy to damage in melee
-   --                             combat
-   -- Player_Melee_Damage_Bonus - Default bonus for player and player's ship
-   --                             crew to damage in melee combat
-   -- Experience_Bonus          - Default bonus to gained experience
-   -- Reputation_Bonus          - Default bonus to gained or lost reputation in
-   --                             bases
-   -- Upgrade_Cost_Bonus        - Default bonus to amount of materials needed for
-   --                             player's ship upgrades.
-   -- Prices_Bonus              - Default bonus to prices for services in bases
-   -- Difficulty_Level          - Default the game difficulty level
-   -- SOURCE
-   type New_Game_Record is record
-      Player_Name: Unbounded_String;
-      Player_Gender: Character;
-      Ship_Name: Unbounded_String;
-      Player_Faction: Tiny_String.Bounded_String;
-      Player_Career: Unbounded_String;
-      Starting_Base: Tiny_String.Bounded_String;
-      Enemy_Damage_Bonus: Bonus_Type;
-      Player_Damage_Bonus: Bonus_Type;
-      Enemy_Melee_Damage_Bonus: Bonus_Type;
-      Player_Melee_Damage_Bonus: Bonus_Type;
-      Experience_Bonus: Bonus_Type;
-      Reputation_Bonus: Bonus_Type;
-      Upgrade_Cost_Bonus: Bonus_Type;
-      Prices_Bonus: Bonus_Type;
-      Difficulty_Level: Difficulty_Type;
-   end record;
-   -- ****
-
-   -- ****d* Config/Config.Default_New_Game_Settings
-   -- FUNCTION
-   -- Default settings for the new game
-   -- SOURCE
-   Default_New_Game_Settings: constant New_Game_Record :=
-     (Player_Name => To_Unbounded_String(Source => "Laeran"),
-      Player_Gender => 'M',
-      Ship_Name => To_Unbounded_String(Source => "Anaria"),
-      Player_Faction => Tiny_String.To_Bounded_String(Source => "POLEIS"),
-      Player_Career => To_Unbounded_String(Source => "general"),
-      Starting_Base => Tiny_String.To_Bounded_String(Source => "Any"),
-      Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
-      Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
-      Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
-      Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
-      Difficulty_Level => Default_Difficulty_Type);
    -- ****
 
    -- ****t* Config/Config.Auto_Move_Break
@@ -153,13 +91,6 @@ package Config is
    -- Default time when to auto save the game
    -- SOURCE
    Default_Auto_Save_Time: constant Auto_Save_Type := NONE;
-   -- ****
-
-   -- ****v* Config/Config.New_Game_Settings
-   -- FUNCTION
-   -- Settings for the new game
-   -- SOURCE
-   New_Game_Settings: New_Game_Record;
    -- ****
 
    -- ****t* Config/Config.Font_Types
