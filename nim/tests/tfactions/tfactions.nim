@@ -20,29 +20,29 @@ echo "Testing getReputation."
 try:
   assert getReputation("POLEIS", "POLEIS") == 0
 except AssertionDefect:
-  echo "Failed to get reputation for the same faction."
+  writeLine(stderr, "Failed to get reputation for the same faction.")
 try:
   assert getReputation("POLEIS", "PIRATES") == -10
 except AssertionDefect:
-  echo "Failed to get reputation for enemy factions."
+  writeLine(stderr, "Failed to get reputation for enemy factions.")
 
 echo "Testing isFriendly."
 try:
   assert isFriendly("POLEIS", "INDEPENDENT")
 except AssertionDefect:
-  echo "Failed to check if friendly factions are friendly."
+  writeLine(stderr, "Failed to check if friendly factions are friendly.")
 try:
   assert not isFriendly("POLEIS", "PIRATES")
 except AssertionDefect:
-  echo "Failed to check if enemies factions are unfriendly."
+  writeLine(stderr, "Failed to check if enemies factions are unfriendly.")
 
 echo "Testing getRandomFaction."
 let factionIndex = getRandomFaction()
 try:
   assert factionIndex.len > 0
 except AssertionDefect:
-  echo "Failed to get random faction index."
+  writeLine(stderr, "Failed to get random faction index.")
 try:
   assert factionIndex in factionsList
 except AssertionDefect:
-  echo "Failed to get existing random faction index."
+  writeLine(stderr, "Failed to get existing random faction index.")
