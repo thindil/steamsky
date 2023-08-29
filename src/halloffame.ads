@@ -48,12 +48,26 @@ package HallOfFame is
       Death_Reason => Null_Unbounded_String);
    -- ****
 
+   -- ****t* HallOfFame/HallOfFame.Hall_Of_Fame_List
+   -- FUNCTION
+   -- List of all entries in the hall of fame
+   -- SOURCE
+   type Hall_Of_Fame_List is array(1 .. 10) of Hall_Of_Fame_Data;
+   -- ****
+
+   -- ****d* HallOfFame/HallOfFameEmpty_Hall_Of_Fame
+   -- FUNCTION
+   -- Empty hall of fame list
+   -- SOURCE
+   Empty_Hall_Of_Fame: constant Hall_Of_Fame_List :=
+     (others => Empty_Hall_Of_Fame_Entry);
+   -- ****
+
    -- ****v* HallOfFame/HallOfFame.Hall_Of_Fame_Array
    -- FUNCTION
    -- Store all hall of fame entries
    -- SOURCE
-   Hall_Of_Fame_Array: array(1 .. 10) of Hall_Of_Fame_Data :=
-     (others => Empty_Hall_Of_Fame_Entry);
+   Hall_Of_Fame_Array: Hall_Of_Fame_List := Empty_Hall_Of_Fame;
    -- ****
 
    -- ****f* HallOfFame/HallOfFame.Load_Hall_Of_Fame
@@ -79,5 +93,6 @@ package HallOfFame is
 -- Temporary code to interact with Nim
 
    procedure Load_Hof_From_Nim;
+   function Get_Hof_From_Nim return Hall_Of_Fame_List;
 
 end HallOfFame;

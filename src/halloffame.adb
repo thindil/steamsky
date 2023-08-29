@@ -87,4 +87,40 @@ package body HallOfFame is
       end loop Load_Hof_Loop;
    end Load_Hof_From_Nim;
 
+   function Get_Hof_From_Nim return Hall_Of_Fame_List is
+      use Interfaces.C;
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Hall_Of_Fame_Data is record
+         Name: chars_ptr;
+         Points: Natural := 0;
+         Death_Reason: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Entry: Nim_Hall_Of_Fame_Data;
+      Result: Hall_Of_Fame_List;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Get_Ada_Hof_Entry
+        (Index: Natural; N_Entry: out Nim_Hall_Of_Fame_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHofEntry";
+   begin
+      Load_Hof_Loop :
+      for I in 1 .. 10 loop
+         Get_Ada_Hof_Entry(Index => I, N_Entry => Nim_Entry);
+         if Strlen(Item => Nim_Entry.Name) > 0 then
+            Result(I) :=
+              (Name =>
+                 To_Unbounded_String(Source => Value(Item => Nim_Entry.Name)),
+               Points => Nim_Entry.Points,
+               Death_Reason =>
+                 To_Unbounded_String
+                   (Source => Value(Item => Nim_Entry.Death_Reason)));
+         end if;
+      end loop Load_Hof_Loop;
+      return Result;
+   end Get_Hof_From_Nim;
+
 end HallOfFame;
