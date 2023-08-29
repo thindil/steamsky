@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of dialogs in the shipyard screen
 - Updated look of the shipyard screen
 - Updated look of in-game dialogs
+- Updated header of the player's ship's crew member dialog
 
 ### Fixed
 - Typos in old changelog
