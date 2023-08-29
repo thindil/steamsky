@@ -391,94 +391,14 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
 
 # Temporary code for interfacing with Ada
 
-type
-  AdaNewGameRecord = object
-    playerName: cstring
-    playerGender: char
-    shipName: cstring
-    playerFaction: cstring
-    playerCareer: cstring
-    startingBase: cstring
-    enemyDamageBonus: cfloat
-    playerDamageBonus: cfloat
-    enemyMeleeDamageBonus: cfloat
-    playerMeleeDamageBonus: cfloat
-    experienceBonus: cfloat
-    reputationBonus: cfloat
-    upgradeCostBonus: cfloat
-    pricesBonus: cfloat
-    difficultyLevel: cstring
-
-proc loadAdaConfig(adaNewGameSettings: var AdaNewGameRecord) {.sideEffect,
-    raises: [], tags: [RootEffect], exportc.} =
-  ## Temporary code to load the game configuration and copy it to the Ada
-  ## code
-  ##
-  ## * adaNewGameSettings - The new game settings which will be copied
-  ## * adaGameSettings    - The game settings which will be copied
-  ##
-  ## Returns the updated parameters adaNewGameSettings and adaGameSettings
+proc loadAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   loadConfig()
-  adaNewGameSettings = AdaNewGameRecord(
-      playerName: newGameSettings.playerName.cstring,
-      playerGender: newGameSettings.playerGender,
-      shipName: newGameSettings.shipName.cstring,
-      playerFaction: newGameSettings.playerFaction.cstring,
-      playerCareer: newGameSettings.playerCareer.cstring,
-      startingBase: newGameSettings.startingBase.cstring,
-      enemyDamageBonus: newGameSettings.enemyDamageBonus,
-      playerDamageBonus: newGameSettings.playerDamageBonus,
-      enemyMeleeDamageBonus: newGameSettings.enemyMeleeDamageBonus,
-      playerMeleeDamageBonus: newGameSettings.playerMeleeDamageBonus,
-      experienceBonus: newGameSettings.experienceBonus,
-      reputationBonus: newGameSettings.reputationBonus,
-      upgradeCostBonus: newGameSettings.upgradeCostBonus,
-      pricesBonus: newGameSettings.pricesBonus, difficultyLevel: (
-      $newGameSettings.difficultyLevel).toUpperAscii.cstring)
-
-proc getAdaNewGameSettings(adaNewGameSettings: AdaNewGameRecord) {.sideEffect,
-    raises: [], tags: [], exportc.} =
-  try:
-    newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
-          playerGender: adaNewGameSettings.playerGender,
-          shipName: $adaNewGameSettings.shipName,
-          playerFaction: $adaNewGameSettings.playerFaction,
-          playerCareer: $adaNewGameSettings.playerCareer,
-          startingBase: $adaNewGameSettings.startingBase,
-          enemyDamageBonus: adaNewGameSettings.enemyDamageBonus,
-          playerDamageBonus: adaNewGameSettings.playerDamageBonus,
-          enemyMeleeDamageBonus: adaNewGameSettings.enemyMeleeDamageBonus,
-          playerMeleeDamageBonus: adaNewGameSettings.playerMeleeDamageBonus,
-          experienceBonus: adaNewGameSettings.experienceBonus,
-          reputationBonus: adaNewGameSettings.reputationBonus,
-          upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
-          pricesBonus: adaNewGameSettings.pricesBonus,
-          difficultyLevel: parseEnum[
-          DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
-  except ValueError:
-    discard
 
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   gameSettings.messagesPosition = newValue
 
-proc saveAdaConfig(adaNewGameSettings: AdaNewGameRecord) {.sideEffect, raises: [
-    ], tags: [RootEffect], exportc.} =
+proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   try:
-    newGameSettings = NewGameRecord(playerName: $adaNewGameSettings.playerName,
-        playerGender: adaNewGameSettings.playerGender,
-        shipName: $adaNewGameSettings.shipName,
-        playerFaction: $adaNewGameSettings.playerFaction,
-        playerCareer: $adaNewGameSettings.playerCareer,
-        startingBase: $adaNewGameSettings.startingBase,
-        enemyDamageBonus: adaNewGameSettings.enemyDamageBonus,
-        playerDamageBonus: adaNewGameSettings.playerDamageBonus,
-        enemyMeleeDamageBonus: adaNewGameSettings.enemyMeleeDamageBonus,
-        playerMeleeDamageBonus: adaNewGameSettings.playerMeleeDamageBonus,
-        experienceBonus: adaNewGameSettings.experienceBonus,
-        reputationBonus: adaNewGameSettings.reputationBonus,
-        upgradeCostBonus: adaNewGameSettings.upgradeCostBonus,
-        pricesBonus: adaNewGameSettings.pricesBonus, difficultyLevel: parseEnum[
-        DifficultyType](($adaNewGameSettings.difficultyLevel).toLowerAscii))
     saveConfig()
   except KeyError, IOError, OSError, ValueError:
     discard
