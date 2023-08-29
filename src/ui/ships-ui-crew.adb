@@ -756,7 +756,8 @@ package body Ships.UI.Crew is
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
       Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".memberdialog", Title => "Crew member details",
+          (Name => ".memberdialog",
+           Title => To_String(Source => Member.Name) & "'s details",
            Columns => 2);
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
