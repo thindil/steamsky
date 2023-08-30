@@ -63,13 +63,6 @@ package HallOfFame is
      (others => Empty_Hall_Of_Fame_Entry);
    -- ****
 
-   -- ****v* HallOfFame/HallOfFame.Hall_Of_Fame_Array
-   -- FUNCTION
-   -- Store all hall of fame entries
-   -- SOURCE
-   Hall_Of_Fame_Array: Hall_Of_Fame_List := Empty_Hall_Of_Fame;
-   -- ****
-
    -- ****f* HallOfFame/HallOfFame.Load_Hall_Of_Fame
    -- FUNCTION
    -- Read hall of fame data from file
@@ -92,7 +85,6 @@ package HallOfFame is
 
 -- Temporary code to interact with Nim
 
-   procedure Load_Hof_From_Nim;
    function Get_Hof_From_Nim return Hall_Of_Fame_List;
 
 end HallOfFame;
