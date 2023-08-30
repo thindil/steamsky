@@ -230,6 +230,7 @@ proc combatTurn*() =
         ammoIndex = 0
         ammoIndex2 = -1
         gunnerOrder = 1
+        shoots = 0
       if module.mType == ModuleType2.harpoonGun:
         ammoIndex2 = module.harpoonIndex
       elif module.mType == ModuleType2.gun:
@@ -239,7 +240,6 @@ proc combatTurn*() =
         logMessage(message = "Gunenr index: " & $gunnerIndex & ".",
             debugType = DebugTypes.combat)
         if ship.crew == playerShip.crew:
-          var shoots = 0
           if gunnerIndex > -1:
             for gun in guns.mitems:
               if gun[0] == mIndex:
@@ -279,6 +279,27 @@ proc combatTurn*() =
               currentAccuracyBonus = accuracyBonus - 20
             else:
               discard
+        else:
+          for gun in enemy.guns.mitems:
+            if gun[0] == mIndex:
+              if gun[2] > 0:
+                shoots = gun[2]
+              elif gun[2] < 0:
+                shoots = 0
+                gun[2].inc
+                if gun[2] == 0:
+                  shoots = 1
+                  gun[2] = if enemy.combatAi == disarmer:
+                      modulesList[ship.modules[gun[0]].protoIndex].speed - 1
+                    else:
+                      modulesList[ship.modules[gun[0]].protoIndex].speed
+          if ship.crew.len > 0 and gunnerIndex > -1:
+            shoots = 0
+        if ammoIndex2 < ship.cargo.len and itemsList[ship.cargo[
+            ammoIndex2].protoIndex].itemType == $(modulesList[
+            module.protoIndex].value - 1):
+          ammoIndex = ammoIndex2
+
 
 # Temporary code for interfacing with Ada
 
