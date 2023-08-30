@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with HallOfFame;
 
 package body Ships.Crew is
 
@@ -38,7 +37,6 @@ package body Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
-      use HallOfFame;
 
       procedure Death_Ada
         (M_Index: Integer; Reas: chars_ptr;
@@ -56,7 +54,6 @@ package body Ships.Crew is
          C_Body => (if Create_Body then 1 else 0));
       Set_Ada_Crew(Ship => Ship);
       Set_Ada_Modules(Ship => Ship);
-      Load_Hof_From_Nim;
    end Death;
 
    procedure Delete_Member

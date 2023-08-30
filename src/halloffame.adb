@@ -36,7 +36,6 @@ package body HallOfFame is
       if Strlen(Item => Result) > 0 then
          raise Data_Loading_Error with Value(Item => Result);
       end if;
-      Load_Hof_From_Nim;
    end Load_Hall_Of_Fame;
 
    procedure Update_Hall_Of_Fame
@@ -50,13 +49,7 @@ package body HallOfFame is
       Update_Ada_Hall_Of_Fame
         (P_Name => New_String(Str => To_String(Source => Player_Name)),
          D_Reason => New_String(Str => To_String(Source => Death_Reason)));
-      Load_Hof_From_Nim;
    end Update_Hall_Of_Fame;
-
-   procedure Load_Hof_From_Nim is
-   begin
-      null;
-   end Load_Hof_From_Nim;
 
    function Get_Hof_From_Nim return Hall_Of_Fame_List is
       use Interfaces.C;
