@@ -190,6 +190,36 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       debugType = DebugTypes.combat)
   return true
 
+proc combatTurn*() =
+
+  proc attack(ship, enemyShip: var ShipRecord) =
+
+    var hitLocation: int = -1
+
+    proc removeGun(moduleIndex: Natural) =
+      if enemyShip.crew == playerShip.crew:
+        for index, gun in guns:
+          if gun[1] == moduleIndex:
+            guns.delete(index)
+            break
+    proc findEnemyModule(mType: ModuleType): int =
+      for index, module in enemyShip.modules:
+        if modulesList[module.protoIndex].mType == mType and module.durability > 0:
+          return index
+      return -1
+    proc findHitWeapon() =
+      for index, module in enemyShip.modules:
+        if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
+            modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
+            module.durability > 0:
+          hitLocation = index
+          return
+
+    if ship.crew == playerShip.crew:
+      logMessage(message = "Player's round", debugType = DebugTypes.combat)
+    else:
+      logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
+
 # Temporary code for interfacing with Ada
 
 proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [],
