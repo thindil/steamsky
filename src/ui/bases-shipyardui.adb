@@ -1468,7 +1468,8 @@ package body Bases.ShipyardUI is
       end if;
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog, Column => 1);
+         Command => "CloseDialog " & Module_Dialog, Column => 1,
+         Icon => "cancelicon");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Bind
@@ -1707,7 +1708,8 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog, Column => 1);
+         Command => "CloseDialog " & Module_Dialog, Column => 1,
+         Icon => "cancelicon");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Bind
