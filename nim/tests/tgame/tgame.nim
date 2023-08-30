@@ -13,8 +13,8 @@ echo "Testing findSkillIndex."
 try:
   assert findSkillIndex(skillName = "Piloting") == 1
 except AssertionDefect:
-  echo "Failed to find the index of the skill."
+  writeLine(stderr, "Failed to find the index of the skill.")
 try:
   assert findSkillIndex(skillName = "sdfwerwerwe") == 0
 except AssertionDefect:
-  echo "Failed to not find the index of the non-existing skill."
+  writeLine(stderr, "Failed to not find the index of the non-existing skill.")
