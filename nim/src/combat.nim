@@ -219,6 +219,34 @@ proc combatTurn*() =
       logMessage(message = "Player's round", debugType = DebugTypes.combat)
     else:
       logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
+    for mIndex, module in ship.modules:
+      if module.durability == 0 or module.mType notin {ModuleType2.gun, batteringRam, harpoonGun}:
+        continue
+      var
+        gunnerIndex = 0
+        ammoIndex = 0
+        ammoIndex2 = -1
+      if module.mType == ModuleType2.harpoonGun:
+        ammoIndex2 = module.harpoonIndex
+      elif module.mType == ModuleType2.gun:
+        ammoIndex2 = module.ammoIndex
+      if module.mType in {ModuleType2.gun, harpoonGun}:
+        gunnerIndex = module.owner[0]
+        logMessage(message = "Gunenr index: " & $gunnerIndex & ".", debugType = DebugTypes.combat)
+        if ship.crew == playerShip.crew:
+          var shoots = 0
+          if gunnerIndex > -1:
+            for gun in guns.mitems:
+              if gun[0] == mIndex:
+                let gunnerOrder = gun[1]
+                var shoots = gun[2]
+                if gun[2] > 0:
+                  if gunnerOrder != 3:
+                    shoots = (shoots.float / 2.0).ceil.int
+                  logMessage(message = "Player shoots (no cooldown): " & $shoots, debugType = DebugTypes.combat)
+                elif gun[2] < 0:
+                  shoots = 0
+                  gun[2].inc
 
 # Temporary code for interfacing with Ada
 
