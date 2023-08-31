@@ -221,13 +221,13 @@ proc combatTurn*() =
       logMessage(message = "Player's round", debugType = DebugTypes.combat)
     else:
       logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
-    for mIndex, module in ship.modules:
+    for mIndex, module in ship.modules.mpairs:
       if module.durability == 0 or module.mType notin {ModuleType2.gun,
           batteringRam, harpoonGun}:
         continue
       var
-        gunnerIndex = 0
-        ammoIndex = 0
+        gunnerIndex = -1
+        ammoIndex = -1
         ammoIndex2 = -1
         gunnerOrder = 1
         shoots = 0
@@ -299,7 +299,28 @@ proc combatTurn*() =
             ammoIndex2].protoIndex].itemType == $(modulesList[
             module.protoIndex].value - 1):
           ammoIndex = ammoIndex2
-
+        if ammoIndex == -1:
+          for iIndex, item in itemsList.pairs:
+            if item.itemType == $(modulesList[module.protoIndex].value - 1):
+              for iIndex2, item2 in ship.cargo:
+                if item2.protoIndex == iIndex:
+                  ammoIndex = iIndex2
+                  if module.mType == ModuleType2.harpoonGun:
+                    module.harpoonIndex = ammoIndex
+                  elif module.mType == ModuleType2.gun:
+                    module.ammoIndex = ammoIndex
+                  break
+            if ammoIndex > -1:
+              break
+        if ammoIndex == -1:
+          if ship.crew == playerShip.crew:
+            addMessage(message = "You don't have ammo to " & module.name & "!",
+                mType = combatMessage, color = red)
+          shoots = 0
+        elif ship.cargo[ammoIndex].amount < shoots:
+          shoots = ship.cargo[ammoIndex].amount
+        if enemy.distance > 5_000:
+          shoots = 0
 
 # Temporary code for interfacing with Ada
 
