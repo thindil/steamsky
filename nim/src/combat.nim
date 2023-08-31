@@ -103,7 +103,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
           else:
             modulesList[module.protoIndex].speed
       enemyGuns.add([1: index, 2: 1, 3: shootingSpeed])
-  enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[
+  game.enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[
       enemyIndex].accuracy.maxValue == 0: protoShipsList[
       enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[
       enemyIndex].accuracy.minValue, max = protoShipsList[
@@ -167,26 +167,27 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
     let
       playerPerception = countPerception(spotter = playerShip,
         spotted = enemyShip)
-      enemyPerception = (if enemy.perception >
-          0: enemy.perception else: countPerception(spotter = enemy.ship,
+      enemyPerception = (if game.enemy.perception >
+          0: game.enemy.perception else: countPerception(
+          spotter = game.enemy.ship,
           spotted = playerShip))
     oldSpeed = playerShip.speed
     if playerPerception + getRandom(min = 1, max = 50) > enemyPerception +
         getRandom(min = 1, max = 50):
-      addMessage(message = "You spotted " & enemy.ship.name & ".",
+      addMessage(message = "You spotted " & game.enemy.ship.name & ".",
           mType = otherMessage)
     else:
-      if realSpeed(ship = playerShip) < realSpeed(ship = enemy.ship):
-        logMessage(message = "You were attacked by " & enemy.ship.name,
+      if realSpeed(ship = playerShip) < realSpeed(ship = game.enemy.ship):
+        logMessage(message = "You were attacked by " & game.enemy.ship.name,
             debugType = DebugTypes.combat)
-        addMessage(message = enemy.ship.name & " intercepted you.",
+        addMessage(message = game.enemy.ship.name & " intercepted you.",
             mType = combatMessage)
         return true
-      addMessage(message = "You spotted " & enemy.ship.name & ".",
+      addMessage(message = "You spotted " & game.enemy.ship.name & ".",
           mType = otherMessage)
     return false
   turnNumber = 0
-  logMessage(message = "Started combat with " & enemy.ship.name,
+  logMessage(message = "Started combat with " & game.enemy.ship.name,
       debugType = DebugTypes.combat)
   return true
 
@@ -283,7 +284,7 @@ proc combatTurn*() =
               else:
                 discard
           else:
-            for gun in enemy.guns.mitems:
+            for gun in game.enemy.guns.mitems:
               if gun[0] == mIndex:
                 if gun[2] > 0:
                   shoots = gun[2]
@@ -292,7 +293,7 @@ proc combatTurn*() =
                   gun[2].inc
                   if gun[2] == 0:
                     shoots = 1
-                    gun[2] = if enemy.combatAi == disarmer:
+                    gun[2] = if game.enemy.combatAi == disarmer:
                         modulesList[ship.modules[gun[0]].protoIndex].speed - 1
                       else:
                         modulesList[ship.modules[gun[0]].protoIndex].speed
@@ -322,11 +323,11 @@ proc combatTurn*() =
             shoots = 0
           elif ship.cargo[ammoIndex].amount < shoots:
             shoots = ship.cargo[ammoIndex].amount
-          if enemy.distance > 5_000:
+          if game.enemy.distance > 5_000:
             shoots = 0
           if module.mType == ModuleType2.harpoonGun and shoots > 0:
             shoots = 1
-            if enemy.distance > 2_000:
+            if game.enemy.distance > 2_000:
               shoots = 0
             if findEnemyModule(mType = ModuleType.armor) > -1:
               shoots = 0
@@ -345,7 +346,7 @@ proc combatTurn*() =
             else:
               discard
         else:
-          if enemy.distance > 100:
+          if game.enemy.distance > 100:
             shoots = 0
           else:
             shoots = (if module.coolingDown: 0 else: 1)
@@ -354,9 +355,9 @@ proc combatTurn*() =
             debugType = DebugTypes.combat)
         if shoots > 0:
           var hitChance = if ship.crew == playerShip.crew:
-              currentAccuracyBonus - enemy.evasion
+              currentAccuracyBonus - game.enemy.evasion
             else:
-              enemy.accuracy - evadeBonus
+              game.enemy.accuracy - evadeBonus
           if gunnerIndex > 0:
             hitChance += getSkillLevel(member = ship.crew[gunnerIndex],
                 skillIndex = gunnerySkill)
@@ -364,8 +365,8 @@ proc combatTurn*() =
             hitChance = -48
           logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
               " Player evasion: " & $evadeBonus, debugType = DebugTypes.combat)
-          logMessage(message = "Enemy evasion: " & $enemy.evasion &
-              " Enemy accuracy: " & $enemy.accuracy,
+          logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
+              " Enemy accuracy: " & $game.enemy.accuracy,
               debugType = DebugTypes.combat)
           logMessage(message = "Chance to hit: " & $hitChance,
               debugType = DebugTypes.combat)
@@ -404,7 +405,7 @@ proc combatTurn*() =
                       hitLocation = 0
                   else:
                     hitLocation = getRandom(min = 0,
-                        max = enemy.ship.modules.high)
+                        max = game.enemy.ship.modules.high)
                 else:
                   while enemyShip.modules[hitLocation].durability == 0:
                     hitLocation.dec
@@ -442,7 +443,7 @@ proc combatTurn*() =
 proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [],
     tags: [], exportc.} =
   harpoonDuration = playerDuration
-  enemy.harpoonDuration = enemyDuration
+  game.enemy.harpoonDuration = enemyDuration
 
 proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
     RootEffect], exportc.} =
@@ -463,20 +464,20 @@ type
     playerGuns: array[10, array[3, cint]]
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
-  adaEnemy.accuracy = enemy.accuracy.cint
-  adaEnemy.combatAi = enemy.combatAi.ord.cint
-  adaEnemy.evasion = enemy.evasion.cint
-  adaEnemy.loot = enemy.loot.cint
-  adaEnemy.perception = enemy.perception.cint
+  adaEnemy.accuracy = game.enemy.accuracy.cint
+  adaEnemy.combatAi = game.enemy.combatAi.ord.cint
+  adaEnemy.evasion = game.enemy.evasion.cint
+  adaEnemy.loot = game.enemy.loot.cint
+  adaEnemy.perception = game.enemy.perception.cint
   adaEnemy.name = enemyName.cstring
-  for index, gun in enemy.guns:
+  for index, gun in game.enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
-  if enemy.guns.len < 10:
-    for index in enemy.guns.len .. 9:
+  if game.enemy.guns.len < 10:
+    for index in game.enemy.guns.len .. 9:
       adaEnemy.guns[index] = [-1, -1, -1]
   for index, gun in guns:
     adaEnemy.playerGuns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if guns.len < 10:
     for index in guns.len .. 9:
       adaEnemy.playerGuns[index] = [-1, -1, -1]
-  npcShip = enemy.ship
+  npcShip = game.enemy.ship
