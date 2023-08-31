@@ -117,17 +117,17 @@ package body Bases.ShipyardUI is
         Get_Widget(pathName => Shipyard_Frame & ".canvas", Interp => Interp);
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Module_Size: Integer;
+      Module_Size: Integer := 0;
       Module_Type_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => Shipyard_Canvas & ".shipyard.install.options.modules",
            Interp => Interp);
-      Cost, Used_Space: Natural;
-      Damage: Float;
+      Cost, Used_Space: Natural := 0;
+      Damage: Float := 0.0;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Max_Size, All_Space: Positive;
-      Install_Info: Unbounded_String;
+      Max_Size, All_Space: Positive := 1;
+      Install_Info: Unbounded_String := Null_Unbounded_String;
       Money_Label: constant Ttk_Label :=
         Get_Widget
           (pathName => Shipyard_Canvas & ".shipyard.moneyinfo",
@@ -198,11 +198,10 @@ package body Bases.ShipyardUI is
             Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
             Show_Sky_Map(Clear => True);
             return TCL_OK;
-         else
-            Current
-              (ComboBox => Module_Type_Box,
-               NewIndex => CArgv.Arg(Argv => Argv, N => 1));
          end if;
+         Current
+           (ComboBox => Module_Type_Box,
+            NewIndex => CArgv.Arg(Argv => Argv, N => 1));
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "0" and
         Argc = 1 then
          Current(ComboBox => Module_Type_Box, NewIndex => "0");
@@ -486,15 +485,15 @@ package body Bases.ShipyardUI is
       use Short_String;
       use Tiny_String;
 
-      M_Type: Module_Type;
-      M_Amount, Weight, Max_Value, Value, Max_Owners: Natural;
+      M_Type: Module_Type := ANY;
+      M_Amount, Weight, Max_Value, Value, Max_Owners: Natural := 0;
       Ship_Module_Index: Natural := 0;
-      Size: Positive;
-      Speed: Integer;
+      Size: Positive := 1;
+      Speed: Integer := 0;
       Module_Text: Tk_Text;
       Added: Boolean := False;
-      Cost: Positive;
-      Money_Index_2: Natural;
+      Cost: Positive := 1;
+      Money_Index_2: Natural := 0;
    begin
       if Installing then
          M_Type := Get_Module(Index => Module_Index).M_Type;
