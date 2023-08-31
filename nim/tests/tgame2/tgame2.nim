@@ -31,7 +31,7 @@ updateGame(1)
 try:
   assert gameDate.minutes == 1
 except AssertionDefect:
-  echo "Failed to updated the game."
+  writeLine(stderr, "Failed to updated the game.")
 
 echo "Testing endGame."
 let oldSaveDir = saveDirectory
@@ -42,4 +42,4 @@ saveDirectory = oldSaveDir
 try:
   assert messagesAmount(0) == 0
 except AssertionDefect:
-  echo "Failed to end the game."
+  writeLine(stderr, "Failed to end the game.")
