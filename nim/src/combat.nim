@@ -349,6 +349,34 @@ proc combatTurn*() =
           shoots = (if module.coolingDown: 0 else: 1)
         module.coolingDown = not module.coolingDown
       logMessage(message = "Shoots: " & $shoots, debugType = DebugTypes.combat)
+      if shoots > 0:
+        var hitChance = if ship.crew == playerShip.crew:
+            currentAccuracyBonus - enemy.evasion
+          else:
+            enemy.accuracy - evadeBonus
+        if gunnerIndex > 0:
+          hitChance += getSkillLevel(member = ship.crew[gunnerIndex],
+              skillIndex = gunnerySkill)
+        if hitChance < -48:
+          hitChance = -48
+        logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
+            " Player evasion: " & $evadeBonus, debugType = DebugTypes.combat)
+        logMessage(message = "Enemy evasion: " & $enemy.evasion &
+            " Enemy accuracy: " & $enemy.accuracy,
+            debugType = DebugTypes.combat)
+        logMessage(message = "Chance to hit: " & $hitChance,
+            debugType = DebugTypes.combat)
+        let enemyNameOwner = enemyName & " (" & factionName & ")"
+        for shoot in 1 .. shoots:
+          var shootMessage: string
+          if ship.crew == playerShip.crew:
+            shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
+                ship.crew[gunnerIndex].name & " shoots at " & enemyNameOwner
+              else:
+                "You ram " & enemyNameOwner
+          else:
+            shootMessage = enemyNameOwner & " attacks"
+
 
 
 # Temporary code for interfacing with Ada
