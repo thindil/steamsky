@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, game, log, messages, ships, ships2, shipscargo, shipscrew,
-    shipsmovement, trades, types, utils
+import crewinventory, config, game, log, messages, ships, ships2, shipscargo,
+    shipscrew, shipsmovement, trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -196,7 +196,7 @@ proc combatTurn*() =
 
     var
       hitLocation: int = -1
-      accuracyBonus = 0
+      accuracyBonus, speedBonus = 0
 
     proc removeGun(moduleIndex: Natural) =
       if enemyShip.crew == playerShip.crew:
@@ -410,7 +410,31 @@ proc combatTurn*() =
                     hitLocation.dec
                     if hitLocation == -1:
                       break attackLoop
-
+              shootMessage = shootMessage & enemyShip.modules[
+                  hitLocation].name & "."
+              let damage = 1.0 - (module.durability.float /
+                  module.maxDurability.float)
+              var weaponDamage = 0
+              if module.mType == ModuleType2.harpoonGun:
+                weaponDamage = module.duration - (module.duration.float * damage).int
+              elif module.mType == ModuleType2.gun:
+                weaponDamage = module.damage - (module.damage.float * damage).int
+              elif module.mType == ModuleType2.batteringRam:
+                weaponDamage = module.damage2 - (module.damage2.float * damage).int
+                weaponDamage = if speedBonus < 0:
+                    weaponDamage + (speedBonus.abs * (countShipWeight(
+                        ship = ship) / 5_000).int)
+                  else:
+                    weaponDamage + (countShipWeight(ship = ship) / 5_000).int
+              if weaponDamage < 1:
+                weaponDamage = 1
+              if ammoIndex > -1:
+                weaponDamage += itemsList[ship.cargo[
+                    ammoIndex].protoIndex].value[0]
+              weaponDamage = if ship.crew == playerShip.crew:
+                    (weaponDamage.float * newGameSettings.playerDamageBonus).int
+                  else:
+                    (weaponDamage.float * newGameSettings.enemyDamageBonus).int
 
 
 # Temporary code for interfacing with Ada
