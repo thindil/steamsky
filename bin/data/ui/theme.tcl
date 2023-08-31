@@ -229,7 +229,7 @@ namespace eval ttk::theme::steamsky {
       # Dialogs header label
       ttk::style configure Header.TLabel -background $colors(-darkorange) \
          -anchor center -justify center -relief solid -padding {5 0 5 0} \
-         -foreground $colors(-cyan)
+         -foreground $colors(-lightgreen)
 
       # Progressbar setting
       # Default progressbars
