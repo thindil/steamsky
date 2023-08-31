@@ -436,7 +436,31 @@ proc combatTurn*() =
                     (weaponDamage.float * newGameSettings.playerDamageBonus).int
                   else:
                     (weaponDamage.float * newGameSettings.enemyDamageBonus).int
-
+              if armorIndex == -1:
+                if module.mType == ModuleType2.harpoonGun:
+                  for eModule in enemyShip.modules:
+                    if eModule.mType == ModuleType2.hull:
+                      weaponDamage = weaponDamage - (eModule.maxModules / 10).int
+                      if weaponDamage < 1:
+                        weaponDamage = 1
+                      break
+                  if ship.crew == playerShip.crew:
+                    game.enemy.harpoonDuration += weaponDamage
+                  else:
+                    harpoonDuration += weaponDamage
+                  weaponDamage = 1
+                elif module.mType == ModuleType2.batteringRam:
+                  if ship.crew == playerShip.crew:
+                    game.enemy.harpoonDuration += 2
+                  else:
+                    harpoonDuration += 2
+              damageModule(ship = enemyShip, moduleIndex = hitLocation, damage = weaponDamage, deathReason = "enemy fire in ship combat")
+              if enemyShip.modules[hitLocation].durability == 0:
+                case modulesList[enemyShip.modules[hitLocation].protoIndex].mType
+                of ModuleType.hull, ModuleType.engine:
+                  endCombat = true
+                else:
+                  discard
 
 # Temporary code for interfacing with Ada
 
