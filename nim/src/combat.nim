@@ -231,13 +231,15 @@ proc combatTurn*() =
         ammoIndex2 = -1
         gunnerOrder = 1
         shoots = 0
+        currentAccuracyBonus = 0
+        evadeBonus = 0
       if module.mType == ModuleType2.harpoonGun:
         ammoIndex2 = module.harpoonIndex
       elif module.mType == ModuleType2.gun:
         ammoIndex2 = module.ammoIndex
       if module.mType in {ModuleType2.gun, harpoonGun}:
         gunnerIndex = module.owner[0]
-        logMessage(message = "Gunenr index: " & $gunnerIndex & ".",
+        logMessage(message = "Gunner index: " & $gunnerIndex & ".",
             debugType = DebugTypes.combat)
         if ship.crew == playerShip.crew:
           if gunnerIndex > -1:
@@ -266,7 +268,6 @@ proc combatTurn*() =
                 debugType = DebugTypes.combat)
             if ship.crew[gunnerIndex].order != gunner:
               gunnerOrder = 1
-            var currentAccuracyBonus = 0
             case gunnerOrder
             of 1:
               if shoots > 0:
@@ -321,6 +322,34 @@ proc combatTurn*() =
           shoots = ship.cargo[ammoIndex].amount
         if enemy.distance > 5_000:
           shoots = 0
+        if module.mType == ModuleType2.harpoonGun and shoots > 0:
+          shoots = 1
+          if enemy.distance > 2_000:
+            shoots = 0
+          if findEnemyModule(mType = ModuleType.armor) > -1:
+            shoots = 0
+        if module.mType == ModuleType2.gun and shoots > 0:
+          case itemsList[ship.cargo[ammoIndex].protoIndex].value[1]
+          of 2:
+            if ship.crew == playerShip.crew:
+              currentAccuracyBonus -= 10
+            else:
+              evadeBonus += 10
+          of 3:
+            if ship.crew == playerShip.crew:
+              currentAccuracyBonus += 10
+            else:
+              evadeBonus -= 10
+          else:
+            discard
+      else:
+        if enemy.distance > 100:
+          shoots = 0
+        else:
+          shoots = (if module.coolingDown: 0 else: 1)
+        module.coolingDown = not module.coolingDown
+      logMessage(message = "Shoots: " & $shoots, debugType = DebugTypes.combat)
+
 
 # Temporary code for interfacing with Ada
 
