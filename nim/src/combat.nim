@@ -454,13 +454,42 @@ proc combatTurn*() =
                     game.enemy.harpoonDuration += 2
                   else:
                     harpoonDuration += 2
-              damageModule(ship = enemyShip, moduleIndex = hitLocation, damage = weaponDamage, deathReason = "enemy fire in ship combat")
+              damageModule(ship = enemyShip, moduleIndex = hitLocation,
+                  damage = weaponDamage,
+                  deathReason = "enemy fire in ship combat")
               if enemyShip.modules[hitLocation].durability == 0:
-                case modulesList[enemyShip.modules[hitLocation].protoIndex].mType
+                case modulesList[enemyShip.modules[
+                    hitLocation].protoIndex].mType
                 of ModuleType.hull, ModuleType.engine:
                   endCombat = true
+                of ModuleType.turret:
+                  if enemyShip.crew == playerShip.crew:
+                    let weaponIndex = enemyShip.modules[hitLocation].gunIndex
+                    if weaponIndex > -1:
+                      enemyShip.modules[weaponIndex].durability = 0
+                      removeGun(moduleIndex = weaponIndex)
                 else:
                   discard
+              if ship.crew == playerShip.crew:
+                addMessage(message = shootMessage, mType = combatMessage, color = green)
+              else:
+                addMessage(message = shootMessage, mType = combatMessage,
+                    color = yellow)
+            else:
+              shootMessage = shootMessage & " and misses."
+              if ship.crew == playerShip.crew:
+                addMessage(message = shootMessage, mType = combatMessage, color = blue)
+              else:
+                addMessage(message = shootMessage, mType = combatMessage, color = cyan)
+            if ammoIndex > -1:
+              updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1)
+            if ship.crew == playerShip.crew and gunnerIndex > -1:
+              gainExp(amount = 2, skillNumber = gunnerySkill,
+                  crewIndex = gunnerIndex)
+            if playerShip.crew[0].health == 0:
+              endCombat = true
+            if endCombat:
+              break attackLoop
 
 # Temporary code for interfacing with Ada
 
