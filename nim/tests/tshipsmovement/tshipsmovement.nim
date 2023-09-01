@@ -4,7 +4,8 @@ discard """
 Testing waitInPlace.
 Testing realSpeed.
 Testing dockShip.
-Testing countFuelNeeded.'''
+Testing countFuelNeeded.
+Testing changeShipSpeed.'''
 """
 
 import std/tables
@@ -90,3 +91,21 @@ try:
   assert countFuelNeeded() == -4
 except AssertionDefect:
   echo "Failed to count the amount of fuel needed for travel."
+
+echo "Testing changeShipSpeed."
+try:
+  assert changeShipSpeed(fullSpeed).len == 0
+except AssertionDefect:
+  echo "Failed to change speed of the docked ship."
+try:
+  assert dockShip(false).len == 0
+except AssertionDefect:
+  echo "Failed to undock the ship."
+try:
+  assert changeShipSpeed(fullStop).len == 0
+except AssertionDefect:
+  echo "Failed to change speed of the ship."
+try:
+  assert dockShip(true).len == 0
+except AssertionDefect:
+  echo "Failed to dock the ship again to the base, second time."
