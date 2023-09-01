@@ -83,7 +83,7 @@ except AssertionDefect:
 try:
   assert dockShip(true).len == 0
 except AssertionDefect:
-  echo "Failed to dock the player's ships from a base."
+  echo "Failed to dock the player's ships to a base."
 
 echo "Testing countFuelNeeded."
 try:
