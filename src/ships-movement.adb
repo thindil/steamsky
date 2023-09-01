@@ -215,27 +215,22 @@ package body Ships.Movement is
    end Dock_Ship;
 
    function Change_Ship_Speed(Speed_Value: Ship_Speed) return String is
-      Have_Engine: Boolean := False;
+      Result: Unbounded_String;
+      function Change_Ada_Ship_Speed(S_Value: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "changeAdaShipSpeed";
    begin
-      Find_Engine_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = ENGINE
-           and then (Module.Durability > 0 and not Module.Disabled) then
-            Have_Engine := True;
-            exit Find_Engine_Loop;
-         end if;
-      end loop Find_Engine_Loop;
-      if not Have_Engine then
-         return
-           "You don't have a working engine on your ship or all of the engines are destroyed.";
-      end if;
-      if Find_Member(Order => ENGINEER) = 0 and
-        not Get_Faction(Index => Player_Ship.Crew(1).Faction).Flags.Contains
-          (Item => To_Unbounded_String(Source => "sentientships")) then
-         return "You don't have an engineer on duty.";
-      end if;
-      Player_Ship.Speed := Speed_Value;
-      return "";
+      Set_Ship_In_Nim;
+      Result :=
+        To_Unbounded_String
+          (Source =>
+             Value
+               (Item =>
+                  Change_Ada_Ship_Speed
+                    (S_Value => Ship_Speed'Pos(Speed_Value))));
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      return To_String(Source => Result);
    end Change_Ship_Speed;
 
    function Real_Speed
