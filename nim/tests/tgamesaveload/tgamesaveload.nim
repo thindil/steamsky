@@ -20,4 +20,4 @@ generateSaveName()
 try:
   assert oldName != saveName
 except AssertionDefect:
-  echo "Failed to generate uniqune name for save game file."
+  writeLine(stderr, "Failed to generate uniqune name for save game file.")
