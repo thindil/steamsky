@@ -135,8 +135,10 @@ package body Bases.ShipyardUI is
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
@@ -175,10 +177,12 @@ package body Bases.ShipyardUI is
                   (pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "",
               Tooltip_Text => "Press mouse button to sort the modules.");
+         --## rule off ASSIGNMENTS
          Shipyard_Frame :=
            Get_Widget
              (pathName => Shipyard_Canvas & ".shipyard.remove",
               Interp => Interp);
+         --## rule on ASSIGNMENTS
          Remove_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Shipyard_Frame),
@@ -490,7 +494,7 @@ package body Bases.ShipyardUI is
       Ship_Module_Index: Natural := 0;
       Size: Positive := 1;
       Speed: Integer := 0;
-      Module_Text: Tk_Text;
+      Module_Text: Tk_Text; --## rule line off IMPROPER_INITIALIZATION
       Added: Boolean := False;
       Cost: Positive := 1;
       Money_Index_2: Natural := 0;
@@ -783,6 +787,7 @@ package body Bases.ShipyardUI is
               (TextWidget => Module_Text, Index => "end",
                Text => "{" & LF & "Quality: }");
             if Installing and then Ship_Module_Index > 0 then
+               --## rule off SIMPLIFIABLE_STATEMENTS
                if Max_Value < 30 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
@@ -799,6 +804,7 @@ package body Bases.ShipyardUI is
                        (TextWidget => Module_Text, Index => "end",
                         Text => "{minimal}");
                   end if;
+               --## rule on SIMPLIFIABLE_STATEMENTS
                elsif Max_Value < 60 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
@@ -849,6 +855,7 @@ package body Bases.ShipyardUI is
                   end if;
                end if;
             else
+               --## rule off SIMPLIFIABLE_STATEMENTS
                if Max_Value < 30 then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
@@ -866,6 +873,7 @@ package body Bases.ShipyardUI is
                     (TextWidget => Module_Text, Index => "end",
                      Text => "{luxury}");
                end if;
+               --## rule on SIMPLIFIABLE_STATEMENTS
             end if;
             Insert
               (TextWidget => Module_Text, Index => "end",
