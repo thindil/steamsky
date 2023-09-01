@@ -193,11 +193,13 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
 
 proc combatTurn*() =
 
+  var accuracyBonus, evadeBonus = 0
+
   proc attack(ship, enemyShip: var ShipRecord) =
 
     var
       hitLocation: int = -1
-      accuracyBonus, speedBonus = 0
+      speedBonus = 0
 
     proc removeGun(moduleIndex: Natural) =
       if enemyShip.crew == playerShip.crew:
@@ -492,7 +494,8 @@ proc combatTurn*() =
               break attackLoop
 
   if findItem(inventory = playerShip.cargo, itemType = fuelType) == -1:
-    addMessage(message = "Ship fall from sky due to lack of fuel.", mType = otherMessage, color = red)
+    addMessage(message = "Ship fall from sky due to lack of fuel.",
+        mType = otherMessage, color = red)
     death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)
     endCombat = true
     return
@@ -520,6 +523,32 @@ proc combatTurn*() =
       gainExp(amount = 2, skillNumber = engineeringSkill, crewIndex = index)
     else:
       discard
+  if pilotIndex > -1:
+    case pilotOrder
+    of 1:
+      accuracyBonus = 20
+      evadeBonus = -10
+    of 2:
+      accuracyBonus = 10
+      evadeBonus = 0
+    of 3:
+      accuracyBonus = 0
+      evadeBonus = 10
+    of 4:
+      accuracyBonus = -10
+      evadeBonus = 20
+    else:
+      discard
+    evadeBonus = evadeBonus + getSkillLevel(member = playerShip.crew[
+        pilotIndex], skillIndex = pilotingSkill)
+  else:
+    accuracyBonus = 20
+    evadeBonus = -10
+  var enemyPilotIndex = findMember(order = pilot,
+      shipCrew = game.enemy.ship.crew)
+  if enemyPilotIndex > -1:
+    accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
+        enemyPilotIndex], skillIndex = pilotingSkill)
 
 # Temporary code for interfacing with Ada
 
