@@ -17,7 +17,7 @@
 
 import std/[math, strutils, tables]
 import crewinventory, config, game, log, messages, ships, ships2, shipscargo,
-    shipscrew, shipsmovement, trades, types, utils
+    shipscrew, shipscrew2, shipsmovement, trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -490,6 +490,36 @@ proc combatTurn*() =
               endCombat = true
             if endCombat:
               break attackLoop
+
+  if findItem(inventory = playerShip.cargo, itemType = fuelType) == -1:
+    addMessage(message = "Ship fall from sky due to lack of fuel.", mType = otherMessage, color = red)
+    death(memberIndex = 0, reason = "fall of the ship", ship = playerShip)
+    endCombat = true
+    return
+  var chanceForRun: int = 0
+  turnNumber.inc
+  case game.enemy.combatAi
+  of attacker:
+    chanceForRun = turnNumber - 120
+  of berserker:
+    chanceForRun = turnNumber - 200
+  of disarmer:
+    chanceForRun = turnNumber - 60
+  else:
+    discard
+  if chanceForRun > 1 and getRandom(min = 1, max = 100) < chanceForRun:
+    game.enemy.combatAi = coward
+  var pilotIndex, engineerIndex: int = -1
+  for index, member in playerShip.crew:
+    case member.order
+    of pilot:
+      pilotIndex = index
+      gainExp(amount = 2, skillNumber = pilotingSkill, crewIndex = index)
+    of engineer:
+      engineerIndex = index
+      gainExp(amount = 2, skillNumber = engineeringSkill, crewIndex = index)
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
