@@ -264,6 +264,21 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
       else:
         discard
 
+proc changeShipSpeed*(speedValue: ShipSpeed): string =
+  var haveEngine = false
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.engine and (module.durability > 0 and
+        not module.disabled):
+      haveEngine = true
+      break
+  if not haveEngine:
+    return "You don't have a working engine on your ship or all of the engines are destroyed."
+  if findMember(order = engineer) == -1 and "sentientships" notin factionsList[
+      playerShip.crew[0].faction].flags:
+    return "You don't have an engineer on duty."
+  playerShip.speed = speedValue
+  return ""
+
 # Temporary code for interfacing with Ada
 
 proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
@@ -292,5 +307,11 @@ proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
   except KeyError, IOError, Exception:
     return getCurrentExceptionMsg().cstring
 
-proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc} =
+proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc.} =
   return countFuelNeeded().cint
+
+proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return changeShipSpeed(speedValue = speedValue.ShipSpeed).cstring
+  except KeyError:
+    return ""
