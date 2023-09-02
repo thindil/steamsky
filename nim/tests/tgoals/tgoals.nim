@@ -21,24 +21,24 @@ updateGoal(GoalTypes.destroy, "PIRATES", 1)
 try:
   assert currentGoal.amount == (amount - 1)
 except AssertionDefect:
-  echo "Failed to update the current goal."
+  writeLine(stderr, "Failed to update the current goal.")
 amount = currentGoal.amount
 updateGoal(reputation, "PIRATES", 1)
 try:
   assert currentGoal.amount == amount
 except AssertionDefect:
-  echo "Failed to not update the current goal."
+  writeLine(stderr, "Failed to not update the current goal.")
 
 echo "Testing clearCurrentGoal."
 clearCurrentGoal()
 try:
   assert currentGoal.index.len == 0
 except AssertionDefect:
-  echo "Failed to reset the player's current goal."
+  writeLine(stderr, "Failed to reset the player's current goal.")
 currentGoal = goalsList[1]
 
 echo "Testing goalText."
 try:
   assert goalText(1) == "Gain max reputation in 1 base"
 except AssertionDefect:
-  echo "Failed to get text of the goal."
+  writeLine(stderr, "Failed to get text of the goal.")
