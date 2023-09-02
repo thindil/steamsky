@@ -193,13 +193,14 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
 
 proc combatTurn*() =
 
-  var accuracyBonus, evadeBonus = 0
+  var
+    accuracyBonus, evadeBonus = 0
+    speedBonus = 0
+    ammoIndex2 = -1
 
   proc attack(ship, enemyShip: var ShipRecord) =
 
-    var
-      hitLocation: int = -1
-      speedBonus = 0
+    var hitLocation: int = -1
 
     proc removeGun(moduleIndex: Natural) =
       if enemyShip.crew == playerShip.crew:
@@ -232,7 +233,6 @@ proc combatTurn*() =
         var
           gunnerIndex = -1
           ammoIndex = -1
-          ammoIndex2 = -1
           gunnerOrder = 1
           shoots = 0
           currentAccuracyBonus = 0
@@ -549,6 +549,30 @@ proc combatTurn*() =
   if enemyPilotIndex > -1:
     accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
         enemyPilotIndex], skillIndex = pilotingSkill)
+  if engineerIndex > -1 or "sentientships" in factionsList[playerShip.crew[
+      0].faction].flags:
+    let message = changeShipSpeed(speedValue = engineerOrder.ShipSpeed)
+    if message.len > 0:
+      addMessage(message = message, mType = orderMessage, color = red)
+  speedBonus = 20 - (realSpeed(ship = playerShip) / 100).int
+  if speedBonus < -10:
+    speedBonus = -10
+  accuracyBonus = accuracyBonus + speedBonus
+  evadeBonus = evadeBonus - speedBonus
+  var damageRange = 10_000
+  for index, module in game.enemy.ship.modules:
+    if module.durability == 0 or module.mType notin {ModuleType2.gun,
+        batteringRam, harpoonGun}:
+      continue
+    if module.mType in {ModuleType2.gun, harpoonGun}:
+      if module.mType == ModuleType2.gun and damageRange > 5_000:
+        damageRange = 5_000
+      elif damageRange > 2_000:
+        damageRange = 2_000
+      ammoIndex2 = if module.mType == ModuleType2.gun:
+          module.ammoIndex
+        else:
+          module.harpoonIndex
 
 # Temporary code for interfacing with Ada
 
