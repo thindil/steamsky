@@ -559,7 +559,9 @@ proc combatTurn*() =
     speedBonus = -10
   accuracyBonus = accuracyBonus + speedBonus
   evadeBonus = evadeBonus - speedBonus
-  var damageRange = 10_000
+  var
+    damageRange = 10_000
+    enemyWeaponIndex = -1
   for index, module in game.enemy.ship.modules:
     if module.durability == 0 or module.mType notin {ModuleType2.gun,
         batteringRam, harpoonGun}:
@@ -573,6 +575,26 @@ proc combatTurn*() =
           module.ammoIndex
         else:
           module.harpoonIndex
+      var enemyAmmoIndex = -1
+      if ammoIndex2 < game.enemy.ship.cargo.len:
+        if itemsList[game.enemy.ship.cargo[ammoIndex2].protoIndex].itemType ==
+            $(modulesList[module.protoIndex].value - 1):
+          enemyAmmoIndex = ammoIndex2
+      if enemyAmmoIndex == -1:
+        for iindex, item in itemsList:
+          if item.itemType == $(modulesList[module.protoIndex].value - 1):
+            for cindex, cargo in game.enemy.ship.cargo:
+              if cargo.protoIndex == iindex:
+                enemyAmmoIndex = cindex
+                break
+            if enemyAmmoIndex > -1:
+              break
+      if enemyAmmoIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
+        game.enemy.combatAi = coward
+        break
+    elif damageRange > 100:
+      damageRange = 100
+    enemyWeaponIndex = index
 
 # Temporary code for interfacing with Ada
 
