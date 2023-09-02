@@ -146,7 +146,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
   if result.len > 0:
     return
   if docking:
-    echo playerShip.crew
     if skyBases[baseIndex].population > 0:
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
           mType = orderMessage)

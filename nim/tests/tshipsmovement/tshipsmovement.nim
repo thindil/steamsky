@@ -92,6 +92,20 @@ try:
 except AssertionDefect:
   echo "Failed to count the amount of fuel needed for travel."
 
+playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
+    homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+    1, 0, 0], order: pilot, loyalty: 100, skills: @[SkillInfo(index: 4,
+    level: 4,
+    experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+    MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+    experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
+    homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
+    1, 0, 0], order: engineer, loyalty: 100, skills: @[SkillInfo(index: 4,
+    level: 4,
+    experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+    MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+    experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
 echo "Testing changeShipSpeed."
 try:
   assert changeShipSpeed(fullSpeed).len == 0
