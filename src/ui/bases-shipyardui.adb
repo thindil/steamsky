@@ -1041,7 +1041,7 @@ package body Bases.ShipyardUI is
                            Text =>
                              "{1/" &
                              Trim
-                               (Source => Integer'Image(abs (Speed)),
+                               (Source => Integer'Image(abs Speed),
                                 Side => Both) &
                              " rounds (slower)} [list red]");
                      end if;
@@ -1062,7 +1062,7 @@ package body Bases.ShipyardUI is
                            Text =>
                              "{1/" &
                              Trim
-                               (Source => Integer'Image(abs (Speed)),
+                               (Source => Integer'Image(abs Speed),
                                 Side => Both) &
                              " rounds (faster)} [list green]");
                      end if;
@@ -1077,7 +1077,7 @@ package body Bases.ShipyardUI is
                            Text =>
                              "{1/" &
                              Trim
-                               (Source => Integer'Image(abs (Speed)),
+                               (Source => Integer'Image(abs Speed),
                                 Side => Both) &
                              " rounds}");
                      end if;
@@ -1093,7 +1093,7 @@ package body Bases.ShipyardUI is
                         Text =>
                           "{1/" &
                           Trim
-                            (Source => Integer'Image(abs (Speed)),
+                            (Source => Integer'Image(abs Speed),
                              Side => Both) &
                           " rounds}");
                   end if;
@@ -1252,7 +1252,7 @@ package body Bases.ShipyardUI is
    procedure Set_Install_Button
      (Error_Label: Ttk_Label; Money_Index_2, Cost: Natural) is
       -- ****
-      Used_Space, All_Space, Max_Size: Natural;
+      Used_Space, All_Space, Max_Size: Natural := 0;
       Has_Unique: Boolean := False;
       Free_Turret_Index: Natural := 0;
    begin
@@ -1311,7 +1311,7 @@ package body Bases.ShipyardUI is
                  (Widgt => Error_Label,
                   options =>
                     "-text {The selected module is too big for your's ship's hull.}");
-            elsif (All_Space - Used_Space) <
+            elsif All_Space - Used_Space <
               Get_Module(Index => Module_Index).Size and
               Get_Module(Index => Module_Index).M_Type /= ARMOR then
                configure
