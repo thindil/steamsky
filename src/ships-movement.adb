@@ -18,11 +18,11 @@
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
 with Config;
-with Factions; use Factions;
+with Factions;
 with Maps;
 with Messages;
 with Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Crew;
 with Statistics;
 
 package body Ships.Movement is
@@ -30,8 +30,10 @@ package body Ships.Movement is
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       use Config;
+      use Factions;
       use Messages;
       use Ships.Cargo;
+      use Ships.Crew;
       use Statistics;
       use Tiny_String;
 
