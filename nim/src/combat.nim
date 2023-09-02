@@ -595,6 +595,50 @@ proc combatTurn*() =
     elif damageRange > 100:
       damageRange = 100
     enemyWeaponIndex = index
+  if enemyWeaponIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
+    game.enemy.combatAi = coward
+  var enemyPilotOrder = 2
+  case game.enemy.combatAi
+  of berserker:
+    if game.enemy.distance > 10 and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 1
+    elif game.enemy.distance <= 10 and game.enemy.ship.speed == fullSpeed:
+      game.enemy.ship.speed.dec
+      addMessage(message = enemyName & " decreases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 2
+  of attacker, disarmer:
+    if game.enemy.distance > damageRange and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 1
+    elif game.enemy.distance <= damageRange and game.enemy.ship.speed == fullSpeed:
+      game.enemy.ship.speed.dec
+      addMessage(message = enemyName & " decreases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 2
+  of coward:
+    if game.enemy.distance < 15_000 and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+    enemyPilotOrder = 4
+  else:
+    discard
+  if game.enemy.harpoonDuration > 0:
+    game.enemy.ship.speed = fullStop
+    addMessage(message = enemyName & " is stopped by your ship.",
+        mType = combatMessage)
+  elif game.enemy.ship.speed == fullStop:
+    game.enemy.ship.speed = quarterSpeed
+  if harpoonDuration > 0:
+    playerShip.speed = fullStop
+    addMessage(message = "You are stopped by the enemy's ship.",
+        mType = combatMessage)
 
 # Temporary code for interfacing with Ada
 
