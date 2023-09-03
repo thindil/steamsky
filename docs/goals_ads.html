@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -35,21 +35,17 @@
 <ul>
 <li>1.1. <a href="./ui/goals-ui_ads.html#robo29">Goals/GUI</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/goals-ui_ads.html#robo604">GUI/GUI.Add_Commands</a></li>
-<li>1.1.2. <a href="./ui/goals-ui_adb.html#robo844">GUI/GUI.Set_Goal_Command</a></li>
-<li>1.1.3. <a href="./ui/goals-ui_adb.html#robo845">GUI/GUI.Show_Goals_Command</a></li>
+<li>1.1.1. <a href="./ui/goals-ui_ads.html#robo593">GUI/GUI.Add_Commands</a></li>
+<li>1.1.2. <a href="./ui/goals-ui_adb.html#robo836">GUI/GUI.Set_Goal_Command</a></li>
+<li>1.1.3. <a href="./ui/goals-ui_adb.html#robo837">GUI/GUI.Show_Goals_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo133">Goals/Goals.Goals_Container</a></li>
-<li>1.3. <a href="#robo134">Goals/Goals.GoalTypes</a></li>
-<li>1.4. <a href="#robo210">Goals/Goals.Goal_Data</a></li>
-<li>1.5. <a href="#robo274">Goals/Goals.Default_Goal_Type</a></li>
-<li>1.6. <a href="#robo275">Goals/Goals.Empty_Goal</a></li>
-<li>1.7. <a href="#robo400">Goals/Goals.Current_Goal</a></li>
-<li>1.8. <a href="#robo401">Goals/Goals.Goals_List</a></li>
-<li>1.9. <a href="#robo597">Goals/Goals.Clear_Current_Goal</a></li>
-<li>1.10. <a href="#robo598">Goals/Goals.Goal_Text</a></li>
-<li>1.11. <a href="#robo599">Goals/Goals.Load_Goals</a></li>
-<li>1.12. <a href="#robo600">Goals/Goals.Update_Goal</a></li>
+<li>1.2. <a href="#robo133">Goals/Goals.GoalTypes</a></li>
+<li>1.3. <a href="#robo209">Goals/Goals.Goal_Data</a></li>
+<li>1.4. <a href="#robo270">Goals/Goals.Default_Goal_Type</a></li>
+<li>1.5. <a href="#robo271">Goals/Goals.Empty_Goal</a></li>
+<li>1.6. <a href="#robo587">Goals/Goals.Clear_Current_Goal</a></li>
+<li>1.7. <a href="#robo588">Goals/Goals.Goal_Text</a></li>
+<li>1.8. <a href="#robo589">Goals/Goals.Update_Goal</a></li>
 </ul>
 </ul>
 <hr />
@@ -65,21 +61,8 @@
 </pre>
 
 <hr />
-<a name="Goals2fGoals2eGoals5fContainer"></a>
-<a name="robo133"></a><h2>Goals/Goals.Goals_Container [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to store goals data
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Goals_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
-     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Goal_Data<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Goals2fGoals2eGoalTypes"></a>
-<a name="robo134"></a><h2>Goals/Goals.GoalTypes [ Types ]</h2>
+<a name="robo133"></a><h2>Goals/Goals.GoalTypes [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -93,7 +76,7 @@
 
 <hr />
 <a name="Goals2fGoals2eGoal5fData"></a>
-<a name="robo210"></a><h2>Goals/Goals.Goal_Data [ Records ]</h2>
+<a name="robo209"></a><h2>Goals/Goals.Goal_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -119,7 +102,7 @@
 
 <hr />
 <a name="Goals2fGoals2eDefault5fGoal5fType"></a>
-<a name="robo274"></a><h2>Goals/Goals.Default_Goal_Type [ Constants ]</h2>
+<a name="robo270"></a><h2>Goals/Goals.Default_Goal_Type [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -131,7 +114,7 @@
 
 <hr />
 <a name="Goals2fGoals2eEmpty5fGoal"></a>
-<a name="robo275"></a><h2>Goals/Goals.Empty_Goal [ Constants ]</h2>
+<a name="robo271"></a><h2>Goals/Goals.Empty_Goal [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -142,55 +125,28 @@
 </pre>
 
 <hr />
-<a name="Goals2fGoals2eCurrent5fGoal"></a>
-<a name="robo400"></a><h2>Goals/Goals.Current_Goal [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Player current goal
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Current_Goal<span class="sign">:</span> Goal_Data<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Goals2fGoals2eGoals5fList"></a>
-<a name="robo401"></a><h2>Goals/Goals.Goals_List [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> List of player goals available in game
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Goals_List<span class="sign">:</span> Goals_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Goals2fGoals2eClear5fCurrent5fGoal"></a>
-<a name="robo597"></a><h2>Goals/Goals.Clear_Current_Goal [ Subprograms ]</h2>
+<a name="robo587"></a><h2>Goals/Goals.Clear_Current_Goal [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Reset current goal
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Clear_Current_Goal <span class="keyword">with</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> Current_Goal<span class="sign">.</span>Index <span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Clear_Current_Goal<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Goals2fGoals2eGoal5fText"></a>
-<a name="robo598"></a><h2>Goals/Goals.Goal_Text [ Subprograms ]</h2>
+<a name="robo588"></a><h2>Goals/Goals.Goal_Text [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get info about selected goal
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Goal_Text<span class="sign">(</span>Index<span class="sign">:</span> Goals_Container<span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Index <span class="sign">&lt;</span><span class="sign">=</span> Goals_List<span class="sign">.</span>Last_Index<span class="sign">,</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> Goal_Text<span class="squote">'Result'</span>Length <span class="sign">&gt;</span> 0<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GoalText"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> Goal_Text<span class="sign">(</span>Index<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Goal_Text<span class="squote">'Result'</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Index - Index of goal from which we take info. If 0 then get info for
@@ -201,20 +157,8 @@
 </pre>
 
 <hr />
-<a name="Goals2fGoals2eLoad5fGoals"></a>
-<a name="robo599"></a><h2>Goals/Goals.Load_Goals [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Load player goals from files
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Load_Goals<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Goals2fGoals2eUpdate5fGoal"></a>
-<a name="robo600"></a><h2>Goals/Goals.Update_Goal [ Subprograms ]</h2>
+<a name="robo589"></a><h2>Goals/Goals.Update_Goal [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Goals</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -233,7 +177,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/goals.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-08-06 02:58:34</p>
+<p>Generated from ./src/goals.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-09-03 03:09:22</p>
 </div> <!-- footer -->
 </body>
 </html>

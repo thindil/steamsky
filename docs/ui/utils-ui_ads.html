@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -34,25 +34,26 @@
 <li>1. <a href="#robo72">Utils/UUI</a></li>
 <ul>
 <li>1.1. <a href="#robo186">UUI/UUI.CreateCommands</a></li>
-<li>1.2. <a href="#robo790">UUI/UUI.Add_Command</a></li>
-<li>1.3. <a href="#robo791">UUI/UUI.Add_Commands</a></li>
-<li>1.4. <a href="#robo792">UUI/UUI.Delete_Widgets</a></li>
-<li>1.5. <a href="#robo793">UUI/UUI.Get_Skill_Marks</a></li>
-<li>1.6. <a href="#robo794">UUI/UUI.Minutes_To_Date</a></li>
-<li>1.7. <a href="#robo795">UUI/UUI.Set_Fonts</a></li>
-<li>1.8. <a href="#robo796">UUI/UUI.Show_Inventory_Item_Info</a></li>
-<li>1.9. <a href="#robo797">UUI/UUI.Show_Screen</a></li>
-<li>1.10. <a href="#robo798">UUI/UUI.Travel_Info</a></li>
-<li>1.11. <a href="#robo799">UUI/UUI.Update_Messages</a></li>
-<li>1.12. <a href="./utils-ui_adb.html#robo1002">UUI/UUI.Check_Amount_Command</a></li>
-<li>1.13. <a href="./dialogs_adb.html#robo1003">UUI/UUI.Get_String_Command</a></li>
-<li>1.14. <a href="./utils-ui_adb.html#robo1004">UUI/UUI.Process_Question_Command</a></li>
-<li>1.15. <a href="./utils-ui_adb.html#robo1005">UUI/UUI.Resize_Canvas_Command</a></li>
-<li>1.16. <a href="#robo1006">UUI/UUI.Set_Destination_Command</a></li>
-<li>1.17. <a href="./utils-ui_adb.html#robo1007">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
-<li>1.18. <a href="./utils-ui_adb.html#robo1008">UUI/UUI.Set_Text_Variable_Command</a></li>
-<li>1.19. <a href="#robo1009">UUI/UUI.Show_On_Map_Command</a></li>
-<li>1.20. <a href="./utils-ui_adb.html#robo1010">UUI/UUI.Validate_Amount_Command</a></li>
+<li>1.2. <a href="#robo187">UUI/UUI.Travel_Array</a></li>
+<li>1.3. <a href="#robo782">UUI/UUI.Add_Command</a></li>
+<li>1.4. <a href="#robo783">UUI/UUI.Add_Commands</a></li>
+<li>1.5. <a href="#robo784">UUI/UUI.Delete_Widgets</a></li>
+<li>1.6. <a href="#robo785">UUI/UUI.Get_Skill_Marks</a></li>
+<li>1.7. <a href="#robo786">UUI/UUI.Minutes_To_Date</a></li>
+<li>1.8. <a href="#robo787">UUI/UUI.Set_Fonts</a></li>
+<li>1.9. <a href="#robo788">UUI/UUI.Show_Inventory_Item_Info</a></li>
+<li>1.10. <a href="#robo789">UUI/UUI.Show_Screen</a></li>
+<li>1.11. <a href="#robo790">UUI/UUI.Travel_Info</a></li>
+<li>1.12. <a href="#robo791">UUI/UUI.Update_Messages</a></li>
+<li>1.13. <a href="./utils-ui_adb.html#robo993">UUI/UUI.Check_Amount_Command</a></li>
+<li>1.14. <a href="./dialogs_adb.html#robo994">UUI/UUI.Get_String_Command</a></li>
+<li>1.15. <a href="./utils-ui_adb.html#robo995">UUI/UUI.Process_Question_Command</a></li>
+<li>1.16. <a href="./utils-ui_adb.html#robo996">UUI/UUI.Resize_Canvas_Command</a></li>
+<li>1.17. <a href="#robo997">UUI/UUI.Set_Destination_Command</a></li>
+<li>1.18. <a href="./utils-ui_adb.html#robo998">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
+<li>1.19. <a href="./utils-ui_adb.html#robo999">UUI/UUI.Set_Text_Variable_Command</a></li>
+<li>1.20. <a href="#robo1000">UUI/UUI.Show_On_Map_Command</a></li>
+<li>1.21. <a href="./utils-ui_adb.html#robo1001">UUI/UUI.Validate_Amount_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -81,8 +82,20 @@
 </pre>
 
 <hr />
+<a name="UUI2fUUI2eTravel5fArray"></a>
+<a name="robo187"></a><h2>UUI/UUI.Travel_Array [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The values returned by Travel_Info function: ETA and fuel usage
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Travel_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+</pre>
+
+<hr />
 <a name="UUI2fUUI2eAdd5fCommand"></a>
-<a name="robo790"></a><h2>UUI/UUI.Add_Command [ Subprograms ]</h2>
+<a name="robo782"></a><h2>UUI/UUI.Add_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -100,7 +113,7 @@
 
 <hr />
 <a name="UUI2fUUI2eAdd5fCommands"></a>
-<a name="robo791"></a><h2>UUI/UUI.Add_Commands [ Subprograms ]</h2>
+<a name="robo783"></a><h2>UUI/UUI.Add_Commands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -112,7 +125,7 @@
 
 <hr />
 <a name="UUI2fUUI2eDelete5fWidgets"></a>
-<a name="robo792"></a><h2>UUI/UUI.Delete_Widgets [ Subprograms ]</h2>
+<a name="robo784"></a><h2>UUI/UUI.Delete_Widgets [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -133,7 +146,7 @@
 
 <hr />
 <a name="UUI2fUUI2eGet5fSkill5fMarks"></a>
-<a name="robo793"></a><h2>UUI/UUI.Get_Skill_Marks [ Subprograms ]</h2>
+<a name="robo785"></a><h2>UUI/UUI.Get_Skill_Marks [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -161,7 +174,7 @@
 
 <hr />
 <a name="UUI2fUUI2eMinutes5fTo5fDate"></a>
-<a name="robo794"></a><h2>UUI/UUI.Minutes_To_Date [ Subprograms ]</h2>
+<a name="robo786"></a><h2>UUI/UUI.Minutes_To_Date [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -181,7 +194,7 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fFonts"></a>
-<a name="robo795"></a><h2>UUI/UUI.Set_Fonts [ Subprograms ]</h2>
+<a name="robo787"></a><h2>UUI/UUI.Set_Fonts [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -200,7 +213,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShow5fInventory5fItem5fInfo"></a>
-<a name="robo796"></a><h2>UUI/UUI.Show_Inventory_Item_Info [ Subprograms ]</h2>
+<a name="robo788"></a><h2>UUI/UUI.Show_Inventory_Item_Info [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -225,7 +238,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShow5fScreen"></a>
-<a name="robo797"></a><h2>UUI/UUI.Show_Screen [ Subprograms ]</h2>
+<a name="robo789"></a><h2>UUI/UUI.Show_Screen [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -241,29 +254,29 @@
 
 <hr />
 <a name="UUI2fUUI2eTravel5fInfo"></a>
-<a name="robo798"></a><h2>UUI/UUI.Travel_Info [ Subprograms ]</h2>
+<a name="robo790"></a><h2>UUI/UUI.Travel_Info [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Add info about travel eta and approx fuel usage
+<pre> Count the ETA and fuel usage for the selected distance
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Travel_Info
-     <span class="sign">(</span>Info_Text<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">;</span> Distance<span class="sign">:</span> Positive<span class="sign">;</span>
-      Show_Fuel_Name<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> Travel_Info<span class="sign">(</span>Distance<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Travel_Array<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Info_Text      - Text to which info about travel will be added
- Distance       - Distance in map fields to destination point
- Show_Fuel_Name - If true, add fuel name to info. Default is false
+<pre> Distance - Distance in map fields to destination point
 </pre>
 <p class="item_name">RESULT</p>
-<pre> Parameter InfoText
+<pre> The array with two values, the first is estimated time to travel the
+ distance, the second is the amount of fuel needed to travel the distance.
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 9.1 - Changed into function and removed parameters
 </pre>
 
 <hr />
 <a name="UUI2fUUI2eUpdate5fMessages"></a>
-<a name="robo799"></a><h2>UUI/UUI.Update_Messages [ Subprograms ]</h2>
+<a name="robo791"></a><h2>UUI/UUI.Update_Messages [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -275,7 +288,7 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fDestination5fCommand"></a>
-<a name="robo1006"></a><h2>UUI/UUI.Set_Destination_Command [ Commands ]</h2>
+<a name="robo997"></a><h2>UUI/UUI.Set_Destination_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -304,7 +317,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShow5fOn5fMap5fCommand"></a>
-<a name="robo1009"></a><h2>UUI/UUI.Show_On_Map_Command [ Commands ]</h2>
+<a name="robo1000"></a><h2>UUI/UUI.Show_On_Map_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -333,7 +346,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-08-06 02:58:34</p>
+<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-09-03 03:09:22</p>
 </div> <!-- footer -->
 </body>
 </html>

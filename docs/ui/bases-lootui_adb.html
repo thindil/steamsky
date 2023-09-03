@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,17 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo866">LUI/LUI.Sort_Items_Command</a></li>
-<li>2. <a href="#robo865">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
-<li>3. <a href="#robo864">LUI/LUI.Show_Loot_Command</a></li>
-<li>4. <a href="#robo863">LUI/LUI.Loot_Item_Command</a></li>
-<li>5. <a href="#robo862">LUI/LUI.Loot_Amount_Command</a></li>
-<li>6. <a href="#robo633">LUI/LUI.Item_Index</a></li>
-<li>7. <a href="#robo417">LUI/LUI.Loot_Table</a></li>
-<li>8. <a href="#robo416">LUI/LUI.Items_Sort_Order</a></li>
-<li>9. <a href="#robo415">LUI/LUI.Items_Indexes</a></li>
-<li>10. <a href="#robo285">LUI/LUI.Default_Items_Sort_Order</a></li>
-<li>11. <a href="#robo142">LUI/LUI.Items_Sort_Orders</a></li>
+<li>1. <a href="#robo858">LUI/LUI.Sort_Items_Command</a></li>
+<li>2. <a href="#robo857">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
+<li>3. <a href="#robo856">LUI/LUI.Show_Loot_Command</a></li>
+<li>4. <a href="#robo855">LUI/LUI.Loot_Item_Command</a></li>
+<li>5. <a href="#robo854">LUI/LUI.Loot_Amount_Command</a></li>
+<li>6. <a href="#robo623">LUI/LUI.Item_Index</a></li>
+<li>7. <a href="#robo622">LUI/LUI.Get_Item_Index</a></li>
+<li>8. <a href="#robo408">LUI/LUI.Loot_Table</a></li>
+<li>9. <a href="#robo407">LUI/LUI.Items_Sort_Order</a></li>
+<li>10. <a href="#robo406">LUI/LUI.Items_Indexes</a></li>
+<li>11. <a href="#robo282">LUI/LUI.Default_Items_Sort_Order</a></li>
+<li>12. <a href="#robo142">LUI/LUI.Items_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="LUI2fLUI2eItems5fSort5fOrders"></a>
@@ -76,7 +77,7 @@
 
 <hr />
 <a name="LUI2fLUI2eDefault5fItems5fSort5fOrder"></a>
-<a name="robo285"></a><h2>LUI/LUI.Default_Items_Sort_Order [ Constants ]</h2>
+<a name="robo282"></a><h2>LUI/LUI.Default_Items_Sort_Order [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -91,7 +92,7 @@
 
 <hr />
 <a name="LUI2fLUI2eItems5fIndexes"></a>
-<a name="robo415"></a><h2>LUI/LUI.Items_Indexes [ Variables ]</h2>
+<a name="robo406"></a><h2>LUI/LUI.Items_Indexes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -103,7 +104,7 @@
 
 <hr />
 <a name="LUI2fLUI2eItems5fSort5fOrder"></a>
-<a name="robo416"></a><h2>LUI/LUI.Items_Sort_Order [ Variables ]</h2>
+<a name="robo407"></a><h2>LUI/LUI.Items_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -118,7 +119,7 @@
 
 <hr />
 <a name="LUI2fLUI2eLoot5fTable"></a>
-<a name="robo417"></a><h2>LUI/LUI.Loot_Table [ Variables ]</h2>
+<a name="robo408"></a><h2>LUI/LUI.Loot_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -129,8 +130,23 @@
 </pre>
 
 <hr />
+<a name="LUI2fLUI2eGet5fItem5fIndex"></a>
+<a name="robo622"></a><h2>LUI/LUI.Get_Item_Index [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get the index of the currently selected item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Get_Item_Index <span class="keyword">return</span> Integer <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The index of the currently selected item
+</pre>
+
+<hr />
 <a name="LUI2fLUI2eItem5fIndex"></a>
-<a name="robo633"></a><h2>LUI/LUI.Item_Index [ Subprograms ]</h2>
+<a name="robo623"></a><h2>LUI/LUI.Item_Index [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -142,7 +158,7 @@
 
 <hr />
 <a name="LUI2fLUI2eLoot5fAmount5fCommand"></a>
-<a name="robo862"></a><h2>LUI/LUI.Loot_Amount_Command [ Commands ]</h2>
+<a name="robo854"></a><h2>LUI/LUI.Loot_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -171,7 +187,7 @@
 
 <hr />
 <a name="LUI2fLUI2eLoot5fItem5fCommand"></a>
-<a name="robo863"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
+<a name="robo855"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -199,7 +215,7 @@
 
 <hr />
 <a name="LUI2fLUI2eShow5fLoot5fCommand"></a>
-<a name="robo864"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
+<a name="robo856"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -226,7 +242,7 @@
 
 <hr />
 <a name="LUI2fLUI2eShow5fTrade5fLoot5fInfo5fCommand"></a>
-<a name="robo865"></a><h2>LUI/LUI.Show_Trade_Loot_Info_Command [ Commands ]</h2>
+<a name="robo857"></a><h2>LUI/LUI.Show_Trade_Loot_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -254,7 +270,7 @@
 
 <hr />
 <a name="LUI2fLUI2eSort5fItems5fCommand"></a>
-<a name="robo866"></a><h2>LUI/LUI.Sort_Items_Command [ Commands ]</h2>
+<a name="robo858"></a><h2>LUI/LUI.Sort_Items_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -282,7 +298,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-08-06 02:58:34</p>
+<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-09-03 03:09:22</p>
 </div> <!-- footer -->
 </body>
 </html>
