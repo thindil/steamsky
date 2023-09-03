@@ -680,6 +680,34 @@ proc combatTurn*() =
   game.enemy.distance = game.enemy.distance + distanceTraveled
   if game.enemy.distance < 10:
     game.enemy.distance = 10
+  if game.enemy.distance >= 15_000:
+    if pilotOrder == 4:
+      addMessage(message = "You escaped the " & enemyName & ".",
+          mType = combatMessage)
+    else:
+      addMessage(message = enemyName & " escaped from you.",
+          mType = combatMessage)
+    for index, member in playerShip.crew.mpairs:
+      if member.order == boarding:
+        death(memberIndex = index, reason = "enemy crew", ship = playerShip,
+            createBody = false)
+    endCombat = true
+    return
+  elif game.enemy.distance < 15_000 and game.enemy.distance >= 10_000:
+    accuracyBonus = accuracyBonus - 10
+    evadeBonus = evadeBonus + 10
+    logMessage(message = "Distance: long", debugType = DebugTypes.combat)
+  elif game.enemy.distance < 5_000 and game.enemy.distance >= 1_000:
+    accuracyBonus = accuracyBonus + 10
+    logMessage(message = "Distance: medium", debugType = DebugTypes.combat)
+  elif game.enemy.distance < 1_000:
+    accuracyBonus = accuracyBonus + 20
+    evadeBonus = evadeBonus - 10
+    logMessage(message = "Distance: short or close",
+        debugType = DebugTypes.combat)
+  attack(ship = playerShip, enemyShip = game.enemy.ship)
+  if not endCombat:
+    attack(ship = game.enemy.ship, enemyShip = playerShip)
 
 # Temporary code for interfacing with Ada
 
