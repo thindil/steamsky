@@ -639,6 +639,47 @@ proc combatTurn*() =
     playerShip.speed = fullStop
     addMessage(message = "You are stopped by the enemy's ship.",
         mType = combatMessage)
+  case enemyPilotOrder
+  of 1:
+    accuracyBonus = accuracyBonus + 20
+    evadeBonus = evadeBonus - 20
+  of 2:
+    accuracyBonus = accuracyBonus + 10
+    evadeBonus = evadeBonus - 10
+  of 3:
+    accuracyBonus = accuracyBonus - 10
+    evadeBonus = evadeBonus + 10
+  of 4:
+    accuracyBonus = accuracyBonus - 20
+    evadeBonus = evadeBonus + 20
+  else:
+    discard
+  speedBonus = 20 - (realSpeed(ship = game.enemy.ship) / 100).int
+  if speedBonus < -10:
+    speedBonus = -10
+  accuracyBonus = accuracyBonus + speedBonus
+  evadeBonus = evadeBonus - speedBonus
+  var distanceTraveled = if enemyPilotOrder < 4: -(realSpeed(
+      ship = game.enemy.ship))
+      else:
+        realSpeed(ship = game.enemy.ship)
+  if pilotIndex > -1:
+    case pilotOrder
+    of 1, 3:
+      distanceTraveled = distanceTraveled - realSpeed(ship = playerShip)
+    of 2:
+      distanceTraveled = distanceTraveled + realSpeed(ship = playerShip)
+      if distanceTraveled > 0 and enemyPilotOrder != 4:
+        distanceTraveled = 0
+    of 4:
+      distanceTraveled = distanceTraveled + realSpeed(ship = playerShip)
+    else:
+      discard
+  else:
+    distanceTraveled = distanceTraveled - realSpeed(ship = playerShip)
+  game.enemy.distance = game.enemy.distance + distanceTraveled
+  if game.enemy.distance < 10:
+    game.enemy.distance = 10
 
 # Temporary code for interfacing with Ada
 
