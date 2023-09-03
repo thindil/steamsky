@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.1] - 2023-09-03
 
 ### Added
 - The game date to the in-game messages
