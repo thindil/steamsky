@@ -763,6 +763,36 @@ proc combatTurn*() =
           if defender.equipment[i] > -1:
             hitChance = hitChance + itemsList[defender.inventory[
                 defender.equipment[i]].protoIndex].value[2]
+        if defender.equipment[hitLocation] > -1:
+          damage = damage - itemsList[defender.inventory[defender.equipment[
+              hitLocation]].protoIndex].value[1]
+        if defender.equipment[shield] > -1:
+          damage = damage - itemsList[defender.inventory[defender.equipment[
+              shield]].protoIndex].value[1]
+        if attacker.equipment[weapon] == -1:
+          var damageBonus = getSkillLevel(member = attacker,
+              skillIndex = unarmedSkill) / 200
+          if damageBonus == 0:
+            damageBonus = 1
+          damage = damage + damageBonus.int
+        let faction = factionsList[defender.faction]
+        if "naturalarmor" in faction.flags:
+          damage = (damage / 2).int
+        if "toxicattack" in factionsList[attacker.faction].flags and
+            attacker.equipment[weapon] == -1 and "diseaseimmune" notin faction.flags:
+          damage = if damage * 10 < 30:
+              damage * 10
+            else:
+              damage + 30
+        if damage < 1:
+          damage = 1
+        if attacker.equipment[weapon] > -1:
+          if itemsList[attacker.inventory[attacker.equipment[
+              weapon]].protoIndex].value[4] == 1:
+            damage = (damage.float * 1.5).int
+          elif itemsList[attacker.inventory[attacker.equipment[
+              weapon]].protoIndex].value[4] == 2:
+            damage = damage * 2
 
 # Temporary code for interfacing with Ada
 
