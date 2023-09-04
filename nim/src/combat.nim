@@ -824,6 +824,32 @@ proc combatTurn*() =
                   itemIndex = attacker.equipment[weapon],
                   skillLevel = attackSkill, memberIndex = attackerIndex2,
                   ship = game.enemy.ship)
+          if defender.equipment[hitLocation] > -1:
+            if playerAttack:
+              damageItem(inventory = defender.inventory,
+                  itemIndex = defender.equipment[hitLocation], skillLevel = 0,
+                  memberIndex = defenderIndex2, ship = game.enemy.ship)
+            else:
+              damageItem(inventory = defender.inventory,
+                  itemIndex = defender.equipment[hitLocation], skillLevel = 0,
+                  memberIndex = defenderIndex2, ship = playerShip)
+          if playerAttack2:
+            if attacker.equipment[weapon] > -1:
+              gainExp(amount = 2, skillNumber = itemsList[attacker.inventory[
+                  attacker.equipment[weapon]].protoIndex].value[2],
+                  crewIndex = attackerIndex2)
+            else:
+              gainExp(amount = 2, skillNumber = unarmedSkill,
+                  crewIndex = attackerIndex2)
+            attacker.skills = playerShip.crew[attackerIndex2].skills
+            attacker.attributes = playerShip.crew[attackerIndex2].attributes
+          defender.health = if damage > defender.health: 0 else: defender.health - damage
+        addMessage(message = attackMessage, mType = combatMessage,
+            color = messageColor)
+        if attacker.tired + 1 <= SkillRange.high:
+          attacker.tired.inc
+        if defender.tired + 1 <= SkillRange.high:
+          defender.tired.inc
 
 # Temporary code for interfacing with Ada
 
