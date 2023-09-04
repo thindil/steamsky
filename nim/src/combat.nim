@@ -708,6 +708,33 @@ proc combatTurn*() =
   attack(ship = playerShip, enemyShip = game.enemy.ship)
   if not endCombat:
     attack(ship = game.enemy.ship, enemyShip = playerShip)
+  if not endCombat:
+    var haveBoardingParty = false
+
+    proc meleeCombat(attackers, defenders: var seq[MemberData];
+        playerAttack: bool) =
+      var
+        attackDone, riposte = false
+        attackerIndex, defenderIndex, orderIndex = 0
+
+      proc characterAttack(attackerIndex2, defenderIndex2: Natural;
+          playerAttack2: bool): bool =
+        let
+          hitLocation = getRandom(min = helmet.int,
+              max = legs.int).EquipmentLocations
+          locationNames: array[helmet .. legs, string] = ["head", "torso",
+              "arm", "leg"]
+        var
+          attacker = if playerAttack2: playerShip.crew[attackerIndex2]
+            else:
+              game.enemy.ship.crew[attackerIndex2]
+          defender = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
+            else:
+              playerShip.crew[defenderIndex2]
+          baseDamage = attacker.attributes[strengthIndex].level
+        if attacker.equipment[weapon] > -1:
+          baseDamage = baseDamage + itemsList[attacker.inventory[
+              attacker.equipment[weapon]].protoIndex].value[1]
 
 # Temporary code for interfacing with Ada
 
