@@ -23,21 +23,21 @@ echo "Testing findProtoItem."
 try:
   assert findProtoItem("Iron") > 0
 except AssertionDefect:
-  echo "Failed to find an existing item."
+  writeLine(stderr, "Failed to find an existing item.")
 try:
   assert findProtoItem("sfdsfsdfsdf") == 0
 except AssertionDefect:
-  echo "Failed to not find a non-existsing item."
+  writeLine(stderr, "Failed to not find a non-existsing item.")
 
 echo "Testing getItemDamage."
 try:
   assert getItemDamage(60) == "Damaged"
 except AssertionDefect:
-  echo "Failed to get an item damage level."
+  writeLine(stderr, "Failed to get an item damage level.")
 try:
   assert getItemDamage(60, true) == "damaged"
 except AssertionDefect:
-  echo "Failed to get lowered an item damage level."
+  writeLine(stderr, "Failed to get lowered an item damage level.")
 
 echo "Testing getItemName."
 block:
@@ -45,40 +45,40 @@ block:
   try:
     assert getItemName(item) == "Basic Ration (slightly used)"
   except AssertionDefect:
-    echo "Failed to get an item name with lowered damage info."
+    writeLine(stderr, "Failed to get an item name with lowered damage info.")
   try:
     assert getItemName(item, false) == "Basic Ration"
   except AssertionDefect:
-    echo "Failed to get an item name."
+    writeLine(stderr, "Failed to get an item name.")
   try:
     assert getItemName(item, true, false) == "Basic Ration (Slightly used)"
   except AssertionDefect:
-    echo "Failed to get an item name with damage info."
+    writeLine(stderr, "Failed to get an item name with damage info.")
   item.name = "New name"
   try:
     assert getItemName(item, false) == "New name"
   except AssertionDefect:
-    echo "Failed to get an item with new name."
+    writeLine(stderr, "Failed to get an item with new name.")
 
 echo "Testing getItemChanceToDamage."
 gameSettings.showNumbers = false
 try:
   assert getItemChanceToDamage(3) == "Small"
 except AssertionDefect:
-  echo "Failed to get chance to damage as string for 3."
+  writeLine(stderr, "Failed to get chance to damage as string for 3.")
 try:
   assert getItemChanceToDamage(30) == "Very high"
 except AssertionDefect:
-  echo "Failed to get chance to damage as string for 10."
+  writeLine(stderr, "Failed to get chance to damage as string for 10.")
 gameSettings.showNumbers = true
 try:
   assert getItemChanceToDamage(3) == " 3%"
 except AssertionDefect:
-  echo "Failed to get chance to damage as percent for 3."
+  writeLine(stderr, "Failed to get chance to damage as percent for 3.")
 try:
   assert getItemChanceToDamage(30) == " 30%"
 except AssertionDefect:
-  echo "Failed to get chance to damage as percent for 30."
+  writeLine(stderr, "Failed to get chance to damage as percent for 30.")
 
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
@@ -99,15 +99,15 @@ echo "Testing findTools."
 try:
   assert findTools(0, "Bucket", clean) > -1
 except AssertionDefect:
-  echo "Failed to find an existing tool."
+  writeLine(stderr, "Failed to find an existing tool.")
 try:
   assert findTools(0, "sfewrwer", talk) == -1
 except AssertionDefect:
-  echo "Failed to not find a non-existing tool."
+  writeLine(stderr, "Failed to not find a non-existing tool.")
 
 echo "Testing getRandomItem."
 let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
 try:
   assert itemIndex > 0 and itemsList.hasKey(itemIndex)
 except AssertionDefect:
-  echo "Failed to get a random item."
+  writeLine(stderr, "Failed to get a random item.")
