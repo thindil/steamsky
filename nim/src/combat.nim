@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, config, game, log, messages, ships, ships2, shipscargo,
-    shipscrew, shipscrew2, shipsmovement, trades, types, utils
+import crewinventory, config, game, goals, log, messages, ships, ships2,
+    shipscargo, shipscrew, shipscrew2, shipsmovement, trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -850,6 +850,23 @@ proc combatTurn*() =
           attacker.tired.inc
         if defender.tired + 1 <= SkillRange.high:
           defender.tired.inc
+        if playerAttack2:
+          playerShip.crew[attackerIndex2] = attacker
+          game.enemy.ship.crew[defenderIndex2] = defender
+        else:
+          playerShip.crew[defenderIndex2] = defender
+          game.enemy.ship.crew[attackerIndex] = attacker
+        if defender.health == 0:
+          if playerAttack2:
+            death(memberIndex = defenderIndex2, reason = attacker.name &
+                " blow in melee combat", ship = game.enemy.ship)
+            for order in boardingOrders.mitems:
+              if order >= defenderIndex2:
+                order.dec
+            #updateKilledMobs(mob = defender, factionName = factionName)
+            updateGoal(goalType = kill, targetIndex = factionName)
+            if game.enemy.ship.crew.len == 0:
+              endCombat = true
 
 # Temporary code for interfacing with Ada
 
