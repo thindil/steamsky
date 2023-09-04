@@ -735,6 +735,34 @@ proc combatTurn*() =
         if attacker.equipment[weapon] > -1:
           baseDamage = baseDamage + itemsList[attacker.inventory[
               attacker.equipment[weapon]].protoIndex].value[1]
+        var
+          wounds = 1.0 - (attacker.health.float / 100.0)
+          damage = (baseDamage - (baseDamage.float * wounds.float).int)
+        if attacker.thirst > 40:
+          wounds = 1.0 - (attacker.thirst.float / 100.0)
+          damage = damage - (baseDamage.float * wounds.float).int
+        if attacker.hunger > 80:
+          wounds = 1.0 - (attacker.hunger.float / 100.0)
+          damage = damage - (baseDamage.float * wounds.float).int
+        damage = if playerAttack2:
+            (damage.float * newGameSettings.playerMeleeDamageBonus).int
+          else:
+            (damage.float * newGameSettings.enemyMeleeDamageBonus).int
+        var hitChance = 0
+        if attacker.equipment[weapon] > -1:
+          let attackSkill = getSkillLevel(member = attacker,
+              skillIndex = itemsList[attacker.inventory[attacker.equipment[
+              weapon]].protoIndex].value[2])
+          hitChance = attackSkill + getRandom(min = 1, max = 50)
+        else:
+          hitChance = getSkillLevel(member = attacker,
+              skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
+        hitChance = hitChance - (getSkillLevel(member = defender,
+            skillIndex = dodgeSkill) + getRandom(min = 1, max = 50))
+        for i in helmet .. legs:
+          if defender.equipment[i] > -1:
+            hitChance = hitChance + itemsList[defender.inventory[
+                defender.equipment[i]].protoIndex].value[2]
 
 # Temporary code for interfacing with Ada
 
