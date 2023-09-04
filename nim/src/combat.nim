@@ -748,9 +748,11 @@ proc combatTurn*() =
             (damage.float * newGameSettings.playerMeleeDamageBonus).int
           else:
             (damage.float * newGameSettings.enemyMeleeDamageBonus).int
-        var hitChance = 0
+        var
+          hitChance = 0
+          attackSkill = 0
         if attacker.equipment[weapon] > -1:
-          let attackSkill = getSkillLevel(member = attacker,
+          attackSkill = getSkillLevel(member = attacker,
               skillIndex = itemsList[attacker.inventory[attacker.equipment[
               weapon]].protoIndex].value[2])
           hitChance = attackSkill + getRandom(min = 1, max = 50)
@@ -793,6 +795,35 @@ proc combatTurn*() =
           elif itemsList[attacker.inventory[attacker.equipment[
               weapon]].protoIndex].value[4] == 2:
             damage = damage * 2
+        var
+          attackMessage = if playerAttack2:
+              attacker.name & " attacks " & defender.name & " (" & factionName & ")"
+            else:
+              attacker.name & " (" & factionName & ") attacks " & defender.name
+          messageColor = white
+        if hitChance < 1:
+          attackMessage = attackMessage & " and misses."
+          messageColor = if playerAttack: blue else: cyan
+          if not playerAttack:
+            gainExp(amount = 2, skillNumber = dodgeSkill,
+                crewIndex = defenderIndex2)
+            defender.skills = playerShip.crew[defenderIndex2].skills
+            defender.attributes = playerShip.crew[defenderIndex2].attributes
+        else:
+          attackMessage = attackMessage & " and hit " & locationNames[
+              hitLocation] & "."
+          messageColor = if playerAttack2: green else: yellow
+          if attacker.equipment[weapon] > -1:
+            if playerAttack:
+              damageItem(inventory = attacker.inventory,
+                  itemIndex = attacker.equipment[weapon],
+                  skillLevel = attackSkill, memberIndex = attackerIndex2,
+                  ship = playerShip)
+            else:
+              damageItem(inventory = attacker.inventory,
+                  itemIndex = attacker.equipment[weapon],
+                  skillLevel = attackSkill, memberIndex = attackerIndex2,
+                  ship = game.enemy.ship)
 
 # Temporary code for interfacing with Ada
 
