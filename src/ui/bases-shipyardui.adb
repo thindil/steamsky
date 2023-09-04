@@ -1373,8 +1373,8 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      Cost: Positive;
-      Money_Index_2: Natural;
+      Cost: Positive := 1;
+      Money_Index_2: Natural := 0;
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
@@ -1908,8 +1908,8 @@ package body Bases.ShipyardUI is
                 Get_Modules_Amount
               else Positive(Player_Ship.Modules.Length)));
       Index: Positive := 1;
-      Cost: Natural;
-      Damage: Float;
+      Cost: Natural := 0;
+      Damage: Float := 0.0;
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
