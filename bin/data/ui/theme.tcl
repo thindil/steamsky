@@ -215,6 +215,10 @@ namespace eval ttk::theme::steamsky {
 
       # Dialog buttons with icons
       ttk::style configure Dialog.TButton -width 0 -compound left
+      ttk::style configure Dialogred.TButton -width 0 -compound left \
+         -foreground $colors(-red)
+      ttk::style configure Dialoggreen.TButton -width 0 -compound left \
+         -foreground $colors(-green)
 
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
