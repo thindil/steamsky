@@ -998,9 +998,37 @@ proc combatTurn*() =
     game.enemy.ship.modules[0].durability = 0
     addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
     lootAmount = game.enemy.loot
-    let shipFreeSpace = freeCargo(amount = -lootAmount)
+    var shipFreeSpace = freeCargo(amount = -lootAmount)
     if shipFreeSpace < 0:
       lootAmount = lootAmount + shipFreeSpace
+    if lootAmount > 0:
+      addMessage(message = "You looted " & $lootAmount & " " & moneyName &
+          " from " & enemyName & ".", mType = combatMessage)
+      updateCargo(ship = playerShip, protoIndex = moneyIndex,
+          amount = lootAmount)
+    shipFreeSpace = freeCargo(amount = 0)
+    if wasBoarded and shipFreeSpace > 0:
+      var message = "Additionally, your boarding party takes from " &
+          enemyName & ":"
+      for item in game.enemy.ship.cargo:
+        lootAmount = (item.amount / 5).int
+        shipFreeSpace = freeCargo(amount = -lootAmount)
+        if shipFreeSpace < 0:
+          lootAmount = lootAmount + shipFreeSpace
+        if itemsList[item.protoIndex].price == 0 and item.protoIndex != moneyIndex:
+          lootAmount = 0
+        if lootAmount > 0:
+          if item != game.enemy.ship.cargo[0]:
+            message = message & ","
+          updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+              amount = lootAmount)
+          message = message & " " & $lootAmount & " " & itemsList[
+              item.protoIndex].name
+          shipFreeSpace = freeCargo(amount = 0)
+          if item == game.enemy.ship.cargo[game.enemy.ship.cargo.high] or
+              shipFreeSpace == 0:
+            break
+      addMessage(message = message & ".", mType = combatMessage)
 
 # Temporary code for interfacing with Ada
 
