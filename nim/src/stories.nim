@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log
+import game, log, utils
 
 type
   StartConditionType = enum
@@ -331,6 +331,38 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       logMessage(message = "Story updated: '" & $storyIndex & "'",
           debugType = everything)
     storiesList[storyIndex] = story
+
+proc startStory*(factionName: string; condition: StartConditionType) =
+  if currentStory.index.len > 0:
+    return
+  var factionIndex = ""
+  for index, faction in factionsList:
+    if faction.name == factionName:
+      factionIndex = index
+      break
+  if factionIndex.len == 0:
+    return
+  var
+    nextStory = false
+    step = ""
+  for story in storiesList.values:
+    nextStory = false
+    for forbiddenFaction in story.forbiddenFactions:
+      if forbiddenFaction.toLowerAscii == playerShip.crew[
+          0].faction.toLowerAscii:
+        nextStory = true
+        break
+    if nextStory:
+      continue
+    case condition
+    of dropItem:
+      if story.startData[1] == factionIndex and getRandom(min = 1,
+          max = story.startData[2].parseInt) == 1:
+        case story.startingStep.finishCondition
+        of askInBase:
+          discard
+        else:
+          discard
 
 # Temporary code for interfacing with Ada
 
