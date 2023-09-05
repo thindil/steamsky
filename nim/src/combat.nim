@@ -884,7 +884,7 @@ proc combatTurn*() =
           return false
         return true
 
-      attackerIndex = 0
+      attackerIndex = attackers.low
       orderIndex = 0
       while attackerIndex < attackers.len:
         riposte = true
@@ -946,6 +946,34 @@ proc combatTurn*() =
                 playerAttack2 = not playerAttack)
           else:
             riposte = true
+        if endCombat:
+          break
+        if riposte:
+          attackerIndex.inc
+      defenderIndex = defenders.low
+      while defenderIndex < defenders.len:
+        riposte = true
+        if defenders[defenderIndex].order == defend:
+          for aIndex, attacker in attackers:
+            if attacker.order == boarding:
+              riposte = characterAttack(attackerIndex2 = defenderIndex,
+                  defenderIndex2 = aIndex, playerAttack2 = not playerAttack)
+              if not endCombat and riposte:
+                riposte = characterAttack(attackerIndex2 = aIndex,
+                    defenderIndex2 = defenderIndex,
+                    playerAttack2 = playerAttack)
+              break
+        if findMember(order = boarding) == -1:
+          updateOrders(ship = game.enemy.ship)
+
+    for member in playerShip.crew:
+      if member.order == boarding:
+        haveBoardingParty = true
+        break
+    for member in game.enemy.ship.crew:
+      if member.order == boarding:
+        haveBoardingParty = true
+        break
 
 # Temporary code for interfacing with Ada
 
