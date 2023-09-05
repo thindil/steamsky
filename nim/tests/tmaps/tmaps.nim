@@ -11,9 +11,9 @@ normalizeCoord(coord)
 try:
   assert coord == 1
 except AssertionDefect:
-  echo "Failed to normalize an invalid coordinate."
+  writeLine(stderr, "Failed to normalize an invalid coordinate.")
 normalizeCoord(coord)
 try:
   assert coord == 1
 except AssertionDefect:
-  echo "Failed to not normalize a valid coordinate."
+  writeLine(stderr, "Failed to not normalize a valid coordinate.")
