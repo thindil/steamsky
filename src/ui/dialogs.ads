@@ -94,10 +94,14 @@ package Dialogs is
       --               Default value is 0 (place button in the first column)
       -- Icon        - The Tcl image which will be displayed on the button instead
       --               of text
+      -- Color       - The color of the text on the button. Can be empty. Default
+      --               value is empty, which mean the default color used for buttons.
+      --               Other options depends on the current game's theme.
       -- SOURCE
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0; Icon: String := "exiticon");
+      Row, Column: Natural := 0; Icon: String := "exiticon";
+      Color: String := "");
    -- ****
 
    -- ****f* Dialogs/Dialogs.Show_Dialog

@@ -125,13 +125,14 @@ package body Dialogs is
 
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0; Icon: String := "exiticon") is
+      Row, Column: Natural := 0; Icon: String := "exiticon";
+      Color: String := "") is
       Button: constant Ttk_Button :=
         Create
           (pathName => Name,
            options =>
-             "-command {" & Command & "} -image {" & Icon &
-             "} -style Dialog.TButton -text {" & Text & "}");
+             "-command {" & Command & "} -image {" & Icon & "} -style Dialog" &
+             Color & ".TButton -text {" & Text & "}");
    begin
       Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid
