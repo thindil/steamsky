@@ -917,6 +917,35 @@ proc combatTurn*() =
             orderIndex.dec
             attackDone = true
           orderIndex.inc
+        if not attackDone:
+          for dIndex, defender in defenders:
+            if defender.order == defend:
+              riposte = characterAttack(attackerIndex2 = attackerIndex,
+                  defenderIndex2 = dIndex, playerAttack2 = playerAttack)
+              if not endCombat and riposte:
+                riposte = characterAttack(attackerIndex2 = dIndex,
+                    defenderIndex2 = attackerIndex,
+                    playerAttack2 = not playerAttack)
+              else:
+                riposte = true
+              attackDone = true
+              break
+        if not attackDone:
+          defenderIndex = getRandom(min = defenders.low, max = defenders.high)
+          if playerAttack:
+            giveOrders(ship = game.enemy.ship, memberIndex = defenderIndex,
+                givenOrder = defend, moduleIndex = 0, checkPriorities = false)
+          else:
+            giveOrders(ship = playerShip, memberIndex = defenderIndex,
+                givenOrder = defend, moduleIndex = 0, checkPriorities = false)
+          riposte = characterAttack(attackerIndex2 = attackerIndex,
+              defenderIndex2 = defenderIndex, playerAttack2 = playerAttack)
+          if not endCombat and riposte:
+            riposte = characterAttack(attackerIndex2 = defenderIndex,
+                defenderIndex2 = attackerIndex,
+                playerAttack2 = not playerAttack)
+          else:
+            riposte = true
 
 # Temporary code for interfacing with Ada
 
