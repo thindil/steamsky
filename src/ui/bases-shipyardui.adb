@@ -1641,7 +1641,9 @@ package body Bases.ShipyardUI is
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
       Damage :=
@@ -1887,12 +1889,14 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table =>
              (if CArgv.Arg(Argv => Argv, N => 1) = "install" then Install_Table
               else Remove_Table),
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 4)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Module_Data is record
          Name: Bounded_String;
          M_Type: Unbounded_String;
@@ -1902,14 +1906,17 @@ package body Bases.ShipyardUI is
          Id: Positive;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Modules: Modules_Array
         (1 ..
              (if CArgv.Arg(Argv => Argv, N => 1) = "install" then
                 Get_Modules_Amount
               else Positive(Player_Ship.Modules.Length)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Index: Positive := 1;
       Cost: Natural := 0;
       Damage: Float := 0.0;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1950,10 +1957,12 @@ package body Bases.ShipyardUI is
          end if;
          return False;
       end "<";
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Module_Data,
          Array_Type => Modules_Array);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       case Column is
          when 1 =>
             if Modules_Sort_Order = NAMEASC then
@@ -1991,6 +2000,7 @@ package body Bases.ShipyardUI is
       if Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Fill_Local_Install_Modules_Loop :
          for I in 1 .. Get_Modules_Amount loop
