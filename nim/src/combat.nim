@@ -891,6 +891,32 @@ proc combatTurn*() =
         if attackers[attackerIndex].order != boarding:
           attackerIndex.inc
           continue
+        attackDone = false
+        if playerAttack:
+          if orderIndex notin boardingOrders:
+            break
+          if boardingOrders[orderIndex] in defenders.low .. defenders.high:
+            defenderIndex = boardingOrders[orderIndex]
+            riposte = characterAttack(attackerIndex2 = attackerIndex,
+                defenderIndex2 = defenderIndex, playerAttack2 = playerAttack)
+            if not endCombat and riposte:
+              if game.enemy.ship.crew[defenderIndex].order != defend:
+                giveOrders(ship = game.enemy.ship, memberIndex = defenderIndex,
+                    givenOrder = defend, moduleIndex = 0,
+                    checkPriorities = false)
+              riposte = characterAttack(attackerIndex2 = defenderIndex,
+                  defenderIndex2 = attackerIndex,
+                  playerAttack2 = not playerAttack)
+            else:
+              riposte = true
+            attackDone = true
+          elif boardingOrders[orderIndex] == -1:
+            giveOrders(ship = playerShip, memberIndex = attackerIndex,
+                givenOrder = rest)
+            boardingOrders.delete(orderIndex)
+            orderIndex.dec
+            attackDone = true
+          orderIndex.inc
 
 # Temporary code for interfacing with Ada
 
