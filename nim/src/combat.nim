@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, config, game, goals, log, messages, ships, ships2,
+import crewinventory, config, game, game2, goals, log, messages, ships, ships2,
     shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, trades,
     types, utils
 
@@ -974,6 +974,33 @@ proc combatTurn*() =
       if member.order == boarding:
         haveBoardingParty = true
         break
+    if game.enemy.harpoonDuration > 0 or harpoonDuration > 0 or haveBoardingParty:
+      if not endCombat and game.enemy.ship.crew.len > 0:
+        meleeCombat(attackers = playerShip.crew,
+            defenders = game.enemy.ship.crew, playerAttack = true)
+      if not endCombat and game.enemy.ship.crew.len > 0:
+        meleeCombat(attackers = game.enemy.ship.crew,
+            defenders = playerShip.crew, playerAttack = false)
+  if not endCombat:
+    if game.enemy.harpoonDuration > 0:
+      game.enemy.harpoonDuration.dec
+    if harpoonDuration > 0:
+      harpoonDuration.dec
+    if game.enemy.harpoonDuration > 0 or harpoonDuration > 0:
+      updateOrders(ship = playerShip, combat = true)
+    updateGame(minutes = 1, inCombat = true)
+  elif playerShip.crew[0].health > 0:
+    var
+      wasBoarded = false
+      lootAmount = 0
+    if findMember(order = boarding) > -1:
+      wasBoarded = true
+    game.enemy.ship.modules[0].durability = 0
+    addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
+    lootAmount = game.enemy.loot
+    let shipFreeSpace = freeCargo(amount = -lootAmount)
+    if shipFreeSpace < 0:
+      lootAmount = lootAmount + shipFreeSpace
 
 # Temporary code for interfacing with Ada
 
