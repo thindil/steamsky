@@ -17,7 +17,8 @@
 
 import std/[math, strutils, tables]
 import crewinventory, config, game, goals, log, messages, ships, ships2,
-    shipscargo, shipscrew, shipscrew2, shipsmovement, trades, types, utils
+    shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, trades,
+    types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -863,10 +864,33 @@ proc combatTurn*() =
             for order in boardingOrders.mitems:
               if order >= defenderIndex2:
                 order.dec
-            #updateKilledMobs(mob = defender, factionName = factionName)
+            updateKilledMobs(mob = defender, factionName = factionName)
             updateGoal(goalType = kill, targetIndex = factionName)
             if game.enemy.ship.crew.len == 0:
               endCombat = true
+          else:
+            orderIndex = -1
+            for index, member in playerShip.crew:
+              if member.order == boarding:
+                orderIndex.inc
+              if index == defenderIndex2:
+                boardingOrders.delete(orderIndex)
+                orderIndex.dec
+                break
+            death(memberIndex = defenderIndex2, reason = attacker.name &
+                " blow in melee combat", ship = playerShip)
+            if defenderIndex2 == 0:
+              endCombat = true
+          return false
+        return true
+
+      attackerIndex = 0
+      orderIndex = 0
+      while attackerIndex < attackers.len:
+        riposte = true
+        if attackers[attackerIndex].order != boarding:
+          attackerIndex.inc
+          continue
 
 # Temporary code for interfacing with Ada
 
