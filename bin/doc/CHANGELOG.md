@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated the default game's theme
+
 ## [9.1] - 2023-09-03
 
 ### Added
