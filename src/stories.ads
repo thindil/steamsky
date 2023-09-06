@@ -346,8 +346,7 @@ package Stories is
    function Get_Step_Data
      (Finish_Data: StepData_Container.Vector; Name: String)
       return Unbounded_String with
-      Pre => Name'Length > 0,
-      Test_Case => (Name => "Test_GetStepData", Mode => Nominal);
+      Pre => Name'Length > 0;
       -- ****
 
       -- ****f* Stories/Stories.Get_Story_Location
