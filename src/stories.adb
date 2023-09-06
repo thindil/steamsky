@@ -30,6 +30,14 @@ with Utils; use Utils;
 
 package body Stories is
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Step_Finish_Data is record
+      Name: chars_ptr;
+      Value: chars_ptr;
+   end record;
+   type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
+   --## rule on TYPE_INITIAL_VALUES
+
    procedure Load_Stories is
       use Interfaces.C;
       --## rule off TYPE_INITIAL_VALUES
@@ -37,11 +45,6 @@ package body Stories is
          Condition: Integer;
          Text: chars_ptr;
       end record;
-      type Nim_Step_Finish_Data is record
-         Name: chars_ptr;
-         Value: chars_ptr;
-      end record;
-      type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
       type Nim_Text_Data_Array is array(0 .. 9) of Nim_Step_Text_Data;
       type Nim_Step_Data is record
          Index: chars_ptr;
@@ -636,14 +639,33 @@ package body Stories is
    function Get_Step_Data
      (Finish_Data: StepData_Container.Vector; Name: String)
       return Unbounded_String is
+      Nim_Data: Nim_Finish_Data_Array;
+      I: Natural := 0;
+      function Get_Ada_Step_Data
+        (F_Data: Nim_Finish_Data_Array; N: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaStepData";
    begin
       Get_Step_Data_Loop :
       for Data of Finish_Data loop
-         if Data.Name = To_Unbounded_String(Source => Name) then
-            return Data.Value;
-         end if;
+         Nim_Data(I) :=
+           (Name => New_String(Str => To_String(Source => Data.Name)),
+            Value => New_String(Str => To_String(Source => Data.Value)));
+         I := I + 1;
       end loop Get_Step_Data_Loop;
-      return Null_Unbounded_String;
+      Fill_Array_Loop :
+      for J in I .. 9 loop
+         Nim_Data(I) :=
+           (Name => New_String(Str => ""), Value => New_String(Str => ""));
+      end loop Fill_Array_Loop;
+      return
+        To_Unbounded_String
+          (Source =>
+             Value
+               (Item =>
+                  Get_Ada_Step_Data
+                    (F_Data => Nim_Data, N => New_String(Str => Name))));
    end Get_Step_Data;
 
    procedure Get_Story_Location

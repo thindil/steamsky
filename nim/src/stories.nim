@@ -500,5 +500,7 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
     name: cstring): cstring {.raises: [], tags: [], exportc.} =
   var nimData: seq[StepFinishData]
   for data in finishData:
+    if data.name.len == 0:
+      break
     nimData.add(StepFinishData(name: $data.name, value: $data.value))
   return getStepData(nimData, $name).cstring
