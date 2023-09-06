@@ -342,7 +342,8 @@ proc selectBase(value: string): string =
       playerShip.destinationY = skyBases[baseIndex].skyY
       return skyBases[baseIndex].name
 
-proc getStepData*(finishData: seq[StepFinishData]; name: string): string =
+func getStepData*(finishData: seq[StepFinishData];
+    name: string): string {.raises: [], tags: [].} =
   result = ""
   for data in finishData:
     if data.name == name:
