@@ -1897,6 +1897,7 @@ package body Bases.ShipyardUI is
               else Remove_Table),
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 4)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Module_Data is record
          Name: Bounded_String;
          M_Type: Unbounded_String;
@@ -1906,12 +1907,15 @@ package body Bases.ShipyardUI is
          Id: Positive;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off DIRECTLY_ACCESSED_GLOBALS
+      --## rule off IMPROPER_INITIALIZATION
       Local_Modules: Modules_Array
         (1 ..
              (if CArgv.Arg(Argv => Argv, N => 1) = "install" then
                 Get_Modules_Amount
               else Positive(Player_Ship.Modules.Length)));
+      --## rule on IMPROPER_INITIALIZATION
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       Index: Positive := 1;
       Cost: Natural := 0;
@@ -2063,6 +2067,7 @@ package body Bases.ShipyardUI is
          end loop Fill_Local_Remove_Modules_Loop;
       end if;
       Sort_Modules(Container => Local_Modules);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Install_Indexes.Clear;
          Fill_Install_Indexes_Loop :
@@ -2076,6 +2081,7 @@ package body Bases.ShipyardUI is
             Remove_Indexes.Append(New_Item => Module.Id);
          end loop Fill_Remove_Indexes_Loop;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Shipyard_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
