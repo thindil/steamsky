@@ -23,11 +23,8 @@ package Stories.Test_Data.Tests is
      (Gnattest_T: in out Test);
    --  stories.ads:333:4:Get_Current_Story_Text:Tets_GetCurrentStoryText
 
-   procedure Test_Get_Step_Data_551f39_456123(Gnattest_T: in out Test);
-   --  stories.ads:346:4:Get_Step_Data:Test_GetStepData
-
    procedure Test_Get_Story_Location_5f0f68_b0f396(Gnattest_T: in out Test);
-   --  stories.ads:362:4:Get_Story_Location:Test_GetStoryLocation
+   --  stories.ads:361:4:Get_Story_Location:Test_GetStoryLocation
 
 end Stories.Test_Data.Tests;
 --  end read only
