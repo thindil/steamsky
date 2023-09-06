@@ -342,6 +342,12 @@ proc selectBase(value: string): string =
       playerShip.destinationY = skyBases[baseIndex].skyY
       return skyBases[baseIndex].name
 
+proc getStepData*(finishData: seq[StepFinishData]; name: string): string =
+  result = ""
+  for data in finishData:
+    if data.name == name:
+      return data.value
+
 proc startStory*(factionName: string; condition: StartConditionType) =
   if currentStory.index.len > 0:
     return
@@ -489,3 +495,10 @@ proc getAdaFinishedStory(index: cint; story: AdaFinishedStoryData) {.sideEffect,
     finishedStories[index - 1] = finishedStory
   else:
     finishedStories.add(y = finishedStory)
+
+proc getAdaStepData(finishData: array[10, AdaStepFinishData];
+    name: cstring): cstring {.raises: [], tags: [], exportc.} =
+  var nimData: seq[StepFinishData]
+  for data in finishData:
+    nimData.add(StepFinishData(name: $data.name, value: $data.value))
+  return getStepData(nimData, $name).cstring
