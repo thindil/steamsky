@@ -332,6 +332,16 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     storiesList[storyIndex] = story
 
+proc selectBase(value: string): string =
+  if value == "any":
+    return ""
+  while true:
+    let baseIndex = getRandom(min = skyBases.low, max = skyBases.high)
+    if skyBases[baseIndex].known and skyBases[baseIndex].reputation.level > -25:
+      playerShip.destinationX = skyBases[baseIndex].skyX
+      playerShip.destinationY = skyBases[baseIndex].skyY
+      return skyBases[baseIndex].name
+
 proc startStory*(factionName: string; condition: StartConditionType) =
   if currentStory.index.len > 0:
     return
