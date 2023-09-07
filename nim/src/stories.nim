@@ -332,7 +332,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     storiesList[storyIndex] = story
 
-proc selectBase(value: string): string =
+proc selectBase(value: string): string {.sideEffect, raises: [], tags: [].} =
   if value == "any":
     return ""
   while true:
