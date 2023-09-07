@@ -639,7 +639,7 @@ package body Stories is
    function Get_Step_Data
      (Finish_Data: StepData_Container.Vector; Name: String)
       return Unbounded_String is
-      Nim_Data: Nim_Finish_Data_Array;
+      Nim_Data: Nim_Finish_Data_Array := (others => <>);
       I: Natural := 0;
       function Get_Ada_Step_Data
         (F_Data: Nim_Finish_Data_Array; N: chars_ptr) return chars_ptr with
