@@ -1301,7 +1301,7 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
            options =>
-             "-text Install -image buyicon -style Dialog.TButton -command {CloseDialog " &
+             "-text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
              Module_Dialog & ";ManipulateModule install}");
       Compare_Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".compare");
@@ -1480,7 +1480,7 @@ package body Bases.ShipyardUI is
          Add_Close_Button
            (Name => Module_Dialog & ".buttonbox.button", Text => "Cancel",
             Command => "CloseDialog " & Module_Dialog, Column => 1,
-            Icon => "cancelicon");
+            Icon => "cancelicon", Color => "red");
       else
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Error_Label,
@@ -1725,13 +1725,13 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
            options =>
-             "-text Remove -image sellicon -style Dialog.TButton -command {CloseDialog " &
+             "-text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
              Module_Dialog & ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
       Add_Close_Button
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column => 1,
-         Icon => "cancelicon");
+         Icon => "cancelicon", Color => "red");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Bind
