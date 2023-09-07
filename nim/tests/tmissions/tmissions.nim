@@ -46,7 +46,7 @@ deleteMission(0, false)
 try:
   assert acceptedMissions.len == 0
 except AssertionDefect:
-  echo "Failed to delete an accepted mission."
+  writeLine(stderr, "Failed to delete an accepted mission.")
 
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
@@ -59,18 +59,18 @@ updateMissions(8)
 try:
   assert acceptedMissions[0].time == 2
 except AssertionDefect:
-  echo "Failed to update accepted missions."
+  writeLine(stderr, "Failed to update accepted missions.")
 updateMissions(2)
 try:
   assert acceptedMissions.len == 0
 except AssertionDefect:
-  echo "Failed to remove an accepted mission."
+  writeLine(stderr, "Failed to remove an accepted mission.")
 
 echo "Testing getMissionType."
 try:
   assert getMissionType(patrol) == "Patrol area"
 except AssertionDefect:
-  echo "Failed to get the name of the mission's type."
+  writeLine(stderr, "Failed to get the name of the mission's type.")
 
 echo "Testing updateMission."
 acceptedMissions = @[]
@@ -80,4 +80,4 @@ updateMission(0)
 try:
   assert acceptedMissions[0].finished
 except AssertionDefect:
-  echo "Failed to update the accepted mission."
+  writeLine(stderr, "Failed to update the accepted mission.")
