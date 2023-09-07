@@ -350,6 +350,13 @@ proc selectBase(value: string): string {.sideEffect, raises: [], tags: [].} =
 
 func getStepData*(finishData: seq[StepFinishData];
     name: string): string {.raises: [], tags: [].} =
+  ## Get the finishing data of the selected step based on its name
+  ##
+  ## * finishData - the list of the step's data
+  ## * name       - the name of the data to find
+  ##
+  ## Returns the finishing data of the selected step with the selected name
+  ## or empty string if nothing found.
   result = ""
   for data in finishData:
     if data.name == name:
