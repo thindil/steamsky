@@ -1257,101 +1257,6 @@ package body Bases.ShipyardUI is
       end if;
    end Set_Module_Info;
 
-   -- ****if* ShipyardUI/ShipyardUI.Set_Install_Button
-   -- FUNCTION
-   -- Set enabled/disabled state for the install button
-   -- PARAMETERS
-   -- Error_Label   - The error label which will be shown if there is a problem
-   -- Money_Index_2 - The index of money in the player's ship's cargo
-   -- Cost          - The cost of the module to install
-   -- SOURCE
-   procedure Set_Install_Button
-     (Error_Label: Ttk_Label; Money_Index_2, Cost: Natural) is
-      -- ****
-      Used_Space, All_Space, Max_Size: Natural := 0;
-      Has_Unique: Boolean := False;
-      Free_Turret_Index: Natural := 0;
-   begin
-      Find_Hull_And_Free_Turret_Loop :
-      for I in Player_Ship.Modules.Iterate loop
-         case Player_Ship.Modules(I).M_Type is
-            when HULL =>
-               Max_Size :=
-                 Get_Module(Index => Player_Ship.Modules(I).Proto_Index).Value;
-               Used_Space := Player_Ship.Modules(I).Installed_Modules;
-               All_Space := Player_Ship.Modules(I).Max_Modules;
-            when TURRET =>
-               if Player_Ship.Modules(I).Gun_Index = 0
-                 and then
-                   Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
-                     .Size >=
-                   Get_Module(Index => Get_Module_Index).Size then
-                  Free_Turret_Index :=
-                    Modules_Container.To_Index(Position => I);
-               end if;
-            when others =>
-               null;
-         end case;
-      end loop Find_Hull_And_Free_Turret_Loop;
-      Check_Unique_Module_Loop :
-      for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index).M_Type =
-           Get_Module(Index => Get_Module_Index).M_Type and
-           Get_Module(Index => Get_Module_Index).Unique then
-            Has_Unique := True;
-            exit Check_Unique_Module_Loop;
-         end if;
-      end loop Check_Unique_Module_Loop;
-      if Money_Index_2 = 0 then
-         configure
-           (Widgt => Error_Label,
-            options => "-text {You don't have any money to buy the module.}");
-      else
-         if Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Money_Index_2)
-             .Amount <
-           Cost then
-            configure
-              (Widgt => Error_Label,
-               options =>
-                 "-text {You don't have enough money to buy the module.}");
-         elsif Has_Unique then
-            configure
-              (Widgt => Error_Label,
-               options =>
-                 "-text {Only one module of that type can be installed on the ship.}");
-         elsif Get_Module(Index => Get_Module_Index).M_Type not in GUN |
-               HARPOON_GUN | HULL then
-            if Get_Module(Index => Get_Module_Index).Size > Max_Size then
-               configure
-                 (Widgt => Error_Label,
-                  options =>
-                    "-text {The selected module is too big for your's ship's hull.}");
-            elsif All_Space - Used_Space <
-              Get_Module(Index => Get_Module_Index).Size and
-              Get_Module(Index => Get_Module_Index).M_Type /= ARMOR then
-               configure
-                 (Widgt => Error_Label,
-                  options =>
-                    "-text {You don't have enough space in your ship's hull to install the module.}");
-            end if;
-         elsif Get_Module(Index => Get_Module_Index).M_Type = HULL and
-           Get_Module(Index => Get_Module_Index).Max_Value < Used_Space then
-            configure
-              (Widgt => Error_Label,
-               options =>
-                 "-text {The selected hull is too small to replace your current hull.}");
-         elsif Get_Module(Index => Get_Module_Index).M_Type in GUN |
-               HARPOON_GUN
-           and then Free_Turret_Index = 0 then
-            configure
-              (Widgt => Error_Label,
-               options =>
-                 "-text {You don't have a free turret to install the selected gun.}");
-         end if;
-      end if;
-   end Set_Install_Button;
-
    -- ****f* ShipyardUI/ShipyardUI.Show_Install_Info_Command
    -- FUNCTION
    -- Show information about the selected module to install
@@ -1413,6 +1318,93 @@ package body Bases.ShipyardUI is
            options => "-style Headerred.TLabel -wraplength 400 -text {}");
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
+      procedure Set_Install_Button
+        (Error_Label: Ttk_Label; Money_Index_2, Cost: Natural) is
+         Used_Space, All_Space, Max_Size: Natural := 0;
+         Has_Unique: Boolean := False;
+         Free_Turret_Index: Natural := 0;
+      begin
+         Find_Hull_And_Free_Turret_Loop :
+         for I in Player_Ship.Modules.Iterate loop
+            case Player_Ship.Modules(I).M_Type is
+               when HULL =>
+                  Max_Size :=
+                    Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
+                      .Value;
+                  Used_Space := Player_Ship.Modules(I).Installed_Modules;
+                  All_Space := Player_Ship.Modules(I).Max_Modules;
+               when TURRET =>
+                  if Player_Ship.Modules(I).Gun_Index = 0
+                    and then
+                      Get_Module(Index => Player_Ship.Modules(I).Proto_Index)
+                        .Size >=
+                      Get_Module(Index => Get_Module_Index).Size then
+                     Free_Turret_Index :=
+                       Modules_Container.To_Index(Position => I);
+                  end if;
+               when others =>
+                  null;
+            end case;
+         end loop Find_Hull_And_Free_Turret_Loop;
+         Check_Unique_Module_Loop :
+         for Module of Player_Ship.Modules loop
+            if Get_Module(Index => Module.Proto_Index).M_Type =
+              Get_Module(Index => Get_Module_Index).M_Type and
+              Get_Module(Index => Get_Module_Index).Unique then
+               Has_Unique := True;
+               exit Check_Unique_Module_Loop;
+            end if;
+         end loop Check_Unique_Module_Loop;
+         if Money_Index_2 = 0 then
+            configure
+              (Widgt => Error_Label,
+               options =>
+                 "-text {You don't have any money to buy the module.}");
+         else
+            if Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                .Amount <
+              Cost then
+               configure
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {You don't have enough money to buy the module.}");
+            elsif Has_Unique then
+               configure
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {Only one module of that type can be installed on the ship.}");
+            elsif Get_Module(Index => Get_Module_Index).M_Type not in GUN |
+                  HARPOON_GUN | HULL then
+               if Get_Module(Index => Get_Module_Index).Size > Max_Size then
+                  configure
+                    (Widgt => Error_Label,
+                     options =>
+                       "-text {The selected module is too big for your's ship's hull.}");
+               elsif All_Space - Used_Space <
+                 Get_Module(Index => Get_Module_Index).Size and
+                 Get_Module(Index => Get_Module_Index).M_Type /= ARMOR then
+                  configure
+                    (Widgt => Error_Label,
+                     options =>
+                       "-text {You don't have enough space in your ship's hull to install the module.}");
+               end if;
+            elsif Get_Module(Index => Get_Module_Index).M_Type = HULL and
+              Get_Module(Index => Get_Module_Index).Max_Value < Used_Space then
+               configure
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {The selected hull is too small to replace your current hull.}");
+            elsif Get_Module(Index => Get_Module_Index).M_Type in GUN |
+                  HARPOON_GUN
+              and then Free_Turret_Index = 0 then
+               configure
+                 (Widgt => Error_Label,
+                  options =>
+                    "-text {You don't have a free turret to install the selected gun.}");
+            end if;
+         end if;
+      end Set_Install_Button;
    begin
       Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Fill_Compare_Modules_Loop :
