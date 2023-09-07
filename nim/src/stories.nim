@@ -390,7 +390,8 @@ proc startStory*(factionName: string; condition: StartConditionType) =
           max = story.startData[2].parseInt) == 1:
         case story.startingStep.finishCondition
         of askInBase:
-          discard
+          step = selectBase(value = getStepData(
+              finishData = story.startingStep.finishData, name = "base"))
         else:
           discard
 
