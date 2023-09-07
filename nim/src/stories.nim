@@ -333,6 +333,12 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     storiesList[storyIndex] = story
 
 proc selectBase(value: string): string {.sideEffect, raises: [], tags: [].} =
+  ## Selecte the name of a base for a story
+  ##
+  ## * value - only value "any" has matter, otherwise ignored
+  ##
+  ## Returns the name of a known and friendly base. If the value parameter is
+  ## any, return an empty string.
   if value == "any":
     return ""
   while true:
