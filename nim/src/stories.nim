@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, utils
+import game, log, maps, types, utils
 
 type
   StartConditionType = enum
@@ -361,6 +361,29 @@ func getStepData*(finishData: seq[StepFinishData];
   for data in finishData:
     if data.name == name:
       return data.value
+
+proc selectLocation(step = seq[StepFinishData]): string =
+  var
+    value = getStepData(finishData = step, name = "x")
+    locationX, locationY = 1
+  if value == "random":
+    locationX = getRandom(min = MapXRange.low, max = MapXRange.high)
+    result = $locationX & ";"
+  else:
+    locationX = value.parseInt
+    result = value & ";"
+  playerShip.destinationX = locationX
+  value = getStepData(finishData = step, name = "y")
+  if value == "random":
+    while true:
+      locationY = getRandom(min = MapYRange.low, max = MapYRange.high)
+      if skyMap[locationX][locationY].baseIndex == 0 and locationY != playerShip.skyY:
+        break
+    result = result & $locationY & ";"
+  else:
+    locationY = value.parseInt
+    result = result & value & ";"
+  playerShip.destinationY = locationY
 
 proc startStory*(factionName: string; condition: StartConditionType) =
   if currentStory.index.len > 0:
