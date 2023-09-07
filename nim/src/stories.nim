@@ -362,7 +362,8 @@ func getStepData*(finishData: seq[StepFinishData];
     if data.name == name:
       return data.value
 
-proc selectLocation(step = seq[StepFinishData]): string =
+proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
+    ValueError], tags: [].} =
   var
     value = getStepData(finishData = step, name = "x")
     locationX, locationY = 1
@@ -377,7 +378,8 @@ proc selectLocation(step = seq[StepFinishData]): string =
   if value == "random":
     while true:
       locationY = getRandom(min = MapYRange.low, max = MapYRange.high)
-      if skyMap[locationX][locationY].baseIndex == 0 and locationY != playerShip.skyY:
+      if skyMap[locationX][locationY].baseIndex == 0 and locationY !=
+          playerShip.skyY:
         break
     result = result & $locationY & ";"
   else:
