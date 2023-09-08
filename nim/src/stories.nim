@@ -409,6 +409,16 @@ proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
   generateEnemies(enemies = enemies, owner = value)
   return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
+proc selectLoot(step = seq[StepFinishData]): string =
+  result = getStepData(finishData = step, name = "item") & ";"
+  var value = getStepData(finishData = step, name = "ship")
+  if value != "random":
+    return result & value
+  value = getStepData(finishData = step, name = "faction")
+  var enemies: seq[Positive]
+  generateEnemies(enemies = enemies, owner = value)
+  return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
+
 proc startStory*(factionName: string; condition: StartConditionType) =
   if currentStory.index.len > 0:
     return
