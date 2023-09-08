@@ -394,6 +394,12 @@ proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
 
 proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
     ValueError], tags: [].} =
+  ## Get the enemy ship for the selected story's step
+  ##
+  ## * step - the finishing data for the selected step
+  ##
+  ## Returns the string with X and Y coordinates and the index of the
+  ## prototype's ship
   result = selectLocation(step = step)
   var value = getStepData(finishData = step, name = "ship")
   if value != "random":
