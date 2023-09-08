@@ -364,6 +364,11 @@ func getStepData*(finishData: seq[StepFinishData];
 
 proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
     ValueError], tags: [].} =
+  ## Get the location on the sky map for the story's step
+  ##
+  ## * step - the finishing data for the selected step
+  ##
+  ## Returns the string with X and Y coordinates for the selected step's location.
   var
     value = getStepData(finishData = step, name = "x")
     locationX, locationY = 1
