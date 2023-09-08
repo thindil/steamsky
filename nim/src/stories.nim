@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import game, log, maps, types, utils
+import events, game, log, maps, types, utils
 
 type
   StartConditionType = enum
@@ -391,6 +391,16 @@ proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
     locationY = value.parseInt
     result = result & value & ";"
   playerShip.destinationY = locationY
+
+proc selectEnemy(step: seq[StepFinishData]): string =
+  result = selectLocation(step = step)
+  var value = getStepData(finishData = step, name = "ship")
+  if value != "random":
+    return result & value
+  value = getStepData(finishData = step, name = "faction")
+  var enemies: seq[Positive]
+  generateEnemies(enemies = enemies, owner = value)
+  return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
 proc startStory*(factionName: string; condition: StartConditionType) =
   if currentStory.index.len > 0:
