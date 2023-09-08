@@ -13,15 +13,15 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -35,23 +35,23 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases.Ship; use Bases.Ship;
+with Bases.Ship;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
-with Maps; use Maps;
-with Maps.UI; use Maps.UI;
+with Maps;
+with Maps.UI;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
-with Trades; use Trades;
+with Trades;
 with Utils.UI; use Utils.UI;
 
 package body Bases.ShipyardUI is
@@ -108,6 +108,13 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Ada.Characters.Handling;
+      use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Maps;
+      use Maps.UI;
       use Tiny_String;
 
       Shipyard_Frame: Ttk_Frame :=
@@ -1319,7 +1326,7 @@ package body Bases.ShipyardUI is
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
       procedure Set_Install_Button
-        (Error_Label: Ttk_Label; Money_Index_2, Cost: Natural) is
+        (E_Label: Ttk_Label; M_Index_2, Cost2: Natural) is
          Used_Space, All_Space, Max_Size: Natural := 0;
          Has_Unique: Boolean := False;
          Free_Turret_Index: Natural := 0;
@@ -1355,51 +1362,51 @@ package body Bases.ShipyardUI is
                exit Check_Unique_Module_Loop;
             end if;
          end loop Check_Unique_Module_Loop;
-         if Money_Index_2 = 0 then
+         if M_Index_2 = 0 then
             configure
-              (Widgt => Error_Label,
+              (Widgt => E_Label,
                options =>
                  "-text {You don't have any money to buy the module.}");
          else
             if Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                (Container => Player_Ship.Cargo, Index => M_Index_2)
                 .Amount <
-              Cost then
+              Cost2 then
                configure
-                 (Widgt => Error_Label,
+                 (Widgt => E_Label,
                   options =>
                     "-text {You don't have enough money to buy the module.}");
             elsif Has_Unique then
                configure
-                 (Widgt => Error_Label,
+                 (Widgt => E_Label,
                   options =>
                     "-text {Only one module of that type can be installed on the ship.}");
             elsif Get_Module(Index => Get_Module_Index).M_Type not in GUN |
                   HARPOON_GUN | HULL then
                if Get_Module(Index => Get_Module_Index).Size > Max_Size then
                   configure
-                    (Widgt => Error_Label,
+                    (Widgt => E_Label,
                      options =>
                        "-text {The selected module is too big for your's ship's hull.}");
                elsif All_Space - Used_Space <
                  Get_Module(Index => Get_Module_Index).Size and
                  Get_Module(Index => Get_Module_Index).M_Type /= ARMOR then
                   configure
-                    (Widgt => Error_Label,
+                    (Widgt => E_Label,
                      options =>
                        "-text {You don't have enough space in your ship's hull to install the module.}");
                end if;
             elsif Get_Module(Index => Get_Module_Index).M_Type = HULL and
               Get_Module(Index => Get_Module_Index).Max_Value < Used_Space then
                configure
-                 (Widgt => Error_Label,
+                 (Widgt => E_Label,
                   options =>
                     "-text {The selected hull is too small to replace your current hull.}");
             elsif Get_Module(Index => Get_Module_Index).M_Type in GUN |
                   HARPOON_GUN
               and then Free_Turret_Index = 0 then
                configure
-                 (Widgt => Error_Label,
+                 (Widgt => E_Label,
                   options =>
                     "-text {You don't have a free turret to install the selected gun.}");
             end if;
@@ -1472,8 +1479,7 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
       Set_Install_Button
-        (Error_Label => Error_Label, Money_Index_2 => Money_Index_2,
-         Cost => Cost);
+        (E_Label => Error_Label, M_Index_2 => Money_Index_2, Cost2 => Cost);
       if cget(Widgt => Error_Label, option => "-text") = "" then
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Install_Button, Options => "-padx {0 5}");
@@ -1525,6 +1531,9 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Ada.Exceptions;
+      use Bases.Ship;
+      use Trades;
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Bases.Ship.Upgrade_Ship
@@ -1608,6 +1617,7 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Short_String;
       use Tiny_String;
 
