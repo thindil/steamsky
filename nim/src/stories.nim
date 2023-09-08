@@ -392,7 +392,8 @@ proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
     result = result & value & ";"
   playerShip.destinationY = locationY
 
-proc selectEnemy(step: seq[StepFinishData]): string =
+proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
+    ValueError], tags: [].} =
   result = selectLocation(step = step)
   var value = getStepData(finishData = step, name = "ship")
   if value != "random":
