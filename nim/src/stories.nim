@@ -439,6 +439,10 @@ proc startStory*(factionName: string; condition: StartConditionType) =
         of askInBase:
           step = selectBase(value = getStepData(
               finishData = story.startingStep.finishData, name = "base"))
+        of destroyShip:
+          step = selectEnemy(step = story.startingStep.finishData)
+        of explore:
+          step = selectLocation(step = story.startingStep.finishData)
         else:
           discard
 
