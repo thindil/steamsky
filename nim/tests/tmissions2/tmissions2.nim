@@ -70,7 +70,7 @@ finishMission(0)
 try:
   assert acceptedMissions.len == 0
 except AssertionDefect:
-  echo "Failed to finish an accepted mission."
+  writeLine(stderr, "Failed to finish an accepted mission.")
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "DRONES", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
     1, 0, 0], loyalty: 100, health: 100, tired: 0, hunger: 0,
@@ -81,7 +81,7 @@ finishMission(0)
 try:
   assert acceptedMissions.len == 0
 except AssertionDefect:
-  echo "Failed to finish an accepted passenger mission."
+  writeLine(stderr, "Failed to finish an accepted passenger mission.")
 
 echo "Testing autoFinishMissions."
 acceptedMissions = @[]
@@ -90,7 +90,7 @@ acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
 try:
   assert autoFinishMissions().len == 0 and acceptedMissions.len == 0
 except AssertionDefect:
-  echo "Failed to auto finish accepted missions."
+  writeLine(stderr, "Failed to auto finish accepted missions.")
 
 echo "Testing acceptMission."
 skyBases[1].missions = @[]
@@ -101,4 +101,4 @@ acceptMission(0)
 try:
   assert acceptedMissions.len == 1
 except AssertionDefect:
-  echo "Failed to accept a mission in a base."
+  writeLine(stderr, "Failed to accept a mission in a base.")
