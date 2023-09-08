@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated the default game's theme
+- Updated look of dialogs in the shipyard screen
 
 ## [9.1] - 2023-09-03
 
