@@ -1674,7 +1674,8 @@ package body Bases.ShipyardUI is
       Insert
         (TextWidget => Module_Text, Index => "end",
          Text =>
-           "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
+           "{Remove gain:" & Positive'Image(Cost) & " " &
+           To_String(Source => Money_Name) & LF & "Removing time:" &
            Positive'Image
              (Get_Module
                 (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
