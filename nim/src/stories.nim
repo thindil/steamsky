@@ -411,6 +411,12 @@ proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
 
 proc selectLoot(step = seq[StepFinishData]): string {.sideEffect, raises: [],
     tags: [].} =
+  ## Get the information about the item looted in this step of a story.
+  ##
+  ## * step - the finishing data for the selected step
+  ##
+  ## Returns the string with name of the item and index of the prototype's
+  ## ship.
   result = getStepData(finishData = step, name = "item") & ";"
   var value = getStepData(finishData = step, name = "ship")
   if value != "random":
