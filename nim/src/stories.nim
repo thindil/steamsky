@@ -596,3 +596,9 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
       break
     nimData.add(StepFinishData(name: $data.name, value: $data.value))
   return getStepData(nimData, $name).cstring
+
+proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    startStory(factionName = $factionName, condition = condition.StartConditionType)
+  except ValueError:
+    discard
