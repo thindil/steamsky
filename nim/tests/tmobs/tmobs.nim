@@ -21,8 +21,8 @@ let newMob = generateMob(5, "POLEIS")
 try:
   assert newMob.attributes[0].level == 2
 except AssertionDefect:
-  echo "Failed to set the mob's attributes."
+  writeLine(stderr, "Failed to set the mob's attributes.")
 try:
   assert newMob.orderTime == 15
 except AssertionDefect:
-  echo "Failed to set the mob's order's time."
+  writeLine(stderr, "Failed to set the mob's order's time.")
