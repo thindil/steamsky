@@ -1853,6 +1853,7 @@ package body Bases.ShipyardUI is
    Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* ShipyardUI/ShipyardUI.Modules_Sort_Order
    -- FUNCTION
    -- The current sorting order for modules list
@@ -1861,6 +1862,7 @@ package body Bases.ShipyardUI is
    -- SOURCE
    Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* ShipyardUI/ShipyardUI.Sort_Modules_Command
    -- FUNCTION
