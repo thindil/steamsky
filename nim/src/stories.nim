@@ -575,6 +575,13 @@ proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
       showText: story.showText == 1, data: $story.data,
       finishedStep: story.finishedStep.StepConditionType)
 
+proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], exportc.} =
+  story = AdaCurrentStoryData(index: currentStory.index.cstring,
+      step: currentStory.step.cint, currentStep: currentStory.currentStep.cint,
+      maxSteps: currentStory.maxSteps.cint, showText: (
+      if currentStory.showText: 1 else: 0), data: currentStory.data.cstring,
+      finishedStep: currentStory.finishedStep.ord.cint)
+
 proc getAdaFinishedStory(index: cint; story: AdaFinishedStoryData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   if story.index.len == 0:
@@ -599,6 +606,7 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
 
 proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [], exportc.} =
   try:
-    startStory(factionName = $factionName, condition = condition.StartConditionType)
+    startStory(factionName = $factionName,
+        condition = condition.StartConditionType)
   except ValueError:
     discard

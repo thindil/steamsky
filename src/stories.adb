@@ -324,110 +324,54 @@ package body Stories is
       --## rule on IMPROPER_INITIALIZATION
    end Select_Loot;
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Current_Story_Data is record
+      Index: chars_ptr;
+      Step: Positive;
+      Current_Step: Integer;
+      Max_Steps: Positive;
+      Show_Text: Integer;
+      Data: chars_ptr;
+      Finished_Step: Natural;
+   end record;
+   --## rule on TYPE_INITIAL_VALUES
+
    procedure Start_Story
      (Faction_Name: Tiny_String.Bounded_String;
       Condition: Start_Condition_Type) is
-      use Ada.Characters.Handling;
-      use Factions;
-      use Ships.Cargo;
       use Tiny_String;
-
-      Faction_Index: Bounded_String := Null_Bounded_String;
-      Step: Unbounded_String := Null_Unbounded_String;
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Texts: UnboundedString_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
+      Nim_Current_Story: Nim_Current_Story_Data;
+      procedure Start_Ada_Story(F_Name: chars_ptr; C: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "startAdaStory";
+      procedure Set_Ada_Current_Story(Story: out Nim_Current_Story_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaCurrentStory";
    begin
       if Current_Story.Index /= Null_Unbounded_String then
          return;
       end if;
-      Find_Faction_Index_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         if Get_Faction(Number => I).Name = Faction_Name then
-            Faction_Index := Get_Faction_Index(Number => I);
-            exit Find_Faction_Index_Loop;
-         end if;
-      end loop Find_Faction_Index_Loop;
-      if Faction_Index = Null_Bounded_String then
-         return;
-      end if;
-      Check_Stories_Loop :
-      for I in Stories_List.Iterate loop
-         Check_Faction_Loop :
-         for ForbiddenFaction of Stories_List(I).Forbidden_Factions loop
-            if To_Lower(Item => To_String(Source => ForbiddenFaction)) =
-              To_Lower
-                (Item => To_String(Source => Player_Ship.Crew(1).Faction)) then
-               goto End_Of_Check_Stories_Loop;
-            end if;
-         end loop Check_Faction_Loop;
-         case Condition is
-            when DROPITEM =>
-               if Stories_List(I).Start_Data(2) =
-                 To_Unbounded_String
-                   (Source => To_String(Source => Faction_Index))
-                 and then
-                   Get_Random
-                     (Min => 1,
-                      Max =>
-                        Positive'Value
-                          (To_String
-                             (Source => Stories_List(I).Start_Data(3)))) =
-                   1 then
-                  case Stories_List(I).Starting_Step.Finish_Condition is
-                     when ASKINBASE =>
-                        Step :=
-                          Select_Base
-                            (Value =>
-                               To_String
-                                 (Source =>
-                                    Get_Step_Data
-                                      (Finish_Data =>
-                                         Stories_List(I).Starting_Step
-                                           .Finish_Data,
-                                       Name => "base")));
-                     when DESTROYSHIP =>
-                        Step :=
-                          Select_Enemy
-                            (Step =>
-                               Stories_List(I).Starting_Step.Finish_Data);
-                     when EXPLORE =>
-                        Step :=
-                          Select_Location
-                            (Step =>
-                               Stories_List(I).Starting_Step.Finish_Data);
-                     when LOOT =>
-                        Step :=
-                          Select_Loot
-                            (Step =>
-                               Stories_List(I).Starting_Step.Finish_Data);
-                     when ANY =>
-                        null;
-                  end case;
-                  Current_Story :=
-                    (Index => Stories_Container.Key(Position => I), Step => 1,
-                     Current_Step => 0,
-                     Max_Steps =>
-                       Get_Random
-                         (Min => Stories_List(I).Min_Steps,
-                          Max => Stories_List(I).Max_Steps),
-                     Show_Text => True, Data => Step, Finished_Step => ANY);
-                  Update_Cargo
-                    (Ship => Player_Ship,
-                     Proto_Index =>
-                       Positive'Value
-                         (To_String(Source => Stories_List(I).Start_Data(1))),
-                     Amount => 1);
-                  Finished_Stories.Append
-                    (New_Item =>
-                       (Index => Current_Story.Index,
-                        Steps_Amount => Current_Story.Max_Steps,
-                        Steps_Texts => Temp_Texts));
-                  return;
-               end if;
-         end case;
-         <<End_Of_Check_Stories_Loop>>
-      end loop Check_Stories_Loop;
+      Get_Current_Story;
+      Start_Ada_Story
+        (F_Name => New_String(Str => To_String(Source => Faction_Name)),
+         C => Start_Condition_Type'Pos(Condition));
+      Set_Ada_Current_Story(Story => Nim_Current_Story);
+      Current_Story :=
+        (Index =>
+           To_Unbounded_String
+             (Source => Value(Item => Nim_Current_Story.Index)),
+         Step => Nim_Current_Story.Step,
+         Current_Step => Nim_Current_Story.Current_Step,
+         Max_Steps => Nim_Current_Story.Max_Steps,
+         Show_Text =>
+           (if Nim_Current_Story.Show_Text = 1 then True else False),
+         Data =>
+           To_Unbounded_String
+             (Source => Value(Item => Nim_Current_Story.Data)),
+         Finished_Step =>
+           Step_Condition_Type'Val(Nim_Current_Story.Finished_Step));
    end Start_Story;
 
    procedure Clear_Current_Story is
@@ -703,17 +647,6 @@ package body Stories is
    end Get_Story_Location;
 
    procedure Get_Current_Story is
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Current_Story_Data is record
-         Index: chars_ptr;
-         Step: Positive;
-         Current_Step: Integer;
-         Max_Steps: Positive;
-         Show_Text: Integer;
-         Data: chars_ptr;
-         Finished_Step: Natural;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       procedure Get_Ada_Current_Story(Story: Nim_Current_Story_Data) with
          Import => True,
          Convention => C,
