@@ -19,7 +19,7 @@ import std/[strutils, tables, xmlparser, xmltree]
 import events, game, log, maps, shipscargo, types, utils
 
 type
-  StartConditionType = enum
+  StartConditionType* = enum
     ## Types of requirements to start a story
     dropItem
   StepConditionType = enum
