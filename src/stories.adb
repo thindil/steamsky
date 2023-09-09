@@ -15,16 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Bases; use Bases;
 with Crew;
 with Events; use Events;
-with Factions;
 with Maps;
 with Ships; use Ships;
-with Ships.Cargo;
 with Ships.Crew;
 with Utils; use Utils;
 
@@ -340,7 +337,11 @@ package body Stories is
      (Faction_Name: Tiny_String.Bounded_String;
       Condition: Start_Condition_Type) is
       use Tiny_String;
+
       Nim_Current_Story: Nim_Current_Story_Data;
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Texts: UnboundedString_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       procedure Start_Ada_Story(F_Name: chars_ptr; C: Integer) with
          Import => True,
          Convention => C,
@@ -372,6 +373,13 @@ package body Stories is
              (Source => Value(Item => Nim_Current_Story.Data)),
          Finished_Step =>
            Step_Condition_Type'Val(Nim_Current_Story.Finished_Step));
+      if Current_Story.Index /= Null_Unbounded_String then
+         Finished_Stories.Append
+           (New_Item =>
+              (Index => Current_Story.Index,
+               Steps_Amount => Current_Story.Max_Steps,
+               Steps_Texts => Temp_Texts));
+      end if;
    end Start_Story;
 
    procedure Clear_Current_Story is
