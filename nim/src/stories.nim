@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import events, game, log, maps, types, utils
+import events, game, log, maps, shipscargo, types, utils
 
 type
   StartConditionType = enum
@@ -409,8 +409,8 @@ proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
   generateEnemies(enemies = enemies, owner = value)
   return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc selectLoot(step = seq[StepFinishData]): string {.sideEffect, raises: [],
-    tags: [].} =
+proc selectLoot(step: seq[StepFinishData]): string {.sideEffect, raises: [
+    KeyError], tags: [].} =
   ## Get the information about the item looted in this step of a story.
   ##
   ## * step - the finishing data for the selected step
@@ -439,7 +439,7 @@ proc startStory*(factionName: string; condition: StartConditionType) =
   var
     nextStory = false
     step = ""
-  for story in storiesList.values:
+  for sIndex, story in storiesList.pairs:
     nextStory = false
     for forbiddenFaction in story.forbiddenFactions:
       if forbiddenFaction.toLowerAscii == playerShip.crew[
@@ -460,8 +460,17 @@ proc startStory*(factionName: string; condition: StartConditionType) =
           step = selectEnemy(step = story.startingStep.finishData)
         of explore:
           step = selectLocation(step = story.startingStep.finishData)
-        else:
+        of loot:
+          step = selectLoot(step = story.startingStep.finishData)
+        of any:
           discard
+        currentStory = CurrentStoryData(index: sIndex, step: 1, currentStep: 0,
+            maxSteps: getRandom(min = story.minSteps, max = story.maxSteps),
+            showText: true, data: step, finishedStep: any)
+        updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt, amount = 1)
+        finishedStories.add(FinishedStoryData(index: currentStory.index,
+            stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
+        return
 
 # Temporary code for interfacing with Ada
 
