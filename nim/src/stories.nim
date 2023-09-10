@@ -426,7 +426,8 @@ proc selectLoot(step: seq[StepFinishData]): string {.sideEffect, raises: [
   generateEnemies(enemies = enemies, owner = value)
   return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc startStory*(factionName: string; condition: StartConditionType) =
+proc startStory*(factionName: string; condition: StartConditionType) {.sideEffect,
+    raises: [ValueError], tags: [].} =
   if currentStory.index.len > 0:
     return
   var factionIndex = ""
