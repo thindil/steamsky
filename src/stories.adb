@@ -162,37 +162,6 @@ package body Stories is
       end loop Convert_Stories_Loop;
    end Load_Stories;
 
-   -- ****if* Stories/Stories.Select_Base
-   -- Select name of the base for story
-   -- PARAMETERS
-   -- Value - Only value "any" matters
-   -- RESULT
-   -- Empty string if Value is "any", otherwise random base name
-   -- SOURCE
-   function Select_Base(Value: String) return Unbounded_String is
-      -- ****
-      Base_Index: Bases_Range := 1;
-   begin
-      if Value = "any" then
-         return Null_Unbounded_String;
-      end if;
-      Select_Base_Loop :
-      loop
-         Base_Index :=
-           Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
-         if Sky_Bases(Base_Index).Known and
-           Sky_Bases(Base_Index).Reputation.Level > -25 then
-            Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
-            Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
-            return
-              To_Unbounded_String
-                (Source =>
-                   Tiny_String.To_String
-                     (Source => Sky_Bases(Base_Index).Name));
-         end if;
-      end loop Select_Base_Loop;
-   end Select_Base;
-
    -- ****if* Stories/Stories.Select_Location
    -- FUNCTION
    -- Get the map location for story step
@@ -246,81 +215,6 @@ package body Stories is
       return Location_Data;
    end Select_Location;
 
-   -- ****if* Stories/Stories.Select_Enemy
-   -- FUNCTION
-   -- Get enemy ship for selected story step
-   -- PARAMETERS
-   -- Step - Data for selected step
-   -- RESULT
-   -- String with location and name for enemy ship for selected story step
-   -- SOURCE
-   function Select_Enemy
-     (Step: StepData_Container.Vector) return Unbounded_String is
-      -- ****
-      --## rule off IMPROPER_INITIALIZATION
-      Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Enemy_Data, Value: Unbounded_String;
-   begin
-      Enemy_Data := Select_Location(Step => Step);
-      Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
-      if Value /= To_Unbounded_String(Source => "random") then
-         return Enemy_Data & Value;
-      end if;
-      Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
-      --## rule off IMPROPER_INITIALIZATION
-      Generate_Enemies
-        (Enemies => Enemies,
-         Owner =>
-           Tiny_String.To_Bounded_String
-             (Source => To_String(Source => Value)));
-      return
-        Enemy_Data &
-        Positive'Image
-          (Enemies
-             (Get_Random
-                (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
-      --## rule on IMPROPER_INITIALIZATION
-   end Select_Enemy;
-
-   -- ****if* Stories/Stories.Select_Loot
-   -- FUNCTION
-   -- Get what item should be looted for this step
-   -- PARAMETERS
-   -- Step - Data for selected step
-   -- RESULT
-   -- String with Item type and enemy prototype ship index to loot
-   -- SOURCE
-   function Select_Loot
-     (Step: StepData_Container.Vector) return Unbounded_String is
-      -- ****
-      --## rule off IMPROPER_INITIALIZATION
-      Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Loot_Data, Value: Unbounded_String;
-   begin
-      Loot_Data := Get_Step_Data(Finish_Data => Step, Name => "item");
-      Append(Source => Loot_Data, New_Item => ";");
-      Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
-      if Value /= To_Unbounded_String(Source => "random") then
-         return Loot_Data & Value;
-      end if;
-      Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
-      --## rule off IMPROPER_INITIALIZATION
-      Generate_Enemies
-        (Enemies => Enemies,
-         Owner =>
-           Tiny_String.To_Bounded_String
-             (Source => To_String(Source => Value)));
-      return
-        Loot_Data &
-        Positive'Image
-          (Enemies
-             (Get_Random
-                (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
-      --## rule on IMPROPER_INITIALIZATION
-   end Select_Loot;
-
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Current_Story_Data is record
       Index: chars_ptr;
@@ -342,7 +236,7 @@ package body Stories is
       --## rule off IMPROPER_INITIALIZATION
       Temp_Texts: UnboundedString_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
-      procedure Start_Ada_Story(F_Name: chars_ptr; C: Integer) with
+      procedure Start_Ada_Story(F_Name: chars_ptr; Con: Integer) with
          Import => True,
          Convention => C,
          External_Name => "startAdaStory";
@@ -357,7 +251,7 @@ package body Stories is
       Get_Current_Story;
       Start_Ada_Story
         (F_Name => New_String(Str => To_String(Source => Faction_Name)),
-         C => Start_Condition_Type'Pos(Condition));
+         Con => Start_Condition_Type'Pos(Condition));
       Set_Ada_Current_Story(Story => Nim_Current_Story);
       Current_Story :=
         (Index =>
@@ -409,6 +303,86 @@ package body Stories is
                      (Finish_Data => Step.Finish_Data, Name => "chance"))));
       Finish_Condition: Unbounded_String;
       Chance: Natural;
+      function Select_Base(Value: String) return Unbounded_String is
+         Base_Index: Bases_Range := 1;
+      begin
+         if Value = "any" then
+            return Null_Unbounded_String;
+         end if;
+         Select_Base_Loop :
+         loop
+            Base_Index :=
+              Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
+            if Sky_Bases(Base_Index).Known and
+              Sky_Bases(Base_Index).Reputation.Level > -25 then
+               Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
+               Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
+               return
+                 To_Unbounded_String
+                   (Source =>
+                      Tiny_String.To_String
+                        (Source => Sky_Bases(Base_Index).Name));
+            end if;
+         end loop Select_Base_Loop;
+      end Select_Base;
+
+      function Select_Enemy
+        (Step: StepData_Container.Vector) return Unbounded_String is
+      --## rule off IMPROPER_INITIALIZATION
+         Enemies: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+         Enemy_Data, Value: Unbounded_String;
+      begin
+         Enemy_Data := Select_Location(Step => Step);
+         Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
+         if Value /= To_Unbounded_String(Source => "random") then
+            return Enemy_Data & Value;
+         end if;
+         Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+      --## rule off IMPROPER_INITIALIZATION
+         Generate_Enemies
+           (Enemies => Enemies,
+            Owner =>
+              Tiny_String.To_Bounded_String
+                (Source => To_String(Source => Value)));
+         return
+           Enemy_Data &
+           Positive'Image
+             (Enemies
+                (Get_Random
+                   (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+      --## rule on IMPROPER_INITIALIZATION
+      end Select_Enemy;
+
+      function Select_Loot
+        (Step: StepData_Container.Vector) return Unbounded_String is
+      --## rule off IMPROPER_INITIALIZATION
+         Enemies: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+         Loot_Data, Value: Unbounded_String;
+      begin
+         Loot_Data := Get_Step_Data(Finish_Data => Step, Name => "item");
+         Append(Source => Loot_Data, New_Item => ";");
+         Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
+         if Value /= To_Unbounded_String(Source => "random") then
+            return Loot_Data & Value;
+         end if;
+         Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+      --## rule off IMPROPER_INITIALIZATION
+         Generate_Enemies
+           (Enemies => Enemies,
+            Owner =>
+              Tiny_String.To_Bounded_String
+                (Source => To_String(Source => Value)));
+         return
+           Loot_Data &
+           Positive'Image
+             (Enemies
+                (Get_Random
+                   (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+      --## rule on IMPROPER_INITIALIZATION
+      end Select_Loot;
+
    begin
       Finish_Condition :=
         Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "condition");
