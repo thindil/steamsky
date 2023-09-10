@@ -102,7 +102,7 @@ package body Bases.UI is
           (pathName => Base_Canvas & ".base.searchframe", Interp => Interp);
       Search_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => Search_Frame & ".search", Interp => Interp);
-      First_Index, Formatted_Time: Unbounded_String;
+      First_Index, Formatted_Time: Unbounded_String := Null_Unbounded_String;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
@@ -135,28 +135,28 @@ package body Bases.UI is
             Formatted_Time :=
               To_Unbounded_String
                 (Source => Positive'Image(Time / 60) & " hour");
-            if (Time / 60) > 1 then
+            if Time / 60 > 1 then
                Append(Source => Formatted_Time, New_Item => "s");
             end if;
-            if (Time mod 60) > 0 then
+            if Time mod 60 > 0 then
                Append
                  (Source => Formatted_Time,
                   New_Item =>
                     " and" & Positive'Image(Time mod 60) & " minute");
-               if (Time mod 60) > 1 then
+               if Time mod 60 > 1 then
                   Append(Source => Formatted_Time, New_Item => "s");
                end if;
             end if;
          end if;
       end Format_Time;
-      function Get_Color(Cost: Positive) return String is
+      function Get_Color(Action_Cost: Positive) return String is
       begin
          if Money_Index_2 = 0
            or else
              Inventory_Container.Element
                (Container => Player_Ship.Cargo, Index => Money_Index_2)
                .Amount <
-             Cost then
+             Action_Cost then
             return "red";
          end if;
          return "";
@@ -184,7 +184,39 @@ package body Bases.UI is
         "1" then
          Destroy(Widgt => Base_Table.Canvas);
       end if;
-      if CArgv.Arg(Argv => Argv, N => 1) /= "recipes" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
+         Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
+         if Argc /= 3 then
+            configure(Widgt => Search_Entry, options => "-validatecommand {}");
+            Delete
+              (TextEntry => Search_Entry, FirstIndex => "0",
+               LastIndex => "end");
+            configure
+              (Widgt => Search_Entry,
+               options => "-validatecommand {SearchRecipes %P}");
+         end if;
+         Base_Table :=
+           Create_Table
+             (Parent => Widget_Image(Win => Base_Frame),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Cost"),
+                 3 => Null_Unbounded_String),
+              Scrollbar =>
+                Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
+              Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
+              Tooltip_Text => "Press mouse button to sort the recipes.");
+         if Natural(Items_Indexes.Length) /= Get_Recipes_Amount then
+            Items_Indexes.Clear;
+            Fill_Recipes_Indexes_Loop :
+            for I in 1 .. Get_Recipes_Amount loop
+               Items_Indexes.Append
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Source => Trim(Source => I'Img, Side => Both)));
+            end loop Fill_Recipes_Indexes_Loop;
+         end if;
+      else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Search_Frame);
          Base_Table :=
            Create_Table
@@ -237,38 +269,6 @@ package body Bases.UI is
                    (Source =>
                       (if Sky_Bases(Base_Index).Population > 299 then "-2"
                        else "-3")));
-         end if;
-      else
-         Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
-         if Argc /= 3 then
-            configure(Widgt => Search_Entry, options => "-validatecommand {}");
-            Delete
-              (TextEntry => Search_Entry, FirstIndex => "0",
-               LastIndex => "end");
-            configure
-              (Widgt => Search_Entry,
-               options => "-validatecommand {SearchRecipes %P}");
-         end if;
-         Base_Table :=
-           Create_Table
-             (Parent => Widget_Image(Win => Base_Frame),
-              Headers =>
-                (1 => To_Unbounded_String(Source => "Name"),
-                 2 => To_Unbounded_String(Source => "Cost"),
-                 3 => Null_Unbounded_String),
-              Scrollbar =>
-                Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
-              Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
-              Tooltip_Text => "Press mouse button to sort the recipes.");
-         if Natural(Items_Indexes.Length) /= Get_Recipes_Amount then
-            Items_Indexes.Clear;
-            Fill_Recipes_Indexes_Loop :
-            for I in 1 .. Get_Recipes_Amount loop
-               Items_Indexes.Append
-                 (New_Item =>
-                    To_Unbounded_String
-                      (Source => Trim(Source => I'Img, Side => Both)));
-            end loop Fill_Recipes_Indexes_Loop;
          end if;
       end if;
       if Money_Index_2 > 0 then
@@ -329,7 +329,7 @@ package body Bases.UI is
                  Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu heal " & To_String(Source => I),
-               Column => 2, Color => Get_Color(Cost => Cost));
+               Column => 2, Color => Get_Color(Action_Cost => Cost));
             Format_Time;
             Add_Button
               (Table => Base_Table,
@@ -391,7 +391,7 @@ package body Bases.UI is
                  Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu repair " & To_String(Source => I),
-               Column => 2, Color => Get_Color(Cost => Cost));
+               Column => 2, Color => Get_Color(Action_Cost => Cost));
             Format_Time;
             Add_Button
               (Table => Base_Table,
@@ -494,7 +494,7 @@ package body Bases.UI is
             Cost :=
               Natural
                 (Float(Cost) *
-                 Float(Get_Float_Setting(Name => "pricesBonus")));
+                 Get_Float_Setting(Name => "pricesBonus"));
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -507,7 +507,7 @@ package body Bases.UI is
                Tooltip => "Show available options",
                Command =>
                  "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
-               Column => 2, New_Row => True, Color => Get_Color(Cost => Cost));
+               Column => 2, New_Row => True, Color => Get_Color(Action_Cost => Cost));
             exit Show_Available_Recipes_Loop when Base_Table.Row =
               Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Recipes_Loop>>
@@ -734,7 +734,7 @@ package body Bases.UI is
               10);
          Cost :=
            Natural
-             (Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
+             (Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
          if Cost = 0 then
             Cost := 1;
          end if;
