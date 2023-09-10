@@ -298,14 +298,13 @@ package Stories is
    -- SOURCE
    procedure Start_Story
      (Faction_Name: Tiny_String.Bounded_String;
-      Condition: Start_Condition_Type) with
-      Test_Case => (Name => "Test_StartStory", Mode => Nominal);
-      -- ****
+      Condition: Start_Condition_Type);
+   -- ****
 
-      -- ****f* Stories/Stories.Clear_Current_Story
-      -- FUNCTION
-      -- Resets current story
-      -- SOURCE
+   -- ****f* Stories/Stories.Clear_Current_Story
+   -- FUNCTION
+   -- Resets current story
+   -- SOURCE
    procedure Clear_Current_Story with
       Post => Current_Story.Index = Null_Unbounded_String,
       Test_Case => (Name => "Test_ClearCurrentStory", Mode => Nominal);
