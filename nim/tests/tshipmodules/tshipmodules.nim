@@ -19,8 +19,8 @@ echo "Testing getModuleType."
 try:
   assert getModuleType(1) == "Hull"
 except AssertionDefect:
-  echo "Failed to get the type of the module."
+  writeLine(stderr, "Failed to get the type of the module.")
 try:
   assert getModuleType(6) == "Alchemy lab"
 except AssertionDefect:
-  echo "Failed to get the type of the module with two words."
+  writeLine(stderr, "Failed to get the type of the module with two words.")
