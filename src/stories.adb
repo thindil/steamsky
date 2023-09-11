@@ -19,7 +19,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Bases; use Bases;
 with Crew;
-with Events; use Events;
+with Events;
 with Maps;
 with Ships; use Ships;
 with Ships.Crew;
@@ -162,59 +162,6 @@ package body Stories is
       end loop Convert_Stories_Loop;
    end Load_Stories;
 
-   -- ****if* Stories/Stories.Select_Location
-   -- FUNCTION
-   -- Get the map location for story step
-   -- PARAMETERS
-   -- Step - Data for selected step
-   -- RESULT
-   -- String with X and Y coordinates for selected step location.
-   -- SOURCE
-   function Select_Location
-     (Step: StepData_Container.Vector) return Unbounded_String is
-      -- ****
-      use Maps;
-
-      Location_Data, Value: Unbounded_String;
-      Location_X: Positive;
-      Location_Y: Positive := 1;
-   begin
-      Value := Get_Step_Data(Finish_Data => Step, Name => "x");
-      if Value = To_Unbounded_String(Source => "random") then
-         Location_X :=
-           Get_Random(Min => Sky_Map'First(1), Max => Sky_Map'Last(1));
-         Location_Data :=
-           To_Unbounded_String(Source => Integer'Image(Location_X));
-         Append(Source => Location_Data, New_Item => ";");
-      else
-         Location_X := Integer'Value(To_String(Source => Value));
-         Location_Data := Value;
-         Append(Source => Location_Data, New_Item => ";");
-      end if;
-      Player_Ship.Destination_X := Location_X;
-      Value := Get_Step_Data(Finish_Data => Step, Name => "y");
-      if Value = To_Unbounded_String(Source => "random") then
-         Random_Location_Loop :
-         loop
-            Location_Y :=
-              Get_Random(Min => Sky_Map'First(2), Max => Sky_Map'Last(2));
-            exit Random_Location_Loop when Sky_Map(Location_X, Location_Y)
-                .Base_Index =
-              0 and
-              Location_Y /= Player_Ship.Sky_Y;
-         end loop Random_Location_Loop;
-         Append
-           (Source => Location_Data, New_Item => Integer'Image(Location_Y));
-         Append(Source => Location_Data, New_Item => ";");
-      else
-         Location_Y := Integer'Value(To_String(Source => Value));
-         Append(Source => Location_Data, New_Item => Value);
-         Append(Source => Location_Data, New_Item => ";");
-      end if;
-      Player_Ship.Destination_Y := Location_Y;
-      return Location_Data;
-   end Select_Location;
-
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Current_Story_Data is record
       Index: chars_ptr;
@@ -286,6 +233,7 @@ package body Stories is
 
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
       use Crew;
+      use Events;
       use Ships.Crew;
 
       Step: Step_Data :=
@@ -303,6 +251,51 @@ package body Stories is
                      (Finish_Data => Step.Finish_Data, Name => "chance"))));
       Finish_Condition: Unbounded_String;
       Chance: Natural;
+
+      function Select_Location
+        (S: StepData_Container.Vector) return Unbounded_String is
+         use Maps;
+
+         Location_Data, Value: Unbounded_String;
+         Location_X: Positive;
+         Location_Y: Positive := 1;
+      begin
+         Value := Get_Step_Data(Finish_Data => S, Name => "x");
+         if Value = To_Unbounded_String(Source => "random") then
+            Location_X :=
+              Get_Random(Min => Sky_Map'First(1), Max => Sky_Map'Last(1));
+            Location_Data :=
+              To_Unbounded_String(Source => Integer'Image(Location_X));
+            Append(Source => Location_Data, New_Item => ";");
+         else
+            Location_X := Integer'Value(To_String(Source => Value));
+            Location_Data := Value;
+            Append(Source => Location_Data, New_Item => ";");
+         end if;
+         Player_Ship.Destination_X := Location_X;
+         Value := Get_Step_Data(Finish_Data => S, Name => "y");
+         if Value = To_Unbounded_String(Source => "random") then
+            Random_Location_Loop :
+            loop
+               Location_Y :=
+                 Get_Random(Min => Sky_Map'First(2), Max => Sky_Map'Last(2));
+               exit Random_Location_Loop when Sky_Map(Location_X, Location_Y)
+                   .Base_Index =
+                 0 and
+                 Location_Y /= Player_Ship.Sky_Y;
+            end loop Random_Location_Loop;
+            Append
+              (Source => Location_Data, New_Item => Integer'Image(Location_Y));
+            Append(Source => Location_Data, New_Item => ";");
+         else
+            Location_Y := Integer'Value(To_String(Source => Value));
+            Append(Source => Location_Data, New_Item => Value);
+            Append(Source => Location_Data, New_Item => ";");
+         end if;
+         Player_Ship.Destination_Y := Location_Y;
+         return Location_Data;
+      end Select_Location;
+
       function Select_Base(Value: String) return Unbounded_String is
          Base_Index: Bases_Range := 1;
       begin
@@ -327,18 +320,18 @@ package body Stories is
       end Select_Base;
 
       function Select_Enemy
-        (Step: StepData_Container.Vector) return Unbounded_String is
+        (S: StepData_Container.Vector) return Unbounded_String is
       --## rule off IMPROPER_INITIALIZATION
          Enemies: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
          Enemy_Data, Value: Unbounded_String;
       begin
-         Enemy_Data := Select_Location(Step => Step);
-         Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
+         Enemy_Data := Select_Location(S => S);
+         Value := Get_Step_Data(Finish_Data => S, Name => "ship");
          if Value /= To_Unbounded_String(Source => "random") then
             return Enemy_Data & Value;
          end if;
-         Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+         Value := Get_Step_Data(Finish_Data => S, Name => "faction");
       --## rule off IMPROPER_INITIALIZATION
          Generate_Enemies
            (Enemies => Enemies,
@@ -355,19 +348,19 @@ package body Stories is
       end Select_Enemy;
 
       function Select_Loot
-        (Step: StepData_Container.Vector) return Unbounded_String is
+        (S: StepData_Container.Vector) return Unbounded_String is
       --## rule off IMPROPER_INITIALIZATION
          Enemies: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
          Loot_Data, Value: Unbounded_String;
       begin
-         Loot_Data := Get_Step_Data(Finish_Data => Step, Name => "item");
+         Loot_Data := Get_Step_Data(Finish_Data => S, Name => "item");
          Append(Source => Loot_Data, New_Item => ";");
-         Value := Get_Step_Data(Finish_Data => Step, Name => "ship");
+         Value := Get_Step_Data(Finish_Data => S, Name => "ship");
          if Value /= To_Unbounded_String(Source => "random") then
             return Loot_Data & Value;
          end if;
-         Value := Get_Step_Data(Finish_Data => Step, Name => "faction");
+         Value := Get_Step_Data(Finish_Data => S, Name => "faction");
       --## rule off IMPROPER_INITIALIZATION
          Generate_Enemies
            (Enemies => Enemies,
@@ -532,11 +525,11 @@ package body Stories is
                              (Finish_Data => Step.Finish_Data,
                               Name => "base")));
             when DESTROYSHIP =>
-               Current_Story.Data := Select_Enemy(Step => Step.Finish_Data);
+               Current_Story.Data := Select_Enemy(S => Step.Finish_Data);
             when EXPLORE =>
-               Current_Story.Data := Select_Location(Step => Step.Finish_Data);
+               Current_Story.Data := Select_Location(S => Step.Finish_Data);
             when LOOT =>
-               Current_Story.Data := Select_Loot(Step => Step.Finish_Data);
+               Current_Story.Data := Select_Loot(S => Step.Finish_Data);
             when ANY =>
                null;
          end case;
