@@ -29,7 +29,7 @@ echo "Testing getCabinQuality."
 try:
   assert getCabinQuality(10) == "Empty room"
 except AssertionDefect:
-  echo "Failed to get the cabin's quality."
+  writeLine(stderr, "Failed to get the cabin's quality.")
 
 echo "Testing damageModule."
 playerShip.modules = @[]
@@ -39,7 +39,7 @@ damageModule(playerShip, 0, 10, "during tests")
 try:
   assert playerShip.modules[0].durability == 90
 except AssertionDefect:
-  echo "Failed to damage the player's ship's module."
+  writeLine(stderr, "Failed to damage the player's ship's module.")
 
 echo "Testing countShipWeigth."
 discard countShipWeight(playerShip)
@@ -54,4 +54,4 @@ let newShip = createShip(2, "", 5, 5, fullSpeed)
 try:
   assert newShip.name == "Tiny pirates ship"
 except AssertionDefect:
-  echo "Failed to create a new ship."
+  writeLine(stderr, "Failed to create a new ship.")
