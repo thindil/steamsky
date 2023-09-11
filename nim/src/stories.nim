@@ -22,7 +22,7 @@ type
   StartConditionType* = enum
     ## Types of requirements to start a story
     dropItem
-  StepConditionType = enum
+  StepConditionType* = enum
     ## Types of requirements to finish a story step
     askInBase, destroyShip, explore, any, loot
 
