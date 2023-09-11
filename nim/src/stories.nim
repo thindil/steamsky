@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import events, game, game2, log, maps, shipscargo, shipscrew, types, utils
+import events, game, log, maps, shipscargo, types, utils
 
 type
   StartConditionType* = enum
@@ -476,46 +476,6 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
         finishedStories.add(FinishedStoryData(index: currentStory.index,
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
-
-proc progessStory*(nextStep: bool = false): bool =
-  var
-    step = if currentStory.currentStep == 0:
-        storiesList[currentStory.index].startingStep
-      elif currentStory.currentStep > 0:
-        storiesList[currentStory.index].steps[currentStory.currentStep]
-      else:
-        storiesList[currentStory.index].finalStep
-    finishCondition = getStepData(finishData = step.finishData,
-        name = "condition")
-  let maxRandom = if step.finishCondition == destroyShip and nextStep:
-        1
-      else:
-        getStepData(finishData = step.finishData, name = "chance").parseInt
-  if finishCondition == "random" and getRandom(min = 1, max = maxRandom) > 1:
-    updateGame(minutes = 10)
-    return false
-  var chance = 0
-  case step.finishCondition
-  of askInBase:
-    let traderIndex = findMember(order = talk)
-    if traderIndex > 0:
-      chance = getSkillLevel(member = playerShip.crew[traderIndex],
-          skillIndex = findSkillIndex(skillName = finishCondition))
-  of destroyShip, explore:
-    for member in playerShip.crew:
-      if member.order in {pilot, gunner}:
-        chance = chance + getSkillLevel(member = member,
-            skillIndex = findSkillIndex(skillName = finishCondition))
-  of loot:
-    for member in playerShip.crew:
-      if member.order == boarding:
-        chance = chance + getSkillLevel(member = member,
-            skillIndex = findSkillIndex(skillName = finishCondition))
-  of any:
-    discard
-  if chance < maxRandom:
-    updateGame(minutes = 10)
-    return false
 
 # Temporary code for interfacing with Ada
 
