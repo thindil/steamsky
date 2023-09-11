@@ -115,8 +115,10 @@ package body Bases.UI is
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Arguments: constant String :=
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
@@ -491,10 +493,12 @@ package body Bases.UI is
                       To_Bounded_String(Source => To_String(Source => I)))
                    .Difficulty *
                  10);
+            --## rule off ASSIGNMENTS
             Cost :=
               Natural
                 (Float(Cost) *
                  Get_Float_Setting(Name => "pricesBonus"));
+            --## rule on ASSIGNMENTS
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -732,9 +736,11 @@ package body Bases.UI is
                 (Recipe_Index => To_Bounded_String(Source => Item_Index))
                 .Difficulty *
               10);
+         --## rule off ASSIGNMENTS
          Cost :=
            Natural
              (Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
+         --## rule on ASSIGNMENTS
          if Cost = 0 then
             Cost := 1;
          end if;
@@ -828,10 +834,12 @@ package body Bases.UI is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Base_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
@@ -841,6 +849,7 @@ package body Bases.UI is
       type Items_Array is array(Positive range <>) of Local_Item_Data;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Items: Items_Array
         (1 ..
              (if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
@@ -850,8 +859,10 @@ package body Bases.UI is
               else Positive(Player_Ship.Modules.Length) +
                 (if Sky_Bases(Base_Index).Population > 299 then 3
                  elsif Sky_Bases(Base_Index).Population > 149 then 2 else 1)));
+      --## rule on IMPROPER_INITIALIZATION
       Index: Positive := 1;
       Cost, Time: Natural := 0;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Base_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -874,6 +885,7 @@ package body Bases.UI is
          end if;
          return False;
       end "<";
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Item_Data,
          Array_Type => Items_Array);
@@ -886,6 +898,7 @@ package body Bases.UI is
            (Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end Count_Repair_Cost;
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       case Column is
          when 1 =>
             if Base_Sort_Order = NAMEASC then
@@ -911,6 +924,7 @@ package body Bases.UI is
       if Base_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
          Fill_Heal_Items_Loop :
          for I in Player_Ship.Crew.Iterate loop
