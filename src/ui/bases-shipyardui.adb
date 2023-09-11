@@ -1657,6 +1657,15 @@ package body Bases.ShipyardUI is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-green)"));
+      Tag_Configure
+        (TextWidget => Module_Text, TagName => "goldenyellow",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       Damage :=
         1.0 -
         Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
@@ -1689,13 +1698,16 @@ package body Bases.ShipyardUI is
            "} [list green]");
       Insert
         (TextWidget => Module_Text, Index => "end",
+         Text => "{" & LF & "Removing time:}");
+      Insert
+        (TextWidget => Module_Text, Index => "end",
          Text =>
-           "{" & LF & "Removing time:" &
+           "{" &
            Positive'Image
              (Get_Module
                 (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Install_Time) &
-           " minutes}");
+           " minutes} [list goldenyellow]");
       Set_Module_Info(Installing => False);
       if Damage > 0.0 then
          configure
