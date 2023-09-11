@@ -21,7 +21,7 @@ import bases, bases2, basescargo, basessaveload, basesship, basestypes, careers,
     factions, game, game2, gamesaveload, goals, halloffame, help, items, log,
     maps, messages, missions, missions2, mobs, shipmodules, ships, shipscargo,
     shipscrew, shipscrew2, shipsmovement, shipsrepairs, shipssaveload,
-    shipsupgrade, statistics, stories, tk, trades, utils
+    shipsupgrade, statistics, stories, stories2, tk, trades, utils
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
