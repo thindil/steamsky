@@ -17,8 +17,8 @@
 
 import std/[math, strutils, tables]
 import crewinventory, config, game, game2, goals, log, messages, ships, ships2,
-    shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, trades,
-    types, utils
+    shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, stories,
+    trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -1029,6 +1029,15 @@ proc combatTurn*() =
               shipFreeSpace == 0:
             break
       addMessage(message = message & ".", mType = combatMessage)
+      if currentStory.index.len == 0:
+        startStory(factionName = factionName, condition = dropItem)
+      else:
+        let step = if currentStory.currentStep == 0:
+            storiesList[currentStory.index].startingStep
+          elif currentStory.currentStep > 0:
+            storiesList[currentStory.index].steps[currentStory.currentStep]
+          else:
+            storiesList[currentStory.index].finalStep
 
 # Temporary code for interfacing with Ada
 
