@@ -428,6 +428,10 @@ proc selectLoot(step: seq[StepFinishData]): string {.sideEffect, raises: [
 
 proc startStory*(factionName: string; condition: StartConditionType) {.sideEffect,
     raises: [ValueError], tags: [].} =
+  ## If possible, start a story
+  ##
+  ## * factionName - the name of faction which is needed to start the story
+  ## * condition   - the starting condition of the story
   if currentStory.index.len > 0:
     return
   var factionIndex = ""
