@@ -889,11 +889,11 @@ package body Bases.UI is
       procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Item_Data,
          Array_Type => Items_Array);
-      procedure Count_Repair_Cost(Index: Integer) is
+      procedure Count_Repair_Cost(I: Integer) is
       begin
          Cost := 0;
          Time := 0;
-         Repair_Cost(Cost => Cost, Time => Time, Module_Index => Index);
+         Repair_Cost(Cost => Cost, Time => Time, Module_Index => I);
          Count_Price
            (Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end Count_Repair_Cost;
@@ -955,7 +955,7 @@ package body Bases.UI is
          Fill_Repair_Items_Loop :
          for I in Player_Ship.Modules.Iterate loop
             Count_Repair_Cost
-              (Index => Modules_Container.To_Index(Position => I));
+              (I => Modules_Container.To_Index(Position => I));
             Local_Items(Modules_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -969,18 +969,18 @@ package body Bases.UI is
                         (Modules_Container.To_Index(Position => I))));
          end loop Fill_Repair_Items_Loop;
          if Sky_Bases(Base_Index).Population > 299 then
-            Count_Repair_Cost(Index => 0);
+            Count_Repair_Cost(I => 0);
             Local_Items(Local_Items'Last - 2) :=
               (Name =>
                  To_Unbounded_String(Source => "Slowly repair the whole ship"),
                Cost => Cost, Time => Time,
                Id => To_Unbounded_String(Source => "0"));
-            Count_Repair_Cost(Index => -1);
+            Count_Repair_Cost(I => -1);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String(Source => "Repair the whole ship"),
                Cost => Cost, Time => Time,
                Id => To_Unbounded_String(Source => "-1"));
-            Count_Repair_Cost(Index => -2);
+            Count_Repair_Cost(I => -2);
             Local_Items(Local_Items'Last) :=
               (Name =>
                  To_Unbounded_String
@@ -988,19 +988,19 @@ package body Bases.UI is
                Cost => Cost, Time => Time,
                Id => To_Unbounded_String(Source => "-2"));
          elsif Sky_Bases(Base_Index).Population > 149 then
-            Count_Repair_Cost(Index => 0);
+            Count_Repair_Cost(I => 0);
             Local_Items(Local_Items'Last - 1) :=
               (Name =>
                  To_Unbounded_String(Source => "Slowly repair the whole ship"),
                Cost => Cost, Time => Time,
                Id => To_Unbounded_String(Source => "0"));
-            Count_Repair_Cost(Index => -1);
+            Count_Repair_Cost(I => -1);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String(Source => "Repair the whole ship"),
                Cost => Cost, Time => Time,
                Id => To_Unbounded_String(Source => "-1"));
          else
-            Count_Repair_Cost(Index => 0);
+            Count_Repair_Cost(I => 0);
             Local_Items(Local_Items'Last) :=
               (Name =>
                  To_Unbounded_String(Source => "Slowly repair the whole ship"),
@@ -1045,7 +1045,7 @@ package body Bases.UI is
             Cost :=
               Natural
                 (Float(Cost) *
-                 Float(Get_Float_Setting(Name => "pricesBonus")));
+                 Get_Float_Setting(Name => "pricesBonus"));
             if Cost = 0 then
                Cost := 1;
             end if;
