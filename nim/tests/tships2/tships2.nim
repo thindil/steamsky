@@ -32,7 +32,7 @@ damageModule(playerShip, 0, 10, "during tests")
 try:
   assert playerShip.modules[0].durability == 90
 except AssertionDefect:
-  echo "Failed to damage the player's ship's module."
+  writeLine(stderr, "Failed to damage the player's ship's module.")
 
 echo "Testing countCombatValue."
 discard countCombatValue()
@@ -41,5 +41,5 @@ echo "Testing generateShipName."
 try:
   assert generateShipName("POLEIS").len() > 0
 except AssertionDefect:
-  echo "Failed to generate random name for a ship."
+  writeLine(stderr, "Failed to generate random name for a ship.")
 
