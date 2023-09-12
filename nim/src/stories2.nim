@@ -21,9 +21,9 @@ import game, game2, shipscrew, stories, types, utils
 
 proc progessStory*(nextStep: bool = false): bool =
   var
-    step = if currentStory.currentStep == 0:
+    step = if currentStory.currentStep == -1:
         storiesList[currentStory.index].startingStep
-      elif currentStory.currentStep > 0:
+      elif currentStory.currentStep > -1:
         storiesList[currentStory.index].steps[currentStory.currentStep]
       else:
         storiesList[currentStory.index].finalStep
@@ -40,7 +40,7 @@ proc progessStory*(nextStep: bool = false): bool =
   case step.finishCondition
   of askInBase:
     let traderIndex = findMember(order = talk)
-    if traderIndex > 0:
+    if traderIndex > -1:
       chance = getSkillLevel(member = playerShip.crew[traderIndex],
           skillIndex = findSkillIndex(skillName = finishCondition))
   of destroyShip, stories.explore:
@@ -58,3 +58,22 @@ proc progessStory*(nextStep: bool = false): bool =
   if chance < maxRandom:
     updateGame(minutes = 10)
     return false
+  if step.finishCondition == destroyShip and not nextStep:
+    return true
+  if finishCondition != "random":
+    case step.finishCondition
+    of askInBase:
+      let traderIndex = findMember(order = talk)
+      if traderIndex > -1:
+        gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = traderIndex)
+    of destroyShip, stories.explore:
+      for index, member in playerShip.crew:
+        if member.order in {pilot, gunner}:
+          gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = index)
+    of loot:
+      for index, member in playerShip.crew:
+        if member.order == boarding:
+          gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = index)
+    of stories.any:
+      discard
+  updateGame(minutes = 30)
