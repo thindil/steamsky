@@ -1629,7 +1629,8 @@ package body Bases.ShipyardUI is
         Create_Dialog
           (Name => ".moduledialog",
            Title =>
-             To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name));
+             To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name),
+           Columns => 2);
       Damage_Bar: constant Ttk_ProgressBar :=
         Create(pathName => Module_Dialog & ".damage");
       Module_Text: constant Tk_Text :=
@@ -1686,7 +1687,8 @@ package body Bases.ShipyardUI is
         (Price => Cost, Trader_Index => Find_Member(Order => TALK),
          Reduce => False);
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+        (Slave => Module_Text,
+         Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
       configure(Widgt => Module_Text, options => "-state normal");
       Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       Insert
@@ -1726,8 +1728,11 @@ package body Bases.ShipyardUI is
          else
             configure(Widgt => Label, options => "-text {Damage: Destroyed}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-         Tcl.Tk.Ada.Grid.Grid(Slave => Damage_Bar);
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-sticky w -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Damage_Bar,
+            Options => "-row 2 -column 1 -sticky we -padx {0 5}");
       end if;
       if Get_Module
           (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
@@ -1745,7 +1750,8 @@ package body Bases.ShipyardUI is
                           Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                        .Description) &
                 "} -wraplength 450");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-sticky w -padx 5 -columnspan 2");
       end if;
       configure
         (Widgt => Module_Text,
@@ -1770,7 +1776,8 @@ package body Bases.ShipyardUI is
         (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
          Command => "CloseDialog " & Module_Dialog, Column => 1,
          Icon => "cancelicon", Color => "red");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Frame, Options => "-pady {0 5} -columnspan 2");
       Focus(Widgt => Close_Button);
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
