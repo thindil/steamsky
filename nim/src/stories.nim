@@ -478,6 +478,10 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
         return
 
 proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].} =
+  ## Get the text of the current step in the player's current story
+  ##
+  ## Returns the string with the current step text or empty string if nothing
+  ## found.
   result = ""
   let stepTexts = if currentStory.currentStep == -1:
       storiesList[currentStory.index].startingStep.texts
