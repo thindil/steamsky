@@ -477,7 +477,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
 
-proc getCurrentStoryText*(): string =
+proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].} =
   result = ""
   let stepTexts = if currentStory.currentStep == -1:
       storiesList[currentStory.index].startingStep.texts
