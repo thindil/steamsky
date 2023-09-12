@@ -477,6 +477,18 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
 
+proc getCurrentStoryText*(): string =
+  result = ""
+  let stepTexts = if currentStory.currentStep == -1:
+      storiesList[currentStory.index].startingStep.texts
+    elif currentStory.currentStep > -1:
+      storiesList[currentStory.index].steps[currentStory.currentStep].texts
+    else:
+      storiesList[currentStory.index].finalStep.texts
+  for text in stepTexts:
+    if text.condition == currentStory.finishedStep:
+      return text.text
+
 # Temporary code for interfacing with Ada
 
 type
@@ -576,13 +588,13 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
 proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
     tags: [], exportc.} =
   currentStory = CurrentStoryData(index: $story.index, step: story.step,
-      currentStep: story.currentStep, maxSteps: story.maxSteps,
+      currentStep: story.currentStep - 1, maxSteps: story.maxSteps,
       showText: story.showText == 1, data: $story.data,
       finishedStep: story.finishedStep.StepConditionType)
 
 proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], exportc.} =
   story = AdaCurrentStoryData(index: currentStory.index.cstring,
-      step: currentStory.step.cint, currentStep: currentStory.currentStep.cint,
+      step: currentStory.step.cint, currentStep: currentStory.currentStep.cint + 1,
       maxSteps: currentStory.maxSteps.cint, showText: (
       if currentStory.showText: 1 else: 0), data: currentStory.data.cstring,
       finishedStep: currentStory.finishedStep.ord.cint)
@@ -615,3 +627,9 @@ proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: []
         condition = condition.StartConditionType)
   except ValueError:
     discard
+
+proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return getCurrentStoryText().cstring
+  except KeyError:
+    return ""
