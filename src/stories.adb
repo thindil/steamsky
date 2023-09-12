@@ -539,21 +539,14 @@ package body Stories is
    end Progress_Story;
 
    function Get_Current_Story_Text return Unbounded_String is
-      Step_Texts: constant StepTexts_Container.Vector :=
-        (if Current_Story.Current_Step = 0 then
-           Stories_List(Current_Story.Index).Starting_Step.Texts
-         elsif Current_Story.Current_Step > 0 then
-           Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step)
-             .Texts
-         else Stories_List(Current_Story.Index).Final_Step.Texts);
+      function Get_Ada_Current_Story_Text return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCurrentStoryText";
    begin
-      Current_Story_Text_Loop :
-      for Text of Step_Texts loop
-         if Text.Condition = Current_Story.Finished_Step then
-            return Text.Text;
-         end if;
-      end loop Current_Story_Text_Loop;
-      return Null_Unbounded_String;
+      return
+        To_Unbounded_String
+          (Source => Value(Item => Get_Ada_Current_Story_Text));
    end Get_Current_Story_Text;
 
    function Get_Step_Data
