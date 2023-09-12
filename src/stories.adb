@@ -23,7 +23,7 @@ with Events;
 with Maps;
 with Ships; use Ships;
 with Ships.Crew;
-with Utils; use Utils;
+with Utils;
 
 package body Stories is
 
@@ -235,6 +235,7 @@ package body Stories is
       use Crew;
       use Events;
       use Ships.Crew;
+      use Utils;
 
       Step: Step_Data :=
         (if Current_Story.Current_Step = 0 then
