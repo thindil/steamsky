@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -996,7 +997,6 @@ package body Maps.UI is
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tcl.Tk.Ada.Widgets.TtkWidget;
 
       Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
@@ -1490,6 +1490,8 @@ package body Maps.UI is
    end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
+      Speed_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => "$bframe.box.speed", Interp => Get_Context);
    begin
       Tcl_SetVar
         (interp => Get_Context, varName => "refreshmap", newValue => "1");
@@ -1505,6 +1507,13 @@ package body Maps.UI is
       Update_Move_Buttons;
       Tcl_Eval(interp => Get_Context, strng => "update");
       Update_Messages;
+      Unbind(Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>");
+      Current
+        (ComboBox => Speed_Box,
+         NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
+      Bind
+        (Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>",
+         Script => "{SetShipSpeed [" & Speed_Box & " current]}");
       if Current_Story.Index /= Null_Unbounded_String and
         Current_Story.Show_Text then
          if Current_Story.Current_Step > -2 then
