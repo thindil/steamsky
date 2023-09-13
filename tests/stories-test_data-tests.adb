@@ -120,44 +120,6 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Current_Story_Text_893370_8f71b5
-      return Unbounded_String is
-   begin
-      declare
-         Test_Get_Current_Story_Text_893370_8f71b5_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Stories.Get_Current_Story_Text;
-      begin
-         return Test_Get_Current_Story_Text_893370_8f71b5_Result;
-      end;
-   end Wrap_Test_Get_Current_Story_Text_893370_8f71b5;
---  end read only
-
---  begin read only
-   procedure Test_Get_Current_Story_Text_tets_getcurrentstorytext
-     (Gnattest_T: in out Test);
-   procedure Test_Get_Current_Story_Text_893370_8f71b5
-     (Gnattest_T: in out Test) renames
-     Test_Get_Current_Story_Text_tets_getcurrentstorytext;
---  id:2.2/89337066f7e37ccc/Get_Current_Story_Text/1/0/tets_getcurrentstorytext/
-   procedure Test_Get_Current_Story_Text_tets_getcurrentstorytext
-     (Gnattest_T: in out Test) is
-      function Get_Current_Story_Text return Unbounded_String renames
-        Wrap_Test_Get_Current_Story_Text_893370_8f71b5;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      Assert
-        (Get_Current_Story_Text /= Null_Unbounded_String,
-         "Failed to get text of current story step.");
-
---  begin read only
-   end Test_Get_Current_Story_Text_tets_getcurrentstorytext;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Get_Story_Location_5f0f68_b0f396
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
    begin
