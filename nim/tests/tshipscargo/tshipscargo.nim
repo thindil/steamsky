@@ -35,28 +35,28 @@ updateCargo(playerShip, 1, -1)
 try:
   assert playerShip.cargo[0].amount == 99
 except AssertionDefect:
-  echo  "Failed to remove an item from the player's ship's cargo."
+  writeLine(stderr,  "Failed to remove an item from the player's ship's cargo.")
 updateCargo(playerShip, 1, 1)
 try:
   assert playerShip.cargo[0].amount == 100
 except AssertionDefect:
-  echo "Failed to add an item to the player's ship's cargo."
+  writeLine(stderr, "Failed to add an item to the player's ship's cargo.")
 updateCargo(playerShip, 40, -1)
 
 echo "Testing freeCargo."
 try:
   assert freeCargo(1) > freeCargo(0)
 except AssertionDefect:
-  echo "Failed to count free cargo space in the player's ship."
+  writeLine(stderr, "Failed to count free cargo space in the player's ship.")
 
 echo "Testing getItemAmount."
 try:
   assert getItemAmount("Fuel") == 100
 except AssertionDefect:
-  echo "Failed to get amount of fuel in the player's ship's cargo."
+  writeLine(stderr, "Failed to get amount of fuel in the player's ship's cargo.")
 
 echo "Testing getItemsAmount."
 try:
   assert getItemsAmount("Drinks") == 200
 except AssertionDefect:
-  echo "Failed to get amount of drinks in the player's ship's cargo."
+  writeLine(stderr, "Failed to get amount of drinks in the player's ship's cargo.")
