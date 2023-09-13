@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Info about the module's damage in the remove module dialog in a base's
   shipyard
+- Setting the player's ship's speed on the map
 
 ## [9.0.1] - 2023-08-20
 
