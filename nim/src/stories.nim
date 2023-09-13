@@ -332,7 +332,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           debugType = everything)
     storiesList[storyIndex] = story
 
-proc selectBase(value: string): string {.sideEffect, raises: [], tags: [].} =
+proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [].} =
   ## Selecte the name of a base for a story
   ##
   ## * value - only value "any" has matter, otherwise ignored
@@ -362,7 +362,7 @@ func getStepData*(finishData: seq[StepFinishData];
     if data.name == name:
       return data.value
 
-proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     ValueError], tags: [].} =
   ## Get the location on the sky map for the story's step
   ##
@@ -392,7 +392,7 @@ proc selectLocation(step: seq[StepFinishData]): string {.sideEffect, raises: [
     result = result & value & ";"
   playerShip.destinationY = locationY
 
-proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectEnemy*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     ValueError], tags: [].} =
   ## Get the enemy ship for the selected story's step
   ##
@@ -409,7 +409,7 @@ proc selectEnemy(step: seq[StepFinishData]): string {.sideEffect, raises: [
   generateEnemies(enemies = enemies, owner = value)
   return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc selectLoot(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectLoot*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     KeyError], tags: [].} =
   ## Get the information about the item looted in this step of a story.
   ##
@@ -469,7 +469,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
           step = selectLoot(step = story.startingStep.finishData)
         of any:
           discard
-        currentStory = CurrentStoryData(index: sIndex, step: 1, currentStep: 0,
+        currentStory = CurrentStoryData(index: sIndex, step: 1, currentStep: 1,
             maxSteps: getRandom(min = story.minSteps, max = story.maxSteps),
             showText: true, data: step, finishedStep: any)
         updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt, amount = 1)
@@ -592,13 +592,13 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
 proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
     tags: [], exportc.} =
   currentStory = CurrentStoryData(index: $story.index, step: story.step,
-      currentStep: story.currentStep - 1, maxSteps: story.maxSteps,
+      currentStep: story.currentStep, maxSteps: story.maxSteps,
       showText: story.showText == 1, data: $story.data,
       finishedStep: story.finishedStep.StepConditionType)
 
 proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], exportc.} =
   story = AdaCurrentStoryData(index: currentStory.index.cstring,
-      step: currentStory.step.cint, currentStep: currentStory.currentStep.cint + 1,
+      step: currentStory.step.cint, currentStep: currentStory.currentStep.cint,
       maxSteps: currentStory.maxSteps.cint, showText: (
       if currentStory.showText: 1 else: 0), data: currentStory.data.cstring,
       finishedStep: currentStory.finishedStep.ord.cint)
