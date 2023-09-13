@@ -19,7 +19,7 @@
 import std/[strutils, tables]
 import game, game2, shipscrew, stories, types, utils
 
-proc progessStory*(nextStep: bool = false): bool =
+proc progressStory*(nextStep: bool = false): bool =
   var
     step = if currentStory.currentStep == -1:
         storiesList[currentStory.index].startingStep
@@ -65,15 +65,58 @@ proc progessStory*(nextStep: bool = false): bool =
     of askInBase:
       let traderIndex = findMember(order = talk)
       if traderIndex > -1:
-        gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = traderIndex)
+        gainExp(amount = 10, skillNumber = findSkillIndex(
+            skillName = finishCondition), crewIndex = traderIndex)
     of destroyShip, stories.explore:
       for index, member in playerShip.crew:
         if member.order in {pilot, gunner}:
-          gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = index)
+          gainExp(amount = 10, skillNumber = findSkillIndex(
+              skillName = finishCondition), crewIndex = index)
     of loot:
       for index, member in playerShip.crew:
         if member.order == boarding:
-          gainExp(amount = 10, skillNumber = findSkillIndex(skillName = finishCondition), crewIndex = index)
+          gainExp(amount = 10, skillNumber = findSkillIndex(
+              skillName = finishCondition), crewIndex = index)
     of stories.any:
       discard
   updateGame(minutes = 30)
+  for finishedStory in finishedStories.mitems:
+    if finishedStory.index == currentStory.index:
+      finishedStory.stepsTexts.add(getCurrentStoryText())
+      break
+  currentStory.step.inc
+  currentStory.finishedStep = step.finishCondition
+  currentStory.showText = true
+  if currentStory.step < currentStory.maxSteps:
+    currentStory.currentStep = getRandom(min = storiesList[
+        currentStory.index].steps.low, max = storiesList[
+        currentStory.index].steps.high)
+    step = storiesList[currentStory.index].steps[currentStory.currentStep]
+  elif currentStory.step == currentStory.maxSteps:
+    currentStory.currentStep = -1
+    step = storiesList[currentStory.index].finalStep
+  else:
+    currentStory.currentStep = -2
+  if currentStory.currentStep != -2:
+    case step.finishCondition
+    of askInBase:
+      currentStory.data = selectBase(value = getStepData(
+          finishData = step.finishData, name = "base"))
+    of destroyShip:
+      currentStory.data = selectEnemy(step = step.finishData)
+    of stories.explore:
+      currentStory.data = selectLocation(step = step.finishData)
+    of loot:
+      currentStory.data = selectLoot(step = step.finishData)
+    of stories.any:
+      discard
+  return true
+
+# Temporary code for interfacing with Ada
+
+proc progressAdaStory(nextStep: cint): cint {.raises: [], tags: [WriteIOEffect,
+    RootEffect], exportc.} =
+  try:
+    return progressStory(nextStep = nextStep == 1).cint
+  except ValueError, IOError, Exception:
+    return 0
