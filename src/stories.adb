@@ -18,12 +18,9 @@
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Bases; use Bases;
-with Crew;
 with Events;
 with Maps;
 with Ships; use Ships;
-with Ships.Crew;
-with Utils;
 
 package body Stories is
 
@@ -174,31 +171,18 @@ package body Stories is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Start_Story
-     (Faction_Name: Tiny_String.Bounded_String;
-      Condition: Start_Condition_Type) is
-      use Tiny_String;
-
+   -- ****if* Stories/Set_Current_Story
+   -- FUNCTION
+   -- Set the current story from Nim
+   -- SOURCE
+   procedure Set_Current_Story is
+      -- ****
       Nim_Current_Story: Nim_Current_Story_Data;
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Texts: UnboundedString_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Start_Ada_Story(F_Name: chars_ptr; Con: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "startAdaStory";
       procedure Set_Ada_Current_Story(Story: out Nim_Current_Story_Data) with
          Import => True,
          Convention => C,
          External_Name => "setAdaCurrentStory";
    begin
-      if Current_Story.Index /= Null_Unbounded_String then
-         return;
-      end if;
-      Get_Current_Story;
-      Start_Ada_Story
-        (F_Name => New_String(Str => To_String(Source => Faction_Name)),
-         Con => Start_Condition_Type'Pos(Condition));
       Set_Ada_Current_Story(Story => Nim_Current_Story);
       Current_Story :=
         (Index =>
@@ -214,6 +198,29 @@ package body Stories is
              (Source => Value(Item => Nim_Current_Story.Data)),
          Finished_Step =>
            Step_Condition_Type'Val(Nim_Current_Story.Finished_Step));
+   end Set_Current_Story;
+
+   procedure Start_Story
+     (Faction_Name: Tiny_String.Bounded_String;
+      Condition: Start_Condition_Type) is
+      use Tiny_String;
+
+      --## rule off IMPROPER_INITIALIZATION
+      Temp_Texts: UnboundedString_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Start_Ada_Story(F_Name: chars_ptr; Con: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "startAdaStory";
+   begin
+      if Current_Story.Index /= Null_Unbounded_String then
+         return;
+      end if;
+      Get_Current_Story;
+      Start_Ada_Story
+        (F_Name => New_String(Str => To_String(Source => Faction_Name)),
+         Con => Start_Condition_Type'Pos(Condition));
+      Set_Current_Story;
       if Current_Story.Index /= Null_Unbounded_String then
          Finished_Stories.Append
            (New_Item =>
@@ -232,310 +239,35 @@ package body Stories is
    end Clear_Current_Story;
 
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
-      use Crew;
       use Events;
-      use Ships.Crew;
-      use Utils;
+      use Maps;
 
-      Step: Step_Data :=
-        (if Current_Story.Current_Step = 0 then
-           Stories_List(Current_Story.Index).Starting_Step
-         elsif Current_Story.Current_Step > 0 then
-           Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step)
-         else Stories_List(Current_Story.Index).Final_Step);
-      Max_Random: constant Positive :=
-        (if Step.Finish_Condition = DESTROYSHIP and Next_Step then 1
-         else Positive'Value
-             (To_String
-                (Source =>
-                   Get_Step_Data
-                     (Finish_Data => Step.Finish_Data, Name => "chance"))));
-      Finish_Condition: Unbounded_String;
-      Chance: Natural;
-
-      function Select_Location
-        (S: StepData_Container.Vector) return Unbounded_String is
-         use Maps;
-
-         Location_Data, Value: Unbounded_String;
-         Location_X: Positive;
-         Location_Y: Positive := 1;
-      begin
-         Value := Get_Step_Data(Finish_Data => S, Name => "x");
-         if Value = To_Unbounded_String(Source => "random") then
-            Location_X :=
-              Get_Random(Min => Sky_Map'First(1), Max => Sky_Map'Last(1));
-            Location_Data :=
-              To_Unbounded_String(Source => Integer'Image(Location_X));
-            Append(Source => Location_Data, New_Item => ";");
-         else
-            Location_X := Integer'Value(To_String(Source => Value));
-            Location_Data := Value;
-            Append(Source => Location_Data, New_Item => ";");
-         end if;
-         Player_Ship.Destination_X := Location_X;
-         Value := Get_Step_Data(Finish_Data => S, Name => "y");
-         if Value = To_Unbounded_String(Source => "random") then
-            Random_Location_Loop :
-            loop
-               Location_Y :=
-                 Get_Random(Min => Sky_Map'First(2), Max => Sky_Map'Last(2));
-               exit Random_Location_Loop when Sky_Map(Location_X, Location_Y)
-                   .Base_Index =
-                 0 and
-                 Location_Y /= Player_Ship.Sky_Y;
-            end loop Random_Location_Loop;
-            Append
-              (Source => Location_Data, New_Item => Integer'Image(Location_Y));
-            Append(Source => Location_Data, New_Item => ";");
-         else
-            Location_Y := Integer'Value(To_String(Source => Value));
-            Append(Source => Location_Data, New_Item => Value);
-            Append(Source => Location_Data, New_Item => ";");
-         end if;
-         Player_Ship.Destination_Y := Location_Y;
-         return Location_Data;
-      end Select_Location;
-
-      function Select_Base(Value: String) return Unbounded_String is
-         Base_Index: Bases_Range := 1;
-      begin
-         if Value = "any" then
-            return Null_Unbounded_String;
-         end if;
-         Select_Base_Loop :
-         loop
-            Base_Index :=
-              Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
-            if Sky_Bases(Base_Index).Known and
-              Sky_Bases(Base_Index).Reputation.Level > -25 then
-               Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
-               Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
-               return
-                 To_Unbounded_String
-                   (Source =>
-                      Tiny_String.To_String
-                        (Source => Sky_Bases(Base_Index).Name));
-            end if;
-         end loop Select_Base_Loop;
-      end Select_Base;
-
-      function Select_Enemy
-        (S: StepData_Container.Vector) return Unbounded_String is
-      --## rule off IMPROPER_INITIALIZATION
-         Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-         Enemy_Data, Value: Unbounded_String;
-      begin
-         Enemy_Data := Select_Location(S => S);
-         Value := Get_Step_Data(Finish_Data => S, Name => "ship");
-         if Value /= To_Unbounded_String(Source => "random") then
-            return Enemy_Data & Value;
-         end if;
-         Value := Get_Step_Data(Finish_Data => S, Name => "faction");
-      --## rule off IMPROPER_INITIALIZATION
-         Generate_Enemies
-           (Enemies => Enemies,
-            Owner =>
-              Tiny_String.To_Bounded_String
-                (Source => To_String(Source => Value)));
-         return
-           Enemy_Data &
-           Positive'Image
-             (Enemies
-                (Get_Random
-                   (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
-      --## rule on IMPROPER_INITIALIZATION
-      end Select_Enemy;
-
-      function Select_Loot
-        (S: StepData_Container.Vector) return Unbounded_String is
-      --## rule off IMPROPER_INITIALIZATION
-         Enemies: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-         Loot_Data, Value: Unbounded_String;
-      begin
-         Loot_Data := Get_Step_Data(Finish_Data => S, Name => "item");
-         Append(Source => Loot_Data, New_Item => ";");
-         Value := Get_Step_Data(Finish_Data => S, Name => "ship");
-         if Value /= To_Unbounded_String(Source => "random") then
-            return Loot_Data & Value;
-         end if;
-         Value := Get_Step_Data(Finish_Data => S, Name => "faction");
-      --## rule off IMPROPER_INITIALIZATION
-         Generate_Enemies
-           (Enemies => Enemies,
-            Owner =>
-              Tiny_String.To_Bounded_String
-                (Source => To_String(Source => Value)));
-         return
-           Loot_Data &
-           Positive'Image
-             (Enemies
-                (Get_Random
-                   (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
-      --## rule on IMPROPER_INITIALIZATION
-      end Select_Loot;
-
+      Result: Boolean;
+      Base_Index: constant Extended_Base_Range :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      function Progress_Ada_Story(N_Step: Integer) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "progressAdaStory";
    begin
-      Finish_Condition :=
-        Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "condition");
-      if Finish_Condition = To_Unbounded_String(Source => "random")
-        and then Get_Random(Min => 1, Max => Max_Random) > 1 then
-         Update_Game(Minutes => 10);
-         return False;
+      Get_Game_Date;
+      Set_Ship_In_Nim;
+      if Base_Index > 0 then
+         Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
-      Chance := 0;
-      case Step.Finish_Condition is
-         when ASKINBASE =>
-            Count_Ask_Chance_Block :
-            declare
-               Trader_Index: constant Natural := Find_Member(Order => TALK);
-            begin
-               if Trader_Index > 0 then
-                  Chance :=
-                    Get_Skill_Level
-                      (Member => Player_Ship.Crew(Trader_Index),
-                       Skill_Index =>
-                         Find_Skill_Index
-                           (Skill_Name =>
-                              To_String(Source => Finish_Condition)));
-               end if;
-            end Count_Ask_Chance_Block;
-         when DESTROYSHIP | EXPLORE =>
-            Count_Explore_Chance_Loop :
-            for Member of Player_Ship.Crew loop
-               if Member.Order in PILOT | GUNNER then
-                  Chance :=
-                    Chance +
-                    Get_Skill_Level
-                      (Member => Member,
-                       Skill_Index =>
-                         Find_Skill_Index
-                           (Skill_Name =>
-                              To_String(Source => Finish_Condition)));
-               end if;
-            end loop Count_Explore_Chance_Loop;
-         when LOOT =>
-            Count_Loot_Chance_Loop :
-            for Member of Player_Ship.Crew loop
-               if Member.Order = BOARDING then
-                  Chance :=
-                    Chance +
-                    Get_Skill_Level
-                      (Member => Member,
-                       Skill_Index =>
-                         Find_Skill_Index
-                           (Skill_Name =>
-                              To_String(Source => Finish_Condition)));
-               end if;
-            end loop Count_Loot_Chance_Loop;
-         when ANY =>
-            null;
-      end case;
-      Chance := Chance + Get_Random(Min => 1, Max => 100);
-      if Chance < Max_Random then
-         Update_Game(Minutes => 10);
-         return False;
+      Set_Current_Story;
+      Result := Progress_Ada_Story(N_Step => (if Next_Step then 1 else 0)) = 1;
+      Get_Current_Story;
+      if Base_Index > 0 then
+         Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
-      if Step.Finish_Condition = DESTROYSHIP and not Next_Step then
-         return True;
-      end if;
-      if Finish_Condition /= To_Unbounded_String(Source => "random") then
-         case Step.Finish_Condition is
-            when ASKINBASE =>
-               Ask_Gain_Experience_Block :
-               declare
-                  Trader_Index: constant Natural := Find_Member(Order => TALK);
-               begin
-                  if Trader_Index > 0 then
-                     Gain_Exp
-                       (Amount => 10,
-                        Skill_Number =>
-                          Find_Skill_Index
-                            (Skill_Name =>
-                               To_String(Source => Finish_Condition)),
-                        Crew_Index => Trader_Index);
-                  end if;
-               end Ask_Gain_Experience_Block;
-            when DESTROYSHIP | EXPLORE =>
-               Count_Explore_Experience_Loop :
-               for I in Player_Ship.Crew.Iterate loop
-                  if Player_Ship.Crew(I).Order = PILOT or
-                    Player_Ship.Crew(I).Order = GUNNER then
-                     Gain_Exp
-                       (Amount => 10,
-                        Skill_Number =>
-                          Find_Skill_Index
-                            (Skill_Name =>
-                               To_String(Source => Finish_Condition)),
-                        Crew_Index => Crew_Container.To_Index(Position => I));
-                  end if;
-               end loop Count_Explore_Experience_Loop;
-            when LOOT =>
-               Count_Loot_Experience_Loop :
-               for I in Player_Ship.Crew.Iterate loop
-                  if Player_Ship.Crew(I).Order = BOARDING then
-                     Gain_Exp
-                       (Amount => 10,
-                        Skill_Number =>
-                          Find_Skill_Index
-                            (Skill_Name =>
-                               To_String(Source => Finish_Condition)),
-                        Crew_Index => Crew_Container.To_Index(Position => I));
-                  end if;
-               end loop Count_Loot_Experience_Loop;
-            when ANY =>
-               null;
-         end case;
-      end if;
-      Update_Game(Minutes => 30);
-      Update_Finished_Stories_Loop :
-      for FinishedStory of Finished_Stories loop
-         if FinishedStory.Index = Current_Story.Index then
-            FinishedStory.Steps_Texts.Append
-              (New_Item => Get_Current_Story_Text);
-            exit Update_Finished_Stories_Loop;
-         end if;
-      end loop Update_Finished_Stories_Loop;
-      Current_Story.Step := Current_Story.Step + 1;
-      Current_Story.Finished_Step := Step.Finish_Condition;
-      Current_Story.Show_Text := True;
-      if Current_Story.Step < Current_Story.Max_Steps then
-         Current_Story.Current_Step :=
-           Get_Random
-             (Min => Stories_List(Current_Story.Index).Steps.First_Index,
-              Max => Stories_List(Current_Story.Index).Steps.Last_Index);
-         Step :=
-           Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step);
-      elsif Current_Story.Step = Current_Story.Max_Steps then
-         Current_Story.Current_Step := -1;
-         Step := Stories_List(Current_Story.Index).Final_Step;
-      else
-         Current_Story.Current_Step := -2;
-      end if;
-      if Current_Story.Current_Step /= -2 then
-         case Step.Finish_Condition is
-            when ASKINBASE =>
-               Current_Story.Data :=
-                 Select_Base
-                   (Value =>
-                      To_String
-                        (Source =>
-                           Get_Step_Data
-                             (Finish_Data => Step.Finish_Data,
-                              Name => "base")));
-            when DESTROYSHIP =>
-               Current_Story.Data := Select_Enemy(S => Step.Finish_Data);
-            when EXPLORE =>
-               Current_Story.Data := Select_Location(S => Step.Finish_Data);
-            when LOOT =>
-               Current_Story.Data := Select_Loot(S => Step.Finish_Data);
-            when ANY =>
-               null;
-         end case;
-      end if;
-      return True;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Events_In_Ada_Loop :
+      for I in 1 .. Get_Events_Amount loop
+         Set_Event(Index => I);
+      end loop Set_Events_In_Ada_Loop;
+      Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
+      return Result;
    end Progress_Story;
 
    function Get_Current_Story_Text return Unbounded_String is
