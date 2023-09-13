@@ -329,19 +329,18 @@ package Stories is
       -- RESULT
       -- Text of current step in current story
       -- SOURCE
-   function Get_Current_Story_Text return Unbounded_String with
-      Test_Case => (Name => "Tets_GetCurrentStoryText", Mode => Robustness);
-      -- ****
+   function Get_Current_Story_Text return Unbounded_String;
+   -- ****
 
-      -- ****f* Stories/Stories.Get_Step_Data
-      -- FUNCTION
-      -- Get step finish data with selected name
-      -- PARAMETERS
-      -- Finish_Data - List of step data
-      -- Name        - Name of data to get
-      -- RESULT
-      -- Selected data from FinishData parameter
-      -- SOURCE
+   -- ****f* Stories/Stories.Get_Step_Data
+   -- FUNCTION
+   -- Get step finish data with selected name
+   -- PARAMETERS
+   -- Finish_Data - List of step data
+   -- Name        - Name of data to get
+   -- RESULT
+   -- Selected data from FinishData parameter
+   -- SOURCE
    function Get_Step_Data
      (Finish_Data: StepData_Container.Vector; Name: String)
       return Unbounded_String with
