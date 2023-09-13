@@ -2,7 +2,8 @@ discard """
   exitcode: 0
   output: '''Loading the game data.
 Testing getStepData.
-Testing startStory.'''
+Testing startStory.
+Testing getCurrentStoryText.'''
 """
 
 import std/tables
@@ -43,3 +44,10 @@ try:
   assert currentStory.index.len > 0
 except AssertionDefect:
   echo "Failed to start a new story."
+
+echo "Testing getCurrentStoryText."
+currentStory.finishedStep = askInBase
+try:
+  assert getCurrentStoryText().len > 0
+except AssertionDefect:
+  echo "Failed to get the current story text."
