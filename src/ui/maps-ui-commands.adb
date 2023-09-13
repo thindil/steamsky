@@ -1449,6 +1449,40 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Invoke_Menu_Command;
 
+   -- ****o* MapCommands/MapCommands.Set_Ship_Speed_Command
+   -- FUNCTION
+   -- Set the new speed for the player's ship
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetShipSpeed speed
+   -- Speed is the new speed order for the player's ship.
+   -- SOURCE
+   function Set_Ship_Speed_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Ship_Speed_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Message: constant String :=
+        Change_Ship_Speed
+          (Ship_Speed'Val(Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) + 1));
+   begin
+      if Message'Length > 0 then
+         Show_Message(Text => Message, Title => "Changing the ship's speed.");
+      end if;
+      return TCL_OK;
+   end Set_Ship_Speed_Command;
+
    procedure Add_Commands is
    begin
       Add_Command
@@ -1494,6 +1528,8 @@ package body Maps.UI.Commands is
         (Name => "ShowGameMenu", Ada_Command => Show_Game_Menu_Command'Access);
       Add_Command
         (Name => "InvokeMenu", Ada_Command => Invoke_Menu_Command'Access);
+      Add_Command
+        (Name => "SetShipSpeed", Ada_Command => Set_Ship_Speed_Command'Access);
    end Add_Commands;
 
 end Maps.UI.Commands;
