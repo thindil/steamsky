@@ -797,6 +797,7 @@ package body Bases.UI is
    Default_Base_Sort_Order: constant Base_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* BUI/BUI.Base_Sort_Order
    -- FUNCTION
    -- The current sorting order for items
@@ -805,6 +806,7 @@ package body Bases.UI is
    -- SOURCE
    Base_Sort_Order: Base_Sort_Orders := Default_Base_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* BUI/BUI.Sort_Modules_Command
    -- FUNCTION
@@ -840,6 +842,7 @@ package body Bases.UI is
           (Table => Base_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
@@ -847,6 +850,7 @@ package body Bases.UI is
          Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
+      --## rule on TYPE_INITIAL_VALUES
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       --## rule off IMPROPER_INITIALIZATION
@@ -1042,10 +1046,12 @@ package body Bases.UI is
                         (Source => Trim(Source => I'Img, Side => Both)))
                    .Difficulty *
                  10);
+            --## rule off ASSIGNMENTS
             Cost :=
               Natural
                 (Float(Cost) *
                  Get_Float_Setting(Name => "pricesBonus"));
+            --## rule on ASSIGNMENTS
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -1074,11 +1080,13 @@ package body Bases.UI is
          end loop Fill_Recipes_Items_Loop;
       end if;
       Sort_Items(Container => Local_Items);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Items_Indexes.Clear;
       Fill_Items_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Items_Indexes_Loop;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Base_Ui_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
