@@ -13,34 +13,34 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Interfaces.C; use Interfaces.C;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Crafts; use Crafts;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -91,6 +91,16 @@ package body Bases.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Ada.Characters.Handling;
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tk.Ada.Winfo;
+      use CoreUI;
       use Tiny_String;
 
       Base_Frame: Ttk_Frame :=
@@ -665,6 +675,8 @@ package body Bases.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Dialogs;
       use Tiny_String;
 
       Cost, Time: Natural := 0;
