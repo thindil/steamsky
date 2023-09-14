@@ -19,7 +19,9 @@
 import std/[strutils, tables]
 import game, game2, shipscrew, stories, types, utils
 
-proc progressStory*(nextStep: bool = false): bool =
+proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
+    KeyError, IOError, ValueError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   var
     step = if currentStory.currentStep == -1:
         storiesList[currentStory.index].startingStep
