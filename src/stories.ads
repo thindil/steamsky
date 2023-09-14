@@ -319,16 +319,15 @@ package Stories is
       -- RESULT
       -- True if story goes to next step, otherwise false
       -- SOURCE
-   function Progress_Story(Next_Step: Boolean := False) return Boolean with
-      Test_Case => (Name => "Test_ProgressStory", Mode => Robustness);
-      -- ****
+   function Progress_Story(Next_Step: Boolean := False) return Boolean;
+   -- ****
 
-      -- ****f* Stories/Stories.Get_Current_Story_Text
-      -- FUNCTION
-      -- Get text of current step in story
-      -- RESULT
-      -- Text of current step in current story
-      -- SOURCE
+   -- ****f* Stories/Stories.Get_Current_Story_Text
+   -- FUNCTION
+   -- Get text of current step in story
+   -- RESULT
+   -- Text of current step in current story
+   -- SOURCE
    function Get_Current_Story_Text return Unbounded_String;
    -- ****
 
