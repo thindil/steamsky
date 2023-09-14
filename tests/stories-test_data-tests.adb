@@ -82,44 +82,6 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Progress_Story_323e5c_14aed6
-     (Next_Step: Boolean := False) return Boolean is
-   begin
-      declare
-         Test_Progress_Story_323e5c_14aed6_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.Stories.Progress_Story
-             (Next_Step);
-      begin
-         return Test_Progress_Story_323e5c_14aed6_Result;
-      end;
-   end Wrap_Test_Progress_Story_323e5c_14aed6;
---  end read only
-
---  begin read only
-   procedure Test_Progress_Story_test_progressstory(Gnattest_T: in out Test);
-   procedure Test_Progress_Story_323e5c_14aed6(Gnattest_T: in out Test) renames
-     Test_Progress_Story_test_progressstory;
---  id:2.2/323e5ccfda3d5599/Progress_Story/1/0/test_progressstory/
-   procedure Test_Progress_Story_test_progressstory(Gnattest_T: in out Test) is
-      function Progress_Story
-        (Next_Step: Boolean := False) return Boolean renames
-        Wrap_Test_Progress_Story_323e5c_14aed6;
---  end read only
-
-      pragma Unreferenced(Gnattest_T);
-
-   begin
-
-      if Progress_Story then
-         null;
-      end if;
-      Assert(True, "This test can only crash.");
-
---  begin read only
-   end Test_Progress_Story_test_progressstory;
---  end read only
-
---  begin read only
    procedure Wrap_Test_Get_Story_Location_5f0f68_b0f396
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
    begin
