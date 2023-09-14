@@ -1475,7 +1475,9 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Interp, Argc);
       Message: constant String :=
         Change_Ship_Speed
-          (Ship_Speed'Val(Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) + 1));
+          (Speed_Value =>
+             Ship_Speed'Val
+               (Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) + 1));
    begin
       if Message'Length > 0 then
          Show_Message(Text => Message, Title => "Changing the ship's speed.");
