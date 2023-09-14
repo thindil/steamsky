@@ -22,6 +22,10 @@ import game, game2, shipscrew, stories, types, utils
 proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
     KeyError, IOError, ValueError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Progress the current story to the next step if requirements for it are meet.
+  ##
+  ## * nextStep - used in destroyShip condition, if false, progress to the next
+  ##              step. Default value is false.
   var
     step = if currentStory.currentStep == -1:
         storiesList[currentStory.index].startingStep
