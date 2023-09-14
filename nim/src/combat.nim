@@ -16,9 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
-import crewinventory, config, game, game2, goals, log, messages, ships, ships2,
-    shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, stories,
-    stories2, trades, types, utils
+import bases, crewinventory, config, game, game2, goals, events, log, maps,
+    messages, missions, ships, ships2, shipscargo, shipscrew, shipscrew2,
+        shipsmovement,
+    statistics, stories, stories2, trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -1053,6 +1054,26 @@ proc combatTurn*() =
         giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
     game.enemy.ship.speed = fullStop
     playerShip.speed = oldSpeed
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+      if eventsList[skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex].eType == attackOnBase:
+        gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 5)
+      deleteEvent(eventIndex = skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex)
+    if skyMap[playerShip.skyX][playerShip.skyY].missionIndex > -1 and
+        acceptedMissions[skyMap[playerShip.skyX][
+        playerShip.skyY].missionIndex].mType == destroy and protoShipsList[
+        acceptedMissions[skyMap[playerShip.skyX][
+        playerShip.skyY].missionIndex].shipIndex].name == game.enemy.ship.name:
+      updateMission(missionIndex = skyMap[playerShip.skyX][
+          playerShip.skyY].missionIndex)
+    var lostReputationChance = 10
+    if protoShipsList[enemyShipIndex].owner == playerShip.crew[0].faction:
+      lostReputationChance = 40
+    if getRandom(min = 1, max = 100) < lostReputationChance:
+      gainRep(baseIndex = game.enemy.ship.homeBase, points = -100)
+    updateDestroyedShips(shipName = game.enemy.ship.name)
+    updateGoal(goalType = GoalTypes.destroy, targetIndex = $enemyShipIndex)
 
 # Temporary code for interfacing with Ada
 
