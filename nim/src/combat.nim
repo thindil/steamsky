@@ -18,7 +18,7 @@
 import std/[math, strutils, tables]
 import crewinventory, config, game, game2, goals, log, messages, ships, ships2,
     shipscargo, shipscrew, shipscrew2, shipsmovement, statistics, stories,
-    trades, types, utils
+    stories2, trades, types, utils
 
 var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
@@ -1038,6 +1038,21 @@ proc combatTurn*() =
             storiesList[currentStory.index].steps[currentStory.currentStep]
           else:
             storiesList[currentStory.index].finalStep
+        if step.finishCondition == loot:
+          let stepData = currentStory.data.split(';')
+          if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
+            if progressStory():
+              case step.finishCondition
+              of loot:
+                updateCargo(ship = playerShip, protoIndex = stepData[
+                    0].parseInt, amount = 1)
+              else:
+                discard
+    for mIndex, member in playerShip.crew:
+      if member.order in {boarding, defend}:
+        giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
+    game.enemy.ship.speed = fullStop
+    playerShip.speed = oldSpeed
 
 # Temporary code for interfacing with Ada
 
