@@ -1507,13 +1507,15 @@ package body Maps.UI is
       Update_Move_Buttons;
       Tcl_Eval(interp => Get_Context, strng => "update");
       Update_Messages;
-      Unbind(Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>");
-      Current
-        (ComboBox => Speed_Box,
-         NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
-      Bind
-        (Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>",
-         Script => "{SetShipSpeed [" & Speed_Box & " current]}");
+      if Player_Ship.Speed /= DOCKED then
+         Unbind(Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>");
+         Current
+           (ComboBox => Speed_Box,
+            NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
+         Bind
+           (Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>",
+            Script => "{SetShipSpeed [" & Speed_Box & " current]}");
+      end if;
       if Current_Story.Index /= Null_Unbounded_String and
         Current_Story.Show_Text then
          if Current_Story.Current_Step > -2 then
