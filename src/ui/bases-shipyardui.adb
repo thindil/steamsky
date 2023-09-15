@@ -42,6 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases.Ship;
 with Config; use Config;
 with CoreUI; use CoreUI;
@@ -1618,6 +1619,7 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
       use Tiny_String;
 
@@ -1715,18 +1717,20 @@ package body Bases.ShipyardUI is
          configure
            (Widgt => Damage_Bar, options => "-value" & Float'Image(Damage));
          if Damage < 0.2 then
-            configure
-              (Widgt => Label, options => "-text {Damage: Slightly damaged}");
+            configure(Widgt => Label, options => "-text {Damage:}");
+            Add(Widget => Damage_Bar, Message => "Slightly damaged");
          elsif Damage < 0.5 then
-            configure(Widgt => Label, options => "-text {Damage: Damaged}");
+            configure(Widgt => Label, options => "-text {Damage:}");
+            Add(Widget => Damage_Bar, Message => "Damaged");
          elsif Damage < 0.8 then
-            configure
-              (Widgt => Label, options => "-text {Damage: Heavily damaged}");
+            configure(Widgt => Label, options => "-text {Damage:}");
+            Add(Widget => Damage_Bar, Message => "Heavily damaged");
          elsif Damage < 1.0 then
-            configure
-              (Widgt => Label, options => "-text {Damage: Almost destroyed}");
+            configure(Widgt => Label, options => "-text {Damage:}");
+            Add(Widget => Damage_Bar, Message => "Almost destroyed");
          else
-            configure(Widgt => Label, options => "-text {Damage: Destroyed}");
+            configure(Widgt => Label, options => "-text {Damage:}");
+            Add(Widget => Damage_Bar, Message => "Destroyed");
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label, Options => "-sticky w -padx {5 0}");
