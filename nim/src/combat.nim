@@ -204,18 +204,18 @@ proc combatTurn*() =
 
     var hitLocation: int = -1
 
-    proc removeGun(moduleIndex: Natural) =
+    proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) =
       if enemyShip.crew == playerShip.crew:
         for index, gun in guns:
           if gun[1] == moduleIndex:
             guns.delete(index)
             break
-    proc findEnemyModule(mType: ModuleType): int =
+    proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int =
       for index, module in enemyShip.modules:
         if modulesList[module.protoIndex].mType == mType and module.durability > 0:
           return index
       return -1
-    proc findHitWeapon() =
+    proc findHitWeapon(enemyShip: ShipRecord) =
       for index, module in enemyShip.modules:
         if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
             modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
@@ -250,25 +250,25 @@ proc combatTurn*() =
           if ship.crew == playerShip.crew:
             if gunnerIndex > -1:
               for gun in guns.mitems:
-                if gun[0] == mIndex:
-                  var shoots = gun[2]
-                  gunnerOrder = gun[1]
-                  if gun[2] > 0:
+                if gun[1] == mIndex:
+                  var shoots = gun[3]
+                  gunnerOrder = gun[2]
+                  if gun[3] > 0:
                     if gunnerOrder != 3:
                       shoots = (shoots.float / 2.0).ceil.int
                     logMessage(message = "Player shoots (no cooldown): " &
                         $shoots, debugType = DebugTypes.combat)
-                  elif gun[2] < 0:
+                  elif gun[3] < 0:
                     shoots = 0
-                    gun[2].inc
-                    if gun[2] == 0:
+                    gun[3].inc
+                    if gun[3] == 0:
                       shoots = 1
-                      gun[2] = if gunnerOrder == 3:
+                      gun[3] = if gunnerOrder == 3:
                           modulesList[playerShip.modules[gun[
-                              0]].protoIndex].speed
+                              1]].protoIndex].speed
                         else:
                           modulesList[playerShip.modules[gun[
-                              0]].protoIndex].speed - 1
+                              1]].protoIndex].speed - 1
                     logMessage(message = "Player shoots (after cooldown): " &
                         $shoots, debugType = DebugTypes.combat)
               logMessage(message = "Shoots test3: " & $shoots,
@@ -289,18 +289,18 @@ proc combatTurn*() =
                 discard
           else:
             for gun in game.enemy.guns.mitems:
-              if gun[0] == mIndex:
-                if gun[2] > 0:
-                  shoots = gun[2]
-                elif gun[2] < 0:
+              if gun[1] == mIndex:
+                if gun[3] > 0:
+                  shoots = gun[3]
+                elif gun[3] < 0:
                   shoots = 0
-                  gun[2].inc
-                  if gun[2] == 0:
+                  gun[3].inc
+                  if gun[3] == 0:
                     shoots = 1
-                    gun[2] = if game.enemy.combatAi == disarmer:
-                        modulesList[ship.modules[gun[0]].protoIndex].speed - 1
+                    gun[3] = if game.enemy.combatAi == disarmer:
+                        modulesList[ship.modules[gun[1]].protoIndex].speed - 1
                       else:
-                        modulesList[ship.modules[gun[0]].protoIndex].speed
+                        modulesList[ship.modules[gun[1]].protoIndex].speed
             if ship.crew.len > 0 and gunnerIndex > -1:
               shoots = 0
           if ammoIndex2 < ship.cargo.len and itemsList[ship.cargo[
@@ -333,7 +333,8 @@ proc combatTurn*() =
             shoots = 1
             if game.enemy.distance > 2_000:
               shoots = 0
-            if findEnemyModule(mType = ModuleType.armor) > -1:
+            if findEnemyModule(mType = ModuleType.armor,
+                enemyShip = enemyShip) > -1:
               shoots = 0
           if module.mType == ModuleType2.gun and shoots > 0:
             case itemsList[ship.cargo[ammoIndex].protoIndex].value[1]
@@ -387,7 +388,8 @@ proc combatTurn*() =
             if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
                 max = hitChance + 50):
               shootMessage = shootMessage & " and hits "
-              let armorIndex = findEnemyModule(mType = ModuleType.armor)
+              let armorIndex = findEnemyModule(mType = ModuleType.armor,
+                  enemyShip = enemyShip)
               if armorIndex > -1:
                 hitLocation = armorIndex
               else:
@@ -396,15 +398,18 @@ proc combatTurn*() =
                     hitLocation = -1
                     case gunnerOrder
                     of 4:
-                      hitLocation = findEnemyModule(mType = ModuleType.engine)
+                      hitLocation = findEnemyModule(mType = ModuleType.engine,
+                          enemyShip = enemyShip)
                     of 5:
                       hitLocation = -1
-                      findHitWeapon()
+                      findHitWeapon(enemyShip = enemyShip)
                       if hitLocation == -1:
                         hitLocation = findEnemyModule(
-                            mType = ModuleType.batteringRam)
+                            mType = ModuleType.batteringRam,
+                            enemyShip = enemyShip)
                     of 6:
-                      hitLocation = findEnemyModule(mType = ModuleType.hull)
+                      hitLocation = findEnemyModule(mType = ModuleType.hull,
+                          enemyShip = enemyShip)
                     else:
                       hitLocation = 0
                   else:
@@ -471,7 +476,8 @@ proc combatTurn*() =
                     let weaponIndex = enemyShip.modules[hitLocation].gunIndex
                     if weaponIndex > -1:
                       enemyShip.modules[weaponIndex].durability = 0
-                      removeGun(moduleIndex = weaponIndex)
+                      removeGun(moduleIndex = weaponIndex,
+                          enemyShip = enemyShip)
                 else:
                   discard
               if ship.crew == playerShip.crew:
