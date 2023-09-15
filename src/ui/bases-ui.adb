@@ -675,7 +675,6 @@ package body Bases.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Dialogs;
       use Tiny_String;
 
@@ -690,6 +689,8 @@ package body Bases.UI is
         Create_Dialog
           (Name => ".basemenu", Title => "Actions", Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
+         use Tcl.Tk.Ada.Widgets.TtkButton;
+
          Button: constant Ttk_Button :=
            Create
              (pathName => Base_Menu & Name,
