@@ -303,13 +303,14 @@ proc combatTurn*() =
                         modulesList[ship.modules[gun[1]].protoIndex].speed
             if ship.crew.len > 0 and gunnerIndex > -1:
               shoots = 0
-          if ammoIndex2 < ship.cargo.len and itemsList[ship.cargo[
-              ammoIndex2].protoIndex].itemType == $(modulesList[
-              module.protoIndex].value - 1):
+          if ammoIndex2 in ship.cargo.low .. ship.cargo.high and itemsList[
+              ship.cargo[ammoIndex2].protoIndex].itemType == itemsTypesList[
+              modulesList[module.protoIndex].value - 1]:
             ammoIndex = ammoIndex2
           if ammoIndex == -1:
             for iIndex, item in itemsList.pairs:
-              if item.itemType == $(modulesList[module.protoIndex].value - 1):
+              if item.itemType == itemsTypesList[modulesList[
+                  module.protoIndex].value - 1]:
                 for iIndex2, item2 in ship.cargo:
                   if item2.protoIndex == iIndex:
                     ammoIndex = iIndex2
@@ -1145,5 +1146,7 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
 proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     combatTurn()
-  except ValueError, IOError, Exception:
+  except Exception as e:
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(e)
     discard
