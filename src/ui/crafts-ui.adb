@@ -97,7 +97,7 @@ package body Crafts.UI is
       -- ****
       use Tiny_String;
 
-      Cargo_Index: Natural;
+      Cargo_Index: Natural := 0;
       Has_Tool: Boolean := True;
    begin
       if Tool_Needed /= To_Bounded_String(Source => "None") then
@@ -138,12 +138,11 @@ package body Crafts.UI is
      (Recipe: Craft_Data;
       Can_Craft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
       -- ****
-      use Tiny_String;
-
-      Cargo_Index: Natural;
    begin
       Can_Craft := False;
       Has_Workplace := False;
+      Has_Materials := False;
+      Has_Tool := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
          if Get_Module(Index => Module.Proto_Index).M_Type = Recipe.Workplace
@@ -155,10 +154,13 @@ package body Crafts.UI is
       Has_Tool := Check_Tool(Tool_Needed => Recipe.Tool);
       Check_Recipe_Block :
       declare
+         use Tiny_String;
+
          Materials: array
            (Recipe.Material_Types.First_Index ..
                 Recipe.Material_Types.Last_Index) of Boolean :=
            (others => False);
+         Cargo_Index: Natural := 0;
       begin
          Find_Materials_Loop :
          for K in
@@ -184,8 +186,8 @@ package body Crafts.UI is
          end loop Find_Materials_Loop;
          Has_Materials := True;
          Set_Can_Craft_Loop :
-         for J in Materials'Range loop
-            if not Materials(J) then
+         for Material of Materials loop
+            if not Material then
                Has_Materials := False;
                exit Set_Can_Craft_Loop;
             end if;
@@ -679,7 +681,7 @@ package body Crafts.UI is
       use Tiny_String;
 
       M_Type: Module_Type;
-      Modules_List_2, Crew_List: Unbounded_String;
+      Modules_List_2, Crew_List: Unbounded_String := Null_Unbounded_String;
       Recipe_Index: constant Bounded_String :=
         To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
       Recipe: constant Craft_Data :=
@@ -1041,7 +1043,7 @@ package body Crafts.UI is
       M_Amount, Cargo_Index: Natural := 0;
       Have_Workplace, Is_Material: Boolean := True;
       Have_Tool: Boolean := False;
-      Text_Length: Positive;
+      Text_Length: Positive := 1;
       Recipe_Text: constant Tk_Text :=
         Create
           (pathName => Recipe_Dialog & ".text",
@@ -1262,7 +1264,9 @@ package body Crafts.UI is
             end if;
          end loop Find_Materials_Loop;
       end loop Check_Materials_Loop;
-      if Recipe.Tool /= To_Bounded_String(Source => "None") then
+      if Recipe.Tool = To_Bounded_String(Source => "None") then
+         Have_Tool := True;
+      else
          Insert
            (TextWidget => Recipe_Text, Index => "end",
             Text => "{" & LF & "Tool: }");
@@ -1271,8 +1275,8 @@ package body Crafts.UI is
          for I in 1 .. Get_Proto_Amount loop
             Have_Tool := False;
             if Get_Proto_Item(Index => I).I_Type = Recipe.Tool
-              and then
-              (Get_Proto_Item(Index => I).Value(1) <= Recipe.Tool_Quality) then
+              and then Get_Proto_Item(Index => I).Value(1) <=
+                Recipe.Tool_Quality then
                if M_Amount > 0 then
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
@@ -1294,8 +1298,6 @@ package body Crafts.UI is
                M_Amount := M_Amount + 1;
             end if;
          end loop Check_Tool_Loop;
-      else
-         Have_Tool := True;
       end if;
       Insert
         (TextWidget => Recipe_Text, Index => "end",
@@ -1581,7 +1583,7 @@ package body Crafts.UI is
          Id: Bounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
-      Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean;
+      Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean := False;
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
