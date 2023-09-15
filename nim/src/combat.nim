@@ -337,7 +337,7 @@ proc combatTurn*() =
                 enemyShip = enemyShip) > -1:
               shoots = 0
           if module.mType == ModuleType2.gun and shoots > 0:
-            case itemsList[ship.cargo[ammoIndex].protoIndex].value[1]
+            case itemsList[ship.cargo[ammoIndex].protoIndex].value[2]
             of 2:
               if ship.crew == playerShip.crew:
                 currentAccuracyBonus -= 10
@@ -440,7 +440,7 @@ proc combatTurn*() =
                 weaponDamage = 1
               if ammoIndex > -1:
                 weaponDamage += itemsList[ship.cargo[
-                    ammoIndex].protoIndex].value[0]
+                    ammoIndex].protoIndex].value[1]
               weaponDamage = if ship.crew == playerShip.crew:
                     (weaponDamage.float * newGameSettings.playerDamageBonus).int
                   else:
@@ -742,7 +742,7 @@ proc combatTurn*() =
           baseDamage = attacker.attributes[strengthIndex].level
         if attacker.equipment[weapon] > -1:
           baseDamage = baseDamage + itemsList[attacker.inventory[
-              attacker.equipment[weapon]].protoIndex].value[1]
+              attacker.equipment[weapon]].protoIndex].value[2]
         var
           wounds = 1.0 - (attacker.health.float / 100.0)
           damage = (baseDamage - (baseDamage.float * wounds.float).int)
@@ -762,7 +762,7 @@ proc combatTurn*() =
         if attacker.equipment[weapon] > -1:
           attackSkill = getSkillLevel(member = attacker,
               skillIndex = itemsList[attacker.inventory[attacker.equipment[
-              weapon]].protoIndex].value[2])
+              weapon]].protoIndex].value[3])
           hitChance = attackSkill + getRandom(min = 1, max = 50)
         else:
           hitChance = getSkillLevel(member = attacker,
@@ -772,13 +772,13 @@ proc combatTurn*() =
         for i in helmet .. legs:
           if defender.equipment[i] > -1:
             hitChance = hitChance + itemsList[defender.inventory[
-                defender.equipment[i]].protoIndex].value[2]
+                defender.equipment[i]].protoIndex].value[3]
         if defender.equipment[hitLocation] > -1:
           damage = damage - itemsList[defender.inventory[defender.equipment[
-              hitLocation]].protoIndex].value[1]
+              hitLocation]].protoIndex].value[2]
         if defender.equipment[shield] > -1:
           damage = damage - itemsList[defender.inventory[defender.equipment[
-              shield]].protoIndex].value[1]
+              shield]].protoIndex].value[2]
         if attacker.equipment[weapon] == -1:
           var damageBonus = getSkillLevel(member = attacker,
               skillIndex = unarmedSkill) / 200
@@ -798,10 +798,10 @@ proc combatTurn*() =
           damage = 1
         if attacker.equipment[weapon] > -1:
           if itemsList[attacker.inventory[attacker.equipment[
-              weapon]].protoIndex].value[4] == 1:
+              weapon]].protoIndex].value[5] == 1:
             damage = (damage.float * 1.5).int
           elif itemsList[attacker.inventory[attacker.equipment[
-              weapon]].protoIndex].value[4] == 2:
+              weapon]].protoIndex].value[5] == 2:
             damage = damage * 2
         var
           attackMessage = if playerAttack2:
@@ -844,7 +844,7 @@ proc combatTurn*() =
           if playerAttack2:
             if attacker.equipment[weapon] > -1:
               gainExp(amount = 2, skillNumber = itemsList[attacker.inventory[
-                  attacker.equipment[weapon]].protoIndex].value[2],
+                  attacker.equipment[weapon]].protoIndex].value[3],
                   crewIndex = attackerIndex2)
             else:
               gainExp(amount = 2, skillNumber = unarmedSkill,
