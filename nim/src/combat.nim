@@ -1074,6 +1074,23 @@ proc combatTurn*() =
       gainRep(baseIndex = game.enemy.ship.homeBase, points = -100)
     updateDestroyedShips(shipName = game.enemy.ship.name)
     updateGoal(goalType = GoalTypes.destroy, targetIndex = $enemyShipIndex)
+    if currentGoal.targetIndex.len > 0:
+      updateGoal(goalType = GoalTypes.destroy, targetIndex = protoShipsList[
+          enemyShipIndex].owner)
+    if currentStory.index.len > 0:
+      let finishCondition = if currentStory.currentStep == 0:
+          storiesList[currentStory.index].startingStep.finishCondition
+        elif currentStory.currentStep > 0:
+          storiesList[currentStory.index].steps[
+              currentStory.currentStep].finishCondition
+        else: storiesList[currentStory.index].finalStep.finishCondition
+      if finishCondition != destroyShip:
+        return
+      let storyData = currentStory.data.split(';')
+      if playerShip.skyX == storyData[0].parseInt and playerShip.skyY ==
+          storyData[1].parseInt and enemyShipIndex == storyData[2].parseInt:
+        if not progressStory(nextStep = true):
+          return
 
 # Temporary code for interfacing with Ada
 
@@ -1118,3 +1135,9 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
     for index in guns.len .. 9:
       adaEnemy.playerGuns[index] = [-1, -1, -1]
   npcShip = game.enemy.ship
+
+proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    combatTurn()
+  except ValueError, IOError, Exception:
+    discard
