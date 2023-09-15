@@ -35,7 +35,7 @@ deleteMember(1, playerShip)
 try:
   assert playerShip.crew.len == (oldLength - 1)
 except AssertionDefect:
-  echo "Failed to remove a crew member from the player's ship."
+  writeLine(stderr, "Failed to remove a crew member from the player's ship.")
 
 echo "Testing death."
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
@@ -47,8 +47,8 @@ death(1, "Test death", playerShip)
 try:
   assert playerShip.crew.len == oldLength - 1
 except AssertionDefect:
-  echo "Failed to kill a crew member on the player's ship."
+  writeLine(stderr, "Failed to kill a crew member on the player's ship.")
 try:
   assert playerShip.cargo.len == 1
 except AssertionDefect:
-  echo "Failed to update the player's ship's cargo with a body."
+  writeLine(stderr, "Failed to update the player's ship's cargo with a body.")
