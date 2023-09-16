@@ -1634,7 +1634,9 @@ package body Bases.ShipyardUI is
              To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name),
            Columns => 2);
       Damage_Bar: constant Ttk_ProgressBar :=
-        Create(pathName => Module_Dialog & ".damage");
+        Create
+          (pathName => Module_Dialog & ".damage",
+           options => "-orient horizontal -maximum 1.0");
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Dialog & ".info",
