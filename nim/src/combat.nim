@@ -1114,15 +1114,17 @@ proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
     return 0
 
 type
+  AdaGunsArray = array[10, array[3, cint]]
+
   AdaEnemyData = object
     accuracy: cint
     combatAi: cint
     evasion: cint
     loot: cint
     perception: cint
-    guns: array[10, array[3, cint]]
+    guns: AdaGunsArray
     name: cstring
-    playerGuns: array[10, array[3, cint]]
+    playerGuns: AdaGunsArray
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = game.enemy.accuracy.cint
@@ -1146,7 +1148,12 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
 proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     combatTurn()
-  except Exception as e:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(e)
+  except:
     discard
+
+proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc.} =
+  guns = @[]
+  for gun in adaGuns:
+    if gun[0] == -1:
+      break
+    guns.add([gun[0].int, gun[1].int, gun[2].int])

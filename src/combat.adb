@@ -15,42 +15,44 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
-with Messages; use Messages;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Messages;
 with Events;
 with Maps;
 with Bases;
 
 package body Combat is
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
+   type Nim_Enemy_Record is record
+      Accuracy: Natural := 0;
+      Combat_Ai: Integer := 0;
+      Evasion: Natural := 0;
+      Loot: Natural := 0;
+      Perception: Natural := 0;
+      Guns: Nim_Guns;
+      Name: chars_ptr;
+      Player_Guns: Nim_Guns;
+   end record;
+   --## rule on TYPE_INITIAL_VALUES
+
+   procedure Get_Ada_Enemy(N_Enemy: out Nim_Enemy_Record) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaEnemy";
+
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
-      use Interfaces.C.Strings;
+      use Messages;
       use Tiny_String;
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
-      type Nim_Enemy_Record is record
-         Accuracy: Natural := 0;
-         Combat_Ai: Integer := 0;
-         Evasion: Natural := 0;
-         Loot: Natural := 0;
-         Perception: Natural := 0;
-         Guns: Nim_Guns;
-         Name: chars_ptr;
-         Player_Guns: Nim_Guns;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       Nim_Enemy: Nim_Enemy_Record;
       Result: Integer;
       function Start_Ada_Combat(E_Index, N_Combat: Integer) return Integer with
          Import => True,
          Convention => C,
          External_Name => "startAdaCombat";
-      procedure Get_Ada_Enemy(N_Enemy: out Nim_Enemy_Record) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaEnemy";
    begin
       Set_Ship_In_Nim;
       Enemy_Ship_Index := Enemy_Index;
@@ -107,12 +109,33 @@ package body Combat is
 
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Nim_Enemy: Nim_Enemy_Record;
+      Nim_G: Nim_Guns;
+      Index: Natural := 0;
       procedure Combat_Ada_Turn with
          Import => True,
          Convention => C,
          External_Name => "combatAdaTurn";
+      procedure Set_Ada_Guns(G: Nim_Guns) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaGuns";
    begin
       Get_Game_Date;
+      Set_Player_Guns:
+      for Gun of Guns loop
+         Nim_G(Index, 0) := Gun(1);
+         Nim_G(Index, 1) := Gun(2);
+         Nim_G(Index, 2) := Gun(3);
+         Index := Index + 1;
+      end loop Set_Player_Guns;
+      Fill_Player_Guns:
+      for I in Index .. 9 loop
+         Nim_G(I, 0) := -1;
+         Nim_G(I, 1) := -1;
+         Nim_G(I, 2) := -1;
+      end loop Fill_Player_Guns;
+      Set_Ada_Guns(G => Nim_G);
       Set_Ship_In_Nim;
       if Base_Index > 0 then
          Set_Base_In_Nim(Base_Index => Base_Index);
@@ -128,6 +151,26 @@ package body Combat is
          Set_Event(Index => I);
       end loop Set_Events_In_Ada_Loop;
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
+      Get_Ada_Enemy(N_Enemy => Nim_Enemy);
+      Enemy.Guns.Clear;
+      Convert_Enemy_Guns_Loop :
+      for I in 0 .. 9 loop
+         exit Convert_Enemy_Guns_Loop when Nim_Enemy.Guns(I, 0) = -1;
+         Enemy.Guns.Append
+           (New_Item =>
+              (1 => Nim_Enemy.Guns(I, 0), 2 => Nim_Enemy.Guns(I, 1),
+               3 => Nim_Enemy.Guns(I, 2)));
+      end loop Convert_Enemy_Guns_Loop;
+      Guns.Clear;
+      Convert_Player_Guns_Loop :
+      for I in 0 .. 9 loop
+         exit Convert_Player_Guns_Loop when Nim_Enemy.Player_Guns(I, 0) = -1;
+         Guns.Append
+           (New_Item =>
+              (1 => Nim_Enemy.Player_Guns(I, 0),
+               2 => Nim_Enemy.Player_Guns(I, 1),
+               3 => Nim_Enemy.Player_Guns(I, 2)));
+      end loop Convert_Player_Guns_Loop;
    end Combat_Turn;
 
    procedure Get_Harpoon_Duration is
