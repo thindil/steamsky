@@ -251,7 +251,7 @@ proc combatTurn*() =
             if gunnerIndex > -1:
               for gun in guns.mitems:
                 if gun[1] == mIndex:
-                  var shoots = gun[3]
+                  shoots = gun[3]
                   gunnerOrder = gun[2]
                   if gun[3] > 0:
                     if gunnerOrder != 3:
@@ -1154,6 +1154,7 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
 proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     combatTurn()
+    npcShip = game.enemy.ship
   except:
     discard
 

@@ -148,6 +148,7 @@ package body Combat is
          Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
+      Get_Ship_From_Nim(Ship => Enemy.Ship);
       Set_Game_Date;
       Set_Events_In_Ada_Loop :
       for I in 1 .. Get_Events_Amount loop
