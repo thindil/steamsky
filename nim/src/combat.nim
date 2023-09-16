@@ -1125,6 +1125,9 @@ type
     guns: AdaGunsArray
     name: cstring
     playerGuns: AdaGunsArray
+    distance: cint
+    harpoonDuration: cint
+    enemyHarpoonDuration: cint
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = game.enemy.accuracy.cint
@@ -1133,6 +1136,9 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.loot = game.enemy.loot.cint
   adaEnemy.perception = game.enemy.perception.cint
   adaEnemy.name = enemyName.cstring
+  adaEnemy.distance = game.enemy.distance.cint
+  adaEnemy.harpoonDuration = harpoonDuration.cint
+  adaEnemy.enemyHarpoonDuration = game.enemy.harpoonDuration.cint
   for index, gun in game.enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if game.enemy.guns.len < 10:
@@ -1156,4 +1162,4 @@ proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc.} =
   for gun in adaGuns:
     if gun[0] == -1:
       break
-    guns.add([gun[0].int, gun[1].int, gun[2].int])
+    guns.add([gun[0].int - 1, gun[1].int, gun[2].int])

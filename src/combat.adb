@@ -34,6 +34,9 @@ package body Combat is
       Guns: Nim_Guns;
       Name: chars_ptr;
       Player_Guns: Nim_Guns;
+      Distance: Natural := 10_000;
+      Harpoon_Duration: Natural := 0;
+      Enemy_Harpoon_Duration: Natural := 0;
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
@@ -56,14 +59,14 @@ package body Combat is
    begin
       Set_Ship_In_Nim;
       Enemy_Ship_Index := Enemy_Index;
-      Harpoon_Duration := 0;
       Boarding_Orders.Clear;
-      Enemy.Distance := 10_000;
-      Enemy.Harpoon_Duration := 0;
       Result :=
         Start_Ada_Combat
           (E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
       Get_Ada_Enemy(N_Enemy => Nim_Enemy);
+      Harpoon_Duration := Nim_Enemy.Harpoon_Duration;
+      Enemy.Harpoon_Duration := Nim_Enemy.Enemy_Harpoon_Duration;
+      Enemy.Distance := Nim_Enemy.Distance;
       Enemy.Accuracy := Nim_Enemy.Accuracy;
       Enemy.Combat_Ai := Ship_Combat_Ai'Val(Nim_Enemy.Combat_Ai);
       Enemy.Evasion := Nim_Enemy.Evasion;
@@ -122,14 +125,14 @@ package body Combat is
          External_Name => "setAdaGuns";
    begin
       Get_Game_Date;
-      Set_Player_Guns:
+      Set_Player_Guns :
       for Gun of Guns loop
          Nim_G(Index, 0) := Gun(1);
          Nim_G(Index, 1) := Gun(2);
          Nim_G(Index, 2) := Gun(3);
          Index := Index + 1;
       end loop Set_Player_Guns;
-      Fill_Player_Guns:
+      Fill_Player_Guns :
       for I in Index .. 9 loop
          Nim_G(I, 0) := -1;
          Nim_G(I, 1) := -1;
@@ -152,6 +155,9 @@ package body Combat is
       end loop Set_Events_In_Ada_Loop;
       Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
       Get_Ada_Enemy(N_Enemy => Nim_Enemy);
+      Enemy.Distance := Nim_Enemy.Distance;
+      Harpoon_Duration := Nim_Enemy.Harpoon_Duration;
+      Enemy.Harpoon_Duration := Nim_Enemy.Enemy_Harpoon_Duration;
       Enemy.Guns.Clear;
       Convert_Enemy_Guns_Loop :
       for I in 0 .. 9 loop
