@@ -78,21 +78,6 @@ package Events is
      (E_Type => No_Event, Sky_X => 1, Sky_Y => 1, Time => 1, Data => 0);
    -- ****
 
-   -- ****t* Events/Events.Events_Container
-   -- FUNCTION
-   -- Used to store events data
-   -- SOURCE
---   package Events_Container is new Vectors
---     (Index_Type => Positive, Element_Type => Event_Data);
-   -- ****
-
-   -- ****v* Events/Events.Events_List
-   -- FUNCTION
-   -- List of all events in the game
-   -- SOURCE
---   Events_List: Events_Container.Vector;
-   -- ****
-
    -- ****f* Events/Events.Check_For_Event
    -- FUNCTION
    -- Check if event happen
