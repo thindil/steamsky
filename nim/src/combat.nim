@@ -1062,11 +1062,13 @@ proc combatTurn*() =
     game.enemy.ship.speed = fullStop
     playerShip.speed = oldSpeed
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+      echo "delete event"
       if eventsList[skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex].eType == attackOnBase:
         gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 5)
       deleteEvent(eventIndex = skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex)
+    echo skyMap[playerShip.skyX][playerShip.skyY]
     if skyMap[playerShip.skyX][playerShip.skyY].missionIndex > -1 and
         acceptedMissions[skyMap[playerShip.skyX][
         playerShip.skyY].missionIndex].mType == destroy and protoShipsList[

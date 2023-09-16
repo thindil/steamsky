@@ -178,6 +178,9 @@ package body Combat is
                2 => Nim_Enemy.Player_Guns(I, 1),
                3 => Nim_Enemy.Player_Guns(I, 2)));
       end loop Convert_Player_Guns_Loop;
+      if Enemy.Ship.Modules(1).Durability = 0 then
+         End_Combat := True;
+      end if;
    end Combat_Turn;
 
    procedure Get_Harpoon_Duration is
