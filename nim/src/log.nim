@@ -42,7 +42,7 @@ proc logMessage(message: cstring; debugType: cint) {.exportc, sideEffect,
   if debugType != debugMode.cint and debugMode != everything:
     return
   try:
-    log(level = lvlAll, $message)
+    log(level = lvlError, $message)
   except Exception:
     echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
@@ -63,6 +63,6 @@ proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
     let logger: FileLogger = newFileLogger(filename = saveDirectory &
         "debug.log", fmtStr = "[$datetime] - $levelname: ")
     addHandler(handler = logger)
-    log(level = lvlAll, "Starting game in debug mode.")
+    log(level = lvlError, "Starting game in debug mode.")
   except IOError, Exception:
     echo ("Can't start log for the game, reason: " & getCurrentExceptionMsg())
