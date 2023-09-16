@@ -264,12 +264,14 @@ package body Crafts.UI is
       Crafts_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Crafts_Frame & ".canvas", Interp => Interp);
       Can_Craft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
-      Recipe: Craft_Data;
+      Recipe: Craft_Data; --## rule line off IMPROPER_INITIALIZATION
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Recipe_Name: constant String :=
         (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2) else "");
@@ -530,6 +532,7 @@ package body Crafts.UI is
             Checked => Has_Tool, Column => 3, New_Row => True);
          <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Set_Deconstruct_Recipes_Loop :
       for I in
         Positive(Get_Known_Recipes_Amount + Natural(Studies.Length) + 1) ..
@@ -594,6 +597,7 @@ package body Crafts.UI is
             Checked => Has_Tool, Column => 3, New_Row => True);
          <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       if Page > 1 then
@@ -1039,7 +1043,7 @@ package body Crafts.UI is
                        .Name)),
            Title_Width => 275);
       Workplace_Name: Bounded_String := Null_Bounded_String;
-      Recipe: Craft_Data;
+      Recipe: Craft_Data; --## rule line off IMPROPER_INITIALIZATION
       M_Amount, Cargo_Index: Natural := 0;
       Have_Workplace, Is_Material: Boolean := True;
       Have_Tool: Boolean := False;
@@ -1059,6 +1063,7 @@ package body Crafts.UI is
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
       if Recipe_Type = "Study" then
+         --## rule off IMPROPER_INITIALIZATION
          Recipe.Material_Types.Append
            (New_Item =>
               Get_Proto_Item
@@ -1074,6 +1079,7 @@ package body Crafts.UI is
                 (Source => Recipe_Index, Low => 7,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
+         --## rule on IMPROPER_INITIALIZATION
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Study_Recipe_Loop :
@@ -1571,10 +1577,12 @@ package body Crafts.UI is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Recipes_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Module_Data is record
          Name: Unbounded_String;
          Workplace: Boolean;
@@ -1584,6 +1592,7 @@ package body Crafts.UI is
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
       Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean := False;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1648,6 +1657,7 @@ package body Crafts.UI is
       if Recipes_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Sort_Known_Recipes_Block :
       declare
          Local_Recipes: Recipes_Array(0 .. Get_Known_Recipes_Amount - 1);
