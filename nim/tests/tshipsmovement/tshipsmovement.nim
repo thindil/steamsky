@@ -64,33 +64,33 @@ playerShip.speed = docked
 try:
   assert realSpeed(playerShip) == 0
 except AssertionDefect:
-  echo "Failed to get the real speed of the docked ship."
+  writeLine(stderr, "Failed to get the real speed of the docked ship.")
 playerShip.speed = fullSpeed
 try:
   assert realSpeed(playerShip) > 0
 except AssertionDefect:
-  echo "Failed to get the real speed of the ship with full speed."
+  writeLine(stderr, "Failed to get the real speed of the ship with full speed.")
 playerShip.speed = docked
 try:
   assert realSpeed(playerShip, true) > 0
 except AssertionDefect:
-  echo "Failed to get info about the real speed of the docked ship."
+  writeLine(stderr, "Failed to get info about the real speed of the docked ship.")
 
 echo "Testing dockShip."
 try:
   assert dockShip(false).len == 0
 except AssertionDefect:
-  echo "Failed to undock the player's ships from a base."
+  writeLine(stderr, "Failed to undock the player's ships from a base.")
 try:
   assert dockShip(true).len == 0
 except AssertionDefect:
-  echo "Failed to dock the player's ships to a base."
+  writeLine(stderr, "Failed to dock the player's ships to a base.")
 
 echo "Testing countFuelNeeded."
 try:
   assert countFuelNeeded() == -4
 except AssertionDefect:
-  echo "Failed to count the amount of fuel needed for travel."
+  writeLine(stderr, "Failed to count the amount of fuel needed for travel.")
 
 playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
@@ -110,16 +110,16 @@ echo "Testing changeShipSpeed."
 try:
   assert changeShipSpeed(fullSpeed).len == 0
 except AssertionDefect:
-  echo "Failed to change speed of the docked ship."
+  writeLine(stderr, "Failed to change speed of the docked ship.")
 try:
   assert dockShip(false).len == 0
 except AssertionDefect:
-  echo "Failed to undock the ship."
+  writeLine(stderr, "Failed to undock the ship.")
 try:
   assert changeShipSpeed(fullStop).len == 0
 except AssertionDefect:
-  echo "Failed to change speed of the ship."
+  writeLine(stderr, "Failed to change speed of the ship.")
 try:
   assert dockShip(true).len == 0
 except AssertionDefect:
-  echo "Failed to dock the ship again to the base, second time."
+  writeLine(stderr, "Failed to dock the ship again to the base, second time.")
