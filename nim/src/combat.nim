@@ -1178,7 +1178,6 @@ proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
     order = -1
   for index, order in boardingOrders:
     adaOrders[index] = order + 1
-  echo "get:", adaOrders
 
 proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], exportc.} =
   boardingOrders = @[]
@@ -1186,4 +1185,3 @@ proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], 
     if order == -1:
       break
     boardingOrders.add(order - 1)
-  echo "set:", boardingOrders
