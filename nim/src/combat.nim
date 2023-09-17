@@ -301,7 +301,7 @@ proc combatTurn*() =
                         modulesList[ship.modules[gun[1]].protoIndex].speed - 1
                       else:
                         modulesList[ship.modules[gun[1]].protoIndex].speed
-            if ship.crew.len > 0 and gunnerIndex > -1:
+            if ship.crew.len > 0 and gunnerIndex == -1:
               shoots = 0
           if ammoIndex2 in ship.cargo.low .. ship.cargo.high and itemsList[
               ship.cargo[ammoIndex2].protoIndex].itemType == itemsTypesList[
@@ -972,6 +972,8 @@ proc combatTurn*() =
                     defenderIndex2 = defenderIndex,
                     playerAttack2 = playerAttack)
               break
+        if riposte:
+          defenderIndex.inc
         if findMember(order = boarding) == -1:
           updateOrders(ship = game.enemy.ship)
 
