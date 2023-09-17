@@ -585,13 +585,14 @@ proc combatTurn*() =
         else:
           module.harpoonIndex
       var enemyAmmoIndex = -1
-      if ammoIndex2 < game.enemy.ship.cargo.len:
+      if ammoIndex2 in game.enemy.ship.cargo.low .. game.enemy.ship.cargo.high:
         if itemsList[game.enemy.ship.cargo[ammoIndex2].protoIndex].itemType ==
-            $(modulesList[module.protoIndex].value - 1):
+            itemsTypesList[modulesList[module.protoIndex].value - 1]:
           enemyAmmoIndex = ammoIndex2
       if enemyAmmoIndex == -1:
         for iindex, item in itemsList:
-          if item.itemType == $(modulesList[module.protoIndex].value - 1):
+          if item.itemType == itemsTypesList[modulesList[
+              module.protoIndex].value - 1]:
             for cindex, cargo in game.enemy.ship.cargo:
               if cargo.protoIndex == iindex:
                 enemyAmmoIndex = cindex
@@ -1128,6 +1129,7 @@ type
     distance: cint
     harpoonDuration: cint
     enemyHarpoonDuration: cint
+    endCombat: cint
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = game.enemy.accuracy.cint
@@ -1139,6 +1141,7 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
   adaEnemy.enemyHarpoonDuration = game.enemy.harpoonDuration.cint
+  adaEnemy.endCombat = (if endCombat: 1 else: 0)
   for index, gun in game.enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if game.enemy.guns.len < 10:

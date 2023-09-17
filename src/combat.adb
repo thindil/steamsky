@@ -37,6 +37,7 @@ package body Combat is
       Distance: Natural := 10_000;
       Harpoon_Duration: Natural := 0;
       Enemy_Harpoon_Duration: Natural := 0;
+      End_Combat: Natural := 0;
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
@@ -112,8 +113,10 @@ package body Combat is
 
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      --## rule off IMPROPER_INITIALIZATION
       Nim_Enemy: Nim_Enemy_Record;
       Nim_G: Nim_Guns;
+      --## rule on IMPROPER_INITIALIZATION
       Index: Natural := 0;
       procedure Combat_Ada_Turn with
          Import => True,
@@ -125,19 +128,19 @@ package body Combat is
          External_Name => "setAdaGuns";
    begin
       Get_Game_Date;
-      Set_Player_Guns :
+      Set_Player_Guns_Loop :
       for Gun of Guns loop
          Nim_G(Index, 0) := Gun(1);
          Nim_G(Index, 1) := Gun(2);
          Nim_G(Index, 2) := Gun(3);
          Index := Index + 1;
-      end loop Set_Player_Guns;
-      Fill_Player_Guns :
+      end loop Set_Player_Guns_Loop;
+      Fill_Player_Guns_Loop :
       for I in Index .. 9 loop
          Nim_G(I, 0) := -1;
          Nim_G(I, 1) := -1;
          Nim_G(I, 2) := -1;
-      end loop Fill_Player_Guns;
+      end loop Fill_Player_Guns_Loop;
       Set_Ada_Guns(G => Nim_G);
       Set_Ship_In_Nim;
       if Base_Index > 0 then
@@ -178,9 +181,7 @@ package body Combat is
                2 => Nim_Enemy.Player_Guns(I, 1),
                3 => Nim_Enemy.Player_Guns(I, 2)));
       end loop Convert_Player_Guns_Loop;
-      if Enemy.Ship.Modules(1).Durability = 0 then
-         End_Combat := True;
-      end if;
+      End_Combat := (if Nim_Enemy.End_Combat = 1 then True else False);
    end Combat_Turn;
 
    procedure Get_Harpoon_Duration is
