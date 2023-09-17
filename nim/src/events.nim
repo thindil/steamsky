@@ -96,7 +96,7 @@ proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
   ##
   ## * eventIndex - the index of the event to delete
   skyMap[eventsList[eventIndex].skyX][eventsList[
-      eventIndex].skyY].eventIndex = 0
+      eventIndex].skyY].eventIndex = -1
   eventsList.delete(eventIndex)
   for index, event in eventsList.pairs:
     skyMap[event.skyX][event.skyY].eventIndex = index
