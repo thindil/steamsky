@@ -1660,7 +1660,9 @@ package body Crafts.UI is
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       Sort_Known_Recipes_Block :
       declare
+         --## rule off IMPROPER_INITIALIZATION
          Local_Recipes: Recipes_Array(0 .. Get_Known_Recipes_Amount - 1);
+         --## rule on IMPROPER_INITIALIZATION
          procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
@@ -1697,18 +1699,23 @@ package body Crafts.UI is
                Materials => Has_Materials, Id => Get_Known_Recipe(Index => I));
          end loop Set_Local_Recipes_Loop;
          Sort_Recipes(Container => Local_Recipes);
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
          Recipes_Indexes.Clear;
          Set_Recipes_Indexes_Loop :
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(New_Item => Recipe.Id);
          end loop Set_Recipes_Indexes_Loop;
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
       end Sort_Known_Recipes_Block;
       Check_Study_Prerequisites
         (Can_Craft => Can_Craft, Has_Tool => Has_Tool,
          Has_Workplace => Has_Workplace);
       Sort_Studying_Recipes_Block :
       declare
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
+         --## rule off IMPROPER_INITIALIZATION
          Local_Recipes: Recipes_Array(1 .. Positive(Studies.Length));
+         --## rule on IMPROPER_INITIALIZATION
          procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
@@ -1733,10 +1740,14 @@ package body Crafts.UI is
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(New_Item => Recipe.Id);
          end loop Set_Studies_Indexes_Loop;
+         --## rule on DIRECTLY_ACCESSED_GLOBALS
       end Sort_Studying_Recipes_Block;
       Sort_Deconstruct_Recipes_Block :
       declare
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
+         --## rule off IMPROPER_INITIALIZATION
          Local_Recipes: Recipes_Array(1 .. Positive(Deconstructs.Length));
+         --## rule on IMPROPER_INITIALIZATION
          procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
@@ -1763,6 +1774,7 @@ package body Crafts.UI is
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(New_Item => Recipe.Id);
          end loop Set_Deconstruct_Indexes_Loop;
+         --## rule on DIRECTLY_ACCESSED_GLOBALS
       end Sort_Deconstruct_Recipes_Block;
       return
         Show_Crafting_Command
