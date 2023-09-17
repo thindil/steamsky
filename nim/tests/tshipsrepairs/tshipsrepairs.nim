@@ -38,4 +38,4 @@ repairShip(15)
 try:
   assert playerShip.modules[0].durability == 100
 except AssertionDefect:
-  echo "Failed to repair the ship's module."
+  writeLine(stderr, "Failed to repair the ship's module.")
