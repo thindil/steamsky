@@ -1133,6 +1133,8 @@ type
     enemyHarpoonDuration: cint
     endCombat: cint
 
+  AdaBoardingOrders = array[50, int]
+
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.accuracy = game.enemy.accuracy.cint
   adaEnemy.combatAi = game.enemy.combatAi.ord.cint
@@ -1169,3 +1171,19 @@ proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc.} =
     if gun[0] == -1:
       break
     guns.add([gun[0].int - 1, gun[1].int, gun[2].int])
+
+proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
+    tags: [], exportc.} =
+  for order in adaOrders.mitems:
+    order = -1
+  for index, order in boardingOrders:
+    adaOrders[index] = order + 1
+  echo "get:", adaOrders
+
+proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], exportc.} =
+  boardingOrders = @[]
+  for order in adaOrders:
+    if order == -1:
+      break
+    boardingOrders.add(order - 1)
+  echo "set:", boardingOrders
