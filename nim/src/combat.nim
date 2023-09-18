@@ -871,7 +871,7 @@ proc combatTurn*() =
             death(memberIndex = defenderIndex2, reason = attacker.name &
                 " blow in melee combat", ship = game.enemy.ship)
             for order in boardingOrders.mitems:
-              if order >= defenderIndex2:
+              if order > defenderIndex2:
                 order.dec
             updateKilledMobs(mob = defender, factionName = factionName)
             updateGoal(goalType = kill, targetIndex = factionName)
