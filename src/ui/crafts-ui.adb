@@ -1542,6 +1542,7 @@ package body Crafts.UI is
    Default_Recipes_Sort_Order: constant Recipes_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* CUI4/CUI4.Recipes_Sort_Order
    -- FUNCTION
    -- The current sorting order for crafting recipes list
@@ -1550,6 +1551,7 @@ package body Crafts.UI is
    -- SOURCE
    Recipes_Sort_Order: Recipes_Sort_Orders := Default_Recipes_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* CUI4/CUI4.Sort_Crafting_Command
    -- FUNCTION
@@ -1583,6 +1585,7 @@ package body Crafts.UI is
           (Table => Recipes_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Module_Data is record
          Name: Unbounded_String;
          Workplace: Boolean;
@@ -1591,6 +1594,7 @@ package body Crafts.UI is
          Id: Bounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
+      --## rule on TYPE_INITIAL_VALUES
       Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean := False;
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Module_Data) return Boolean is
