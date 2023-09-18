@@ -39,6 +39,6 @@ upgradeShip(15)
 try:
   assert playerShip.modules[0].upgradeProgress < 20
 except AssertionDefect:
-  echo "Failed to progress in the player's ship's upgrade."
+  writeLine(stderr, "Failed to progress in the player's ship's upgrade.")
 playerShip.upgradeModule = -1
 upgradeShip(15)
