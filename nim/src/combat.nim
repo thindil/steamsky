@@ -1177,11 +1177,11 @@ proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
   for order in adaOrders.mitems:
     order = -1
   for index, order in boardingOrders:
-    adaOrders[index] = order + 1
+    adaOrders[index] = order
 
 proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], exportc.} =
   boardingOrders = @[]
   for order in adaOrders:
     if order == -1:
       break
-    boardingOrders.add(order - 1)
+    boardingOrders.add(order)
