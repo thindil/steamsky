@@ -2042,14 +2042,14 @@ package body Combat.UI is
               (Ship => Player_Ship,
                Member_Index => Crew_Container.To_Index(Position => I),
                Given_Order => REST);
-            if Order = BOARDING then
-               Boarding_Orders.Append(New_Item => 0);
-            end if;
          elsif Selected and Player_Ship.Crew(I).Order /= Order then
             Give_Orders
               (Ship => Player_Ship,
                Member_Index => Crew_Container.To_Index(Position => I),
                Given_Order => Order, Module_Index => 0);
+            if Order = BOARDING then
+               Boarding_Orders.Append(New_Item => 0);
+            end if;
          end if;
       end loop Set_Crew_Selection_Loop;
       Update_Combat_Ui;
