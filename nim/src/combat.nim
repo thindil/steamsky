@@ -902,7 +902,7 @@ proc combatTurn*() =
           continue
         attackDone = false
         if playerAttack:
-          if orderIndex notin boardingOrders:
+          if orderIndex notin boardingOrders.low .. boardingOrders.high:
             break
           if boardingOrders[orderIndex] in defenders.low .. defenders.high:
             defenderIndex = boardingOrders[orderIndex]
