@@ -193,7 +193,9 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       debugType = DebugTypes.combat)
   return true
 
-proc combatTurn*() =
+proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
+    CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
 
   var
     accuracyBonus, evadeBonus = 0
