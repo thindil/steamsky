@@ -865,7 +865,7 @@ proc combatTurn*() =
           game.enemy.ship.crew[defenderIndex2] = defender
         else:
           playerShip.crew[defenderIndex2] = defender
-          game.enemy.ship.crew[attackerIndex] = attacker
+          game.enemy.ship.crew[attackerIndex2] = attacker
         if defender.health == 0:
           if playerAttack2:
             death(memberIndex = defenderIndex2, reason = attacker.name &
