@@ -36,7 +36,7 @@ updateCraftingOrders("1")
 try:
   assert gameStats.craftingOrders.len == 1
 except AssertionDefect:
-  echo "Failed to update the amount of finished crafting orders."
+  writeLine(stderr, "Failed to update the amount of finished crafting orders.")
 
 echo "Testing updateFinishedGoals."
 gameStats.finishedGoals = @[]
@@ -44,19 +44,19 @@ updateFinishedGoals("1")
 try:
   assert gameStats.finishedGoals.len == 1
 except AssertionDefect:
-  echo "Failed to update the amount of finished goals."
+  writeLine(stderr, "Failed to update the amount of finished goals.")
 updateFinishedGoals("Sdfdsf")
 try:
   assert gameStats.finishedGoals.len == 1
 except AssertionDefect:
-  echo "Failed to not update the amount of finished goals with non-existing goal."
+  writeLine(stderr, "Failed to not update the amount of finished goals with non-existing goal.")
 
 echo "Testing getGamePoints."
 gameStats.points = 0
 try:
   assert getGamePoints() == 0
 except AssertionDefect:
-  echo "Failed to get the player's game points."
+  writeLine(stderr, "Failed to get the player's game points.")
 
 echo "Testing updateFinishedMissions."
 gameStats.finishedMissions = @[]
@@ -64,7 +64,7 @@ updateFinishedMissions("DESTROY")
 try:
   assert gameStats.finishedMissions.len == 1
 except AssertionDefect:
-  echo "Failed to update the amount of finished missions."
+  writeLine(stderr, "Failed to update the amount of finished missions.")
 
 echo "Testing clearGameStats."
 gameStats.points = 100
@@ -72,7 +72,7 @@ clearGameStats()
 try:
   assert gameStats.points == 0
 except AssertionDefect:
-  echo "Failed to clear the game statistics."
+  writeLine(stderr, "Failed to clear the game statistics.")
 
 echo "Testing updateKilledMobs."
 gameStats.killedMobs = @[]
@@ -86,7 +86,7 @@ updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
 try:
   assert gameStats.killedMobs.len == 1
 except AssertionDefect:
-  echo "Failed to update the amount of killed mobs."
+  writeLine(stderr, "Failed to update the amount of killed mobs.")
 
 echo "Testing updateDestroyedShips."
 gameStats.destroyedShips = @[]
@@ -94,9 +94,9 @@ updateDestroyedShips("Tiny pirates ship")
 try:
   assert gameStats.destroyedShips.len == 1
 except AssertionDefect:
-  echo "Failed to update the amount of destroyed ships."
+  writeLine(stderr, "Failed to update the amount of destroyed ships.")
 updateDestroyedShips("Sfdsfdsf")
 try:
   assert gameStats.destroyedShips.len == 1
 except AssertionDefect:
-  echo "Failed to not update the amount of destroyed ships with non-existing ship."
+  writeLine(stderr, "Failed to not update the amount of destroyed ships with non-existing ship.")
