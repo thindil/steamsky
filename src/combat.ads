@@ -179,5 +179,6 @@ package Combat is
 -- Temporary code to interact with Nim
 
    procedure Get_Harpoon_Duration;
+   function Get_Enemy_Name return Tiny_String.Bounded_String;
 
 end Combat;

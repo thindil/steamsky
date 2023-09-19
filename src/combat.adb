@@ -159,7 +159,7 @@ package body Combat is
          Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
       Index := 0;
-      Fill_Nim_Boarding_Orders_Loop:
+      Fill_Nim_Boarding_Orders_Loop :
       for Order of Boarding_Orders loop
          Nim_Orders(Index) := Order;
          Index := Index + 1;
@@ -168,7 +168,7 @@ package body Combat is
       Combat_Ada_Turn;
       Get_Ada_Boarding_Orders(Orders => Nim_Orders);
       Boarding_Orders.Clear;
-      Fill_Boarding_Orders_Loop:
+      Fill_Boarding_Orders_Loop :
       for Order of Nim_Orders loop
          exit Fill_Boarding_Orders_Loop when Order = -1;
          Boarding_Orders.Append(New_Item => Order);
@@ -221,5 +221,16 @@ package body Combat is
         (Player_Duration => Harpoon_Duration,
          Enemy_Duration => Enemy.Harpoon_Duration);
    end Get_Harpoon_Duration;
+
+   function Get_Enemy_Name return Tiny_String.Bounded_String is
+      function Set_Ada_Enemy_Name return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaEnemyName";
+   begin
+      return
+        Tiny_String.To_Bounded_String
+          (Source => Value(Item => Set_Ada_Enemy_Name));
+   end Get_Enemy_Name;
 
 end Combat;

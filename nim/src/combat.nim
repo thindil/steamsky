@@ -1188,3 +1188,6 @@ proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], 
     if order == -1:
       break
     boardingOrders.add(order)
+
+proc setAdaEnemyName(): cstring {.raises: [], tags: [], exportc.} =
+  return enemyName.cstring
