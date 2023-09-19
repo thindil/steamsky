@@ -14,43 +14,42 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Interfaces.C.Strings;
+with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
-use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with CoreUI; use CoreUI;
-with Crew; use Crew;
+with CoreUI;
+with Crew;
 with Dialogs; use Dialogs;
 with Items; use Items;
-with Maps.UI; use Maps.UI;
-with Ships.Crew; use Ships.Crew;
+with Maps.UI;
+with Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -257,6 +256,14 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Interfaces.C.Strings;
+      use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tk.Ada.Winfo;
+      use CoreUI;
       use Tiny_String;
 
       Crafts_Frame: Ttk_Frame :=
@@ -682,6 +689,8 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tiny_String;
 
       M_Type: Module_Type;
@@ -990,6 +999,8 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Widgets.Text;
       use Tiny_String;
 
       Recipe_Index: constant Bounded_String :=
@@ -1434,6 +1445,9 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Crew;
+      use Maps.UI;
+      use Ships.Crew;
       use Tiny_String;
 
       Recipe_Index: Bounded_String :=
