@@ -1129,7 +1129,6 @@ type
     loot: cint
     perception: cint
     guns: AdaGunsArray
-    name: cstring
     playerGuns: AdaGunsArray
     distance: cint
     harpoonDuration: cint
@@ -1144,7 +1143,6 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.evasion = game.enemy.evasion.cint
   adaEnemy.loot = game.enemy.loot.cint
   adaEnemy.perception = game.enemy.perception.cint
-  adaEnemy.name = enemyName.cstring
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
   adaEnemy.enemyHarpoonDuration = game.enemy.harpoonDuration.cint

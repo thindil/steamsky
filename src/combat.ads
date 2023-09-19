@@ -26,13 +26,6 @@ with Game; use Game;
 package Combat is
 -- ****
 
-   -- ****v* Combat/Combat.Enemy_Name
-   -- FUNCTION
-   -- Name of enemy
-   -- SOURCE
-   Enemy_Name: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
-   -- ****
-
    -- ****v* Combat/Combat.Pilot_Order, Combat.Engineer_Order
    -- FUNCTION
    -- Orders for crew members

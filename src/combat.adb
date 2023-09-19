@@ -32,7 +32,6 @@ package body Combat is
       Loot: Natural := 0;
       Perception: Natural := 0;
       Guns: Nim_Guns;
-      Name: chars_ptr;
       Player_Guns: Nim_Guns;
       Distance: Natural := 10_000;
       Harpoon_Duration: Natural := 0;
@@ -49,7 +48,6 @@ package body Combat is
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
       use Messages;
-      use Tiny_String;
 
       Nim_Enemy: Nim_Enemy_Record;
       Result: Integer;
@@ -74,7 +72,6 @@ package body Combat is
       Enemy.Loot := Nim_Enemy.Loot;
       Enemy.Perception := Nim_Enemy.Perception;
       End_Combat := False;
-      Enemy_Name := To_Bounded_String(Source => Value(Item => Nim_Enemy.Name));
       Messages_Starts := Get_Last_Message_Index + 1;
       Enemy.Guns.Clear;
       Convert_Enemy_Guns_Loop :

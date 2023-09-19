@@ -719,7 +719,7 @@ package body Combat.UI is
       Append
         (Source => Enemy_Info,
          New_Item =>
-           "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
+           "Name: " & To_String(Source => Get_Enemy_Name) & LF & "Type: " &
            To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
            To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
            "Distance: " &
@@ -2073,7 +2073,7 @@ package body Combat.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       if New_Combat then
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
-           and then Enemy_Name /=
+           and then Get_Enemy_Name /=
              Get_Proto_Ship
                (Proto_Index =>
                   Get_Event
