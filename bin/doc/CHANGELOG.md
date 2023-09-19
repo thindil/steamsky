@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Setting the player's ship's speed on the map
 - Events don't dissapear when they end
 - Crash when starting melee combat
+- Saving the game in the debug menu
 
 ## [9.1] - 2023-09-03
 
