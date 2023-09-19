@@ -196,7 +196,8 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
-
+  ## One turn in the combat, between the ships and the crew members if there
+  ## is boarding party on any ship.
   var
     accuracyBonus, evadeBonus = 0
     speedBonus = 0
