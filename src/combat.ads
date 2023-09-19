@@ -173,9 +173,8 @@ package Combat is
       -- FUNCTION
       -- Count damage/ships actions, etc
       -- SOURCE
-   procedure Combat_Turn with
-      Test_Case => (Name => "Test_CombatTurn", Mode => Robustness);
-      -- ****
+   procedure Combat_Turn;
+   -- ****
 
 -- Temporary code to interact with Nim
 
