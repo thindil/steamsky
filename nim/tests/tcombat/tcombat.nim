@@ -1,7 +1,8 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing startCombat.'''
+Testing startCombat.
+Testing combatTurn.'''
 """
 
 import std/tables
@@ -43,3 +44,6 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
 
 echo "Testing startCombat."
 discard startCombat(2)
+
+echo "Testing combatTurn."
+combatTurn()
