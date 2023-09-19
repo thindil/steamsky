@@ -51,8 +51,6 @@ package body Game.SaveLoad is
          Convention => C,
          External_Name => "saveAdaGame";
    begin
-      Get_Ada_Save_Name
-        (Name => New_String(Str => To_String(Source => Save_Name)));
       Set_Ship_In_Nim;
       Get_Bases_Loop :
       for I in Bases_Range loop
