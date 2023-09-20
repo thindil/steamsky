@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -152,11 +152,13 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".stats", Interp => Interp);
       Rows: Natural := 0;
       Tokens: Slice_Set;
-      Label: Ttk_Label;
+      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Member: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
+      --## rule off IMPROPER_INITIALIZATION
       Skills_Indexes: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Skills_List_Values: Unbounded_String;
    begin
       Member :=
@@ -357,10 +359,12 @@ package body DebugUI is
       Frame_Name: constant String := ".debugdialog.main.world.deleteevent";
       Events_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".delete", Interp => Interp);
+      --## rule off IMPROPER_INITIALIZATION
       Values_List: Unbounded_String;
+      Event: Event_Data;
+      --## rule on IMPROPER_INITIALIZATION
       Events_Button: constant Ttk_Button :=
         Get_Widget(pathName => Frame_Name & ".deleteevent", Interp => Interp);
-      Event: Event_Data;
    begin
       if Get_Events_Amount = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Events_Button);
@@ -766,10 +770,12 @@ package body DebugUI is
       Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
       Player_Ship.Modules(Module_Index).Durability :=
         Natural'Value(Get(Widgt => Spin_Box));
+      --## rule off ASSIGNMENTS
       Spin_Box.Name := New_String(Str => Frame_Name & ".maxdur");
       Player_Ship.Modules(Module_Index).Max_Durability :=
         Natural'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".upgrade");
+      --## rule on ASSIGNMENTS
       Player_Ship.Modules(Module_Index).Upgrade_Progress :=
         Natural'Value(Get(Widgt => Spin_Box));
       return TCL_OK;
@@ -860,7 +866,9 @@ package body DebugUI is
       Spin_Box: Ttk_SpinBox :=
         Get_Widget
           (pathName => Frame_Name & ".stats2.health", Interp => Interp);
+      --## rule off IMPROPER_INITIALIZATION
       Local_Attribute: Mob_Attribute_Record;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       Player_Ship.Crew(Member_Index).Health :=
@@ -868,6 +876,7 @@ package body DebugUI is
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
       Player_Ship.Crew(Member_Index).Thirst :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
+      --## rule off ASSIGNMENTS
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
       Player_Ship.Crew(Member_Index).Hunger :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
@@ -878,6 +887,7 @@ package body DebugUI is
       Player_Ship.Crew(Member_Index).Morale(1) :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
+      --## rule on ASSIGNMENTS
       Player_Ship.Crew(Member_Index).Loyalty :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
       Update_Stats_Loop :
@@ -1045,7 +1055,7 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
       Base_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
-      Item: Base_Cargo;
+      Item: Base_Cargo; --## rule line off IMPROPER_INITIALIZATION
    begin
       Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
       Find_Index_Loop :
@@ -1083,11 +1093,13 @@ package body DebugUI is
       Base_Box.Name := New_String(Str => Frame_Name & ".reputation");
       Sky_Bases(Base_Index).Reputation.Level :=
         Integer'Value(Get(Widgt => Base_Box));
+      --## rule off ASSIGNMENTS
       Base_Box.Name := New_String(Str => Frame_Name & ".money");
       Item :=
         BaseCargo_Container.Element
           (Container => Sky_Bases(Base_Index).Cargo, Index => 1);
       Item.Amount := Natural'Value(Get(Widgt => Base_Box));
+      --## rule on ASSIGNMENTS
       BaseCargo_Container.Replace_Element
         (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
          New_Item => Item);
