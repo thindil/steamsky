@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with Messages;
 with Events;
 with Maps;
@@ -93,8 +93,8 @@ package body Combat is
                3 => Nim_Enemy.Player_Guns(I, 2)));
       end loop Convert_Player_Guns_Loop;
       Get_Ship_From_Nim(Ship => Enemy.Ship);
-      if Pilot_Order = 0 then
-         Pilot_Order := 2;
+      if Get_Pilot_Order = 0 then
+         Set_Pilot_Order(New_Order => 2);
          Engineer_Order := 3;
       end if;
       if Result = 1 then
@@ -220,6 +220,8 @@ package body Combat is
    end Get_Harpoon_Duration;
 
    function Get_Enemy_Name return Tiny_String.Bounded_String is
+      use Interfaces.C.Strings;
+
       function Set_Ada_Enemy_Name return chars_ptr with
          Import => True,
          Convention => C,
