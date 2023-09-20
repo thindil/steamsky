@@ -22,11 +22,11 @@ echo "Testing getStepData."
 try:
   assert getStepData(storiesList["1"].steps[0].finishData, "condition") == "Rhetoric"
 except AssertionDefect:
-  echo "Failed to get finish data of selected step."
+  writeLine(stderr, "Failed to get finish data of selected step.")
 try:
   assert getStepData(storiesList["1"].steps[0].finishData, "sdfdsf").len == 0
 except AssertionDefect:
-  echo "Failed to not get non existing finish data of selected step."
+  writeLine(stderr, "Failed to not get non existing finish data of selected step.")
 
 echo "Testing startStory."
 playerShip.crew = @[]
@@ -43,11 +43,11 @@ for i in 1 .. 1_000_000:
 try:
   assert currentStory.index.len > 0
 except AssertionDefect:
-  echo "Failed to start a new story."
+  writeLine(stderr, "Failed to start a new story.")
 
 echo "Testing getCurrentStoryText."
 currentStory.finishedStep = askInBase
 try:
   assert getCurrentStoryText().len > 0
 except AssertionDefect:
-  echo "Failed to get the current story text."
+  writeLine(stderr, "Failed to get the current story text.")
