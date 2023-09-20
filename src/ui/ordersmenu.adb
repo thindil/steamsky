@@ -19,6 +19,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -28,6 +29,7 @@ with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
+with CoreUI; use CoreUI;
 with Crafts; use Crafts;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -62,7 +64,7 @@ package body OrdersMenu is
       Missions_Limit: Integer;
       Event: Events_Types := NONE;
       Item_Index: Natural;
-      Orders_Menu: constant Ttk_Frame :=
+      Orders_Menu: Ttk_Frame :=
         Create_Dialog(Name => ".gameframe.orders", Title => "Ship orders");
       Dialog_Close_Button: constant Ttk_Button :=
         Create
@@ -109,6 +111,12 @@ package body OrdersMenu is
            Close_Dialog_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
               Argv => Argv);
+      end if;
+      if Tcl_GetVar(interp => Interp, varName => "gamestate") = "combat" then
+         Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
+         Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);
+         Destroy(Widgt => Orders_Menu);
+         return TCL_OK;
       end if;
       if Find_Member(Order => TALK) > 0 then
          Have_Trader := True;
