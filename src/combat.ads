@@ -30,7 +30,7 @@ package Combat is
    -- FUNCTION
    -- Orders for crew members
    -- SOURCE
-   Pilot_Order, Engineer_Order: Natural := 0;
+   Engineer_Order: Natural := 0;
    -- ****
 
    -- ****t* Combat/Combat.Guns_Info_Array
@@ -173,5 +173,13 @@ package Combat is
 
    procedure Get_Harpoon_Duration;
    function Get_Enemy_Name return Tiny_String.Bounded_String;
+   procedure Set_Pilot_Order(New_Order: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaPilotOrder";
+   function Get_Pilot_Order return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaPilotOrder";
 
 end Combat;

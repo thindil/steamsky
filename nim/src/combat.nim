@@ -1189,3 +1189,9 @@ proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], 
 
 proc setAdaEnemyName(): cstring {.raises: [], tags: [], exportc.} =
   return enemyName.cstring
+
+proc getAdaPilotOrder(order: cint) {.raises: [], tags: [], exportc.} =
+  pilotOrder = order
+
+proc setAdaPilotOrder(): cint {.raises: [], tags: [], exportc.} =
+  return pilotOrder.cint
