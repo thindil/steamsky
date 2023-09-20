@@ -438,11 +438,11 @@ type
     ## * data       - The minumum quality of the cabin (in bases) or passenger index (in accepted)
     ## * shipIndex  - The index of the prototype ship to destroy
     ## * target     - The target for the mission (ship, item)
-    time*: Positive
+    time*: Positive = 1
     targetX*: range[0..MapXRange.high]
     targetY*: range[0..MapYRange.high]
-    reward*: Positive
-    startBase*: BasesRange
+    reward*: Positive = 1
+    startBase*: BasesRange = 1
     finished*: bool
     multiplier*: RewardMultiplier
     case mType*: MissionsTypes
@@ -590,9 +590,9 @@ type
     ## * itemIndex - The index of the prototype item used by the event
     ## * shipIndex - The index of the prototype ship used by the event
     ## * data      - General data of the event
-    skyX*: MapXRange
-    skyY*: MapYRange
-    time*: Positive
+    skyX*: MapXRange = 1
+    skyY*: MapYRange = 1
+    time*: Positive = 1
     case eType*: EventsTypes
     of doublePrice:
       itemIndex*: int
