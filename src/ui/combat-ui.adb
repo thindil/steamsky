@@ -294,7 +294,8 @@ package body Combat.UI is
          NewIndex => Natural'Image(Find_Member(Order => PILOT)));
       Combo_Box.Name := New_String(Str => Frame & ".pilotorder");
       Current
-        (ComboBox => Combo_Box, NewIndex => Integer'Image(Get_Pilot_Order - 1));
+        (ComboBox => Combo_Box,
+         NewIndex => Integer'Image(Get_Pilot_Order - 1));
       if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) and
         Find_Member(Order => PILOT) = 0 then
@@ -311,7 +312,8 @@ package body Combat.UI is
          NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
       Combo_Box.Name := New_String(Str => Frame & ".engineerorder");
       Current
-        (ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
+        (ComboBox => Combo_Box,
+         NewIndex => Natural'Image(Get_Engineer_Order - 1));
       if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) and
         Find_Member(Order => ENGINEER) = 0 then
@@ -1384,7 +1386,8 @@ package body Combat.UI is
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotorder");
          --## rule off IMPROPER_INITIALIZATION
-         Set_Pilot_Order(New_Order => Positive'Value(Current(ComboBox => Combo_Box)) + 1);
+         Set_Pilot_Order
+           (New_Order => Positive'Value(Current(ComboBox => Combo_Box)) + 1);
          --## rule on IMPROPER_INITIALIZATION
          if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
@@ -1405,7 +1408,8 @@ package body Combat.UI is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineerorder");
          --## rule off IMPROPER_INITIALIZATION
-         Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
+         Set_Engineer_Order
+           (New_Order => Positive'Value(Current(ComboBox => Combo_Box)) + 1);
          --## rule on IMPROPER_INITIALIZATION
          if Faction.Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
@@ -2102,7 +2106,7 @@ package body Combat.UI is
                  To_String(Source => Data_Directory) & "ui" & Dir_Separator &
                  "combat.tcl");
             Set_Pilot_Order(New_Order => 2);
-            Engineer_Order := 3;
+            Set_Engineer_Order(New_Order => 3);
             Add_Command
               (Name => "NextTurn", Ada_Command => Next_Turn_Command'Access);
             Add_Command

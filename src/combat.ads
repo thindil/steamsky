@@ -26,13 +26,6 @@ with Game; use Game;
 package Combat is
 -- ****
 
-   -- ****v* Combat/Combat.Pilot_Order, Combat.Engineer_Order
-   -- FUNCTION
-   -- Orders for crew members
-   -- SOURCE
-   Engineer_Order: Natural := 0;
-   -- ****
-
    -- ****t* Combat/Combat.Guns_Info_Array
    -- FUNCTION
    -- Data structure for gun information: 1 - Gun index in ship modules

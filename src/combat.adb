@@ -95,7 +95,7 @@ package body Combat is
       Get_Ship_From_Nim(Ship => Enemy.Ship);
       if Get_Pilot_Order = 0 then
          Set_Pilot_Order(New_Order => 2);
-         Engineer_Order := 3;
+         Set_Engineer_Order(New_Order => 3);
       end if;
       if Result = 1 then
          return True;
