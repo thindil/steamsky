@@ -181,5 +181,13 @@ package Combat is
       Import => True,
       Convention => C,
       External_Name => "setAdaPilotOrder";
+   procedure Set_Engineer_Order(New_Order: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaEngineerOrder";
+   function Get_Engineer_Order return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaEngineerOrder";
 
 end Combat;

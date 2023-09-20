@@ -1195,3 +1195,9 @@ proc getAdaPilotOrder(order: cint) {.raises: [], tags: [], exportc.} =
 
 proc setAdaPilotOrder(): cint {.raises: [], tags: [], exportc.} =
   return pilotOrder.cint
+
+proc getAdaEngineerOrder(order: cint) {.raises: [], tags: [], exportc.} =
+  engineerOrder = order
+
+proc setAdaEngineerOrder(): cint {.raises: [], tags: [], exportc.} =
+  return engineerOrder.cint
