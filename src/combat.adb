@@ -232,4 +232,16 @@ package body Combat is
           (Source => Value(Item => Set_Ada_Enemy_Name));
    end Get_Enemy_Name;
 
+   function Get_End_Combat return Boolean is
+      function Get_Ada_End_Combat return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaEndCombat";
+   begin
+      if Get_Ada_End_Combat = 1 then
+         return True;
+      end if;
+      return False;
+   end Get_End_Combat;
+
 end Combat;

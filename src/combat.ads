@@ -182,5 +182,6 @@ package Combat is
       Import => True,
       Convention => C,
       External_Name => "setAdaEngineerOrder";
+   function Get_End_Combat return Boolean;
 
 end Combat;

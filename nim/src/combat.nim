@@ -1201,3 +1201,6 @@ proc getAdaEngineerOrder(order: cint) {.raises: [], tags: [], exportc.} =
 
 proc setAdaEngineerOrder(): cint {.raises: [], tags: [], exportc.} =
   return engineerOrder.cint
+
+proc getAdaEndCombat(): cint {.raises: [], tags: [], exportc.} =
+  return endCombat.cint
