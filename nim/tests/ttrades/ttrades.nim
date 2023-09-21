@@ -49,4 +49,4 @@ generateTraderCargo(96)
 try:
   assert traderCargo.len > 0
 except AssertionDefect:
-  echo "Failed to generate the trader's cargo."
+  writeLine(stderr,  "Failed to generate the trader's cargo.")
