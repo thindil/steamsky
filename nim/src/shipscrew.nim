@@ -241,8 +241,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
                 if owner == -1:
                   ship.modules[index].owner[i] = memberIndex;
                   addMessage(message = (memberName & " takes " & module.name &
-                      " as their own cabin.").cstring,
-                      kind = otherMessage.ord.cint)
+                      " as their own cabin."),
+                      mType = otherMessage)
                   break takeCabin
       else:
         discard
@@ -318,60 +318,60 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
   if ship.crew == playerShip.crew:
     case givenOrder
       of pilot:
-        addMessage(message = (memberName & " starts piloting.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts piloting.",
+            mType = orderMessage)
         ship.modules[moduleIndex2].owner[0] = memberIndex
       of engineer:
-        addMessage(message = (memberName & " starts engineer's duty.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts engineer's duty.",
+            mType = orderMessage)
       of gunner:
-        addMessage(message = (memberName & " starts operating gun.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts operating gun.",
+            mType = orderMessage)
         ship.modules[moduleIndex2].owner[0] = memberIndex
       of rest:
-        addMessage(message = (memberName & " is going on break.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " is going on break.",
+            mType = orderMessage)
       of repair:
-        addMessage(message = (memberName & " starts repairing ship.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts repairing ship.",
+            mType = orderMessage)
       of craft:
-        addMessage(message = (memberName & " starts manufacturing.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts manufacturing.",
+            mType = orderMessage)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
           if owner == -1:
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
       of upgrading:
-        addMessage(message = (memberName & " starts upgrading " & ship.modules[
-            ship.upgradeModule].name & ".").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts upgrading " & ship.modules[
+            ship.upgradeModule].name & ".",
+            mType = orderMessage)
       of talk:
-        addMessage(message = (memberName &
-            " is now assigned to talking in bases.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName &
+            " is now assigned to talking in bases.",
+            mType = orderMessage)
       of heal:
-        addMessage(message = (memberName &
-            " starts healing wounded crew members.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName &
+            " starts healing wounded crew members.",
+            mType = orderMessage)
         if moduleIndex > -1:
           for index, owner in ship.modules[moduleIndex].owner.pairs:
             if owner == -1:
               ship.modules[moduleIndex2].owner[index] = memberIndex
               break
       of clean:
-        addMessage(message = (memberName & " starts cleaning ship.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName & " starts cleaning ship.",
+            mType = orderMessage)
       of boarding:
-        addMessage(message = (memberName &
-            " starts boarding the enemy ship.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName &
+            " starts boarding the enemy ship.",
+            mType = orderMessage)
       of defend:
-        addMessage(message = (memberName &
-            " starts defending the ship.").cstring,
-            kind = orderMessage.ord.cint)
+        addMessage(message = memberName &
+            " starts defending the ship.",
+            mType = orderMessage)
       of train:
-        addMessage(message = (memberName &
-            " starts personal training.").cstring, kind = orderMessage.ord.cint)
+        addMessage(message = memberName &
+            " starts personal training.", mType = orderMessage)
         for index, owner in ship.modules[moduleIndex2].owner.pairs:
           if owner == -1:
             ship.modules[moduleIndex2].owner[index] = memberIndex

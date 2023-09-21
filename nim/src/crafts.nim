@@ -550,9 +550,9 @@ proc setRecipe*(workshop: Natural; amount: Positive;
     playerShip.modules[workshop].craftingIndex = recipeIndex.strip
     playerShip.modules[workshop].craftingTime = recipesList[recipeIndex].time
     recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
-  addMessage(message = (recipeName & " was set as manufacturing order in " &
-      playerShip.modules[workshop].name & ".").cstring,
-      kind = orderMessage.ord.cint)
+  addMessage(message = recipeName & " was set as manufacturing order in " &
+      playerShip.modules[workshop].name & ".",
+      mType = orderMessage)
   updateOrders(ship = playerShip)
 
 proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
