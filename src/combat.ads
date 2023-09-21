@@ -107,13 +107,6 @@ package Combat is
    Enemy: Enemy_Record;
    -- ****
 
-   -- ****v* Combat/Combat.End_Combat
-   -- FUNCTION
-   -- True if combat ends
-   -- SOURCE
-   End_Combat: Boolean;
-   -- ****
-
    -- ****v* Combat/Combat.Messages_Starts
    -- FUNCTION
    -- Start index for showing messages

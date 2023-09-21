@@ -842,12 +842,12 @@ package body Combat.UI is
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
       Row := 1;
-      if End_Combat then
+      if Get_End_Combat then
          Enemy.Distance := 100;
       end if;
       Show_Enemy_Ship_Status_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
-         if End_Combat then
+         if Get_End_Combat then
             Enemy.Ship.Modules(I).Durability := 0;
          end if;
          Label :=
@@ -1267,7 +1267,7 @@ package body Combat.UI is
    begin
       Combat_Turn;
       Update_Header;
-      if End_Combat then
+      if Get_End_Combat then
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>

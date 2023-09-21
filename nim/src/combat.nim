@@ -1133,7 +1133,6 @@ type
     distance: cint
     harpoonDuration: cint
     enemyHarpoonDuration: cint
-    endCombat: cint
 
   AdaBoardingOrders = array[50, cint]
 
@@ -1146,7 +1145,6 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
   adaEnemy.enemyHarpoonDuration = game.enemy.harpoonDuration.cint
-  adaEnemy.endCombat = (if endCombat: 1 else: 0)
   for index, gun in game.enemy.guns:
     adaEnemy.guns[index] = [gun[1].cint + 1, gun[2].cint, gun[3].cint]
   if game.enemy.guns.len < 10:

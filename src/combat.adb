@@ -36,7 +36,6 @@ package body Combat is
       Distance: Natural := 10_000;
       Harpoon_Duration: Natural := 0;
       Enemy_Harpoon_Duration: Natural := 0;
-      End_Combat: Natural := 0;
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
@@ -71,7 +70,6 @@ package body Combat is
       Enemy.Evasion := Nim_Enemy.Evasion;
       Enemy.Loot := Nim_Enemy.Loot;
       Enemy.Perception := Nim_Enemy.Perception;
-      End_Combat := False;
       Messages_Starts := Get_Last_Message_Index + 1;
       Enemy.Guns.Clear;
       Convert_Enemy_Guns_Loop :
@@ -204,7 +202,6 @@ package body Combat is
                2 => Nim_Enemy.Player_Guns(I, 1),
                3 => Nim_Enemy.Player_Guns(I, 2)));
       end loop Convert_Player_Guns_Loop;
-      End_Combat := (if Nim_Enemy.End_Combat = 1 then True else False);
    end Combat_Turn;
 
    procedure Get_Harpoon_Duration is
