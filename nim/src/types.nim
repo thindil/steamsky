@@ -181,19 +181,19 @@ type
     ## * name       - The name of the item, if different than the default one
     ## * durability - The current durability of the item
     ## * price      - The price for which the item was bought
-    protoIndex*: Natural
-    amount*: Positive
+    protoIndex*: Natural = 0
+    amount*: Positive = 1
     name*: string
     durability*: ItemsDurability
-    price*: Natural
+    price*: Natural = 0
 
   MobAttributeRecord* = object
     ## Used to store information about the crew member's attributes
     ##
     ## * level      - The level of the attribute
     ## * experience - The amount of experience in the attribute
-    level*: range[1..50]
-    experience*: Natural
+    level*: range[1..50] = 1
+    experience*: Natural = 0
 
   SkillInfo* = object
     ## Used to store information about the crew member's skills
@@ -382,11 +382,11 @@ type
     skills*: seq[SkillInfo]
     name*: string
     gender*: char
-    price*: Positive
+    price*: Positive = 1
     inventory*: seq[Positive]
     equipment*: EquipmentArray
-    payment*: Positive
-    homeBase*: BasesRange
+    payment*: Positive = 1
+    homeBase*: BasesRange = 1
     faction*: string
 
   BaseCargo* = object
@@ -625,9 +625,9 @@ type
     ## * protoIndex - The index of mob's prototype which will be used to create the crew member
     ## * minAmount  - The minimum amount of the mob as crew members on the ship
     ## * maxAmount  - The maximum amount of the mob as crew members on the ship
-    protoIndex*: Positive
-    minAmount*: Positive
-    maxAmount*: Natural
+    protoIndex*: Positive = 1
+    minAmount*: Positive = 1
+    maxAmount*: Natural = 0
 
   ProtoShipData* = object
     ## Used to store data about the prototype of the ship
