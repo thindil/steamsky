@@ -23,7 +23,7 @@ type
     kind*: cint
     color*: cint
 
-func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
+func formattedTime(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
   ## Format the selected the game time, add leading zeroes, marks between
   ## values, etc.
@@ -50,7 +50,48 @@ func formattedTime*(year: cint, month: cint, day: cint, hour: cint,
   formattedTime.add($minutes)
   return formattedTime.cstring
 
-proc addMessage*(message: cstring; kind: cint; color: cint = ord(
+func formattedTime*(year: int, month: int, day: int, hour: int,
+    minutes: int): string {.gcsafe, raises: [], tags: [].} =
+  ## Format the selected the game time, add leading zeroes, marks between
+  ## values, etc.
+  ##
+  ## * year    - The amount of years to format
+  ## * month   - The amount of months to format
+  ## * day     - The amount of days to format
+  ## * hour    - The amount of hours to format
+  ## * minutes - The amount of minutes to format
+  ##
+  ## Returns the string with formatted time
+  result = $year & "-"
+  if month < 10:
+    result.add("0")
+  result.add($month & "-")
+  if day < 10:
+    result.add("0")
+  result.add($day & " ")
+  if hour < 10:
+    result.add("0")
+  result.add($hour & ":")
+  if minutes < 10:
+    result.add("0")
+  result.add($minutes)
+
+proc addMessage*(message: string; mType: MessageType;
+    color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
+  ## Add the message to the messages list. Delete the oldest message if the
+  ## adding will reach the max limit of messages. Same as above, but uses
+  ## the standard types instead of compatible string or int.
+  ##
+  ## * message - The message to add
+  ## * mType   - The type of the message to add
+  ## * color   - The color used to draw the message
+  if messagesList.len() == gameSettings.messagesLimit:
+    messagesList.delete(i = 0)
+  messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate.year,
+      gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] " &
+      message, kind: mType, color: color))
+
+proc addMessage(message: cstring; kind: cint; color: cint = ord(
     white)) {.sideEffect, raises: [], tags: [], exportc.} =
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages
@@ -63,18 +104,6 @@ proc addMessage*(message: cstring; kind: cint; color: cint = ord(
   messagesList.add(y = MessageData(message: "[" & $formattedTime(gameDate.year,
       gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] " &
       $message, kind: kind.MessageType, color: color.MessageColor))
-
-proc addMessage*(message: string; mType: MessageType;
-    color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
-  ## Add the message to the messages list. Delete the oldest message if the
-  ## adding will reach the max limit of messages. Same as above, but uses
-  ## the standard types instead of compatible string or int.
-  ##
-  ## * message - The message to add
-  ## * mType   - The type of the message to add
-  ## * color   - The color used to draw the message
-  addMessage(message = message.cstring, kind = mType.ord.cint,
-      color = color.ord.cint)
 
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
   ## Get the index of the last message in the messagesList
