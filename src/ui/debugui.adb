@@ -150,7 +150,7 @@ package body DebugUI is
           (pathName => Frame_Name & ".stats2.health", Interp => Interp);
       Member_Frame: Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".stats", Interp => Interp);
-      Rows: Natural := 0;
+      Rows: Natural;
       Tokens: Slice_Set;
       Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Member: Member_Data
@@ -159,7 +159,7 @@ package body DebugUI is
       --## rule off IMPROPER_INITIALIZATION
       Skills_Indexes: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
-      Skills_List_Values: Unbounded_String;
+      Skills_List_Values: Unbounded_String := Null_Unbounded_String;
    begin
       Member :=
         Player_Ship.Crew(Natural'Value(Current(ComboBox => Combo_Box)) + 1);
@@ -370,10 +370,9 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Events_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Events_Box);
          return TCL_OK;
-      else
-         Tcl.Tk.Ada.Grid.Grid(Slave => Events_Button);
-         Tcl.Tk.Ada.Grid.Grid(Slave => Events_Box);
       end if;
+      Tcl.Tk.Ada.Grid.Grid(Slave => Events_Button);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Events_Box);
       Update_Events_Loop :
       for I in 1 .. Get_Events_Amount loop
          Event := Get_Event(Index => I);
@@ -502,7 +501,7 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".ship.x", Interp => Interp);
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".ship.module", Interp => Interp);
-      Values_List: Unbounded_String;
+      Values_List: Unbounded_String := Null_Unbounded_String;
    begin
       Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Sky_X));
       Spin_Box.Name := New_String(Str => Frame_Name & ".ship.y");
@@ -960,7 +959,7 @@ package body DebugUI is
       Item_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".amount", Interp => Interp);
       Item_Name: Bounded_String;
-      Item_Index: Natural;
+      Item_Index: Natural := 0;
    begin
       Item_Name := To_Bounded_String(Source => Get(Widgt => Item_Entry));
       Find_Index_Loop :
@@ -1368,7 +1367,7 @@ package body DebugUI is
 
       Frame_Name: constant String := ".debugdialog.main.bases";
       Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type");
-      Values_List: Unbounded_String;
+      Values_List: Unbounded_String := Null_Unbounded_String;
    begin
       Tcl_EvalFile
         (interp => Get_Context,
@@ -1459,7 +1458,7 @@ package body DebugUI is
       Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
       Load_Proto_Modules_Block :
       declare
-         Module: Base_Module_Data;
+         Module: Base_Module_Data := (others => <>);
       begin
          Load_Modules_Prototypes_Loop :
          for I in 1 .. Get_Modules_Amount loop
