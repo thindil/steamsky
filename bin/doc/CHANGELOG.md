@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Crash when starting melee combat
 - Saving the game in the debug menu
 - Showing the player's ship's orders menu during combat
+- Smaller factions starts in large factions' bases
 
 ## [9.0.1] - 2023-08-20
 
