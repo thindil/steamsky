@@ -184,7 +184,7 @@ type
     protoIndex*: Natural = 0
     amount*: Positive = 1
     name*: string
-    durability*: ItemsDurability
+    durability*: ItemsDurability = 100
     price*: Natural = 0
 
   MobAttributeRecord* = object
@@ -201,9 +201,9 @@ type
     ## * index      - The index of the skill
     ## * level      - The level of the skill
     ## * experience - The amount of the experience in the skill
-    index*: Natural
-    level*: SkillRange
-    experience*: Natural
+    index*: Natural = 0
+    level*: SkillRange = 0
+    experience*: Natural = 0
 
   MemberData* = object
     ## Used to store information about the crew member
@@ -228,26 +228,26 @@ type
     ## * loyalty        - The loyalty level of the member
     ## * homeBase       - The index of the home base
     ## * faction        - The faction index to which the member belongs
-    attributes*: seq[MobAttributeRecord]
-    skills*: seq[SkillInfo]
-    name*: string
-    gender*: char
-    health*: SkillRange
-    tired*: range[0..150]
-    hunger*: SkillRange
-    thirst*: SkillRange
-    order*: CrewOrders
-    previousOrder*: CrewOrders
-    orderTime*: int
+    attributes*: seq[MobAttributeRecord] = @[]
+    skills*: seq[SkillInfo] = @[]
+    name*: string = ""
+    gender*: char = 'M'
+    health*: SkillRange = 100
+    tired*: range[0..150] = 0
+    hunger*: SkillRange = 0
+    thirst*: SkillRange = 0
+    order*: CrewOrders = rest
+    previousOrder*: CrewOrders = rest
+    orderTime*: int = 15
     orders*: array[1..12, Natural]
-    inventory*: seq[InventoryData]
+    inventory*: seq[InventoryData] = @[]
     equipment*: EquipmentArray
     payment*: AttributesArray
-    contractLength*: int
+    contractLength*: int = -1
     morale*: AttributesArray
-    loyalty*: SkillRange
-    homeBase*: BasesRange
-    faction*: string
+    loyalty*: SkillRange = 100
+    homeBase*: BasesRange = 1
+    faction*: string = ""
 
   ShipRecord* = object
     ## Used to store information about ships
@@ -265,19 +265,19 @@ type
     ## * repairModule  - The index of module which will be repaired as first
     ## * description   - The description of the ship
     ## * homeBase      - The index of the home base of the ship
-    name*: string
-    skyX*: MapXRange
-    skyY*: MapYRange
-    speed*: ShipSpeed
-    modules*: seq[ModuleData]
-    cargo*: seq[InventoryData]
-    crew*: seq[MemberData]
-    upgradeModule*: int
-    destinationX*: range[0..MapXRange.high]
-    destinationY*: range[0..MapYRange.high]
-    repairModule*: int
-    description*: string
-    homeBase*: Natural
+    name*: string = ""
+    skyX*: MapXRange = 1
+    skyY*: MapYRange = 1
+    speed*: ShipSpeed = fullSpeed
+    modules*: seq[ModuleData] = @[]
+    cargo*: seq[InventoryData] = @[]
+    crew*: seq[MemberData] = @[]
+    upgradeModule*: int = -1
+    destinationX*: range[0..MapXRange.high] = 0
+    destinationY*: range[0..MapYRange.high] = 0
+    repairModule*: int = -1
+    description*: string = ""
+    homeBase*: Natural = 0
 
   ReputationRanges* = object
     ## Used to store reputation ranges for relation with other factions
@@ -543,17 +543,17 @@ type
     ## * tool            - The type of item used as a tool in crafting
     ## * reputation      - The minimal amount of reputation needed to buy the recipe in bases
     ## * toolQuality     - The minimal quality of tool used in crafting
-    materialTypes*: seq[string]
-    materialAmounts*: seq[Positive]
-    resultIndex*: Natural
-    resultAmount*: Natural
-    workplace*: ModuleType
-    skill*: Natural
-    time*: Positive
-    difficulty*: Positive
-    tool*: string
-    reputation*: ReputationRange
-    toolQuality*: Positive
+    materialTypes*: seq[string] = @[]
+    materialAmounts*: seq[Positive] = @[]
+    resultIndex*: Natural = 0
+    resultAmount*: Natural = 0
+    workplace*: ModuleType = alchemyLab
+    skill*: Natural = 0
+    time*: Positive = 1
+    difficulty*: Positive = 1
+    tool*: string = ""
+    reputation*: ReputationRange = 0
+    toolQuality*: Positive = 1
 
   GoalData* = object
     ## Used to store information about the in-game goals
