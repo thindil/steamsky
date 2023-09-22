@@ -290,10 +290,51 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
       upgradeProgress = ((modulesList[playerShip.modules[
           moduleIndex].protoIndex].maxValue.float * 2.0) *
           newGameSettings.upgradeCostBonus).Natural
+    of hull:
+      if playerShip.modules[moduleIndex].maxModules == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher enlarge the size of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = ((modulesList[playerShip.modules[
+          moduleIndex].protoIndex].maxValue.float * 40.0) *
+          newGameSettings.upgradeCostBonus).Natural
+    of harpoonGun:
+      if playerShip.modules[moduleIndex].duration == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher improve the strength of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = ((modulesList[playerShip.modules[
+          moduleIndex].protoIndex].maxValue.float * 10.0) *
+          newGameSettings.upgradeCostBonus).Natural
     else:
-      discard
+      raise newException(exceptn = ShipUpgradeError,
+          message = playerShip.modules[moduleIndex].name & " can't be upgraded in that way.")
+    upgradeAction = maxValue
+  of 3:
+    case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+    of engine:
+      var maxValue = (modulesList[playerShip.modules[
+          moduleIndex].protoIndex].value.float / 2.0).Natural
+      if maxValue < 1:
+        maxValue = 1
+      if playerShip.modules[moduleIndex].fuelUsage == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher improve the fuel usage of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = ((modulesList[playerShip.modules[
+          moduleIndex].protoIndex].value.float * 20.0) *
+          newGameSettings.upgradeCostBonus).Natural
+    else:
+      raise newException(exceptn = ShipUpgradeError,
+          message = playerShip.modules[moduleIndex].name & " can't be upgraded in that way.")
+    upgradeAction = value
+  of 4:
+    if playerShip.modules[moduleIndex].upgradeAction == none:
+      raise newException(exceptn = ShipUpgradeError,
+          message = playerShip.modules[moduleIndex].name & " doesn't have any upgrade set yet.")
+    upgradeAction = playerShip.modules[moduleIndex].upgradeAction
   else:
-    discard
+    return
 
 # Temporary code for interfacing with Ada
 
