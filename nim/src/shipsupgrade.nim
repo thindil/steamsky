@@ -243,7 +243,9 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
   if playerShip.modules[moduleIndex].durability == 0 and upgradeType != 3:
     raise newException(exceptn = ShipUpgradeError,
       message = "You can't upgrade " & playerShip.modules[moduleIndex].name & " because it's destroyed.")
-  var upgradeAction: ShipUpgrade = none
+  var
+    upgradeAction: ShipUpgrade = none
+    upgradeProgress = 0
   case upgradeType
   of 1:
     let maxValue = (modulesList[playerShip.modules[
@@ -253,6 +255,43 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
         message = "You can't futher improve the durability of " &
         playerShip.modules[moduleIndex].name & ".")
     upgradeAction = durability
+    upgradeProgress = (modulesList[playerShip.modules[
+        moduleIndex].protoIndex].durability.float *
+        newGameSettings.upgradeCostBonus).Natural
+  of 2:
+    let maxValue = (modulesList[playerShip.modules[
+        moduleIndex].protoIndex].maxValue.float * 1.5).Natural
+    case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+    of engine:
+      if playerShip.modules[moduleIndex].power == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher improve the power of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = ((modulesList[playerShip.modules[
+          moduleIndex].protoIndex].maxValue.float / 20.0) *
+          newGameSettings.upgradeCostBonus).Natural
+    of cabin:
+      if playerShip.modules[moduleIndex].quality == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher improve the quality of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = (modulesList[playerShip.modules[
+          moduleIndex].protoIndex].maxValue.float *
+          newGameSettings.upgradeCostBonus).Natural
+    of gun, batteringRam:
+      let damage = if playerShip.modules[moduleIndex].mType ==
+          ModuleType2.gun: playerShip.modules[moduleIndex].damage
+          else:
+            playerShip.modules[moduleIndex].damage2
+      if damage == maxValue:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You can't futher improve the damage of " &
+            playerShip.modules[moduleIndex].name & ".")
+      upgradeProgress = ((modulesList[playerShip.modules[
+          moduleIndex].protoIndex].maxValue.float * 2.0) *
+          newGameSettings.upgradeCostBonus).Natural
+    else:
+      discard
   else:
     discard
 
