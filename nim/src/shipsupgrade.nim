@@ -335,6 +335,24 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
     upgradeAction = playerShip.modules[moduleIndex].upgradeAction
   else:
     return
+  let materialIndex = findItem(inventory = playerShip.cargo,
+      itemType = modulesList[playerShip.modules[
+      moduleIndex].protoIndex].repairMaterial)
+  if materialIndex == -1:
+    for item in itemsList.values:
+      if item.itemType == modulesList[playerShip.modules[
+          moduleIndex].protoIndex].repairMaterial:
+        raise newException(exceptn = ShipUpgradeError,
+            message = "You don't have the " & item.name & " to upgrade " &
+            playerShip.modules[moduleIndex].name & ".")
+  playerShip.upgradeModule = moduleIndex
+  if playerShip.modules[moduleIndex].upgradeAction != upgradeAction:
+    playerShip.modules[moduleIndex].upgradeProgress = upgradeProgress
+    if playerShip.modules[moduleIndex].upgradeProgress == 0:
+      playerShip.modules[moduleIndex].upgradeProgress = 1
+    playerShip.modules[moduleIndex].upgradeAction = upgradeAction
+  addMessage(message = "You set the " & playerShip.modules[moduleIndex].name &
+      " to upgrade.", mType = orderMessage)
 
 # Temporary code for interfacing with Ada
 
@@ -343,3 +361,10 @@ proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc.} =
     upgradeShip(minutes = minutes)
   except KeyError, Exception:
     discard
+
+proc startAdaUpgrading(moduleIndex, upgradeType: cint): cstring {.raises: [],
+    tags: [], exportc.} =
+  try:
+    startUpgrading(moduleIndex = moduleIndex - 1, upgradeType = upgradeType)
+  except:
+    return getCurrentExceptionMsg().cstring
