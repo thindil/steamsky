@@ -368,3 +368,4 @@ proc startAdaUpgrading(moduleIndex, upgradeType: cint): cstring {.raises: [],
     startUpgrading(moduleIndex = moduleIndex - 1, upgradeType = upgradeType)
   except:
     return getCurrentExceptionMsg().cstring
+  return ""
