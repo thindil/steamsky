@@ -18,6 +18,9 @@
 import std/tables
 import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
+type ShipUpgradeError* = object of CatchableError
+  ## Raised when there is some problems with starting the ship upgrade
+
 proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
     Exception], tags: [RootEffect].} =
   ## Upgrade the currently selected module in the player ship
@@ -235,6 +238,23 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
     else:
       upgradedModule.upgradeProgress = upgradeProgress
   playerShip.modules[playerShip.upgradeModule] = upgradedModule
+
+proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
+  if playerShip.modules[moduleIndex].durability == 0 and upgradeType != 3:
+    raise newException(exceptn = ShipUpgradeError,
+      message = "You can't upgrade " & playerShip.modules[moduleIndex].name & " because it's destroyed.")
+  var upgradeAction: ShipUpgrade = none
+  case upgradeType
+  of 1:
+    let maxValue = (modulesList[playerShip.modules[
+        moduleIndex].protoIndex].durability.float * 1.5).Natural
+    if playerShip.modules[moduleIndex].maxDurability == maxValue:
+      raise newException(exceptn = ShipUpgradeError,
+        message = "You can't futher improve the durability of " &
+        playerShip.modules[moduleIndex].name & ".")
+    upgradeAction = durability
+  else:
+    discard
 
 # Temporary code for interfacing with Ada
 
