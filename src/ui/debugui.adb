@@ -1141,7 +1141,9 @@ package body DebugUI is
       Npc_Ship_X := Positive'Value(Get(Widgt => Ship_Box));
       Ship_Box.Name := New_String(Str => Frame_Name & ".y");
       Npc_Ship_Y := Positive'Value(Get(Widgt => Ship_Box));
+      --## rule off ASSIGNMENTS
       Ship_Box.Name := New_String(Str => Frame_Name & ".duration");
+      --## rule on ASSIGNMENTS
       Duration := Positive'Value(Get(Widgt => Ship_Box));
       Add_Ship_Event_Loop :
       for I in 1 .. Get_Proto_Ships_Amount loop
