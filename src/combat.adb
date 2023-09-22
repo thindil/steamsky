@@ -26,11 +26,7 @@ package body Combat is
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
    type Nim_Enemy_Record is record
-      Accuracy: Natural := 0;
-      Combat_Ai: Integer := 0;
-      Evasion: Natural := 0;
       Loot: Natural := 0;
-      Perception: Natural := 0;
       Guns: Nim_Guns;
       Player_Guns: Nim_Guns;
       Distance: Natural := 10_000;
@@ -65,11 +61,7 @@ package body Combat is
       Harpoon_Duration := Nim_Enemy.Harpoon_Duration;
       Enemy.Harpoon_Duration := Nim_Enemy.Enemy_Harpoon_Duration;
       Enemy.Distance := Nim_Enemy.Distance;
-      Enemy.Accuracy := Nim_Enemy.Accuracy;
-      Enemy.Combat_Ai := Ship_Combat_Ai'Val(Nim_Enemy.Combat_Ai);
-      Enemy.Evasion := Nim_Enemy.Evasion;
       Enemy.Loot := Nim_Enemy.Loot;
-      Enemy.Perception := Nim_Enemy.Perception;
       Messages_Starts := Get_Last_Message_Index + 1;
       Enemy.Guns.Clear;
       Convert_Enemy_Guns_Loop :

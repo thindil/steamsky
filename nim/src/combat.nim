@@ -1123,11 +1123,7 @@ type
   AdaGunsArray = array[10, array[3, cint]]
 
   AdaEnemyData = object
-    accuracy: cint
-    combatAi: cint
-    evasion: cint
     loot: cint
-    perception: cint
     guns: AdaGunsArray
     playerGuns: AdaGunsArray
     distance: cint
@@ -1137,11 +1133,7 @@ type
   AdaBoardingOrders = array[50, cint]
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
-  adaEnemy.accuracy = game.enemy.accuracy.cint
-  adaEnemy.combatAi = game.enemy.combatAi.ord.cint
-  adaEnemy.evasion = game.enemy.evasion.cint
   adaEnemy.loot = game.enemy.loot.cint
-  adaEnemy.perception = game.enemy.perception.cint
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
   adaEnemy.enemyHarpoonDuration = game.enemy.harpoonDuration.cint
