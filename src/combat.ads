@@ -70,24 +70,16 @@ package Combat is
    -- Data structure for enemies
    -- PARAMETERS
    -- Ship             - Ship data for enemy
-   -- Accuracy         - Bonus to accuracy
    -- Distance         - Current distance to enemy
-   -- Combat_Ai        - Enemy in combat AI type
-   -- Evasion          - Bonus to evasion
    -- Loot             - Amount of loot(money) looted from ship
-   -- Perception       - Bonus to perception
    -- Harpoon_Duration - How long (amount of rounds) ship will be stopped by
    --                    player harpoon
    -- Guns             - List of guns installed on the enemy ship
    -- SOURCE
    type Enemy_Record is record
       Ship: Ship_Record;
-      Accuracy: Natural := 0;
       Distance: Integer := 0;
-      Combat_Ai: Ship_Combat_Ai;
-      Evasion: Natural := 0;
       Loot: Natural := 0;
-      Perception: Natural := 0;
       Harpoon_Duration: Natural := 0;
       Guns: Guns_Container.Vector;
    end record;
