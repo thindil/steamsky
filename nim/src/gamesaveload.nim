@@ -21,6 +21,9 @@ import basessaveload, config, game, goals, log, maps, messages, missions,
 
 const saveVersion = 5 ## The current version of the game saves files
 
+type SaveGameInvalidData* = object of CatchableError
+  ## Raised when there is an invalid data in the saved game file.
+
 var saveName*: string ## The full path to the game save file with file name
 
 proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
@@ -216,6 +219,13 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
 proc loadGame*() =
   let savedGame = loadXml(saveName)
+  logMessage(message = "Start loading game from file " & saveName & ".",
+      debugType = everything)
+  # Check the same game compatybility
+  var versionNode = savedGame.child("version")
+  if versionNode.attr("version").parseInt > saveVersion:
+    raise newException(exceptn = DataLoadingError,
+        message = "This save is incompatible with this version of the game.")
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
