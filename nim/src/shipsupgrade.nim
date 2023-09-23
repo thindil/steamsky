@@ -241,6 +241,10 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
 
 proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
     raises: [ShipUpgradeError, KeyError], tags: [].} =
+  ## Set the module's upgrade of the player's ship
+  ##
+  ## * moduleIndex - the index of the module to upgrade
+  ## * upgradeType - the type of the upgrade
   if playerShip.modules[moduleIndex].durability == 0 and upgradeType != 3:
     raise newException(exceptn = ShipUpgradeError,
       message = "You can't upgrade " & playerShip.modules[moduleIndex].name & " because it's destroyed.")
