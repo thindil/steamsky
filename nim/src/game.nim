@@ -63,6 +63,8 @@ const
   startDate*: DateRecord = DateRecord(year: 1600, month: 3, day: 1, hour: 8,
       minutes: 1) ## The start date for a new game
 
+{.warning[UnsafeSetLen]: off.}
+{.warning[UnsafeDefault]: off.}
 var
   saveDirectory*: string = "data" & DirSep & "saves" &
       DirSep ## The directory where the saved games and logs are stored
@@ -131,6 +133,8 @@ var
   harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
   enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
       skyY: 1))                            ## The enemy information
+{.warning[UnsafeDefault]: on.}
+{.warning[UnsafeSetLen]: on.}
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [].} =

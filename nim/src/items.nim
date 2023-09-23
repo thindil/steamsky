@@ -181,7 +181,7 @@ func getItemDamage*(itemDurability: ItemsDurability;
   if toLower:
     result = toLowerAscii(s = result)
 
-proc getItemName*(item: InventoryData; damageInfo,
+proc getItemName*(item: InventoryData; damageInfo: bool = true;
     toLower: bool = true): string {.sideEffect, raises: [], tags: [].} =
   ## Get the name of the selected item with optional info about the item's
   ## damage
@@ -455,7 +455,7 @@ proc findAdaTools(memberIndex: cint; itemType: cstring; order,
   except KeyError, Exception:
     return 0
 
-proc getAdaRandomItem(items: cstring, equipIndex, highestLevel,
+proc getAdaRandomItem(items: cstring; equipIndex, highestLevel,
     weaponSkillLevel: cint; factionIndex: cstring;
         highestSkill: cint): cint {.sideEffect, raises: [], tags: [], exportc.} =
   case $items

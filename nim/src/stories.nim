@@ -112,9 +112,9 @@ type
     ## * stepsAmount - the amount of steps in the finished story
     ## * stepsTexts  - the texts of steps done in the story. If less than stepsAmount
     ##                 then it is the current story
-    index*: string
-    stepsAmount*: Positive
-    stepsTexts*: seq[string]
+    index*: string = ""
+    stepsAmount*: Positive = 1
+    stepsTexts*: seq[string] = @[]
 
 var
   storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
