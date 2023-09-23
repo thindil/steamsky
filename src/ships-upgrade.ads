@@ -41,8 +41,7 @@ package Ships.Upgrade is
       Upgrade_Type: Positive) with
       Pre => Module_Index in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index and
-      Upgrade_Type < 5,
-      Test_Case => (Name => "Test_StartUpgrading", Mode => Nominal);
+      Upgrade_Type < 5;
       -- ****
 
       -- ****f* SUpgrade/SUpgrade.Upgrade_Ship
