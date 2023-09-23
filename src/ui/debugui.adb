@@ -13,27 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
+with Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.Directory_Operations;
+with GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -41,10 +41,10 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
-with Game.SaveLoad; use Game.SaveLoad;
+with Game.SaveLoad;
 with Items; use Items;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -140,6 +140,8 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use GNAT.String_Split;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.crew";
@@ -354,6 +356,7 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.world.deleteevent";
@@ -594,6 +597,7 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Containers;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.bases";
@@ -679,6 +683,8 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Game.SaveLoad;
+
    begin
       Save_Game(Pretty_Print => True);
       return TCL_OK;
@@ -707,6 +713,8 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Maps.UI;
+
       Frame_Name: constant String := ".debugdialog.main.ship";
       Spin_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
@@ -1365,6 +1373,8 @@ package body DebugUI is
    end Delete_Event_Command;
 
    procedure Show_Debug_Ui is
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.bases";
