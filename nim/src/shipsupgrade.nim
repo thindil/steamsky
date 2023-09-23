@@ -239,7 +239,8 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
       upgradedModule.upgradeProgress = upgradeProgress
   playerShip.modules[playerShip.upgradeModule] = upgradedModule
 
-proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) =
+proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
+    raises: [ShipUpgradeError, KeyError], tags: [].} =
   if playerShip.modules[moduleIndex].durability == 0 and upgradeType != 3:
     raise newException(exceptn = ShipUpgradeError,
       message = "You can't upgrade " & playerShip.modules[moduleIndex].name & " because it's destroyed.")
