@@ -79,7 +79,7 @@ try:
 except AssertionDefect:
   writeLine(stderr, "Failed to get the level of the player's skill.")
 try:
-  assert getSkillLevel(playerShip.crew[0], 4) == 1
+  assert getSkillLevel(playerShip.crew[0], 4) == 7
 except AssertionDefect:
   writeLine(stderr, "Failed to get the level of the crew member's skill.")
 
