@@ -1,7 +1,8 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing upgradeShip.'''
+Testing upgradeShip.
+Testing startUpgrading.'''
 """
 
 import std/tables
@@ -42,3 +43,10 @@ except AssertionDefect:
   writeLine(stderr, "Failed to progress in the player's ship's upgrade.")
 playerShip.upgradeModule = -1
 upgradeShip(15)
+
+echo "Testing startUpgrading."
+startUpgrading(0, 1)
+try:
+  assert playerShip.upgradeModule == 0
+except AssertionDefect:
+  writeLine(stderr, "Failed to set upgrade of the player's ship.")
