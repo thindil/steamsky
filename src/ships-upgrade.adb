@@ -264,8 +264,7 @@ package body Ships.Upgrade is
       if Player_Ship.Modules(Module_Index).Upgrade_Action /=
         Upgrade_Action then
          Player_Ship.Modules(Module_Index).Upgrade_Progress :=
-           Integer
-             (Float(Upgrade_Progress) * New_Game_Settings.Upgrade_Cost_Bonus);
+           Upgrade_Progress;
          if Player_Ship.Modules(Module_Index).Upgrade_Progress = 0 then
             Player_Ship.Modules(Module_Index).Upgrade_Progress := 1;
          end if;
