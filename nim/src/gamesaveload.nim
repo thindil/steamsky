@@ -228,20 +228,20 @@ proc loadGame*() =
   # Load the game difficulty settings
   logMessage(message = "Loading the game difficulty settings...",
       debugType = everything)
-  for setting in savedGame.findAll("difficulty"):
-    newGameSettings.enemyDamageBonus = setting.attr(
-        "enemydamagebonus").parseFloat
-    newGameSettings.playerDamageBonus = setting.attr(
-        "playerdamagebonus").parseFloat
-    newGameSettings.enemyMeleeDamageBonus = setting.attr(
-        "enemymeleedamagebonus").parseFloat
-    newGameSettings.playerMeleeDamageBonus = setting.attr(
-        "playermeleedamagebonus").parseFloat
-    newGameSettings.experienceBonus = setting.attr("experiencebonus").parseFloat
-    newGameSettings.reputationBonus = setting.attr("reputationbonus").parseFloat
-    newGameSettings.upgradeCostBonus = setting.attr(
-        "upgradecostbonus").parseFloat
-    newGameSettings.pricesBonus = setting.attr("pricesbonus").parseFloat
+  var diffNode = savedGame.child("difficulty")
+  newGameSettings.enemyDamageBonus = diffNode.attr(
+      "enemydamagebonus").parseFloat
+  newGameSettings.playerDamageBonus = diffNode.attr(
+      "playerdamagebonus").parseFloat
+  newGameSettings.enemyMeleeDamageBonus = diffNode.attr(
+      "enemymeleedamagebonus").parseFloat
+  newGameSettings.playerMeleeDamageBonus = diffNOde.attr(
+      "playermeleedamagebonus").parseFloat
+  newGameSettings.experienceBonus = diffNode.attr("experiencebonus").parseFloat
+  newGameSettings.reputationBonus = diffNode.attr("reputationbonus").parseFloat
+  newGameSettings.upgradeCostBonus = diffNode.attr(
+      "upgradecostbonus").parseFloat
+  newGameSettings.pricesBonus = diffNode.attr("pricesbonus").parseFloat
   logMessage(message = "done", debugType = everything)
   # Load the game date
   logMessage(message = "Loading the game time...", debugType = everything)
@@ -251,6 +251,14 @@ proc loadGame*() =
   gameDate.day = dateNode.attr("day").parseInt
   gameDate.hour = dateNode.attr("hour").parseInt
   gameDate.minutes = dateNode.attr("minutes").parseInt
+  logMessage(message = "done", debugType = everything)
+  # Load the sky map
+  logMessage(message = "Loading the map...", debugType = everything)
+  for field in savedGame.findAll("field"):
+    let
+      x = field.attr("x").parseInt
+      y = field.attr("y").parseInt
+    skyMap[x][y].visited = true
   logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
