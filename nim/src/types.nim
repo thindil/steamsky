@@ -409,11 +409,11 @@ type
     ## * day     - The game's day
     ## * hour    - The game's hour
     ## * minutes - The game's minutes
-    year*: range[0..4_000_000]
-    month*: range[0..24]
-    day*: range[0..62]
-    hour*: range[0..48]
-    minutes*: range[0..120]
+    year*: range[0..4_000_000] = 0
+    month*: range[0..24] = 0
+    day*: range[0..62] = 0
+    hour*: range[0..48] = 0
+    minutes*: range[0..120] = 0
 
   ReputationData* = object
     ## Used to store information about the level of the player's reputation
