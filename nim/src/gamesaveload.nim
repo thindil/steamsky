@@ -235,7 +235,7 @@ proc loadGame*() =
       "playerdamagebonus").parseFloat
   newGameSettings.enemyMeleeDamageBonus = diffNode.attr(
       "enemymeleedamagebonus").parseFloat
-  newGameSettings.playerMeleeDamageBonus = diffNOde.attr(
+  newGameSettings.playerMeleeDamageBonus = diffNode.attr(
       "playermeleedamagebonus").parseFloat
   newGameSettings.experienceBonus = diffNode.attr("experiencebonus").parseFloat
   newGameSettings.reputationBonus = diffNode.attr("reputationbonus").parseFloat

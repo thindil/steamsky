@@ -117,3 +117,23 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
           "durability": $item.durability, "price": $item.price}.toXmlAttributes
       baseTree.add(itemElement)
     saveData.add(baseTree)
+
+proc loadBases*(saveData: var XmlNode) =
+  var baseIndex = 1
+  for base in saveData.findAll("base"):
+    skyBases[baseIndex].name = base.attr("name")
+    skyBases[baseIndex].visited = DateRecord()
+    skyBases[baseIndex].skyX = base.attr("x").parseInt
+    skyBases[baseIndex].skyY = base.attr("y").parseInt
+    skyBases[baseIndex].baseType = base.attr("type")
+    skyBases[baseIndex].population = base.attr("population").parseInt
+    skyBases[baseIndex].recruitDate = DateRecord()
+    skyBases[baseIndex].recruits = @[]
+    skyBases[baseIndex].known = false
+    skyBases[baseIndex].askedForBases = false
+    skyBases[baseIndex].askedForEvents = DateRecord()
+    skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
+    skyBases[baseIndex].missionsDate = DateRecord()
+    skyBases[baseIndex].missions = @[]
+    skyBases[baseIndex].owner = "POLEIS"
+    skyBases[baseIndex].size = parseEnum[BasesSize](base.attr("size"))
