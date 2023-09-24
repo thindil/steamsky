@@ -1624,7 +1624,7 @@ package body Bases.ShipyardUI is
       use Tiny_String;
 
       Cost: Natural;
-      Damage: Float;
+      Damage_Percent: Float;
       Ship_Module_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Dialog: constant Ttk_Frame :=
@@ -1647,6 +1647,7 @@ package body Bases.ShipyardUI is
         Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
+      Progress_Bar_Style, Status_Tooltip: Unbounded_String;
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
@@ -1671,10 +1672,9 @@ package body Bases.ShipyardUI is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-goldenyellow)"));
-      Damage :=
-        1.0 -
+      Damage_Percent :=
         Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
-          Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
+        Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
       Cost :=
         Get_Module(Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
           .Price -
@@ -1683,7 +1683,7 @@ package body Bases.ShipyardUI is
              (Get_Module
                 (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price) *
-           Damage);
+           Damage_Percent);
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -1715,25 +1715,40 @@ package body Bases.ShipyardUI is
                 .Install_Time) &
            " minutes} [list goldenyellow]");
       Set_Module_Info(Installing => False);
-      if Damage > 0.0 then
-         configure
-           (Widgt => Damage_Bar, options => "-value" & Float'Image(Damage));
-         if Damage < 0.2 then
-            configure(Widgt => Label, options => "-text {Damage:}");
-            Add(Widget => Damage_Bar, Message => "Slightly damaged");
-         elsif Damage < 0.5 then
-            configure(Widgt => Label, options => "-text {Damage:}");
-            Add(Widget => Damage_Bar, Message => "Damaged");
-         elsif Damage < 0.8 then
-            configure(Widgt => Label, options => "-text {Damage:}");
-            Add(Widget => Damage_Bar, Message => "Heavily damaged");
-         elsif Damage < 1.0 then
-            configure(Widgt => Label, options => "-text {Damage:}");
-            Add(Widget => Damage_Bar, Message => "Almost destroyed");
-         else
-            configure(Widgt => Label, options => "-text {Damage:}");
-            Add(Widget => Damage_Bar, Message => "Destroyed");
+      if Damage_Percent < 1.0 then
+         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style green.Horizontal.TProgressbar");
+            Status_Tooltip :=
+              To_Unbounded_String(Source => "Slightly damaged");
+         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style yellow.Horizontal.TProgressbar");
+            Status_Tooltip := To_Unbounded_String(Source => "Damaged");
+         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
+            Progress_Bar_Style :=
+              To_Unbounded_String
+                (Source => " -style yellow.Horizontal.TProgressbar");
+            Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
+         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
+            Progress_Bar_Style := Null_Unbounded_String;
+            Status_Tooltip :=
+              To_Unbounded_String(Source => "Almost destroyed");
+         elsif Damage_Percent = 0.0 then
+            Progress_Bar_Style := Null_Unbounded_String;
+            Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
          end if;
+         configure
+           (Widgt => Damage_Bar,
+            options =>
+              "-value" & Float'Image(Damage_Percent) &
+              To_String(Source => Progress_Bar_Style));
+         configure(Widgt => Label, options => "-text {Status:}");
+         Add
+           (Widget => Damage_Bar,
+            Message => To_String(Source => Status_Tooltip));
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label, Options => "-sticky w -padx {5 0}");
          Tcl.Tk.Ada.Grid.Grid
