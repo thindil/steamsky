@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated the default game's theme
 - Updated look of dialogs in the shipyard screen
+- Module's damage information in the module's remove dialog in bases' shipyards
 
 ### Fixed
 - Info about the module's damage in the remove module dialog in a base's
