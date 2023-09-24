@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.2] - 2023-09-24
 
 ### Fixed
 - Info about the module's damage in the remove module dialog in a base's
