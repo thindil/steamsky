@@ -222,10 +222,36 @@ proc loadGame*() =
   logMessage(message = "Start loading game from file " & saveName & ".",
       debugType = everything)
   # Check the same game compatybility
-  var versionNode = savedGame.child("version")
-  if versionNode.attr("version").parseInt > saveVersion:
+  if savedGame.attr("version").parseInt > saveVersion:
     raise newException(exceptn = DataLoadingError,
         message = "This save is incompatible with this version of the game.")
+  # Load the game difficulty settings
+  logMessage(message = "Loading the game difficulty settings...",
+      debugType = everything)
+  for setting in savedGame.findAll("difficulty"):
+    newGameSettings.enemyDamageBonus = setting.attr(
+        "enemydamagebonus").parseFloat
+    newGameSettings.playerDamageBonus = setting.attr(
+        "playerdamagebonus").parseFloat
+    newGameSettings.enemyMeleeDamageBonus = setting.attr(
+        "enemymeleedamagebonus").parseFloat
+    newGameSettings.playerMeleeDamageBonus = setting.attr(
+        "playermeleedamagebonus").parseFloat
+    newGameSettings.experienceBonus = setting.attr("experiencebonus").parseFloat
+    newGameSettings.reputationBonus = setting.attr("reputationbonus").parseFloat
+    newGameSettings.upgradeCostBonus = setting.attr(
+        "upgradecostbonus").parseFloat
+    newGameSettings.pricesBonus = setting.attr("pricesbonus").parseFloat
+  logMessage(message = "done", debugType = everything)
+  # Load the game date
+  logMessage(message = "Loading the game time...", debugType = everything)
+  var dateNode = savedGame.child("gamedate")
+  gameDate.year = dateNode.attr("year").parseInt
+  gameDate.month = dateNode.attr("month").parseInt
+  gameDate.day = dateNode.attr("day").parseInt
+  gameDate.hour = dateNode.attr("hour").parseInt
+  gameDate.minutes = dateNode.attr("minutes").parseInt
+  logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
