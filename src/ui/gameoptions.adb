@@ -363,15 +363,19 @@ package body GameOptions is
         Get_Widget(pathName => Main_Paned & ".optionsframe", Interp => Interp);
       Options_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Options_Frame & ".canvas", Interp => Interp);
+      --## rule off IMPROPER_INITIALIZATION
       Label: Ttk_Label;
       Combo_Box_Widget: Ttk_ComboBox;
       Spin_Box_Widget: Ttk_SpinBox;
       Key_Entry: Ttk_Entry;
+      --## rule on IMPROPER_INITIALIZATION
       Local_Themes_List: Unbounded_String;
+      --## rule off TYPE_INITIAL_VALUES
       type Widget_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Labels_Array: constant array(1 .. 4) of Widget_Data :=
         (1 =>
            (Name => To_Unbounded_String(Source => "data"),
@@ -830,7 +834,7 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Spin_Box: Ttk_SpinBox;
+      Spin_Box: Ttk_SpinBox; --## rule line off IMPROPER_INITIALIZATION
       Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "map"),
          2 => To_Unbounded_String(Source => "interface"),
@@ -884,8 +888,10 @@ package body GameOptions is
       pragma Unreferenced(Client_Data, Argc);
       Root_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
+      --## rule off IMPROPER_INITIALIZATION
       Key_Entry: Ttk_Entry;
       Map_View: Tk_Text;
+      --## rule on IMPROPER_INITIALIZATION
       Theme_Combo_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => Root_Name & ".interface.theme", Interp => Interp);
@@ -1051,6 +1057,7 @@ package body GameOptions is
          Value => Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit"));
       Save_Config;
       Key_Entry.Interp := Interp;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Set_Accelerators_Loop :
       for I in Accels'Range loop
          Unbind_From_Main_Window
@@ -1071,6 +1078,7 @@ package body GameOptions is
          Key_Entry.Name :=
            New_String
              (Str => Root_Name & To_String(Source => Accels(I).Entry_Name));
+         --## rule off SIMPLIFIABLE_STATEMENTS
          if I < 12 then
             Menu_Accelerators(I) :=
               To_Unbounded_String(Source => Get(Widgt => Key_Entry));
@@ -1105,6 +1113,7 @@ package body GameOptions is
             General_Accelerators(I - 49) :=
               To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          end if;
+         --## rule on SIMPLIFIABLE_STATEMENTS
          Accels(I).Shortcut :=
            To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       end loop Set_Accelerators_Loop;
@@ -1150,6 +1159,7 @@ package body GameOptions is
          end loop Save_Accelerators_Loop;
          Close(File => Keys_File);
       end Save_Keys_To_File_Block;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Set_Keys;
       if CArgv.Arg(Argv => Argv, N => 1) = "map" then
          Show_Sky_Map(Clear => True);
@@ -1497,7 +1507,7 @@ package body GameOptions is
            (Shortcut => To_Unbounded_String(Source => "Alt-d"),
             Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
             Config_Name => To_Unbounded_String(Source => "")));
-      Key_Entry: Ttk_Entry;
+      Key_Entry: Ttk_Entry; --## rule line off IMPROPER_INITIALIZATION
    begin
       Key_Entry.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "movement" then
