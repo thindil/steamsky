@@ -158,8 +158,7 @@ proc loadBases*(saveData: var XmlNode) =
           day: askDate.attr("day").parseInt, hour: askDate.attr(
           "hour").parseInt, minutes: askDate.attr("minutes").parseInt)
     for baseRecruit in base.findAll("recruit"):
-      var
-        recruit = RecruitData()
+      var recruit = RecruitData()
       recruit.name = baseRecruit.attr("name")
       recruit.gender = baseRecruit.attr("gender")[0]
       recruit.price = baseRecruit.attr("price").parseInt
@@ -186,4 +185,32 @@ proc loadBases*(saveData: var XmlNode) =
       let homeBase = baseRecruit.child("homebase")
       if homeBase != nil:
         recruit.homeBase = homeBase.attr("homebase").parseInt
-
+      let faction = baseRecruit.child("faction")
+      if faction != nil:
+        recruit.faction = faction.attr("faction")
+      skyBases[baseIndex].recruits.add(recruit)
+    let reputation = base.child("reputation")
+    if reputation != nil:
+      skyBases[baseIndex].reputation.level = reputation.attr("level").parseInt
+      let progress = reputation.attr("progress")
+      if progress.len > 0:
+        skyBases[baseIndex].reputation.experience = progress.parseInt
+    let missionsDate = base.child("missionsdate")
+    if missionsDate != nil:
+      skyBases[baseIndex].missionsDate = DateRecord(year: missionsDate.attr(
+          "year").parseInt, month: missionsDate.attr("month").parseInt,
+          day: missionsDate.attr("day").parseInt, hour: missionsDate.attr(
+          "hour").parseInt, minutes: missionsDate.attr("minutes").parseInt)
+    for mission in base.findAll("mission"):
+      let mType = parseEnum[MissionsTypes](mission.attr("type"))
+      var
+        targetIndex: string
+        target: int
+      if mType in {deliver, destroy}:
+        targetIndex = mission.attr("target")
+      else:
+        target = mission.attr("target").parseInt
+      let
+        time = mission.attr("time").parseInt
+        targetX = mission.attr("targetx").parseInt
+        targetY = mission.attr("targety").parseInt
