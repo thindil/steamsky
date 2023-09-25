@@ -214,3 +214,38 @@ proc loadBases*(saveData: var XmlNode) =
         time = mission.attr("time").parseInt
         targetX = mission.attr("targetx").parseInt
         targetY = mission.attr("targety").parseInt
+        reward = mission.attr("reward").parseInt
+      case mType
+      of deliver:
+        skyBases[baseIndex].missions.add(MissionData(mType: deliver,
+            itemIndex: targetIndex.parseInt, time: time, targetX: targetX,
+            targetY: targetY, reward: reward, startBase: baseIndex,
+            finished: false, multiplier: 1.0))
+      of destroy:
+        skyBases[baseIndex].missions.add(MissionData(mType: destroy,
+            shipIndex: targetIndex.parseInt, time: time, targetX: targetX,
+            targetY: targetY, reward: reward, startBase: baseIndex,
+            finished: false, multiplier: 1.0))
+      of patrol:
+        skyBases[baseIndex].missions.add(MissionData(mType: patrol,
+            target: target, time: time, targetX: targetX, targetY: targetY,
+            reward: reward, startBase: baseIndex, finished: false,
+            multiplier: 1.0))
+      of explore:
+        skyBases[baseIndex].missions.add(MissionData(mType: explore,
+            target: target, time: time, targetX: targetX, targetY: targetY,
+            reward: reward, startBase: baseIndex, finished: false,
+            multiplier: 1.0))
+      of passenger:
+        if target > 91:
+          target = 91
+        skyBases[baseIndex].missions.add(MissionData(mType: passenger,
+            data: target, time: time, targetX: targetX, targetY: targetY,
+            reward: reward, startBase: baseIndex, finished: false,
+            multiplier: 1.0))
+    for baseItem in base.findAll("item"):
+      var item = BaseCargo()
+      item.protoIndex = baseItem.attr("index").parseInt
+      item.durability = baseItem.attr("durability").parseInt
+      item.amount = baseItem.attr("amount").parseInt
+      item.price = baseItem.attr("price").parseInt
