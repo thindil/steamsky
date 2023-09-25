@@ -1641,13 +1641,17 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".info",
            options => "-height 10 -width 40");
-      Label: Ttk_Label := Create(pathName => Module_Dialog & ".damagelbl");
+      Label: Ttk_Label :=
+        Create
+          (pathName => Module_Dialog & ".gainlbl",
+           options => "-text {Remove gain:}");
       Remove_Button: Ttk_Button;
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
-      Progress_Bar_Style, Status_Tooltip: Unbounded_String;
+      Progress_Bar_Style, Status_Tooltip: Unbounded_String :=
+        Null_Unbounded_String;
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
@@ -1690,21 +1694,25 @@ package body Bases.ShipyardUI is
       Count_Price
         (Price => Cost, Trader_Index => Find_Member(Order => TALK),
          Reduce => False);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
+      Label :=
+        Create
+          (pathName => Module_Dialog & ".gaininfolbl",
+           options =>
+             "-text {" & Positive'Image(Cost) & " " &
+             To_String(Source => Money_Name) & "} -style Headergreen.TLabel");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Label, Options => "-sticky w -padx 5 -row 1 -column 1");
+      Label :=
+        Create
+          (pathName => Module_Dialog & ".timelbl",
+           options => "-text {Removing time:}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
          Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
       configure(Widgt => Module_Text, options => "-state normal");
       Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-      Insert
-        (TextWidget => Module_Text, Index => "end", Text => "{Remove gain:}");
-      Insert
-        (TextWidget => Module_Text, Index => "end",
-         Text =>
-           "{" & Positive'Image(Cost) & " " & To_String(Source => Money_Name) &
-           "} [list green]");
-      Insert
-        (TextWidget => Module_Text, Index => "end",
-         Text => "{" & LF & "Removing time:}");
       Insert
         (TextWidget => Module_Text, Index => "end",
          Text =>
@@ -1740,12 +1748,15 @@ package body Bases.ShipyardUI is
             Progress_Bar_Style := Null_Unbounded_String;
             Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
          end if;
+         Label :=
+           Create
+             (pathName => Module_Dialog & ".damagelbl",
+              options => "-text {Status:}");
          configure
            (Widgt => Damage_Bar,
             options =>
               "-value" & Float'Image(Damage_Percent) &
               To_String(Source => Progress_Bar_Style));
-         configure(Widgt => Label, options => "-text {Status:}");
          Add
            (Widget => Damage_Bar,
             Message => To_String(Source => Status_Tooltip));
@@ -1753,7 +1764,7 @@ package body Bases.ShipyardUI is
            (Slave => Label, Options => "-sticky w -padx {5 0}");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Damage_Bar,
-            Options => "-row 2 -column 1 -sticky we -padx {0 5}");
+            Options => "-row 4 -column 1 -sticky we -padx {0 5}");
       end if;
       if Get_Module
           (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
