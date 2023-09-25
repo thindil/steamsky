@@ -369,7 +369,7 @@ package body GameOptions is
       Spin_Box_Widget: Ttk_SpinBox;
       Key_Entry: Ttk_Entry;
       --## rule on IMPROPER_INITIALIZATION
-      Local_Themes_List: Unbounded_String;
+      Local_Themes_List: Unbounded_String := Null_Unbounded_String;
       --## rule off TYPE_INITIAL_VALUES
       type Widget_Data is record
          Name: Unbounded_String;
