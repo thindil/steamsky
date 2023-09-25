@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, xmltree]
-import game, types
+import game, maps, types
 
 proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
   ## Save the bases from the current game into a file
@@ -249,3 +249,7 @@ proc loadBases*(saveData: var XmlNode) =
       item.durability = baseItem.attr("durability").parseInt
       item.amount = baseItem.attr("amount").parseInt
       item.price = baseItem.attr("price").parseInt
+      skyBases[baseIndex].cargo.add(item)
+    skyMap[skyBases[baseIndex].skyX][skyBases[
+        baseIndex].skyY].baseIndex = baseIndex
+    baseIndex.inc
