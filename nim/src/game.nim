@@ -62,6 +62,8 @@ const
   defaultItemDurability*: ItemsDurability = 100 ## Default durability for the new items
   startDate*: DateRecord = DateRecord(year: 1600, month: 3, day: 1, hour: 8,
       minutes: 1) ## The start date for a new game
+  noDate*: DateRecord = DateRecord(year: 0, month: 0, day: 0, hour: 0,
+      minutes: 0) ## The empty, not set game date
 
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
