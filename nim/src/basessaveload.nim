@@ -163,6 +163,8 @@ proc loadBases*(saveData: var XmlNode) =
       recruit.name = baseRecruit.attr("name")
       recruit.gender = baseRecruit.attr("gender")[0]
       recruit.price = baseRecruit.attr("price").parseInt
+      recruit.payment = 20
+      recruit.homeBase = 1
       for recruitSkill in baseRecruit.findAll("skill"):
         var skill = SkillInfo()
         skill.index = recruitSkill.attr("index").parseInt
@@ -171,4 +173,17 @@ proc loadBases*(saveData: var XmlNode) =
       for recruitAttr in baseRecruit.findAll("attribute"):
         recruit.attributes.add(MobAttributeRecord(level: recruitAttr.attr(
             "level").parseInt, experience: 0))
+      for item in baseRecruit.findAll("item"):
+        recruit.inventory.add(item.attr("index").parseInt)
+      for equipment in baseRecruit.findAll("equipment"):
+        var eqIndex = parseEnum[EquipmentLocations](equipment.attr(
+            "slot")).ord - 1
+        recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
+            "index").parseInt
+      let payment = baseRecruit.child("payment")
+      if payment != nil:
+        recruit.payment = payment.attr("payment").parseInt
+      let homeBase = baseRecruit.child("homebase")
+      if homeBase != nil:
+        recruit.homeBase = homeBase.attr("homebase").parseInt
 
