@@ -157,3 +157,18 @@ proc loadBases*(saveData: var XmlNode) =
           "year").parseInt, month: askDate.attr("month").parseInt,
           day: askDate.attr("day").parseInt, hour: askDate.attr(
           "hour").parseInt, minutes: askDate.attr("minutes").parseInt)
+    for baseRecruit in base.findAll("recruit"):
+      var
+        recruit = RecruitData()
+      recruit.name = baseRecruit.attr("name")
+      recruit.gender = baseRecruit.attr("gender")[0]
+      recruit.price = baseRecruit.attr("price").parseInt
+      for recruitSkill in baseRecruit.findAll("skill"):
+        var skill = SkillInfo()
+        skill.index = recruitSkill.attr("index").parseInt
+        skill.level = recruitSkill.attr("level").parseInt
+        recruit.skills.add(skill)
+      for recruitAttr in baseRecruit.findAll("attribute"):
+        recruit.attributes.add(MobAttributeRecord(level: recruitAttr.attr(
+            "level").parseInt, experience: 0))
+
