@@ -135,5 +135,25 @@ proc loadBases*(saveData: var XmlNode) =
     skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
     skyBases[baseIndex].missionsDate = DateRecord()
     skyBases[baseIndex].missions = @[]
-    skyBases[baseIndex].owner = "POLEIS"
+    skyBases[baseIndex].owner = base.attr("owner")
     skyBases[baseIndex].size = parseEnum[BasesSize](base.attr("size"))
+    if base.attr("askedforbases") == "Y":
+      skyBases[baseIndex].askedForBases = true
+    let visitDate = base.child("visiteddate")
+    if visitDate != nil:
+      skyBases[baseIndex].visited = DateRecord(year: visitDate.attr(
+          "year").parseInt, month: visitDate.attr("month").parseInt,
+          day: visitDate.attr("day").parseInt, hour: visitDate.attr(
+          "hour").parseInt, minutes: visitDate.attr("minutes").parseInt)
+    let recruitDate = base.child("recruitdate")
+    if recruitDate != nil:
+      skyBases[baseIndex].recruitDate = DateRecord(year: recruitDate.attr(
+          "year").parseInt, month: recruitDate.attr("month").parseInt,
+          day: recruitDate.attr("day").parseInt, hour: recruitDate.attr(
+          "hour").parseInt, minutes: recruitDate.attr("minutes").parseInt)
+    let askDate = base.child("askedforeventsdate")
+    if recruitDate != nil:
+      skyBases[baseIndex].askedForEvents = DateRecord(year: askDate.attr(
+          "year").parseInt, month: askDate.attr("month").parseInt,
+          day: askDate.attr("day").parseInt, hour: askDate.attr(
+          "hour").parseInt, minutes: askDate.attr("minutes").parseInt)
