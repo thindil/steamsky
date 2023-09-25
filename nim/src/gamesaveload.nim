@@ -260,6 +260,10 @@ proc loadGame*() =
       y = field.attr("y").parseInt
     skyMap[x][y].visited = true
   logMessage(message = "done", debugType = everything)
+  # Load sky bases
+  logMessage(message = "Loading bases...", debugType = everything)
+  loadBases(saveData = savedGame)
+  logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):

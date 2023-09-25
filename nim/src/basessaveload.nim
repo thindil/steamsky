@@ -118,7 +118,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
       baseTree.add(itemElement)
     saveData.add(baseTree)
 
-proc loadBases*(saveData: var XmlNode) =
+proc loadBases*(saveData: XmlNode) =
   var baseIndex = 1
   for base in saveData.findAll("base"):
     skyBases[baseIndex].name = base.attr("name")
