@@ -230,6 +230,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Headergreen.TLabel -foreground $colors(-green)
       # Labels with gray text
       ttk::style configure Gray.TLabel -foreground $colors(-gray)
+      # Labels with golden text
+      ttk::style configure Golden.TLabel -foreground $colors(-goldenyellow)
       # Dialogs header label
       ttk::style configure Header.TLabel -background $colors(-darkorange) \
          -anchor center -justify center -relief solid -padding {5 0 5 0} \
