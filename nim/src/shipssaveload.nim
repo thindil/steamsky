@@ -282,5 +282,70 @@ proc loadPlayerShip*(saveData: XmlNode) =
         else:
           discard
         dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: engine, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          fuelUsage: fuelUsage, power: power, disabled: disabled))
+    of cabin:
+      var cleanliness, quality = 0
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          cleanliness = modData.attr("value").parseInt
+        of 2:
+          quality = modData.attr("value").parseInt
+        else:
+          discard
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: cabin, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          cleanliness: cleanliness, quality: quality))
+    of cockpit:
+      playerShip.modules.add(ModuleData(mType: cockpit, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+    of workshop:
+      var
+        craftingIndex = ""
+        craftingTime, craftingAmount = 0
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          craftingIndex = modData.attr("value")
+          if craftingIndex == "0":
+            craftingIndex = ""
+        of 2:
+          craftingTime = modData.attr("value").parseInt
+        of 3:
+          craftingAmount = modData.attr("value").parseInt
+        else:
+          discard
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: workshop, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          craftingIndex: craftingIndex, craftingTime: craftingTime,
+          craftingAmount: craftingAmount))
+    of medicalRoom:
+      playerShip.modules.add(ModuleData(mType: medicalRoom, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+    of trainingRoom:
+      var trainedSkill = 0
+      for modData in module.findAll("data"):
+        if dataIndex == 1:
+          trainedSkill = modData.attr("value").parseInt
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: trainingRoom, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          trainedSkill: trainedSkill))
     else:
       discard
