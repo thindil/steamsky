@@ -180,9 +180,9 @@ proc loadPlayerShip*(saveData: XmlNode) =
     let
       name = module.attr("name")
       protoIndex = module.attr("index").parseInt
-      weight = module.attr("weight")
-      modDur = module.attr("durability")
-      maxDur = module.attr("maxDur")
+      weight = module.attr("weight").parseInt
+      modDur = module.attr("durability").parseInt
+      maxDur = module.attr("maxDur").parseInt
     var
       owners: seq[int]
       upgradeAction: ShipUpgrade = none
@@ -227,3 +227,60 @@ proc loadPlayerShip*(saveData: XmlNode) =
         mType = harpoonGun
       else:
         mType = any
+    else:
+      case modulesList[protoIndex].mType
+      of medicalRoom:
+        mType = medicalRoom
+      of trainingRoom:
+        mType = trainingRoom
+      of engine:
+        mType = engine
+      of cabin:
+        mType = cabin
+      of cockpit:
+        mType = cockpit
+      of turret:
+        mType = turret
+      of gun:
+        mType = gun
+      of cargo:
+        mType = cargoRoom
+      of hull:
+        mType = hull
+      of armor:
+        mType = armor
+      of batteringRam:
+        mType = batteringRam
+      of harpoonGun:
+        mType = harpoonGun
+      else:
+        mType = parseEnum[ModuleType2](module.attr("mtype"))
+    var
+      data: array[1..3, int] = [0, 0, 0]
+      dataIndex = 1
+    case mType
+    of any:
+      for modData in module.findAll("data"):
+        data[dataIndex] = modData.attr("value").parseInt
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: any, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction, data: data))
+    of engine:
+      var
+        fuelUsage, power = 0
+        disabled = false
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          fuelUsage = modData.attr("value").parseInt
+        of 2:
+          power = modData.attr("value").parseInt
+        of 3:
+          disabled = modData.attr("value") == "1"
+        else:
+          discard
+        dataIndex.inc
+    else:
+      discard
