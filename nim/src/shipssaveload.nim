@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, xmltree]
+import std/[strutils, tables, xmltree]
 import game, types
 
 proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
@@ -179,9 +179,51 @@ proc loadPlayerShip*(saveData: XmlNode) =
   for module in shipNode.findAll("module"):
     let
       name = module.attr("name")
-      protoIndex = module.attr("index")
+      protoIndex = module.attr("index").parseInt
       weight = module.attr("weight")
-    var owners: seq[int]
+      modDur = module.attr("durability")
+      maxDur = module.attr("maxDur")
+    var
+      owners: seq[int]
+      upgradeAction: ShipUpgrade = none
+      upgradeProgress = 0
+      mType: ModuleType2 = any
     if module.attr("owner") == "":
       for owner in module.findAll("owner"):
         owners.add(owner.attr("value").parseInt - 1)
+    else:
+      owners.add(module.attr("owner").parseInt - 1)
+    if module.attr("upgradeaction") != "":
+      upgradeAction = module.attr("upgradeaction").parseInt.ShipUpgrade
+    if module.attr("upgradeprogress") != "":
+      upgradeProgress = module.attr("upgradeprogress").parseInt
+    if module.attr("mtype") == "":
+      case modulesList[protoIndex].mType
+      of alchemyLab .. greenhouse:
+        mType = workshop
+      of medicalRoom:
+        mType = medicalRoom
+      of trainingRoom:
+        mType = trainingRoom
+      of engine:
+        mType = engine
+      of cabin:
+        mType = cabin
+      of cockpit:
+        mType = cockpit
+      of turret:
+        mType = turret
+      of gun:
+        mType = gun
+      of cargo:
+        mType = cargoRoom
+      of hull:
+        mType = hull
+      of armor:
+        mType = armor
+      of batteringRam:
+        mType = batteringRam
+      of harpoonGun:
+        mType = harpoonGun
+      else:
+        mType = any
