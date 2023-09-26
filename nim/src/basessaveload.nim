@@ -119,6 +119,9 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
     saveData.add(baseTree)
 
 proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].} =
+  ## Load the bases from the file into the game
+  ##
+  ## * saveData - the XML structure from which the bases will be loaded
   var baseIndex = 1
   for base in saveData.findAll("base"):
     skyBases[baseIndex].name = base.attr("name")
