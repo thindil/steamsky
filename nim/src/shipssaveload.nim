@@ -176,6 +176,9 @@ proc loadPlayerShip*(saveData: XmlNode) =
   playerShip.destinationY = shipNode.attr("destinationy").parseInt
   playerShip.repairModule = shipNode.attr("repairpriority").parseInt
   playerShip.homeBase = shipNode.attr("homebase").parseInt
+  playerShip.modules = @[]
+  playerShip.cargo = @[]
+  playerShip.crew = @[]
   for module in shipNode.findAll("module"):
     let
       name = module.attr("name")
@@ -431,3 +434,26 @@ proc loadPlayerShip*(saveData: XmlNode) =
           maxDurability: maxDur, owner: owners,
           upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
           duration: duration, harpoonIndex: harpoonIndex))
+  for cargo in shipNode.findAll("cargo"):
+    let
+      protoIndex = cargo.attr("index").parseInt
+      amount = cargo.attr("amount").parseInt
+      name = cargo.attr("name")
+      itemDurability = cargo.attr("durability").parseInt
+      price = (if cargo.attr("price").len == 0: 0 else: cargo.attr(
+          "price").parseInt)
+    playerShip.cargo.add(InventoryData(protoIndex: protoIndex, amount: amount,
+        name: name, durability: itemDurability, price: price))
+  for crew in shipNode.findAll("member"):
+    var member: MemberData
+    member.name = crew.attr("name")
+    member.gender = crew.attr("gender")[0]
+    member.health = crew.attr("health").parseInt
+    member.tired = crew.attr("tired").parseInt
+    member.hunger = crew.attr("hunger").parseInt
+    member.thirst = crew.attr("thirst").parseInt
+    member.order = crew.attr("order").parseInt.CrewOrders
+    member.previousOrder = crew.attr("previousorder").parseInt.CrewOrders
+    member.orderTime = crew.attr("ordertime").parseInt
+    member.payment[1] = crew.attr("dailypay").parseInt
+    member.payment[2] = crew.attr("tradepay").parseInt
