@@ -13,10 +13,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
-with Ada.Strings; use Ada.Strings;
+with Ada.Directories;
+with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -25,25 +25,24 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
+with Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Wm;
+with Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
-with Combat.UI; use Combat.UI;
+with Combat.UI;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -359,6 +358,10 @@ package body GameOptions is
    function Show_Options_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ada.Directories;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Winfo;
+
       Options_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".optionsframe", Interp => Interp);
       Options_Canvas: constant Tk_Canvas :=
@@ -886,6 +889,14 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings;
+      use Tcl.Tk.Ada.TtkStyle;
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Wm;
+      use Tcl.Tklib.Ada.Tooltip;
+      use Combat.UI;
+
       Root_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
       --## rule off IMPROPER_INITIALIZATION
@@ -1144,6 +1155,8 @@ package body GameOptions is
         To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
       declare
+         use Ada.Text_IO;
+
          Keys_File: File_Type;
       begin
          Create
