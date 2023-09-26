@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/xmltree
+import std/[strutils, xmltree]
 import game, types
 
 proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].} =
@@ -164,3 +164,24 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
       memberTree.add(itemElement)
     shipTree.add(memberTree)
   saveData.add(shipTree)
+
+proc loadPlayerShip*(saveData: XmlNode) =
+  let shipNode = saveData.child("playership")
+  playerShip.name = shipNode.attr("name")
+  playerShip.skyX = shipNode.attr("x").parseInt
+  playerShip.skyY = shipNode.attr("y").parseInt
+  playerShip.speed = shipNode.attr("speed").parseInt.ShipSpeed
+  playerShip.upgradeModule = shipNode.attr("upgrademodule").parseInt
+  playerShip.destinationX = shipNode.attr("destinationx").parseInt
+  playerShip.destinationY = shipNode.attr("destinationy").parseInt
+  playerShip.repairModule = shipNode.attr("repairpriority").parseInt
+  playerShip.homeBase = shipNode.attr("homebase").parseInt
+  for module in shipNode.findAll("module"):
+    let
+      name = module.attr("name")
+      protoIndex = module.attr("index")
+      weight = module.attr("weight")
+    var owners: seq[int]
+    if module.attr("owner") == "":
+      for owner in module.findAll("owner"):
+        owners.add(owner.attr("value").parseInt - 1)
