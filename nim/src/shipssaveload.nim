@@ -347,5 +347,87 @@ proc loadPlayerShip*(saveData: XmlNode) =
           maxDurability: maxDur, owner: owners,
           upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
           trainedSkill: trainedSkill))
-    else:
-      discard
+    of turret:
+      var gunIndex = -1
+      for modData in module.findAll("data"):
+        if dataIndex == 1:
+          gunIndex = modData.attr("value").parseInt - 1
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: turret, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          gunIndex: gunIndex))
+    of gun:
+      var
+        damage = 0
+        ammoIndex = -1
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          ammoIndex = modData.attr("value").parseInt - 1
+        of 2:
+          damage = modData.attr("value").parseInt
+        else:
+          discard
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: gun, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          damage: damage, ammoIndex: ammoIndex))
+    of cargoRoom:
+      playerShip.modules.add(ModuleData(mType: cargoRoom, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+    of hull:
+      var installedModules, maxModules = 0
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          installedModules = modData.attr("value").parseInt - 1
+        of 2:
+          maxModules = modData.attr("value").parseInt
+        else:
+          discard
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: hull, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          installedModules: installedModules, maxModules: maxModules))
+    of armor:
+      playerShip.modules.add(ModuleData(mType: armor, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
+    of batteringRam:
+      var damage = 0
+      for modData in module.findAll("data"):
+        if dataIndex == 1:
+          damage = modData.attr("value").parseInt
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: batteringRam, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          damage2: damage, coolingDown: false))
+    of harpoonGun:
+      var
+        duration = 0
+        harpoonIndex = -1
+      for modData in module.findAll("data"):
+        case dataIndex
+        of 1:
+          harpoonIndex = modData.attr("value").parseInt - 1
+        of 2:
+          duration = modData.attr("value").parseInt
+        else:
+          discard
+        dataIndex.inc
+      playerShip.modules.add(ModuleData(mType: harpoonGun, name: name,
+          protoIndex: protoIndex, weight: weight, durability: modDur,
+          maxDurability: maxDur, owner: owners,
+          upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
+          duration: duration, harpoonIndex: harpoonIndex))
