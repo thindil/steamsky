@@ -457,3 +457,38 @@ proc loadPlayerShip*(saveData: XmlNode) =
     member.orderTime = crew.attr("ordertime").parseInt
     member.payment[1] = crew.attr("dailypay").parseInt
     member.payment[2] = crew.attr("tradepay").parseInt
+    member.contractLength = crew.attr("contractlength").parseInt
+    member.morale[1] = crew.attr("moralelevel").parseInt
+    member.morale[2] = crew.attr("moralepoints").parseInt
+    member.loyalty = crew.attr("loyalty").parseInt
+    for skill in crew.findAll("skill"):
+      let
+        index = skill.attr("index").parseInt
+        level = skill.attr("level").parseInt
+        experience = (if skill.attr("experience").len > 0: skill.attr(
+            "experience").parseInt else: 0)
+      member.skills.add(SkillInfo(index: index, level: level,
+          experience: experience))
+    var priorityIndex = 1
+    for priority in crew.findAll("priority"):
+      member.orders[priorityIndex] = priority.attr("value").parseInt
+      priorityIndex.inc
+    var attributeIndex = 1
+    for attribute in crew.findAll("attribute"):
+      let
+        level = attribute.attr("level").parseInt
+        experience = (if attribute.attr("experience").len > 0: attribute.attr(
+            "experience").parseInt else: 0)
+      member.attributes[attributeIndex] = MobAttributeRecord(level: level,
+          experience: experience)
+      attributeIndex.inc
+    for item in crew.findAll("item"):
+      let
+        itemIndex = item.attr("index").parseInt
+        amount = item.attr("amount").parseInt
+        itemName = item.attr("name")
+        itemDurability = item.attr("durability").parseInt
+        price = (if item.attr("price").len > 0: item.attr(
+            "price").parseInt else: 0)
+      member.inventory.add(InventoryData(protoIndex: itemIndex, amount: amount,
+          name: itemName, durability: itemDurability, price: price))
