@@ -173,7 +173,16 @@ proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
     if ord(message.kind).cint == kind:
       result.inc()
 
-proc restoreMessage*(message: cstring; kind: cint = ord(
+proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
+    color: MessageColor = white) {.raises: [], tags: [].} =
+  ## Restore the selected message from the save file
+  ##
+  ## * message - The text of the message to restore
+  ## * kind    - The kind of the message to restore
+  ## * color   - The color used to draw the message
+  messagesList.add(MessageData(message: message, kind: kind, color: color))
+
+proc restoreMessage(message: cstring; kind: cint = ord(
     MessageType.default).cint; color: cint = ord(white).cint) {.raises: [],
     tags: [], exportc.} =
   ## Restore the selected message from the save file
