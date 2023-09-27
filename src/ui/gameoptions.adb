@@ -51,6 +51,7 @@ with Utils.UI; use Utils.UI;
 
 package body GameOptions is
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****it* GameOptions/GameOptions.Accel_Data
    -- FUNCTION
    -- Data for showing keyboard shortcuts
@@ -65,6 +66,7 @@ package body GameOptions is
       Config_Name: Unbounded_String;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****iv* GameOptions/GameOptions.Accels
    -- FUNCTION
