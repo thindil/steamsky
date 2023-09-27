@@ -165,7 +165,8 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
     shipTree.add(memberTree)
   saveData.add(shipTree)
 
-proc loadPlayerShip*(saveData: XmlNode) =
+proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
+    tags: [].} =
   let shipNode = saveData.child("playership")
   playerShip.name = shipNode.attr("name")
   playerShip.skyX = shipNode.attr("x").parseInt
