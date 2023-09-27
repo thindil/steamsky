@@ -167,6 +167,9 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [].}
 
 proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
     tags: [].} =
+  ## Load the player's ship data from the file
+  ##
+  ## * saveData - the XML structure from which the ship will be loaded
   let shipNode = saveData.child("playership")
   playerShip.name = shipNode.attr("name")
   playerShip.skyX = shipNode.attr("x").parseInt
