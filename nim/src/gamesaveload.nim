@@ -264,6 +264,22 @@ proc loadGame*() =
   logMessage(message = "Loading bases...", debugType = everything)
   loadBases(saveData = savedGame)
   logMessage(message = "done", debugType = everything)
+  # Load the player's ship
+  logMessage(message = "Loading the player's ship...", debugType = everything)
+  loadPlayerShip(saveData = savedGame)
+  logMessage(message = "done", debugType = everything)
+  # Load known recipes
+  logMessage(message = "Loading known recipes...", debugType = everything)
+  for recipe in savedGame.findAll("recipe"):
+    knownRecipes.add(recipe.attr("index"))
+  logMessage(message = "done", debugType = everything)
+  # Load messages
+  logMessage(message = "Loading messages...", debugType = everything)
+  for message in savedGame.findAll("message"):
+    restoreMessage(message = message.innerText, kind = message.attr(
+        "type").parseInt.MessageType, color = message.attr(
+        "color").parseInt.MessageColor)
+  logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
