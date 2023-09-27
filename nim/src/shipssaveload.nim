@@ -492,3 +492,12 @@ proc loadPlayerShip*(saveData: XmlNode) =
             "price").parseInt else: 0)
       member.inventory.add(InventoryData(protoIndex: itemIndex, amount: amount,
           name: itemName, durability: itemDurability, price: price))
+    var equipmentIndex = 1
+    for item in crew.findAll("equipment"):
+      member.equipment[(equipmentIndex - 1).EquipmentLocations] = item.attr(
+          "index").parseInt - 1
+    member.homeBase = (if crew.attr("homebase").len > 0: crew.attr(
+        "homebase").parseInt else: playerShip.homeBase)
+    member.faction = (if crew.attr("faction").len > 0: crew.attr(
+        "faction") else: skyBases[member.homeBase].owner)
+    playerShip.crew.add(member)
