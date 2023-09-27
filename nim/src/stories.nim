@@ -105,7 +105,7 @@ type
     data*: string
     finishedStep*: StepConditionType
 
-  FinishedStoryData = object
+  FinishedStoryData* = object
     ## Used to store information about finished story
     ##
     ## * index       - the index of the finished story
