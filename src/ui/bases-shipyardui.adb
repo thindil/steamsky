@@ -1708,20 +1708,21 @@ package body Bases.ShipyardUI is
           (pathName => Module_Dialog & ".timelbl",
            options => "-text {Removing time:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
+      Label :=
+        Create
+          (pathName => Module_Dialog & ".timeinfolbl",
+           options => "-text {" &
+           Positive'Image
+             (Get_Module
+                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                .Install_Time) &
+           " minutes} -style Golden.TLabel");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
          Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
       configure(Widgt => Module_Text, options => "-state normal");
       Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-      Insert
-        (TextWidget => Module_Text, Index => "end",
-         Text =>
-           "{" &
-           Positive'Image
-             (Get_Module
-                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                .Install_Time) &
-           " minutes} [list goldenyellow]");
       Set_Module_Info(Installing => False);
       if Damage_Percent < 1.0 then
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
