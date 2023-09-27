@@ -280,6 +280,52 @@ proc loadGame*() =
         "type").parseInt.MessageType, color = message.attr(
         "color").parseInt.MessageColor)
   logMessage(message = "done", debugType = everything)
+  # Load events
+  logMessage(message = "Loading events...", debugType = everything)
+  for index, savedEvent in savedGame.findAll("event"):
+    var event = EventData(skyX: savedEvent.attr("x").parseInt,
+        skyY: savedEvent.attr("y").parseInt, time: savedEvent.attr(
+        "time").parseInt, eType: savedEvent.attr("type").parseInt.EventsTypes)
+    case event.eType
+      of doublePrice:
+        event.itemIndex = savedEvent.attr("data").parseInt
+      of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
+        event.shipIndex = savedEvent.attr("data").parseInt
+      else:
+        event.data = savedEvent.attr("data").parseInt
+    eventsList.add(event)
+    skyMap[event.skyX][event.skyY].eventIndex = index + 1
+  logMessage(message = "done", debugType = everything)
+  # Load the current story
+  let storyNode = savedGame.child("currentstory")
+  if storyNode != nil:
+    logMessage(message = "Loading the current story...", debugType = everything)
+    currentStory.index = storyNode.attr("index")
+    currentStory.step = storyNode.attr("step").parseInt
+    case storyNode.attr("currentstep")
+    of "start":
+      currentStory.currentStep = 0
+    of "finish":
+      currentStory.currentStep = -1
+    else:
+      for index, step in storiesList[currentStory.index].steps:
+        if step.index == storyNode.attr("currentStep"):
+          currentStory.currentStep = index
+          break
+    currentStory.maxSteps = storyNode.attr("maxsteps").parseInt
+    currentStory.showText = storyNode.attr("showtext") == "Y"
+    currentStory.finishedStep = storyNode.attr("finishedstep").parseInt.StepConditionType
+    logMessage(message = "done", debugType = everything)
+  # Load finished stories data
+  logMessage(message = "Loading finished stories...", debugType = everything)
+  for savedStory in savedGame.findAll("finishedstory"):
+    var story = FinishedStoryData()
+    story.index = savedStory.attr("index")
+    story.stepsAmount = savedStory.attr("stepsamount").parseInt
+    for text in savedStory:
+      story.stepsTexts.add(text.innerText)
+    finishedStories.add(story)
+  logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for mission in savedGame.findAll("acceptedmission"):
