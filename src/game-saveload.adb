@@ -451,29 +451,13 @@ package body Game.SaveLoad is
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
             Time_Stamp => False);
       end Load_Finished_Stories_Block;
-      -- Load player career
-      Log_Message
-        (Message => "Loading player career...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "playercareer");
-      Saved_Node := Item(List => Nodes_List, Index => 0);
-      Player_Career :=
-        To_Unbounded_String
-          (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
-      Get_Ada_Game_String
-        (Name => New_String(Str => "playerCareer"),
-         Value => New_String(Str => To_String(Source => Player_Career)));
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
+      Player_Career := To_Unbounded_String(Source => Set_Game_String(Name => "playerCareer"));
    exception
       when An_Exception : others =>
          Free(Read => Reader);
