@@ -50,7 +50,7 @@ except AssertionDefect:
   writeLine(stderr, "Failed to get the amount of messages.")
 
 echo "Testing restoreMessage."
-restoreMessage("my message".cstring, ord(MessageType.default), ord(white))
+restoreMessage("my message", MessageType.default, white)
 try:
   assert messagesAmount(ord(MessageType.default)) == 2
 except AssertionDefect:
