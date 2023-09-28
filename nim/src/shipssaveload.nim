@@ -189,7 +189,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
       protoIndex = module.attr("index").parseInt
       weight = module.attr("weight").parseInt
       modDur = module.attr("durability").parseInt
-      maxDur = module.attr("maxDur").parseInt
+      maxDur = module.attr("maxdurability").parseInt
     var
       owners: seq[int]
       upgradeAction: ShipUpgrade = none
@@ -477,15 +477,13 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
     for priority in crew.findAll("priority"):
       member.orders[priorityIndex] = priority.attr("value").parseInt
       priorityIndex.inc
-    var attributeIndex = 1
     for attribute in crew.findAll("attribute"):
       let
         level = attribute.attr("level").parseInt
         experience = (if attribute.attr("experience").len > 0: attribute.attr(
             "experience").parseInt else: 0)
-      member.attributes[attributeIndex] = MobAttributeRecord(level: level,
-          experience: experience)
-      attributeIndex.inc
+      member.attributes.add(MobAttributeRecord(level: level,
+          experience: experience))
     for item in crew.findAll("item"):
       let
         itemIndex = item.attr("index").parseInt
