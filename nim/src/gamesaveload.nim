@@ -381,6 +381,12 @@ proc loadGame*() =
       targetIndex: goalNode.attr("target"), multiplier: goalNode.attr(
       "multiplier").parseInt)
   logMessage(message = "done", debugType = everything)
+  # Load the player's career
+  logMessage(message = "Loading the player's career...", debugType = everything)
+  let careerNode = savedGame.child("playercareer")
+  playerCareer = careerNode.attr("index")
+  logMessage(message = "done", debugType = everything)
+  logMessage(message = "Finished loading the game.", debugType = everything)
 
 proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect].} =
