@@ -243,6 +243,8 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
             reward: reward, startBase: baseIndex, finished: false,
             multiplier: 1.0))
     for baseItem in base.findAll("item"):
+      if baseItem.attr("durability").len == 0:
+        continue
       var item = BaseCargo()
       item.protoIndex = baseItem.attr("index").parseInt
       item.durability = baseItem.attr("durability").parseInt
