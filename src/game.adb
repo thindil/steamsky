@@ -335,6 +335,15 @@ package body Game is
          return Exception_Message(X => An_Exception);
    end Load_Game_Data;
 
+   function Set_Game_String(Name: String) return String is
+      function Set_Ada_Game_String(N: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGameString";
+   begin
+      return Value(Item => Set_Ada_Game_String(N => New_String(Str => Name)));
+   end Set_Game_String;
+
    procedure Get_Game_Date is
       procedure Get_Ada_Game_Date
         (Year, Month, Day, Hour, Minutes: Integer) with

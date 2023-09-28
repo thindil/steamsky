@@ -416,6 +416,12 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
   else:
     discard
 
+proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+  case $name
+  of "playerCareer":
+    return playerCareer.cstring
+  return "".cstring
+
 proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [], exportc.} =
   gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)

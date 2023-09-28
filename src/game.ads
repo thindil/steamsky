@@ -841,6 +841,8 @@ package Game is
       Convention => C,
       External_Name => "getAdaGameString";
 
+   function Set_Game_String(Name: String) return String;
+
    procedure Get_Game_Date;
 
    procedure Set_Game_Date;
