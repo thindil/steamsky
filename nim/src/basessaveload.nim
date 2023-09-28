@@ -139,7 +139,7 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
     skyBases[baseIndex].missionsDate = DateRecord()
     skyBases[baseIndex].missions = @[]
     skyBases[baseIndex].owner = base.attr("owner")
-    skyBases[baseIndex].size = parseEnum[BasesSize](base.attr("size"))
+    skyBases[baseIndex].size = parseEnum[BasesSize](base.attr("size").toLowerAscii)
     if base.attr("askedforbases") == "Y":
       skyBases[baseIndex].askedForBases = true
     let visitDate = base.child("visiteddate")
@@ -152,14 +152,12 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
     if recruitDate != nil:
       skyBases[baseIndex].recruitDate = DateRecord(year: recruitDate.attr(
           "year").parseInt, month: recruitDate.attr("month").parseInt,
-          day: recruitDate.attr("day").parseInt, hour: recruitDate.attr(
-          "hour").parseInt, minutes: recruitDate.attr("minutes").parseInt)
+          day: recruitDate.attr("day").parseInt, hour: 0, minutes: 0)
     let askDate = base.child("askedforeventsdate")
-    if recruitDate != nil:
+    if askDate != nil:
       skyBases[baseIndex].askedForEvents = DateRecord(year: askDate.attr(
           "year").parseInt, month: askDate.attr("month").parseInt,
-          day: askDate.attr("day").parseInt, hour: askDate.attr(
-          "hour").parseInt, minutes: askDate.attr("minutes").parseInt)
+          day: askDate.attr("day").parseInt, hour: 0, minutes: 0)
     for baseRecruit in base.findAll("recruit"):
       var recruit = RecruitData()
       recruit.name = baseRecruit.attr("name")
@@ -178,8 +176,7 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
       for item in baseRecruit.findAll("item"):
         recruit.inventory.add(item.attr("index").parseInt)
       for equipment in baseRecruit.findAll("equipment"):
-        var eqIndex = parseEnum[EquipmentLocations](equipment.attr(
-            "slot")).ord - 1
+        var eqIndex = (equipment.attr("slot").parseInt - 1)
         recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
             "index").parseInt
       let payment = baseRecruit.child("payment")
@@ -202,10 +199,9 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
     if missionsDate != nil:
       skyBases[baseIndex].missionsDate = DateRecord(year: missionsDate.attr(
           "year").parseInt, month: missionsDate.attr("month").parseInt,
-          day: missionsDate.attr("day").parseInt, hour: missionsDate.attr(
-          "hour").parseInt, minutes: missionsDate.attr("minutes").parseInt)
+          day: missionsDate.attr("day").parseInt, hour: 0, minutes: 0)
     for mission in base.findAll("mission"):
-      let mType = parseEnum[MissionsTypes](mission.attr("type"))
+      let mType = mission.attr("type").parseInt.MissionsTypes
       var
         targetIndex: string
         target: int
