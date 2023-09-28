@@ -514,7 +514,10 @@ package body Bases.ShipyardUI is
       Ship_Module_Index: Natural := 0;
       Size: Positive := 1;
       Speed: Integer := 0;
-      Module_Text: Tk_Text; --## rule line off IMPROPER_INITIALIZATION
+      --## rule off IMPROPER_INITIALIZATION
+      Module_Text: Tk_Text;
+      Module_Label: Ttk_Label;
+      --## rule on IMPROPER_INITIALIZATION
       Added: Boolean := False;
       Cost: Positive := 1;
       Money_Index_2: Natural := 0;
@@ -528,6 +531,7 @@ package body Bases.ShipyardUI is
          Max_Owners := Get_Module(Index => Get_Module_Index).Max_Owners;
          Speed := Get_Module(Index => Get_Module_Index).Speed;
          Module_Text := Get_Widget(pathName => ".moduledialog.info");
+         Module_Label := Get_Widget(pathName => ".moduledialog.cost");
          Get_Module_Index_Block :
          declare
             Compare_Box: constant Ttk_ComboBox :=
@@ -558,17 +562,11 @@ package body Bases.ShipyardUI is
          Money_Index_2 :=
            Find_Item
              (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-         configure(Widgt => Module_Text, options => "-state normal");
-         Delete
-           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{Install cost:}");
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text =>
-              "{" & Positive'Image(Cost) & " " &
-              To_String(Source => Money_Name) & "}" &
+         configure
+           (Widgt => Module_Label,
+            options =>
+              "-text {" & Positive'Image(Cost) & " " &
+              To_String(Source => Money_Name) & "} " &
               (if
                  Money_Index_2 = 0
                  or else
@@ -576,8 +574,11 @@ package body Bases.ShipyardUI is
                      (Container => Player_Ship.Cargo, Index => Money_Index_2)
                      .Amount <
                    Cost
-               then " [list red]"
-               else ""));
+               then "-style Headerred.TLabel"
+               else "-style Golden.TLabel"));
+         configure(Widgt => Module_Text, options => "-state normal");
+         Delete
+           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
          Insert
            (TextWidget => Module_Text, Index => "end",
             Text =>
@@ -1296,7 +1297,8 @@ package body Bases.ShipyardUI is
                (Source =>
                   Get_Module
                     (Index => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)))
-                    .Name));
+                    .Name),
+           Columns => 2);
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Dialog & ".info",
@@ -1326,6 +1328,11 @@ package body Bases.ShipyardUI is
            options => "-style Headerred.TLabel -wraplength 400 -text {}");
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
+      Module_Label: Ttk_Label :=
+        Create
+          (pathName => Module_Dialog & ".costlbl",
+           options => "-text {Install cost:}");
+      Row: Positive := 1;
       procedure Set_Install_Button
         (E_Label: Ttk_Label; M_Index_2, Cost2: Natural) is
          Used_Space, All_Space, Max_Size: Natural := 0;
@@ -1438,15 +1445,24 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Compare_Box, Options => "-row 0 -column 1 -padx {5 0}");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Compare_Frame, Options => "-pady {0 5}");
+           (Slave => Compare_Frame, Options => "-pady {0 5} -columnspan 2");
          Bind
            (Widgt => Compare_Box, Sequence => "<<ComboboxSelected>>",
             Script => "{CompareModules}");
+         Row := 2;
       end if;
       Cost := Get_Module(Index => Get_Module_Index).Price;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       Money_Index_2 :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Label, Options => "-sticky w -padx 5 -pady {5 0}");
+      Module_Label := Create(pathName => Module_Dialog & ".cost");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Label,
+         Options =>
+           "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
+           " -column 1");
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -1478,7 +1494,7 @@ package body Bases.ShipyardUI is
               Positive'Value
                 (Metrics(Font => "InterfaceFont", Option => "-linespace"))));
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+        (Slave => Module_Text, Options => "-padx 5 -pady {5 0} -columnspan 2");
       Set_Install_Button
         (E_Label => Error_Label, M_Index_2 => Money_Index_2, Cost2 => Cost);
       if cget(Widgt => Error_Label, option => "-text") = "" then
@@ -1497,7 +1513,8 @@ package body Bases.ShipyardUI is
             Command => "CloseDialog " & Module_Dialog, Column => 1,
             Icon => "exiticon");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Frame, Options => "-pady {0 5} -columnspan 2");
       Focus(Widgt => Close_Button);
       Bind
         (Widgt => Close_Button, Sequence => "<Tab>",
@@ -1711,13 +1728,15 @@ package body Bases.ShipyardUI is
       Label :=
         Create
           (pathName => Module_Dialog & ".timeinfolbl",
-           options => "-text {" &
-           Positive'Image
-             (Get_Module
-                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                .Install_Time) &
-           " minutes} -style Golden.TLabel");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
+           options =>
+             "-text {" &
+             Positive'Image
+               (Get_Module
+                  (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                  .Install_Time) &
+             " minutes} -style Golden.TLabel");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
          Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
