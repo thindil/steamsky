@@ -339,7 +339,7 @@ package body Game is
       function Set_Ada_Game_String(N: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
-         External_Name => "getAdaGameString";
+         External_Name => "setAdaGameString";
    begin
       return Value(Item => Set_Ada_Game_String(N => New_String(Str => Name)));
    end Set_Game_String;
