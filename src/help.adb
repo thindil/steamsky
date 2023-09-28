@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Help is
 
@@ -24,6 +24,8 @@ package body Help is
    function Get_Help
      (Title: out Unbounded_String; Help_Index: Integer := -1)
       return Help_Data is
+      use Interfaces.C.Strings;
+
       Text, Index, Help_Title: chars_ptr;
       Help_Entry: Help_Data;
       procedure Get_Ada_Help
