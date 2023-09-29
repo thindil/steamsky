@@ -64,8 +64,8 @@ package body Help.UI is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      New_Text, Tag_Text: Unbounded_String;
-      Start_Index, End_Index, Old_Index: Natural;
+      New_Text, Tag_Text: Unbounded_String := Null_Unbounded_String;
+      Start_Index, End_Index, Old_Index: Natural := 0;
       type Variables_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
@@ -211,13 +211,13 @@ package body Help.UI is
          6 => To_Unbounded_String(Source => "sentientships"),
          7 => To_Unbounded_String(Source => "fanaticism"),
          8 => To_Unbounded_String(Source => "loner"));
-      Factions_With_Flag: Unbounded_String;
+      Factions_With_Flag: Unbounded_String := Null_Unbounded_String;
       Bases_Flags: constant array(1 .. 4) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "shipyard"),
          2 => To_Unbounded_String(Source => "temple"),
          3 => To_Unbounded_String(Source => "blackmarket"),
          4 => To_Unbounded_String(Source => "barracks"));
-      Bases_With_Flag, Help_Title: Unbounded_String;
+      Bases_With_Flag, Help_Title: Unbounded_String := Null_Unbounded_String;
       Topics_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
       Help_View: constant Tk_Text :=
@@ -243,16 +243,7 @@ package body Help.UI is
       loop
          Start_Index :=
            Index(Source => New_Text, Pattern => "{", From => Old_Index);
-         if Start_Index > 0 then
-            Insert
-              (TextWidget => Help_View, Index => "end",
-               Text =>
-                 "{" &
-                 Slice
-                   (Source => New_Text, Low => Old_Index,
-                    High => Start_Index - 1) &
-                 "}");
-         else
+         if Start_Index = 0 then
             Insert
               (TextWidget => Help_View, Index => "end",
                Text =>
@@ -263,18 +254,26 @@ package body Help.UI is
                  "}");
             exit Replace_Help_Text_Loop;
          end if;
+         Insert
+           (TextWidget => Help_View, Index => "end",
+            Text =>
+              "{" &
+              Slice
+                (Source => New_Text, Low => Old_Index,
+                 High => Start_Index - 1) &
+              "}");
          End_Index :=
            Index(Source => New_Text, Pattern => "}", From => Start_Index) - 1;
          Tag_Text :=
            Unbounded_Slice
              (Source => New_Text, Low => Start_Index + 1, High => End_Index);
          Insert_Variables_Loop :
-         for I in Variables'Range loop
-            if Tag_Text = Variables(I).Name then
+         for Variable of Variables loop
+            if Tag_Text = Variable.Name then
                Insert
                  (TextWidget => Help_View, Index => "end",
                   Text =>
-                    "{" & To_String(Source => Variables(I).Value) &
+                    "{" & To_String(Source => Variable.Value) &
                     "} [list special]");
                exit Insert_Variables_Loop;
             end if;
@@ -315,12 +314,12 @@ package body Help.UI is
             end if;
          end loop Insert_Tags_Loop;
          Insert_Factions_Flags_Loop :
-         for I in Flags_Tags'Range loop
-            if Tag_Text = Flags_Tags(I) then
+         for Flag_Tag of Flags_Tags loop
+            if Tag_Text = Flag_Tag then
                Factions_With_Flag := Null_Unbounded_String;
                Create_Factions_List_Loop :
-               for I in 1 .. Get_Factions_Amount loop
-                  Faction := Get_Faction(Number => I);
+               for J in 1 .. Get_Factions_Amount loop
+                  Faction := Get_Faction(Number => J);
                   if Faction.Flags.Contains(Item => Tag_Text) then
                      if Factions_With_Flag /= Null_Unbounded_String then
                         Append
@@ -467,7 +466,7 @@ package body Help.UI is
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Get_Interface_Theme));
       Help: Help_Data;
-      Help_Title: Unbounded_String;
+      Help_Title: Unbounded_String := Null_Unbounded_String;
    begin
       if Winfo_Get(Widgt => Help_Window, Info => "exists") = "1" then
          return
