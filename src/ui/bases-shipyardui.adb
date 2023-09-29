@@ -1718,7 +1718,7 @@ package body Bases.ShipyardUI is
              (Get_Module
                 (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price) *
-           Damage_Percent);
+           (1.0 - Damage_Percent));
       if Cost = 0 then
          Cost := 1;
       end if;
