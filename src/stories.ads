@@ -275,13 +275,6 @@ package Stories is
    Stories_List: Stories_Container.Map;
    -- ****
 
-   -- ****v* Stories/Stories.Finished_Stories
-   -- FUNCTION
-   -- List of finished stories (or past data of current story)
-   -- SOURCE
-   -- Finished_Stories: FinishedStories_Container.Vector;
-   -- ****
-
    -- ****f* Stories/Stories.Load_Stories
    -- FUNCTION
    -- Load stories data from files

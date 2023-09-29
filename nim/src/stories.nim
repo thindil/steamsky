@@ -641,7 +641,7 @@ proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc.} =
 proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   story.index = "".cstring
-  story.stepsAmount = 0
+  story.stepsAmount = 1
   for text in story.stepsTexts.mitems:
     text = "".cstring
   if index >= finishedStories.len:
