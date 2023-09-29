@@ -220,14 +220,6 @@ package body Stories is
          Con => Start_Condition_Type'Pos(Condition));
    end Start_Story;
 
-   procedure Clear_Current_Story is
-   begin
-      Current_Story :=
-        (Index => Null_Unbounded_String, Step => 1, Current_Step => -3,
-         Max_Steps => 1, Show_Text => False, Data => Null_Unbounded_String,
-         Finished_Step => ANY);
-   end Clear_Current_Story;
-
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
       use Events;
       use Maps;

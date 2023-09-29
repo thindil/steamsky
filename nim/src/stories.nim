@@ -97,13 +97,13 @@ type
     ## * data         - various data for the current step of the story, depends on
     ##                  the step
     ## * finishedStep - the finish condition for the previous step in the story
-    index*: string
-    step*: Positive
-    currentStep*: int
-    maxSteps*: Positive
-    showText*: bool
-    data*: string
-    finishedStep*: StepConditionType
+    index*: string = ""
+    step*: Positive = 1
+    currentStep*: int = 0
+    maxSteps*: Positive = 1
+    showText*: bool = false
+    data*: string = ""
+    finishedStep*: StepConditionType = any
 
   FinishedStoryData* = object
     ## Used to store information about finished story
@@ -493,6 +493,9 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].}
     if text.condition == currentStory.finishedStep:
       return text.text
 
+proc clearCurrentStory*() =
+  currentStory = CurrentStoryData()
+
 # Temporary code for interfacing with Ada
 
 type
@@ -638,3 +641,6 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
   story.stepsAmount = nimStory.stepsAmount.cint
   for index, text in nimStory.stepsTexts:
     story.stepsTexts[index] = text.cstring
+
+proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc.} =
+  clearCurrentStory()
