@@ -644,7 +644,7 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
   story.stepsAmount = 0
   for text in story.stepsTexts.mitems:
     text = "".cstring
-  if index > finishedStories.len:
+  if index >= finishedStories.len:
     return
   let nimStory = finishedStories[index - 1]
   story.index = nimStory.index.cstring

@@ -401,6 +401,8 @@ package body Stories is
    end Get_Finished_Story;
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
+      use Interfaces.C;
+
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Steps_Texts is array(0 .. 10) of chars_ptr;
       type Nim_Finished_Story_Data is record
@@ -420,6 +422,15 @@ package body Stories is
          External_Name => "setAdaFinishedStory";
    begin
       Set_Ada_Finished_Story(I => Index, Story => Nim_Story);
+      Story.Index :=
+        To_Unbounded_String(Source => Value(Item => Nim_Story.Index));
+      Story.Steps_Amount := Nim_Story.Steps_Amount;
+      Convert_Text_Loop :
+      for Step of Nim_Story.Steps_Text loop
+         exit Convert_Text_Loop when Strlen(Item => Step) = 0;
+         Story.Steps_Texts.Append
+           (New_Item => To_Unbounded_String(Source => Value(Item => Step)));
+      end loop Convert_Text_Loop;
       return Story;
    end Get_Finished_Story;
 
