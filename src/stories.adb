@@ -175,16 +175,17 @@ package body Stories is
    -- FUNCTION
    -- Set the current story from Nim
    -- SOURCE
-   procedure Set_Current_Story is
+   function Get_Current_Story return Current_Story_Data is
       -- ****
       Nim_Current_Story: Nim_Current_Story_Data;
+      New_Current_Story: Current_Story_Data;
       procedure Set_Ada_Current_Story(Story: out Nim_Current_Story_Data) with
          Import => True,
          Convention => C,
          External_Name => "setAdaCurrentStory";
    begin
       Set_Ada_Current_Story(Story => Nim_Current_Story);
-      Current_Story :=
+      New_Current_Story :=
         (Index =>
            To_Unbounded_String
              (Source => Value(Item => Nim_Current_Story.Index)),
@@ -198,7 +199,8 @@ package body Stories is
              (Source => Value(Item => Nim_Current_Story.Data)),
          Finished_Step =>
            Step_Condition_Type'Val(Nim_Current_Story.Finished_Step));
-   end Set_Current_Story;
+      return New_Current_Story;
+   end Get_Current_Story;
 
    procedure Start_Story
      (Faction_Name: Tiny_String.Bounded_String;
@@ -210,14 +212,12 @@ package body Stories is
          Convention => C,
          External_Name => "startAdaStory";
    begin
-      if Current_Story.Index /= Null_Unbounded_String then
+      if Get_Current_Story.Index /= Null_Unbounded_String then
          return;
       end if;
-      Get_Current_Story;
       Start_Ada_Story
         (F_Name => New_String(Str => To_String(Source => Faction_Name)),
          Con => Start_Condition_Type'Pos(Condition));
-      Set_Current_Story;
    end Start_Story;
 
    procedure Clear_Current_Story is
@@ -245,9 +245,7 @@ package body Stories is
       if Base_Index > 0 then
          Set_Base_In_Nim(Base_Index => Base_Index);
       end if;
-      Set_Current_Story;
       Result := Progress_Ada_Story(N_Step => (if Next_Step then 1 else 0)) = 1;
-      Get_Current_Story;
       if Base_Index > 0 then
          Get_Base_From_Nim(Base_Index => Base_Index);
       end if;
@@ -336,25 +334,6 @@ package body Stories is
          end if;
       end if;
    end Get_Story_Location;
-
-   procedure Get_Current_Story is
-      procedure Get_Ada_Current_Story(Story: Nim_Current_Story_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaCurrentStory";
-   begin
-      Get_Ada_Current_Story
-        (Story =>
-           (Index =>
-              New_String(Str => To_String(Source => Current_Story.Index)),
-            Step => Current_Story.Step,
-            Current_Step => Current_Story.Current_Step,
-            Max_Steps => Current_Story.Max_Steps,
-            Show_Text => (if Current_Story.Show_Text then 1 else 0),
-            Data => New_String(Str => To_String(Source => Current_Story.Data)),
-            Finished_Step =>
-              Step_Condition_Type'Pos(Current_Story.Finished_Step)));
-   end Get_Current_Story;
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
       use Interfaces.C;

@@ -32,7 +32,6 @@ with Maps; use Maps;
 with Messages;
 with Ships; use Ships;
 with Ships.SaveLoad;
-with Stories; use Stories;
 
 package body Game.SaveLoad is
 
@@ -65,10 +64,6 @@ package body Game.SaveLoad is
                Mission_Index => Sky_Map(X, Y).Mission_Index);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
-      Get_Current_Story;
-      Get_Ada_Game_String
-        (Name => New_String(Str => "playerCareer"),
-         Value => New_String(Str => To_String(Source => Player_Career)));
       Save_Ada_Game(P_Print => (if Pretty_Print then 1 else 0));
    end Save_Game;
 
@@ -343,60 +338,6 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      -- Load current story
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "Current_Story");
-      if Length(List => Nodes_List) > 0 then
-         Log_Message
-           (Message => "Loading current story...", Message_Type => EVERYTHING,
-            New_Line => False);
-         Saved_Node := Item(List => Nodes_List, Index => 0);
-         Current_Story.Index :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
-         Current_Story.Step :=
-           Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "step"));
-         if Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
-           "start" then
-            Current_Story.Current_Step := 0;
-         elsif Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
-           "finish" then
-            Current_Story.Current_Step := -1;
-         else
-            Load_Story_Steps_Loop :
-            for I in Stories_List(Current_Story.Index).Steps.Iterate loop
-               if Stories_List(Current_Story.Index).Steps(I).Index =
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute
-                        (Elem => Saved_Node, Name => "currentstep")) then
-                  Current_Story.Current_Step :=
-                    Steps_Container.To_Index(Position => I);
-                  exit Load_Story_Steps_Loop;
-               end if;
-            end loop Load_Story_Steps_Loop;
-         end if;
-         Current_Story.Max_Steps :=
-           Positive'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "maxsteps"));
-         Current_Story.Show_Text :=
-           (if Get_Attribute(Elem => Saved_Node, Name => "showtext") = "Y" then
-              True
-            else False);
-         if Get_Attribute(Elem => Saved_Node, Name => "data") /= "" then
-            Current_Story.Data :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
-         end if;
-         Current_Story.Finished_Step :=
-           Step_Condition_Type'Val
-             (Integer'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "finishedstep")));
-         Log_Message
-           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-            Time_Stamp => False);
-      end if;
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);

@@ -299,7 +299,6 @@ package Stories is
    -- Resets current story
    -- SOURCE
    procedure Clear_Current_Story with
-      Post => Current_Story.Index = Null_Unbounded_String,
       Test_Case => (Name => "Test_ClearCurrentStory", Mode => Nominal);
       -- ****
 
@@ -355,7 +354,7 @@ package Stories is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Current_Story;
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
+   function Get_Current_Story return Current_Story_Data;
 
 end Stories;

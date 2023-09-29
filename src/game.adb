@@ -111,7 +111,6 @@ package body Game is
                   Mission_Index => Sky_Map(X, Y).Mission_Index);
             end loop Get_Map_X_Loop;
          end loop Get_Map_Y_Loop;
-         Get_Current_Story;
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Clear_Game_Stats;
