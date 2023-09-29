@@ -364,5 +364,6 @@ package Stories is
 
    procedure Get_Current_Story;
    procedure Get_Finished_Story(Index: Positive);
+   function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
 
 end Stories;

@@ -532,9 +532,9 @@ type
     finishedStep: cint
 
   AdaFinishedStoryData = object
-    index: string
+    index: cstring
     stepsAmount: cint
-    stepsTexts: array[10, string]
+    stepsTexts: array[10, cstring]
 
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
@@ -607,7 +607,7 @@ proc getAdaFinishedStory(index: cint; story: AdaFinishedStoryData) {.sideEffect,
     raises: [], tags: [], exportc.} =
   if story.index.len == 0:
     return
-  var finishedStory = FinishedStoryData(index: story.index,
+  var finishedStory = FinishedStoryData(index: $story.index,
       stepsAmount: story.stepsAmount)
   for text in story.stepsTexts:
     finishedStory.stepsTexts.add(y = $text)
@@ -637,3 +637,17 @@ proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc.} =
     return getCurrentStoryText().cstring
   except KeyError:
     return ""
+
+proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  story.index = "".cstring
+  story.stepsAmount = 0
+  for text in story.stepsTexts.mitems:
+    text = "".cstring
+  if index > finishedStories.len:
+    return
+  let nimStory = finishedStories[index - 1]
+  story.index = nimStory.index.cstring
+  story.stepsAmount = nimStory.stepsAmount.cint
+  for index, text in nimStory.stepsTexts:
+    story.stepsTexts[index] = text.cstring

@@ -400,4 +400,27 @@ package body Stories is
       Get_Ada_Finished_Story(I => Index, Story => Nim_Story);
    end Get_Finished_Story;
 
+   function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Steps_Texts is array(0 .. 10) of chars_ptr;
+      type Nim_Finished_Story_Data is record
+         Index: chars_ptr;
+         Steps_Amount: Integer;
+         Steps_Text: Nim_Steps_Texts;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
+      Nim_Story: Nim_Finished_Story_Data;
+      Story: Finished_Story_Data;
+      --## rule on IMPROPER_INITIALIZATION
+      procedure Set_Ada_Finished_Story
+        (I: Positive; Story: out Nim_Finished_Story_Data) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaFinishedStory";
+   begin
+      Set_Ada_Finished_Story(I => Index, Story => Nim_Story);
+      return Story;
+   end Get_Finished_Story;
+
 end Stories;
