@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -189,7 +188,7 @@ package body Knowledge is
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       Delete_Widgets
         (Start_Index => 1, End_Index => Rows - 1, Frame => Knowledge_Frame);
-      if Finished_Stories.Length = 0 then
+      if Length(Source => Get_Finished_Story(Index => 1).Index) = 0 then
          Label :=
            Create
              (pathName => Knowledge_Frame & ".nostories",
@@ -210,13 +209,18 @@ package body Knowledge is
               Create
                 (pathName => Knowledge_Frame & ".view",
                  options => "-wrap word");
+            Finished_Story: Finished_Story_Data;
+            Amount: Natural := 0;
          begin
             Load_Finished_Stories_Loop :
-            for FinishedStory of Finished_Stories loop
+            for I in 1 .. 100 loop
+               Finished_Story := Get_Finished_Story(Index => I);
+               exit Load_Finished_Stories_Loop when Length(Source => Finished_Story.Index) = 0;
                Append
                  (Source => Finished_Stories_List,
                   New_Item =>
-                    " {" & Stories_List(FinishedStory.Index).Name & "}");
+                    " {" & Stories_List(Finished_Story.Index).Name & "}");
+               Amount := Amount + 1;
             end loop Load_Finished_Stories_Loop;
             configure
               (Widgt => Stories_Box,
@@ -229,7 +233,7 @@ package body Knowledge is
             Current
               (ComboBox => Stories_Box,
                NewIndex =>
-                 Natural'Image(Natural(Finished_Stories.Length) - 1));
+                 Natural'Image(Amount - 1));
             Tcl.Tk.Ada.Grid.Grid(Slave => Stories_Box);
             Button :=
               Create

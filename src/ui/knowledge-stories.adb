@@ -90,11 +90,11 @@ package body Knowledge.Stories is
          options => "-state normal -width" & Positive'Image(Line_Width));
       Delete(TextWidget => Story_View, StartIndex => "1.0", Indexes => "end");
       Story_Steps_Info_Loop :
-      for StepText of Finished_Stories(Story_Index).Steps_Texts loop
+      for StepText of Get_Finished_Story(Index => Story_Index).Steps_Texts loop
          Append(Source => Story_Text, New_Item => StepText & LF);
          Rows := Rows + (Length(Source => StepText) / Line_Width) + 1;
       end loop Story_Steps_Info_Loop;
-      if Natural(Finished_Stories(Story_Index).Steps_Texts.Length) <
+      if Natural(Get_Finished_Story(Index => Story_Index).Steps_Texts.Length) <
         Finished_Stories(Story_Index).Steps_Amount then
          Append(Source => Story_Text, New_Item => Get_Current_Story_Text & LF);
          Rows :=

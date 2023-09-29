@@ -112,11 +112,6 @@ package body Game is
             end loop Get_Map_X_Loop;
          end loop Get_Map_Y_Loop;
          Get_Current_Story;
-         Get_Finished_Stories_Loop :
-         for I in
-           Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
-            Get_Finished_Story(Index => I);
-         end loop Get_Finished_Stories_Loop;
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Clear_Game_Stats;

@@ -66,10 +66,6 @@ package body Game.SaveLoad is
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
       Get_Current_Story;
-      Get_Finished_Stories_Loop :
-      for I in Finished_Stories.First_Index .. Finished_Stories.Last_Index loop
-         Get_Finished_Story(Index => I);
-      end loop Get_Finished_Stories_Loop;
       Get_Ada_Game_String
         (Name => New_String(Str => "playerCareer"),
          Value => New_String(Str => To_String(Source => Player_Career)));
@@ -401,56 +397,6 @@ package body Game.SaveLoad is
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
             Time_Stamp => False);
       end if;
-      -- Load finished stories data
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "finishedstory");
-      Load_Finished_Stories_Block :
-      declare
-         Steps_Amount: Positive;
-         Temp_Texts: UnboundedString_Container.Vector;
-         Story_Index: Unbounded_String;
-         --## rule off IMPROPER_INITIALIZATION
-         Child_Nodes_List: Node_List;
-         --## rule on IMPROPER_INITIALIZATION
-      begin
-         Log_Message
-           (Message => "Loading finished stories...",
-            Message_Type => EVERYTHING, New_Line => False);
-         Load_Finished_Stories_Loop :
-         for I in 0 .. Length(List => Nodes_List) - 1 loop
-            Saved_Node := Item(List => Nodes_List, Index => I);
-            Story_Index :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
-            Steps_Amount :=
-              Positive'Value
-                (Get_Attribute(Elem => Saved_Node, Name => "stepsamount"));
-            Temp_Texts.Clear;
-            Child_Nodes_List := Child_Nodes(N => Saved_Node);
-            Load_Stories_Text_Loop :
-            for J in 0 .. Length(List => Child_Nodes_List) - 1 loop
-               Temp_Texts.Append
-                 (New_Item =>
-                    To_Unbounded_String
-                      (Source =>
-                         Node_Value
-                           (N =>
-                              First_Child
-                                (N =>
-                                   Item
-                                     (List => Child_Nodes_List,
-                                      Index => J)))));
-            end loop Load_Stories_Text_Loop;
-            Finished_Stories.Append
-              (New_Item =>
-                 (Index => Story_Index, Steps_Amount => Steps_Amount,
-                  Steps_Texts => Temp_Texts));
-         end loop Load_Finished_Stories_Loop;
-         Log_Message
-           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-            Time_Stamp => False);
-      end Load_Finished_Stories_Block;
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);

@@ -279,7 +279,7 @@ package Stories is
    -- FUNCTION
    -- List of finished stories (or past data of current story)
    -- SOURCE
-   Finished_Stories: FinishedStories_Container.Vector;
+   -- Finished_Stories: FinishedStories_Container.Vector;
    -- ****
 
    -- ****f* Stories/Stories.Load_Stories
@@ -363,7 +363,6 @@ package Stories is
 -- Temporary code to interact with Nim
 
    procedure Get_Current_Story;
-   procedure Get_Finished_Story(Index: Positive);
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
 
 end Stories;

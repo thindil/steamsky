@@ -831,7 +831,6 @@ package body Ships.UI.Cargo is
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => Item_Index)
             .Proto_Index then
-         Finished_Stories.Delete(Index => Finished_Stories.Last_Index);
          Clear_Current_Story;
       end if;
       if Drop_Amount > 0 then

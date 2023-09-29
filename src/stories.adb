@@ -205,9 +205,6 @@ package body Stories is
       Condition: Start_Condition_Type) is
       use Tiny_String;
 
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Texts: UnboundedString_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
       procedure Start_Ada_Story(F_Name: chars_ptr; Con: Integer) with
          Import => True,
          Convention => C,
@@ -221,13 +218,6 @@ package body Stories is
         (F_Name => New_String(Str => To_String(Source => Faction_Name)),
          Con => Start_Condition_Type'Pos(Condition));
       Set_Current_Story;
-      if Current_Story.Index /= Null_Unbounded_String then
-         Finished_Stories.Append
-           (New_Item =>
-              (Index => Current_Story.Index,
-               Steps_Amount => Current_Story.Max_Steps,
-               Steps_Texts => Temp_Texts));
-      end if;
    end Start_Story;
 
    procedure Clear_Current_Story is
@@ -365,40 +355,6 @@ package body Stories is
             Finished_Step =>
               Step_Condition_Type'Pos(Current_Story.Finished_Step)));
    end Get_Current_Story;
-
-   procedure Get_Finished_Story(Index: Positive) is
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Steps_Texts is array(0 .. 10) of chars_ptr;
-      type Nim_Finished_Story_Data is record
-         Index: chars_ptr;
-         Steps_Amount: Integer;
-         Steps_Text: Nim_Steps_Texts;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Story: Nim_Finished_Story_Data;
-      --## rule on IMPROPER_INITIALIZATION
-      Step_Index: Natural := 0;
-      procedure Get_Ada_Finished_Story
-        (I: Positive; Story: Nim_Finished_Story_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaFinishedStory";
-   begin
-      if Index <= Finished_Stories.Last_Index then
-         Nim_Story.Index :=
-           New_String
-             (Str => To_String(Source => Finished_Stories(Index).Index));
-         Nim_Story.Steps_Amount := Finished_Stories(Index).Steps_Amount;
-         Convert_Steps_Texts_Loop :
-         for Text of Finished_Stories(Index).Steps_Texts loop
-            Nim_Story.Steps_Text(Step_Index) :=
-              New_String(Str => To_String(Source => Text));
-            Step_Index := Step_Index + 1;
-         end loop Convert_Steps_Texts_Loop;
-      end if;
-      Get_Ada_Finished_Story(I => Index, Story => Nim_Story);
-   end Get_Finished_Story;
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
       use Interfaces.C;
