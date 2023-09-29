@@ -603,19 +603,6 @@ proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], 
       if currentStory.showText: 1 else: 0), data: currentStory.data.cstring,
       finishedStep: currentStory.finishedStep.ord.cint)
 
-proc getAdaFinishedStory(index: cint; story: AdaFinishedStoryData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
-  if story.index.len == 0:
-    return
-  var finishedStory = FinishedStoryData(index: $story.index,
-      stepsAmount: story.stepsAmount)
-  for text in story.stepsTexts:
-    finishedStory.stepsTexts.add(y = $text)
-  if index <= finishedStories.len:
-    finishedStories[index - 1] = finishedStory
-  else:
-    finishedStories.add(y = finishedStory)
-
 proc getAdaStepData(finishData: array[10, AdaStepFinishData];
     name: cstring): cstring {.raises: [], tags: [], exportc.} =
   var nimData: seq[StepFinishData]
