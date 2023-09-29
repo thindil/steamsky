@@ -576,16 +576,17 @@ package body Bases.ShipyardUI is
                    Cost
                then "-style Headerred.TLabel"
                else "-style Golden.TLabel"));
-         configure(Widgt => Module_Text, options => "-state normal");
-         Delete
-           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text =>
-              "{" & LF & "Installation time:" &
+         Module_Label := Get_Widget(pathName => ".moduledialog.time");
+         configure
+           (Widgt => Module_Label,
+            options =>
+              "-text {" &
               Positive'Image
                 (Get_Module(Index => Get_Module_Index).Install_Time) &
               " minutes}");
+         configure(Widgt => Module_Text, options => "-state normal");
+         Delete
+           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       else
          Ship_Module_Index := Get_Module_Index;
          M_Type :=
@@ -662,7 +663,7 @@ package body Bases.ShipyardUI is
                Insert
                  (TextWidget => Module_Text, Index => "end",
                   Text =>
-                    "{" & LF & "Ship hull can be only replaced." & LF &
+                    "{Ship hull can be only replaced." & LF &
                     "Modules space:}");
                if Max_Value <
                  Player_Ship.Modules(Ship_Module_Index).Max_Modules then
@@ -720,7 +721,7 @@ package body Bases.ShipyardUI is
          when ENGINE =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max power:}");
+               Text => "{Max power:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
@@ -772,7 +773,7 @@ package body Bases.ShipyardUI is
          when ShipModules.CARGO =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max cargo:}");
+               Text => "{Max cargo:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
                  Get_Module
@@ -807,7 +808,7 @@ package body Bases.ShipyardUI is
          when CABIN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Quality: }");
+               Text => "{Quality: }");
             if Installing and then Ship_Module_Index > 0 then
                --## rule off SIMPLIFIABLE_STATEMENTS
                if Max_Value < 30 then
@@ -934,7 +935,7 @@ package body Bases.ShipyardUI is
          when ALCHEMY_LAB .. GREENHOUSE =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max workers:}");
+               Text => "{Max workers:}");
             if Installing and then Ship_Module_Index > 0 then
                if Get_Module
                    (Index =>
@@ -969,7 +970,7 @@ package body Bases.ShipyardUI is
          when GUN | HARPOON_GUN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Strength:}");
+               Text => "{Strength:}");
             if Installing and then Ship_Module_Index > 0 then
                if M_Type = GUN then
                   if Player_Ship.Modules(Ship_Module_Index).Damage >
@@ -1124,7 +1125,7 @@ package body Bases.ShipyardUI is
          when BATTERING_RAM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Strength:}");
+               Text => "{Strength:}");
             if Installing and then Ship_Module_Index > 0 then
                if Player_Ship.Modules(Ship_Module_Index).Damage2 >
                  Max_Value then
@@ -1463,6 +1464,19 @@ package body Bases.ShipyardUI is
          Options =>
            "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
            " -column 1");
+      Row := Row + 1;
+      Module_Label :=
+        Create
+          (pathName => Module_Dialog & ".timelbl",
+           options => "-text {Install time:}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Label, Options => "-sticky w -padx 5 -pady {5 0}");
+      Module_Label := Create(pathName => Module_Dialog & ".time");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Label,
+         Options =>
+           "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
+           " -column 1");
       Tag_Configure
         (TextWidget => Module_Text, TagName => "red",
          Options =>
@@ -1714,7 +1728,7 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
       Label :=
         Create
-          (pathName => Module_Dialog & ".gaininfolbl",
+          (pathName => Module_Dialog & ".gain",
            options =>
              "-text {" & Positive'Image(Cost) & " " &
              To_String(Source => Money_Name) & "} -style Headergreen.TLabel");
@@ -1727,7 +1741,7 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
       Label :=
         Create
-          (pathName => Module_Dialog & ".timeinfolbl",
+          (pathName => Module_Dialog & ".time",
            options =>
              "-text {" &
              Positive'Image
