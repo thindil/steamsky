@@ -503,8 +503,9 @@ package body Bases.ShipyardUI is
    -- Show information about selected module
    -- PARAMETERS
    -- Installing - If true, player looking at installing modules list
+   -- Row        - The current row in the dialog
    -- SOURCE
-   procedure Set_Module_Info(Installing: Boolean) is
+   procedure Set_Module_Info(Installing: Boolean; Row: Positive) is
       -- ****
       use Short_String;
       use Tiny_String;
@@ -521,6 +522,7 @@ package body Bases.ShipyardUI is
       Added: Boolean := False;
       Cost: Positive := 1;
       Money_Index_2: Natural := 0;
+      New_Row: Positive := Row + 1;
    begin
       if Installing then
          M_Type := Get_Module(Index => Get_Module_Index).M_Type;
@@ -583,7 +585,7 @@ package body Bases.ShipyardUI is
               "-text {" &
               Positive'Image
                 (Get_Module(Index => Get_Module_Index).Install_Time) &
-              " minutes}");
+              " minutes} -style Golden.TLabel");
          configure(Widgt => Module_Text, options => "-state normal");
          Delete
            (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
@@ -660,63 +662,91 @@ package body Bases.ShipyardUI is
       case M_Type is
          when HULL =>
             if Installing then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text =>
-                    "{Ship hull can be only replaced." & LF &
-                    "Modules space:}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.hullinfo",
+                    options =>
+                      "-text {Ship hull can be only replaced.} -style Golden.TLabel");
+               New_Row := New_Row + 1;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options => "-sticky w -columnspan 2 -padx {5 0}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.moduleslbl",
+                    options => "-text {Modules space:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
                if Max_Value <
                  Player_Ship.Modules(Ship_Module_Index).Max_Modules then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " (smaller)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.modules",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " (smaller)} -style Headerred.TLabel");
                elsif Max_Value >
                  Player_Ship.Modules(Ship_Module_Index).Max_Modules then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " (bigger)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.modules",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " (bigger)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.modules",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         "} -style Golden.TLabel");
                end if;
-            end if;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max module size:}");
-            if Installing then
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.maxsizelbl",
+                    options => "-text {Max module size:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
                if Value <
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Value) & " (smaller)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.maxsize",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         " (smaller)} -style Headerred.TLabel");
                elsif Value >
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Value) &
-                       " (bigger)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.maxsize",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         " (bigger)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.maxsize",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         "} -style Golden.TLabel");
                end if;
-            else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Positive'Image(Value) & "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
             end if;
          when ENGINE =>
             Insert
@@ -1495,7 +1525,7 @@ package body Bases.ShipyardUI is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-green)"));
-      Set_Module_Info(Installing => True);
+      Set_Module_Info(Installing => True, Row => Row);
       configure
         (Widgt => Module_Text,
          options =>
@@ -1751,12 +1781,12 @@ package body Bases.ShipyardUI is
              " minutes} -style Golden.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
+      configure(Widgt => Module_Text, options => "-state normal");
+      Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
+      Set_Module_Info(Installing => False, Row => 3);
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Text,
          Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
-      configure(Widgt => Module_Text, options => "-state normal");
-      Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-      Set_Module_Info(Installing => False);
       if Damage_Percent < 1.0 then
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
             Progress_Bar_Style :=
@@ -2219,7 +2249,7 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Set_Module_Info(Installing => True);
+      Set_Module_Info(Installing => True, Row => 3);
       return TCL_OK;
    end Compare_Modules_Command;
 
