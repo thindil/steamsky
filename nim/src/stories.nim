@@ -494,6 +494,7 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].}
       return text.text
 
 proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
+  ## Reset the player's current story
   currentStory = CurrentStoryData()
 
 # Temporary code for interfacing with Ada
