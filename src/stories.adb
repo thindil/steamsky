@@ -159,24 +159,23 @@ package body Stories is
       end loop Convert_Stories_Loop;
    end Load_Stories;
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Current_Story_Data is record
-      Index: chars_ptr;
-      Step: Positive;
-      Current_Step: Integer;
-      Max_Steps: Positive;
-      Show_Text: Integer;
-      Data: chars_ptr;
-      Finished_Step: Natural;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    -- ****if* Stories/Set_Current_Story
    -- FUNCTION
    -- Set the current story from Nim
    -- SOURCE
    function Get_Current_Story return Current_Story_Data is
       -- ****
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Current_Story_Data is record
+         Index: chars_ptr;
+         Step: Positive;
+         Current_Step: Integer;
+         Max_Steps: Positive;
+         Show_Text: Integer;
+         Data: chars_ptr;
+         Finished_Step: Natural;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Current_Story: Nim_Current_Story_Data;
       New_Current_Story: Current_Story_Data;
       procedure Set_Ada_Current_Story(Story: out Nim_Current_Story_Data) with
@@ -343,12 +342,12 @@ package body Stories is
       Story: Finished_Story_Data;
       --## rule on IMPROPER_INITIALIZATION
       procedure Set_Ada_Finished_Story
-        (I: Positive; Story: out Nim_Finished_Story_Data) with
+        (I: Positive; S: out Nim_Finished_Story_Data) with
          Import => True,
          Convention => C,
          External_Name => "setAdaFinishedStory";
    begin
-      Set_Ada_Finished_Story(I => Index, Story => Nim_Story);
+      Set_Ada_Finished_Story(I => Index, S => Nim_Story);
       Story.Index :=
         To_Unbounded_String(Source => Value(Item => Nim_Story.Index));
       Story.Steps_Amount := Nim_Story.Steps_Amount;
