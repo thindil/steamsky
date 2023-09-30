@@ -66,10 +66,12 @@ package body Help.UI is
 
       New_Text, Tag_Text: Unbounded_String := Null_Unbounded_String;
       Start_Index, End_Index, Old_Index: Natural := 0;
+      --## rule off TYPE_INITIAL_VALUES
       type Variables_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Variables: constant array(1 .. 11) of Variables_Data :=
         (1 =>
            (Name => To_Unbounded_String(Source => "MoneyName"),
@@ -191,10 +193,12 @@ package body Help.UI is
          21 => Menu_Accelerators(11), 22 => Map_Accelerators(1),
          23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
          25 => Map_Accelerators(4));
+      --## rule off TYPE_INITIAL_VALUES
       type Font_Tag is record
          Tag: String(1 .. 1);
          Text_Tag: Unbounded_String;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Font_Tags: constant array(1 .. 3) of Font_Tag :=
         (1 => (Tag => "b", Text_Tag => To_Unbounded_String(Source => "bold")),
          2 =>
@@ -222,8 +226,10 @@ package body Help.UI is
         Get_Widget(pathName => ".help.paned.topics.view", Interp => Interp);
       Help_View: constant Tk_Text :=
         Get_Widget(pathName => ".help.paned.content.view", Interp => Interp);
+      --## rule off IMPROPER_INITIALIZATION
       Faction: Faction_Record;
       Help: Help_Data;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       configure(Widgt => Help_View, options => "-state normal");
       Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
@@ -465,7 +471,7 @@ package body Help.UI is
         Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Get_Interface_Theme));
-      Help: Help_Data;
+      Help: Help_Data; --## rule line off IMPROPER_INITIALIZATION
       Help_Title: Unbounded_String := Null_Unbounded_String;
    begin
       if Winfo_Get(Widgt => Help_Window, Info => "exists") = "1" then
