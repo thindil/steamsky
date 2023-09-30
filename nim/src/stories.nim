@@ -493,7 +493,7 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].}
     if text.condition == currentStory.finishedStep:
       return text.text
 
-proc clearCurrentStory*() =
+proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
   currentStory = CurrentStoryData()
 
 # Temporary code for interfacing with Ada
