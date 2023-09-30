@@ -301,8 +301,7 @@ package Stories is
    procedure Clear_Current_Story with
       Import => True,
       Convention => C,
-      External_Name => "clearAdaCurrentStory",
-      Test_Case => (Name => "Test_ClearCurrentStory", Mode => Nominal);
+      External_Name => "clearAdaCurrentStory";
       -- ****
 
       -- ****f* Stories/Stories.Progress_Story
