@@ -25,7 +25,7 @@ with Log;
 with Maps; use Maps;
 with Ships; use Ships;
 with Statistics; use Statistics;
-with Stories; use Stories;
+with Stories;
 
 package body Game is
 
@@ -132,6 +132,7 @@ package body Game is
       use Ada.Exceptions;
       use BasesTypes;
       use Log;
+      use Stories;
 
       Result: chars_ptr;
       function Load_Ada_Game_Data return chars_ptr with
