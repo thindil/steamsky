@@ -458,7 +458,7 @@ package body Maps.UI is
          End_X := 1_024;
          Start_X := 1_025 - Map_Width;
       end if;
-      if Current_Story.Index /= Null_Unbounded_String then
+      if Get_Current_Story.Index /= Null_Unbounded_String then
          Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
          if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
             Story_X := 0;
@@ -488,7 +488,7 @@ package body Maps.UI is
                   Map_Tag :=
                     (if Sky_Map(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String(Source => "unvisited"));
-               elsif Current_Story.Index /= Null_Unbounded_String
+               elsif Get_Current_Story.Index /= Null_Unbounded_String
                  and then (X = Story_X and Y = Story_Y) then
                   Map_Char := Current_Theme.Story_Icon;
                   Map_Tag := To_Unbounded_String(Source => "green");
@@ -871,7 +871,7 @@ package body Maps.UI is
             Insert_Text(New_Text => To_String(Source => Mission_Info_Text));
          end Add_Mission_Info_Block;
       end if;
-      if Current_Story.Index /= Null_Unbounded_String then
+      if Get_Current_Story.Index /= Null_Unbounded_String then
          Add_Story_Info_Block :
          declare
             --## rule off IMPROPER_INITIALIZATION
@@ -886,14 +886,14 @@ package body Maps.UI is
             end if;
             if X = Story_X and Y = Story_Y then
                Finish_Condition :=
-                 (if Current_Story.Current_Step = 0 then
-                    Stories_List(Current_Story.Index).Starting_Step
+                 (if Get_Current_Story.Current_Step = 0 then
+                    Stories_List(Get_Current_Story.Index).Starting_Step
                       .Finish_Condition
-                  elsif Current_Story.Current_Step > 0 then
-                    Stories_List(Current_Story.Index).Steps
-                      (Current_Story.Current_Step)
+                  elsif Get_Current_Story.Current_Step > 0 then
+                    Stories_List(Get_Current_Story.Index).Steps
+                      (Get_Current_Story.Current_Step)
                       .Finish_Condition
-                  else Stories_List(Current_Story.Index).Final_Step
+                  else Stories_List(Get_Current_Story.Index).Final_Step
                       .Finish_Condition);
                if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
                   Insert_Text(New_Text => LF & "Story leads you here");
@@ -1516,9 +1516,9 @@ package body Maps.UI is
            (Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>",
             Script => "{SetShipSpeed [" & Speed_Box & " current]}");
       end if;
-      if Current_Story.Index /= Null_Unbounded_String and
-        Current_Story.Show_Text then
-         if Current_Story.Current_Step > -2 then
+      if Get_Current_Story.Index /= Null_Unbounded_String and
+        Get_Current_Story.Show_Text then
+         if Get_Current_Story.Current_Step > -2 then
             Show_Info
               (Text => To_String(Source => Get_Current_Story_Text),
                Title => "Story");
