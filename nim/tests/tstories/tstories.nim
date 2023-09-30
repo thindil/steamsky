@@ -3,7 +3,8 @@ discard """
   output: '''Loading the game data.
 Testing getStepData.
 Testing startStory.
-Testing getCurrentStoryText.'''
+Testing getCurrentStoryText.
+Testing clearCurrentStory.'''
 """
 
 import std/tables
@@ -51,3 +52,12 @@ try:
   assert getCurrentStoryText().len > 0
 except AssertionDefect:
   writeLine(stderr, "Failed to get the current story text.")
+
+echo "Testing clearCurrentStory."
+let oldStory = currentStory
+clearCurrentStory()
+try:
+  assert currentStory.index.len == 0
+except AssertionDefect:
+  writeLine(stderr, "Failed to clear the current story.")
+currentStory = oldStory
