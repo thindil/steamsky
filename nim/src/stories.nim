@@ -645,3 +645,6 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
 
 proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc.} =
   clearCurrentStory()
+
+proc setAdaStoryShowText(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
+  currentStory.showText = newValue == 1

@@ -358,5 +358,6 @@ package Stories is
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
    function Get_Current_Story return Current_Story_Data;
+   procedure Set_Story_Show_Text(New_Value: Boolean := False);
 
 end Stories;

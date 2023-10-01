@@ -360,4 +360,13 @@ package body Stories is
       return Story;
    end Get_Finished_Story;
 
+   procedure Set_Story_Show_Text(New_Value: Boolean := False) is
+      procedure Set_Ada_Story_Show_Text(New_V: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaStoryShowText";
+   begin
+      Set_Ada_Story_Show_Text(New_V => (if New_Value then 1 else 0));
+   end Set_Story_Show_Text;
+
 end Stories;
