@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,18 +33,16 @@
 <ul>
 <li>1. <a href="#robo23">Events/Events</a></li>
 <ul>
-<li>1.1. <a href="#robo93">Events/Events.Events_Container</a></li>
-<li>1.2. <a href="#robo94">Events/Events.Events_Types</a></li>
-<li>1.3. <a href="#robo199">Events/Events.Event_Data</a></li>
-<li>1.4. <a href="#robo251">Events/Events.Empty_Event</a></li>
-<li>1.5. <a href="#robo252">Events/Events.No_Event</a></li>
-<li>1.6. <a href="#robo357">Events/Events.Events_List</a></li>
-<li>1.7. <a href="#robo571">Events/Events.Check_For_Event</a></li>
-<li>1.8. <a href="#robo572">Events/Events.Delete_Event</a></li>
-<li>1.9. <a href="#robo573">Events/Events.Generate_Traders</a></li>
-<li>1.10. <a href="#robo574">Events/Events.GenerateEnemies</a></li>
-<li>1.11. <a href="#robo575">Events/Events.Recover_Base</a></li>
-<li>1.12. <a href="#robo576">Events/Events.Update_Events</a></li>
+<li>1.1. <a href="#robo93">Events/Events.Events_Types</a></li>
+<li>1.2. <a href="#robo198">Events/Events.Event_Data</a></li>
+<li>1.3. <a href="#robo250">Events/Events.Empty_Event</a></li>
+<li>1.4. <a href="#robo251">Events/Events.No_Event</a></li>
+<li>1.5. <a href="#robo562">Events/Events.Check_For_Event</a></li>
+<li>1.6. <a href="#robo563">Events/Events.Delete_Event</a></li>
+<li>1.7. <a href="#robo564">Events/Events.Generate_Traders</a></li>
+<li>1.8. <a href="#robo565">Events/Events.GenerateEnemies</a></li>
+<li>1.9. <a href="#robo566">Events/Events.Recover_Base</a></li>
+<li>1.10. <a href="#robo567">Events/Events.Update_Events</a></li>
 </ul>
 </ul>
 <hr />
@@ -60,21 +58,8 @@
 </pre>
 
 <hr />
-<a name="Events2fEvents2eEvents5fContainer"></a>
-<a name="robo93"></a><h2>Events/Events.Events_Container [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to store events data
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">  <span class="keyword">package</span> Events_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
-    <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Event_Data<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Events2fEvents2eEvents5fTypes"></a>
-<a name="robo94"></a><h2>Events/Events.Events_Types [ Types ]</h2>
+<a name="robo93"></a><h2>Events/Events.Events_Types [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -89,7 +74,7 @@
 
 <hr />
 <a name="Events2fEvents2eEvent5fData"></a>
-<a name="robo199"></a><h2>Events/Events.Event_Data [ Records ]</h2>
+<a name="robo198"></a><h2>Events/Events.Event_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -122,7 +107,7 @@
 
 <hr />
 <a name="Events2fEvents2eEmpty5fEvent"></a>
-<a name="robo251"></a><h2>Events/Events.Empty_Event [ Constants ]</h2>
+<a name="robo250"></a><h2>Events/Events.Empty_Event [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -135,7 +120,7 @@
 
 <hr />
 <a name="Events2fEvents2eNo5fEvent"></a>
-<a name="robo252"></a><h2>Events/Events.No_Event [ Constants ]</h2>
+<a name="robo251"></a><h2>Events/Events.No_Event [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -146,20 +131,8 @@
 </pre>
 
 <hr />
-<a name="Events2fEvents2eEvents5fList"></a>
-<a name="robo357"></a><h2>Events/Events.Events_List [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> List of all events in the game
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">  Events_List<span class="sign">:</span> Events_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Events2fEvents2eCheck5fFor5fEvent"></a>
-<a name="robo571"></a><h2>Events/Events.Check_For_Event [ Subprograms ]</h2>
+<a name="robo562"></a><h2>Events/Events.Check_For_Event [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -174,7 +147,7 @@
 
 <hr />
 <a name="Events2fEvents2eDelete5fEvent"></a>
-<a name="robo572"></a><h2>Events/Events.Delete_Event [ Subprograms ]</h2>
+<a name="robo563"></a><h2>Events/Events.Delete_Event [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -189,7 +162,7 @@
 
 <hr />
 <a name="Events2fEvents2eGenerate5fTraders"></a>
-<a name="robo573"></a><h2>Events/Events.Generate_Traders [ Subprograms ]</h2>
+<a name="robo564"></a><h2>Events/Events.Generate_Traders [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -201,7 +174,7 @@
 
 <hr />
 <a name="Events2fEvents2eGenerateEnemies"></a>
-<a name="robo574"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
+<a name="robo565"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -223,7 +196,7 @@
 
 <hr />
 <a name="Events2fEvents2eRecover5fBase"></a>
-<a name="robo575"></a><h2>Events/Events.Recover_Base [ Subprograms ]</h2>
+<a name="robo566"></a><h2>Events/Events.Recover_Base [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -238,7 +211,7 @@
 
 <hr />
 <a name="Events2fEvents2eUpdate5fEvents"></a>
-<a name="robo576"></a><h2>Events/Events.Update_Events [ Subprograms ]</h2>
+<a name="robo567"></a><h2>Events/Events.Update_Events [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -253,7 +226,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-09-03 03:09:22</p>
+<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-10-01 03:00:49</p>
 </div> <!-- footer -->
 </body>
 </html>
