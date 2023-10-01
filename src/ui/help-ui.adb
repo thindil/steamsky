@@ -228,19 +228,19 @@ package body Help.UI is
         Get_Widget(pathName => ".help.paned.content.view", Interp => Interp);
       --## rule off IMPROPER_INITIALIZATION
       Faction: Faction_Record;
-      Help: Help_Data;
+      Local_Help: Help_Data;
       --## rule on IMPROPER_INITIALIZATION
    begin
       configure(Widgt => Help_View, options => "-state normal");
       Delete(TextWidget => Help_View, StartIndex => "1.0", Indexes => "end");
       Find_Help_Text_Loop :
       for I in 0 .. 100 loop
-         Help := Get_Help(Title => Help_Title, Help_Index => I);
-         exit Find_Help_Text_Loop when Length(Source => Help.Index) = 0;
-         if Help.Index =
+         Local_Help := Get_Help(Title => Help_Title, Help_Index => I);
+         exit Find_Help_Text_Loop when Length(Source => Local_Help.Index) = 0;
+         if Local_Help.Index =
            To_Unbounded_String
              (Source => Selection(TreeViewWidget => Topics_View)) then
-            New_Text := Help.Text;
+            New_Text := Local_Help.Text;
             exit Find_Help_Text_Loop;
          end if;
       end loop Find_Help_Text_Loop;
@@ -298,8 +298,8 @@ package body Help.UI is
             end if;
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
-         for I in Font_Tags'Range loop
-            if Tag_Text = To_Unbounded_String(Source => Font_Tags(I).Tag) then
+         for Font_Tag of Font_Tags loop
+            if Tag_Text = To_Unbounded_String(Source => Font_Tag.Tag) then
                Start_Index :=
                  Index(Source => New_Text, Pattern => "{", From => End_Index) -
                  1;
@@ -310,8 +310,7 @@ package body Help.UI is
                     Slice
                       (Source => New_Text, Low => End_Index + 2,
                        High => Start_Index) &
-                    "} [list " & To_String(Source => Font_Tags(I).Text_Tag) &
-                    "]");
+                    "} [list " & To_String(Source => Font_Tag.Text_Tag) & "]");
                End_Index :=
                  Index
                    (Source => New_Text, Pattern => "}", From => Start_Index) -
@@ -471,7 +470,7 @@ package body Help.UI is
         Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
       Current_Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Get_Interface_Theme));
-      Help: Help_Data; --## rule line off IMPROPER_INITIALIZATION
+      Local_Help: Help_Data; --## rule line off IMPROPER_INITIALIZATION
       Help_Title: Unbounded_String := Null_Unbounded_String;
    begin
       if Winfo_Get(Widgt => Help_Window, Info => "exists") = "1" then
@@ -546,13 +545,13 @@ package body Help.UI is
            Natural'Image(Get_Integer_Setting(Name => "topicsPosition")));
       Insert_Topics_Loop :
       for I in 0 .. 100 loop
-         Help := Get_Help(Title => Help_Title, Help_Index => I);
-         exit Insert_Topics_Loop when Length(Source => Help.Index) = 0;
+         Local_Help := Get_Help(Title => Help_Title, Help_Index => I);
+         exit Insert_Topics_Loop when Length(Source => Local_Help.Index) = 0;
          Insert
            (TreeViewWidget => Topics_View,
             Options =>
-              "{} end -id {" & To_String(Source => Help.Index) & "} -text {" &
-              To_String(Source => Help_Title) & "}");
+              "{} end -id {" & To_String(Source => Local_Help.Index) &
+              "} -text {" & To_String(Source => Help_Title) & "}");
       end loop Insert_Topics_Loop;
       Bind
         (Widgt => Topics_View, Sequence => "<<TreeviewSelect>>",
