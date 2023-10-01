@@ -25,7 +25,6 @@ with Input_Sources.File;
 with Bases; use Bases;
 with Bases.SaveLoad;
 with Config;
-with Events;
 with Log;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -236,46 +235,6 @@ package body Game.SaveLoad is
         (Message => "Loading player ship...", Message_Type => EVERYTHING,
          New_Line => False);
       Load_Player_Ship(Save_Data => Save_Data);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Load events
-      Log_Message
-        (Message => "Loading events...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "event");
-      Load_Events_Block :
-      declare
-         use Events;
-
-         E_Type: Events_Types;
-         X, Y, Time: Integer;
-         Data: Unbounded_String;
-      begin
-         Load_Events_Loop :
-         for I in 0 .. Length(List => Nodes_List) - 1 loop
-            Saved_Node := Item(List => Nodes_List, Index => I);
-            E_Type :=
-              Events_Types'Val
-                (Integer'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
-            X := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "x"));
-            Y := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "y"));
-            Time :=
-              Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "time"));
-            Data :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
-            Get_Ada_Event
-              (Index => Get_Events_Amount + 1,
-               E_Type => Events_Types'Pos(E_Type), X => X, Y => Y,
-               Time => Time,
-               Data => Positive'Value(To_String(Source => Data)));
-            Sky_Map(X, Y).Event_Index := I + 1;
-         end loop Load_Events_Loop;
-      end Load_Events_Block;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
