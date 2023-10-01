@@ -749,56 +749,106 @@ package body Bases.ShipyardUI is
                New_Row := New_Row + 1;
             end if;
          when ENGINE =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Max power:}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.powerlbl",
+                 options => "-text {Max power:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " (weaker)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.power",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " (weaker)} -style Headerred.TLabel");
                elsif Max_Value >
                  Player_Ship.Modules(Ship_Module_Index).Power then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " (stronger)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.power",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " (stronger)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.power",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         "} -style Golden.TLabel");
                end if;
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Fuel usage:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.fuellbl",
+                    options => "-text {Fuel usage:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
                if Value <
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Value) & " (less)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.fuel",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         " (less)} -style Headergreen.TLabel");
                elsif Value >
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Value) & " (more)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.fuel",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         " (more)} -style Headerred.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.fuel",
+                       options =>
+                         "-text {" & Positive'Image(Value) &
+                         "} -style Golden.TLabel");
                end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Positive'Image(Max_Value) & "}");
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text =>
-                    "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
+               New_Row := New_Row - 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.power",
+                    options =>
+                      "-text {" & Positive'Image(Max_Value) &
+                      "} -style Golden.TLabel");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.fuellbl",
+                    options => "-text {Fuel usage:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.fuel",
+                    options =>
+                      "-text {" & Positive'Image(Value) &
+                      "} -style Golden.TLabel");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
             end if;
          when ShipModules.CARGO =>
             Insert
