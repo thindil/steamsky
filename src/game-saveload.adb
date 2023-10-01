@@ -29,7 +29,6 @@ with Crafts;
 with Events;
 with Log;
 with Maps; use Maps;
-with Messages;
 with Ships; use Ships;
 with Ships.SaveLoad;
 
@@ -78,7 +77,6 @@ package body Game.SaveLoad is
       use Config;
       use Crafts;
       use Log;
-      use Messages;
       use Ships.SaveLoad;
       use Tiny_String;
 
@@ -261,40 +259,6 @@ package body Game.SaveLoad is
                      (Elem => Item(List => Nodes_List, Index => I),
                       Name => "index")));
       end loop Load_Known_Recipes_Loop;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Load messages
-      Log_Message
-        (Message => "Loading messages...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "message");
-      Clear_Messages;
-      Load_Messages_Block :
-      declare
-         Text: Unbounded_String;
-         M_Type: Message_Type;
-         Color: Message_Color;
-      begin
-         Load_Messages_Loop :
-         for I in 0 .. Length(List => Nodes_List) - 1 loop
-            Saved_Node := Item(List => Nodes_List, Index => I);
-            Text :=
-              To_Unbounded_String
-                (Source => Node_Value(N => First_Child(N => Saved_Node)));
-            M_Type :=
-              Message_Type'Val
-                (Integer'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
-            Color :=
-              Message_Color'Val
-                (Integer'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "color")));
-            Restore_Message(Message => Text, M_Type => M_Type, Color => Color);
-         end loop Load_Messages_Loop;
-      end Load_Messages_Block;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
