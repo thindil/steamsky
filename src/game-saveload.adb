@@ -25,7 +25,6 @@ with Input_Sources.File;
 with Bases; use Bases;
 with Bases.SaveLoad;
 with Config;
-with Crafts;
 with Events;
 with Log;
 with Maps; use Maps;
@@ -75,10 +74,8 @@ package body Game.SaveLoad is
       use Input_Sources.File;
       use Bases.SaveLoad;
       use Config;
-      use Crafts;
       use Log;
       use Ships.SaveLoad;
-      use Tiny_String;
 
       Save_File: File_Input;
       --## rule off IMPROPER_INITIALIZATION
@@ -239,26 +236,6 @@ package body Game.SaveLoad is
         (Message => "Loading player ship...", Message_Type => EVERYTHING,
          New_Line => False);
       Load_Player_Ship(Save_Data => Save_Data);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
-      -- Load known recipes
-      Log_Message
-        (Message => "Loading known recipes...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "recipe");
-      Load_Known_Recipes_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Add_Known_Recipe
-           (Recipe_Index =>
-              To_Bounded_String
-                (Source =>
-                   Get_Attribute
-                     (Elem => Item(List => Nodes_List, Index => I),
-                      Name => "index")));
-      end loop Load_Known_Recipes_Loop;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
