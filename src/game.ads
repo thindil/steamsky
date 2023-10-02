@@ -639,13 +639,6 @@ package Game is
        (Source => "data" & Dir_Separator & "mods" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.Player_Career
-   -- FUNCTION
-   -- Index of career selected by player during starting game
-   -- SOURCE
-   Player_Career: Unbounded_String;
-   -- ****
-
    -- ****v* Game/Game.Themes_Directory
    -- FUNCTION
    -- Path to directory where are ui themes
