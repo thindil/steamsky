@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated look of dialogs in the shipyard screen
+
 ### Fixed
 - Typos in the changelog
 
