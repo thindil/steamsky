@@ -12,12 +12,12 @@ All notable changes to this project will be documented in this file.
 - Info about the module's damage in the remove module dialog in a base's
   shipyard
 - Setting the player's ship's speed on the map
-- Events don't dissapear when they end
+- Events don't disappear when they end
 - Crash when starting melee combat
 - Saving the game in the debug menu
 - Showing the player's ship's orders menu during combat
-- Smaller factions starts in large factions' bases
-- Counting the amount of time need for upgrade the player's ship's modules
+- Smaller factions start in large factions' bases
+- Counting the amount of time need to upgrade the player's ship's modules
   when starting an upgrade
 
 ## [9.1] - 2023-09-03
