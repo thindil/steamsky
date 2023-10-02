@@ -253,14 +253,6 @@ package Stories is
    Empty_Finished_Story: constant Finished_Story_Data := (others => <>);
    -- ****
 
-   -- ****t* Stories/Stories.FinishedStories_Container
-   -- FUNCTIONS
-   -- Used to store finished stories
-   -- SOURCE
-   package FinishedStories_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Finished_Story_Data);
-   -- ****
-
    -- ****v* Stories/Stories.Stories_List
    -- FUNCTION
    -- List of available stories in game
