@@ -298,8 +298,8 @@ package body Help.UI is
             end if;
          end loop Insert_Keys_Loop;
          Insert_Tags_Loop :
-         for Font_Tag of Font_Tags loop
-            if Tag_Text = To_Unbounded_String(Source => Font_Tag.Tag) then
+         for F_Tag of Font_Tags loop
+            if Tag_Text = To_Unbounded_String(Source => F_Tag.Tag) then
                Start_Index :=
                  Index(Source => New_Text, Pattern => "{", From => End_Index) -
                  1;
@@ -310,7 +310,7 @@ package body Help.UI is
                     Slice
                       (Source => New_Text, Low => End_Index + 2,
                        High => Start_Index) &
-                    "} [list " & To_String(Source => Font_Tag.Text_Tag) & "]");
+                    "} [list " & To_String(Source => F_Tag.Text_Tag) & "]");
                End_Index :=
                  Index
                    (Source => New_Text, Pattern => "}", From => Start_Index) -
