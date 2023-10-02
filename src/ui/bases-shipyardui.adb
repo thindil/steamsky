@@ -851,40 +851,57 @@ package body Bases.ShipyardUI is
                New_Row := New_Row + 1;
             end if;
          when ShipModules.CARGO =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Max cargo:}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.cargolbl",
+                 options => "-text {Max cargo:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " kg (bigger)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.cargo",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " kg (bigger)} -style Headergreen.TLabel");
                elsif Max_Value <
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Positive'Image(Max_Value) &
-                       " kg (smaller)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.cargo",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " kg (smaller)} -style Headerred.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) & " kg}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.cargo",
+                       options =>
+                         "-text {" & Positive'Image(Max_Value) &
+                         " kg} -style Golden.TLabel");
                end if;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Positive'Image(Max_Value) & " kg}");
+               New_Row := New_Row - 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.cargo",
+                    options =>
+                      "-text {" & Positive'Image(Max_Value) &
+                      " kg} -style Golden.TLabel");
             end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
          when CABIN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
