@@ -302,18 +302,18 @@ package body Stories is
    begin
       Story_X := 1;
       Story_Y := 1;
-      if Current_Story.Data = Null_Unbounded_String then
+      if Get_Current_Story.Data = Null_Unbounded_String then
          Story_X := Player_Ship.Sky_X;
          Story_Y := Player_Ship.Sky_Y;
       else
          Create
-           (S => Tokens, From => To_String(Source => Current_Story.Data),
+           (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
             Separators => ";");
          if Slice_Count(S => Tokens) < 3 then
             Get_Story_Location_Loop :
             for Sky_Base of Sky_Bases loop
                if Tiny_String.To_String(Source => Sky_Base.Name) =
-                 To_String(Source => Current_Story.Data) then
+                 To_String(Source => Get_Current_Story.Data) then
                   Story_X := Sky_Base.Sky_X;
                   Story_Y := Sky_Base.Sky_Y;
                   exit Get_Story_Location_Loop;

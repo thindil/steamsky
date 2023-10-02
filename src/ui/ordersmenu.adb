@@ -121,22 +121,22 @@ package body OrdersMenu is
       if Find_Member(Order => TALK) > 0 then
          Have_Trader := True;
       end if;
-      if Current_Story.Index /= Null_Unbounded_String then
+      if Get_Current_Story.Index /= Null_Unbounded_String then
          Show_Story_Button_Block :
          declare
             Step: constant Step_Data :=
-              (if Current_Story.Current_Step = 0 then
-                 Stories_List(Current_Story.Index).Starting_Step
-               elsif Current_Story.Current_Step > 0 then
-                 Stories_List(Current_Story.Index).Steps
-                   (Current_Story.Current_Step)
-               else Stories_List(Current_Story.Index).Final_Step);
+              (if Get_Current_Story.Current_Step = 0 then
+                 Stories_List(Get_Current_Story.Index).Starting_Step
+               elsif Get_Current_Story.Current_Step > 0 then
+                 Stories_List(Get_Current_Story.Index).Steps
+                   (Get_Current_Story.Current_Step)
+               else Stories_List(Get_Current_Story.Index).Final_Step);
          begin
             case Step.Finish_Condition is
                when ASKINBASE =>
                   if Base_Index > 0 then
-                     if Current_Story.Data = Null_Unbounded_String or
-                       To_String(Source => Current_Story.Data) =
+                     if Get_Current_Story.Data = Null_Unbounded_String or
+                       To_String(Source => Get_Current_Story.Data) =
                          To_String(Source => Sky_Bases(Base_Index).Name) then
                         Add_Button
                           (Name => ".story",
@@ -165,7 +165,7 @@ package body OrdersMenu is
                   begin
                      Create
                        (S => Tokens,
-                        From => To_String(Source => Current_Story.Data),
+                        From => To_String(Source => Get_Current_Story.Data),
                         Separators => ";");
                      if Player_Ship.Sky_X =
                        Positive'Value(Slice(S => Tokens, Index => 1)) and
@@ -193,7 +193,7 @@ package body OrdersMenu is
                   begin
                      Create
                        (S => Tokens,
-                        From => To_String(Source => Current_Story.Data),
+                        From => To_String(Source => Get_Current_Story.Data),
                         Separators => ";");
                      if Player_Ship.Sky_X =
                        Positive'Value(Slice(S => Tokens, Index => 1)) and
@@ -1082,11 +1082,11 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Step: Step_Data :=
-        (if Current_Story.Current_Step = 0 then
-           Stories_List(Current_Story.Index).Starting_Step
-         elsif Current_Story.Current_Step > 0 then
-           Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step)
-         else Stories_List(Current_Story.Index).Final_Step);
+        (if Get_Current_Story.Current_Step = 0 then
+           Stories_List(Get_Current_Story.Index).Starting_Step
+         elsif Get_Current_Story.Current_Step > 0 then
+           Stories_List(Get_Current_Story.Index).Steps(Get_Current_Story.Current_Step)
+         else Stories_List(Get_Current_Story.Index).Final_Step);
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
@@ -1104,7 +1104,7 @@ package body OrdersMenu is
             Tokens: Slice_Set;
          begin
             Create
-              (S => Tokens, From => To_String(Source => Current_Story.Data),
+              (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
                Separators => ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
@@ -1118,19 +1118,19 @@ package body OrdersMenu is
                when others =>
                   null;
             end case;
-            if Current_Story.Current_Step > -2 then
+            if Get_Current_Story.Current_Step > -2 then
                Step :=
-                 (if Current_Story.Current_Step > 0 then
-                    Stories_List(Current_Story.Index).Steps
-                      (Current_Story.Current_Step)
-                  else Stories_List(Current_Story.Index).Final_Step);
+                 (if Get_Current_Story.Current_Step > 0 then
+                    Stories_List(Get_Current_Story.Index).Steps
+                      (Get_Current_Story.Current_Step)
+                  else Stories_List(Get_Current_Story.Index).Final_Step);
                Show_Current_Story_Loop :
                for Text of Step.Texts loop
-                  if Current_Story.Finished_Step = Text.Condition then
+                  if Get_Current_Story.Finished_Step = Text.Condition then
                      Show_Info
                        (Text => To_String(Source => Text.Text),
                         Title => "Story");
-                     Current_Story.Show_Text := False;
+                     Set_Story_Show_Text;
                      exit Show_Current_Story_Loop;
                   end if;
                end loop Show_Current_Story_Loop;
@@ -1141,7 +1141,7 @@ package body OrdersMenu is
       else
          Show_Info
            (Text => To_String(Source => Step.Fail_Text), Title => "Story");
-         Current_Story.Show_Text := False;
+         Set_Story_Show_Text;
       end if;
       Update_Header;
       Update_Messages;

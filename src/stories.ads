@@ -261,13 +261,6 @@ package Stories is
      (Index_Type => Positive, Element_Type => Finished_Story_Data);
    -- ****
 
-   -- ****v* Stories/Stories.Current_Story
-   -- FUNCTION
-   -- Contains data about current story on which player is
-   -- SOURCE
-   Current_Story: Current_Story_Data;
-   -- ****
-
    -- ****v* Stories/Stories.Stories_List
    -- FUNCTION
    -- List of available stories in game

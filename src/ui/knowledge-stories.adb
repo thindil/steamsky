@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -100,16 +100,16 @@ package body Knowledge.Stories is
          Rows :=
            Rows +
            (Length(Source => Get_Current_Story_Text & LF) / Line_Width) + 1;
-         if Current_Story.Data /= Null_Unbounded_String then
+         if Get_Current_Story.Data /= Null_Unbounded_String then
             Step :=
-              (if Current_Story.Current_Step = 0 then
-                 Stories_List(Current_Story.Index).Starting_Step
-               elsif Current_Story.Current_Step > 0 then
-                 Stories_List(Current_Story.Index).Steps
-                   (Current_Story.Current_Step)
-               else Stories_List(Current_Story.Index).Final_Step);
+              (if Get_Current_Story.Current_Step = 0 then
+                 Stories_List(Get_Current_Story.Index).Starting_Step
+               elsif Get_Current_Story.Current_Step > 0 then
+                 Stories_List(Get_Current_Story.Index).Steps
+                   (Get_Current_Story.Current_Step)
+               else Stories_List(Get_Current_Story.Index).Final_Step);
             Create
-              (S => Tokens, From => To_String(Source => Current_Story.Data),
+              (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
                Separators => ";");
             case Step.Finish_Condition is
                when ASKINBASE =>
@@ -117,12 +117,12 @@ package body Knowledge.Stories is
                      Append
                        (Source => Story_Text,
                         New_Item =>
-                          "You must travel to base " & Current_Story.Data &
+                          "You must travel to base " & Get_Current_Story.Data &
                           " at X:");
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
                         if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
-                          To_String(Source => Current_Story.Data) then
+                          To_String(Source => Get_Current_Story.Data) then
                            Append
                              (Source => Story_Text,
                               New_Item => Positive'Image(Sky_Bases(I).Sky_X));

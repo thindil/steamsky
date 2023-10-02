@@ -1531,7 +1531,7 @@ package body Maps.UI is
                   Result => "showstats");
             end if;
          end if;
-         Current_Story.Show_Text := False;
+         Set_Story_Show_Text;
       end if;
    end Show_Sky_Map;
 
@@ -1634,11 +1634,11 @@ package body Maps.UI is
 
    procedure Finish_Story is
    begin
-      Get_Game_Stats(Value => 10_000 * Current_Story.Max_Steps, Stat => 1);
+      Get_Game_Stats(Value => 10_000 * Get_Current_Story.Max_Steps, Stat => 1);
       Clear_Current_Story;
       Show_Question
         (Question =>
-           To_String(Source => Stories_List(Current_Story.Index).End_Text) &
+           To_String(Source => Stories_List(Get_Current_Story.Index).End_Text) &
            " Do you want to finish the game?",
          Result => "retire");
    end Finish_Story;
