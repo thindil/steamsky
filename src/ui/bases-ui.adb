@@ -505,9 +505,7 @@ package body Bases.UI is
                  10);
             --## rule off ASSIGNMENTS
             Cost :=
-              Natural
-                (Float(Cost) *
-                 Get_Float_Setting(Name => "pricesBonus"));
+              Natural(Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
             --## rule on ASSIGNMENTS
             if Cost = 0 then
                Cost := 1;
@@ -521,7 +519,8 @@ package body Bases.UI is
                Tooltip => "Show available options",
                Command =>
                  "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
-               Column => 2, New_Row => True, Color => Get_Color(Action_Cost => Cost));
+               Column => 2, New_Row => True,
+               Color => Get_Color(Action_Cost => Cost));
             exit Show_Available_Recipes_Loop when Base_Table.Row =
               Get_Integer_Setting(Name => "listsLimit") + 1;
             <<End_Of_Recipes_Loop>>
@@ -751,8 +750,7 @@ package body Bases.UI is
               10);
          --## rule off ASSIGNMENTS
          Cost :=
-           Natural
-             (Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
+           Natural(Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
          --## rule on ASSIGNMENTS
          if Cost = 0 then
             Cost := 1;
@@ -971,8 +969,7 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
          Fill_Repair_Items_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            Count_Repair_Cost
-              (I => Modules_Container.To_Index(Position => I));
+            Count_Repair_Cost(I => Modules_Container.To_Index(Position => I));
             Local_Items(Modules_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -1061,9 +1058,7 @@ package body Bases.UI is
                  10);
             --## rule off ASSIGNMENTS
             Cost :=
-              Natural
-                (Float(Cost) *
-                 Get_Float_Setting(Name => "pricesBonus"));
+              Natural(Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
             --## rule on ASSIGNMENTS
             if Cost = 0 then
                Cost := 1;

@@ -109,7 +109,8 @@ package body Knowledge.Stories is
                    (Get_Current_Story.Current_Step)
                else Stories_List(Get_Current_Story.Index).Final_Step);
             Create
-              (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
+              (S => Tokens,
+               From => To_String(Source => Get_Current_Story.Data),
                Separators => ";");
             case Step.Finish_Condition is
                when ASKINBASE =>

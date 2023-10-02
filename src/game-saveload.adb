@@ -244,7 +244,8 @@ package body Game.SaveLoad is
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
-      Player_Career := To_Unbounded_String(Source => Set_Game_String(Name => "playerCareer"));
+      Player_Career :=
+        To_Unbounded_String(Source => Set_Game_String(Name => "playerCareer"));
    exception
       when An_Exception : others =>
          Free(Read => Reader);

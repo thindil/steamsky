@@ -20,8 +20,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 package body Config is
 
    procedure Load_Config is
-      procedure Load_Ada_Config
-         with
+      procedure Load_Ada_Config with
          Import => True,
          Convention => C,
          External_Name => "loadAdaConfig";
@@ -30,8 +29,7 @@ package body Config is
    end Load_Config;
 
    procedure Save_Config is
-      procedure Save_Ada_Config
-         with
+      procedure Save_Ada_Config with
          Import => True,
          Convention => C,
          External_Name => "saveAdaConfig";

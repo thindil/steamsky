@@ -827,7 +827,8 @@ package body Ships.UI.Cargo is
         and then
           Positive'Value
             (To_String
-               (Source => Stories_List(Get_Current_Story.Index).Start_Data(1))) =
+               (Source =>
+                  Stories_List(Get_Current_Story.Index).Start_Data(1))) =
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => Item_Index)
             .Proto_Index then

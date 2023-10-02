@@ -215,7 +215,9 @@ package body Knowledge is
             Load_Finished_Stories_Loop :
             for I in 1 .. 100 loop
                Finished_Story := Get_Finished_Story(Index => I);
-               exit Load_Finished_Stories_Loop when Length(Source => Finished_Story.Index) = 0;
+               exit Load_Finished_Stories_Loop when Length
+                   (Source => Finished_Story.Index) =
+                 0;
                Append
                  (Source => Finished_Stories_List,
                   New_Item =>
@@ -231,9 +233,7 @@ package body Knowledge is
               (Widgt => Stories_Box, Sequence => "<<ComboboxSelected>>",
                Script => "ShowStory");
             Current
-              (ComboBox => Stories_Box,
-               NewIndex =>
-                 Natural'Image(Amount - 1));
+              (ComboBox => Stories_Box, NewIndex => Natural'Image(Amount - 1));
             Tcl.Tk.Ada.Grid.Grid(Slave => Stories_Box);
             Button :=
               Create

@@ -1085,7 +1085,8 @@ package body OrdersMenu is
         (if Get_Current_Story.Current_Step = 0 then
            Stories_List(Get_Current_Story.Index).Starting_Step
          elsif Get_Current_Story.Current_Step > 0 then
-           Stories_List(Get_Current_Story.Index).Steps(Get_Current_Story.Current_Step)
+           Stories_List(Get_Current_Story.Index).Steps
+             (Get_Current_Story.Current_Step)
          else Stories_List(Get_Current_Story.Index).Final_Step);
       Message: Unbounded_String;
    begin
@@ -1104,7 +1105,8 @@ package body OrdersMenu is
             Tokens: Slice_Set;
          begin
             Create
-              (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
+              (S => Tokens,
+               From => To_String(Source => Get_Current_Story.Data),
                Separators => ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
