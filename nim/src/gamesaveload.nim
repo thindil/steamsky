@@ -254,6 +254,12 @@ proc loadGame*() =
   logMessage(message = "done", debugType = everything)
   # Load the sky map
   logMessage(message = "Loading the map...", debugType = everything)
+  for x in 1 .. 1_024:
+    for y in 1 .. 1_024:
+      skyMap[x][y].missionIndex = -1
+      skyMap[x][y].baseIndex = 0
+      skyMap[x][y].eventIndex = -1
+      skyMap[x][y].visited = false
   for field in savedGame.findAll("field"):
     let
       x = field.attr("x").parseInt
