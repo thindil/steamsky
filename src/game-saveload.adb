@@ -28,7 +28,6 @@ with Config;
 with Log;
 with Maps; use Maps;
 with Ships; use Ships;
-with Ships.SaveLoad;
 
 package body Game.SaveLoad is
 
@@ -74,7 +73,6 @@ package body Game.SaveLoad is
       use Bases.SaveLoad;
       use Config;
       use Log;
-      use Ships.SaveLoad;
 
       Save_File: File_Input;
       --## rule off IMPROPER_INITIALIZATION
@@ -230,20 +228,13 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      -- Load player ship
-      Log_Message
-        (Message => "Loading player ship...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Load_Player_Ship(Save_Data => Save_Data);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
+      Get_Ship_From_Nim(Ship => Player_Ship);
    exception
       when An_Exception : others =>
          Free(Read => Reader);
