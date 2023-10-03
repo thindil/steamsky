@@ -14,28 +14,28 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with BasesTypes; use BasesTypes;
+with Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Wm;
+with BasesTypes;
 with Config; use Config;
-with Dialogs; use Dialogs;
-with Factions; use Factions;
+with Dialogs;
+with Factions;
 with Game; use Game;
-with Items; use Items;
-with Maps.UI; use Maps.UI;
-with Themes; use Themes;
-with Utils.UI; use Utils.UI;
+with Items;
+with Maps.UI;
+with Themes;
+with Utils.UI;
 
 package body Help.UI is
 
@@ -62,6 +62,10 @@ package body Help.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use BasesTypes;
+      use Factions;
+      use Items;
+      use Maps.UI;
       use Tiny_String;
 
       New_Text, Tag_Text: Unbounded_String := Null_Unbounded_String;
@@ -456,6 +460,14 @@ package body Help.UI is
    function Show_Help_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ada.Strings.Fixed;
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Winfo;
+      use Tcl.Tk.Ada.Wm;
+      use Dialogs;
+      use Themes;
+
       Help_Window: constant Tk_Toplevel :=
         Get_Widget(pathName => ".help", Interp => Interp);
       X, Y: Integer;
@@ -576,6 +588,7 @@ package body Help.UI is
    end Show_Help_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowTopic", Ada_Command => Show_Topic_Command'Access);
