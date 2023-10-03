@@ -903,112 +903,149 @@ package body Bases.ShipyardUI is
                  "-sticky w -column 1 -row" & Positive'Image(New_Row));
             New_Row := New_Row + 1;
          when CABIN =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Quality: }");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.qualitylbl",
+                 options => "-text {Quality:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                --## rule off SIMPLIFIABLE_STATEMENTS
                if Max_Value < 30 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{minimal (worse)} [list red]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {minimal (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{minimal (better)} [list green]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {minimal (better)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{minimal}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options => "-text {minimal} -style Golden.TLabel");
                   end if;
                --## rule on SIMPLIFIABLE_STATEMENTS
                elsif Max_Value < 60 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{basic (worse)} [list red]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {basic (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{basic (better)} [list green]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {basic (better)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{basic}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options => "-text {basic} -style Golden.TLabel");
                   end if;
                elsif Max_Value < 80 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{extended (worse)} [list red]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {extended (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{extended (better)} [list green]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {extended (better)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{extended}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options => "-text {extended} -style Golden.TLabel");
                   end if;
                else
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{luxury (worse) [list red]}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {luxury (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{luxury (better) [list green]}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options =>
+                            "-text {luxury (better)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{luxury}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.quality",
+                          options => "-text {luxury} -style Golden.TLabel");
                   end if;
                end if;
             else
+               New_Row := New_Row - 1;
                --## rule off SIMPLIFIABLE_STATEMENTS
                if Max_Value < 30 then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{minimal}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.quality",
+                       options => "-text {minimal} -style Golden.TLabel");
                elsif Max_Value < 60 then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{basic}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.quality",
+                       options => "-text {basic} -style Golden.TLabel");
                elsif Max_Value < 80 then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{extended}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.quality",
+                       options => "-text {extended} -style Golden.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{luxury}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.quality",
+                       options => "-text {luxury} -style Golden.TLabel");
                end if;
                --## rule on SIMPLIFIABLE_STATEMENTS
             end if;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max owners:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.ownerslbl",
+                 options => "-text {Max owners:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Owners) &
-                       " (less)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.owners",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         " (less)} -style Headerred.TLabel");
                elsif Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
@@ -1019,16 +1056,33 @@ package body Bases.ShipyardUI is
                      Text =>
                        "{" & Natural'Image(Max_Owners) &
                        " (more)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.owners",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         " (more)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.owners",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         "} -style Golden.TLabel");
                end if;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Natural'Image(Max_Owners) & "}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.owners",
+                    options =>
+                      "-text {" & Natural'Image(Max_Owners) &
+                      "} -style Golden.TLabel");
             end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
          when ALCHEMY_LAB .. GREENHOUSE =>
             Insert
               (TextWidget => Module_Text, Index => "end",
