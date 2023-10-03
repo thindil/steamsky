@@ -175,10 +175,10 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
   playerShip.skyX = shipNode.attr("x").parseInt
   playerShip.skyY = shipNode.attr("y").parseInt
   playerShip.speed = shipNode.attr("speed").parseInt.ShipSpeed
-  playerShip.upgradeModule = shipNode.attr("upgrademodule").parseInt
+  playerShip.upgradeModule = shipNode.attr("upgrademodule").parseInt - 1
   playerShip.destinationX = shipNode.attr("destinationx").parseInt
   playerShip.destinationY = shipNode.attr("destinationy").parseInt
-  playerShip.repairModule = shipNode.attr("repairpriority").parseInt
+  playerShip.repairModule = shipNode.attr("repairpriority").parseInt - 1
   playerShip.homeBase = shipNode.attr("homebase").parseInt
   playerShip.modules = @[]
   playerShip.cargo = @[]
