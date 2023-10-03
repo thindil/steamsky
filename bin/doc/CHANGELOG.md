@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in the changelog
+- Loading the player's ship's upgrade and repair priority statuses
 
 ## [9.2] - 2023-10-01
 
