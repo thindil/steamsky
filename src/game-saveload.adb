@@ -23,7 +23,6 @@ with DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
-with Bases.SaveLoad;
 with Config;
 with Log;
 with Maps; use Maps;
@@ -70,7 +69,6 @@ package body Game.SaveLoad is
       use DOM.Core.Nodes;
       use DOM.Readers;
       use Input_Sources.File;
-      use Bases.SaveLoad;
       use Config;
       use Log;
 
@@ -220,14 +218,6 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      -- Load sky bases
-      Log_Message
-        (Message => "Loading bases...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Load_Bases(Save_Data => Save_Data);
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
@@ -235,6 +225,10 @@ package body Game.SaveLoad is
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
       Get_Ship_From_Nim(Ship => Player_Ship);
+      Get_Bases_Loop :
+      for I in Sky_Bases'Range loop
+         Get_Base_From_Nim(Base_Index => I);
+      end loop Get_Bases_Loop;
    exception
       when An_Exception : others =>
          Free(Read => Reader);
