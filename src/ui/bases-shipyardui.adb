@@ -1051,11 +1051,6 @@ package body Bases.ShipyardUI is
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Owners) &
-                       " (more)} [list green]");
                   Module_Label :=
                     Create
                       (pathName => ".moduledialog.owners",
@@ -1084,40 +1079,57 @@ package body Bases.ShipyardUI is
                  "-sticky w -column 1 -row" & Positive'Image(New_Row));
             New_Row := New_Row + 1;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Max workers:}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.workerslbl",
+                 options => "-text {Max workers:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Owners) &
-                       " (less)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.workers",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         " (less)} -style Headerred.TLabel");
                elsif Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Owners) &
-                       " (more)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.workers",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         " (more)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.workers",
+                       options =>
+                         "-text {" & Natural'Image(Max_Owners) &
+                         "} -style Golden.TLabel");
                end if;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Natural'Image(Max_Owners) & "}");
+               New_Row := New_Row - 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.workers",
+                    options =>
+                      "-text {" & Natural'Image(Max_Owners) &
+                      "} -style Golden.TLabel");
             end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
          when GUN | HARPOON_GUN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
