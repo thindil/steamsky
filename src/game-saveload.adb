@@ -23,7 +23,6 @@ with DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases; use Bases;
-with Config;
 with Log;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -69,7 +68,6 @@ package body Game.SaveLoad is
       use DOM.Core.Nodes;
       use DOM.Readers;
       use Input_Sources.File;
-      use Config;
       use Log;
 
       Save_File: File_Input;
@@ -107,68 +105,6 @@ package body Game.SaveLoad is
             raise Save_Game_Invalid_Data
               with "This save is incompatible with this version of the game";
          end if;
-      end if;
-      -- Load game difficulty settings
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "difficulty");
-      if Length(List => Nodes_List) > 0 then
-         Log_Message
-           (Message => "Loading game difficulty settings...",
-            Message_Type => EVERYTHING, New_Line => False);
-         Saved_Node := Item(List => Nodes_List, Index => 0);
-         Set_Float_Setting
-           (Name => "enemyDamageBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "enemydamagebonus")));
-         Set_Float_Setting
-           (Name => "playerDamageBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "playerdamagebonus")));
-         Set_Float_Setting
-           (Name => "enemyMeleeDamageBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "enemymeleedamagebonus")));
-         Set_Float_Setting
-           (Name => "playerMeleeDamageBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "playermeleedamagebonus")));
-         Set_Float_Setting
-           (Name => "experienceBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "experiencebonus")));
-         Set_Float_Setting
-           (Name => "reputationBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "reputationbonus")));
-         Set_Float_Setting
-           (Name => "upgradeCostBonus",
-            Value =>
-              Bonus_Type'Value
-                (Get_Attribute
-                   (Elem => Saved_Node, Name => "upgradecostbonus")));
-         if Get_Attribute(Elem => Saved_Node, Name => "pricesbonus") /= "" then
-            Set_Float_Setting
-              (Name => "pricesBonus",
-               Value =>
-                 Bonus_Type'Value
-                   (Get_Attribute(Elem => Saved_Node, Name => "pricesbonus")));
-         end if;
-         Log_Message
-           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-            Time_Stamp => False);
       end if;
       Free(Read => Reader);
       Log_Message
