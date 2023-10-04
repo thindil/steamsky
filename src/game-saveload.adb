@@ -170,27 +170,6 @@ package body Game.SaveLoad is
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
             Time_Stamp => False);
       end if;
-      -- Load game date
-      Log_Message
-        (Message => "Loading game time...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "gamedate");
-      Saved_Node := Item(List => Nodes_List, Index => 0);
-      Game_Date.Year :=
-        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "year"));
-      Game_Date.Month :=
-        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "month"));
-      Game_Date.Day :=
-        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "day"));
-      Game_Date.Hour :=
-        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "hour"));
-      Game_Date.Minutes :=
-        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "minutes"));
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
@@ -209,6 +188,7 @@ package body Game.SaveLoad is
             Set_Map_Cell(X => X, Y => Y);
          end loop Get_Map_X_Loop;
       end loop Get_Map_Y_Loop;
+      Set_Game_Date;
    exception
       when An_Exception : others =>
          Free(Read => Reader);
