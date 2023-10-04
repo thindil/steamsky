@@ -82,20 +82,4 @@ package body Game.SaveLoad is
            with Exception_Message(X => An_Exception);
    end Load_Game;
 
-   procedure Generate_Save_Name(Rename_Save: Boolean := False) is
-      New_Name: chars_ptr;
-      procedure Generate_Ada_Save_Name(R_Save: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaSaveName";
-      procedure Set_Ada_Save_Name(Name: out chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaSaveName";
-   begin
-      Generate_Ada_Save_Name(R_Save => (if Rename_Save then 1 else 0));
-      Set_Ada_Save_Name(Name => New_Name);
-      Save_Name := To_Unbounded_String(Source => Value(Item => New_Name));
-   end Generate_Save_Name;
-
 end Game.SaveLoad;

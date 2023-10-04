@@ -53,14 +53,4 @@ package Game.SaveLoad is
    procedure Load_Game;
    -- ****
 
-   -- ****f* GSaveLoad/GSaveLoad.Generate_Save_Name
-   -- FUNCTION
-   -- Generate unique name for save game file
-   -- PARAMETERS
-   -- Rename_Save - If true, rename existing save game file. Default false.
-   -- SOURCE
-   procedure Generate_Save_Name(Rename_Save: Boolean := False) with
-      Post => Save_Name /= Save_Name'Old;
-      -- ****
-
 end Game.SaveLoad;
