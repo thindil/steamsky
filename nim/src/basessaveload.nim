@@ -142,6 +142,8 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
     skyBases[baseIndex].size = parseEnum[BasesSize](base.attr("size").toLowerAscii)
     if base.attr("askedforbases") == "Y":
       skyBases[baseIndex].askedForBases = true
+    if base.attr("known") == "Y":
+      skyBases[baseIndex].known = true
     let visitDate = base.child("visiteddate")
     if visitDate != nil:
       skyBases[baseIndex].visited = DateRecord(year: visitDate.attr(
