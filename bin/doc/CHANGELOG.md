@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in the changelog
 - Loading the player's ship's upgrade and repair priority statuses
+- Loading do the sky base is known to the player
 
 ## [9.2] - 2023-10-01
 
