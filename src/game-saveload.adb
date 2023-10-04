@@ -191,33 +191,6 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      -- Load sky map
-      Log_Message
-        (Message => "Loading map...", Message_Type => EVERYTHING,
-         New_Line => False);
-      Sky_Map :=
-        (others =>
-           (others =>
-              (Base_Index => 0, Visited => False, Event_Index => 0,
-               Mission_Index => 0)));
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "field");
-      Load_Map_Block :
-      declare
-         X, Y: Positive;
-      begin
-         Load_Map_Loop :
-         for I in 0 .. Length(List => Nodes_List) - 1 loop
-            Saved_Node := Item(List => Nodes_List, Index => I);
-            X := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "x"));
-            Y := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "y"));
-            Sky_Map(X, Y).Visited := True;
-         end loop Load_Map_Loop;
-      end Load_Map_Block;
-      Log_Message
-        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
-         Time_Stamp => False);
       Free(Read => Reader);
       Log_Message
         (Message => "Finished loading game.", Message_Type => EVERYTHING);
@@ -229,6 +202,13 @@ package body Game.SaveLoad is
       for I in Sky_Bases'Range loop
          Get_Base_From_Nim(Base_Index => I);
       end loop Get_Bases_Loop;
+      Get_Map_Y_Loop :
+      for Y in 1 .. 1_024 loop
+         Get_Map_X_Loop :
+         for X in 1 .. 1_024 loop
+            Set_Map_Cell(X => X, Y => Y);
+         end loop Get_Map_X_Loop;
+      end loop Get_Map_Y_Loop;
    exception
       when An_Exception : others =>
          Free(Read => Reader);
