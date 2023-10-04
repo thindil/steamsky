@@ -50,6 +50,10 @@ package body Game.SaveLoad is
    procedure Load_Game is
       use Ada.Exceptions;
 
+      procedure Get_Ada_Save_Name(Name: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaSaveName";
       procedure Load_Ada_Game with
          Import => True,
          Convention => C,

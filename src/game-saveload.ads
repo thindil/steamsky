@@ -63,11 +63,4 @@ package Game.SaveLoad is
       Post => Save_Name /= Save_Name'Old;
       -- ****
 
--- Temporary code to interact with Nim
-
-   procedure Get_Ada_Save_Name(Name: chars_ptr) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaSaveName";
-
 end Game.SaveLoad;
