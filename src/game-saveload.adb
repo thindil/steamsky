@@ -16,25 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
-with DOM.Core;
-with DOM.Core.Documents;
-with DOM.Core.Elements;
-with DOM.Core.Nodes;
-with DOM.Readers;
-with Input_Sources.File;
 with Bases; use Bases;
-with Log;
 with Maps; use Maps;
 with Ships; use Ships;
 
 package body Game.SaveLoad is
-
-   -- ****iv* GSaveLoad/GSaveLoad.Save_Version
-   -- FUNCTION
-   -- Current version of the save game
-   -- SOURCE
-   Save_Version: constant Positive := 5;
-   -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
       procedure Save_Ada_Game(P_Print: Integer) with
@@ -63,52 +49,12 @@ package body Game.SaveLoad is
 
    procedure Load_Game is
       use Ada.Exceptions;
-      use DOM.Core;
-      use DOM.Core.Elements;
-      use DOM.Core.Nodes;
-      use DOM.Readers;
-      use Input_Sources.File;
-      use Log;
 
-      Save_File: File_Input;
-      --## rule off IMPROPER_INITIALIZATION
-      Reader: Tree_Reader;
-      --## rule on IMPROPER_INITIALIZATION
-      Nodes_List: Node_List;
-      Saved_Node: Node;
-      Save_Data: Document;
       procedure Load_Ada_Game with
          Import => True,
          Convention => C,
          External_Name => "loadAdaGame";
    begin
-      Log_Message
-        (Message =>
-           "Start loading game from file " & To_String(Source => Save_Name) &
-           ".",
-         Message_Type => EVERYTHING);
-      Open(Filename => To_String(Source => Save_Name), Input => Save_File);
-      --## rule off IMPROPER_INITIALIZATION
-      Parse(Parser => Reader, Input => Save_File);
-      Close(Input => Save_File);
-      Save_Data := Get_Tree(Read => Reader);
-      --## rule off IMPROPER_INITIALIZATION
-      -- Check save game compatybility
-      Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "save");
-      Saved_Node := Item(List => Nodes_List, Index => 0);
-      if Get_Attribute(Elem => Saved_Node, Name => "version") /= "" then
-         if Positive'Value
-             (Get_Attribute(Elem => Saved_Node, Name => "version")) >
-           Save_Version then
-            raise Save_Game_Invalid_Data
-              with "This save is incompatible with this version of the game";
-         end if;
-      end if;
-      Free(Read => Reader);
-      Log_Message
-        (Message => "Finished loading game.", Message_Type => EVERYTHING);
       Get_Ada_Save_Name
         (Name => New_String(Str => To_String(Source => Save_Name)));
       Load_Ada_Game;
@@ -127,7 +73,6 @@ package body Game.SaveLoad is
       Set_Game_Date;
    exception
       when An_Exception : others =>
-         Free(Read => Reader);
          Player_Ship.Crew.Clear;
          raise Save_Game_Invalid_Data
            with Exception_Message(X => An_Exception);
