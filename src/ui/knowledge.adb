@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -77,7 +77,11 @@ package body Knowledge is
 
       Knowledge_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".knowledgeframe");
+      --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
+      Label: Ttk_Label;
+      Button: Ttk_Button;
+      --## rule on IMPROPER_INITIALIZATION
       Rows: Natural := 0;
       Knowledge_Canvas: Tk_Canvas :=
         Get_Widget
@@ -85,8 +89,6 @@ package body Knowledge is
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Knowledge_Canvas & ".frame.options.types");
       Combo_Values: Unbounded_String;
-      Label: Ttk_Label;
-      Button: Ttk_Button;
    begin
       if Winfo_Get(Widgt => Knowledge_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -209,7 +211,9 @@ package body Knowledge is
               Create
                 (pathName => Knowledge_Frame & ".view",
                  options => "-wrap word");
+            --## rule off IMPROPER_INITIALIZATION
             Finished_Story: Finished_Story_Data;
+            --## rule on IMPROPER_INITIALIZATION
             Amount: Natural := 0;
          begin
             Load_Finished_Stories_Loop :
@@ -295,11 +299,13 @@ package body Knowledge is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      --## rule off TYPE_INITIAL_VALUES
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Frames: constant array(1 .. 4) of Frame_Info :=
         (1 =>
            (Name => To_Unbounded_String(Source => "bases"), Column => 0,
