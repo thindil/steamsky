@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split;
 with Bases; use Bases;
 with Events;
 with Maps;
@@ -291,40 +290,6 @@ package body Stories is
                   Get_Ada_Step_Data
                     (F_Data => Nim_Data, N => New_String(Str => Name))));
    end Get_Step_Data;
-
-   procedure Get_Story_Location
-     (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) is
-      use GNAT.String_Split;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Tokens: Slice_Set;
-      --## rule on IMPROPER_INITIALIZATION
-   begin
-      Story_X := 1;
-      Story_Y := 1;
-      if Get_Current_Story.Data = Null_Unbounded_String then
-         Story_X := Player_Ship.Sky_X;
-         Story_Y := Player_Ship.Sky_Y;
-      else
-         Create
-           (S => Tokens, From => To_String(Source => Get_Current_Story.Data),
-            Separators => ";");
-         if Slice_Count(S => Tokens) < 3 then
-            Get_Story_Location_Loop :
-            for Sky_Base of Sky_Bases loop
-               if Tiny_String.To_String(Source => Sky_Base.Name) =
-                 To_String(Source => Get_Current_Story.Data) then
-                  Story_X := Sky_Base.Sky_X;
-                  Story_Y := Sky_Base.Sky_Y;
-                  exit Get_Story_Location_Loop;
-               end if;
-            end loop Get_Story_Location_Loop;
-         else
-            Story_X := Integer'Value(Slice(S => Tokens, Index => 1));
-            Story_Y := Integer'Value(Slice(S => Tokens, Index => 2));
-         end if;
-      end if;
-   end Get_Story_Location;
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
       use Interfaces.C;
