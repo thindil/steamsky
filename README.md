@@ -140,8 +140,6 @@ see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 ## Licenses
 The game is available under the GPLv3 license.
 
-The XmlAda library distributed with the game are also under the GPLv3 license.
-
 The Tashy library distributed with the game is under GPLv2 license with the
 linking exception.
 
