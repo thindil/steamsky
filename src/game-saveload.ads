@@ -50,7 +50,7 @@ package Game.SaveLoad is
    -- FUNCTION
    -- Load game from file
    -- SOURCE
-   procedure Load_Game;
+   procedure Load_Game(File_Name: String);
    -- ****
 
 end Game.SaveLoad;

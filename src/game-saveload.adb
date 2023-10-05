@@ -47,7 +47,7 @@ package body Game.SaveLoad is
       Save_Ada_Game(P_Print => (if Pretty_Print then 1 else 0));
    end Save_Game;
 
-   procedure Load_Game is
+   procedure Load_Game(File_Name: String) is
       use Ada.Exceptions;
 
       procedure Get_Ada_Save_Name(Name: chars_ptr) with
@@ -60,7 +60,7 @@ package body Game.SaveLoad is
          External_Name => "loadAdaGame";
    begin
       Get_Ada_Save_Name
-        (Name => New_String(Str => To_String(Source => Save_Name)));
+        (Name => New_String(Str => File_Name));
       Load_Ada_Game;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Bases_Loop :
