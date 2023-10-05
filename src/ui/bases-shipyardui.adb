@@ -1131,84 +1131,118 @@ package body Bases.ShipyardUI is
                  "-sticky w -column 1 -row" & Positive'Image(New_Row));
             New_Row := New_Row + 1;
          when GUN | HARPOON_GUN =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Strength:}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.strengthlbl",
+                 options => "-text {Strength:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if M_Type = GUN then
                   if Player_Ship.Modules(Ship_Module_Index).Damage >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{" & Natural'Image(Max_Value) &
-                          " (weaker)} [list red]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            " (weaker)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Damage <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{" & Natural'Image(Max_Value) &
-                          " (stronger)} [list green]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            " (stronger)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) & "}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            "} -style Golden.TLabel");
                   end if;
                else
                   if Player_Ship.Modules(Ship_Module_Index).Duration >
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{" & Natural'Image(Max_Value) &
-                          " (weaker)} [list red]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            " (weaker)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Damage <
                     Max_Value then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{" & Natural'Image(Max_Value) &
-                          " (stronger)} [list green]");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            " (stronger)} -style Headergreen.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) & "}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.strength",
+                          options =>
+                            "-text {" & Natural'Image(Max_Value) &
+                            "} -style Golden.TLabel");
                   end if;
                end if;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Natural'Image(Max_Value) & "}");
+               New_Row := New_Row - 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.strength",
+                    options =>
+                      "-text {" & Natural'Image(Max_Value) &
+                      "} -style Golden.TLabel");
             end if;
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Ammunition: }");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.ammolbl",
+                 options => "-text {Ammunition:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             Ammunition_Info_Loop :
             for I in 1 .. Get_Proto_Amount loop
                if Get_Proto_Item(Index => I).I_Type =
                  Get_Ada_Item_Type(Item_Index => Value - 1) then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{Any" &
-                       Slice
-                         (Source => Get_Proto_Item(Index => I).Name,
-                          Low =>
-                            Index
-                              (Source => Get_Proto_Item(Index => I).Name,
-                               Pattern => " "),
-                          High =>
-                            Length
-                              (Source => Get_Proto_Item(Index => I).Name)) &
-                       "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.ammo",
+                       options =>
+                         "-text {Any" &
+                         Slice
+                           (Source => Get_Proto_Item(Index => I).Name,
+                            Low =>
+                              Index
+                                (Source => Get_Proto_Item(Index => I).Name,
+                                 Pattern => " "),
+                            High =>
+                              Length
+                                (Source => Get_Proto_Item(Index => I).Name)) &
+                         "} -style Golden.TLabel");
+                  Tcl.Tk.Ada.Grid.Grid
+                    (Slave => Module_Label,
+                     Options =>
+                       "-sticky w -column 1 -row" & Positive'Image(New_Row));
+                  New_Row := New_Row + 1;
                   exit Ammunition_Info_Loop;
                end if;
             end loop Ammunition_Info_Loop;
             if M_Type = GUN then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Max fire rate:}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.ratelbl",
+                    options => "-text {Max fire rate:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
                if Installing and then Ship_Module_Index > 0 then
                   if Get_Module
                       (Index =>
@@ -1216,20 +1250,22 @@ package body Bases.ShipyardUI is
                       .Speed >
                     Speed then
                      if Speed > 0 then
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text =>
-                             "{" & Positive'Image(Speed) &
-                             "/round (slower)} [list red]");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {" & Integer'Image(Speed) &
+                               "/round (slower)} -style Headerred.TLabel");
                      else
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text =>
-                             "{1/" &
-                             Trim
-                               (Source => Integer'Image(abs Speed),
-                                Side => Both) &
-                             " rounds (slower)} [list red]");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {1/" &
+                               Trim
+                                 (Source => Integer'Image(abs Speed),
+                                  Side => Both) &
+                               " rounds (slower)} -style Headerred.TLabel");
                      end if;
                   elsif Get_Module
                       (Index =>
@@ -1237,53 +1273,68 @@ package body Bases.ShipyardUI is
                       .Speed <
                     Speed then
                      if Speed > 0 then
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text =>
-                             "{" & Positive'Image(Speed) &
-                             "/round (faster)} [list green]");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {" & Integer'Image(Speed) &
+                               "/round (faster)} -style Headergreen.TLabel");
                      else
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text =>
-                             "{1/" &
-                             Trim
-                               (Source => Integer'Image(abs Speed),
-                                Side => Both) &
-                             " rounds (faster)} [list green]");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {1/" &
+                               Trim
+                                 (Source => Integer'Image(abs Speed),
+                                  Side => Both) &
+                               " rounds (faster)} -style Headergreen.TLabel");
                      end if;
                   else
                      if Speed > 0 then
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text => "{" & Positive'Image(Speed) & "/round}");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {" & Integer'Image(Speed) &
+                               "/round} -style Golden.TLabel");
                      else
-                        Insert
-                          (TextWidget => Module_Text, Index => "end",
-                           Text =>
-                             "{1/" &
-                             Trim
-                               (Source => Integer'Image(abs Speed),
-                                Side => Both) &
-                             " rounds}");
+                        Module_Label :=
+                          Create
+                            (pathName => ".moduledialog.rate",
+                             options =>
+                               "-text {1/" &
+                               Trim
+                                 (Source => Integer'Image(abs Speed),
+                                  Side => Both) &
+                               " rounds} -style Golden.TLabel");
                      end if;
                   end if;
                else
                   if Speed > 0 then
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Positive'Image(Speed) & "/round}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.rate",
+                          options =>
+                            "-text {" & Integer'Image(Speed) &
+                            "/round} -style Golden.TLabel");
                   else
-                     Insert
-                       (TextWidget => Module_Text, Index => "end",
-                        Text =>
-                          "{1/" &
-                          Trim
-                            (Source => Integer'Image(abs Speed),
-                             Side => Both) &
-                          " rounds}");
+                     Module_Label :=
+                       Create
+                         (pathName => ".moduledialog.rate",
+                          options =>
+                            "-text {1/" &
+                            Trim
+                              (Source => Integer'Image(abs Speed),
+                               Side => Both) &
+                            " rounds} -style Golden.TLabel");
                   end if;
                end if;
+               Tcl.Tk.Ada.Grid.Grid
+                  (Slave => Module_Label,
+                  Options =>
+                  "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
             end if;
          when BATTERING_RAM =>
             Insert
