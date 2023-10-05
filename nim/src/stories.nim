@@ -497,6 +497,18 @@ proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
   ## Reset the player's current story
   currentStory = CurrentStoryData()
 
+proc getStoryLocation*(): tuple[storyX: MapXRange; storyY: MapYRange] =
+  result = (1, 1)
+  if currentStory.data.len == 0:
+    return (playerShip.skyX, playerShip.skyY)
+  let coords = currentStory.data.split(';')
+  if coords.len < 3:
+    for skyBase in skyBases:
+      if skyBase.name == currentStory.data:
+        return (skyBase.skyX, skyBase.skyY)
+  else:
+    return (coords[1].parseInt.MapXRange, coords[2].parseInt.MapYRange)
+
 # Temporary code for interfacing with Ada
 
 type
@@ -648,3 +660,10 @@ proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc.} =
 
 proc setAdaStoryShowText(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   currentStory.showText = newValue == 1
+
+proc getAdaStoryLocation(x, y: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+  try:
+    (x, y) = getStoryLocation()
+  except:
+    x = 1
+    y = 1
