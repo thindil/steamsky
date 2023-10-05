@@ -22,13 +22,6 @@
 package Game.SaveLoad is
 -- ****
 
-   -- ****v* GSaveLoad/GSaveLoad.Save_Name
-   -- FUNCTION
-   -- Full path with file name for current savegame
-   -- SOURCE
-   Save_Name: Unbounded_String;
-   -- ****
-
    -- ****e* GSaveLoad/GSaveLoad.Save_Game_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in savegame
