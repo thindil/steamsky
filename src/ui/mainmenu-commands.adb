@@ -662,8 +662,10 @@ package body MainMenu.Commands is
    begin
       Tcl.Tk.Ada.Pack.Pack_Forget
         (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
-      Save_Name := Save_Directory & CArgv.Arg(Argv => Argv, N => 1);
-      Load_Game;
+      Load_Game
+        (File_Name =>
+           To_String(Source => Save_Directory) &
+           CArgv.Arg(Argv => Argv, N => 1));
       Start_Game;
       return TCL_OK;
    exception
