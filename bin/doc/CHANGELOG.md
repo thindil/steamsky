@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated look of dialogs in the shipyard screen
+- Updated README.md
 
 ### Fixed
 - Typos in the changelog
