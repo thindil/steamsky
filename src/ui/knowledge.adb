@@ -80,7 +80,6 @@ package body Knowledge is
       --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
       Label: Ttk_Label;
-      Button: Ttk_Button;
       --## rule on IMPROPER_INITIALIZATION
       Rows: Natural := 0;
       Knowledge_Canvas: Tk_Canvas :=
@@ -88,7 +87,7 @@ package body Knowledge is
           (pathName => Knowledge_Frame & ".bases.canvas", Interp => Interp);
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Knowledge_Canvas & ".frame.options.types");
-      Combo_Values: Unbounded_String;
+      Combo_Values: Unbounded_String := Null_Unbounded_String;
    begin
       if Winfo_Get(Widgt => Knowledge_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -206,13 +205,14 @@ package body Knowledge is
               Create
                 (pathName => Options_Frame & ".titles",
                  options => "-state readonly");
-            Finished_Stories_List: Unbounded_String;
+            Finished_Stories_List: Unbounded_String := Null_Unbounded_String;
             Stories_View: constant Tk_Text :=
               Create
                 (pathName => Knowledge_Frame & ".view",
                  options => "-wrap word");
             --## rule off IMPROPER_INITIALIZATION
             Finished_Story: Finished_Story_Data;
+            Button: Ttk_Button;
             --## rule on IMPROPER_INITIALIZATION
             Amount: Natural := 0;
          begin
@@ -328,44 +328,20 @@ package body Knowledge is
              ".canvas.frame.maxmin",
            Interp => Interp);
    begin
-      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
-         Hide_Manipulate_Frames_Loop :
-         for FrameInfo of Frames loop
-            Frame.Name :=
-              New_String
-                (Str =>
-                   Frame_Name & "." & To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
-              CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-            else
-               Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Slave => Frame,
-                  Options =>
-                    "-columnspan 1 -rowspan 1 -column" &
-                    Natural'Image(FrameInfo.Column) & " -row" &
-                    Natural'Image(FrameInfo.Row));
-            end if;
-         end loop Hide_Manipulate_Frames_Loop;
-         configure
-           (Widgt => Button,
-            options =>
-              "-image movemapupicon -command {KnowledgeMaxMin " &
-              CArgv.Arg(Argv => Argv, N => 1) & " show}");
-      else
+      if CArgv.Arg(Argv => Argv, N => 2) = "show" then
          Show_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
                 (Str =>
                    Frame_Name & "." & To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /=
+            if To_String(Source => FrameInfo.Name) =
               CArgv.Arg(Argv => Argv, N => 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
-            else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
                   Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
+            else
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             end if;
          end loop Show_Manipulate_Frames_Loop;
          configure
@@ -373,6 +349,30 @@ package body Knowledge is
             options =>
               "-image movemapdownicon -command {KnowledgeMaxMin " &
               CArgv.Arg(Argv => Argv, N => 1) & " hide}");
+      else
+         Hide_Manipulate_Frames_Loop :
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String
+                (Str =>
+                   Frame_Name & "." & To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) =
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Slave => Frame,
+                  Options =>
+                    "-columnspan 1 -rowspan 1 -column" &
+                    Natural'Image(FrameInfo.Column) & " -row" &
+                    Natural'Image(FrameInfo.Row));
+            else
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+            end if;
+         end loop Hide_Manipulate_Frames_Loop;
+         configure
+           (Widgt => Button,
+            options =>
+              "-image movemapupicon -command {KnowledgeMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " show}");
       end if;
       return TCL_OK;
    end Knowledge_Max_Min_Command;
