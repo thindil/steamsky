@@ -1,5 +1,4 @@
 with "tashy";
-with "xmlada";
 
 project steamsky is
 
