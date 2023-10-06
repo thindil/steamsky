@@ -16,10 +16,10 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Bases; use Bases;
+with Bases;
 with Events;
 with Maps;
-with Ships; use Ships;
+with Ships;
 
 package body Stories is
 
@@ -219,8 +219,10 @@ package body Stories is
    end Start_Story;
 
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
+      use Bases;
       use Events;
       use Maps;
+      use Ships;
 
       Result: Boolean;
       Base_Index: constant Extended_Base_Range :=
