@@ -13,38 +13,38 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.Directory_Operations;
+with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with BasesTypes; use BasesTypes;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Winfo;
+with BasesTypes;
 with CoreUI; use CoreUI;
-with Factions; use Factions;
-with Game; use Game;
+with Factions;
+with Game;
 with Knowledge.Bases;
 with Knowledge.Events;
 with Knowledge.Missions;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
+--## rule off REDUCEABLE_SCOPE
 with Stories; use Stories;
+--## rule on REDUCEABLE_SCOPE
 with Knowledge.Stories;
 with Utils.UI; use Utils.UI;
 
@@ -73,6 +73,18 @@ package body Knowledge is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argv);
+      use GNAT.Directory_Operations;
+      use GNAT.String_Split;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Winfo;
+      use BasesTypes;
+      use Factions;
+      use Game;
+      use Maps.UI;
       use Tiny_String;
 
       Knowledge_Frame: Ttk_Frame :=
@@ -199,6 +211,9 @@ package body Knowledge is
       else
          Load_Finished_Stories_Block :
          declare
+            use Tcl.Tk.Ada.Event;
+            use Tcl.Tk.Ada.Widgets.Text;
+
             Options_Frame: constant Ttk_Frame :=
               Create(pathName => Knowledge_Frame & ".options");
             Stories_Box: constant Ttk_ComboBox :=
