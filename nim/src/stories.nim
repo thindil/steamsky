@@ -499,6 +499,10 @@ proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
 
 proc getStoryLocation*(): tuple[storyX: MapXRange;
     storyY: MapYRange] {.sideEffect, raises: [ValueError], tags: [].} =
+  ## Get the target's location of the current player's story
+  ##
+  ## Returns tuple with X and Y coordinates on the map of the target for
+  ## the current story's step.
   result = (1, 1)
   if currentStory.data.len == 0:
     return (playerShip.skyX, playerShip.skyY)
