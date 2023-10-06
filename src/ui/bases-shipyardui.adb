@@ -1331,40 +1331,57 @@ package body Bases.ShipyardUI is
                   end if;
                end if;
                Tcl.Tk.Ada.Grid.Grid
-                  (Slave => Module_Label,
+                 (Slave => Module_Label,
                   Options =>
-                  "-sticky w -column 1 -row" & Positive'Image(New_Row));
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
                New_Row := New_Row + 1;
             end if;
          when BATTERING_RAM =>
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{Strength:}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.strengthlbl",
+                 options => "-text {Strength:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
                if Player_Ship.Modules(Ship_Module_Index).Damage2 >
                  Max_Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Value) &
-                       " (weaker)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.strength",
+                       options =>
+                         "-text {" & Natural'Image(Max_Value) &
+                         " (weaker)} -style Headerred.TLabel");
                elsif Player_Ship.Modules(Ship_Module_Index).Damage2 <
                  Max_Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Max_Value) &
-                       " (stronger)} [list green]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.strength",
+                       options =>
+                         "-text {" & Natural'Image(Max_Value) &
+                         " (stronger)} -style Headergreen.TLabel");
                else
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Value) & "}");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.strength",
+                       options =>
+                         "-text {" & Natural'Image(Max_Value) &
+                         "} -style Golden.TLabel");
                end if;
             else
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & Natural'Image(Max_Value) & "}");
+               New_Row := New_Row - 1;
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.strength",
+                    options =>
+                      "-text {" & Natural'Image(Max_Value) &
+                      "} -style Golden.TLabel");
             end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
          when others =>
             null;
       end case;
