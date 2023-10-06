@@ -338,8 +338,7 @@ package Stories is
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) with
       Import => True,
       Convention => C,
-      External_Name => "getAdaStoryLocation",
-      Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
+      External_Name => "getAdaStoryLocation";
       -- ****
 
 -- Temporary code to interact with Nim
