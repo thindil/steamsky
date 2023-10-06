@@ -4,7 +4,8 @@ discard """
 Testing getStepData.
 Testing startStory.
 Testing getCurrentStoryText.
-Testing clearCurrentStory.'''
+Testing clearCurrentStory.
+Testing getStoryLocation.'''
 """
 
 import std/tables
@@ -61,3 +62,10 @@ try:
 except AssertionDefect:
   writeLine(stderr, "Failed to clear the current story.")
 currentStory = oldStory
+
+echo "Testing getStoryLocation."
+let (x, y) = getStoryLocation()
+try:
+  assert x > 0 and y > 0
+except AssertionDefect:
+  writeLine(stderr, "Failed to get the location of the current story's step.")
