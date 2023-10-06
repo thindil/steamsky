@@ -497,7 +497,8 @@ proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
   ## Reset the player's current story
   currentStory = CurrentStoryData()
 
-proc getStoryLocation*(): tuple[storyX: MapXRange; storyY: MapYRange] =
+proc getStoryLocation*(): tuple[storyX: MapXRange;
+    storyY: MapYRange] {.sideEffect, raises: [ValueError], tags: [].} =
   result = (1, 1)
   if currentStory.data.len == 0:
     return (playerShip.skyX, playerShip.skyY)
