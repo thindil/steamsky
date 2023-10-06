@@ -31,21 +31,6 @@ package body Stories is
    type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Load_Stories is
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Story_Data;
-      --## rule on IMPROPER_INITIALIZATION
-   begin
-      Clear_Current_Story;
-      Convert_Stories_Loop :
-      for I in 1 .. 10 loop
-         Temp_Record :=
-           Get_Story
-             (Index => To_Unbounded_String(Source => Positive'Image(I)));
-         exit Convert_Stories_Loop when Temp_Record.Steps.Length = 0;
-      end loop Convert_Stories_Loop;
-   end Load_Stories;
-
    -- ****if* Stories/Set_Current_Story
    -- FUNCTION
    -- Set the current story from Nim

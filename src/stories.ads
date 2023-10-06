@@ -260,13 +260,6 @@ package Stories is
    Stories_List: Stories_Container.Map;
    -- ****
 
-   -- ****f* Stories/Stories.Load_Stories
-   -- FUNCTION
-   -- Load stories data from files
-   -- SOURCE
-   procedure Load_Stories;
-   -- ****
-
    -- ****f* Stories/Stories.Start_Story
    -- FUNCTION
    -- Check if any story can starts
