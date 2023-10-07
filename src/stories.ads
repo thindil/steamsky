@@ -17,8 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Strings.Unbounded.Hash;
-with Ada.Containers.Hashed_Maps;
 with Game; use Game;
 
 -- ****h* Stories/Stories
@@ -189,15 +187,6 @@ package Stories is
    Empty_Story: constant Story_Data := (others => <>);
    -- ****
 
-   -- ****t* Stories/Stories.Stories_Container
-   -- FUNCTION
-   -- Used to store stories
-   -- SOURCE
-   package Stories_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Story_Data,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
-   -- ****
-
    -- ****s* Stories/Stories.Current_Story_Data
    -- FUNCTION
    -- Data structure for current active story
@@ -251,13 +240,6 @@ package Stories is
    -- Empty finished story data
    -- SOURCE
    Empty_Finished_Story: constant Finished_Story_Data := (others => <>);
-   -- ****
-
-   -- ****v* Stories/Stories.Stories_List
-   -- FUNCTION
-   -- List of available stories in game
-   -- SOURCE
-   Stories_List: Stories_Container.Map;
    -- ****
 
    -- ****f* Stories/Stories.Start_Story
