@@ -16,12 +16,18 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import bases, basescargo, basestypes, crewinventory, game, maps, ships,
-    shipscargo, shipscrew, types, utils
+import bases, basescargo, basestypes, crewinventory, game, maps, messages,
+    ships, shipscargo, shipscrew, types, utils
 
 type
   NoTraderError* = object of CatchableError
     ## Raised when there is no crew member assigned to talk
+
+  NoFreeCargoError* = object of CatchableError
+    ## Raised when there is no free space in the player's ship cargo
+
+  NoMoneyInBaseError* = object of CatchableError
+    ## Raised when there is not enough money in the base for trade
 
 proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
     KeyError], tags: [].} =
@@ -101,6 +107,32 @@ proc sellItems*(itemIndex: Natural; amount: string) =
   if playerShip.cargo[itemIndex].durability < 100:
     profit = (profit.float * (playerShip.cargo[itemIndex].durability.float / 100.0)).int
   countPrice(price = price, traderIndex = traderIndex, reduce = false)
+  for index, member in playerShip.crew:
+    if member.payment[2] == 0:
+      continue
+    if profit < 1:
+      updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
+          min = -25, max = -5))
+      addMessage(message = member.name &
+          " is sad because doesn't get own part of profit.",
+          mType = tradeMessage, color = red)
+      profit = 0
+      continue
+    profit = profit - (profit.float * (member.payment[2].float / 100.0)).int
+    if profit < 1:
+      if profit < 0:
+        updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
+            min = -12, max = -2))
+        addMessage(message = member.name &
+            " is sad because doesn't get own part of profit.",
+            mType = tradeMessage, color = red)
+      profit = 0
+  if freeCargo(amount = itemsList[protoIndex].weight * sellAmount) - profit < 0:
+    raise newException(exceptn = NoFreeCargoError, message = "")
+  let itemName = itemsList[protoIndex].name
+  if baseIndex > 0:
+    if profit > skyBases[baseIndex].cargo[0].amount:
+      raise newException(exceptn = NoMoneyInBaseError, message = itemName)
 
 # Temporary code for interfacing with Ada
 
