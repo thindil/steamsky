@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import bases, basescargo, basestypes, crewinventory, game, maps, messages,
-    ships, shipscargo, shipscrew, types, utils
+import bases, basescargo, basestypes, crewinventory, game, game2, maps,
+    messages, ships, shipscargo, shipscrew, types, utils
 
 type
   NoTraderError* = object of CatchableError
@@ -160,6 +160,14 @@ proc sellItems*(itemIndex: Natural; amount: string) =
   else:
     traderCargo[0].amount = traderCargo[0].amount - profit
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  let gain = profit - (sellAmount * price)
+  addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
+      $profit & " " & moneyName & "." & (if gain == 0: "" else: " You " & (
+      if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
+      " compared to the base price."), mType = tradeMessage)
+  if baseIndex > 0 and eventIndex > -1:
+    eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+  updateGame(minutes = 5)
 
 # Temporary code for interfacing with Ada
 
@@ -168,3 +176,10 @@ proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc.} 
     generateTraderCargo(protoIndex = protoIndex)
   except KeyError:
     discard
+
+proc sellAdaItems(itemIndex: cint, amount: cstring): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    sellItems(itemIndex = itemIndex.Natural, amount = $amount)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
