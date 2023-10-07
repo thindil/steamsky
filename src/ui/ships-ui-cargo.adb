@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -828,7 +828,7 @@ package body Ships.UI.Cargo is
           Positive'Value
             (To_String
                (Source =>
-                  Stories_List(Get_Current_Story.Index).Start_Data(1))) =
+                  Get_Story(Index => Get_Current_Story.Index).Start_Data(1))) =
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => Item_Index)
             .Proto_Index then

@@ -126,11 +126,11 @@ package body OrdersMenu is
          declare
             Step: constant Step_Data :=
               (if Get_Current_Story.Current_Step = 0 then
-                 Stories_List(Get_Current_Story.Index).Starting_Step
+                 Get_Story(Index => Get_Current_Story.Index).Starting_Step
                elsif Get_Current_Story.Current_Step > 0 then
-                 Stories_List(Get_Current_Story.Index).Steps
+                 Get_Story(Index => Get_Current_Story.Index).Steps
                    (Get_Current_Story.Current_Step)
-               else Stories_List(Get_Current_Story.Index).Final_Step);
+               else Get_Story(Index => Get_Current_Story.Index).Final_Step);
          begin
             case Step.Finish_Condition is
                when ASKINBASE =>
@@ -1083,11 +1083,11 @@ package body OrdersMenu is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Step: Step_Data :=
         (if Get_Current_Story.Current_Step = 0 then
-           Stories_List(Get_Current_Story.Index).Starting_Step
+           Get_Story(Index => Get_Current_Story.Index).Starting_Step
          elsif Get_Current_Story.Current_Step > 0 then
-           Stories_List(Get_Current_Story.Index).Steps
+           Get_Story(Index => Get_Current_Story.Index).Steps
              (Get_Current_Story.Current_Step)
-         else Stories_List(Get_Current_Story.Index).Final_Step);
+         else Get_Story(Index => Get_Current_Story.Index).Final_Step);
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
@@ -1123,9 +1123,9 @@ package body OrdersMenu is
             if Get_Current_Story.Current_Step > -2 then
                Step :=
                  (if Get_Current_Story.Current_Step > 0 then
-                    Stories_List(Get_Current_Story.Index).Steps
+                    Get_Story(Index => Get_Current_Story.Index).Steps
                       (Get_Current_Story.Current_Step)
-                  else Stories_List(Get_Current_Story.Index).Final_Step);
+                  else Get_Story(Index => Get_Current_Story.Index).Final_Step);
                Show_Current_Story_Loop :
                for Text of Step.Texts loop
                   if Get_Current_Story.Finished_Step = Text.Condition then

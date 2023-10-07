@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -887,13 +887,13 @@ package body Maps.UI is
             if X = Story_X and Y = Story_Y then
                Finish_Condition :=
                  (if Get_Current_Story.Current_Step = 0 then
-                    Stories_List(Get_Current_Story.Index).Starting_Step
+                    Get_Story(Index => Get_Current_Story.Index).Starting_Step
                       .Finish_Condition
                   elsif Get_Current_Story.Current_Step > 0 then
-                    Stories_List(Get_Current_Story.Index).Steps
+                    Get_Story(Index => Get_Current_Story.Index).Steps
                       (Get_Current_Story.Current_Step)
                       .Finish_Condition
-                  else Stories_List(Get_Current_Story.Index).Final_Step
+                  else Get_Story(Index => Get_Current_Story.Index).Final_Step
                       .Finish_Condition);
                if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
                   Insert_Text(New_Text => LF & "Story leads you here");
@@ -1639,7 +1639,7 @@ package body Maps.UI is
       Show_Question
         (Question =>
            To_String
-             (Source => Stories_List(Get_Current_Story.Index).End_Text) &
+             (Source => Get_Story(Index => Get_Current_Story.Index).End_Text) &
            " Do you want to finish the game?",
          Result => "retire");
    end Finish_Story;

@@ -103,11 +103,11 @@ package body Knowledge.Stories is
          if Get_Current_Story.Data /= Null_Unbounded_String then
             Step :=
               (if Get_Current_Story.Current_Step = 0 then
-                 Stories_List(Get_Current_Story.Index).Starting_Step
+                 Get_Story(Index => Get_Current_Story.Index).Starting_Step
                elsif Get_Current_Story.Current_Step > 0 then
-                 Stories_List(Get_Current_Story.Index).Steps
+                 Get_Story(Index => Get_Current_Story.Index).Steps
                    (Get_Current_Story.Current_Step)
-               else Stories_List(Get_Current_Story.Index).Final_Step);
+               else Get_Story(Index => Get_Current_Story.Index).Final_Step);
             Create
               (S => Tokens,
                From => To_String(Source => Get_Current_Story.Data),

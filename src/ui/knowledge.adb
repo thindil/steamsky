@@ -240,7 +240,7 @@ package body Knowledge is
                Append
                  (Source => Finished_Stories_List,
                   New_Item =>
-                    " {" & Stories_List(Finished_Story.Index).Name & "}");
+                    " {" & Get_Story(Index => Finished_Story.Index).Name & "}");
                Amount := Amount + 1;
             end loop Load_Finished_Stories_Loop;
             configure
