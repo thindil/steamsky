@@ -523,6 +523,7 @@ package body Bases.ShipyardUI is
       Cost: Positive := 1;
       Money_Index_2: Natural := 0;
       New_Row: Positive := Row + 1;
+      Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Installing then
          M_Type := Get_Module(Index => Get_Module_Index).M_Type;
@@ -1386,51 +1387,81 @@ package body Bases.ShipyardUI is
             null;
       end case;
       if M_Type not in HULL | ARMOR then
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & "Size:}");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.sizelbl", options => "-text {Size:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
          if Installing then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
                if Module.M_Type = HULL
                  and then Size >
                    Get_Module(Index => Module.Proto_Index).Value then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text =>
-                       "{" & Natural'Image(Size) &
-                       " (needs a bigger hull)} [list red]");
+                  Module_Label :=
+                    Create
+                      (pathName => ".moduledialog.size",
+                       options =>
+                         "-text {" & Natural'Image(Size) &
+                         " (need a bigger hull)} -style Headerred.TLabel");
                   Added := True;
                   exit Check_Module_Size_Loop;
                end if;
             end loop Check_Module_Size_Loop;
          end if;
          if not Added then
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text => "{" & Natural'Image(Size) & "}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.size",
+                 options =>
+                   "-text {" & Natural'Image(Size) & "} -style Golden.TLabel");
          end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label,
+            Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
+         New_Row := New_Row + 1;
       end if;
       if Weight > 0 then
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.weightlbl",
+              options => "-text {Weight:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.weight",
+              options =>
+                "-text {" & Natural'Image(Weight) & "} -style Golden.TLabel");
          if Ship_Module_Index > 0 then
             if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{ (heavier)}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.weight",
+                    options =>
+                      "-text {" & Natural'Image(Weight) &
+                      " (heavier)} -style Golden.TLabel");
             elsif Weight < Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text => "{ (lighter)}");
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.weight",
+                    options =>
+                      "-text {" & Natural'Image(Weight) &
+                      " (lighter)} -style Golden.TLabel");
             end if;
          end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label,
+            Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
+         New_Row := New_Row + 1;
       end if;
       if Installing then
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & "Repair/Upgrade material: }");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.repairlbl",
+              options => "-text {Repair/Upgrade material:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
          M_Amount := 0;
          Repair_Materials_Loop :
          for I in 1 .. Get_Proto_Amount loop
@@ -1439,44 +1470,61 @@ package body Bases.ShipyardUI is
                 (Source =>
                    Get_Module(Index => Get_Module_Index).Repair_Material) then
                if M_Amount > 0 then
-                  Insert
-                    (TextWidget => Module_Text, Index => "end",
-                     Text => "{ or }");
+                  Append(Source => Text, New_Item => "{ or }");
                end if;
-               Insert
-                 (TextWidget => Module_Text, Index => "end",
-                  Text =>
-                    "{" &
-                    To_String(Source => Get_Proto_Item(Index => I).Name) &
-                    "}");
+               Append
+                 (Source => Text,
+                  New_Item =>
+                    To_String(Source => Get_Proto_Item(Index => I).Name));
                M_Amount := M_Amount + 1;
             end if;
          end loop Repair_Materials_Loop;
-         Insert
-           (TextWidget => Module_Text, Index => "end",
-            Text =>
-              "{" & LF & "Repair/Upgrade skill: " &
-              To_String
-                (Source =>
-                   SkillsData_Container.Element
-                     (Container => Skills_List,
-                      Index =>
-                        Get_Module(Index => Get_Module_Index).Repair_Skill)
-                     .Name) &
-              "/" &
-              To_String
-                (Source =>
-                   AttributesData_Container.Element
-                     (Container => Attributes_List,
-                      Index =>
-                        SkillsData_Container.Element
-                          (Container => Skills_List,
-                           Index =>
-                             Get_Module(Index => Get_Module_Index)
-                               .Repair_Skill)
-                          .Attribute)
-                     .Name) &
-              "}");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.repair",
+              options =>
+                "-text {" & To_String(Source => Text) &
+                "} -style Golden.TLabel");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label,
+            Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
+         New_Row := New_Row + 1;
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.repair2lbl",
+              options => "-text {Repair/Upgrade skill:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+         Module_Label :=
+           Create
+             (pathName => ".moduledialog.repair2",
+              options =>
+                "-text {" &
+                To_String
+                  (Source =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List,
+                        Index =>
+                          Get_Module(Index => Get_Module_Index).Repair_Skill)
+                       .Name) &
+                "/" &
+                To_String
+                  (Source =>
+                     AttributesData_Container.Element
+                       (Container => Attributes_List,
+                        Index =>
+                          SkillsData_Container.Element
+                            (Container => Skills_List,
+                             Index =>
+                               Get_Module(Index => Get_Module_Index)
+                                 .Repair_Skill)
+                            .Attribute)
+                       .Name) &
+                "} -style Golden.TLabel");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Module_Label,
+            Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
+         New_Row := New_Row + 1;
          if Get_Module(Index => Get_Module_Index).Unique then
             Insert
               (TextWidget => Module_Text, Index => "end",
