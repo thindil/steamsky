@@ -177,7 +177,8 @@ proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc.} 
   except KeyError:
     discard
 
-proc sellAdaItems(itemIndex: cint, amount: cstring): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
+    tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     sellItems(itemIndex = itemIndex.Natural, amount = $amount)
     return "".cstring
