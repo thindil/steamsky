@@ -133,6 +133,33 @@ proc sellItems*(itemIndex: Natural; amount: string) =
   if baseIndex > 0:
     if profit > skyBases[baseIndex].cargo[0].amount:
       raise newException(exceptn = NoMoneyInBaseError, message = itemName)
+    updateBaseCargo(protoIndex = protoIndex, amount = sellAmount,
+        durability = playerShip.cargo[itemIndex].durability)
+  else:
+    if profit > traderCargo[0].amount:
+      raise newException(exceptn = NoMoneyInBaseError, message = itemName)
+    var cargoAdded = false
+    for item in traderCargo.mitems:
+      if item.protoIndex == protoIndex and item.durability == playerShip.cargo[
+          itemIndex].durability:
+        item.amount = item.amount + sellAmount
+        cargoAdded = true
+        break
+    if not cargoAdded:
+      traderCargo.add(BaseCargo(protoIndex: protoIndex, amount: sellAmount,
+          durability: playerShip.cargo[itemIndex].durability, price: itemsList[
+          protoIndex].price))
+  updateCargo(ship = playerShip, cargoIndex = itemIndex, amount = -sellAmount,
+      price = playerShip.cargo[itemIndex].price)
+  updateCargo(ship = playerShip, protoIndex = moneyIndex, amount = profit)
+  if baseIndex > 0:
+    updateBaseCargo(protoIndex = moneyIndex, amount = -profit)
+    gainRep(baseIndex = baseIndex, points = 1)
+    if itemsList[protoIndex].reputation > skyBases[baseIndex].reputation.level:
+      gainRep(baseIndex = baseIndex, points = 1)
+  else:
+    traderCargo[0].amount = traderCargo[0].amount - profit
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
 
 # Temporary code for interfacing with Ada
 
