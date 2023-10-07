@@ -15,8 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import crewinventory, game, ships, shipscargo, types, utils
+import std/[strutils, tables]
+import basescargo, crewinventory, game, maps, ships, shipscargo, shipscrew,
+    types, utils
+
+type
+  NoTraderError* = object of CatchableError
+    ## Raised when there is no crew member assigned to talk
 
 proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
     KeyError], tags: [].} =
@@ -62,6 +67,23 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
       else:
         cargoAmount = 1
     cargoAmount.dec
+
+proc sellItems*(itemIndex: Natural; amount: string) =
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    raise newException(exceptn = NoTraderError, message = "")
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    protoIndex = playerShip.cargo[itemIndex].protoIndex
+  var baseItemIndex = -1
+  if baseIndex > -1:
+    baseItemIndex = findBaseCargo(protoIndex = protoIndex)
+  else:
+    for index, item in traderCargo:
+      if item.protoIndex == protoIndex:
+        baseItemIndex = index
+        break
+  let sellAmount = amount.parseInt
 
 # Temporary code for interfacing with Ada
 
