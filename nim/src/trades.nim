@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import basescargo, crewinventory, game, maps, ships, shipscargo, shipscrew,
-    types, utils
+import bases, basescargo, basestypes, crewinventory, game, maps, ships,
+    shipscargo, shipscrew, types, utils
 
 type
   NoTraderError* = object of CatchableError
@@ -83,7 +83,24 @@ proc sellItems*(itemIndex: Natural; amount: string) =
       if item.protoIndex == protoIndex:
         baseItemIndex = index
         break
+  var price: Natural = 0
+  if baseItemIndex == -1:
+    price = getPrice(baseType = skyBases[baseIndex].baseType,
+        itemIndex = protoIndex)
+  else:
+    price = if baseIndex > 0:
+        skyBases[baseIndex].cargo[baseItemIndex].price
+      else:
+        traderCargo[baseItemIndex].price
+  let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
+      eventsList[eventIndex].itemIndex == protoIndex:
+    price = price * 2
   let sellAmount = amount.parseInt
+  var profit = price * sellAmount
+  if playerShip.cargo[itemIndex].durability < 100:
+    profit = (profit.float * (playerShip.cargo[itemIndex].durability.float / 100.0)).int
+  countPrice(price = price, traderIndex = traderIndex, reduce = false)
 
 # Temporary code for interfacing with Ada
 
