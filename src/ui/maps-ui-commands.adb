@@ -94,9 +94,10 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Button: Ttk_Button;
+      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
    begin
       Button.Interp := Interp;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Hide_Buttons_Loop :
       for I in 2 .. 13 loop
          Button.Name :=
@@ -106,6 +107,7 @@ package body Maps.UI.Commands is
                 To_String(Source => Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end loop Hide_Buttons_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       return TCL_OK;
@@ -134,12 +136,13 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Button: Ttk_Button;
+      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
       Buttons_Box: constant Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
    begin
       Button.Interp := Interp;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Show_Buttons_Loop :
       for I in 2 .. 11 loop
          Button.Name :=
@@ -149,6 +152,7 @@ package body Maps.UI.Commands is
                 To_String(Source => Button_Names(I)));
          Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       end loop Show_Buttons_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       Button.Name :=
         New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
@@ -431,6 +435,7 @@ package body Maps.UI.Commands is
            options =>
              "-text Close -command {CloseDialog " & Destination_Dialog & "}");
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if (Map_X = 0 or Map_Y = 0)
         and then
           Update_Map_Info_Command
@@ -449,6 +454,7 @@ package body Maps.UI.Commands is
              (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
               Argv => Argv);
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
       Bind
         (Widgt => Button, Sequence => "<Escape>",
@@ -528,8 +534,10 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Player_Ship.Destination_X := Map_X;
       Player_Ship.Destination_Y := Map_Y;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Add_Message
         (Message => "You set the travel destination for your ship.",
          M_Type => ORDERMESSAGE);
@@ -579,6 +587,7 @@ package body Maps.UI.Commands is
       Map_Height :=
         Positive'Value(cget(Widgt => Map_View, option => "-height"));
       Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if CArgv.Arg(Argv => Argv, N => 1) = "centeronship" then
          Center_X := Player_Ship.Sky_X;
          Center_Y := Player_Ship.Sky_Y;
@@ -637,6 +646,7 @@ package body Maps.UI.Commands is
          Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
          Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Draw_Map;
       return
         Close_Dialog_Command
