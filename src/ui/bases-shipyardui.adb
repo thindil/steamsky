@@ -523,7 +523,7 @@ package body Bases.ShipyardUI is
       Cost: Positive := 1;
       Money_Index_2: Natural := 0;
       New_Row: Positive := Row + 1;
-      Text: Unbounded_String := Null_Unbounded_String;
+      Info_Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Installing then
          M_Type := Get_Module(Index => Get_Module_Index).M_Type;
@@ -1428,11 +1428,6 @@ package body Bases.ShipyardUI is
               options => "-text {Weight:}");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
-         Module_Label :=
-           Create
-             (pathName => ".moduledialog.weight",
-              options =>
-                "-text {" & Natural'Image(Weight) & "} -style Golden.TLabel");
          if Ship_Module_Index > 0 then
             if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
                Module_Label :=
@@ -1470,10 +1465,10 @@ package body Bases.ShipyardUI is
                 (Source =>
                    Get_Module(Index => Get_Module_Index).Repair_Material) then
                if M_Amount > 0 then
-                  Append(Source => Text, New_Item => "{ or }");
+                  Append(Source => Info_Text, New_Item => "{ or }");
                end if;
                Append
-                 (Source => Text,
+                 (Source => Info_Text,
                   New_Item =>
                     To_String(Source => Get_Proto_Item(Index => I).Name));
                M_Amount := M_Amount + 1;
@@ -1483,7 +1478,7 @@ package body Bases.ShipyardUI is
            Create
              (pathName => ".moduledialog.repair",
               options =>
-                "-text {" & To_String(Source => Text) &
+                "-text {" & To_String(Source => Info_Text) &
                 "} -style Golden.TLabel");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Module_Label,
@@ -1526,22 +1521,29 @@ package body Bases.ShipyardUI is
             Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
          New_Row := New_Row + 1;
          if Get_Module(Index => Get_Module_Index).Unique then
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF &
-                 "The module is unique. Only one module of that type can be installed on the ship.}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.unique",
+                 options =>
+                   "-text {The module is unique. Only one module of that type can be installed on the ship.} -style Golden.TLabel -wraplength 450");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options => "-sticky w -padx 5 -columnspan 2");
          end if;
          if Get_Module(Index => Get_Module_Index).Description /=
            Short_String.Null_Bounded_String then
-            Insert
-              (TextWidget => Module_Text, Index => "end",
-               Text =>
-                 "{" & LF & LF &
-                 To_String
-                   (Source =>
-                      Get_Module(Index => Get_Module_Index).Description) &
-                 "}");
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.description",
+                 options =>
+                   "-text {" &
+                   To_String
+                     (Source =>
+                        Get_Module(Index => Get_Module_Index).Description) &
+                   "} -wraplength 450");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options => "-sticky w -padx 5 -pady {20 0} -columnspan 2");
          end if;
       end if;
    end Set_Module_Info;
@@ -1605,7 +1607,7 @@ package body Bases.ShipyardUI is
       Error_Label: constant Ttk_Label :=
         Create
           (pathName => Module_Dialog & ".errorLabel",
-           options => "-style Headerred.TLabel -wraplength 400 -text {}");
+           options => "-style Headerred.TLabel -wraplength 450 -text {}");
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
       Module_Label: Ttk_Label :=
