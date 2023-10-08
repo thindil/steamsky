@@ -724,8 +724,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Message: Unbounded_String;
-      Result: Natural;
+      Message: Unbounded_String := Null_Unbounded_String;
+      Result: Natural := 0;
       Starts_Combat: Boolean := False;
       New_X, New_Y: Integer := 0;
       procedure Update_Coordinates is
@@ -891,7 +891,7 @@ package body Maps.UI.Commands is
                Result := 4;
                exit Move_Loop;
             end if;
-            exit Move_Loop when Result = 6 or Result = 7;
+            exit Move_Loop when Result in 6 .. 7;
          end loop Move_Loop;
       end if;
       case Result is
@@ -1321,10 +1321,7 @@ package body Maps.UI.Commands is
                 "-text {" & Label & " [" & To_String(Source => Shortcut) &
                 "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
       begin
-         if not Last then
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-sticky we -padx 5");
-         else
+         if Last then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
                Script =>
@@ -1334,6 +1331,9 @@ package body Maps.UI.Commands is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
             Focus(Widgt => Button);
+         else
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-sticky we -padx 5");
          end if;
          Shortcuts.Append
            (New_Item =>
@@ -1449,7 +1449,8 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Argc);
       Focused_Widget: constant Ttk_Frame :=
         Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
-      Commands: constant array(Menu_Accelerators'Range) of Unbounded_String :=
+      Menu_Commands: constant array
+        (Menu_Accelerators'Range) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "ShowShipInfo"),
          2 => To_Unbounded_String(Source => "ShowOrders"),
          3 => To_Unbounded_String(Source => "ShowCrafting"),
@@ -1471,7 +1472,8 @@ package body Maps.UI.Commands is
          if To_String(Source => Menu_Accelerators(I)) =
            CArgv.Arg(Argv => Argv, N => 1) then
             Tcl_Eval
-              (interp => Interp, strng => To_String(Source => Commands(I)));
+              (interp => Interp,
+               strng => To_String(Source => Menu_Commands(I)));
             return TCL_OK;
          end if;
       end loop Invoke_Button_Loop;
