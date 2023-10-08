@@ -77,6 +77,10 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
 proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     NoTraderError, NoFreeCargoError, NoMoneyInBaseError, KeyError, ValueError,
     IOError, Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Sell the selected item from the player's ship cargo to the trader
+  ##
+  ## * itemIndex - the index of the item in the player's ship cargo
+  ## * amount    - the amount of the item to sell
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
