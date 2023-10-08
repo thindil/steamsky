@@ -74,7 +74,9 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
         cargoAmount = 1
     cargoAmount.dec
 
-proc sellItems*(itemIndex: Natural; amount: string) =
+proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
+    NoTraderError, NoFreeCargoError, NoMoneyInBaseError, KeyError, ValueError,
+    IOError, Exception], tags: [WriteIOEffect, RootEffect].} =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
