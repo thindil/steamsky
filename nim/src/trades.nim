@@ -180,7 +180,7 @@ proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc.} 
 proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
     tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
-    sellItems(itemIndex = itemIndex.Natural, amount = $amount)
+    sellItems(itemIndex = itemIndex.Natural - 1, amount = $amount)
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
