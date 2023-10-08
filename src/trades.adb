@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C.Strings;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes;
 with Crew; use Crew;
@@ -197,6 +198,8 @@ package body Trades is
 
    procedure Sell_Items
      (Item_Index: Inventory_Container.Extended_Index; Amount: String) is
+      use Interfaces.C;
+      use Interfaces.C.Strings;
       use BasesTypes;
       use Utils;
       use Tiny_String;
@@ -219,7 +222,30 @@ package body Trades is
         Find_Member(Order => TALK);
       Profit: Integer := 0;
       Item: Base_Cargo := (others => <>);
+      Result: chars_ptr;
+      Ada_Result, Exception_Name: Unbounded_String;
+      Space_Index: Natural;
+      function Sell_Ada_Items
+        (I_Index: Natural; A: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "sellAdaItems";
    begin
+      Result :=
+        Sell_Ada_Items(I_Index => Item_Index, A => New_String(Str => Amount));
+      if Strlen(Item => Result) > 0 then
+         Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
+         Space_Index := Index(Source => Ada_Result, Pattern => " ");
+         if Space_Index > 0 then
+            Exception_Name :=
+              Unbounded_Slice
+                (Source => Ada_Result, Low => 1, High => Space_Index - 1);
+         end if;
+         if Exception_Name =
+           To_Unbounded_String(Source => "NoTraderError") then
+            raise Trade_No_Trader;
+         end if;
+      end if;
       Sell_Amount := Positive'Value(Amount);
       if Trader_Index = 0 then
          raise Trade_No_Trader;
