@@ -8,7 +8,7 @@ Testing getItemsAmount.'''
 """
 
 import std/tables
-import ../../src/[careers, factions, game, items, shipscargo, types]
+import ../../src/[careers, factions, game, items, shipmodules, shipscargo, types]
 
 echo "Loading the game data."
 if itemsList.len == 0:
@@ -16,9 +16,11 @@ if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
+  loadModules("../bin/data/shipmodules.dat")
 
 playerShip.modules = @[]
-playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
+playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
+    durability: 100, maxDurability: 100))
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200, durability: 100))
