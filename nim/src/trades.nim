@@ -224,6 +224,21 @@ proc buyItems*(baseItemIndex: Natural; amount: string) =
     updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
         durability = skyBases[baseIndex].cargo[baseItemIndex].durability)
     gainRep(baseIndex = baseIndex, points = 1)
+  else:
+    updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
+        durability = traderCargo[baseItemIndex].durability, price = price)
+    traderCargo[baseItemIndex].amount = traderCargo[baseItemIndex].amount - buyAmount
+    if traderCargo[baseItemIndex].amount == 0:
+      traderCargo.delete(baseItemIndex)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  let gain = (buyAmount * price) - cost
+  addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &
+      $cost & " " & moneyName & "." & (if gain == 0: "" else: "You " & (
+      if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
+      " compared to the base price."), mType = tradeMessage)
+  if baseIndex == 0 and eventIndex > -1:
+    eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+  updateGame(minutes = 5)
 
 # Temporary code for interfacing with Ada
 
@@ -237,6 +252,14 @@ proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
     tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     sellItems(itemIndex = itemIndex.Natural - 1, amount = $amount)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
+
+proc buyAdaItems(baseItemIndex: cint; amount: cstring): cstring {.raises: [],
+    tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    buyItems(baseItemIndex = baseItemIndex.Natural - 1, amount = $amount)
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
