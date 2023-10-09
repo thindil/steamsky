@@ -13,8 +13,5 @@ package Trades.Test_Data.Tests is
    procedure Test_Buy_Items_eb7d42_e10e97(Gnattest_T: in out Test);
    --  trades.ads:114:4:Buy_Items:Test_BuyItems
 
-   procedure Test_Sell_Items_51dfd2_132f39(Gnattest_T: in out Test);
-   --  trades.ads:127:4:Sell_Items:Test_SellItems
-
 end Trades.Test_Data.Tests;
 --  end read only
