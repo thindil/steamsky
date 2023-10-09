@@ -29,6 +29,12 @@ type
   NoMoneyInBaseError* = object of CatchableError
     ## Raised when there is not enough money in the base for trade
 
+  NoMoneyError* = object of CatchableError
+    ## Raised when the player doesn't have money to buy an item
+
+  NotEnoughMoneyError* = object of CatchableError
+    ## Raised when the player doesn't have enough money to buy an item
+
 proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
     KeyError], tags: [].} =
   ## Generate the list of items for trade.
@@ -199,6 +205,25 @@ proc buyItems*(baseItemIndex: Natural; amount: string) =
   let buyAmount = amount.parseInt
   var cost: Natural = buyAmount * price
   countPrice(price = cost, traderIndex = traderIndex)
+  if freeCargo(amount = cost - (itemsList[itemIndex].weight * buyAmount)) < 0:
+    raise newException(exceptn = NoFreeCargoError, message = "")
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  if moneyIndex2 == -1:
+    raise newException(exceptn = NoMoneyError, message = itemName)
+  if cost > playerShip.cargo[moneyIndex2].amount:
+    raise newException(exceptn = NotEnoughMoneyError, message = itemName)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+  if baseIndex > 0:
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+  else:
+    traderCargo[0].amount = traderCargo[0].amount + cost
+  if baseIndex > 0:
+    updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
+        durability = skyBases[baseIndex].cargo[baseItemIndex].durability, price = price)
+    updateBaseCargo(cargoIndex = baseItemIndex.cint, amount = -buyAmount,
+        durability = skyBases[baseIndex].cargo[baseItemIndex].durability)
+    gainRep(baseIndex = baseIndex, points = 1)
 
 # Temporary code for interfacing with Ada
 
