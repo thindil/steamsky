@@ -16,19 +16,25 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings;
-with Bases.Cargo; use Bases.Cargo;
-with Crew; use Crew;
-with Events; use Events;
+with Bases.Cargo;
+with Crew;
+with Events;
 with Game; use Game;
 with Maps; use Maps;
-with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Messages;
+with Ships.Cargo;
+with Ships.Crew;
 
 package body Trades is
 
    procedure Buy_Items
      (Base_Item_Index: BaseCargo_Container.Extended_Index; Amount: String) is
+      use Bases.Cargo;
+      use Crew;
+      use Events;
+      use Messages;
+      use Ships.Cargo;
+      use Ships.Crew;
       use Tiny_String;
 
       Buy_Amount, Price: Positive;
@@ -202,8 +208,8 @@ package body Trades is
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Result: chars_ptr;
-      Ada_Result, Exception_Name: Unbounded_String;
-      Space_Index: Natural;
+      Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
+      Space_Index: Natural := 0;
       function Sell_Ada_Items
         (I_Index: Natural; A: chars_ptr) return chars_ptr with
          Import => True,
