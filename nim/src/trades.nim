@@ -175,6 +175,31 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     eventsList[eventIndex].time = eventsList[eventIndex].time + 5
   updateGame(minutes = 5)
 
+proc buyItems*(baseItemIndex: Natural; amount: string) =
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    raise newException(exceptn = NoTraderError, message = "")
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  var
+    itemIndex, price = 0
+    itemName = ""
+  if baseIndex > 0:
+    itemIndex = skyBases[baseIndex].cargo[baseItemIndex].protoIndex
+    itemName = itemsList[itemIndex].name
+    price = skyBases[baseIndex].cargo[baseItemIndex].price
+    if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
+        eventsList[eventIndex].itemIndex == itemIndex:
+      price = price * 2
+  else:
+    itemIndex = traderCargo[baseItemIndex].protoIndex
+    itemName = itemsList[itemIndex].name
+    price = traderCargo[baseItemIndex].price
+  let buyAmount = amount.parseInt
+  var cost: Natural = buyAmount * price
+  countPrice(price = cost, traderIndex = traderIndex)
+
 # Temporary code for interfacing with Ada
 
 proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc.} =
