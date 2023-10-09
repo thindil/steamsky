@@ -1386,6 +1386,9 @@ package body Bases.ShipyardUI is
          when others =>
             null;
       end case;
+      if M_Type = ARMOR and not Installing then
+         New_Row := New_Row - 1;
+      end if;
       if M_Type not in HULL | ARMOR then
          Module_Label :=
            Create
@@ -1422,33 +1425,41 @@ package body Bases.ShipyardUI is
          New_Row := New_Row + 1;
       end if;
       if Weight > 0 then
-         Module_Label :=
-           Create
-             (pathName => ".moduledialog.weightlbl",
-              options => "-text {Weight:}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
          if Ship_Module_Index > 0 then
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.weightlbl",
+                 options => "-text {Weight:}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
                Module_Label :=
                  Create
                    (pathName => ".moduledialog.weight",
                     options =>
                       "-text {" & Natural'Image(Weight) &
-                      " (heavier)} -style Golden.TLabel");
+                      " kg (heavier)} -style Golden.TLabel");
             elsif Weight < Player_Ship.Modules(Ship_Module_Index).Weight then
                Module_Label :=
                  Create
                    (pathName => ".moduledialog.weight",
                     options =>
                       "-text {" & Natural'Image(Weight) &
-                      " (lighter)} -style Golden.TLabel");
+                      " kg (lighter)} -style Golden.TLabel");
+            else
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.weight",
+                    options =>
+                      "-text {" & Natural'Image(Weight) &
+                      " kg} -style Golden.TLabel");
             end if;
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Module_Label,
-            Options => "-sticky w -column 1 -row" & Positive'Image(New_Row));
-         New_Row := New_Row + 1;
       end if;
       if Installing then
          Module_Label :=
