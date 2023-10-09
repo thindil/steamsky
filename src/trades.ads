@@ -130,8 +130,7 @@ package Trades is
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
               Inventory_Container.Last_Index
                 (Container => Player_Ship.Cargo) and
-      Amount'Length > 0,
-      Test_Case => (Name => "Test_SellItems", Mode => Nominal);
+      Amount'Length > 0;
       -- ****
 
       -- ****f* Trades/Trades.Generate_Trader_Cargo
