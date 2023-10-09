@@ -1303,13 +1303,17 @@ package body Maps.UI.Commands is
       Row: Positive := 1;
       State: constant String :=
         Tcl_GetVar(interp => Interp, varName => "gamestate");
+      --## rule off TYPE_INITIAL_VALUES
       type Menu_Shortcut is record
          Button_Name: Unbounded_String;
          Shortcut: Unbounded_String;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Menu_Shortcut);
+      --## rule off IMPROPER_INITIALIZATION
       Shortcuts: Shortcuts_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Game_Menu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
       procedure Add_Button
         (Name, Label, Command: String; Shortcut: Unbounded_String;
@@ -1395,7 +1399,9 @@ package body Maps.UI.Commands is
          Shortcut => To_Unbounded_String(Source => "Escape"), Last => True);
       Add_Bindings_Block :
       declare
+         --## rule off IMPROPER_INITIALIZATION
          Menu_Button: Ttk_Button;
+         --## rule on IMPROPER_INITIALIZATION
       begin
          Buttons_Loop :
          for Button of Shortcuts loop
