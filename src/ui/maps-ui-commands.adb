@@ -13,18 +13,17 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Strings; use Ada.Strings;
+with Ada.Containers.Vectors;
+with Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
-use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -33,26 +32,25 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with Bases; use Bases;
-with Combat.UI; use Combat.UI;
+with Tcl.Tk.Ada.Wm;
+with Bases;
+with Combat.UI;
 with Config; use Config;
 with CoreUI; use CoreUI;
-with Crew; use Crew;
+with Crew;
 with Dialogs; use Dialogs;
-with Events; use Events;
-with Factions; use Factions;
+with Events;
+with Factions;
 with Messages; use Messages;
-with OrdersMenu; use OrdersMenu;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with OrdersMenu;
+with Ships.Cargo;
+with Ships.Crew;
 with Ships.Movement; use Ships.Movement;
-with Statistics.UI; use Statistics.UI;
-with Themes; use Themes;
-with Utils.UI; use Utils.UI;
+with Statistics.UI;
+with Themes;
+with Utils.UI;
 
 package body Maps.UI.Commands is
 
@@ -239,6 +237,9 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Strings.UTF_Encoding.Wide_Strings;
+      use Themes;
+
       Map_View: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
    begin
@@ -419,6 +420,8 @@ package body Maps.UI.Commands is
    function Show_Destination_Menu_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use OrdersMenu;
+
       Destination_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".gameframe.destinationmenu", Title => "Set destination",
@@ -574,6 +577,9 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Bases;
+
       Map_View: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
       Map_Height, Map_Width: Positive;
@@ -724,6 +730,12 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Combat.UI;
+      use Crew;
+      use Events;
+      use Factions;
+      use Ships.Crew;
+
       Message: Unbounded_String := Null_Unbounded_String;
       Result: Natural := 0;
       Starts_Combat: Boolean := False;
@@ -848,6 +860,8 @@ package body Maps.UI.Commands is
             end if;
             Set_Low_Amount_Info_Block :
             declare
+               use Ships.Cargo;
+
                Message_Dialog: constant Ttk_Frame :=
                  Get_Widget(pathName => ".message", Interp => Interp);
             begin
@@ -1032,6 +1046,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Statistics.UI;
+
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
@@ -1100,6 +1116,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Event;
+
       Map_View: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
    begin
@@ -1193,6 +1211,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Wm;
+
    begin
       Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
       if Tcl_GetResult(interp => Interp) = "0" then
@@ -1232,6 +1252,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+
       Paned_Position: Positive;
       Sash_Position: constant Natural :=
         Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
@@ -1300,6 +1322,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Containers;
+
       Row: Positive := 1;
       State: constant String :=
         Tcl_GetVar(interp => Interp, varName => "gamestate");
@@ -1523,6 +1547,7 @@ package body Maps.UI.Commands is
    end Set_Ship_Speed_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "HideMapButtons",
