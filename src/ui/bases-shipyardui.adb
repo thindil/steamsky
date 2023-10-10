@@ -27,11 +27,9 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -516,7 +514,6 @@ package body Bases.ShipyardUI is
       Size: Positive := 1;
       Speed: Integer := 0;
       --## rule off IMPROPER_INITIALIZATION
-      Module_Text: Tk_Text;
       Module_Label: Ttk_Label;
       --## rule on IMPROPER_INITIALIZATION
       Added: Boolean := False;
@@ -533,7 +530,6 @@ package body Bases.ShipyardUI is
          Weight := Get_Module(Index => Get_Module_Index).Weight;
          Max_Owners := Get_Module(Index => Get_Module_Index).Max_Owners;
          Speed := Get_Module(Index => Get_Module_Index).Speed;
-         Module_Text := Get_Widget(pathName => ".moduledialog.info");
          Module_Label := Get_Widget(pathName => ".moduledialog.cost");
          Get_Module_Index_Block :
          declare
@@ -587,9 +583,6 @@ package body Bases.ShipyardUI is
               Positive'Image
                 (Get_Module(Index => Get_Module_Index).Install_Time) &
               " minutes} -style Golden.TLabel");
-         configure(Widgt => Module_Text, options => "-state normal");
-         Delete
-           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       else
          Ship_Module_Index := Get_Module_Index;
          M_Type :=
@@ -658,7 +651,6 @@ package body Bases.ShipyardUI is
            Get_Module
              (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Speed;
-         Module_Text := Get_Widget(pathName => ".moduledialog.info");
       end if;
       case M_Type is
          when HULL =>
@@ -1564,7 +1556,7 @@ package body Bases.ShipyardUI is
    -- Show information about the selected module to install
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
+   -- Interp      - Tcl interpreter in which command was executed. Unused
    -- Argc        - Number of arguments passed to the command.
    -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -1577,7 +1569,7 @@ package body Bases.ShipyardUI is
    function Show_Install_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Cost: Positive := 1;
@@ -1592,10 +1584,6 @@ package body Bases.ShipyardUI is
                     (Index => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)))
                     .Name),
            Columns => 2);
-      Module_Text: constant Tk_Text :=
-        Create
-          (pathName => Module_Dialog & ".info",
-           options => "-height 10 -width 40");
       Frame: constant Ttk_Frame :=
         Create(pathName => Module_Dialog & ".buttonbox");
       Close_Button: constant Ttk_Button :=
@@ -1769,38 +1757,7 @@ package body Bases.ShipyardUI is
          Options =>
            "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
            " -column 1");
-      Tag_Configure
-        (TextWidget => Module_Text, TagName => "red",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-red)"));
-      Tag_Configure
-        (TextWidget => Module_Text, TagName => "green",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-green)"));
       Set_Module_Info(Installing => True, Row => Row);
-      configure
-        (Widgt => Module_Text,
-         options =>
-           "-state disabled -height" &
-           Positive'Image
-             (Positive'Value
-                (Count
-                   (TextWidget => Module_Text, Options => "-displaylines",
-                    Index1 => "0.0", Index2 => "end")) /
-              Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace"))));
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Module_Text, Options => "-padx 5 -pady {5 0} -columnspan 2");
       Set_Install_Button
         (E_Label => Error_Label, M_Index_2 => Money_Index_2, Cost2 => Cost);
       if cget(Widgt => Error_Label, option => "-text") = "" then
@@ -1927,7 +1884,7 @@ package body Bases.ShipyardUI is
    -- Show information about the selected module to remove
    -- PARAMETERS
    -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
+   -- Interp      - Tcl interpreter in which command was executed. Unused
    -- Argc        - Number of arguments passed to the command. Unused
    -- Argv        - Values of arguments passed to the command.
    -- SOURCE
@@ -1940,7 +1897,7 @@ package body Bases.ShipyardUI is
    function Show_Remove_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
@@ -1960,10 +1917,6 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".damage",
            options => "-orient horizontal -maximum 1.0");
-      Module_Text: constant Tk_Text :=
-        Create
-          (pathName => Module_Dialog & ".info",
-           options => "-height 10 -width 40");
       Label: Ttk_Label :=
         Create
           (pathName => Module_Dialog & ".gainlbl",
@@ -1981,24 +1934,6 @@ package body Bases.ShipyardUI is
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
-      Tag_Configure
-        (TextWidget => Module_Text, TagName => "green",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-green)"));
-      Tag_Configure
-        (TextWidget => Module_Text, TagName => "goldenyellow",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-goldenyellow)"));
       Damage_Percent :=
         Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
         Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
@@ -2043,12 +1978,7 @@ package body Bases.ShipyardUI is
              " minutes} -style Golden.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
-      configure(Widgt => Module_Text, options => "-state normal");
-      Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       Set_Module_Info(Installing => False, Row => 3);
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Module_Text,
-         Options => "-sticky we -padx 5 -pady 5 -columnspan 2");
       if Damage_Percent < 1.0 then
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
             Progress_Bar_Style :=
@@ -2111,18 +2041,6 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label, Options => "-sticky w -padx 5 -columnspan 2");
       end if;
-      configure
-        (Widgt => Module_Text,
-         options =>
-           "-state disabled -height" &
-           Positive'Image
-             (Positive'Value
-                (Count
-                   (TextWidget => Module_Text, Options => "-displaylines",
-                    Index1 => "0.0", Index2 => "end")) /
-              Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-              1));
       Remove_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
