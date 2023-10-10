@@ -280,14 +280,6 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string =
   return ""
 
 proc moveShip*(x, y: int; message: var string): Natural =
-
-  proc needRest(order: CrewOrders): bool =
-    if findMember(order = order) == -1:
-      for member in playerShip.crew:
-        if member.previousOrder == order:
-          return true
-    return false
-
   case playerShip.speed
   of docked:
     message = "First you must undock your ship from the base."
@@ -300,7 +292,7 @@ proc moveShip*(x, y: int; message: var string): Natural =
   message = haveOrderRequirements()
   if message.len > 0:
     return 0
-  let fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  var fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
   if fuelIndex == -1:
     message = "You don't have any fuel."
     return 0
@@ -309,6 +301,58 @@ proc moveShip*(x, y: int; message: var string): Natural =
     message = "You don't have enough fuel (" & itemsList[playerShip.cargo[
         fuelIndex].protoIndex].name & ")."
     return 0
+  let speed = realSpeed(ship = playerShip).float / 1_000.0
+  if speed < 0.5:
+    message = "You can't fly because your ship is overloaded."
+    return 0
+  let
+    newX = playerShip.skyX + x
+    newY = playerShip.skyY + y
+  if newX < 1 or newX > 1_024 or newY < 1 or newY > 1_024:
+    return 0;
+  playerShip.skyX = newX
+  playerShip.skyY = newY
+  updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+      fuelIndex].protoIndex, amount = fuelNeeded)
+  var timePassed = (100.0 / speed).int
+  if timePassed > 0:
+    case playerShip.speed
+    of quarterSpeed:
+      if timePassed < 60:
+        timePassed = 60
+    of halfSpeed:
+      if timePassed < 30:
+        timePassed = 30
+    of fullSpeed:
+      if timePassed < 15:
+        timePassed = 15
+    else:
+      discard
+    updateGame(minutes = timePassed)
+    fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
+    if fuelIndex == -1:
+      addMessage(message = "Ship falls from the sky due to a lack of fuel.",
+          mType = otherMessage, color = red)
+      death(memberIndex = 0, reason = "fall ot the ship", ship = playerShip)
+      return 0
+
+  proc needRest(order: CrewOrders): bool =
+    if findMember(order = order) == -1:
+      for member in playerShip.crew:
+        if member.previousOrder == order:
+          return true
+    return false
+
+  if "sentientships" notin factionsList[playerShip.crew[0].faction].flags:
+    if needRest(order = pilot):
+      if not gameSettings.autoRest:
+        return 6
+      return 8
+    if needRest(order = engineer):
+      if not gameSettings.autoRest:
+        return 7
+      return 8
+  return 1
 
 # Temporary code for interfacing with Ada
 
