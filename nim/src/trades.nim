@@ -185,6 +185,10 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
     NoTraderError, NoFreeCargoError, NoMoneyError, NotEnoughMoneyError,
     KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Buy the selected item from the trader
+  ##
+  ## * baseItemIndex - the index of the item to buy in the trader's cargo
+  ## * amount        - the amount of the item to buy
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
