@@ -17,7 +17,9 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
+--## rule off REDUCEABLE_SCOPE
 with Items; use Items;
+--## rule on REDUCEABLE_SCOPE
 with Ships; use Ships;
 
 -- ****h* Trades/Trades
@@ -113,8 +115,7 @@ package Trades is
    -- SOURCE
    procedure Buy_Items
      (Base_Item_Index: BaseCargo_Container.Extended_Index; Amount: String) with
-      Pre => Amount'Length > 0,
-      Test_Case => (Name => "Test_BuyItems", Mode => Nominal);
+      Pre => Amount'Length > 0;
       -- ****
 
       -- ****f* Trades/Trades.Sell_Items
