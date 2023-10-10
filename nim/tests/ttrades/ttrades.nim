@@ -2,7 +2,8 @@ discard """
   exitcode: 0
   output: '''Loading the game data.
 Testing generateTraderCargo.
-Testing sellItems.'''
+Testing sellItems.
+Testing buyItems.'''
 """
 
 import std/tables
@@ -25,7 +26,6 @@ if protoShipsList.len == 0:
 if basesTypesList.len == 0:
   loadBasesTypes("../bin/data/bases.dat")
 
-skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 playerShip.skyX = 1
 playerShip.skyY = 1
 playerShip.crew = @[]
@@ -58,6 +58,7 @@ skyMap[1][1].eventIndex = -1
 skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
+skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 for i in 2 .. 100:
   skyBases[i].population = 100
 generateCargo()
@@ -72,3 +73,7 @@ except AssertionDefect:
 
 echo "Testing sellItems."
 sellItems(1, "1")
+
+echo "Testing buyItems."
+generateCargo()
+buyItems(2, "1")
