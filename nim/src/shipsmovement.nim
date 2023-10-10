@@ -279,6 +279,37 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string =
   playerShip.speed = speedValue
   return ""
 
+proc moveShip*(x, y: int; message: var string): Natural =
+
+  proc needRest(order: CrewOrders): bool =
+    if findMember(order = order) == -1:
+      for member in playerShip.crew:
+        if member.previousOrder == order:
+          return true
+    return false
+
+  case playerShip.speed
+  of docked:
+    message = "First you must undock your ship from the base."
+    return 0
+  of fullStop:
+    message = "First you must set the speed of your ship."
+    return 0
+  else:
+    discard
+  message = haveOrderRequirements()
+  if message.len > 0:
+    return 0
+  let fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  if fuelIndex == -1:
+    message = "You don't have any fuel."
+    return 0
+  let fuelNeeded = countFuelNeeded()
+  if playerShip.cargo[fuelIndex].amount < fuelNeeded:
+    message = "You don't have enough fuel (" & itemsList[playerShip.cargo[
+        fuelIndex].protoIndex].name & ")."
+    return 0
+
 # Temporary code for interfacing with Ada
 
 proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
