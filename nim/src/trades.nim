@@ -181,7 +181,10 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     eventsList[eventIndex].time = eventsList[eventIndex].time + 5
   updateGame(minutes = 5)
 
-proc buyItems*(baseItemIndex: Natural; amount: string) =
+proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
+    NoTraderError, NoFreeCargoError, NoMoneyError, NotEnoughMoneyError,
+    KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
