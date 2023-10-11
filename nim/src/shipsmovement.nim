@@ -264,7 +264,8 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
       else:
         discard
 
-proc changeShipSpeed*(speedValue: ShipSpeed): string =
+proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
+    KeyError], tags: [].} =
   var haveEngine = false
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and (module.durability > 0 and
