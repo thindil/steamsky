@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -14,28 +14,28 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Latin_1;
+with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Interfaces.C.Strings;
+with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
@@ -52,6 +52,8 @@ package body Messages.UI is
      (Message: Message_Data; Messages_View: Tk_Text;
       Messages_Type: Message_Type) is
       -- ****
+      use Ada.Characters.Latin_1;
+
       Message_Tag: constant String :=
         (if Message.Color /= WHITE then
            " [list " & To_Lower(Item => Message_Color'Image(Message.Color)) &
@@ -92,6 +94,15 @@ package body Messages.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Interfaces.C.Strings;
+      use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Winfo;
+
       Messages_Frame: Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".messagesframe", Interp => Interp);
@@ -242,6 +253,8 @@ package body Messages.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Dialogs;
+
    begin
       Show_Question
         (Question => "Are you sure you want to clear all messages?",
@@ -273,6 +286,8 @@ package body Messages.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings.Fixed;
+
       Frame_Name: constant String :=
         Main_Paned & ".messagesframe.canvas.messages";
       Type_Box: constant Ttk_ComboBox :=
