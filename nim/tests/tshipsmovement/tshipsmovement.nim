@@ -5,7 +5,8 @@ Testing waitInPlace.
 Testing realSpeed.
 Testing dockShip.
 Testing countFuelNeeded.
-Testing changeShipSpeed.'''
+Testing changeShipSpeed.
+Testing moveShip.'''
 """
 
 import std/tables
@@ -106,6 +107,7 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
     MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
     experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+
 echo "Testing changeShipSpeed."
 try:
   assert changeShipSpeed(fullSpeed).len == 0
@@ -123,3 +125,17 @@ try:
   assert dockShip(true).len == 0
 except AssertionDefect:
   writeLine(stderr, "Failed to dock the ship again to the base, second time.")
+
+echo "Testing moveShip."
+var
+  newX, newY = 1
+  message = ""
+playerShip.speed = fullSpeed
+try:
+  assert moveShip(newX, newY, message) != 0
+except AssertionDefect:
+  writeLine(stderr, message)
+if playerShip.skyX != 2:
+  writeLine(stderr, "Failed to move the player's ship in X axis")
+if playerShip.skyY != 2:
+  writeLine(stderr, "Failed to move the player's ship in Y axis")
