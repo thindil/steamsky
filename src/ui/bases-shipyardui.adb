@@ -42,7 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with Bases.Ship;
-with Config; use Config;
+with Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Maps;
@@ -112,6 +112,7 @@ package body Bases.ShipyardUI is
       use Tcl.Tk.Ada.Widgets.TtkEntry;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Config;
       use Maps;
       use Maps.UI;
       use Tiny_String;
@@ -899,7 +900,7 @@ package body Bases.ShipyardUI is
             Module_Label :=
               Create
                 (pathName => ".moduledialog.qualitylbl",
-                 options => "-text {Quality:}");
+                 options => "-text {Quality: }");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             if Installing and then Ship_Module_Index > 0 then
@@ -1199,7 +1200,7 @@ package body Bases.ShipyardUI is
             Module_Label :=
               Create
                 (pathName => ".moduledialog.ammolbl",
-                 options => "-text {Ammunition:}");
+                 options => "-text {Ammunition: }");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
             Ammunition_Info_Loop :
@@ -1378,7 +1379,7 @@ package body Bases.ShipyardUI is
          when others =>
             null;
       end case;
-      if M_Type = ARMOR and not Installing then
+      if M_Type in ARMOR | TURRET and not Installing then
          New_Row := New_Row - 1;
       end if;
       if M_Type not in HULL | ARMOR then
@@ -1920,7 +1921,7 @@ package body Bases.ShipyardUI is
       Label: Ttk_Label :=
         Create
           (pathName => Module_Dialog & ".gainlbl",
-           options => "-text {Remove gain:}");
+           options => "-text {Remove gain: }");
       Remove_Button: Ttk_Button;
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
@@ -1957,24 +1958,29 @@ package body Bases.ShipyardUI is
         Create
           (pathName => Module_Dialog & ".gain",
            options =>
-             "-text {" & Positive'Image(Cost) & " " &
-             To_String(Source => Money_Name) & "} -style Headergreen.TLabel");
+             "-text {" & Trim(Source => Positive'Image(Cost), Side => Left) &
+             " " & To_String(Source => Money_Name) &
+             "} -style Headergreen.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Label, Options => "-sticky w -padx 5 -row 1 -column 1");
       Label :=
         Create
           (pathName => Module_Dialog & ".timelbl",
-           options => "-text {Removing time:}");
+           options => "-text {Removing time: }");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
       Label :=
         Create
           (pathName => Module_Dialog & ".time",
            options =>
              "-text {" &
-             Positive'Image
-               (Get_Module
-                  (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                  .Install_Time) &
+             Trim
+               (Source =>
+                  Positive'Image
+                    (Get_Module
+                       (Index =>
+                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                       .Install_Time),
+                Side => Left) &
              " minutes} -style Golden.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
