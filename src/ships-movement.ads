@@ -36,21 +36,20 @@ package Ships.Movement is
    -- Message
    -- SOURCE
    function Move_Ship
-     (X, Y: Integer; Message: in out Unbounded_String) return Natural with
-      Test_Case => (Name => "Test_MoveShip", Mode => Robustness);
-      -- ****
+     (X, Y: Integer; Message: in out Unbounded_String) return Natural;
+     -- ****
 
-      -- ****f* SMovement/SMovement.Dock_Ship
-      -- FUNCTION
-      -- Dock/Undock ship at base
-      -- PARAMETERS
-      -- Docking - If true, ship docks to the base, otherwise false
-      -- Escape  - If true, the player is trying to escape from the base
-      --           without paying. Default value is False
-      -- RESULT
-      -- Empty string if operation was succesfull, otherwise message what goes
-      -- wrong
-      -- SOURCE
+     -- ****f* SMovement/SMovement.Dock_Ship
+     -- FUNCTION
+     -- Dock/Undock ship at base
+     -- PARAMETERS
+     -- Docking - If true, ship docks to the base, otherwise false
+     -- Escape  - If true, the player is trying to escape from the base
+     --           without paying. Default value is False
+     -- RESULT
+     -- Empty string if operation was succesfull, otherwise message what goes
+     -- wrong
+     -- SOURCE
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String;
       -- ****
