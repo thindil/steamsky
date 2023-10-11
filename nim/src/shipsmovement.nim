@@ -266,6 +266,12 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
 
 proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
     KeyError], tags: [].} =
+  ## Change the player's ship's speed
+  ##
+  ## * speeedValue - the new value for the player's ship's speed
+  ##
+  ## Returns an empty string if the speed was changed successfully, otherwise
+  ## returns a message with information what goes wrong.
   var haveEngine = false
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and (module.durability > 0 and
