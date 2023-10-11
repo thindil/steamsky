@@ -286,7 +286,9 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
   playerShip.speed = speedValue
   return ""
 
-proc moveShip*(x, y: int; message: var string): Natural =
+proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
+    KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   case playerShip.speed
   of docked:
     message = "First you must undock your ship from the base."
