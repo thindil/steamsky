@@ -390,3 +390,13 @@ proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [], expor
     return changeShipSpeed(speedValue = speedValue.ShipSpeed).cstring
   except KeyError:
     return ""
+
+proc moveAdaShip(x, y: cint; message: var cstring): cint {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  var mesg = ""
+  try:
+    result = moveShip(x, y, mesg).cint
+    message = mesg.cstring
+  except ValueError, IOError, Exception:
+    result = 0
+    message = ""
