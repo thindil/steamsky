@@ -24,7 +24,7 @@ package body Ships.Movement is
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       Nim_Message: chars_ptr;
-      Result: Natural := 0;
+      Result: Natural;
       function Move_Ada_Ship
         (Nx, Ny: Integer; Msg: out chars_ptr) return Natural with
          Import => True,
