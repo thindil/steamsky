@@ -565,8 +565,8 @@ package body Bases.ShipyardUI is
          configure
            (Widgt => Module_Label,
             options =>
-              "-text {" & Positive'Image(Cost) & " " &
-              To_String(Source => Money_Name) & "} " &
+              "-text {" & Trim(Source => Positive'Image(Cost), Side => Left) &
+              " " & To_String(Source => Money_Name) & "} " &
               (if
                  Money_Index_2 = 0
                  or else
@@ -581,8 +581,11 @@ package body Bases.ShipyardUI is
            (Widgt => Module_Label,
             options =>
               "-text {" &
-              Positive'Image
-                (Get_Module(Index => Get_Module_Index).Install_Time) &
+              Trim
+                (Source =>
+                   Positive'Image
+                     (Get_Module(Index => Get_Module_Index).Install_Time),
+                 Side => Left) &
               " minutes} -style Golden.TLabel");
       else
          Ship_Module_Index := Get_Module_Index;
@@ -912,19 +915,19 @@ package body Bases.ShipyardUI is
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {minimal (worse)} -style Headerred.TLabel");
+                            "-text { minimal (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {minimal (better)} -style Headergreen.TLabel");
+                            "-text { minimal (better)} -style Headergreen.TLabel");
                   else
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
-                          options => "-text {minimal} -style Golden.TLabel");
+                          options => "-text { minimal} -style Golden.TLabel");
                   end if;
                --## rule on SIMPLIFIABLE_STATEMENTS
                elsif Max_Value < 60 then
@@ -934,19 +937,19 @@ package body Bases.ShipyardUI is
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {basic (worse)} -style Headerred.TLabel");
+                            "-text { basic (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {basic (better)} -style Headergreen.TLabel");
+                            "-text { basic (better)} -style Headergreen.TLabel");
                   else
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
-                          options => "-text {basic} -style Golden.TLabel");
+                          options => "-text { basic} -style Golden.TLabel");
                   end if;
                elsif Max_Value < 80 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
@@ -955,19 +958,19 @@ package body Bases.ShipyardUI is
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {extended (worse)} -style Headerred.TLabel");
+                            "-text { extended (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {extended (better)} -style Headergreen.TLabel");
+                            "-text { extended (better)} -style Headergreen.TLabel");
                   else
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
-                          options => "-text {extended} -style Golden.TLabel");
+                          options => "-text { extended} -style Golden.TLabel");
                   end if;
                else
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
@@ -976,19 +979,19 @@ package body Bases.ShipyardUI is
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {luxury (worse)} -style Headerred.TLabel");
+                            "-text { luxury (worse)} -style Headerred.TLabel");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
                           options =>
-                            "-text {luxury (better)} -style Headergreen.TLabel");
+                            "-text { luxury (better)} -style Headergreen.TLabel");
                   else
                      Module_Label :=
                        Create
                          (pathName => ".moduledialog.quality",
-                          options => "-text {luxury} -style Golden.TLabel");
+                          options => "-text { luxury} -style Golden.TLabel");
                   end if;
                end if;
             else
@@ -998,22 +1001,22 @@ package body Bases.ShipyardUI is
                   Module_Label :=
                     Create
                       (pathName => ".moduledialog.quality",
-                       options => "-text {minimal} -style Golden.TLabel");
+                       options => "-text { minimal} -style Golden.TLabel");
                elsif Max_Value < 60 then
                   Module_Label :=
                     Create
                       (pathName => ".moduledialog.quality",
-                       options => "-text {basic} -style Golden.TLabel");
+                       options => "-text { basic} -style Golden.TLabel");
                elsif Max_Value < 80 then
                   Module_Label :=
                     Create
                       (pathName => ".moduledialog.quality",
-                       options => "-text {extended} -style Golden.TLabel");
+                       options => "-text { extended} -style Golden.TLabel");
                else
                   Module_Label :=
                     Create
                       (pathName => ".moduledialog.quality",
-                       options => "-text {luxury} -style Golden.TLabel");
+                       options => "-text { luxury} -style Golden.TLabel");
                end if;
                --## rule on SIMPLIFIABLE_STATEMENTS
             end if;
@@ -1079,6 +1082,9 @@ package body Bases.ShipyardUI is
                  options => "-text {Max workers:}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+            if Installing and then Ship_Module_Index = 0 then
+               New_Row := New_Row + 1;
+            end if;
             if Installing and then Ship_Module_Index > 0 then
                if Get_Module
                    (Index =>
@@ -1131,6 +1137,9 @@ package body Bases.ShipyardUI is
                  options => "-text {Strength:}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+            if Installing and then Ship_Module_Index = 0 then
+               New_Row := New_Row + 1;
+            end if;
             if Installing and then Ship_Module_Index > 0 then
                if M_Type = GUN then
                   if Player_Ship.Modules(Ship_Module_Index).Damage >
@@ -1331,6 +1340,9 @@ package body Bases.ShipyardUI is
                New_Row := New_Row + 1;
             end if;
          when BATTERING_RAM =>
+            if Installing and then Ship_Module_Index = 0 then
+               New_Row := New_Row + 1;
+            end if;
             Module_Label :=
               Create
                 (pathName => ".moduledialog.strengthlbl",
@@ -1458,7 +1470,7 @@ package body Bases.ShipyardUI is
          Module_Label :=
            Create
              (pathName => ".moduledialog.repairlbl",
-              options => "-text {Repair/Upgrade material:}");
+              options => "-text {Repair/Upgrade material: }");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
          M_Amount := 0;
@@ -1491,7 +1503,7 @@ package body Bases.ShipyardUI is
          Module_Label :=
            Create
              (pathName => ".moduledialog.repair2lbl",
-              options => "-text {Repair/Upgrade skill:}");
+              options => "-text {Repair/Upgrade skill: }");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
          Module_Label :=
