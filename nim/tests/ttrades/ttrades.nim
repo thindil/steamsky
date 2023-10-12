@@ -76,4 +76,5 @@ sellItems(1, "1")
 
 echo "Testing buyItems."
 generateCargo()
+updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2)
 buyItems(2, "1")
