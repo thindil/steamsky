@@ -52,7 +52,8 @@ func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
     elif coord > MapYRange.high:
       coord = MapYRange.high
 
-proc countDistance*(destinationX: MapXRange; destinationY: MapYRange): Natural =
+proc countDistance*(destinationX: MapXRange;
+    destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [].} =
   var
     diffX: float = ((playerShip.skyX - destinationX).abs).float
     diffY: float = ((playerShip.skyY - destinationY).abs).float
