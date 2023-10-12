@@ -289,6 +289,16 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
 proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
     KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Move the player's ship on the map
+  ##
+  ## * x       - the amount of fields in X axis by which the ship will be moved
+  ## * y       - the amount of fields in Y axis by which the ship will be moved
+  ## * message - if the ship can't be moved, a message with information why,
+  ##             otherwise an empty string.
+  ##
+  ## 1 if ship was moved, 0 if not, 8 if moved but the crew members need a rest,
+  ## 6 if moved and the pilot was on rest after and 7 if moved and the engineer
+  ## was on rest. Last two are only when auto rest option is enabled.
   case playerShip.speed
   of docked:
     message = "First you must undock your ship from the base."
