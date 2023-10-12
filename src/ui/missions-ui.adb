@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ package body Missions.UI is
    function Count_Missions_Amount return Natural is
       -- ****
       Missions_Limit: Natural;
-      Mission: Mission_Data;
+      Mission: Mission_Data := Empty_Mission;
    begin
       Missions_Limit :=
         (case Sky_Bases
@@ -161,7 +161,7 @@ package body Missions.UI is
       Rows: Natural := 0;
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
-      Mission_Time: Unbounded_String;
+      Mission_Time: Unbounded_String := Null_Unbounded_String;
       Can_Accept: Boolean := True;
       Cabin_Taken: Boolean := False;
    begin
