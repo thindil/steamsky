@@ -15,27 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Elementary_Functions;
-with Ships;
-
 package body Maps is
-
-   function Count_Distance
-     (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range) return Natural is
-      use Ada.Numerics.Elementary_Functions;
-      use Ships;
-
-      Diff_X: Natural range 0 .. Map_X_Range'Last;
-      Diff_Y: Natural range 0 .. Map_Y_Range'Last;
-      Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
-   begin
-      Diff_X := abs (Player_Ship.Sky_X - Destination_X);
-      Diff_Y := abs (Player_Ship.Sky_Y - Destination_Y);
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Distance := Sqrt(X => Float((Diff_X**2) + (Diff_Y**2)));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      return Natural(Float'Floor(Distance));
-   end Count_Distance;
 
    procedure Normalize_Coord
      (Coord: in out Integer; Is_X_Axis: Boolean := True) is

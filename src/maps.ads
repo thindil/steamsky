@@ -69,7 +69,9 @@ package Maps is
    function Count_Distance
      (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range)
       return Natural with
-      Test_Case => (Name => "Test_CountDistance", Mode => Robustness);
+      Import => True,
+      Convention => C,
+      External_Name => "countAdaDistance";
       -- ****
 
       -- ****f* Maps/Maps.Normalize_Coord
