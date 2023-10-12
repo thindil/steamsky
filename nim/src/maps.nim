@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import types
+import std/math
+import game, types
 
 type SkyCell* = object
   ## Used to store information about the map's cell
@@ -51,6 +52,13 @@ func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
     elif coord > MapYRange.high:
       coord = MapYRange.high
 
+proc countDistance*(destinationX: MapXRange; destinationY: MapYRange): Natural =
+  var
+    diffX: float = ((playerShip.skyX - destinationX).abs).float
+    diffY: float = ((playerShip.skyY - destinationY).abs).float
+  return (sqrt((diffX^2) + (diffY^2))).floor.Natural
+
+
 # Temporary code for interfacing with Ada
 
 proc getAdaMapCell(x, y, baseIndex, visited, eventIndex,
@@ -65,3 +73,7 @@ proc setAdaMapCell(x, y: cint; baseIndex, visited, eventIndex,
   visited = skyMap[x][y].visited.ord.cint
   eventIndex = skyMap[x][y].eventIndex.cint + 1
   missionIndex = skyMap[x][y].missionIndex.cint + 1
+
+proc countAdaDistance(destinationX, destinationY: cint): cint {.raises: [],
+    tags: [], exportc.} =
+  return countDistance(destinationX, destinationY).cint
