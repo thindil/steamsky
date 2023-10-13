@@ -54,6 +54,13 @@ func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
 
 proc countDistance*(destinationX: MapXRange;
     destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [].} =
+  ## Count the distance between the player's ship and the point on the map
+  ##
+  ## * destinationX - the X position of the point to which the distance will be count
+  ## * destinationY - the Y position of the point to which the distance will be count
+  ##
+  ## The distance between the player's ship position and the selected point on the
+  ## map.
   var
     diffX: float = ((playerShip.skyX - destinationX).abs).float
     diffY: float = ((playerShip.skyY - destinationY).abs).float
