@@ -69,74 +69,58 @@ package body Bases.Trade is
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
       Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) is
-      use Tiny_String;
+      use Interfaces.C;
 
-      Base_Index: constant Bases_Range :=
+      Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Money_Index_2: Inventory_Container.Extended_Index;
-      Price: Natural;
-      Recruit: constant Recruit_Data :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Recruit_Index);
-      Morale: Skill_Range;
-      Inventory: Inventory_Container.Vector (Capacity => 32);
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      Result: chars_ptr;
+      Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
+      Space_Index: Natural := 0;
+      function Hire_Ada_Recruit
+        (R_Index, C, D_Payment, T_Payment, C_Length: Integer)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "hireAdaRecruit";
    begin
-      if Trader_Index = 0 then
-         raise Trade_No_Trader;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Ada_Recruits
+        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+      Get_Game_Date;
+      Result :=
+        Hire_Ada_Recruit
+          (R_Index => Recruit_Index, C => Cost, D_Payment => Daily_Payment,
+           T_Payment => Trade_Payment, C_Length => Contract_Length);
+      if Strlen(Item => Result) > 0 then
+         Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
+         Space_Index := Index(Source => Ada_Result, Pattern => " ");
+         if Space_Index > 0 then
+            Exception_Name :=
+              Unbounded_Slice
+                (Source => Ada_Result, Low => 1, High => Space_Index - 1);
+         end if;
+         if Exception_Name =
+           To_Unbounded_String(Source => "NoTraderError") then
+            raise Trade_No_Trader;
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "NoMoneyError") then
+            raise Trade_No_Money
+              with Slice
+                (Source => Ada_Result, Low => Space_Index + 1,
+                 High => Length(Source => Ada_Result));
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "NotEnoughMoneyError") then
+            raise Trade_Not_Enough_Money
+              with Slice
+                (Source => Ada_Result, Low => Space_Index + 1,
+                 High => Length(Source => Ada_Result));
+         end if;
       end if;
-      Price := Cost;
-      Count_Price(Price => Price, Trader_Index => Trader_Index);
-      Money_Index_2 :=
-        Check_Money
-          (Price => Price, Message => To_String(Source => Recruit.Name));
-      Add_Recruit_Inventory_Loop :
-      for Item of Recruit.Inventory loop
-         Inventory_Container.Append
-           (Container => Inventory,
-            New_Item =>
-              (Proto_Index => Item, Amount => 1, Name => Null_Bounded_String,
-               Durability => Default_Item_Durability, Price => 0));
-      end loop Add_Recruit_Inventory_Loop;
-      if Get_Faction(Index => Sky_Bases(Base_Index).Owner).Flags.Contains
-          (Item => To_Unbounded_String(Source => "nomorale")) then
-         Morale := 50;
-      else
-         Morale :=
-           (if 50 + Sky_Bases(Base_Index).Reputation.Level > 100 then 100
-            else 50 + Sky_Bases(Base_Index).Reputation.Level);
-      end if;
-      Player_Ship.Crew.Append
-        (New_Item =>
-           (Amount_Of_Attributes => Attributes_Amount,
-            Amount_Of_Skills => Skills_Amount, Name => Recruit.Name,
-            Gender => Recruit.Gender, Health => 100, Tired => 0,
-            Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => REST,
-            Previous_Order => REST, Order_Time => 15, Orders => (others => 0),
-            Attributes => Recruit.Attributes, Inventory => Inventory,
-            Equipment => Recruit.Equipment,
-            Payment => (1 => Daily_Payment, 2 => Trade_Payment),
-            Contract_Length => Contract_Length,
-            Morale => (1 => Morale, 2 => 0), Loyalty => Morale,
-            Home_Base => Recruit.Home_Base, Faction => Recruit.Faction));
-      Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-         Amount => -(Price));
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Gain_Rep(Base_Index => Base_Index, Points => 1);
-      Add_Message
-        (Message =>
-           "You hired " & To_String(Source => Recruit.Name) & " for" &
-           Positive'Image(Price) & " " & To_String(Source => Money_Name) & ".",
-         M_Type => TRADEMESSAGE);
-      Recruit_Container.Delete
-        (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
-      Sky_Bases(Base_Index).Population := Sky_Bases(Base_Index).Population - 1;
-      Update_Game(Minutes => 5);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Ada_Recruits
+        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
    end Hire_Recruit;
 
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
