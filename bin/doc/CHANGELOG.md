@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Typos in the changelog
 - Loading the player's ship's upgrade and repair priority statuses
 - Loading do the sky base is known to the player
+- Crash when trying to sell the ship's module which has owners
 
 ## [9.2] - 2023-10-01
 
