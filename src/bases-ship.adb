@@ -515,14 +515,21 @@ package body Bases.Ship is
             end loop Remove_Upgrade_Order_Loop;
          end if;
          if Player_Ship.Modules(Ship_Module_Index).M_Type /= CABIN then
-            Give_Rest_Order_Loop :
-            for Owner of Player_Ship.Modules(Ship_Module_Index).Owner loop
-               if Owner > 0 then
-                  Give_Orders
-                    (Ship => Player_Ship, Member_Index => Owner,
-                     Given_Order => REST, Check_Priorities => False);
-               end if;
-            end loop Give_Rest_Order_Loop;
+            Give_Rest_Order_Block :
+            declare
+               Owners: constant Natural_Container.Vector :=
+                 Player_Ship.Modules(Ship_Module_Index).Owner;
+            begin
+               Give_Rest_Order_Loop :
+               for Owner of Owners loop
+                  if Owner > 0 then
+                     Give_Orders
+                       (Ship => Player_Ship, Member_Index => Owner,
+                        Given_Order => REST, Check_Priorities => False);
+                  end if;
+               end loop Give_Rest_Order_Loop;
+               Player_Ship.Modules(Ship_Module_Index).Owner := Owners;
+            end Give_Rest_Order_Block;
          end if;
          Update_Cargo
            (Ship => Player_Ship, Cargo_Index => Money_Index_2,
