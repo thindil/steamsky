@@ -19,7 +19,7 @@ import std/tables
 import bases, game, game2, crewinventory, maps, messages, shipscargo, shipscrew,
     trades, types
 
-proc checkMoney(price: Positive; message: string = ""): Positive =
+proc checkMoney(price: Positive; message: string = ""): int =
   result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   if result == -1:
     raise newException(exceptn = NoMoneyError, message = message)
