@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, game, crewinventory, maps, shipscrew, trades, types
+import bases, game, game2, crewinventory, maps, messages, shipscargo, shipscrew,
+    trades, types
 
 proc checkMoney(price: Positive; message: string = ""): Positive =
   result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
@@ -53,5 +54,25 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       equipment: recruit.equipment, payment: [1: dailyPayment, 2: tradePayment],
       contractLength: contractLength, morale: [1: morale, 2: 0],
       loyalty: morale, homeBase: recruit.homeBase, faction: recruit.faction))
-  let
-    moneyIndex2 = checkMoney(price = price, message = recruit.name)
+  let moneyIndex2 = checkMoney(price = price, message = recruit.name)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  gainRep(baseIndex = baseIndex, points = 1)
+  addMessage(message = "You hired " & recruit.name & " for " & $price & " " &
+      moneyName & ".", mType = tradeMessage)
+  skyBases[baseIndex].recruits.delete(recruitIndex)
+  skyBases[baseIndex].population.dec
+  updateGame(minutes = 5)
+
+# Temporary code for interfacing with Ada
+
+proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
+    contractLength: cint): cstring {.raises: [], tags: [WriteIOEffect,
+    RootEffect], exportc.} =
+  try:
+    hireRecruit(recruitIndex = recruitIndex, cost = cost,
+        dailyPayment = dailyPayment, tradePayment = tradePayment,
+        contractLength = contractLength)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
