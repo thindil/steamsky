@@ -59,7 +59,19 @@ package body Missions.UI is
    Base_Index: Natural;
    -- ****
 
-   -- ****o* MUI3/MIU3.Show_Mission_Command
+   -- ****if* MUI3/MUI3.Get_Base_Index
+   -- FUNCTION
+   -- Get the base index
+   -- RESULT
+   -- The current base index in the list of bases
+   -- SOURCE
+   function Get_Base_Index return Natural is
+      -- ****
+   begin
+      return Base_Index;
+   end Get_Base_Index;
+
+   -- ****if* MUI3/MIU3.Show_Mission_Command
    -- FUNCTION
    -- Show mission on map
    -- PARAMETERS
@@ -92,9 +104,9 @@ package body Missions.UI is
            Argv =>
              CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
              Map_X_Range'Image
-               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_X) &
+               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
              Map_Y_Range'Image
-               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_Y));
+               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y));
    end Show_Mission_Command;
 
    -- ****iv* MUI3/MUI3.Missions_Table
@@ -159,7 +171,9 @@ package body Missions.UI is
 
       Row: Positive := 2;
       Rows: Natural := 0;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String := Null_Unbounded_String;
       Can_Accept: Boolean := True;
@@ -267,6 +281,7 @@ package body Missions.UI is
                   Column => 4);
             when DESTROY =>
                if List(I).Ship_Index = 0 then
+                  --## rule off IMPROPER_INITIALIZATION
                   Get_Enemy_Name_Block :
                   declare
                      Enemies: Positive_Container.Vector;
@@ -279,6 +294,7 @@ package body Missions.UI is
                             (Min => Enemies.First_Index,
                              Max => Enemies.Last_Index));
                   end Get_Enemy_Name_Block;
+                  --## rule on IMPROPER_INITIALIZATION
                end if;
                Add_Button
                  (Table => Missions_Table,
@@ -398,14 +414,14 @@ package body Missions.UI is
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      Sky_Bases(Base_Index).Missions(Mission_Index).Multiplier :=
+      Sky_Bases(Get_Base_Index).Missions(Mission_Index).Multiplier :=
         Reward_Multiplier
           (Float'Value
              (Tcl_GetVar(interp => Get_Context, varName => "reward")) /
            100.0);
       Accept_Mission(Mission_Index => Mission_Index);
       if Count_Missions_Amount > 0 then
-         Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions);
+         Refresh_Missions_List(List => Sky_Bases(Get_Base_Index).Missions);
          Update_Table(Table => Missions_Table);
          Update_Messages;
       else
@@ -495,12 +511,12 @@ package body Missions.UI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      if Sky_Bases(Base_Index).Missions.Length = 0 then
+      if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
       Refresh_Missions_List
-        (List => Sky_Bases(Base_Index).Missions,
+        (List => Sky_Bases(Get_Base_Index).Missions,
          Page =>
            (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
             else 1));
@@ -556,7 +572,7 @@ package body Missions.UI is
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission: constant Mission_Data :=
-        Sky_Bases(Base_Index).Missions(Mission_Index);
+        Sky_Bases(Get_Base_Index).Missions(Mission_Index);
       Mission_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
@@ -689,9 +705,9 @@ package body Missions.UI is
              "-text Show -image showicon -command {CloseDialog " &
              Mission_Dialog & ";set mappreview 1;ShowOnMap " &
              Map_X_Range'Image
-               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_X) &
+               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
              Map_Y_Range'Image
-               (Sky_Bases(Base_Index).Missions(Mission_Index).Target_Y) &
+               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y) &
              "} -style Dialog.TButton");
       Add(Widget => Button, Message => "Show the mission on the map");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
@@ -761,7 +777,7 @@ package body Missions.UI is
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Mission: constant Mission_Data :=
-        Sky_Bases(Base_Index).Missions(Mission_Index);
+        Sky_Bases(Get_Base_Index).Missions(Mission_Index);
       Mission_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
@@ -887,7 +903,7 @@ package body Missions.UI is
       Reward_Label: constant Ttk_Label :=
         Get_Widget(pathName => ".missiondialog.rewardlbl", Interp => Interp);
       Mission: constant Mission_Data :=
-        Sky_Bases(Base_Index).Missions(Mission_Index);
+        Sky_Bases(Get_Base_Index).Missions(Mission_Index);
       Value: constant Natural :=
         Natural
           (Float'Value(Tcl_GetVar(interp => Interp, varName => "reward")));
@@ -993,7 +1009,7 @@ package body Missions.UI is
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
       Local_Missions: Missions_Array
-        (1 .. Positive(Sky_Bases(Base_Index).Missions.Length));
+        (1 .. Positive(Sky_Bases(Get_Base_Index).Missions.Length));
       function "<"(Left, Right: Local_Mission_Data) return Boolean is
       begin
          if Missions_Sort_Order = TYPEASC
@@ -1092,36 +1108,40 @@ package body Missions.UI is
          return TCL_OK;
       end if;
       Fill_Local_Missions_Loop :
-      for I in Sky_Bases(Base_Index).Missions.Iterate loop
+      for I in Sky_Bases(Get_Base_Index).Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(Position => I)) :=
-           (M_Type => Sky_Bases(Base_Index).Missions(I).M_Type,
+           (M_Type => Sky_Bases(Get_Base_Index).Missions(I).M_Type,
             Distance =>
               Count_Distance
-                (Destination_X => Sky_Bases(Base_Index).Missions(I).Target_X,
-                 Destination_Y => Sky_Bases(Base_Index).Missions(I).Target_Y),
+                (Destination_X =>
+                   Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                 Destination_Y =>
+                   Sky_Bases(Get_Base_Index).Missions(I).Target_Y),
             Coords =>
               To_Unbounded_String
                 (Source =>
                    "X:" &
-                   Natural'Image(Sky_Bases(Base_Index).Missions(I).Target_X) &
+                   Natural'Image
+                     (Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
                    " Y:" &
-                   Natural'Image(Sky_Bases(Base_Index).Missions(I).Target_Y)),
+                   Natural'Image
+                     (Sky_Bases(Get_Base_Index).Missions(I).Target_Y)),
             Details =>
-              (case Sky_Bases(Base_Index).Missions(I).M_Type is
+              (case Sky_Bases(Get_Base_Index).Missions(I).M_Type is
                  when DELIVER =>
                    To_String
                      (Source =>
                         Get_Proto_Item
                           (Index =>
-                             Sky_Bases(Base_Index).Missions(I).Item_Index)
+                             Sky_Bases(Get_Base_Index).Missions(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
                      (Source =>
                         Sky_Bases
                           (Sky_Map
-                             (Sky_Bases(Base_Index).Missions(I).Target_X,
-                              Sky_Bases(Base_Index).Missions(I).Target_Y)
+                             (Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                              Sky_Bases(Get_Base_Index).Missions(I).Target_Y)
                              .Base_Index)
                           .Name),
                  when PATROL =>
@@ -1129,10 +1149,10 @@ package body Missions.UI is
                      (Source =>
                         "X:" &
                         Natural'Image
-                          (Sky_Bases(Base_Index).Missions(I).Target_X) &
+                          (Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
                         " Y:" &
                         Natural'Image
-                          (Sky_Bases(Base_Index).Missions(I).Target_Y)),
+                          (Sky_Bases(Get_Base_Index).Missions(I).Target_Y)),
                  when DESTROY =>
                    To_Unbounded_String
                      (Source =>
@@ -1140,29 +1160,30 @@ package body Missions.UI is
                           (Source =>
                              Get_Proto_Ship
                                (Proto_Index =>
-                                  Sky_Bases(Base_Index).Missions(I).Ship_Index)
+                                  Sky_Bases(Get_Base_Index).Missions(I)
+                                    .Ship_Index)
                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String
                      (Source =>
                         "X:" &
                         Natural'Image
-                          (Sky_Bases(Base_Index).Missions(I).Target_X) &
+                          (Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
                         " Y:" &
                         Natural'Image
-                          (Sky_Bases(Base_Index).Missions(I).Target_Y)),
+                          (Sky_Bases(Get_Base_Index).Missions(I).Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
                    To_String
                      (Source =>
                         Sky_Bases
                           (Sky_Map
-                             (Sky_Bases(Base_Index).Missions(I).Target_X,
-                              Sky_Bases(Base_Index).Missions(I).Target_Y)
+                             (Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                              Sky_Bases(Get_Base_Index).Missions(I).Target_Y)
                              .Base_Index)
                           .Name)),
-            Time => Sky_Bases(Base_Index).Missions(I).Time,
-            Reward => Sky_Bases(Base_Index).Missions(I).Reward,
+            Time => Sky_Bases(Get_Base_Index).Missions(I).Time,
+            Reward => Sky_Bases(Get_Base_Index).Missions(I).Reward,
             Id => Mission_Container.To_Index(Position => I));
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
@@ -1171,7 +1192,8 @@ package body Missions.UI is
       for Mission of Local_Missions loop
          Missions_Indexes.Append(New_Item => Mission.Id);
       end loop Fill_Missions_Indexes_Loop;
-      Refresh_Missions_List(List => Sky_Bases(Base_Index).Missions, Page => 1);
+      Refresh_Missions_List
+        (List => Sky_Bases(Get_Base_Index).Missions, Page => 1);
       Update_Table(Table => Missions_Table);
       return TCL_OK;
    end Sort_Available_Missions_Command;
