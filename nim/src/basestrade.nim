@@ -30,6 +30,13 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
     tradePayment: Natural; contractLength: int) {.sideEffect, raises: [
     NoTraderError, NoMoneyError, NotEnoughMoneyError, KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Hire the selected recruit in the current base
+  ##
+  ## * recruitIndex   - the index of the recruit on the base's recruits' list
+  ## * cost           - the initial cost of the recruit
+  ## * dailyPayment   - the daily payment for the recruit
+  ## * tradePayment   - the percent of trade gain as payment for the recruit
+  ## * contractLength - the length of the contract. 0 means infinite contract
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
