@@ -420,6 +420,7 @@ package body Missions.UI is
              (Tcl_GetVar(interp => Get_Context, varName => "reward")) /
            100.0);
       Accept_Mission(Mission_Index => Mission_Index);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Count_Missions_Amount > 0 then
          Refresh_Missions_List(List => Sky_Bases(Get_Base_Index).Missions);
          Update_Table(Table => Missions_Table);
@@ -428,6 +429,7 @@ package body Missions.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
@@ -487,6 +489,7 @@ package body Missions.UI is
            (Name => "ShowMission", Ada_Command => Show_Mission_Command'Access);
          Add_Command
            (Name => "SetMission", Ada_Command => Set_Mission_Command'Access);
+         --## rule off DIRECTLY_ACCESSED_GLOBALS
          Missions_Table :=
            Create_Table
              (Parent => Missions_Canvas & ".missions",
@@ -501,6 +504,7 @@ package body Missions.UI is
                 Get_Widget(pathName => Main_Paned & ".missionsframe.scrolly"),
               Command => "SortAvailableMissions",
               Tooltip_Text => "Press mouse button to sort the missions.");
+         --## rule on DIRECTLY_ACCESSED_GLOBALS
       elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
         Argc = 1 then
          Show_Sky_Map(Clear => True);
@@ -520,7 +524,9 @@ package body Missions.UI is
          Page =>
            (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
             else 1));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Update_Table(Table => Missions_Table);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       configure
         (Widgt => Missions_Canvas,
          options =>
@@ -587,7 +593,7 @@ package body Missions.UI is
       Mission_Info: Unbounded_String := Null_Unbounded_String;
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Mission_Dialog & ".buttons");
-      Button: Ttk_Button;
+      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
       Travel_Values: constant Travel_Array :=
         Travel_Info
           (Distance =>
@@ -678,7 +684,7 @@ package body Missions.UI is
                   exit Modules_Loop when Can_Accept;
                end if;
             end loop Modules_Loop;
-            if Base_Index = 0 then
+            if Get_Base_Index = 0 then
                Can_Accept := True;
             end if;
             configure
@@ -994,10 +1000,12 @@ package body Missions.UI is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Missions_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
@@ -1008,8 +1016,11 @@ package body Missions.UI is
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Missions: Missions_Array
         (1 .. Positive(Sky_Bases(Get_Base_Index).Missions.Length));
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Mission_Data) return Boolean is
       begin
          if Missions_Sort_Order = TYPEASC
@@ -1060,6 +1071,7 @@ package body Missions.UI is
          end if;
          return False;
       end "<";
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Mission_Data,
          Array_Type => Missions_Array);
