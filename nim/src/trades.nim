@@ -35,6 +35,9 @@ type
   NotEnoughMoneyError* = object of CatchableError
     ## Raised when the player doesn't have enough money to buy an item
 
+  CantBuyError* = object of CatchableError
+    ## Raised when the item is not available for sale
+
 proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
     KeyError], tags: [].} =
   ## Generate the list of items for trade.
