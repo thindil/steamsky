@@ -1175,7 +1175,7 @@ package body Bases.ShipyardUI is
                           options =>
                             "-text {" & Natural'Image(Max_Value) &
                             " (weaker)} -style Headerred.TLabel");
-                  elsif Player_Ship.Modules(Ship_Module_Index).Damage <
+                  elsif Player_Ship.Modules(Ship_Module_Index).Duration <
                     Max_Value then
                      Module_Label :=
                        Create
