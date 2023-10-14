@@ -27,7 +27,9 @@ proc checkMoney(price: Positive; message: string = ""): int =
     raise newException(exceptn = NotEnoughMoneyError, message = message)
 
 proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
-    tradePayment: Natural; contractLength: int) =
+    tradePayment: Natural; contractLength: int) {.sideEffect, raises: [
+    NoTraderError, NoMoneyError, NotEnoughMoneyError, KeyError, IOError,
+    Exception], tags: [WriteIOEffect, RootEffect].} =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
