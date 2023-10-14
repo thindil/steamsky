@@ -978,7 +978,7 @@ package body Bases.ShipyardUI is
                         Text =>
                           "{" & Natural'Image(Max_Value) &
                           " (weaker)} [list red]");
-                  elsif Player_Ship.Modules(Ship_Module_Index).Damage <
+                  elsif Player_Ship.Modules(Ship_Module_Index).Duration <
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
