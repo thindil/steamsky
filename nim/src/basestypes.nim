@@ -37,7 +37,7 @@ type
     name*: string
     color: string
     trades: Table[Positive, PricesArray]
-    recipes: seq[string]
+    recipes*: seq[string]
     flags*: seq[string]
     description*: string
 
