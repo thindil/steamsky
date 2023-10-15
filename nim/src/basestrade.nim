@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, basestypes, game, game2, crewinventory, maps, messages,
-    shipscargo, shipscrew, trades, types
+import bases, basescargo, basestypes, config, game, game2, crewinventory, maps,
+    messages, shipscargo, shipscrew, trades, types
 
 type
   AlreadyKnownError* = object of CatchableError
@@ -88,13 +88,28 @@ proc buyRecipe*(recipeIndex: string) =
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
-  var cost = 0
+  var cost: Natural = 0
   if getPrice(baseType = baseType, itemIndex = recipesList[
       recipeIndex].resultIndex) > 0:
     cost = getPrice(baseType = baseType, itemIndex = recipesList[
         recipeIndex].resultIndex) * recipesList[recipeIndex].difficulty * 10
   else:
     cost = recipesList[recipeIndex].difficulty * 10
+  cost = (cost.float * newGameSettings.pricesBonus).Natural
+  if cost == 0:
+    cost = 1
+  countPrice(price = cost, traderIndex = traderIndex)
+  let
+    recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
+    moneyIndex2 = checkMoney(price = cost, message = recipeName)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+  updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+  knownRecipes.add(recipeIndex)
+  addMessage(message = "You bought the recipe for " & recipeName & " for " &
+      $cost & " of " & moneyName & ".", mType = tradeMessage)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  gainRep(baseIndex = baseIndex, points = 1)
+  updateGame(minutes = 5)
 
 # Temporary code for interfacing with Ada
 
@@ -105,6 +120,14 @@ proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
     hireRecruit(recruitIndex = recruitIndex, cost = cost,
         dailyPayment = dailyPayment, tradePayment = tradePayment,
         contractLength = contractLength)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
+
+proc buyAdaRecipe(recipeIndex: cstring): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    buyRecipe(recipeIndex = $recipeIndex)
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
