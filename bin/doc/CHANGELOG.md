@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to sell the ship's module which has owners
 - Crash when trying to see an harpoon gun information in the shipyard's screen
   during installation when another harpoon gun is installed
+- Recruits in bases have wrong items equipped
 
 ## [9.2] - 2023-10-01
 
