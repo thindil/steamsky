@@ -77,7 +77,9 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
   skyBases[baseIndex].population.dec
   updateGame(minutes = 5)
 
-proc buyRecipe*(recipeIndex: string) =
+proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
+    AlreadyKnownError, NoTraderError, KeyError, NotEnoughMoneyError,
+    NoMoneyError, IOError, Exception], tags: [WriteIOEffect, RootEffect].} =
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     baseType = skyBases[baseIndex].baseType
