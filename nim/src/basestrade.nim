@@ -16,8 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, game, game2, crewinventory, maps, messages, shipscargo, shipscrew,
-    trades, types
+import bases, basestypes, game, game2, crewinventory, maps, messages,
+    shipscargo, shipscrew, trades, types
+
+type
+  AlreadyKnownError* = object of CatchableError
+    ## Raised when the recipe is already known to the player
 
 proc checkMoney(price: Positive; message: string = ""): int =
   result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
@@ -72,6 +76,25 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
   skyBases[baseIndex].recruits.delete(recruitIndex)
   skyBases[baseIndex].population.dec
   updateGame(minutes = 5)
+
+proc buyRecipe*(recipeIndex: string) =
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseType = skyBases[baseIndex].baseType
+  if recipeIndex notin basesTypesList[baseType].recipes:
+    raise newException(exceptn = CantBuyError, message = "")
+  if recipeIndex in knownRecipes:
+    raise newException(exceptn = AlreadyKnownError, message = "")
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    raise newException(exceptn = NoTraderError, message = "")
+  var cost = 0
+  if getPrice(baseType = baseType, itemIndex = recipesList[
+      recipeIndex].resultIndex) > 0:
+    cost = getPrice(baseType = baseType, itemIndex = recipesList[
+        recipeIndex].resultIndex) * recipesList[recipeIndex].difficulty * 10
+  else:
+    cost = recipesList[recipeIndex].difficulty * 10
 
 # Temporary code for interfacing with Ada
 
