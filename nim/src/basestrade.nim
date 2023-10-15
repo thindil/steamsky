@@ -80,6 +80,10 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
 proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
     AlreadyKnownError, NoTraderError, KeyError, NotEnoughMoneyError,
     NoMoneyError, IOError, Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Buy the selected crafting recipe from the base
+  ##
+  ## * recipeIndex - the index of the recipe on the list of available recipes
+  ##                 in the game
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     baseType = skyBases[baseIndex].baseType
