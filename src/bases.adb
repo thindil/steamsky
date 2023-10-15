@@ -320,9 +320,12 @@ package body Bases is
    begin
       Convert_Inventory_Loop :
       for I in Nim_Recruit.Inventory'Range loop
+         exit Convert_Inventory_Loop when I >
+           Positive_Formal_Container.Last_Index
+             (Container => Recruit.Inventory);
          Nim_Recruit.Inventory(I) :=
            Positive_Formal_Container.Element
-             (Container => Recruit.Inventory, Index => I + 1);
+             (Container => Recruit.Inventory, Index => I);
       end loop Convert_Inventory_Loop;
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
@@ -361,14 +364,12 @@ package body Bases is
       Ada_Recruit.Gender := Recruit.Gender;
       Ada_Recruit.Payment := Recruit.Payment;
       Ada_Recruit.Price := Recruit.Price;
-      --## rule off SIMPLIFIABLE_STATEMENTS
       Convert_Inventory_Loop :
-      for I in Recruit.Inventory'Range loop
+      for Item of Recruit.Inventory loop
+         exit Convert_Inventory_Loop when Item = 0;
          Positive_Formal_Container.Append
-           (Container => Ada_Recruit.Inventory,
-            New_Item => Recruit.Inventory(I) + 1);
+           (Container => Ada_Recruit.Inventory, New_Item => Item);
       end loop Convert_Inventory_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
          Ada_Recruit.Equipment(Equipment_Locations'Val(I)) :=
