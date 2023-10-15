@@ -19,7 +19,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Crafts; use Crafts;
 with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
@@ -124,91 +123,46 @@ package body Bases.Trade is
    end Hire_Recruit;
 
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
+      use Interfaces.C;
       use Tiny_String;
 
-      Base_Index: constant Bases_Range :=
+      Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Money_Index_2: Inventory_Container.Extended_Index;
-      Cost: Natural;
-      Recipe_Name: constant String :=
-        To_String
-          (Source =>
-             Get_Proto_Item
-               (Index =>
-                  Get_Recipe
-                    (Recipe_Index =>
-                       To_Bounded_String
-                         (Source => To_String(Source => Recipe_Index)))
-                    .Result_Index)
-               .Name);
-      Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      Result: chars_ptr;
+      Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
+      Space_Index: Natural := 0;
+      function Buy_Ada_Recipe(R_Index: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "buyAdaRecipe";
    begin
-      if not Has_Recipe
-          (Base_Type => Base_Type,
-           Recipe => To_String(Source => Recipe_Index)) then
-         raise Trade_Cant_Buy;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Game_Date;
+      Result :=
+        Buy_Ada_Recipe
+          (R_Index => New_String(Str => To_String(Source => Recipe_Index)));
+      if Strlen(Item => Result) > 0 then
+         Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
+         Space_Index := Index(Source => Ada_Result, Pattern => " ");
+         if Space_Index > 0 then
+            Exception_Name :=
+              Unbounded_Slice
+                (Source => Ada_Result, Low => 1, High => Space_Index - 1);
+         end if;
+         if Exception_Name =
+           To_Unbounded_String(Source => "NoTraderError") then
+            raise Trade_No_Trader;
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "CantBuyError") then
+            raise Trade_Cant_Buy;
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "AlreadyKnownError") then
+            raise Trade_Already_Known;
+         end if;
       end if;
-      if Is_Known_Recipe(Recipe_Index => Recipe_Index) then
-         raise Trade_Already_Known;
-      end if;
-      if Trader_Index = 0 then
-         raise Trade_No_Trader;
-      end if;
-      if Get_Price
-          (Base_Type => Sky_Bases(Base_Index).Base_Type,
-           Item_Index =>
-             Get_Recipe
-               (Recipe_Index =>
-                  To_Bounded_String
-                    (Source => To_String(Source => Recipe_Index)))
-               .Result_Index) >
-        0 then
-         Cost :=
-           Get_Price
-             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-              Item_Index =>
-                Get_Recipe
-                  (Recipe_Index =>
-                     To_Bounded_String
-                       (Source => To_String(Source => Recipe_Index)))
-                  .Result_Index) *
-           Get_Recipe
-             (Recipe_Index =>
-                To_Bounded_String(Source => To_String(Source => Recipe_Index)))
-             .Difficulty *
-           10;
-      else
-         Cost :=
-           Get_Recipe
-             (Recipe_Index =>
-                To_Bounded_String(Source => To_String(Source => Recipe_Index)))
-             .Difficulty *
-           10;
-      end if;
-      Cost :=
-        Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
-      if Cost = 0 then
-         Cost := 1;
-      end if;
-      Count_Price(Price => Cost, Trader_Index => Trader_Index);
-      Money_Index_2 := Check_Money(Price => Cost, Message => Recipe_Name);
-      Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
-      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-      Add_Known_Recipe(Recipe_Index => Recipe_Index);
-      Add_Message
-        (Message =>
-           "You bought the recipe for " & Recipe_Name & " for" &
-           Positive'Image(Cost) & " of " & To_String(Source => Money_Name) &
-           ".",
-         M_Type => TRADEMESSAGE);
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Gain_Rep(Base_Index => Base_Index, Points => 1);
-      Update_Game(Minutes => 5);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
    end Buy_Recipe;
 
    procedure Heal_Wounded(Member_Index: Crew_Container.Extended_Index) is
