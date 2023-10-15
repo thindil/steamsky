@@ -1006,6 +1006,7 @@ package body Missions.UI is
           (Table => Missions_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
@@ -1016,6 +1017,7 @@ package body Missions.UI is
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Local_Missions: Missions_Array
         (1 .. Positive(Sky_Bases(Get_Base_Index).Missions.Length));
@@ -1076,6 +1078,7 @@ package body Missions.UI is
         (Index_Type => Positive, Element_Type => Local_Mission_Data,
          Array_Type => Missions_Array);
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       case Column is
          when 1 =>
             if Missions_Sort_Order = TYPEASC then
@@ -1119,6 +1122,7 @@ package body Missions.UI is
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Missions_Loop :
       for I in Sky_Bases(Get_Base_Index).Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(Position => I)) :=
@@ -1206,7 +1210,9 @@ package body Missions.UI is
       end loop Fill_Missions_Indexes_Loop;
       Refresh_Missions_List
         (List => Sky_Bases(Get_Base_Index).Missions, Page => 1);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Update_Table(Table => Missions_Table);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return TCL_OK;
    end Sort_Available_Missions_Command;
 
