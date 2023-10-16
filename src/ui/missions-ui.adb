@@ -963,6 +963,7 @@ package body Missions.UI is
    Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* MUI3/MUI3.Missions_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of available missions
@@ -971,6 +972,7 @@ package body Missions.UI is
    -- SOURCE
    Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* MUI3/MUI3.Sort_Available_Missions_Command
    -- FUNCTION
@@ -1203,6 +1205,7 @@ package body Missions.UI is
             Id => Mission_Container.To_Index(Position => I));
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Missions_Indexes.Clear;
       Fill_Missions_Indexes_Loop :
       for Mission of Local_Missions loop
@@ -1210,7 +1213,6 @@ package body Missions.UI is
       end loop Fill_Missions_Indexes_Loop;
       Refresh_Missions_List
         (List => Sky_Bases(Get_Base_Index).Missions, Page => 1);
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Update_Table(Table => Missions_Table);
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       return TCL_OK;
