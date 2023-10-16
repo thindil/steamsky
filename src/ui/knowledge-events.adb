@@ -141,7 +141,8 @@ package body Knowledge.Events is
                    Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
                    Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
             Icon => To_Unbounded_String(Source => "destinationicon"),
-            Text => To_Unbounded_String(Source => "Target")),
+            Text => To_Unbounded_String(Source => "Target"),
+            Color => To_Unbounded_String(Source => "green")),
          Button_2 =>
            (Tooltip =>
               To_Unbounded_String(Source => "Show the event on the map"),
@@ -152,7 +153,8 @@ package body Knowledge.Events is
                    Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
                    Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
             Icon => To_Unbounded_String(Source => "showicon"),
-            Text => To_Unbounded_String(Source => "Show")));
+            Text => To_Unbounded_String(Source => "Show"),
+            Color => To_Unbounded_String(Source => "green")));
       return TCL_OK;
    end Show_Event_Info_Command;
 

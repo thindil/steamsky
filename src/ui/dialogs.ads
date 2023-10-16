@@ -47,6 +47,7 @@ package Dialogs is
       Command: Unbounded_String := Null_Unbounded_String;
       Icon: Unbounded_String := Null_Unbounded_String;
       Tooltip: Unbounded_String := Null_Unbounded_String;
+      Color: Unbounded_String := Null_Unbounded_String;
    end record;
    -- ****
 
@@ -56,7 +57,8 @@ package Dialogs is
    -- SOURCE
    Empty_Button_Settings: constant Button_Settings :=
      (Text => Null_Unbounded_String, Command => Null_Unbounded_String,
-      Icon => Null_Unbounded_String, Tooltip => Null_Unbounded_String);
+      Icon => Null_Unbounded_String, Tooltip => Null_Unbounded_String,
+      Color => Null_Unbounded_String);
    -- ****
 
    -- ****f* Dialogs/Dialogs.Create_Dialog

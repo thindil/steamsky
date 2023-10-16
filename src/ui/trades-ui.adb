@@ -1207,7 +1207,8 @@ package body Trades.UI is
                       "TradeAmount buy" & Natural'Image(Max_Buy_Amount) &
                       Natural'Image(Price)),
                Icon => To_Unbounded_String(Source => "buyicon"),
-               Text => To_Unbounded_String(Source => "Buy"))),
+               Text => To_Unbounded_String(Source => "Buy"),
+               Color => To_Unbounded_String(Source => "green"))),
          Button_2 =>
            (if Max_Sell_Amount = 0 then Empty_Button_Settings
             else
@@ -1220,7 +1221,8 @@ package body Trades.UI is
                       "TradeAmount sell" & Natural'Image(Max_Sell_Amount) &
                       Natural'Image(Price)),
                Icon => To_Unbounded_String(Source => "sellicon"),
-               Text => To_Unbounded_String(Source => "Sell"))));
+               Text => To_Unbounded_String(Source => "Sell"),
+               Color => To_Unbounded_String(Source => "green"))));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 

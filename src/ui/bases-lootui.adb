@@ -770,7 +770,8 @@ package body Bases.LootUI is
                       (Source =>
                          "LootAmount take" & Natural'Image(Max_Amount)),
                   Icon => To_Unbounded_String(Source => "giveicon"),
-                  Text => To_Unbounded_String(Source => "Take"))),
+                  Text => To_Unbounded_String(Source => "Take"),
+                  Color => To_Unbounded_String(Source => "green"))),
             Button_2 =>
               (if Cargo_Max_Amount = 0 then Empty_Button_Settings
                else
@@ -782,7 +783,8 @@ package body Bases.LootUI is
                       (Source =>
                          "LootAmount drop" & Natural'Image(Cargo_Max_Amount)),
                   Icon => To_Unbounded_String(Source => "dropicon"),
-                  Text => To_Unbounded_String(Source => "Drop"))));
+                  Text => To_Unbounded_String(Source => "Drop"),
+                  Color => To_Unbounded_String(Source => "green"))));
       end Show_Info_Block;
       return TCL_OK;
    end Show_Loot_Item_Info_Command;

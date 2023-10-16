@@ -1275,7 +1275,8 @@ package body Ships.UI.Crew.Inventory is
             Icon => To_Unbounded_String(Source => "cargoicon"),
             Tooltip =>
               To_Unbounded_String
-                (Source => "Move the selected item to the ship's cargo")),
+                (Source => "Move the selected item to the ship's cargo"),
+            Color => To_Unbounded_String(Source => "green")),
          Button_2 =>
            (if Equipable then
               (Text =>
@@ -1290,7 +1291,8 @@ package body Ships.UI.Crew.Inventory is
                Tooltip =>
                  (if Used then To_Unbounded_String(Source => "Stop")
                   else To_Unbounded_String(Source => "Start")) &
-                 " using the selected item")
+                 " using the selected item",
+               Color => To_Unbounded_String(Source => "green"))
             else Empty_Button_Settings));
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;

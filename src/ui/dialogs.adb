@@ -653,8 +653,8 @@ package body Dialogs is
                    " -image {" & To_String(Source => Button_1.Icon) & "}"
                  else "") &
                 " -command {" & Close_Command & ";" &
-                To_String(Source => Button_1.Command) &
-                "} -style Dialog.TButton");
+                To_String(Source => Button_1.Command) & "} -style Dialog" &
+                To_String(Source => Button_1.Color) & ".TButton");
          Add
            (Widget => Button,
             Message => To_String(Source => Button_1.Tooltip));
@@ -670,7 +670,7 @@ package body Dialogs is
         (Name => Buttons_Frame & ".button", Text => "Close",
          Command => Close_Command,
          Column => (if Length(Source => Button_1.Text) > 0 then 1 else 0),
-         Icon => "exiticon");
+         Icon => "exiticon", Color => "red");
       Button := Get_Widget(pathName => Buttons_Frame & ".button");
       if Length(Source => Button_2.Text) > 0 and
         Length(Source => Button_2.Command) > 1 then
@@ -686,8 +686,8 @@ package body Dialogs is
                    " -image {" & To_String(Source => Button_2.Icon) & "}"
                  else "") &
                 " -command {" & Close_Command & ";" &
-                To_String(Source => Button_2.Command) &
-                "} -style Dialog.TButton");
+                To_String(Source => Button_2.Command) & "} -style Dialog" &
+                To_String(Source => Button_1.Color) & ".TButton");
          Add
            (Widget => Button,
             Message => To_String(Source => Button_2.Tooltip));

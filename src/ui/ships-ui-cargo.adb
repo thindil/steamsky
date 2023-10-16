@@ -911,7 +911,8 @@ package body Ships.UI.Cargo is
               To_Unbounded_String
                 (Source => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1)),
             Icon => To_Unbounded_String(Source => "giveicon"),
-            Text => To_Unbounded_String(Source => "Give")),
+            Text => To_Unbounded_String(Source => "Give"),
+            Color => To_Unbounded_String(Source => "green")),
          Button_2 =>
            (Tooltip =>
               To_Unbounded_String(Source => "Drop item from the ship cargo"),
@@ -919,7 +920,8 @@ package body Ships.UI.Cargo is
               To_Unbounded_String
                 (Source => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1)),
             Icon => To_Unbounded_String(Source => "dropicon"),
-            Text => To_Unbounded_String(Source => "Drop")));
+            Text => To_Unbounded_String(Source => "Drop"),
+            Color => To_Unbounded_String(Source => "green")));
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
