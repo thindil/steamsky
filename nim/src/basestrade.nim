@@ -136,6 +136,10 @@ proc healCost*(cost, time: var Natural; memberIndex: int) =
   if time == 0:
     time = 1
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if "temple" in factionsList[skyBases[baseIndex].owner].flags:
+    cost = (cost / 2).Natural
+    if cost == 0:
+      cost = 1
 
 # Temporary code for interfacing with Ada
 
@@ -157,3 +161,14 @@ proc buyAdaRecipe(recipeIndex: cstring): cstring {.raises: [], tags: [
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
+
+proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: [], exportc.} =
+  var
+    nimCost = 0.Natural
+    nimTime = 0.Natural
+  try:
+    healCost(cost = nimCost, time = nimTime, memberIndex = memberIndex)
+  except:
+    discard
+  time = nimTime.cint
+  cost = nimCost.cint
