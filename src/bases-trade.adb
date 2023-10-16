@@ -23,9 +23,7 @@ with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
-with BasesTypes; use BasesTypes;
 with Maps; use Maps;
-with Factions; use Factions;
 
 package body Bases.Trade is
 
@@ -223,62 +221,6 @@ package body Bases.Trade is
       Gain_Rep(Base_Index => Base_Index, Points => 1);
       Update_Game(Minutes => Time);
    end Heal_Wounded;
-
-   procedure Heal_Cost
-     (Cost, Time: in out Natural;
-      Member_Index: Crew_Container.Extended_Index) is
-      use Tiny_String;
-
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-   begin
-      if Member_Index > 0 then
-         Time := 5 * (100 - Player_Ship.Crew(Member_Index).Health);
-         Cost :=
-           (5 * (100 - Player_Ship.Crew(Member_Index).Health)) *
-           Get_Price
-             (Base_Type => To_Bounded_String(Source => "0"),
-              Item_Index =>
-                Find_Proto_Item
-                  (Item_Type =>
-                     Get_Faction
-                       (Index => Player_Ship.Crew(Member_Index).Faction)
-                       .Healing_Tools));
-      else
-         Count_Heal_Cost_Loop :
-         for Member of Player_Ship.Crew loop
-            if Member.Health < 100 then
-               Time := Time + (5 * (100 - Member.Health));
-               Cost :=
-                 Cost +
-                 ((5 * (100 - Member.Health)) *
-                  Get_Proto_Item
-                    (Index =>
-                       Find_Proto_Item
-                         (Item_Type =>
-                            Get_Faction(Index => Member.Faction)
-                              .Healing_Tools))
-                    .Price);
-            end if;
-         end loop Count_Heal_Cost_Loop;
-      end if;
-      Cost :=
-        Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
-      if Cost = 0 then
-         Cost := 1;
-      end if;
-      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      if Time = 0 then
-         Time := 1;
-      end if;
-      if Has_Flag
-          (Base_Type => Sky_Bases(Base_Index).Base_Type, Flag => "temple") then
-         Cost := Cost / 2;
-         if Cost = 0 then
-            Cost := 1;
-         end if;
-      end if;
-   end Heal_Cost;
 
    function Train_Cost
      (Member_Index: Crew_Container.Extended_Index;

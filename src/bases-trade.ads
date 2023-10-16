@@ -90,6 +90,9 @@ package Bases.Trade is
    procedure Heal_Cost
      (Cost, Time: in out Natural;
       Member_Index: Crew_Container.Extended_Index) with
+      Import => True,
+      Convention => C,
+      External_Name => "healAdaCost",
       Pre => Member_Index <= Player_Ship.Crew.Last_Index,
       Post => Cost > 0 and Time > 0,
       Test_Case => (Name => "Test_HealCost", Mode => Nominal);
