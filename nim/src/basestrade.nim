@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import bases, basescargo, basestypes, config, game, game2, crewinventory, maps,
-    messages, shipscargo, shipscrew, trades, types
+import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
+    maps, messages, shipscargo, shipscrew, trades, types
 
 type
   AlreadyKnownError* = object of CatchableError
@@ -116,6 +116,26 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   gainRep(baseIndex = baseIndex, points = 1)
   updateGame(minutes = 5)
+
+proc healCost*(cost, time: var Natural; memberIndex: int) =
+  if memberIndex > -1:
+    time = 5 * (100 - playerShip.crew[memberIndex].health)
+    cost = (5 * (100 - playerShip.crew[memberIndex].health)) * getPrice(
+        baseType = "0", itemIndex = findProtoItem(itemType = factionsList[
+        playerShip.crew[memberIndex].faction].healingTools))
+  else:
+    for member in playerShip.crew:
+      time = time + (5 * (100 - member.health))
+      cost = cost + ((5 * (100 - member.health)) * getPrice(baseType = "0",
+          itemIndex = findProtoItem(itemType = factionsList[
+          member.faction].healingTools)))
+  cost = (cost.float * newGameSettings.pricesBonus).Natural
+  if cost == 0:
+    cost = 1
+  countPrice(price = cost, traderIndex = findMember(order = talk))
+  if time == 0:
+    time = 1
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
 
 # Temporary code for interfacing with Ada
 
