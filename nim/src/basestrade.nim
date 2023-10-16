@@ -167,7 +167,7 @@ proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: []
     nimCost = 0.Natural
     nimTime = 0.Natural
   try:
-    healCost(cost = nimCost, time = nimTime, memberIndex = memberIndex)
+    healCost(cost = nimCost, time = nimTime, memberIndex = memberIndex - 1)
   except:
     discard
   time = nimTime.cint
