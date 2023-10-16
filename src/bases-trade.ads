@@ -61,8 +61,7 @@ package Bases.Trade is
       -- Recipe_Index - Index of the recipe from base recipes list to buy
       -- SOURCE
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => Recipe_Index) > 0,
-      Test_Case => (Name => "Test_BuyRecipe", Mode => Nominal);
+      Pre => Tiny_String.Length(Source => Recipe_Index) > 0;
       -- ****
 
       -- ****f* BTrade/BTrade.Heal_Wounded
