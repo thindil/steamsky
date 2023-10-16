@@ -1,11 +1,13 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing hireRecruit.'''
+Testing hireRecruit.
+Testing buyRecipes.'''
 """
 
 import std/tables
-import ../../src/[bases, basescargo, basestrade, basestypes, careers, crafts, factions, game, items, maps, mobs, ships, shipmodules, types]
+import ../../src/[bases, basescargo, basestrade, basestypes, careers, crafts,
+    factions, game, items, maps, mobs, ships, shipmodules, types]
 
 echo "Loading the game data."
 if itemsList.len == 0:
@@ -67,3 +69,16 @@ try:
   assert playerShip.crew.len == 2
 except AssertionDefect:
   writeLine(stderr, "Failed to hire a recruit.")
+
+echo "Testing buyRecipes."
+let
+  recipes = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  recipesAmount = knownRecipes.len
+for recipe in recipes:
+  if recipe in basesTypesList["1"].recipes:
+    buyRecipe(recipe)
+    break
+try:
+  assert knownRecipes.len == recipesAmount + 1
+except AssertionDefect:
+  writeLine(stderr, "Failed to buy a crafting recipe.")
