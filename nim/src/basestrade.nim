@@ -117,7 +117,8 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
   gainRep(baseIndex = baseIndex, points = 1)
   updateGame(minutes = 5)
 
-proc healCost*(cost, time: var Natural; memberIndex: int) =
+proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
+    raises: [KeyError], tags: [].} =
   if memberIndex > -1:
     time = 5 * (100 - playerShip.crew[memberIndex].health)
     cost = (5 * (100 - playerShip.crew[memberIndex].health)) * getPrice(
