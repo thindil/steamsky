@@ -27,42 +27,6 @@ with Maps; use Maps;
 
 package body Bases.Trade is
 
-   -- ****if* BTrade/BTrade.Check_Money
-   -- FUNCTION
-   -- Check if player have enough money
-   -- PARAMETERS
-   -- Price   - Miniumum amount of money which player must have
-   -- Message - Additional message to return when player don't have enough
-   --           money
-   -- RESULT
-   -- Cargo index of money from the player ship
-   -- SOURCE
-   function Check_Money
-     (Price: Positive; Message: String := "") return Positive is
-      -- ****
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-   begin
-      if Money_Index_2 = 0 then
-         if Message /= "" then
-            raise Trade_No_Money with Message;
-         else
-            raise Trade_No_Money;
-         end if;
-      end if;
-      if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => Money_Index_2)
-          .Amount <
-        Price then
-         if Message /= "" then
-            raise Trade_Not_Enough_Money with Message;
-         else
-            raise Trade_Not_Enough_Money;
-         end if;
-      end if;
-      return Money_Index_2;
-   end Check_Money;
-
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
       Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) is
@@ -118,6 +82,7 @@ package body Bases.Trade is
       Set_Base_Cargo(Base_Index => Base_Index);
       Set_Ada_Recruits
         (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+      Set_Game_Date;
    end Hire_Recruit;
 
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
@@ -161,65 +126,45 @@ package body Bases.Trade is
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Game_Date;
    end Buy_Recipe;
 
    procedure Heal_Wounded(Member_Index: Crew_Container.Extended_Index) is
-      use Tiny_String;
+      use Interfaces.C;
 
-      Base_Index: constant Bases_Range :=
+      Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Money_Index_2: Inventory_Container.Extended_Index := 0;
-      Cost, Time: Natural := 0;
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      Result: chars_ptr;
+      Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
+      Space_Index: Natural := 0;
+      function Heal_Ada_Wounded(M_Index: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "healAdaWounded";
    begin
-      Heal_Cost(Cost => Cost, Time => Time, Member_Index => Member_Index);
-      if Cost = 0 then
-         raise Trade_Cant_Heal;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Game_Date;
+      Result := Heal_Ada_Wounded(M_Index => Member_Index);
+      if Strlen(Item => Result) > 0 then
+         Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
+         Space_Index := Index(Source => Ada_Result, Pattern => " ");
+         if Space_Index > 0 then
+            Exception_Name :=
+              Unbounded_Slice
+                (Source => Ada_Result, Low => 1, High => Space_Index - 1);
+         end if;
+         if Exception_Name =
+           To_Unbounded_String(Source => "NoTraderError") then
+            raise Trade_No_Trader;
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "CantHealError") then
+            raise Trade_Cant_Heal;
+         end if;
       end if;
-      if Trader_Index = 0 then
-         raise Trade_No_Trader;
-      end if;
-      Money_Index_2 := Check_Money(Price => Cost);
-      if Member_Index > 0 then
-         Player_Ship.Crew(Member_Index).Health := 100;
-         Add_Message
-           (Message =>
-              "You paid for healing " &
-              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-              " for" & Positive'Image(Cost) & " " &
-              To_String(Source => Money_Name) & ".",
-            M_Type => TRADEMESSAGE);
-         Give_Orders
-           (Ship => Player_Ship, Member_Index => Member_Index,
-            Given_Order => REST, Module_Index => 0, Check_Priorities => False);
-      else
-         Give_Rest_Order_Loop :
-         for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Health < 100 then
-               Player_Ship.Crew(I).Health := 100;
-               Give_Orders
-                 (Ship => Player_Ship,
-                  Member_Index => Crew_Container.To_Index(Position => I),
-                  Given_Order => REST, Module_Index => 0,
-                  Check_Priorities => False);
-            end if;
-         end loop Give_Rest_Order_Loop;
-         Add_Message
-           (Message =>
-              "You paid for healing for all wounded crew members for" &
-              Positive'Image(Cost) & " " & To_String(Source => Money_Name) &
-              ".",
-            M_Type => TRADEMESSAGE);
-      end if;
-      Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
-      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Gain_Rep(Base_Index => Base_Index, Points => 1);
-      Update_Game(Minutes => Time);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Game_Date;
    end Heal_Wounded;
 
    function Train_Cost
