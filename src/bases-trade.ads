@@ -94,8 +94,7 @@ package Bases.Trade is
       Convention => C,
       External_Name => "healAdaCost",
       Pre => Member_Index <= Player_Ship.Crew.Last_Index,
-      Post => Cost > 0 and Time > 0,
-      Test_Case => (Name => "Test_HealCost", Mode => Nominal);
+      Post => Cost > 0 and Time > 0;
       -- ****
 
       -- ****f* BTrade/BTrade.Train_Cost
