@@ -670,7 +670,7 @@ package body Dialogs is
         (Name => Buttons_Frame & ".button", Text => "Close",
          Command => Close_Command,
          Column => (if Length(Source => Button_1.Text) > 0 then 1 else 0),
-         Icon => "exiticon", Color => "red");
+         Icon => "exiticon");
       Button := Get_Widget(pathName => Buttons_Frame & ".button");
       if Length(Source => Button_2.Text) > 0 and
         Length(Source => Button_2.Command) > 1 then
