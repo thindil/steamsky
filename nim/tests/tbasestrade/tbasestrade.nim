@@ -2,7 +2,8 @@ discard """
   exitcode: 0
   output: '''Loading the game data.
 Testing hireRecruit.
-Testing buyRecipes.'''
+Testing buyRecipes.
+Testing healCost.'''
 """
 
 import std/tables
@@ -82,3 +83,17 @@ try:
   assert knownRecipes.len == recipesAmount + 1
 except AssertionDefect:
   writeLine(stderr, "Failed to buy a crafting recipe.")
+
+echo "Testing healCost."
+var cost, time: Natural = 0
+healCost(cost, time, 0)
+try:
+  assert cost == 1 and time == 1
+except AssertionDefect:
+  writeLine(stderr, "Failed to count heal cost of a not wounded crew member.")
+playerShip.crew[0].health -= 10
+healCost(cost, time, 0)
+try:
+  assert cost > 1 and time > 1
+except AssertionDefect:
+  writeLine(stderr, "Failed to count heal cost of a wounded crew member.")
