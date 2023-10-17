@@ -119,6 +119,15 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
 
 proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Count the cost and time needed by the healing wounded crew members action
+  ## in the base
+  ##
+  ## * cost        - the amount of money needed for the action
+  ## * time        - the amount of time needed for complete the action
+  ## * memberIndex - the index of the player's ship's crew member to heal. If
+  ##                 equal to -1, heal the whole crew
+  ##
+  ## Returns modified cost and time parameters
   if memberIndex > -1:
     time = 5 * (100 - playerShip.crew[memberIndex].health)
     cost = (5 * (100 - playerShip.crew[memberIndex].health)) * getPrice(
