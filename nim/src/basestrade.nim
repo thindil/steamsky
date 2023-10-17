@@ -215,9 +215,10 @@ proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: []
   time = nimTime.cint
   cost = nimCost.cint
 
-proc healAdaWounded(memberIndex: cint) {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc.} =
+proc healAdaWounded(memberIndex: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
   try:
     healWounded(memberIndex = memberIndex - 1)
-  except:
-    discard
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
