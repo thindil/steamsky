@@ -22,6 +22,7 @@ import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
 type
   AlreadyKnownError* = object of CatchableError
     ## Raised when the recipe is already known to the player
+  CantHealError* = object of CatchableError
 
 proc checkMoney(price: Positive; message: string = ""): int =
   result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
@@ -151,6 +152,37 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
     if cost == 0:
       cost = 1
 
+proc healWounded*(memberIndex: int) =
+  var cost, time: Natural = 0
+  healCost(cost = cost, time = time, memberIndex = memberIndex)
+  if cost == 0:
+    raise newException(exceptn = CantHealError, message = "")
+  let traderIndex = findMember(order = talk)
+  if traderIndex == -1:
+    raise newException(exceptn = NoTraderError, message = "")
+  if memberIndex > -1:
+    playerShip.crew[memberIndex].health = 100
+    addMessage(message = "You paid for healing " & playerShip.crew[
+        memberIndex].name & " for " & $cost & " " & moneyName & ".",
+        mType = tradeMessage)
+    giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
+        moduleIndex = -1, checkPriorities = false)
+  else:
+    for index, member in playerShip.crew.mpairs:
+      if member.health < 100:
+        member.health = 100
+        giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest,
+            moduleIndex = -1, checkPriorities = false)
+    addMessage(message = "You paid for healing all wounded crew members for " &
+        $cost & " " & moneyName & ".", mType = tradeMessage)
+  var moneyIndex2 = checkMoney(price = cost)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+  updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  gainRep(baseIndex = baseIndex, points = 1)
+  updateGame(minutes = time)
+
 # Temporary code for interfacing with Ada
 
 proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
@@ -182,3 +214,10 @@ proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: []
     discard
   time = nimTime.cint
   cost = nimCost.cint
+
+proc healAdaWounded(memberIndex: cint) {.raises: [], tags: [WriteIOEffect,
+    RootEffect], exportc.} =
+  try:
+    healWounded(memberIndex = memberIndex - 1)
+  except:
+    discard
