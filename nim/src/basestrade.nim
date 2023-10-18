@@ -152,7 +152,9 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
     if cost == 0:
       cost = 1
 
-proc healWounded*(memberIndex: int) =
+proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
+    NoTraderError, KeyError, NotEnoughMoneyError, IOError, NoMoneyError,
+    Exception], tags: [WriteIOEffect, RootEffect].} =
   var cost, time: Natural = 0
   healCost(cost = cost, time = time, memberIndex = memberIndex)
   if cost == 0:
