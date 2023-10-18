@@ -61,9 +61,9 @@ package body OrdersMenu is
       Have_Trader: Boolean := False;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Missions_Limit: Integer;
+      Missions_Limit: Integer := 0;
       Event: Events_Types := NONE;
-      Item_Index: Natural;
+      Item_Index: Natural := 0;
       Orders_Menu: Ttk_Frame :=
         Create_Dialog(Name => ".gameframe.orders", Title => "Ship orders");
       Dialog_Close_Button: constant Ttk_Button :=
@@ -76,7 +76,7 @@ package body OrdersMenu is
          Button_Name: Unbounded_String;
          Shortcut: Character;
       end record;
-      Mission: Mission_Data;
+      Mission: Mission_Data := Empty_Mission;
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Order_Shortcut);
       Shortcuts: Shortcuts_Container.Vector;
@@ -436,7 +436,7 @@ package body OrdersMenu is
                   if Sky_Bases(Base_Index).Reputation.Level > -25 then
                      Show_Docking_Button_Block :
                      declare
-                        Docking_Cost: Positive;
+                        Docking_Cost: Positive := 1;
                      begin
                         Count_Docking_Cost_Loop :
                         for Module of Player_Ship.Modules loop
@@ -970,7 +970,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       Starts_Combat, U_Mission: Boolean := False;
-      Mission: Mission_Data;
+      Mission: Mission_Data := Empty_Mission;
    begin
       Check_Missions_Loop :
       for I in 1 .. Get_Accepted_Missions_Amount loop
@@ -1088,7 +1088,7 @@ package body OrdersMenu is
            Get_Story(Index => Get_Current_Story.Index).Steps
              (Get_Current_Story.Current_Step)
          else Get_Story(Index => Get_Current_Story.Index).Final_Step);
-      Message: Unbounded_String;
+      Message: Unbounded_String := Null_Unbounded_String;
    begin
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
          Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
@@ -1206,10 +1206,10 @@ package body OrdersMenu is
          Gain_Rep
            (Base_Index => Base_Index,
             Points =>
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Item_Index)
-                 .Amount /
-               10));
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Item_Index)
+                .Amount /
+              10);
          Add_Message
            (Message =>
               "You gave " &
@@ -1230,8 +1230,7 @@ package body OrdersMenu is
                 (Container => Player_Ship.Cargo, Index => Item_Index)
                 .Proto_Index,
             Amount =>
-              (0 -
-               Inventory_Container.Element
+              -(Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Item_Index)
                  .Amount));
       else
