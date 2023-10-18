@@ -189,6 +189,19 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
   gainRep(baseIndex = baseIndex, points = 1)
   updateGame(minutes = time)
 
+proc trainCost*(memberIndex, skillIndex: Natural): Natural =
+  result = (100.0 * newGameSettings.pricesBonus).Natural
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.index == skillIndex:
+      if skill.level == 100:
+        return 0
+      result = (((skill.level + 1) * 100).float *
+          newGameSettings.pricesBonus).Natural
+      if result == 0:
+        result = 1
+      break
+  countPrice(price = result, traderIndex = findMember(order = talk))
+
 # Temporary code for interfacing with Ada
 
 proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
@@ -228,3 +241,10 @@ proc healAdaWounded(memberIndex: cint): cstring {.raises: [], tags: [
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
+
+proc trainAdaCost(memberIndex, skillIndex: cint): cint {.raises: [], tags: [], exportc.} =
+  try:
+    return trainCost(memberIndex = memberIndex - 1,
+        skillIndex = skillIndex).cint
+  except KeyError:
+    return 0
