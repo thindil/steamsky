@@ -10,14 +10,11 @@ package Bases.Trade.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Heal_Wounded_aad41c_6975e9(Gnattest_T: in out Test);
-   --  bases-trade.ads:74:4:Heal_Wounded:Test_HealWounded
-
    procedure Test_Train_Cost_7284bc_f49c70(Gnattest_T: in out Test);
-   --  bases-trade.ads:111:4:Train_Cost:Test_TrainCost
+   --  bases-trade.ads:110:4:Train_Cost:Test_TrainCost
 
    procedure Test_Train_Skill_30157e_5fedf8(Gnattest_T: in out Test);
-   --  bases-trade.ads:130:4:Train_Skill:Test_TrainSkill
+   --  bases-trade.ads:129:4:Train_Skill:Test_TrainSkill
 
 end Bases.Trade.Test_Data.Tests;
 --  end read only
