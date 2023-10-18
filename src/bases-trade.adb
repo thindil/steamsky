@@ -22,7 +22,6 @@ with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
-with Config; use Config;
 with Maps; use Maps;
 
 package body Bases.Trade is
@@ -166,32 +165,6 @@ package body Bases.Trade is
       Set_Base_Cargo(Base_Index => Base_Index);
       Set_Game_Date;
    end Heal_Wounded;
-
-   function Train_Cost
-     (Member_Index: Crew_Container.Extended_Index;
-      Skill_Index: Skills_Container.Extended_Index) return Natural is
-      Cost: Natural :=
-        Natural(100.0 * Get_Float_Setting(Name => "pricesBonus"));
-   begin
-      Count_Train_Cost_Loop :
-      for Skill of Player_Ship.Crew(Member_Index).Skills loop
-         if Skill.Index = Skill_Index then
-            if Skill.Level = 100 then
-               return 0;
-            end if;
-            Cost :=
-              Natural
-                (Float((Skill.Level + 1) * 100) *
-                 Float(Get_Float_Setting(Name => "pricesBonus")));
-            if Cost = 0 then
-               Cost := 1;
-            end if;
-            exit Count_Train_Cost_Loop;
-         end if;
-      end loop Count_Train_Cost_Loop;
-      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      return Cost;
-   end Train_Cost;
 
    procedure Train_Skill
      (Member_Index: Crew_Container.Extended_Index;

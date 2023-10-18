@@ -113,6 +113,9 @@ package Bases.Trade is
       Pre => Member_Index in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
       Skill_Index in 1 .. Skills_Amount,
+      Import => True,
+      Convention => C,
+      External_Name => "trainAdaCost",
       Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
 
