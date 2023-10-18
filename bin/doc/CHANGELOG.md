@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Colored version of buy and sell icons
+
 ### Changed
 - Updated look of dialogs in the shipyard screen
 - Updated README.md
