@@ -3,7 +3,8 @@ discard """
   output: '''Loading the game data.
 Testing hireRecruit.
 Testing buyRecipes.
-Testing healCost.'''
+Testing healCost.
+Testing healWounded.'''
 """
 
 import std/tables
@@ -47,7 +48,7 @@ playerShip.modules.add(ModuleData(mType: gun, protoIndex: 9, durability: 100,
 playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
     durability: 100, owner: @[0]))
 playerShip.cargo = @[]
-playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
+playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000, durability: 100))
 playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200, durability: 100))
 playerShip.speed = docked
 skyMap[1][1].baseIndex = 1
@@ -97,3 +98,17 @@ try:
   assert cost > 1 and time > 1
 except AssertionDefect:
   writeLine(stderr, "Failed to count heal cost of a wounded crew member.")
+
+echo "Testing healWounded."
+playerShip.crew[0].health = 90
+healWounded(0)
+try:
+  assert playerShip.crew[0].health == 100
+except AssertionDefect:
+  writeLine(stderr, "Failed to heal a wounded crew member.")
+playerShip.crew[0].health = 90
+healWounded(-1)
+try:
+  assert playerShip.crew[0].health == 100
+except AssertionDefect:
+  writeLine(stderr, "Failed to heal the whole crew.")
