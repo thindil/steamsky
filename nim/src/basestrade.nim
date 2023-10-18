@@ -155,6 +155,10 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
 proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
     NoTraderError, KeyError, NotEnoughMoneyError, IOError, NoMoneyError,
     Exception], tags: [WriteIOEffect, RootEffect].} =
+  ## Heal the player's ship crew's wounded members in bases
+  ##
+  ## * memberIndex - the index of the wounded crew member to heal. If -1 then
+  ##                 heal all the wounded crew members.
   var cost, time: Natural = 0
   healCost(cost = cost, time = time, memberIndex = memberIndex)
   if cost == 0:
