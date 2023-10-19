@@ -16,12 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Messages; use Messages;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
-with Utils; use Utils;
-with Bases.Cargo; use Bases.Cargo;
 with Maps; use Maps;
 
 package body Bases.Trade is
@@ -170,80 +165,22 @@ package body Bases.Trade is
      (Member_Index: Crew_Container.Extended_Index;
       Skill_Index: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) is
-      use Tiny_String;
-
-      Cost: Natural;
-      Money_Index_2: Inventory_Container.Extended_Index;
-      Gained_Exp: Positive;
-      Base_Index: constant Bases_Range :=
+      Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Trader_Index: Crew_Container.Extended_Index;
-      Sessions, Overall_Cost: Natural := 0;
-      Max_Amount: Integer := Amount;
+      procedure Train_Ada_Skill(M_Index, S_Index, A, I_Amount: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "trainAdaSkill";
    begin
-      Give_Orders
-        (Ship => Player_Ship, Member_Index => Member_Index,
-         Given_Order => REST, Module_Index => 0, Check_Priorities => False);
-      Train_Skill_Loop :
-      while Max_Amount > 0 loop
-         Cost :=
-           Train_Cost
-             (Member_Index => Member_Index, Skill_Index => Skill_Index);
-         Money_Index_2 :=
-           Find_Item
-             (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-         exit Train_Skill_Loop when Cost = 0 or
-           Inventory_Container.Element
-               (Container => Player_Ship.Cargo, Index => Money_Index_2)
-               .Amount <
-             Cost or
-           (not Is_Amount and Max_Amount < Cost);
-         Gained_Exp :=
-           Get_Random(Min => 10, Max => 60) +
-           Player_Ship.Crew(Member_Index).Attributes
-             (Positive
-                (SkillsData_Container.Element
-                   (Container => Skills_List, Index => Skill_Index)
-                   .Attribute))
-             .Level;
-         if Gained_Exp > 100 then
-            Gained_Exp := 100;
-         end if;
-         Gain_Exp
-           (Amount => Gained_Exp, Skill_Number => Skill_Index,
-            Crew_Index => Member_Index);
-         Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => Money_Index_2,
-            Amount => -(Cost));
-         Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-         Trader_Index := Find_Member(Order => TALK);
-         if Trader_Index > 0 then
-            Gain_Exp
-              (Amount => 5, Skill_Number => Talking_Skill,
-               Crew_Index => Trader_Index);
-         end if;
-         Gain_Rep(Base_Index => Base_Index, Points => 5);
-         Update_Game(Minutes => 60);
-         Sessions := Sessions + 1;
-         Overall_Cost := Overall_Cost + Cost;
-         Max_Amount := Max_Amount - (if Is_Amount then 1 else Cost);
-      end loop Train_Skill_Loop;
-      if Sessions > 0 then
-         Add_Message
-           (Message =>
-              "You purchased" & Positive'Image(Sessions) &
-              " training session(s) in " &
-              To_String
-                (Source =>
-                   SkillsData_Container.Element
-                     (Container => Skills_List, Index => Skill_Index)
-                     .Name) &
-              " for " &
-              To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-              " for" & Positive'Image(Overall_Cost) & " " &
-              To_String(Source => Money_Name) & ".",
-            M_Type => TRADEMESSAGE);
-      end if;
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Game_Date;
+      Train_Ada_Skill
+        (M_Index => Member_Index, S_Index => Integer(Skill_Index), A => Amount,
+         I_Amount => (if Is_Amount then 1 else 0));
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Game_Date;
    end Train_Skill;
 
 end Bases.Trade;
