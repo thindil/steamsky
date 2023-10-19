@@ -189,7 +189,8 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
   gainRep(baseIndex = baseIndex, points = 1)
   updateGame(minutes = time)
 
-proc trainCost*(memberIndex, skillIndex: Natural): Natural =
+proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
+    raises: [KeyError], tags: [].} =
   result = (100.0 * newGameSettings.pricesBonus).Natural
   for skill in playerShip.crew[memberIndex].skills:
     if skill.index == skillIndex:
