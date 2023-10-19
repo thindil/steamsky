@@ -191,6 +191,14 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
 
 proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Count the cost needed to train the selected skill of the selected
+  ## player's ship's crew's member.
+  ##
+  ## * memberIndex - the index of the member in the player's ship's crew
+  ## * skillIndex  - the index of the skill to train
+  ##
+  ## Returns the amount of money needed to train the skill or 0 if the
+  ## skill reached maximum level and can't be trained.
   result = (100.0 * newGameSettings.pricesBonus).Natural
   for skill in playerShip.crew[memberIndex].skills:
     if skill.index == skillIndex:
