@@ -115,8 +115,7 @@ package Bases.Trade is
       Skill_Index in 1 .. Skills_Amount,
       Import => True,
       Convention => C,
-      External_Name => "trainAdaCost",
-      Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
+      External_Name => "trainAdaCost";
       -- ****
 
       -- ****f* BTrade/BTrade.Train_Skill
