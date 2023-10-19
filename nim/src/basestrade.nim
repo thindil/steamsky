@@ -215,19 +215,19 @@ proc trainSkill*(memberIndex, skillIndex: Natural; amount: Positive;
     isAmount: bool = true) =
   giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
       moduleIndex = 0, checkPriorities = false)
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var
-    cost: Natural
     maxAmount: int = amount
-    moneyIndex2: int
-    gainedExp: Positive
+    sessions, overallCost: Natural = 0
   while maxAmount > 0:
-    cost = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
+    let
+      cost = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
+      moneyIndex2 = findItem(inventory = playerShip.cargo,
+          protoIndex = moneyIndex)
     if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
         not isAmount and maxAmount < cost):
       break
-    gainedExp = getRandom(min = 10, max = 60) + playerShip.crew[
+    var gainedExp = getRandom(min = 10, max = 60) + playerShip.crew[
         memberIndex].attributes[skillsList[skillIndex].attribute].level
     if gainedExp > 100:
       gainedExp = 100
@@ -235,6 +235,19 @@ proc trainSkill*(memberIndex, skillIndex: Natural; amount: Positive;
         crewIndex = memberIndex)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+    let traderIndex = findMember(order = talk)
+    if traderIndex > 0:
+      gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
+    gainRep(baseIndex = baseIndex, points = 5)
+    updateGame(minutes = 60)
+    sessions.inc
+    overallCost = overallCost + cost
+    maxAmount = maxAmount - (if isAmount: 1 else: cost)
+  if sessions > 0:
+    addMessage(message = "You purchased " & $sessions &
+        " training session(s) in " & skillsList[skillIndex].name & " for " &
+        playerShip.crew[memberIndex].name & " for " & $overallCost & " " &
+        moneyName & ".", mType = tradeMessage)
 
 # Temporary code for interfacing with Ada
 
@@ -282,3 +295,11 @@ proc trainAdaCost(memberIndex, skillIndex: cint): cint {.raises: [], tags: [], e
         skillIndex = skillIndex).cint
   except KeyError:
     return 0
+
+proc trainAdaSkill(memberIndex, skillIndex, amount, isAmount: cint) {.raises: [],
+    tags: [WriteIOEffect, RootEffect], exportc.} =
+  try:
+    trainSkill(memberIndex = memberIndex - 1, skillIndex = skillIndex,
+        amount = amount, isAmount = isAmount == 1)
+  except KeyError, IOError, Exception:
+    discard
