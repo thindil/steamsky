@@ -17,7 +17,7 @@
 
 import std/tables
 import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
-    maps, messages, shipscargo, shipscrew, trades, types
+    maps, messages, shipscargo, shipscrew, trades, types, utils
 
 type
   AlreadyKnownError* = object of CatchableError
@@ -210,6 +210,31 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
         result = 1
       break
   countPrice(price = result, traderIndex = findMember(order = talk))
+
+proc trainSkill*(memberIndex, skillIndex: Natural; amount: Positive;
+    isAmount: bool = true) =
+  giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
+      moduleIndex = 0, checkPriorities = false)
+  var
+    cost: Natural
+    maxAmount: int = amount
+    moneyIndex2: int
+    gainedExp: Positive
+  while maxAmount > 0:
+    cost = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
+        not isAmount and maxAmount < cost):
+      break
+    gainedExp = getRandom(min = 10, max = 60) + playerShip.crew[
+        memberIndex].attributes[skillsList[skillIndex].attribute].level
+    if gainedExp > 100:
+      gainedExp = 100
+    gainExp(amount = gainedExp, skillNumber = skillIndex,
+        crewIndex = memberIndex)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+    updateBaseCargo(protoIndex = moneyIndex, amount = cost)
 
 # Temporary code for interfacing with Ada
 
