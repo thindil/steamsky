@@ -72,14 +72,18 @@ package body OrdersMenu is
            options =>
              "-text Close -command {CloseDialog " & Orders_Menu & "}");
       Last_Button: Ttk_Button := Get_Widget(pathName => ".", Interp => Interp);
+      --## rule off TYPE_INITIAL_VALUES
       type Order_Shortcut is record
          Button_Name: Unbounded_String;
          Shortcut: Character;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Mission: Mission_Data := Empty_Mission;
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Order_Shortcut);
+      --## rule off IMPROPER_INITIALIZATION
       Shortcuts: Shortcuts_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       procedure Add_Button
         (Name, Label, Command, Shortcut: String; Underline: Natural;
          Row: Integer := -1) is
@@ -655,7 +659,9 @@ package body OrdersMenu is
          end loop Set_Shortcuts_Loop;
          Add_Shortcuts_To_Buttons_Block :
          declare
+            --## rule off IMPROPER_INITIALIZATION
             Menu_Button: Ttk_Button;
+            --## rule on IMPROPER_INITIALIZATION
          begin
             Set_Buttons_Loop :
             for Button of Shortcuts loop
@@ -1223,6 +1229,7 @@ package body OrdersMenu is
                      .Name) &
               " for free to base.",
             M_Type => TRADEMESSAGE);
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
          Update_Cargo
            (Ship => Player_Ship,
             Proto_Index =>
@@ -1233,9 +1240,11 @@ package body OrdersMenu is
               -(Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Item_Index)
                  .Amount));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
       else
          Sell_Medicines_Block :
          begin
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Gain_Rep
               (Base_Index => Base_Index,
                Points =>
@@ -1244,6 +1253,7 @@ package body OrdersMenu is
                      .Amount /
                    20) *
                   (-1)));
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             Sell_Items
               (Item_Index => Item_Index,
                Amount =>
