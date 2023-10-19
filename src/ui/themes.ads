@@ -153,6 +153,8 @@ package Themes is
    -- Power_Icon            - Icon used for the enable or disable engine button
    -- Assign_Crew_Icon      - Icon used for assign crew members to ship's modules
    -- Assign_Ammo_Icon      - Icon used for assign ammo to ship's guns
+   -- Buy_Default_Icon      - Icon used for buy items button with default color
+   -- Sell_Default_Icon     - Icon used for sell items button with default color
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -249,6 +251,8 @@ package Themes is
       Power_Icon: Unbounded_String;
       Assign_Crew_Icon: Unbounded_String;
       Assign_Ammo_Icon: Unbounded_String;
+      Buy_Default_Icon: Unbounded_String;
+      Sell_Default_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -353,7 +357,9 @@ package Themes is
       Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg",
       Power_Icon => Default_Theme_Icons_Path & "power.svg",
       Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg",
-      Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg");
+      Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg",
+      Buy_Default_Icon => Default_Theme_Icons_Path & "buy2.svg",
+      Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
