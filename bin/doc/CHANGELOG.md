@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to see an harpoon gun information in the shipyard's screen
   during installation when another harpoon gun is installed
 - Recruits in bases have wrong items equipped
+- Crash when trying to train the player's crew's members' skills in bases
 
 ## [9.0.2] - 2023-09-24
 
