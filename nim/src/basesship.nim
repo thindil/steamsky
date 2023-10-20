@@ -61,11 +61,44 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) =
         moduleIndex].protoIndex].repairMaterial)
     cost = time * getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = protoIndex)
+  else:
+    for module in playerShip.modules:
+      if module.durability < module.maxDurability:
+        time = time + module.maxDurability - module.durability
+        protoIndex = findProtoItem(itemType = modulesList[
+            module.protoIndex].repairMaterial)
+        cost = cost + ((module.maxDurability - module.durability) * getPrice(
+            baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex))
+    if moduleIndex == -2:
+      cost = cost * 2
+      time = (time / 2).Natural
+    elif moduleIndex == -3:
+      cost = cost * 4
+      time = (time / 4).Natural
+  if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
+    cost = (cost / 2).Natural
+  cost = (cost.float * newGameSettings.pricesBonus).Natural
+  if cost == 0:
+    cost = 1
+  if time == 0:
+    time = 1
 
 # Temporary code for interfacing with Ada
 
 proc payAdaForDock() {.raises: [], tags: [], exportc.} =
   try:
     payForDock()
+  except KeyError:
+    discard
+
+proc repairAdaCost(cost, time: var cint; moduleIndex: cint) {.raises: [],
+    tags: [], exportc.} =
+  try:
+    var
+      nimCost = cost.Natural
+      nimTime = time.Natural
+    repairCost(cost = nimCost, time = nimTime, moduleIndex = moduleIndex)
+    cost = nimCost.cint
+    time = nimTime.cint
   except KeyError:
     discard
