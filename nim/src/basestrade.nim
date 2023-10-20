@@ -214,6 +214,15 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
 proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
     isAmount: bool = true) {.sideEffect, raises: [KeyError, IOError, Exception],
     tags: [WriteIOEffect, RootEffect].} =
+  ## Train the selected skill of the selected player's ship's crew member in
+  ## the base
+  ##
+  ## * memberIndex - the index of the member in the player's ship's crew
+  ## * skillIndex  - the index of the skill to train
+  ## * amount      - how many times train the skill or how much money spend
+  ##                 on the training
+  ## * isAmount    - if true, the amount parameter is the amount of training
+  ##                 sessions. Otherwise it is the amount of money to spend
   giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
       moduleIndex = 0, checkPriorities = false)
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
