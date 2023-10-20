@@ -13,25 +13,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Containers.Vectors;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
-with BasesTypes; use BasesTypes;
+with BasesTypes;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
-with Crafts; use Crafts;
+with Crafts;
 with Crew; use Crew;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
@@ -42,20 +42,30 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
 with Trades; use Trades;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
-with WaitMenu; use WaitMenu;
+with WaitMenu;
 
 package body OrdersMenu is
 
    function Show_Orders_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ada.Containers;
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tk.Ada.Winfo;
+      use BasesTypes;
+      use Crafts;
+      use CoreUI;
       use Tiny_String;
 
       Have_Trader: Boolean := False;
@@ -713,6 +723,8 @@ package body OrdersMenu is
    function Docking_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use WaitMenu;
+
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed = DOCKED then
@@ -1182,6 +1194,7 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ships.Cargo;
       use Tiny_String;
 
       Base_Index: constant Positive :=
