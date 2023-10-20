@@ -99,6 +99,9 @@ package Bases.Ship is
      (Cost, Time: in out Natural; Module_Index: Integer) with
       Pre => Module_Index in -2 .. Player_Ship.Modules.Last_Index,
       Post => Cost > 0 and Time > 0,
+      Import => True,
+      Convention => C,
+      External_Name => "repairAdaCost",
       Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
       -- ****
 

@@ -21,8 +21,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
-with Config;
-with BasesTypes;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
 
@@ -588,70 +586,5 @@ package body Bases.Ship is
       Set_Base_Cargo(Base_Index => Base_Index);
       Get_Ship_From_Nim(Ship => Player_Ship);
    end Pay_For_Dock;
-
-   procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
-      use BasesTypes;
-      use Config;
-
-      Proto_Index: Natural := 0;
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-   begin
-      if Module_Index > 0 then
-         Time :=
-           Player_Ship.Modules(Module_Index).Max_Durability -
-           Player_Ship.Modules(Module_Index).Durability;
-         Proto_Index :=
-           Find_Proto_Item
-             (Item_Type =>
-                Get_Module
-                  (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                  .Repair_Material);
-         Cost :=
-           Time *
-           Get_Price
-             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-              Item_Index => Proto_Index);
-      else
-         Count_Repair_Time_And_Cost_Loop :
-         for Module of Player_Ship.Modules loop
-            if Module.Durability < Module.Max_Durability then
-               Time := Time + Module.Max_Durability - Module.Durability;
-               Proto_Index :=
-                 Find_Proto_Item
-                   (Item_Type =>
-                      Get_Module(Index => Module.Proto_Index).Repair_Material);
-               Cost :=
-                 Cost +
-                 ((Module.Max_Durability - Module.Durability) *
-                  Get_Price
-                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                     Item_Index => Proto_Index));
-            end if;
-         end loop Count_Repair_Time_And_Cost_Loop;
-         --## rule off SIMPLIFIABLE_STATEMENTS
-         if Module_Index = -1 then
-            Cost := Cost * 2;
-            Time := Time / 2;
-         elsif Module_Index = -2 then
-            Cost := Cost * 4;
-            Time := Time / 4;
-         end if;
-         --## rule on SIMPLIFIABLE_STATEMENTS
-      end if;
-      if Has_Flag
-          (Base_Type => Sky_Bases(Base_Index).Base_Type,
-           Flag => "shipyard") then
-         Cost := Cost / 2;
-      end if;
-      Cost :=
-        Natural(Float(Cost) * Float(Get_Float_Setting(Name => "pricesBonus")));
-      if Cost = 0 then
-         Cost := 1;
-      end if;
-      if Time = 0 then
-         Time := 1;
-      end if;
-   end Repair_Cost;
 
 end Bases.Ship;
