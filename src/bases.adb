@@ -320,12 +320,12 @@ package body Bases is
    begin
       Convert_Inventory_Loop :
       for I in Nim_Recruit.Inventory'Range loop
-         exit Convert_Inventory_Loop when I >
+         exit Convert_Inventory_Loop when I =
            Positive_Formal_Container.Last_Index
              (Container => Recruit.Inventory);
          Nim_Recruit.Inventory(I) :=
            Positive_Formal_Container.Element
-             (Container => Recruit.Inventory, Index => I);
+             (Container => Recruit.Inventory, Index => I + 1);
       end loop Convert_Inventory_Loop;
       Convert_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
