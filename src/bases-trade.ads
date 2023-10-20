@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -134,8 +134,7 @@ package Bases.Trade is
       Is_Amount: Boolean := True) with
       Pre => Member_Index in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      Skill_Index in 1 .. Skills_Amount,
-      Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
+      Skill_Index in 1 .. Skills_Amount;
       -- ****
 
 end Bases.Trade;
