@@ -5,7 +5,8 @@ Testing hireRecruit.
 Testing buyRecipes.
 Testing healCost.
 Testing healWounded.
-Testing trainCost.'''
+Testing trainCost.
+Testing trainSkill.'''
 """
 
 import std/tables
@@ -63,6 +64,7 @@ for i in 2 .. 100:
   skyBases[i].population = 100
 generateCargo()
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+playerCareer = "general"
 
 echo "Testing hireRecruit."
 generateCargo()
@@ -120,3 +122,10 @@ try:
   assert trainCost(0, 1) > 0
 except AssertionDefect:
   writeLine(stderr, "Failed to count the train cost of the skill for a crew member.")
+
+echo "Testing trainSkill."
+trainSkill(0, 1, 1)
+try:
+  assert playerShip.crew[0].skills.len == 2
+except AssertionDefect:
+  writeLine(stderr, "Failed to train a new skill in the base.")
