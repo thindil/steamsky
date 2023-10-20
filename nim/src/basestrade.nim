@@ -211,8 +211,9 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
       break
   countPrice(price = result, traderIndex = findMember(order = talk))
 
-proc trainSkill*(memberIndex, skillIndex: Natural; amount: Positive;
-    isAmount: bool = true) =
+proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
+    isAmount: bool = true) {.sideEffect, raises: [KeyError, IOError, Exception],
+    tags: [WriteIOEffect, RootEffect].} =
   giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
       moduleIndex = 0, checkPriorities = false)
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -296,8 +297,8 @@ proc trainAdaCost(memberIndex, skillIndex: cint): cint {.raises: [], tags: [], e
   except KeyError:
     return 0
 
-proc trainAdaSkill(memberIndex, skillIndex, amount, isAmount: cint) {.raises: [],
-    tags: [WriteIOEffect, RootEffect], exportc.} =
+proc trainAdaSkill(memberIndex, skillIndex, amount, isAmount: cint) {.raises: [
+    ], tags: [WriteIOEffect, RootEffect], exportc.} =
   try:
     trainSkill(memberIndex = memberIndex - 1, skillIndex = skillIndex,
         amount = amount, isAmount = isAmount == 1)
