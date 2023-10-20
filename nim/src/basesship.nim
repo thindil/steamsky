@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import bases, basescargo, config, crewinventory, game, maps, messages,
-    shipscargo, shipscrew, types
+import std/tables
+import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
+    messages, shipscargo, shipscrew, types
 
 proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
   ## Pay daily fee for docking, if the player doesn't have enough money for
@@ -49,6 +50,17 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
       " docking fee.", mType = otherMessage)
   if traderIndex > -1:
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+
+proc repairCost*(cost, time: var Natural; moduleIndex: int) =
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var protoIndex: int
+  if moduleIndex > -1:
+    time = playerShip.modules[moduleIndex].maxDurability - playerShip.modules[
+        moduleIndex].durability
+    protoIndex = findProtoItem(itemType = modulesList[playerShip.modules[
+        moduleIndex].protoIndex].repairMaterial)
+    cost = time * getPrice(baseType = skyBases[baseIndex].baseType,
+        itemIndex = protoIndex)
 
 # Temporary code for interfacing with Ada
 
