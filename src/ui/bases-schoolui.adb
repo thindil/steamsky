@@ -112,10 +112,9 @@ package body Bases.SchoolUI is
       Old_Combo_List :=
         To_Unbounded_String
           (Source => cget(Widgt => Combo_Box, option => "-values"));
-      if Length(Source => Old_Combo_List) + 1 =
+      Update_Header;
+      if Length(Source => Old_Combo_List) + 1 /=
         Length(Source => Combo_List) then
-         Update_Header;
-      else
          configure
            (Widgt => Combo_Box,
             options =>
