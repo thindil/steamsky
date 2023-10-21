@@ -1,11 +1,13 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing payForDock.'''
+Testing payForDock.
+Testing repairCost.'''
 """
 
 import std/tables
-import ../../src/[basesship, basestypes, careers, factions, game, items, maps, types]
+import ../../src/[basesship, basestypes, careers, factions, game, items, maps,
+    shipmodules, types]
 
 echo "Loading the game data."
 if basesTypesList.len == 0:
@@ -14,6 +16,7 @@ if basesTypesList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
+  loadModules("../bin/data/shipmodules.dat")
 
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 playerShip.skyX = 1
@@ -27,7 +30,7 @@ playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
     experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
 playerShip.modules = @[]
 playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
-    durability: 100, maxModules: 10))
+    durability: 100, maxDurability: 100, maxModules: 10))
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
 playerShip.speed = docked
@@ -43,3 +46,19 @@ try:
   assert playerShip.cargo[0].amount == 90
 except AssertionDefect:
   writeLine(stderr, "Failed to pay for docking in a base.")
+
+echo "Testing repairCost."
+var cost, time: Natural = 0
+playerShip.modules[0].durability -= 5
+repairCost(cost, time, 0)
+try:
+  assert cost > 0 and time > 0
+except AssertionDefect:
+  writeLine(stderr, "Failed to count cost and time needed to repair a single module.")
+cost = 0
+time = 0
+repairCost(cost, time, -1)
+try:
+  assert cost > 0 and time > 0
+except AssertionDefect:
+  writeLine(stderr, "Failed to count cost and time needed to repair the whole ship.")
