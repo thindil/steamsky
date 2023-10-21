@@ -97,7 +97,7 @@ proc repairAdaCost(cost, time: var cint; moduleIndex: cint) {.raises: [],
     var
       nimCost = cost.Natural
       nimTime = time.Natural
-    repairCost(cost = nimCost, time = nimTime, moduleIndex = moduleIndex)
+    repairCost(cost = nimCost, time = nimTime, moduleIndex = moduleIndex - 1)
     cost = nimCost.cint
     time = nimTime.cint
   except KeyError:
