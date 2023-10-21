@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   during installation when another harpoon gun is installed
 - Recruits in bases have wrong items equipped
 - Crash when trying to train the player's crew's members' skills in bases
+- Game time information doesn't update after training skill in bases
 
 ## [9.0.2] - 2023-09-24
 
