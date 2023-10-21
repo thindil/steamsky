@@ -23,6 +23,7 @@ type
   AlreadyKnownError* = object of CatchableError
     ## Raised when the recipe is already known to the player
   CantHealError* = object of CatchableError
+    ## Raised when the selected player's ship's crew member can't be healed
 
 proc checkMoney(price: Positive; message: string = ""): int =
   result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
