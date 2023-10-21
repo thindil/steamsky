@@ -51,7 +51,8 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
   if traderIndex > -1:
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
 
-proc repairCost*(cost, time: var Natural; moduleIndex: int) =
+proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
+    raises: [KeyError], tags: [].} =
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var protoIndex: int
   if moduleIndex > -1:
