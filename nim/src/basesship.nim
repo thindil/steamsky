@@ -53,6 +53,15 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
 
 proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
     raises: [KeyError], tags: [].} =
+  ## Count the repair cost and time required for the player's ship in the base
+  ##
+  ## * cost        - the cost of repair action
+  ## * time        - the time required to finish the repair action
+  ## * moduleIndex - the index of the module to repair. Values below 0 means:
+  ##                 -1: repair all damaged modules slowly, -2 repair all damaged
+  ##                 modules in normal speed, -3 repais all damaged modules fast
+  ##
+  ## Returns the modified parameters cost and time
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var protoIndex: int
   if moduleIndex > -1:
