@@ -101,8 +101,7 @@ package Bases.Ship is
       Post => Cost > 0 and Time > 0,
       Import => True,
       Convention => C,
-      External_Name => "repairAdaCost",
-      Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
+      External_Name => "repairAdaCost";
       -- ****
 
 end Bases.Ship;
