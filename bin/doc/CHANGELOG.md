@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to see an harpoon gun information in the shipyard's screen
   during installation when another harpoon gun is installed
 - Recruits in bases have wrong items equipped
+- Game time information doesn't update after training skill in bases
 
 ## [9.2] - 2023-10-01
 
