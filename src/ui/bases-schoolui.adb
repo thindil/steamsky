@@ -112,6 +112,7 @@ package body Bases.SchoolUI is
       Old_Combo_List :=
         To_Unbounded_String
           (Source => cget(Widgt => Combo_Box, option => "-values"));
+      Update_Header;
       if Length(Source => Old_Combo_List) + 1 /=
         Length(Source => Combo_List) then
          configure
@@ -120,8 +121,6 @@ package body Bases.SchoolUI is
               "-values [list" & To_String(Source => Combo_List) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
          Set(SpinBox => Spin_Box, Value => "1");
-      else
-         Update_Header;
       end if;
       Tcl_Eval
         (interp => Interp,
