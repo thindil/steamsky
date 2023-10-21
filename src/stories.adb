@@ -243,7 +243,7 @@ package body Stories is
       Temp_Record: Story_Data;
       Nim_Story: Nim_Story_Data;
       --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Ada_Story(Index: chars_ptr; Story: out Nim_Story_Data) with
+      procedure Get_Ada_Story(I: chars_ptr; Story: out Nim_Story_Data) with
          Import => True,
          Convention => C,
          External_Name => "getAdaStory";
@@ -288,11 +288,13 @@ package body Stories is
       end Convert_Step;
    begin
       Get_Ada_Story
-        (Index => New_String(Str => To_String(Source => Index)),
+        (I => New_String(Str => To_String(Source => Index)),
          Story => Nim_Story);
+      --## rule off IMPROPER_INITIALIZATION
       Temp_Record.Steps.Clear;
       Temp_Record.Start_Data.Clear;
       Temp_Record.Forbidden_Factions.Clear;
+      --## rule on IMPROPER_INITIALIZATION
       if Nim_Story.Start_Condition = -1 then
          return Temp_Record;
       end if;
