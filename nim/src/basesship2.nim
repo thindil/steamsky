@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import bases, basesship, crewinventory, game, messages, shipscrew, trades, types
+import bases, basescargo, basesship, crewinventory, game, game2, maps, messages,
+    shipscargo, shipscrew, trades, types
 
 type
   NothingToRepairError* = object of CatchableError
@@ -46,4 +47,19 @@ proc repairShip*(moduleIndex: int) =
         module.durability = module.maxDurability
     addMessage(message = "You bought an entire ship repair for " & $cost & " " &
         moneyName & ".", mType = tradeMessage)
+  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
+  updateBaseCargo(protoIndex = moneyIndex, amount = cost)
+  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+  gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
+  updateGame(minutes = time)
+
+# Temporary code for interfacing with Ada
+
+proc repairAdaShip(moduleIndex: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    repairShip(moduleIndex = moduleIndex - 1)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
 
