@@ -25,6 +25,11 @@ type
 proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
     NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
     RootEffect].} =
+  ## Repair the selected module or the whole player's ship in bases
+  ##
+  ## * moduleIndex - the index of the module to repair. If less than 0, repair
+  ##                 the whole player's ship. -1 - slow repair, -2 normal speed,
+  ##                 -3 fast repair.
   var cost, time: Natural = 0
   repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
   if cost == 0:
