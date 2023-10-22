@@ -55,7 +55,7 @@ proc repairShip*(moduleIndex: int) =
 
 # Temporary code for interfacing with Ada
 
-proc repairAdaShip(moduleIndex: cint): cstring {.raises: [], tags: [
+proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc.} =
   try:
     repairShip(moduleIndex = moduleIndex - 1)

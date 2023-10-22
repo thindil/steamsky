@@ -27,70 +27,41 @@ with ShipModules; use ShipModules;
 package body Bases.Ship is
 
    procedure Repair_Ship(Module_Index: Integer) is
-      use Tiny_String;
+      use Interfaces.C;
 
-      Cost, Time: Natural := 0;
-      Money_Index_2: constant Inventory_Container.Extended_Index :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
+      Base_Index: constant Extended_Base_Range :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Result: chars_ptr;
+      Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
+      Space_Index: Natural := 0;
+      function Repair_Ada_Ship(M_Index: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "repairAdaShip2";
    begin
-      Repair_Cost(Cost => Cost, Time => Time, Module_Index => Module_Index);
-      if Cost = 0 then
-         raise Bases_Ship_Nothing_To_Repair;
-      end if;
-      Count_Price(Price => Cost, Trader_Index => Trader_Index);
-      if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => Money_Index_2)
-          .Amount <
-        Cost then
-         raise Trade_Not_Enough_Money;
-      end if;
-      Give_Rest_Order_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order = REPAIR then
-            Give_Orders
-              (Ship => Player_Ship,
-               Member_Index => Crew_Container.To_Index(Position => I),
-               Given_Order => REST);
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      Get_Game_Date;
+      Result := Repair_Ada_Ship(M_Index => Module_Index);
+      if Strlen(Item => Result) > 0 then
+         Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
+         Space_Index := Index(Source => Ada_Result, Pattern => " ");
+         if Space_Index > 0 then
+            Exception_Name :=
+              Unbounded_Slice
+                (Source => Ada_Result, Low => 1, High => Space_Index - 1);
          end if;
-      end loop Give_Rest_Order_Loop;
-      if Module_Index > 0 then
-         Player_Ship.Modules(Module_Index).Durability :=
-           Player_Ship.Modules(Module_Index).Max_Durability;
-         Add_Message
-           (Message =>
-              "You bought " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              " repair for" & Positive'Image(Cost) & " " &
-              To_String(Source => Money_Name) & ".",
-            M_Type => TRADEMESSAGE);
-      else
-         Repair_Whole_Ship_Loop :
-         for Module of Player_Ship.Modules loop
-            if Module.Durability < Module.Max_Durability then
-               Module.Durability := Module.Max_Durability;
-            end if;
-         end loop Repair_Whole_Ship_Loop;
-         Add_Message
-           (Message =>
-              "You bought an entire ship repair for" & Positive'Image(Cost) &
-              " " & To_String(Source => Money_Name) & ".",
-            M_Type => TRADEMESSAGE);
+         if Exception_Name =
+           To_Unbounded_String(Source => "NothingToRepairError") then
+            raise Bases_Ship_Nothing_To_Repair;
+         elsif Exception_Name =
+           To_Unbounded_String(Source => "NotEnoughMoneyError") then
+            raise Trade_Not_Enough_Money;
+         end if;
       end if;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Update_Cargo
-        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-      Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
-         Crew_Index => Trader_Index);
-      Gain_Rep
-        (Base_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
-         Points => 1);
-      Update_Game(Minutes => Time);
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Game_Date;
    end Repair_Ship;
 
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) is
