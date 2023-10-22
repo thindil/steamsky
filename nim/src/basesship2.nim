@@ -22,7 +22,9 @@ type
   NothingToRepairError* = object of CatchableError
     ## Raised when there is nothing to repair on the player's ship
 
-proc repairShip*(moduleIndex: int) =
+proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
+    NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
+    RootEffect].} =
   var cost, time: Natural = 0
   repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
   if cost == 0:
