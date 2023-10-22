@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.3] - 2023-10-22
 
 ### Fixed
 - Crash when trying to sell the ship's module which has owners
