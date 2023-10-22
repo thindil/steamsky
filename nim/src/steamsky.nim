@@ -19,7 +19,8 @@ import std/[os, parseopt, strutils]
 import game, log, tk
 # Temporary imports
 import goals, help, mobs, shipmodules, ships, basescargo, crew, events,
-    missions, stories, bases, combat, crew2, events2, missions2, basestrade
+    missions, stories, bases, combat, crew2, events2, missions2, basestrade,
+    basesship2
 import ui/utilsui
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
