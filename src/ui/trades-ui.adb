@@ -154,20 +154,22 @@ package body Trades.UI is
         Get_Widget
           (pathName => Trade_Canvas & ".trade.options.typelabel",
            Interp => Interp);
-      Item_Name, Trade_Info, Item_Durability: Unbounded_String;
-      Proto_Index: Natural;
-      Base_Type, Item_Type: Bounded_String;
+      Item_Name, Trade_Info, Item_Durability: Unbounded_String :=
+        Null_Unbounded_String;
+      Proto_Index: Natural := 0;
+      Base_Type: Bounded_String;
+      Item_Type: Bounded_String := Null_Bounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
-      Price: Positive;
+      Price: Positive := 1;
       Combo_Box: Ttk_ComboBox;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
-      Base_Cargo_Index, Base_Amount: Natural;
+      Base_Cargo_Index, Base_Amount: Natural := 0;
       Indexes_List: Positive_Container.Vector;
       Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
-      Profit: Integer;
+      Profit: Integer := 0;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Search_Entry: constant Ttk_Entry :=
@@ -624,7 +626,7 @@ package body Trades.UI is
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 4);
          Add_Button
-           (Table => Trade_Table, Text => Integer'Image(-(Price)),
+           (Table => Trade_Table, Text => Integer'Image(-Price),
             Tooltip => "Show available options for item",
             Command =>
               "ShowTradeItemInfo -" &
@@ -836,7 +838,7 @@ package body Trades.UI is
       use Short_String;
       use Tiny_String;
 
-      Item_Info: Unbounded_String;
+      Item_Info: Unbounded_String := Null_Unbounded_String;
       Proto_Index: Natural;
       Cargo_Index, Base_Cargo_Index, Price: Natural := 0;
       Base_Index: constant Natural :=
@@ -847,11 +849,11 @@ package body Trades.UI is
       Max_Sell_Amount, Max_Buy_Amount: Integer := 0;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Base_Type: Tiny_String.Bounded_String;
+      Base_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
    begin
       Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
       if Item_Index < 0 then
-         Base_Cargo_Index := abs (Item_Index);
+         Base_Cargo_Index := abs Item_Index;
       else
          Cargo_Index := Item_Index;
       end if;
@@ -1112,7 +1114,7 @@ package body Trades.UI is
       if Base_Cargo_Index > 0 and Money_Index_2 > 0 and
         ((Base_Index > 0 and
           Is_Buyable(Base_Type => Base_Type, Item_Index => Proto_Index)) or
-         (Base_Index = 0)) then
+         Base_Index = 0) then
          Max_Buy_Amount :=
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
