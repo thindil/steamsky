@@ -1121,6 +1121,10 @@ story.
 * Key `AssignAmmoIcon`: Path to the SVG image which will be used for assign an
   ammunition to a gun in the player' ship in the module info dialog.
   Optional.
+* Key `BuyDefaultIcon`: Path to the SVG image which will be used for buy item
+  button in the item info dialog in the trade screen. Optional.
+* Key `SellDefaultIcon`: Path to the SVG image which will be used for sell item
+  button in the item info dialog in the trade screen. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
