@@ -2,6 +2,7 @@ discard """
   exitcode: 0
   output: '''Loading the game data.
 Testing deleteMission.
+Testing generateMissions.
 Testing updateMission.
 Testing getMissionType.
 Testing updateMission.'''
@@ -48,6 +49,7 @@ try:
 except AssertionDefect:
   writeLine(stderr, "Failed to delete an accepted mission.")
 
+echo "Testing generateMissions."
 skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 generateMissions()
 
