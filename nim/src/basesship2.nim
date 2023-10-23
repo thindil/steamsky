@@ -115,6 +115,22 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
           modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
         raise newException(exceptn = InstallationError,
             message = "You don't have free modules space for more modules.")
+      if modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun} and
+          freeTurretIndex == -1:
+        raise newException(exceptn = InstallationError,
+            message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    updateBaseCargo(protoIndex = moneyIndex, amount = price)
+    gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
+    updateGame(minutes = modulesList[moduleIndex].installTime)
+    if modulesList[moduleIndex].mType == ModuleType.hull:
+      playerShip.modules.insert(ModuleData(mType: hull, name: modulesList[
+          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+          moduleIndex].weight, durability: modulesList[moduleIndex].durability,
+          maxDurability: modulesList[moduleIndex].durability,
+          installedModules: modulesList[moduleIndex].value,
+          maxModules: modulesList[moduleIndex].maxValue))
 
 # Temporary code for interfacing with Ada
 
