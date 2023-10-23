@@ -24,6 +24,9 @@ type
     ## Raised when there is nothing to repair on the player's ship
   UniqueModuleError* = object of CatchableError
     ## Raised when there is installed the same type of an unique module
+  InstallationError* = object of CatchableError
+    ## Raised when there is a problem with installing a new module on the
+    ## player's ship
 
 proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
     NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
@@ -87,6 +90,31 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
     if playerShip.cargo[moneyIndex2].amount < price:
       raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
           moduleIndex].name)
+    for module in playerShip.modules:
+      if modulesList[module.protoIndex].mType == modulesList[
+          moduleIndex].mType and modulesList[moduleIndex].unique:
+        raise newException(exceptn = UniqueModuleError, message = modulesList[
+            moduleIndex].name)
+    if modulesList[moduleIndex].mType == ModuleType.hull:
+      for module in playerShip.modules:
+        if modulesList[module.protoIndex].size > modulesList[moduleIndex].value:
+          raise newException(exceptn = InstallationError,
+              message = "This hull don't allow to have installed that big modules what you currently have.")
+      if modulesList[moduleIndex].maxValue < modulesAmount:
+        raise newException(exceptn = InstallationError,
+            message = "This hull is too small for your ship. Remove some modules first.")
+      playerShip.modules.delete(hullIndex)
+    else:
+      if modulesList[moduleIndex].size > modulesList[playerShip.modules[
+          hullIndex].protoIndex].value:
+        raise newException(exceptn = InstallationError,
+            message = "You can't install this module because it is too big for this hull.")
+      if modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
+        modulesAmount = modulesAmount + modulesList[moduleIndex].size
+      if modulesAmount > playerShip.modules[hullIndex].maxModules and
+          modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
+        raise newException(exceptn = InstallationError,
+            message = "You don't have free modules space for more modules.")
 
 # Temporary code for interfacing with Ada
 
