@@ -15,12 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
 import bases, basescargo, basesship, crewinventory, game, game2, maps, messages,
     shipscargo, shipscrew, trades, types
 
 type
   NothingToRepairError* = object of CatchableError
     ## Raised when there is nothing to repair on the player's ship
+  UniqueModuleError* = object of CatchableError
+    ## Raised when there is installed the same type of an unique module
 
 proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
     NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
@@ -59,6 +62,31 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
   updateGame(minutes = time)
+
+proc upgradeShip*(install: bool; moduleIndex: Natural) =
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  if moneyIndex2 == -1:
+    raise newException(exceptn = NoMoneyError, message = "")
+  var hullIndex, modulesAmount, freeTurretIndex = 0
+  for index, module in playerShip.modules:
+    case module.mType
+    of hull:
+      hullIndex = index
+      modulesAmount = module.installedModules
+    of turret:
+      if module.gunIndex == -1 and install and modulesList[
+          module.protoIndex].size >= modulesList[moduleIndex].size:
+        freeTurretIndex = index
+    else:
+      discard
+  let traderIndex = findMember(order = talk)
+  if install:
+    var price = modulesList[moduleIndex].price
+    countPrice(price = price, traderIndex = traderIndex)
+    if playerShip.cargo[moneyIndex2].amount < price:
+      raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
+          moduleIndex].name)
 
 # Temporary code for interfacing with Ada
 
