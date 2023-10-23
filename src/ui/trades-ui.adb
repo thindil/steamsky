@@ -166,7 +166,9 @@ package body Trades.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
       Base_Cargo_Index, Base_Amount: Natural := 0;
+      --## rule off IMPROPER_INITIALIZATION
       Indexes_List: Positive_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
       Event_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Profit: Integer := 0;
@@ -176,9 +178,11 @@ package body Trades.UI is
         Get_Widget
           (pathName => Trade_Canvas & ".trade.options.search",
            Interp => Interp);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
@@ -474,6 +478,7 @@ package body Trades.UI is
       Current_Item_Index :=
         Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) +
         2;
+      --## rule off SIMPLIFIABLE_STATEMENTS
       Fill_Trader_Types_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          Proto_Index :=
@@ -664,6 +669,7 @@ package body Trades.UI is
             Column => 8, New_Row => True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       if Page > 1 then
          if Trade_Table.Row <
            Get_Integer_Setting(Name => "listsLimit") + 1 then
@@ -1084,12 +1090,14 @@ package body Trades.UI is
                  (Price => Max_Price,
                   Trader_Index => Find_Member(Order => TALK), Reduce => False);
             end if;
+            --## rule off SIMPLIFIABLE_EXPRESSIONS
             Weight :=
               Free_Cargo
                 (Amount =>
                    (Get_Proto_Item(Index => Proto_Index).Weight *
                     Max_Sell_Amount) -
                    Max_Price);
+            --## rule on SIMPLIFIABLE_EXPRESSIONS
             Count_Sell_Amount_Loop :
             while Weight < 0 loop
                Max_Sell_Amount :=
@@ -1102,12 +1110,14 @@ package body Trades.UI is
                Count_Price
                  (Price => Max_Price,
                   Trader_Index => Find_Member(Order => TALK), Reduce => False);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Weight :=
                  Free_Cargo
                    (Amount =>
                       (Get_Proto_Item(Index => Proto_Index).Weight *
                        Max_Sell_Amount) -
                       Max_Price);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end loop Count_Sell_Amount_Loop;
          end Count_Sell_Amount_Block;
       end if;
@@ -1162,17 +1172,21 @@ package body Trades.UI is
                Count_Price
                  (Price => Max_Price,
                   Trader_Index => Find_Member(Order => TALK));
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Weight :=
                  Free_Cargo
                    (Amount =>
                       Max_Price -
                       (Get_Proto_Item(Index => Proto_Index).Weight *
                        Max_Buy_Amount));
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Max_Buy_Amount :=
                     Max_Buy_Amount +
                     (Weight / Get_Proto_Item(Index => Proto_Index).Weight) - 1;
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                   if Max_Buy_Amount < 0 then
                      Max_Buy_Amount := 0;
                   end if;
@@ -1181,12 +1195,14 @@ package body Trades.UI is
                   Count_Price
                     (Price => Max_Price,
                      Trader_Index => Find_Member(Order => TALK));
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Weight :=
                     Free_Cargo
                       (Amount =>
                          Max_Price -
                          (Get_Proto_Item(Index => Proto_Index).Weight *
                           Max_Buy_Amount));
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                end loop Count_Buy_Amount_Loop;
             end if;
          end Count_Buy_Amount_Block;
@@ -1301,6 +1317,7 @@ package body Trades.UI is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if CArgv.Arg(Argv => Argv, N => 1) = "sell" then
          Show_Manipulate_Item
            (Title =>
@@ -1364,6 +1381,7 @@ package body Trades.UI is
             end if;
          end if;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return TCL_OK;
    end Trade_Amount_Command;
 
