@@ -5,17 +5,24 @@ Testing repairShip.'''
 """
 
 import std/tables
-import ../../src/[basesship2, basestypes, careers, factions, game, items, maps,
-    shipmodules, types, utils]
+import ../../src/[basesship2, basestypes, careers, crafts, factions, game,
+    items, maps, mobs, ships, shipmodules, types, utils]
 
 echo "Loading the game data."
-if itemsList.len == 0:
+if basesTypesList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
+if modulesList.len == 0:
   loadModules("../bin/data/shipmodules.dat")
+if recipesList.len == 0:
+  loadRecipes("../bin/data/recipes.dat")
+if protoMobsList.len == 0:
+  loadMobs("../bin/data/mobs.dat")
+if protoShipsList.len == 0:
+  loadShips("../bin/data/ships.dat")
 
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 playerShip.skyX = 1
@@ -35,8 +42,15 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
     durability: 100, maxDurability: 100, maxModules: 10))
 playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
     durability: 100))
+playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
+    durability: 100))
+playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
+    durability: 100))
+playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
+    durability: 100, damage: 100, owner: @[-1]))
 playerShip.cargo = @[]
-playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000, durability: 100))
+playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
+    durability: 100))
 playerShip.speed = docked
 for x in 1 .. 1024:
   for y in 1 .. 1024:
