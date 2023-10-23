@@ -129,8 +129,63 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
           moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
           moduleIndex].weight, durability: modulesList[moduleIndex].durability,
           maxDurability: modulesList[moduleIndex].durability,
-          installedModules: modulesList[moduleIndex].value,
-          maxModules: modulesList[moduleIndex].maxValue))
+          upgradeAction: none, installedModules: modulesList[moduleIndex].value,
+          maxModules: modulesList[moduleIndex].maxValue), hullIndex)
+    else:
+      var owners: seq[int] = @[]
+      for i in 1 .. modulesList[moduleIndex].maxOwners:
+        owners.add(-1)
+      case modulesList[moduleIndex].mType
+      of alchemyLab .. greenhouse:
+        playerShip.modules.add(ModuleData(mType: workshop, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            craftingIndex: "", craftingTime: 0, craftingAmount: 0))
+      of medicalRoom:
+        playerShip.modules.add(ModuleData(mType: medicalRoom, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of trainingRoom:
+        playerShip.modules.add(ModuleData(mType: trainingRoom,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            trainedSkill: 0))
+      of cockpit:
+        playerShip.modules.add(ModuleData(mType: cockpit, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of turret:
+        playerShip.modules.add(ModuleData(mType: turret, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            gunIndex: -1))
+      of cabin:
+        playerShip.modules.add(ModuleData(mType: cabin, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            cleanliness: modulesList[moduleIndex].value, quality: modulesList[
+            moduleIndex].maxValue))
+      of cargo:
+        playerShip.modules.add(ModuleData(mType: cargoRoom, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      else:
+        discard
 
 # Temporary code for interfacing with Ada
 
