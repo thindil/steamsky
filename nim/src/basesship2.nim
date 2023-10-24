@@ -314,7 +314,8 @@ proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
 proc upgradeAdaShip2(install, moduleIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc.} =
   try:
-    upgradeShip(install = install == 1, moduleIndex = moduleIndex - 1)
+    upgradeShip(install = install == 1, moduleIndex = (if install ==
+        1: moduleIndex else: moduleIndex - 1))
     return "".cstring
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
