@@ -27,6 +27,9 @@ type
   InstallationError* = object of CatchableError
     ## Raised when there is a problem with installing a new module on the
     ## player's ship
+  RemovingError* = object of CatchableError
+    ## Raised when there is a problem with removing a modue from the player's
+    ## ship
 
 proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
     NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
@@ -83,7 +86,9 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
         freeTurretIndex = index
     else:
       discard
-  let traderIndex = findMember(order = talk)
+  let
+    traderIndex = findMember(order = talk)
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var price: Natural = 0
   if install:
     price = modulesList[moduleIndex].price
@@ -123,7 +128,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
     updateBaseCargo(protoIndex = moneyIndex, amount = price)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
+    gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = modulesList[moduleIndex].installTime)
     if modulesList[moduleIndex].mType == ModuleType.hull:
       playerShip.modules.insert(ModuleData(mType: hull, name: modulesList[
@@ -238,6 +243,28 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
     price = modulesList[playerShip.modules[shipModuleIndex].protoIndex].price -
         (modulesList[playerShip.modules[
         shipModuleIndex].protoIndex].price.float * damage).Natural
+    countPrice(price = price, traderIndex = traderIndex, reduce = false)
+    if freeCargo(amount = -price) < 0:
+      raise newException(exceptn = NoFreeCargoError, message = "")
+    if price > skyBases[baseIndex].cargo[0].amount:
+      raise newException(exceptn = NoMoneyInBaseError, message = "")
+    case modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType
+    of turret:
+      if playerShip.modules[shipModuleIndex].gunIndex > -1:
+        raise newException(exceptn = RemovingError,
+            message = "You have installed gun in this turret, remove it before you remove this turret.")
+    of gun, harpoonGun:
+      for module in playerShip.modules.mitems:
+        if module.mType == ModuleType2.turret and module.gunIndex == shipModuleIndex:
+          module.gunIndex = -1
+          break
+    of cargo:
+      if freeCargo(amount = 0 - modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue) < 0:
+        raise newException(exceptn = RemovingError,
+            message = "You can't sell this cargo bay, because you have items in it.")
+    else:
+      discard
 
 # Temporary code for interfacing with Ada
 
