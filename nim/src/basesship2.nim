@@ -84,8 +84,9 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
     else:
       discard
   let traderIndex = findMember(order = talk)
+  var price: Natural = 0
   if install:
-    var price = modulesList[moduleIndex].price
+    price = modulesList[moduleIndex].price
     countPrice(price = price, traderIndex = traderIndex)
     if playerShip.cargo[moneyIndex2].amount < price:
       raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
@@ -184,8 +185,59 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
             moduleIndex].weight, durability: modulesList[
             moduleIndex].durability, maxDurability: modulesList[
             moduleIndex].durability, owner: owners, upgradeAction: none))
+      of engine:
+        playerShip.modules.add(ModuleData(mType: engine, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            fuelUsage: modulesList[moduleIndex].value, power: modulesList[
+            moduleIndex].maxValue, disabled: false))
+      of armor:
+        playerShip.modules.add(ModuleData(mType: armor, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of batteringRam:
+        playerShip.modules.add(ModuleData(mType: batteringRam,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+            weight: modulesList[moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            damage2: modulesList[moduleIndex].maxValue, coolingDown: false))
+      of gun:
+        playerShip.modules.add(ModuleData(mType: gun, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            damage: modulesList[moduleIndex].maxValue, ammoIndex: -1))
+      of harpoonGun:
+        playerShip.modules.add(ModuleData(mType: harpoonGun, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            duration: modulesList[moduleIndex].maxValue, harpoonIndex: -1))
       else:
         discard
+    case modulesList[moduleIndex].mType
+    of gun, harpoonGun:
+      playerShip.modules[freeTurretIndex].gunIndex = playerShip.modules.high
+    else:
+      playerShip.modules[hullIndex].installedModules = modulesAmount
+    addMessage(message = "You installed " & modulesList[moduleIndex].name &
+        " on your ship for " & $price & " " & moneyName & ".",
+        mType = tradeMessage)
+  else:
+    let
+      shipModuleIndex = moduleIndex
+      damage = 1.0 - (playerShip.modules[shipModuleIndex].durability.float /
+          playerShip.modules[shipModuleIndex].maxDurability.float)
+    price = modulesList[playerShip.modules[shipModuleIndex].protoIndex].price -
+        (modulesList[playerShip.modules[
+        shipModuleIndex].protoIndex].price.float * damage).Natural
 
 # Temporary code for interfacing with Ada
 
