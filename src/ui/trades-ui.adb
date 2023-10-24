@@ -182,9 +182,9 @@ package body Trades.UI is
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
          else 1);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
@@ -1413,10 +1413,12 @@ package body Trades.UI is
 
       X_Pos: constant Integer :=
         Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         (if X_Pos > -1 then
            Get_Column_Number(Table => Trade_Table, X_Position => X_Pos)
          else Items_Sort_Orders'Pos(Items_Sort_Order) + 1);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1430,7 +1432,9 @@ package body Trades.UI is
       end record;
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      --## rule off IMPROPER_INITIALIZATION
       Indexes_List: Positive_Container.Vector;
+      --## rule off IMPROPER_INITIALIZATION
       Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
       Base_Cargo_Index, Price: Natural;
       Base_Type: Bounded_String;
@@ -1439,7 +1443,10 @@ package body Trades.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
+      --## rule off IMPROPER_INITIALIZATION
       Local_Items: Items_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1558,6 +1565,7 @@ package body Trades.UI is
       if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Base_Index > 0 then
          BaseCargo_Container.Assign
            (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
