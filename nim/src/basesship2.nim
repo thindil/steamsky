@@ -74,6 +74,11 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
     InstallationError, IOError, RemovingError, NoFreeCargoError,
     NoMoneyInBaseError, CrewOrderError, CrewNoSpaceError, Exception], tags: [
     WriteIOEffect, RootEffect].} =
+  ## Install or remove modules in the player's ship in bases
+  ##
+  ## * install     - if true, install the selected module
+  ## * moduleIndex - the prototype index of the module to install or index of
+  ##                 module in the player's ship to remove
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if moneyIndex2 == -1:
