@@ -290,6 +290,16 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
     addMessage(message = "You removed " & playerShip.modules[
         shipModuleIndex].name & " from your ship and received " & $price & " " &
         moneyName & ".", mType = tradeMessage)
+    playerShip.modules.delete(shipModuleIndex)
+    if playerShip.repairModule > shipModuleIndex:
+      playerShip.repairModule.dec
+    elif playerShip.repairModule == shipModuleIndex:
+      playerShip.repairModule = -1
+    if playerShip.upgradeModule > shipModuleIndex:
+      playerShip.upgradeModule.dec
+    for module in playerShip.modules.mitems:
+      if module.mType == ModuleType2.turret and module.gunIndex > shipModuleIndex:
+        module.gunIndex.dec
 
 # Temporary code for interfacing with Ada
 
@@ -301,3 +311,10 @@ proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
   except Exception as e:
     return ($e.name & " " & e.msg).cstring
 
+proc upgradeAdaShip2(install, moduleIndex: cint): cstring {.raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
+  try:
+    upgradeShip(install = install == 1, moduleIndex = moduleIndex - 1)
+    return "".cstring
+  except Exception as e:
+    return ($e.name & " " & e.msg).cstring
