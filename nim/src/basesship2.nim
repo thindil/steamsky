@@ -69,7 +69,11 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
   gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 1)
   updateGame(minutes = time)
 
-proc upgradeShip*(install: bool; moduleIndex: Natural) =
+proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
+    NoMoneyError, KeyError, NotEnoughMoneyError, UniqueModuleError,
+    InstallationError, IOError, RemovingError, NoFreeCargoError,
+    NoMoneyInBaseError, CrewOrderError, CrewNoSpaceError, Exception], tags: [
+    WriteIOEffect, RootEffect].} =
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if moneyIndex2 == -1:
