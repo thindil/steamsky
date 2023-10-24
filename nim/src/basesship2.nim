@@ -265,6 +265,31 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) =
             message = "You can't sell this cargo bay, because you have items in it.")
     else:
       discard
+    if modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType notin {
+        ModuleType.hull, armor, gun, harpoonGun}:
+      modulesAmount = modulesAmount - modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].size
+      playerShip.modules[hullIndex].installedModules = modulesAmount
+    if playerShip.upgradeModule == shipModuleIndex:
+      playerShip.upgradeModule = -1
+      for index, member in playerShip.crew:
+        if member.order == upgrading:
+          giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+          break
+    if playerShip.modules[shipModuleIndex].mType != ModuleType2.cabin:
+      for owner in playerShip.modules[shipModuleIndex].owner:
+        if owner > -1:
+          giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest,
+              checkPriorities = false)
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = price)
+    updateBaseCargo(protoIndex = moneyIndex, amount = price)
+    gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    gainRep(baseIndex = baseIndex, points = 1)
+    updateGame(minutes = modulesList[playerShip.modules[
+        shipModuleIndex].protoIndex].installTime)
+    addMessage(message = "You removed " & playerShip.modules[
+        shipModuleIndex].name & " from your ship and received " & $price & " " &
+        moneyName & ".", mType = tradeMessage)
 
 # Temporary code for interfacing with Ada
 
