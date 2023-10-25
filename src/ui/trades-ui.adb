@@ -1133,13 +1133,13 @@ package body Trades.UI is
          Count_Buy_Amount_Block :
          declare
             Max_Price: Natural := Max_Buy_Amount * Price;
-            Weight: Integer;
+            Weight: Integer := 0;
          begin
             if Max_Buy_Amount > 0 then
                Count_Price
                  (Price => Max_Price,
                   Trader_Index => Find_Member(Order => TALK));
-               if Max_Price < (Max_Buy_Amount * Price) then
+               if Max_Price < Max_Buy_Amount * Price then
                   Max_Buy_Amount :=
                     Natural
                       (Float'Floor
@@ -1207,7 +1207,7 @@ package body Trades.UI is
             end if;
          end Count_Buy_Amount_Block;
          if Item_Index = 0 then
-            Item_Index := -(Base_Cargo_Index);
+            Item_Index := -Base_Cargo_Index;
          end if;
       end if;
       Show_Info
@@ -1354,11 +1354,11 @@ package body Trades.UI is
                            (Index =>
                               BaseCargo_Container.Element
                                 (Container => Sky_Bases(Base_Index).Cargo,
-                                 Index => abs (Item_Index))
+                                 Index => abs Item_Index)
                                 .Proto_Index)
                            .Name),
                   Command => "TradeItem buy", Action => "buy",
-                  Item_Index => abs (Item_Index),
+                  Item_Index => abs Item_Index,
                   Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
                   Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
             else
@@ -1371,11 +1371,11 @@ package body Trades.UI is
                            (Index =>
                               BaseCargo_Container.Element
                                 (Container => Trader_Cargo,
-                                 Index => abs (Item_Index))
+                                 Index => abs Item_Index)
                                 .Proto_Index)
                            .Name),
                   Command => "TradeItem buy", Action => "buy",
-                  Item_Index => abs (Item_Index),
+                  Item_Index => abs Item_Index,
                   Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
                   Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
             end if;
@@ -1693,7 +1693,7 @@ package body Trades.UI is
                          (Container => Base_Cargo, Index => I)
                          .Durability) /
                     Float(Default_Item_Durability),
-                  Price => Price, Profit => -(Price),
+                  Price => Price, Profit => -Price,
                   Weight => Get_Proto_Item(Index => Proto_Index).Weight,
                   Owned => 0,
                   Available =>
@@ -1750,7 +1750,7 @@ package body Trades.UI is
              ".gameframe.paned.tradeframe.canvas.trade.options.type");
    begin
       if Item_Index < 0 then
-         Base_Cargo_Index := abs (Item_Index);
+         Base_Cargo_Index := abs Item_Index;
       else
          Cargo_Index := Item_Index;
       end if;
