@@ -1,12 +1,13 @@
 discard """
   exitcode: 0
   output: '''Loading the game data.
-Testing repairShip.'''
+Testing repairShip.
+Testing upgradeShip.'''
 """
 
 import std/tables
-import ../../src/[basesship2, basestypes, careers, crafts, factions, game,
-    items, maps, mobs, ships, shipmodules, types, utils]
+import ../../src/[basescargo, basesship2, basestypes, careers, crafts, factions,
+    game, items, maps, mobs, ships, shipmodules, types, utils]
 
 echo "Loading the game data."
 if basesTypesList.len == 0:
@@ -42,12 +43,14 @@ playerShip.modules.add(ModuleData(mType: ModuleType2.hull, protoIndex: 1,
     durability: 100, maxDurability: 100, maxModules: 10))
 playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
     durability: 100))
+playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
+    durability: 100))
 playerShip.modules.add(ModuleData(mType: ModuleType2.armor, protoIndex: 57,
     durability: 100))
 playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
     durability: 100))
 playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
-    durability: 100, damage: 100, owner: @[-1]))
+    durability: 100, damage: 100, owner: @[-1], maxDurability: 100))
 playerShip.cargo = @[]
 playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
     durability: 100))
@@ -70,6 +73,7 @@ for index, base in skyBases.mpairs:
 skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
+generateCargo()
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 echo "Testing repairShip."
@@ -85,3 +89,15 @@ try:
   assert playerShip.modules[0].durability == playerShip.modules[0].maxDurability
 except AssertionDefect:
   writeLine(stderr, "Failed to repair the whole player's ship in the base.")
+
+echo "Testing upgradeShip."
+upgradeShip(false, 5)
+try:
+  assert playerShip.modules.len == 5
+except AssertionDefect:
+  writeLine(stderr, "Failed to remove a module from the player's ship in the base.")
+upgradeShip(true, 6)
+try:
+  assert playerShip.modules.len == 6
+except AssertionDefect:
+  writeLine(stderr, "Failed to install a module from the player's ship in the base.")
