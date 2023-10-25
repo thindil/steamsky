@@ -32,12 +32,6 @@ jobs:
          name: adacontrol.log
          path: adacontrol.log
 
-    - name: Generate tests
-      run: gnattest -P steamsky.gpr
-
-    - name: Build the tests
-      run: gprbuild -P tests/driver/test_driver.gpr
-
     - name: Run the tests
       run: others/tests.nims 30
 
