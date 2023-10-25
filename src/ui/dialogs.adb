@@ -687,7 +687,7 @@ package body Dialogs is
                  else "") &
                 " -command {" & Close_Command & ";" &
                 To_String(Source => Button_2.Command) & "} -style Dialog" &
-                To_String(Source => Button_1.Color) & ".TButton");
+                To_String(Source => Button_2.Color) & ".TButton");
          Add
            (Widget => Button,
             Message => To_String(Source => Button_2.Tooltip));
