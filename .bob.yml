@@ -1,11 +1,5 @@
 version: 2.0
 - command:
-   name: tests
-   execute:
-      - gprbuild -P tests/driver/test_driver.gpr
-      - nim others/tests.nims $1
-   description: Build and run Steam Sky unit tests X times (required argument how many times)
-- command:
    name: debug
    execute:
       - gprbuild -P steamsky.gpr
@@ -25,13 +19,6 @@ version: 2.0
    execute:
       - gprclean -P steamsky.gpr
    description: Clean all compilation files
-- command:
-   name: createtests
-   execute:
-      - gnattest -P steamsky.gpr
-      - gnatpp -P tests/prettytests.gpr
-      - gprbuild -P tests/driver/test_driver.gpr
-   description: Regenerate unit tests, pretty print and build them
 - command:
    name: docs
    execute:
@@ -57,12 +44,6 @@ version: 2.0
       - gnatpp -P steamsky.gpr
    description: Pretty print Steam Sky source code
 - command:
-   name: prettytests
-   execute:
-      - gnatpp -P tests/prettytests.gpr
-      - gprbuild -P tests/driver/test_driver.gpr
-   description: Pretty print unit tests source code and build them
-- command:
    name: push
    execute:
       - fossil push
@@ -79,7 +60,6 @@ version: 2.0
    name: checkall
    execute:
       - bob debug
-      - bob tests 20
       - bob check
    description: Run all the project tests
    flags:
