@@ -71,8 +71,7 @@ package Bases.Ship is
       -- SOURCE
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) with
       Pre => Module_Index in
-        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index,
-      Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
+        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index;
       -- ****
 
       -- ****f* Ship/Ship.Pay_For_Dock
