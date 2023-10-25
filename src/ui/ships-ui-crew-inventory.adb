@@ -1276,7 +1276,7 @@ package body Ships.UI.Crew.Inventory is
             Tooltip =>
               To_Unbounded_String
                 (Source => "Move the selected item to the ship's cargo"),
-            Color => To_Unbounded_String(Source => "green")),
+            Color => Null_Unbounded_String),
          Button_2 =>
            (if Equipable then
               (Text =>
