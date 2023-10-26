@@ -52,10 +52,21 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   for index, header in headers:
     interp.tclEval("ttk::style lookup Table -headerforecolor -tags [list header" &
         $index & "]")
-    let fillStyle: string = $(interp.tclGetResult())
+    let fillStyle = $(interp.tclGetResult())
     interp.tclEval(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
         "} -font InterfaceFont -justify center -fill " & fillStyle)
+    let headerId = $(interp.tclGetResult())
+    if command.len > 0:
+      interp.tclEval(result.canvas & " " & headerId & " <Enter> {" &
+          result.canvas & " configure -cursor hand1}")
+      interp.tclEval(result.canvas & " " & headerId & " <Leave> {" &
+          result.canvas & " configure -cursor left_ptr}")
+      interp.tclEval(result.canvas & " " & headerId & " <Button-1> {" &
+          command & " %x}")
+    if tooltipText.len > 0:
+      interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
+          headerId & " \"\"" & tooltipText & "\"\"")
 
 # Temporary code for interfacing with Ada
 
