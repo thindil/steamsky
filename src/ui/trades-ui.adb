@@ -1419,6 +1419,7 @@ package body Trades.UI is
            Get_Column_Number(Table => Trade_Table, X_Position => X_Pos)
          else Items_Sort_Orders'Pos(Items_Sort_Order) + 1);
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1430,6 +1431,7 @@ package body Trades.UI is
          Available: Natural;
          Id: Positive;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       --## rule off IMPROPER_INITIALIZATION
@@ -1648,12 +1650,14 @@ package body Trades.UI is
                Id => I));
       end loop Add_Cargo_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Items_Indexes.Clear;
       Add_Cargo_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Add_Cargo_Indexes_Loop;
       Items_Indexes.Append(New_Item => 0);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Local_Items.Clear;
       Add_Base_Item_Loop :
       for I in
@@ -1704,10 +1708,12 @@ package body Trades.UI is
          end if;
       end loop Add_Base_Item_Loop;
       Sort_Items.Sort(Container => Local_Items);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Add_Base_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Add_Base_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Trade_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
@@ -1749,11 +1755,13 @@ package body Trades.UI is
           (pathName =>
              ".gameframe.paned.tradeframe.canvas.trade.options.type");
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Item_Index < 0 then
          Base_Cargo_Index := abs Item_Index;
       else
          Cargo_Index := Item_Index;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Cargo_Index > 0 then
          Proto_Index :=
            Inventory_Container.Element
@@ -1807,12 +1815,14 @@ package body Trades.UI is
       Bind
         (Widgt => Type_Box, Sequence => "<<ComboBoxSelected>>",
          Script => "{ShowTrade [" & Type_Box & " get]}");
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Items_Sort_Order /= Default_Items_Sort_Order then
          return
            Sort_Items_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => 2,
               Argv => CArgv.Empty & "SortTradeItem" & "-1");
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Trade_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
