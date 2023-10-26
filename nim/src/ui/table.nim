@@ -31,16 +31,27 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   let interp = getInterp()
   result = TableWidget()
   if scrollbar == ".":
-    interp.tclEval("ttk::scrollbar " & parent &
-        ".scrolly -orient vertical -command [list " & parent & ".table yview]")
-    interp.tclEval("ttk::scrollbar " & parent &
-        ".scrollx -orient vertical -command [list " & parent & ".table xview]")
+    result.scrollbar = parent & ".scrolly"
     result.canvas = parent & ".table"
+    interp.tclEval("ttk::scrollbar " & result.scrollbar &
+        " -orient vertical -command [list " & result.canvas & " yview]")
+    interp.tclEval("ttk::scrollbar " & parent &
+        ".scrollx -orient vertical -command [list " & result.canvas & " xview]")
     interp.tclEval("canvas " & result.canvas & " -yscrollcommand [list " &
-        parent & ".scrolly set] -xscrollcommand [list " & parent & ".scrollx set]")
+        result.scrollbar & " set] -xscrollcommand [list " & parent & ".scrollx set]")
+    interp.tclEval("pack " & result.scrollbar & " -side right -fill y")
+    interp.tclEval("pack " & result.canvas & " -side top -fill both -padx {5 0}")
+    interp.tclEval("pack " & parent & ".scrollx -side bottom -fill x")
+    interp.tclEval("::autoscroll::autoscroll " & parent & ".scrollx")
+    interp.tclEval("::autoscroll::autoscroll " & result.scrollbar)
 
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
     command, tooltipText: cstring) {.raises: [], tags: [], exportc.} =
-  discard
+  var nimHeaders: HeadersList = @[]
+  for header in headers:
+    if header.len > 0:
+      nimHeaders.add($header)
+  discard createTable(parent = $parent, headers = nimHeaders,
+      scrollbar = $scrollbar, command = $command, tooltipText = $tooltipText)
