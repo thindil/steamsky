@@ -29,10 +29,9 @@ type
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     command: string = ""; tooltipText: string = ""): TableWidget =
   let interp = getInterp()
-  result = TableWidget()
+  result = TableWidget(canvas: parent & ".table")
   if scrollbar == ".":
     result.scrollbar = parent & ".scrolly"
-    result.canvas = parent & ".table"
     interp.tclEval("ttk::scrollbar " & result.scrollbar &
         " -orient vertical -command [list " & result.canvas & " yview]")
     interp.tclEval("ttk::scrollbar " & parent &
@@ -44,6 +43,19 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("pack " & parent & ".scrollx -side bottom -fill x")
     interp.tclEval("::autoscroll::autoscroll " & parent & ".scrollx")
     interp.tclEval("::autoscroll::autoscroll " & result.scrollbar)
+  else:
+    result.scrollbar = scrollbar
+    interp.tclEval("grid " & result.canvas & " -sticky nwes -padx {5 0}")
+    interp.tclEval("grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
+    interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
+  var x = 0
+  for index, header in headers:
+    interp.tclEval("ttk::style lookup Table -headerforecolor -tags [list header" &
+        $index & "]")
+    let fillStyle: string = $(interp.tclGetResult())
+    interp.tclEval(result.canvas & " create text " & $x &
+        " 2 -anchor nw -text {" & header &
+        "} -font InterfaceFont -justify center -fill " & fillStyle)
 
 # Temporary code for interfacing with Ada
 
