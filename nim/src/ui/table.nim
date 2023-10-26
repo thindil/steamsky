@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
 import ../tk
 
 type
@@ -52,11 +53,11 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   for index, header in headers:
     interp.tclEval("ttk::style lookup Table -headerforecolor -tags [list header" &
         $index & "]")
-    let fillStyle = $(interp.tclGetResult())
+    let fillStyle = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
         "} -font InterfaceFont -justify center -fill " & fillStyle)
-    let headerId = $(interp.tclGetResult())
+    let headerId = $(interp.tclGetResult)
     if command.len > 0:
       interp.tclEval(result.canvas & " " & headerId & " <Enter> {" &
           result.canvas & " configure -cursor hand1}")
@@ -67,6 +68,15 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     if tooltipText.len > 0:
       interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
           headerId & " \"\"" & tooltipText & "\"\"")
+    interp.tclEval(result.canvas & " bbox header" & $index)
+    let
+      tclResult = $(interp.tclGetResult)
+      coords = tclResult.split
+    var oldX = x - 5
+    x = coords[2].parseInt + 5
+    result.columnsWidth.add(x - coords[0].parseInt)
+    if index == 0:
+      result.rowHeight = coords[3].parseInt + 5
 
 # Temporary code for interfacing with Ada
 
@@ -76,5 +86,8 @@ proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
   for header in headers:
     if header.len > 0:
       nimHeaders.add($header)
-  discard createTable(parent = $parent, headers = nimHeaders,
-      scrollbar = $scrollbar, command = $command, tooltipText = $tooltipText)
+  try:
+    discard createTable(parent = $parent, headers = nimHeaders,
+        scrollbar = $scrollbar, command = $command, tooltipText = $tooltipText)
+  except:
+    discard
