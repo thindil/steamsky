@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import ../tk
+
 type
   TableWidget* = object
     canvas*: string
@@ -26,4 +28,19 @@ type
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     command: string = ""; tooltipText: string = ""): TableWidget =
-  return TableWidget()
+  let interp = getInterp()
+  result = TableWidget()
+  if scrollbar == ".":
+    interp.tclEval("ttk::scrollbar " & parent &
+        ".scrolly -orient vertical -command [list " & parent & ".table yview]")
+    interp.tclEval("ttk::scrollbar " & parent &
+        ".scrollx -orient vertical -command [list " & parent & ".table xview]")
+    result.canvas = parent & ".table"
+    interp.tclEval("canvas " & result.canvas & " -yscrollcommand [list " &
+        parent & ".scrolly set] -xscrollcommand [list " & parent & ".scrollx set]")
+
+# Temporary code for interfacing with Ada
+
+proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
+    command, tooltipText: cstring) {.raises: [], tags: [], exportc.} =
+  discard
