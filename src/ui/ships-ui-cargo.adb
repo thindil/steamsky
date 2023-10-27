@@ -608,7 +608,7 @@ package body Ships.UI.Cargo is
            options =>
              "-image giveicon -command {GiveItem " &
              CArgv.Arg(Argv => Argv, N => 1) &
-             "} -style Dialog.TButton -text Give");
+             "} -style Dialoggreen.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options => "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
@@ -621,7 +621,7 @@ package body Ships.UI.Cargo is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-image cancelicon -command {CloseDialog " & Item_Dialog &
-             "} -style Dialog.TButton -text Close");
+             "} -style Dialogred.TButton -text Close");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
