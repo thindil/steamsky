@@ -34,7 +34,7 @@ jobs:
 
     - name: Run the tests
       run: |
-        nimble install -y unittests2
+        nimble install -y unittest2
         others/tests.nims 30
 
   build_linux:
