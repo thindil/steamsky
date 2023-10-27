@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   during installation when another harpoon gun is installed
 - Recruits in bases have wrong items equipped
 - Game time information doesn't update after training skill in bases
+- Crash when starting a combat
 
 ## [9.2] - 2023-10-01
 
