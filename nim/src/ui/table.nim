@@ -51,23 +51,23 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
   var x = 0
   for index, header in headers:
-    interp.tclEval("ttk::style lookup Table -headerforecolor -tags [list header" &
-        $index & "]")
-    let fillStyle = $(interp.tclGetResult)
+    interp.tclEval("ttk::style lookup Table -headerforecolor")
+    var fillStyle = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
-        "} -font InterfaceFont -justify center -fill " & fillStyle)
+        "} -font InterfaceFont -justify center -fill " & fillStyle &
+        " -tags [list header" & $index & "]")
     let headerId = $(interp.tclGetResult)
     if command.len > 0:
-      interp.tclEval(result.canvas & " " & headerId & " <Enter> {" &
+      interp.tclEval(result.canvas & " bind " & headerId & " <Enter> {" &
           result.canvas & " configure -cursor hand1}")
-      interp.tclEval(result.canvas & " " & headerId & " <Leave> {" &
+      interp.tclEval(result.canvas & " bind " & headerId & " <Leave> {" &
           result.canvas & " configure -cursor left_ptr}")
-      interp.tclEval(result.canvas & " " & headerId & " <Button-1> {" &
+      interp.tclEval(result.canvas & " bind " & headerId & " <Button-1> {" &
           command & " %x}")
     if tooltipText.len > 0:
       interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
-          headerId & " \"\"" & tooltipText & "\"\"")
+          headerId & " \"" & tooltipText & "\"")
     interp.tclEval(result.canvas & " bbox header" & $index)
     let
       tclResult = $(interp.tclGetResult)
@@ -77,6 +77,16 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     result.columnsWidth.add(x - coords[0].parseInt)
     if index == 0:
       result.rowHeight = coords[3].parseInt + 5
+    interp.tclEval("ttk::style lookup Table -headerbackcolor")
+    fillStyle = $(interp.tclGetResult)
+    interp.tclEval("ttk::style lookup Table -headerbordercolor")
+    var borderStyle = $(interp.tclGetResult)
+    interp.tclEval(result.canvas & " create rectangle " & $oldX & " 0 " & $(x -
+        2) & " " & $(result.rowHeight - 3) & " -fill " & fillStyle &
+        " -outline " & $borderStyle & " -width 2 -tags [list headerback" &
+        $index & "]")
+    let backgroundId = $(interp.tclGetResult)
+    interp.tclEval(result.canvas & " lower headerback" & $index)
 
 # Temporary code for interfacing with Ada
 
