@@ -87,6 +87,28 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
         $index & "]")
     let backgroundId = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " lower headerback" & $index)
+    if command.len > 0:
+      interp.tclEval(result.canvas & " bind " & backgroundId & " <Enter> {" &
+          result.canvas & " configure -cursor hand1}")
+      interp.tclEval(result.canvas & " bind " & backgroundId & " <Leave> {" &
+          result.canvas & " configure -cursor left_ptr}")
+      interp.tclEval(result.canvas & " bind " & backgroundId & " <Button-1> {" &
+          command & " %x}")
+    if tooltipText.len > 0:
+      interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
+          backgroundId & " \"" & tooltipText & "\"")
+  interp.tclEval("SetScrollBarBindings " & result.canvas & " " &
+      result.scrollbar)
+  interp.tclEval("bind " & result.canvas & " <Up> {UpdateCurrentRow" &
+      result.canvas & " lower}")
+  interp.tclEval("bind " & result.canvas & " <Down> {UpdateCurrentRow" &
+      result.canvas & " raise}")
+  interp.tclEval("bind " & result.canvas & " <Key-space> {ExecuteCurrentRow" &
+      result.canvas & "}")
+  interp.tclEval("bind " & result.canvas & " <FocusOut> {HideCurrentRow" &
+      result.canvas & "}")
+  interp.tclEval("bind " & result.canvas & " <Leave> {HideCurrentRow" &
+      result.canvas & "}")
 
 # Temporary code for interfacing with Ada
 
