@@ -112,14 +112,31 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
 
 # Temporary code for interfacing with Ada
 
+type
+  AdaTableWidget = object
+    canvas: cstring
+    columnsWidth: array[10, cint]
+    row: cint
+    rowHeight: cint
+    scrollbar: cstring
+
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
-    command, tooltipText: cstring) {.raises: [], tags: [], exportc.} =
+    command, tooltipText: cstring; adaTable: var AdaTableWidget) {.raises: [],
+    tags: [], exportc.} =
   var nimHeaders: HeadersList = @[]
   for header in headers:
     if header.len > 0:
       nimHeaders.add($header)
   try:
-    discard createTable(parent = $parent, headers = nimHeaders,
+    let newTable = createTable(parent = $parent, headers = nimHeaders,
         scrollbar = $scrollbar, command = $command, tooltipText = $tooltipText)
+    adaTable.canvas = newTable.canvas.cstring
+    for width in adaTable.columnsWidth.mitems:
+      width = 0
+    for index, width in newTable.columnsWidth:
+      adaTable.columnsWidth[index] = width.cint
+    adaTable.row = newTable.row.cint
+    adaTable.rowHeight = newTable.rowHeight.cint
+    adaTable.scrollbar = newTable.scrollbar.cstring
   except:
     discard
