@@ -56,19 +56,14 @@ package body Table is
 
       type Nim_Headers is array(0 .. 10) of chars_ptr;
       type Nim_Width is array(0 .. 10) of Integer;
-      type Nim_Table is record
-         Canvas: chars_ptr;
-         Columns_Width: Nim_Width;
-         Row: Integer;
-         Row_Height: Integer;
-         Scrollbar: chars_ptr;
-      end record;
-      Ada_Table: Nim_Table;
       N_Headers: Nim_Headers;
-      Index: Natural := 0;
+      Nim_Canvas, Nim_Scrollbar: chars_ptr;
+      N_Width: Nim_Width;
+      Index, Nim_Height: Natural := 0;
       procedure Create_Ada_Table
         (P: chars_ptr; H: Nim_Headers; S, C, T_Text: chars_ptr;
-         N_Table: out Nim_Table) with
+         N_Canvas, N_Scrollbar: out chars_ptr; Height: out Integer;
+         N_W: out Nim_Width) with
          Import => True,
          Convention => C,
          External_Name => "createAdaTable";
@@ -82,18 +77,20 @@ package body Table is
         (P => New_String(Str => Parent), H => N_Headers,
          S => New_String(Str => Widget_Image(Win => Scrollbar)),
          C => New_String(Str => Command),
-         T_Text => New_String(Str => Tooltip_Text), N_Table => Ada_Table);
-      New_Table.Canvas :=
-        Get_Widget(pathName => Value(Item => Ada_Table.Canvas));
-      Index := 0;
+         T_Text => New_String(Str => Tooltip_Text), N_Canvas => Nim_Canvas,
+         N_Scrollbar => Nim_Scrollbar, Height => Nim_Height, N_W => N_Width);
+      New_Table.Canvas := Get_Widget(pathName => Value(Item => Nim_Canvas));
+      Index := 1;
       Convert_Headers_Width_Loop :
-      for Width of Ada_Table.Columns_Width loop
+      for Width of N_Width loop
+         exit Convert_Headers_Width_Loop when Index > Headers'Length;
          New_Table.Columns_Width(Index) := Width;
+         Index := Index + 1;
       end loop Convert_Headers_Width_Loop;
-      New_Table.Row := Ada_Table.Row;
-      New_Table.Row_Height := Ada_Table.Row_Height;
+      New_Table.Row := 1;
+      New_Table.Row_Height := Nim_Height;
       New_Table.Scrollbar :=
-        Get_Widget(pathName => Value(Item => Ada_Table.Scrollbar));
+        Get_Widget(pathName => Value(Item => Nim_Scrollbar));
 --      if Widget_Image(Win => Scrollbar) = "." then
 --         Y_Scroll :=
 --           Create
