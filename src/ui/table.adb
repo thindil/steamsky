@@ -93,6 +93,11 @@ package body Table is
       New_Table.Row_Height := Nim_Height;
       New_Table.Scrollbar :=
         Get_Widget(pathName => Value(Item => Nim_Scrollbar));
+      Tcl_Eval
+        (interp => Get_Context,
+         strng =>
+           "SetScrollbarBindings " & New_Table.Canvas & " " &
+           New_Table.Scrollbar);
 --      if Widget_Image(Win => Scrollbar) = "." then
 --         Y_Scroll :=
 --           Create
@@ -232,11 +237,6 @@ package body Table is
 --         end if;
 --      end loop Create_Headers_Loop;
 --      New_Table.Canvas := Canvas_Widget;
---      Tcl_Eval
---        (interp => Get_Context,
---         strng =>
---           "SetScrollbarBindings " & New_Table.Canvas & " " &
---           New_Table.Scrollbar);
 --      Bind
 --        (Widgt => New_Table.Canvas, Sequence => "<Up>",
 --         Script => "{UpdateCurrentRow " & New_Table.Canvas & " lower}");
