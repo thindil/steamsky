@@ -85,7 +85,7 @@ package body Table is
       Index := 1;
       Convert_Headers_Width_Loop :
       for Width of N_Width loop
-         exit Convert_Headers_Width_Loop when Index > Headers'Length;
+         exit Convert_Headers_Width_Loop when Width = 0;
          New_Table.Columns_Width(Index) := Width;
          Index := Index + 1;
       end loop Convert_Headers_Width_Loop;

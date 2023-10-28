@@ -46,8 +46,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("::autoscroll::autoscroll " & result.scrollbar)
   else:
     result.scrollbar = scrollbar
-    interp.tclEval("canvas " & result.canvas & " -yscrollcommand [list " &
-        result.scrollbar & " set] -xscrollcommand [list " & parent & ".scrollx set]")
+    interp.tclEval("canvas " & result.canvas)
     interp.tclEval("grid " & result.canvas & " -sticky nwes -padx {5 0}")
     interp.tclEval("grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
     interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
@@ -62,7 +61,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
         "} -font InterfaceFont -justify center -fill " & headerColor &
-        " -tags [list header" & $index & "]")
+        " -tags [list header" & $(index + 1) & "]")
     let headerId = $(interp.tclGetResult)
     if command.len > 0:
       interp.tclEval(result.canvas & " bind " & headerId & " <Enter> {" &
@@ -74,7 +73,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     if tooltipText.len > 0:
       interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
           headerId & " \"" & tooltipText & "\"")
-    interp.tclEval(result.canvas & " bbox header" & $index)
+    interp.tclEval(result.canvas & " bbox header" & $(index + 1))
     let
       tclResult = $(interp.tclGetResult)
       coords = tclResult.split
@@ -86,9 +85,9 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval(result.canvas & " create rectangle " & $oldX & " 0 " & $(x -
         2) & " " & $(result.rowHeight - 3) & " -fill " & headerBackColor &
         " -outline " & $borderStyle & " -width 2 -tags [list headerback" &
-        $index & "]")
+        $(index + 1) & "]")
     let backgroundId = $(interp.tclGetResult)
-    interp.tclEval(result.canvas & " lower headerback" & $index)
+    interp.tclEval(result.canvas & " lower headerback" & $(index + 1))
     if command.len > 0:
       interp.tclEval(result.canvas & " bind " & backgroundId & " <Enter> {" &
           result.canvas & " configure -cursor hand1}")
