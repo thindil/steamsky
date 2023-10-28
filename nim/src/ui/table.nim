@@ -52,12 +52,16 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
     interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
   var x = 0
+  interp.tclEval("ttk::style lookup Table -headerforecolor")
+  let headerColor = $(interp.tclGetResult)
+  interp.tclEval("ttk::style lookup Table -headerbackcolor")
+  let headerBackColor = $(interp.tclGetResult)
+  interp.tclEval("ttk::style lookup Table -headerbordercolor")
+  let borderStyle = $(interp.tclGetResult)
   for index, header in headers:
-    interp.tclEval("ttk::style lookup Table -headerforecolor")
-    var fillStyle = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
-        "} -font InterfaceFont -justify center -fill " & fillStyle &
+        "} -font InterfaceFont -justify center -fill " & headerColor &
         " -tags [list header" & $index & "]")
     let headerId = $(interp.tclGetResult)
     if command.len > 0:
@@ -79,12 +83,8 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     result.columnsWidth.add(x - coords[0].parseInt)
     if index == 0:
       result.rowHeight = coords[3].parseInt + 5
-    interp.tclEval("ttk::style lookup Table -headerbackcolor")
-    fillStyle = $(interp.tclGetResult)
-    interp.tclEval("ttk::style lookup Table -headerbordercolor")
-    var borderStyle = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " create rectangle " & $oldX & " 0 " & $(x -
-        2) & " " & $(result.rowHeight - 3) & " -fill " & fillStyle &
+        2) & " " & $(result.rowHeight - 3) & " -fill " & headerBackColor &
         " -outline " & $borderStyle & " -width 2 -tags [list headerback" &
         $index & "]")
     let backgroundId = $(interp.tclGetResult)
