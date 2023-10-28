@@ -36,7 +36,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("ttk::scrollbar " & result.scrollbar &
         " -orient vertical -command [list " & result.canvas & " yview]")
     interp.tclEval("ttk::scrollbar " & parent &
-        ".scrollx -orient vertical -command [list " & result.canvas & " xview]")
+        ".scrollx -orient horizontal -command [list " & result.canvas & " xview]")
     interp.tclEval("canvas " & result.canvas & " -yscrollcommand [list " &
         result.scrollbar & " set] -xscrollcommand [list " & parent & ".scrollx set]")
     interp.tclEval("pack " & result.scrollbar & " -side right -fill y")
@@ -46,6 +46,8 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("::autoscroll::autoscroll " & result.scrollbar)
   else:
     result.scrollbar = scrollbar
+    interp.tclEval("canvas " & result.canvas & " -yscrollcommand [list " &
+        result.scrollbar & " set] -xscrollcommand [list " & parent & ".scrollx set]")
     interp.tclEval("grid " & result.canvas & " -sticky nwes -padx {5 0}")
     interp.tclEval("grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
     interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
@@ -99,15 +101,15 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
           backgroundId & " \"" & tooltipText & "\"")
   interp.tclEval("SetScrollBarBindings " & result.canvas & " " &
       result.scrollbar)
-  interp.tclEval("bind " & result.canvas & " <Up> {UpdateCurrentRow" &
+  interp.tclEval("bind " & result.canvas & " <Up> {UpdateCurrentRow " &
       result.canvas & " lower}")
-  interp.tclEval("bind " & result.canvas & " <Down> {UpdateCurrentRow" &
+  interp.tclEval("bind " & result.canvas & " <Down> {UpdateCurrentRow " &
       result.canvas & " raise}")
-  interp.tclEval("bind " & result.canvas & " <Key-space> {ExecuteCurrentRow" &
+  interp.tclEval("bind " & result.canvas & " <Key-space> {ExecuteCurrentRow " &
       result.canvas & "}")
-  interp.tclEval("bind " & result.canvas & " <FocusOut> {HideCurrentRow" &
+  interp.tclEval("bind " & result.canvas & " <FocusOut> {HideCurrentRow " &
       result.canvas & "}")
-  interp.tclEval("bind " & result.canvas & " <Leave> {HideCurrentRow" &
+  interp.tclEval("bind " & result.canvas & " <Leave> {HideCurrentRow " &
       result.canvas & "}")
 
 # Temporary code for interfacing with Ada
