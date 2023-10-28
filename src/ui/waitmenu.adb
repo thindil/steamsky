@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -286,12 +286,11 @@ package body WaitMenu is
                end loop Modules_Loop;
             end if;
          end loop Check_Crew_Heal_Loop;
-         if Time_Needed > 0 then
-            Update_Game(Minutes => Time_Needed);
-            Wait_In_Place(Minutes => Time_Needed);
-         else
+         if Time_Needed = 0 then
             return TCL_OK;
          end if;
+         Update_Game(Minutes => Time_Needed);
+         Wait_In_Place(Minutes => Time_Needed);
       elsif CArgv.Arg(Argv => Argv, N => 1) = "amount" then
          Update_Game(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
          Wait_In_Place(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
