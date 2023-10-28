@@ -33,9 +33,7 @@ jobs:
          path: adacontrol.log
 
     - name: Run the tests
-      run: |
-        nimble install -y unittest2
-        others/tests.nims 30
+      run: others/tests.nims 30
 
   build_linux:
 
