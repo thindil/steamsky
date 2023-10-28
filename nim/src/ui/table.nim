@@ -28,7 +28,8 @@ type
   HeadersList* = seq[string]
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
-    command: string = ""; tooltipText: string = ""): TableWidget =
+    command: string = ""; tooltipText: string = ""): TableWidget {.sideEffect,
+    raises: [ValueError], tags: [].} =
   let interp = getInterp()
   result = TableWidget(canvas: parent & ".table")
   if scrollbar == ".":
