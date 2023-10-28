@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,21 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
-
 package body Utils is
-
-   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String is
-      use Interfaces.C.Strings;
-      use Tiny_String;
-
-      function Robotic_Name return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "generateRoboticName";
-   begin
-      return To_Bounded_String(Source => Value(Item => Robotic_Name));
-   end Generate_Robotic_Name;
 
    function Days_Difference
      (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)

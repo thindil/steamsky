@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2023 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -54,14 +54,5 @@ package Utils is
      (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)
       return Integer;
       -- ****
-
-      -- ****f* Utils/Utils.GenerateRoboticName
-      -- FUNCTION
-      -- Generate robotic type name for bases, mobs, ships, etc
-      -- RESULT
-      -- Random robotic name
-      -- SOURCE
-   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String;
-   -- ****
 
 end Utils;
