@@ -54,14 +54,16 @@ package body Table is
 --      Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
 --      Header_Id: Unbounded_String := Null_Unbounded_String;
 
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Headers is array(0 .. 10) of chars_ptr;
       type Nim_Width is array(0 .. 10) of Integer;
+      --## rule on TYPE_INITIAL_VALUES
       N_Headers: Nim_Headers;
       Nim_Canvas, Nim_Scrollbar: chars_ptr;
-      N_Width: Nim_Width;
+      N_Width: Nim_Width := (others => 0);
       Index, Nim_Height: Natural := 0;
       procedure Create_Ada_Table
-        (P: chars_ptr; H: Nim_Headers; S, C, T_Text: chars_ptr;
+        (P: chars_ptr; H: Nim_Headers; S, Com, T_Text: chars_ptr;
          N_Canvas, N_Scrollbar: out chars_ptr; Height: out Integer;
          N_W: out Nim_Width) with
          Import => True,
@@ -76,7 +78,7 @@ package body Table is
       Create_Ada_Table
         (P => New_String(Str => Parent), H => N_Headers,
          S => New_String(Str => Widget_Image(Win => Scrollbar)),
-         C => New_String(Str => Command),
+         Com => New_String(Str => Command),
          T_Text => New_String(Str => Tooltip_Text), N_Canvas => Nim_Canvas,
          N_Scrollbar => Nim_Scrollbar, Height => Nim_Height, N_W => N_Width);
       New_Table.Canvas := Get_Widget(pathName => Value(Item => Nim_Canvas));
