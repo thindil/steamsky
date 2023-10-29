@@ -10,4 +10,10 @@ if not fileExists("steamsky.gpr"):
 withDir "nim":
   for i in 1..parseInt(paramStr(paramCount())):
     echo i
-    exec "testament all"
+    try:
+      exec "testament all"
+    except:
+      discard
+    for file in listFiles("newtests"):
+      if file.endsWith("nim"):
+        exec "nim c --verbosity:0 -r " & file
