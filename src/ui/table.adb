@@ -39,9 +39,13 @@ package body Table is
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
       use Interfaces.C.Strings;
+      --## rule off IMPROPER_INITIALIZATION
       New_Table: Table_Widget (Amount => Headers'Length);
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off TYPE_INITIAL_VALUES
       type Nim_Headers is array(0 .. 10) of chars_ptr;
       type Nim_Width is array(0 .. 10) of Integer;
+      --## rule on TYPE_INITIAL_VALUES
       N_Headers: Nim_Headers;
       Nim_Canvas, Nim_Scrollbar: chars_ptr;
       N_Width: Nim_Width := (others => 0);
