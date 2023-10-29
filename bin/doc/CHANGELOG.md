@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.3] - 2023-10-29
 
 ### Added
 - Colored version of buy and sell icons
