@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Recruits in bases have wrong items equipped
 - Game time information doesn't update after training skill in bases
 - Crash when starting a combat
+- Setting names for Drones bases
 
 ## [9.2] - 2023-10-01
 
