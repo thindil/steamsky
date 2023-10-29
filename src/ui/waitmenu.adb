@@ -13,27 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Latin_1;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with CoreUI; use CoreUI;
+with Tcl.Tklib.Ada.Tooltip;
+with CoreUI;
 with Crew; use Crew;
-with Dialogs; use Dialogs;
-with Game; use Game;
-with Maps.UI; use Maps.UI;
+with Dialogs;
+with Game;
+with Maps.UI;
 with Ships; use Ships;
-with Ships.Movement; use Ships.Movement;
+with Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body WaitMenu is
@@ -42,6 +42,12 @@ package body WaitMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tklib.Ada.Tooltip;
+      use Dialogs;
+
       Wait_Dialog: Ttk_Frame :=
         Get_Widget(pathName => ".gameframe.wait", Interp => Interp);
       Button: Ttk_Button;
@@ -49,6 +55,8 @@ package body WaitMenu is
       Amount_Label: Ttk_Label;
       Need_Healing, Need_Rest: Boolean := False;
       procedure Add_Button(Time: Positive) is
+         use Ada.Strings;
+         use Ada.Strings.Fixed;
       begin
          Button :=
            Create
@@ -234,6 +242,11 @@ package body WaitMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use CoreUI;
+      use Game;
+      use Maps.UI;
+      use Ships.Movement;
+
       Time_Needed: Natural := 0;
       Dialog_Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => ".gameframe.wait.close", Interp => Interp);
