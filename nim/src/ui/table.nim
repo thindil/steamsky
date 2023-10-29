@@ -20,6 +20,14 @@ import ../tk
 
 type
   TableWidget* = object
+    ## Contains data about a table widget
+    ##
+    ## * canvas       - the Tcl path to the canvas widget used as a base widget
+    ## * columnsWidth - the width of all columns of the table
+    ## * row          - the number of rows in the table
+    ## * rowHeight    - the height of a row in the table
+    ## * scrollbar    - the Tcl path to the vertical scrollbar associated with
+    ##                  the table
     canvas*: string
     columnsWidth*: seq[Positive]
     row*: Positive = 1
@@ -30,6 +38,16 @@ type
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     command: string = ""; tooltipText: string = ""): TableWidget {.sideEffect,
     raises: [ValueError], tags: [].} =
+  ## Create a new table and columns' headers for it
+  ##
+  ## * parent      - the Tcl path to the parent widget for the table
+  ## * headers     - the list of text to show on the table's colomns' headers
+  ## * scrollbar   - the Tcl path to the vertical scrollbar associated with the
+  ##                 table
+  ## * command     - the Tcl command to execute when the player click in the table
+  ## * tooltipText - the text to show when the player hover mouse above the table
+  ##
+  ## Returns the newly created TableWidget with information about the table
   let interp = getInterp()
   result = TableWidget(canvas: parent & ".table")
   if scrollbar == ".":
