@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash when starting a combat
+- Setting names for Drones bases
 
 ## [9.0.3] - 2023-10-22
 
