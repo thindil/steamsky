@@ -18,7 +18,7 @@
 import std/random
 import types
 
-proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
+proc generateRoboticName*(): string {.sideEffect, raises: [],
     tags: [].} =
   ## Generate robotic type name for bases, mobs, ships, etc
   ##
@@ -28,15 +28,14 @@ proc generateRoboticName*(): cstring {.exportc, gcsafe, sideEffect, raises: [],
     lettersAmount: Positive = rand(x = 2..5)
     numbersAmount: Positive = rand(x = 2..4)
     letters: set[char] = {'A'..'Z'}
-  var name: string = ""
+  result = ""
   # Get random letters for the name
   for i in 1..lettersAmount:
-    name.add(y = sample(s = letters))
-  name.add('-')
+    result.add(y = sample(s = letters))
+  result.add('-')
   # Get random digits for the name
   for i in 1..numbersAmount:
-    name.add(y = $rand(max = 9))
-  return name.cstring
+    result.add(y = $rand(max = 9))
 
 proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
     tags: [].} =
