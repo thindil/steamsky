@@ -28,7 +28,7 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
   ## Returns the randomly generated name of the base
   try:
     if factionsList[factionIndex].namesType == robotic:
-      return $generateRoboticName();
+      return generateRoboticName()
   except KeyError:
     discard
   if getRandom(min = 1, max = 100) < 16:
