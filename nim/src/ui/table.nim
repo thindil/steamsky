@@ -125,6 +125,22 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   interp.tclEval("bind " & result.canvas & " <Leave> {HideCurrentRow " &
       result.canvas & "}")
 
+proc clearTable*(table: var TableWidget) =
+  let
+    buttonsFrame = table.canvas & ".buttonframe"
+    interp = getInterp()
+  if interp.tclEval2("winfo exists " & buttonsFrame) == "1":
+    interp.tclEval("destroy " & buttonsFrame & ".previous")
+    interp.tclEval("destroy " & buttonsFrame & ".next")
+    interp.tclEval("destroy " & buttonsFrame)
+  for row in 1 .. table.row:
+    for column in 1 .. table.columnsWidth.high:
+      interp.tclEval(table.canvas & " delete row" & $row & "col" & $column)
+      interp.tclEval(table.canvas & " delete row" & $row)
+      interp.tclEval(table.canvas & " delete progressbar" & $row & "back" & $column)
+      interp.tclEval(table.canvas & " delete progressbar" & $row & "bar" & $column)
+  table.row = 1
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
