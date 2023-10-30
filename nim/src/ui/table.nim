@@ -70,18 +70,14 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     interp.tclEval("grid columnconfigure " & parent & " " & result.canvas & " -weight 1")
     interp.tclEval("grid rowconfigure " & parent & " " & result.canvas & " -weight 1")
   var x = 0
-  interp.tclEval("ttk::style lookup Table -headerforecolor")
-  let headerColor = $(interp.tclGetResult)
-  interp.tclEval("ttk::style lookup Table -headerbackcolor")
-  let headerBackColor = $(interp.tclGetResult)
-  interp.tclEval("ttk::style lookup Table -headerbordercolor")
-  let borderStyle = $(interp.tclGetResult)
+  let headerColor = interp.tclEval2("ttk::style lookup Table -headerforecolor")
+  let headerBackColor = interp.tclEval2("ttk::style lookup Table -headerbackcolor")
+  let borderStyle = interp.tclEval2("ttk::style lookup Table -headerbordercolor")
   for index, header in headers:
-    interp.tclEval(result.canvas & " create text " & $x &
+    let headerId = interp.tclEval2(result.canvas & " create text " & $x &
         " 2 -anchor nw -text {" & header &
         "} -font InterfaceFont -justify center -fill " & headerColor &
         " -tags [list header" & $(index + 1) & "]")
-    let headerId = $(interp.tclGetResult)
     if command.len > 0:
       interp.tclEval(result.canvas & " bind " & headerId & " <Enter> {" &
           result.canvas & " configure -cursor hand1}")
@@ -92,20 +88,19 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     if tooltipText.len > 0:
       interp.tclEval("tooltip::tooltip " & result.canvas & " -item " &
           headerId & " \"" & tooltipText & "\"")
-    interp.tclEval(result.canvas & " bbox header" & $(index + 1))
     let
-      tclResult = $(interp.tclGetResult)
+      tclResult = interp.tclEval2(result.canvas & " bbox header" & $(index + 1))
       coords = tclResult.split
     var oldX = x - 5
     x = coords[2].parseInt + 5
     result.columnsWidth.add(x - coords[0].parseInt)
     if index == 0:
       result.rowHeight = coords[3].parseInt + 5
-    interp.tclEval(result.canvas & " create rectangle " & $oldX & " 0 " & $(x -
-        2) & " " & $(result.rowHeight - 3) & " -fill " & headerBackColor &
+    let backgroundId = interp.tclEval2(result.canvas & " create rectangle " &
+        $oldX & " 0 " & $(x - 2) & " " & $(result.rowHeight - 3) & " -fill " &
+            headerBackColor &
         " -outline " & $borderStyle & " -width 2 -tags [list headerback" &
         $(index + 1) & "]")
-    let backgroundId = $(interp.tclGetResult)
     interp.tclEval(result.canvas & " lower headerback" & $(index + 1))
     if command.len > 0:
       interp.tclEval(result.canvas & " bind " & backgroundId & " <Enter> {" &
