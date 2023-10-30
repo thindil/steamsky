@@ -33,7 +33,7 @@ type
     row*: Positive = 1
     rowHeight*: Positive = 1
     scrollbar*: string
-  HeadersList* = seq[string]
+  HeadersList* = seq[string] ## The list of titles for a table's headers
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     command: string = ""; tooltipText: string = ""): TableWidget {.sideEffect,
