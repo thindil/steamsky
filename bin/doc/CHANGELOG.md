@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Displaying tables if the first column has an empty header
+
 ## [9.3] - 2023-10-29
 
 ### Added
