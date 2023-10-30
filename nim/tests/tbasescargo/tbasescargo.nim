@@ -8,6 +8,8 @@ Testing updateBaseCargo.'''
 
 import std/tables
 import ../../src/[basescargo, basestypes, careers, factions, game, items, maps, types]
+# Temporary import for megatest
+import ../../src/[shipmodules, crafts, mobs, ships]
 
 echo "Loading the game data."
 if basesTypesList.len == 0:
@@ -16,6 +18,15 @@ if basesTypesList.len == 0:
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
+# Temporary loading, for megatest
+if modulesList.len == 0:
+  loadModules("../bin/data/shipmodules.dat")
+if recipesList.len == 0:
+  loadRecipes("../bin/data/recipes.dat")
+if protoMobsList.len == 0:
+  loadMobs("../bin/data/mobs.dat")
+if protoShipsList.len == 0:
+  loadShips("../bin/data/ships.dat")
 
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 playerShip.skyX = 1
