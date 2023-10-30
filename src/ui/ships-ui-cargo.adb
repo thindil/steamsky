@@ -982,7 +982,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
-   procedure Add_Commands is
+   procedure Add_Cargo_Commands is
    begin
       Add_Command
         (Name => "ShowCargo", Ada_Command => Show_Cargo_Command'Access);
@@ -1000,6 +1000,6 @@ package body Ships.UI.Cargo is
       Add_Command
         (Name => "UpdateMaxGiveAmount",
          Ada_Command => Update_Max_Give_Amount_Command'Access);
-   end Add_Commands;
+   end Add_Cargo_Commands;
 
 end Ships.UI.Cargo;
