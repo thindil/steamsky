@@ -16,4 +16,4 @@ withDir "nim":
       discard
     for file in listFiles("newtests"):
       if file.endsWith("nim"):
-        exec "nim c --verbosity:0 -r " & file
+        exec "nim c --verbosity:0 --NimblePath:/root/.nimble -r " & file
