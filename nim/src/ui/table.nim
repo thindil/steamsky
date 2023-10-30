@@ -131,8 +131,8 @@ proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
     command, tooltipText: cstring; adaCanvas, adaScrollbar: var cstring;
     height: var cint; adaWidth: var array[10, cint]) {.raises: [], tags: [], exportc.} =
   var nimHeaders: HeadersList = @[]
-  for header in headers:
-    if header.len > 0:
+  for index, header in headers:
+    if header.len > 0 or index == 0:
       nimHeaders.add($header)
   try:
     let newTable = createTable(parent = $parent, headers = nimHeaders,
