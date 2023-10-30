@@ -119,3 +119,14 @@ proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
   ## * interp - The Tcl interpreter from which the result will be taken
   ##
   ## Returns the string with the result of the last evaluated Tcl command
+
+proc tclEval2*(interp: PInterp; script: string): string =
+  ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
+  ## of the evaluation. Accepts Tcl code as Nim string
+  ##
+  ## * interp - The Tcl interpreter on which the code will be evaluated
+  ## * script - The Tcl code which will be evaluated
+  ##
+  ## Returns the result of the evaluation of the code as Nim string
+  interp.tclEval(script = script)
+  return $(interp.tclGetResult)
