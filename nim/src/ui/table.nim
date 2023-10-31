@@ -146,7 +146,8 @@ proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
       interp.tclEval(table.canvas & " delete progressbar" & $row & "bar" & $column)
   table.row = 1
 
-proc addBindings(canvas, itemId, row, command, color: string) =
+proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
+    raises: [], tags: [].} =
   let interp = getInterp()
   interp.tclEval(canvas & " bind " & itemId & " <Enter> {" & canvas &
       " itemconfigure row$currentrow -fill " & color & ";" & canvas &
