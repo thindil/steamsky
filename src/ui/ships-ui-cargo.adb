@@ -94,8 +94,8 @@ package body Ships.UI.Cargo is
       Cargo_Info_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
       Tokens: Slice_Set;
-      Rows: Natural := 0;
-      Item_Type: Bounded_String;
+      Rows: Natural;
+      Item_Type: Bounded_String := Null_Bounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
