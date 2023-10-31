@@ -125,7 +125,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   interp.tclEval("bind " & result.canvas & " <Leave> {HideCurrentRow " &
       result.canvas & "}")
 
-proc clearTable*(table: var TableWidget) =
+proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
   let
     buttonsFrame = table.canvas & ".buttonframe"
     interp = getInterp()
