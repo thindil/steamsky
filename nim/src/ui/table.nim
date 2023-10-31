@@ -126,6 +126,11 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
       result.canvas & "}")
 
 proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
+  ## Clear the data from the selected table
+  ##
+  ## * table - the TableWidget which data will be cleared
+  ##
+  ## Returns the modified parameter table
   let
     buttonsFrame = table.canvas & ".buttonframe"
     interp = getInterp()
