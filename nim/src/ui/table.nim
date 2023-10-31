@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../tk
+import ../[config, tk]
 
 type
   TableWidget* = object
@@ -145,6 +145,18 @@ proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
       interp.tclEval(table.canvas & " delete progressbar" & $row & "back" & $column)
       interp.tclEval(table.canvas & " delete progressbar" & $row & "bar" & $column)
   table.row = 1
+
+proc addBindings(canvas, itemId, row, command, color: string) =
+  let interp = getInterp()
+  interp.tclEval(canvas & " bind " & itemId & " <Enter> {" & canvas &
+      " itemconfigure row$currentrow -fill " & color & ";" & canvas &
+      " itemconfigure row" & row & " -fill " & interp.tclEval2(
+      "ttk::style lookup -selectbackground") & (if command.len > 0: ";" &
+      canvas & " configure -cursor hand1" else: "") & ";set currentrow " & row & "}")
+  interp.tclEval(canvas & " bind " & itemId & " <Leave> {" & canvas & " confgiure -cursor left_ptr}")
+  if command.len > 0:
+    interp.tclEval(canvas & " bind " & itemId & " <Button-" & (
+        if gameSettings.rightButton: "3" else: "1") & "> {" & command & "}")
 
 # Temporary code for interfacing with Ada
 
