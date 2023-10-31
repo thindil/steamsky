@@ -162,3 +162,10 @@ proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
     adaScrollbar = newTable.scrollbar.cstring
   except:
     discard
+
+proc clearAdaTable(columns, rows: cint; canvas: cstring) {.raises: [], tags: [], exportc.} =
+  var nimColumns: seq[Positive]
+  for index in 1 .. columns:
+    nimColumns.add(1)
+  var newTable = TableWidget(columnsWidth: nimColumns, canvas: $canvas, row: rows)
+  clearTable(newTable)
