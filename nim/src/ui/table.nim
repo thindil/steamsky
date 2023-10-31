@@ -139,7 +139,7 @@ proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
     interp.tclEval("destroy " & buttonsFrame & ".next")
     interp.tclEval("destroy " & buttonsFrame)
   for row in 1 .. table.row:
-    for column in 1 .. table.columnsWidth.high:
+    for column in 1 .. table.columnsWidth.len:
       interp.tclEval(table.canvas & " delete row" & $row & "col" & $column)
       interp.tclEval(table.canvas & " delete row" & $row)
       interp.tclEval(table.canvas & " delete progressbar" & $row & "back" & $column)
