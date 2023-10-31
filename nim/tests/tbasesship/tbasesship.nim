@@ -6,8 +6,10 @@ Testing repairCost.'''
 """
 
 import std/tables
-import ../../src/[basesship, basestypes, careers, factions, game, items, maps,
-    shipmodules, types]
+import ../../src/[basescargo, basesship, basestypes, careers, factions, game,
+    items, maps, shipmodules, types]
+# Temporary import for megatest
+import ../../src/[crafts, mobs, ships]
 
 echo "Loading the game data."
 if basesTypesList.len == 0:
@@ -17,6 +19,13 @@ if basesTypesList.len == 0:
   loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
   loadModules("../bin/data/shipmodules.dat")
+# Temporary loading, for megatest
+if recipesList.len == 0:
+  loadRecipes("../bin/data/recipes.dat")
+if protoMobsList.len == 0:
+  loadMobs("../bin/data/mobs.dat")
+if protoShipsList.len == 0:
+  loadShips("../bin/data/ships.dat")
 
 skyBases[1].reputation = ReputationData(level: 1, experience: 1)
 playerShip.skyX = 1
@@ -38,6 +47,7 @@ skyMap[1][1].baseIndex = 1
 skyBases[1].population = 100
 skyBases[1].baseType = "1"
 skyBases[1].owner = "POLEIS"
+generateCargo()
 gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
 echo "Testing payForDock."
