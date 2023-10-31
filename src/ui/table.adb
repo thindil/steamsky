@@ -16,7 +16,7 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
@@ -38,7 +38,6 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
-      use Interfaces.C.Strings;
       --## rule off IMPROPER_INITIALIZATION
       New_Table: Table_Widget (Amount => Headers'Length);
       --## rule on IMPROPER_INITIALIZATION
@@ -92,46 +91,15 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Clear_Table(Table: in out Table_Widget) is
       --## rule on LOCAL_HIDING
-      Buttons_Frame: Ttk_Frame :=
-        Get_Widget(pathName => Table.Canvas & ".buttonframe");
-      --## rule off IMPROPER_INITIALIZATION
-      Button: Ttk_Button;
-      --## rule on IMPROPER_INITIALIZATION
+      procedure Clear_Ada_Table
+        (Columns, Rows: Positive; Canvas: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "clearAdaTable";
    begin
-      if Winfo_Get(Widgt => Buttons_Frame, Info => "exists") = "1" then
-         Button := Get_Widget(pathName => Buttons_Frame & ".previous");
-         Destroy(Widgt => Button);
-         Button := Get_Widget(pathName => Buttons_Frame & ".next");
-         Destroy(Widgt => Button);
-         Destroy(Widgt => Buttons_Frame);
-      end if;
-      Clear_Rows_Loop :
-      for Row in 1 .. Table.Row loop
-         Clear_Columns_Loop :
-         for Column in 1 .. Table.Amount loop
-            Delete
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-                 "col" & Trim(Source => Positive'Image(Column), Side => Left));
-            Delete
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "row" & Trim(Source => Positive'Image(Row), Side => Left));
-            Delete
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "progressbar" &
-                 Trim(Source => Positive'Image(Row), Side => Left) & "back" &
-                 Trim(Source => Positive'Image(Column), Side => Left));
-            Delete
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "progressbar" &
-                 Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
-                 Trim(Source => Positive'Image(Column), Side => Left));
-         end loop Clear_Columns_Loop;
-      end loop Clear_Rows_Loop;
+      Clear_Ada_Table
+        (Columns => Table.Amount, Rows => Table.Row,
+         Canvas => New_String(Str => Widget_Image(Win => Table.Canvas)));
       Table.Row := 1;
    end Clear_Table;
 
