@@ -7,10 +7,6 @@ if not fileExists("steamsky.gpr"):
   quit QuitFailure
 
 # Run Nim tests
-try:
-  exec "ls -a /root"
-except:
-  discard
 withDir "nim":
   for i in 1..parseInt(paramStr(paramCount())):
     echo i
