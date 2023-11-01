@@ -25,9 +25,9 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Utils.UI;
@@ -92,14 +92,14 @@ package body Table is
    procedure Clear_Table(Table: in out Table_Widget) is
       --## rule on LOCAL_HIDING
       procedure Clear_Ada_Table
-        (Columns, Rows: Positive; Canvas: chars_ptr) with
+        (Columns, Rows: Positive; C: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "clearAdaTable";
    begin
       Clear_Ada_Table
         (Columns => Table.Amount, Rows => Table.Row,
-         Canvas => New_String(Str => Widget_Image(Win => Table.Canvas)));
+         C => New_String(Str => Widget_Image(Win => Table.Canvas)));
       Table.Row := 1;
    end Clear_Table;
 
@@ -352,6 +352,8 @@ package body Table is
       end loop Update_Columns_Loop;
       Resize_Table_Block :
       declare
+         use Tcl.Tk.Ada.Winfo;
+
          Tokens: Slice_Set;
       begin
          Create
@@ -539,6 +541,9 @@ package body Table is
    procedure Add_Pagination
      (Table: in out Table_Widget;
       Previous_Command, Next_Command: String := "") is
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Table.Canvas & ".buttonframe");
       --## rule off IMPROPER_INITIALIZATION
