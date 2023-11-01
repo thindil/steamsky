@@ -102,7 +102,7 @@ proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
   ##
   ## Returns tclOk if the code evaluated correctly, otherwise tclError
 
-proc tclEval*(interp: PInterp; script: string): TclResults {.discardable.} =
+proc tclEval*(interp: PInterp = getInterp(); script: string): TclResults {.discardable.} =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
   ##
@@ -120,7 +120,7 @@ proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
   ##
   ## Returns the string with the result of the last evaluated Tcl command
 
-proc tclEval2*(interp: PInterp; script: string): string =
+proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
   ##
