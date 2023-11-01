@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Icon for the player's ship's crew members' inventory. Author: Delapouite
+  (https://game-icons.net), license CC BY 3.0
+
 ### Fixed
 - Displaying tables if the first column has an empty header
 
