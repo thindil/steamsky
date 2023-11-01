@@ -90,11 +90,11 @@ proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     return
   let interp = getInterp()
   for i in startIndex .. endIndex:
-    if interp.tclEval(script = "grid slaves " & $frame & " -row " & $i) == tclError:
+    if tclEval(script = "grid slaves " & $frame & " -row " & $i) == tclError:
       return
     let tclResult = $interp.tclGetResult()
     for widget in tclResult.split():
-      discard interp.tclEval(script = "destroy " & widget)
+      tclEval(script = "destroy " & widget)
 
 proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
     raises: [], tags: [].} =
@@ -105,38 +105,38 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
     paned = mainPaned & ".controls.buttons"
     messagesFrame = mainPaned & ".controls.messages"
   let interp = getInterp()
-  if interp.tclEval(script = mainPaned & " panes") == tclError:
+  if tclEval(script = mainPaned & " panes") == tclError:
     return
   let
     tclResult = $interp.tclGetResult()
     oldSubWindow = tclResult.split()[0]
     subWindow = mainPaned & "." & $newScreenName
-  if interp.tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
+  if tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
     return
-  if interp.tclEval(script = mainPaned & " insert 0 " & subWindow &
+  if tclEval(script = mainPaned & " insert 0 " & subWindow &
       " -weight 1") == tclError:
     return
   if newScreenName in ["optionsframe".cstring, "messagesframe"] or
       not gameSettings.showLastMessages:
-    if interp.tclEval(script = "grid remove " & messagesFrame) == tclError:
+    if tclEval(script = "grid remove " & messagesFrame) == tclError:
       return
     if newScreenName != "mapframe":
-      if interp.tclEval(script = "winfo height " & mainPaned) == tclError:
+      if tclEval(script = "winfo height " & mainPaned) == tclError:
         return
       let newPos = $interp.tclGetResult()
-      if interp.tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
+      if tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
         return
   else:
     if oldSubWindow in [mainPaned & ".messagesframe", mainPaned &
         ".optionsframe"]:
-      if interp.tclEval(script = mainPaned & " sashpos 0 " & $(
+      if tclEval(script = mainPaned & " sashpos 0 " & $(
           gameSettings.windowHeight - gameSettings.messagesPosition)) == tclError:
         return
-    if interp.tclEval(script = "grid " & messagesFrame) == tclError:
+    if tclEval(script = "grid " & messagesFrame) == tclError:
       return
   if newScreenName == "mapframe":
-    if interp.tclEval(script = "grid " & paned) == tclError:
+    if tclEval(script = "grid " & paned) == tclError:
       return
   else:
-    if interp.tclEval(script = "grid remove " & paned) == tclError:
+    if tclEval(script = "grid remove " & paned) == tclError:
       return
