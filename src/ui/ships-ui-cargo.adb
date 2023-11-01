@@ -105,8 +105,10 @@ package body Ships.UI.Cargo is
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
          else 1);
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Free_Space_Label: constant Ttk_Label :=
         Get_Widget
@@ -324,11 +326,13 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
          else Get_Column_Number
              (Table => Cargo_Table,
               X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
@@ -338,10 +342,13 @@ package body Ships.UI.Cargo is
          Id: Positive;
       end record;
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Cargo: Cargo_Array
         (1 ..
              Natural
                (Inventory_Container.Length(Container => Player_Ship.Cargo)));
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Cargo_Data) return Boolean is
       begin
          if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -428,6 +435,7 @@ package body Ships.UI.Cargo is
              (Client_Data => Client_Data, Interp => Interp, Argc => 1,
               Argv => CArgv.Empty & "ShowCargo");
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Cargo_Loop :
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
