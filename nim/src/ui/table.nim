@@ -148,13 +148,19 @@ proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
 
 proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
     raises: [], tags: [].} =
+  ## Add Tcl events to the selected element of the TableWidget
+  ##
+  ## * canvas  - Tk canvas in which the events will be added
+  ## * itemId  - the Id of the item to which the events will be added
+  ## * row     - the number of the row in which the events will be added
+  ## * command - the Tcl command which will be executed on mouse button event
   let interp = getInterp()
   interp.tclEval(canvas & " bind " & itemId & " <Enter> {" & canvas &
       " itemconfigure row$currentrow -fill " & color & ";" & canvas &
       " itemconfigure row" & row & " -fill " & interp.tclEval2(
       "ttk::style lookup -selectbackground") & (if command.len > 0: ";" &
       canvas & " configure -cursor hand1" else: "") & ";set currentrow " & row & "}")
-  interp.tclEval(canvas & " bind " & itemId & " <Leave> {" & canvas & " confgiure -cursor left_ptr}")
+  interp.tclEval(canvas & " bind " & itemId & " <Leave> {" & canvas & " configure -cursor left_ptr}")
   if command.len > 0:
     interp.tclEval(canvas & " bind " & itemId & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {" & command & "}")
