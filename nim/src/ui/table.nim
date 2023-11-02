@@ -193,7 +193,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   let
     textColor = (if color.len > 0: color else: tclEval2(
         script = "ttk::style lookup -foreground"))
-    itemId = tclEval2(script = table.canvas & " create text" & $x & " " & $((
+    itemId = tclEval2(script = table.canvas & " create text " & $x & " " & $((
         table.row * table.rowHeight) + 2) & " -anchor nw -text {" & text &
         "} -font InterfaceFont -fill " & textColor & " -tags [list row" &
         $table.row & "col" & $column & "]")
@@ -202,6 +202,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
         itemId & " \"" & tooltip & "\"")
   let backgroundColor = addBackground(table, newRow, command)
   addBindings(table.canvas, itemId, $table.row, command, backgroundColor)
+  echo "id:", itemId
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
@@ -246,8 +247,12 @@ proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
   try:
     var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
     for width in columnsWidth:
+      if width == 0:
+        break
       newTable.columnsWidth.add(width)
     addButton(newTable, $text, $tooltip, $command, column, newRow == 1, $color)
     row = newTable.row.cint
   except:
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(getCurrentException())
     discard

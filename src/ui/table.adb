@@ -34,6 +34,10 @@ with Utils.UI;
 
 package body Table is
 
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Width is array(0 .. 10) of Integer;
+   --## rule on TYPE_INITIAL_VALUES
+
    function Create_Table
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
@@ -43,7 +47,6 @@ package body Table is
       --## rule on IMPROPER_INITIALIZATION
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Headers is array(0 .. 10) of chars_ptr;
-      type Nim_Width is array(0 .. 10) of Integer;
       --## rule on TYPE_INITIAL_VALUES
       N_Headers: Nim_Headers;
       Nim_Canvas, Nim_Scrollbar: chars_ptr;
@@ -91,8 +94,7 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Clear_Table(Table: in out Table_Widget) is
       --## rule on LOCAL_HIDING
-      procedure Clear_Ada_Table
-        (Columns, Rows: Positive; Canv: chars_ptr) with
+      procedure Clear_Ada_Table(Columns, Rows: Positive; Canv: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "clearAdaTable";
@@ -209,66 +211,87 @@ package body Table is
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
       Column: Positive; New_Row: Boolean := False; Color: String := "") is
       --## rule on LOCAL_HIDING
-      X: Natural := 5;
-      Item_Id: Unbounded_String := Null_Unbounded_String;
-      --## rule off IMPROPER_INITIALIZATION
-      Tokens: Slice_Set;
-      --## rule on IMPROPER_INITIALIZATION
-      Text_Color: constant String :=
-        (if Color'Length > 0 then Color
-         else Style_Lookup
-             (Name => To_String(Source => Get_Interface_Theme),
-              Option => "-foreground"));
-      Background_Color: constant String :=
-        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
+--      X: Natural := 5;
+--      Item_Id: Unbounded_String := Null_Unbounded_String;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Tokens: Slice_Set;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Text_Color: constant String :=
+--        (if Color'Length > 0 then Color
+--         else Style_Lookup
+--             (Name => To_String(Source => Get_Interface_Theme),
+--              Option => "-foreground"));
+--      Background_Color: constant String :=
+--        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
+      N_Width: Nim_Width := (others => 0);
+      Index: Natural := 0;
+      Row: Positive := Table.Row;
+      procedure Add_Ada_Button
+        (Canvas, T, Tt, Com, Colr: chars_ptr; Col, nRow, rHeight: Integer;
+         Width: Nim_Width; R: in out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaButton";
    begin
+      Convert_Width_Loop :
+      for Width of Table.Columns_Width loop
+         N_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Width_Loop;
+      Add_Ada_Button
+        (Canvas => New_String(Str => Widget_Image(Win => Table.Canvas)),
+         T => New_String(Str => Text), Tt => New_String(Str => Tooltip),
+         Com => New_String(Str => Command), Colr => New_String(Str => Color),
+         Col => Column, nRow => (if New_Row then 1 else 0),
+         rHeight => Table.Row_Height, Width => N_Width, R => Row);
+      Table.Row := Row;
       --## rule off SIMPLIFIABLE_STATEMENTS
-      Count_X_Loop :
-      for I in 1 .. Column - 1 loop
-         X := X + Table.Columns_Width(I);
-      end loop Count_X_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Item_Id :=
-        To_Unbounded_String
-          (Source =>
-             Canvas_Create
-               (Parent => Table.Canvas, Child_Type => "text",
-                Options =>
-                  Trim(Source => Natural'Image(X), Side => Left) &
-                  Positive'Image((Table.Row * Table.Row_Height) + 2) &
-                  " -anchor nw -text {" & Text &
-                  "} -font InterfaceFont -fill " & Text_Color &
-                  " -tags [list row" &
-                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
-                  "col" &
-                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      if Tooltip'Length > 0 then
-         Add
-           (Widget => Table.Canvas, Message => Tooltip,
-            Options => "-item " & To_String(Source => Item_Id));
-      end if;
-      Add_Bindings
-        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Command => Command, Color => Background_Color);
-      Create
-        (S => Tokens,
-         From =>
-           BBox
-             (CanvasWidget => Table.Canvas,
-              TagOrId => To_String(Source => Item_Id)),
-         Separators => " ");
-      X :=
-        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
-        Positive'Value(Slice(S => Tokens, Index => 1));
-      if X > Table.Columns_Width(Column) then
-         Table.Columns_Width(Column) := X;
-      end if;
-      if New_Row then
-         Table.Row := Table.Row + 1;
-      end if;
+--      Count_X_Loop :
+--      for I in 1 .. Column - 1 loop
+--         X := X + Table.Columns_Width(I);
+--      end loop Count_X_Loop;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Item_Id :=
+--        To_Unbounded_String
+--          (Source =>
+--             Canvas_Create
+--               (Parent => Table.Canvas, Child_Type => "text",
+--                Options =>
+--                  Trim(Source => Natural'Image(X), Side => Left) &
+--                  Positive'Image((Table.Row * Table.Row_Height) + 2) &
+--                  " -anchor nw -text {" & Text &
+--                  "} -font InterfaceFont -fill " & Text_Color &
+--                  " -tags [list row" &
+--                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+--                  "col" &
+--                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      if Tooltip'Length > 0 then
+--         Add
+--           (Widget => Table.Canvas, Message => Tooltip,
+--            Options => "-item " & To_String(Source => Item_Id));
+--      end if;
+--      Add_Bindings
+--        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+--         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+--         Command => Command, Color => Background_Color);
+--      Create
+--        (S => Tokens,
+--         From =>
+--           BBox
+--             (CanvasWidget => Table.Canvas,
+--              TagOrId => To_String(Source => Item_Id)),
+--         Separators => " ");
+--      X :=
+--        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
+--        Positive'Value(Slice(S => Tokens, Index => 1));
+--      if X > Table.Columns_Width(Column) then
+--         Table.Columns_Width(Column) := X;
+--      end if;
+--      if New_Row then
+--         Table.Row := Table.Row + 1;
+--      end if;
    end Add_Button;
 
    --## rule off LOCAL_HIDING
