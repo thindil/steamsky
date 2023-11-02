@@ -92,14 +92,14 @@ package body Table is
    procedure Clear_Table(Table: in out Table_Widget) is
       --## rule on LOCAL_HIDING
       procedure Clear_Ada_Table
-        (Columns, Rows: Positive; C: chars_ptr) with
+        (Columns, Rows: Positive; Canv: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "clearAdaTable";
    begin
       Clear_Ada_Table
         (Columns => Table.Amount, Rows => Table.Row,
-         C => New_String(Str => Widget_Image(Win => Table.Canvas)));
+         Canv => New_String(Str => Widget_Image(Win => Table.Canvas)));
       Table.Row := 1;
    end Clear_Table;
 
