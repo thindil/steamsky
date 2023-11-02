@@ -161,6 +161,20 @@ proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
     tclEval(script = canvas & " bind " & itemId & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {" & command & "}")
 
+proc addBackground(table: TableWidget; newRow: bool; command: string): string =
+  result = (if table.row mod 2 > 0: tclEval2(
+      script = "ttk::style lookup Table -rowcolor") else: tclEval2(
+      script = "ttk::style lookup -background"))
+  if not newRow:
+    return
+  let itemId = tclEval2(script = table.canvas & " create rectangle 0 " & $(
+      table.row * table.rowHeight) & " 10 " & $((table.row * table.rowHeight) +
+      table.rowHeight) & " -fill " & result & " -width 0 -tags [list row" & $(
+      table.row) & "]")
+  tclEval(script = table.canvas & " lower " & itemId)
+  addBindings(canvas = table.canvas, itemId = "row" & $table.row,
+      row = $table.row, command = command, color = result)
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
