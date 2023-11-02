@@ -333,6 +333,7 @@ package body Ships.UI.Cargo is
              (Table => Cargo_Table,
               X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
@@ -342,6 +343,7 @@ package body Ships.UI.Cargo is
          Id: Positive;
       end record;
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Local_Cargo: Cargo_Array
         (1 ..
@@ -494,11 +496,13 @@ package body Ships.UI.Cargo is
             Id => I);
       end loop Fill_Local_Cargo_Loop;
       Sort_Cargo(Container => Local_Cargo);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Cargo_Indexes.Clear;
       Fill_Cargo_Indexes_Loop :
       for Item of Local_Cargo loop
          Cargo_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Cargo_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Show_Cargo_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 1,
@@ -802,7 +806,9 @@ package body Ships.UI.Cargo is
         Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off IMPROPER_INITIALIZATION
       Accepted_Mission: Mission_Data;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       Drop_Amount := Natural'Value(Get(Widgt => Spin_Box));
       Drop_Amount_2 := Drop_Amount;
