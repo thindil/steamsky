@@ -201,7 +201,15 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
   let backgroundColor = addBackground(table, newRow, command)
-  addBindings(table.canvas, $itemId, $table.row, command, backgroundColor)
+  addBindings(table.canvas, itemId, $table.row, command, backgroundColor)
+  let
+    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords = tclResult.split
+  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  if x > table.columnsWidth[column - 1]:
+    table.columnsWidth[column - 1] = x
+  if newRow:
+    table.row.inc
 
 # Temporary code for interfacing with Ada
 
@@ -231,3 +239,15 @@ proc clearAdaTable(columns, rows: cint; canvas: cstring) {.raises: [], tags: [],
     nimColumns.add(1)
   var newTable = TableWidget(columnsWidth: nimColumns, canvas: $canvas, row: rows)
   clearTable(newTable)
+
+proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
+    newRow, rowHeight: cint; columnsWidth: array[10, cint];
+    row: var cint) {.raises: [], tags: [], exportc.} =
+  try:
+    var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
+    for width in columnsWidth:
+      newTable.columnsWidth.add(width)
+    addButton(newTable, $text, $tooltip, $command, column, newRow == 1, $color)
+    row = newTable.row.cint
+  except:
+    discard
