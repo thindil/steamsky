@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -350,7 +350,7 @@ package Themes is
       No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg",
       No_Engineer_Icon => Default_Theme_Icons_Path & "noengineer.svg",
       Destination_Icon => Default_Theme_Icons_Path & "destination.svg",
-      Inventory_Icon => Default_Theme_Icons_Path & "unequip.svg",
+      Inventory_Icon => Default_Theme_Icons_Path & "inventory.svg",
       Dismiss_Icon => Default_Theme_Icons_Path & "dismiss.svg",
       Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg",
       Repair_Priority_Icon => Default_Theme_Icons_Path & "repair-priority.svg",
