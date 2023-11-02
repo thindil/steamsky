@@ -161,7 +161,8 @@ proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
     tclEval(script = canvas & " bind " & itemId & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {" & command & "}")
 
-proc addBackground(table: TableWidget; newRow: bool; command: string): string =
+proc addBackground(table: TableWidget; newRow: bool;
+    command: string): string {.sideEffect, raises: [], tags: [].} =
   result = (if table.row mod 2 > 0: tclEval2(
       script = "ttk::style lookup Table -rowcolor") else: tclEval2(
       script = "ttk::style lookup -background"))
