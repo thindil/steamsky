@@ -163,6 +163,15 @@ proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
 
 proc addBackground(table: TableWidget; newRow: bool;
     command: string): string {.sideEffect, raises: [], tags: [].} =
+  ## Add the proper color to the item in the table and return the name of the
+  ## used color
+  ##
+  ## * table   - the TableWinget in which the background will be set
+  ## * newRow  - if true, add the background, otherwise just return its color
+  ## * command - the Tcl command which will be executed when the background is
+  ##             clicked by the player
+  ##
+  ## Returns the name of the color of the background of the item
   result = (if table.row mod 2 > 0: tclEval2(
       script = "ttk::style lookup Table -rowcolor") else: tclEval2(
       script = "ttk::style lookup -background"))
