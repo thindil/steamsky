@@ -185,6 +185,24 @@ proc addBackground(table: TableWidget; newRow: bool;
   addBindings(canvas = table.canvas, itemId = "row" & $table.row,
       row = $table.row, command = command, color = result)
 
+proc addButton*(table: var TableWidget; text, tooltip, command: string;
+    column: Positive; newRow: bool = false; color: string = "") =
+  var x = 5
+  for i in 0 .. column:
+    x = x + table.columnsWidth[i]
+  let
+    textColor = (if color.len > 0: color else: tclEval2(
+        script = "ttk::style lookup -foreground"))
+    itemId = tclEval2(script = table.canvas & " create text" & $x & " " & $((
+        table.row * table.rowHeight) + 2) & " -anchor nw -text {" & text &
+        "} -font InterfaceFont -fill " & textColor & " -tags [list row" &
+        $table.row & "col" & $column & "]")
+  if tooltip.len > 0:
+    tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
+        itemId & " \"" & tooltip & "\"")
+  let backgroundColor = addBackground(table, newRow, command)
+  addBindings(table.canvas, $itemId, $table.row, command, backgroundColor)
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
