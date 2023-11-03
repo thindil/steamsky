@@ -6,6 +6,16 @@ Testing findSkillIndex.'''
 
 import ../../src/[game]
 
+## Temporary code
+import std/tables
+import ../../src/[items, careers, factions]
+if itemsList.len == 0:
+  loadData("../bin/data/game.dat")
+  loadItems("../bin/data/items.dat")
+  loadCareers("../bin/data/careers.dat")
+  loadFactions("../bin/data/factions.dat")
+# end of temporary code
+
 echo "Loading the game data."
 loadData("../bin/data/game.dat")
 
