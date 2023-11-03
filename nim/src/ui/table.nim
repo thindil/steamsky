@@ -153,9 +153,10 @@ proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
   ## * command - the Tcl command which will be executed on mouse button event
   tclEval(script = canvas & " bind " & itemId & " <Enter> {" & canvas &
       " itemconfigure row$currentrow -fill " & color & ";" & canvas &
-      " itemconfigure row" & row & " -fill " & tclEval2(script =
-    "ttk::style lookup -selectbackground") & (if command.len > 0: ";" &
-    canvas & " configure -cursor hand1" else: "") & ";set currentrow " & row & "}")
+      " itemconfigure row" & row & " -fill " & tclEval2(
+      script = "ttk::style lookup " & gameSettings.interfaceTheme &
+      " -selectbackground") & (if command.len > 0: ";" & canvas &
+      " configure -cursor hand1" else: "") & ";set currentrow " & row & "}")
   tclEval(script = canvas & " bind " & itemId & " <Leave> {" & canvas & " configure -cursor left_ptr}")
   if command.len > 0:
     tclEval(script = canvas & " bind " & itemId & " <Button-" & (
@@ -174,7 +175,8 @@ proc addBackground(table: TableWidget; newRow: bool;
   ## Returns the name of the color of the background of the item
   result = (if table.row mod 2 > 0: tclEval2(
       script = "ttk::style lookup Table -rowcolor") else: tclEval2(
-      script = "ttk::style lookup -background"))
+      script = "ttk::style lookup " & gameSettings.interfaceTheme &
+      " -background"))
   if not newRow:
     return
   let itemId = tclEval2(script = table.canvas & " create rectangle 0 " & $(
@@ -188,11 +190,12 @@ proc addBackground(table: TableWidget; newRow: bool;
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
     column: Positive; newRow: bool = false; color: string = "") =
   var x = 5
-  for i in 0 .. column:
-    x = x + table.columnsWidth[i]
+  for i in 1 .. column - 1:
+    x = x + table.columnsWidth[i - 1]
   let
     textColor = (if color.len > 0: color else: tclEval2(
-        script = "ttk::style lookup -foreground"))
+        script = "ttk::style lookup " & gameSettings.interfaceTheme &
+        " -foreground"))
     itemId = tclEval2(script = table.canvas & " create text " & $x & " " & $((
         table.row * table.rowHeight) + 2) & " -anchor nw -text {" & text &
         "} -font InterfaceFont -fill " & textColor & " -tags [list row" &
@@ -202,7 +205,6 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
         itemId & " \"" & tooltip & "\"")
   let backgroundColor = addBackground(table, newRow, command)
   addBindings(table.canvas, itemId, $table.row, command, backgroundColor)
-  echo "id:", itemId
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
@@ -242,7 +244,7 @@ proc clearAdaTable(columns, rows: cint; canvas: cstring) {.raises: [], tags: [],
   clearTable(newTable)
 
 proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
-    newRow, rowHeight: cint; columnsWidth: array[10, cint];
+    newRow, rowHeight: cint; columnsWidth: var array[10, cint];
     row: var cint) {.raises: [], tags: [], exportc.} =
   try:
     var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
@@ -251,8 +253,8 @@ proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
         break
       newTable.columnsWidth.add(width)
     addButton(newTable, $text, $tooltip, $command, column, newRow == 1, $color)
+    for index, width in newTable.columnsWidth:
+      columnsWidth[index] = width.cint
     row = newTable.row.cint
   except:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(getCurrentException())
     discard

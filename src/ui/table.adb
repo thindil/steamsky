@@ -227,7 +227,7 @@ package body Table is
       Index: Natural := 0;
       Row: Positive := Table.Row;
       procedure Add_Ada_Button
-        (Canvas, T, Tt, Com, Colr: chars_ptr; Col, nRow, rHeight: Integer;
+        (Can, T, Tt, Com, Colr: chars_ptr; Col, N_Row, R_Height: Integer;
          Width: Nim_Width; R: in out Integer) with
          Import => True,
          Convention => C,
@@ -239,12 +239,19 @@ package body Table is
          Index := Index + 1;
       end loop Convert_Width_Loop;
       Add_Ada_Button
-        (Canvas => New_String(Str => Widget_Image(Win => Table.Canvas)),
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
          T => New_String(Str => Text), Tt => New_String(Str => Tooltip),
          Com => New_String(Str => Command), Colr => New_String(Str => Color),
-         Col => Column, nRow => (if New_Row then 1 else 0),
-         rHeight => Table.Row_Height, Width => N_Width, R => Row);
+         Col => Column, N_Row => (if New_Row then 1 else 0),
+         R_Height => Table.Row_Height, Width => N_Width, R => Row);
       Table.Row := Row;
+      Index := 1;
+      Convert_Nim_Width_Loop :
+      for Width of N_Width loop
+         exit Convert_Nim_Width_Loop when Width = 0;
+         Table.Columns_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Nim_Width_Loop;
       --## rule off SIMPLIFIABLE_STATEMENTS
 --      Count_X_Loop :
 --      for I in 1 .. Column - 1 loop
