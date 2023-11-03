@@ -228,6 +228,24 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   if newRow:
     table.row.inc
 
+proc updateTable*(table: var TableWidget; grabFocus: bool = true) =
+  var tag = "headerback1"
+  tclEval(script = "canvas coords " & tag & " 0 0 " & $(table.columnsWidth[0] +
+      10) & " " & $(table.rowHeight - 3))
+  var
+    newX = table.columnsWidth[0] + 20
+    newY = 2
+  for column in 2 .. table.columnsWidth.len:
+    tag = "header" & $column
+    tclEval(script = "canvas coords " & tag & " " & $newX & " " & $newY)
+    tag = "headerback" & $column
+    tclEval(script = "canvas coords " & tag & " " & $(newX - 10) & " 0 " & $(
+        newX + table.columnsWidth[column - 1] + 10) & " " & $(table.rowHeight - 3))
+    for row in 1 .. table.row:
+      newY = newY + table.rowHeight
+      tag = "row" & $row & "col" & $column
+      tclEval(script = "canvas moveto " & tag & " " & $newX & " " & $newY)
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
