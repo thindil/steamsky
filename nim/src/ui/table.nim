@@ -190,6 +190,19 @@ proc addBackground(table: TableWidget; newRow: bool;
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
     column: Positive; newRow: bool = false; color: string = "") {.sideEffect,
     raises: [ValueError], tags: [].} =
+  ## Add a button item to the selected TableWidget
+  ##
+  ## * table   - the TableWidget to which the button will be added
+  ## * text    - the text to display on the button
+  ## * tooltip - the tooltip text to display when the player hover the mouse
+  ##             over the button
+  ## * command - the Tcl command to execute when the player press the button
+  ## * column  - the column in which the button will be placed
+  ## * newRow  - if true, add a new row to the table after adding the button
+  ## * color   - the color of the text on the button. If empty, use the default
+  ##             color of the current theme
+  ##
+  ## Returns the modified parameter table
   var x = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
