@@ -188,7 +188,8 @@ proc addBackground(table: TableWidget; newRow: bool;
       row = $table.row, command = command, color = result)
 
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
-    column: Positive; newRow: bool = false; color: string = "") =
+    column: Positive; newRow: bool = false; color: string = "") {.sideEffect,
+    raises: [ValueError], tags: [].} =
   var x = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
