@@ -245,6 +245,27 @@ proc updateTable*(table: var TableWidget; grabFocus: bool = true) =
       newY = newY + table.rowHeight
       tag = "row" & $row & "col" & $column
       tclEval(script = "canvas moveto " & tag & " " & $newX & " " & $newY)
+      tag = "progressbar" & $row & "back" & $column
+      tclEval(script = "canvas moveto " & tag & " " & $newX & " " & $(newY + 5))
+      tag = "progressbar" & $row & "bar" & $column
+      tclEval(script = "canvas moveto " & tag & " " & $(newX + 2) & " " & $(
+          newY + 7))
+    newX = newX + table.columnsWidth[column - 1] + 20
+    newY = 2
+  let
+    tclResult = tclEval2(script = table.canvas & " bbox all")
+    coords = tclResult.split
+  if tclEval2(script = "winfo parent " & table.canvas) != tclEval2(
+      script = "winfo parent " & table.scrollbar):
+    tclEval(script = table.canvas & " configure -height [expr " & coords[3] &
+        " - " & coords[1] & "] -width [expr " & coords[2] & " - " & coords[0] & " + 5]")
+  newY = table.rowHeight
+  for row in 1 .. table.row:
+    newY = newY + table.rowHeight
+    tag = "row" & $row
+    tclEval(script = "canvas coords " & tag & " 0 " & $(newY -
+        table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
+  tclEval(script = "set currentrow 1")
 
 # Temporary code for interfacing with Ada
 
