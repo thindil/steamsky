@@ -569,7 +569,7 @@ package body Ships.UI.Cargo is
         Create
           (pathName => Item_Dialog & ".member",
            options => "-state readonly -width 14");
-      Members_Names: Unbounded_String;
+      Members_Names: Unbounded_String := Null_Unbounded_String;
    begin
       Label :=
         Create
@@ -696,7 +696,7 @@ package body Ships.UI.Cargo is
       if Free_Inventory
           (Member_Index => Member_Index,
            Amount =>
-             0 - (Get_Proto_Item(Index => Item.Proto_Index).Weight * Amount)) <
+             -(Get_Proto_Item(Index => Item.Proto_Index).Weight * Amount)) <
         0 then
          Show_Message
            (Text =>
@@ -721,7 +721,7 @@ package body Ships.UI.Cargo is
          Proto_Index => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
       Update_Cargo
-        (Ship => Player_Ship, Amount => (0 - Amount),
+        (Ship => Player_Ship, Amount =>  -Amount,
          Cargo_Index => Item_Index, Price => Item.Price);
       Destroy(Widgt => Item_Dialog);
       Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
@@ -864,7 +864,7 @@ package body Ships.UI.Cargo is
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Item_Index)
                 .Proto_Index,
-            Amount => (0 - Drop_Amount),
+            Amount => -Drop_Amount,
             Durability =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Item_Index)
