@@ -905,7 +905,7 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-text Move -command {MoveItem " &
              CArgv.Arg(Argv => Argv, N => 1) &
-             "} -image cargoicon -style Dialog.TButton");
+             "} -image cargoicon -style Dialoggreen.TButton");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
@@ -948,7 +948,7 @@ package body Ships.UI.Crew.Inventory is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-text Cancel -command {CloseDialog " & Item_Dialog &
-             " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialog.TButton");
+             " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialogred.TButton");
       Add
         (Widget => Button,
          Message => "Cancel giving and close dialog. \[Escape key\]");
