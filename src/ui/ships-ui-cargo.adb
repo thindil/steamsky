@@ -293,12 +293,14 @@ package body Ships.UI.Cargo is
    Default_Cargo_Sort_Order: constant Cargo_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUCargo/SUCargo.Cargo_Sort_Order
    -- FUNCTION
    -- The current sorting order of items in the player's ship cargo
    -- SOURCE
    Cargo_Sort_Order: Cargo_Sort_Orders := Default_Cargo_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUCargo/SUCargo.Sort_Cargo_Command
    -- FUNCTION
@@ -693,6 +695,7 @@ package body Ships.UI.Cargo is
    begin
       Amount := Natural'Value(Get(Widgt => Spin_Box));
       Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if Free_Inventory
           (Member_Index => Member_Index,
            Amount =>
@@ -706,6 +709,7 @@ package body Ships.UI.Cargo is
             Title => "Can't give item");
          return TCL_OK;
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Add_Message
         (Message =>
            "You gave" & Positive'Image(Amount) & " " &
