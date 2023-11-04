@@ -228,7 +228,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   if newRow:
     table.row.inc
 
-proc updateTable*(table: var TableWidget; grabFocus: bool = true) =
+proc updateTable*(table: TableWidget; grabFocus: bool = true) =
   var tag = "headerback1"
   tclEval(script = "canvas coords " & tag & " 0 0 " & $(table.columnsWidth[0] +
       10) & " " & $(table.rowHeight - 3))
@@ -266,6 +266,12 @@ proc updateTable*(table: var TableWidget; grabFocus: bool = true) =
     tclEval(script = "canvas coords " & tag & " 0 " & $(newY -
         table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
   tclEval(script = "set currentrow 1")
+  tclEval(script = table.canvas & " bind <FocusIn> {set maxrows " & $table.row &
+      ";if {$currentrow > $maxrows} {set currentrow 1};" & table.canvas &
+      " itemconfigure row$currentrow -fill [ttk::style lookup " &
+      gameSettings.interfaceTheme & " -selectbackground]}")
+  if grabFocus:
+    tclEval(script = "focus " & table.canvas)
 
 # Temporary code for interfacing with Ada
 
@@ -309,5 +315,17 @@ proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
     for index, width in newTable.columnsWidth:
       columnsWidth[index] = width.cint
     row = newTable.row.cint
+  except:
+    discard
+
+proc updateAdaTable(canvas: cstring; row, rowHeight, grabFocus: cint;
+    columnsWidth: array[10, cint]) {.raises: [], tags: [], exportc.} =
+  try:
+    var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
+    for width in columnsWidth:
+      if width == 0:
+        break
+      newTable.columnsWidth.add(width)
+    updateTable(newTable, grabFocus == 1)
   except:
     discard
