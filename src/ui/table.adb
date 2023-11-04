@@ -27,7 +27,7 @@ with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Utils.UI;
@@ -245,132 +245,149 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Update_Table(Table: Table_Widget; Grab_Focus: Boolean := True) is
       --## rule off LOCAL_HIDING
-      Tag: Unbounded_String;
-      New_X: Natural := Table.Columns_Width(1) + 20;
-      New_Y: Natural := 2;
+   --   Tag: Unbounded_String;
+   --   New_X: Natural := Table.Columns_Width(1) + 20;
+   --   New_Y: Natural := 2;
+      N_Width: Nim_Width := (others => 0);
+      Index: Natural := 0;
+      procedure Update_Ada_Table
+        (Can: chars_ptr; Row, Row_Height, G_Focus: Integer;
+         Width: Nim_Width) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaTable";
    begin
-      Tag := To_Unbounded_String(Source => "headerback1");
-      Coords
-        (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
-         Coordinates =>
-           "0 0" & Positive'Image(Table.Columns_Width(1) + 10) &
-           Positive'Image(Table.Row_Height - 3));
-      Update_Columns_Loop :
-      for Column in 2 .. Table.Amount loop
-         Tag :=
-           To_Unbounded_String
-             (Source =>
-                "header" &
-                Trim(Source => Natural'Image(Column), Side => Left));
-         Coords
-           (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
-            Coordinates =>
-              Trim(Source => Positive'Image(New_X), Side => Left) &
-              Positive'Image(New_Y));
-         Tag :=
-           To_Unbounded_String
-             (Source =>
-                "headerback" &
-                Trim(Source => Natural'Image(Column), Side => Left));
-         Coords
-           (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
-            Coordinates =>
-              Trim(Source => Positive'Image(New_X - 10), Side => Left) & " 0" &
-              Positive'Image(New_X + Table.Columns_Width(Column) + 10) &
-              Positive'Image(Table.Row_Height - 3));
-         Update_Rows_Loop :
-         for Row in 1 .. Table.Row loop
-            New_Y := New_Y + Table.Row_Height;
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-                   "col" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
-               YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "progressbar" &
-                   Trim(Source => Positive'Image(Row), Side => Left) & "back" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
-               YPos =>
-                 Trim(Source => Positive'Image(New_Y + 5), Side => Left));
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "progressbar" &
-                   Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X + 2), Side => Left),
-               YPos =>
-                 Trim(Source => Positive'Image(New_Y + 7), Side => Left));
-         end loop Update_Rows_Loop;
-         New_X := New_X + Table.Columns_Width(Column) + 20;
-         New_Y := 2;
-      end loop Update_Columns_Loop;
-      Resize_Table_Block :
-      declare
-         use Tcl.Tk.Ada.Winfo;
+      Convert_Width_Loop :
+      for Width of Table.Columns_Width loop
+         N_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Width_Loop;
+      Update_Ada_Table
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
+         Row => Table.Row, Row_Height => Table.Row_Height,
+         G_Focus => (if Grab_Focus then 1 else 0), Width => N_Width);
+    --  Tag := To_Unbounded_String(Source => "headerback1");
+    --  Coords
+    --    (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+    --     Coordinates =>
+    --       "0 0" & Positive'Image(Table.Columns_Width(1) + 10) &
+    --       Positive'Image(Table.Row_Height - 3));
+    --  Update_Columns_Loop :
+    --  for Column in 2 .. Table.Amount loop
+    --     Tag :=
+    --       To_Unbounded_String
+    --         (Source =>
+    --            "header" &
+    --            Trim(Source => Natural'Image(Column), Side => Left));
+    --     Coords
+    --       (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+    --        Coordinates =>
+    --          Trim(Source => Positive'Image(New_X), Side => Left) &
+    --          Positive'Image(New_Y));
+    --     Tag :=
+    --       To_Unbounded_String
+    --         (Source =>
+    --            "headerback" &
+    --            Trim(Source => Natural'Image(Column), Side => Left));
+    --     Coords
+    --       (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+    --        Coordinates =>
+    --          Trim(Source => Positive'Image(New_X - 10), Side => Left) & " 0" &
+    --          Positive'Image(New_X + Table.Columns_Width(Column) + 10) &
+    --          Positive'Image(Table.Row_Height - 3));
+    --     Update_Rows_Loop :
+    --     for Row in 1 .. Table.Row loop
+    --        New_Y := New_Y + Table.Row_Height;
+    --        Tag :=
+    --          To_Unbounded_String
+    --            (Source =>
+    --               "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+    --               "col" &
+    --               Trim(Source => Natural'Image(Column), Side => Left));
+    --        MoveTo
+    --          (CanvasWidget => Table.Canvas,
+    --           TagOrId => To_String(Source => Tag),
+    --           XPos => Trim(Source => Positive'Image(New_X), Side => Left),
+    --           YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
+    --        Tag :=
+    --          To_Unbounded_String
+    --            (Source =>
+    --               "progressbar" &
+    --               Trim(Source => Positive'Image(Row), Side => Left) & "back" &
+    --               Trim(Source => Natural'Image(Column), Side => Left));
+    --        MoveTo
+    --          (CanvasWidget => Table.Canvas,
+    --           TagOrId => To_String(Source => Tag),
+    --           XPos => Trim(Source => Positive'Image(New_X), Side => Left),
+    --           YPos =>
+    --             Trim(Source => Positive'Image(New_Y + 5), Side => Left));
+    --        Tag :=
+    --          To_Unbounded_String
+    --            (Source =>
+    --               "progressbar" &
+    --               Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
+    --               Trim(Source => Natural'Image(Column), Side => Left));
+    --        MoveTo
+    --          (CanvasWidget => Table.Canvas,
+    --           TagOrId => To_String(Source => Tag),
+    --           XPos => Trim(Source => Positive'Image(New_X + 2), Side => Left),
+    --           YPos =>
+    --             Trim(Source => Positive'Image(New_Y + 7), Side => Left));
+    --     end loop Update_Rows_Loop;
+    --     New_X := New_X + Table.Columns_Width(Column) + 20;
+    --     New_Y := 2;
+    --  end loop Update_Columns_Loop;
+    --  Resize_Table_Block :
+    --  declare
+    --     use Tcl.Tk.Ada.Winfo;
 
-         Tokens: Slice_Set;
-      begin
-         Create
-           (S => Tokens,
-            From => BBox(CanvasWidget => Table.Canvas, TagOrId => "all"),
-            Separators => " ");
-            -- if no scrollbars, resize the table
-         if Winfo_Get(Widgt => Table.Canvas, Info => "parent") /=
-           Winfo_Get(Widgt => Table.Scrollbar, Info => "parent") then
-            configure
-              (Widgt => Table.Canvas,
-               options =>
-                 "-height [expr " & Slice(S => Tokens, Index => 4) & " - " &
-                 Slice(S => Tokens, Index => 2) & "] -width [expr " &
-                 Slice(S => Tokens, Index => 3) & " - " &
-                 Slice(S => Tokens, Index => 1) & " + 5]");
-         end if;
-         New_Y := Table.Row_Height;
-         Resize_Background_Loop :
-         for Row in 1 .. Table.Row loop
-            New_Y := New_Y + Table.Row_Height;
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "row" & Trim(Source => Positive'Image(Row), Side => Left));
-            Coords
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               Coordinates =>
-                 "0" & Positive'Image(New_Y - Table.Row_Height) &
-                 Positive'Image
-                   (Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
-                 Positive'Image(New_Y));
-         end loop Resize_Background_Loop;
-      end Resize_Table_Block;
-      Tcl_SetVar
-        (interp => Get_Context, varName => "currentrow", newValue => "1");
-      Bind
-        (Widgt => Table.Canvas, Sequence => "<FocusIn>",
-         Script =>
-           "{set maxrows" & Natural'Image(Table.Row) &
-           ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
-           " itemconfigure row$currentrow -fill [ttk::style lookup " &
-           To_String(Source => Get_Interface_Theme) & " -selectbackground]}");
-      if Grab_Focus then
-         Widgets.Focus(Widgt => Table.Canvas);
-      end if;
+    --     Tokens: Slice_Set;
+    --  begin
+    --     Create
+    --       (S => Tokens,
+    --        From => BBox(CanvasWidget => Table.Canvas, TagOrId => "all"),
+    --        Separators => " ");
+    --        -- if no scrollbars, resize the table
+    --     if Winfo_Get(Widgt => Table.Canvas, Info => "parent") /=
+    --       Winfo_Get(Widgt => Table.Scrollbar, Info => "parent") then
+    --        configure
+    --          (Widgt => Table.Canvas,
+    --           options =>
+    --             "-height [expr " & Slice(S => Tokens, Index => 4) & " - " &
+    --             Slice(S => Tokens, Index => 2) & "] -width [expr " &
+    --             Slice(S => Tokens, Index => 3) & " - " &
+    --             Slice(S => Tokens, Index => 1) & " + 5]");
+    --     end if;
+    --     New_Y := Table.Row_Height;
+    --     Resize_Background_Loop :
+    --     for Row in 1 .. Table.Row loop
+    --        New_Y := New_Y + Table.Row_Height;
+    --        Tag :=
+    --          To_Unbounded_String
+    --            (Source =>
+    --               "row" & Trim(Source => Positive'Image(Row), Side => Left));
+    --        Coords
+    --          (CanvasWidget => Table.Canvas,
+    --           TagOrId => To_String(Source => Tag),
+    --           Coordinates =>
+    --             "0" & Positive'Image(New_Y - Table.Row_Height) &
+    --             Positive'Image
+    --               (Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
+    --             Positive'Image(New_Y));
+    --     end loop Resize_Background_Loop;
+    --  end Resize_Table_Block;
+    --  Tcl_SetVar
+    --    (interp => Get_Context, varName => "currentrow", newValue => "1");
+    --  Bind
+    --    (Widgt => Table.Canvas, Sequence => "<FocusIn>",
+    --     Script =>
+    --       "{set maxrows" & Natural'Image(Table.Row) &
+    --       ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
+    --       " itemconfigure row$currentrow -fill [ttk::style lookup " &
+    --       To_String(Source => Get_Interface_Theme) & " -selectbackground]}");
+    --  if Grab_Focus then
+    --     Widgets.Focus(Widgt => Table.Canvas);
+    --  end if;
    end Update_Table;
 
    procedure Add_Progress_Bar
