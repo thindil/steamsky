@@ -376,18 +376,6 @@ package body Table is
                  Positive'Image(New_Y));
          end loop Resize_Background_Loop;
       end Resize_Table_Block;
---      Tcl_SetVar
---        (interp => Get_Context, varName => "currentrow", newValue => "1");
---      Bind
---        (Widgt => Table.Canvas, Sequence => "<FocusIn>",
---         Script =>
---           "{set maxrows" & Natural'Image(Table.Row) &
---           ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
---           " itemconfigure row$currentrow -fill [ttk::style lookup " &
---           To_String(Source => Get_Interface_Theme) & " -selectbackground]}");
---      if Grab_Focus then
---         Widgets.Focus(Widgt => Table.Canvas);
---      end if;
    end Update_Table;
 
    procedure Add_Progress_Bar
