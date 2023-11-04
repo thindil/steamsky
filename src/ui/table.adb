@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Utils.UI;
+with Ada.Text_IO;
 
 package body Table is
 
@@ -295,45 +296,7 @@ package body Table is
               Trim(Source => Positive'Image(New_X - 10), Side => Left) & " 0" &
               Positive'Image(New_X + Table.Columns_Width(Column) + 10) &
               Positive'Image(Table.Row_Height - 3));
-         Update_Rows_Loop :
-         for Row in 1 .. Table.Row loop
-            New_Y := New_Y + Table.Row_Height;
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-                   "col" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
-               YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "progressbar" &
-                   Trim(Source => Positive'Image(Row), Side => Left) & "back" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
-               YPos =>
-                 Trim(Source => Positive'Image(New_Y + 5), Side => Left));
-            Tag :=
-              To_Unbounded_String
-                (Source =>
-                   "progressbar" &
-                   Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
-                   Trim(Source => Natural'Image(Column), Side => Left));
-            MoveTo
-              (CanvasWidget => Table.Canvas,
-               TagOrId => To_String(Source => Tag),
-               XPos => Trim(Source => Positive'Image(New_X + 2), Side => Left),
-               YPos =>
-                 Trim(Source => Positive'Image(New_Y + 7), Side => Left));
-         end loop Update_Rows_Loop;
+         Ada.Text_IO.Put_Line(BBox(CanvasWidget => Table.Canvas, TagOrId => "all"));
          New_X := New_X + Table.Columns_Width(Column) + 20;
          New_Y := 2;
       end loop Update_Columns_Loop;

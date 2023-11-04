@@ -235,12 +235,14 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) =
   var
     newX = table.columnsWidth[0] + 20
     newY = 2
+  echo "Nim"
   for column in 2 .. table.columnsWidth.len:
     tag = "header" & $column
     tclEval(script = "canvas coords " & tag & " " & $newX & " " & $newY)
     tag = "headerback" & $column
     tclEval(script = "canvas coords " & tag & " " & $(newX - 10) & " 0 " & $(
         newX + table.columnsWidth[column - 1] + 10) & " " & $(table.rowHeight - 3))
+    echo tclEval2(script = table.canvas & " bbox all")
     for row in 1 .. table.row:
       newY = newY + table.rowHeight
       tag = "row" & $row & "col" & $column
@@ -255,6 +257,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) =
   let
     tclResult = tclEval2(script = table.canvas & " bbox all")
     coords = tclResult.split
+  echo "End nim"
   if tclEval2(script = "winfo parent " & table.canvas) != tclEval2(
       script = "winfo parent " & table.scrollbar):
     tclEval(script = table.canvas & " configure -height [expr " & coords[3] &
