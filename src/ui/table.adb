@@ -243,8 +243,7 @@ package body Table is
    end Add_Button;
 
    --## rule off LOCAL_HIDING
-   procedure Update_Table
-     (Table: in out Table_Widget; Grab_Focus: Boolean := True) is
+   procedure Update_Table(Table: Table_Widget; Grab_Focus: Boolean := True) is
       --## rule off LOCAL_HIDING
       Tag: Unbounded_String;
       New_X: Natural := Table.Columns_Width(1) + 20;

@@ -159,7 +159,7 @@ package Table is
       -- 7.1 - Renamed to Update_Table
       -- SOURCE
    procedure Update_Table
-     (Table: in out Table_Widget; Grab_Focus: Boolean := True) with
+     (Table: Table_Widget; Grab_Focus: Boolean := True) with
       Pre => Table.Row_Height > 1;
       -- ****
 
