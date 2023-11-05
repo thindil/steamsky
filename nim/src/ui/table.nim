@@ -230,6 +230,11 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
 
 proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
     raises: [ValueError], tags: [].} =
+  ## Update the size and coordinates of all elements in the selected TableWidget
+  ##
+  ## * table     - the TableWidget in which the elements will be resized and
+  ##               moved
+  ## * grabFocus - if true, set the keyboard focus on the table after updating
   var tag = "headerback1"
   tclEval(script = table.canvas & " coords " & tag & " 0 0 " & $(
       table.columnsWidth[0] + 10) & " " & $(table.rowHeight - 3))
