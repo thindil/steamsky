@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.4] - 2023-11-05
 
 ### Fixed
 - Crash when starting a combat
