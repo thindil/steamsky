@@ -281,6 +281,20 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
   if grabFocus:
     tclEval(script = "focus " & table.canvas)
 
+proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
+    tooltip, command: string; column: Positive; newRow: bool = false;
+    invertColors: bool = false) =
+  var x = 0
+  for i in 1 .. column - 1:
+    x = x + table.columnsWidth[i - 1]
+  var itemId = tclEval2(script = table.canvas & " create rectangle " & $x &
+      " " & $((table.row * table.rowHeight) + 5) & " " & $(x + 102) & " " & $((
+      table.row * table.rowHeight) + (table.rowHeight - 10)) & " -fill " &
+      tclEval2(script = "ttk::style lookup " & gameSettings.interfaceTheme &
+      " -troughcolor") & " -outline " & tclEval2(script = "ttk::style lookup " &
+      gameSettings.interfaceTheme & " -bordercolor") &
+      " -tags [list progressbar" & $table.row & "back" & $column & "]")
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
