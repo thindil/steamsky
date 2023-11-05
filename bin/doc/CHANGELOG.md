@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Icon for the player's ship's crew members' inventory. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
+- Colored version of move item to cargo icon
 
 ### Changed
 - Made some dialogs' buttons colorful
