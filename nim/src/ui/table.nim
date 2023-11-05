@@ -228,10 +228,11 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   if newRow:
     table.row.inc
 
-proc updateTable*(table: TableWidget; grabFocus: bool = true) =
+proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
+    raises: [ValueError], tags: [].} =
   var tag = "headerback1"
-  tclEval(script = table.canvas & " coords " & tag & " 0 0 " & $(table.columnsWidth[0] +
-      10) & " " & $(table.rowHeight - 3))
+  tclEval(script = table.canvas & " coords " & tag & " 0 0 " & $(
+      table.columnsWidth[0] + 10) & " " & $(table.rowHeight - 3))
   var
     newX = table.columnsWidth[0] + 20
     newY = 2
@@ -239,17 +240,19 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) =
     tag = "header" & $column
     tclEval(script = table.canvas & " coords " & tag & " " & $newX & " " & $newY)
     tag = "headerback" & $column
-    tclEval(script = table.canvas & " coords " & tag & " " & $(newX - 10) & " 0 " & $(
-        newX + table.columnsWidth[column - 1] + 10) & " " & $(table.rowHeight - 3))
+    tclEval(script = table.canvas & " coords " & tag & " " & $(newX - 10) &
+        " 0 " & $(newX + table.columnsWidth[column - 1] + 10) & " " & $(
+            table.rowHeight - 3))
     for row in 1 .. table.row:
       newY = newY + table.rowHeight
       tag = "row" & $row & "col" & $column
       tclEval(script = table.canvas & " moveto " & tag & " " & $newX & " " & $newY)
       tag = "progressbar" & $row & "back" & $column
-      tclEval(script = table.canvas & " moveto " & tag & " " & $newX & " " & $(newY + 5))
+      tclEval(script = table.canvas & " moveto " & tag & " " & $newX & " " & $(
+          newY + 5))
       tag = "progressbar" & $row & "bar" & $column
-      tclEval(script = table.canvas & " moveto " & tag & " " & $(newX + 2) & " " & $(
-          newY + 7))
+      tclEval(script = table.canvas & " moveto " & tag & " " & $(newX + 2) &
+          " " & $(newY + 7))
     newX = newX + table.columnsWidth[column - 1] + 20
     newY = 2
   let
