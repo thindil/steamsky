@@ -15,15 +15,15 @@
 
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split; use GNAT.String_Split;
-with Tcl.Ada; use Tcl.Ada;
+with GNAT.String_Split;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -31,17 +31,17 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tklib.Ada.Tooltip;
+with Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
-with Missions; use Missions;
+with Missions;
 with Ships.Cargo; use Ships.Cargo;
-with Stories; use Stories;
+with Stories;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -85,6 +85,11 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use GNAT.String_Split;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Config;
       use Tiny_String;
 
       Ship_Canvas: constant Tk_Canvas :=
@@ -536,6 +541,8 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Event;
+      use Tcl.Tklib.Ada.Tooltip;
       use Tiny_String;
 
       Item_Index: constant Positive :=
@@ -678,6 +685,7 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tcl.Tk.Ada.Widgets.Toplevel;
       use Tiny_String;
 
       Member_Index, Amount: Positive;
@@ -801,6 +809,8 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Missions;
+      use Stories;
       use Tiny_String;
 
       Drop_Amount, Drop_Amount_2: Natural;
