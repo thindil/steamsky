@@ -7,12 +7,13 @@ Testing manufacturing.'''
 """
 
 import std/tables
-import ../../src/[crafts, game, items, shipmodules, shipscargo, types]
+import ../../src/[careers, crafts, factions, game, items, shipmodules, shipscargo, types]
 
 echo "Loading the game data."
-if itemsList.len == 0:
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
+loadData("../bin/data/game.dat")
+loadItems("../bin/data/items.dat")
+loadCareers("../bin/data/careers.dat")
+loadFactions("../bin/data/factions.dat")
 if recipesList.len == 0:
   loadRecipes("../bin/data/recipes.dat")
   loadModules("../bin/data/shipmodules.dat")
