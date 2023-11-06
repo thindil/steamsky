@@ -317,6 +317,25 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
         tclEval2(script = "ttk::style lookup yellow.Horizontal.TProgressbar -background")
       else:
         tclEval2(script = "ttk::style lookup TProgressbar -background")
+  else:
+    color = if length > 74:
+        tclEval2(script = "ttk::style lookup green.Horizontal.TProgressbar -background")
+      elif length > 24:
+        tclEval2(script = "ttk::style lookup yellow.Horizontal.TProgressbar -background")
+      elif length > 0:
+        tclEval2(script = "ttk::style lookup TProgressbar -background")
+      else:
+        tclEval2(script = "ttk::style lookup TProgressbar -troughcolor")
+  itemId = tclEval2(script = table.canvas & " create rectangle " & $(x + 2) &
+      " " & $((table.row * table.rowHeight) + 7) & " " & $(x + length) & " " &
+      $((table.row * table.rowHeight) + (table.rowHeight - 12)) & " -fill " &
+      color & " -tags [list progressbar" & $table.row & "bar" & $column & "]")
+  addBindings(canvas = table.canvas, itemId = itemId, row = $table.row, command= command, color = backgroundColor)
+  if tooltip.len > 0:
+    tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
+        itemId & " \"" & tooltip & "\"")
+  if newRow:
+    table.row.inc
 
 # Temporary code for interfacing with Ada
 
@@ -372,5 +391,19 @@ proc updateAdaTable(canvas: cstring; row, rowHeight, grabFocus: cint;
         break
       newTable.columnsWidth.add(width)
     updateTable(newTable, grabFocus == 1)
+  except:
+    discard
+
+proc addAdaProgressbar(canvas, text, tooltip, command: cstring; value, maxValue, column, newRow, rowHeight, invertColors: cint; columnsWidth: var array[10, cint]; row: var cint) {.raises: [], tags: [], exportc.} =
+  try:
+    var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
+    for width in columnsWidth:
+      if width == 0:
+        break
+      newTable.columnsWidth.add(width)
+    addProgressbar(table, value, maxValue, $tooltip, $command, column, newRow == 1, invertColors == 1)
+    for index, width in newTable.columnsWidth:
+      columnsWidth[index] = width.cint
+    row = newTable.row.cint
   except:
     discard
