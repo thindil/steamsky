@@ -2881,7 +2881,7 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);
-      Ships.UI.Crew.Inventory.Add_Commands;
+      Ships.UI.Crew.Inventory.Add_Inventory_Commands;
    end Add_Crew_Commands;
 
 end Ships.UI.Crew;

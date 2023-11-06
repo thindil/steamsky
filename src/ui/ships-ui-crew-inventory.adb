@@ -1514,7 +1514,7 @@ package body Ships.UI.Crew.Inventory is
            Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Toggle_All_Inventory_Command;
 
-   procedure Add_Commands is
+   procedure Add_Inventory_Commands is
    begin
       Add_Command
         (Name => "UpdateInventory",
@@ -1547,6 +1547,6 @@ package body Ships.UI.Crew.Inventory is
       Add_Command
         (Name => "ToggleAllInventory",
          Ada_Command => Toggle_All_Inventory_Command'Access);
-   end Add_Commands;
+   end Add_Inventory_Commands;
 
 end Ships.UI.Crew.Inventory;

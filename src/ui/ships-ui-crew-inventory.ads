@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 package Ships.UI.Crew.Inventory is
 -- ****
 
-   -- ****f* SUCI/SUCI.Add_Commands
+   -- ****f* SUCI/SUCI.Add_Inventory_Commands
    -- FUNCTION
    -- Add Tcl commands related to the player's ship crew members inventory
    -- SOURCE
-   procedure Add_Commands;
+   procedure Add_Inventory_Commands;
    -- ****
 
 end Ships.UI.Crew.Inventory;
