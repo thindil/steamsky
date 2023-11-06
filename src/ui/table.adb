@@ -244,9 +244,6 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Update_Table(Table: Table_Widget; Grab_Focus: Boolean := True) is
       --## rule off LOCAL_HIDING
---      Tag: Unbounded_String;
---      New_X: Natural := Table.Columns_Width(1) + 20;
---      New_Y: Natural := 2;
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
       procedure Update_Ada_Table
