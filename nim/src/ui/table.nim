@@ -294,6 +294,29 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
       " -troughcolor") & " -outline " & tclEval2(script = "ttk::style lookup " &
       gameSettings.interfaceTheme & " -bordercolor") &
       " -tags [list progressbar" & $table.row & "back" & $column & "]")
+  let backgroundColor = addBackground(table = table, newRow = newRow,
+      command = command)
+  addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
+      command = command, color = backgroundColor)
+  if tooltip.len > 0:
+    tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
+        itemId & " \"" & tooltip & "\"")
+  let
+    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords = tclResult.split
+  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  if x > table.columnsWidth[column - 1]:
+    table.columnsWidth[column - 1] = x
+  var color = ""
+  let length: Natural = (100.0 + ((value.float - maxValue.float) /
+      maxValue.float * 100.0)).Natural
+  if invertColors:
+    color = if length < 25:
+        tclEval2(script = "ttk::style lookup green.Horizontal.TProgressbar -background")
+      elif length > 24 and length < 75:
+        tclEval2(script = "ttk::style lookup yellow.Horizontal.TProgressbar -background")
+      else:
+        tclEval2(script = "ttk::style lookup TProgressbar -background")
 
 # Temporary code for interfacing with Ada
 
