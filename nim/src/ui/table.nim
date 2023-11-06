@@ -290,10 +290,10 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   var itemId = tclEval2(script = table.canvas & " create rectangle " & $x &
       " " & $((table.row * table.rowHeight) + 5) & " " & $(x + 102) & " " & $((
       table.row * table.rowHeight) + (table.rowHeight - 10)) & " -fill " &
-      tclEval2(script = "ttk::style lookup " & gameSettings.interfaceTheme &
-      " -troughcolor") & " -outline " & tclEval2(script = "ttk::style lookup " &
-      gameSettings.interfaceTheme & " -bordercolor") &
-      " -tags [list progressbar" & $table.row & "back" & $column & "]")
+      tclEval2(script = "ttk::style lookup TProgressbar -troughcolor") &
+          " -outline " & tclEval2(
+          script = "ttk::style lookup TProgressbar -bordercolor") &
+          " -tags [list progressbar" & $table.row & "back" & $column & "]")
   let backgroundColor = addBackground(table = table, newRow = newRow,
       command = command)
   addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
