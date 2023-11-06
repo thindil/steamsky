@@ -330,7 +330,8 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
       " " & $((table.row * table.rowHeight) + 7) & " " & $(x + length) & " " &
       $((table.row * table.rowHeight) + (table.rowHeight - 12)) & " -fill " &
       color & " -tags [list progressbar" & $table.row & "bar" & $column & "]")
-  addBindings(canvas = table.canvas, itemId = itemId, row = $table.row, command= command, color = backgroundColor)
+  addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
+      command = command, color = backgroundColor)
   if tooltip.len > 0:
     tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
         itemId & " \"" & tooltip & "\"")
@@ -394,14 +395,17 @@ proc updateAdaTable(canvas: cstring; row, rowHeight, grabFocus: cint;
   except:
     discard
 
-proc addAdaProgressbar(canvas, text, tooltip, command: cstring; value, maxValue, column, newRow, rowHeight, invertColors: cint; columnsWidth: var array[10, cint]; row: var cint) {.raises: [], tags: [], exportc.} =
+proc addAdaProgressbar(canvas, text, tooltip, command: cstring; value, maxValue,
+    column, newRow, rowHeight, invertColors: cint; columnsWidth: var array[10,
+    cint]; row: var cint) {.raises: [], tags: [], exportc.} =
   try:
     var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
     for width in columnsWidth:
       if width == 0:
         break
       newTable.columnsWidth.add(width)
-    addProgressbar(table, value, maxValue, $tooltip, $command, column, newRow == 1, invertColors == 1)
+    addProgressbar(newTable, value, maxValue, $tooltip, $command, column,
+        newRow == 1, invertColors == 1)
     for index, width in newTable.columnsWidth:
       columnsWidth[index] = width.cint
     row = newTable.row.cint
