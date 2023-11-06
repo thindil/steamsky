@@ -469,6 +469,9 @@ package body Themes is
                  To_Unbounded_String(Source => "SellDefaultIcon") then
                   Temp_Record.Sell_Default_Icon :=
                     Convert_Path(Old_Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveIcon") then
+                  Temp_Record.Move_Icon := Convert_Path(Old_Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -657,7 +660,8 @@ package body Themes is
          69 => To_Unbounded_String(Source => "assigncrewicon"),
          70 => To_Unbounded_String(Source => "assignammoicon"),
          71 => To_Unbounded_String(Source => "buy2icon"),
-         72 => To_Unbounded_String(Source => "sell2icon"));
+         72 => To_Unbounded_String(Source => "sell2icon"),
+         73 => To_Unbounded_String(Source => "moveicon"));
       Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -696,7 +700,7 @@ package body Themes is
          66 => Theme.Repair_Priority_Icon, 67 => Theme.Upgrade_Button_Icon,
          68 => Theme.Power_Icon, 69 => Theme.Assign_Crew_Icon,
          70 => Theme.Assign_Ammo_Icon, 71 => Theme.Buy_Default_Icon,
-         72 => Theme.Sell_Default_Icon);
+         72 => Theme.Sell_Default_Icon, 73 => Theme.Move_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

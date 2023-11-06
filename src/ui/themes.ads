@@ -155,6 +155,7 @@ package Themes is
    -- Assign_Ammo_Icon      - Icon used for assign ammo to ship's guns
    -- Buy_Default_Icon      - Icon used for buy items button with default color
    -- Sell_Default_Icon     - Icon used for sell items button with default color
+   -- Move_Icon             - Icon used for moving items from inventory to cargo
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -253,6 +254,7 @@ package Themes is
       Assign_Ammo_Icon: Unbounded_String;
       Buy_Default_Icon: Unbounded_String;
       Sell_Default_Icon: Unbounded_String;
+      Move_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -359,7 +361,8 @@ package Themes is
       Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg",
       Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg",
       Buy_Default_Icon => Default_Theme_Icons_Path & "buy2.svg",
-      Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg");
+      Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg",
+      Move_Icon => Default_Theme_Icons_Path & "cargo2.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
