@@ -395,7 +395,7 @@ proc updateAdaTable(canvas: cstring; row, rowHeight, grabFocus: cint;
   except:
     discard
 
-proc addAdaProgressbar(canvas, text, tooltip, command: cstring; value, maxValue,
+proc addAdaProgressbar(canvas, tooltip, command: cstring; value, maxValue,
     column, newRow, rowHeight, invertColors: cint; columnsWidth: var array[10,
     cint]; row: var cint) {.raises: [], tags: [], exportc.} =
   try:

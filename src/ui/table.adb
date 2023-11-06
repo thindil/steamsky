@@ -268,135 +268,165 @@ package body Table is
      (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
-      X: Natural := 0;
-      Item_Id, Color: Unbounded_String := Null_Unbounded_String;
-      --## rule off IMPROPER_INITIALIZATION
-      Tokens: Slice_Set;
-      --## rule on IMPROPER_INITIALIZATION
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Length: constant Natural :=
-        Natural
-          (100.0 +
-           ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Background_Color: constant String :=
-        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
+--      X: Natural := 0;
+--      Item_Id, Color: Unbounded_String := Null_Unbounded_String;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Tokens: Slice_Set;
+--      --## rule on IMPROPER_INITIALIZATION
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Length: constant Natural :=
+--        Natural
+--          (100.0 +
+--           ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Background_Color: constant String :=
+--        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
+      N_Width: Nim_Width := (others => 0);
+      Index: Natural := 0;
+      Row: Positive := Table.Row;
+      procedure Add_Ada_Progressbar
+        (Can, Tt, Com: chars_ptr;
+         Val, Max_Val, Col, N_Row, R_Height, I_Colors: Integer;
+         Width: Nim_Width; R: in out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaProgressbar";
    begin
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      Count_X_Loop :
-      for I in 1 .. Column - 1 loop
-         X := X + Table.Columns_Width(I);
-      end loop Count_X_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Item_Id :=
-        To_Unbounded_String
-          (Source =>
-             Canvas_Create
-               (Parent => Table.Canvas, Child_Type => "rectangle",
-                Options =>
-                  Trim(Source => Natural'Image(X), Side => Left) &
-                  Positive'Image((Table.Row * Table.Row_Height) + 5) &
-                  Positive'Image(X + 102) &
-                  Positive'Image
-                    ((Table.Row * Table.Row_Height) +
-                     (Table.Row_Height - 10)) &
-                  " -fill " &
-                  Style_Lookup
-                    (Name => "TProgressbar", Option => "-troughcolor") &
-                  " -outline " &
-                  Style_Lookup
-                    (Name => "TProgressbar", Option => "-bordercolor") &
-                  " -tags [list progressbar" &
-                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
-                  "back" &
-                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Add_Bindings
-        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Command => Command, Color => Background_Color);
-      if Tooltip'Length > 0 then
-         Add
-           (Widget => Table.Canvas, Message => Tooltip,
-            Options => "-item " & To_String(Source => Item_Id));
-      end if;
-      Create
-        (S => Tokens,
-         From =>
-           BBox
-             (CanvasWidget => Table.Canvas,
-              TagOrId => To_String(Source => Item_Id)),
-         Separators => " ");
-      X :=
-        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
-        Positive'Value(Slice(S => Tokens, Index => 1));
-      if X > Table.Columns_Width(Column) then
-         Table.Columns_Width(Column) := X;
-      end if;
-      if Invert_Colors then
-         Color :=
-           To_Unbounded_String
-             (Source =>
-                (if Length < 25 then
-                   Style_Lookup
-                     (Name => "green.Horizontal.TProgressbar",
-                      Option => "-background")
-                 elsif Length > 24 and Length < 75 then
-                   Style_Lookup
-                     (Name => "yellow.Horizontal.TProgressbar",
-                      Option => "-background")
-                 else Style_Lookup
-                     (Name => "TProgressbar", Option => "-background")));
-      else
-         Color :=
-           To_Unbounded_String
-             (Source =>
-                (if Length > 74 then
-                   Style_Lookup
-                     (Name => "green.Horizontal.TProgressbar",
-                      Option => "-background")
-                 elsif Length > 24 then
-                   Style_Lookup
-                     (Name => "yellow.Horizontal.TProgressbar",
-                      Option => "-background")
-                 elsif Length > 0 then
-                   Style_Lookup
-                     (Name => "TProgressbar", Option => "-background")
-                 else Style_Lookup
-                     (Name => "TProgressbar", Option => "-troughcolor")));
-      end if;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Item_Id :=
-        To_Unbounded_String
-          (Source =>
-             Canvas_Create
-               (Parent => Table.Canvas, Child_Type => "rectangle",
-                Options =>
-                  Trim(Source => Natural'Image(X + 2), Side => Left) &
-                  Positive'Image((Table.Row * Table.Row_Height) + 7) &
-                  Positive'Image(X + Length) &
-                  Positive'Image
-                    ((Table.Row * Table.Row_Height) +
-                     (Table.Row_Height - 12)) &
-                  " -fill " & To_String(Source => Color) &
-                  " -tags [list progressbar" &
-                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
-                  "bar" &
-                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Add_Bindings
-        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Command => Command, Color => Background_Color);
-      if Tooltip'Length > 0 then
-         Add
-           (Widget => Table.Canvas, Message => Tooltip,
-            Options => "-item " & To_String(Source => Item_Id));
-      end if;
-      if New_Row then
-         Table.Row := Table.Row + 1;
-      end if;
+      Convert_Width_Loop :
+      for Width of Table.Columns_Width loop
+         N_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Width_Loop;
+      Add_Ada_Progressbar
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
+         Tt => New_String(Str => Tooltip), Com => New_String(Str => Command),
+         Val => Value, Max_Val => Max_Value, Col => Column,
+         N_Row => (if New_Row then 1 else 0), R_Height => Table.Row_Height,
+         I_Colors => (if Invert_Colors then 1 else 0), Width => N_Width,
+         R => Row);
+      Table.Row := Row;
+      Index := 1;
+      Convert_Nim_Width_Loop :
+      for Width of N_Width loop
+         exit Convert_Nim_Width_Loop when Width = 0;
+         Table.Columns_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Nim_Width_Loop;
+--      --## rule off SIMPLIFIABLE_STATEMENTS
+--      Count_X_Loop :
+--      for I in 1 .. Column - 1 loop
+--         X := X + Table.Columns_Width(I);
+--      end loop Count_X_Loop;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Item_Id :=
+--        To_Unbounded_String
+--          (Source =>
+--             Canvas_Create
+--               (Parent => Table.Canvas, Child_Type => "rectangle",
+--                Options =>
+--                  Trim(Source => Natural'Image(X), Side => Left) &
+--                  Positive'Image((Table.Row * Table.Row_Height) + 5) &
+--                  Positive'Image(X + 102) &
+--                  Positive'Image
+--                    ((Table.Row * Table.Row_Height) +
+--                     (Table.Row_Height - 10)) &
+--                  " -fill " &
+--                  Style_Lookup
+--                    (Name => "TProgressbar", Option => "-troughcolor") &
+--                  " -outline " &
+--                  Style_Lookup
+--                    (Name => "TProgressbar", Option => "-bordercolor") &
+--                  " -tags [list progressbar" &
+--                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+--                  "back" &
+--                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Add_Bindings
+--        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+--         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+--         Command => Command, Color => Background_Color);
+--      if Tooltip'Length > 0 then
+--         Add
+--           (Widget => Table.Canvas, Message => Tooltip,
+--            Options => "-item " & To_String(Source => Item_Id));
+--      end if;
+--      Create
+--        (S => Tokens,
+--         From =>
+--           BBox
+--             (CanvasWidget => Table.Canvas,
+--              TagOrId => To_String(Source => Item_Id)),
+--         Separators => " ");
+--      X :=
+--        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
+--        Positive'Value(Slice(S => Tokens, Index => 1));
+--      if X > Table.Columns_Width(Column) then
+--         Table.Columns_Width(Column) := X;
+--      end if;
+--      if Invert_Colors then
+--         Color :=
+--           To_Unbounded_String
+--             (Source =>
+--                (if Length < 25 then
+--                   Style_Lookup
+--                     (Name => "green.Horizontal.TProgressbar",
+--                      Option => "-background")
+--                 elsif Length > 24 and Length < 75 then
+--                   Style_Lookup
+--                     (Name => "yellow.Horizontal.TProgressbar",
+--                      Option => "-background")
+--                 else Style_Lookup
+--                     (Name => "TProgressbar", Option => "-background")));
+--      else
+--         Color :=
+--           To_Unbounded_String
+--             (Source =>
+--                (if Length > 74 then
+--                   Style_Lookup
+--                     (Name => "green.Horizontal.TProgressbar",
+--                      Option => "-background")
+--                 elsif Length > 24 then
+--                   Style_Lookup
+--                     (Name => "yellow.Horizontal.TProgressbar",
+--                      Option => "-background")
+--                 elsif Length > 0 then
+--                   Style_Lookup
+--                     (Name => "TProgressbar", Option => "-background")
+--                 else Style_Lookup
+--                     (Name => "TProgressbar", Option => "-troughcolor")));
+--      end if;
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Item_Id :=
+--        To_Unbounded_String
+--          (Source =>
+--             Canvas_Create
+--               (Parent => Table.Canvas, Child_Type => "rectangle",
+--                Options =>
+--                  Trim(Source => Natural'Image(X + 2), Side => Left) &
+--                  Positive'Image((Table.Row * Table.Row_Height) + 7) &
+--                  Positive'Image(X + Length) &
+--                  Positive'Image
+--                    ((Table.Row * Table.Row_Height) +
+--                     (Table.Row_Height - 12)) &
+--                  " -fill " & To_String(Source => Color) &
+--                  " -tags [list progressbar" &
+--                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+--                  "bar" &
+--                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Add_Bindings
+--        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+--         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+--         Command => Command, Color => Background_Color);
+--      if Tooltip'Length > 0 then
+--         Add
+--           (Widget => Table.Canvas, Message => Tooltip,
+--            Options => "-item " & To_String(Source => Item_Id));
+--      end if;
+--      if New_Row then
+--         Table.Row := Table.Row + 1;
+--      end if;
    end Add_Progress_Bar;
 
    procedure Add_Pagination
