@@ -354,15 +354,18 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
 proc addPagination*(table: TableWidget; previousCommand: string = "";
     nextCommand: string = "") =
   let buttonsFrame = table.canvas & ".buttonframe"
+  tclEval(script = "ttk::frame " & buttonsFrame)
   var button: string
   if previousCommand.len > 0:
     button = buttonsFrame & ".previous"
-    tclEval(script = button & " -text Previous -command {" & previousCommand & "}")
+    tclEval(script = "ttk::button " & button & " -text Previous -command {" &
+        previousCommand & "}")
     tclEval(script = "grid " & button & " -sticky w")
     tclEval(script = "tooltip::tooltip " & button & " \"Previous page\"")
   if nextCommand.len > 0:
     button = buttonsFrame & ".next"
-    tclEval(script = button & " -text Previous -command {" & nextCommand & "}")
+    tclEval(script = "ttk::button " & button & " -text Next -command {" &
+        nextCommand & "}")
     tclEval(script = "grid " & button & " -sticky e -row 0 -column 1")
     tclEval(script = "tooltip::tooltip " & button & " \"Next page\"")
   tclEval(script = "update")
