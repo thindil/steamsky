@@ -22,11 +22,11 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Utils.UI;
@@ -245,40 +245,49 @@ package body Table is
    end Add_Progress_Bar;
 
    procedure Add_Pagination
-     (Table: Table_Widget;
-      Previous_Command, Next_Command: String := "") is
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-
-      Buttons_Frame: constant Ttk_Frame :=
-        Create(pathName => Table.Canvas & ".buttonframe");
-      --## rule off IMPROPER_INITIALIZATION
-      Button: Ttk_Button;
-      --## rule on IMPROPER_INITIALIZATION
+     (Table: Table_Widget; Previous_Command, Next_Command: String := "") is
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--
+--      Buttons_Frame: constant Ttk_Frame :=
+--        Create(pathName => Table.Canvas & ".buttonframe");
+--      --## rule off IMPROPER_INITIALIZATION
+--      Button: Ttk_Button;
+--      --## rule on IMPROPER_INITIALIZATION
+      procedure Add_Ada_Pagination
+        (Can, P_Command, N_Command: chars_ptr; R, R_Height: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaPagination";
    begin
-      if Previous_Command'Length > 0 then
-         Button :=
-           Create
-             (pathName => Buttons_Frame & ".previous",
-              options => "-text Previous -command {" & Previous_Command & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky w");
-         Add(Widget => Button, Message => "Previous page");
-      end if;
-      if Next_Command'Length > 0 then
-         Button :=
-           Create
-             (pathName => Buttons_Frame & ".next",
-              options => "-text Next -command {" & Next_Command & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-sticky e -row 0 -column 1");
-         Add(Widget => Button, Message => "Next page");
-      end if;
-      Tcl_Eval(interp => Get_Interp(Widgt => Table.Canvas), strng => "update");
-      Canvas_Create
-        (Parent => Table.Canvas, Child_Type => "window",
-         Options =>
-           "0" & Positive'Image(Table.Row * Table.Row_Height) &
-           " -anchor nw -window " & Buttons_Frame);
+      Add_Ada_Pagination
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
+         P_Command => New_String(Str => Previous_Command),
+         N_Command => New_String(Str => Next_Command), R => Table.Row,
+         R_Height => Table.Row_Height);
+--      if Previous_Command'Length > 0 then
+--         Button :=
+--           Create
+--             (pathName => Buttons_Frame & ".previous",
+--              options => "-text Previous -command {" & Previous_Command & "}");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky w");
+--         Add(Widget => Button, Message => "Previous page");
+--      end if;
+--      if Next_Command'Length > 0 then
+--         Button :=
+--           Create
+--             (pathName => Buttons_Frame & ".next",
+--              options => "-text Next -command {" & Next_Command & "}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button, Options => "-sticky e -row 0 -column 1");
+--         Add(Widget => Button, Message => "Next page");
+--      end if;
+--      Tcl_Eval(interp => Get_Interp(Widgt => Table.Canvas), strng => "update");
+--      Canvas_Create
+--        (Parent => Table.Canvas, Child_Type => "window",
+--         Options =>
+--           "0" & Positive'Image(Table.Row * Table.Row_Height) &
+--           " -anchor nw -window " & Buttons_Frame);
    end Add_Pagination;
 
    procedure Add_Check_Button
