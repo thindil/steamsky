@@ -351,6 +351,24 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   if newRow:
     table.row.inc
 
+proc addPagination*(table: TableWidget; previousCommand: string = "";
+    nextCommand: string = "") =
+  let buttonsFrame = table.canvas & ".buttonframe"
+  var button: string
+  if previousCommand.len > 0:
+    button = buttonsFrame & ".previous"
+    tclEval(script = button & " -text Previous -command {" & previousCommand & "}")
+    tclEval(script = "grid " & button & " -sticky w")
+    tclEval(script = "tooltip::tooltip " & button & " \"Previous page\"")
+  if nextCommand.len > 0:
+    button = buttonsFrame & ".next"
+    tclEval(script = button & " -text Previous -command {" & nextCommand & "}")
+    tclEval(script = "grid " & button & " -sticky e -row 0 -column 1")
+    tclEval(script = "tooltip::tooltip " & button & " \"Next page\"")
+  tclEval(script = "update")
+  tclEval(script = table.canvas & " create window 0 " & $(table.row *
+      table.rowHeight) & " -anchor nw -window " & buttonsFrame)
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
@@ -424,3 +442,8 @@ proc addAdaProgressbar(canvas, tooltip, command: cstring; value, maxValue,
     row = newTable.row.cint
   except:
     discard
+
+proc addAdaPagination(canvas, prevCommand, nextCommand: cstring; row,
+    rowHeight: cint) {.raises: [], tags: [], exportc.} =
+  let newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
+  addPagination(newTable, $prevCommand, $nextCommand)
