@@ -913,7 +913,7 @@ package body Ships.UI.Crew.Inventory is
            options =>
              "-text Move -command {MoveItem " &
              CArgv.Arg(Argv => Argv, N => 1) &
-             "} -image cargoicon -style Dialoggreen.TButton");
+             "} -image moveicon -style Dialoggreen.TButton");
       Max_Amount_Button: Ttk_Button;
       Max_Amount: constant Positive :=
         Inventory_Container.Element
