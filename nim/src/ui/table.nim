@@ -283,7 +283,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
 
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
-    invertColors: bool = false) =
+    invertColors: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
   var x = 0
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
