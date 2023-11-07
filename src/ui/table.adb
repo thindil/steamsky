@@ -17,7 +17,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -147,63 +147,6 @@ package body Table is
             Command => "{" & Command & "}");
       end if;
    end Add_Bindings;
-
-   --## rule off LOCAL_HIDING
-   -- ****if* Table/Table.Add_Background
-   -- FUNCTION
-   -- Add a proper background color to the item in the table and return the
-   -- name of used color
-   -- PARAMETERS
-   -- Table    - The Table_Widget in which background will be added
-   -- New_Row  - If True, add the background, otherwise just return the color
-   --            which will be used
-   -- Command  - Tcl command which will be executed when the background was
-   --            clicked
-   -- RESULT
-   -- The String with the name of the color used for set background for the
-   -- item
-   -- SOURCE
-   function Add_Background
-     (Table: Table_Widget; New_Row: Boolean; Command: String) return String is
-     -- ****
-      --## rule on LOCAL_HIDING
-      Item_Id: Unbounded_String;
-      Color: constant String :=
-        (if Table.Row rem 2 > 0 then
-           Style_Lookup(Name => "Table", Option => "-rowcolor")
-         else Style_Lookup
-             (Name => To_String(Source => Get_Interface_Theme),
-              Option => "-background"));
-   begin
-      if not New_Row then
-         return Color;
-      end if;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Item_Id :=
-        To_Unbounded_String
-          (Source =>
-             Canvas_Create
-               (Parent => Table.Canvas, Child_Type => "rectangle",
-                Options =>
-                  " 0" & Positive'Image((Table.Row * Table.Row_Height)) &
-                  " 10" &
-                  Positive'Image
-                    ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
-                  " -fill " & Color & " -width 0 -tags [list row" &
-                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
-                  "]"));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Lower
-        (CanvasWidget => Table.Canvas,
-         TagOrId => To_String(Source => Item_Id));
-      Add_Bindings
-        (Canvas => Table.Canvas,
-         Item_Id =>
-           "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Command => Command, Color => Color);
-      return Color;
-   end Add_Background;
 
    --## rule off LOCAL_HIDING
    procedure Add_Button
@@ -341,11 +284,55 @@ package body Table is
    procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
+      use GNAT.String_Split;
+
       X: Natural := 5;
       Item_Id: Unbounded_String := Null_Unbounded_String;
       --## rule off IMPROPER_INITIALIZATION
       Tokens: Slice_Set;
       --## rule on IMPROPER_INITIALIZATION
+      --## rule off LOCAL_HIDING
+      function Add_Background
+        (Table: Table_Widget; New_Row: Boolean; Command: String)
+         return String is
+         --## rule on LOCAL_HIDING
+         Item_Id: Unbounded_String;
+         Color: constant String :=
+           (if Table.Row rem 2 > 0 then
+              Style_Lookup(Name => "Table", Option => "-rowcolor")
+            else Style_Lookup
+                (Name => To_String(Source => Get_Interface_Theme),
+                 Option => "-background"));
+      begin
+         if not New_Row then
+            return Color;
+         end if;
+         --## rule off SIMPLIFIABLE_EXPRESSIONS
+         Item_Id :=
+           To_Unbounded_String
+             (Source =>
+                Canvas_Create
+                  (Parent => Table.Canvas, Child_Type => "rectangle",
+                   Options =>
+                     " 0" & Positive'Image((Table.Row * Table.Row_Height)) &
+                     " 10" &
+                     Positive'Image
+                       ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
+                     " -fill " & Color & " -width 0 -tags [list row" &
+                     Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                     "]"));
+         --## rule on SIMPLIFIABLE_EXPRESSIONS
+         Lower
+           (CanvasWidget => Table.Canvas,
+            TagOrId => To_String(Source => Item_Id));
+         Add_Bindings
+           (Canvas => Table.Canvas,
+            Item_Id =>
+              "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
+            Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+            Command => Command, Color => Color);
+         return Color;
+      end Add_Background;
       Background_Color: constant String :=
         Add_Background(Table => Table, New_Row => New_Row, Command => Command);
       Image_Name: constant String :=
