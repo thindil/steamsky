@@ -284,6 +284,19 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
     invertColors: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
+  ## Add a progressbar item to the selected TableWidget
+  ##
+  ## * table         - the TableWidget to which the progressbar will be added
+  ## * value         - the current value for the progressbar
+  ## * maxValue      - the max value for the progessbar
+  ## * tooltip       - the tootip text for the progressbar
+  ## * command       - the Tcl command to execute when the player press the
+  ##                   progressbar
+  ## * column        - the column in which place the progressbar
+  ## * newRow        - if true, add a new row after adding the progressbar
+  ## * invenrtColors - if true, invert colors of the progressbar
+  ##
+  ## Returns modified parameter table
   var x = 0
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
