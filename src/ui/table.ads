@@ -208,7 +208,7 @@ package Table is
       -- 7.6 - Added default values for Previous_Command and Next_Command
       -- SOURCE
    procedure Add_Pagination
-     (Table: in out Table_Widget;
+     (Table: Table_Widget;
       Previous_Command, Next_Command: String := "") with
       Pre => Table.Row_Height > 1;
       -- ****

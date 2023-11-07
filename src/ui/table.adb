@@ -245,7 +245,7 @@ package body Table is
    end Add_Progress_Bar;
 
    procedure Add_Pagination
-     (Table: in out Table_Widget;
+     (Table: Table_Widget;
       Previous_Command, Next_Command: String := "") is
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
