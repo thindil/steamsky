@@ -458,7 +458,6 @@ package body Ships.UI.Crew.Inventory is
                 CArgv.Empty & "UpdateInventory" &
                 Trim(Source => Positive'Image(Member_Index), Side => Left));
       end if;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Inventory_Loop :
       for I in
         Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
@@ -544,6 +543,7 @@ package body Ships.UI.Crew.Inventory is
       for Item of Local_Inventory loop
          Inventory_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Inventory_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 4,
