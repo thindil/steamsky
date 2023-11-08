@@ -504,3 +504,20 @@ proc addAdaPagination(canvas, prevCommand, nextCommand: cstring; row,
     rowHeight: cint) {.raises: [], tags: [], exportc.} =
   let newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
   addPagination(newTable, $prevCommand, $nextCommand)
+
+proc addAdaCheckButton(canvas, tooltip, command: cstring; column, newRow,
+    rowHeight, checked, emptyUnchecked: cint; columnsWidth: var array[10, cint];
+    row: var cint) {.raises: [], tags: [], exportc.} =
+  try:
+    var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
+    for width in columnsWidth:
+      if width == 0:
+        break
+      newTable.columnsWidth.add(width)
+    addCheckButton(newTable, $tooltip, $command, checked == 1, column, newRow ==
+        1, emptyUnchecked == 1)
+    for index, width in newTable.columnsWidth:
+      columnsWidth[index] = width.cint
+    row = newTable.row.cint
+  except:
+    discard
