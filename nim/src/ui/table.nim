@@ -385,11 +385,46 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   var x = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
-  let imageName = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
+  let
+    imageName = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
       "::Images(checkbox-" & (if checked: "checked" else: (
       if emptyUnchecked: "unchecked-empty" else: "unchecked")) & ")}"
-  var itemId = tclEval2(script = table.canvas & " create image " & $x & " " & $((
-      table.row * table.rowHeight) + 2) & " -anchor nw -image ")
+    itemId = tclEval2(script = table.canvas & " create image " & $x & " " & $((
+        table.row * table.rowHeight) + 2) & " -anchor nw -image " & imageName &
+        " -tags [list row" & $table.row & "col" & $column & "]")
+  if tooltip.len > 0:
+    tclEval(script = "tooltip::tooltip " & table.canvas & " -item " &
+        itemId & " \"" & tooltip & "\"")
+  let
+    tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
+    coords = tclResult.split
+  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  if x > table.columnsWidth[column - 1]:
+    table.columnsWidth[column - 1] = x
+  if command.len > 0:
+
+    proc addBackground(table: TableWidget; newRow: bool;
+        command: string): string =
+      result = (if table.row mod 2 > 0: tclEval2(
+          script = "ttk::style lookup Table -rowcolor") else: tclEval2(
+          script = "ttk::style lookup " & gameSettings.interfaceTheme &
+          " -background"))
+      if not newRow:
+        return
+      let itemId = tclEval2(script = table.canvas & " create rectangle 0 " & $(
+          table.row * table.rowHeight) & " 10 " & $((table.row *
+          table.rowHeight) + table.rowHeight) & " -fill " & result &
+          " -width 0 -tags [list row" & $table.row & "]")
+      tclEval(script = table.canvas & " lower " & itemId)
+      addBindings(canvas = table.canvas, itemId = "row" & $table.row,
+          row = $table.row, command = command, color = result)
+
+    let backgroundColor = addBackground(table = table, newRow = newRow,
+        command = command)
+    addBindings(canvas = table.canvas, itemId = itemId, row = $table.row,
+        command = command, color = backgroundColor)
+  if newRow:
+    table.row.inc
 
 # Temporary code for interfacing with Ada
 
