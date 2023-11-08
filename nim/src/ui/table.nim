@@ -353,6 +353,13 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
 
 proc addPagination*(table: TableWidget; previousCommand: string = "";
     nextCommand: string = "") {.sideEffect, raises: [], tags: [].} =
+  ## Add pagination buttons to the bottom of the selected TableWidget
+  ##
+  ## * table           - the TableWidget to which the buttons will be added
+  ## * previousCommand - the Tcl command executed when the previous page button
+  ##                     is pressed
+  ## * nextCommand     - the Tcl command executed when the next page button is
+  ##                     pressed
   let buttonsFrame = table.canvas & ".buttonframe"
   tclEval(script = "ttk::frame " & buttonsFrame)
   var button: string
