@@ -352,7 +352,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     table.row.inc
 
 proc addPagination*(table: TableWidget; previousCommand: string = "";
-    nextCommand: string = "") =
+    nextCommand: string = "") {.sideEffect, raises: [], tags: [].} =
   let buttonsFrame = table.canvas & ".buttonframe"
   tclEval(script = "ttk::frame " & buttonsFrame)
   var button: string
