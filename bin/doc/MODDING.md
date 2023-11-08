@@ -1125,6 +1125,9 @@ story.
   button in the item info dialog in the trade screen. Optional.
 * Key `SellDefaultIcon`: Path to the SVG image which will be used for sell item
   button in the item info dialog in the trade screen. Optional.
+* Key `MoveIcon`: Path to the SVG image which will be used for move item to the
+  player's ship's cargo button in the item info dialog in the inventory screen.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
