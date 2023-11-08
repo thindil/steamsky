@@ -183,7 +183,7 @@ package body Table is
 
    --## rule off LOCAL_HIDING
    procedure Update_Table(Table: Table_Widget; Grab_Focus: Boolean := True) is
-      --## rule off LOCAL_HIDING
+      --## rule on LOCAL_HIDING
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
       procedure Update_Ada_Table
@@ -204,8 +204,10 @@ package body Table is
          G_Focus => (if Grab_Focus then 1 else 0), Width => N_Width);
    end Update_Table;
 
+   --## rule off LOCAL_HIDING
    procedure Add_Progress_Bar
      (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
+      --## rule on LOCAL_HIDING
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
       N_Width: Nim_Width := (others => 0);
@@ -241,8 +243,10 @@ package body Table is
       end loop Convert_Nim_Width_Loop;
    end Add_Progress_Bar;
 
+   --## rule off LOCAL_HIDING
    procedure Add_Pagination
      (Table: Table_Widget; Previous_Command, Next_Command: String := "") is
+      --## rule on LOCAL_HIDING
       procedure Add_Ada_Pagination
         (Can, P_Command, N_Command: chars_ptr; R, R_Height: Integer) with
          Import => True,
@@ -256,9 +260,11 @@ package body Table is
          R_Height => Table.Row_Height);
    end Add_Pagination;
 
+   --## rule off LOCAL_HIDING
    procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
+      --## rule on LOCAL_HIDING
       use GNAT.String_Split;
 
       X: Natural := 5;
@@ -365,8 +371,10 @@ package body Table is
       end if;
    end Add_Check_Button;
 
+   --## rule off LOCAL_HIDING
    function Get_Column_Number
      (Table: Table_Widget; X_Position: Natural) return Positive is
+      --## rule on LOCAL_HIDING
       Position: Positive := X_Position;
    begin
       Find_Number_Loop :
@@ -379,7 +387,9 @@ package body Table is
       return 1;
    end Get_Column_Number;
 
+   --## rule off LOCAL_HIDING
    procedure Update_Headers_Command(Table: Table_Widget; Command: String) is
+      --## rule on LOCAL_HIDING
    begin
       if Command'Length > 0 then
          Update_Headers_Loop :
