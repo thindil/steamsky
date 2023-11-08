@@ -379,6 +379,18 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
   tclEval(script = table.canvas & " create window 0 " & $(table.row *
       table.rowHeight) & " -anchor nw -window " & buttonsFrame)
 
+proc addCheckButton*(table: var TableWidget; tooltip, command: string;
+    checked: bool; column: Positive; newRow: bool = false;
+    emptyUnchecked: bool = false) =
+  var x = 5
+  for i in 1 .. column - 1:
+    x = x + table.columnsWidth[i - 1]
+  let imageName = "${ttk::theme::" & tclEval2(script = "ttk::style theme use") &
+      "::Images(checkbox-" & (if checked: "checked" else: (
+      if emptyUnchecked: "unchecked-empty" else: "unchecked")) & ")}"
+  var itemId = tclEval2(script = table.canvas & " create image " & $x & " " & $((
+      table.row * table.rowHeight) + 2) & " -anchor nw -image ")
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
