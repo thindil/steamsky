@@ -382,6 +382,20 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
     emptyUnchecked: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
+  ## Add checkbutton item to the selected TableWidget
+  ##
+  ## * table          - the TableWidget to which the checkbutton will be added
+  ## * tooltip        - the tooltip text for the checkbutton
+  ## * command        - the Tcl command which will be executed when checkbutton
+  ##                    was clicked
+  ## * checked        - if true, the checkbutton is checked
+  ## * column         - the column in which the checkbutton will be placed
+  ## * newRow         - if true, add a new row to the table after adding the
+  ##                    checkbutton
+  ## * emptyUnchecked - if true, show empty unchecked checkbox instead of red
+  ##                    cross
+  ##
+  ## Returns modified parameter table
   var x = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
