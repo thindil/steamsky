@@ -100,50 +100,6 @@ package body Table is
    end Clear_Table;
 
    --## rule off LOCAL_HIDING
-   -- ****if* Table/Add_Bindings
-   -- FUNCTION
-   -- Add events to the selected element of the Table_Widget
-   -- PARAMETERS
-   -- Canvas   - Tk_Canvas in which the events will be added
-   -- Item_Id  - The id of the item to which the events will be added
-   -- Row      - The number of row in which the events will be added
-   -- Command  - The Tcl command which will be executed on mouse button event
-   -- HISTORY
-   -- 6.6 - Added
-   -- SOURCE
---   procedure Add_Bindings
---     (Canvas: Tk_Canvas; Item_Id, Row, Command, Color: String) is
---     -- ****
---      --## rule on LOCAL_HIDING
---   begin
---      Bind
---        (CanvasWidget => Canvas, TagOrId => Item_Id, Sequence => "<Enter>",
---         Command =>
---           "{" & Canvas & " itemconfigure row$currentrow -fill " & Color &
---           ";" & Canvas & " itemconfigure row" & Row & " -fill " &
---           Style_Lookup
---             (Name => To_String(Source => Get_Interface_Theme),
---              Option => "-selectbackground") &
---           (if Command'Length > 0 then
---              ";" & Canvas & " configure -cursor hand1"
---            else "") &
---           ";set currentrow " & Row & "}");
---      Bind
---        (CanvasWidget => Canvas, TagOrId => Item_Id, Sequence => "<Leave>",
---         Command => "{" & Canvas & " configure -cursor left_ptr}");
---      if Command'Length > 0 then
---         Bind
---           (CanvasWidget => Canvas, TagOrId => Item_Id,
---            Sequence =>
---              "<Button-" &
---              (if Get_Boolean_Setting(Name => "rightButton") then "3"
---               else "1") &
---              ">",
---            Command => "{" & Command & "}");
---      end if;
---   end Add_Bindings;
-
-   --## rule off LOCAL_HIDING
    procedure Add_Button
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
       Column: Positive; New_Row: Boolean := False; Color: String := "") is
