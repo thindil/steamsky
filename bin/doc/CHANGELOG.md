@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Made some dialogs' buttons colorful
+- Updated modding guide
 
 ### Fixed
 - Displaying tables if the first column has an empty header
