@@ -381,7 +381,7 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
-    emptyUnchecked: bool = false) =
+    emptyUnchecked: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
   var x = 5
   for i in 1 .. column - 1:
     x = x + table.columnsWidth[i - 1]
