@@ -14,6 +14,7 @@ import ../../src/[careers, crafts, events, factions, game, items, maps, mobs,
 
 echo "Loading the game data."
 loadData("../bin/data/game.dat")
+loadItems("../bin/data/items.dat")
 loadModules("../bin/data/shipmodules.dat")
 loadCareers("../bin/data/careers.dat")
 loadFactions("../bin/data/factions.dat")
