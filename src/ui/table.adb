@@ -17,14 +17,12 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
--- with GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Utils.UI;
 
@@ -265,63 +263,6 @@ package body Table is
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
       --## rule on LOCAL_HIDING
---      use GNAT.String_Split;
---
---      X: Natural := 5;
---      Item_Id: Unbounded_String := Null_Unbounded_String;
---      --## rule off IMPROPER_INITIALIZATION
---      Tokens: Slice_Set;
---      --## rule on IMPROPER_INITIALIZATION
---      --## rule off LOCAL_HIDING
---      function Add_Background
---        (Table: Table_Widget; New_Row: Boolean; Command: String)
---         return String is
---         --## rule on LOCAL_HIDING
---         Item_Id: Unbounded_String;
---         Color: constant String :=
---           (if Table.Row rem 2 > 0 then
---              Style_Lookup(Name => "Table", Option => "-rowcolor")
---            else Style_Lookup
---                (Name => To_String(Source => Get_Interface_Theme),
---                 Option => "-background"));
---      begin
---         if not New_Row then
---            return Color;
---         end if;
---         --## rule off SIMPLIFIABLE_EXPRESSIONS
---         Item_Id :=
---           To_Unbounded_String
---             (Source =>
---                Canvas_Create
---                  (Parent => Table.Canvas, Child_Type => "rectangle",
---                   Options =>
---                     " 0" & Positive'Image((Table.Row * Table.Row_Height)) &
---                     " 10" &
---                     Positive'Image
---                       ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
---                     " -fill " & Color & " -width 0 -tags [list row" &
---                     Trim(Source => Positive'Image(Table.Row), Side => Left) &
---                     "]"));
---         --## rule on SIMPLIFIABLE_EXPRESSIONS
---         Lower
---           (CanvasWidget => Table.Canvas,
---            TagOrId => To_String(Source => Item_Id));
---         Add_Bindings
---           (Canvas => Table.Canvas,
---            Item_Id =>
---              "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
---            Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
---            Command => Command, Color => Color);
---         return Color;
---      end Add_Background;
---      Background_Color: constant String :=
---        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
---      Image_Name: constant String :=
---        "${ttk::theme::" & Theme_Use & "::Images(checkbox-" &
---        (if Checked then "checked"
---         else (if Empty_Unchecked then "unchecked-empty" else "unchecked")) &
---        ")}";
-
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
       Row: Positive := Table.Row;
@@ -353,53 +294,6 @@ package body Table is
          Table.Columns_Width(Index) := Width;
          Index := Index + 1;
       end loop Convert_Nim_Width_Loop;
---      --## rule off SIMPLIFIABLE_STATEMENTS
---      Count_X_Loop :
---      for I in 1 .. Column - 1 loop
---         X := X + Table.Columns_Width(I);
---      end loop Count_X_Loop;
---      --## rule on SIMPLIFIABLE_STATEMENTS
---      --## rule off SIMPLIFIABLE_EXPRESSIONS
---      Item_Id :=
---        To_Unbounded_String
---          (Source =>
---             Canvas_Create
---               (Parent => Table.Canvas, Child_Type => "image",
---                Options =>
---                  Trim(Source => Natural'Image(X), Side => Left) &
---                  Positive'Image((Table.Row * Table.Row_Height) + 2) &
---                  " -anchor nw -image " & Image_Name & " -tags [list row" &
---                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
---                  "col" &
---                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
---      --## rule on SIMPLIFIABLE_EXPRESSIONS
---      if Tooltip'Length > 0 then
---         Add
---           (Widget => Table.Canvas, Message => Tooltip,
---            Options => "-item " & To_String(Source => Item_Id));
---      end if;
---      Create
---        (S => Tokens,
---         From =>
---           BBox
---             (CanvasWidget => Table.Canvas,
---              TagOrId => To_String(Source => Item_Id)),
---         Separators => " ");
---      X :=
---        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
---        Positive'Value(Slice(S => Tokens, Index => 1));
---      if X > Table.Columns_Width(Column) then
---         Table.Columns_Width(Column) := X;
---      end if;
---      if Command'Length > 0 then
---         Add_Bindings
---           (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
---            Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
---            Command => Command, Color => Background_Color);
---      end if;
---      if New_Row then
---         Table.Row := Table.Row + 1;
---      end if;
    end Add_Check_Button;
 
    --## rule off LOCAL_HIDING
