@@ -207,10 +207,9 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Add_Progress_Bar
      (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
-      --## rule on LOCAL_HIDING
-
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
+      --## rule on LOCAL_HIDING
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
       Row: Positive := Table.Row;
@@ -541,7 +540,7 @@ package body Table is
          else Style_Lookup
              (Name => To_String(Source => Get_Interface_Theme),
               Option => "-background"));
-      Canvas: constant Tk_Canvas :=
+      Can: constant Tk_Canvas :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
@@ -557,10 +556,10 @@ package body Table is
          end if;
       end if;
       Item_Configure
-        (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+        (CanvasWidget => Can, TagOrId => "row$currentrow",
          Options => "-fill " & Color);
       Item_Configure
-        (CanvasWidget => Canvas,
+        (CanvasWidget => Can,
          TagOrId =>
            "row" & Trim(Source => Natural'Image(Current_Row), Side => Left),
          Options =>
@@ -600,7 +599,7 @@ package body Table is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Canvas: constant Tk_Canvas :=
+      Can: constant Tk_Canvas :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
@@ -608,7 +607,7 @@ package body Table is
         (interp => Interp,
          strng =>
            Bind
-             (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+             (CanvasWidget => Can, TagOrId => "row$currentrow",
               Sequence =>
                 "<Button-" &
                 (if Get_Boolean_Setting(Name => "rightButton") then "3"
@@ -643,7 +642,7 @@ package body Table is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Canvas: constant Tk_Canvas :=
+      Can: constant Tk_Canvas :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Color: constant String :=
@@ -658,13 +657,15 @@ package body Table is
               Option => "-background"));
    begin
       Item_Configure
-        (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+        (CanvasWidget => Can, TagOrId => "row$currentrow",
          Options => "-fill " & Color);
       return TCL_OK;
    end Hide_Current_Row_Command;
 
+   --## rule off LOCAL_HIDING
    function Is_Checked
      (Table: Table_Widget; Row, Column: Natural) return Boolean is
+   --## rule on LOCAL_HIDING
    begin
       if Item_Cget
           (CanvasWidget => Table.Canvas,
@@ -678,8 +679,10 @@ package body Table is
       return False;
    end Is_Checked;
 
+   --## rule off LOCAL_HIDING
    procedure Toggle_Checked_Button
      (Table: Table_Widget; Row, Column: Natural) is
+   --## rule on LOCAL_HIDING
    begin
       if Is_Checked(Table => Table, Row => Row, Column => Column) then
          Item_Configure
