@@ -329,6 +329,7 @@ package body Ships.UI.Crew.Inventory is
              (Table => Inventory_Table,
               X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Item_Data is record
          Selected: Boolean;
          Name: Unbounded_String;
@@ -340,6 +341,7 @@ package body Ships.UI.Crew.Inventory is
          Id: Positive;
       end record;
       type Inventory_Array is array(Positive range <>) of Local_Item_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Local_Inventory: Inventory_Array
@@ -543,13 +545,13 @@ package body Ships.UI.Crew.Inventory is
       for Item of Local_Inventory loop
          Inventory_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Inventory_Indexes_Loop;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 4,
            Argv =>
              CArgv.Empty & "UpdateInventory" &
              Trim(Source => Positive'Image(Member_Index), Side => Left));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
    end Sort_Crew_Inventory_Command;
 
    -- ****if* SUCI/SUCI.Reset_Selection
@@ -563,6 +565,7 @@ package body Ships.UI.Crew.Inventory is
    procedure Reset_Selection(Interp: Tcl_Interp) is
       -- ****
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Reset_Item_Selection_Loop :
       for I in
         1 ..
@@ -577,6 +580,7 @@ package body Ships.UI.Crew.Inventory is
                varName => "invindex" & Trim(Source => I'Img, Side => Left));
          end if;
       end loop Reset_Item_Selection_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
    end Reset_Selection;
 
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
@@ -668,7 +672,9 @@ package body Ships.UI.Crew.Inventory is
               To_String(Source => Player_Ship.Crew(Local_Member_Index).Name));
          return TCL_OK;
       end if;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Member_Index := Local_Member_Index;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Reset_Selection(Interp => Interp);
       Add
         (Widget => Dialog_Close_Button,
@@ -696,6 +702,7 @@ package body Ships.UI.Crew.Inventory is
           (Winfo_Get(Widgt => Select_All_Button, Info => "reqheight"));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Buttons_Box, Options => "-sticky w -padx 5");
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Inventory_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Member_Frame),
@@ -708,6 +715,7 @@ package body Ships.UI.Crew.Inventory is
               6 => To_Unbounded_String(Source => "Weight")),
            Scrollbar => Y_Scroll, Command => "SortCrewInventory",
            Tooltip_Text => "Press mouse button to sort the inventory.");
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
            Argv => Argv) =
