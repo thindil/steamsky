@@ -20,7 +20,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
@@ -36,6 +36,8 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
+      use Tcl.Tk.Ada;
+
       --## rule off IMPROPER_INITIALIZATION
       New_Table: Table_Widget (Amount => Headers'Length);
       --## rule on IMPROPER_INITIALIZATION
@@ -256,16 +258,20 @@ package body Table is
    function Get_Column_Number
      (Table: Table_Widget; X_Position: Natural) return Positive is
       --## rule on LOCAL_HIDING
-      Position: Positive := X_Position;
+      N_Width: Nim_Width := (others => 0);
+      Index: Natural := 0;
+      function Get_Ada_Column_Number
+        (Width: Nim_Width; X_Pos: Integer) return Positive with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaColumnNumber";
    begin
-      Find_Number_Loop :
-      for I in Table.Columns_Width'Range loop
-         if Position < Table.Columns_Width(I) + 20 then
-            return I;
-         end if;
-         Position := Position - Table.Columns_Width(I) - 20;
-      end loop Find_Number_Loop;
-      return 1;
+      Convert_Width_Loop :
+      for Width of Table.Columns_Width loop
+         N_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Width_Loop;
+      return Get_Ada_Column_Number(Width => N_Width, X_Pos => X_Position);
    end Get_Column_Number;
 
    --## rule off LOCAL_HIDING
