@@ -277,86 +277,22 @@ package body Table is
    --## rule off LOCAL_HIDING
    procedure Update_Headers_Command(Table: Table_Widget; Command: String) is
       --## rule on LOCAL_HIDING
+      N_Width: Nim_Width := (others => 0);
+      Index: Natural := 0;
+      procedure Update_Ada_Headers_Command
+        (Can, Com: chars_ptr; Width: Nim_Width) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaHeadersCommand";
    begin
-      if Command'Length > 0 then
-         Update_Headers_Loop :
-         for I in Table.Columns_Width'Range loop
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Enter>",
-               Command => "{" & Table.Canvas & " configure -cursor hand1}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Leave>",
-               Command => "{" & Table.Canvas & " configure -cursor left_ptr}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Enter>",
-               Command => "{" & Table.Canvas & " configure -cursor hand1}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Leave>",
-               Command => "{" & Table.Canvas & " configure -cursor left_ptr}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
-         end loop Update_Headers_Loop;
-      else
-         Reset_Headers_Command_Loop :
-         for I in Table.Columns_Width'Range loop
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Enter>", Command => "{}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Leave>", Command => "{}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "header" & Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Button-1>", Command => "{}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Enter>", Command => "{}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Leave>", Command => "{}");
-            Bind
-              (CanvasWidget => Table.Canvas,
-               TagOrId =>
-                 "headerback" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-               Sequence => "<Button-1>", Command => "{}");
-         end loop Reset_Headers_Command_Loop;
-      end if;
+      Convert_Width_Loop :
+      for Width of Table.Columns_Width loop
+         N_Width(Index) := Width;
+         Index := Index + 1;
+      end loop Convert_Width_Loop;
+      Update_Ada_Headers_Command
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
+         Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
 
    -- ****o* Table/Table.Update_Current_Row_Command
