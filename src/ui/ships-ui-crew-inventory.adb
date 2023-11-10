@@ -715,7 +715,6 @@ package body Ships.UI.Crew.Inventory is
               6 => To_Unbounded_String(Source => "Weight")),
            Scrollbar => Y_Scroll, Command => "SortCrewInventory",
            Tooltip_Text => "Press mouse button to sort the inventory.");
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Update_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
            Argv => Argv) =
@@ -731,6 +730,7 @@ package body Ships.UI.Crew.Inventory is
           (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-pady 5");
       Widgets.Focus(Widgt => Inventory_Table.Canvas);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Bind
         (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
          Script => "{focus " & Select_All_Button & ";break}");
@@ -802,6 +802,7 @@ package body Ships.UI.Crew.Inventory is
 
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Item_Type: constant Bounded_String :=
         Get_Proto_Item
           (Index =>
@@ -870,6 +871,7 @@ package body Ships.UI.Crew.Inventory is
       elsif Is_Tool(Item_Type => Item_Type) then
          Player_Ship.Crew(Member_Index).Equipment(TOOL) := Item_Index;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       return
         Sort_Crew_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
