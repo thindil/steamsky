@@ -456,6 +456,31 @@ proc getColumnNumber*(table: TableWidget;
     position = position - width - 20
   return 1
 
+proc updateHeadersCommand*(table: TableWidget; command: string) =
+  if command.len > 0:
+    for i in table.columnsWidth.low .. table.columnsWidth.high:
+      tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Enter> {" &
+          table.canvas & " configure -cursor hand1}")
+      tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Leave> {" &
+          table.canvas & " configure -cursor left_ptr}")
+      tclEval(script = table.canvas & " bind header" & $(i + 1) &
+          " <Button-1> {" & command & " %x}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) &
+          " <Enter> {" & table.canvas & " configure -cursor hand1}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) &
+          " <Leave> {" & table.canvas & " configure -cursor left_ptr}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) &
+          " <Button-1> {" & command & " %x}")
+  else:
+    for i in table.columnsWidth.low .. table.columnsWidth.high:
+      tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Enter> {}")
+      tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Leave> {}")
+      tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Button-1> {}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Enter> {}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Leave> {}")
+      tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
+
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
@@ -560,3 +585,12 @@ proc getAdaColumnNumber(columnsWidth: array[10, cint];
       break
     newTable.columnsWidth.add(width)
   return getColumnNumber(newTable, xPosition).cint
+
+proc updateAdaHeadersCommand(canvas, command: cstring; columnsWidth: array[10,
+    cint]) {.raises: [], tags: [], exportc.} =
+  var newTable = TableWidget(canvas: $canvas)
+  for width in columnsWidth:
+    if width == 0:
+      break
+    newTable.columnsWidth.add(width)
+  updateHeadersCommand(newTable, $command)
