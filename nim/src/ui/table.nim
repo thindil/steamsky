@@ -440,6 +440,14 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   if newRow:
     table.row.inc
 
+proc getColumnNumber*(table: TableWidget; xPosition: Natural): Positive =
+  var position = xPosition
+  for index, width in table.columnsWidth:
+    if position < width + 20:
+      return index + 1
+    position = position - width - 20
+  return 1
+
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
@@ -535,3 +543,12 @@ proc addAdaCheckButton(canvas, tooltip, command: cstring; column, newRow,
     row = newTable.row.cint
   except:
     discard
+
+proc getAdaColumnNumber(columnsWidth: array[10, cint];
+    xPosition: cint): cint {.raises: [], tags: [], exportc.} =
+  var newTable = TableWidget()
+  for width in columnsWidth:
+    if width == 0:
+      break
+    newTable.columnsWidth.add(width)
+  return getColumnNumber(newTable, xPosition).cint
