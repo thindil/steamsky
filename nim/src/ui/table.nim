@@ -442,6 +442,13 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
 
 proc getColumnNumber*(table: TableWidget;
     xPosition: Natural): Positive {.sideEffect, raises: [], tags: [].} =
+  ## Get the number of the column in the selected TableWidget according to
+  ## the position in X axis
+  ##
+  ## * table     - the TableWidget in which the column will be checked
+  ## * xPosition - the position in X axis which will be looking for
+  ##
+  ## The number of column, starts from 1, for the selected position in X axis
   var position = xPosition
   for index, width in table.columnsWidth:
     if position < width + 20:
