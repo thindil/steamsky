@@ -456,7 +456,8 @@ proc getColumnNumber*(table: TableWidget;
     position = position - width - 20
   return 1
 
-proc updateHeadersCommand*(table: TableWidget; command: string) =
+proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
+    raises: [], tags: [].} =
   if command.len > 0:
     for i in table.columnsWidth.low .. table.columnsWidth.high:
       tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Enter> {" &
