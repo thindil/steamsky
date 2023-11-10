@@ -440,7 +440,8 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   if newRow:
     table.row.inc
 
-proc getColumnNumber*(table: TableWidget; xPosition: Natural): Positive =
+proc getColumnNumber*(table: TableWidget;
+    xPosition: Natural): Positive {.sideEffect, raises: [], tags: [].} =
   var position = xPosition
   for index, width in table.columnsWidth:
     if position < width + 20:
