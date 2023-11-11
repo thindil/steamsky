@@ -55,7 +55,7 @@ type
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
 
-  TclCmdProc* = proc (clientData: pointer; interp: TclInterp; argc: cint;
+  TclCmdProc* = proc (clientData: cint; interp: TclInterp; argc: cint;
       argv: openArray[cstring]): TclResults {.cdecl.}
     ## Procedure which will be executed as Tcl command
     ##
@@ -67,7 +67,7 @@ type
     ## Returns tclOk if the command was executed without problems, otherwise
     ## usually tclError
 
-  TclCmdDeleteProc* = proc (clientData: pointer) {.cdecl.}
+  TclCmdDeleteProc* = proc (clientData: cint) {.cdecl.}
     ## Procedure used to remove the selected Tcl command
     ##
     ## * clientData - the additional data passed to the procedure
@@ -150,7 +150,7 @@ proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
   return $(interp.tclGetResult)
 
 proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
-    clientData: pointer; deleteProc: TclCmdDeleteProc): cint {.cdecl,
+    clientData: cint; deleteProc: TclCmdDeleteProc): pointer {.cdecl,
     dynlib: tclDllName, importc: "Tcl_CreateCommand", discardable.}
   ## Add a new Tcl command, defined in Nim on the selected Tcl interpreter.
   ## If there is a command with the same name, it will be replaced.
@@ -162,4 +162,4 @@ proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
   ## * deleteProc - the Nim procedure which will be executed during removing
   ##                the command, can be nil
   ##
-  ## Returns handler for the newly created command
+  ## Returns pointer for the newly created command

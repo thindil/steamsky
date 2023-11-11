@@ -19,6 +19,18 @@ import std/strutils
 import ../../src/[config, tk, types]
 import coreui
 
+type AddingCommandError* = object of CatchableError
+  ## Raised when there is problem with adding a Tcl command
+
+proc addCommand*(name: string; nimCommand: TclCmdProc) =
+  if tclEval2(script = "info commands " & name).len > 0:
+    raise newException(exceptn = AddingCommandError,
+        message = "Command with name " & name & " exists.")
+  if tclCreateCommand(interp = getInterp(), cmdName = name.cstring,
+      cproc = nimCommand, clientData = 0, deleteProc = nil) == nil:
+    raise newException(exceptn = AddingCommandError,
+        message = "Can't add command " & name)
+
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
   ## Convert the game minutes to the game time in days, hours, etc
