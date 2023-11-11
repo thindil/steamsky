@@ -57,8 +57,20 @@ type
 
   TclCmdProc* = proc (clientData: pointer; interp: TclInterp; argc: cint;
       argv: openArray[cstring]): TclResults {.cdecl.}
+    ## Procedure which will be executed as Tcl command
+    ##
+    ## * clientData - the additional data passed to the procedure
+    ## * interp     - the Tcl interpreter on which the command will be executed
+    ## * argc       - the amount of arguments which the command takes
+    ## * argv       - the values of the command's arguments
+    ##
+    ## Returns tclOk if the command was executed without problems, otherwise
+    ## usually tclError
 
   TclCmdDeleteProc* = proc (clientData: pointer) {.cdecl.}
+    ## Procedure used to remove the selected Tcl command
+    ##
+    ## * clientData - the additional data passed to the procedure
 
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
@@ -139,4 +151,15 @@ proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
 
 proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
     clientData: pointer; deleteProc: TclCmdDeleteProc): cint {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_CreateCommand".}
+    dynlib: tclDllName, importc: "Tcl_CreateCommand", discardable.}
+  ## Add a new Tcl command, defined in Nim on the selected Tcl interpreter.
+  ## If there is a command with the same name, it will be replaced.
+  ##
+  ## * interp     - the Tcl interpreter on which the command will be added
+  ## * cmdName    - the name of the command to add
+  ## * cproc      - the Nim procedure which will be executed as the command
+  ## * clientData - the additional data passed to cproc and deleteProc
+  ## * deleteProc - the Nim procedure which will be executed during removing
+  ##                the command, can be nil
+  ##
+  ## Returns handler for the newly created command
