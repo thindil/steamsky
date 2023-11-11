@@ -458,6 +458,12 @@ proc getColumnNumber*(table: TableWidget;
 
 proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
     raises: [], tags: [].} =
+  ## Update the selected TableWidget headers' Tcl command executed when the
+  ## player clicks on a header
+  ##
+  ## * table   - the TableWidget in which headers will be updated
+  ## * command - the Tcl command to assign to the headers. If empty, the
+  ##             current command will be resetted.
   if command.len > 0:
     for i in table.columnsWidth.low .. table.columnsWidth.high:
       tclEval(script = table.canvas & " bind header" & $(i + 1) & " <Enter> {" &
