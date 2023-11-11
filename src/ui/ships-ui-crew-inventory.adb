@@ -743,9 +743,11 @@ package body Ships.UI.Crew.Inventory is
       Bind
         (Widgt => Unselect_All_Button, Sequence => "<Escape>",
          Script => "{" & Dialog_Close_Button & " invoke;break}");
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Bind
         (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
          Script => "{" & Dialog_Close_Button & " invoke;break}");
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Focus(Widgt => Dialog_Close_Button);
       if Height > 500 then
          Height := 500;
@@ -905,6 +907,7 @@ package body Ships.UI.Crew.Inventory is
 
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Item_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".itemdialog",
@@ -930,6 +933,7 @@ package body Ships.UI.Crew.Inventory is
           (Container => Player_Ship.Crew(Member_Index).Inventory,
            Index => Item_Index)
           .Amount;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Amount_Box: constant Ttk_SpinBox :=
         Create
           (pathName => Item_Dialog & ".amount",
@@ -1001,6 +1005,7 @@ package body Ships.UI.Crew.Inventory is
              Main_Paned &
              ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
    begin
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Free_Cargo
           (Amount =>
              0 -
@@ -1062,6 +1067,7 @@ package body Ships.UI.Crew.Inventory is
             Given_Order => REST);
       end if;
       Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
    end Move_Item;
 
    -- ****o* SUCI/SUCI.Move_Item_Command
@@ -1102,12 +1108,14 @@ package body Ships.UI.Crew.Inventory is
       Destroy(Widgt => Item_Dialog);
       Tcl_Eval
         (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Member_Index).Inventory) =
         0 then
          Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
          return TCL_OK;
       end if;
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       return
         Sort_Crew_Inventory_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
