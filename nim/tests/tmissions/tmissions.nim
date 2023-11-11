@@ -17,7 +17,7 @@ if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
+loadModules("../bin/data/shipmodules.dat")
 
 playerShip.skyX = 1
 playerShip.skyY = 1
