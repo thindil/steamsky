@@ -22,7 +22,8 @@ import coreui
 type AddingCommandError* = object of CatchableError
   ## Raised when there is problem with adding a Tcl command
 
-proc addCommand*(name: string; nimCommand: TclCmdProc) =
+proc addCommand*(name: string; nimCommand: TclCmdProc) {.sideEffect, raises: [
+    AddingCommandError], tags: [].} =
   if tclEval2(script = "info commands " & name).len > 0:
     raise newException(exceptn = AddingCommandError,
         message = "Command with name " & name & " exists.")
