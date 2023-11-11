@@ -22,13 +22,19 @@ import coreui
 type AddingCommandError* = object of CatchableError
   ## Raised when there is problem with adding a Tcl command
 
-proc addCommand*(name: string; nimCommand: TclCmdProc) {.sideEffect, raises: [
+proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
     AddingCommandError], tags: [].} =
+  ## Add the selected Nim procedure as a Tcl command.
+  ##
+  ## * name    - the name of the Tcl command
+  ## * nimProc - the Nim procedure which will be executed as the Tcl command
+  ##
+  ## Raises AddingCommandError exception if the command can't be added.
   if tclEval2(script = "info commands " & name).len > 0:
     raise newException(exceptn = AddingCommandError,
         message = "Command with name " & name & " exists.")
   if tclCreateCommand(interp = getInterp(), cmdName = name.cstring,
-      cproc = nimCommand, clientData = 0, deleteProc = nil) == nil:
+      cproc = nimProc, clientData = 0, deleteProc = nil) == nil:
     raise newException(exceptn = AddingCommandError,
         message = "Can't add command " & name)
 
