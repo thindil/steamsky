@@ -33,7 +33,7 @@ else:
     tkDllName = "libtk8.6.so(|.1|.0)"
 
 type
-  TFreeProc* = proc (theBlock: pointer){.cdecl.}
+  TFreeProc* = proc (theBlock: pointer) {.cdecl.}
     ## Procedure which will be run during freeing the result value
     ##
     ## * theBlock - the pointer to the value to free
@@ -54,6 +54,11 @@ type
   TclError* = object of CatchableError
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
+
+  TclCmdProc* = proc (clientData: pointer; interp: TclInterp; argc: cint;
+      argv: openArray[cstring]): TclResults {.cdecl.}
+
+  TclCmdDeleteProc* = proc (clientData: pointer) {.cdecl.}
 
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
@@ -102,7 +107,8 @@ proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
   ##
   ## Returns tclOk if the code evaluated correctly, otherwise tclError
 
-proc tclEval*(interp: PInterp = getInterp(); script: string): TclResults {.discardable.} =
+proc tclEval*(interp: PInterp = getInterp();
+    script: string): TclResults {.discardable.} =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
   ##
@@ -130,3 +136,7 @@ proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
   ## Returns the result of the evaluation of the code as Nim string
   interp.tclEval(script = script)
   return $(interp.tclGetResult)
+
+proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
+    clientData: pointer; deleteProc: TclCmdDeleteProc): cint {.cdecl,
+    dynlib: tclDllName, importc: "Tcl_CreateCommand".}
