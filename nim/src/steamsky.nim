@@ -73,6 +73,6 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
 
   # Initialize needed packages
   for package in ["tooltip", "tksvg", "autoscroll"]:
-    if result.tclEval(script = ("package require " & package).cstring) == tclError:
+    if result.tclEval(script = "package require " & package) == tclError:
       raise newException(exceptn = TclError, message = "Can't initialize " &
           package & " package.")
