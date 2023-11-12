@@ -181,3 +181,21 @@ proc tclGetVar*(varName: string): string =
   ##
   ## Returns the value of the selected Tcl variable as a Nim string
   return $tclGetVar(getInterp(), varName.cstring, 1)
+
+proc tclSetVar(interp: PInterp; varName, newValue: cstring;
+    flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar".}
+  ## Set the new value for the selected Tcl variable. If variable doesn't
+  ## exist, it will be created.
+  ##
+  ## * interp   - the Tcl interpreter on which the variable will be set
+  ## * varName  - the name of the Tcl variable to set
+  ## * newValue - the value of the Tcl variable
+  ## * flags    - the flag related to what kind of variable it will be
+
+proc tclSetVar*(varName, newValue: string) =
+  ## Set the new value for the selected Tcl variable. If variable doesn't
+  ## exist, it will be created.
+  ##
+  ## * varName  - the name of the Tcl variable to set
+  ## * newValue - the value of the Tcl variable
+  tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
