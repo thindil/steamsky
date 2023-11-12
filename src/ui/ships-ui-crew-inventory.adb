@@ -628,7 +628,8 @@ package body Ships.UI.Crew.Inventory is
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
       Member_Frame: constant Ttk_Frame :=
         Create(pathName => Member_Canvas & ".frame");
-      Height, Width: Positive := 10;
+      Height: Positive := 10;
+      Width: Positive;
       Free_Space_Label: constant Ttk_Label :=
         Create
           (pathName => Member_Frame & ".freespace",
@@ -1048,7 +1049,7 @@ package body Ships.UI.Crew.Inventory is
               Index => Item_Index)
              .Price);
       Update_Inventory
-        (Member_Index => Member_Index, Amount => (0 - Amount),
+        (Member_Index => Member_Index, Amount => -Amount,
          Inventory_Index => Item_Index, Ship => Player_Ship);
       if
         (Player_Ship.Crew(Member_Index).Order = CLEAN and
@@ -1149,7 +1150,7 @@ package body Ships.UI.Crew.Inventory is
       Amount: Natural := 0;
       Button: constant Ttk_Button :=
         Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 3));
-      Max_Value: constant Positive :=
+      Max_Val: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Spin_Box: constant Ttk_SpinBox :=
         Get_Widget
@@ -1162,8 +1163,8 @@ package body Ships.UI.Crew.Inventory is
          Widgets.configure(Widgt => Button, options => "-state disabled");
          Tcl_SetResult(interp => Interp, str => "1");
          return TCL_OK;
-      elsif Amount > Max_Value then
-         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Value));
+      elsif Amount > Max_Val then
+         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Val));
       end if;
       Widgets.configure(Widgt => Button, options => "-state normal");
       Tcl_SetResult(interp => Interp, str => "1");
@@ -1393,7 +1394,7 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      Is_Used: Boolean;
+      Is_Used: Boolean := False;
       Equip: constant Boolean :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "equip" then True else False);
    begin
