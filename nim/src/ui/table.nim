@@ -17,6 +17,7 @@
 
 import std/strutils
 import ../[config, tk]
+import utilsui
 
 type
   TableWidget* = object
@@ -506,6 +507,14 @@ proc updateCurrentRowCommand*(clientData: cint; interp: TclInterp; argc: cint;
       script = "ttk::style lookup " & gameSettings.interfaceTheme &
       " -background"))
   tclEval(script = canvas & " row$currentrow -fill " & color)
+  tclEval(script = canvas & " itemconfigure row" & $currentRow & " -fill " &
+      tclEval2(script = "ttk::style lookup " & gameSettings.interfaceTheme &
+      " -selectbackground"))
+  tclSetVar("currentRow", $currentRow)
+  return tclOk
+
+proc addCommands*() =
+  addCommand("NimUpdateCurrentRow", updateCurrentRowCommand)
 
 # Temporary code for interfacing with Ada
 
@@ -620,3 +629,9 @@ proc updateAdaHeadersCommand(canvas, command: cstring; columnsWidth: array[10,
       break
     newTable.columnsWidth.add(width)
   updateHeadersCommand(newTable, $command)
+
+proc addAdaCommands() {.raises: [], tags: [], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
