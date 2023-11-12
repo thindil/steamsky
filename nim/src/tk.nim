@@ -109,7 +109,7 @@ proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
   ##
   ## Returns tclOk if Tk initialized correctly, otherwise tclError
 
-proc tclEval*(interp: PInterp; script: cstring): TclResults {.cdecl,
+proc tclEval(interp: PInterp; script: cstring): TclResults {.cdecl,
     dynlib: tclDllName, importc: "Tcl_Eval".}
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation
@@ -163,3 +163,21 @@ proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
   ##                the command, can be nil
   ##
   ## Returns pointer for the newly created command
+
+proc tclGetVar(interp: PInterp; varName: cstring;
+    flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar".}
+  ## Get the value of the selected Tcl variable.
+  ##
+  ## * interp  - the Tcl interpreter from which the variable will be get
+  ## * varName - the name of the Tcl variable to get
+  ## * flags   - the flag related to what kind of variable to search
+  ##
+  ## Returns the value of the selected Tcl variable
+
+proc tclGetVar*(varName: string): string =
+  ## Get the value of the selected Tcl variable.
+  ##
+  ## * varName - the name of the Tcl variable to get
+  ##
+  ## Returns the value of the selected Tcl variable as a Nim string
+  return $tclGetVar(getInterp(), varName.cstring, 1)
