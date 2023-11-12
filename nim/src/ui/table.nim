@@ -487,6 +487,25 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Leave> {}")
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
+proc updateCurrentRowCommand*(clientData: cint; interp: TclInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var currentRow: Natural = tclGetVar("currentrow").parseInt
+  let maxRows: Natural = tclGetVar("maxrows").parseInt
+  if argv[2] == "lower":
+    currentRow.dec
+    if currentRow == 0:
+      currentRow = 1
+  else:
+    currentRow.inc
+    if currentRow > maxRows:
+      currentRow = maxRows
+  let
+    canvas = $argv[1]
+    color = (if currentRow mod 2 > 0: tclEval2(
+      script = "ttk::style lookup Table -rowcolor") else: tclEval2(
+      script = "ttk::style lookup " & gameSettings.interfaceTheme &
+      " -background"))
+  tclEval(script = canvas & " row$currentrow -fill " & color)
 
 # Temporary code for interfacing with Ada
 
