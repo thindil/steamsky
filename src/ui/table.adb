@@ -295,76 +295,6 @@ package body Table is
          Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
 
-   -- ****o* Table/Table.Update_Current_Row_Command
-   -- FUNCTION
-   -- Update Tcl variable currentrow and show the currently selected row in
-   -- the table
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- UpdateCurrentRow canvas action
-   -- Canvas is the name of Table Tk_Canvas in which the current row will
-   -- be updated, action is the name of action which will be taken. Can be
-   -- raise or lower
-   -- SOURCE
-   function Update_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Update_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Current_Row: Natural :=
-        Natural'Value(Tcl_GetVar(interp => Interp, varName => "currentrow"));
-      Max_Rows: constant Natural :=
-        Natural'Value(Tcl_GetVar(interp => Interp, varName => "maxrows")) - 1;
-      Color: constant String :=
-        (if Current_Row rem 2 > 0 then
-           Style_Lookup(Name => "Table", Option => "-rowcolor")
-         else Style_Lookup
-             (Name => To_String(Source => Get_Interface_Theme),
-              Option => "-background"));
-      Can: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-   begin
-      if CArgv.Arg(Argv => Argv, N => 2) = "lower" then
-         Current_Row := Current_Row - 1;
-         if Current_Row = 0 then
-            Current_Row := 1;
-         end if;
-      else
-         Current_Row := Current_Row + 1;
-         if Current_Row > Max_Rows then
-            Current_Row := Max_Rows;
-         end if;
-      end if;
-      Item_Configure
-        (CanvasWidget => Can, TagOrId => "row$currentrow",
-         Options => "-fill " & Color);
-      Item_Configure
-        (CanvasWidget => Can,
-         TagOrId =>
-           "row" & Trim(Source => Natural'Image(Current_Row), Side => Left),
-         Options =>
-           "-fill " &
-           Style_Lookup
-             (Name => To_String(Source => Get_Interface_Theme),
-              Option => "-selectbackground"));
-      Tcl_SetVar
-        (interp => Interp, varName => "currentrow",
-         newValue => Trim(Source => Natural'Image(Current_Row), Side => Left));
-      return TCL_OK;
-   end Update_Current_Row_Command;
-
    -- ****o* Table/Table.Execute_Current_Row_Command
    -- FUNCTION
    -- Execute the Tcl command associated with the current row in the selected
@@ -495,10 +425,12 @@ package body Table is
 
    procedure Add_Commands is
       use Utils.UI;
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaTableCommands";
    begin
-      Add_Command
-        (Name => "UpdateCurrentRow",
-         Ada_Command => Update_Current_Row_Command'Access);
+      Add_Ada_Commands;
       Add_Command
         (Name => "ExecuteCurrentRow",
          Ada_Command => Execute_Current_Row_Command'Access);
