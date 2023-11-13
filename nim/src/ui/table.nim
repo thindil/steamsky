@@ -525,8 +525,15 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return tclError
 
+proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let canvas = $argv[1]
+  return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
+      if gameSettings.rightButton: "3" else: "1") & ">")
+
 proc addCommands*() =
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
+  addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
 
 # Temporary code for interfacing with Ada
 
