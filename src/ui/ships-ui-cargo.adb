@@ -627,7 +627,7 @@ package body Ships.UI.Cargo is
         Create
           (pathName => Item_Dialog & ".givebutton",
            options =>
-             "-image giveicon -command {GiveItem " &
+             "-image give2icon -command {GiveItem " &
              CArgv.Arg(Argv => Argv, N => 1) &
              "} -style Dialoggreen.TButton -text Give");
       Tcl.Tk.Ada.Grid.Grid
