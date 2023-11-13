@@ -488,7 +488,7 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Leave> {}")
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
-proc updateCurrentRowCommand*(clientData: cint; interp: PInterp; argc: cint;
+proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Update the Tcl variable currentrow and show the currently selected row in
   ## the table

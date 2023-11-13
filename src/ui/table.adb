@@ -295,49 +295,6 @@ package body Table is
          Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
 
-   -- ****o* Table/Table.Execute_Current_Row_Command
-   -- FUNCTION
-   -- Execute the Tcl command associated with the current row in the selected
-   -- Table_Widget
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ExecuteCurrentRow canvas
-   -- Canvas is the name of Table Tk_Canvas in which the Tcl command related
-   -- to the current row will be executed
-   -- SOURCE
-   function Execute_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Execute_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Can: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-   begin
-      Tcl_Eval
-        (interp => Interp,
-         strng =>
-           Bind
-             (CanvasWidget => Can, TagOrId => "row$currentrow",
-              Sequence =>
-                "<Button-" &
-                (if Get_Boolean_Setting(Name => "rightButton") then "3"
-                 else "1") &
-                ">"));
-      return TCL_OK;
-   end Execute_Current_Row_Command;
-
    -- ****o* Table/Table.Hide_Current_Row_Command
    -- FUNCTION
    -- Set the normal background color for the current row in the selected
@@ -431,9 +388,6 @@ package body Table is
          External_Name => "addAdaTableCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ExecuteCurrentRow",
-         Ada_Command => Execute_Current_Row_Command'Access);
       Add_Command
         (Name => "HideCurrentRow",
          Ada_Command => Hide_Current_Row_Command'Access);
