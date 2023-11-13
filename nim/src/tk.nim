@@ -55,7 +55,7 @@ type
     ## Used to raise exceptions related to the Tcl/Tk, like failed
     ## initialization, etc.
 
-  TclCmdProc* = proc (clientData: cint; interp: TclInterp; argc: cint;
+  TclCmdProc* = proc (clientData: cint; interp: PInterp; argc: cint;
       argv: openArray[cstring]): TclResults
     ## Procedure which will be executed as Tcl command
     ##
