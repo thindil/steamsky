@@ -490,6 +490,15 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
 
 proc updateCurrentRowCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Update the Tcl variable currentrow and show the currently selected row in
+  ## the table
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if everything was set correctly, otherwise tclError
   try:
     var currentRow: Natural = tclGetVar("currentrow").parseInt
     let maxRows: Natural = tclGetVar("maxrows").parseInt
