@@ -488,7 +488,7 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Leave> {}")
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
-proc updateCurrentRowCommand*(clientData: cint; interp: TclInterp; argc: cint;
+proc updateCurrentRowCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var currentRow: Natural = tclGetVar("currentrow").parseInt
   let maxRows: Natural = tclGetVar("maxrows").parseInt
@@ -514,7 +514,7 @@ proc updateCurrentRowCommand*(clientData: cint; interp: TclInterp; argc: cint;
   return tclOk
 
 proc addCommands*() =
-  addCommand("NimUpdateCurrentRow", updateCurrentRowCommand)
+  addCommand("UpdateCurrentRow", updateCurrentRowCommand)
 
 # Temporary code for interfacing with Ada
 
@@ -630,7 +630,7 @@ proc updateAdaHeadersCommand(canvas, command: cstring; columnsWidth: array[10,
     newTable.columnsWidth.add(width)
   updateHeadersCommand(newTable, $command)
 
-proc addAdaCommands() {.raises: [], tags: [], exportc.} =
+proc addAdaTableCommands() {.raises: [], tags: [], exportc.} =
   try:
     addCommands()
   except:
