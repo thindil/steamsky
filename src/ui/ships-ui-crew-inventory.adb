@@ -289,12 +289,14 @@ package body Ships.UI.Crew.Inventory is
    Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUCI/SUCI.Inventory_Sort_Order
    -- FUNCTION
    -- The current sorting order of items in various inventories
    -- SOURCE
    Inventory_Sort_Order: Inventory_Sort_Orders := Default_Inventory_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
    -- FUNCTION
@@ -1007,6 +1009,7 @@ package body Ships.UI.Crew.Inventory is
              ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Free_Cargo
           (Amount =>
              0 -
@@ -1030,6 +1033,7 @@ package body Ships.UI.Crew.Inventory is
             Title => "No free space in cargo");
          return;
       end if;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Update_Cargo
         (Ship => Player_Ship,
          Proto_Index =>
