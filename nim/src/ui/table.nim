@@ -540,9 +540,20 @@ proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
       if gameSettings.rightButton: "3" else: "1") & ">")
 
+proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    canvas = $argv[1]
+    color = (if tclGetVar("currentrow").parseInt mod 2 > 0: tclEval2(
+        script = "ttk::style lookup Table -rowcolor") else: tclEval2(
+        script = "ttk::style lookup " & gameSettings.interfaceTheme &
+        " -background"))
+  return tclEval(script = canvas & " itemconfigure row$currentrow -fill " & color)
+
 proc addCommands*() =
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
   addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
+  addCommand("HideCurrentRow", hideCurrentRowCommand)
 
 # Temporary code for interfacing with Ada
 
