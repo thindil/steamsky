@@ -1128,6 +1128,8 @@ story.
 * Key `MoveIcon`: Path to the SVG image which will be used for move item to the
   player's ship's cargo button in the item info dialog in the inventory screen.
   Optional.
+* Key `GiveColoredIcon`: Path to the SVG image which will be used for give item
+  button in the give item dialog. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
