@@ -499,6 +499,12 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   ## * argv       - the list of the command's arguments
   ##
   ## Returns tclOk if everything was set correctly, otherwise tclError
+  ##
+  ## Tcl:
+  ## UpdateCurrentRow canvas action
+  ## Canvas is the name of Table Tk_Canvas in which the current row will
+  ## be updated, action is the name of action which will be taken. Can be
+  ## raise or lower
   try:
     var currentRow: Natural = tclGetVar("currentrow").parseInt
     let maxRows: Natural = tclGetVar("maxrows").parseInt
@@ -536,12 +542,30 @@ proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   ## * argv       - the list of the command's arguments
   ##
   ## Returns tclOk if the command was executed correctly, otherwise tclError
+  ##
+  ## Tcl
+  ## ExecuteCurrentRow canvas
+  ## Canvas is the name of Table Tk_Canvas in which the Tcl command related
+  ## to the current row will be executed
   let canvas = $argv[1]
   return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
       if gameSettings.rightButton: "3" else: "1") & ">")
 
 proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the normal background for the current row in the selected TableWidget
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the background was set correctly, otherwise tclError
+  ##
+  ## Tcl:
+  ## HideCurrentRow canvas
+  ## Canvas is the name of Table Tk_Canvas in which the selected row
+  ## background will be recolored
   try:
     let
       canvas = $argv[1]
@@ -554,6 +578,7 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc addCommands*() =
+  ## Add Tcl commands related to the TableWidget
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
   addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
   addCommand("HideCurrentRow", hideCurrentRowCommand)
