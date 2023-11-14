@@ -17,14 +17,10 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Config;
-with Utils.UI;
 
 package body Table is
 
@@ -295,55 +291,6 @@ package body Table is
          Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
 
-   -- ****o* Table/Table.Hide_Current_Row_Command
-   -- FUNCTION
-   -- Set the normal background color for the current row in the selected
-   -- Table_Widget
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- HideCurrentRow canvas
-   -- Canvas is the name of Table Tk_Canvas in which the selected row
-   -- background will be recolored
-   -- SOURCE
-   function Hide_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Hide_Current_Row_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.TtkStyle;
-      use Config;
-
-      Can: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Color: constant String :=
-        (if
-           Natural'Value
-             (Tcl_GetVar(interp => Interp, varName => "currentrow")) rem
-           2 >
-           0
-         then Style_Lookup(Name => "Table", Option => "-rowcolor")
-         else Style_Lookup
-             (Name => To_String(Source => Get_Interface_Theme),
-              Option => "-background"));
-   begin
-      Item_Configure
-        (CanvasWidget => Can, TagOrId => "row$currentrow",
-         Options => "-fill " & Color);
-      return TCL_OK;
-   end Hide_Current_Row_Command;
-
    --## rule off LOCAL_HIDING
    function Is_Checked
      (Table: Table_Widget; Row, Column: Natural) return Boolean is
@@ -382,18 +329,5 @@ package body Table is
             Options => "-image checkbox-checked");
       end if;
    end Toggle_Checked_Button;
-
-   procedure Add_Commands is
-      use Utils.UI;
-      procedure Add_Ada_Commands with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaTableCommands";
-   begin
-      Add_Ada_Commands;
-      Add_Command
-        (Name => "HideCurrentRow",
-         Ada_Command => Hide_Current_Row_Command'Access);
-   end Add_Commands;
 
 end Table;
