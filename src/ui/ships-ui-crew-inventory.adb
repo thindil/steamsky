@@ -19,30 +19,28 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Generic_Array_Sort;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
-with CoreUI; use CoreUI;
+with Config;
+with CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
-with Ships.Cargo; use Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Cargo;
+with Ships.Crew;
 with Table; use Table;
-with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
@@ -93,6 +91,8 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Config;
+
       Member: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -608,6 +608,11 @@ package body Ships.UI.Crew.Inventory is
    function Show_Member_Inventory_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tk.Ada.Winfo;
+      use Tcl.Tklib.Ada.Autoscroll;
       use Tiny_String;
 
       Local_Member_Index: constant Positive :=
@@ -1002,6 +1007,12 @@ package body Ships.UI.Crew.Inventory is
    -- SOURCE
    procedure Move_Item(Item_Index, Amount: Positive) is
       -- ****
+      use Tcl.Tk.Ada.Event;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use CoreUI;
+      use Ships.Cargo;
+      use Ships.Crew;
+
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
@@ -1009,7 +1020,7 @@ package body Ships.UI.Crew.Inventory is
              ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       if Free_Cargo
           (Amount =>
              0 -
@@ -1033,7 +1044,7 @@ package body Ships.UI.Crew.Inventory is
             Title => "No free space in cargo");
          return;
       end if;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Update_Cargo
         (Ship => Player_Ship,
          Proto_Index =>
@@ -1099,6 +1110,7 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tcl.Tk.Ada.Widgets.Toplevel;
 
       Amount: Positive;
       Item_Index: constant Positive :=
