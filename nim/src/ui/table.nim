@@ -527,6 +527,15 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Excecut the Tcl command associated with the current row in the selected
+  ## TableWidget
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the command was executed correctly, otherwise tclError
   let canvas = $argv[1]
   return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
       if gameSettings.rightButton: "3" else: "1") & ">")
