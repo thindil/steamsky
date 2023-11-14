@@ -526,7 +526,7 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let canvas = $argv[1]
   return tclEval(script = canvas & " bind row$currentrow <Button-1" & (
       if gameSettings.rightButton: "3" else: "1") & ">")
