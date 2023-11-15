@@ -579,6 +579,13 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
     raises: [], tags: [].} =
+  ## Check if the selected checkbutton in the TableWidget is checked or not
+  ##
+  ## * table  - the TableWidget in which the checkbox will be checked
+  ## * row    - the row in which the checkbox is
+  ## * column - the column in which the checkbox is
+  ##
+  ## Returns true if the checkbox is checked, otherwise false.
   if tclEval2(script = table.canvas & " itemcget row" & $row & "col" & $column &
       " -image") == "checkbox-checked":
     return true
