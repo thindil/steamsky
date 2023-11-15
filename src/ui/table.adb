@@ -13,8 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl;
@@ -316,22 +314,14 @@ package body Table is
    procedure Toggle_Checked_Button
      (Table: Table_Widget; Row, Column: Natural) is
    --## rule on LOCAL_HIDING
+      procedure Toggle_Ada_Checked_Button(Can: chars_ptr; R, Col: Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "toggleAdaCheckedButton";
    begin
-      if Is_Checked(Table => Table, Row => Row, Column => Column) then
-         Item_Configure
-           (CanvasWidget => Table.Canvas,
-            TagOrId =>
-              "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-              "col" & Trim(Source => Positive'Image(Column), Side => Left),
-            Options => "-image checkbox-unchecked-empty");
-      else
-         Item_Configure
-           (CanvasWidget => Table.Canvas,
-            TagOrId =>
-              "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-              "col" & Trim(Source => Positive'Image(Column), Side => Left),
-            Options => "-image checkbox-checked");
-      end if;
+      Toggle_Ada_Checked_Button
+        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)), R => Row,
+         Col => Column);
    end Toggle_Checked_Button;
 
 end Table;
