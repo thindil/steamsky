@@ -17,8 +17,8 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 
@@ -32,6 +32,8 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
+      use Tcl;
+      use Tcl.Ada;
       use Tcl.Tk.Ada;
 
       --## rule off IMPROPER_INITIALIZATION
@@ -295,14 +297,16 @@ package body Table is
    function Is_Checked
      (Table: Table_Widget; Row, Column: Natural) return Boolean is
    --## rule on LOCAL_HIDING
+      function Is_Ada_Checked
+        (Can: chars_ptr; R, Col: Natural) return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "isAdaChecked";
    begin
-      if Item_Cget
-          (CanvasWidget => Table.Canvas,
-           TagOrId =>
-             "row" & Trim(Source => Positive'Image(Row), Side => Left) &
-             "col" & Trim(Source => Positive'Image(Column), Side => Left),
-           Option => "-image") =
-        "checkbox-checked" then
+      if Is_Ada_Checked
+          (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
+           R => Row, Col => Column) =
+        1 then
          return True;
       end if;
       return False;
