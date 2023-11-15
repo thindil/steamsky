@@ -591,7 +591,8 @@ proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
     return true
   return false
 
-proc toggleCheckedButton*(table: TableWidget; row, column: Natural) =
+proc toggleCheckedButton*(table: TableWidget; row,
+    column: Natural) {.sideEffect, raises: [], tags: [].} =
   if isChecked(table, row, column):
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-unchecked-empty")
@@ -599,7 +600,7 @@ proc toggleCheckedButton*(table: TableWidget; row, column: Natural) =
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-checked")
 
-proc addCommands*() =
+proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the TableWidget
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
   addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
