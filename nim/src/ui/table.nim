@@ -577,6 +577,12 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return tclError
 
+proc isChecked*(table: TableWidget; row, column: Natural): bool =
+  if tclEval2(script = table.canvas & " itemcget row" & $row & "col" & $column &
+      " -image") == "checkbox-checked":
+    return true
+  return false
+
 proc addCommands*() =
   ## Add Tcl commands related to the TableWidget
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
@@ -702,3 +708,10 @@ proc addAdaTableCommands() {.raises: [], tags: [], exportc.} =
     addCommands()
   except:
     echo getCurrentExceptionMsg()
+
+proc isAdaChecked(canvas: cstring; row, column: cint): cint {.raises: [],
+    tags: [], exportc.} =
+  let newTable = TableWidget(canvas: $canvas)
+  if isChecked(newTable, row, column):
+    return 1
+  return 0
