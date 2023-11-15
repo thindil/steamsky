@@ -591,6 +591,14 @@ proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
     return true
   return false
 
+proc toggleCheckedButton*(table: TableWidget; row, column: Natural) =
+  if isChecked(table, row, column):
+    tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
+        $column & " -image checkbox-unchecked-empty")
+  else:
+    tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
+        $column & " -image checkbox-checked")
+
 proc addCommands*() =
   ## Add Tcl commands related to the TableWidget
   addCommand("UpdateCurrentRow", updateCurrentRowCommand)
@@ -723,3 +731,8 @@ proc isAdaChecked(canvas: cstring; row, column: cint): cint {.raises: [],
   if isChecked(newTable, row, column):
     return 1
   return 0
+
+proc toggleAdaCheckedButton(canvas: cstring; row,
+    column: cint): cint {.raises: [], tags: [], exportc.} =
+  let newTable = TableWidget(canvas: $canvas)
+  toggleCheckedButton(newTable, row, column)
