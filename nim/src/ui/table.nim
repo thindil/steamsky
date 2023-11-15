@@ -577,7 +577,8 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return tclError
 
-proc isChecked*(table: TableWidget; row, column: Natural): bool =
+proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
+    raises: [], tags: [].} =
   if tclEval2(script = table.canvas & " itemcget row" & $row & "col" & $column &
       " -image") == "checkbox-checked":
     return true
