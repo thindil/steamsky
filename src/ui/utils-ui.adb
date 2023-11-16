@@ -33,7 +33,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
@@ -73,56 +72,6 @@ package body Utils.UI is
          raise Steam_Sky_Add_Command_Error with "Can't add command " & Name;
       end if;
    end Add_Command;
-
-   -- ****o* UUI/UUI.Resize_Canvas_Command
-   -- PARAMETERS
-   -- Resize the selected canvas
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ResizeCanvas name width height
-   -- Name is the name of the canvas to resize, width it a new width, height
-   -- is a new height
-   -- SOURCE
-   function Resize_Canvas_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Resize_Canvas_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Winfo;
-
-      Canvas: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Parent_Frame: Ttk_Frame;
-   begin
-      if Winfo_Get(Widgt => Canvas, Info => "exists") = "0" then
-         return TCL_OK;
-      end if;
-      Parent_Frame :=
-        Get_Widget
-          (pathName => Winfo_Get(Widgt => Canvas, Info => "parent"),
-           Interp => Interp);
-      Unbind(Widgt => Parent_Frame, Sequence => "<Configure>");
-      Widgets.configure
-        (Widgt => Canvas,
-         options =>
-           "-width " & CArgv.Arg(Argv => Argv, N => 2) & " -height [expr " &
-           CArgv.Arg(Argv => Argv, N => 3) & " - 20]");
-      Bind
-        (Widgt => Parent_Frame, Sequence => "<Configure>",
-         Script => "{ResizeCanvas %W.canvas %w %h}");
-      return TCL_OK;
-   end Resize_Canvas_Command;
 
    -- ****o* UUI/UUI.Check_Amount_Command
    -- PARAMETERS
@@ -740,9 +689,12 @@ package body Utils.UI is
    end Set_Destination_Command;
 
    procedure Add_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaUtilsCommands";
    begin
-      Add_Command
-        (Name => "ResizeCanvas", Ada_Command => Resize_Canvas_Command'Access);
+      Add_Ada_Commands;
       Add_Command
         (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
       Add_Command
