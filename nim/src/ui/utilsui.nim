@@ -159,3 +159,26 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
   else:
     if tclEval(script = "grid remove " & paned) == tclError:
       return
+
+proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let canvas = $argv[1]
+  if tclEval2(script = "winfo exists " & canvas) == "0":
+    return tclOk
+  let parentFrame = tclEval2(script = "winfo parent " & canvas)
+  tclEval(script = "bind " & parentFrame & " <Configure>")
+  tclEval(script = canvas & " configure -width " & $argv[2] &
+      " -height [expr " & $argv[3] & " - 20]")
+  tclEval(script = "bind " & parentFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+  return tclOk
+
+proc addCommands*() =
+  addCommand("ResizeCanvas", resizeCanvasCommand)
+
+# Temporary code for interfacing with Ada
+
+proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
