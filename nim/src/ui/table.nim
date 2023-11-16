@@ -593,6 +593,11 @@ proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
 
 proc toggleCheckedButton*(table: TableWidget; row,
     column: Natural) {.sideEffect, raises: [], tags: [].} =
+  ## Change the state of the selected checkbutton in the selected TableWidget
+  ##
+  ## * table  - the TableWidget in which the checkbox will be toggled
+  ## * row    - the row in which the checkbox is
+  ## * column - the column in which the checkbox is
   if isChecked(table, row, column):
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-unchecked-empty")
