@@ -32,7 +32,7 @@ package body Bases.Trade is
       Ada_Result, Exception_Name: Unbounded_String := Null_Unbounded_String;
       Space_Index: Natural := 0;
       function Hire_Ada_Recruit
-        (R_Index, C, D_Payment, T_Payment, C_Length: Integer)
+        (R_Index, Co, D_Payment, T_Payment, C_Length: Integer)
          return chars_ptr with
          Import => True,
          Convention => C,
@@ -45,7 +45,7 @@ package body Bases.Trade is
       Get_Game_Date;
       Result :=
         Hire_Ada_Recruit
-          (R_Index => Recruit_Index, C => Cost, D_Payment => Daily_Payment,
+          (R_Index => Recruit_Index, Co => Cost, D_Payment => Daily_Payment,
            T_Payment => Trade_Payment, C_Length => Contract_Length);
       if Strlen(Item => Result) > 0 then
          Ada_Result := To_Unbounded_String(Source => Value(Item => Result));
