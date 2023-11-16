@@ -161,7 +161,7 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
       return
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let canvas = $argv[1]
   if tclEval2(script = "winfo exists " & canvas) == "0":
     return tclOk
