@@ -199,3 +199,17 @@ proc tclSetVar*(varName, newValue: string) =
   ## * varName  - the name of the Tcl variable to set
   ## * newValue - the value of the Tcl variable
   tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
+
+proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
+    dynlib: tclDllName, importc: "Tcl_SetResult".}
+  ## Set the new value for the Tcl result
+  ##
+  ## * interp   - the Tcl interpreter on which the result will be set
+  ## * result   - the new value for the Tcl result
+  ## * freeProc - the type of procedure used to free the result
+
+proc tclSetResult*(value: string) =
+  ## Set the new value for the Tcl result on the current Tcl interpreter
+  ##
+  ## * result   - the new value for the Tcl result
+  tclSetResult(getInterp(), value.cstring, 1)
