@@ -172,7 +172,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & parentFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
   return tclOk
 
-proc addCommands*() =
+proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   addCommand("ResizeCanvas", resizeCanvasCommand)
 
 # Temporary code for interfacing with Ada
