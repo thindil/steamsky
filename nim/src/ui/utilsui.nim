@@ -162,6 +162,19 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Resize the selected canvas
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ##
+  ## Tcl:
+  ## ResizeCanvas name width height
+  ## Name is the name of the canvas to resize, width it a new width, height
+  ## is a new height
   let canvas = $argv[1]
   if tclEval2(script = "winfo exists " & canvas) == "0":
     return tclOk
@@ -173,6 +186,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
+  ## Add Tcl commands related to the various UI elements
   addCommand("ResizeCanvas", resizeCanvasCommand)
 
 # Temporary code for interfacing with Ada
