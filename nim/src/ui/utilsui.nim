@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../../src/[bases, config, game, shipscrew, tk, types]
+import std/[tables, strutils]
+import ../../src/[bases, config, game, shipscargo, shipscrew, tk, types]
 import coreui
 
 type AddingCommandError* = object of CatchableError
@@ -225,6 +225,19 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       let label = ".itemdialog.costlbl"
       tclEval(script = label & " configure -text {" & (if argv[4] ==
           "buy": "Cost:" else: "Gain:") & " " & $cost & " " & moneyName & "}")
+      if argv[4] == "buy":
+        tclSetResult("1")
+        return tclOk
+  let
+    label = ".itemdialog.errorlbl"
+    cargoIndex = parseInt(s = $argv[2])
+  if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
+    let amount = getItemAmount(fuelType) - value
+    if amount < gameSettings.lowFuel:
+      tclEval(script = label & " configure -text {" & warningText & "fuel.}")
+      tclEval(script = "grid " & label)
+      tclSetResult("1")
+      return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
