@@ -157,6 +157,7 @@ package Themes is
    -- Sell_Default_Icon     - Icon used for sell items button with default color
    -- Move_Icon             - Icon used for moving items from inventory to cargo
    -- Give_Colored_Icon     - Icon used for give items button with green color
+   -- Drop_Colored_Icon     - Icon used for drop items button with green color
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -257,6 +258,7 @@ package Themes is
       Sell_Default_Icon: Unbounded_String;
       Move_Icon: Unbounded_String;
       Give_Colored_Icon: Unbounded_String;
+      Drop_Colored_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -365,7 +367,8 @@ package Themes is
       Buy_Default_Icon => Default_Theme_Icons_Path & "buy2.svg",
       Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg",
       Move_Icon => Default_Theme_Icons_Path & "cargo2.svg",
-      Give_Colored_Icon => Default_Theme_Icons_Path & "give2.svg");
+      Give_Colored_Icon => Default_Theme_Icons_Path & "give2.svg",
+      Drop_Colored_Icon => Default_Theme_Icons_Path & "drop2.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
