@@ -873,7 +873,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Sort_Bases_Command;
 
-   procedure Add_Commands is
+   procedure Add_Knowledge_Bases_Commands is
    begin
       Add_Command
         (Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
@@ -881,6 +881,6 @@ package body Knowledge.Bases is
         (Name => "ShowBaseInfo", Ada_Command => Show_Base_Info_Command'Access);
       Add_Command
         (Name => "SortKnownBases", Ada_Command => Sort_Bases_Command'Access);
-   end Add_Commands;
+   end Add_Knowledge_Bases_Commands;
 
 end Knowledge.Bases;

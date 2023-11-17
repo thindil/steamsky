@@ -30,11 +30,11 @@ package Knowledge.Bases is
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1);
    -- ****
 
-   -- ****f* KBases/KBases.Add_Commands
+   -- ****f* KBases/KBases.Add_Knowledge_Bases_Commands
    -- FUNCTION
    -- Add Tcl commands related to the list of known bases
    -- SOURCE
-   procedure Add_Commands;
+   procedure Add_Knowledge_Bases_Commands;
    -- ****
 
 end Knowledge.Bases;
