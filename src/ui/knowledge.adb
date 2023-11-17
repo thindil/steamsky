@@ -400,7 +400,7 @@ package body Knowledge is
       Add_Command
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
-      Knowledge.Bases.Add_Commands;
+      Knowledge.Bases.Add_Knowledge_Bases_Commands;
       Knowledge.Events.Add_Commands;
       Knowledge.Missions.Add_Commands;
       Knowledge.Stories.Add_Commands;
