@@ -187,57 +187,80 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  var value = 0
-  if argv[3].len > 0:
-    try:
-      let val = $argv[3]
-      value = val.parseInt
-    except:
-      tclSetResult("0")
-      return tclOk
-  var warningText = ""
-  if $argv[1] == ".itemdialog.giveamount":
-    warningText = "You will give amount below low lewel of "
-  else:
-    warningText = "You will " & $argv[1] & " amount below low lewel of "
-  let
-    spinBox = $argv[1]
-    maxValue = tclEval2(script = spinBox & " cget -to").parseInt
-  let button = $argv[argc - 1]
-  if value < 1:
-    if button.len > 0:
-      tclEval(script = button & " configure -state disabled")
-    tclSetResult("1")
-    return tclOk
-  elif value > maxValue:
-    tclEval(script = spinBox & " set " & $maxValue)
-    value = maxValue
-  if button.len > 0:
-    tclEval(script = button & " configure -state normal")
-  if argc > 4:
-    if argv[4] == "take":
+  try:
+    var value = 0
+    if argv[3].len > 0:
+      try:
+        let val = $argv[3]
+        value = val.parseInt
+      except:
+        tclSetResult("0")
+        return tclOk
+    var warningText = ""
+    if $argv[1] == ".itemdialog.giveamount":
+      warningText = "You will give amount below low lewel of "
+    else:
+      warningText = "You will " & $argv[4] & " amount below low lewel of "
+    let
+      spinBox = $argv[1]
+      maxValue = tclEval2(script = spinBox & " cget -to").parseInt
+    let button = $argv[argc - 1]
+    if value < 1:
+      if button.len > 0:
+        tclEval(script = button & " configure -state disabled")
       tclSetResult("1")
       return tclOk
-    elif $argv[4] in ["buy", "sell"]:
-      var cost: Natural = value * parseInt(s = $argv[5])
-      countPrice(price = cost, traderIndex = findMember(order = talk),
-          reduce = argv[4] == "buy")
-      let label = ".itemdialog.costlbl"
-      tclEval(script = label & " configure -text {" & (if argv[4] ==
-          "buy": "Cost:" else: "Gain:") & " " & $cost & " " & moneyName & "}")
-      if argv[4] == "buy":
+    elif value > maxValue:
+      tclEval(script = spinBox & " set " & $maxValue)
+      value = maxValue
+    if button.len > 0:
+      tclEval(script = button & " configure -state normal")
+    if argc > 4:
+      if argv[4] == "take":
         tclSetResult("1")
         return tclOk
-  let
-    label = ".itemdialog.errorlbl"
-    cargoIndex = parseInt(s = $argv[2])
-  if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
-    let amount = getItemAmount(fuelType) - value
-    if amount < gameSettings.lowFuel:
-      tclEval(script = label & " configure -text {" & warningText & "fuel.}")
-      tclEval(script = "grid " & label)
-      tclSetResult("1")
-      return tclOk
+      elif $argv[4] in ["buy", "sell"]:
+        var cost: Natural = value * parseInt(s = $argv[5])
+        countPrice(price = cost, traderIndex = findMember(order = talk),
+            reduce = argv[4] == "buy")
+        let label = ".itemdialog.costlbl"
+        tclEval(script = label & " configure -text {" & (if argv[4] ==
+            "buy": "Cost:" else: "Gain:") & " " & $cost & " " & moneyName & "}")
+        if argv[4] == "buy":
+          tclSetResult("1")
+          return tclOk
+    let
+      label = ".itemdialog.errorlbl"
+      cargoIndex = parseInt(s = $argv[2])
+    if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
+      let amount = getItemAmount(itemType = fuelType) - value
+      if amount <= gameSettings.lowFuel:
+        tclEval(script = label & " configure -text {" & warningText & "fuel.}")
+        tclEval(script = "grid " & label)
+        tclSetResult("1")
+        return tclOk
+    for member in playerShip.crew:
+      let faction = factionsList[member.faction]
+      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in faction.drinksTypes:
+        let amount = getItemsAmount(iType = "Drinks") - value
+        if amount <= gameSettings.lowDrinks:
+          tclEval(script = label & " configure -text {" & warningText & "drinks.}")
+          tclEval(script = "grid " & label)
+          tclSetResult("1")
+          return tclOk
+      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in faction.foodTypes:
+        let amount = getItemsAmount(iType = "Food") - value
+        if amount <= gameSettings.lowFood:
+          tclEval(script = label & " configure -text {" & warningText & "food.}")
+          tclEval(script = "grid " & label)
+          tclSetResult("1")
+          return tclOk
+    tclEval(script = "grid remove " & label)
+    tclSetResult("1")
+    return tclOk
+  except:
+    tclSetResult("0")
+    return tclError
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
