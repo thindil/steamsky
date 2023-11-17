@@ -696,8 +696,8 @@ package body Utils.UI is
          External_Name => "addAdaUtilsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
+--      Add_Command
+--        (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
       Add_Command
         (Name => "ValidateAmount",
          Ada_Command => Validate_Amount_Command'Access);
