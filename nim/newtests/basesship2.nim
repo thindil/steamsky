@@ -70,6 +70,7 @@ suite "Unit tests for basesships2 module":
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
   generateCargo()
+  skyBases[1].cargo[0].amount = 10_000
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
   test "Testing repairShip.":
