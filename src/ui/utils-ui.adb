@@ -29,7 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -613,6 +613,7 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 
       Widget: constant Ttk_Frame :=
