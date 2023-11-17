@@ -185,9 +185,37 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & parentFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
   return tclOk
 
+proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var value = 0
+  if argv[3].len > 0:
+    try:
+      let val = $argv[3]
+      value = val.parseInt
+    except:
+      tclSetResult("0")
+      return tclOk
+  var warningText = ""
+  if $argv[1] == ".itemdialog.giveamount":
+    warningText = "You will give amount below low lewel of "
+  else:
+    warningText = "You will " & $argv[1] & " amount below low lewel of "
+  let
+    spinBox = $argv[1]
+    maxValue = tclEval2(script = spinBox & " cget -to").parseInt
+  let button = $argv[argc - 1]
+  if value < 1:
+    tclEval(script = button & " configure -state disabled")
+    tclSetResult("1")
+    return tclOk
+  elif value > maxValue:
+    tclEval(script = spinBox & " set " & $maxValue)
+    value = maxValue
+
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   addCommand("ResizeCanvas", resizeCanvasCommand)
+  addCommand("CheckAmount", checkAmountCommand)
 
 # Temporary code for interfacing with Ada
 
