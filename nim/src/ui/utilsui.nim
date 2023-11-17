@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../../src/[config, tk, types]
+import ../../src/[bases, config, game, shipscrew, tk, types]
 import coreui
 
 type AddingCommandError* = object of CatchableError
@@ -205,12 +205,26 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     maxValue = tclEval2(script = spinBox & " cget -to").parseInt
   let button = $argv[argc - 1]
   if value < 1:
-    tclEval(script = button & " configure -state disabled")
+    if button.len > 0:
+      tclEval(script = button & " configure -state disabled")
     tclSetResult("1")
     return tclOk
   elif value > maxValue:
     tclEval(script = spinBox & " set " & $maxValue)
     value = maxValue
+  if button.len > 0:
+    tclEval(script = button & " configure -state normal")
+  if argc > 4:
+    if argv[4] == "take":
+      tclSetResult("1")
+      return tclOk
+    elif $argv[4] in ["buy", "sell"]:
+      var cost: Natural = value * parseInt(s = $argv[5])
+      countPrice(price = cost, traderIndex = findMember(order = talk),
+          reduce = argv[4] == "buy")
+      let label = ".itemdialog.costlbl"
+      tclEval(script = label & " configure -text {" & (if argv[4] ==
+          "buy": "Cost:" else: "Gain:") & " " & $cost & " " & moneyName & "}")
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
