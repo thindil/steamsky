@@ -280,10 +280,20 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     tclSetResult("0")
     return tclError
 
+proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let value = tclEval2(script = $argv[1] & " get").cstring
+  var newArgv: seq[cstring]
+  for i in 0 ..< argc:
+    newArgv.add(argv[i])
+  newArgv.insert(value, 3)
+  return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
+
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   addCommand("ResizeCanvas", resizeCanvasCommand)
   addCommand("CheckAmount", checkAmountCommand)
+  addCommand("ValidateAmount", validateAmountCommand)
 
 # Temporary code for interfacing with Ada
 
