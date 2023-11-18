@@ -187,6 +187,22 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Check the amount of the item, if it is not below low level of warning or
+  ## if the entered amount is a proper number
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the amount is valid, otherwise tclError
+  ##
+  ## Tcl:
+  ## CheckAmount name cargoindex value action button
+  ## Name is the name of spinbox which value will be checked, cargoindex is
+  ## the index of the item in the cargo, value is the value entered by the
+  ## player, action is the action performed by the player and button is
+  ## the button which accept the action
   try:
     var value = 0
     if argv[3].len > 0:
