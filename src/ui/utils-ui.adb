@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings;
@@ -27,10 +26,7 @@ with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
@@ -38,7 +34,6 @@ with Combat.UI;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Events;
-with Factions;
 with Items; use Items;
 with Maps;
 with Maps.UI; use Maps.UI;
@@ -72,245 +67,6 @@ package body Utils.UI is
          raise Steam_Sky_Add_Command_Error with "Can't add command " & Name;
       end if;
    end Add_Command;
-
-   --## rule off REDREDUCEABLE_SCOPE
-   -- ****o* UUI/UUI.Check_Amount_Command
-   -- PARAMETERS
-   -- Check amount of the item, if it is not below low level warning or if
-   -- entered amount is a proper number
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- CheckAmount name cargoindex value action button
-   -- Name is the name of spinbox which value will be checked, cargoindex is
-   -- the index of the item in the cargo, value is the value entered by the
-   -- player, action is the action performed by the player and button is
-   -- the button which accept the action
-   -- SOURCE
-   function Check_Amount_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Check_Amount_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-      use Ada.Characters.Handling;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tiny_String;
-      use Factions;
-
-      Cargo_Index: constant Natural :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Warning_Text: Unbounded_String := Null_Unbounded_String;
-      Amount: Integer := 0;
-      Label: Ttk_Label :=
-        Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      Value: Integer := 0;
-      Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Max_Value: constant Positive :=
-        Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
-      Button: constant Ttk_Button :=
-        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => Argc - 1));
-      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
-   begin
-      if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
-         Check_Argument_Loop :
-         for Char of CArgv.Arg(Argv => Argv, N => 3) loop
-            if not Is_Decimal_Digit(Item => Char) then
-               Tcl_SetResult(interp => Interp, str => "0");
-               return TCL_OK;
-            end if;
-         end loop Check_Argument_Loop;
-         if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
-            Value := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
-         else
-            Value := 0;
-         end if;
-      end if;
-      if CArgv.Arg(Argv => Argv, N => 1) = ".itemdialog.giveamount" then
-         Warning_Text :=
-           To_Unbounded_String
-             (Source => "You will give amount below low level of ");
-      else
-         Warning_Text :=
-           To_Unbounded_String
-             (Source =>
-                "You will " & CArgv.Arg(Argv => Argv, N => 4) &
-                " amount below low level of ");
-      end if;
-      if Value < 1 then
-         if Strlen(Item => Button.Name) > 0 then
-            Widgets.configure(Widgt => Button, options => "-state disabled");
-         end if;
-         Tcl_SetResult(interp => Interp, str => "1");
-         return TCL_OK;
-      elsif Value > Max_Value then
-         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Value));
-         Value := Max_Value;
-      end if;
-      if Strlen(Item => Button.Name) > 0 then
-         Widgets.configure(Widgt => Button, options => "-state normal");
-      end if;
-      if Argc > 4 then
-         if CArgv.Arg(Argv => Argv, N => 4) = "take" then
-            Tcl_SetResult(interp => Interp, str => "1");
-            return TCL_OK;
-         elsif CArgv.Arg(Argv => Argv, N => 4) in "buy" | "sell" then
-            Set_Price_Info_Block :
-            declare
-               Cost: Natural :=
-                 Value * Positive'Value(CArgv.Arg(Argv => Argv, N => 5));
-            begin
-               Label :=
-                 Get_Widget
-                   (pathName => ".itemdialog.costlbl", Interp => Interp);
-               Count_Price
-                 (Price => Cost, Trader_Index => Find_Member(Order => TALK),
-                  Reduce =>
-                    (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True
-                     else False));
-               configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" &
-                    (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then "Cost:"
-                     else "Gain:") &
-                    Natural'Image(Cost) & " " &
-                    To_String(Source => Money_Name) & "}");
-               if CArgv.Arg(Argv => Argv, N => 4) = "buy" then
-                  Tcl_SetResult(interp => Interp, str => "1");
-                  return TCL_OK;
-               end if;
-            end Set_Price_Info_Block;
-         end if;
-      end if;
-      Label :=
-        Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      if To_String
-          (Source =>
-             Get_Proto_Item
-               (Index =>
-                  Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                    .Proto_Index)
-               .I_Type) =
-        To_String(Source => Fuel_Type) then
-         Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
-         if Amount <= Get_Integer_Setting(Name => "lowFuel") then
-            Widgets.configure
-              (Widgt => Label,
-               options =>
-                 "-text {" & To_String(Source => Warning_Text) & "fuel.}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-            Tcl_SetResult(interp => Interp, str => "1");
-            return TCL_OK;
-         end if;
-      end if;
-      Check_Food_And_Drinks_Loop :
-      for Member of Player_Ship.Crew loop
-         Faction := Get_Faction(Index => Member.Faction);
-         if Faction.Drinks_Types.Contains
-             (Item =>
-                Get_Proto_Item
-                  (Index =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                       .Proto_Index)
-                  .I_Type) then
-            Amount := Get_Items_Amount(I_Type => "Drinks") - Value;
-            if Amount <= Get_Integer_Setting(Name => "lowDrinks") then
-               Widgets.configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" & To_String(Source => Warning_Text) &
-                    "drinks.}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-               Tcl_SetResult(interp => Interp, str => "1");
-               return TCL_OK;
-            end if;
-            exit Check_Food_And_Drinks_Loop;
-         elsif Faction.Food_Types.Contains
-             (Item =>
-                Get_Proto_Item
-                  (Index =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                       .Proto_Index)
-                  .I_Type) then
-            Amount := Get_Items_Amount(I_Type => "Food") - Value;
-            if Amount <= Get_Integer_Setting(Name => "lowFood") then
-               Widgets.configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" & To_String(Source => Warning_Text) & "food.}");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-               Tcl_SetResult(interp => Interp, str => "1");
-               return TCL_OK;
-            end if;
-            exit Check_Food_And_Drinks_Loop;
-         end if;
-      end loop Check_Food_And_Drinks_Loop;
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Tcl_SetResult(interp => Interp, str => "1");
-      return TCL_OK;
-   exception
-      when Constraint_Error =>
-         Tcl_SetResult(interp => Interp, str => "0");
-         return TCL_OK;
-   end Check_Amount_Command;
-   --## rule on REDREDUCEABLE_SCOPE
-
-   -- ****o* UUI/UUI.Validate_Amount_Command
-   -- PARAMETERS
-   -- Validate amount of the item when button to increase or decrease the
-   -- amount was pressed
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ValidateAmount name
-   -- Name is the name of spinbox which value will be validated
-   -- SOURCE
-   function Validate_Amount_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Validate_Amount_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      New_Argv: constant CArgv.Chars_Ptr_Ptr :=
-        (if Argc < 4 then Argv & Get(Widgt => Spin_Box)
-         elsif Argc = 4 then
-           CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
-           CArgv.Arg(Argv => Argv, N => 1) & CArgv.Arg(Argv => Argv, N => 2) &
-           Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3)
-         else CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
-           CArgv.Arg(Argv => Argv, N => 1) & CArgv.Arg(Argv => Argv, N => 2) &
-           Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3) &
-           CArgv.Arg(Argv => Argv, N => 4) & CArgv.Arg(Argv => Argv, N => 5));
-   begin
-      return
-        Check_Amount_Command
-          (Client_Data => Client_Data, Interp => Interp,
-           Argc => CArgv.Argc(Argv => New_Argv), Argv => New_Argv);
-   end Validate_Amount_Command;
 
    -- ****o* UUI/UUI.Set_Text_Variable_Command
    -- FUNCTION
@@ -698,9 +454,6 @@ package body Utils.UI is
          External_Name => "addAdaUtilsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ValidateAmount",
-         Ada_Command => Validate_Amount_Command'Access);
       Add_Command
         (Name => "SetTextVariable",
          Ada_Command => Set_Text_Variable_Command'Access);
