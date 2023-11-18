@@ -112,10 +112,11 @@ package body Knowledge.Bases is
       Search_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => Bases_Frame & ".options.search");
       Tokens: Slice_Set;
-      Rows: Natural := 0;
+      Rows: Natural;
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Bases_Frame & ".options.types");
-      Bases_Type, Bases_Owner, Bases_Status, Color: Unbounded_String;
+      Bases_Type, Bases_Owner, Bases_Status, Color: Unbounded_String :=
+        Null_Unbounded_String;
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
@@ -448,7 +449,7 @@ package body Knowledge.Bases is
               (Widgt => Reputation_Progress,
                options =>
                  "-width" &
-                 Positive'Image(abs (Sky_Bases(Base_Index).Reputation.Level)));
+                 Positive'Image(abs Sky_Bases(Base_Index).Reputation.Level));
             if Sky_Bases(Base_Index).Reputation.Level > 0 then
                configure
                  (Widgt => Reputation_Progress,
@@ -491,7 +492,7 @@ package body Knowledge.Bases is
               Formated_Time(Time => Sky_Bases(Base_Index).Visited));
          Show_Mission_And_Recruits_Info_Block :
          declare
-            Time_Diff: Integer;
+            Time_Diff: Integer := 0;
          begin
             if Sky_Bases(Base_Index).Population > 0 and
               Sky_Bases(Base_Index).Reputation.Level > -25 then
