@@ -231,7 +231,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
           return tclOk
     let
       label = ".itemdialog.errorlbl"
-      cargoIndex = parseInt(s = $argv[2])
+      cargoIndex = parseInt(s = $argv[2]) - 1
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount = getItemAmount(itemType = fuelType) - value
       if amount <= gameSettings.lowFuel:
@@ -241,14 +241,16 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         return tclOk
     for member in playerShip.crew:
       let faction = factionsList[member.faction]
-      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in faction.drinksTypes:
+      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.drinksTypes:
         let amount = getItemsAmount(iType = "Drinks") - value
         if amount <= gameSettings.lowDrinks:
           tclEval(script = label & " configure -text {" & warningText & "drinks.}")
           tclEval(script = "grid " & label)
           tclSetResult("1")
           return tclOk
-      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in faction.foodTypes:
+      elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.foodTypes:
         let amount = getItemsAmount(iType = "Food") - value
         if amount <= gameSettings.lowFood:
           tclEval(script = label & " configure -text {" & warningText & "food.}")
