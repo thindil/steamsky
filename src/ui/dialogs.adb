@@ -733,7 +733,7 @@ package body Dialogs is
           (pathName => Item_Dialog & ".dropbutton",
            options =>
              "-command {" & Command & "} -style Dialoggreen.TButton" &
-             (if Action = "drop" then " -image dropicon"
+             (if Action = "drop" then " -image drop2icon"
               elsif Action = "take" then " -image giveicon"
               elsif Action = "buy" then " -image buyicon"
               elsif Action = "sell" then " -image sellicon" else "") &
