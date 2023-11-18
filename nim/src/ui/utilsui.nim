@@ -281,7 +281,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let value = tclEval2(script = $argv[1] & " get").cstring
   var newArgv: seq[cstring]
   for i in 0 ..< argc:
