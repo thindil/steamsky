@@ -73,6 +73,7 @@ package body Utils.UI is
       end if;
    end Add_Command;
 
+   --## rule off REDREDUCEABLE_SCOPE
    -- ****o* UUI/UUI.Check_Amount_Command
    -- PARAMETERS
    -- Check amount of the item, if it is not below low level warning or if
@@ -266,6 +267,7 @@ package body Utils.UI is
          Tcl_SetResult(interp => Interp, str => "0");
          return TCL_OK;
    end Check_Amount_Command;
+   --## rule on REDREDUCEABLE_SCOPE
 
    -- ****o* UUI/UUI.Validate_Amount_Command
    -- PARAMETERS
@@ -696,8 +698,6 @@ package body Utils.UI is
          External_Name => "addAdaUtilsCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
       Add_Command
         (Name => "ValidateAmount",
          Ada_Command => Validate_Amount_Command'Access);
