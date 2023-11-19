@@ -1130,6 +1130,8 @@ story.
   Optional.
 * Key `GiveColoredIcon`: Path to the SVG image which will be used for give item
   button in the give item dialog. Optional.
+* Key `DropColoredIcon`: Path to the SVG image which will be used for drop item
+  button in the drop item dialog. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
