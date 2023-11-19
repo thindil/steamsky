@@ -117,8 +117,10 @@ package body Knowledge.Bases is
         Get_Widget(pathName => Bases_Frame & ".options.types");
       Bases_Type, Bases_Owner, Bases_Status, Color: Unbounded_String :=
         Null_Unbounded_String;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
    begin
       Create
@@ -164,7 +166,9 @@ package body Knowledge.Bases is
       Bases_Type := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Combo_Box.Name := New_String(Str => Bases_Frame & ".options.status");
       Bases_Status := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      --## rule off ASSIGNMENTS
       Combo_Box.Name := New_String(Str => Bases_Frame & ".options.owner");
+      --## rule on ASSIGNMENTS
       Bases_Owner := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Rows := 0;
       Load_Bases_Loop :
@@ -410,7 +414,7 @@ package body Knowledge.Bases is
           (Name => ".basedialog",
            Title => To_String(Source => Sky_Bases(Base_Index).Name),
            Columns => 3);
-      Base_Label: Ttk_Label;
+      Base_Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Base_Info: Unbounded_String;
       Base_Button: Ttk_Button :=
         Create
@@ -696,10 +700,12 @@ package body Knowledge.Bases is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         Get_Column_Number
           (Table => Bases_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
@@ -712,7 +718,10 @@ package body Knowledge.Bases is
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Bases: Bases_Array (Bases_Range);
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Base_Data) return Boolean is
       begin
          if Bases_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -834,6 +843,7 @@ package body Knowledge.Bases is
       if Bases_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Bases_Loop :
       for I in Sky_Bases'Range loop
          Local_Bases(I) :=
