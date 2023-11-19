@@ -302,6 +302,19 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   newArgv.insert(value, 3)
   return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
 
+proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    varName = $argv[1]
+    tEntry = ".getstring.entry"
+    value = tclEval2(script = tEntry & " get")
+  tclSetVar(varName, value)
+  if varName == "shipname":
+    playerShip.name = value
+  elif varName.len > 10 and varName[0 .. 9] == "modulename":
+    let moduleIndex = varName[10 .. ^1].parseInt
+    playerShip.modules[moduleIndex].name = value
+
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   addCommand("ResizeCanvas", resizeCanvasCommand)
