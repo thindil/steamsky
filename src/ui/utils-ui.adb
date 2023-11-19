@@ -23,13 +23,13 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Bases; use Bases;
+with Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
@@ -40,7 +40,7 @@ with Maps.UI; use Maps.UI;
 with MainMenu;
 with Messages; use Messages;
 with Missions;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement;
 with Ships.UI.Crew; use Ships.UI.Crew;
@@ -157,6 +157,7 @@ package body Utils.UI is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Directories;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Bases;
       use Maps;
       use MainMenu;
       use Tiny_String;
@@ -175,6 +176,8 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          Set_Home_Base_Block :
          declare
+            use Ships.Cargo;
+
             Trader_Index: constant Natural := Find_Member(Order => TALK);
             Price: Positive := 1_000;
             Money_Index2: constant Natural :=
@@ -265,6 +268,7 @@ package body Utils.UI is
       elsif Result = "showstats" then
          Show_Game_Stats_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.TtkButton;
             use Statistics.UI;
 
             Button: constant Ttk_Button :=
