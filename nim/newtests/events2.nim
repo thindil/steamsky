@@ -1,5 +1,5 @@
-import ../src/[careers, crafts, events2, factions, game, items, maps, mobs,
-    ships, shipmodules, types]
+import ../src/[basestypes, careers, crafts, events2, factions, game, items,
+    maps, mobs, ships, shipmodules, types]
 import unittest2
 
 suite "Unit tests for events2 module":
@@ -7,6 +7,7 @@ suite "Unit tests for events2 module":
   checkpoint "Loading the game data."
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
+  loadBasesTypes("../bin/data/bases.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
   loadModules("../bin/data/shipmodules.dat")
