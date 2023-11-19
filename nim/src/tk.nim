@@ -200,6 +200,20 @@ proc tclSetVar*(varName, newValue: string) =
   ## * newValue - the value of the Tcl variable
   tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
 
+proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
+    dynlib: tclDllName, importc: "Tcl_UnsetVar".}
+  ## Remove the selected Tcl variable.
+  ##
+  ## * interp   - the Tcl interpreter on which the variable will be removed
+  ## * varName  - the name of the Tcl variable to remove
+  ## * flags    - the flag related to what kind of variable it is
+
+proc tclUnsetVar*(varName: string) =
+  ## Remove the selected Tcl variable.
+  ##
+  ## * varName  - the name of the Tcl variable to remove
+  tclUnsetVar(getInterp(), varName.cstring, 1)
+
 proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
     dynlib: tclDllName, importc: "Tcl_SetResult".}
   ## Set the new value for the Tcl result
