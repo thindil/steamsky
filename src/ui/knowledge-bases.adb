@@ -706,6 +706,7 @@ package body Knowledge.Bases is
           (Table => Bases_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Base_Data is record
          Name: Bounded_String;
          Distance: Natural;
@@ -718,6 +719,7 @@ package body Knowledge.Bases is
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Local_Bases: Bases_Array (Bases_Range);
       --## rule on IMPROPER_INITIALIZATION
@@ -875,11 +877,13 @@ package body Knowledge.Bases is
             Id => I);
       end loop Fill_Local_Bases_Loop;
       Sort_Bases(Container => Local_Bases);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Bases_Indexes.Clear;
       Fill_Bases_Indexes_Loop :
       for Base of Local_Bases loop
          Bases_Indexes.Append(New_Item => Base.Id);
       end loop Fill_Bases_Indexes_Loop;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
    end Sort_Bases_Command;
