@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[game, config, crafts, types]
+import ../[game, config, crafts, tk, types]
 import coreui, table
 
 var
@@ -109,7 +109,9 @@ proc updateModulesInfo*(page: Positive = 1) =
       modulesIndexes.add(index)
   clearTable(modulesTable)
   let startRow = ((page - 1) * gameSettings.listsLimit) + 1
-  var currentRow = 1
+  var
+    currentRow = 1
+    row = 2
   for index in modulesIndexes:
     if currentRow < startRow:
       currentRow.inc
@@ -124,3 +126,22 @@ proc updateModulesInfo*(page: Positive = 1) =
     addButton(table = modulesTable, text = getModuleInfo(moduleIndex = index),
         tooltip = "Show the module's info", command = "ShowModuleInfo " &
         $index, column = 3, newRow = true)
+    row.inc
+    if modulesTable.row == gameSettings.listsLimit + 1:
+      break
+    if page > 1:
+      if modulesTable.row < gameSettings.listsLimit + 1:
+        addPagination(table = modulesTable, previousCommand = "ShowModules " &
+            $(page - 1))
+      else:
+        addPagination(table = modulesTable, previousCommand = "ShowModules " &
+            $(page - 1), nextCommand = "ShowModules " & $(page + 1))
+    elif modulesTable.row == gameSettings.listsLimit + 1:
+      addPagination(table = modulesTable, nextCommand = "ShowModules " & $(
+          page + 1))
+    updateTable(table = modulesTable)
+    tclEval(script = "update")
+    tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
+        script = shipCanvas & " bbox all") & "]")
+    tclEval(script = shipCanvas & " xview moveto 0.0")
+    tclEval(script = shipCanvas & " yview moveto 0.0")
