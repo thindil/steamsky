@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[game, config, types]
+import ../[game, config, crafts, types]
 import coreui, table
 
 var
@@ -39,6 +39,42 @@ proc getModuleInfo(moduleIndex: Natural): string =
       result.add(" no gunner.")
     else:
       result.add(" " & playerShip.crew[module.owner[0]].name & " is gunner.")
+  of workshop:
+    let recipeName = getWorkshopRecipeName(moduleIndex)
+    if recipeName.len > 0:
+      result = recipeName
+      var hasWorkers = false
+      for owner in module.owner:
+        if owner > -1:
+          if hasWorkers:
+            result.add(", " & playerShip.crew[owner].name)
+          else:
+            result.add(", workers: " & playerShip.crew[owner].name)
+          hasWorkers = true
+      if not hasWorkers:
+        result.add(", no workers assigned")
+      result.add(".")
+    else:
+      result = "No crafting order."
+  of engine:
+    if module.disabled:
+      result = "Engine disabled"
+  of trainingRoom:
+    if module.trainedSkill > 0:
+      result = "Set for training " & skillsList[module.trainedSkill].name
+      var hasTrainees = false
+      for owner in module.owner:
+        if owner > -1:
+          if hasTrainees:
+            result.add(", " & playerShip.crew[owner].name)
+          else:
+            result.add(", trainees: " & playerShip.crew[owner].name)
+          hasTrainees = true
+      if not hasTrainees:
+        result.add(", no trainees assigned")
+      result.add(".")
+    else:
+      result = "Not set for training."
   else:
     discard
 
@@ -69,3 +105,6 @@ proc updateModulesInfo*(page: Positive = 1) =
         index].durability, maxValue = playerShip.modules[index].maxDurability,
         tooltip = "Show the module's info", command = "ShowModuleInfo " &
         $index, column = 2)
+    addButton(table = modulesTable, text = getModuleInfo(moduleIndex = index),
+        tooltip = "Show the module's info", command = "ShowModuleInfo " &
+        $index, column = 3, newRow = true)
