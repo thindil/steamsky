@@ -15,9 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import ../[game, config]
 import coreui, table
 
-var modulesTable: TableWidget
+var
+  modulesTable: TableWidget
+  modulesIndexes: seq[Natural]
 
 proc updateModulesInfo*(page: Positive = 1) =
   let
@@ -28,3 +31,21 @@ proc updateModulesInfo*(page: Positive = 1) =
         "Durability", "Additional info"], scrollbar = mainPaned &
         ".shipinfoframe.modules.scrolly", command = "SortShipModules",
         tooltipText = "Press mouse button to sort the modules.")
+  if modulesIndexes.len != playerShip.modules.len:
+    modulesIndexes = @[]
+    for index, _ in playerShip.modules:
+      modulesIndexes.add(index)
+  clearTable(modulesTable)
+  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
+  for index in modulesIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    addButton(table = modulesTable, text = playerShip.modules[index].name,
+        tooltip = "Show the module's info", command = "ShowModuleInfo " &
+        $index, column = 1)
+    addProgressbar(table = modulesTable, value = playerShip.modules[
+        index].durability, maxValue = playerShip.modules[index].maxDurability,
+        tooltip = "Show the module's info", command = "ShowModuleInfo " &
+        $index, column = 2)
