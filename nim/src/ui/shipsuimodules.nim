@@ -25,6 +25,12 @@ var
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
     tags: [].} =
+  ## Get the additional information about the module
+  ##
+  ## * moduleIndex - the index of the module in the player's ship to show info
+  ##
+  ## Returns the string with the additional information about the module or the
+  ## empty string if no info is available
   let module = playerShip.modules[moduleIndex]
   case module.mType
   of gun:
