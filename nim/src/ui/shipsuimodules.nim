@@ -23,24 +23,31 @@ var
   modulesTable: TableWidget
   modulesIndexes: seq[Natural]
 
-proc getModuleInfo(moduleIndex: Natural): string =
+proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
+    tags: [].} =
   let module = playerShip.modules[moduleIndex]
   case module.mType
   of gun:
-    if module.ammoIndex in 0 ..
-        playerShip.cargo.high and itemsList[playerShip.cargo[
-            module.ammoIndex].protoIndex].itemType == itemsTypesList[
-            modulesList[module.protoIndex].value]:
-      result = "Uses " & itemsList[playerShip.cargo[
-          module.ammoIndex].protoIndex].name & ", "
-    else:
+    try:
+      if module.ammoIndex in 0 ..
+          playerShip.cargo.high and itemsList[playerShip.cargo[
+              module.ammoIndex].protoIndex].itemType == itemsTypesList[
+              modulesList[module.protoIndex].value]:
+        result = "Uses " & itemsList[playerShip.cargo[
+            module.ammoIndex].protoIndex].name & ", "
+      else:
+        result = "No ammunition assigned, "
+    except:
       result = "No ammunition assigned, "
     if module.owner[0] == -1:
       result.add(" no gunner.")
     else:
       result.add(" " & playerShip.crew[module.owner[0]].name & " is gunner.")
   of workshop:
-    let recipeName = getWorkshopRecipeName(moduleIndex)
+    let recipeName = try:
+        getWorkshopRecipeName(moduleIndex)
+      except:
+        ""
     if recipeName.len > 0:
       result = recipeName
       var hasWorkers = false
@@ -60,20 +67,23 @@ proc getModuleInfo(moduleIndex: Natural): string =
     if module.disabled:
       result = "Engine disabled"
   of trainingRoom:
-    if module.trainedSkill > 0:
-      result = "Set for training " & skillsList[module.trainedSkill].name
-      var hasTrainees = false
-      for owner in module.owner:
-        if owner > -1:
-          if hasTrainees:
-            result.add(", " & playerShip.crew[owner].name)
-          else:
-            result.add(", trainees: " & playerShip.crew[owner].name)
-          hasTrainees = true
-      if not hasTrainees:
-        result.add(", no trainees assigned")
-      result.add(".")
-    else:
+    try:
+      if module.trainedSkill > 0:
+        result = "Set for training " & skillsList[module.trainedSkill].name
+        var hasTrainees = false
+        for owner in module.owner:
+          if owner > -1:
+            if hasTrainees:
+              result.add(", " & playerShip.crew[owner].name)
+            else:
+              result.add(", trainees: " & playerShip.crew[owner].name)
+            hasTrainees = true
+        if not hasTrainees:
+          result.add(", no trainees assigned")
+        result.add(".")
+      else:
+        result = "Not set for training."
+    except:
       result = "Not set for training."
   else:
     discard
