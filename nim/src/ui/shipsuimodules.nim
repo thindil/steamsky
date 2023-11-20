@@ -15,12 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[game, config]
+import ../[game, config, types]
 import coreui, table
 
 var
   modulesTable: TableWidget
   modulesIndexes: seq[Natural]
+
+proc getModuleInfo(moduleIndex: Natural): string =
+  let module = playerShip.modules[moduleIndex]
+  case module.mType
+  of gun:
+    if playerShip.modules[moduleIndex].ammoIndex in 0 ..
+        playerShip.cargo.high and itemsList[playerShip.cargo[playerShip.modules[
+        moduleIndex].ammoIndex].protoIndex].itemType == modulesList[
+        playerShip.modules[moduleIndex].protoIndex].value:
+      result = "Uses " & itemsList[playerShip.cargo[playerShip.modules[
+          moduleIndex].ammoIndex].protoIndex].name & ", "
+    else:
+      result = "No ammunition assigned, "
+  else:
+    discard
 
 proc updateModulesInfo*(page: Positive = 1) =
   let
