@@ -94,7 +94,8 @@ proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
   else:
     discard
 
-proc updateModulesInfo*(page: Positive = 1) =
+proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
+    tags: [].} =
   let
     shipCanvas = mainPaned & ".shipinfoframe.modules.canvas"
     shipInfoFrame = shipCanvas & ".frame"
