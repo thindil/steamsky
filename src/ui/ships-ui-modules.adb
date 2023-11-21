@@ -2410,7 +2410,7 @@ package body Ships.UI.Modules is
       --## rule on TYPE_INITIAL_VALUES
       M_Array: Modules_Array := (others => 0);
       N_Width: Nim_Width := (others => 0);
-      Index: Positive := 1;
+      Index: Natural := 0;
       procedure Update_Ada_Modules_Info(P: Positive; Modules: Modules_Array; W: out Nim_Width) with
          Import => True,
          Convention => C,
@@ -2444,6 +2444,7 @@ package body Ships.UI.Modules is
          Index := Index + 1;
       end loop Convert_Modules_Indexes_Loop;
       Update_Ada_Modules_Info(P => Page, Modules => M_Array, W => N_Width);
+      Index := 1;
       Convert_Headers_Width_Loop :
       for Width of N_Width loop
          exit Convert_Headers_Width_Loop when Width = 0;

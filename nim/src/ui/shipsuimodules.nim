@@ -102,7 +102,7 @@ proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
   let
     shipCanvas = mainPaned & ".shipinfoframe.modules.canvas"
     shipInfoFrame = shipCanvas & ".frame"
-  if modulesTable.rowHeight == 1:
+  if modulesTable.rowHeight == 0:
     modulesTable = createTable(parent = shipInfoFrame, headers = @["Name",
         "Durability", "Additional info"], scrollbar = mainPaned &
         ".shipinfoframe.modules.scrolly", command = "SortShipModules",
@@ -122,14 +122,14 @@ proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
       continue
     addButton(table = modulesTable, text = playerShip.modules[index].name,
         tooltip = "Show the module's info", command = "ShowModuleInfo " &
-        $index, column = 1)
+        $(index + 1), column = 1)
     addProgressbar(table = modulesTable, value = playerShip.modules[
         index].durability, maxValue = playerShip.modules[index].maxDurability,
         tooltip = "Show the module's info", command = "ShowModuleInfo " &
-        $index, column = 2)
+        $(index + 1), column = 2)
     addButton(table = modulesTable, text = getModuleInfo(moduleIndex = index),
         tooltip = "Show the module's info", command = "ShowModuleInfo " &
-        $index, column = 3, newRow = true)
+        $(index + 1), column = 3, newRow = true)
     row.inc
     if modulesTable.row == gameSettings.listsLimit + 1:
       break
@@ -164,4 +164,4 @@ proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint]) {.raises: [], t
   try:
     updateModulesInfo(page)
   except:
-    echo "error"
+    discard
