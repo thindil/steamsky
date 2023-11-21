@@ -149,3 +149,8 @@ proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
         script = shipCanvas & " bbox all") & "]")
     tclEval(script = shipCanvas & " xview moveto 0.0")
     tclEval(script = shipCanvas & " yview moveto 0.0")
+
+# Temporary code for interfacing with Ada
+
+proc getAdaModuleInfo(moduleIndex: cint): cstring {.raises: [], tags: [], exportc.} =
+  return getModuleInfo(moduleIndex - 1).cstring
