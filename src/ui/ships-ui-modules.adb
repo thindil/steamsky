@@ -43,7 +43,6 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
--- with CoreUI;
 with Crafts; use Crafts;
 with Dialogs; use Dialogs;
 with Factions;
@@ -2392,19 +2391,6 @@ package body Ships.UI.Modules is
    end Get_Module_Info;
 
    procedure Update_Modules_Info(Page: Positive := 1) is
---      use CoreUI;
---      use Tiny_String;
---
---      Ship_Canvas: constant Tk_Canvas :=
---        Get_Widget(pathName => Main_Paned & ".shipinfoframe.modules.canvas");
---      Ship_Info_Frame: constant Ttk_Frame :=
---        Get_Widget(pathName => Ship_Canvas & ".frame");
---      Row: Positive := 2;
---      --## rule off SIMPLIFIABLE_EXPRESSIONS
---      Start_Row: constant Positive :=
---        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
---      --## rule on SIMPLIFIABLE_EXPRESSIONS
---      Current_Row: Positive := 1;
       --## rule off TYPE_INITIAL_VALUES
       type Modules_Array is array(0 .. 50) of Natural;
       --## rule on TYPE_INITIAL_VALUES
@@ -2416,20 +2402,6 @@ package body Ships.UI.Modules is
          Convention => C,
          External_Name => "updateAdaModulesInfo";
    begin
---      if Modules_Table.Row_Height = 1 then
---         Modules_Table :=
---           Create_Table
---             (Parent => Widget_Image(Win => Ship_Info_Frame),
---              Headers =>
---                (1 => To_Unbounded_String(Source => "Name"),
---                 2 => To_Unbounded_String(Source => "Durability"),
---                 3 => To_Unbounded_String(Source => "Additional info")),
---              Scrollbar =>
---                Get_Widget
---                  (pathName => Main_Paned & ".shipinfoframe.modules.scrolly"),
---              Command => "SortShipModules",
---              Tooltip_Text => "Press mouse button to sort the modules.");
---      end if;
       if Modules_Indexes.Length /= Player_Ship.Modules.Length then
          Modules_Indexes.Clear;
          Update_Modules_Indexes_Loop :
@@ -2451,65 +2423,6 @@ package body Ships.UI.Modules is
          Modules_Table.Columns_Width(Index) := Width;
          Index := Index + 1;
       end loop Convert_Headers_Width_Loop;
---      Clear_Table(Table => Modules_Table);
---      Show_Modules_Menu_Loop :
---      for Module_Index of Modules_Indexes loop
---         if Current_Row < Start_Row then
---            Current_Row := Current_Row + 1;
---            goto End_Of_Loop;
---         end if;
---         Add_Button
---           (Table => Modules_Table,
---            Text =>
---              To_String(Source => Player_Ship.Modules(Module_Index).Name),
---            Tooltip => "Show the module's info",
---            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
---            Column => 1);
---         Add_Progress_Bar
---           (Table => Modules_Table,
---            Value => Player_Ship.Modules(Module_Index).Durability,
---            Max_Value => Player_Ship.Modules(Module_Index).Max_Durability,
---            Tooltip => "Show the module's info",
---            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
---            Column => 2);
---         Add_Button
---           (Table => Modules_Table,
---            Text => Get_Module_Info(Module_Index => Module_Index),
---            Tooltip => "Show the module's info",
---            Command => "ShowModuleInfo" & Positive'Image(Module_Index),
---            Column => 3, New_Row => True);
---         Row := Row + 1;
---         exit Show_Modules_Menu_Loop when Modules_Table.Row =
---           Get_Integer_Setting(Name => "listsLimit") + 1;
---         <<End_Of_Loop>>
---      end loop Show_Modules_Menu_Loop;
---      if Page > 1 then
---         if Modules_Table.Row <
---           Get_Integer_Setting(Name => "listsLimit") + 1 then
---            Add_Pagination
---              (Table => Modules_Table,
---               Previous_Command => "ShowModules" & Positive'Image(Page - 1));
---         else
---            Add_Pagination
---              (Table => Modules_Table,
---               Previous_Command => "ShowModules" & Positive'Image(Page - 1),
---               Next_Command => "ShowModules" & Positive'Image(Page + 1));
---         end if;
---      elsif Modules_Table.Row =
---        Get_Integer_Setting(Name => "listsLimit") + 1 then
---         Add_Pagination
---           (Table => Modules_Table,
---            Next_Command => "ShowModules" & Positive'Image(Page + 1));
---      end if;
---      Update_Table(Table => Modules_Table);
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      configure
---        (Widgt => Ship_Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
---      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
---      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
    end Update_Modules_Info;
 
    -- ****o* SUModules/SUModules.Show_Modules_Command
