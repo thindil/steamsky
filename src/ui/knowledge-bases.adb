@@ -13,14 +13,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
+with Interfaces.C.Strings;
+with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
@@ -28,27 +28,26 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
-with BasesTypes; use BasesTypes;
-with Config; use Config;
-with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
-with Factions; use Factions;
+with BasesTypes;
+with Config;
+with CoreUI;
+with Dialogs;
+with Factions;
 with Game; use Game;
 with Maps; use Maps;
-with Messages; use Messages;
+with Messages;
 with Ships; use Ships;
 with Table; use Table;
-with Utils; use Utils;
+with Utils;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
@@ -103,6 +102,17 @@ package body Knowledge.Bases is
    end Get_Reputation_Text;
 
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
+      use Ada.Characters.Handling;
+      use Interfaces.C.Strings;
+      use GNAT.String_Split;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use BasesTypes;
+      use Config;
+      use CoreUI;
+      use Factions;
       use Tiny_String;
 
       Bases_Canvas: constant Tk_Canvas :=
@@ -405,6 +415,12 @@ package body Knowledge.Bases is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tklib.Ada.Tooltip;
+      use Dialogs;
+      use Messages;
       use Tiny_String;
 
       Base_Index: constant Positive :=
@@ -426,6 +442,8 @@ package body Knowledge.Bases is
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
              "} -style Dialog.TButton");
       procedure Set_Reputation_Text(Reputation_Text: String) is
+         use Ada.Strings;
+
          Reputation_Bar: constant Ttk_Frame :=
            Create
              (pathName => Base_Dialog & ".reputation",
@@ -496,6 +514,8 @@ package body Knowledge.Bases is
               Formated_Time(Time => Sky_Bases(Base_Index).Visited));
          Show_Mission_And_Recruits_Info_Block :
          declare
+            use Utils;
+
             Time_Diff: Integer := 0;
          begin
             if Sky_Bases(Base_Index).Population > 0 and
@@ -665,6 +685,7 @@ package body Knowledge.Bases is
    Default_Bases_Sort_Order: constant Bases_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* KBases/KBases.Bases_Sort_Order
    -- FUNCTION
    -- The current sorting order for known bases list
@@ -673,6 +694,7 @@ package body Knowledge.Bases is
    -- SOURCE
    Bases_Sort_Order: Bases_Sort_Orders := Default_Bases_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* KBases/KBases.Sort_Bases_Command
    -- FUNCTION
