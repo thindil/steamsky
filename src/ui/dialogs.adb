@@ -734,7 +734,7 @@ package body Dialogs is
            options =>
              "-command {" & Command & "} -style Dialoggreen.TButton" &
              (if Action = "drop" then " -image drop2icon"
-              elsif Action = "take" then " -image giveicon"
+              elsif Action = "take" then " -image give2icon"
               elsif Action = "buy" then " -image buyicon"
               elsif Action = "sell" then " -image sellicon" else "") &
              " -text {" & To_Upper(Item => Action(Action'First)) &
