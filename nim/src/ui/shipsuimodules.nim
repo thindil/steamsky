@@ -96,6 +96,9 @@ proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
 
 proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
     tags: [].} =
+  ## Update the list of the player's ship's installed modules
+  ##
+  ## * page - the number of the current page of the list to show
   let
     shipCanvas = mainPaned & ".shipinfoframe.modules.canvas"
     shipInfoFrame = shipCanvas & ".frame"
