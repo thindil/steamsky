@@ -311,4 +311,10 @@ package Table is
       External_Name => "addAdaTableCommands";
    -- ****
 
+-- Temporary code to interact with Nim
+
+   --## rule off TYPE_INITIAL_VALUES
+   type Nim_Width is array(0 .. 10) of Integer;
+   --## rule on TYPE_INITIAL_VALUES
+
 end Table;

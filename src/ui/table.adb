@@ -22,10 +22,6 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 
 package body Table is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Width is array(0 .. 10) of Integer;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Create_Table
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
