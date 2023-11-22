@@ -155,7 +155,8 @@ proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
 proc getAdaModuleInfo(moduleIndex: cint): cstring {.raises: [], tags: [], exportc.} =
   return getModuleInfo(moduleIndex - 1).cstring
 
-proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint]) {.raises: [], tags: [], exportc.} =
+proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint];
+    columnsWidth: var array[10, cint]) {.raises: [], tags: [], exportc.} =
   modulesIndexes = @[]
   for index in mIndexes:
     if index == 0:
@@ -165,3 +166,5 @@ proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint]) {.raises: [], t
     updateModulesInfo(page)
   except:
     discard
+  for index, width in modulesTable.columnsWidth:
+    columnsWidth[index] = width.cint
