@@ -17,7 +17,7 @@
 
 import std/[tables, strutils]
 import ../../src/[bases, config, game, shipscargo, shipscrew, tk, types]
-import coreui
+import coreui, shipsuimodules
 
 type AddingCommandError* = object of CatchableError
   ## Raised when there is problem with adding a Tcl command
@@ -239,9 +239,9 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         var cost: Natural = value * parseInt(s = $argv[5])
         countPrice(price = cost, traderIndex = findMember(order = talk),
             reduce = argv[4] == "buy")
-        let label = ".itemdialog.costlbl"
-        tclEval(script = label & " configure -text {" & (if argv[4] ==
-            "buy": "Cost:" else: "Gain:") & " " & $cost & " " & moneyName & "}")
+        let label = ".itemdialog.cost2lbl"
+        tclEval(script = label & " configure -text {" & $cost & " " &
+            moneyName & "}")
         if argv[4] == "buy":
           tclSetResult("1")
           return tclOk
@@ -313,7 +313,13 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.name = value
   elif varName.len > 10 and varName[0 .. 9] == "modulename":
     let moduleIndex = varName[10 .. ^1].parseInt
-    playerShip.modules[moduleIndex].name = value
+    playerShip.modules[moduleIndex - 1].name = value
+    tclUnsetVar(varName)
+    updateModulesInfo()
+  elif varName.len > 8 and varName[0 .. 7] == "crewname":
+    let crewIndex = varName[8 .. ^1].parseInt
+    playerShip.crew[crewIndex - 1].name = value
+    tclUnsetVar(varName)
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
