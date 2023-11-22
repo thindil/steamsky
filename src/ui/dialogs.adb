@@ -843,12 +843,18 @@ package body Dialogs is
            Create
              (pathName => Item_Dialog & ".costlbl",
               options =>
-                "-wraplength 370 -text {" &
-                (if Action = "buy" then "Cost:" else "Gain:") &
-                Natural'Image(Cost) & " " & To_String(Source => Money_Name) &
+                "-text {Total " & (if Action = "buy" then "cost:" else "gain:") &
                 "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label, Options => "-columnspan 2 -padx 5 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+         Label :=
+           Create
+             (pathName => Item_Dialog & ".cost2lbl",
+              options =>
+                "-text {" & Natural'Image(Cost) & " " &
+                To_String(Source => Money_Name) & "} -style " &
+                (if Action = "buy" then "Golden.TLabel"
+                 else "Headergreen.TLabel"));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-column 1 -row 2");
       end if;
       Label :=
         Create
