@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../../src/[bases, config, game, shipscargo, shipscrew, tk, types]
+import ../[bases, config, game, shipscargo, shipscrew, tk, types]
 import coreui, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
