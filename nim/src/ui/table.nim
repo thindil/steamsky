@@ -17,7 +17,6 @@
 
 import std/strutils
 import ../[config, tk]
-import utilsui
 
 type
   TableWidget* = object
