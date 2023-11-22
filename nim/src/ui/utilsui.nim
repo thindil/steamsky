@@ -17,7 +17,7 @@
 
 import std/[tables, strutils]
 import ../[bases, config, game, shipscargo, shipscrew, tk, types]
-import coreui, shipsuimodules
+import coreui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -301,6 +301,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     let crewIndex = varName[8 .. ^1].parseInt
     playerShip.crew[crewIndex - 1].name = value
     tclUnsetVar(varName)
+    updateCrewInfo()
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
