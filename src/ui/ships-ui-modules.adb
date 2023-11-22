@@ -2369,27 +2369,6 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Get_Active_Button_Command;
 
-   -- ****if* SUModules/SUModules.Get_Module_Info
-   -- FUNCTION
-   -- Get the additional information about the module
-   -- PARAMETERS
-   -- Module_Index - the index of the module in the player's ship to show info
-   -- RESULT
-   -- The string with additional information about the module or empty string
-   -- if no info is available.
-   -- SOURCE
-   function Get_Module_Info(Module_Index: Positive) return String is
-      -- ****
-      use Interfaces.C.Strings;
---
-      function Get_Ada_Module_Info(M_Index: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaModuleInfo";
-   begin
-      return Value(Item => Get_Ada_Module_Info(M_Index => Module_Index));
-   end Get_Module_Info;
-
    procedure Update_Modules_Info(Page: Positive := 1) is
       --## rule off TYPE_INITIAL_VALUES
       type Modules_Array is array(0 .. 50) of Natural;
@@ -2397,7 +2376,7 @@ package body Ships.UI.Modules is
       M_Array: Modules_Array := (others => 0);
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
-      procedure Update_Ada_Modules_Info(P: Positive; Modules: Modules_Array; W: out Nim_Width) with
+      procedure Update_Ada_Modules_Info(P: Positive; M: Modules_Array; W: out Nim_Width) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaModulesInfo";
@@ -2415,7 +2394,7 @@ package body Ships.UI.Modules is
          M_Array(Index) := M_Index;
          Index := Index + 1;
       end loop Convert_Modules_Indexes_Loop;
-      Update_Ada_Modules_Info(P => Page, Modules => M_Array, W => N_Width);
+      Update_Ada_Modules_Info(P => Page, M => M_Array, W => N_Width);
       Index := 1;
       Convert_Headers_Width_Loop :
       for Width of N_Width loop
@@ -2577,6 +2556,15 @@ package body Ships.UI.Modules is
       procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Module_Data,
          Array_Type => Modules_Array);
+      function Get_Module_Info(Module_Index: Positive) return String is
+         use Interfaces.C.Strings;
+         function Get_Ada_Module_Info(M_Index: Positive) return chars_ptr with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaModuleInfo";
+      begin
+         return Value(Item => Get_Ada_Module_Info(M_Index => Module_Index));
+      end Get_Module_Info;
    begin
       case Column is
          when 1 =>
