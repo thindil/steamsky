@@ -401,7 +401,7 @@ package body Knowledge is
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.Add_Knowledge_Bases_Commands;
-      Knowledge.Events.Add_Commands;
+      Knowledge.Events.Add_Knowledge_Events_Commands;
       Knowledge.Missions.Add_Commands;
       Knowledge.Stories.Add_Commands;
    end Add_Commands;

@@ -20,11 +20,11 @@
 package Knowledge.Events is
 -- ****
 
-   -- ****f* KEvents/KEvents.Add_Commands
+   -- ****f* KEvents/KEvents.Add_Knowledge_Events_Commands
    -- FUNCTION
    -- Add Tcl commands related to the list of known bases
    -- SOURCE
-   procedure Add_Commands;
+   procedure Add_Knowledge_Events_Commands;
    -- ****
 
    -- ****f* KEvents/KEvents.Update_Events_List

@@ -414,7 +414,7 @@ package body Knowledge.Events is
       return TCL_OK;
    end Sort_Events_Command;
 
-   procedure Add_Commands is
+   procedure Add_Knowledge_Events_Commands is
    begin
       Add_Command
         (Name => "ShowEventInfo",
@@ -423,7 +423,7 @@ package body Knowledge.Events is
         (Name => "ShowEvents", Ada_Command => Show_Events_Command'Access);
       Add_Command
         (Name => "SortKnownEvents", Ada_Command => Sort_Events_Command'Access);
-   end Add_Commands;
+   end Add_Knowledge_Events_Commands;
 
    procedure Update_Events_List(Page: Positive := 1) is
       use Tiny_String;
