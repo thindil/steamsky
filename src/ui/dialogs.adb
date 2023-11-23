@@ -20,9 +20,11 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -624,15 +626,18 @@ package body Dialogs is
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings;
       Wrap_Length: Positive := 300) is
+      pragma Unreferenced(Wrap_Length);
+      use Tcl.Tk.Ada.Font;
+      use Tcl.Tk.Ada.Widgets.Text;
+
       Info_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".info", Title => Title, Title_Width => 275, Columns => 3,
            Parent_Name => Parent_Name);
-      Info_Label: constant Ttk_Label :=
+      Info_Label: constant Tk_Text :=
         Create
           (pathName => Info_Dialog & ".text",
-           options =>
-             "-text {" & Text & "} -wraplength" & Positive'Image(Wrap_Length));
+           options => "-width 25 -height 5 -wrap char");
       Button: Ttk_Button;
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
@@ -640,6 +645,19 @@ package body Dialogs is
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Info_Dialog & ".buttons");
    begin
+      Insert
+        (TextWidget => Info_Label, Index => "end", Text => "{" & Text & "}");
+      configure
+        (Widgt => Info_Label,
+         options =>
+           "-state disabled -height" &
+           Positive'Image
+             (Positive'Value
+                (Count
+                   (TextWidget => Info_Label, Options => "-displaylines",
+                    Index1 => "0.0", Index2 => "end")) /
+              Positive'Value
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) + 2));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Length(Source => Button_1.Text) > 0 and
@@ -843,8 +861,8 @@ package body Dialogs is
            Create
              (pathName => Item_Dialog & ".costlbl",
               options =>
-                "-text {Total " & (if Action = "buy" then "cost:" else "gain:") &
-                "}");
+                "-text {Total " &
+                (if Action = "buy" then "cost:" else "gain:") & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
          Label :=
            Create
