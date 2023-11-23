@@ -14,11 +14,12 @@ import ../../src/[basestypes, careers, crafts, factions, game, items, maps,
     mobs, ships, shipsmovement, shipmodules, types]
 
 echo "Loading the game data."
-if basesTypesList.len == 0:
+if itemsList.len == 0:
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
+if basesTypesList.len == 0:
   loadBasesTypes("../bin/data/bases.dat")
 if modulesList.len == 0:
   loadModules("../bin/data/shipmodules.dat")

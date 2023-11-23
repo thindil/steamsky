@@ -13,6 +13,7 @@ if itemsList.len == 0:
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
+if modulesList.len == 0:
   loadModules("../bin/data/shipmodules.dat")
 
 echo "Testing getModuleType."
