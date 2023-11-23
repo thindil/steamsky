@@ -34,8 +34,13 @@ suite "Unit tests for events2 module":
       durability: 100))
   playerShip.modules.add(ModuleData(mType: ModuleType2.turret, protoIndex: 86,
       durability: 100))
-  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
+  playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 9,
       durability: 100, damage: 100))
+  playerShip.cargo = @[]
+  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 2000,
+      durability: 100))
+  playerShip.cargo.add(InventoryData(protoIndex: 4, amount: 100,
+      durability: 100))
   skyMap[1][1].baseIndex = 1
   skyBases[1].population = 100
   skyBases[1].baseType = "1"
