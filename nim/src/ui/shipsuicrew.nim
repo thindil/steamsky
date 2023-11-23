@@ -45,3 +45,11 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   if needClean:
     button = buttonsFrame & ".clean"
     tclEval(script = "ttk::button " & button & " -image cleanordericon -command {OrderForAll Clean}")
+    tclEval(script = "grid " & button & " -row 0 -column 2 -padx {0 2}")
+  if needRepair:
+    button = buttonsFrame & ".repair"
+    tclEval(script = "ttk::button " & button & " -image repairordericon -command {OrderForAll Repair}")
+    if needClean:
+      tclEval(script = "grid " & button & " -row 0 -column 3")
+    else:
+      tclEval(script = "grid " & button & " -row 0 -column 2")
