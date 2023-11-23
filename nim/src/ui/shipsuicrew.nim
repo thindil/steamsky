@@ -19,6 +19,16 @@ import std/strutils
 import ../[game, tk, types]
 import coreui
 
+proc hasSelection(): bool =
+  ## Check if there is any crew member selected on the list
+  ##
+  ## Returns true if there is any crew member selected on the list, otherwise
+  ## false
+  for i in playerShip.crew.low .. playerShip.crew.high:
+    if tclGetVar(varName = "crewindex" & $(i + 1)) == "1":
+      return true
+  return false
+
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
@@ -53,3 +63,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
       tclEval(script = "grid " & button & " -row 0 -column 3")
     else:
       tclEval(script = "grid " & button & " -row 0 -column 2")
+
+# Temporary code for interfacing with Ada
+
+proc hasAdaSelection(): cint {.raises: [], tags: [], exportc.} =
+  return (if hasSelection(): 1 else: 0)
