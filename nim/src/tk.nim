@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
+
 # Set names of Tcl/Tk libraries
 # On Windows
 when defined(windows):
@@ -246,3 +248,20 @@ proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
       cproc = nimProc, clientData = 0, deleteProc = nil) == nil:
     raise newException(exceptn = AddingCommandError,
         message = "Can't add command " & name)
+
+proc deleteWidgets*(startIndex, endIndex: int; frame: string) =
+  ## Delete widgets inside the selected grid
+  ##
+  ## * startIndex - the index of the first widget to delete
+  ## * endIndex   - the index of the last widget to delete
+  ## * frame      - the name of the container which is the grid
+  if endIndex < startIndex:
+    return
+  let interp = getInterp()
+  for i in startIndex .. endIndex:
+    if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
+      return
+    let tclResult = $interp.tclGetResult()
+    for widget in tclResult.split():
+      tclEval(script = "destroy " & widget)
+

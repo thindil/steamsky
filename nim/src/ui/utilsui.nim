@@ -79,17 +79,6 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
 
-proc deleteWidgets(startIndex, endIndex: int; frame: string) =
-  if endIndex < startIndex:
-    return
-  let interp = getInterp()
-  for i in startIndex .. endIndex:
-    if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
-      return
-    let tclResult = $interp.tclGetResult()
-    for widget in tclResult.split():
-      tclEval(script = "destroy " & widget)
-
 proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
     raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
