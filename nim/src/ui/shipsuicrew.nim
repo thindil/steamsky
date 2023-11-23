@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../tk
+import ../[game, tk, types]
 import coreui
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
@@ -24,3 +24,24 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
     gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
     rows = gridSize[2].parseInt
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
+  var needRepair, needClean = false
+  for module in playerShip.modules:
+    if module.durability < module.maxDurability:
+      needRepair = true
+    if module.durability > 0 and module.mType == ModuleType2.cabin and
+        module.cleanliness < module.quality:
+      needClean = true
+    if needRepair and needClean:
+      break
+  let
+    buttonsFrame = crewInfoFrame & ".ordersbuttons"
+    ordersLabel = buttonsFrame & ".label"
+  tclEval(script = "ttk::label " & ordersLabel & " -text {Orders for all:}")
+  tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
+  var button = buttonsFrame & ".rest"
+  tclEval(script = "ttk::button " & button & " -image goresticon -command {OrderForAll Rest}")
+  tclEval(script = "grid " & button & " -row 0 -column 1 -padx {0 2}")
+  if needClean:
+    button = buttonsFrame & ".clean"
+    tclEval(script = "ttk::button " & button & " -image cleanordericon -command {OrderForAll Clean}")
