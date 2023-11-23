@@ -857,7 +857,7 @@ package body Utils.UI is
         (S_Index, E_Index: Integer; Parent: chars_ptr) with
          Import => True,
          Convention => C,
-         External_Name => "deleteWidgets";
+         External_Name => "deleteAdaWidgets";
    begin
       Delete_Widgts
         (S_Index => Start_Index, E_Index => End_Index,

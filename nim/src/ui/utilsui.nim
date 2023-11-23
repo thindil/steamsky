@@ -79,18 +79,12 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
 
-proc deleteWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
-    gcsafe, sideEffect, raises: [], tags: [].} =
-  ## Delete the selected widgets in the selected Tk grid
-  ##
-  ## * startIndex - The index of the first widget to delete. Starts from 0
-  ## * endIndex   - The index of the last widget to delete
-  ## * frame      - The parent frame in which the widgets will be deleted
+proc deleteWidgets(startIndex, endIndex: int; frame: string) =
   if endIndex < startIndex:
     return
   let interp = getInterp()
   for i in startIndex .. endIndex:
-    if tclEval(script = "grid slaves " & $frame & " -row " & $i) == tclError:
+    if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
       return
     let tclResult = $interp.tclGetResult()
     for widget in tclResult.split():
@@ -316,3 +310,8 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
     addCommands()
   except:
     echo getCurrentExceptionMsg()
+
+proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
+    gcsafe, sideEffect, raises: [], tags: [].} =
+  deleteWidgets(startIndex, endIndex, $frame)
+
