@@ -271,6 +271,7 @@ package body Knowledge.Events is
         Get_Column_Number
           (Table => Events_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Event_Data is record
          E_Type: Events_Types;
          Distance: Natural;
@@ -279,7 +280,11 @@ package body Knowledge.Events is
          Id: Positive;
       end record;
       type Events_Array is array(Positive range <>) of Local_Event_Data;
+      --## rule on TYPE_INITIAL_VALUES
+      --## rule off IMPROPER_INITIALIZATION
       Local_Events: Events_Array(1 .. Get_Events_Amount);
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Event_Data) return Boolean is
       begin
          if Events_Sort_Order = TYPEASC
@@ -351,6 +356,7 @@ package body Knowledge.Events is
       if Events_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Events_Loop :
       for I in 1 .. Get_Events_Amount loop
          Local_Events(I) :=
@@ -434,7 +440,7 @@ package body Knowledge.Events is
         Get_Widget(pathName => Events_Canvas & ".frame");
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      Label: Ttk_Label;
+      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Row: Positive;
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
