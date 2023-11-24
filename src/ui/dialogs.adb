@@ -625,9 +625,7 @@ package body Dialogs is
 
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings;
-      Wrap_Length: Positive := 300) is
-      pragma Unreferenced(Wrap_Length);
+      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
       use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
 
@@ -658,7 +656,8 @@ package body Dialogs is
                    (TextWidget => Info_Label, Options => "-displaylines",
                     Index1 => "0.0", Index2 => "end")) /
               Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) + 2));
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
+              2));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Length(Source => Button_1.Text) > 0 and
