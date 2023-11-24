@@ -442,8 +442,10 @@ package body Knowledge.Events is
       Rows: Natural := 0;
       Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Row: Positive;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Color: Unbounded_String;
    begin
@@ -452,6 +454,7 @@ package body Knowledge.Events is
          From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame),
          Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Events_Table.Row > 1 then
          Clear_Table(Table => Events_Table);
       end if;
@@ -714,6 +717,7 @@ package body Knowledge.Events is
          end if;
          Update_Table(Table => Events_Table);
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Events_Canvas,
