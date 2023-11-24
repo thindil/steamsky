@@ -19,7 +19,7 @@ import std/strutils
 import ../[game, tk, types]
 import coreui
 
-proc hasSelection(): bool =
+proc hasSelection(): bool {.sideEffect, raises: [], tags: [].} =
   ## Check if there is any crew member selected on the list
   ##
   ## Returns true if there is any crew member selected on the list, otherwise
