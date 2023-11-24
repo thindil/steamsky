@@ -125,6 +125,7 @@ package body Dialogs is
       return New_Dialog;
    end Create_Dialog;
 
+   --## rule off LOCAL_HIDING
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
       Row, Column: Natural := 0; Icon: String := "exiticon";
