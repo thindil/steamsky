@@ -129,52 +129,11 @@ package body Ships.UI.Crew is
    -- HISTORY
    -- 8.5 - Added
    -- SOURCE
-   procedure Update_Tooltips is
+   procedure Update_Tooltips with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaTooltips";
       -- ****
-      Selection: constant Boolean := Has_Selection;
-      Button: Ttk_Button;
-      Buttons_Frame: constant String :=
-        Main_Paned & ".shipinfoframe.crew.canvas.frame.ordersbuttons";
-   begin
-      Button := Get_Widget(pathName => Buttons_Frame & ".label");
-      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
-         configure
-           (Widgt => Button,
-            options =>
-              "-text {Orders for " &
-              (if Selection then "selected" else "all") & ":}");
-         Add
-           (Widget => Button,
-            Message =>
-              "Give the selected order to the " &
-              (if Selection then "selected crew members" else "whole crew") &
-              ".");
-      end if;
-      Button.Name := New_String(Str => Buttons_Frame & ".rest");
-      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
-         Add
-           (Widget => Button,
-            Message =>
-              "Go rest " &
-              (if Selection then "selected crew members" else "everyone"));
-      end if;
-      Button.Name := New_String(Str => Buttons_Frame & ".clean");
-      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
-         Add
-           (Widget => Button,
-            Message =>
-              "Clean ship " &
-              (if Selection then "selected crew members" else "everyone"));
-      end if;
-      Button.Name := New_String(Str => Buttons_Frame & ".repair");
-      if Winfo_Get(Widgt => Button, Info => "exists") = "1" then
-         Add
-           (Widget => Button,
-            Message =>
-              "Repair ship " &
-              (if Selection then "selected crew members" else "everyone"));
-      end if;
-   end Update_Tooltips;
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
       use Ada.Characters.Handling;
