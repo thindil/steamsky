@@ -114,23 +114,12 @@ package body Ships.UI.Crew is
    -- SOURCE
    function Has_Selection return Boolean is
       -- ****
+      function Has_Ada_Selection return Integer with
+         Import => True,
+         Convention => C,
+         External_Name => "hasAdaSelection";
    begin
-      Check_Selection_Loop :
-      for I in
-        Crew_Container.First_Index(Container => Player_Ship.Crew) ..
-          Crew_Container.Last_Index(Container => Player_Ship.Crew) loop
-         if Tcl_GetVar
-             (interp => Get_Context,
-              varName =>
-                "crewindex" &
-                Trim
-                  (Source => Crew_Container.Extended_Index'Image(I),
-                   Side => Left)) =
-           "1" then
-            return True;
-         end if;
-      end loop Check_Selection_Loop;
-      return False;
+      return (if Has_Ada_Selection = 1 then True else False);
    end Has_Selection;
 
    -- ****if* SUCrew/SUCrew.Update_Tooltips
