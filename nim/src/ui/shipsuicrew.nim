@@ -29,7 +29,7 @@ proc hasSelection(): bool {.sideEffect, raises: [], tags: [].} =
       return true
   return false
 
-proc updateTooltips() =
+proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
   let
     buttonsFrame = mainPaned & ".shipinfoframe.crew.canvas.frame.ordersbuttons"
     selection = hasSelection()
