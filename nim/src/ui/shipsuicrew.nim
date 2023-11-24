@@ -29,6 +29,30 @@ proc hasSelection(): bool {.sideEffect, raises: [], tags: [].} =
       return true
   return false
 
+proc updateTooltips() =
+  let
+    buttonsFrame = mainPaned & ".shipinfoframe.crew.canvas.frame.ordersbuttons"
+    selection = hasSelection()
+  var button = buttonsFrame & ".label"
+  if tclEval2(script = "winfo exists " & button) == "1":
+    tclEval(script = button & " configure -text {Orders for " & (
+        if selection: "selected" else: "all") & ":}")
+    tclEval(script = "tooltip::tooltip " & button &
+        " \"Give the selected order to the " & (
+        if selection: "selected crew members" else: "whole crew") & ".\"")
+  button = buttonsFrame & ".rest"
+  if tclEval2(script = "winfo exists " & button) == "1":
+    tclEval(script = "tooltip::tooltip " & button & " \"Go rest " & (
+        if selection: "selected crew members" else: "everyone") & "\"")
+  button = buttonsFrame & ".clean"
+  if tclEval2(script = "winfo exists " & button) == "1":
+    tclEval(script = "tooltip::tooltip " & button & " \"Clean the ship " & (
+        if selection: "selected crew members" else: "everyone") & "\"")
+  button = buttonsFrame & ".repair"
+  if tclEval2(script = "winfo exists " & button) == "1":
+    tclEval(script = "tooltip::tooltip " & button & " \"Repair the ship " & (
+        if selection: "selected crew members" else: "everyone") & "\"")
+
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
@@ -63,8 +87,12 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
       tclEval(script = "grid " & button & " -row 0 -column 3")
     else:
       tclEval(script = "grid " & button & " -row 0 -column 2")
+  updateTooltips()
 
 # Temporary code for interfacing with Ada
 
 proc hasAdaSelection(): cint {.raises: [], tags: [], exportc.} =
   return (if hasSelection(): 1 else: 0)
+
+proc updateAdaTooltips() {.raises: [], tags: [], exportc.} =
+  updateTooltips()
