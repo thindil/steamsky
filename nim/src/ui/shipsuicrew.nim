@@ -30,6 +30,8 @@ proc hasSelection(): bool {.sideEffect, raises: [], tags: [].} =
   return false
 
 proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
+  ## Update the tooltips of the button with order for everyone/selected crew
+  ## member in dependency on the selection of the crew members on the list.
   let
     buttonsFrame = mainPaned & ".shipinfoframe.crew.canvas.frame.ordersbuttons"
     selection = hasSelection()
