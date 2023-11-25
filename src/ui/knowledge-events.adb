@@ -40,7 +40,7 @@ with Items; use Items;
 with Maps; use Maps;
 with Ships; use Ships;
 with Table; use Table;
-with Utils; use Utils;
+with Utils;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Events is
@@ -439,15 +439,15 @@ package body Knowledge.Events is
       Events_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Events_Canvas & ".frame");
       Tokens: Slice_Set;
-      Rows: Natural := 0;
+      Rows: Natural;
       Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
-      Row: Positive;
+      Row: Positive := 1;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
-      Color: Unbounded_String;
+      Color: Unbounded_String := Null_Unbounded_String;
    begin
       Create
         (S => Tokens,
