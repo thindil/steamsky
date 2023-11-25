@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
+import std/[strutils, tables]
 import ../[game, tk, types]
 import coreui
 
@@ -70,7 +70,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
       needClean = true
     if needRepair and needClean:
       break
-  let
+  var
     buttonsFrame = crewInfoFrame & ".ordersbuttons"
     ordersLabel = buttonsFrame & ".label"
   tclEval(script = "ttk::label " & ordersLabel & " -text {Orders for all:}")
@@ -90,6 +90,20 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
     else:
       tclEval(script = "grid " & button & " -row 0 -column 2")
   updateTooltips()
+  tclEval(script = "grid " & buttonsFrame & " -sticky w")
+  buttonsFrame = crewInfoFrame & ".selectskill"
+  ordersLabel = buttonsFrame & ".label"
+  tclEval(script = "ttk::label " & ordersLabel & " -text {Skill:}")
+  tclEval(script = "tooltip::tooltip " & ordersLabel & " \"Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.\"")
+  tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
+  var skills = " {Highest}"
+  for skill in skillsList.values:
+    skills.add(" {" & skill.name & "}")
+  let skillBox = crewInfoFrame & ".selectskill.combox"
+  tclEval(script = "ttk::combobox " & skillBox &
+      " -state readonly -values [list" & skills & "]")
+  tclEval(script = "bind " & skillBox & " <<ComboboxSelected>> SelectCrewSkill")
+  tclEval(script = skillBox & " current " & $skill)
 
 # Temporary code for interfacing with Ada
 
