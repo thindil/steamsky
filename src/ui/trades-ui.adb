@@ -995,8 +995,9 @@ package body Trades.UI is
          Append
            (Source => Item_Info,
             New_Item =>
-              "Strength:" &
-              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)));
+              "Strength:{gold}" &
+              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Get_Proto_Item(Index => Proto_Index).Description /=
         Short_String.Null_Bounded_String then
