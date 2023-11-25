@@ -626,6 +626,7 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
+      use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
 
@@ -643,9 +644,46 @@ package body Dialogs is
         (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Info_Dialog & ".buttons");
+      Tag_Index: Natural := Index(Source => Text, Pattern => "{gold}");
+      Start_Index: Natural := 1;
    begin
-      Insert
-        (TextWidget => Info_Label, Index => "end", Text => "{" & Text & "}");
+      Tag_Configure
+        (TextWidget => Info_Label, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Get_Context,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
+      if Tag_Index = 0 then
+         Insert
+           (TextWidget => Info_Label, Index => "end",
+            Text => "{" & Text & "}");
+      else
+         Insert_Text_Loop :
+         while Tag_Index > 0 loop
+            Insert
+              (TextWidget => Info_Label, Index => "end",
+               Text => "{" & Text(Start_Index .. Tag_Index - 1) & "}");
+            Start_Index := Tag_Index + 6;
+            Tag_Index :=
+              Index(Source => Text, Pattern => "{/gold}", From => Tag_Index);
+            exit Insert_Text_Loop when Tag_Index = 0;
+            Insert
+              (TextWidget => Info_Label, Index => "end",
+               Text =>
+                 "{" & Text(Start_Index .. Tag_Index - 1) & "} [list gold]");
+            Start_Index := Tag_Index + 7;
+            Tag_Index :=
+              Index(Source => Text, Pattern => "{gold}", From => Tag_Index);
+         end loop Insert_Text_Loop;
+         if Start_Index > 1 and then Tag_Index = 0 then
+            Insert
+              (TextWidget => Info_Label, Index => "end",
+               Text => "{" & Text(Start_Index .. Text'Last) & "}");
+         end if;
+      end if;
       configure
         (Widgt => Info_Label,
          options =>
