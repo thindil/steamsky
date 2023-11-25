@@ -104,6 +104,17 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
       " -state readonly -values [list" & skills & "]")
   tclEval(script = "bind " & skillBox & " <<ComboboxSelected>> SelectCrewSkill")
   tclEval(script = skillBox & " current " & $skill)
+  tclEval(script = "tooltip::tooltip " & skillBox & " \"Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.\"")
+  tclEval(script = "grid " & skillBox & " -row 0 -column 1")
+  button = buttonsFrame & ".selectallbutton"
+  tclEval(script = "ttk::button " & button & " -image selectallicon -command {ToggleAllCrew select} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & button & " \"Select all crew members.\"")
+  tclEval(script = "grid " & button & " -padx {5 2}")
+  button = buttonsFrame & ".unselectallbutton"
+  tclEval(script = "ttk::button " & button & " -image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
+  tclEval(script = "grid " & button & " -sticky w -row 1 -column 1")
+  tclEval(script = "grid " & buttonsFrame & " -sticky w")
 
 # Temporary code for interfacing with Ada
 
