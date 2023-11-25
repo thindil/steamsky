@@ -140,6 +140,17 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
         command = "ToggleCrewMember " & $(index + 1) & " " & $(mIndex + 1),
         checked = tclGetVar(varName = "crewindex" & $(mIndex + 1)) == "1",
         column = 1, emptyUnchecked = true)
+    addButton(table = crewTable, text = playerShip.crew[mIndex].name,
+        tooltip = "Show available crew member's options",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 2)
+    addButton(table = crewTable, text = ($playerShip.crew[
+        mIndex].order).capitalizeAscii,
+        tooltip = "The current order for the selected crew member.\nPress the mouse button to change it.",
+        command = "ShowCrewOrder " & $(mIndex + 1), column = 3)
+#    if skill == 0:
+#      addButton(table = crewTable, text = getHighestSkill(memberIndex = mIndex),
+#          tooltip = "The highest skill of the selected crew member",
+#          command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
 
 # Temporary code for interfacing with Ada
 
