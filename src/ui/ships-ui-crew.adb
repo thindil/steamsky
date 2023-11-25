@@ -20,7 +20,7 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl.Ada; use Tcl.Ada;
@@ -38,7 +38,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases;
@@ -103,24 +103,6 @@ package body Ships.UI.Crew is
                (Container => Skills_List, Index => Highest_Index)
                .Name);
    end Get_Highest_Skill;
-
-   -- ****if* SUCrew/SUCrew.Has_Selection
-   -- FUNCTION
-   -- Check if there are any crew members selected on the list
-   -- RESULT
-   -- True if some members are selected on the list, otherwise false
-   -- HISTORY
-   -- 8.5 - Added
-   -- SOURCE
-   function Has_Selection return Boolean is
-      -- ****
-      function Has_Ada_Selection return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "hasAdaSelection";
-   begin
-      return (if Has_Ada_Selection = 1 then True else False);
-   end Has_Selection;
 
    -- ****if* SUCrew/SUCrew.Update_Tooltips
    -- FUNCTION
@@ -471,6 +453,14 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      function Has_Selection return Boolean is
+         function Has_Ada_Selection return Integer with
+            Import => True,
+            Convention => C,
+            External_Name => "hasAdaSelection";
+      begin
+         return (if Has_Ada_Selection = 1 then True else False);
+      end Has_Selection;
    begin
       if Has_Selection then
          Give_Orders_To_Selected_Loop :
@@ -623,6 +613,8 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Winfo;
+
       Member_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => ".memberdialog.canvas", Interp => Interp);
       Tab_Name: constant String :=
@@ -1807,6 +1799,8 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Interfaces.C.Strings;
+
       Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
       Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
