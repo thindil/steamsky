@@ -16,8 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, tk, types]
-import coreui
+import ../[config, game, tk, types]
+import coreui, table
+
+var
+  crewTable: TableWidget
+    ## The UI table with all members of the player's ship's crew
+  crewIndexes: seq[Natural]
+    ## The list of indexes of the crew members
 
 proc hasSelection(): bool {.sideEffect, raises: [], tags: [].} =
   ## Check if there is any crew member selected on the list
@@ -115,6 +121,25 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
   tclEval(script = "grid " & button & " -sticky w -row 1 -column 1")
   tclEval(script = "grid " & buttonsFrame & " -sticky w")
+  crewTable = createTable(parent = crewInfoFrame, headers = @["", "Name",
+      "Order", "Skill", "Health", "Fatigue", "Thirst", "Hunger", "Morale"],
+      scrollbar = ".gameframe.paned.shipinfoframe.crew.scrolly",
+      command = "SortShipCrew",
+      tooltipText = "Press mouse button to sort the crew.")
+  if crewIndexes.len != playerShip.crew.len:
+    crewIndexes = @[]
+    for i in playerShip.crew.low .. playerShip.crew.high:
+      crewIndexes.add(i)
+  var currentRow = 1
+  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  for index, mIndex in crewIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    addCheckButton(table = crewTable, tooltip = "Select the crew member to give orders to them.",
+        command = "ToggleCrewMember " & $(index + 1) & " " & $(mIndex + 1),
+        checked = tclGetVar(varName = "crewindex" & $(mIndex + 1)) == "1",
+        column = 1, emptyUnchecked = true)
 
 # Temporary code for interfacing with Ada
 
