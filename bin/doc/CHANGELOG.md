@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.4] - 2023-11-26
 
 ### Added
 - Icon for the player's ship's crew members' inventory. Author: Delapouite
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Made some dialogs' buttons colorful
 - Updated modding guide
+- Updated look of the items information dialog in the trading screen
 
 ### Fixed
 - Displaying tables if the first column has an empty header
