@@ -915,7 +915,7 @@ package body Trades.UI is
          Append
            (Source => Item_Info,
             New_Item =>
-              "Skill: " &
+              "Skill: {gold}" &
               To_String
                 (Source =>
                    SkillsData_Container.Element
@@ -940,7 +940,7 @@ package body Trades.UI is
               (if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
                  LF & "Can be used with shield."
                else LF & "Can't be used with shield (two-handed weapon).") &
-              LF & "Damage type: ");
+              LF & "{/gold}Damage type: {gold}");
          case Get_Proto_Item(Index => Proto_Index).Value(5) is
             when 1 =>
                Append(Source => Item_Info, New_Item => "cutting");
@@ -951,6 +951,7 @@ package body Trades.UI is
             when others =>
                null;
          end case;
+         Append(Source => Item_Info, New_Item => "{/gold}");
       end if;
       Show_More_Info_Loop :
       for ItemType of Item_Types loop
@@ -961,12 +962,13 @@ package body Trades.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 "Damage chance: " &
+                 "Damage chance: {gold}" &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
                       Get_Proto_Item(Index => Proto_Index).Value(1)) &
-                 LF & "Strength:" &
-                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)));
+                 LF & "{/gold}Strength:{gold}" &
+                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
+                 "{/gold}");
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
@@ -977,9 +979,10 @@ package body Trades.UI is
          Append
            (Source => Item_Info,
             New_Item =>
-              "Damage chance: " &
+              "Damage chance: {gold}" &
               Get_Item_Chance_To_Damage
-                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)));
+                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
         and then
