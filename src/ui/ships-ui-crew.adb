@@ -86,22 +86,14 @@ package body Ships.UI.Crew is
    -- SOURCE
    function Get_Highest_Skill(Member_Index: Positive) return String is
       -- ****
-      Highest_Level: Skill_Range := 1;
-      Highest_Index: Skills_Amount_Range := 1;
+      use Interfaces.C.Strings;
+
+      function Get_Ada_Highest_Skill(M_Index: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHighestSkill";
    begin
-      Get_Highest_Skill_Level_Loop :
-      for Skill of Player_Ship.Crew(Member_Index).Skills loop
-         if Skill.Level > Highest_Level then
-            Highest_Level := Skill.Level;
-            Highest_Index := Skill.Index;
-         end if;
-      end loop Get_Highest_Skill_Level_Loop;
-      return
-        To_String
-          (Source =>
-             SkillsData_Container.Element
-               (Container => Skills_List, Index => Highest_Index)
-               .Name);
+      return Value(Item => Get_Ada_Highest_Skill(M_Index => Member_Index));
    end Get_Highest_Skill;
 
    -- ****if* SUCrew/SUCrew.Update_Tooltips
