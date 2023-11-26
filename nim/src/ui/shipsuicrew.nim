@@ -61,6 +61,16 @@ proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & button & " \"Repair the ship " & (
         if selection: "selected crew members" else: "everyone") & "\"")
 
+proc getHighestSkill(memberIndex: Natural): string =
+  var
+    highestLevel = 1
+    highestIndex = 1
+  for skill in playerShip.crew[memberIndex].skills:
+    if skill.level > highestLevel:
+      highestLevel = skill.level
+      highestIndex = skill.index
+  return skillsList[highestIndex].name
+
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
@@ -147,10 +157,10 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
         mIndex].order).capitalizeAscii,
         tooltip = "The current order for the selected crew member.\nPress the mouse button to change it.",
         command = "ShowCrewOrder " & $(mIndex + 1), column = 3)
-#    if skill == 0:
-#      addButton(table = crewTable, text = getHighestSkill(memberIndex = mIndex),
-#          tooltip = "The highest skill of the selected crew member",
-#          command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
+    if skill == 0:
+      addButton(table = crewTable, text = getHighestSkill(memberIndex = mIndex),
+          tooltip = "The highest skill of the selected crew member",
+          command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
 
 # Temporary code for interfacing with Ada
 
@@ -159,3 +169,9 @@ proc hasAdaSelection(): cint {.raises: [], tags: [], exportc.} =
 
 proc updateAdaTooltips() {.raises: [], tags: [], exportc.} =
   updateTooltips()
+
+proc getAdaHighestSkill(memberIndex: cint): cstring {.raises: [], tags: [], exportc.} =
+  try:
+    return getHighestSkill(memberIndex.int - 1).cstring
+  except:
+    return "".cstring
