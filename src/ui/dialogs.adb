@@ -637,8 +637,8 @@ package body Dialogs is
       Info_Label: constant Tk_Text :=
         Create
           (pathName => Info_Dialog & ".text",
-           options => "-width 25 -height 5 -wrap char");
-      Button: Ttk_Button;
+           options => "-width 30 -height 5 -wrap char");
+      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
         (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
