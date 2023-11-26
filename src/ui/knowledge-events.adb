@@ -13,27 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Containers; use Ada.Containers;
-with Ada.Strings; use Ada.Strings;
+with Ada.Containers;
+with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
-with Config; use Config;
-with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Config;
+with CoreUI;
+with Dialogs;
 with Events; use Events;
 with Game; use Game;
 with Items; use Items;
@@ -76,6 +76,8 @@ package body Knowledge.Events is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Characters.Latin_1;
+      use Dialogs;
       use Tiny_String;
 
       Event_Index: constant Positive :=
@@ -225,6 +227,7 @@ package body Knowledge.Events is
    Default_Events_Sort_Order: constant Events_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* KEvents/KEvents.Events_Sort_Order
    -- FUNCTION
    -- The current sorting order for known events list
@@ -233,6 +236,7 @@ package body Knowledge.Events is
    -- SOURCE
    Events_Sort_Order: Events_Sort_Orders := Default_Events_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* KEvents/KEvents.Events_Indexes
    -- FUNCTION
@@ -432,6 +436,15 @@ package body Knowledge.Events is
    end Add_Knowledge_Events_Commands;
 
    procedure Update_Events_List(Page: Positive := 1) is
+      use GNAT.String_Split;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Config;
+      use CoreUI;
       use Tiny_String;
 
       Events_Canvas: constant Tk_Canvas :=
