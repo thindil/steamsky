@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.3 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,27 +31,26 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo957">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
-<li>2. <a href="#robo956">SUModules/SUModules.Stop_Upgrading_Command</a></li>
-<li>3. <a href="#robo955">SUModules/SUModules.Sort_Modules_Command</a></li>
-<li>4. <a href="#robo954">SUModules/SUModules.Show_Modules_Command</a></li>
-<li>5. <a href="#robo953">SUModules/SUModules.Show_Module_Info_Command</a></li>
-<li>6. <a href="#robo952">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
-<li>7. <a href="#robo951">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
-<li>8. <a href="#robo950">SUModules/SUModules.Show_Assign_Ammo_Command</a></li>
-<li>9. <a href="#robo949">SUModules/SUModules.Set_Upgrade_Command</a></li>
-<li>10. <a href="#robo948">SUModules/SUModules.Set_Repair_Command</a></li>
-<li>11. <a href="#robo947">SUModules/SUModules.Reset_Destination_Command</a></li>
-<li>12. <a href="#robo946">SUModules/SUModules.Get_Active_Button_Command</a></li>
-<li>13. <a href="#robo945">SUModules/SUModules.Disable_Engine_Command</a></li>
-<li>14. <a href="#robo944">SUModules/SUModules.Cancel_Order_Command</a></li>
-<li>15. <a href="#robo943">SUModules/SUModules.Assign_Module_Command</a></li>
-<li>16. <a href="#robo728">SUModules/SUModules.Get_Module_Info</a></li>
-<li>17. <a href="#robo448">SUModules/SUModules.Modules_Table</a></li>
-<li>18. <a href="#robo447">SUModules/SUModules.Modules_Sort_Order</a></li>
-<li>19. <a href="#robo446">SUModules/SUModules.Modules_Indexes</a></li>
-<li>20. <a href="#robo318">SUModules/SUModules.Default_Modules_Sort_Order</a></li>
-<li>21. <a href="#robo174">SUModules/SUModules.Modules_Sort_Orders</a></li>
+<li>1. <a href="#robo953">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
+<li>2. <a href="#robo952">SUModules/SUModules.Stop_Upgrading_Command</a></li>
+<li>3. <a href="#robo951">SUModules/SUModules.Sort_Modules_Command</a></li>
+<li>4. <a href="#robo950">SUModules/SUModules.Show_Modules_Command</a></li>
+<li>5. <a href="#robo949">SUModules/SUModules.Show_Module_Info_Command</a></li>
+<li>6. <a href="#robo948">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
+<li>7. <a href="#robo947">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
+<li>8. <a href="#robo946">SUModules/SUModules.Show_Assign_Ammo_Command</a></li>
+<li>9. <a href="#robo945">SUModules/SUModules.Set_Upgrade_Command</a></li>
+<li>10. <a href="#robo944">SUModules/SUModules.Set_Repair_Command</a></li>
+<li>11. <a href="#robo943">SUModules/SUModules.Reset_Destination_Command</a></li>
+<li>12. <a href="#robo942">SUModules/SUModules.Get_Active_Button_Command</a></li>
+<li>13. <a href="#robo941">SUModules/SUModules.Disable_Engine_Command</a></li>
+<li>14. <a href="#robo940">SUModules/SUModules.Cancel_Order_Command</a></li>
+<li>15. <a href="#robo939">SUModules/SUModules.Assign_Module_Command</a></li>
+<li>16. <a href="#robo448">SUModules/SUModules.Modules_Table</a></li>
+<li>17. <a href="#robo447">SUModules/SUModules.Modules_Sort_Order</a></li>
+<li>18. <a href="#robo446">SUModules/SUModules.Modules_Indexes</a></li>
+<li>19. <a href="#robo318">SUModules/SUModules.Default_Modules_Sort_Order</a></li>
+<li>20. <a href="#robo174">SUModules/SUModules.Modules_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="SUModules2fSUModules2eModules5fSort5fOrders"></a>
@@ -135,27 +134,8 @@
 </pre>
 
 <hr />
-<a name="SUModules2fSUModules2eGet5fModule5fInfo"></a>
-<a name="robo728"></a><h2>SUModules/SUModules.Get_Module_Info [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the additional information about the module
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Module_Info<span class="sign">(</span>Module_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Module_Index - the index of the module in the player's ship to show info
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The string with additional information about the module or empty string
- if no info is available.
-</pre>
-
-<hr />
 <a name="SUModules2fSUModules2eAssign5fModule5fCommand"></a>
-<a name="robo943"></a><h2>SUModules/SUModules.Assign_Module_Command [ Commands ]</h2>
+<a name="robo939"></a><h2>SUModules/SUModules.Assign_Module_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -186,7 +166,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eCancel5fOrder5fCommand"></a>
-<a name="robo944"></a><h2>SUModules/SUModules.Cancel_Order_Command [ Commands ]</h2>
+<a name="robo940"></a><h2>SUModules/SUModules.Cancel_Order_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -215,7 +195,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eDisable5fEngine5fCommand"></a>
-<a name="robo945"></a><h2>SUModules/SUModules.Disable_Engine_Command [ Commands ]</h2>
+<a name="robo941"></a><h2>SUModules/SUModules.Disable_Engine_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -243,7 +223,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eGet5fActive5fButton5fCommand"></a>
-<a name="robo946"></a><h2>SUModules/SUModules.Get_Active_Button_Command [ Commands ]</h2>
+<a name="robo942"></a><h2>SUModules/SUModules.Get_Active_Button_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -272,7 +252,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eReset5fDestination5fCommand"></a>
-<a name="robo947"></a><h2>SUModules/SUModules.Reset_Destination_Command [ Commands ]</h2>
+<a name="robo943"></a><h2>SUModules/SUModules.Reset_Destination_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -299,7 +279,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eSet5fRepair5fCommand"></a>
-<a name="robo948"></a><h2>SUModules/SUModules.Set_Repair_Command [ Commands ]</h2>
+<a name="robo944"></a><h2>SUModules/SUModules.Set_Repair_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -329,7 +309,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eSet5fUpgrade5fCommand"></a>
-<a name="robo949"></a><h2>SUModules/SUModules.Set_Upgrade_Command [ Commands ]</h2>
+<a name="robo945"></a><h2>SUModules/SUModules.Set_Upgrade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -358,7 +338,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fAssign5fAmmo5fCommand"></a>
-<a name="robo950"></a><h2>SUModules/SUModules.Show_Assign_Ammo_Command [ Commands ]</h2>
+<a name="robo946"></a><h2>SUModules/SUModules.Show_Assign_Ammo_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -387,7 +367,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fAssign5fCrew5fCommand"></a>
-<a name="robo951"></a><h2>SUModules/SUModules.Show_Assign_Crew_Command [ Commands ]</h2>
+<a name="robo947"></a><h2>SUModules/SUModules.Show_Assign_Crew_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -416,7 +396,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fAssign5fSkill5fCommand"></a>
-<a name="robo952"></a><h2>SUModules/SUModules.Show_Assign_Skill_Command [ Commands ]</h2>
+<a name="robo948"></a><h2>SUModules/SUModules.Show_Assign_Skill_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -445,7 +425,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fModule5fInfo5fCommand"></a>
-<a name="robo953"></a><h2>SUModules/SUModules.Show_Module_Info_Command [ Commands ]</h2>
+<a name="robo949"></a><h2>SUModules/SUModules.Show_Module_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -473,7 +453,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fModules5fCommand"></a>
-<a name="robo954"></a><h2>SUModules/SUModules.Show_Modules_Command [ Commands ]</h2>
+<a name="robo950"></a><h2>SUModules/SUModules.Show_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -502,7 +482,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eSort5fModules5fCommand"></a>
-<a name="robo955"></a><h2>SUModules/SUModules.Sort_Modules_Command [ Commands ]</h2>
+<a name="robo951"></a><h2>SUModules/SUModules.Sort_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -530,7 +510,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eStop5fUpgrading5fCommand"></a>
-<a name="robo956"></a><h2>SUModules/SUModules.Stop_Upgrading_Command [ Commands ]</h2>
+<a name="robo952"></a><h2>SUModules/SUModules.Stop_Upgrading_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -557,7 +537,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eUpdate5fAssign5fCrew5fCommand"></a>
-<a name="robo957"></a><h2>SUModules/SUModules.Update_Assign_Crew_Command [ Commands ]</h2>
+<a name="robo953"></a><h2>SUModules/SUModules.Update_Assign_Crew_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -587,7 +567,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-10-29 03:47:43</p>
+<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-11-26 04:16:46</p>
 </div> <!-- footer -->
 </body>
 </html>

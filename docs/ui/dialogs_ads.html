@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.3 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -53,10 +53,10 @@
 <li>1.18. <a href="#robo547">Dialogs/Dialogs.Show_Question</a></li>
 <li>1.19. <a href="./dialogs_adb.html#robo548">Dialogs/Set_Mouse_X_Position</a></li>
 <li>1.20. <a href="./dialogs_adb.html#robo549">Dialogs/Set_Mouse_Y_Position</a></li>
-<li>1.21. <a href="#robo800">Dialogs/Dialogs.Close_Dialog_Command</a></li>
-<li>1.22. <a href="./dialogs_adb.html#robo801">Dialogs/Dialogs.Move_Dialog_Command</a></li>
-<li>1.23. <a href="./dialogs_adb.html#robo802">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
-<li>1.24. <a href="./dialogs_adb.html#robo803">Dialogs/Dialogs.Update_Dialog_Command</a></li>
+<li>1.21. <a href="#robo796">Dialogs/Dialogs.Close_Dialog_Command</a></li>
+<li>1.22. <a href="./dialogs_adb.html#robo797">Dialogs/Dialogs.Move_Dialog_Command</a></li>
+<li>1.23. <a href="./dialogs_adb.html#robo798">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
+<li>1.24. <a href="./dialogs_adb.html#robo799">Dialogs/Dialogs.Update_Dialog_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -243,8 +243,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Show_Info
      <span class="sign">(</span>Text<span class="sign">:</span> String<span class="sign">;</span> Parent_Name<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".gameframe"</span><span class="sign">;</span> Title<span class="sign">:</span> String<span class="sign">;</span>
-      Button_1<span class="sign">,</span> Button_2<span class="sign">:</span> Button_Settings <span class="sign">:</span><span class="sign">=</span> Empty_Button_Settings<span class="sign">;</span>
-      Wrap_Length<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 300<span class="sign">)</span> <span class="keyword">with</span>
+      Button_1<span class="sign">,</span> Button_2<span class="sign">:</span> Button_Settings <span class="sign">:</span><span class="sign">=</span> Empty_Button_Settings<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Text<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0 and Parent_Name'</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -257,8 +256,6 @@
                button will not show. Default value is empty.
  Button_2    - The setting for the second optional button. If empty,
                the button will not show. Default value is empty.
- Wrap_Length - The amount of pixels at which the info text will be
-               wrapped. Default value is 300
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 8.2 - Added parameter Wrap_Length
@@ -338,7 +335,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eClose5fDialog5fCommand"></a>
-<a name="robo800"></a><h2>Dialogs/Dialogs.Close_Dialog_Command [ Commands ]</h2>
+<a name="robo796"></a><h2>Dialogs/Dialogs.Close_Dialog_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -366,7 +363,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/dialogs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-10-29 03:47:43</p>
+<p>Generated from ./src/ui/dialogs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-11-26 04:16:46</p>
 </div> <!-- footer -->
 </body>
 </html>
