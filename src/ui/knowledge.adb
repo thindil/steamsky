@@ -402,7 +402,7 @@ package body Knowledge is
          Ada_Command => Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.Add_Knowledge_Bases_Commands;
       Knowledge.Events.Add_Knowledge_Events_Commands;
-      Knowledge.Missions.Add_Commands;
+      Knowledge.Missions.Add_Knowledge_Missions_Commands;
       Knowledge.Stories.Add_Commands;
    end Add_Commands;
 

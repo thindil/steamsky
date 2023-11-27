@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 package Knowledge.Missions is
 -- ****
 
-   -- ****f* KMissions/KMissions.Add_Commands
+   -- ****f* KMissions/KMissions.Add_Knowledge_Missions_Commands
    -- FUNCTION
    -- Add Tcl commands related to the list of known bases
    -- SOURCE
-   procedure Add_Commands;
+   procedure Add_Knowledge_Missions_Commands;
    -- ****
 
    -- ****f* KMissions/KMissions.Update_Missions_List

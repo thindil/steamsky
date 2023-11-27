@@ -435,7 +435,7 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Sort_Missions_Command;
 
-   procedure Add_Commands is
+   procedure Add_Knowledge_Missions_Commands is
    begin
       Add_Command
         (Name => "ShowMissionMenu",
@@ -445,7 +445,7 @@ package body Knowledge.Missions is
       Add_Command
         (Name => "SortAccepted_Missions",
          Ada_Command => Sort_Missions_Command'Access);
-   end Add_Commands;
+   end Add_Knowledge_Missions_Commands;
 
    procedure Update_Missions_List(Page: Positive := 1) is
       use Tiny_String;
