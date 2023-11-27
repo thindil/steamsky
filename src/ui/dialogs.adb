@@ -637,7 +637,7 @@ package body Dialogs is
       Info_Label: constant Tk_Text :=
         Create
           (pathName => Info_Dialog & ".text",
-           options => "-width 30 -height 5 -wrap char");
+           options => "-width 30 -height 5 -wrap word");
       Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
@@ -695,7 +695,7 @@ package body Dialogs is
                     Index1 => "0.0", Index2 => "end")) /
               Positive'Value
                 (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-              2));
+              3));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Length(Source => Button_1.Text) > 0 and
