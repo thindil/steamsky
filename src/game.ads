@@ -68,7 +68,7 @@ package Game is
    -- FUNCTION
    -- Current the game version
    -- SOURCE
-   Game_Version: constant String := "Version: 9.4";
+   Game_Version: constant String := "Version: 9.5";
    -- ****
 
    -- ****t* Game/Game.UnboundedString_Container
