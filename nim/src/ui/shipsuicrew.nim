@@ -63,6 +63,12 @@ proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
 
 proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
     KeyError], tags: [].} =
+  ## Get the name of the highest skill of the selected crew member
+  ##
+  ## * memberIndex - the crew index of the member which the highest skill will
+  ##                 be get
+  ##
+  ## Returns the name of the highest skill of the selected crew member
   var
     highestLevel = 1
     highestIndex = 1
