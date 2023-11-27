@@ -61,7 +61,8 @@ proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & button & " \"Repair the ship " & (
         if selection: "selected crew members" else: "everyone") & "\"")
 
-proc getHighestSkill(memberIndex: Natural): string =
+proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
+    KeyError], tags: [].} =
   var
     highestLevel = 1
     highestIndex = 1
