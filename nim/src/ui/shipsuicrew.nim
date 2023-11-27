@@ -187,6 +187,36 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
         tooltip = "The current tired level of the selected crew member",
         command = "ShowMemberInfo " & $(mIndex + 1), column = 6, newRow = false,
         invertColors = true)
+    addProgressbar(table = crewTable, value = playerShip.crew[mIndex].thirst,
+        maxValue = SkillRange.high,
+        tooltip = "The current thirst level of the selected crew member",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 7, newRow = false,
+        invertColors = true)
+    addProgressbar(table = crewTable, value = playerShip.crew[mIndex].hunger,
+        maxValue = SkillRange.high,
+        tooltip = "The current hunger level of the selected crew member",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 8, newRow = false,
+        invertColors = true)
+    addProgressbar(table = crewTable, value = playerShip.crew[mIndex].morale[1],
+        maxValue = SkillRange.high,
+        tooltip = "The current morale level of the selected crew member",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 9, newRow = true)
+    if crewTable.row == gameSettings.listsLimit + 1:
+      break
+  if page > 1:
+    addPagination(table = crewTable, previousCommand = "ShowCrew " & $(page -
+        1) & " " & $skill, nextCommand = (if crewTable.row <
+        gameSettings.listsLimit + 1: "" else: "ShowCrew " & $(page + 1) & " " & $skill))
+  elif crewTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = crewTable, nextCommand = "ShowCrew " & $(page + 1) &
+        " " & $skill)
+  updateTable(table = crewTable)
+  tclEval(script = "update")
+  let shipCanvas = mainPaned & ".shipinfoframe.crew.canvas"
+  tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
+      script = shipCanvas & " bbox all") & "]")
+  tclEval(script = shipCanvas & " xview moveto 0.0")
+  tclEval(script = shipCanvas & " yview moveto 0.0")
 
 # Temporary code for interfacing with Ada
 
@@ -201,3 +231,9 @@ proc getAdaHighestSkill(memberIndex: cint): cstring {.raises: [], tags: [], expo
     return getHighestSkill(memberIndex.int - 1).cstring
   except:
     return "".cstring
+
+proc updateAdaCrewInfo(page, skill: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    updateCrewInfo(page = page, skill = skill)
+  except:
+    echo "error"
