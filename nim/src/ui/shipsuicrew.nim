@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, game, tk, types]
+import ../[config, crew, game, shipscrew, tk, types]
 import coreui, table
 
 var
@@ -168,6 +168,25 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
       addButton(table = crewTable, text = getHighestSkill(memberIndex = mIndex),
           tooltip = "The highest skill of the selected crew member",
           command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
+    else:
+      addButton(table = crewTable, text = getSkillLevelName(
+          skillLevel = getSkillLevel(member = playerShip.crew[mIndex],
+          skillIndex = skill)), tooltip = "The level of " & tclEval2(
+          script = skillBox & " get") & " of the selected crew member",
+          command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
+    addProgressbar(table = crewTable, value = playerShip.crew[mIndex].health,
+        maxValue = SkillRange.high,
+        tooltip = "The current health level of the selected crew member",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 5)
+    var tiredLevel = playerShip.crew[mIndex].tired - playerShip.crew[
+        mIndex].attributes[conditionIndex].level
+    if tiredLevel < 0:
+      tiredLevel = 0
+    addProgressbar(table = crewTable, value = tiredLevel,
+        maxValue = SkillRange.high,
+        tooltip = "The current tired level of the selected crew member",
+        command = "ShowMemberInfo " & $(mIndex + 1), column = 6, newRow = false,
+        invertColors = true)
 
 # Temporary code for interfacing with Ada
 
