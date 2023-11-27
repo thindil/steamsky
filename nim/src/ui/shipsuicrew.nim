@@ -232,8 +232,16 @@ proc getAdaHighestSkill(memberIndex: cint): cstring {.raises: [], tags: [], expo
   except:
     return "".cstring
 
-proc updateAdaCrewInfo(page, skill: cint) {.raises: [], tags: [], exportc.} =
+proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
+    columnsWidth: var array[10, cint]) {.raises: [], tags: [], exportc.} =
+  crewIndexes = @[]
+  for index in cIndexes:
+    if index == 0:
+      break
+    crewIndexes.add(index - 1)
   try:
     updateCrewInfo(page = page, skill = skill)
   except:
     echo "error"
+  for index, width in crewTable.columnsWidth:
+    columnsWidth[index] = width.cint
