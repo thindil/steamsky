@@ -21,7 +21,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.String_Split;
 with CArgv;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -37,12 +37,12 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases;
-with Config; use Config;
+with Config;
 with CoreUI; use CoreUI;
 with Crafts;
 with Dialogs; use Dialogs;
@@ -73,42 +73,6 @@ package body Ships.UI.Crew is
    Crew_Indexes: Positive_Container.Vector;
    -- ****
 
-   -- ****if* SUCrew/SUCrew.Get_Highest_Skill
-   -- FUNCTION
-   -- Get the name of the highest skill of the selected crew member
-   -- PARAMETERS
-   -- Member_Index - The index of the selected crew member which skill will
-   --                be get
-   -- RESULT
-   -- The name of the highest skill of the selected crew member
-   -- HISTORY
-   -- 6.9 - Added
-   -- SOURCE
-   function Get_Highest_Skill(Member_Index: Positive) return String is
-      -- ****
-      use Interfaces.C.Strings;
-
-      function Get_Ada_Highest_Skill(M_Index: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaHighestSkill";
-   begin
-      return Value(Item => Get_Ada_Highest_Skill(M_Index => Member_Index));
-   end Get_Highest_Skill;
-
-   -- ****if* SUCrew/SUCrew.Update_Tooltips
-   -- FUNCTION
-   -- Update the tooltips for the orders buttons, depends if there are crew
-   -- members selected on the list or not
-   -- HISTORY
-   -- 8.5 - Added
-   -- SOURCE
-   procedure Update_Tooltips with
-      Import => True,
-      Convention => C,
-      External_Name => "updateAdaTooltips";
-      -- ****
-
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
 --      use Ada.Characters.Handling;
 --
@@ -137,7 +101,8 @@ package body Ships.UI.Crew is
       C_Array: Crew_Array := (others => 0);
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
-      procedure Update_Ada_Crew_Info(P: Positive; S: Natural; M: Crew_Array; W: out Nim_Width) with
+      procedure Update_Ada_Crew_Info
+        (P: Positive; S: Natural; M: Crew_Array; W: out Nim_Width) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaCrewInfo";
@@ -150,7 +115,7 @@ package body Ships.UI.Crew is
               (New_Item => Crew_Container.To_Index(Position => I));
          end loop Update_Crew_Indexes_Loop;
       end if;
-      Convert_Crew_Indexes_Loop:
+      Convert_Crew_Indexes_Loop :
       for C_Index of Crew_Indexes loop
          C_Array(Index) := C_Index;
          Index := Index + 1;
@@ -710,8 +675,11 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use Tcl.Tklib.Ada.Autoscroll;
+      use Tcl.Tklib.Ada.Tooltip;
       use Bases;
+      use Config;
       use Factions;
 
       Member_Index: constant Positive :=
@@ -2088,6 +2056,17 @@ package body Ships.UI.Crew is
       procedure Sort_Crew is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Member_Data,
          Array_Type => Crew_Array);
+      function Get_Highest_Skill(Member_Index: Positive) return String is
+         use Interfaces.C.Strings;
+
+         function Get_Ada_Highest_Skill
+           (M_Index: Positive) return chars_ptr with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaHighestSkill";
+      begin
+         return Value(Item => Get_Ada_Highest_Skill(M_Index => Member_Index));
+      end Get_Highest_Skill;
    begin
       case Column is
          when 1 =>
@@ -2652,6 +2631,8 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use GNAT.String_Split;
+
       Orders_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
       Button: constant Ttk_Button :=
@@ -2723,6 +2704,10 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      procedure Update_Tooltips with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaTooltips";
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Toggle_Checked_Button
