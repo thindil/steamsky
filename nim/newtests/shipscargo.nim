@@ -1,0 +1,51 @@
+import ../src/[careers, factions, game, items, shipmodules, shipscargo, types]
+import unittest2
+
+suite "Unit tests for shipscargo module":
+
+  checkpoint "Loading the game data."
+  loadData("../bin/data/game.dat")
+  loadItems("../bin/data/items.dat")
+  loadCareers("../bin/data/careers.dat")
+  loadFactions("../bin/data/factions.dat")
+  loadModules("../bin/data/shipmodules.dat")
+
+  playerShip.modules = @[]
+  playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
+      durability: 100, maxDurability: 100))
+  playerShip.cargo = @[]
+  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
+      durability: 100))
+  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200,
+      durability: 100))
+  playerShip.crew = @[]
+  playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
+      homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
+      1, 1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
+      level: 4, experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+      experience: 0), MobAttributeRecord(level: 3, experience: 0),
+      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+      experience: 0)], health: 100))
+
+  test "Testing updateCargo.":
+    checkpoint "Remove an item from the player's ship cargo"
+    updateCargo(playerShip, 1, -1)
+    check:
+      playerShip.cargo[0].amount == 99
+    checkpoint "Add an item to the player's ship cargo"
+    updateCargo(playerShip, 1, 1)
+    check:
+      playerShip.cargo[0].amount == 100
+    updateCargo(playerShip, 40, -1)
+
+  test "Testing freeCargo.":
+    check:
+      freeCargo(1) > freeCargo(0)
+
+  test "Testing getItemAmount.":
+    check:
+      getItemAmount("Fuel") == 100
+
+  test "Testing getItemsAmount.":
+    check:
+      getItemsAmount("Drinks") == 200
