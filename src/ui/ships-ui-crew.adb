@@ -1959,7 +1959,7 @@ package body Ships.UI.Crew is
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
       Skill_Index: constant Natural :=
-        Natural'Value(Current(ComboBox => Skill_Box));
+        Natural(Find_Skill_Index(Skill_Name => Get(Widgt => Skill_Box)));
       --## rule off TYPE_INITIAL_VALUES
       type Local_Member_Data is record
          Selected: Boolean;
