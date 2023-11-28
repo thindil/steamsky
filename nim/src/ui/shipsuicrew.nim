@@ -82,7 +82,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
     gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
-    rows = gridSize[2].parseInt
+    rows = gridSize[1].parseInt
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
   var needRepair, needClean = false
   for module in playerShip.modules:
@@ -96,6 +96,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   var
     buttonsFrame = crewInfoFrame & ".ordersbuttons"
     ordersLabel = buttonsFrame & ".label"
+  tclEval(script = "ttk::frame " & buttonsFrame)
   tclEval(script = "ttk::label " & ordersLabel & " -text {Orders for all:}")
   tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
   var button = buttonsFrame & ".rest"
@@ -115,6 +116,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
   updateTooltips()
   tclEval(script = "grid " & buttonsFrame & " -sticky w")
   buttonsFrame = crewInfoFrame & ".selectskill"
+  tclEval(script = "ttk::frame " & buttonsFrame)
   ordersLabel = buttonsFrame & ".label"
   tclEval(script = "ttk::label " & ordersLabel & " -text {Skill:}")
   tclEval(script = "tooltip::tooltip " & ordersLabel & " \"Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.\"")
@@ -242,6 +244,7 @@ proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
   try:
     updateCrewInfo(page = page, skill = skill)
   except:
-    echo "error"
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(e = getCurrentException())
   for index, width in crewTable.columnsWidth:
     columnsWidth[index] = width.cint
