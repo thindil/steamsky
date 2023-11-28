@@ -265,8 +265,11 @@ package body Knowledge.Missions is
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      --## rule off IMPROPER_INITIALIZATION
       Local_Missions: Missions_Array(1 .. Get_Accepted_Missions_Amount);
       Accepted_Mission: Mission_Data;
+      --## rule on IMPROPER_INITIALIZATION
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Local_Mission_Data) return Boolean is
       begin
          if Missions_Sort_Order = TYPEASC
@@ -364,6 +367,7 @@ package body Knowledge.Missions is
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Fill_Local_Missions_Loop :
       for I in 1 .. Get_Accepted_Missions_Amount loop
          Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
