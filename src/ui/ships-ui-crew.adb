@@ -102,7 +102,8 @@ package body Ships.UI.Crew is
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
       procedure Update_Ada_Crew_Info
-        (P: Positive; S: Natural; M: Crew_Array; W: out Nim_Width) with
+        (P: Positive; S: Natural; M: Crew_Array; W: out Nim_Width;
+         Row, Height: out Positive) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaCrewInfo";
@@ -120,7 +121,9 @@ package body Ships.UI.Crew is
          C_Array(Index) := C_Index;
          Index := Index + 1;
       end loop Convert_Crew_Indexes_Loop;
-      Update_Ada_Crew_Info(P => Page, S => Skill, M => C_Array, W => N_Width);
+      Update_Ada_Crew_Info
+        (P => Page, S => Skill, M => C_Array, W => N_Width,
+         Row => Crew_Table.Row, Height => Crew_Table.Row_Height);
       Index := 1;
       Convert_Headers_Width_Loop :
       for Width of N_Width loop
@@ -128,6 +131,9 @@ package body Ships.UI.Crew is
          Crew_Table.Columns_Width(Index) := Width;
          Index := Index + 1;
       end loop Convert_Headers_Width_Loop;
+      Crew_Table.Canvas :=
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame.table");
 --      Create
 --        (S => Tokens,
 --         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Crew_Info_Frame),

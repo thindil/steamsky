@@ -235,7 +235,8 @@ proc getAdaHighestSkill(memberIndex: cint): cstring {.raises: [], tags: [], expo
     return "".cstring
 
 proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
-    columnsWidth: var array[10, cint]) {.raises: [], tags: [], exportc.} =
+    columnsWidth: var array[10, cint]; row, rowHeight: var cint) {.raises: [],
+        tags: [], exportc.} =
   crewIndexes = @[]
   for index in cIndexes:
     if index == 0:
@@ -248,3 +249,5 @@ proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
     echo getStackTrace(e = getCurrentException())
   for index, width in crewTable.columnsWidth:
     columnsWidth[index] = width.cint
+  row = crewTable.row.cint
+  rowHeight = crewTable.rowHeight.cint
