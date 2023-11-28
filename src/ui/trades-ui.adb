@@ -280,7 +280,7 @@ package body Trades.UI is
          if Index
              (Source => Items_Types,
               Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 then
+           0 and Get_Proto_Item(Index => Proto_Index).Price > 0 then
             Append
               (Source => Items_Types,
                New_Item => " {" & To_String(Source => Item_Type) & "}");
