@@ -78,7 +78,8 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
       highestIndex = skill.index
   return skillsList[highestIndex].name
 
-proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
+proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
+    raises: [ValueError], tags: [].} =
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
     gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
@@ -173,7 +174,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) =
     else:
       addButton(table = crewTable, text = getSkillLevelName(
           skillLevel = getSkillLevel(member = playerShip.crew[mIndex],
-          skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox & " get")))),
+          skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox &
+              " get")))),
           tooltip = "The level of " & tclEval2(
           script = skillBox & " get") & " of the selected crew member",
           command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
