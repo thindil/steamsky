@@ -1879,7 +1879,7 @@ package body Ships.UI.Crew is
          Crew_Indexes.Append(New_Item => Member.Id);
          --## rule on DIRECTLY_ACCESSED_GLOBALS
       end loop Fill_Crew_Indexes_Loop;
-      Update_Crew_Info(Skill => Skill_Index);
+      Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
       return TCL_OK;
    end Sort_Crew_Command;
 
