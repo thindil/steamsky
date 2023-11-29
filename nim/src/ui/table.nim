@@ -37,7 +37,7 @@ type
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     command: string = ""; tooltipText: string = ""): TableWidget {.sideEffect,
-    raises: [ValueError], tags: [].} =
+    raises: [], tags: [].} =
   ## Create a new table and columns' headers for it
   ##
   ## * parent      - the Tcl path to the parent widget for the table
@@ -91,10 +91,15 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
       tclResult = tclEval2(script = result.canvas & " bbox header" & $(index + 1))
       coords = tclResult.split
     var oldX = x - 5
-    x = coords[2].parseInt + 5
-    result.columnsWidth.add(x - coords[0].parseInt)
-    if index == 0:
-      result.rowHeight = coords[3].parseInt + 5
+    try:
+      x = coords[2].parseInt + 5
+      result.columnsWidth.add(x - coords[0].parseInt)
+      if index == 0:
+        result.rowHeight = coords[3].parseInt + 5
+    except ValueError:
+      tclEval(script = "bgerror {Can't get coordinates for the table. Result: " &
+          tclResult & "}")
+      return
     let backgroundId = tclEval2(script = result.canvas & " create rectangle " &
         $oldX & " 0 " & $(x - 2) & " " & $(result.rowHeight - 3) & " -fill " &
             headerBackColor &
