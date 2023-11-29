@@ -80,6 +80,10 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
     raises: [ValueError], tags: [].} =
+  ## Update the list of the player's ship's crew members
+  ##
+  ## * page  - the current page of the list to show
+  ## * skill - the currently selected skill on the list of skills to show
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
     gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
