@@ -61,8 +61,7 @@ proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & button & " \"Repair the ship " & (
         if selection: "selected crew members" else: "everyone") & "\"")
 
-proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
-    KeyError], tags: [].} =
+proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
   ## Get the name of the highest skill of the selected crew member
   ##
   ## * memberIndex - the crew index of the member which the highest skill will
@@ -76,10 +75,14 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [
     if skill.level > highestLevel:
       highestLevel = skill.level
       highestIndex = skill.index
-  return skillsList[highestIndex].name
+  try:
+    return skillsList[highestIndex].name
+  except KeyError:
+    tclEval(script = "bgerror {Can't get the highest skill. Index: " & $highestIndex & "}")
+    return "Unknown"
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
-    raises: [ValueError], tags: [].} =
+    raises: [], tags: [].} =
   ## Update the list of the player's ship's crew members
   ##
   ## * page  - the current page of the list to show
@@ -87,7 +90,11 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
     gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
-    rows = gridSize[1].parseInt
+    rows = try:
+        gridSize[1].parseInt
+      except ValueError:
+        tclEval(script = "bgerror {Can't get the size of the grid. Result: " & $gridSize & "}")
+        return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
   var needRepair, needClean = false
   for module in playerShip.modules:
@@ -176,13 +183,16 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
           tooltip = "The highest skill of the selected crew member",
           command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
     else:
-      addButton(table = crewTable, text = getSkillLevelName(
-          skillLevel = getSkillLevel(member = playerShip.crew[mIndex],
-          skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox &
-              " get")))),
-          tooltip = "The level of " & tclEval2(
-          script = skillBox & " get") & " of the selected crew member",
-          command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
+      try:
+        addButton(table = crewTable, text = getSkillLevelName(
+            skillLevel = getSkillLevel(member = playerShip.crew[mIndex],
+            skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox &
+                " get")))),
+            tooltip = "The level of " & tclEval2(
+            script = skillBox & " get") & " of the selected crew member",
+            command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
+      except KeyError:
+        tclEval(script = "bgerror {Can't get the level of the skill.}")
     addProgressbar(table = crewTable, value = playerShip.crew[mIndex].health,
         maxValue = SkillRange.high,
         tooltip = "The current health level of the selected crew member",
