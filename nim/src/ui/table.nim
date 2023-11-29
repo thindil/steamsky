@@ -194,7 +194,7 @@ proc addBackground(table: TableWidget; newRow: bool;
 
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
     column: Positive; newRow: bool = false; color: string = "") {.sideEffect,
-    raises: [ValueError], tags: [].} =
+    raises: [], tags: [].} =
   ## Add a button item to the selected TableWidget
   ##
   ## * table   - the TableWidget to which the button will be added
@@ -227,14 +227,18 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
-  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  try:
+    x = (coords[2].parseInt + 10) - coords[0].parseInt
+  except ValueError:
+    tclEval(script = "bgerror {Can't add a button to the table. Result: " & tclResult & "}")
+    return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
   if newRow:
     table.row.inc
 
 proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
-    raises: [ValueError], tags: [].} =
+    raises: [], tags: [].} =
   ## Update the size and coordinates of all elements in the selected TableWidget
   ##
   ## * table     - the TableWidget in which the elements will be resized and
@@ -276,8 +280,12 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
   for row in 1 .. table.row:
     newY = newY + table.rowHeight
     tag = "row" & $row
-    tclEval(script = table.canvas & " coords " & tag & " 0 " & $(newY -
-        table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
+    try:
+      discard tclEval(script = table.canvas & " coords " & tag & " 0 " & $(newY -
+          table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
+    except ValueError:
+      tclEval(script = "bgerror {Can't update the table. Result: " & tclResult & "}")
+      return
   tclEval(script = "set currentrow 1")
   tclEval(script = table.canvas & " bind <FocusIn> {set maxrows " & $table.row &
       ";if {$currentrow > $maxrows} {set currentrow 1};" & table.canvas &
@@ -288,7 +296,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
 
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
-    invertColors: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
+    invertColors: bool = false) {.sideEffect, raises: [], tags: [].} =
   ## Add a progressbar item to the selected TableWidget
   ##
   ## * table         - the TableWidget to which the progressbar will be added
@@ -322,7 +330,11 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
-  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  try:
+    x = (coords[2].parseInt + 10) - coords[0].parseInt
+  except ValueError:
+    tclEval(script = "bgerror {Can't add a progressbar to the table. Result: " & tclResult & "}")
+    return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
   var color = ""
@@ -386,7 +398,7 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
-    emptyUnchecked: bool = false) {.sideEffect, raises: [ValueError], tags: [].} =
+    emptyUnchecked: bool = false) {.sideEffect, raises: [], tags: [].} =
   ## Add checkbutton item to the selected TableWidget
   ##
   ## * table          - the TableWidget to which the checkbutton will be added
@@ -417,7 +429,11 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   let
     tclResult = tclEval2(script = table.canvas & " bbox " & itemId)
     coords = tclResult.split
-  x = (coords[2].parseInt + 10) - coords[0].parseInt
+  try:
+    x = (coords[2].parseInt + 10) - coords[0].parseInt
+  except ValueError:
+    tclEval(script = "bgerror {Can't add a checkbutton to the table. Result: " & tclResult & "}")
+    return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
   if command.len > 0:
