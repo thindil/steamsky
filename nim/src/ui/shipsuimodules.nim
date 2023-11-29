@@ -96,7 +96,7 @@ proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
   else:
     discard
 
-proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [ValueError],
+proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [],
     tags: [].} =
   ## Update the list of the player's ship's installed modules
   ##
