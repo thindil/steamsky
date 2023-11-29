@@ -85,7 +85,7 @@ package body Knowledge.Missions is
              " mission actions",
            Parent_Name => ".", Columns => 3);
       procedure Add_Button
-        (Name, Label, Command, Icon, Tooltip: String; Column: Natural) is
+        (Name, Label, Command, Icon, Tooltip_Text: String; Column: Natural) is
          Button: constant Ttk_Button :=
            Create
              (pathName => Mission_Menu & Name,
@@ -99,7 +99,7 @@ package body Knowledge.Missions is
             Options =>
               "-sticky we -padx 5 -pady {0 5} -row 1 -column" &
               Natural'Image(Column));
-         Add(Widget => Button, Message => Tooltip);
+         Add(Widget => Button, Message => Tooltip_Text);
          Bind
            (Widgt => Button, Sequence => "<Escape>",
             Script => "{CloseDialog " & Mission_Menu & " .;break}");
@@ -113,16 +113,16 @@ package body Knowledge.Missions is
    begin
       Add_Button
         (Name => ".destination",
-         Tooltip => "Set the mission as destination for the ship.",
+         Tooltip_Text => "Set the mission as destination for the ship.",
          Command =>
            "SetDestination2 " & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
          Icon => "destination", Label => "Target", Column => 0);
       Add_Button
         (Name => ".close", Label => "Close", Command => "", Icon => "exit",
-         Tooltip => "Close the dialog.", Column => 1);
+         Tooltip_Text => "Close the dialog.", Column => 1);
       Add_Button
-        (Name => ".show", Tooltip => "Show the mission on map.",
+        (Name => ".show", Tooltip_Text => "Show the mission on map.",
          Command =>
            "ShowOnMap" & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
@@ -406,11 +406,11 @@ package body Knowledge.Missions is
                  when DESTROY =>
                    To_Unbounded_String
                      (Source =>
-                        (To_String
+                        To_String
                            (Source =>
                               Get_Proto_Ship
                                 (Proto_Index => Accepted_Mission.Ship_Index)
-                                .Name))),
+                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String
                      (Source =>
@@ -459,14 +459,14 @@ package body Knowledge.Missions is
       Missions_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Missions_Canvas & ".frame");
       Tokens: Slice_Set;
-      Rows: Natural := 0;
+      Rows: Natural;
       Label: Ttk_Label;
-      Row: Positive;
+      Row: Positive := 1;
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       Current_Row: Positive := 1;
-      Mission_Time, Color: Unbounded_String;
-      Accepted_Mission: Mission_Data;
+      Mission_Time, Color: Unbounded_String := Null_Unbounded_String;
+      Accepted_Mission: Mission_Data := Empty_Mission;
    begin
       Create
         (S => Tokens,
