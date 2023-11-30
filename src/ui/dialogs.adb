@@ -20,7 +20,6 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -627,7 +626,6 @@ package body Dialogs is
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
       use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
 
       Info_Dialog: constant Ttk_Frame :=
@@ -637,7 +635,7 @@ package body Dialogs is
       Info_Label: constant Tk_Text :=
         Create
           (pathName => Info_Dialog & ".text",
-           options => "-width 30 -height 5 -wrap word");
+           options => "-width 30 -height 25 -wrap word");
       Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
@@ -688,14 +686,10 @@ package body Dialogs is
         (Widgt => Info_Label,
          options =>
            "-state disabled -height" &
-           Positive'Image
-             (Positive'Value
-                (Count
-                   (TextWidget => Info_Label, Options => "-displaylines",
-                    Index1 => "0.0", Index2 => "end")) /
-              Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-              3));
+           Float'Image
+             (Float'Value
+                (Index(TextWidget => Info_Label, TextIndex => "end")) +
+              1.0));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Length(Source => Button_1.Text) > 0 and
