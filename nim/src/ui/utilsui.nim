@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[tables, strutils]
-import ../[bases, config, game, shipscargo, shipscrew, tk, types]
+import std/[os, strutils, tables]
+import ../[bases, config, crewinventory, game, shipscargo, shipscrew, tk, types]
 import coreui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
@@ -307,6 +307,17 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.crew[crewIndex - 1].name = value
     tclUnsetVar(varName)
     updateCrewInfo()
+  return tclOk
+
+proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let answer = argv[1]
+  if answer == "deletesave":
+    removeFile(saveDirectory & tclGetVar("deletesave"))
+    tclUnsetVar("deletesave")
+    tclEval(script = "ShowLoadGame")
+  elif answer == "sethomebase":
+    let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
