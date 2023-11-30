@@ -255,6 +255,7 @@ package body Knowledge.Missions is
         Get_Column_Number
           (Table => Missions_Table,
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      --## rule off TYPE_INITIAL_VALUES
       type Local_Mission_Data is record
          M_Type: Missions_Types;
          Distance: Natural;
@@ -265,6 +266,7 @@ package body Knowledge.Missions is
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Local_Missions: Missions_Array(1 .. Get_Accepted_Missions_Amount);
       Accepted_Mission: Mission_Data;
@@ -460,10 +462,12 @@ package body Knowledge.Missions is
         Get_Widget(pathName => Missions_Canvas & ".frame");
       Tokens: Slice_Set;
       Rows: Natural;
-      Label: Ttk_Label;
+      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
       Row: Positive := 1;
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Row: constant Positive :=
         ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       Current_Row: Positive := 1;
       Mission_Time, Color: Unbounded_String := Null_Unbounded_String;
       Accepted_Mission: Mission_Data := Empty_Mission;
@@ -473,6 +477,7 @@ package body Knowledge.Missions is
          From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame),
          Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Missions_Table.Row > 1 then
          Clear_Table(Table => Missions_Table);
       end if;
@@ -672,6 +677,7 @@ package body Knowledge.Missions is
          end if;
          Update_Table(Table => Missions_Table);
       end if;
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Missions_Canvas,
