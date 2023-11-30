@@ -268,6 +268,18 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the player's ship, module or crew member's name in Nim and Tcl
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the name was set, otherwise tclError
+  ##
+  ## Tcl:
+  ## SetTextVariable variablename
+  ## Variablename is the name of variable to set
   let
     varName = $argv[1]
     tEntry = ".getstring.entry"
