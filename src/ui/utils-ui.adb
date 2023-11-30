@@ -44,7 +44,6 @@ with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement;
 with Ships.UI.Crew; use Ships.UI.Crew;
-with Ships.UI.Modules;
 with Statistics.UI;
 
 package body Utils.UI is
@@ -92,42 +91,10 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkEntry;
-      use Tiny_String;
-
-      T_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => ".getstring.entry", Interp => Interp);
-      Value: constant String := Get(Widgt => T_Entry);
-      Var_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      Tcl_SetVar(interp => Interp, varName => Var_Name, newValue => Value);
-      if Var_Name = "shipname" then
-         Player_Ship.Name := To_Bounded_String(Source => Value);
-      elsif Var_Name'Length > 10 and then Var_Name(1 .. 10) = "modulename" then
-         Rename_Module_Block :
-         declare
-            use Ships.UI.Modules;
-
-            Module_Index: constant Positive :=
-              Positive'Value(Var_Name(11 .. Var_Name'Last));
-         begin
-            Player_Ship.Modules(Module_Index).Name :=
-              To_Bounded_String(Source => Value);
-            Tcl_UnsetVar(interp => Interp, varName => Var_Name);
-            Update_Modules_Info;
-         end Rename_Module_Block;
-      elsif Var_Name'Length > 8 and then Var_Name(1 .. 8) = "crewname" then
-         Rename_Crew_Member_Block :
-         declare
-            Crew_Index: constant Positive :=
-              Positive'Value(Var_Name(9 .. Var_Name'Last));
-         begin
-            Player_Ship.Crew(Crew_Index).Name :=
-              To_Bounded_String(Source => Value);
-            Tcl_UnsetVar(interp => Interp, varName => Var_Name);
-            Update_Crew_Info;
-         end Rename_Crew_Member_Block;
-      end if;
+      Get_Ada_Ship;
+      Tcl_Eval(interp => Interp, strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
+      Set_Ada_Ship(Ship => Player_Ship);
       return TCL_OK;
    end Set_Text_Variable_Command;
 
