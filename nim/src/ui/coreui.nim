@@ -15,4 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-const mainPaned* = ".gameframe.paned" ## The name of the main Tk paned widget of the game
+const
+  mainPaned* = ".gameframe.paned"
+    ## The name of the main Tk paned widget of the game
+  gameHeader* = ".gameframe.header"
+    ## The name of the header Tk frame (with menu button, time, icons, etc.)
