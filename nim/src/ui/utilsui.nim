@@ -267,7 +267,7 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     varName = $argv[1]
     tEntry = ".getstring.entry"
@@ -276,12 +276,22 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   if varName == "shipname":
     playerShip.name = value
   elif varName.len > 10 and varName[0 .. 9] == "modulename":
-    let moduleIndex = varName[10 .. ^1].parseInt
+    let moduleIndex = try:
+        varName[10 .. ^1].parseInt
+      except ValueError:
+        -1
+    if moduleIndex == -1:
+      return tclError
     playerShip.modules[moduleIndex - 1].name = value
     tclUnsetVar(varName)
     updateModulesInfo()
   elif varName.len > 8 and varName[0 .. 7] == "crewname":
-    let crewIndex = varName[8 .. ^1].parseInt
+    let crewIndex = try:
+        varName[8 .. ^1].parseInt
+      except ValueError:
+        -1
+    if crewIndex == -1:
+      return tclError
     playerShip.crew[crewIndex - 1].name = value
     tclUnsetVar(varName)
     updateCrewInfo()
