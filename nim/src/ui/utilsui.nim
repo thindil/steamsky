@@ -285,12 +285,14 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.crew[crewIndex - 1].name = value
     tclUnsetVar(varName)
     updateCrewInfo()
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   addCommand("ResizeCanvas", resizeCanvasCommand)
   addCommand("CheckAmount", checkAmountCommand)
   addCommand("ValidateAmount", validateAmountCommand)
+  addCommand("NimSetTextVariable", setTextVariableCommand)
 
 # Temporary code for interfacing with Ada
 
