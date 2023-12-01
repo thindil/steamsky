@@ -21,7 +21,8 @@ import coreui
 var timerId: string = "" ## Id of the timer for auto close command
 
 proc createDialog*(name, title: string; titleWidth: Positive = 275;
-    columns: Positive = 1; parentName: string = ".gameframe"): string =
+    columns: Positive = 1;
+    parentName: string = ".gameframe"): string {.sideEffect, raises: [], tags: [].} =
   if parentName == ".gameframe":
     tclEval(script = "tk busy " & gameHeader)
     tclEval(script = "tk busy " & mainPaned)
