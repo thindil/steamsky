@@ -56,6 +56,16 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
       if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
       dialogHeader & " 0 0}")
 
+proc showMessage*(text: string; parentFrame: string = ".gameframe";
+    title: string) =
+  let
+    messageDialog = createDialog(name = (if parentFrame ==
+        ".": "" else: parentFrame) & ".message", title = title,
+        parentName = parentFrame)
+    messageLabel = messageDialog & ".text"
+  tclEval(script = "ttk::label " & messageLabel & " -text {" & text & "} -wraplength 300")
+  tclEval(script = "grid " & messageLabel & " -sticky we -padx 5 -pady 5")
+
 # Temporary code for interfacing with Ada
 
 proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
