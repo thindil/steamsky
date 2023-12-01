@@ -49,6 +49,8 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
 # Temporary code for interfacing with Ada
 
 proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
-    parentName: cstring): cstring {.raises: [], tags: [], exportc.} =
-  return createDialog($name, $title, titleWidth.Positive, columns.Positive,
+    parentName: cstring; timerName: var cstring): cstring {.raises: [], tags: [], exportc.} =
+  timerId = $timerName
+  result = createDialog($name, $title, titleWidth.Positive, columns.Positive,
       $parentName).cstring
+  timerName = timerId.cstring

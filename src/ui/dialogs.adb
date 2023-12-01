@@ -16,6 +16,7 @@
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -33,7 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with CoreUI;
+-- with CoreUI;
 with Ships;
 with Utils.UI;
 
@@ -74,53 +75,72 @@ package body Dialogs is
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
       return Ttk_Frame is
-      use CoreUI;
+      use Interfaces.C.Strings;
+      -- use CoreUI;
 
-      New_Dialog: constant Ttk_Frame :=
-        Create(pathName => Name, options => "-style Dialog.TFrame");
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (pathName => New_Dialog & ".header",
-           options =>
-             "-text {" & Title & "} -wraplength" &
-             Positive'Image(Title_Width) &
-             " -style Header.TLabel -cursor hand1");
+      New_Dialog: Ttk_Frame;
+--      Dialog_Header: constant Ttk_Label :=
+--        Create
+--          (pathName => New_Dialog & ".header",
+--           options =>
+--             "-text {" & Title & "} -wraplength" &
+--             Positive'Image(Title_Width) &
+--             " -style Header.TLabel -cursor hand1");
+      Temp_Timer_Id: chars_ptr :=
+        New_String(Str => To_String(Source => Timer_Id));
+      function Create_Ada_Dialog
+        (N, T: chars_ptr; T_Width, Cols: Positive; P_Name: chars_ptr;
+         Timer_Name: out chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "createAdaDialog";
    begin
-      if Parent_Name = ".gameframe" then
-         Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
-         Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
-      else
-         Tcl.Tk.Ada.Busy.Busy
-           (Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
-      end if;
-      if Get_Timer_Id /= Null_Unbounded_String then
-         Cancel(id_or_script => To_String(Source => Get_Timer_Id));
-         Set_Timer_Id(New_Value => Null_Unbounded_String);
-      end if;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Dialog_Header,
-         Options =>
-           "-sticky we -padx 2 -pady {2 0}" &
-           (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
-            else ""));
-      Bind
-        (Widgt => Dialog_Header,
-         Sequence =>
-           "<ButtonPress-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
-           ">",
-         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
-      Bind
-        (Widgt => Dialog_Header, Sequence => "<Motion>",
-         Script => "{MoveDialog " & New_Dialog & " %X %Y}");
-      Bind
-        (Widgt => Dialog_Header,
-         Sequence =>
-           "<ButtonRelease-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
-           ">",
-         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
+      New_Dialog :=
+        Get_Widget
+          (pathName =>
+             Value
+               (Item =>
+                  Create_Ada_Dialog
+                    (N => New_String(Str => Name),
+                     T => New_String(Str => Title), T_Width => Title_Width,
+                     Cols => Columns, P_Name => New_String(Str => Parent_Name),
+                     Timer_Name => Temp_Timer_Id)));
+      Timer_Id := To_Unbounded_String(Source => Value(Item => Temp_Timer_Id));
+--      if Parent_Name = ".gameframe" then
+--         Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
+--         Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
+--      else
+--         Tcl.Tk.Ada.Busy.Busy
+--           (Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
+--      end if;
+--      if Get_Timer_Id /= Null_Unbounded_String then
+--         Cancel(id_or_script => To_String(Source => Get_Timer_Id));
+--         Set_Timer_Id(New_Value => Null_Unbounded_String);
+--      end if;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Dialog_Header,
+--         Options =>
+--           "-sticky we -padx 2 -pady {2 0}" &
+--           (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
+--            else ""));
+--      Bind
+--        (Widgt => Dialog_Header,
+--         Sequence =>
+--           "<ButtonPress-" &
+--           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+--           ">",
+--         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
+--      Bind
+--        (Widgt => Dialog_Header, Sequence => "<Motion>",
+--         Script => "{MoveDialog " & New_Dialog & " %X %Y}");
+--      Bind
+--        (Widgt => Dialog_Header,
+--         Sequence =>
+--           "<ButtonRelease-" &
+--           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+--           ">",
+--         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return New_Dialog;
    end Create_Dialog;
 
