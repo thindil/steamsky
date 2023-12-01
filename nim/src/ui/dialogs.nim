@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import ../[config, tk]
 import coreui
 
 var timerId: string = "" ## Id of the timer for auto close command
@@ -38,3 +38,17 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
       "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
   tclEval(script = "grid " & dialogHeader & " -sticky we -padx 2 -pady {2 0}" &
       (if columns > 1: " -columnspan " & $columns else: ""))
+  tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
+      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
+      dialogHeader & " %X %Y}")
+  tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " & result & " %X %Y}")
+  tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
+      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
+      dialogHeader & " 0 0}")
+
+# Temporary code for interfacing with Ada
+
+proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
+    parentName: cstring): cstring {.raises: [], tags: [], exportc.} =
+  return createDialog($name, $title, titleWidth.Positive, columns.Positive,
+      $parentName).cstring
