@@ -13,11 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
+with Ada.Containers;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
@@ -25,23 +25,23 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
-with Config; use Config;
-with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Config;
+with CoreUI;
+with Dialogs;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
 with Missions; use Missions;
 with Ships; use Ships;
 with Table; use Table;
-with Utils; use Utils;
+with Utils;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Missions is
@@ -70,6 +70,10 @@ package body Knowledge.Missions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tklib.Ada.Tooltip;
+      use Dialogs;
+
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Accepted_Mission: constant Mission_Data :=
@@ -209,6 +213,7 @@ package body Knowledge.Missions is
    Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* KMissions/KMissions.Missions_Sort_Order
    -- FUNCTION
    -- The current sorting order for accepted missions list
@@ -217,6 +222,7 @@ package body Knowledge.Missions is
    -- SOURCE
    Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****iv* KMissions/KMissions.Missions_Indexes
    -- FUNCTION
@@ -454,6 +460,12 @@ package body Knowledge.Missions is
    end Add_Knowledge_Missions_Commands;
 
    procedure Update_Missions_List(Page: Positive := 1) is
+      use GNAT.String_Split;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Config;
+      use CoreUI;
       use Tiny_String;
 
       Missions_Canvas: constant Tk_Canvas :=
