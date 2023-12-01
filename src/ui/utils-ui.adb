@@ -43,7 +43,7 @@ with Missions;
 with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement;
-with Ships.UI.Crew; use Ships.UI.Crew;
+with Ships.UI.Crew;
 with Statistics.UI;
 
 package body Utils.UI is
@@ -287,6 +287,7 @@ package body Utils.UI is
       else
          Dismiss_Member_Block :
          declare
+            use Ships.UI.Crew;
             Base_Index: constant Positive :=
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
             Member_Index: constant Positive :=
