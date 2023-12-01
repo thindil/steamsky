@@ -23,6 +23,15 @@ var timerId: string = "" ## Id of the timer for auto close command
 proc createDialog*(name, title: string; titleWidth: Positive = 275;
     columns: Positive = 1;
     parentName: string = ".gameframe"): string {.sideEffect, raises: [], tags: [].} =
+  ## Create a new dialog with the selected title
+  ##
+  ## * name       - the Tk path of the new dialog
+  ## * title      - the title of the new dialog
+  ## * titleWidth - the width in pixels of the new dialog
+  ## * columns    - the amount of columns for elements in the new dialog
+  ## * parentName - the Tk path of the parent widget
+  ##
+  ## Returns the full Tk path of the new dialog
   if parentName == ".gameframe":
     tclEval(script = "tk busy " & gameHeader)
     tclEval(script = "tk busy " & mainPaned)
