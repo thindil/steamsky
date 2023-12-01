@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated look of the items information dialog in the trading screen
+
 ### Fixed
 - Don't show empty categories of items in the trading screen
 - Crash when trying to show the crew members with the selected skill in the
