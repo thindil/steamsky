@@ -108,28 +108,41 @@ package body Dialogs is
      (Name, Text, Command: String; Column_Span: Positive := 1;
       Row, Column: Natural := 0; Icon: String := "exiticon";
       Color: String := "") is
-      Button: constant Ttk_Button :=
-        Create
-          (pathName => Name,
-           options =>
-             "-command {" & Command & "} -image {" & Icon & "} -style Dialog" &
-             Color & ".TButton -text {" & Text & "}");
+      use Interfaces.C.Strings;
+
+--      Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Name,
+--           options =>
+--             "-command {" & Command & "} -image {" & Icon & "} -style Dialog" &
+--             Color & ".TButton -text {" & Text & "}");
+      procedure Add_Ada_Close_Button
+        (N, T, Com: chars_ptr; Col_Span, R, Col: Integer;
+         I, Colo: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaCloseButton";
    begin
-      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button,
-         Options =>
-           "-pady 5" &
-           (if Column_Span > 1 then
-              " -columnspan" & Positive'Image(Column_Span)
-            else "") &
-           " -row" & Positive'Image(Row) &
-           (if Column > 0 then " -column" & Positive'Image(Column) else ""));
-      Focus(Widgt => Button);
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{break}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Button & " invoke;break}");
+      Add_Ada_Close_Button
+        (N => New_String(Str => Name), T => New_String(Str => Text),
+         Com => New_String(Str => Command), Col_Span => Column_Span, R => Row,
+         Col => Column, I => New_String(Str => Icon),
+         Colo => New_String(Str => Color));
+--      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Button,
+--         Options =>
+--           "-pady 5" &
+--           (if Column_Span > 1 then
+--              " -columnspan" & Positive'Image(Column_Span)
+--            else "") &
+--           " -row" & Positive'Image(Row) &
+--           (if Column > 0 then " -column" & Positive'Image(Column) else ""));
+--      Focus(Widgt => Button);
+--      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{break}");
+--      Bind
+--        (Widgt => Button, Sequence => "<Escape>",
+--         Script => "{" & Button & " invoke;break}");
    end Add_Close_Button;
 
    procedure Show_Dialog
