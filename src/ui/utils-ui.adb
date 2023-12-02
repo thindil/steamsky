@@ -93,7 +93,9 @@ package body Utils.UI is
       pragma Unreferenced(Client_Data, Argc);
    begin
       Get_Ada_Ship;
-      Tcl_Eval(interp => Interp, strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
+      Tcl_Eval
+        (interp => Interp,
+         strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
       Set_Ada_Ship(Ship => Player_Ship);
       return TCL_OK;
    end Set_Text_Variable_Command;
@@ -689,14 +691,14 @@ package body Utils.UI is
       Append
         (Source => Item_Info,
          New_Item =>
-           "Weight:" &
+           "Weight: {gold}" &
            Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
-           " kg");
+           " kg{/gold}");
       if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Skill: " &
+              LF & "Skill: {gold}" &
               To_String
                 (Source =>
                    SkillsData_Container.Element
@@ -717,24 +719,27 @@ package body Utils.UI is
                              Skills_Amount_Range
                                (Get_Proto_Item(Index => Proto_Index).Value(3)))
                           .Attribute)
-                     .Name));
+                     .Name) &
+              "{/gold}");
          if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
             Append
               (Source => Item_Info,
-               New_Item => LF & "Can be used with shield.");
+               New_Item => LF & "{gold}Can be used with shield.{/gold}");
          else
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Can't be used with shield (two-handed weapon).");
+                 LF &
+                 "{gold}Can't be used with shield (two-handed weapon).{/gold}");
          end if;
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Damage type: " &
+              LF & "Damage type: {gold}" &
               (case Get_Proto_Item(Index => Proto_Index).Value(5) is
                  when 1 => "cutting", when 2 => "impaling", when 3 => "blunt",
-                 when others => ""));
+                 when others => "") &
+              "{/gold}");
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
@@ -742,12 +747,13 @@ package body Utils.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Damage chance: " &
+                 LF & "Damage chance: {gold}" &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
                       Get_Proto_Item(Index => Proto_Index).Value(1)) &
-                 LF & "Strength:" &
-                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)));
+                 LF & "{/gold}Strength:{gold}" &
+                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
+                 "{/gold}");
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
@@ -755,9 +761,10 @@ package body Utils.UI is
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Damage chance: " &
+              LF & "Damage chance: {gold}" &
               Get_Item_Chance_To_Damage
-                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)));
+                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
         and then
@@ -770,8 +777,9 @@ package body Utils.UI is
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Strength:" &
-              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)));
+              LF & "Strength:{gold}" &
+              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Get_Proto_Item(Index => Proto_Index).Description /=
         Short_String.Null_Bounded_String then
