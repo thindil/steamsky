@@ -79,7 +79,7 @@ package body Dialogs is
 
       New_Dialog: Ttk_Frame;
       Temp_Timer_Id: chars_ptr :=
-        New_String(Str => To_String(Source => Timer_Id));
+        New_String(Str => To_String(Source => Get_Timer_Id));
       function Create_Ada_Dialog
         (N, T: chars_ptr; T_Width, Cols: Positive; P_Name: chars_ptr;
          Timer_Name: out chars_ptr) return chars_ptr with
@@ -97,7 +97,9 @@ package body Dialogs is
                      T => New_String(Str => Title), T_Width => Title_Width,
                      Cols => Columns, P_Name => New_String(Str => Parent_Name),
                      Timer_Name => Temp_Timer_Id)));
-      Timer_Id := To_Unbounded_String(Source => Value(Item => Temp_Timer_Id));
+      Set_Timer_Id
+        (New_Value =>
+           To_Unbounded_String(Source => Value(Item => Temp_Timer_Id)));
       return New_Dialog;
    end Create_Dialog;
 
