@@ -70,8 +70,6 @@ package body Knowledge.Missions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tklib.Ada.Tooltip;
       use Dialogs;
 
       Mission_Index: constant Positive :=
@@ -90,6 +88,9 @@ package body Knowledge.Missions is
            Parent_Name => ".", Columns => 3);
       procedure Add_Button
         (Name, Label, Command, Icon, Tooltip_Text: String; Column: Natural) is
+         use Tcl.Tk.Ada.Widgets.TtkButton;
+         use Tcl.Tklib.Ada.Tooltip;
+
          Button: constant Ttk_Button :=
            Create
              (pathName => Mission_Menu & Name,
