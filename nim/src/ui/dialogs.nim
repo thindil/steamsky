@@ -59,6 +59,18 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
 proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
     row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
     color: string = "") {.sideEffect, raises: [], tags: [].} =
+  ## Add a close button to the selected dialog and set keyboard bindings for it
+  ##
+  ## * name       - the Tk path (name) for the button
+  ## * text       - the text to display on the button
+  ## * command    - the Tcl command to run when the button was clicked
+  ## * columnSpan - the amount of columns to merge when placing the button
+  ## * row        - the row in which the button will be placed
+  ## * column     - the column in which the button will be placed
+  ## * icon       - the Tcl name of the image which will be displayed on the
+  ##                button intead of the text or close to the text
+  ## * color      - the color of the text on the button. Depends on the
+  ##                current game's theme
   let button = name
   tclEval(script = "ttk::button " & button & " -command {" & command &
       "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
