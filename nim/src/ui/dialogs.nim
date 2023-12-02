@@ -56,6 +56,21 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
       if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
       dialogHeader & " 0 0}")
 
+proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
+    row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
+    color: string = "") =
+  let button = name
+  tclEval(script = "ttk::button " & button & " -command {" & command &
+      "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
+      text & "}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
+  tclEval(script = "grid " & button & " -pady 5" & (if columnSpan >
+      1: " -columnspan " & $columnSpan else: "") & " -row " & $row & (
+      if column > 0: " -column " & $column else: ""))
+  tclEval(script = "focus " & button)
+  tclEval(script = "bind " & button & " <Tab> {break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+
 proc showMessage*(text: string; parentFrame: string = ".gameframe";
     title: string) =
   let
