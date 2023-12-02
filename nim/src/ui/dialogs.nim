@@ -58,7 +58,7 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
 
 proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
     row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
-    color: string = "") =
+    color: string = "") {.sideEffect, raises: [], tags: [].} =
   let button = name
   tclEval(script = "ttk::button " & button & " -command {" & command &
       "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
