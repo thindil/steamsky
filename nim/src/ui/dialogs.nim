@@ -89,3 +89,8 @@ proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
   result = createDialog($name, $title, titleWidth.Positive, columns.Positive,
       $parentName).cstring
   timerName = timerId.cstring
+
+  proc addAdaCloseButtonon(name, text, command: cstring; columnSpan, row,
+      column: cint; icon, color: cstring) {.raises: [], tags: [], exportc.} =
+    addCloseButton($name, $text, $command, columnSpan.Positive, row.Natural,
+        column.Natural, $icon, $color)
