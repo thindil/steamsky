@@ -317,7 +317,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
       if member.contractLength < 0:
         member.contractLength = 0
 
-  while i < playerShip.crew.high:
+  while i < playerShip.crew.len:
     var currentMinutes: int = minutes
     orderTime = playerShip.crew[i].orderTime
     var times = 0
