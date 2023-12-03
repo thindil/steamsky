@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Don't show empty categories of items in the trading screen
 - Crash when trying to show the crew members with the selected skill in the
   ship info screen
+- The last member of the player's ship's crew doesn't work
 
 ## [9.0.4] - 2023-11-05
 
