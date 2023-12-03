@@ -83,6 +83,15 @@ proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
   tclEval(script = "bind " & button & " <Tab> {break}")
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
 
+proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
+    withTimer: bool = false; relativeX: float = 0.3; relativeY: float = 0.3) =
+  tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
+      $relativeX & " -rely " & $relativeY)
+  tclEval(script = "raise " & dialog)
+  if withTimer:
+    timerId = tclEval2(script = "after 1000 UpdateDialog " & dialog & (
+        if parentFrame == ".gameframe": "" else: " " & parentFrame))
+
 proc showMessage*(text: string; parentFrame: string = ".gameframe";
     title: string) =
   let
@@ -110,3 +119,9 @@ proc addAdaCloseButton(name, text, command: cstring; columnSpan, row,
     column: cint; icon, color: cstring) {.raises: [], tags: [], exportc.} =
   addCloseButton($name, $text, $command, columnSpan.Positive, row.Natural,
       column.Natural, $icon, $color)
+
+proc showAdaDialog(dialog, parentFrame: cstring; withTimer: cint; relativeX,
+    relativeY: cfloat): cstring {.raises: [], tags: [], exportc.} =
+  showDialog($dialog, $parentFrame, withTimer == 1, relativeX.float,
+      relativeY.float)
+  return timerId.cstring
