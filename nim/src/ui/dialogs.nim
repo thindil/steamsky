@@ -92,6 +92,10 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
     messageLabel = messageDialog & ".text"
   tclEval(script = "ttk::label " & messageLabel & " -text {" & text & "} -wraplength 300")
   tclEval(script = "grid " & messageLabel & " -sticky we -padx 5 -pady 5")
+  addCloseButton(name = messageDialog & ".button", text = "Close" &
+      $gameSettings.autoCloseMessagesTime, command = "CloseDialog " &
+      messageDialog & (if parentFrame == ".gameframe": "" else: " " &
+      parentFrame), row = 2)
 
 # Temporary code for interfacing with Ada
 
