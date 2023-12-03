@@ -128,25 +128,25 @@ package body Dialogs is
      (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
       With_Timer: Boolean := False;
       Relative_X, Relative_Y: Damage_Factor := 0.3) is
+      use Interfaces.C.Strings;
+
+      Local_Timer: chars_ptr;
+      function Show_Ada_Dialog
+        (D, P_Frame: chars_ptr; W_Timer: Integer; Rel_X, Rel_Y: Damage_Factor)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "showAdaDialog";
    begin
-      Tcl.Tk.Ada.Place.Place
-        (Slave => Dialog,
-         Options =>
-           "-in " & Parent_Frame & " -relx" & Damage_Factor'Image(Relative_X) &
-           " -rely" & Damage_Factor'Image(Relative_Y));
-      Widget_Raise(Widgt => Dialog);
-      if With_Timer then
-         Set_Timer_Id
-           (New_Value =>
-              To_Unbounded_String
-                (Source =>
-                   After
-                     (Ms => 1_000,
-                      Script =>
-                        "UpdateDialog " & Dialog &
-                        (if Parent_Frame = ".gameframe" then ""
-                         else " " & Parent_Frame))));
-      end if;
+      Local_Timer :=
+        Show_Ada_Dialog
+          (D => New_String(Str => Widget_Image(Win => Dialog)),
+           P_Frame => New_String(Str => Parent_Frame),
+           W_Timer => (if With_Timer then 1 else 0), Rel_X => Relative_X,
+           Rel_Y => Relative_Y);
+      Set_Timer_Id
+        (New_Value =>
+           To_Unbounded_String(Source => Value(Item => Local_Timer)));
    end Show_Dialog;
 
    function Close_Dialog_Command
