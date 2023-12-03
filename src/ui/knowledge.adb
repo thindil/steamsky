@@ -403,7 +403,7 @@ package body Knowledge is
       Knowledge.Bases.Add_Knowledge_Bases_Commands;
       Knowledge.Events.Add_Knowledge_Events_Commands;
       Knowledge.Missions.Add_Knowledge_Missions_Commands;
-      Knowledge.Stories.Add_Commands;
+      Knowledge.Stories.Add_Knowledge_Stories_Commands;
    end Add_Commands;
 
 end Knowledge;

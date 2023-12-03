@@ -296,7 +296,7 @@ package body Knowledge.Stories is
              Positive'Image(New_X) & Positive'Image(New_Y));
    end Set_Story_Command;
 
-   procedure Add_Commands is
+   procedure Add_Knowledge_Stories_Commands is
    begin
       Add_Command
         (Name => "ShowStory", Ada_Command => Show_Story_Command'Access);
@@ -304,6 +304,6 @@ package body Knowledge.Stories is
         (Name => "ShowStoryLocation",
          Ada_Command => Show_Story_Location_Command'Access);
       Add_Command(Name => "SetStory", Ada_Command => Set_Story_Command'Access);
-   end Add_Commands;
+   end Add_Knowledge_Stories_Commands;
 
 end Knowledge.Stories;
