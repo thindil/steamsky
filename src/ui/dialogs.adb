@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -34,7 +34,6 @@ with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
--- with CoreUI;
 with Ships;
 with Utils.UI;
 
@@ -75,7 +74,6 @@ package body Dialogs is
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
       return Ttk_Frame is
-      use Interfaces.C.Strings;
 
       New_Dialog: Ttk_Frame;
       Temp_Timer_Id: chars_ptr :=
@@ -108,7 +106,6 @@ package body Dialogs is
      (Name, Text, Command: String; Column_Span: Positive := 1;
       Row, Column: Natural := 0; Icon: String := "exiticon";
       Color: String := "") is
-      use Interfaces.C.Strings;
 
       procedure Add_Ada_Close_Button
         (N, T, Com: chars_ptr; Col_Span, R, Col: Integer;
@@ -128,7 +125,6 @@ package body Dialogs is
      (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
       With_Timer: Boolean := False;
       Relative_X, Relative_Y: Damage_Factor := 0.3) is
-      use Interfaces.C.Strings;
 
       Local_Timer: chars_ptr;
       function Show_Ada_Dialog
@@ -566,16 +562,6 @@ package body Dialogs is
 
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
---      Message_Dialog: constant Ttk_Frame :=
---        Create_Dialog
---          (Name =>
---             (if Parent_Frame = "." then "" else Parent_Frame) & ".message",
---           Title => Title, Parent_Name => Parent_Frame);
---      Message_Label: constant Ttk_Label :=
---        Create
---          (pathName => Message_Dialog & ".text",
---           options => "-text {" & Text & "} -wraplength 300");
-      use Interfaces.C.Strings;
 
       Local_Timer: chars_ptr;
       function Show_Ada_Message
@@ -592,21 +578,6 @@ package body Dialogs is
       Set_Timer_Id
         (New_Value =>
            To_Unbounded_String(Source => Value(Item => Local_Timer)));
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Message_Label, Options => "-sticky we -padx 5 -pady 5");
---      Add_Close_Button
---        (Name => Message_Dialog & ".button",
---         Text =>
---           "Close" &
---           Positive'Image
---             (Get_Integer_Setting(Name => "autoCloseMessagesTime")),
---         Command =>
---           "CloseDialog " & Message_Dialog &
---           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame),
---         Row => 2);
---      Show_Dialog
---        (Dialog => Message_Dialog, Parent_Frame => Parent_Frame,
---         With_Timer => True);
    end Show_Message;
 
    procedure Show_Info
