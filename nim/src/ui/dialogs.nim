@@ -86,6 +86,15 @@ proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
 proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
     withTimer: bool = false; relativeX: float = 0.3;
     relativeY: float = 0.3) {.sideEffect, raises: [], tags: [].} =
+  ## Show the selected dialog to the player
+  ##
+  ## * dialog      - the Tk path (name) of the dialog to show
+  ## * parentFrame - the Tk path (name) of the parent frame for the dialog
+  ## * withTimer   - if true, add the close timer for the dialog
+  ## * relativeX   - the relative X coordinate of the dialog inside its parent
+  ##                 frame. 0.0 is the left border
+  ## * relativeY   - the relative Y coordinate of the dialog inside its parent
+  ##                 frame. 0.0 is the top border
   tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
       $relativeX & " -rely " & $relativeY)
   tclEval(script = "raise " & dialog)
