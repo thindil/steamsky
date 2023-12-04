@@ -138,7 +138,7 @@ proc showAdaDialog(dialog, parentFrame: cstring; withTimer: cint; relativeX,
       relativeY.float)
   return timerId.cstring
 
-proc showAdaMessage(dialog, parentFrame, title: cstring): cstring {.raises: [],
+proc showAdaMessage(text, parentFrame, title: cstring): cstring {.raises: [],
     tags: [], exportc.} =
-  showMessage($dialog, $parentFrame, $title)
+  showMessage($text, $parentFrame, $title)
   return timerId.cstring

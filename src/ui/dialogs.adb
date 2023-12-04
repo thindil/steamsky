@@ -566,31 +566,47 @@ package body Dialogs is
 
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
-      Message_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name =>
-             (if Parent_Frame = "." then "" else Parent_Frame) & ".message",
-           Title => Title, Parent_Name => Parent_Frame);
-      Message_Label: constant Ttk_Label :=
-        Create
-          (pathName => Message_Dialog & ".text",
-           options => "-text {" & Text & "} -wraplength 300");
+--      Message_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name =>
+--             (if Parent_Frame = "." then "" else Parent_Frame) & ".message",
+--           Title => Title, Parent_Name => Parent_Frame);
+--      Message_Label: constant Ttk_Label :=
+--        Create
+--          (pathName => Message_Dialog & ".text",
+--           options => "-text {" & Text & "} -wraplength 300");
+      use Interfaces.C.Strings;
+
+      Local_Timer: chars_ptr;
+      function Show_Ada_Message
+        (Te, P_Frame, Ti: chars_ptr)
+         return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "showAdaMessage";
    begin
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Message_Label, Options => "-sticky we -padx 5 -pady 5");
-      Add_Close_Button
-        (Name => Message_Dialog & ".button",
-         Text =>
-           "Close" &
-           Positive'Image
-             (Get_Integer_Setting(Name => "autoCloseMessagesTime")),
-         Command =>
-           "CloseDialog " & Message_Dialog &
-           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame),
-         Row => 2);
-      Show_Dialog
-        (Dialog => Message_Dialog, Parent_Frame => Parent_Frame,
-         With_Timer => True);
+      Local_Timer :=
+        Show_Ada_Message
+          (Te => New_String(Str => Text),
+           P_Frame => New_String(Str => Parent_Frame), Ti => New_String(Str => Title));
+      Set_Timer_Id
+        (New_Value =>
+           To_Unbounded_String(Source => Value(Item => Local_Timer)));
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Message_Label, Options => "-sticky we -padx 5 -pady 5");
+--      Add_Close_Button
+--        (Name => Message_Dialog & ".button",
+--         Text =>
+--           "Close" &
+--           Positive'Image
+--             (Get_Integer_Setting(Name => "autoCloseMessagesTime")),
+--         Command =>
+--           "CloseDialog " & Message_Dialog &
+--           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame),
+--         Row => 2);
+--      Show_Dialog
+--        (Dialog => Message_Dialog, Parent_Frame => Parent_Frame,
+--         With_Timer => True);
    end Show_Message;
 
    procedure Show_Info
