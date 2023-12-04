@@ -84,7 +84,8 @@ proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
 
 proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
-    withTimer: bool = false; relativeX: float = 0.3; relativeY: float = 0.3) =
+    withTimer: bool = false; relativeX: float = 0.3;
+    relativeY: float = 0.3) {.sideEffect, raises: [], tags: [].} =
   tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
       $relativeX & " -rely " & $relativeY)
   tclEval(script = "raise " & dialog)
