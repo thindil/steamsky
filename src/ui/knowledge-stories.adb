@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -68,9 +68,9 @@ package body Knowledge.Stories is
         Main_Paned & ".knowledgeframe.stories.canvas.frame";
       Story_View: constant Tk_Text :=
         Get_Widget(pathName => Frame_Name & ".view", Interp => Interp);
-      Story_Text: Unbounded_String;
+      Story_Text: Unbounded_String := Null_Unbounded_String;
       Tokens: Slice_Set;
-      Step: Step_Data;
+      Step: Step_Data := Empty_Step;
       Story_Index: Positive;
       Stories_Box: constant Ttk_ComboBox :=
         Get_Widget
@@ -82,7 +82,7 @@ package body Knowledge.Stories is
         (Positive'Value(Winfo_Get(Widgt => Stories_Box, Info => "reqwidth")) +
          Positive'Value(Winfo_Get(Widgt => Button, Info => "reqwidth"))) /
         Positive'Value(Measure(Font => "InterfaceFont", Text => "{ }"));
-      Faction: Faction_Record;
+      Faction: Faction_Record := Empty_Faction;
    begin
       Story_Index := Natural'Value(Current(ComboBox => Stories_Box)) + 1;
       configure
@@ -121,16 +121,16 @@ package body Knowledge.Stories is
                           "You must travel to base " & Get_Current_Story.Data &
                           " at X:");
                      Base_Location_Loop :
-                     for I in Sky_Bases'Range loop
-                        if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
+                     for Base of Sky_Bases loop
+                        if Tiny_String.To_String(Source => Base.Name) =
                           To_String(Source => Get_Current_Story.Data) then
                            Append
                              (Source => Story_Text,
-                              New_Item => Positive'Image(Sky_Bases(I).Sky_X));
+                              New_Item => Positive'Image(Base.Sky_X));
                            Append(Source => Story_Text, New_Item => " Y:");
                            Append
                              (Source => Story_Text,
-                              New_Item => Positive'Image(Sky_Bases(I).Sky_Y));
+                              New_Item => Positive'Image(Base.Sky_Y));
                            exit Base_Location_Loop;
                         end if;
                      end loop Base_Location_Loop;
@@ -170,7 +170,7 @@ package body Knowledge.Stories is
                             Get_Proto_Item
                               (Index =>
                                  Positive'Value
-                                   ((Slice(S => Tokens, Index => 1))))
+                                   (Slice(S => Tokens, Index => 1)))
                               .Name) &
                        " from ");
                   if Slice(S => Tokens, Index => 2) = "any" then
@@ -251,7 +251,7 @@ package body Knowledge.Stories is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      New_X, New_Y: Positive := 1;
+      New_X, New_Y: Positive;
    begin
       Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
       return
@@ -285,7 +285,7 @@ package body Knowledge.Stories is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      New_X, New_Y: Positive := 1;
+      New_X, New_Y: Positive;
    begin
       Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
       return
