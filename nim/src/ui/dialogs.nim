@@ -115,6 +115,8 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
       $gameSettings.autoCloseMessagesTime, command = "CloseDialog " &
       messageDialog & (if parentFrame == ".gameframe": "" else: " " &
       parentFrame), row = 2)
+  showDialog(dialog = messageDialog, parentFrame = parentFrame,
+      withTimer = true)
 
 # Temporary code for interfacing with Ada
 
@@ -134,4 +136,9 @@ proc showAdaDialog(dialog, parentFrame: cstring; withTimer: cint; relativeX,
     relativeY: cfloat): cstring {.raises: [], tags: [], exportc.} =
   showDialog($dialog, $parentFrame, withTimer == 1, relativeX.float,
       relativeY.float)
+  return timerId.cstring
+
+proc showAdaMessage(dialog, parentFrame, title: cstring): cstring {.raises: [],
+    tags: [], exportc.} =
+  showMessage($dialog, $parentFrame, $title)
   return timerId.cstring
