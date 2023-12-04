@@ -625,6 +625,24 @@ package body Dialogs is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-goldenyellow)"));
+      Tag_Configure
+        (TextWidget => Info_Label, TagName => "green",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Get_Context,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-green)"));
+      Tag_Configure
+        (TextWidget => Info_Label, TagName => "red",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Get_Context,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-red)"));
       if Tag_Index = 0 then
          Insert
            (TextWidget => Info_Label, Index => "end",
