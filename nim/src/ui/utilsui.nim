@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[bases, config, crewinventory, game, game2, maps, messages,
     shipscargo, shipscrew, tk, types]
-import coreui, dialogs, shipsuicrew, shipsuimodules
+import dialogs, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -79,51 +79,6 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
   if travelTime.minutes > 0:
     timeText = timeText & " " & $travelTime.minutes & "mins"
   infoText = timeText.cstring
-
-proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
-    raises: [], tags: [].} =
-  ## Clear the old screen and show the selected to the player
-  ##
-  ## * newScreenName - the Tcl name of the screen which will be show
-  const
-    paned = mainPaned & ".controls.buttons"
-    messagesFrame = mainPaned & ".controls.messages"
-  let interp = getInterp()
-  if tclEval(script = mainPaned & " panes") == tclError:
-    return
-  let
-    tclResult = $interp.tclGetResult()
-    oldSubWindow = tclResult.split()[0]
-    subWindow = mainPaned & "." & $newScreenName
-  if tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
-    return
-  if tclEval(script = mainPaned & " insert 0 " & subWindow &
-      " -weight 1") == tclError:
-    return
-  if newScreenName in ["optionsframe".cstring, "messagesframe"] or
-      not gameSettings.showLastMessages:
-    if tclEval(script = "grid remove " & messagesFrame) == tclError:
-      return
-    if newScreenName != "mapframe":
-      if tclEval(script = "winfo height " & mainPaned) == tclError:
-        return
-      let newPos = $interp.tclGetResult()
-      if tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
-        return
-  else:
-    if oldSubWindow in [mainPaned & ".messagesframe", mainPaned &
-        ".optionsframe"]:
-      if tclEval(script = mainPaned & " sashpos 0 " & $(
-          gameSettings.windowHeight - gameSettings.messagesPosition)) == tclError:
-        return
-    if tclEval(script = "grid " & messagesFrame) == tclError:
-      return
-  if newScreenName == "mapframe":
-    if tclEval(script = "grid " & paned) == tclError:
-      return
-  else:
-    if tclEval(script = "grid remove " & paned) == tclError:
-      return
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
