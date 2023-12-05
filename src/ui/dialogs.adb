@@ -33,7 +33,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
+with Config;
 with Ships;
 with Utils.UI;
 
@@ -583,6 +583,7 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
+      use Config;
       use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.Text;
 
