@@ -19,11 +19,12 @@ import std/strutils
 import ../[config, tk]
 import coreui
 
-proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
-    raises: [], tags: [].} =
+proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
   ##
   ## * newScreenName - the Tcl name of the screen which will be show
+  if tclGetVar(varName = "mappreview") == "1" and newScreenName != "mapframe":
+    tclUnsetVar(varName = "mappreview")
   const
     paned = mainPaned & ".controls.buttons"
     messagesFrame = mainPaned & ".controls.messages"
@@ -39,7 +40,7 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
   if tclEval(script = mainPaned & " insert 0 " & subWindow &
       " -weight 1") == tclError:
     return
-  if newScreenName in ["optionsframe".cstring, "messagesframe"] or
+  if newScreenName in ["optionsframe", "messagesframe"] or
       not gameSettings.showLastMessages:
     if tclEval(script = "grid remove " & messagesFrame) == tclError:
       return
@@ -64,3 +65,7 @@ proc showScreen*(newScreenName: cstring) {.exportc, sideEffect,
     if tclEval(script = "grid remove " & paned) == tclError:
       return
 
+# Temporary code for interfacing with Ada
+
+proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
+  showScreen($newScreenName)

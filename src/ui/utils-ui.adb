@@ -625,12 +625,8 @@ package body Utils.UI is
       procedure Nim_Show_Screen(Screen_Name: chars_ptr) with
          Import => True,
          Convention => C,
-         External_Name => "showScreen";
+         External_Name => "showAdaScreen";
    begin
-      if Tcl_GetVar(interp => Get_Context, varName => "mappreview") = "1" and
-        New_Screen_Name /= "mapframe" then
-         Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
-      end if;
       Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
    end Show_Screen;
 
