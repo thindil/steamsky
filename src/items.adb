@@ -34,11 +34,12 @@ package body Items is
    end Find_Proto_Item;
 
    function Get_Item_Damage
-     (Item_Durability: Items_Durability; To_Lower: Boolean := False)
-      return String is
+     (Item_Durability: Items_Durability;
+      To_Lower, With_Colors: Boolean := False) return String is
 
       function Get_Ada_Item_Damage
-        (I_Durability: Items_Durability; Lower: Integer) return chars_ptr with
+        (I_Durability: Items_Durability; Lower, Colors: Integer)
+         return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "getAdaItemDamage";
@@ -48,7 +49,8 @@ package body Items is
           (Item =>
              Get_Ada_Item_Damage
                (I_Durability => Item_Durability,
-                Lower => (if To_Lower then 1 else 0)));
+                Lower => (if To_Lower then 1 else 0),
+                Colors => (if With_Colors then 1 else 0)));
    end Get_Item_Damage;
 
    function Get_Item_Name

@@ -137,11 +137,13 @@ package Items is
       -- Item_Durability - Numeric value of current durability of the item
       -- To_Lower        - If true, convert description to lower cases. Default
       --                   is false
+      -- With_Colors     - If true, add colors' tags to the description. Default
+      --                   value is false
       -- RESULT
       -- Description of item damage level
       -- SOURCE
    function Get_Item_Damage
-     (Item_Durability: Items_Durability; To_Lower: Boolean := False)
+     (Item_Durability: Items_Durability; To_Lower, With_Colors: Boolean := False)
       return String with
       Post => Get_Item_Damage'Result'Length > 0;
       -- ****

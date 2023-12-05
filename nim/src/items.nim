@@ -159,25 +159,30 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
       return index
   return 0
 
-func getItemDamage*(itemDurability: ItemsDurability;
-    toLower: bool = false): string {.raises: [], tags: [].} =
+func getItemDamage*(itemDurability: ItemsDurability; toLower: bool = false;
+    withColors: bool = false): string {.raises: [], tags: [].} =
   ## Get the description of the item damage level
   ##
   ## * itemDurability - the durability of the item which description will be get
   ## * toLower        - if true, convert the description to lower letters
+  ## * withColors     - if true, add colors' tags to the description
   ##
   ## Returns the description of the item damage level or empty string if the item isn't
   ## damaged
   let damage: float = 1.0 - (itemDurability.float / 100.0)
   result = ""
   if damage < 0.2:
-    result = "Slightly used"
+    result = (if withColors: "{green}" else: "") & "Slightly used" & (
+        if withColors: "{/green}" else: "")
   elif damage < 0.5:
-    result = "Damaged"
+    result = (if withColors: "{gold}" else: "") & "Damaged" & (
+        if withColors: "{/gold}" else: "")
   elif damage < 0.8:
-    result = "Heavily damaged"
+    result = (if withColors: "{gold}" else: "") & "Heavily damaged" & (
+        if withColors: "{/gold}" else: "")
   else:
-    result = "Almost destroyed"
+    result = (if withColors: "{red}" else: "") & "Almost destroyed" & (
+        if withColors: "{/gold}" else: "")
   if toLower:
     result = toLowerAscii(s = result)
 
@@ -421,9 +426,10 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
 proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return findProtoItem(itemType = $itemType).cint
 
-func getAdaItemDamage(itemDurability: cint; toLower: cint): cstring {.raises: [
-    ], tags: [], exportc.} =
-  return getItemDamage(itemDurability.ItemsDurability, toLower == 1).cstring
+func getAdaItemDamage(itemDurability: cint; toLower,
+    withColors: cint): cstring {.raises: [], tags: [], exportc.} =
+  return getItemDamage(itemDurability.ItemsDurability, toLower == 1,
+      withColors == 1).cstring
 
 proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
     toLower: cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
