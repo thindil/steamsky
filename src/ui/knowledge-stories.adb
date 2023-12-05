@@ -69,7 +69,7 @@ package body Knowledge.Stories is
       Story_View: constant Tk_Text :=
         Get_Widget(pathName => Frame_Name & ".view", Interp => Interp);
       Story_Text: Unbounded_String := Null_Unbounded_String;
-      Tokens: Slice_Set;
+      Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
       Step: Step_Data := Empty_Step;
       Story_Index: Positive;
       Stories_Box: constant Ttk_ComboBox :=
@@ -89,6 +89,7 @@ package body Knowledge.Stories is
         (Widgt => Story_View,
          options => "-state normal -width" & Positive'Image(Line_Width));
       Delete(TextWidget => Story_View, StartIndex => "1.0", Indexes => "end");
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Story_Steps_Info_Loop :
       for StepText of Get_Finished_Story(Index => Story_Index).Steps_Texts loop
          Append(Source => Story_Text, New_Item => StepText & LF);
@@ -222,6 +223,7 @@ package body Knowledge.Stories is
          Button.Name := New_String(Str => Frame_Name & ".options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
       end if;
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       configure
         (Widgt => Story_View,
          options => "-state disabled -height" & Positive'Image(Rows));
