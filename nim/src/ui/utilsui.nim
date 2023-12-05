@@ -16,8 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crewinventory, game, shipscargo, shipscrew, tk, types]
-import coreui, shipsuicrew, shipsuimodules
+import ../[bases, config, crewinventory, game, game2, maps, messages,
+    shipscargo, shipscrew, tk, types]
+import coreui, dialogs, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -317,7 +318,25 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclUnsetVar("deletesave")
     tclEval(script = "ShowLoadGame")
   elif answer == "sethomebase":
-    let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+    let moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    if moneyIndex2 == -1:
+      showMessage(text = "You don't have any " & moneyName &
+          " for change ship home base.", title = "No money")
+      return tclOk
+    let traderIndex = findMember(order = talk)
+    var price: Natural = 1_000
+    countPrice(price = price, traderIndex = traderIndex)
+    if playerShip.cargo[moneyIndex2].amount < price:
+      showMessage(text = "You don't have enough " & moneyName &
+          " for change ship home base.", title = "No money")
+      return tclOk
+    playerShip.homeBase = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    addMessage(message = "You changed your ship home base to: " & skyBases[
+        playerShip.homeBase].name, mType = otherMessage)
+    gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    updateGame(minutes = 10)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
