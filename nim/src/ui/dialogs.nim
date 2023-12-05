@@ -104,6 +104,11 @@ proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
 
 proc showMessage*(text: string; parentFrame: string = ".gameframe";
     title: string) {.sideEffect, raises: [], tags: [].} =
+  ## Show the dialog with the selected message to the player
+  ##
+  ## * text        - the text to of the message to show
+  ## * parentFrame - the Tk path (name) of the parent frame of the message
+  ## * title       - the title of the dialog with the message
   let
     messageDialog = createDialog(name = (if parentFrame ==
         ".": "" else: parentFrame) & ".message", title = title,
