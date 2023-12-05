@@ -103,7 +103,7 @@ proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
         if parentFrame == ".gameframe": "" else: " " & parentFrame))
 
 proc showMessage*(text: string; parentFrame: string = ".gameframe";
-    title: string) =
+    title: string) {.sideEffect, raises: [], tags: [].} =
   let
     messageDialog = createDialog(name = (if parentFrame ==
         ".": "" else: parentFrame) & ".message", title = title,
