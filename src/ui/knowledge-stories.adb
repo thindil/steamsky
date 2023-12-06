@@ -13,27 +13,26 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
+with Ada.Characters.Latin_1;
+with Ada.Strings.Unbounded;
+with Interfaces.C.Strings;
+with GNAT.String_Split;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases; use Bases;
-with CoreUI; use CoreUI;
-with Factions; use Factions;
-with Game; use Game;
-with Items; use Items;
-with Ships; use Ships;
+with Tcl.Tk.Ada.Winfo;
+with Bases;
+with CoreUI;
+with Factions;
+with Game;
+with Items;
+with Ships;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
 
@@ -62,6 +61,23 @@ package body Knowledge.Stories is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Characters.Latin_1;
+      use Ada.Strings.Unbounded;
+      use Interfaces.C.Strings;
+      use GNAT.String_Split;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Font;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Winfo;
+      use Bases;
+      use CoreUI;
+      use Factions;
+      use Game;
+      use Items;
+      use Ships;
       use Tiny_String;
 
       Frame_Name: constant String :=
