@@ -66,7 +66,10 @@ suite "Unit tests for missions2 module":
     playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
         homeBase: 1, faction: "DRONES", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
         1, 0, 0], loyalty: 100, health: 100, tired: 0, hunger: 0,
-        thirst: 0, skills: @[], attributes: @[], contractLength: 1000))
+        thirst: 0, skills: @[], attributes: @[MobAttributeRecord(level: 3,
+      experience: 0), MobAttributeRecord(level: 3, experience: 0),
+      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+      experience: 0)], contractLength: 1000))
     acceptedMissions.add(y = MissionData(mType: passenger, time: 1000,
         targetX: 1, targetY: 1, reward: 1, startBase: 1, finished: false,
             multiplier: 1.0, data: 2))
