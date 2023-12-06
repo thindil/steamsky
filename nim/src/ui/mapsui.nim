@@ -89,6 +89,37 @@ proc updateHeader*() =
     let speed = (if playerShip.speed != docked: realSpeed(
         ship = playerShip).float / 1_000.0 else: realSpeed(ship = playerShip,
         infoOnly = true).float / 1_000)
+    if speed < 0.5:
+      tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
+      tclEval(script = "grid " & label)
+  var
+    haveGunner, haveWorker = true
+    needWorker, needCleaning, needRepairs = false
+  for module in playerShip.modules:
+    case modulesList[module.protoIndex].mType
+    of gun, harpoonGun:
+      if module.owner[0] == -1:
+        haveGunner = false
+      elif playerShip.crew[module.owner[0]].order != gunner:
+        haveGunner = false
+    of alchemyLab .. greenhouse:
+      if module.craftingIndex.len > 0:
+        needWorker = true
+        for owner in module.owner:
+          if owner == -1:
+            haveWorker = false
+          elif playerShip.crew[owner].order != craft:
+            haveWorker = false
+          if not haveWorker:
+            break
+    of cabin:
+      if module.cleanliness != module.quality:
+        needCleaning = true
+    else:
+      discard
+    if module.durability != module.maxDurability:
+      needRepairs = true
+  label = gameHeader & ".pilot"
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
