@@ -565,8 +565,7 @@ package body Dialogs is
 
       Local_Timer: chars_ptr;
       function Show_Ada_Message
-        (Te, P_Frame, Ti: chars_ptr)
-         return chars_ptr with
+        (Te, P_Frame, Ti: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "showAdaMessage";
@@ -574,7 +573,8 @@ package body Dialogs is
       Local_Timer :=
         Show_Ada_Message
           (Te => New_String(Str => Text),
-           P_Frame => New_String(Str => Parent_Frame), Ti => New_String(Str => Title));
+           P_Frame => New_String(Str => Parent_Frame),
+           Ti => New_String(Str => Title));
       Set_Timer_Id
         (New_Value =>
            To_Unbounded_String(Source => Value(Item => Local_Timer)));
@@ -601,8 +601,12 @@ package body Dialogs is
         (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Info_Dialog & ".buttons");
-      Tag_Index: Natural := Index(Source => Text, Pattern => "{gold}");
+      Tag_Index: Natural := 0;
       Start_Index: Natural := 1;
+      Tags: constant array(1 .. 3) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "gold"),
+         2 => To_Unbounded_String(Source => "green"),
+         3 => To_Unbounded_String(Source => "red"));
    begin
       Tag_Configure
         (TextWidget => Info_Label, TagName => "gold",
@@ -631,28 +635,51 @@ package body Dialogs is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
+      Find_Tags_Loop :
+      for Tag of Tags loop
+         Tag_Index :=
+           Index
+             (Source => Text, Pattern => "{" & To_String(Source => Tag) & "}");
+         if Tag_Index > 0 then
+            exit Find_Tags_Loop;
+         end if;
+      end loop Find_Tags_Loop;
       if Tag_Index = 0 then
          Insert
            (TextWidget => Info_Label, Index => "end",
             Text => "{" & Text & "}");
       else
-         Insert_Text_Loop :
-         while Tag_Index > 0 loop
-            Insert
-              (TextWidget => Info_Label, Index => "end",
-               Text => "{" & Text(Start_Index .. Tag_Index - 1) & "}");
-            Start_Index := Tag_Index + 6;
+         Insert_Text_With_Tags_Loop :
+         for Tag of Tags loop
             Tag_Index :=
-              Index(Source => Text, Pattern => "{/gold}", From => Tag_Index);
-            exit Insert_Text_Loop when Tag_Index = 0;
-            Insert
-              (TextWidget => Info_Label, Index => "end",
-               Text =>
-                 "{" & Text(Start_Index .. Tag_Index - 1) & "} [list gold]");
-            Start_Index := Tag_Index + 7;
-            Tag_Index :=
-              Index(Source => Text, Pattern => "{gold}", From => Tag_Index);
-         end loop Insert_Text_Loop;
+              Index
+                (Source => Text,
+                 Pattern => "{" & To_String(Source => Tag) & "}");
+            Insert_Text_Loop :
+            while Tag_Index > 0 loop
+               Insert
+                 (TextWidget => Info_Label, Index => "end",
+                  Text => "{" & Text(Start_Index .. Tag_Index - 1) & "}");
+               Start_Index := Tag_Index + Length(Source => Tag) + 2;
+               Tag_Index :=
+                 Index
+                   (Source => Text,
+                    Pattern => "{/" & To_String(Source => Tag) & "}",
+                    From => Tag_Index);
+               exit Insert_Text_Loop when Tag_Index = 0;
+               Insert
+                 (TextWidget => Info_Label, Index => "end",
+                  Text =>
+                    "{" & Text(Start_Index .. Tag_Index - 1) & "} [list " &
+                    To_String(Source => Tag) & "]");
+               Start_Index := Tag_Index + Length(Source => Tag) + 3;
+               Tag_Index :=
+                 Index
+                   (Source => Text,
+                    Pattern => "{" & To_String(Source => Tag) & "}",
+                    From => Tag_Index);
+            end loop Insert_Text_Loop;
+         end loop Insert_Text_With_Tags_Loop;
          if Start_Index > 1 and then Tag_Index = 0 then
             Insert
               (TextWidget => Info_Label, Index => "end",
