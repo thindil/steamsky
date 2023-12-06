@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[config, game, messages, shipscargo, shipsmovement, tk]
+import std/tables
+import ../[config, game, messages, shipscargo, shipsmovement, tk, types]
 import coreui, utilsui2
 
 proc updateHeader*() =
@@ -42,8 +43,52 @@ proc updateHeader*() =
   itemAmount = getItemsAmount(iType = "Drinks")
   if itemAmount == 0:
     tclEval(script = label & " configure -image nodrinksicon")
-    tclEval(script = "tooltip::tooltip " & label & " \"You don't have any drinks in ship but your crew needs them to live..\"")
+    tclEval(script = "tooltip::tooltip " & label & " \"You don't have any drinks in ship but your crew needs them to live.\"")
     tclEval(script = "grid " & label)
+  elif itemAmount <= gameSettings.lowDrinks:
+    tclEval(script = label & " configure -image lowdrinksicon")
+    tclEval(script = "tooltip::tooltip " & label &
+        " \"Low level of drinks on ship. Only " & $itemAmount & " left.\"")
+    tclEval(script = "grid " & label)
+  itemAmount = getItemsAmount(iType = "Food")
+  if itemAmount == 0:
+    tclEval(script = label & " configure -image nofoodicon")
+    tclEval(script = "tooltip::tooltip " & label & " \"You don't have any food in ship but your crew needs them to live.\"")
+    tclEval(script = "grid " & label)
+  elif itemAmount <= gameSettings.lowFood:
+    tclEval(script = label & " configure -image lowfoodicon")
+    tclEval(script = "tooltip::tooltip " & label &
+        " \"Low level of food on ship. Only " & $itemAmount & " left.\"")
+    tclEval(script = "grid " & label)
+  var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
+    haveRepairman = false
+  for member in playerShip.crew:
+    case member.order
+    of pilot:
+      havePilot = true
+    of engineer:
+      haveEngineer = true
+    of talk:
+      haveTrader = true
+    of upgrading:
+      haveUpgrader = true
+    of clean:
+      haveCleaner = true
+    of repair:
+      haveRepairman = true
+    else:
+      discard
+  label = gameHeader & ".overloaded"
+  tclEval(script = "grid remove " & label)
+  let
+    faction = factionsList[playerShip.crew[0].faction]
+    frame = mainPaned & ".combat"
+  if havePilot and (haveEngineer or "sentientships" in faction.flags) and (
+      tclEval2(script = "winfo exists " & frame) == "0" or tclEval2(
+      script = "winfo ismapped " & frame) == "0"):
+    let speed = (if playerShip.speed != docked: realSpeed(
+        ship = playerShip).float / 1_000.0 else: realSpeed(ship = playerShip,
+        infoOnly = true).float / 1_000)
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
