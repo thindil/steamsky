@@ -120,6 +120,56 @@ proc updateHeader*() =
     if module.durability != module.maxDurability:
       needRepairs = true
   label = gameHeader & ".pilot"
+  if havePilot:
+    tclEval(script = "grid remove " & label)
+  else:
+    if "sentientships" in faction.flags:
+      tclEval(script = label & " configure -image nopiloticon")
+      tclEval(script = "tooltip::tooltip " & label & " \"No pilot assigned. Ship fly on it own.\"")
+    else:
+      tclEval(script = label & " configure -image piloticon")
+      tclEval(script = "tooltip::tooltip " & label & " \"No pilot assigned. Ship can't move.\"")
+    tclEval(script = "grid " & label)
+  label = gameHeader & ".engineer"
+  if haveEngineer:
+    tclEval(script = "grid remove " & label)
+  else:
+    if "sentientships" in faction.flags:
+      tclEval(script = label & " configure -image noengineericon")
+      tclEval(script = "tooltip::tooltip " & label & " \"No engineer assigned. Ship fly on it own.\"")
+    else:
+      tclEval(script = label & " configure -image engineericon")
+      tclEval(script = "tooltip::tooltip " & label & " \"No engineer assigned. Ship can't move.\"")
+    tclEval(script = "grid " & label)
+  label = gameHeader & ".gunner"
+  if haveGunner:
+    tclEval(script = "grid remove " & label)
+  else:
+    tclEval(script = label & " configure -style Headerred.TLabel")
+    tclEval(script = "tooltip::tooltip " & label & " \"One or more guns don't have a gunner.\"")
+    tclEval(script = "grid " & label)
+  label = gameHeader & ".repairs"
+  if needRepairs:
+    if haveRepairman:
+      tclEval(script = label & " configure -image repairicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"The ship is being repaired.\"")
+    else:
+      tclEval(script = label & " configure -image norepairicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"The ship needs repairs but no one is working them.\"")
+    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = "grid remove " & label)
+  label = gameHeader & ".crafting"
+  if needWorker:
+    if haveWorker:
+      tclEval(script = label & " configure -image manufactureicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"All crafting orders are being executed.\"")
+    else:
+      tclEval(script = label & " configure -image nocrafticon")
+      tclEval(script = "tooltip::tooltip " & label & " \"You need to assign crew members to begin manufacturing.\"")
+    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = "grid remove " & label)
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
