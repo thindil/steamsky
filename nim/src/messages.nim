@@ -50,8 +50,9 @@ func formattedTime(year: cint, month: cint, day: cint, hour: cint,
   formattedTime.add($minutes)
   return formattedTime.cstring
 
-func formattedTime*(year: int, month: int, day: int, hour: int,
-    minutes: int): string {.gcsafe, raises: [], tags: [].} =
+func formattedTime*(year: int = gameDate.year, month: int = gameDate.month,
+    day: int = gameDate.day, hour: int = gameDate.hour,
+    minutes: int = gameDate.minutes): string {.gcsafe, raises: [], tags: [].} =
   ## Format the selected the game time, add leading zeroes, marks between
   ## values, etc.
   ##
