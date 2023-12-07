@@ -265,39 +265,6 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCrewInfo()
   return tclOk
 
-proc showQuestion*(question, res: string; inGame: bool = true) =
-  let
-    questionDialog = createDialog(name = ".questiondialog", title = (if res ==
-        "showstats": "Question" else: "Confirmation"), titleWidth = 275,
-        columns = 2, parentName = (if inGame: ".gameframe" else: "."))
-    label = questionDialog & ".question"
-  tclEval(script = "ttk::label " & label & " -text {" & question & "} -wraplength 370 -takefocus 0")
-  tclEval(script = "grid " & label & " -columnspan 2 -padx 5 -pady {5 0}")
-  var button = questionDialog & ".yesbutton"
-  tclEval(script = "ttk::button " & button &
-      " -text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
-      res & "}")
-  tclEval(script = "grid " & button & " -column 0 -row 2 -pady {0 5} -padx 5")
-  tclEval(script = "bind " & button & " <Escape> {" & questionDialog & ".nobutton invoke;break}")
-  button = questionDialog & ".nobutton"
-  tclEval(script = "ttk::button " & button &
-      " -text No -command {CloseDialog " & questionDialog & (
-      if inGame: "" else: " .") & "}")
-  tclEval(script = "grid " & button & " -column 1 -row 2 -pady {0 5} -padx 5")
-  tclEval(script = "focus " & button)
-  if inGame:
-    showDialog(dialog = questionDialog)
-  else:
-    showDialog(dialog = questionDialog, parentFrame = ".", relativeX = 0.2)
-  tclEval(script = "bind " & button & " <Tab> {focus .questiondialog.yesbutton;break}")
-  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
-  if res == "showstats":
-    tclEval(script = button & " configure -command {CloseDialog " &
-        questionDialog & "l ProcessQuestion mainmenu}")
-    button = questionDialog & ".yesbutton"
-    tclEval(script = button & " configure -command {CloseDialog " &
-        questionDialog & "l ProcessQuestion showstats}")
-
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let answer = argv[1]
@@ -345,7 +312,3 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
-
-proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [],
-    tags: [].} =
-  showQuestion($question, $res, inGame == 1)
