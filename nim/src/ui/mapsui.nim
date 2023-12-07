@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[config, game, messages, shipscargo, shipsmovement, tk, types]
+import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, utilsui2
 
 proc updateHeader*() =
@@ -167,6 +167,42 @@ proc updateHeader*() =
     else:
       tclEval(script = label & " configure -image nocrafticon")
       tclEval(script = "tooltip::tooltip " & label & " \"You need to assign crew members to begin manufacturing.\"")
+    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = "grid remove " & label)
+  label = gameHeader & ".upgrade"
+  if playerShip.upgradeModule > -1:
+    if haveUpgrader:
+      tclEval(script = label & " configure -image upgradeicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"A ship module upgrade in progress.\"")
+    else:
+      tclEval(script = label & " configure -image noupgradeticon")
+      tclEval(script = "tooltip::tooltip " & label & " \"A ship module upgrade is in progress but no one is working on it.\"")
+    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = "grid remove " & label)
+  label = gameHeader & ".talk"
+  if haveTrader:
+    tclEval(script = "grid remove " & label)
+  elif skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
+    tclEval(script = "tooltip::tooltip " & label & " \"No trader assigned. You need one to talk/trade.\"")
+    tclEval(script = "grid " & label)
+  elif skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+    if eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == friendlyShip:
+      tclEval(script = "tooltip::tooltip " & label & " \"No trader assigned. You need one to talk/trade.\"")
+      tclEval(script = "grid " & label)
+    else:
+      tclEval(script = "grid remove " & label)
+  else:
+    tclEval(script = "grid remove " & label)
+  label = gameHeader & ".talk"
+  if needCleaning:
+    if haveCleaner:
+      tclEval(script = label & " configure -image cleanicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"Ship is cleaned.\"")
+    else:
+      tclEval(script = label & " configure -image nocleanicon")
+      tclEval(script = "tooltip::tooltip " & label & " \"Ship is dirty but no one is cleaning it.\"")
     tclEval(script = "grid " & label)
   else:
     tclEval(script = "grid remove " & label)
