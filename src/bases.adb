@@ -22,6 +22,19 @@ with Trades; use Trades;
 
 package body Bases is
 
+   procedure Set_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Set_Ada_Base_Reputation
+        (B_Index: Integer; Level, Experience: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseReputation";
+   begin
+      Set_Ada_Base_Reputation
+        (B_Index => Base_Index,
+         Level => Sky_Bases(Base_Index).Reputation.Level,
+         Experience => Sky_Bases(Base_Index).Reputation.Experience);
+   end Set_Base_Reputation;
+
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
       procedure Gain_Ada_Rep(B_Index, Pnts: Integer) with
          Import => True,
@@ -70,46 +83,6 @@ package body Bases is
                        New_String
                          (Str => To_String(Source => Faction_Index)))));
    end Generate_Base_Name;
-
-   procedure Generate_Recruits is
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Generate_Ada_Recruits with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaRecruits";
-   begin
-      Get_Ada_Recruits
-        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
-      Get_Game_Date;
-      Get_Ada_Base_Date
-        (Base_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
-         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
-         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
-         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
-         Date_Type => 2);
-      Set_Ship_In_Nim;
-      Get_Ada_Base_Population
-        (Base_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-      Get_Base_Type
-        (Base_Index => Base_Index,
-         Base_Type => Sky_Bases(Base_Index).Base_Type);
-      Get_Base_Reputation(Base_Index => Base_Index);
-      Generate_Ada_Recruits;
-      Set_Ada_Recruits
-        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
-      Set_Ada_Base_Date
-        (Base_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
-         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
-         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
-         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
-         Date_Type => 2);
-   end Generate_Recruits;
 
    procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
       Import => True,
@@ -206,55 +179,6 @@ package body Bases is
       Set_Game_Date;
    end Ask_For_Events;
 
-   procedure Update_Population is
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Update_Ada_Population with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaPopulation";
-   begin
-      Get_Game_Date;
-      Get_Ada_Base_Date
-        (Base_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Recruit_Date.Year,
-         Month => Sky_Bases(Base_Index).Recruit_Date.Month,
-         Day => Sky_Bases(Base_Index).Recruit_Date.Day,
-         Hour => Sky_Bases(Base_Index).Recruit_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
-         Date_Type => 2);
-      Set_Ship_In_Nim;
-      Get_Ada_Base_Population
-        (Base_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-      Update_Ada_Population;
-      Set_Base_Population(Base_Index => Base_Index);
-   end Update_Population;
-
-   procedure Update_Prices is
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Update_Ada_Prices with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaPrices";
-   begin
-      Get_Game_Date;
-      Set_Ship_In_Nim;
-      Get_Ada_Base_Population
-        (Base_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-      Get_Ada_Base_Date
-        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
-         Month => Sky_Bases(Base_Index).Visited.Month,
-         Day => Sky_Bases(Base_Index).Visited.Day,
-         Hour => Sky_Bases(Base_Index).Visited.Hour,
-         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
-      Get_Base_Cargo(Base_Index => Base_Index);
-      Update_Ada_Prices;
-      Set_Base_Cargo(Base_Index => Base_Index);
-   end Update_Prices;
-
    procedure Get_Base_Reputation(Base_Index: Bases_Range) is
       procedure Get_Ada_Base_Reputation
         (B_Index, Level, Experience: Integer) with
@@ -267,19 +191,6 @@ package body Bases is
          Level => Sky_Bases(Base_Index).Reputation.Level,
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Get_Base_Reputation;
-
-   procedure Set_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Reputation
-        (B_Index: Integer; Level, Experience: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseReputation";
-   begin
-      Set_Ada_Base_Reputation
-        (B_Index => Base_Index,
-         Level => Sky_Bases(Base_Index).Reputation.Level,
-         Experience => Sky_Bases(Base_Index).Reputation.Experience);
-   end Set_Base_Reputation;
 
    procedure Get_Base_Owner(Base_Index: Bases_Range) is
       procedure Get_Ada_Base_Owner(B_Index: Integer; Owner: chars_ptr) with

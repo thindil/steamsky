@@ -48,10 +48,10 @@ package Crew.Inventory is
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) with
       Pre =>
-      (Member_Index <= Ship.Crew.Last_Index and
+      Member_Index <= Ship.Crew.Last_Index and
        Inventory_Index <=
          Inventory_Container.Last_Index
-           (Container => Ship.Crew(Member_Index).Inventory));
+           (Container => Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Free_Inventory
@@ -87,10 +87,10 @@ package Crew.Inventory is
    procedure Take_Off_Item
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) with
       Pre =>
-      (Member_Index <= Player_Ship.Crew.Last_Index and
+      Member_Index <= Player_Ship.Crew.Last_Index and
        Item_Index <=
          Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(Member_Index).Inventory));
+           (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Item_Is_Used
@@ -108,10 +108,10 @@ package Crew.Inventory is
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
       return Boolean with
       Pre =>
-      (Member_Index <= Player_Ship.Crew.Last_Index and
+      Member_Index <= Player_Ship.Crew.Last_Index and
        Item_Index <=
          Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(Member_Index).Inventory));
+           (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Find_Tools
@@ -134,8 +134,8 @@ package Crew.Inventory is
      (Member_Index: Positive; Item_Type: Tiny_String.Bounded_String;
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural with
       Pre =>
-      (Member_Index <= Player_Ship.Crew.Last_Index and
-       Tiny_String.Length(Source => Item_Type) > 0);
+      Member_Index <= Player_Ship.Crew.Last_Index and
+       Tiny_String.Length(Source => Item_Type) > 0;
       -- ****
 
 end Crew.Inventory;

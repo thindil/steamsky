@@ -21,6 +21,13 @@ with Maps; use Maps;
 
 package body Bases.Ship is
 
+   -- ****e* Ship/Ship.Bases_Ship_Nothing_To_Repair
+   -- FUNCTION
+   -- Raised when there is nothing to repair
+   -- SOURCE
+   Bases_Ship_Nothing_To_Repair: exception;
+   -- ****
+
    procedure Repair_Ship(Module_Index: Integer) is
       use Interfaces.C;
 
@@ -118,20 +125,5 @@ package body Bases.Ship is
       Set_Base_Cargo(Base_Index => Base_Index);
       Set_Game_Date;
    end Upgrade_Ship;
-
-   procedure Pay_For_Dock is
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Pay_Ada_For_Dock with
-         Import => True,
-         Convention => C,
-         External_Name => "payAdaForDock";
-   begin
-      Set_Ship_In_Nim;
-      Get_Base_Cargo(Base_Index => Base_Index);
-      Pay_Ada_For_Dock;
-      Set_Base_Cargo(Base_Index => Base_Index);
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Pay_For_Dock;
 
 end Bases.Ship;

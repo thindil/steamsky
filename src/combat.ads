@@ -36,12 +36,14 @@ package Combat is
       Default_Component_Value => 0;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Combat/Combat.Empty_Guns
       -- FUNCTION
       -- An empty gun info
       -- SOURCE
    Empty_Guns: constant Guns_Info_Array := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Combat/Combat.Guns_Container
    -- FUNCTION
@@ -85,12 +87,14 @@ package Combat is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Combat/Combat.Empty_Enemy
    -- FUNCTION
    -- Empty enemy info data
    -- SOURCE
    Empty_Enemy: constant Enemy_Record := (others => <>);
    -- ****
+   --## rule off REDUCEABLE_SCOPE
 
    -- ****v* Combat/Combat.Enemy
    -- FUNCTION
@@ -149,7 +153,6 @@ package Combat is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Harpoon_Duration;
    function Get_Enemy_Name return Tiny_String.Bounded_String;
    procedure Set_Pilot_Order(New_Order: Natural) with
       Import => True,

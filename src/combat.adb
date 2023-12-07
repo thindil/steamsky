@@ -196,18 +196,6 @@ package body Combat is
       end loop Convert_Player_Guns_Loop;
    end Combat_Turn;
 
-   procedure Get_Harpoon_Duration is
-      procedure Get_Ada_Harpoon_Duration
-        (Player_Duration, Enemy_Duration: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaHarpoonDuration";
-   begin
-      Get_Ada_Harpoon_Duration
-        (Player_Duration => Harpoon_Duration,
-         Enemy_Duration => Enemy.Harpoon_Duration);
-   end Get_Harpoon_Duration;
-
    function Get_Enemy_Name return Tiny_String.Bounded_String is
       use Interfaces.C.Strings;
 

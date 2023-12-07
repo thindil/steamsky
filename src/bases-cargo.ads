@@ -22,13 +22,6 @@
 package Bases.Cargo is
 -- ****
 
-   -- ****f* BCargo/BCargo.Generate_Cargo
-   -- FUNCTION
-   -- Generate base cargo
-   -- SOURCE
-   procedure Generate_Cargo;
-   -- ****
-
    -- ****f* BCargo/BCargo.Update_Base_Cargo
    -- FUNCTION
    -- Update cargo in base

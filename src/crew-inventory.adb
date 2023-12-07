@@ -139,7 +139,7 @@ package body Crew.Inventory is
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural is
       use Tiny_String;
 
-      Tools_Index: Natural := 0;
+      Tools_Index: Natural;
       Nim_Equipment: Nim_Equipment_Array;
       Nim_Inventory: Nim_Inventory_Array :=
         Inventory_To_Nim

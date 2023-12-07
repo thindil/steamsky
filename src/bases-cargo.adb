@@ -19,32 +19,6 @@ with Maps; use Maps;
 
 package body Bases.Cargo is
 
-   procedure Generate_Cargo is
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Generate_Ada_Cargo with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaCargo";
-   begin
-      Get_Ada_Base_Date
-        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
-         Month => Sky_Bases(Base_Index).Visited.Month,
-         Day => Sky_Bases(Base_Index).Visited.Day,
-         Hour => Sky_Bases(Base_Index).Visited.Hour,
-         Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
-      Get_Base_Cargo(Base_Index => Base_Index);
-      Get_Ada_Base_Population
-        (Base_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-      Get_Base_Reputation(Base_Index => Base_Index);
-      Get_Base_Type
-        (Base_Index => Base_Index,
-         Base_Type => Sky_Bases(Base_Index).Base_Type);
-      Generate_Ada_Cargo;
-      Set_Base_Cargo(Base_Index => Base_Index);
-   end Generate_Cargo;
-
    procedure Update_Base_Cargo
      (Proto_Index: Natural := 0; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;

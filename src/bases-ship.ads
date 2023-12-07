@@ -22,13 +22,6 @@
 package Bases.Ship is
 -- ****
 
-   -- ****e* Ship/Ship.Bases_Ship_Nothing_To_Repair
-   -- FUNCTION
-   -- Raised when there is nothing to repair
-   -- SOURCE
-   Bases_Ship_Nothing_To_Repair: exception;
-   -- ****
-
    -- ****e* Ship/Ship.Bases_Ship_Unique_Module
    -- FUNCTION
    -- Raised when player try install another same unique module
@@ -73,13 +66,6 @@ package Bases.Ship is
       Pre => Module_Index in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index;
       -- ****
-
-      -- ****f* Ship/Ship.Pay_For_Dock
-      -- FUNCTION
-      -- Pay daily fee for docking
-      -- SOURCE
-   procedure Pay_For_Dock;
-   -- ****
 
    -- ****f* Ship/Ship.Repair_Cost
    -- FUNCTION

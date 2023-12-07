@@ -21,6 +21,20 @@ with Maps; use Maps;
 
 package body Bases.Trade is
 
+   -- ****e* BTrade/BTrade.Trade_Already_Known
+   -- FUNCTION
+   -- Raised when player known selected recipe
+   -- SOURCE
+   Trade_Already_Known: exception;
+   -- ****
+
+   -- ****e* BTrade/BTrade.Trade_Cant_Heal
+   -- FUNCTION
+   -- Raised when no crew members are wounded
+   -- SOURCE
+   Trade_Cant_Heal: exception;
+   -- ****
+
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
       Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) is

@@ -23,20 +23,6 @@
 package Bases.Trade is
 -- ****
 
-   -- ****e* BTrade/BTrade.Trade_Already_Known
-   -- FUNCTION
-   -- Raised when player known selected recipe
-   -- SOURCE
-   Trade_Already_Known: exception;
-   -- ****
-
-   -- ****e* BTrade/BTrade.Trade_Cant_Heal
-   -- FUNCTION
-   -- Raised when no crew members are wounded
-   -- SOURCE
-   Trade_Cant_Heal: exception;
-   -- ****
-
    -- ****f* BTrade/BTrade.Hire_Recruit
    -- FUNCTION
    -- Hire selected recruit from bases and add him/her to player ship crew

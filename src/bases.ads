@@ -112,6 +112,7 @@ package Bases is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Bases/Bases.Empty_Base_Cargo
    -- FUNCTION
    -- Empty base cargo
@@ -120,6 +121,7 @@ package Bases is
      (Proto_Index => 0, Amount => 0, Durability => Default_Item_Durability,
       Price => 0);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Bases/Bases.BaseCargo_Container
    -- FUNCTION
@@ -138,12 +140,14 @@ package Bases is
       Default_Value => MEDIUM;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Bases/Bases.Default_Base_Size
       -- FUNCTION
       -- The default size of a base
       -- SOURCE
    Default_Base_Size: constant Bases_Size := MEDIUM;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    --## rule off TYPE_INITIAL_VALUES
    -- ****s* Bases/Bases.Base_Record
@@ -239,13 +243,6 @@ package Bases is
       Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0;
       -- ****
 
-      -- ****f* Bases/Bases.Generate_Recruits
-      -- FUNCTION
-      -- Generate if needed new recruits in base
-      -- SOURCE
-   procedure Generate_Recruits;
-   -- ****
-
    -- ****f* Bases/Bases.Ask_For_Bases
    -- FUNCTION
    -- Ask in base for direction for other bases
@@ -260,33 +257,15 @@ package Bases is
    procedure Ask_For_Events;
    -- ****
 
-   -- ****f* Bases/Bases.Update_Population
-   -- FUNCTION
-   -- Update base population if needed
-   -- SOURCE
-   procedure Update_Population;
-   -- ****
-
-   -- ****f* Bases/Bases.Update_Prices
-   -- FUNCTION
-   -- Random changes of items prices in base
-   -- SOURCE
-   procedure Update_Prices;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Get_Base_Reputation(Base_Index: Bases_Range);
-
-   procedure Set_Base_Reputation(Base_Index: Bases_Range);
 
    procedure Get_Ada_Base_Location
      (Base_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
       Import => True,
       Convention => C,
       External_Name => "getAdaBaseLocation";
-
-   procedure Get_Base_Owner(Base_Index: Bases_Range);
 
    procedure Get_Ada_Base_Population
      (Base_Index: Bases_Range; Population: Natural) with
