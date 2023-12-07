@@ -265,6 +265,24 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCrewInfo()
   return tclOk
 
+proc showQuestion*(question, res: string; inGame: bool = true) =
+  let
+    questionDialog = createDialog(name = ".questiondialog", title = (if res ==
+        "showstats": "Question" else: "Confirmation"), titleWidth = 275,
+        columns = 2, parentName = (if inGame: ".gameframe" else: "."))
+    label = questionDialog & ".question"
+  tclEval(script = "ttk::label " & label & " -text {" & question & "} -wraplength 370 -takefocus 0")
+  tclEval(script = "grid " & label & " -columnspan 2 -padx 5 -pady {5 0}")
+  var button = questionDialog & ".yesbutton"
+  tclEval(script = "ttk::button " & button &
+      " -text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
+      res & "}")
+  tclEval(script = "bind " & button & " <Escape> {" & questionDialog & ".nobutton invoke;break}")
+  button = questionDialog & ".nobutton"
+  tclEval(script = "ttk::button " & button &
+      " -text No -command {CloseDialog " & questionDialog & (
+      if inGame: "" else: " .") & "}")
+
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let answer = argv[1]
