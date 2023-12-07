@@ -20,7 +20,10 @@ suite "Unit tests for crew module":
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
-      1, 0, 0], order: gunner, loyalty: 100))
+      1, 0, 0], order: gunner, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
+      experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
       durability: 100, owner: @[0]))
