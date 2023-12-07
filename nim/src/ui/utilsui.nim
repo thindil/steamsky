@@ -277,11 +277,26 @@ proc showQuestion*(question, res: string; inGame: bool = true) =
   tclEval(script = "ttk::button " & button &
       " -text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
       res & "}")
+  tclEval(script = "grid " & button & " -column 0 -row 2 -pady {0 5} -padx 5")
   tclEval(script = "bind " & button & " <Escape> {" & questionDialog & ".nobutton invoke;break}")
   button = questionDialog & ".nobutton"
   tclEval(script = "ttk::button " & button &
       " -text No -command {CloseDialog " & questionDialog & (
       if inGame: "" else: " .") & "}")
+  tclEval(script = "grid " & button & " -column 1 -row 2 -pady {0 5} -padx 5")
+  tclEval(script = "focus " & button)
+  if inGame:
+    showDialog(dialog = questionDialog)
+  else:
+    showDialog(dialog = questionDialog, parentFrame = ".", relativeX = 0.2)
+  tclEval(script = "bind " & button & " <Tab> {focus .questiondialog.yesbutton;break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  if res == "showstats":
+    tclEval(script = button & " configure -command {CloseDialog " &
+        questionDialog & "l ProcessQuestion mainmenu}")
+    button = questionDialog & ".yesbutton"
+    tclEval(script = button & " configure -command {CloseDialog " &
+        questionDialog & "l ProcessQuestion showstats}")
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -331,3 +346,6 @@ proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
 
+proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [],
+    tags: [].} =
+  showQuestion($question, $res, inGame == 1)
