@@ -33,7 +33,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -49,7 +49,7 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
-with Crew;
+-- with Crew;
 with Dialogs; use Dialogs;
 with DebugUI;
 with Events; use Events;
@@ -64,9 +64,9 @@ with Messages; use Messages;
 with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
-with ShipModules;
-with Ships.Cargo;
-with Ships.Movement;
+-- with ShipModules;
+-- with Ships.Cargo;
+-- with Ships.Movement;
 with Ships.UI;
 with Statistics; use Statistics;
 with Statistics.UI;
@@ -79,316 +79,322 @@ with WaitMenu;
 package body Maps.UI is
 
    procedure Update_Header is
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Crew;
-      use Ships.Cargo;
-      use Ships.Movement;
-      use ShipModules;
-      use Tiny_String;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Crew;
+--      use Ships.Cargo;
+--      use Ships.Movement;
+--      use ShipModules;
+--      use Tiny_String;
 
-      Have_Worker, Have_Gunner: Boolean := True;
-      Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
-      Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean :=
-        False;
-      Item_Amount: Natural;
-      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
-      Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".combat");
-      Faction: constant Faction_Record :=
-        Get_Faction(Index => Player_Ship.Crew(1).Faction);
+--      Have_Worker, Have_Gunner: Boolean := True;
+--      Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
+--      Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean :=
+--        False;
+--      Item_Amount: Natural;
+--      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
+--      Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => Main_Paned & ".combat");
+--      Faction: constant Faction_Record :=
+--        Get_Faction(Index => Player_Ship.Crew(1).Faction);
+      procedure Update_Ada_Header with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaHeader";
    begin
-      configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
-      if Get_Boolean_Setting(Name => "showNumbers") then
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Formated_Time & " Speed:" &
-              Natural'Image((Real_Speed(Ship => Player_Ship) * 60) / 1_000) &
-              " km/h}");
-         Add(Widget => Label, Message => "Game time and current ship speed.");
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".nofuel");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := Get_Item_Amount(Item_Type => Fuel_Type);
-      if Item_Amount = 0 then
-         configure(Widgt => Label, options => "-image nofuelicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "You can't travel anymore, because you don't have any fuel for ship.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFuel") then
-         configure(Widgt => Label, options => "-image lowfuelicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "Low level of fuel on ship. Only" & Natural'Image(Item_Amount) &
-              " left.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".nodrink");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := Get_Items_Amount(I_Type => "Drinks");
-      if Item_Amount = 0 then
-         configure(Widgt => Label, options => "-image nodrinksicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "You don't have any drinks in ship but your crew needs them to live.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Get_Integer_Setting(Name => "lowDrinks") then
-         configure(Widgt => Label, options => "-image lowdrinksicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "Low level of drinks on ship. Only" &
-              Natural'Image(Item_Amount) & " left.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".nofood");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := Get_Items_Amount(I_Type => "Food");
-      if Item_Amount = 0 then
-         configure(Widgt => Label, options => "-image nofoodicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "You don't have any food in ship but your crew needs it to live.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFood") then
-         configure(Widgt => Label, options => "-image lowfoodicon");
-         Add
-           (Widget => Label,
-            Message =>
-              "Low level of food on ship. Only" & Natural'Image(Item_Amount) &
-              " left.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Find_Workers_Loop :
-      for Member of Player_Ship.Crew loop
-         case Member.Order is
-            when PILOT =>
-               Have_Pilot := True;
-            when ENGINEER =>
-               Have_Engineer := True;
-            when TALK =>
-               Have_Trader := True;
-            when UPGRADING =>
-               Have_Upgrader := True;
-            when CLEAN =>
-               Have_Cleaner := True;
-            when REPAIR =>
-               Have_Repairman := True;
-            when others =>
-               null;
-         end case;
-      end loop Find_Workers_Loop;
-      Label.Name := New_String(Str => Game_Header & ".overloaded");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      if Have_Pilot and
-        (Have_Engineer or
-         Faction.Flags.Contains
-           (Item => To_Unbounded_String(Source => "sentientships"))) and
-        (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
-         or else Winfo_Get(Widgt => Frame, Info => "ismapped") = "0") then
-         Set_Overloaded_Info_Block :
-         declare
-            type Speed_Type is digits 2;
-            --## rule off SIMPLIFIABLE_EXPRESSIONS
-            Speed: constant Speed_Type :=
-              (if Player_Ship.Speed /= DOCKED then
-                 (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0)
-               else
-                 (Speed_Type
-                    (Real_Speed(Ship => Player_Ship, Info_Only => True)) /
-                  1_000.0));
-            --## rule n SIMPLIFIABLE_EXPRESSIONS
-         begin
-            if Speed < 0.5 then
-               Add
-                 (Widget => Label,
-                  Message =>
-                    "You can't fly with your ship, because it is overloaded.");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-            end if;
-         end Set_Overloaded_Info_Block;
-      end if;
-      Check_Workers_Loop :
-      for Module of Player_Ship.Modules loop
-         case Get_Module(Index => Module.Proto_Index).M_Type is
-            when GUN | HARPOON_GUN =>
-               if Module.Owner(1) = 0 then
-                  Have_Gunner := False;
-               elsif Player_Ship.Crew(Module.Owner(1)).Order /= GUNNER then
-                  Have_Gunner := False;
-               end if;
-            when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Crafting_Index /= Null_Bounded_String then
-                  Need_Worker := True;
-                  Check_Owners_Loop :
-                  for Owner of Module.Owner loop
-                     if Owner = 0 then
-                        Have_Worker := False;
-                     elsif Player_Ship.Crew(Owner).Order /= CRAFT then
-                        Have_Worker := False;
-                     end if;
-                     exit Check_Owners_Loop when not Have_Worker;
-                  end loop Check_Owners_Loop;
-               end if;
-            when CABIN =>
-               if Module.Cleanliness /= Module.Quality then
-                  Need_Cleaning := True;
-               end if;
-            when others =>
-               null;
-         end case;
-         if Module.Durability /= Module.Max_Durability then
-            Need_Repairs := True;
-         end if;
-      end loop Check_Workers_Loop;
-      Label.Name := New_String(Str => Game_Header & ".pilot");
-      if Have_Pilot then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      else
-         if Faction.Flags.Contains
-             (Item => To_Unbounded_String(Source => "sentientships")) then
-            configure(Widgt => Label, options => "-image nopiloticon");
-            Add
-              (Widget => Label,
-               Message => "No pilot assigned. Ship fly on it own.");
-         else
-            configure(Widgt => Label, options => "-image piloticon");
-            Add
-              (Widget => Label,
-               Message => "No pilot assigned. Ship can't move.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".engineer");
-      if Have_Engineer then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      else
-         if Faction.Flags.Contains
-             (Item => To_Unbounded_String(Source => "sentientships")) then
-            configure(Widgt => Label, options => "-image noengineericon");
-            Add
-              (Widget => Label,
-               Message => "No engineer assigned. Ship fly on it own.");
-         else
-            configure(Widgt => Label, options => "-image engineericon");
-            Add
-              (Widget => Label,
-               Message => "No engineer assigned. Ship can't move.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".gunner");
-      if Have_Gunner then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      else
-         configure(Widgt => Label, options => "-style Headerred.TLabel");
-         Add
-           (Widget => Label,
-            Message => "One or more guns don't have a gunner.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".repairs");
-      if Need_Repairs then
-         if Have_Repairman then
-            configure(Widgt => Label, options => "-image repairicon");
-            Add(Widget => Label, Message => "The ship is being repaired.");
-         else
-            configure(Widgt => Label, options => "-image norepairicon");
-            Add
-              (Widget => Label,
-               Message =>
-                 "The ship needs repairs but no one is working them.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".crafting");
-      if Need_Worker then
-         if Have_Worker then
-            configure(Widgt => Label, options => "-image manufactureicon");
-            Add
-              (Widget => Label,
-               Message => "All crafting orders are being executed.");
-         else
-            configure(Widgt => Label, options => "-image nocrafticon");
-            Add
-              (Widget => Label,
-               Message =>
-                 "You need to assign crew members to begin manufacturing.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".upgrade");
-      if Player_Ship.Upgrade_Module > 0 then
-         if Have_Upgrader then
-            configure(Widgt => Label, options => "-image upgradeicon");
-            Add
-              (Widget => Label,
-               Message => "A ship module upgrade in progress.");
-         else
-            configure(Widgt => Label, options => "-image noupgradeicon");
-            Add
-              (Widget => Label,
-               Message =>
-                 "A ship module upgrade is in progress but no one is working on it.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".talk");
-      if Have_Trader then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         Add
-           (Widget => Label,
-            Message => "No trader assigned. You need one to talk/trade.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-         if Get_Event
-             (Index =>
-                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-             .E_Type =
-           FRIENDLYSHIP then
-            Add
-              (Widget => Label,
-               Message => "No trader assigned. You need one to talk/trade.");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-         else
-            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-         end if;
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      end if;
-      Label.Name := New_String(Str => Game_Header & ".clean");
-      if Need_Cleaning then
-         if Have_Cleaner then
-            configure(Widgt => Label, options => "-image cleanicon");
-            Add(Widget => Label, Message => "Ship is cleaned.");
-         else
-            configure(Widgt => Label, options => "-image nocleanicon");
-            Add
-              (Widget => Label,
-               Message => "Ship is dirty but no one is cleaning it.");
-         end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      end if;
-      if Player_Ship.Crew(1).Health = 0 then
-         Show_Question
-           (Question =>
-              "You are dead. Would you like to see your game statistics?",
-            Result => "showstats");
-      end if;
+      Set_Ship_In_Nim;
+      Update_Ada_Header;
+--      configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
+--      if Get_Boolean_Setting(Name => "showNumbers") then
+--         configure
+--           (Widgt => Label,
+--            options =>
+--              "-text {" & Formated_Time & " Speed:" &
+--              Natural'Image((Real_Speed(Ship => Player_Ship) * 60) / 1_000) &
+--              " km/h}");
+--         Add(Widget => Label, Message => "Game time and current ship speed.");
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".nofuel");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      Item_Amount := Get_Item_Amount(Item_Type => Fuel_Type);
+--      if Item_Amount = 0 then
+--         configure(Widgt => Label, options => "-image nofuelicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "You can't travel anymore, because you don't have any fuel for ship.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFuel") then
+--         configure(Widgt => Label, options => "-image lowfuelicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "Low level of fuel on ship. Only" & Natural'Image(Item_Amount) &
+--              " left.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".nodrink");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      Item_Amount := Get_Items_Amount(I_Type => "Drinks");
+--      if Item_Amount = 0 then
+--         configure(Widgt => Label, options => "-image nodrinksicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "You don't have any drinks in ship but your crew needs them to live.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      elsif Item_Amount <= Get_Integer_Setting(Name => "lowDrinks") then
+--         configure(Widgt => Label, options => "-image lowdrinksicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "Low level of drinks on ship. Only" &
+--              Natural'Image(Item_Amount) & " left.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".nofood");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      Item_Amount := Get_Items_Amount(I_Type => "Food");
+--      if Item_Amount = 0 then
+--         configure(Widgt => Label, options => "-image nofoodicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "You don't have any food in ship but your crew needs it to live.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      elsif Item_Amount <= Get_Integer_Setting(Name => "lowFood") then
+--         configure(Widgt => Label, options => "-image lowfoodicon");
+--         Add
+--           (Widget => Label,
+--            Message =>
+--              "Low level of food on ship. Only" & Natural'Image(Item_Amount) &
+--              " left.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Find_Workers_Loop :
+--      for Member of Player_Ship.Crew loop
+--         case Member.Order is
+--            when PILOT =>
+--               Have_Pilot := True;
+--            when ENGINEER =>
+--               Have_Engineer := True;
+--            when TALK =>
+--               Have_Trader := True;
+--            when UPGRADING =>
+--               Have_Upgrader := True;
+--            when CLEAN =>
+--               Have_Cleaner := True;
+--            when REPAIR =>
+--               Have_Repairman := True;
+--            when others =>
+--               null;
+--         end case;
+--      end loop Find_Workers_Loop;
+--      Label.Name := New_String(Str => Game_Header & ".overloaded");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      if Have_Pilot and
+--        (Have_Engineer or
+--         Faction.Flags.Contains
+--           (Item => To_Unbounded_String(Source => "sentientships"))) and
+--        (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
+--         or else Winfo_Get(Widgt => Frame, Info => "ismapped") = "0") then
+--         Set_Overloaded_Info_Block :
+--         declare
+--            type Speed_Type is digits 2;
+--            --## rule off SIMPLIFIABLE_EXPRESSIONS
+--            Speed: constant Speed_Type :=
+--              (if Player_Ship.Speed /= DOCKED then
+--                 (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0)
+--               else
+--                 (Speed_Type
+--                    (Real_Speed(Ship => Player_Ship, Info_Only => True)) /
+--                  1_000.0));
+--            --## rule n SIMPLIFIABLE_EXPRESSIONS
+--         begin
+--            if Speed < 0.5 then
+--               Add
+--                 (Widget => Label,
+--                  Message =>
+--                    "You can't fly with your ship, because it is overloaded.");
+--               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--            end if;
+--         end Set_Overloaded_Info_Block;
+--      end if;
+--      Check_Workers_Loop :
+--      for Module of Player_Ship.Modules loop
+--         case Get_Module(Index => Module.Proto_Index).M_Type is
+--            when GUN | HARPOON_GUN =>
+--               if Module.Owner(1) = 0 then
+--                  Have_Gunner := False;
+--               elsif Player_Ship.Crew(Module.Owner(1)).Order /= GUNNER then
+--                  Have_Gunner := False;
+--               end if;
+--            when ALCHEMY_LAB .. GREENHOUSE =>
+--               if Module.Crafting_Index /= Null_Bounded_String then
+--                  Need_Worker := True;
+--                  Check_Owners_Loop :
+--                  for Owner of Module.Owner loop
+--                     if Owner = 0 then
+--                        Have_Worker := False;
+--                     elsif Player_Ship.Crew(Owner).Order /= CRAFT then
+--                        Have_Worker := False;
+--                     end if;
+--                     exit Check_Owners_Loop when not Have_Worker;
+--                  end loop Check_Owners_Loop;
+--               end if;
+--            when CABIN =>
+--               if Module.Cleanliness /= Module.Quality then
+--                  Need_Cleaning := True;
+--               end if;
+--            when others =>
+--               null;
+--         end case;
+--         if Module.Durability /= Module.Max_Durability then
+--            Need_Repairs := True;
+--         end if;
+--      end loop Check_Workers_Loop;
+--      Label.Name := New_String(Str => Game_Header & ".pilot");
+--      if Have_Pilot then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      else
+--         if Faction.Flags.Contains
+--             (Item => To_Unbounded_String(Source => "sentientships")) then
+--            configure(Widgt => Label, options => "-image nopiloticon");
+--            Add
+--              (Widget => Label,
+--               Message => "No pilot assigned. Ship fly on it own.");
+--         else
+--            configure(Widgt => Label, options => "-image piloticon");
+--            Add
+--              (Widget => Label,
+--               Message => "No pilot assigned. Ship can't move.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".engineer");
+--      if Have_Engineer then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      else
+--         if Faction.Flags.Contains
+--             (Item => To_Unbounded_String(Source => "sentientships")) then
+--            configure(Widgt => Label, options => "-image noengineericon");
+--            Add
+--              (Widget => Label,
+--               Message => "No engineer assigned. Ship fly on it own.");
+--         else
+--            configure(Widgt => Label, options => "-image engineericon");
+--            Add
+--              (Widget => Label,
+--               Message => "No engineer assigned. Ship can't move.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".gunner");
+--      if Have_Gunner then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      else
+--         configure(Widgt => Label, options => "-style Headerred.TLabel");
+--         Add
+--           (Widget => Label,
+--            Message => "One or more guns don't have a gunner.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".repairs");
+--      if Need_Repairs then
+--         if Have_Repairman then
+--            configure(Widgt => Label, options => "-image repairicon");
+--            Add(Widget => Label, Message => "The ship is being repaired.");
+--         else
+--            configure(Widgt => Label, options => "-image norepairicon");
+--            Add
+--              (Widget => Label,
+--               Message =>
+--                 "The ship needs repairs but no one is working them.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".crafting");
+--      if Need_Worker then
+--         if Have_Worker then
+--            configure(Widgt => Label, options => "-image manufactureicon");
+--            Add
+--              (Widget => Label,
+--               Message => "All crafting orders are being executed.");
+--         else
+--            configure(Widgt => Label, options => "-image nocrafticon");
+--            Add
+--              (Widget => Label,
+--               Message =>
+--                 "You need to assign crew members to begin manufacturing.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".upgrade");
+--      if Player_Ship.Upgrade_Module > 0 then
+--         if Have_Upgrader then
+--            configure(Widgt => Label, options => "-image upgradeicon");
+--            Add
+--              (Widget => Label,
+--               Message => "A ship module upgrade in progress.");
+--         else
+--            configure(Widgt => Label, options => "-image noupgradeicon");
+--            Add
+--              (Widget => Label,
+--               Message =>
+--                 "A ship module upgrade is in progress but no one is working on it.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".talk");
+--      if Have_Trader then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
+--         Add
+--           (Widget => Label,
+--            Message => "No trader assigned. You need one to talk/trade.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
+--         if Get_Event
+--             (Index =>
+--                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+--             .E_Type =
+--           FRIENDLYSHIP then
+--            Add
+--              (Widget => Label,
+--               Message => "No trader assigned. You need one to talk/trade.");
+--            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--         else
+--            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--         end if;
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      end if;
+--      Label.Name := New_String(Str => Game_Header & ".clean");
+--      if Need_Cleaning then
+--         if Have_Cleaner then
+--            configure(Widgt => Label, options => "-image cleanicon");
+--            Add(Widget => Label, Message => "Ship is cleaned.");
+--         else
+--            configure(Widgt => Label, options => "-image nocleanicon");
+--            Add
+--              (Widget => Label,
+--               Message => "Ship is dirty but no one is cleaning it.");
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      end if;
+--      if Player_Ship.Crew(1).Health = 0 then
+--         Show_Question
+--           (Question =>
+--              "You are dead. Would you like to see your game statistics?",
+--            Result => "showstats");
+--      end if;
    end Update_Header;
 
    -- ****iv* MUI/MUI.MapView
