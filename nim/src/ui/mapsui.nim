@@ -50,6 +50,8 @@ proc updateHeader*() =
     tclEval(script = "tooltip::tooltip " & label &
         " \"Low level of drinks on ship. Only " & $itemAmount & " left.\"")
     tclEval(script = "grid " & label)
+  label = gameHeader & ".nofood"
+  tclEval(script = "grid remove " & label)
   itemAmount = getItemsAmount(iType = "Food")
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofoodicon")
@@ -195,7 +197,7 @@ proc updateHeader*() =
       tclEval(script = "grid remove " & label)
   else:
     tclEval(script = "grid remove " & label)
-  label = gameHeader & ".talk"
+  label = gameHeader & ".clean"
   if needCleaning:
     if haveCleaner:
       tclEval(script = label & " configure -image cleanicon")
