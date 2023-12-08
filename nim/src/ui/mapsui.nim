@@ -17,7 +17,7 @@
 
 import std/tables
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
-import coreui, utilsui2
+import coreui, dialogs, utilsui2
 
 proc updateHeader*() =
   var label = gameHeader & ".time"
@@ -206,9 +206,20 @@ proc updateHeader*() =
     tclEval(script = "grid " & label)
   else:
     tclEval(script = "grid remove " & label)
+  if playerShip.crew[0].health == 0:
+    showQuestion(question = "You are dead. Would you like to see your game statistics?",
+        res = "showstats")
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
   if clear:
     showScreen(newScreenName = "mapframe")
   tclSetVar(varName = "gamestate", newValue = "general")
+
+# Temporary code for interfacing with Ada
+
+proc updateAdaHeader() {.raises: [], tags: [], exportc.} =
+  try:
+    updateHeader()
+  except:
+    discard
