@@ -603,7 +603,7 @@ package body Dialogs is
         Create(pathName => Info_Dialog & ".buttons");
       Tag_Index: Natural := Index(Source => Text, Pattern => "{");
       Start_Index: Natural := 1;
-      Tag_Name: Unbounded_String;
+      Tag_Name: Unbounded_String := Null_Unbounded_String;
    begin
       Tag_Configure
         (TextWidget => Info_Label, TagName => "gold",
@@ -647,18 +647,20 @@ package body Dialogs is
          Tag_Name :=
            To_Unbounded_String
              (Source => Text(Start_Index + 1 .. Tag_Index - 1));
+         --## rule off ASSIGNMENTS
          Start_Index := Tag_Index + 1;
          Tag_Index :=
            Index
              (Source => Text,
               Pattern => "{/" & To_String(Source => Tag_Name) & "}",
               From => Start_Index);
+         --## rule on ASSIGNMENTS
          Insert
            (TextWidget => Info_Label, Index => "end",
             Text =>
               "{" & Text(Start_Index .. Tag_Index - 1) & "} [list " &
               To_String(Source => Tag_Name) & "]");
-         Start_Index := Tag_Index + 1;
+         Start_Index := Tag_Index + Length(Source => Tag_Name) + 3;
          Tag_Index :=
            Index(Source => Text, Pattern => "{", From => Start_Index);
       end loop Insert_Text_Loop;
