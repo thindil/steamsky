@@ -123,7 +123,8 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
   showDialog(dialog = messageDialog, parentFrame = parentFrame,
       withTimer = true)
 
-proc showQuestion*(question, res: string; inGame: bool = true) =
+proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
+    raises: [], tags: {}.} =
   let
     questionDialog = createDialog(name = ".questiondialog", title = (if res ==
         "showstats": "Question" else: "Confirmation"), titleWidth = 275,
@@ -181,6 +182,6 @@ proc showAdaMessage(text, parentFrame, title: cstring): cstring {.raises: [],
   showMessage($text, $parentFrame, $title)
   return timerId.cstring
 
-proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [],
-    tags: [].} =
+proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [
+    ], tags: [].} =
   showQuestion($question, $res, inGame == 1)
