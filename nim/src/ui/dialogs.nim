@@ -125,6 +125,12 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
 
 proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
     raises: [], tags: {}.} =
+  ## Show the dialog with the selected question to the player
+  ##
+  ## * question - the question to show to the player
+  ## * res      - the Tcl value set for the Ok button
+  ## * inGame   - if true, the dialog will be show in the game, otherwise in
+  ##              the main screen (like delete save game, etc.)
   let
     questionDialog = createDialog(name = ".questiondialog", title = (if res ==
         "showstats": "Question" else: "Confirmation"), titleWidth = 275,
