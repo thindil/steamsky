@@ -71,6 +71,7 @@ package Crew is
       Default_Value => REST;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Crew/Crew.Default_Crew_Order
       -- FUNCTION
       -- The default order for the crew members
@@ -93,6 +94,7 @@ package Crew is
       -- SOURCE
    Default_Equipment_Location: constant Equipment_Locations := WEAPON;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION
@@ -323,13 +325,6 @@ package Crew is
      (Attribute_Level: Positive) return String with
       Pre => Attribute_Level <= 50;
       -- ****
-
-      -- ****f* Crew/Crew.Daily_Payment
-      -- FUNCTION
-   -- Daily payment and upgrade contracts length for player ship crew members
-   -- SOURCE
-   procedure Daily_Payment;
-   -- ****
 
    -- ****f* Crew/Crew.Get_Training_Tool_Quality
    -- FUNCTION

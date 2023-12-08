@@ -21,6 +21,27 @@ with Trades;
 
 package body Crafts is
 
+   -- ****e* Crafts/Crafts.Crafting_No_Materials
+   -- FUNCTION
+   -- Raised when no materials needed for selected recipe
+   -- SOURCE
+   Crafting_No_Materials: exception;
+   -- ****
+
+   -- ****e* Crafts/Crafts.Crafting_No_Tools
+   -- FUNCTION
+   -- Raised when no tool needed for selected recipe
+   -- SOURCE
+   Crafting_No_Tools: exception;
+   -- ****
+
+   -- ****e* Crafts/Crafts.Crafting_No_Workshop
+   -- FUNCTION
+   -- Raised when no workshop needed for selected recipe
+   -- SOURCE
+   Crafting_No_Workshop: exception;
+   -- ****
+
    --## rule off TYPE_INITIAL_VALUES
    type Material_Types_Array is array(0 .. 4) of chars_ptr;
    type Material_Amounts_Array is array(0 .. 4) of Integer;
@@ -198,17 +219,6 @@ package body Crafts is
       end if;
       return False;
    end Is_Known_Recipe;
-
-   procedure Add_Known_Recipe(Recipe_Index: Tiny_String.Bounded_String) is
-      procedure Add_Ada_Known_Recipe(R_Index: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaKnownRecipe";
-   begin
-      Add_Ada_Known_Recipe
-        (R_Index =>
-           New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
-   end Add_Known_Recipe;
 
    function Get_Known_Recipe
      (Index: Integer) return Tiny_String.Bounded_String is

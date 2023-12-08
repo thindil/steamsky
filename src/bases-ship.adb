@@ -21,13 +21,6 @@ with Maps; use Maps;
 
 package body Bases.Ship is
 
-   -- ****e* Ship/Ship.Bases_Ship_Nothing_To_Repair
-   -- FUNCTION
-   -- Raised when there is nothing to repair
-   -- SOURCE
-   Bases_Ship_Nothing_To_Repair: exception;
-   -- ****
-
    procedure Repair_Ship(Module_Index: Integer) is
       use Interfaces.C;
 
@@ -40,6 +33,7 @@ package body Bases.Ship is
          Import => True,
          Convention => C,
          External_Name => "repairAdaShip2";
+      Bases_Ship_Nothing_To_Repair: exception;
    begin
       Set_Ship_In_Nim;
       Get_Base_Cargo(Base_Index => Base_Index);

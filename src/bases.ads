@@ -295,9 +295,6 @@ package Bases is
    procedure Set_Ada_Recruits
      (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range);
 
-   procedure Get_Base_Type
-     (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String);
-
    procedure Get_Base_Cargo(Base_Index: Natural);
 
    procedure Set_Base_Cargo(Base_Index: Natural);

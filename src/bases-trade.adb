@@ -21,20 +21,6 @@ with Maps; use Maps;
 
 package body Bases.Trade is
 
-   -- ****e* BTrade/BTrade.Trade_Already_Known
-   -- FUNCTION
-   -- Raised when player known selected recipe
-   -- SOURCE
-   Trade_Already_Known: exception;
-   -- ****
-
-   -- ****e* BTrade/BTrade.Trade_Cant_Heal
-   -- FUNCTION
-   -- Raised when no crew members are wounded
-   -- SOURCE
-   Trade_Cant_Heal: exception;
-   -- ****
-
    procedure Hire_Recruit
      (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
       Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer) is
@@ -106,6 +92,7 @@ package body Bases.Trade is
          Import => True,
          Convention => C,
          External_Name => "buyAdaRecipe";
+      Trade_Already_Known: exception;
    begin
       Set_Ship_In_Nim;
       Get_Base_Cargo(Base_Index => Base_Index);
@@ -149,6 +136,7 @@ package body Bases.Trade is
          Import => True,
          Convention => C,
          External_Name => "healAdaWounded";
+      Trade_Cant_Heal: exception;
    begin
       Set_Ship_In_Nim;
       Get_Base_Cargo(Base_Index => Base_Index);

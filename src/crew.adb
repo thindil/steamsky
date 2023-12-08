@@ -115,31 +115,6 @@ package body Crew is
           (Item => Get_Ada_Attribute_Level_Name(A_Level => Attribute_Level));
    end Get_Attribute_Level_Name;
 
-   procedure Daily_Payment is
-      procedure Daily_Ada_Payment with
-         Import => True,
-         Convention => C,
-         External_Name => "dailyAdaPayment";
-   begin
-      Set_Ship_In_Nim;
-      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         Get_Ada_Base_Population
-           (Base_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
-            Population =>
-              Sky_Bases
-                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-                .Population);
-      end if;
-      Daily_Ada_Payment;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         Set_Base_Population
-           (Base_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index);
-      end if;
-   end Daily_Payment;
-
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive is
       function Get_Ada_Training_Tool_Quality

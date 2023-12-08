@@ -192,20 +192,6 @@ package body Bases is
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Get_Base_Reputation;
 
-   procedure Get_Base_Owner(Base_Index: Bases_Range) is
-      procedure Get_Ada_Base_Owner(B_Index: Integer; Owner: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseOwner";
-   begin
-      Get_Ada_Base_Owner
-        (B_Index => Base_Index,
-         Owner =>
-           New_String
-             (Str =>
-                Tiny_String.To_String(Source => Sky_Bases(Base_Index).Owner)));
-   end Get_Base_Owner;
-
    procedure Set_Base_Population(Base_Index: Bases_Range) is
       procedure Set_Ada_Base_Population
         (B_Index: Integer; Population: out Integer) with
@@ -486,6 +472,19 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseKnown";
+      procedure Get_Base_Owner(Base_Index: Bases_Range) is
+         procedure Get_Ada_Base_Owner(B_Index: Integer; Owner: chars_ptr) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaBaseOwner";
+      begin
+         Get_Ada_Base_Owner
+           (B_Index => Base_Index,
+            Owner =>
+              New_String
+                (Str =>
+                   Tiny_String.To_String(Source => Sky_Bases(Base_Index).Owner)));
+      end Get_Base_Owner;
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,

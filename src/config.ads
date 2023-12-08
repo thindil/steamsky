@@ -41,6 +41,7 @@ package Config is
       Default_Value => NORMAL;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Config/Config.Default_Difficulty_Type
    -- FUNCTION
    -- Default difficulty level for the game
@@ -92,6 +93,7 @@ package Config is
    -- SOURCE
    Default_Auto_Save_Time: constant Auto_Save_Type := NONE;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Config/Config.Font_Types
    -- FUNCTION

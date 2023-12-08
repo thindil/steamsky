@@ -59,27 +59,6 @@ package Crafts is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****e* Crafts/Crafts.Crafting_No_Materials
-   -- FUNCTION
-   -- Raised when no materials needed for selected recipe
-   -- SOURCE
-   Crafting_No_Materials: exception;
-   -- ****
-
-   -- ****e* Crafts/Crafts.Crafting_No_Tools
-   -- FUNCTION
-   -- Raised when no tool needed for selected recipe
-   -- SOURCE
-   Crafting_No_Tools: exception;
-   -- ****
-
-   -- ****e* Crafts/Crafts.Crafting_No_Workshop
-   -- FUNCTION
-   -- Raised when no workshop needed for selected recipe
-   -- SOURCE
-   Crafting_No_Workshop: exception;
-   -- ****
-
    -- ****f* Crafts/Crafts.Manufacturing
    -- FUNCTION
    -- Craft selected items
@@ -161,8 +140,6 @@ package Crafts is
 
    function Is_Known_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Boolean;
-
-   procedure Add_Known_Recipe(Recipe_Index: Tiny_String.Bounded_String);
 
    function Get_Known_Recipe(Index: Integer) return Tiny_String.Bounded_String;
 
