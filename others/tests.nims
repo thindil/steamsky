@@ -10,10 +10,6 @@ if not fileExists("steamsky.gpr"):
 withDir "nim":
   for i in 1..parseInt(paramStr(paramCount())):
     echo i
-    try:
-      exec "testament all"
-    except:
-      discard
-    for file in listFiles("newtests"):
+    for file in listFiles("tests"):
       if file.endsWith("nim"):
         exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file
