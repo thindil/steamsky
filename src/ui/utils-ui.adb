@@ -661,7 +661,8 @@ package body Utils.UI is
                       Inventory_Container.Element
                         (Container => Player_Ship.Crew(Member_Index).Inventory,
                          Index => Item_Index)
-                        .Durability) &
+                        .Durability,
+                    With_Colors => True) &
                  LF);
          end if;
       else
@@ -680,7 +681,8 @@ package body Utils.UI is
                    (Item_Durability =>
                       Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => Item_Index)
-                        .Durability) &
+                        .Durability,
+                    With_Colors => True) &
                  LF);
          end if;
       end if;
