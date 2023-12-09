@@ -19,7 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
-with Interfaces.C.Strings;
+-- with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -34,10 +34,10 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkWidget;
+-- with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Tooltip;
+-- with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Bases.LootUI;
 with Bases.RecruitUI;
@@ -691,88 +691,94 @@ package body Maps.UI is
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
-      use Interfaces.C.Strings;
-      use Tcl.Tk.Ada.Widgets.TtkWidget;
-      use Tcl.Tklib.Ada.Tooltip;
-
-      Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "nw"),
-         2 => To_Unbounded_String(Source => "n"),
-         3 => To_Unbounded_String(Source => "ne"),
-         4 => To_Unbounded_String(Source => "w"),
-         5 => To_Unbounded_String(Source => "e"),
-         6 => To_Unbounded_String(Source => "sw"),
-         7 => To_Unbounded_String(Source => "s"),
-         8 => To_Unbounded_String(Source => "se"));
-      Move_Buttons_Tooltips: constant array(1 .. 8) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "Move ship up and left"),
-         2 => To_Unbounded_String(Source => "Move ship up"),
-         3 => To_Unbounded_String(Source => "Move ship up and right"),
-         4 => To_Unbounded_String(Source => "Move ship left"),
-         5 => To_Unbounded_String(Source => "Move ship right"),
-         6 => To_Unbounded_String(Source => "Move ship down and left"),
-         7 => To_Unbounded_String(Source => "Move ship down"),
-         8 => To_Unbounded_String(Source => "Move ship down and right"));
-      Frame_Name: constant String := Main_Paned & ".controls.buttons";
-      Button: Ttk_Button := Get_Widget(pathName => Frame_Name & ".wait");
-      Speedbox: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".box.speed");
+--      use Interfaces.C.Strings;
+--      use Tcl.Tk.Ada.Widgets.TtkWidget;
+--      use Tcl.Tklib.Ada.Tooltip;
+--
+--      Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "nw"),
+--         2 => To_Unbounded_String(Source => "n"),
+--         3 => To_Unbounded_String(Source => "ne"),
+--         4 => To_Unbounded_String(Source => "w"),
+--         5 => To_Unbounded_String(Source => "e"),
+--         6 => To_Unbounded_String(Source => "sw"),
+--         7 => To_Unbounded_String(Source => "s"),
+--         8 => To_Unbounded_String(Source => "se"));
+--      Move_Buttons_Tooltips: constant array(1 .. 8) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "Move ship up and left"),
+--         2 => To_Unbounded_String(Source => "Move ship up"),
+--         3 => To_Unbounded_String(Source => "Move ship up and right"),
+--         4 => To_Unbounded_String(Source => "Move ship left"),
+--         5 => To_Unbounded_String(Source => "Move ship right"),
+--         6 => To_Unbounded_String(Source => "Move ship down and left"),
+--         7 => To_Unbounded_String(Source => "Move ship down"),
+--         8 => To_Unbounded_String(Source => "Move ship down and right"));
+--      Frame_Name: constant String := Main_Paned & ".controls.buttons";
+--      Button: Ttk_Button := Get_Widget(pathName => Frame_Name & ".wait");
+--      Speedbox: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".box.speed");
+      procedure Update_Ada_Move_Buttons with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMoveButtons";
    begin
-      if Player_Ship.Speed = DOCKED then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Speedbox);
-         Button.Name := New_String(Str => Frame_Name & ".box.moveto");
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-         Button.Name := New_String(Str => Frame_Name & ".wait");
-         configure(Widgt => Button, options => "-image waiticon");
-         Add(Widget => Button, Message => "Wait 1 minute.");
-         Disable_Move_Buttons_Loop :
-         for ButtonName of Move_Buttons_Names loop
-            Button.Name :=
-              New_String
-                (Str => Frame_Name & "." & To_String(Source => ButtonName));
-            State(Widget => Button, StateSpec => "disabled");
-            Add
-              (Widget => Button,
-               Message =>
-                 "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
-         end loop Disable_Move_Buttons_Loop;
-      else
-         Current
-           (ComboBox => Speedbox,
-            NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
-         Tcl.Tk.Ada.Grid.Grid(Slave => Speedbox);
-         if Player_Ship.Destination_X > 0 and
-           Player_Ship.Destination_Y > 0 then
-            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
-            Button.Name := New_String(Str => Frame_Name & ".wait");
-            configure(Widgt => Button, options => "-image movestepicon");
-            Add
-              (Widget => Button,
-               Message => "Move ship one map field toward destination.");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-         else
-            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
-            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
-            Button.Name := New_String(Str => Frame_Name & ".wait");
-            configure(Widgt => Button, options => "-image waiticon");
-            Add(Widget => Button, Message => "Wait 1 minute.");
-         end if;
-         Enable_Move_Buttons_Loop :
-         for I in Move_Buttons_Names'Range loop
-            Button.Name :=
-              New_String
-                (Str =>
-                   Frame_Name & "." &
-                   To_String(Source => Move_Buttons_Names(I)));
-            State(Widget => Button, StateSpec => "!disabled");
-            Add
-              (Widget => Button,
-               Message => To_String(Source => Move_Buttons_Tooltips(I)));
-         end loop Enable_Move_Buttons_Loop;
-      end if;
+      Set_Ship_In_Nim;
+      Update_Ada_Move_Buttons;
+--      if Player_Ship.Speed = DOCKED then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Speedbox);
+--         Button.Name := New_String(Str => Frame_Name & ".box.moveto");
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+--         Button.Name := New_String(Str => Frame_Name & ".wait");
+--         configure(Widgt => Button, options => "-image waiticon");
+--         Add(Widget => Button, Message => "Wait 1 minute.");
+--         Disable_Move_Buttons_Loop :
+--         for ButtonName of Move_Buttons_Names loop
+--            Button.Name :=
+--              New_String
+--                (Str => Frame_Name & "." & To_String(Source => ButtonName));
+--            State(Widget => Button, StateSpec => "disabled");
+--            Add
+--              (Widget => Button,
+--               Message =>
+--                 "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
+--         end loop Disable_Move_Buttons_Loop;
+--      else
+--         Current
+--           (ComboBox => Speedbox,
+--            NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Speedbox);
+--         if Player_Ship.Destination_X > 0 and
+--           Player_Ship.Destination_Y > 0 then
+--            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
+--            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
+--            Button.Name := New_String(Str => Frame_Name & ".wait");
+--            configure(Widgt => Button, options => "-image movestepicon");
+--            Add
+--              (Widget => Button,
+--               Message => "Move ship one map field toward destination.");
+--            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--         else
+--            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
+--            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+--            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
+--            Button.Name := New_String(Str => Frame_Name & ".wait");
+--            configure(Widgt => Button, options => "-image waiticon");
+--            Add(Widget => Button, Message => "Wait 1 minute.");
+--         end if;
+--         Enable_Move_Buttons_Loop :
+--         for I in Move_Buttons_Names'Range loop
+--            Button.Name :=
+--              New_String
+--                (Str =>
+--                   Frame_Name & "." &
+--                   To_String(Source => Move_Buttons_Names(I)));
+--            State(Widget => Button, StateSpec => "!disabled");
+--            Add
+--              (Widget => Button,
+--               Message => To_String(Source => Move_Buttons_Tooltips(I)));
+--         end loop Enable_Move_Buttons_Loop;
+--      end if;
    end Update_Move_Buttons;
 
    procedure Create_Game_Ui is
