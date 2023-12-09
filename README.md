@@ -45,10 +45,14 @@ It will build the game and put all needed files (except libraries) to directory
 
 ### Build unit tests
 
-Navigate to `tests/driver` directory from the main directory (where this
-file is):
+Use the script `tests.nims` from the `others` directory. In the project's main
+directory (where this file is):
 
-* From console: type `gprbuild -P test_driver.gpr`
+* From console: type `others/tests.nims 1`. The argument is how many times
+  repeat the tests.
+
+The project's tests use package [unittest2](https://github.com/status-im/nim-unittest2),
+thus all its runtime options can be used to run the tests.
 
 ## Generating code documentation
 
