@@ -20,6 +20,8 @@ import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, utilsui2
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
+  ## Update in-game header with information about time, state of the crew
+  ## members, etc.
   var label = gameHeader & ".time"
   tclEval(script = label & " configure -text {" & formattedTime() & "}")
   if gameSettings.showNumbers:
