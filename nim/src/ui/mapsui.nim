@@ -242,6 +242,25 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
 
+proc updateMoveButtons*() =
+  let
+    moveButtonsNames = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
+    frameName = mainPaned & ".controls.buttons"
+    speedBox = frameName & ".box.speed"
+  var button = frameName & ".box.moveto"
+  if playerShip.speed == docked:
+    tclEval(script = "grid remove " & speedBox)
+    tclEval(script = "grid remove " & button)
+    button = frameName & ".wait"
+    tclEval(script = button & " configure -image waiticon")
+    tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
+    for buttonName in moveButtonsNames:
+      tclEval(script = buttonName & " state disabled")
+      tclEval(script = "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.\"")
+  else:
+    tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
+    tclEval(script = "grid " & speedBox)
+
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
   if clear:
