@@ -19,16 +19,24 @@ import std/tables
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, utilsui2
 
-proc updateHeader*() =
+proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   var label = gameHeader & ".time"
   tclEval(script = label & " configure -text {" & formattedTime() & "}")
   if gameSettings.showNumbers:
-    tclEval(script = label & " configure -text {" & formattedTime() &
-        " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
+    try:
+      discard tclEval(script = label & " configure -text {" & formattedTime() &
+          " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
+    except ValueError:
+      tclEval(script = "bgerror {Can't show the speed of the ship. Reason: " & getCurrentExceptionMsg() & "}")
+      return
     tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
   label = gameHeader & ".nofuel"
   tclEval(script = "grid remove " & label)
-  var itemAmount = getItemAmount(itemType = fuelType)
+  var itemAmount = try:
+        getItemAmount(itemType = fuelType)
+      except KeyError:
+        tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+        return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofuelicon")
     tclEval(script = "tooltip::tooltip " & label & " \"You can't travel anymore, because you don't have any fuel for ship.\"")
@@ -40,7 +48,11 @@ proc updateHeader*() =
     tclEval(script = "grid " & label)
   label = gameHeader & ".nodrink"
   tclEval(script = "grid remove " & label)
-  itemAmount = getItemsAmount(iType = "Drinks")
+  itemAmount = try:
+      getItemsAmount(iType = "Drinks")
+    except KeyError:
+      tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+      return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nodrinksicon")
     tclEval(script = "tooltip::tooltip " & label & " \"You don't have any drinks in ship but your crew needs them to live.\"")
@@ -52,7 +64,11 @@ proc updateHeader*() =
     tclEval(script = "grid " & label)
   label = gameHeader & ".nofood"
   tclEval(script = "grid remove " & label)
-  itemAmount = getItemsAmount(iType = "Food")
+  itemAmount = try:
+      getItemsAmount(iType = "Food")
+    except KeyError:
+      tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+      return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofoodicon")
     tclEval(script = "tooltip::tooltip " & label & " \"You don't have any food in ship but your crew needs them to live.\"")
@@ -83,14 +99,22 @@ proc updateHeader*() =
   label = gameHeader & ".overloaded"
   tclEval(script = "grid remove " & label)
   let
-    faction = factionsList[playerShip.crew[0].faction]
+    faction = try:
+        factionsList[playerShip.crew[0].faction]
+      except KeyError:
+        tclEval(script = "bgerror {Can't get faction. Reason: " & getCurrentExceptionMsg() & "}")
+        return
     frame = mainPaned & ".combat"
   if havePilot and (haveEngineer or "sentientships" in faction.flags) and (
       tclEval2(script = "winfo exists " & frame) == "0" or tclEval2(
       script = "winfo ismapped " & frame) == "0"):
-    let speed = (if playerShip.speed != docked: realSpeed(
-        ship = playerShip).float / 1_000.0 else: realSpeed(ship = playerShip,
-        infoOnly = true).float / 1_000)
+    let speed = try:
+          (if playerShip.speed != docked: realSpeed(
+              ship = playerShip).float / 1_000.0 else: realSpeed(ship = playerShip,
+              infoOnly = true).float / 1_000)
+        except ValueError:
+          tclEval(script = "bgerror {Can't count speed. Reason: " & getCurrentExceptionMsg() & "}")
+          return
     if speed < 0.5:
       tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
       tclEval(script = "grid " & label)
@@ -98,27 +122,31 @@ proc updateHeader*() =
     haveGunner, haveWorker = true
     needWorker, needCleaning, needRepairs = false
   for module in playerShip.modules:
-    case modulesList[module.protoIndex].mType
-    of gun, harpoonGun:
-      if module.owner[0] == -1:
-        haveGunner = false
-      elif playerShip.crew[module.owner[0]].order != gunner:
-        haveGunner = false
-    of alchemyLab .. greenhouse:
-      if module.craftingIndex.len > 0:
-        needWorker = true
-        for owner in module.owner:
-          if owner == -1:
-            haveWorker = false
-          elif playerShip.crew[owner].order != craft:
-            haveWorker = false
-          if not haveWorker:
-            break
-    of cabin:
-      if module.cleanliness != module.quality:
-        needCleaning = true
-    else:
-      discard
+    try:
+      case modulesList[module.protoIndex].mType
+      of gun, harpoonGun:
+        if module.owner[0] == -1:
+          haveGunner = false
+        elif playerShip.crew[module.owner[0]].order != gunner:
+          haveGunner = false
+      of alchemyLab .. greenhouse:
+        if module.craftingIndex.len > 0:
+          needWorker = true
+          for owner in module.owner:
+            if owner == -1:
+              haveWorker = false
+            elif playerShip.crew[owner].order != craft:
+              haveWorker = false
+            if not haveWorker:
+              break
+      of cabin:
+        if module.cleanliness != module.quality:
+          needCleaning = true
+      else:
+        discard
+    except KeyError:
+      tclEval(script = "bgerror {Can't check modules. Reason: " & getCurrentExceptionMsg() & "}")
+      return
     if module.durability != module.maxDurability:
       needRepairs = true
   label = gameHeader & ".pilot"
