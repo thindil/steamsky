@@ -247,6 +247,9 @@ proc showSkyMap*(clear: bool = false) =
   if clear:
     showScreen(newScreenName = "mapframe")
   tclSetVar(varName = "gamestate", newValue = "general")
+  updateHeader()
+  if tclGetVar(varName = "refreshmap") == "1":
+    tclEval(script = "DrawMap")
 
 # Temporary code for interfacing with Ada
 
