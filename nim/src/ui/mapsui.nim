@@ -29,7 +29,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       discard tclEval(script = label & " configure -text {" & formattedTime() &
           " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
     except ValueError:
-      tclEval(script = "bgerror {Can't show the speed of the ship. Reason: " & getCurrentExceptionMsg() & "}")
+      tclEval(script = "bgerror {Can't show the speed of the ship. Reason: " &
+          getCurrentExceptionMsg() & "}")
       return
     tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
   label = gameHeader & ".nofuel"
@@ -37,7 +38,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   var itemAmount = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
-        tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+        tclEval(script = "bgerror {Can't get items amount. Reason: " &
+            getCurrentExceptionMsg() & "}")
         return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofuelicon")
@@ -53,7 +55,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   itemAmount = try:
       getItemsAmount(iType = "Drinks")
     except KeyError:
-      tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+      tclEval(script = "bgerror {Can't get items amount. Reason: " &
+          getCurrentExceptionMsg() & "}")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nodrinksicon")
@@ -69,7 +72,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   itemAmount = try:
       getItemsAmount(iType = "Food")
     except KeyError:
-      tclEval(script = "bgerror {Can't get items amount. Reason: " & getCurrentExceptionMsg() & "}")
+      tclEval(script = "bgerror {Can't get items amount. Reason: " &
+          getCurrentExceptionMsg() & "}")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofoodicon")
@@ -104,7 +108,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     faction = try:
         factionsList[playerShip.crew[0].faction]
       except KeyError:
-        tclEval(script = "bgerror {Can't get faction. Reason: " & getCurrentExceptionMsg() & "}")
+        tclEval(script = "bgerror {Can't get faction. Reason: " &
+            getCurrentExceptionMsg() & "}")
         return
     frame = mainPaned & ".combat"
   if havePilot and (haveEngineer or "sentientships" in faction.flags) and (
@@ -112,10 +117,12 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       script = "winfo ismapped " & frame) == "0"):
     let speed = try:
           (if playerShip.speed != docked: realSpeed(
-              ship = playerShip).float / 1_000.0 else: realSpeed(ship = playerShip,
+              ship = playerShip).float / 1_000.0 else: realSpeed(
+                  ship = playerShip,
               infoOnly = true).float / 1_000)
         except ValueError:
-          tclEval(script = "bgerror {Can't count speed. Reason: " & getCurrentExceptionMsg() & "}")
+          tclEval(script = "bgerror {Can't count speed. Reason: " &
+              getCurrentExceptionMsg() & "}")
           return
     if speed < 0.5:
       tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
@@ -147,7 +154,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       else:
         discard
     except KeyError:
-      tclEval(script = "bgerror {Can't check modules. Reason: " & getCurrentExceptionMsg() & "}")
+      tclEval(script = "bgerror {Can't check modules. Reason: " &
+          getCurrentExceptionMsg() & "}")
       return
     if module.durability != module.maxDurability:
       needRepairs = true
@@ -255,11 +263,34 @@ proc updateMoveButtons*() =
     tclEval(script = button & " configure -image waiticon")
     tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
     for buttonName in moveButtonsNames:
-      tclEval(script = buttonName & " state disabled")
-      tclEval(script = "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.\"")
+      button = frameName & "." & buttonName
+      tclEval(script = button & " state disabled")
+      tclEval(script = "tooltip::tooltip " & button & " \"You have to give order 'Undock' from\nMenu->Ship orders first to move ship.\"")
   else:
     tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
     tclEval(script = "grid " & speedBox)
+    if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+      button = frameName & ".box.moveto"
+      tclEval(script = "grid " & button)
+      tclEval(script = "grid configure " & speedBox)
+      button = frameName & ".wait"
+      tclEval(script = button & " configure -image movestepicon")
+      tclEval(script = "tooltip::tooltip " & button & " \"Move ship one map field toward destination.\"")
+    else:
+      button = frameName & ".box.moveto"
+      tclEval(script = "grid remove " & button)
+      tclEval(script = "grid configure " & speedBox)
+      button = frameName & ".wait"
+      tclEval(script = button & " configure -image waiticon")
+      tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
+    let moveButtonsTooltips = ["Move ship up and left", "Move ship up",
+        "Move ship up and right", "Move ship left", "Move ship right",
+        "Move ship down and left", "Move ship down", "Move ship down and right"]
+    for index, name in moveButtonsNames:
+      button = frameName & "." & name
+      tclEval(script = button & " state !disabled")
+      tclEval(script = "tooltip::tooltip " & button & " \"" &
+          moveButtonsTooltips[index] & "\"")
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
@@ -277,3 +308,6 @@ proc updateAdaHeader() {.raises: [], tags: [], exportc.} =
     updateHeader()
   except:
     discard
+
+proc updateAdaMoveButtons() {.raises: [], tags: [], exportc.} =
+  updateMoveButtons()
