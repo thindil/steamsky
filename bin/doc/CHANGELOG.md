@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated look of the items information dialog in the trading screen
+- Updated README.md
 
 ### Fixed
 - Don't show empty categories of items in the trading screen
