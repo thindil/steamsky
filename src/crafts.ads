@@ -59,15 +59,6 @@ package Crafts is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****f* Crafts/Crafts.Manufacturing
-   -- FUNCTION
-   -- Craft selected items
-   -- PARAMETERS
-   -- Minutes - How many in game minutes passed
-   -- SOURCE
-   procedure Manufacturing(Minutes: Positive);
-      -- ****
-
    -- ****f* Crafts/Crafts.Set_Recipe_Data
    -- FUNCTION
    -- Set crafting data for selected recipe

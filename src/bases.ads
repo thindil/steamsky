@@ -273,8 +273,6 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBasePopulation";
 
-   procedure Set_Base_Population(Base_Index: Bases_Range);
-
    procedure Get_Ada_Base_Date
      (Base_Index: Bases_Range;
       Year, Month, Day, Hour, Minutes, Date_Type: Natural) with

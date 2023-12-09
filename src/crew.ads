@@ -94,7 +94,6 @@ package Crew is
       -- SOURCE
    Default_Equipment_Location: constant Equipment_Locations := WEAPON;
    -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION
@@ -136,6 +135,7 @@ package Crew is
    Empty_Attributes: constant Mob_Attribute_Record :=
      Mob_Attribute_Record'(others => <>);
      -- ****
+     --## rule on REDUCEABLE_SCOPE
 
      --## rule off TYPE_INITIAL_VALUES
      -- ****t* Crew/Crew.Mob_Attributes

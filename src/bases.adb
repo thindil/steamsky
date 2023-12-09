@@ -358,19 +358,6 @@ package body Bases is
       end loop Convert_Crew_Loop;
    end Set_Ada_Recruits;
 
-   procedure Get_Base_Type
-     (Base_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String) is
-      procedure Get_Ada_Base_Type(B_Index: Integer; B_Type: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseType";
-   begin
-      Get_Ada_Base_Type
-        (B_Index => Base_Index,
-         B_Type =>
-           New_String(Str => Tiny_String.To_String(Source => Base_Type)));
-   end Get_Base_Type;
-
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Base_Cargo is record
       Proto_Index: Natural;
@@ -472,19 +459,31 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseKnown";
-      procedure Get_Base_Owner(Base_Index: Bases_Range) is
-         procedure Get_Ada_Base_Owner(B_Index: Integer; Owner: chars_ptr) with
+      procedure Get_Base_Owner(B_Index: Bases_Range) is
+         procedure Get_Ada_Base_Owner(Ba_Index: Integer; Owner: chars_ptr) with
             Import => True,
             Convention => C,
             External_Name => "getAdaBaseOwner";
       begin
          Get_Ada_Base_Owner
-           (B_Index => Base_Index,
+           (Ba_Index => B_Index,
             Owner =>
               New_String
                 (Str =>
-                   Tiny_String.To_String(Source => Sky_Bases(Base_Index).Owner)));
+                   Tiny_String.To_String(Source => Sky_Bases(B_Index).Owner)));
       end Get_Base_Owner;
+      procedure Get_Base_Type
+        (B_Index: Bases_Range; Base_Type: Tiny_String.Bounded_String) is
+         procedure Get_Ada_Base_Type(Ba_Index: Integer; B_Type: chars_ptr) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaBaseType";
+      begin
+         Get_Ada_Base_Type
+           (Ba_Index => B_Index,
+            B_Type =>
+              New_String(Str => Tiny_String.To_String(Source => Base_Type)));
+      end Get_Base_Type;
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -502,7 +501,7 @@ package body Bases is
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Get_Base_Type
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Base_Type => Sky_Bases(Base_Index).Base_Type);
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
@@ -542,7 +541,7 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes,
          Date_Type => 1);
       Get_Missions(Base_Index => Base_Index);
-      Get_Base_Owner(Base_Index => Base_Index);
+      Get_Base_Owner(B_Index => Base_Index);
       Get_Base_Cargo(Base_Index => Base_Index);
       Get_Ada_Base_Size
         (B_Index => Base_Index,

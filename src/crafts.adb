@@ -21,27 +21,6 @@ with Trades;
 
 package body Crafts is
 
-   -- ****e* Crafts/Crafts.Crafting_No_Materials
-   -- FUNCTION
-   -- Raised when no materials needed for selected recipe
-   -- SOURCE
-   Crafting_No_Materials: exception;
-   -- ****
-
-   -- ****e* Crafts/Crafts.Crafting_No_Tools
-   -- FUNCTION
-   -- Raised when no tool needed for selected recipe
-   -- SOURCE
-   Crafting_No_Tools: exception;
-   -- ****
-
-   -- ****e* Crafts/Crafts.Crafting_No_Workshop
-   -- FUNCTION
-   -- Raised when no workshop needed for selected recipe
-   -- SOURCE
-   Crafting_No_Workshop: exception;
-   -- ****
-
    --## rule off TYPE_INITIAL_VALUES
    type Material_Types_Array is array(0 .. 4) of chars_ptr;
    type Material_Amounts_Array is array(0 .. 4) of Integer;
@@ -128,6 +107,9 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "checkAdaRecipe";
+      Crafting_No_Materials: exception;
+      Crafting_No_Tools: exception;
+      Crafting_No_Workshop: exception;
    begin
       Get_Ada_Modules;
       Get_Ada_Ship_Cargo
@@ -150,17 +132,6 @@ package body Crafts is
             return Max_Amount;
       end case;
    end Check_Recipe;
-
-   procedure Manufacturing(Minutes: Positive) is
-      procedure Ada_Manufacturing(M: Positive) with
-         Import => True,
-         Convention => C,
-         External_Name => "adaManufacturing";
-   begin
-      Set_Ship_In_Nim;
-      Ada_Manufacturing(M => Minutes);
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Manufacturing;
 
    procedure Set_Recipe
      (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is

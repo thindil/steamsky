@@ -15,8 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Bases; use Bases;
-with Maps; use Maps;
+with Bases;
+with Maps;
 with Ships; use Ships;
 
 package body Crew is
@@ -73,6 +73,8 @@ package body Crew is
    end Update_Crew;
 
    procedure Wait_For_Rest is
+      use Bases;
+      use Maps;
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       procedure Wait_Ada_For_Rest with

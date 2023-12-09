@@ -19,7 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -32,12 +32,12 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Bases.LootUI;
 with Bases.RecruitUI;
@@ -58,7 +58,7 @@ with Items;
 with Knowledge;
 with Log;
 with Maps.UI.Commands;
-with Messages; use Messages;
+with Messages;
 with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
@@ -130,10 +130,12 @@ package body Maps.UI is
         Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
       Map_Width :=
         Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       Start_Y := Center_Y - (Map_Height / 2);
       Start_X := Center_X - (Map_Width / 2);
       End_Y := Center_Y + (Map_Height / 2);
       End_X := Center_X + (Map_Width / 2);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
       if Start_Y < 1 then
          Start_Y := 1;
          End_Y := Map_Height;
@@ -689,7 +691,9 @@ package body Maps.UI is
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
+      use Interfaces.C.Strings;
       use Tcl.Tk.Ada.Widgets.TtkWidget;
+      use Tcl.Tklib.Ada.Tooltip;
 
       Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "nw"),
@@ -774,7 +778,9 @@ package body Maps.UI is
    procedure Create_Game_Ui is
       use Ada.Strings.Fixed;
       use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+      use Tcl.Tk.Ada.Winfo;
       use Tcl.Tk.Ada.Wm;
       use DebugUI;
       use Log;
