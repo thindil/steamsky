@@ -250,7 +250,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
 
-proc updateMoveButtons*() =
+proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
   let
     moveButtonsNames = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
     frameName = mainPaned & ".controls.buttons"
