@@ -82,10 +82,9 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     saveTree.add(recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
-  let messagesToSave = (if gameSettings.savedMessages.cint > messagesAmount(
-      0): messagesAmount(0) else: gameSettings.savedMessages.cint)
-  for i in (messagesAmount(0) - messagesToSave + 1) .. messagesAmount(0):
-    let message = getMessage(i, 0)
+  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
+  for i in (messagesAmount() - messagesToSave + 1) .. messagesAmount():
+    let message = getMessage(i)
     var messageElement = newElement("message")
     messageElement.attrs = {"type": $message.kind,
         "color": $message.color}.toXmlAttributes
@@ -282,9 +281,9 @@ proc loadGame*() =
   # Load messages
   logMessage(message = "Loading messages...", debugType = everything)
   for message in savedGame.findAll("message"):
-    restoreMessage(message = message.innerText, kind = message.attr(
-        "type").parseInt.MessageType, color = message.attr(
-        "color").parseInt.MessageColor)
+    restoreMessage(message = message.innerText, kind = parseEnum[MessageType](
+        s = message.attr("type")), color = parseEnum[MessageColor](
+        s = message.attr("color")))
   logMessage(message = "done", debugType = everything)
   # Load events
   logMessage(message = "Loading events...", debugType = everything)
@@ -320,7 +319,8 @@ proc loadGame*() =
           break
     currentStory.maxSteps = storyNode.attr("maxsteps").parseInt
     currentStory.showText = storyNode.attr("showtext") == "Y"
-    currentStory.finishedStep = storyNode.attr("finishedstep").parseInt.StepConditionType
+    currentStory.finishedStep = storyNode.attr(
+        "finishedstep").parseInt.StepConditionType
     logMessage(message = "done", debugType = everything)
   # Load finished stories data
   logMessage(message = "Loading finished stories...", debugType = everything)
