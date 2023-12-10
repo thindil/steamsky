@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.5] - 2023-12-10
 
 ### Fixed
 - Don't show empty categories of items in the trading screen
