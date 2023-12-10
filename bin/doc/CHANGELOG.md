@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Updated look of the items information dialog in the trading screen
+- Updated look of the items' information dialogs in the trading and ship info
+  screens
 - Updated README.md
 
 ### Fixed
