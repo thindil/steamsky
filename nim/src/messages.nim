@@ -161,18 +161,21 @@ proc clearMessages*() {.raises: [], tags: [], exportc.} =
   ## Remove all the in-game messages
   messagesList = @[]
 
-proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
+proc messagesAmount*(kind: MessageType = default): int =
   ## Get the amount of the messages of the selected type
   ##
   ## * kind - The type of messages which amount will be get
   ##
   ## Returns the amount of the selected type of messages
-  if kind == ord(MessageType.default):
-    return messagesList.len().cint
+  if kind == default:
+    return messagesList.len()
   result = 0
   for message in messagesList:
-    if ord(message.kind).cint == kind:
+    if message.kind == kind:
       result.inc()
+
+proc messagesAmount*(kind: cint): cint {.raises: [], tags: [], exportc.} =
+  return messagesAmount(kind.MessageType).cint
 
 proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
     color: MessageColor = white) {.raises: [], tags: [].} =
@@ -186,10 +189,5 @@ proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
 proc restoreMessage(message: cstring; kind: cint = ord(
     MessageType.default).cint; color: cint = ord(white).cint) {.raises: [],
     tags: [], exportc.} =
-  ## Restore the selected message from the save file
-  ##
-  ## * message - The text of the message to restore
-  ## * kind    - The kind of the message to restore
-  ## * color   - The color used to draw the message
   messagesList.add(MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
