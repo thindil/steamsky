@@ -251,6 +251,8 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
         res = "showstats")
 
 proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
+  ## Update the player's ship movement buttons, depending on the state of the
+  ## ship
   let
     moveButtonsNames = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
     frameName = mainPaned & ".controls.buttons"
