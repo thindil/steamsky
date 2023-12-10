@@ -302,6 +302,8 @@ proc showSkyMap*(clear: bool = false) =
   updateHeader()
   if tclGetVar(varName = "refreshmap") == "1":
     tclEval(script = "DrawMap")
+  updateMoveButtons()
+  tclEval(script = "update")
 
 # Temporary code for interfacing with Ada
 
