@@ -114,28 +114,4 @@ package Crew.Inventory is
            (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
-      -- ****f* Inventory/Inventory.Find_Tools
-      -- FUNCTION
-      -- Search for specified tools in character and ship cargo
-      -- PARAMETERS
-      -- Member_Index - Crew index of the member which will be checked
-      -- Item_Type    - Type of item which will be looking for
-      -- Order        - Order which crew member will be doing when he/she find
-      --                proper tool
-      -- Tool_Quality - Minimal quality of tool to find. Default value is 100
-      -- RESULT
-      -- Selected crew member inventory index of the tool or 0 if tool was not
-      -- found
-      -- HISTORY
-      -- 7.5 - Renamed to Find_Tools, changed parameters names to Member_Index,
-      --       Item_Type and Tool_Quality
-      -- SOURCE
-   function Find_Tools
-     (Member_Index: Positive; Item_Type: Tiny_String.Bounded_String;
-      Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural with
-      Pre =>
-      Member_Index <= Player_Ship.Crew.Last_Index and
-       Tiny_String.Length(Source => Item_Type) > 0;
-      -- ****
-
 end Crew.Inventory;

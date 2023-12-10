@@ -299,7 +299,6 @@ package body Game is
          Money_Name :=
            To_Unbounded_String(Source => Value(Item => Nim_Strings(12)));
          Get_Ada_Game_Integers(Values => Nim_Integers);
-         Corpse_Index := Nim_Integers(0);
          Money_Index := Nim_Integers(1);
          Condition_Index := Nim_Integers(2);
          Strength_Index := Nim_Integers(3);

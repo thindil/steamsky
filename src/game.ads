@@ -139,13 +139,6 @@ package Game is
    Empty_Attributes_Array: constant Attributes_Array := (others => 0);
    -- ****
 
-   -- ****t* Game/Game.Attributes_Container
-   -- Used to store attributes data
-   -- SOURCE
-   package Attributes_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Attributes_Array);
-   -- ****
-
    -- ****t* Game/Game.Standard_String
    -- FUNCTION
    -- Used to store various texts, max length 1024
@@ -249,6 +242,7 @@ package Game is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.Empty_Atribute_Record
    -- FUNCTION
    -- Empty attributes record constant
@@ -256,6 +250,7 @@ package Game is
    Empty_Atribute_Record: constant Attribute_Record :=
      Attribute_Record'(others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
      -- ****t* Game/Game.Attributes_Amount_Range
      -- FUNCTION
@@ -439,13 +434,6 @@ package Game is
    -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    -- SOURCE
    Alchemy_Tools: Tiny_String.Bounded_String;
-   -- ****
-
-   -- ****v* Game/Game.Corpse_Index
-   -- FUNCTION
-   -- Index of item used to create mobs corpses
-   -- SOURCE
-   Corpse_Index: Positive;
    -- ****
 
    -- ****v* Game/Game.Mission_Items_Type
@@ -656,12 +644,14 @@ package Game is
       Default_Value => ADD;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.Default_Data_Action
    -- FUNCTION
    -- Default data action when loading the game data
    -- SOURCE
    Default_Data_Action: constant Data_Action := ADD;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    --## rule off TYPE_INITIAL_VALUES
    -- ****t* Game/Game.Natural_Array
@@ -720,6 +710,7 @@ package Game is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.Default_Reputation
    -- FUNCTION
    -- Default reputation values
@@ -727,6 +718,7 @@ package Game is
    Default_Reputation: constant Reputation_Data :=
      (Level => 0, Experience => 0);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Game/Game.Bases_Range
    -- FUNCTION

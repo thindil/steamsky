@@ -19,53 +19,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Factions is
 
-   function Get_Reputation
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Integer is
-      use Tiny_String;
-
-      function Get_Ada_Reputation
-        (S_Index, T_Index: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaReputation";
-   begin
-      return
-        Get_Ada_Reputation
-          (S_Index => New_String(Str => To_String(Source => Source_Faction)),
-           T_Index => New_String(Str => To_String(Source => Target_Faction)));
-   end Get_Reputation;
-
-   function Is_Friendly
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Boolean is
-      use Tiny_String;
-
-      function Is_Ada_Friendly(S_Index, T_Index: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "isAdaFriendly";
-   begin
-      if Is_Ada_Friendly
-          (S_Index => New_String(Str => To_String(Source => Source_Faction)),
-           T_Index => New_String(Str => To_String(Source => Target_Faction))) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Is_Friendly;
-
-   function Get_Random_Faction return Tiny_String.Bounded_String is
-      function Get_Ada_Random_Faction return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaRandomFaction";
-   begin
-      return
-        Tiny_String.To_Bounded_String
-          (Source => Value(Item => Get_Ada_Random_Faction));
-   end Get_Random_Faction;
-
    function Get_Faction
      (Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Number: Natural := 0) return Faction_Record is

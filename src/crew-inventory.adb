@@ -134,44 +134,4 @@ package body Crew.Inventory is
       return False;
    end Item_Is_Used;
 
-   function Find_Tools
-     (Member_Index: Positive; Item_Type: Tiny_String.Bounded_String;
-      Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural is
-      use Tiny_String;
-
-      Tools_Index: Natural;
-      Nim_Equipment: Nim_Equipment_Array;
-      Nim_Inventory: Nim_Inventory_Array :=
-        Inventory_To_Nim
-          (Inventory => Player_Ship.Crew(Member_Index).Inventory);
-      function Find_Ada_Tools
-        (M_Index: Integer; I_Type: chars_ptr; M_Order, T_Quality: Integer)
-         return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "findAdaTools";
-   begin
-      Get_Ada_Crew;
-      Get_Ada_Crew_Inventory
-        (Inventory => Nim_Inventory, Member_Index => Member_Index);
-      Tools_Index :=
-        Find_Ada_Tools
-          (M_Index => Member_Index,
-           I_Type => New_String(Str => To_String(Source => Item_Type)),
-           M_Order => Crew_Orders'Pos(Order), T_Quality => Tool_Quality);
-      Set_Ada_Crew_Inventory
-        (Inventory => Nim_Inventory, Member_Index => Member_Index,
-         Get_Player_Ship => 1);
-      Player_Ship.Crew(Member_Index).Inventory :=
-        Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
-      Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
-      Update_Equipment_Loop :
-      for I in Nim_Equipment'Range loop
-         Player_Ship.Crew(Member_Index).Equipment
-           (Equipment_Locations'Val(I)) :=
-           Nim_Equipment(I);
-      end loop Update_Equipment_Loop;
-      return Tools_Index;
-   end Find_Tools;
-
 end Crew.Inventory;

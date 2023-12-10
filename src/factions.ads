@@ -35,6 +35,7 @@ package Factions is
       Default_Value => STANDARD;
       -- ****
 
+   --# rule off REDUCEABLE_SCOPE
    -- ****d* Factions/Factions.Default_Names_Type
    -- FUNCTION
    -- Default type of names of npc
@@ -129,6 +130,7 @@ package Factions is
    -- SOURCE
    Empty_Carreer: constant Career_Record := (others => <>);
    -- ****
+   --# rule on REDUCEABLE_SCOPE
 
    -- ****t* Factions/Factions.Careers_Container
    -- FUNCTION
@@ -209,43 +211,6 @@ package Factions is
    -- SOURCE
    Empty_Faction: constant Faction_Record := (others => <>);
    -- ****
-
-   -- ****f* Factions/Factions.Get_Reputation
-   -- FUNCTION
-   -- Get reputation between Source_Faction and Target_Faction
-   -- PARAMETERS
-   -- Source_Faction - Index of first faction which reputation will be check
-   -- Target_Faction - Index of second faction which reputation will be check
-   -- RESULT
-   -- Numeric reputation level between both factions
-   -- SOURCE
-   function Get_Reputation
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Integer;
-      -- ****
-
-      -- ****f* Factions/Factions.Is_Friendly
-      -- FUNCTION
-      -- Check if Target_Faction is friendly for Source_Faction. Returns true if yes, otherwise false.
-      -- PARAMETERS
-      -- Source_Faction - Index of base faction to which TargetFaction will be checked
-      -- Target_Faction - Index of faction to check
-      -- RESULT
-      -- True if factions are friendly between self, otherwise false
-      -- SOURCE
-   function Is_Friendly
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
-      return Boolean;
-      -- ****
-
-      -- ****f* Factions/Factions.Get_Random_Faction
-      -- FUNCTION
-      -- Select random faction from list
-      -- RESULT
-      -- Random index of faction
-      -- SOURCE
-   function Get_Random_Faction return Tiny_String.Bounded_String;
-      -- ****
 
 -- Temporary code to interact with Nim
 

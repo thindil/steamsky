@@ -58,20 +58,6 @@ package body Crew is
                          (Str => To_String(Source => Faction_Index)))));
    end Generate_Member_Name;
 
-   procedure Update_Crew
-     (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
-      procedure Update_Ada_Crew(M, T_Points, Combat: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaCrew";
-   begin
-      Set_Ship_In_Nim;
-      Update_Ada_Crew
-        (M => Minutes, T_Points => Tired_Points,
-         Combat => (if In_Combat then 1 else 0));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Update_Crew;
-
    procedure Wait_For_Rest is
       use Bases;
       use Maps;

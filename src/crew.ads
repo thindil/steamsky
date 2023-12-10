@@ -44,6 +44,7 @@ package Crew is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Crew/Crew.Empty_Skill_Info
    -- FUNCTION
    -- Default empty skill
@@ -71,7 +72,6 @@ package Crew is
       Default_Value => REST;
       -- ****
 
-      --## rule off REDUCEABLE_SCOPE
       -- ****d* Crew/Crew.Default_Crew_Order
       -- FUNCTION
       -- The default order for the crew members
@@ -281,18 +281,6 @@ package Crew is
       Import => True,
       Convention => C,
       External_Name => "findAdaCabin";
-      -- ****
-
-      -- ****f* Crew/Crew.Update_Crew
-      -- FUNCTION
-      -- Update player ship crew
-      -- PARAMETERS
-      -- Minutes      - Amount of in-game minutes which passed
-      -- Tired_Points - Amount of Tired points which will be added to crew members
-      -- In_Combat    - If true, player is in combat. Default is false
-      -- SOURCE
-   procedure Update_Crew
-     (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False);
       -- ****
 
       -- ****f* Crew/Crew.Wait_For_Rest

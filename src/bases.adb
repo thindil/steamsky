@@ -192,18 +192,6 @@ package body Bases is
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Get_Base_Reputation;
 
-   procedure Set_Base_Population(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Population
-        (B_Index: Integer; Population: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBasePopulation";
-   begin
-      Set_Ada_Base_Population
-        (B_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-   end Set_Base_Population;
-
    function Recruit_To_Nim(Recruit: Recruit_Data) return Nim_Recruit_Data is
       use Tiny_String;
       Nim_Recruit: Nim_Recruit_Data :=
@@ -501,8 +489,7 @@ package body Bases is
         (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Get_Base_Type
-        (B_Index => Base_Index,
-         Base_Type => Sky_Bases(Base_Index).Base_Type);
+        (B_Index => Base_Index, Base_Type => Sky_Bases(Base_Index).Base_Type);
       Get_Ada_Base_Population
         (Base_Index => Base_Index,
          Population => Sky_Bases(Base_Index).Population);
@@ -579,6 +566,17 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseSize";
+      procedure Set_Base_Population(Base_Index: Bases_Range) is
+         procedure Set_Ada_Base_Population
+           (B_Index: Integer; Population: out Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "setAdaBasePopulation";
+      begin
+         Set_Ada_Base_Population
+           (B_Index => Base_Index,
+            Population => Sky_Bases(Base_Index).Population);
+      end Set_Base_Population;
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=

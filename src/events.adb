@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings;
-with Bases;
 with Maps; use Maps;
 
 package body Events is
@@ -41,19 +40,6 @@ package body Events is
       end if;
       return False;
    end Check_For_Event;
-
-   procedure Update_Events(Minutes: Positive) is
-      procedure Update_Ada_Events(M: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaEvents";
-   begin
-      Update_Ada_Events(M => Minutes);
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. Get_Events_Amount loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
-   end Update_Events;
 
    procedure Delete_Event(Event_Index: Positive) is
       procedure Delete_Ada_Event(E_Index: Integer) with
@@ -84,19 +70,6 @@ package body Events is
       Set_Ship_In_Nim;
       Generate_Ada_Traders;
    end Generate_Traders;
-
-   procedure Recover_Base(Base_Index: Bases_Range) is
-      use Bases;
-
-      procedure Recover_Ada_Base(B_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "recoverAdaBase";
-   begin
-      Set_Base_In_Nim(Base_Index => Base_Index);
-      Recover_Ada_Base(B_Index => Base_Index);
-      Get_Base_From_Nim(Base_Index => Base_Index);
-   end Recover_Base;
 
    procedure Generate_Enemies
      (Enemies: in out Positive_Container.Vector;

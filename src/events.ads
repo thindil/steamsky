@@ -70,6 +70,7 @@ package Events is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Events/Events.Empty_Event
    -- FUNCTION
    -- Default value for Event_Data, an empty event
@@ -77,6 +78,7 @@ package Events is
    Empty_Event: constant Event_Data :=
      (E_Type => No_Event, Sky_X => 1, Sky_Y => 1, Time => 1, Data => 0);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Events/Events.Check_For_Event
    -- FUNCTION
@@ -85,15 +87,6 @@ package Events is
    -- Return true if combat starts, otherwise false
    -- SOURCE
    function Check_For_Event return Boolean;
-   -- ****
-
-   -- ****f* Events/Events.Update_Events
-   -- FUNCTION
-   -- Update all events timers
-   -- PARAMETERS
-   -- Minutes - Amount of in-game minutes which passed
-   -- SOURCE
-   procedure Update_Events(Minutes: Positive);
    -- ****
 
    -- ****f* Events/Events.Delete_Event
@@ -110,15 +103,6 @@ package Events is
    -- Create list of traders needed for trader event
    -- SOURCE
    procedure Generate_Traders;
-   -- ****
-
-   -- ****f* Events/Events.Recover_Base
-   -- FUNCTION
-   -- Recover abandoned base
-   -- PARAMETERS
-   -- Base_Index - Index of the base where recovery happened
-   -- SOURCE
-   procedure Recover_Base(Base_Index: Bases_Range);
    -- ****
 
    -- ****f* Events/Events.GenerateEnemies
