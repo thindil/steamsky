@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[config, tk]
+import ../[config, messages, tk]
 import coreui
 
 proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
@@ -64,6 +64,19 @@ proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
   else:
     if tclEval(script = "grid remove " & paned) == tclError:
       return
+
+proc updateMessages*() =
+  let messagesView = mainPaned & ".controls.messages.view"
+  tclEval(script = messagesView & " configure -state normal")
+  tclEval(script = messagesView & " delete 1.0 end")
+  var loopStart = 0 - messagesAmount()
+  if loopStart == 0:
+    return
+  if loopStart < -10:
+    loopStart = -10
+  if gameSettings.messagesOrder == olderFirst:
+    for i in loopStart .. -1:
+      let message = getMessage(messageIndex = i + 1)
 
 # Temporary code for interfacing with Ada
 
