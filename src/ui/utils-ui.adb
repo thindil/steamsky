@@ -22,7 +22,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
--- with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -553,77 +552,12 @@ package body Utils.UI is
    end Travel_Info;
 
    procedure Update_Messages is
---      use Tcl.Tk.Ada.Widgets.Text;
---
---      Loop_Start: Integer := 0 - Messages_Amount;
---      Message: Message_Data; --## rule line off IMPROPER_INITIALIZATION
---      Tag_Names: constant array(1 .. 5) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => "yellow"),
---         2 => To_Unbounded_String(Source => "green"),
---         3 => To_Unbounded_String(Source => "red"),
---         4 => To_Unbounded_String(Source => "blue"),
---         5 => To_Unbounded_String(Source => "cyan"));
---      Messages_View: constant Tk_Text :=
---        Get_Widget(pathName => ".gameframe.paned.controls.messages.view");
---      procedure Show_Message is
---      begin
---         if Message.Color = WHITE then
---            Insert
---              (TextWidget => Messages_View, Index => "end",
---               Text => "{" & To_String(Source => Message.Message) & "}");
---         else
---            Insert
---              (TextWidget => Messages_View, Index => "end",
---               Text =>
---                 "{" & To_String(Source => Message.Message) & "} [list " &
---                 To_String
---                   (Source => Tag_Names(Message_Color'Pos(Message.Color))) &
---                 "]");
---         end if;
---      end Show_Message;
       procedure Update_Ada_Messages with
          Import => True,
          Convention => C,
          External_Name => "updateAdaMessages";
    begin
       Update_Ada_Messages;
---      Tcl.Tk.Ada.Widgets.configure
---        (Widgt => Messages_View, options => "-state normal");
---      Delete
---        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
---      if Loop_Start = 0 then
---         return;
---      end if;
---      if Loop_Start < -10 then
---         Loop_Start := -10;
---      end if;
---      if Get_Messages_Order = OLDER_FIRST then
---         Show_Older_First_Loop :
---         for I in Loop_Start .. -1 loop
---            Message := Get_Message(Message_Index => I + 1);
---            Show_Message;
---            if I < -1 then
---               Insert
---                 (TextWidget => Messages_View, Index => "end",
---                  Text => "{" & LF & "}");
---            end if;
---         end loop Show_Older_First_Loop;
---         Tcl_Eval(interp => Get_Context, strng => "update");
---         See(TextWidget => Messages_View, Index => "end");
---      else
---         Show_Newer_First_Loop :
---         for I in reverse Loop_Start .. -1 loop
---            Message := Get_Message(Message_Index => I + 1);
---            Show_Message;
---            if I > Loop_Start then
---               Insert
---                 (TextWidget => Messages_View, Index => "end",
---                  Text => "{" & LF & "}");
---            end if;
---         end loop Show_Newer_First_Loop;
---      end if;
---      Tcl.Tk.Ada.Widgets.configure
---        (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) is
