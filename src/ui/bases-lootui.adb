@@ -620,13 +620,14 @@ package body Bases.LootUI is
       Append
         (Source => Item_Info,
          New_Item =>
-           "Weight:" &
-           Integer'Image(Get_Proto_Item(Index => Proto_Index).Weight) & " kg");
+           "Weight:{gold}" &
+           Integer'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
+           " kg{/gold}");
       if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Skill: " &
+              LF & "Skill: {gold}" &
               To_String
                 (Source =>
                    SkillsData_Container.Element
@@ -647,25 +648,27 @@ package body Bases.LootUI is
                              Skills_Amount_Range
                                (Get_Proto_Item(Index => Proto_Index).Value(3)))
                           .Attribute)
-                     .Name));
+                     .Name) &
+              "{/gold}");
          if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
             Append
               (Source => Item_Info,
-               New_Item => LF & "Can be used with shield.");
+               New_Item => LF & "{gold}Can be used with shield.{/gold}");
          else
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Can't be used with shield (two-handed weapon).");
+                 LF &
+                 "{gold}Can't be used with shield (two-handed weapon).{/gold}");
          end if;
-         Append(Source => Item_Info, New_Item => LF & "Damage type: ");
+         Append(Source => Item_Info, New_Item => LF & "Damage type: {gold}");
          case Get_Proto_Item(Index => Proto_Index).Value(5) is
             when 1 =>
-               Append(Source => Item_Info, New_Item => "cutting");
+               Append(Source => Item_Info, New_Item => "cutting{/gold}");
             when 2 =>
-               Append(Source => Item_Info, New_Item => "impaling");
+               Append(Source => Item_Info, New_Item => "impaling{/gold}");
             when 3 =>
-               Append(Source => Item_Info, New_Item => "blunt");
+               Append(Source => Item_Info, New_Item => "blunt{/gold}");
             when others =>
                null;
          end case;
@@ -676,15 +679,17 @@ package body Bases.LootUI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Damage chance: " &
+                 LF & "Damage chance: {gold}" &
                  Get_Item_Chance_To_Damage
                    (Item_Data =>
-                      Get_Proto_Item(Index => Proto_Index).Value(1)));
+                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
+                 "{/gold}");
             Append
               (Source => Item_Info,
                New_Item =>
-                 LF & "Strength:" &
-                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)));
+                 LF & "Strength:{gold}" &
+                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
+                 "{/gold}");
             exit Show_Weapon_Info_Loop;
          end if;
       end loop Show_Weapon_Info_Loop;
@@ -692,9 +697,10 @@ package body Bases.LootUI is
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Damage chance: " &
+              LF & "Damage chance: {gold}" &
               Get_Item_Chance_To_Damage
-                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)));
+                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
         and then
@@ -707,8 +713,9 @@ package body Bases.LootUI is
          Append
            (Source => Item_Info,
             New_Item =>
-              LF & "Strength:" &
-              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)));
+              LF & "Strength:{gold}" &
+              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
+              "{/gold}");
       end if;
       if Get_Proto_Item(Index => Proto_Index).Description /=
         Short_String.Null_Bounded_String then
