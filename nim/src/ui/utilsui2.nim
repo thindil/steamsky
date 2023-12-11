@@ -80,7 +80,8 @@ proc updateMessages*() =
     if message.color == white:
       tclEval(script = messagesView & " insert end {" & message.message & "}")
     else:
-      tclEval(script = messagesView & " insert end {" & message.message & "} [list " & tagNames[message.color.ord] & "]")
+      tclEval(script = messagesView & " insert end {" & message.message &
+          "} [list " & tagNames[message.color.ord] & "]")
 
   if gameSettings.messagesOrder == olderFirst:
     for i in loopStart .. -1:
@@ -94,8 +95,12 @@ proc updateMessages*() =
       showMessage(getMessage(messageIndex = i + 1))
       if i > loopStart:
         tclEval(script = messagesView & " insert end {\n}")
+  tclEval(script = messagesView & " configure -state disable")
 
 # Temporary code for interfacing with Ada
 
 proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
   showScreen($newScreenName)
+
+proc updateAdaMessages() {.exportc, raises: [], tags: [].} =
+  updateMessages()
