@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[config, messages, tk]
+import ../[config, messages, tk, types]
 import coreui
 
 proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
@@ -74,9 +74,26 @@ proc updateMessages*() =
     return
   if loopStart < -10:
     loopStart = -10
+
+  proc showMessage(message: MessageData) =
+    let tagNames = ["yellow", "green", "red", "blue", "cyan"]
+    if message.color == white:
+      tclEval(script = messagesView & " insert end {" & message.message & "}")
+    else:
+      tclEval(script = messagesView & " insert end {" & message.message & "} [list " & tagNames[message.color.ord] & "]")
+
   if gameSettings.messagesOrder == olderFirst:
     for i in loopStart .. -1:
-      let message = getMessage(messageIndex = i + 1)
+      showMessage(getMessage(messageIndex = i + 1))
+      if i < -1:
+        tclEval(script = messagesView & " insert end {\n}")
+    tclEval(script = "update")
+    tclEval(script = messagesView & " see end")
+  else:
+    for i in countdown(loopStart, -1):
+      showMessage(getMessage(messageIndex = i + 1))
+      if i > loopStart:
+        tclEval(script = messagesView & " insert end {\n}")
 
 # Temporary code for interfacing with Ada
 
