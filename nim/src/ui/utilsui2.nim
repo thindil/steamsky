@@ -65,7 +65,7 @@ proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
     if tclEval(script = "grid remove " & paned) == tclError:
       return
 
-proc updateMessages*() =
+proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
   let messagesView = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
