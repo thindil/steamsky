@@ -91,7 +91,7 @@ proc updateMessages*() =
     tclEval(script = "update")
     tclEval(script = messagesView & " see end")
   else:
-    for i in countdown(loopStart, -1):
+    for i in countdown(-1, loopStart):
       showMessage(getMessage(messageIndex = i + 1))
       if i > loopStart:
         tclEval(script = messagesView & " insert end {\n}")
