@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases; use Bases;
 with BasesTypes;
 with Config;
@@ -325,15 +326,6 @@ package body Game is
             Message_Type => EVERYTHING);
          return Exception_Message(X => An_Exception);
    end Load_Game_Data;
-
-   function Set_Game_String(Name: String) return String is
-      function Set_Ada_Game_String(N: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameString";
-   begin
-      return Value(Item => Set_Ada_Game_String(N => New_String(Str => Name)));
-   end Set_Game_String;
 
    procedure Get_Game_Date is
       procedure Get_Ada_Game_Date

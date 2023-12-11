@@ -33,6 +33,7 @@ package Goals is
       Default_Value => RANDOM;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Goals/Goals.Default_Goal_Type
       -- FUNCTION
       -- Default goal type, random type
@@ -66,6 +67,7 @@ package Goals is
    -- SOURCE
    Empty_Goal: constant Goal_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Goals/Goals.Goal_Text
    -- FUNCTION
@@ -87,22 +89,8 @@ package Goals is
    procedure Clear_Current_Goal;
    -- ****
 
-   -- ****f* Goals/Goals.Update_Goal
-   -- FUNCTION
-   -- Update current goal
-   -- PARAMETERS
-   -- G_Type       - Type of goal to check
-   -- Target_Index - Index of target to check
-   -- Amount       - Amount for goal to modify if both checks are valid
-   -- SOURCE
-   procedure Update_Goal
-     (G_Type: Goal_Types; Target_Index: Unbounded_String;
-      Amount: Positive := 1);
-      -- ****
-
 -- Temporary code to interact with Nim
 
-   function Get_Current_Goal return Goal_Data;
    function Get_Goals_Amount return Positive with
       Import => True,
       Convention => C,

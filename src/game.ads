@@ -21,7 +21,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
 with Ada.Containers.Formal_Vectors;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -47,14 +46,6 @@ package Game is
       Hour: Natural range 0 .. 48;
       Minutes: Natural range 0 .. 120;
    end record;
-   -- ****
-
-   -- ****d* Game/Game.Start_Date
-   -- FUNCTION
-   -- The default start date for in-game time
-   -- SOURCE
-   Start_Date: constant Date_Record :=
-     (Year => 1_600, Month => 3, Day => 1, Hour => 8, Minutes => 1);
    -- ****
 
    -- ****v* Game/Game.Game_Date
@@ -97,17 +88,6 @@ package Game is
      (Index_Type => Positive, Element_Type => Positive);
    -- ****
 
-   -- ****t* Game/Game.Positive_Indefinite_Container
-   -- FUNCTION
-   -- Used to store Positive values as list
-   -- HISTORY
-   -- 7.5 - Added
-   -- SOURCE
-   package Positive_Indefinite_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Positive,
-      Max_Size_In_Storage_Elements => Positive'Size, Bounded => False);
-   -- ****
-
    -- ****t* Game/Game.Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
@@ -132,21 +112,14 @@ package Game is
       Default_Component_Value => 0;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.Empty_Attributes_Array
    -- FUNCTION
    -- Empty attributes array constant
    -- SOURCE
    Empty_Attributes_Array: constant Attributes_Array := (others => 0);
    -- ****
-
-   -- ****t* Game/Game.Standard_String
-   -- FUNCTION
-   -- Used to store various texts, max length 1024
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
-   package Standard_String is new Generic_Bounded_Length(Max => 1_024);
-   -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Game/Game.Short_String
    -- FUNCTION
@@ -155,15 +128,6 @@ package Game is
    -- 6.5 - Added
    -- SOURCE
    package Short_String is new Generic_Bounded_Length(Max => 512);
-   -- ****
-
-   -- ****t* Game/Game.Very_Short_String
-   -- FUNCTION
-   -- Used to store various texts, max length 128
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
-   package Very_Short_String is new Generic_Bounded_Length(Max => 128);
    -- ****
 
    -- ****t* Game/Game.Tiny_String
@@ -203,30 +167,6 @@ package Game is
    package TinyString_Formal_Container is new Formal_Vectors
      (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
       "=" => Tiny_String."=");
-   -- ****
-
-   -- ****t* Game/Game.TinyString_Indefinite_Container
-   -- FUNCTION
-   -- Used to store Tiny_String values as list
-   -- HISTORY
-   -- 7.5 - Added
-   -- SOURCE
-   package TinyString_Indefinite_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
-      "=" => Tiny_String."=",
-      Max_Size_In_Storage_Elements => Tiny_String.Bounded_String'Size,
-      Bounded => False);
-   -- ****
-
-   -- ****t* Game/Game.SyllableString_Container
-   -- FUNCTION
-   -- Used to store Syllable_String values as list
-   -- HISTORY
-   -- 7.3 - Added
-   -- SOURCE
-   package SyllableString_Container is new Formal_Vectors
-     (Index_Type => Positive, Element_Type => Syllable_String.Bounded_String,
-      "=" => Syllable_String."=");
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -360,6 +300,7 @@ package Game is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.Empty_Skill
    -- FUNCTION
    -- Empty skill data constant
@@ -370,6 +311,7 @@ package Game is
       Tool => Tiny_String.Null_Bounded_String,
       Tools_Quality => Empty_Tool_Quality_Array);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
      -- ****t* Game/Game.Skills_Amount_Range
      -- FUNCTION
@@ -681,12 +623,14 @@ package Game is
       Default_Value => 0.0;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Game/Game.No_Damage
    -- FUNCTION
    -- Constant for no damage for Damage_Factor type
    -- SOURCE
    No_Damage: constant Damage_Factor := 0.0;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Game/Game.Reputation_Range
    -- FUNCTION
@@ -820,13 +764,6 @@ package Game is
    -- ****
 
 -- Temporary code to interact with Nim
-
-   procedure Get_Ada_Game_String(Name, Value: chars_ptr) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaGameString";
-
-   function Set_Game_String(Name: String) return String;
 
    procedure Get_Game_Date;
 

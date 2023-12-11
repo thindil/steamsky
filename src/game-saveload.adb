@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;

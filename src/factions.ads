@@ -35,7 +35,7 @@ package Factions is
       Default_Value => STANDARD;
       -- ****
 
-   --# rule off REDUCEABLE_SCOPE
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Factions/Factions.Default_Names_Type
    -- FUNCTION
    -- Default type of names of npc
@@ -130,7 +130,7 @@ package Factions is
    -- SOURCE
    Empty_Carreer: constant Career_Record := (others => <>);
    -- ****
-   --# rule on REDUCEABLE_SCOPE
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Factions/Factions.Careers_Container
    -- FUNCTION

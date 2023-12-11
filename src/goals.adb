@@ -47,37 +47,6 @@ package body Goals is
       Clear_Ada_Current_Goal;
    end Clear_Current_Goal;
 
-   procedure Update_Goal
-     (G_Type: Goal_Types; Target_Index: Unbounded_String;
-      Amount: Positive := 1) is
-      procedure Update_Ada_Goal
-        (Goal_Type: Integer; Target: chars_ptr; A: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaGoal";
-   begin
-      Update_Ada_Goal
-        (Goal_Type => Goal_Types'Pos(G_Type),
-         Target => New_String(Str => To_String(Source => Target_Index)),
-         A => Amount);
-   end Update_Goal;
-
-   function Get_Current_Goal return Goal_Data is
-      Nim_Goal: Nim_Goal_Data;
-      procedure Set_Ada_Current_Goal(Goal: out Nim_Goal_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaCurrentGoal";
-   begin
-      Set_Ada_Current_Goal(Goal => Nim_Goal);
-      return
-        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
-         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
-         Target_Index =>
-           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
-         Multiplier => Nim_Goal.Multiplier);
-   end Get_Current_Goal;
-
    function Get_Goal(Index: Positive) return Goal_Data is
       use Interfaces.C;
 

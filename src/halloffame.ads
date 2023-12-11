@@ -39,6 +39,7 @@ package HallOfFame is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* HallOfFame/HallOfFame.Empty_Hall_Of_Fame_Entry
    -- FUNCTION
    -- Empty entry for Hall of Fame
@@ -47,6 +48,7 @@ package HallOfFame is
      (Name => Null_Unbounded_String, Points => 0,
       Death_Reason => Null_Unbounded_String);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* HallOfFame/HallOfFame.Hall_Of_Fame_List
    -- FUNCTION

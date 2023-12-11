@@ -566,16 +566,16 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseSize";
-      procedure Set_Base_Population(Base_Index: Bases_Range) is
+      procedure Set_Base_Population(B_Index: Bases_Range) is
          procedure Set_Ada_Base_Population
-           (B_Index: Integer; Population: out Integer) with
+           (B_Ind: Integer; Population: out Integer) with
             Import => True,
             Convention => C,
             External_Name => "setAdaBasePopulation";
       begin
          Set_Ada_Base_Population
-           (B_Index => Base_Index,
-            Population => Sky_Bases(Base_Index).Population);
+           (B_Ind => B_Index,
+            Population => Sky_Bases(B_Index).Population);
       end Set_Base_Population;
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
@@ -593,7 +593,7 @@ package body Bases is
       Set_Ada_Base_Type(B_Index => Base_Index, B_Type => Name);
       Sky_Bases(Base_Index).Base_Type :=
         To_Bounded_String(Source => Value(Item => Name));
-      Set_Base_Population(Base_Index => Base_Index);
+      Set_Base_Population(B_Index => Base_Index);
       Set_Ada_Base_Date
         (Base_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
