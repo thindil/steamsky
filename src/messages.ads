@@ -72,6 +72,7 @@ package Messages is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Messages/Messages.Empty_Message
    -- FUNCTION
    -- The empty in-game message
@@ -80,6 +81,7 @@ package Messages is
      (Message => Null_Unbounded_String, M_Type => Default_Message_Type,
       Color => Default_Message_Color);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Messages/Messages.Formated_Time
    -- FUNCTION
@@ -143,20 +145,6 @@ package Messages is
       -- SOURCE
    function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural;
    -- ****
-
-   -- ****f* Messages/Messages.Restore_Message
-   -- FUNCTION
-   -- Restore message from save file
-   -- PARAMETERS
-   -- Message  - Text of message to restore
-   -- M_Type   - Type of message to restore. Default is no type
-   -- Color    - Color of message to restore. Default is white.
-   -- SOURCE
-   procedure Restore_Message
-     (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
-      Color: Message_Color := WHITE) with
-      Pre => Message /= Null_Unbounded_String;
-      -- ****
 
       -- ****f* Messages/Messages.Get_Last_Message_Index
       -- FUNCTION

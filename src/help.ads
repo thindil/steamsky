@@ -37,6 +37,7 @@ package Help is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Help/Help.Empty_Help
    -- FUNCTION
    -- Default value for Help_Data, an empty help entry
@@ -44,6 +45,7 @@ package Help is
    Empty_Help: constant Help_Data :=
      (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
 -- Temporary code to interact with Nim
 

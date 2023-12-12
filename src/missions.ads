@@ -48,12 +48,14 @@ package Missions is
       Default_Value => 1.0;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Missions/Missions.Default_Multiplier
       -- FUNCTION
       -- Default multiplier for missions reward
       -- SOURCE
    Default_Multiplier: constant Reward_Multiplier := 1.0;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Missions/Missions.Mission_Data:
    -- FUNCTION
@@ -117,20 +119,6 @@ package Missions is
    Missions_Accepting_Error: exception;
    -- ****
 
-   -- ****e* Missions/Missions.Missions_Finishing_Error
-   -- FUNCTION
-   -- Raised when mission can't be finished
-   -- SOURCE
-   Missions_Finishing_Error: exception;
-   -- ****
-
-   -- ****f* Missions/Missions.Generate_Missions
-   -- FUNCTION
-   -- Generate if needed new missions in base
-   -- SOURCE
-   procedure Generate_Missions;
-   -- ****
-
    -- ****f* Missions/Missions.Accept_Mission
    -- FUNCTION
    -- Accept selected mission from base
@@ -139,15 +127,6 @@ package Missions is
    --                 accept
    -- SOURCE
    procedure Accept_Mission(Mission_Index: Positive);
-   -- ****
-
-   -- ****f* Missions/Missions.Update_Missions
-   -- FUNCTION
-   -- Update accepted missions
-   -- PARAMETERS
-   -- Minutes - Amount of passed minutes
-   -- SOURCE
-   procedure Update_Missions(Minutes: Positive);
    -- ****
 
    -- ****f* Missions/Missions.Finish_Mission

@@ -38,19 +38,6 @@ package body HallOfFame is
       end if;
    end Load_Hall_Of_Fame;
 
-   procedure Update_Hall_Of_Fame
-     (Player_Name, Death_Reason: Unbounded_String) is
-
-      procedure Update_Ada_Hall_Of_Fame(P_Name, D_Reason: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaHallOfFame";
-   begin
-      Update_Ada_Hall_Of_Fame
-        (P_Name => New_String(Str => To_String(Source => Player_Name)),
-         D_Reason => New_String(Str => To_String(Source => Death_Reason)));
-   end Update_Hall_Of_Fame;
-
    function Get_Hof_From_Nim return Hall_Of_Fame_List is
       use Interfaces.C;
 

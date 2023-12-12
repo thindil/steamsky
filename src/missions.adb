@@ -22,37 +22,12 @@ with Bases; use Bases;
 
 package body Missions is
 
-   procedure Generate_Missions is
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Generate_Ada_Missions with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaMissions";
-   begin
-      Get_Ada_Base_Date
-        (Base_Index => Base_Index,
-         Year => Sky_Bases(Base_Index).Missions_Date.Year,
-         Month => Sky_Bases(Base_Index).Missions_Date.Month,
-         Day => Sky_Bases(Base_Index).Missions_Date.Day,
-         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes,
-         Date_Type => 1);
-      Get_Missions(Base_Index => Base_Index);
-      Get_Base_Reputation(Base_Index => Base_Index);
-      Get_Ada_Base_Population
-        (Base_Index => Base_Index,
-         Population => Sky_Bases(Base_Index).Population);
-      Generate_Ada_Missions;
-      Set_Missions(Base_Index => Base_Index);
-      Set_Ada_Base_Date
-        (Base_Index => Base_Index, Date_Type => 1,
-         Year => Sky_Bases(Base_Index).Missions_Date.Year,
-         Month => Sky_Bases(Base_Index).Missions_Date.Month,
-         Day => Sky_Bases(Base_Index).Missions_Date.Day,
-         Hour => Sky_Bases(Base_Index).Missions_Date.Hour,
-         Minutes => Sky_Bases(Base_Index).Missions_Date.Minutes);
-   end Generate_Missions;
+   -- ****e* Missions/Missions.Missions_Finishing_Error
+   -- FUNCTION
+   -- Raised when mission can't be finished
+   -- SOURCE
+   Missions_Finishing_Error: exception;
+   -- ****
 
    procedure Accept_Mission(Mission_Index: Positive) is
       use Interfaces.C;
@@ -81,15 +56,6 @@ package body Missions is
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
         Get_Accepted_Missions_Amount;
    end Accept_Mission;
-
-   procedure Update_Missions(Minutes: Positive) is
-      procedure Update_Ada_Missions(M: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaMissions";
-   begin
-      Update_Ada_Missions(M => Minutes);
-   end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
       use Interfaces.C;

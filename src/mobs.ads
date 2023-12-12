@@ -115,6 +115,7 @@ package Mobs is
    subtype Proto_Mobs_Amount_Range is Positive range 1 .. 256;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Mobs/Mobs.Default_Proto_Mobs_Amount
    -- FUNCTION
    -- The default amount of mobiles' prototypes in the game
@@ -123,6 +124,7 @@ package Mobs is
    -- SOURCE
    Default_Proto_Mobs_Amount: constant Proto_Mobs_Amount_Range := 113;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Mobs/Mobs.Generate_Mob
    -- FUNCTION

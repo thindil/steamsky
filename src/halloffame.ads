@@ -57,6 +57,7 @@ package HallOfFame is
    type Hall_Of_Fame_List is array(1 .. 10) of Hall_Of_Fame_Data;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* HallOfFame/HallOfFameEmpty_Hall_Of_Fame
    -- FUNCTION
    -- Empty hall of fame list
@@ -64,6 +65,7 @@ package HallOfFame is
    Empty_Hall_Of_Fame: constant Hall_Of_Fame_List :=
      (others => Empty_Hall_Of_Fame_Entry);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* HallOfFame/HallOfFame.Load_Hall_Of_Fame
    -- FUNCTION
@@ -71,19 +73,6 @@ package HallOfFame is
    -- SOURCE
    procedure Load_Hall_Of_Fame;
    -- ****
-
-   -- ****f* HallOfFame/HallOfFame.Update_Hall_Of_Fame
-   -- FUNCTION
-   -- Check did new entry should enter hall of fame
-   -- PARAMETERS
-   -- Player_Name  - Name of player's character to add to the hall of fame
-   -- Death_Reason - Reason of death of selected character
-   -- SOURCE
-   procedure Update_Hall_Of_Fame
-     (Player_Name, Death_Reason: Unbounded_String) with
-      Pre => Player_Name /= Null_Unbounded_String and
-      Death_Reason /= Null_Unbounded_String;
-      -- ****
 
 -- Temporary code to interact with Nim
 

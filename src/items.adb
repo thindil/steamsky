@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ships; use Ships;
-
 package body Items is
 
    function Find_Proto_Item
@@ -74,41 +72,6 @@ package body Items is
                 D_Info => (if Damage_Info then 1 else 0),
                 Lower => (if To_Lower then 1 else 0)));
    end Get_Item_Name;
-
-   procedure Damage_Item
-     (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-      Skill_Level, Member_Index: Natural := 0; Ship: in out Ship_Record) is
-      Nim_Inventory: Nim_Inventory_Array :=
-        Inventory_To_Nim(Inventory => Inventory);
-      Nim_Cargo: Nim_Inventory_Array :=
-        Inventory_To_Nim(Inventory => Ship.Cargo);
-      procedure Damage_Ada_Item
-        (Inv: in out Nim_Inventory_Array;
-         I_Index, S_Level, M_Index, In_Player_Ship: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "damageAdaItem";
-   begin
-      Get_Ada_Ship_Cargo
-        (Cargo => Nim_Cargo,
-         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Damage_Ada_Item
-        (Inv => Nim_Inventory, I_Index => Item_Index, S_Level => Skill_Level,
-         M_Index => Member_Index,
-         In_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Inventory_Container.Assign
-        (Target => Inventory,
-         Source =>
-           Inventory_From_Nim
-             (Inventory => Nim_Inventory,
-              Size => (if Member_Index > 0 then 32 else 128)));
-      Set_Ada_Ship_Cargo
-        (Cargo => Nim_Cargo,
-         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      Inventory_Container.Assign
-        (Target => Ship.Cargo,
-         Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
-   end Damage_Item;
 
    function Find_Item
      (Inventory: Inventory_Container.Vector; Proto_Index: Natural := 0;

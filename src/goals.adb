@@ -19,16 +19,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Goals is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Goal_Data is record
-      Index: chars_ptr;
-      G_Type: Integer;
-      Amount: Natural;
-      Target_Index: chars_ptr;
-      Multiplier: Positive;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Goal_Text(Index: Natural) return String is
       function Goal_Ada_Text(I: Natural) return chars_ptr with
          Import => True,
@@ -50,6 +40,15 @@ package body Goals is
    function Get_Goal(Index: Positive) return Goal_Data is
       use Interfaces.C;
 
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Goal_Data is record
+         Index: chars_ptr;
+         G_Type: Integer;
+         Amount: Natural;
+         Target_Index: chars_ptr;
+         Multiplier: Positive;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Nim_Goal: Nim_Goal_Data;
       --## rule on IMPROPER_INITIALIZATION

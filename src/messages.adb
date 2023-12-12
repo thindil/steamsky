@@ -81,19 +81,6 @@ package body Messages is
       return Nim_Messages_Amount(Kind => Message_Type'Pos(M_Type));
    end Messages_Amount;
 
-   procedure Restore_Message
-     (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
-      Color: Message_Color := WHITE) is
-      procedure Nim_Restore_Message(Msg: chars_ptr; Kind, Mcolor: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "restoreMessage";
-   begin
-      Nim_Restore_Message
-        (Msg => New_String(Str => To_String(Source => Message)),
-         Kind => Message_Type'Pos(M_Type), Mcolor => Message_Color'Pos(Color));
-   end Restore_Message;
-
    function Get_Last_Message_Index return Natural is
       function Nim_Get_Last_Message_Index return Integer with
          Import => True,

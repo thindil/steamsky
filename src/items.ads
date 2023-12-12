@@ -18,7 +18,6 @@
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Game; use Game;
-limited with Ships;
 
 -- ****h* Items/Items
 -- FUNCTION
@@ -62,12 +61,14 @@ package Items is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Items/Items.Empty_Object
    -- FUNCTION
    -- Default, empty object prototype
    -- SOURCE
    Empty_Object: constant Object_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Items/Items.Items_Durability
    -- FUNCTION
@@ -102,12 +103,14 @@ package Items is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Items/Items.Empty_Item
    -- FUNCTION
    -- Default, empty item for inventory
    -- SOURCE
    Empty_Item: constant Inventory_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Items/Items.Inventory_Container
    -- FUNCTION
@@ -165,30 +168,6 @@ package Items is
       Post => Get_Item_Name'Result'Length > 0;
       -- ****
 
-      -- ****f* Items/Items.Damage_Item
-      -- FUNCTION
-      -- Check if item in ship cargo or character inventory was damaged
-      -- PARAMETERS
-      -- Inventory    - Inventory in which selected item is
-      -- Item_Index   - Inventory index of selected item
-      -- Skill_Level  - Level of skill character which uses that item. Default
-      --                is 0
-      -- Member_Index - Index of crew member of player ship which uses that
-      --                item. Default is 0
-      -- Ship         - The ship in which the item will be check for damage
-      -- RESULT
-      -- Updated inventory in which item was
-      -- HISTORY
-      -- 6.9 - Added Ship parameter
-      -- SOURCE
-   procedure Damage_Item
-     (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-      Skill_Level, Member_Index: Natural := 0;
-      Ship: in out Ships.Ship_Record) with
-      Pre => Item_Index <=
-      Inventory_Container.Last_Index(Container => Inventory);
-      -- ****
-
       -- ****f* Items/Items.Find_Item
       -- FUNCTION
       -- Find item in ship cargo or character inventory
@@ -209,16 +188,6 @@ package Items is
       Post => Find_Item'Result <=
       Inventory_Container.Last_Index(Container => Inventory);
       -- ****
-
-      -- ****f* Items/Items.Set_Tools_List
-      -- FUNCTION
-      -- Fill tools types list
-      -- SOURCE
-   procedure Set_Tools_List with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaToolsList";
-   -- ****
 
    -- ****f* Items/Items.Get_Item_Chance_To_Damage
    -- FUNCTION

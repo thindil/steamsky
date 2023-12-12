@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -50,6 +50,7 @@ package body Game.SaveLoad is
 
    procedure Load_Game(File_Name: String) is
       use Ada.Exceptions;
+      use Interfaces.C.Strings;
 
       procedure Get_Ada_Save_Name(Name: chars_ptr) with
          Import => True,

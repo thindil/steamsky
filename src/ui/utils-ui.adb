@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -572,6 +572,7 @@ package body Utils.UI is
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
+      use Ada.Characters.Latin_1;
       use Short_String;
       use Tiny_String;
 

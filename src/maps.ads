@@ -42,12 +42,14 @@ package Maps is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Maps/Maps.Empty_Cell
    -- FUNCTION
    -- Default, empty map cell data
    -- SOURCE
    Empty_Cell: constant Sky_Cell := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****v* Maps/Maps.Sky_Map
    -- FUNCTION

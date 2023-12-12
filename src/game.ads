@@ -30,6 +30,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 package Game is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Game/Game.Date_Record
    -- FUNCTION
    -- Data for game date/time
@@ -47,6 +48,7 @@ package Game is
       Minutes: Natural range 0 .. 120;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****v* Game/Game.Game_Date
    -- FUNCTION
@@ -137,16 +139,6 @@ package Game is
    -- 6.5 - Added
    -- SOURCE
    package Tiny_String is new Generic_Bounded_Length(Max => 64);
-   -- ****
-
-   -- ****t* Game/Game.Syllable_String
-   -- FUNCTION
-   -- Used to store various texts, mostly syllables for generating random
-   -- names, max length 10
-   -- HISTORY
-   -- 7.3 - Added
-   -- SOURCE
-   package Syllable_String is new Generic_Bounded_Length(Max => 10);
    -- ****
 
    -- ****t* Game/Game.TinyString_Container
