@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Updated look of the items' information dialogs in the trading and ship info
-  screens
+- Updated look of the items' information dialogs in the trading, ship info and
+  looting bases screens
 - Updated README.md
 
 ### Fixed
