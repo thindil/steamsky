@@ -66,6 +66,8 @@ proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
       return
 
 proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
+  ## Update the list of in-game messages, delete old ones and show the
+  ## newest to the player
   let messagesView = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
