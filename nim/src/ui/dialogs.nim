@@ -208,6 +208,26 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     tagIndex = text.find('{', startIndex)
   tclEval(script = infoLabel & " configure -state disabled -height " & $(
       tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
+  tclEval(script = "grid " & infoLabel & " -sticky we -padx 5 -pady {5 0}")
+  let
+    buttonsFrame = infoDialog & ".buttons"
+    closeCommand = "CloseDialog " & infoDialog & (if parentName ==
+        ".gameframe": "" else: " " & parentName)
+  tclEval(script = "ttk::frame " & buttonsFrame)
+  var button = ""
+  if button1.text.len > 0 and button1.command.len > 0:
+    button = buttonsFrame & ".button1"
+    tclEval(script = "ttk::button " & button & " -text {" & button1.text & "}" &
+        (if button1.icon.len > 0: " -image {" & button1.icon & "}" else: "") &
+        " -command {" & closeCommand & ";" & button1.command &
+        "} -style Dialog" & button1.color & ".TButton")
+    tclEval(script = "tooltip::tooltip " & button & " \"" & button1.tooltip & "\"")
+    tclEval(script = "grid " & button & " -padx 5")
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
+    tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
+  addCloseButton(name = buttonsFrame & ".button", text = "Close",
+      command = closeCommand, column = (if button1.text.len > 0: 1 else: 0),
+      icon = "exiticon")
 
 # Temporary code for interfacing with Ada
 
