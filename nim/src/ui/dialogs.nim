@@ -228,8 +228,30 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   addCloseButton(name = buttonsFrame & ".button", text = "Close",
       command = closeCommand, column = (if button1.text.len > 0: 1 else: 0),
       icon = "exiticon")
+  button = buttonsFrame & ".button"
+  if button2.text.len > 0 and button2.command.len > 1:
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button2;break}")
+    button = buttonsFrame & ".button2"
+    tclEval(script = "ttk::button " & button & " -text {" & button2.text & "}" &
+        (if button1.icon.len > 0: " -image {" & button2.icon & "}" else: "") &
+        " -command {" & closeCommand & ";" & button2.command &
+        "} -style Dialog" & button2.color & ".TButton")
+    tclEval(script = "tooltip::tooltip " & button & " \"" & button2.tooltip & "\"")
+    tclEval(script = "grid " & button & " -row 0 -column 2 -padx 5")
+    if button1.text.len > 0:
+      tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
+    else:
+      tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
+    tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
+  elif button1.text.len > 0 and button1.command.len > 0:
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
+  tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
+  showDialog(dialog = infoDialog)
 
 # Temporary code for interfacing with Ada
+
+type AdaButtonSettings = object
+  text, command, icon, tooltip, color: cstring
 
 proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
     parentName: cstring; timerName: var cstring): cstring {.raises: [], tags: [], exportc.} =
@@ -257,3 +279,15 @@ proc showAdaMessage(text, parentFrame, title: cstring): cstring {.raises: [],
 proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [
     ], tags: [].} =
   showQuestion($question, $res, inGame == 1)
+
+proc showAdaInfo(text, parentName, title: cstring; button1,
+    button2: AdaButtonSettings) {.exportc, raises: [], tags: [].} =
+  let
+    nimButton1 = ButtonSettings(text: $button1.text, command: $button1.command,
+        icon: $button1.icon, tooltip: $button1.tooltip, color: $button1.color)
+    nimButton2 = ButtonSettings(text: $button2.text, command: $button2.command,
+        icon: $button2.icon, tooltip: $button2.tooltip, color: $button2.color)
+  try:
+    showInfo($text, $parentName, $title, nimButton1, nimButton2)
+  except:
+    discard
