@@ -18,6 +18,12 @@
 import ../[config, tk]
 import coreui
 
+type ButtonSettings* = object
+  text, command, icon, tooltip, color: string
+
+const emptyButtonSettings = ButtonSettings(text: "", command: "", icon: "",
+    tooltip: "", color: "")
+
 var timerId: string = "" ## Id of the timer for auto close command
 
 proc createDialog*(name, title: string; titleWidth: Positive = 275;
@@ -162,6 +168,24 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
     button = questionDialog & ".yesbutton"
     tclEval(script = button & " configure -command {CloseDialog " &
         questionDialog & "l ProcessQuestion showstats}")
+
+proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
+    button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings) =
+  let
+    infoDialog = createDialog(name = ".info", title = title, titleWidth = 275,
+        columns = 3, parentName = parentName)
+    infoLabel = infoDialog & ".text"
+  tclEval(script = "text " & infoLabel & " -width 30 -height 25 -wrap word")
+  tclEval(script = infoLabel & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  tclEval(script = infoLabel & " tag configure green -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-green)"))
+  tclEval(script = infoLabel & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
 
 # Temporary code for interfacing with Ada
 
