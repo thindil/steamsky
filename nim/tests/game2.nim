@@ -32,4 +32,4 @@ suite "Unit tests for game2 module":
     endGame(false)
     saveDirectory = oldSaveDir
     check:
-      messagesAmount(0) == 0
+      messagesAmount() == 0
