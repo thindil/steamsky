@@ -304,6 +304,13 @@ proc showSkyMap*(clear: bool = false) =
     tclEval(script = "DrawMap")
   updateMoveButtons()
   tclEval(script = "update")
+  updateMessages()
+  if playerShip.speed != docked:
+    let speedBox = "$bframe.box.speed"
+    tclEval(script = "bind " & speedBox & " <<ComboboxSelected>> {}")
+    tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
+    tclEval(script = "bind " & speedBox &
+        " <<ComboboxSelected>> {SetShipSpeed [" & speedBox & " current]}")
 
 # Temporary code for interfacing with Ada
 
