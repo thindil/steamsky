@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
 import ../[config, tk]
 import coreui
 
@@ -186,6 +187,27 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   tclEval(script = infoLabel & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-red)"))
+  var
+    startIndex = 0
+    tagIndex = text.find('{')
+  while true:
+    if tagIndex == -1:
+      tagIndex = text.len
+    tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
+        1] & "}")
+    if tagIndex == text.len:
+      break
+    startIndex = tagIndex
+    tagIndex = text.find('}', startIndex)
+    let tagName = text[startIndex + 1 .. tagIndex - 1]
+    startIndex = tagIndex + 1
+    tagIndex = text.find("{/" & tagName & "}", startIndex)
+    tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
+        1] & "} [list " & tagName & "]")
+    startIndex = tagIndex + tagName.len + 3
+    tagIndex = text.find('{', startIndex)
+  tclEval(script = infoLabel & " configure -state disabled -height " & $(
+      tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
 
 # Temporary code for interfacing with Ada
 
