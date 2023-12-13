@@ -173,6 +173,16 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [], tags: [].} =
+  ## Show the dialog with the selected text to the player
+  ##
+  ## * text       - the text to show in the dialog. Can use special tags for colors,
+  ##                like `{gold}{/gold}`
+  ## * parentName - the name of the Tk parent frame
+  ## * title      - the title of the dialog
+  ## * button1    - the settings for the first optional button. If empty,
+  ##                the button will not shown
+  ## * button2    - the settings for the second optional button. If empty,
+  ##                the button will not shown
   let
     infoDialog = createDialog(name = ".info", title = title, titleWidth = 275,
         columns = 3, parentName = parentName)
