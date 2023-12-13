@@ -143,6 +143,14 @@ proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
   ##
   ## Returns the string with the result of the last evaluated Tcl command
 
+proc tclGetResult2*(interp: PInterp = getInterp()): string =
+  ## Get the string with the result of the last evaluated Tcl command
+  ##
+  ## * interp - The Tcl interpreter from which the result will be taken
+  ##
+  ## Returns the string with the result of the last evaluated Tcl command
+  return $interp.tclGetResult
+
 proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
