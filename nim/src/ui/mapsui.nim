@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[config, game, maps, messages, shipscargo, shipsmovement, stories, tk, types]
+import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
+    stories, tk, types]
 import coreui, dialogs, utilsui2
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
@@ -294,6 +295,12 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
       tclEval(script = "tooltip::tooltip " & button & " \"" &
           moveButtonsTooltips[index] & "\"")
 
+proc finishStory*() =
+  gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
+  clearCurrentStory()
+  showQuestion(question = storiesList[currentStory.index].endText &
+      " Do you want to finish the game?", res = "retire")
+
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
   if clear:
@@ -325,3 +332,9 @@ proc updateAdaHeader() {.raises: [], tags: [], exportc.} =
 
 proc updateAdaMoveButtons() {.raises: [], tags: [], exportc.} =
   updateMoveButtons()
+
+proc finishAdaStory() {.raises: [], tags: [], exportc.} =
+  try:
+    finishStory()
+  except:
+    discard
