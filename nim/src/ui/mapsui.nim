@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
+import ../[config, game, maps, messages, shipscargo, shipsmovement, stories, tk, types]
 import coreui, dialogs, utilsui2
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
@@ -311,6 +311,9 @@ proc showSkyMap*(clear: bool = false) =
     tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
     tclEval(script = "bind " & speedBox &
         " <<ComboboxSelected>> {SetShipSpeed [" & speedBox & " current]}")
+  if currentStory.index.len > 0 and currentStory.showText:
+    if currentStory.currentStep > -2:
+      showInfo(text = getCurrentStoryText(), title = "Story")
 
 # Temporary code for interfacing with Ada
 
