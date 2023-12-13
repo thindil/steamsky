@@ -299,13 +299,13 @@ package body Dialogs is
              "-text {" & CArgv.Arg(Argv => Argv, N => 4) &
              "} -command {SetTextVariable " & CArgv.Arg(Argv => Argv, N => 2) &
              "; CloseDialog " & String_Dialog &
-             "} -image editicon -style Dialog.TButton");
+             "} -image editicon -style Dialoggreen.TButton");
       Cancel_Button: constant Ttk_Button :=
         Create
           (pathName => String_Dialog & ".closebutton",
            options =>
              "-text Cancel -command {CloseDialog " & String_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image cancelicon -style Dialogred.TButton");
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => String_Label,
