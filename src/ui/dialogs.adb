@@ -18,13 +18,12 @@ with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -32,8 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
--- with Config;
+with Tcl.Tklib.Ada.Tooltip;
 with Ships;
 with Utils.UI;
 
@@ -484,6 +482,7 @@ package body Dialogs is
       New_X, New_Y, Current_X_Mouse, Current_Y_Mouse: Integer;
       Header: constant Ttk_Frame := Get_Widget(pathName => Dialog & ".header");
       function Get_Coordinate(Name: String) return Integer is
+         use Tcl.Ada;
       begin
          Tcl_Eval
            (interp => Interp,
@@ -583,27 +582,6 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
---      use Config;
---      use Ada.Strings.Fixed;
---      use Tcl.Tk.Ada.Widgets.Text;
---
---      Info_Dialog: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".info", Title => Title, Title_Width => 275, Columns => 3,
---           Parent_Name => Parent_Name);
---      Info_Label: constant Tk_Text :=
---        Create
---          (pathName => Info_Dialog & ".text",
---           options => "-width 30 -height 25 -wrap word");
---      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
---      Close_Command: constant String :=
---        "CloseDialog " & Info_Dialog &
---        (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
---      Buttons_Frame: constant Ttk_Frame :=
---        Create(pathName => Info_Dialog & ".buttons");
---      Tag_Index: Natural := Index(Source => Text, Pattern => "{");
---      Start_Index: Natural := 1;
---      Tag_Name: Unbounded_String := Null_Unbounded_String;
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Button_Settings is record
          Text: chars_ptr;
@@ -636,147 +614,6 @@ package body Dialogs is
          P_Name => New_String(Str => Parent_Name),
          Ti => New_String(Str => Title), B_1 => Nim_Button_1,
          B_2 => Nim_Button_2);
---      Tag_Configure
---        (TextWidget => Info_Label, TagName => "gold",
---         Options =>
---           "-foreground " &
---           Tcl_GetVar
---             (interp => Get_Context,
---              varName =>
---                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
---                "::colors(-goldenyellow)"));
---      Tag_Configure
---        (TextWidget => Info_Label, TagName => "green",
---         Options =>
---           "-foreground " &
---           Tcl_GetVar
---             (interp => Get_Context,
---              varName =>
---                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
---                "::colors(-green)"));
---      Tag_Configure
---        (TextWidget => Info_Label, TagName => "red",
---         Options =>
---           "-foreground " &
---           Tcl_GetVar
---             (interp => Get_Context,
---              varName =>
---                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
---                "::colors(-red)"));
---      Insert_Text_Loop :
---      loop
---         if Tag_Index = 0 then
---            Tag_Index := Text'Last;
---         end if;
---         Insert
---           (TextWidget => Info_Label, Index => "end",
---            Text => "{" & Text(Start_Index .. Tag_Index - 1) & "}");
---         exit Insert_Text_Loop when Tag_Index = Text'Last;
---         Start_Index := Tag_Index;
---         Tag_Index :=
---           Index(Source => Text, Pattern => "}", From => Start_Index);
---         Tag_Name :=
---           To_Unbounded_String
---             (Source => Text(Start_Index + 1 .. Tag_Index - 1));
---         --## rule off ASSIGNMENTS
---         Start_Index := Tag_Index + 1;
---         Tag_Index :=
---           Index
---             (Source => Text,
---              Pattern => "{/" & To_String(Source => Tag_Name) & "}",
---              From => Start_Index);
---         --## rule on ASSIGNMENTS
---         Insert
---           (TextWidget => Info_Label, Index => "end",
---            Text =>
---              "{" & Text(Start_Index .. Tag_Index - 1) & "} [list " &
---              To_String(Source => Tag_Name) & "]");
---         Start_Index := Tag_Index + Length(Source => Tag_Name) + 3;
---         Tag_Index :=
---           Index(Source => Text, Pattern => "{", From => Start_Index);
---      end loop Insert_Text_Loop;
---      configure
---        (Widgt => Info_Label,
---         options =>
---           "-state disabled -height" &
---           Float'Image
---             (Float'Value
---                (Index(TextWidget => Info_Label, TextIndex => "end")) +
---              1.0));
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
---      if Length(Source => Button_1.Text) > 0 and
---        Length(Source => Button_1.Command) > 0 then
---         Button :=
---           Create
---             (pathName => Buttons_Frame & ".button1",
---              options =>
---                "-text {" & To_String(Source => Button_1.Text) & "}" &
---                (if Length(Source => Button_1.Icon) > 0 then
---                   " -image {" & To_String(Source => Button_1.Icon) & "}"
---                 else "") &
---                " -command {" & Close_Command & ";" &
---                To_String(Source => Button_1.Command) & "} -style Dialog" &
---                To_String(Source => Button_1.Color) & ".TButton");
---         Add
---           (Widget => Button,
---            Message => To_String(Source => Button_1.Tooltip));
---         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
---         Bind
---           (Widgt => Button, Sequence => "<Tab>",
---            Script => "{focus " & Buttons_Frame & ".button;break}");
---         Bind
---           (Widgt => Button, Sequence => "<Escape>",
---            Script => "{" & Buttons_Frame & ".button invoke;break}");
---      end if;
---      Add_Close_Button
---        (Name => Buttons_Frame & ".button", Text => "Close",
---         Command => Close_Command,
---         Column => (if Length(Source => Button_1.Text) > 0 then 1 else 0),
---         Icon => "exiticon");
---      Button := Get_Widget(pathName => Buttons_Frame & ".button");
---      if Length(Source => Button_2.Text) > 0 and
---        Length(Source => Button_2.Command) > 1 then
---         Bind
---           (Widgt => Button, Sequence => "<Tab>",
---            Script => "{focus " & Buttons_Frame & ".button2;break}");
---         Button :=
---           Create
---             (pathName => Buttons_Frame & ".button2",
---              options =>
---                "-text {" & To_String(Source => Button_2.Text) & "}" &
---                (if Length(Source => Button_2.Icon) > 0 then
---                   " -image {" & To_String(Source => Button_2.Icon) & "}"
---                 else "") &
---                " -command {" & Close_Command & ";" &
---                To_String(Source => Button_2.Command) & "} -style Dialog" &
---                To_String(Source => Button_2.Color) & ".TButton");
---         Add
---           (Widget => Button,
---            Message => To_String(Source => Button_2.Tooltip));
---         Tcl.Tk.Ada.Grid.Grid
---           (Slave => Button, Options => "-row 0 -column 2 -padx 5");
---         if Length(Source => Button_1.Text) > 0 then
---            Bind
---              (Widgt => Button, Sequence => "<Tab>",
---               Script => "{focus " & Buttons_Frame & ".button1;break}");
---         else
---            Bind
---              (Widgt => Button, Sequence => "<Tab>",
---               Script => "{focus " & Buttons_Frame & ".button;break}");
---         end if;
---         Bind
---           (Widgt => Button, Sequence => "<Escape>",
---            Script => "{" & Buttons_Frame & ".button invoke;break}");
---      elsif Length(Source => Button_1.Text) > 0 and
---        Length(Source => Button_1.Command) > 0 then
---         Bind
---           (Widgt => Button, Sequence => "<Tab>",
---            Script => "{focus " & Buttons_Frame & ".button1;break}");
---      end if;
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
---      Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
 
    procedure Show_Manipulate_Item
@@ -785,6 +622,7 @@ package body Dialogs is
       Max_Amount, Cost: Natural := 0) is
       use Ada.Characters.Handling;
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Tcl.Tklib.Ada.Tooltip;
       use Ships;
 
       Item_Dialog: constant Ttk_Frame :=
