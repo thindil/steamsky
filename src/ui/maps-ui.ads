@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -162,7 +162,10 @@ package Maps.UI is
    -- FUNCTION
    -- Finish the current story
    -- SOURCE
-   procedure Finish_Story;
+   procedure Finish_Story with
+      Import => True,
+      Convention => C,
+      External_Name => "finishAdaStory";
    -- ****
 
 private

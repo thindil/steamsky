@@ -1254,16 +1254,4 @@ package body Maps.UI is
          Script => "{ToggleFullScreen}");
    end Set_Keys;
 
-   procedure Finish_Story is
-   begin
-      Get_Game_Stats(Value => 10_000 * Get_Current_Story.Max_Steps, Stat => 1);
-      Clear_Current_Story;
-      Show_Question
-        (Question =>
-           To_String
-             (Source => Get_Story(Index => Get_Current_Story.Index).End_Text) &
-           " Do you want to finish the game?",
-         Result => "retire");
-   end Finish_Story;
-
 end Maps.UI;
