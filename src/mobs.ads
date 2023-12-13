@@ -41,6 +41,7 @@ package Mobs is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Mobs/Mobs.Empty_Mob_Item
    -- FUNCTION
    -- Empty item for mobs prototype
@@ -48,6 +49,7 @@ package Mobs is
    Empty_Mob_Item: constant Mob_Inventory_Record :=
      (Proto_Index => 0, Min_Amount => 0, Max_Amount => 0);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
      -- ****t* Mobs/Mobs.Inventory_Amount_Range
      -- FUNCTION
@@ -98,6 +100,7 @@ package Mobs is
 
    function Get_Proto_Mob(Index: Positive) return Proto_Mob_Record;
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Mobs/Mobs.Empty_Mob
    -- FUNCTION
    -- Empty prototype of mob
@@ -105,6 +108,7 @@ package Mobs is
    Empty_Mob: constant Proto_Mob_Record :=
      (Amount_Of_Attributes => 1, Amount_Of_Skills => 1, others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Mobs/Mobs.Proto_Mobs_Amount_Range
    -- FUNCTION
@@ -142,26 +146,6 @@ package Mobs is
       return Member_Data with
       Pre => Mob_Index > 0 and Mob_Index < Get_Proto_Mobs_Amount,
       Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0;
-      -- ****
-
-      -- ****f* Mobs/Mobs.Get_Random_Item
-      -- FUNCTION
-      -- Get random item from the list based on mob skills and faction
-      -- PARAMETERS
-      -- Items_Indexes      - The type of items from which the item will be get
-      -- Equip_Index        - Index of equipment for selected item
-      -- Highest_Level      - Highest skill level for selected mob
-      -- Weapon_Skill_Level - Weapon skill level for selected mob
-      -- Faction_Index      - Faction index to which selected mob belongs
-      -- RESULT
-      -- Index of the item or 0 if the selected index not found
-      -- SOURCE
-   function Get_Random_Item
-     (Items_Indexes: String; Equip_Index: Equipment_Locations;
-      Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
-      return Natural with
-      Pre => Highest_Level < 101 and Weapon_Skill_Level < 101;
       -- ****
 
 -- Temporary code to interact with Nim

@@ -17,7 +17,6 @@
 
 -- with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
-with Ships; use Ships;
 
 -- ****h* Events/Events
 -- FUNCTION

@@ -17,6 +17,7 @@
 
 with Interfaces.C.Strings;
 with Maps; use Maps;
+with Ships; use Ships;
 
 package body Events is
 

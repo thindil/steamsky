@@ -38,12 +38,14 @@ package Ships is
       Default_Value => FULL_SPEED;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Default_Ship_Speed
    -- FUNCTION
    -- Default speed setting for ships
    -- SOURCE
    Default_Ship_Speed: constant Ship_Speed := FULL_SPEED;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Ship_Combat_Ai
    -- FUNCTION
@@ -53,12 +55,14 @@ package Ships is
       Default_Value => NONE;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Default_Combat_Ai
    -- FUNCTION
    -- Default value for NPC's ships combat behavior
    -- SOURCE
    Default_Combat_Ai: constant Ship_Combat_Ai := NONE;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Ship_Upgrade
    -- FUNCTION
@@ -68,12 +72,14 @@ package Ships is
       Default_Value => NONE;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Default_Ship_Upgrade
    -- FUNCTION
    -- Default ship upgrade (no upgrade)
    -- SOURCE
    Default_Ship_Upgrade: constant Ship_Upgrade := NONE;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Data_Array
    -- FUNCTION
@@ -83,12 +89,14 @@ package Ships is
       Default_Component_Value => 0;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Empty_Data_Array
    -- FUNCTION
    -- Empty modules data
    -- SOURCE
    Empty_Data_Array: constant Data_Array := (others => 0);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Module_Type_2
    -- FUNCTION
@@ -188,12 +196,14 @@ package Ships is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Default_Module
    -- FUNCTION
    -- Default empty module without type
    -- SOURCE
    Default_Module: constant Module_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Modules_Container
    -- FUNCTION
@@ -355,28 +365,6 @@ package Ships is
    Player_Ship: Ship_Record;
    -- ****
 
-   -- ****f* Ships/Ships.CreateShip
-   -- FUNCTION
-   -- Create new ship
-   -- PARAMETERS
-   -- Proto_Index     - Index of prototype ship which will be used to create
-   --                   the new ship
-   -- Name            - Name of the new ship. If empty, then the default name
-   --                   of the prototype ship will be used
-   -- X               - X coordinate of newly created ship on map
-   -- Y               - Y coordinate of newly created ship on map
-   -- Speed           - Starting speed of newly created ship
-   -- Random_Upgrades - If true, newly created ship will be have
-   --                   random upgrades to own modules. Default is true.
-   -- RESULT
-   -- Newly created ship
-   -- SOURCE
-   function Create_Ship
-     (Proto_Index: Positive; Name: Tiny_String.Bounded_String; X: Map_X_Range;
-      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record;
-      -- ****
-
    -- ****f* Ships/Ships.Count_Ship_Weight
    -- FUNCTION
    -- Count weight of ship (with modules and cargo)
@@ -401,15 +389,6 @@ package Ships is
       Pre => Tiny_String.Length(Source => Owner) > 0;
       -- ****
 
-      -- ****f* Ships/Ships.Count_Combat_Value
-      -- FUNCTION
-      -- Count combat value of player ship
-      -- RESULT
-      -- Numeric level of combat value of player ship
-      -- SOURCE
-   function Count_Combat_Value return Natural;
-      -- ****
-
       -- ****f* Ships/Ships.Get_Cabin_Quality
       -- FUNCTION
       -- Get description of quality of selected cabin in player ship
@@ -420,24 +399,6 @@ package Ships is
       -- SOURCE
    function Get_Cabin_Quality(Quality: Natural) return String with
       Post => Get_Cabin_Quality'Result'Length > 0;
-      -- ****
-
-      -- ****f* Ships/Ships.Damage_Module
-      -- FUNCTION
-      -- Damage the selected module
-      -- PARAMETERS
-      -- Ship         - Ship in which the module will be damaged
-      -- Module_Index - Index of the module to damage
-      -- Damage       - Amount of damage which the module will take
-      -- Death_Reason - If module has owner, reason of owner's death
-      --                if module will be destroyed
-      -- SOURCE
-   procedure Damage_Module
-     (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
-      Damage: Positive; Death_Reason: String) with
-      Pre => Module_Index in
-        Ship.Modules.First_Index .. Ship.Modules.Last_Index and
-      Death_Reason'Length > 0;
       -- ****
 
 -- Temporary code to interact with Nim

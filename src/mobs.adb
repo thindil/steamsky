@@ -50,28 +50,6 @@ package body Mobs is
       --## rule on IMPROPER_INITIALIZATION
    end Generate_Mob;
 
-   function Get_Random_Item
-     (Items_Indexes: String; Equip_Index: Equipment_Locations;
-      Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Tiny_String.Bounded_String; Highest_Skill: Positive)
-      return Natural is
-      function Get_Ada_Random_Item
-        (I_Indexes: chars_ptr; E_Index, H_Level, W_Skill_Level: Integer;
-         F_Index: chars_ptr; H_Skill: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaRandomItem";
-   begin
-      return
-        Get_Ada_Random_Item
-          (I_Indexes => New_String(Str => Items_Indexes),
-           E_Index => Equipment_Locations'Pos(Equip_Index),
-           H_Level => Highest_Level, W_Skill_Level => Weapon_Skill_Level,
-           F_Index =>
-             New_String(Str => Tiny_String.To_String(Source => Faction_Index)),
-           H_Skill => Highest_Skill);
-   end Get_Random_Item;
-
    function Get_Proto_Mob(Index: Positive) return Proto_Mob_Record is
       --## rule off IMPROPER_INITIALIZATION
       Temp_Record: Proto_Mob_Record

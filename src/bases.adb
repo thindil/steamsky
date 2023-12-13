@@ -22,6 +22,39 @@ with Trades; use Trades;
 
 package body Bases is
 
+   procedure Get_Ada_Base_Population
+     (Base_Index: Bases_Range; Population: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBasePopulation";
+
+   procedure Get_Ada_Base_Date
+     (Base_Index: Bases_Range;
+      Year, Month, Day, Hour, Minutes, Date_Type: Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaBaseDate";
+
+   procedure Set_Ada_Base_Date
+     (Base_Index: Bases_Range; Date_Type: Natural;
+      Year, Month, Day, Hour, Minutes: out Natural) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaBaseDate";
+
+   procedure Get_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Get_Ada_Base_Reputation
+        (B_Index, Level, Experience: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseReputation";
+   begin
+      Get_Ada_Base_Reputation
+        (B_Index => Base_Index,
+         Level => Sky_Bases(Base_Index).Reputation.Level,
+         Experience => Sky_Bases(Base_Index).Reputation.Experience);
+   end Get_Base_Reputation;
+
    procedure Set_Base_Reputation(Base_Index: Bases_Range) is
       procedure Set_Ada_Base_Reputation
         (B_Index: Integer; Level, Experience: out Integer) with
@@ -178,19 +211,6 @@ package body Bases is
       Get_Base_From_Nim(Base_Index => Base_Index);
       Set_Game_Date;
    end Ask_For_Events;
-
-   procedure Get_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Get_Ada_Base_Reputation
-        (B_Index, Level, Experience: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseReputation";
-   begin
-      Get_Ada_Base_Reputation
-        (B_Index => Base_Index,
-         Level => Sky_Bases(Base_Index).Reputation.Level,
-         Experience => Sky_Bases(Base_Index).Reputation.Experience);
-   end Get_Base_Reputation;
 
    function Recruit_To_Nim(Recruit: Recruit_Data) return Nim_Recruit_Data is
       use Tiny_String;

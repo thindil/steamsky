@@ -22,13 +22,6 @@ with Bases; use Bases;
 
 package body Missions is
 
-   -- ****e* Missions/Missions.Missions_Finishing_Error
-   -- FUNCTION
-   -- Raised when mission can't be finished
-   -- SOURCE
-   Missions_Finishing_Error: exception;
-   -- ****
-
    procedure Accept_Mission(Mission_Index: Positive) is
       use Interfaces.C;
 
@@ -64,6 +57,7 @@ package body Missions is
         Get_Accepted_Mission(Mission_Index => Mission_Index);
       Base_Index: constant Bases_Range := Mission.Start_Base;
       Message: chars_ptr;
+      Missions_Finishing_Error: exception;
       function Finish_Ada_Mission(M_Index: Integer) return chars_ptr with
          Import => True,
          Convention => C,

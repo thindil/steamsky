@@ -259,33 +259,11 @@ package Bases is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Base_Reputation(Base_Index: Bases_Range);
-
    procedure Get_Ada_Base_Location
      (Base_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
       Import => True,
       Convention => C,
       External_Name => "getAdaBaseLocation";
-
-   procedure Get_Ada_Base_Population
-     (Base_Index: Bases_Range; Population: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBasePopulation";
-
-   procedure Get_Ada_Base_Date
-     (Base_Index: Bases_Range;
-      Year, Month, Day, Hour, Minutes, Date_Type: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseDate";
-
-   procedure Set_Ada_Base_Date
-     (Base_Index: Bases_Range; Date_Type: Natural;
-      Year, Month, Day, Hour, Minutes: out Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaBaseDate";
 
    procedure Get_Ada_Recruits
      (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);

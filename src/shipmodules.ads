@@ -35,12 +35,14 @@ package ShipModules is
       Default_Value => ANY;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* ShipModules/ShipModules.Default_Module_Type
       -- FUNCTION
       -- Default value for modules type
       -- SOURCE
    Default_Module_Type: constant Module_Type := ANY;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* ShipModules/ShipModules.Module_Size
    -- FUNCTION
@@ -101,12 +103,14 @@ package ShipModules is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* ShipModules/ShipModules.Empty_Base_Module
    -- FUNCTION
    -- Empty prototype module data
    -- SOURCE
    Empty_Base_Module: constant Base_Module_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* ShipModules/ShipModules.Get_Module_Type
    -- FUNCTION

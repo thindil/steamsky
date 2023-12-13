@@ -21,29 +21,6 @@ with ShipModules;
 
 package body Ships is
 
-   function Create_Ship
-     (Proto_Index: Positive; Name: Tiny_String.Bounded_String; X: Map_X_Range;
-      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record is
-      use Tiny_String;
-
-      procedure Create_Ada_Ship
-        (P_Index: Integer; N: chars_ptr;
-         Start_X, Start_Y, Spd, R_Upgrades: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "createAdaShip";
-      Tmp_Ship: Ship_Record := Empty_Ship;
-   begin
-      Create_Ada_Ship
-        (P_Index => Proto_Index,
-         N => New_String(Str => To_String(Source => Name)), Start_X => X,
-         Start_Y => Y, Spd => Ship_Speed'Pos(Speed),
-         R_Upgrades => (if Random_Upgrades then 1 else 0));
-      Get_Ship_From_Nim(Ship => Tmp_Ship);
-      return Tmp_Ship;
-   end Create_Ship;
-
    function Count_Ship_Weight(Ship: Ship_Record) return Positive is
       function Count_Ada_Ship_Weight
         (In_Player_Ship: Integer) return Positive with
@@ -76,16 +53,6 @@ package body Ships is
                        New_String(Str => To_String(Source => Owner)))));
    end Generate_Ship_Name;
 
-   function Count_Combat_Value return Natural is
-      function Count_Ada_Combat_Value return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "countAdaCombatValue";
-   begin
-      Set_Ship_In_Nim;
-      return Count_Ada_Combat_Value;
-   end Count_Combat_Value;
-
    function Get_Cabin_Quality(Quality: Natural) return String is
       function Get_Cabin_Quality_Nim(Q: Natural) return chars_ptr with
          Import => True,
@@ -94,24 +61,6 @@ package body Ships is
    begin
       return Value(Item => Get_Cabin_Quality_Nim(Q => Quality));
    end Get_Cabin_Quality;
-
-   procedure Damage_Module
-     (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
-      Damage: Positive; Death_Reason: String) is
-      procedure Damage_Ada_Module
-        (In_Player_Ship: Integer; M_Index: Natural; D: Positive;
-         D_Reason: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "damageAdaModule";
-   begin
-      Set_Ship_In_Nim(Ship => Ship);
-      Damage_Ada_Module
-        (In_Player_Ship => (if Ship = Player_Ship then 1 else 0),
-         M_Index => Module_Index, D => Damage,
-         D_Reason => New_String(Str => Death_Reason));
-      Get_Ship_From_Nim(Ship => Ship);
-   end Damage_Module;
 
    procedure Get_Ada_Crew
      (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew) is
