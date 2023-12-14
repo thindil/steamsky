@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import basestypes, combat, events, game, game2, items, maps, messages,
+import basestypes, combat, events, game, game2, factions, items, maps, messages,
     shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
 proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
@@ -199,7 +199,9 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       # Full docks or enemy patrol
       else:
         # Enemy patrol
-        if roll in 20 .. 40:
+        if roll in 20 .. 40 and not isFriendly(sourceFaction = playerShip.crew[
+            0].faction,
+        targetFaction = skyBases[baseIndex].owner):
           var enemies: seq[Positive]
           generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
               withTraders = false)
