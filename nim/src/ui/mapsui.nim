@@ -296,6 +296,8 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
           moveButtonsTooltips[index] & "\"")
 
 proc finishStory*() {.raises: [], tags: [], exportc.} =
+  ## Finish the current player's story. Give experience and ask about
+  ## finishing the game
   gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
   clearCurrentStory()
   try:
