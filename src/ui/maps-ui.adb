@@ -29,7 +29,6 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
@@ -44,7 +43,6 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
--- with Dialogs;
 with DebugUI;
 with Events; use Events;
 with Factions; use Factions;
@@ -1110,57 +1108,12 @@ package body Maps.UI is
    end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
---      use Dialogs;
---
---      Speed_Box: constant Ttk_ComboBox :=
---        Get_Widget(pathName => "$bframe.box.speed", Interp => Get_Context);
       procedure Show_Ada_Sky_Map(C: Integer) with
          Import => True,
          Convention => C,
          External_Name => "showAdaSkyMap";
    begin
       Show_Ada_Sky_Map(C => (if Clear then 1 else 0));
---      Tcl_SetVar
---        (interp => Get_Context, varName => "refreshmap", newValue => "1");
---      if Clear then
---         Show_Screen(New_Screen_Name => "mapframe");
---      end if;
---      Tcl_SetVar
---        (interp => Get_Context, varName => "gamestate", newValue => "general");
---      Update_Header;
---      if Tcl_GetVar(interp => Get_Context, varName => "refreshmap") = "1" then
---         Tcl_Eval(interp => Get_Context, strng => "DrawMap");
---      end if;
---      Update_Move_Buttons;
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      Update_Messages;
---      if Player_Ship.Speed /= DOCKED then
---         Unbind(Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>");
---         Current
---           (ComboBox => Speed_Box,
---            NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
---         Bind
---           (Widgt => Speed_Box, Sequence => "<<ComboboxSelected>>",
---            Script => "{SetShipSpeed [" & Speed_Box & " current]}");
---      end if;
---      if Get_Current_Story.Index /= Null_Unbounded_String and
---        Get_Current_Story.Show_Text then
---         if Get_Current_Story.Current_Step > -2 then
---            Show_Info
---              (Text => To_String(Source => Get_Current_Story_Text),
---               Title => "Story");
---         else
---            Finish_Story;
---            if Player_Ship.Crew(1).Health = 0 then
---               Show_Question
---                 (Question =>
---                    "You are dead. Would you like to see your game statistics?",
---                  Result => "showstats");
---            end if;
---         end if;
---         Set_Story_Show_Text;
---      end if;
    end Show_Sky_Map;
 
    procedure Set_Keys is
