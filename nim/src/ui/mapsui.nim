@@ -295,11 +295,15 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
       tclEval(script = "tooltip::tooltip " & button & " \"" &
           moveButtonsTooltips[index] & "\"")
 
-proc finishStory*() =
+proc finishStory*() {.raises: [], tags: [], exportc.} =
   gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
   clearCurrentStory()
-  showQuestion(question = storiesList[currentStory.index].endText &
-      " Do you want to finish the game?", res = "retire")
+  try:
+    showQuestion(question = storiesList[currentStory.index].endText &
+        " Do you want to finish the game?", res = "retire")
+  except KeyError:
+    tclEval(script = "bgerror {Can't get the end text of the current story. Result: " &
+        tclGetResult2() & "}")
 
 proc showSkyMap*(clear: bool = false) =
   tclSetVar(varName = "refreshmap", newValue = "1")
