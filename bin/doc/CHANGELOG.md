@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when the game is trying to create an enemy patrol at a friendly base
+
 ## [9.0.5] - 2023-12-10
 
 ### Fixed
