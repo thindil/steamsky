@@ -57,4 +57,12 @@ suite "Unit tests for events2 module":
   skyMap[playerShip.skyX][playerShip.skyY].eventIndex = -1
 
   test "Testing checkForEvent.":
+    checkpoint "Check for event at a poleis base"
+    discard checkForEvent()
+    checkpoint "Check for events at a pirates base"
+    skyBases[1].owner = "PIRATER"
+    discard checkForEvent()
+    checkpoint "Check for events in a poleis base"
+    skyBases[1].owner = "POLEIS"
+    playerShip.speed = docked
     discard checkForEvent()
