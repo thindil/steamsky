@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to show the crew members with the selected skill in the
   ship info screen
 - The last member of the player's ship's crew doesn't work
+- Crash when the game is trying to create an enemy patrol at a friendly base
 
 ## [9.4] - 2023-11-26
 
