@@ -351,8 +351,8 @@ proc finishAdaStory() {.raises: [], tags: [], exportc.} =
   except:
     discard
 
-proc showAdaSkyMap() {.raises: [], tags: [], exportc.} =
+proc showAdaSkyMap(clear: cint) {.raises: [], tags: [], exportc.} =
   try:
-    showSkyMap()
+    showSkyMap(clear == 1)
   except:
     discard
