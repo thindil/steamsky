@@ -327,6 +327,12 @@ proc showSkyMap*(clear: bool = false) =
   if currentStory.index.len > 0 and currentStory.showText:
     if currentStory.currentStep > -2:
       showInfo(text = getCurrentStoryText(), title = "Story")
+    else:
+      finishStory()
+      if playerShip.crew[0].health == 0:
+        showQuestion(question = "You are dead. Would you like to see your game statistics?",
+            res = "showstats")
+    currentStory.showText = true
 
 # Temporary code for interfacing with Ada
 
@@ -342,5 +348,11 @@ proc updateAdaMoveButtons() {.raises: [], tags: [], exportc.} =
 proc finishAdaStory() {.raises: [], tags: [], exportc.} =
   try:
     finishStory()
+  except:
+    discard
+
+proc showAdaSkyMap() {.raises: [], tags: [], exportc.} =
+  try:
+    showSkyMap()
   except:
     discard
