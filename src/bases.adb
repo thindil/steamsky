@@ -22,26 +22,6 @@ with Trades; use Trades;
 
 package body Bases is
 
-   procedure Get_Ada_Base_Population
-     (Base_Index: Bases_Range; Population: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBasePopulation";
-
-   procedure Get_Ada_Base_Date
-     (Base_Index: Bases_Range;
-      Year, Month, Day, Hour, Minutes, Date_Type: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseDate";
-
-   procedure Set_Ada_Base_Date
-     (Base_Index: Bases_Range; Date_Type: Natural;
-      Year, Month, Day, Hour, Minutes: out Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaBaseDate";
-
    procedure Get_Base_Reputation(Base_Index: Bases_Range) is
       procedure Get_Ada_Base_Reputation
         (B_Index, Level, Experience: Integer) with
@@ -492,6 +472,17 @@ package body Bases is
             B_Type =>
               New_String(Str => Tiny_String.To_String(Source => Base_Type)));
       end Get_Base_Type;
+      procedure Get_Ada_Base_Date
+        (B_Index: Bases_Range;
+         Year, Month, Day, Hour, Minutes, Date_Type: Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseDate";
+      procedure Get_Ada_Base_Population
+        (B_Index: Bases_Range; Population: Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBasePopulation";
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -500,7 +491,7 @@ package body Bases is
              (Str =>
                 Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name)));
       Get_Ada_Base_Date
-        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+        (B_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
          Month => Sky_Bases(Base_Index).Visited.Month,
          Day => Sky_Bases(Base_Index).Visited.Day,
          Hour => Sky_Bases(Base_Index).Visited.Hour,
@@ -511,10 +502,10 @@ package body Bases is
       Get_Base_Type
         (B_Index => Base_Index, Base_Type => Sky_Bases(Base_Index).Base_Type);
       Get_Ada_Base_Population
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Population => Sky_Bases(Base_Index).Population);
       Get_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
@@ -531,7 +522,7 @@ package body Bases is
          Asked_For_Bases =>
            (if Sky_Bases(Base_Index).Asked_For_Bases then 1 else 0));
       Get_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Asked_For_Events.Year,
          Month => Sky_Bases(Base_Index).Asked_For_Events.Month,
          Day => Sky_Bases(Base_Index).Asked_For_Events.Day,
@@ -540,7 +531,7 @@ package body Bases is
          Date_Type => 3);
       Get_Base_Reputation(Base_Index => Base_Index);
       Get_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Missions_Date.Year,
          Month => Sky_Bases(Base_Index).Missions_Date.Month,
          Day => Sky_Bases(Base_Index).Missions_Date.Day,
@@ -594,15 +585,20 @@ package body Bases is
             External_Name => "setAdaBasePopulation";
       begin
          Set_Ada_Base_Population
-           (B_Ind => B_Index,
-            Population => Sky_Bases(B_Index).Population);
+           (B_Ind => B_Index, Population => Sky_Bases(B_Index).Population);
       end Set_Base_Population;
+      procedure Set_Ada_Base_Date
+        (B_Index: Bases_Range; Date_Type: Natural;
+         Year, Month, Day, Hour, Minutes: out Natural) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseDate";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
         To_Bounded_String(Source => Value(Item => Name));
       Set_Ada_Base_Date
-        (Base_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
+        (B_Index => Base_Index, Year => Sky_Bases(Base_Index).Visited.Year,
          Month => Sky_Bases(Base_Index).Visited.Month,
          Day => Sky_Bases(Base_Index).Visited.Day,
          Hour => Sky_Bases(Base_Index).Visited.Hour,
@@ -615,7 +611,7 @@ package body Bases is
         To_Bounded_String(Source => Value(Item => Name));
       Set_Base_Population(B_Index => Base_Index);
       Set_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Recruit_Date.Year,
          Month => Sky_Bases(Base_Index).Recruit_Date.Month,
          Day => Sky_Bases(Base_Index).Recruit_Date.Day,
@@ -638,7 +634,7 @@ package body Bases is
          Sky_Bases(Base_Index).Asked_For_Bases := False;
       end if;
       Set_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Asked_For_Events.Year,
          Month => Sky_Bases(Base_Index).Asked_For_Events.Month,
          Day => Sky_Bases(Base_Index).Asked_For_Events.Day,
@@ -647,7 +643,7 @@ package body Bases is
          Date_Type => 3);
       Set_Base_Reputation(Base_Index => Base_Index);
       Set_Ada_Base_Date
-        (Base_Index => Base_Index,
+        (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Missions_Date.Year,
          Month => Sky_Bases(Base_Index).Missions_Date.Month,
          Day => Sky_Bases(Base_Index).Missions_Date.Day,

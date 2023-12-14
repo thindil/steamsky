@@ -22,13 +22,6 @@
 package Ships.Upgrade is
 -- ****
 
-   -- ****e* SUpgrade/SUpgrade.Ship_Upgrade_Error
-   -- FUNCTION
-   -- Raised when player can't start upgrading module
-   -- SOURCE
-   Ship_Upgrade_Error: exception;
-   -- ****
-
    -- ****f* SUpgrade/SUpgrade.Start_Upgrading
    -- FUNCTION
    -- Set upgrading order
@@ -43,14 +36,5 @@ package Ships.Upgrade is
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index and
       Upgrade_Type < 5;
       -- ****
-
-      -- ****f* SUpgrade/SUpgrade.Upgrade_Ship
-      -- FUNCTION
-      -- Upgrade selected module on ship
-      -- PARAMETERS
-      -- Minutes - Amount of passed in-game minutes
-      -- SOURCE
-   procedure Upgrade_Ship(Minutes: Positive);
-   -- ****
 
 end Ships.Upgrade;

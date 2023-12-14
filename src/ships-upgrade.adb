@@ -19,6 +19,13 @@ with Interfaces.C.Strings;
 
 package body Ships.Upgrade is
 
+   -- ****e* SUpgrade/SUpgrade.Ship_Upgrade_Error
+   -- FUNCTION
+   -- Raised when player can't start upgrading module
+   -- SOURCE
+   Ship_Upgrade_Error: exception;
+   -- ****
+
    procedure Start_Upgrading
      (Module_Index: Modules_Container.Extended_Index;
       Upgrade_Type: Positive) is
@@ -40,16 +47,5 @@ package body Ships.Upgrade is
       end if;
       Get_Ship_From_Nim(Ship => Player_Ship);
    end Start_Upgrading;
-
-   procedure Upgrade_Ship(Minutes: Positive) is
-      procedure Upgrade_Ada_Ship(M: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "upgradeAdaShip";
-   begin
-      Set_Ship_In_Nim;
-      Upgrade_Ada_Ship(M => Minutes);
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Upgrade_Ship;
 
 end Ships.Upgrade;

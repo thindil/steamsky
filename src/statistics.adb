@@ -39,49 +39,6 @@ package body Statistics is
       Clear_Ada_Game_Stats;
    end Clear_Game_Stats;
 
-   procedure Update_Finished_Goals(Index: Unbounded_String) is
-      procedure Update_Ada_Finished_Goals(I: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaFinishedGoals";
-   begin
-      Update_Ada_Finished_Goals
-        (I => New_String(Str => To_String(Source => Index)));
-   end Update_Finished_Goals;
-
-   procedure Update_Finished_Missions(M_Type: Unbounded_String) is
-      procedure Update_Ada_Finished_Missions(M_T: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaFinishedMissions";
-   begin
-      Update_Ada_Finished_Missions
-        (M_T => New_String(Str => To_String(Source => M_Type)));
-   end Update_Finished_Missions;
-
-   procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
-      procedure Update_Ada_Crafting_Orders(I: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaCraftingOrders";
-   begin
-      Update_Ada_Crafting_Orders
-        (I => New_String(Str => Tiny_String.To_String(Source => Index)));
-   end Update_Crafting_Orders;
-
-   procedure Update_Killed_Mobs
-     (Mob: Member_Data; Fraction_Name: Unbounded_String) is
-      procedure Update_Ada_Killed_Mobs
-        (M: Nim_Member_Data; F_Name: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaKilledMobs";
-   begin
-      Update_Ada_Killed_Mobs
-        (M => Member_To_Nim(Member => Mob),
-         F_Name => New_String(Str => To_String(Source => Fraction_Name)));
-   end Update_Killed_Mobs;
-
    function Get_Game_Points return Natural is
       function Get_Ada_Game_Points return Natural with
          Import => True,

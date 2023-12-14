@@ -44,7 +44,7 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Dialogs;
 with DebugUI;
 with Events; use Events;
 with Factions; use Factions;
@@ -59,7 +59,7 @@ with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
 with Ships.UI;
-with Statistics; use Statistics;
+with Statistics;
 with Statistics.UI;
 with Stories; use Stories;
 with Trades.UI;
@@ -1111,6 +1111,7 @@ package body Maps.UI is
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Dialogs;
 
       Speed_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => "$bframe.box.speed", Interp => Get_Context);

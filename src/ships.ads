@@ -256,12 +256,14 @@ package Ships is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Empty_Ship
    -- FUNCTION
    -- Empty record for ship data
    -- SOURCE
    Empty_Ship: constant Ship_Record := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Ships/Ships.Proto_Member_Data
    -- FUNCTION
@@ -279,12 +281,14 @@ package Ships is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.Empty_Proto_Member
    -- FUNCTION
    -- Empty record for proto crew info
    -- SOURCE
    Empty_Proto_Member: constant Proto_Member_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Ships/Ships.Proto_Crew_Container
    -- FUNCTION
@@ -309,12 +313,14 @@ package Ships is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Ships/Ships.No_Ship_Bonus
    -- FUNCTION
    -- Default value for ship bonus data without any bonus
    -- SOURCE
    No_Ship_Bonus: constant Ship_Bonus_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Ships/Ships.Proto_Ship_Data
    -- FUNCTION

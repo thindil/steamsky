@@ -17,7 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Crew; use Crew;
 with Game; use Game;
 use Game.Tiny_String;
 
@@ -41,12 +40,14 @@ package Statistics is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Statistics/Statistics.Empty_Statistics_Data
    -- FUNCTION
    -- Empty statistic data
    -- SOURCE
    Empty_Statistics_Data: constant Statistics_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Statistics/Statistics.Statistics_Container
    -- FUNCTION
@@ -74,48 +75,6 @@ package Statistics is
       Post => Get_Game_Points = 0;
       -- ****
 
-      -- ****f* Statistics/Statistics.Update_Finished_Goals
-      -- FUNCTION
-      -- Add new finished goal to list
-      -- PARAMETERS
-      -- Index - Index of goal to update
-      -- SOURCE
-   procedure Update_Finished_Goals(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String;
-      -- ****
-
-      -- ****f* Statistics/Statistics.Update_Finished_Missions
-      -- FUNCTION
-      -- Add new finished mission to list
-      -- PARAMETERS
-      -- M_Type - Type of mission to update
-      -- SOURCE
-   procedure Update_Finished_Missions(M_Type: Unbounded_String) with
-      Pre => M_Type /= Null_Unbounded_String;
-      -- ****
-
-      -- ****f* Statistics/Statistics.Update_Crafting_Orders
-      -- FUNCTION
-      -- Add new finished crafting order to list
-      -- PARAMETERS
-      -- Index - Index of crafting order to update
-      -- SOURCE
-   procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => Index) > 0;
-      -- ****
-
-      -- ****f* Statistics/Statistics.Update_Killed_Mobs
-      -- FUNCTION
-      -- Add new killed mob to list
-      -- PARAMETERS
-      -- Mob          - Killed mobile data
-      -- Faction_Name - Faction name to which killed mobile belongs
-      -- SOURCE
-   procedure Update_Killed_Mobs
-     (Mob: Member_Data; Fraction_Name: Unbounded_String) with
-      Pre => Fraction_Name /= Null_Unbounded_String;
-      -- ****
-
       -- ****f* Statistics/Statistics.Get_Game_Points
       -- FUNCTION
       -- Get amount of gained points multiplied by difficulty bonus
@@ -127,10 +86,6 @@ package Statistics is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Game_Stats(Value, Stat: Natural) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaGameStats";
    function Get_Game_Stats_Number(Name: String) return Natural;
    function Get_Game_Stats_List
      (Name: String) return Statistics_Container.Vector;

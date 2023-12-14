@@ -32,14 +32,16 @@ package Stories is
    -- SOURCE
    type Start_Condition_Type is (DROPITEM) with
       Default_Value => DROPITEM;
-   -- ****
+      -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Stories/Stories.Default_Start_Condition
       -- FUNCTION
       -- The default type of condition to start stories
       -- SOURCE
    Default_Start_Condition: constant Start_Condition_Type := DROPITEM;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Stories/Stories.Step_Condition_Type
    -- FUNCTION
@@ -50,12 +52,14 @@ package Stories is
       Default_Value => ANY;
       -- ****
 
+      --## rule off REDUCEABLE_SCOPE
       -- ****d* Stories/Stories.Default_Step_Condition
       -- FUNCTION
       -- The default type of the condition to finish the story
       -- SOURCE
    Default_Step_Condition: constant Step_Condition_Type := ANY;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Stories/Stories.Step_Text_Data
    -- FUNCTION
