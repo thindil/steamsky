@@ -308,6 +308,10 @@ proc finishStory*() {.raises: [], tags: [], exportc.} =
         tclGetResult2() & "}")
 
 proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
+  ## Show the sky map, draw the map, update the header, etc
+  ##
+  ## * clear - if true, remove the old subwindow and replace it with the one
+  ##           with the sky map
   tclSetVar(varName = "refreshmap", newValue = "1")
   if clear:
     showScreen(newScreenName = "mapframe")
