@@ -307,7 +307,7 @@ proc finishStory*() {.raises: [], tags: [], exportc.} =
     tclEval(script = "bgerror {Can't get the end text of the current story. Result: " &
         tclGetResult2() & "}")
 
-proc showSkyMap*(clear: bool = false) =
+proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
   tclSetVar(varName = "refreshmap", newValue = "1")
   if clear:
     showScreen(newScreenName = "mapframe")
@@ -326,7 +326,11 @@ proc showSkyMap*(clear: bool = false) =
         " <<ComboboxSelected>> {SetShipSpeed [" & speedBox & " current]}")
   if currentStory.index.len > 0 and currentStory.showText:
     if currentStory.currentStep > -2:
-      showInfo(text = getCurrentStoryText(), title = "Story")
+      try:
+        showInfo(text = getCurrentStoryText(), title = "Story")
+      except KeyError:
+        tclEval(script = "bgerror {Can't show the story text. Reason: " &
+            getCurrentExceptionMsg() & "}")
     else:
       finishStory()
       if playerShip.crew[0].health == 0:
