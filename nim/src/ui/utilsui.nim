@@ -16,9 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crewinventory, game, game2, maps, messages,
-    shipscargo, shipscrew, tk, types]
-import dialogs, shipsuicrew, shipsuimodules
+import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
+    messages, missions2, shipscargo, shipscrew, tk, types]
+import dialogs, mapsui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -292,6 +292,15 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
         playerShip.homeBase].name, mType = otherMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     updateGame(minutes = 10)
+    showSkyMap()
+  elif answer == "nopilot":
+    waitForRest()
+    let startsCombat = checkForEvent()
+    var message: string
+    if not startsCombat and gameSettings.autoFinish:
+      message = autoFinishMissions()
+    if message.len > 0:
+      showMessage(text = message, title = "Error")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
