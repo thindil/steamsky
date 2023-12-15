@@ -20,3 +20,5 @@ const
     ## The name of the main Tk paned widget of the game
   gameHeader* = ".gameframe.header"
     ## The name of the header Tk frame (with menu button, time, icons, etc.)
+  closeButton* = gameHeader & ".closebutton"
+    ## The name of the button used to close all screens in the game
