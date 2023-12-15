@@ -34,6 +34,8 @@ with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with Crafts; use Crafts;
 with CoreUI;
+with Game; use Game;
+use Game.Tiny_String;
 with Goals; use Goals;
 with Items; use Items;
 with Missions; use Missions;

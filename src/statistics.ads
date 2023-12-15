@@ -17,8 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Game; use Game;
-use Game.Tiny_String;
 
 -- ****h* Statistics/Statistics
 -- FUNCTION
@@ -57,20 +55,10 @@ package Statistics is
      (Index_Type => Positive, Element_Type => Statistics_Data);
    -- ****
 
-   -- ****f* Statistics/Statistics.Update_Destroyed_Ships
+   -- ****f* Statistics/Statistics.Clear_Game_Stats
    -- FUNCTION
-   -- Add new destroyed ship to list
-   -- PARAMETERS
-   -- Ship_Name - Name of the ship to add to destroyed list
+   -- Clear game statistics
    -- SOURCE
-   procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) with
-      Pre => Ship_Name /= Tiny_String.Null_Bounded_String;
-      -- ****
-
-      -- ****f* Statistics/Statistics.Clear_Game_Stats
-      -- FUNCTION
-      -- Clear game statistics
-      -- SOURCE
    procedure Clear_Game_Stats with
       Post => Get_Game_Points = 0;
       -- ****

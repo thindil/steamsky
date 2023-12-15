@@ -74,12 +74,14 @@ package Stories is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Stories/Stories.Empty_Step_Text
    -- FUNCTION
    -- Empty data for stories steps texts
    -- SOURCE
    Empty_Step_Text: constant Step_Text_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Stories/Stories.StepTexts_Container
    -- FUNCTION
@@ -102,12 +104,14 @@ package Stories is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Stories/Stories.Empty_Finish_Condition
    -- FUNCTION
    -- Empty finish condition for a story's step
    -- SOURCE
    Empty_Finish_Condition: constant Step_Finish_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Stories/Stories.StepData_Container
    -- FUNCTION
@@ -184,12 +188,14 @@ package Stories is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Stories/Stories.Empty_Story
    -- FUNCTION
    -- Empty story inforation
    -- SOURCE
    Empty_Story: constant Story_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Stories/Stories.Current_Story_Data
    -- FUNCTION
@@ -216,12 +222,14 @@ package Stories is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Stories/Stories.Empty_Current_Story
    -- FUNCTION
    -- Empty current story data
    -- SOURCE
    Empty_Current_Story: constant Current_Story_Data := (others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Stories/Stories.Finished_Story_Data
    -- FUNCTION
@@ -239,24 +247,14 @@ package Stories is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Stories/Stories.Empty_Finished_Story
    -- FUNCTION
    -- Empty finished story data
    -- SOURCE
    Empty_Finished_Story: constant Finished_Story_Data := (others => <>);
    -- ****
-
-   -- ****f* Stories/Stories.Start_Story
-   -- FUNCTION
-   -- Check if any story can starts
-   -- PARAMETERS
-   -- Faction_Name - Name of faction to which players belongs
-   -- Condition    - Starting condition which was triggered
-   -- SOURCE
-   procedure Start_Story
-     (Faction_Name: Tiny_String.Bounded_String;
-      Condition: Start_Condition_Type);
-   -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Stories/Stories.Clear_Current_Story
    -- FUNCTION

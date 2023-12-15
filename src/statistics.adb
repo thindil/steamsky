@@ -20,16 +20,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Statistics is
 
-   procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
-      procedure Update_Ada_Destroyed_Ships(S_Name: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaDestroyedShips";
-   begin
-      Update_Ada_Destroyed_Ships
-        (S_Name => New_String(Str => To_String(Source => Ship_Name)));
-   end Update_Destroyed_Ships;
-
    procedure Clear_Game_Stats is
       procedure Clear_Ada_Game_Stats with
          Import => True,

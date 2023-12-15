@@ -19,13 +19,6 @@ with Interfaces.C.Strings;
 
 package body Ships.Upgrade is
 
-   -- ****e* SUpgrade/SUpgrade.Ship_Upgrade_Error
-   -- FUNCTION
-   -- Raised when player can't start upgrading module
-   -- SOURCE
-   Ship_Upgrade_Error: exception;
-   -- ****
-
    procedure Start_Upgrading
      (Module_Index: Modules_Container.Extended_Index;
       Upgrade_Type: Positive) is
@@ -33,6 +26,7 @@ package body Ships.Upgrade is
       use Interfaces.C.Strings;
 
       Result: chars_ptr;
+      Ship_Upgrade_Error: exception;
       function Start_Ada_Upgrading
         (M_Index, U_Type: Integer) return chars_ptr with
          Import => True,

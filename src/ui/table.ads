@@ -31,12 +31,14 @@ package Table is
    type Width_Array is array(Positive range <>) of Positive;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Table/Table.No_Width_Array
    -- FUNCTION
    -- Empty table width array
    -- SOURCE
    No_Width_Array: constant Width_Array := (1 => 1);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Table/Table.Table_Widget
    -- FUNCTION
@@ -57,12 +59,14 @@ package Table is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Table/Table.Empty_Table
    -- FUNCTION
    -- Empty table widget with default values and one column
    -- SOURCE
    Empty_Table: constant Table_Widget := (Amount => 1, others => <>);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Table/Table.Headers_Array
    -- FUNCTION
@@ -71,12 +75,14 @@ package Table is
    type Headers_Array is array(Positive range <>) of Unbounded_String;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****d* Table/Table.No_Headers
    -- FUNCTION
    -- Array of headers with one empty header
    -- SOURCE
    No_Headers: constant Headers_Array := (1 => Null_Unbounded_String);
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****f* Table/Table.Create_Table
    -- FUNCTION

@@ -73,24 +73,6 @@ package body Stories is
       return New_Current_Story;
    end Get_Current_Story;
 
-   procedure Start_Story
-     (Faction_Name: Tiny_String.Bounded_String;
-      Condition: Start_Condition_Type) is
-      use Tiny_String;
-
-      procedure Start_Ada_Story(F_Name: chars_ptr; Con: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "startAdaStory";
-   begin
-      if Get_Current_Story.Index /= Null_Unbounded_String then
-         return;
-      end if;
-      Start_Ada_Story
-        (F_Name => New_String(Str => To_String(Source => Faction_Name)),
-         Con => Start_Condition_Type'Pos(Condition));
-   end Start_Story;
-
    function Progress_Story(Next_Step: Boolean := False) return Boolean is
       use Bases;
       use Events;
