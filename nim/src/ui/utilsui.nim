@@ -301,6 +301,8 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       message = autoFinishMissions()
     if message.len > 0:
       showMessage(text = message, title = "Error")
+    centerX = playerShip.skyX
+    centerY = playerShip.skyY
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
