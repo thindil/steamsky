@@ -20,6 +20,8 @@ import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
 import coreui, dialogs, utilsui2
 
+var centerX*, centerY*: Positive ## Coordinates of the center point on the map
+
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   ## Update in-game header with information about time, state of the crew
   ## members, etc.
@@ -364,3 +366,7 @@ proc showAdaSkyMap(clear: cint) {.raises: [], tags: [], exportc.} =
     showSkyMap(clear == 1)
   except:
     discard
+
+proc getCenterPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
+  x = centerX.cint
+  y = centerY.cint
