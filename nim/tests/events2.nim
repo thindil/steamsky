@@ -60,7 +60,7 @@ suite "Unit tests for events2 module":
     checkpoint "Check for event at a poleis base"
     discard checkForEvent()
     checkpoint "Check for events at a pirates base"
-    skyBases[1].owner = "PIRATER"
+    skyBases[1].owner = "PIRATES"
     discard checkForEvent()
     checkpoint "Check for events in a poleis base"
     skyBases[1].owner = "POLEIS"
