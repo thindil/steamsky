@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Colored version of icon for edit the player's ship's, crew members or ship's
+  modules names
+
 ### Changed
 - Updated look of the items' information dialogs in the trading, ship info and
   looting bases screens
