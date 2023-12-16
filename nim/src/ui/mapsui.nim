@@ -21,10 +21,11 @@ import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
 import coreui, dialogs, utilsui2
 
 
-const generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
+var
+  centerX*, centerY*: Positive ## Coordinates of the center point on the map
+  generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
 
-var centerX*, centerY*: Positive ## Coordinates of the center point on the map
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   ## Update in-game header with information about time, state of the crew
@@ -381,3 +382,6 @@ proc setAdaCenterPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
 
 proc getAdaGeneralAccelerator(index: cint): cstring {.raises: [], tags: [], exportc.} =
   return generalAccelerators[index - 1].cstring
+
+proc setAdaGeneralAccelerator(index: cint; value: cstring) {.raises: [], tags: [], exportc.} =
+  generalAccelerators[index - 1] = $value

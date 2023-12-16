@@ -171,6 +171,7 @@ package Maps.UI is
 -- Temporary code to interact with Nim
 
    function Get_General_Accelerator(Index: Positive) return String;
+   procedure Set_General_Accelerator(Index: Positive; Value: String);
 
 private
 
