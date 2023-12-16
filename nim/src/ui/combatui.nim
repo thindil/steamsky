@@ -34,3 +34,5 @@ proc showCombatUi*(newCombat: bool = true) =
         return
       if tclEval2(script = "winfo exists " & combatFrame) == "0":
         tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
+        pilotOrder = 2
+        engineerOrder = 3
