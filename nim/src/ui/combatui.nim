@@ -1,0 +1,36 @@
+# Copyright 2023 Bartek thindil Jasicki
+#
+# This file is part of Steam Sky.
+#
+# Steam Sky is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Steam Sky is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+import std/[os, tables]
+import ../[combat, game, maps, tk]
+import coreui
+
+proc showCombatUi*(newCombat: bool = true) =
+  tclEval(script = "grid remove " & closeButton)
+  var combatStarted = false
+  let combatFrame = mainPaned & ".combatframe"
+  if newCombat:
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and enemyName !=
+        protoShipsList[eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex].name:
+      combatStarted = startCombat(enemyIndex = eventsList[skyMap[
+          playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
+          newCombat = false)
+      if not combatStarted:
+        return
+      if tclEval2(script = "winfo exists " & combatFrame) == "0":
+        tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
