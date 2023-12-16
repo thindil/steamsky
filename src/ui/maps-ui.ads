@@ -168,6 +168,10 @@ package Maps.UI is
       External_Name => "finishAdaStory";
    -- ****
 
+-- Temporary code to interact with Nim
+
+   function Get_General_Accelerator(Index: Positive) return String;
+
 private
 
    -- ****v* MUI/MUI.Start_X_(private)

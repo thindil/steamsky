@@ -20,6 +20,10 @@ import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
 import coreui, dialogs, utilsui2
 
+
+const generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
+    ## The list of keyboard shortcuts used in some places
+
 var centerX*, centerY*: Positive ## Coordinates of the center point on the map
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
@@ -374,3 +378,6 @@ proc getAdaCenterPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
 proc setAdaCenterPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
   centerX = x.Positive
   centerY = y.Positive
+
+proc getAdaGeneralAccelerator(index: cint): cstring {.raises: [], tags: [], exportc.} =
+  return generalAccelerators[index - 1].cstring

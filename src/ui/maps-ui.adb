@@ -19,6 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -1212,5 +1213,16 @@ package body Maps.UI is
            ">",
          Script => "{ToggleFullScreen}");
    end Set_Keys;
+
+   function Get_General_Accelerator(Index: Positive) return String is
+      use Interfaces.C.Strings;
+
+      function Get_Ada_General_Accelerator(I: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaGeneralAccelerator";
+   begin
+      return Value(Item => Get_Ada_General_Accelerator(I => Index));
+   end Get_General_Accelerator;
 
 end Maps.UI;
