@@ -367,6 +367,10 @@ proc showAdaSkyMap(clear: cint) {.raises: [], tags: [], exportc.} =
   except:
     discard
 
-proc getCenterPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
+proc getAdaCenterPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
   x = centerX.cint
   y = centerY.cint
+
+proc setAdaCenterPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
+  centerX = x.Positive
+  centerY = y.Positive
