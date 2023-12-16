@@ -25,10 +25,10 @@ var
   enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
   factionName: string         ## The name of the enemy's faction (ship and its crew)
   boardingOrders: seq[int]    ## The list of orders for the boarding party
-  pilotOrder: Natural = 0     ## The player's ship pilot order
-  engineerOrder: Natural      ## The player's ship engineer order
+  pilotOrder*: Natural = 0    ## The player's ship pilot order
+  engineerOrder*: Natural     ## The player's ship engineer order
   endCombat: bool = false     ## If true, the combat ends
-  enemyName*: string           ## The name of the enemy's ship
+  enemyName*: string          ## The name of the enemy's ship
   messagesStarts: int = -1    ## The starting index of messages to show
   guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
   oldSpeed = fullSpeed        ## The speed of the player's ship before combat
