@@ -17,7 +17,13 @@
 
 import std/[os, tables]
 import ../[combat, game, maps, tk]
-import coreui
+import coreui, mapsui
+
+proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  combatTurn()
+  updateHeader()
+  return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
@@ -36,3 +42,4 @@ proc showCombatUi*(newCombat: bool = true) =
         tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
         pilotOrder = 2
         engineerOrder = 3
+        addCommand("NextTurn", nextTurnCommand)
