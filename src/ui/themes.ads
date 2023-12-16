@@ -16,8 +16,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Game; use Game;
 
 -- ****h* Themes/Themes
 -- FUNCTION
@@ -42,17 +40,7 @@ package Themes is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****d* Themes/ThemesDefault_Theme_Icons_Path
-   -- FUNCTION
-   -- Path to the icons in the default the game's theme
-   -- HISTORY
-   -- 7.1 - Added
-   -- SOURCE
-   Default_Theme_Icons_Path: constant Unbounded_String :=
-     Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator & "ui" &
-     Dir_Separator;
-   -- ****
-
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* Themes/Themes.Theme_Record
    -- FUNCTION
    -- Data structure for themes settings
@@ -263,6 +251,7 @@ package Themes is
       Drop_Colored_Icon: Unbounded_String;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Themes/Themes.Themes_Container
    -- FUNCTION

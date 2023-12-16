@@ -17,6 +17,7 @@ with Ada.Strings.Maps;
 with Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Interfaces.C.Strings;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Image.Photo;
@@ -26,8 +27,20 @@ with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Config; use Config;
 with CoreUI;
+with Game; use Game;
 
 package body Themes is
+
+   -- ****id* Themes/ThemesDefault_Theme_Icons_Path
+   -- FUNCTION
+   -- Path to the icons in the default the game's theme
+   -- HISTORY
+   -- 7.1 - Added
+   -- SOURCE
+   Default_Theme_Icons_Path: constant Unbounded_String :=
+     Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator & "ui" &
+     Dir_Separator;
+   -- ****
 
    -- ****id* Themes/Themes.Default_Theme
    -- FUNCTION
