@@ -545,8 +545,7 @@ package body Maps.UI.Commands is
         (Message => "You set the travel destination for your ship.",
          M_Type => ORDERMESSAGE);
       if Get_Boolean_Setting(Name => "autoCenter") then
-         Center_X := Player_Ship.Sky_X;
-         Center_Y := Player_Ship.Sky_Y;
+         Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
       end if;
       Draw_Map;
       Update_Move_Buttons;
@@ -586,7 +585,9 @@ package body Maps.UI.Commands is
       Dialog_Name: constant String := ".gameframe.movemapdialog";
       Spin_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
+      Center_X, Center_Y: Positive;
    begin
+      Get_Center_Point(X => Center_X, Y => Center_Y);
       if Winfo_Get(Widgt => Map_View, Info => "ismapped") = "0" then
          return TCL_OK;
       end if;
@@ -652,6 +653,7 @@ package body Maps.UI.Commands is
          Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
          Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
       end if;
+      Set_Center_Point(X => Center_X, Y => Center_Y);
       --## rule on SIMPLIFIABLE_EXPRESSIONS
       Draw_Map;
       return
@@ -952,8 +954,7 @@ package body Maps.UI.Commands is
          Show_Message
            (Text => To_String(Source => Message), Title => "Message");
       end if;
-      Center_X := Player_Ship.Sky_X;
-      Center_Y := Player_Ship.Sky_Y;
+      Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
       if Starts_Combat then
          Show_Combat_Ui;
       else

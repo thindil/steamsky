@@ -93,13 +93,6 @@ package Maps.UI is
      To_Unbounded_String(Source => "Control-f");
    -- ****
 
-   -- ****iv* MUI/MUI.Center_X
-   -- FUNCTION
-   -- Coordinates of the center point of the map
-   -- SOURCE
-   Center_X, Center_Y: Positive;
-   -- ****
-
    -- ****v* MUI/MUI.Default_Fonts_Sizes
    -- FUNCTION
    -- Default sizes of the game fonts
@@ -159,6 +152,14 @@ package Maps.UI is
 
    function Get_General_Accelerator(Index: Positive) return String;
    procedure Set_General_Accelerator(Index: Positive; Value: String);
+   procedure Get_Center_Point(X, Y: out Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaCenterPoint";
+   procedure Set_Center_Point(X, Y: Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaCenterPoint";
 
 private
 

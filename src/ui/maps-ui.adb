@@ -113,7 +113,9 @@ package body Maps.UI is
            0
          then True
          else False);
+      Center_X, Center_Y: Positive;
    begin
+      Get_Center_Point(X => Center_X, Y => Center_Y);
       if Preview and Player_Ship.Speed /= DOCKED then
          Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
          Preview := False;
@@ -1056,8 +1058,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Header);
       end if;
       Update_Header;
-      Center_X := Player_Ship.Sky_X;
-      Center_Y := Player_Ship.Sky_Y;
+      Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
       Set_Tags_Loop :
       for Base_Type of Bases_Types loop
          exit Set_Tags_Loop when Length(Source => Base_Type) = 0;
