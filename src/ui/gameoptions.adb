@@ -271,19 +271,23 @@ package body GameOptions is
            To_Unbounded_String(Source => ".interface.fullscreenkey"),
          Config_Name => To_Unbounded_String(Source => "FullScreen")),
       50 =>
-        (Shortcut => To_Unbounded_String(Source => Get_General_Accelerator(Index => 1)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_General_Accelerator(Index => 1)),
          Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
          Config_Name => To_Unbounded_String(Source => "ResizeFirst")),
       51 =>
-        (Shortcut => To_Unbounded_String(Source => Get_General_Accelerator(Index => 2)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_General_Accelerator(Index => 2)),
          Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"),
          Config_Name => To_Unbounded_String(Source => "ResizeSecond")),
       52 =>
-        (Shortcut => To_Unbounded_String(Source => Get_General_Accelerator(Index => 3)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_General_Accelerator(Index => 3)),
          Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"),
          Config_Name => To_Unbounded_String(Source => "ResizeThird")),
       53 =>
-        (Shortcut => To_Unbounded_String(Source => Get_General_Accelerator(Index => 4)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_General_Accelerator(Index => 4)),
          Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
          Config_Name => To_Unbounded_String(Source => "ResizeFourth")));
    -- ****
@@ -1123,7 +1127,8 @@ package body GameOptions is
          elsif I = 49 then
             null;
          else
-            Set_General_Accelerator(Index => I - 49, Value => Get(Widgt => Key_Entry));
+            Set_General_Accelerator
+              (Index => I - 49, Value => Get(Widgt => Key_Entry));
          end if;
          --## rule on SIMPLIFIABLE_STATEMENTS
          Accels(I).Shortcut :=

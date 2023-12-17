@@ -1270,20 +1270,16 @@ package body Combat.UI is
       if Get_End_Combat then
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 1) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 1) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 2) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 2) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 3) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 3) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 4) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 4) & ">");
          Update_Combat_Ui;
          configure(Widgt => Close_Button, options => "-command {ShowSkyMap}");
          Tcl_SetVar

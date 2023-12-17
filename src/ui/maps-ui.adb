@@ -893,16 +893,20 @@ package body Maps.UI is
                   Full_Screen_Accel := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeFirst") then
-                  Set_General_Accelerator(Index => 1, Value => To_String(Source => Value));
+                  Set_General_Accelerator
+                    (Index => 1, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeSecond") then
-                  Set_General_Accelerator(Index => 2, Value => To_String(Source => Value));
+                  Set_General_Accelerator
+                    (Index => 2, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeThird") then
-                  Set_General_Accelerator(Index => 3, Value => To_String(Source => Value));
+                  Set_General_Accelerator
+                    (Index => 3, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeForth") then
-                  Set_General_Accelerator(Index => 4, Value => To_String(Source => Value));
+                  Set_General_Accelerator
+                    (Index => 4, Value => To_String(Source => Value));
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;

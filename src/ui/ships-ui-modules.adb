@@ -2376,7 +2376,8 @@ package body Ships.UI.Modules is
       M_Array: Modules_Array := (others => 0);
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
-      procedure Update_Ada_Modules_Info(P: Positive; M: Modules_Array; W: out Nim_Width) with
+      procedure Update_Ada_Modules_Info
+        (P: Positive; M: Modules_Array; W: out Nim_Width) with
          Import => True,
          Convention => C,
          External_Name => "updateAdaModulesInfo";
@@ -2389,7 +2390,7 @@ package body Ships.UI.Modules is
               (New_Item => Modules_Container.To_Index(Position => I));
          end loop Update_Modules_Indexes_Loop;
       end if;
-      Convert_Modules_Indexes_Loop:
+      Convert_Modules_Indexes_Loop :
       for M_Index of Modules_Indexes loop
          M_Array(Index) := M_Index;
          Index := Index + 1;

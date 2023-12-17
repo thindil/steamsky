@@ -146,8 +146,8 @@ package Items is
       -- Description of item damage level
       -- SOURCE
    function Get_Item_Damage
-     (Item_Durability: Items_Durability; To_Lower, With_Colors: Boolean := False)
-      return String with
+     (Item_Durability: Items_Durability;
+      To_Lower, With_Colors: Boolean := False) return String with
       Post => Get_Item_Damage'Result'Length > 0;
       -- ****
 

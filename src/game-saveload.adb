@@ -61,8 +61,7 @@ package body Game.SaveLoad is
          Convention => C,
          External_Name => "loadAdaGame";
    begin
-      Get_Ada_Save_Name
-        (Name => New_String(Str => File_Name));
+      Get_Ada_Save_Name(Name => New_String(Str => File_Name));
       Load_Ada_Game;
       Get_Ship_From_Nim(Ship => Player_Ship);
       Get_Bases_Loop :

@@ -416,10 +416,10 @@ package body Knowledge.Missions is
                    To_Unbounded_String
                      (Source =>
                         To_String
-                           (Source =>
-                              Get_Proto_Ship
-                                (Proto_Index => Accepted_Mission.Ship_Index)
-                                .Name)),
+                          (Source =>
+                             Get_Proto_Ship
+                               (Proto_Index => Accepted_Mission.Ship_Index)
+                               .Name)),
                  when EXPLORE =>
                    To_Unbounded_String
                      (Source =>

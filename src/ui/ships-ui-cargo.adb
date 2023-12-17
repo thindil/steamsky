@@ -733,8 +733,8 @@ package body Ships.UI.Cargo is
          Proto_Index => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
       Update_Cargo
-        (Ship => Player_Ship, Amount =>  -Amount,
-         Cargo_Index => Item_Index, Price => Item.Price);
+        (Ship => Player_Ship, Amount => -Amount, Cargo_Index => Item_Index,
+         Price => Item.Price);
       Destroy(Widgt => Item_Dialog);
       Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
       Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);

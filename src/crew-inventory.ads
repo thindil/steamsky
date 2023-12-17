@@ -47,11 +47,10 @@ package Crew.Inventory is
      (Member_Index: Positive; Amount: Integer; Proto_Index: Natural := 0;
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) with
-      Pre =>
-      Member_Index <= Ship.Crew.Last_Index and
-       Inventory_Index <=
-         Inventory_Container.Last_Index
-           (Container => Ship.Crew(Member_Index).Inventory);
+      Pre => Member_Index <= Ship.Crew.Last_Index and
+      Inventory_Index <=
+        Inventory_Container.Last_Index
+          (Container => Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Free_Inventory
@@ -86,11 +85,10 @@ package Crew.Inventory is
       -- SOURCE
    procedure Take_Off_Item
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) with
-      Pre =>
-      Member_Index <= Player_Ship.Crew.Last_Index and
-       Item_Index <=
-         Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(Member_Index).Inventory);
+      Pre => Member_Index <= Player_Ship.Crew.Last_Index and
+      Item_Index <=
+        Inventory_Container.Last_Index
+          (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Item_Is_Used
@@ -107,11 +105,10 @@ package Crew.Inventory is
    function Item_Is_Used
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
       return Boolean with
-      Pre =>
-      Member_Index <= Player_Ship.Crew.Last_Index and
-       Item_Index <=
-         Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(Member_Index).Inventory);
+      Pre => Member_Index <= Player_Ship.Crew.Last_Index and
+      Item_Index <=
+        Inventory_Container.Last_Index
+          (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
 end Crew.Inventory;

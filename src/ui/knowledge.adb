@@ -143,20 +143,16 @@ package body Knowledge is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 1) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 1) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 2) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 2) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 3) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 3) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence =>
-              "<" & Get_General_Accelerator(Index => 4) & ">");
+            Sequence => "<" & Get_General_Accelerator(Index => 4) & ">");
          return TCL_OK;
       end if;
       Tcl_SetVar
@@ -240,7 +236,8 @@ package body Knowledge is
                Append
                  (Source => Finished_Stories_List,
                   New_Item =>
-                    " {" & Get_Story(Index => Finished_Story.Index).Name & "}");
+                    " {" & Get_Story(Index => Finished_Story.Index).Name &
+                    "}");
                Amount := Amount + 1;
             end loop Load_Finished_Stories_Loop;
             configure
