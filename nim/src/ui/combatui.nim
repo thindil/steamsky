@@ -23,6 +23,9 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   combatTurn()
   updateHeader()
+  if endCombat:
+    for accel in generalAccelerators:
+      tclEval(script = "bind . <" & accel & "> {}")
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
