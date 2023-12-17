@@ -144,42 +144,42 @@ package body Knowledge is
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(1)) & ">");
+              "<" & Get_General_Accelerator(Index => 1) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(2)) & ">");
+              "<" & Get_General_Accelerator(Index => 2) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(3)) & ">");
+              "<" & Get_General_Accelerator(Index => 3) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(4)) & ">");
+              "<" & Get_General_Accelerator(Index => 4) & ">");
          return TCL_OK;
       end if;
       Tcl_SetVar
         (interp => Interp, varName => "gamestate", newValue => "knowledge");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
          Script => "{InvokeButton " & Knowledge_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 3) & ">",
          Script =>
            "{InvokeButton " & Knowledge_Frame &
            ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
          Script =>
            "{InvokeButton " & Knowledge_Frame &
            ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 4) & ">",
          Script =>
            "{InvokeButton " & Knowledge_Frame &
            ".stories.canvas.frame.maxmin}");

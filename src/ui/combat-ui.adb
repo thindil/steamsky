@@ -266,23 +266,23 @@ package body Combat.UI is
    begin
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
          Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 3) & ">",
          Script =>
            "{InvokeButton " & Main_Paned &
            ".combatframe.damage.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
          Script =>
            "{InvokeButton " & Main_Paned &
            ".combatframe.enemy.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 4) & ">",
          Script =>
            "{InvokeButton " & Main_Paned &
            ".combatframe.status.canvas.frame.maxmin}");
@@ -1024,11 +1024,11 @@ package body Combat.UI is
    begin
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
          Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
         (Interp => Get_Context,
-         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
          Script =>
            "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
       Create
@@ -1271,19 +1271,19 @@ package body Combat.UI is
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(1)) & ">");
+              "<" & Get_General_Accelerator(Index => 1) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(2)) & ">");
+              "<" & Get_General_Accelerator(Index => 2) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(3)) & ">");
+              "<" & Get_General_Accelerator(Index => 3) & ">");
          Unbind_From_Main_Window
            (Interp => Interp,
             Sequence =>
-              "<" & To_String(Source => General_Accelerators(4)) & ">");
+              "<" & Get_General_Accelerator(Index => 4) & ">");
          Update_Combat_Ui;
          configure(Widgt => Close_Button, options => "-command {ShowSkyMap}");
          Tcl_SetVar

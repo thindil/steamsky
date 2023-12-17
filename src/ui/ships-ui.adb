@@ -120,31 +120,31 @@ package body Ships.UI is
          Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Unbind_Accelerators_Loop :
-         for Accel of General_Accelerators loop
+         for I in 1 .. 4 loop
             Unbind_From_Main_Window
               (Interp => Interp,
-               Sequence => "<" & To_String(Source => Accel) & ">");
+               Sequence => "<" & Get_General_Accelerator(Index => I) & ">");
          end loop Unbind_Accelerators_Loop;
          return TCL_OK;
       end if;
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
          Script => "{InvokeButton " & Ship_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 3) & ">",
          Script =>
            "{InvokeButton " & Ship_Info_Frame &
            ".modules.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
          Script =>
            "{InvokeButton " & Ship_Info_Frame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp => Interp,
-         Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Sequence => "<" & Get_General_Accelerator(Index => 4) & ">",
          Script =>
            "{InvokeButton " & Ship_Info_Frame & ".cargo.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid

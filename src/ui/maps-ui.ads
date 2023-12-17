@@ -93,19 +93,6 @@ package Maps.UI is
      To_Unbounded_String(Source => "Control-f");
    -- ****
 
-   -- ****v* MUI/MUI.General_Accelerators
-   -- FUNCTION
-   -- Array with default shortcuts used in many places
-   -- HISTORY
-   -- 6.9 - Added
-   -- SOURCE
-   General_Accelerators: array(1 .. 4) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "Alt-a"),
-      2 => To_Unbounded_String(Source => "Alt-b"),
-      3 => To_Unbounded_String(Source => "Alt-c"),
-      4 => To_Unbounded_String(Source => "Alt-d"));
-   -- ****
-
    -- ****iv* MUI/MUI.Center_X
    -- FUNCTION
    -- Coordinates of the center point of the map
