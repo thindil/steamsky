@@ -148,6 +148,7 @@ package Themes is
    -- Move_Icon             - Icon used for moving items from inventory to cargo
    -- Give_Colored_Icon     - Icon used for give items button with green color
    -- Drop_Colored_Icon     - Icon used for drop items button with green color
+   -- Edit_Colored_Icon     - Icon used for edit button with green color
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -249,6 +250,7 @@ package Themes is
       Move_Icon: Unbounded_String;
       Give_Colored_Icon: Unbounded_String;
       Drop_Colored_Icon: Unbounded_String;
+      Edit_Colored_Icon: Unbounded_String;
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
