@@ -19,6 +19,23 @@ import std/[os, tables]
 import ../[combat, game, maps, tk]
 import coreui, mapsui
 
+proc updateCombatUi() =
+  var frame = mainPaned & ".combatframe.crew.canvas.frame"
+  tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
+      frame & ".maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
+      mainPaned & ".combatframe.damage.canvas.frame.maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton " &
+      mainPaned & ".combatframe.enemy.canvas.frame.maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[3] & "> {InvokeButton " &
+      mainPaned & ".combatframe.status.canvas.frame.maxmin}")
+  var comboBox = frame & ".pilotcrew"
+
+  proc getCrewList(position: Natural): string =
+    result = "Nobody"
+
+  tclEval(script = comboBox & " configure -values [list " & getCrewList(position = 0) & "]")
+
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   combatTurn()
@@ -26,6 +43,7 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
   if endCombat:
     for accel in generalAccelerators:
       tclEval(script = "bind . <" & accel & "> {}")
+    updateCombatUi()
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =

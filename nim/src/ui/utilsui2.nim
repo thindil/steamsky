@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[config, messages, tk, types]
+import ../[config, game, messages, shipscrew, tk, types]
 import coreui
 
 proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
@@ -99,6 +99,20 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
+proc getSkillMarks*(skillIndex: Natural; memberIndex: Natural): string =
+  var
+    skillValue = 0
+    crewIndex = -1
+  for index, member in playerShip.crew:
+    if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
+      skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
+      crewIndex = index
+  if getSkillLevel(member = playerShip.crew[memberIndex],
+      skillIndex = skillIndex) > 0:
+    result = " +"
+  if memberIndex == crewIndex:
+    result = result & "+"
+
 # Temporary code for interfacing with Ada
 
 proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
@@ -106,3 +120,10 @@ proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
 
 proc updateAdaMessages() {.exportc, raises: [], tags: [].} =
   updateMessages()
+
+proc getAdaSkillMarks(skillIndex, memberIndex: cint): cstring {.exportc,
+    raises: [], tags: [].} =
+  try:
+    return getSkillMarks(skillIndex - 1, memberIndex - 1).cstring
+  except:
+    return "Error"
