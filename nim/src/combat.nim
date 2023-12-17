@@ -27,7 +27,7 @@ var
   boardingOrders: seq[int]    ## The list of orders for the boarding party
   pilotOrder*: Natural = 0    ## The player's ship pilot order
   engineerOrder*: Natural     ## The player's ship engineer order
-  endCombat: bool = false     ## If true, the combat ends
+  endCombat*: bool = false     ## If true, the combat ends
   enemyName*: string          ## The name of the enemy's ship
   messagesStarts: int = -1    ## The starting index of messages to show
   guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
