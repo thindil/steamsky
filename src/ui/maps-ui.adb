@@ -891,16 +891,16 @@ package body Maps.UI is
                   Full_Screen_Accel := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeFirst") then
-                  General_Accelerators(1) := Value;
+                  Set_General_Accelerator(Index => 1, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeSecond") then
-                  General_Accelerators(2) := Value;
+                  Set_General_Accelerator(Index => 2, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeThird") then
-                  General_Accelerators(3) := Value;
+                  Set_General_Accelerator(Index => 3, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeForth") then
-                  General_Accelerators(4) := Value;
+                  Set_General_Accelerator(Index => 4, Value => To_String(Source => Value));
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
@@ -1109,12 +1109,12 @@ package body Maps.UI is
    end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
-      procedure Show_Ada_Sky_Map(C: Integer) with
+      procedure Show_Ada_Sky_Map(Cle: Integer) with
          Import => True,
          Convention => C,
          External_Name => "showAdaSkyMap";
    begin
-      Show_Ada_Sky_Map(C => (if Clear then 1 else 0));
+      Show_Ada_Sky_Map(Cle => (if Clear then 1 else 0));
    end Show_Sky_Map;
 
    procedure Set_Keys is
