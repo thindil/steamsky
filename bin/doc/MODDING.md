@@ -1132,6 +1132,9 @@ story.
   button in the give item dialog. Optional.
 * Key `DropColoredIcon`: Path to the SVG image which will be used for drop item
   button in the drop item dialog. Optional.
+* Key `EditColoredIcon`: Path to the SVG image which will be used for rename
+  button in the rename various things dialogs (like the player's ship, modules,
+  crew members, etc.). Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
