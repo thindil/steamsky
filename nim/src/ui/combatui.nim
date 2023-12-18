@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, strutils, tables]
 import ../[combat, game, maps, shipscrew, tk, types]
 import coreui, mapsui, utilsui2
 
@@ -47,6 +47,34 @@ proc updateCombatUi() =
   let faction = factionsList[playerShip.crew[0].faction]
   if "sentientships" notin faction.flags and findMember(order = pilot) == -1:
     tclEval(script = "grid remove " & comboBox)
+  else:
+    tclEval(script = "grid " & comboBox)
+  comboBox = frame & ".engineercrew"
+  tclEval(script = comboBox & " configure -values [list " & getCrewList(
+      position = 1) & "]")
+  tclEval(script = comboBox & " current " & $(findMember(order = engineer) + 1))
+  comboBox = frame & ".engineerorder"
+  tclEval(script = comboBox & " current " & $(engineerOrder - 1))
+  if "sentientships" notin faction.flags and findMember(order = engineer) == -1:
+    tclEval(script = "grid remove " & comboBox)
+  else:
+    tclEval(script = "grid " & comboBox)
+  let
+    tclResult = tclEval2(script = "grid size " & frame).split(" ")
+    rows: Positive = tclResult[1].parseInt()
+  deleteWidgets(startIndex = 4, endIndex = rows - 1, frame = frame)
+  var
+    haveAmmo = false
+    ammoAmount = 0
+  for gun in guns:
+    let aIndex = (if playerShip.modules[gun[1]].mType ==
+        ModuleType2.gun: playerShip.modules[gun[1]].ammoIndex else: playerShip.modules[gun[
+        1]].harpoonIndex)
+    if aIndex in playerShip.cargo.low .. playerShip.cargo.high and itemsList[
+        playerShip.cargo[aIndex].protoIndex].itemType == itemsTypesList[modulesList[
+        playerShip.modules[gun[1]].protoIndex].value]:
+      ammoAmount = playerShip.cargo[aIndex].amount
+      haveAmmo = true
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
