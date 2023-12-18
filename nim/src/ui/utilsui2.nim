@@ -99,7 +99,7 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc getSkillMarks*(skillIndex: Natural; memberIndex: Natural): string =
+proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string =
   var
     skillValue = 0
     crewIndex = -1
@@ -124,6 +124,6 @@ proc updateAdaMessages() {.exportc, raises: [], tags: [].} =
 proc getAdaSkillMarks(skillIndex, memberIndex: cint): cstring {.exportc,
     raises: [], tags: [].} =
   try:
-    return getSkillMarks(skillIndex - 1, memberIndex - 1).cstring
+    return getSkillMarks(skillIndex, memberIndex - 1).cstring
   except:
-    return "Error"
+    return ""
