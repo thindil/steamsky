@@ -99,20 +99,31 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+proc getSkillMarks*(skillIndex: Positive;
+    memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+  ## Get the marks with information about the skill level for the selected
+  ## skill for the selected crew member
+  ##
+  ## * skillIndex  - the index of the skill to check
+  ## * memberIndex - the index of the player's ship's crew member to check
+  ##
+  ## The string with one "+" sign if the crew member known the skill, the
+  ## string with twi "+" sings if the crew member has the highest level in
+  ## the skill of the all crew members. Otherwise return an empty string.
   var
     skillValue = 0
     crewIndex = -1
   try:
     for index, member in playerShip.crew:
-        if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
-          skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
-          crewIndex = index
+      if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
+        skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
+        crewIndex = index
     if getSkillLevel(member = playerShip.crew[memberIndex],
         skillIndex = skillIndex) > 0:
       result = " +"
   except:
-    tclEval(script = "bgerror {Can't get the crew member skill level. Reason: " & getCurrentExceptionMsg() & "}")
+    tclEval(script = "bgerror {Can't get the crew member skill level. Reason: " &
+        getCurrentExceptionMsg() & "}")
     return ""
   if memberIndex == crewIndex:
     result = result & "+"
