@@ -30,7 +30,7 @@ var
   endCombat*: bool = false     ## If true, the combat ends
   enemyName*: string          ## The name of the enemy's ship
   messagesStarts: int = -1    ## The starting index of messages to show
-  guns: seq[array[1..3, int]] ## The list of guns installed on the player's ship
+  guns*: seq[array[1..3, int]] ## The list of guns installed on the player's ship
   oldSpeed = fullSpeed        ## The speed of the player's ship before combat
   turnNumber: Natural = 0     ## The number of the combat's turn
 
