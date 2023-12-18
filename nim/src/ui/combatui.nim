@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[combat, game, maps, tk]
-import coreui, mapsui
+import ../[combat, game, maps, shipscrew, tk, types]
+import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -33,8 +33,20 @@ proc updateCombatUi() =
 
   proc getCrewList(position: Natural): string =
     result = "Nobody"
+    for index, member in playerShip.crew:
+      if member.skills.len > 0:
+        result = result & " {" & member.name & getSkillMarks(skillIndex = (
+            if position == 0: pilotingSkill elif position ==
+            1: engineeringSkill else: gunnerySkill), memberIndex = index) & "}"
 
-  tclEval(script = comboBox & " configure -values [list " & getCrewList(position = 0) & "]")
+  tclEval(script = comboBox & " configure -values [list " & getCrewList(
+      position = 0) & "]")
+  tclEval(script = comboBox & " current " & $(findMember(order = pilot) + 1))
+  comboBox = frame & ".pilotorder"
+  tclEval(script = comboBox & " current " & $(pilotOrder - 1))
+  let faction = factionsList[playerShip.crew[0].faction]
+  if "sentientships" notin faction.flags and findMember(order = pilot) == -1:
+    tclEval(script = "grid remove " & comboBox)
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
