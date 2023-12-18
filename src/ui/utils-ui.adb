@@ -781,8 +781,6 @@ package body Utils.UI is
    function Get_Skill_Marks
      (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
       return String is
---      Skill_Value, Crew_Index: Natural := 0;
---      Skill_String: Unbounded_String := Null_Unbounded_String;
       function Get_Ada_Skill_Marks
         (S_Index, M_Index: Integer) return chars_ptr with
          Import => True,
@@ -794,27 +792,6 @@ package body Utils.UI is
           (Item =>
              Get_Ada_Skill_Marks
                (S_Index => Integer(Skill_Index), M_Index => Member_Index));
---      Get_Highest_Skills_Loop :
---      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
---         if Get_Skill_Level
---             (Member => Player_Ship.Crew(I), Skill_Index => Skill_Index) >
---           Skill_Value then
---            Crew_Index := I;
---            Skill_Value :=
---              Get_Skill_Level
---                (Member => Player_Ship.Crew(I), Skill_Index => Skill_Index);
---         end if;
---      end loop Get_Highest_Skills_Loop;
---      if Get_Skill_Level
---          (Member => Player_Ship.Crew(Member_Index),
---           Skill_Index => Skill_Index) >
---        0 then
---         Skill_String := To_Unbounded_String(Source => " +");
---      end if;
---      if Member_Index = Crew_Index then
---         Skill_String := Skill_String & To_Unbounded_String(Source => "+");
---      end if;
---      return To_String(Source => Skill_String);
    end Get_Skill_Marks;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
