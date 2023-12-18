@@ -99,17 +99,21 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string =
+proc getSkillMarks*(skillIndex: Positive; memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
   var
     skillValue = 0
     crewIndex = -1
-  for index, member in playerShip.crew:
-    if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
-      skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
-      crewIndex = index
-  if getSkillLevel(member = playerShip.crew[memberIndex],
-      skillIndex = skillIndex) > 0:
-    result = " +"
+  try:
+    for index, member in playerShip.crew:
+        if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
+          skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
+          crewIndex = index
+    if getSkillLevel(member = playerShip.crew[memberIndex],
+        skillIndex = skillIndex) > 0:
+      result = " +"
+  except:
+    tclEval(script = "bgerror {Can't get the crew member skill level. Reason: " & getCurrentExceptionMsg() & "}")
+    return ""
   if memberIndex == crewIndex:
     result = result & "+"
 
