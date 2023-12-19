@@ -149,8 +149,35 @@ proc updateCombatUi() =
         " <<ComboboxSelected>> {SetCombatOrder " & $gunIndex & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
   # Show boarding/defending settings
-  if (harpoonDuration > 0 or enemy.harpoonDuration > 0) and protoShipsList[enemyShipIndex].crew.len > 0:
-    discard
+  if (harpoonDuration > 0 or enemy.harpoonDuration > 0) and protoShipsList[
+      enemyShipIndex].crew.len > 0:
+    var button = frame & ".boarding"
+    tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
+    tclEval(script = "grid " & button & " -padx 5")
+    tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.\"")
+    button = frame & ".defending"
+    tclEval(script = "ttk::button " & button & " -text {Defenders:} -command {SetCombatParty defenders}")
+    tclEval(script = "grid " & button & " -sticky we -padx 5 -pady 5")
+    tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your ship's defenders against the enemy party.\"")
+    var boardingParty, defenders = ""
+    for member in playerShip.crew:
+      case member.order
+      of boarding:
+        boardingParty = boardingParty & member.name & ", "
+      of defend:
+        defenders = defenders & member.name & ", "
+      else:
+        discard
+    if boardingParty.len > 0:
+      boardingParty = boardingParty[0 .. ^2]
+    let
+      label = frame & ".boardparty"
+      labelLength = tclEval2(script = "winfo reqwidth " & frame &
+          ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
+          frame & ".engineerorder").parseInt
+    if tclEval2(script = "winfo exists " & label) == "0":
+      tclEval(script = "ttk::label " & label & " -text {" & boardingParty &
+          "} -wraplength " & $labelLength)
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
