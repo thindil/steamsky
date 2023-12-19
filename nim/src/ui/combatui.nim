@@ -16,11 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[combat, game, maps, shipscrew, tk, types]
+import ../[combat, crewinventory, game, maps, shipscrew, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
-  var frame = mainPaned & ".combatframe.crew.canvas.frame"
+  let frame = mainPaned & ".combatframe.crew.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       frame & ".maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
@@ -66,15 +66,29 @@ proc updateCombatUi() =
   var
     haveAmmo = false
     ammoAmount = 0
-  for gun in guns:
+  for gunIndex, gun in guns:
     let aIndex = (if playerShip.modules[gun[1]].mType ==
-        ModuleType2.gun: playerShip.modules[gun[1]].ammoIndex else: playerShip.modules[gun[
-        1]].harpoonIndex)
+        ModuleType2.gun: playerShip.modules[gun[
+        1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
     if aIndex in playerShip.cargo.low .. playerShip.cargo.high and itemsList[
         playerShip.cargo[aIndex].protoIndex].itemType == itemsTypesList[modulesList[
         playerShip.modules[gun[1]].protoIndex].value]:
       ammoAmount = playerShip.cargo[aIndex].amount
       haveAmmo = true
+    if not haveAmmo:
+      ammoAmount = 0
+      for itemIndex, item in itemsList:
+        if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
+            1]].protoIndex].value]:
+          let ammoIndex = findItem(inventory = playerShip.cargo,
+              protoIndex = itemIndex)
+          if ammoIndex > -1:
+            ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
+      let label = frame & ".gunlabel" & $gunIndex
+      tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
+          gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
+      tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
