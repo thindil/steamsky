@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[os, math, strutils, tables]
 import ../[combat, crewinventory, game, maps, shipscrew, tk, types]
 import coreui, mapsui, utilsui2
 
@@ -66,10 +66,25 @@ proc updateCombatUi() =
   var
     haveAmmo, hasGunner = false
     ammoAmount = 0
-  let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ", "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
+  let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
+      "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
 
   proc getGunSpeed(position: Natural; index: Positive): string =
-    return ""
+    result = ""
+    var gunSpeed = modulesList[playerShip.modules[guns[position][
+        1]].protoIndex].speed
+    case index
+    of 1:
+      gunSpeed = 0
+    of 3:
+      discard
+    else:
+      gunSpeed = (if gunSpeed > 0: (gunSpeed.float /
+          2.0).ceil.int else: gunSpeed - 1)
+    if gunSpeed > 0:
+      return "(" & $gunSpeed & "/round)"
+    elif gunSpeed < 0:
+      return "(1/" & $gunSpeed & " rounds)"
 
   for gunIndex, gun in guns:
     haveAmmo = false
@@ -96,7 +111,7 @@ proc updateCombatUi() =
         gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
     tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    let comboBox = frame & ".guncrew" & $gunIndex
+    var comboBox = frame & ".guncrew" & $gunIndex
     tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
         getCrewList(position = 2) & "] -width 10 -state readonly")
     if playerShip.modules[gun[1]].owner[0] == 0:
@@ -109,12 +124,24 @@ proc updateCombatUi() =
       else:
         tclEval(script = comboBox & " current 0")
     tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 1")
-    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " & mainPaned & ".combatframe.next}")
-    tclEval(script = "bind " & comboBox & " <<ComboboxSelected>> {SetCombatPosition gunner " & $gunIndex & "}")
+    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+        mainPaned & ".combatframe.next}")
+    tclEval(script = "bind " & comboBox &
+        " <<ComboboxSelected>> {SetCombatPosition gunner " & $gunIndex & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
     var gunnerOrders = ""
     for orderIndex, order in gunnersOrders:
-      gunnerOrders = gunnerOrders & " " & order & getGunSpeed(position = gunIndex, index = orderIndex) & "}"
+      gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
+          position = gunIndex, index = orderIndex) & "}"
+    comboBox = frame & ".gunorder" & $gunIndex
+    if tclEval2(script = "winfo exists " & comboBox) == "0":
+      tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+          gunnerOrders & "] -state readonly")
+    tclEval(script = comboBox & " current " & $(gun[2] - 1))
+    if hasGunner:
+      tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 2 -padx {0 5}")
+    else:
+      tclEval(script = "grid remove " & comboBox)
 
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
