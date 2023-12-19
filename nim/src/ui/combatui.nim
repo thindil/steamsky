@@ -64,9 +64,11 @@ proc updateCombatUi() =
     rows: Positive = tclResult[1].parseInt()
   deleteWidgets(startIndex = 4, endIndex = rows - 1, frame = frame)
   var
-    haveAmmo = false
+    haveAmmo, hasGunner = false
     ammoAmount = 0
   for gunIndex, gun in guns:
+    haveAmmo = false
+    hasGunner = false
     let aIndex = (if playerShip.modules[gun[1]].mType ==
         ModuleType2.gun: playerShip.modules[gun[
         1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
@@ -84,11 +86,24 @@ proc updateCombatUi() =
               protoIndex = itemIndex)
           if ammoIndex > -1:
             ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
-      let label = frame & ".gunlabel" & $gunIndex
-      tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
-          gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
-      tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
-      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
+    let label = frame & ".gunlabel" & $gunIndex
+    tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
+        gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
+    tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
+    tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
+    let comboBox = frame & ".guncrew" & $gunIndex
+    tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+        getCrewList(position = 2) & "] -width 10 -state readonly")
+    if playerShip.modules[gun[1]].owner[0] == 0:
+      tclEval(script = comboBox & " current 0")
+    else:
+      if playerShip.crew[playerShip.modules[gun[1]].owner[0]].order == gunner:
+        tclEval(script = comboBox & " current " & $(playerShip.modules[gun[
+            1]].owner[0] + 1))
+        hasGunner = true
+      else:
+        tclEval(script = comboBox & " current 0")
+
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
