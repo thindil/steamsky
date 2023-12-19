@@ -22,7 +22,7 @@ import bases, crewinventory, config, game, game2, goals, events, log, maps,
     statistics, stories, stories2, trades, types, utils
 
 var
-  enemyShipIndex: Natural     ## The index of the enemy's ship's prototype
+  enemyShipIndex*: Natural     ## The index of the enemy's ship's prototype
   factionName: string         ## The name of the enemy's faction (ship and its crew)
   boardingOrders: seq[int]    ## The list of orders for the boarding party
   pilotOrder*: Natural = 0    ## The player's ship pilot order
