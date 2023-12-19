@@ -86,6 +86,7 @@ proc updateCombatUi() =
     elif gunSpeed < 0:
       return "(1/" & $gunSpeed & " rounds)"
 
+  # Show the guns settings
   for gunIndex, gun in guns:
     haveAmmo = false
     hasGunner = false
@@ -142,7 +143,14 @@ proc updateCombatUi() =
       tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 2 -padx {0 5}")
     else:
       tclEval(script = "grid remove " & comboBox)
-
+    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+        mainPaned & ".combatframe.next}")
+    tclEval(script = "bind " & comboBox &
+        " <<ComboboxSelected>> {SetCombatOrder " & $gunIndex & "}")
+    tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
+  # Show boarding/defending settings
+  if (harpoonDuration > 0 or enemy.harpoonDuration > 0) and protoShipsList[enemyShipIndex].crew.len > 0:
+    discard
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
