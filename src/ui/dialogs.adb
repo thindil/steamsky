@@ -299,7 +299,7 @@ package body Dialogs is
              "-text {" & CArgv.Arg(Argv => Argv, N => 4) &
              "} -command {SetTextVariable " & CArgv.Arg(Argv => Argv, N => 2) &
              "; CloseDialog " & String_Dialog &
-             "} -image editicon -style Dialoggreen.TButton");
+             "} -image edit2icon -style Dialoggreen.TButton");
       Cancel_Button: constant Ttk_Button :=
         Create
           (pathName => String_Dialog & ".closebutton",
