@@ -20,7 +20,7 @@ import ../[combat, crewinventory, game, maps, shipscrew, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
-  let frame = mainPaned & ".combatframe.crew.canvas.frame"
+  var frame = mainPaned & ".combatframe.crew.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       frame & ".maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
@@ -59,7 +59,7 @@ proc updateCombatUi() =
     tclEval(script = "grid remove " & comboBox)
   else:
     tclEval(script = "grid " & comboBox)
-  let
+  var
     tclResult = tclEval2(script = "grid size " & frame).split(" ")
     rows: Positive = tclResult[1].parseInt()
   deleteWidgets(startIndex = 4, endIndex = rows - 1, frame = frame)
@@ -170,14 +170,36 @@ proc updateCombatUi() =
         discard
     if boardingParty.len > 0:
       boardingParty = boardingParty[0 .. ^2]
-    let
-      label = frame & ".boardparty"
-      labelLength = tclEval2(script = "winfo reqwidth " & frame &
+    var label = frame & ".boardparty"
+    let labelLength = tclEval2(script = "winfo reqwidth " & frame &
           ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
           frame & ".engineerorder").parseInt
     if tclEval2(script = "winfo exists " & label) == "0":
       tclEval(script = "ttk::label " & label & " -text {" & boardingParty &
           "} -wraplength " & $labelLength)
+      tclEval(script = "grid " & label & " -row " & $(guns.len + 4) & " -column 1 -columnspan 2 -sticky w")
+      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
+    else:
+      tclEval(script = label & " configure -text {" & boardingParty & "}")
+    if defenders.len > 0:
+      defenders = defenders[0 .. ^2]
+    label = frame & ".defenders"
+    if tclEval2(script = "winfo exists " & label) == "0":
+      tclEval(script = "ttk::label " & label & " -text {" & defenders &
+          "} -wraplength " & $labelLength)
+      tclEval(script = "grid " & label & " -row " & $(guns.len + 5) & " -column 1 -columnspan 2 -sticky w")
+      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
+    else:
+      tclEval(script = label & " configure -text {" & defenders & "}")
+    tclEval(script = "update")
+    let combatCanvas = mainPaned & ".combatframe.crew.canvas"
+    tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(script = combatCanvas & " bbox all") & "]")
+    tclEval(script = combatCanvas & " xview moveto 0.0")
+    tclEval(script = combatCanvas & " yview moveto 0.0")
+    # Show the player's ship damage info if needed
+    frame = mainPaned & ".combatframe.damage.canvas.frame"
+    tclResult = tclEval2(script = "grid size " & frame).split(" ")
+    rows = tclResult[1].parseInt()
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
