@@ -66,6 +66,11 @@ proc updateCombatUi() =
   var
     haveAmmo, hasGunner = false
     ammoAmount = 0
+  let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ", "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
+
+  proc getGunSpeed(position: Natural; index: Positive): string =
+    return ""
+
   for gunIndex, gun in guns:
     haveAmmo = false
     hasGunner = false
@@ -103,6 +108,13 @@ proc updateCombatUi() =
         hasGunner = true
       else:
         tclEval(script = comboBox & " current 0")
+    tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 1")
+    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " & mainPaned & ".combatframe.next}")
+    tclEval(script = "bind " & comboBox & " <<ComboboxSelected>> {SetCombatPosition gunner " & $gunIndex & "}")
+    tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
+    var gunnerOrders = ""
+    for orderIndex, order in gunnersOrders:
+      gunnerOrders = gunnerOrders & " " & order & getGunSpeed(position = gunIndex, index = orderIndex) & "}"
 
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
