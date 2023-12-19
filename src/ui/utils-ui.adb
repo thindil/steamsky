@@ -40,7 +40,7 @@ with MainMenu;
 with Messages; use Messages;
 with Missions;
 with Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+with Ships.Crew;
 with Ships.Movement;
 with Ships.UI.Crew;
 with Statistics.UI;
@@ -128,6 +128,7 @@ package body Utils.UI is
       use Bases;
       use Maps;
       use MainMenu;
+      use Ships.Crew;
       use Tiny_String;
 
       Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
