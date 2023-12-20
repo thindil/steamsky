@@ -16,9 +16,26 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, crewinventory, game, maps, shipscrew, shipmodules,
+import ../[combat, config, crewinventory, game, maps, messages, shipscrew, shipmodules,
     shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
+
+proc updateMessages() =
+  let messagesView = mainPaned & ".controls.messages.view"
+  tclEval(script = messagesView & " configure -state normal")
+  tclEval(script = messagesView & " delete 1.0 end")
+  var loopStart = 0 - messagesAmount()
+  if loopStart == 0:
+    tclEval(script = messagesView & " configure -state disable")
+    return
+  if loopStart < -10:
+    loopStart = -10
+  let message = getMessage(messageIndex = getLastMessageIndex())
+  var currentTurnTime = formattedTime()
+  if not message.message.startsWith(currentTurnTime):
+    currentTurnTime = message.message[0 .. currentTurnTime.len - 1]
+  if gameSettings.messagesOrder == olderFirst:
+    discard
 
 proc updateCombatUi() =
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -150,7 +167,7 @@ proc updateCombatUi() =
         " <<ComboboxSelected>> {SetCombatOrder " & $gunIndex & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
   # Show boarding/defending settings
-  if (harpoonDuration > 0 or enemy.harpoonDuration > 0) and protoShipsList[
+  if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and protoShipsList[
       enemyShipIndex].crew.len > 0:
     var button = frame & ".boarding"
     tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
