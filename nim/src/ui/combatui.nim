@@ -34,8 +34,17 @@ proc updateMessages() =
   var currentTurnTime = formattedTime()
   if not message.message.startsWith(currentTurnTime):
     currentTurnTime = message.message[0 .. currentTurnTime.len - 1]
-  if gameSettings.messagesOrder == olderFirst:
+
+  proc showMessage() =
     discard
+
+  if gameSettings.messagesOrder == olderFirst:
+    for i in loopStart .. -1:
+      let message = getMessage(messageIndex = i + 1)
+      if getLastMessageIndex() + i + 1 >= messagesStarts:
+        showMessage()
+        if i < -1:
+          tclEval(script = messagesView & " insert end {\n}")
 
 proc updateCombatUi() =
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -251,23 +260,23 @@ proc updateCombatUi() =
       script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  var enemyInfo = "Name: " & enemyName & "\nType: " & enemy.ship.name &
-      "\nHome: " & skyBases[enemy.ship.homeBase].name & "\nDistance:" & (
-      if enemy.distance >= 15_000: "Escaped" elif enemy.distance in 10_000 ..
-      15_000: "Long" elif enemy.distance in 5_000 ..
-      10_000: "Medium" elif enemy.distance in 1_000 ..
+  var enemyInfo = "Name: " & enemyName & "\nType: " & game.enemy.ship.name &
+      "\nHome: " & skyBases[game.enemy.ship.homeBase].name & "\nDistance:" & (
+      if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in 10_000 ..
+      15_000: "Long" elif game.enemy.distance in 5_000 ..
+      10_000: "Medium" elif game.enemy.distance in 1_000 ..
       5_000: "Short" else: "Close") & "\nStatus: "
-  if enemy.distance < 15_000:
-    if enemy.ship.modules[0].durability == 0:
+  if game.enemy.distance < 15_000:
+    if game.enemy.ship.modules[0].durability == 0:
       enemyInfo = enemyInfo & "Destroyed"
     else:
       var enemyStatus = "Ok"
-      for module in enemy.ship.modules:
+      for module in game.enemy.ship.modules:
         if module.durability < module.maxDurability:
           enemyStatus = "Damaged"
           break
       enemyInfo = enemyInfo & enemyStatus
-    for module in enemy.ship.modules:
+    for module in game.enemy.ship.modules:
       if module.durability > 0:
         case modulesList[module.protoIndex].mType
         of armor:
@@ -283,8 +292,8 @@ proc updateCombatUi() =
   else:
     enemyInfo = enemyInfo & "Unknown"
   enemyInfo = enemyInfo & "\nSpeed: "
-  if enemy.distance < 15_000:
-    case enemy.ship.speed
+  if game.enemy.distance < 15_000:
+    case game.enemy.ship.speed
     of fullStop:
       enemyInfo = enemyInfo & "Stopped"
     of quarterSpeed:
@@ -295,8 +304,8 @@ proc updateCombatUi() =
       enemyInfo = enemyInfo & "Fast"
     else:
       discard
-    if enemy.ship.speed != fullStop:
-      let speedDiff = realSpeed(ship = enemy.ship) - realSpeed(
+    if game.enemy.ship.speed != fullStop:
+      let speedDiff = realSpeed(ship = game.enemy.ship) - realSpeed(
           ship = playerShip)
       if speedDiff > 250:
         enemyInfo = enemyInfo & " (much faster)"
@@ -310,8 +319,8 @@ proc updateCombatUi() =
         enemyInfo = enemyInfo & " (much slower)"
   else:
     enemyInfo = enemyInfo & "Unknown"
-  if enemy.ship.description.len > 0:
-    enemyInfo = enemyInfo & "\n\n" & enemy.ship.description
+  if game.enemy.ship.description.len > 0:
+    enemyInfo = enemyInfo & "\n\n" & game.enemy.ship.description
   var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
   tclEval(script = label & " configure -text {" & enemyInfo & "}")
   tclEval(script = "update")
@@ -327,11 +336,11 @@ proc updateCombatUi() =
   deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
   row = 1
   if endCombat:
-    enemy.distance = 100
-  for module in enemy.ship.modules.mitems:
+    game.enemy.distance = 100
+  for module in game.enemy.ship.modules.mitems:
     if endCombat:
       module.durability = 0
-    label = frame & ".lbl" & $row & " -text {" & (if enemy.distance >
+    label = frame & ".lbl" & $row & " -text {" & (if game.enemy.distance >
         1_000: getModuleType(moduleIndex = module.protoIndex) else: modulesList[
         module.protoIndex].name) & "}" & (if module.durability ==
         0: " -font OverstrikedFont -style Gray.TLabel" else: "")
