@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, crewinventory, game, maps, shipscrew, shipmodules, shipsmovement, tk, types]
+import ../[combat, crewinventory, game, maps, shipscrew, shipmodules,
+    shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
@@ -229,10 +230,16 @@ proc updateCombatUi() =
     row.inc
   tclEval(script = "update")
   combatCanvas = mainPaned & ".combatframe.damage.canvas"
-  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(script = combatCanvas & " bbox all") & "]")
+  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(
+      script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  var enemyInfo = "Name: " & enemyName & "\nType: " & enemy.ship.name & "\nHome: " & skyBases[enemy.ship.homeBase].name & "\nDistance:" & (if enemy.distance >= 15_000: "Escaped" elif enemy.distance in 10_000 .. 15_000: "Long" elif enemy.distance in 5_000 .. 10_000: "Medium" elif enemy.distance in 1_000 .. 5_000: "Short" else: "Close") & "\nStatus: "
+  var enemyInfo = "Name: " & enemyName & "\nType: " & enemy.ship.name &
+      "\nHome: " & skyBases[enemy.ship.homeBase].name & "\nDistance:" & (
+      if enemy.distance >= 15_000: "Escaped" elif enemy.distance in 10_000 ..
+      15_000: "Long" elif enemy.distance in 5_000 ..
+      10_000: "Medium" elif enemy.distance in 1_000 ..
+      5_000: "Short" else: "Close") & "\nStatus: "
   if enemy.distance < 15_000:
     if enemy.ship.modules[0].durability == 0:
       enemyInfo = enemyInfo & "Destroyed"
@@ -272,7 +279,8 @@ proc updateCombatUi() =
     else:
       discard
     if enemy.ship.speed != fullStop:
-      let speedDiff = realSpeed(ship = enemy.ship) - realSpeed(ship = playerShip)
+      let speedDiff = realSpeed(ship = enemy.ship) - realSpeed(
+          ship = playerShip)
       if speedDiff > 250:
         enemyInfo = enemyInfo & " (much faster)"
       elif speedDiff > 0:
@@ -291,7 +299,8 @@ proc updateCombatUi() =
   tclEval(script = label & " configure -text {" & enemyInfo & "}")
   tclEval(script = "update")
   combatCanvas = mainPaned & ".combatframe.enemy.canvas"
-  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(script = combatCanvas & " bbox all") & "]")
+  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(
+      script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
   # Show the enemy's ship damage info
@@ -305,10 +314,32 @@ proc updateCombatUi() =
   for module in enemy.ship.modules.mitems:
     if endCombat:
       module.durability = 0
-    label = frame & ".lbl" & $row & " -text {" & (if enemy.distance > 1_000: getModuleType(moduleIndex = module.protoIndex) else: modulesList[module.protoIndex].name) & "}" & (if module.durability == 0: " -font OverstrikedFont -style Gray.TLabel" else: "")
+    label = frame & ".lbl" & $row & " -text {" & (if enemy.distance >
+        1_000: getModuleType(moduleIndex = module.protoIndex) else: modulesList[
+        module.protoIndex].name) & "}" & (if module.durability ==
+        0: " -font OverstrikedFont -style Gray.TLabel" else: "")
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
-    let damagePercent = (module.durability.float / module.maxDurability.float)
+    let
+      damagePercent = (module.durability.float / module.maxDurability.float)
+      progressBar = frame & ".dmg" & $row
+    tclEval(script = "ttk::progressbar " & progressBar &
+        " -orient horizontal -length 150 -maximum 1.0 -value " &
+        $damagePercent & (if damagePercent ==
+        1.0: " -style green.Horizontal.TProgressbar" elif damagePercent >
+        0.24: " -style yellow.Horizontal.TProgressbar" else: " -style Horizontal.TProgressbar"))
+    tclEval(script = "grid " & progressBar & " -row " & $row & " -column 1")
+    tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.status.scrolly")
+    tclEval(script = "grid columnconfigure " & progressBar & " -weight 1")
+    tclEval(script = "grid rowconfigure " & progressBar & " -weight 1")
+    row.inc
+  tclEval(script = "update")
+  combatCanvas = mainPaned & ".combatframe.status.canvas"
+  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(
+      script = combatCanvas & " bbox all") & "]")
+  tclEval(script = combatCanvas & " xview moveto 0.0")
+  tclEval(script = combatCanvas & " yview moveto 0.0")
+  updateMessages()
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -338,3 +369,11 @@ proc showCombatUi*(newCombat: bool = true) =
         pilotOrder = 2
         engineerOrder = 3
         addCommand("NextTurn", nextTurnCommand)
+
+# Temporary code for interfacing with Ada
+
+proc updateAdaCombatUi() {.raises: [], tags: [], exportc.} =
+  try:
+    updateCombatUi()
+  except:
+    echo "error"
