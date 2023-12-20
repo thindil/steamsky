@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, crewinventory, game, maps, shipscrew, tk, types]
+import ../[combat, crewinventory, game, maps, shipscrew, shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
@@ -233,6 +233,60 @@ proc updateCombatUi() =
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
   var enemyInfo = "Name: " & enemyName & "\nType: " & enemy.ship.name & "\nHome: " & skyBases[enemy.ship.homeBase].name & "\nDistance:" & (if enemy.distance >= 15_000: "Escaped" elif enemy.distance in 10_000 .. 15_000: "Long" elif enemy.distance in 5_000 .. 10_000: "Medium" elif enemy.distance in 1_000 .. 5_000: "Short" else: "Close") & "\nStatus: "
+  if enemy.distance < 15_000:
+    if enemy.ship.modules[0].durability == 0:
+      enemyInfo = enemyInfo & "Destroyed"
+    else:
+      var enemyStatus = "Ok"
+      for module in enemy.ship.modules:
+        if module.durability < module.maxDurability:
+          enemyStatus = "Damaged"
+          break
+      enemyInfo = enemyInfo & enemyStatus
+    for module in enemy.ship.modules:
+      if module.durability > 0:
+        case modulesList[module.protoIndex].mType
+        of armor:
+          enemyInfo = enemyInfo & " (armored)"
+        of gun:
+          enemyInfo = enemyInfo & " (gun)"
+        of batteringRam:
+          enemyInfo = enemyInfo & " (battering ram)"
+        of harpoonGun:
+          enemyInfo = enemyInfo & " (harpoon gun)"
+        else:
+          discard
+  else:
+    enemyInfo = enemyInfo & "Unknown"
+  enemyInfo = enemyInfo & "\nSpeed: "
+  if enemy.distance < 15_000:
+    case enemy.ship.speed
+    of fullStop:
+      enemyInfo = enemyInfo & "Stopped"
+    of quarterSpeed:
+      enemyInfo = enemyInfo & "Slow"
+    of halfSpeed:
+      enemyInfo = enemyInfo & "Medium"
+    of fullSpeed:
+      enemyInfo = enemyInfo & "Fast"
+    else:
+      discard
+    if enemy.ship.speed != fullStop:
+      let speedDiff = realSpeed(ship = enemy.ship) - realSpeed(ship = playerShip)
+      if speedDiff > 250:
+        enemyInfo = enemyInfo & " (much faster)"
+      elif speedDiff > 0:
+        enemyInfo = enemyInfo & " (faster)"
+      elif speedDiff == 0:
+        enemyInfo = enemyInfo & " (equal)"
+      elif speedDiff > -250:
+        enemyInfo = enemyInfo & " (slowed)"
+      else:
+        enemyInfo = enemyInfo & " (much slower)"
+  else:
+    enemyInfo = enemyInfo & "Unknown"
+  if enemy.ship.description.len > 0:
+    enemyInfo = enemyInfo & "\n\n" & enemy.ship.description
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
