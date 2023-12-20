@@ -193,13 +193,37 @@ proc updateCombatUi() =
       tclEval(script = label & " configure -text {" & defenders & "}")
     tclEval(script = "update")
     let combatCanvas = mainPaned & ".combatframe.crew.canvas"
-    tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(script = combatCanvas & " bbox all") & "]")
+    tclEval(script = combatCanvas & " configure -scrollregion [list " &
+        tclEval2(script = combatCanvas & " bbox all") & "]")
     tclEval(script = combatCanvas & " xview moveto 0.0")
     tclEval(script = combatCanvas & " yview moveto 0.0")
     # Show the player's ship damage info if needed
     frame = mainPaned & ".combatframe.damage.canvas.frame"
     tclResult = tclEval2(script = "grid size " & frame).split(" ")
     rows = tclResult[1].parseInt()
+    deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+    button = frame & ".maxmin"
+    tclEval(script = "ttk::button " & button & " -style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}")
+    tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
+    tclEval(script = "tooltip::tooltip " & button & " \"Maximize/minimize the ship status info\"")
+    var row = 1
+    for module in playerShip.modules:
+      label = frame & ".lbl" & $row
+      tclEval(script = "ttk::label " & label & " -text {" & module.name & "}" &
+          (if module.durability ==
+          0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
+      tclEval(script = "grid " & label & " -row " & $row & " -sticky w -padx 5")
+      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.damage.scrolly")
+      let
+        damagePercent = module.durability.float / module.maxDurability.float
+        progressBar = frame & ".dmg" & $row
+      tclEval(script = "ttk::progressbar " & progressBar &
+          " -orient horizontal -length 150 -maximum 1.0 -value " &
+          $damagePercent & (if damagePercent ==
+          1.0: " -style green.Horizontal.TProgressbar" elif damagePercent >
+          0.24: " -style yellow.Horizontal.TProgressbar" else: " -style Horizontal.TProgressbar"))
+      tclEval(script = "grid " & progressBar & " -row " & $row & " -column 1")
+      tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.damage.scrolly")
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
