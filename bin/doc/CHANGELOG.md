@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of the items' information dialogs in the trading, ship info and
   looting bases screens
 - Updated README.md
-- Made the rename dialog's buttons colorful
+- Updated look of the rename dialogs
 
 ### Fixed
 - Don't show empty categories of items in the trading screen
