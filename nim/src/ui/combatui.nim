@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, crewinventory, game, maps, shipscrew, shipsmovement, tk, types]
+import ../[combat, crewinventory, game, maps, shipscrew, shipmodules, shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateCombatUi() =
@@ -287,6 +287,28 @@ proc updateCombatUi() =
     enemyInfo = enemyInfo & "Unknown"
   if enemy.ship.description.len > 0:
     enemyInfo = enemyInfo & "\n\n" & enemy.ship.description
+  var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
+  tclEval(script = label & " configure -text {" & enemyInfo & "}")
+  tclEval(script = "update")
+  combatCanvas = mainPaned & ".combatframe.enemy.canvas"
+  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(script = combatCanvas & " bbox all") & "]")
+  tclEval(script = combatCanvas & " xview moveto 0.0")
+  tclEval(script = combatCanvas & " yview moveto 0.0")
+  # Show the enemy's ship damage info
+  frame = mainPaned & ".combatframe.status.canvas.frame"
+  tclResult = tclEval2(script = "grid size " & frame).split(" ")
+  rows = tclResult[1].parseInt()
+  deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+  row = 1
+  if endCombat:
+    enemy.distance = 100
+  for module in enemy.ship.modules.mitems:
+    if endCombat:
+      module.durability = 0
+    label = frame & ".lbl" & $row & " -text {" & (if enemy.distance > 1_000: getModuleType(moduleIndex = module.protoIndex) else: modulesList[module.protoIndex].name) & "}" & (if module.durability == 0: " -font OverstrikedFont -style Gray.TLabel" else: "")
+    tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
+    tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
+    let damagePercent = (module.durability.float / module.maxDurability.float)
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
