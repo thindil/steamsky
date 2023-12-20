@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, config, crewinventory, game, maps, messages, shipscrew, shipmodules,
-    shipsmovement, tk, types]
+import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
+    shipmodules, shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
 proc updateMessages() =
@@ -35,16 +35,32 @@ proc updateMessages() =
   if not message.message.startsWith(currentTurnTime):
     currentTurnTime = message.message[0 .. currentTurnTime.len - 1]
 
-  proc showMessage() =
-    discard
+  proc showMessage(message: MessageData) =
+    let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
+    if message.message.startsWith(currentTurnTime):
+      if message.color == white:
+        tclEval(script = messagesView & " insert end {" & message.message & "}")
+      else:
+        tclEval(script = messagesView & " insert end {" & message.message &
+            "} [list " & tagNames[message.color.ord] & "]")
+    else:
+      tclEval(script = messagesView & " insert end {" & message.message & "} [list gray]")
 
   if gameSettings.messagesOrder == olderFirst:
     for i in loopStart .. -1:
-      let message = getMessage(messageIndex = i + 1)
       if getLastMessageIndex() + i + 1 >= messagesStarts:
-        showMessage()
+        showMessage(getMessage(messageIndex = i + 1))
         if i < -1:
           tclEval(script = messagesView & " insert end {\n}")
+    tclEval(script = messagesView & " see")
+  else:
+    for i in countdown(-1, loopStart):
+      if getLastMessageIndex() + i + 1 < messagesStarts:
+        break
+      showMessage(getMessage(messageIndex = i + 1))
+      if i > loopStart:
+        tclEval(script = messagesView & " insert end {\n}")
+  tclEval(script = messagesView & " configure -state disable")
 
 proc updateCombatUi() =
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -262,7 +278,8 @@ proc updateCombatUi() =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   var enemyInfo = "Name: " & enemyName & "\nType: " & game.enemy.ship.name &
       "\nHome: " & skyBases[game.enemy.ship.homeBase].name & "\nDistance:" & (
-      if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in 10_000 ..
+      if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
+      10_000 ..
       15_000: "Long" elif game.enemy.distance in 5_000 ..
       10_000: "Medium" elif game.enemy.distance in 1_000 ..
       5_000: "Short" else: "Close") & "\nStatus: "
@@ -397,6 +414,9 @@ proc showCombatUi*(newCombat: bool = true) =
         addCommand("NextTurn", nextTurnCommand)
 
 # Temporary code for interfacing with Ada
+
+proc updateCombatAdaMessges() {.raises: [], tags: [], exportc.} =
+  updateMessages()
 
 proc updateAdaCombatUi() {.raises: [], tags: [], exportc.} =
   try:
