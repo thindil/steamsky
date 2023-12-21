@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   ship info screen
 - The last member of the player's ship's crew doesn't work
 - Crash when the game is trying to create an enemy patrol at a friendly base
+- Coloring in-game messages in the combat screen
 
 ## [9.4] - 2023-11-26
 
