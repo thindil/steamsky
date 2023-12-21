@@ -154,7 +154,7 @@ proc updateCombatUi() =
         gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
     tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    var comboBox = frame & ".guncrew" & $gunIndex
+    var comboBox = frame & ".guncrew" & $(gunIndex + 1)
     tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
         getCrewList(position = 2) & "] -width 10 -state readonly")
     if playerShip.modules[gun[1]].owner[0] == 0:
@@ -170,13 +170,13 @@ proc updateCombatUi() =
     tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
         mainPaned & ".combatframe.next}")
     tclEval(script = "bind " & comboBox &
-        " <<ComboboxSelected>> {SetCombatPosition gunner " & $gunIndex & "}")
+        " <<ComboboxSelected>> {SetCombatPosition gunner " & $(gunIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
     var gunnerOrders = ""
     for orderIndex, order in gunnersOrders:
       gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
           position = gunIndex, index = orderIndex) & "}"
-    comboBox = frame & ".gunorder" & $gunIndex
+    comboBox = frame & ".gunorder" & $(gunIndex + 1)
     if tclEval2(script = "winfo exists " & comboBox) == "0":
       tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
           gunnerOrders & "] -state readonly")
@@ -188,7 +188,7 @@ proc updateCombatUi() =
     tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
         mainPaned & ".combatframe.next}")
     tclEval(script = "bind " & comboBox &
-        " <<ComboboxSelected>> {SetCombatOrder " & $gunIndex & "}")
+        " <<ComboboxSelected>> {SetCombatOrder " & $(gunIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
   # Show boarding/defending settings
   if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and protoShipsList[
@@ -242,8 +242,11 @@ proc updateCombatUi() =
   # Show the player's ship damage info if needed
   frame = mainPaned & ".combatframe.damage.canvas.frame"
   tclResult = tclEval2(script = "grid size " & frame).split(" ")
-  rows = tclResult[1].parseInt()
-  deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+  try:
+    rows = tclResult[1].parseInt()
+    deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+  except:
+    discard
   var button = frame & ".maxmin"
   tclEval(script = "ttk::button " & button & " -style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}")
   tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
@@ -356,10 +359,12 @@ proc updateCombatUi() =
   for module in game.enemy.ship.modules.mitems:
     if endCombat:
       module.durability = 0
-    label = frame & ".lbl" & $row & " -text {" & (if game.enemy.distance >
-        1_000: getModuleType(moduleIndex = module.protoIndex) else: modulesList[
+    label = frame & ".lbl" & $row
+    tclEval(script = "ttk::label " & label & " -text {" & (
+        if game.enemy.distance > 1_000: getModuleType(
+        moduleIndex = module.protoIndex) else: modulesList[
         module.protoIndex].name) & "}" & (if module.durability ==
-        0: " -font OverstrikedFont -style Gray.TLabel" else: "")
+        0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
     let
@@ -421,4 +426,5 @@ proc updateAdaCombatUi() {.raises: [], tags: [], exportc.} =
   try:
     updateCombatUi()
   except:
-    discard
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(getCurrentException())
