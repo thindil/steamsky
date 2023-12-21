@@ -29,7 +29,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
--- with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -44,7 +43,6 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases;
--- with Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -70,102 +68,6 @@ package body Combat.UI is
       Convention => C,
       External_Name => "updateCombatAdaMessages";
       -- ****
---      use Tcl.Tk.Ada.Widgets.Text;
---      use Config;
---
---      Loop_Start: Integer := 0 - Messages_Amount;
---      Message: Message_Data;
---      Current_Turn_Time: Unbounded_String :=
---        To_Unbounded_String(Source => Formated_Time);
---      Messages_View: constant Tk_Text :=
---        Get_Widget(pathName => Main_Paned & ".controls.messages.view");
---      procedure Show_Message is
---         Tag_Names: constant array(1 .. 5) of Unbounded_String :=
---           (1 => To_Unbounded_String(Source => "yellow"),
---            2 => To_Unbounded_String(Source => "green"),
---            3 => To_Unbounded_String(Source => "red"),
---            4 => To_Unbounded_String(Source => "blue"),
---            5 => To_Unbounded_String(Source => "cyan"));
---      begin
---         if Unbounded_Slice
---             (Source => Message.Message, Low => 1,
---              High => Length(Source => Current_Turn_Time)) =
---           Current_Turn_Time then
---            if Message.Color = WHITE then
---               Insert
---                 (TextWidget => Messages_View, Index => "end",
---                  Text => "{" & To_String(Source => Message.Message) & "}");
---            else
---               Insert
---                 (TextWidget => Messages_View, Index => "end",
---                  Text =>
---                    "{" & To_String(Source => Message.Message) & "} [list " &
---                    To_String
---                      (Source => Tag_Names(Message_Color'Pos(Message.Color))) &
---                    "]");
---            end if;
---         else
---            Insert
---              (TextWidget => Messages_View, Index => "end",
---               Text =>
---                 "{" & To_String(Source => Message.Message) & "} [list gray]");
---         end if;
---      end Show_Message;
---   begin
---      Tcl.Tk.Ada.Widgets.configure
---        (Widgt => Messages_View, options => "-state normal");
---      Delete
---        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
---      if Loop_Start = 0 then
---         Tcl.Tk.Ada.Widgets.configure
---           (Widgt => Messages_View, options => "-state disable");
---         return;
---      end if;
---      if Loop_Start < -10 then
---         Loop_Start := -10;
---      end if;
---      Message := Get_Message(Message_Index => Get_Last_Message_Index);
---      if Unbounded_Slice
---          (Source => Message.Message, Low => 1,
---           High => Length(Source => Current_Turn_Time)) /=
---        Current_Turn_Time then
---         Current_Turn_Time :=
---           Unbounded_Slice
---             (Source => Message.Message, Low => 1,
---              High => Length(Source => Current_Turn_Time));
---      end if;
---      if Get_Messages_Order = OLDER_FIRST then
---         Show_Older_Messages_First_Loop :
---         for I in Loop_Start .. -1 loop
---            Message := Get_Message(Message_Index => I + 1);
---            if Get_Last_Message_Index + I + 1 >= Messages_Starts then
---               Show_Message;
---               if I < -1 then
---                  Insert
---                    (TextWidget => Messages_View, Index => "end",
---                     Text => "{" & LF & "}");
---               end if;
---            end if;
---         end loop Show_Older_Messages_First_Loop;
---         See(TextWidget => Messages_View, Index => "end");
---      else
---         Show_New_Messages_First_Loop :
---         for I in reverse Loop_Start .. -1 loop
---            Message := Get_Message(Message_Index => I + 1);
---            exit Show_New_Messages_First_Loop when Get_Last_Message_Index + I +
---              1 <
---              Messages_Starts;
---            Show_Message;
---            if I > Loop_Start then
---               Insert
---                 (TextWidget => Messages_View, Index => "end",
---                  Text => "{" & LF & "}");
---            end if;
---         end loop Show_New_Messages_First_Loop;
---      end if;
---      Tcl.Tk.Ada.Widgets.configure
---        (Widgt => Messages_View, options => "-state disable");
---   end Update_Messages;
 
    -- ****if* CUI/CUI.Update_Combat_Ui
    -- FUNCTION
