@@ -20,7 +20,7 @@ import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
     shipmodules, shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
-proc updateMessages() =
+proc updateCombatMessages() =
   let messagesView = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
@@ -30,10 +30,7 @@ proc updateMessages() =
     return
   if loopStart < -10:
     loopStart = -10
-  let message = getMessage(messageIndex = getLastMessageIndex())
-  var currentTurnTime = formattedTime()
-  if not message.message.startsWith(currentTurnTime):
-    currentTurnTime = message.message[0 .. currentTurnTime.len - 1]
+  var currentTurnTime = "[" & formattedTime() & "]"
 
   proc showMessage(message: MessageData) =
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
@@ -382,7 +379,7 @@ proc updateCombatUi() =
       script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  updateMessages()
+  updateCombatMessages()
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -415,11 +412,11 @@ proc showCombatUi*(newCombat: bool = true) =
 
 # Temporary code for interfacing with Ada
 
-proc updateCombatAdaMessges() {.raises: [], tags: [], exportc.} =
-  updateMessages()
+proc updateCombatAdaMessages() {.raises: [], tags: [], exportc.} =
+  updateCombatMessages()
 
 proc updateAdaCombatUi() {.raises: [], tags: [], exportc.} =
   try:
     updateCombatUi()
   except:
-    echo "error"
+    discard
