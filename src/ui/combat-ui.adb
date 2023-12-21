@@ -42,7 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Bases;
+-- with Bases;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -54,7 +54,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement;
+-- with Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
@@ -73,766 +73,769 @@ package body Combat.UI is
    -- FUNCTION
    -- Update information about combat: remove old UI and create new elements
    -- SOURCE
-   procedure Update_Combat_Ui is
+   procedure Update_Combat_Ui with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaCombatUi";
       -- ****
-      use Bases;
-      use Short_String;
-      use Tiny_String;
-
-      Tokens: Slice_Set;
-      Frame: Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas.frame");
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame & ".pilotcrew");
-      Gunners_Orders: constant array(1 .. 6) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "{Don't shoot"),
-         2 => To_Unbounded_String(Source => "{Precise fire "),
-         3 => To_Unbounded_String(Source => "{Fire at will "),
-         4 => To_Unbounded_String(Source => "{Aim for their engine "),
-         5 => To_Unbounded_String(Source => "{Aim for their weapon "),
-         6 => To_Unbounded_String(Source => "{Aim for their hull "));
-      Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String :=
-        Null_Unbounded_String;
-      Have_Ammo: Boolean := True;
-      Ammo_Amount, Ammo_Index, Row: Natural := 0;
-      Rows: Natural;
-      Damage_Percent: Float := 0.0;
-      --## rule off IMPROPER_INITIALIZATION
-      Label: Ttk_Label;
-      Progress_Bar: Ttk_ProgressBar;
-      Combat_Canvas: Tk_Canvas;
-      --## rule on IMPROPER_INITIALIZATION
-      Has_Gunner: Boolean := False;
-      Faction: constant Faction_Record :=
-        Get_Faction(Index => Player_Ship.Crew(1).Faction);
-      function Get_Crew_List(Position: Natural) return String is
-         Crew_List: Unbounded_String :=
-           To_Unbounded_String(Source => "Nobody");
-      begin
-         Mark_Skills_Loop :
-         for I in
-           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-            if Skills_Container.Length
-                (Container => Player_Ship.Crew(I).Skills) >
-              0 then
-               Append
-                 (Source => Crew_List,
-                  New_Item =>
-                    " {" & To_String(Source => Player_Ship.Crew(I).Name) &
-                    Get_Skill_Marks
-                      (Skill_Index =>
-                         (if Position = 0 then Piloting_Skill
-                          elsif Position = 1 then Engineering_Skill
-                          else Gunnery_Skill),
-                       Member_Index => I) &
-                    "}");
-            end if;
-         end loop Mark_Skills_Loop;
-         return To_String(Source => Crew_List);
-      end Get_Crew_List;
-      function Get_Gun_Speed
-        (Position: Natural; Index: Positive) return String is
-         Gun_Speed: Integer;
-         Firerate: Unbounded_String := Null_Unbounded_String;
-      begin
-         Gun_Speed :=
-           Get_Module
-             (Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
-             .Speed;
-         case Index is
-            when 1 =>
-               Gun_Speed := 0;
-            when 3 =>
-               null;
-            when others =>
-               Gun_Speed :=
-                 (if Gun_Speed > 0 then
-                    Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
-                  else Gun_Speed - 1);
-         end case;
-         --## rule off SIMPLIFIABLE_STATEMENTS
-         if Gun_Speed > 0 then
-            Firerate :=
-              To_Unbounded_String
-                (Source =>
-                   "(" &
-                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
-                   "/round)");
-         elsif Gun_Speed < 0 then
-            Firerate :=
-              To_Unbounded_String
-                (Source =>
-                   "(1/" &
-                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
-                   " rounds)");
-         end if;
-         --## rule on SIMPLIFIABLE_STATEMENTS
-         return To_String(Source => Firerate);
-      end Get_Gun_Speed;
-   begin
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
-         Script => "{InvokeButton " & Frame & ".maxmin}");
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 3) & ">",
-         Script =>
-           "{InvokeButton " & Main_Paned &
-           ".combatframe.damage.canvas.frame.maxmin}");
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
-         Script =>
-           "{InvokeButton " & Main_Paned &
-           ".combatframe.enemy.canvas.frame.maxmin}");
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 4) & ">",
-         Script =>
-           "{InvokeButton " & Main_Paned &
-           ".combatframe.status.canvas.frame.maxmin}");
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list " & Get_Crew_List(Position => 0) & "]");
-      Current
-        (ComboBox => Combo_Box,
-         NewIndex => Natural'Image(Find_Member(Order => PILOT)));
-      Combo_Box.Name := New_String(Str => Frame & ".pilotorder");
-      Current
-        (ComboBox => Combo_Box,
-         NewIndex => Integer'Image(Get_Pilot_Order - 1));
-      if not Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "sentientships")) and
-        Find_Member(Order => PILOT) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
-      else
-         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
-      end if;
-      Combo_Box.Name := New_String(Str => Frame & ".engineercrew");
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list " & Get_Crew_List(Position => 1) & "]");
-      Current
-        (ComboBox => Combo_Box,
-         NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
-      Combo_Box.Name := New_String(Str => Frame & ".engineerorder");
-      Current
-        (ComboBox => Combo_Box,
-         NewIndex => Natural'Image(Get_Engineer_Order - 1));
-      if not Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "sentientships")) and
-        Find_Member(Order => ENGINEER) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
-      else
-         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
-      end if;
-      Create
-        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
-         Separators => " ");
-      Rows := Positive'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 4, End_Index => Rows - 1, Frame => Frame);
-      Show_Guns_Info_Loop :
-      for I in Guns.Iterate loop
-         Have_Ammo := False;
-         Has_Gunner := False;
-         Check_Ammo_Block :
-         declare
-            A_Index: constant Natural :=
-              (if Player_Ship.Modules(Guns(I)(1)).M_Type = GUN then
-                 Player_Ship.Modules(Guns(I)(1)).Ammo_Index
-               else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
-         begin
-            if A_Index in
-                Inventory_Container.First_Index
-                      (Container => Player_Ship.Cargo) ..
-                      Inventory_Container.Last_Index
-                        (Container => Player_Ship.Cargo)
-              and then
-                Get_Proto_Item
-                  (Index =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => A_Index)
-                       .Proto_Index)
-                  .I_Type =
-                Get_Ada_Item_Type
-                  (Item_Index =>
-                     Get_Module
-                       (Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
-                       .Value -
-                     1) then
-               Ammo_Amount :=
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => A_Index)
-                   .Amount;
-               Have_Ammo := True;
-            end if;
-         end Check_Ammo_Block;
-         if not Have_Ammo then
-            Ammo_Amount := 0;
-            Find_Ammo_Loop :
-            for J in 1 .. Get_Proto_Amount loop
-               if Get_Proto_Item(Index => J).I_Type =
-                 Get_Ada_Item_Type
-                   (Item_Index =>
-                      Get_Module
-                        (Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
-                        .Value -
-                      1) then
-                  Ammo_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
-                  if Ammo_Index > 0 then
-                     Ammo_Amount :=
-                       Ammo_Amount +
-                       Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => Ammo_Index)
-                         .Amount;
-                  end if;
-               end if;
-            end loop Find_Ammo_Loop;
-         end if;
-         Gun_Index :=
-           To_Unbounded_String
-             (Source =>
-                Trim
-                  (Source =>
-                     Positive'Image(Guns_Container.To_Index(Position => I)),
-                   Side => Left));
-         Label :=
-           Create
-             (pathName => Frame & ".gunlabel" & To_String(Source => Gun_Index),
-              options =>
-                "-text {" &
-                To_String(Source => Player_Ship.Modules(Guns(I)(1)).Name) &
-                ":" & LF & "(Ammo:" & Natural'Image(Ammo_Amount) & ")}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label,
-            Options =>
-              "-row" &
-              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
-              " -padx {5 0}");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Frame & ".gunlabel" &
-              To_String(Source => Gun_Index) & " $combatframe.crew.scrolly");
-         Combo_Box :=
-           Create
-             (pathName => Frame & ".guncrew" & To_String(Source => Gun_Index),
-              options =>
-                "-values [list " & Get_Crew_List(Position => 2) &
-                "] -width 10 -state readonly");
-         if Player_Ship.Modules(Guns(I)(1)).Owner(1) = 0 then
-            Current(ComboBox => Combo_Box, NewIndex => "0");
-         else
-            if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
-                .Order =
-              GUNNER then
-               Current
-                 (ComboBox => Combo_Box,
-                  NewIndex =>
-                    Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
-               Has_Gunner := True;
-            else
-               Current(ComboBox => Combo_Box, NewIndex => "0");
-            end if;
-         end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Combo_Box,
-            Options =>
-              "-row" &
-              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
-              " -column 1");
-         Bind
-           (Widgt => Combo_Box, Sequence => "<Return>",
-            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
-         Bind
-           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
-            Script =>
-              "{SetCombatPosition gunner " & To_String(Source => Gun_Index) &
-              "}");
-         Add
-           (Widget => Combo_Box,
-            Message =>
-              "Select the crew member which will be the operate the gun during" &
-              LF &
-              "the combat. The sign + after name means that this crew member" &
-              LF &
-              "has gunnery skill, the sign ++ after name means that his/her" &
-              LF & "gunnery skill is the best in the crew");
-         Gunner_Orders := Null_Unbounded_String;
-         Show_Gun_Orders_Loop :
-         for J in Gunners_Orders'Range loop
-            Append
-              (Source => Gunner_Orders,
-               New_Item =>
-                 " " & Gunners_Orders(J) &
-                 Get_Gun_Speed
-                   (Position => Guns_Container.To_Index(Position => I),
-                    Index => J) &
-                 "}");
-         end loop Show_Gun_Orders_Loop;
-         Combo_Box :=
-           Get_Widget
-             (pathName =>
-                Frame & ".gunorder" & To_String(Source => Gun_Index));
-         if Winfo_Get(Widgt => Combo_Box, Info => "exists") = "0" then
-            Combo_Box :=
-              Create
-                (pathName =>
-                   Frame & ".gunorder" & To_String(Source => Gun_Index),
-                 options =>
-                   "-values [list" & To_String(Source => Gunner_Orders) &
-                   "] -state readonly");
-         end if;
-         Current
-           (ComboBox => Combo_Box, NewIndex => Natural'Image(Guns(I)(2) - 1));
-         if Has_Gunner then
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Combo_Box,
-               Options =>
-                 "-row" &
-                 Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
-                 " -column 2 -padx {0 5}");
-         else
-            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
-         end if;
-         Bind
-           (Widgt => Combo_Box, Sequence => "<Return>",
-            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
-         Bind
-           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
-            Script =>
-              "{SetCombatOrder " & To_String(Source => Gun_Index) & "}");
-         Add
-           (Widget => Combo_Box,
-            Message =>
-              "Select the order for the gunner. Shooting in the selected" &
-              LF & "part of enemy ship is less precise but always hit the" &
-              LF & "selected part.");
-      end loop Show_Guns_Info_Loop;
-      -- Show boarding/defending info
-      if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
-        Get_Proto_Ship(Proto_Index => Enemy_Ship_Index).Crew.Length > 0 then
-         Show_Boarding_Info_Block :
-         declare
-            Button: Ttk_Button :=
-              Create
-                (pathName => Frame & ".boarding",
-                 options =>
-                   "-text {Boarding party:} -command {SetCombatParty boarding}");
-            Boarding_Party, Defenders: Unbounded_String :=
-              Null_Unbounded_String;
-            Label_Length: constant Positive :=
-              Positive'Value
-                (Winfo_Get
-                   (Widgt =>
-                      Ttk_Label'
-                        (Get_Widget(pathName => Frame & ".engineercrew")),
-                    Info => "reqwidth")) +
-              Positive'Value
-                (Winfo_Get
-                   (Widgt =>
-                      Ttk_Label'
-                        (Get_Widget(pathName => Frame & ".engineerorder")),
-                    Info => "reqwidth"));
-         begin
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
-            Add
-              (Widget => Button,
-               Message =>
-                 "Set your boarding party. If you join it, you will be able" &
-                 LF &
-                 "to give orders them, but not your gunners or engineer.");
-            Button :=
-              Create
-                (pathName => Frame & ".defending",
-                 options =>
-                   "-text {Defenders:} -command {SetCombatParty defenders}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-sticky we -padx 5 -pady 5");
-            Add
-              (Widget => Button,
-               Message =>
-                 "Set your ship's defenders against the enemy party.");
-            Set_Boarding_And_Defenders_Loop :
-            for Member of Player_Ship.Crew loop
-               case Member.Order is
-                  when BOARDING =>
-                     Append
-                       (Source => Boarding_Party,
-                        New_Item => To_String(Source => Member.Name) & ", ");
-                  when DEFEND =>
-                     Append
-                       (Source => Defenders,
-                        New_Item => To_String(Source => Member.Name) & ", ");
-                  when others =>
-                     null;
-               end case;
-            end loop Set_Boarding_And_Defenders_Loop;
-            if Boarding_Party /= Null_Unbounded_String then
-               Boarding_Party :=
-                 Unbounded_Slice
-                   (Source => Boarding_Party, Low => 1,
-                    High => Length(Source => Boarding_Party) - 2);
-            end if;
-            Label := Get_Widget(pathName => Frame & ".boardparty");
-            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
-               Label :=
-                 Create
-                   (pathName => Frame & ".boardparty",
-                    options =>
-                      "-text {" & To_String(Source => Boarding_Party) &
-                      "} -wraplength" & Positive'Image(Label_Length));
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Label,
-                  Options =>
-                    "-row" & Positive'Image(Natural(Guns.Length) + 4) &
-                    " -column 1 -columnspan 2 -sticky w");
-               Tcl_Eval
-                 (interp => Get_Context,
-                  strng =>
-                    "SetScrollbarBindings " & Label &
-                    " $combatframe.crew.scrolly");
-            else
-               configure
-                 (Widgt => Label,
-                  options =>
-                    "-text {" & To_String(Source => Boarding_Party) & "}");
-            end if;
-            if Defenders /= Null_Unbounded_String then
-               Defenders :=
-                 Unbounded_Slice
-                   (Source => Defenders, Low => 1,
-                    High => Length(Source => Defenders) - 2);
-            end if;
-            Label := Get_Widget(pathName => Frame & ".defenders");
-            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
-               Label :=
-                 Create
-                   (pathName => Frame & ".defenders",
-                    options =>
-                      "-text {" & To_String(Source => Defenders) &
-                      "} -wraplength" & Positive'Image(Label_Length));
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Label,
-                  Options =>
-                    "-row" & Positive'Image(Natural(Guns.Length) + 5) &
-                    " -column 1 -columnspan 2 -sticky w");
-               Tcl_Eval
-                 (interp => Get_Context,
-                  strng =>
-                    "SetScrollbarBindings " & Label &
-                    " $combatframe.crew.scrolly");
-            else
-               configure
-                 (Widgt => Label,
-                  options => "-text {" & To_String(Source => Defenders) & "}");
-            end if;
-         end Show_Boarding_Info_Block;
-      end if;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      -- Show player ship damage info if needed
-      Frame.Name :=
-        New_String(Str => Main_Paned & ".combatframe.damage.canvas.frame");
-      Create
-        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 0, End_Index => Rows - 1, Frame => Frame);
-      Row := 1;
-      Add_Minimize_Button_Block :
-      declare
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Frame & ".maxmin",
-              options =>
-                "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-sticky w -padx 5 -row 0 -column 0");
-         Add
-           (Widget => Button,
-            Message => "Maximize/minimize the ship status info");
-      end Add_Minimize_Button_Block;
-      Show_Player_Ship_Damage_Loop :
-      for Module of Player_Ship.Modules loop
-         Label :=
-           Create
-             (pathName =>
-                Frame & ".lbl" &
-                Trim(Source => Natural'Image(Row), Side => Left),
-              options =>
-                "-text {" & To_String(Source => Module.Name) & "}" &
-                (if Module.Durability = 0 then
-                   " -font OverstrikedFont -style Gray.TLabel"
-                 else ""));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label,
-            Options => "-row" & Natural'Image(Row) & " -sticky w -padx 5");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Label &
-              " $combatframe.damage.scrolly");
-         Damage_Percent :=
-           Float(Module.Durability) / Float(Module.Max_Durability);
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".dmg" &
-                Trim(Source => Natural'Image(Row), Side => Left),
-              options =>
-                "-orient horizontal -length 150 -maximum 1.0 -value" &
-                Float'Image(Damage_Percent) &
-                (if Damage_Percent = 1.0 then
-                   " -style green.Horizontal.TProgressbar"
-                 elsif Damage_Percent > 0.24 then
-                   " -style yellow.Horizontal.TProgressbar"
-                 else " -style Horizontal.TProgressbar"));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar,
-            Options => "-row" & Natural'Image(Row) & " -column 1");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Progress_Bar &
-              " $combatframe.damage.scrolly");
-         Tcl.Tk.Ada.Grid.Column_Configure
-           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure
-           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
-         Row := Row + 1;
-      end loop Show_Player_Ship_Damage_Loop;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".combatframe.damage.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Append
-        (Source => Enemy_Info,
-         New_Item =>
-           "Name: " & To_String(Source => Get_Enemy_Name) & LF & "Type: " &
-           To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
-           To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
-           "Distance: " &
-           (if Enemy.Distance >= 15_000 then "Escaped"
-            elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
-            elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
-            elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
-           LF & "Status: ");
-      if Enemy.Distance < 15_000 then
-         if Enemy.Ship.Modules(1).Durability = 0 then
-            Append(Source => Enemy_Info, New_Item => "Destroyed");
-         else
-            Show_Enemy_Status_Block :
-            declare
-               Enemy_Status: Unbounded_String :=
-                 To_Unbounded_String(Source => "Ok");
-            begin
-               Check_Enemy_Ship_Status_Loop :
-               for Module of Enemy.Ship.Modules loop
-                  if Module.Durability < Module.Max_Durability then
-                     Enemy_Status := To_Unbounded_String(Source => "Damaged");
-                     exit Check_Enemy_Ship_Status_Loop;
-                  end if;
-               end loop Check_Enemy_Ship_Status_Loop;
-               Append(Source => Enemy_Info, New_Item => Enemy_Status);
-            end Show_Enemy_Status_Block;
-            Check_Enemy_Status_Loop :
-            for Module of Enemy.Ship.Modules loop
-               if Module.Durability > 0 then
-                  case Get_Module(Index => Module.Proto_Index).M_Type is
-                     when ARMOR =>
-                        Append(Source => Enemy_Info, New_Item => " (armored)");
-                     when GUN =>
-                        Append(Source => Enemy_Info, New_Item => " (gun)");
-                     when BATTERING_RAM =>
-                        Append
-                          (Source => Enemy_Info,
-                           New_Item => " (battering ram)");
-                     when HARPOON_GUN =>
-                        Append
-                          (Source => Enemy_Info, New_Item => " (harpoon gun)");
-                     when others =>
-                        null;
-                  end case;
-               end if;
-            end loop Check_Enemy_Status_Loop;
-         end if;
-      else
-         Append(Source => Enemy_Info, New_Item => "Unknown");
-      end if;
-      Append(Source => Enemy_Info, New_Item => LF & "Speed: ");
-      if Enemy.Distance < 15_000 then
-         case Enemy.Ship.Speed is
-            when Ships.FULL_STOP =>
-               Append(Source => Enemy_Info, New_Item => "Stopped");
-            when QUARTER_SPEED =>
-               Append(Source => Enemy_Info, New_Item => "Slow");
-            when HALF_SPEED =>
-               Append(Source => Enemy_Info, New_Item => "Medium");
-            when FULL_SPEED =>
-               Append(Source => Enemy_Info, New_Item => "Fast");
-            when others =>
-               null;
-         end case;
-         if Enemy.Ship.Speed /= Ships.FULL_STOP then
-            Show_Enemy_Ship_Speed_Block :
-            declare
-               use Ships.Movement;
-
-               Speed_Diff: constant Integer :=
-                 Real_Speed(Ship => Enemy.Ship) -
-                 Real_Speed(Ship => Player_Ship);
-            begin
-               --## rule off SIMPLIFIABLE_STATEMENTS
-               if Speed_Diff > 250 then
-                  Append(Source => Enemy_Info, New_Item => " (much faster)");
-               elsif Speed_Diff > 0 then
-                  Append(Source => Enemy_Info, New_Item => " (faster)");
-               elsif Speed_Diff = 0 then
-                  Append(Source => Enemy_Info, New_Item => " (equal)");
-               elsif Speed_Diff > -250 then
-                  Append(Source => Enemy_Info, New_Item => " (slower)");
-               else
-                  Append(Source => Enemy_Info, New_Item => " (much slower)");
-               end if;
-               --## rule on SIMPLIFIABLE_STATEMENTS
-            end Show_Enemy_Ship_Speed_Block;
-         end if;
-      else
-         Append(Source => Enemy_Info, New_Item => "Unknown");
-      end if;
-      if Length(Source => Enemy.Ship.Description) > 0 then
-         Append
-           (Source => Enemy_Info,
-            New_Item => LF & LF & To_String(Source => Enemy.Ship.Description));
-      end if;
-      Label :=
-        Get_Widget
-          (pathName => Main_Paned & ".combatframe.enemy.canvas.frame.info");
-      configure
-        (Widgt => Label,
-         options => "-text {" & To_String(Source => Enemy_Info) & "}");
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Frame.Name :=
-        New_String(Str => Main_Paned & ".combatframe.status.canvas.frame");
-      Create
-        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
-      Row := 1;
-      if Get_End_Combat then
-         Enemy.Distance := 100;
-      end if;
-      Show_Enemy_Ship_Status_Loop :
-      for I in Enemy.Ship.Modules.Iterate loop
-         if Get_End_Combat then
-            Enemy.Ship.Modules(I).Durability := 0;
-         end if;
-         Label :=
-           Create
-             (pathName =>
-                Frame & ".lbl" &
-                Trim(Source => Natural'Image(Row), Side => Left),
-              options =>
-                "-text {" &
-                To_String
-                  (Source =>
-                     (if Enemy.Distance > 1_000 then
-                        To_Unbounded_String
-                          (Source =>
-                             Get_Module_Type
-                               (Module_Index =>
-                                  Enemy.Ship.Modules(I).Proto_Index))
-                      else To_Unbounded_String
-                          (Source =>
-                             To_String
-                               (Source =>
-                                  Get_Module
-                                    (Index =>
-                                       Enemy.Ship.Modules(I).Proto_Index)
-                                    .Name)))) &
-                "}" &
-                (if Enemy.Ship.Modules(I).Durability = 0 then
-                   " -font OverstrikedFont -style Gray.TLabel"
-                 else ""));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label,
-            Options =>
-              "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Label &
-              " $combatframe.status.scrolly");
-         Damage_Percent :=
-           Float(Enemy.Ship.Modules(I).Durability) /
-           Float(Enemy.Ship.Modules(I).Max_Durability);
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".dmg" &
-                Trim(Source => Natural'Image(Row), Side => Left),
-              options =>
-                "-orient horizontal -length 150 -maximum 1.0 -value" &
-                Float'Image(Damage_Percent) &
-                (if Damage_Percent = 1.0 then
-                   " -style green.Horizontal.TProgressbar"
-                 elsif Damage_Percent > 0.24 then
-                   " -style yellow.Horizontal.TProgressbar"
-                 else " -style Horizontal.TProgressbar"));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar,
-            Options => "-row" & Natural'Image(Row) & " -column 1");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Progress_Bar &
-              " $combatframe.status.scrolly");
-         Tcl.Tk.Ada.Grid.Column_Configure
-           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure
-           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
-         Row := Row + 1;
-      end loop Show_Enemy_Ship_Status_Loop;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".combatframe.status.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Update_Messages;
-   end Update_Combat_Ui;
+--      use Bases;
+--      use Short_String;
+--      use Tiny_String;
+--
+--      Tokens: Slice_Set;
+--      Frame: Ttk_Frame :=
+--        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas.frame");
+--      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame & ".pilotcrew");
+--      Gunners_Orders: constant array(1 .. 6) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "{Don't shoot"),
+--         2 => To_Unbounded_String(Source => "{Precise fire "),
+--         3 => To_Unbounded_String(Source => "{Fire at will "),
+--         4 => To_Unbounded_String(Source => "{Aim for their engine "),
+--         5 => To_Unbounded_String(Source => "{Aim for their weapon "),
+--         6 => To_Unbounded_String(Source => "{Aim for their hull "));
+--      Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String :=
+--        Null_Unbounded_String;
+--      Have_Ammo: Boolean := True;
+--      Ammo_Amount, Ammo_Index, Row: Natural := 0;
+--      Rows: Natural;
+--      Damage_Percent: Float := 0.0;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Label: Ttk_Label;
+--      Progress_Bar: Ttk_ProgressBar;
+--      Combat_Canvas: Tk_Canvas;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Has_Gunner: Boolean := False;
+--      Faction: constant Faction_Record :=
+--        Get_Faction(Index => Player_Ship.Crew(1).Faction);
+--      function Get_Crew_List(Position: Natural) return String is
+--         Crew_List: Unbounded_String :=
+--           To_Unbounded_String(Source => "Nobody");
+--      begin
+--         Mark_Skills_Loop :
+--         for I in
+--           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+--            if Skills_Container.Length
+--                (Container => Player_Ship.Crew(I).Skills) >
+--              0 then
+--               Append
+--                 (Source => Crew_List,
+--                  New_Item =>
+--                    " {" & To_String(Source => Player_Ship.Crew(I).Name) &
+--                    Get_Skill_Marks
+--                      (Skill_Index =>
+--                         (if Position = 0 then Piloting_Skill
+--                          elsif Position = 1 then Engineering_Skill
+--                          else Gunnery_Skill),
+--                       Member_Index => I) &
+--                    "}");
+--            end if;
+--         end loop Mark_Skills_Loop;
+--         return To_String(Source => Crew_List);
+--      end Get_Crew_List;
+--      function Get_Gun_Speed
+--        (Position: Natural; Index: Positive) return String is
+--         Gun_Speed: Integer;
+--         Firerate: Unbounded_String := Null_Unbounded_String;
+--      begin
+--         Gun_Speed :=
+--           Get_Module
+--             (Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
+--             .Speed;
+--         case Index is
+--            when 1 =>
+--               Gun_Speed := 0;
+--            when 3 =>
+--               null;
+--            when others =>
+--               Gun_Speed :=
+--                 (if Gun_Speed > 0 then
+--                    Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
+--                  else Gun_Speed - 1);
+--         end case;
+--         --## rule off SIMPLIFIABLE_STATEMENTS
+--         if Gun_Speed > 0 then
+--            Firerate :=
+--              To_Unbounded_String
+--                (Source =>
+--                   "(" &
+--                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+--                   "/round)");
+--         elsif Gun_Speed < 0 then
+--            Firerate :=
+--              To_Unbounded_String
+--                (Source =>
+--                   "(1/" &
+--                   Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+--                   " rounds)");
+--         end if;
+--         --## rule on SIMPLIFIABLE_STATEMENTS
+--         return To_String(Source => Firerate);
+--      end Get_Gun_Speed;
+--   begin
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
+--         Script => "{InvokeButton " & Frame & ".maxmin}");
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 3) & ">",
+--         Script =>
+--           "{InvokeButton " & Main_Paned &
+--           ".combatframe.damage.canvas.frame.maxmin}");
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
+--         Script =>
+--           "{InvokeButton " & Main_Paned &
+--           ".combatframe.enemy.canvas.frame.maxmin}");
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 4) & ">",
+--         Script =>
+--           "{InvokeButton " & Main_Paned &
+--           ".combatframe.status.canvas.frame.maxmin}");
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list " & Get_Crew_List(Position => 0) & "]");
+--      Current
+--        (ComboBox => Combo_Box,
+--         NewIndex => Natural'Image(Find_Member(Order => PILOT)));
+--      Combo_Box.Name := New_String(Str => Frame & ".pilotorder");
+--      Current
+--        (ComboBox => Combo_Box,
+--         NewIndex => Integer'Image(Get_Pilot_Order - 1));
+--      if not Faction.Flags.Contains
+--          (Item => To_Unbounded_String(Source => "sentientships")) and
+--        Find_Member(Order => PILOT) = 0 then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
+--      end if;
+--      Combo_Box.Name := New_String(Str => Frame & ".engineercrew");
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list " & Get_Crew_List(Position => 1) & "]");
+--      Current
+--        (ComboBox => Combo_Box,
+--         NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
+--      Combo_Box.Name := New_String(Str => Frame & ".engineerorder");
+--      Current
+--        (ComboBox => Combo_Box,
+--         NewIndex => Natural'Image(Get_Engineer_Order - 1));
+--      if not Faction.Flags.Contains
+--          (Item => To_Unbounded_String(Source => "sentientships")) and
+--        Find_Member(Order => ENGINEER) = 0 then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
+--      end if;
+--      Create
+--        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+--         Separators => " ");
+--      Rows := Positive'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets(Start_Index => 4, End_Index => Rows - 1, Frame => Frame);
+--      Show_Guns_Info_Loop :
+--      for I in Guns.Iterate loop
+--         Have_Ammo := False;
+--         Has_Gunner := False;
+--         Check_Ammo_Block :
+--         declare
+--            A_Index: constant Natural :=
+--              (if Player_Ship.Modules(Guns(I)(1)).M_Type = GUN then
+--                 Player_Ship.Modules(Guns(I)(1)).Ammo_Index
+--               else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
+--         begin
+--            if A_Index in
+--                Inventory_Container.First_Index
+--                      (Container => Player_Ship.Cargo) ..
+--                      Inventory_Container.Last_Index
+--                        (Container => Player_Ship.Cargo)
+--              and then
+--                Get_Proto_Item
+--                  (Index =>
+--                     Inventory_Container.Element
+--                       (Container => Player_Ship.Cargo, Index => A_Index)
+--                       .Proto_Index)
+--                  .I_Type =
+--                Get_Ada_Item_Type
+--                  (Item_Index =>
+--                     Get_Module
+--                       (Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
+--                       .Value -
+--                     1) then
+--               Ammo_Amount :=
+--                 Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => A_Index)
+--                   .Amount;
+--               Have_Ammo := True;
+--            end if;
+--         end Check_Ammo_Block;
+--         if not Have_Ammo then
+--            Ammo_Amount := 0;
+--            Find_Ammo_Loop :
+--            for J in 1 .. Get_Proto_Amount loop
+--               if Get_Proto_Item(Index => J).I_Type =
+--                 Get_Ada_Item_Type
+--                   (Item_Index =>
+--                      Get_Module
+--                        (Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
+--                        .Value -
+--                      1) then
+--                  Ammo_Index :=
+--                    Find_Item
+--                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
+--                  if Ammo_Index > 0 then
+--                     Ammo_Amount :=
+--                       Ammo_Amount +
+--                       Inventory_Container.Element
+--                         (Container => Player_Ship.Cargo, Index => Ammo_Index)
+--                         .Amount;
+--                  end if;
+--               end if;
+--            end loop Find_Ammo_Loop;
+--         end if;
+--         Gun_Index :=
+--           To_Unbounded_String
+--             (Source =>
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Guns_Container.To_Index(Position => I)),
+--                   Side => Left));
+--         Label :=
+--           Create
+--             (pathName => Frame & ".gunlabel" & To_String(Source => Gun_Index),
+--              options =>
+--                "-text {" &
+--                To_String(Source => Player_Ship.Modules(Guns(I)(1)).Name) &
+--                ":" & LF & "(Ammo:" & Natural'Image(Ammo_Amount) & ")}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label,
+--            Options =>
+--              "-row" &
+--              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+--              " -padx {5 0}");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Frame & ".gunlabel" &
+--              To_String(Source => Gun_Index) & " $combatframe.crew.scrolly");
+--         Combo_Box :=
+--           Create
+--             (pathName => Frame & ".guncrew" & To_String(Source => Gun_Index),
+--              options =>
+--                "-values [list " & Get_Crew_List(Position => 2) &
+--                "] -width 10 -state readonly");
+--         if Player_Ship.Modules(Guns(I)(1)).Owner(1) = 0 then
+--            Current(ComboBox => Combo_Box, NewIndex => "0");
+--         else
+--            if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
+--                .Order =
+--              GUNNER then
+--               Current
+--                 (ComboBox => Combo_Box,
+--                  NewIndex =>
+--                    Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
+--               Has_Gunner := True;
+--            else
+--               Current(ComboBox => Combo_Box, NewIndex => "0");
+--            end if;
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Combo_Box,
+--            Options =>
+--              "-row" &
+--              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+--              " -column 1");
+--         Bind
+--           (Widgt => Combo_Box, Sequence => "<Return>",
+--            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
+--         Bind
+--           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+--            Script =>
+--              "{SetCombatPosition gunner " & To_String(Source => Gun_Index) &
+--              "}");
+--         Add
+--           (Widget => Combo_Box,
+--            Message =>
+--              "Select the crew member which will be the operate the gun during" &
+--              LF &
+--              "the combat. The sign + after name means that this crew member" &
+--              LF &
+--              "has gunnery skill, the sign ++ after name means that his/her" &
+--              LF & "gunnery skill is the best in the crew");
+--         Gunner_Orders := Null_Unbounded_String;
+--         Show_Gun_Orders_Loop :
+--         for J in Gunners_Orders'Range loop
+--            Append
+--              (Source => Gunner_Orders,
+--               New_Item =>
+--                 " " & Gunners_Orders(J) &
+--                 Get_Gun_Speed
+--                   (Position => Guns_Container.To_Index(Position => I),
+--                    Index => J) &
+--                 "}");
+--         end loop Show_Gun_Orders_Loop;
+--         Combo_Box :=
+--           Get_Widget
+--             (pathName =>
+--                Frame & ".gunorder" & To_String(Source => Gun_Index));
+--         if Winfo_Get(Widgt => Combo_Box, Info => "exists") = "0" then
+--            Combo_Box :=
+--              Create
+--                (pathName =>
+--                   Frame & ".gunorder" & To_String(Source => Gun_Index),
+--                 options =>
+--                   "-values [list" & To_String(Source => Gunner_Orders) &
+--                   "] -state readonly");
+--         end if;
+--         Current
+--           (ComboBox => Combo_Box, NewIndex => Natural'Image(Guns(I)(2) - 1));
+--         if Has_Gunner then
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Combo_Box,
+--               Options =>
+--                 "-row" &
+--                 Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+--                 " -column 2 -padx {0 5}");
+--         else
+--            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
+--         end if;
+--         Bind
+--           (Widgt => Combo_Box, Sequence => "<Return>",
+--            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
+--         Bind
+--           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+--            Script =>
+--              "{SetCombatOrder " & To_String(Source => Gun_Index) & "}");
+--         Add
+--           (Widget => Combo_Box,
+--            Message =>
+--              "Select the order for the gunner. Shooting in the selected" &
+--              LF & "part of enemy ship is less precise but always hit the" &
+--              LF & "selected part.");
+--      end loop Show_Guns_Info_Loop;
+--      -- Show boarding/defending info
+--      if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
+--        Get_Proto_Ship(Proto_Index => Enemy_Ship_Index).Crew.Length > 0 then
+--         Show_Boarding_Info_Block :
+--         declare
+--            Button: Ttk_Button :=
+--              Create
+--                (pathName => Frame & ".boarding",
+--                 options =>
+--                   "-text {Boarding party:} -command {SetCombatParty boarding}");
+--            Boarding_Party, Defenders: Unbounded_String :=
+--              Null_Unbounded_String;
+--            Label_Length: constant Positive :=
+--              Positive'Value
+--                (Winfo_Get
+--                   (Widgt =>
+--                      Ttk_Label'
+--                        (Get_Widget(pathName => Frame & ".engineercrew")),
+--                    Info => "reqwidth")) +
+--              Positive'Value
+--                (Winfo_Get
+--                   (Widgt =>
+--                      Ttk_Label'
+--                        (Get_Widget(pathName => Frame & ".engineerorder")),
+--                    Info => "reqwidth"));
+--         begin
+--            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
+--            Add
+--              (Widget => Button,
+--               Message =>
+--                 "Set your boarding party. If you join it, you will be able" &
+--                 LF &
+--                 "to give orders them, but not your gunners or engineer.");
+--            Button :=
+--              Create
+--                (pathName => Frame & ".defending",
+--                 options =>
+--                   "-text {Defenders:} -command {SetCombatParty defenders}");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Button, Options => "-sticky we -padx 5 -pady 5");
+--            Add
+--              (Widget => Button,
+--               Message =>
+--                 "Set your ship's defenders against the enemy party.");
+--            Set_Boarding_And_Defenders_Loop :
+--            for Member of Player_Ship.Crew loop
+--               case Member.Order is
+--                  when BOARDING =>
+--                     Append
+--                       (Source => Boarding_Party,
+--                        New_Item => To_String(Source => Member.Name) & ", ");
+--                  when DEFEND =>
+--                     Append
+--                       (Source => Defenders,
+--                        New_Item => To_String(Source => Member.Name) & ", ");
+--                  when others =>
+--                     null;
+--               end case;
+--            end loop Set_Boarding_And_Defenders_Loop;
+--            if Boarding_Party /= Null_Unbounded_String then
+--               Boarding_Party :=
+--                 Unbounded_Slice
+--                   (Source => Boarding_Party, Low => 1,
+--                    High => Length(Source => Boarding_Party) - 2);
+--            end if;
+--            Label := Get_Widget(pathName => Frame & ".boardparty");
+--            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
+--               Label :=
+--                 Create
+--                   (pathName => Frame & ".boardparty",
+--                    options =>
+--                      "-text {" & To_String(Source => Boarding_Party) &
+--                      "} -wraplength" & Positive'Image(Label_Length));
+--               Tcl.Tk.Ada.Grid.Grid
+--                 (Slave => Label,
+--                  Options =>
+--                    "-row" & Positive'Image(Natural(Guns.Length) + 4) &
+--                    " -column 1 -columnspan 2 -sticky w");
+--               Tcl_Eval
+--                 (interp => Get_Context,
+--                  strng =>
+--                    "SetScrollbarBindings " & Label &
+--                    " $combatframe.crew.scrolly");
+--            else
+--               configure
+--                 (Widgt => Label,
+--                  options =>
+--                    "-text {" & To_String(Source => Boarding_Party) & "}");
+--            end if;
+--            if Defenders /= Null_Unbounded_String then
+--               Defenders :=
+--                 Unbounded_Slice
+--                   (Source => Defenders, Low => 1,
+--                    High => Length(Source => Defenders) - 2);
+--            end if;
+--            Label := Get_Widget(pathName => Frame & ".defenders");
+--            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
+--               Label :=
+--                 Create
+--                   (pathName => Frame & ".defenders",
+--                    options =>
+--                      "-text {" & To_String(Source => Defenders) &
+--                      "} -wraplength" & Positive'Image(Label_Length));
+--               Tcl.Tk.Ada.Grid.Grid
+--                 (Slave => Label,
+--                  Options =>
+--                    "-row" & Positive'Image(Natural(Guns.Length) + 5) &
+--                    " -column 1 -columnspan 2 -sticky w");
+--               Tcl_Eval
+--                 (interp => Get_Context,
+--                  strng =>
+--                    "SetScrollbarBindings " & Label &
+--                    " $combatframe.crew.scrolly");
+--            else
+--               configure
+--                 (Widgt => Label,
+--                  options => "-text {" & To_String(Source => Defenders) & "}");
+--            end if;
+--         end Show_Boarding_Info_Block;
+--      end if;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas :=
+--        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      -- Show player ship damage info if needed
+--      Frame.Name :=
+--        New_String(Str => Main_Paned & ".combatframe.damage.canvas.frame");
+--      Create
+--        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets(Start_Index => 0, End_Index => Rows - 1, Frame => Frame);
+--      Row := 1;
+--      Add_Minimize_Button_Block :
+--      declare
+--         Button: constant Ttk_Button :=
+--           Create
+--             (pathName => Frame & ".maxmin",
+--              options =>
+--                "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
+--      begin
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button, Options => "-sticky w -padx 5 -row 0 -column 0");
+--         Add
+--           (Widget => Button,
+--            Message => "Maximize/minimize the ship status info");
+--      end Add_Minimize_Button_Block;
+--      Show_Player_Ship_Damage_Loop :
+--      for Module of Player_Ship.Modules loop
+--         Label :=
+--           Create
+--             (pathName =>
+--                Frame & ".lbl" &
+--                Trim(Source => Natural'Image(Row), Side => Left),
+--              options =>
+--                "-text {" & To_String(Source => Module.Name) & "}" &
+--                (if Module.Durability = 0 then
+--                   " -font OverstrikedFont -style Gray.TLabel"
+--                 else ""));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label,
+--            Options => "-row" & Natural'Image(Row) & " -sticky w -padx 5");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Label &
+--              " $combatframe.damage.scrolly");
+--         Damage_Percent :=
+--           Float(Module.Durability) / Float(Module.Max_Durability);
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".dmg" &
+--                Trim(Source => Natural'Image(Row), Side => Left),
+--              options =>
+--                "-orient horizontal -length 150 -maximum 1.0 -value" &
+--                Float'Image(Damage_Percent) &
+--                (if Damage_Percent = 1.0 then
+--                   " -style green.Horizontal.TProgressbar"
+--                 elsif Damage_Percent > 0.24 then
+--                   " -style yellow.Horizontal.TProgressbar"
+--                 else " -style Horizontal.TProgressbar"));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Bar,
+--            Options => "-row" & Natural'Image(Row) & " -column 1");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Progress_Bar &
+--              " $combatframe.damage.scrolly");
+--         Tcl.Tk.Ada.Grid.Column_Configure
+--           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
+--         Tcl.Tk.Ada.Grid.Row_Configure
+--           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
+--         Row := Row + 1;
+--      end loop Show_Player_Ship_Damage_Loop;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas :=
+--        Get_Widget(pathName => Main_Paned & ".combatframe.damage.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Append
+--        (Source => Enemy_Info,
+--         New_Item =>
+--           "Name: " & To_String(Source => Get_Enemy_Name) & LF & "Type: " &
+--           To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
+--           To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
+--           "Distance: " &
+--           (if Enemy.Distance >= 15_000 then "Escaped"
+--            elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
+--            elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
+--            elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
+--           LF & "Status: ");
+--      if Enemy.Distance < 15_000 then
+--         if Enemy.Ship.Modules(1).Durability = 0 then
+--            Append(Source => Enemy_Info, New_Item => "Destroyed");
+--         else
+--            Show_Enemy_Status_Block :
+--            declare
+--               Enemy_Status: Unbounded_String :=
+--                 To_Unbounded_String(Source => "Ok");
+--            begin
+--               Check_Enemy_Ship_Status_Loop :
+--               for Module of Enemy.Ship.Modules loop
+--                  if Module.Durability < Module.Max_Durability then
+--                     Enemy_Status := To_Unbounded_String(Source => "Damaged");
+--                     exit Check_Enemy_Ship_Status_Loop;
+--                  end if;
+--               end loop Check_Enemy_Ship_Status_Loop;
+--               Append(Source => Enemy_Info, New_Item => Enemy_Status);
+--            end Show_Enemy_Status_Block;
+--            Check_Enemy_Status_Loop :
+--            for Module of Enemy.Ship.Modules loop
+--               if Module.Durability > 0 then
+--                  case Get_Module(Index => Module.Proto_Index).M_Type is
+--                     when ARMOR =>
+--                        Append(Source => Enemy_Info, New_Item => " (armored)");
+--                     when GUN =>
+--                        Append(Source => Enemy_Info, New_Item => " (gun)");
+--                     when BATTERING_RAM =>
+--                        Append
+--                          (Source => Enemy_Info,
+--                           New_Item => " (battering ram)");
+--                     when HARPOON_GUN =>
+--                        Append
+--                          (Source => Enemy_Info, New_Item => " (harpoon gun)");
+--                     when others =>
+--                        null;
+--                  end case;
+--               end if;
+--            end loop Check_Enemy_Status_Loop;
+--         end if;
+--      else
+--         Append(Source => Enemy_Info, New_Item => "Unknown");
+--      end if;
+--      Append(Source => Enemy_Info, New_Item => LF & "Speed: ");
+--      if Enemy.Distance < 15_000 then
+--         case Enemy.Ship.Speed is
+--            when Ships.FULL_STOP =>
+--               Append(Source => Enemy_Info, New_Item => "Stopped");
+--            when QUARTER_SPEED =>
+--               Append(Source => Enemy_Info, New_Item => "Slow");
+--            when HALF_SPEED =>
+--               Append(Source => Enemy_Info, New_Item => "Medium");
+--            when FULL_SPEED =>
+--               Append(Source => Enemy_Info, New_Item => "Fast");
+--            when others =>
+--               null;
+--         end case;
+--         if Enemy.Ship.Speed /= Ships.FULL_STOP then
+--            Show_Enemy_Ship_Speed_Block :
+--            declare
+--               use Ships.Movement;
+--
+--               Speed_Diff: constant Integer :=
+--                 Real_Speed(Ship => Enemy.Ship) -
+--                 Real_Speed(Ship => Player_Ship);
+--            begin
+--               --## rule off SIMPLIFIABLE_STATEMENTS
+--               if Speed_Diff > 250 then
+--                  Append(Source => Enemy_Info, New_Item => " (much faster)");
+--               elsif Speed_Diff > 0 then
+--                  Append(Source => Enemy_Info, New_Item => " (faster)");
+--               elsif Speed_Diff = 0 then
+--                  Append(Source => Enemy_Info, New_Item => " (equal)");
+--               elsif Speed_Diff > -250 then
+--                  Append(Source => Enemy_Info, New_Item => " (slower)");
+--               else
+--                  Append(Source => Enemy_Info, New_Item => " (much slower)");
+--               end if;
+--               --## rule on SIMPLIFIABLE_STATEMENTS
+--            end Show_Enemy_Ship_Speed_Block;
+--         end if;
+--      else
+--         Append(Source => Enemy_Info, New_Item => "Unknown");
+--      end if;
+--      if Length(Source => Enemy.Ship.Description) > 0 then
+--         Append
+--           (Source => Enemy_Info,
+--            New_Item => LF & LF & To_String(Source => Enemy.Ship.Description));
+--      end if;
+--      Label :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".combatframe.enemy.canvas.frame.info");
+--      configure
+--        (Widgt => Label,
+--         options => "-text {" & To_String(Source => Enemy_Info) & "}");
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas :=
+--        Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Frame.Name :=
+--        New_String(Str => Main_Paned & ".combatframe.status.canvas.frame");
+--      Create
+--        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
+--      Row := 1;
+--      if Get_End_Combat then
+--         Enemy.Distance := 100;
+--      end if;
+--      Show_Enemy_Ship_Status_Loop :
+--      for I in Enemy.Ship.Modules.Iterate loop
+--         if Get_End_Combat then
+--            Enemy.Ship.Modules(I).Durability := 0;
+--         end if;
+--         Label :=
+--           Create
+--             (pathName =>
+--                Frame & ".lbl" &
+--                Trim(Source => Natural'Image(Row), Side => Left),
+--              options =>
+--                "-text {" &
+--                To_String
+--                  (Source =>
+--                     (if Enemy.Distance > 1_000 then
+--                        To_Unbounded_String
+--                          (Source =>
+--                             Get_Module_Type
+--                               (Module_Index =>
+--                                  Enemy.Ship.Modules(I).Proto_Index))
+--                      else To_Unbounded_String
+--                          (Source =>
+--                             To_String
+--                               (Source =>
+--                                  Get_Module
+--                                    (Index =>
+--                                       Enemy.Ship.Modules(I).Proto_Index)
+--                                    .Name)))) &
+--                "}" &
+--                (if Enemy.Ship.Modules(I).Durability = 0 then
+--                   " -font OverstrikedFont -style Gray.TLabel"
+--                 else ""));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label,
+--            Options =>
+--              "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Label &
+--              " $combatframe.status.scrolly");
+--         Damage_Percent :=
+--           Float(Enemy.Ship.Modules(I).Durability) /
+--           Float(Enemy.Ship.Modules(I).Max_Durability);
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".dmg" &
+--                Trim(Source => Natural'Image(Row), Side => Left),
+--              options =>
+--                "-orient horizontal -length 150 -maximum 1.0 -value" &
+--                Float'Image(Damage_Percent) &
+--                (if Damage_Percent = 1.0 then
+--                   " -style green.Horizontal.TProgressbar"
+--                 elsif Damage_Percent > 0.24 then
+--                   " -style yellow.Horizontal.TProgressbar"
+--                 else " -style Horizontal.TProgressbar"));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Bar,
+--            Options => "-row" & Natural'Image(Row) & " -column 1");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Progress_Bar &
+--              " $combatframe.status.scrolly");
+--         Tcl.Tk.Ada.Grid.Column_Configure
+--           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
+--         Tcl.Tk.Ada.Grid.Row_Configure
+--           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
+--         Row := Row + 1;
+--      end loop Show_Enemy_Ship_Status_Loop;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas :=
+--        Get_Widget(pathName => Main_Paned & ".combatframe.status.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Update_Messages;
+--   end Update_Combat_Ui;
 
    -- ****if* CUI/CUI.ShowCombatFrame
    -- FUNCTION
