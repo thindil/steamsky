@@ -20,7 +20,7 @@ import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
     shipmodules, shipsmovement, tk, types]
 import coreui, mapsui, utilsui2
 
-proc updateCombatMessages() =
+proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
   let messagesView = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
