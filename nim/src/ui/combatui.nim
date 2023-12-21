@@ -51,7 +51,7 @@ proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
         showMessage(getMessage(messageIndex = i + 1))
         if i < -1:
           tclEval(script = messagesView & " insert end {\n}")
-    tclEval(script = messagesView & " see")
+    tclEval(script = messagesView & " see end")
   else:
     for i in countdown(-1, loopStart):
       if getLastMessageIndex() + i + 1 < messagesStarts:
