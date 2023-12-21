@@ -21,6 +21,8 @@ import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
 import coreui, mapsui, utilsui2
 
 proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
+  ## Update the list of in-game messages in combat, delete old ones and show
+  ## the newest to the player
   let messagesView = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
