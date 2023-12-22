@@ -62,6 +62,8 @@ proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
+  ## Update the combat UI, remove the old elements and add new, depending
+  ## on the information to show
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       frame & ".maxmin}")
