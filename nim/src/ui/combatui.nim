@@ -61,7 +61,7 @@ proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc updateCombatUi() =
+proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       frame & ".maxmin}")
@@ -86,7 +86,12 @@ proc updateCombatUi() =
   tclEval(script = comboBox & " current " & $(findMember(order = pilot) + 1))
   comboBox = frame & ".pilotorder"
   tclEval(script = comboBox & " current " & $(pilotOrder - 1))
-  let faction = factionsList[playerShip.crew[0].faction]
+  let faction = try:
+      factionsList[playerShip.crew[0].faction]
+    except:
+      tclEval(script = "bgerror {Can't update combat UI, no faction: " &
+          playerShip.crew[0].faction & "}")
+      return
   if "sentientships" notin faction.flags and findMember(order = pilot) == -1:
     tclEval(script = "grid remove " & comboBox)
   else:
@@ -103,7 +108,10 @@ proc updateCombatUi() =
     tclEval(script = "grid " & comboBox)
   var
     tclResult = tclEval2(script = "grid size " & frame).split(" ")
-    rows: Positive = tclResult[1].parseInt()
+    rows: Positive = try:
+        tclResult[1].parseInt()
+      except:
+        1
   deleteWidgets(startIndex = 4, endIndex = rows - 1, frame = frame)
   var
     haveAmmo, hasGunner = false
@@ -135,20 +143,30 @@ proc updateCombatUi() =
     let aIndex = (if playerShip.modules[gun[1]].mType ==
         ModuleType2.gun: playerShip.modules[gun[
         1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
-    if aIndex in playerShip.cargo.low .. playerShip.cargo.high and itemsList[
-        playerShip.cargo[aIndex].protoIndex].itemType == itemsTypesList[modulesList[
-        playerShip.modules[gun[1]].protoIndex].value]:
-      ammoAmount = playerShip.cargo[aIndex].amount
-      haveAmmo = true
+    try:
+      if aIndex in playerShip.cargo.low .. playerShip.cargo.high and itemsList[
+          playerShip.cargo[aIndex].protoIndex].itemType == itemsTypesList[modulesList[
+          playerShip.modules[gun[1]].protoIndex].value]:
+        ammoAmount = playerShip.cargo[aIndex].amount
+        haveAmmo = true
+    except:
+      tclEval(script = "bgerror {Can't show the player's ship's gun settings. No proto item with index: " &
+          $playerShip.cargo[aIndex].protoIndex & "}")
+      return
     if not haveAmmo:
       ammoAmount = 0
       for itemIndex, item in itemsList:
-        if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
-            1]].protoIndex].value]:
-          let ammoIndex = findItem(inventory = playerShip.cargo,
-              protoIndex = itemIndex)
-          if ammoIndex > -1:
-            ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
+        try:
+          if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
+              1]].protoIndex].value]:
+            let ammoIndex = findItem(inventory = playerShip.cargo,
+                protoIndex = itemIndex)
+            if ammoIndex > -1:
+              ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
+        except:
+          tclEval(script = "bgerror {Can't show the gun's ammo information. No proto module with index: " &
+              $playerShip.modules[gun[1]].protoIndex & "}")
+          return
     let label = frame & ".gunlabel" & $gunIndex
     tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
         gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
@@ -174,8 +192,13 @@ proc updateCombatUi() =
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
     var gunnerOrders = ""
     for orderIndex, order in gunnersOrders:
-      gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
-          position = gunIndex, index = orderIndex) & "}"
+      try:
+        gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
+            position = gunIndex, index = orderIndex) & "}"
+      except:
+        tclEval(script = "bgerror {Can't show gunner's order. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     comboBox = frame & ".gunorder" & $(gunIndex + 1)
     if tclEval2(script = "winfo exists " & comboBox) == "0":
       tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
@@ -191,48 +214,53 @@ proc updateCombatUi() =
         " <<ComboboxSelected>> {SetCombatOrder " & $(gunIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
   # Show boarding/defending settings
-  if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and protoShipsList[
-      enemyShipIndex].crew.len > 0:
-    var button = frame & ".boarding"
-    tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
-    tclEval(script = "grid " & button & " -padx 5")
-    tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.\"")
-    button = frame & ".defending"
-    tclEval(script = "ttk::button " & button & " -text {Defenders:} -command {SetCombatParty defenders}")
-    tclEval(script = "grid " & button & " -sticky we -padx 5 -pady 5")
-    tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your ship's defenders against the enemy party.\"")
-    var boardingParty, defenders = ""
-    for member in playerShip.crew:
-      case member.order
-      of boarding:
-        boardingParty = boardingParty & member.name & ", "
-      of defend:
-        defenders = defenders & member.name & ", "
+  try:
+    if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
+        protoShipsList[enemyShipIndex].crew.len > 0:
+      var button = frame & ".boarding"
+      tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
+      tclEval(script = "grid " & button & " -padx 5")
+      tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.\"")
+      button = frame & ".defending"
+      tclEval(script = "ttk::button " & button & " -text {Defenders:} -command {SetCombatParty defenders}")
+      tclEval(script = "grid " & button & " -sticky we -padx 5 -pady 5")
+      tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your ship's defenders against the enemy party.\"")
+      var boardingParty, defenders = ""
+      for member in playerShip.crew:
+        case member.order
+        of boarding:
+          boardingParty = boardingParty & member.name & ", "
+        of defend:
+          defenders = defenders & member.name & ", "
+        else:
+          discard
+      if boardingParty.len > 0:
+        boardingParty = boardingParty[0 .. ^2]
+      var label = frame & ".boardparty"
+      let labelLength = tclEval2(script = "winfo reqwidth " & frame &
+            ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
+            frame & ".engineerorder").parseInt
+      if tclEval2(script = "winfo exists " & label) == "0":
+        tclEval(script = "ttk::label " & label & " -text {" & boardingParty &
+            "} -wraplength " & $labelLength)
+        tclEval(script = "grid " & label & " -row " & $(guns.len + 4) & " -column 1 -columnspan 2 -sticky w")
+        tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
       else:
-        discard
-    if boardingParty.len > 0:
-      boardingParty = boardingParty[0 .. ^2]
-    var label = frame & ".boardparty"
-    let labelLength = tclEval2(script = "winfo reqwidth " & frame &
-          ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
-          frame & ".engineerorder").parseInt
-    if tclEval2(script = "winfo exists " & label) == "0":
-      tclEval(script = "ttk::label " & label & " -text {" & boardingParty &
-          "} -wraplength " & $labelLength)
-      tclEval(script = "grid " & label & " -row " & $(guns.len + 4) & " -column 1 -columnspan 2 -sticky w")
-      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    else:
-      tclEval(script = label & " configure -text {" & boardingParty & "}")
-    if defenders.len > 0:
-      defenders = defenders[0 .. ^2]
-    label = frame & ".defenders"
-    if tclEval2(script = "winfo exists " & label) == "0":
-      tclEval(script = "ttk::label " & label & " -text {" & defenders &
-          "} -wraplength " & $labelLength)
-      tclEval(script = "grid " & label & " -row " & $(guns.len + 5) & " -column 1 -columnspan 2 -sticky w")
-      tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    else:
-      tclEval(script = label & " configure -text {" & defenders & "}")
+        tclEval(script = label & " configure -text {" & boardingParty & "}")
+      if defenders.len > 0:
+        defenders = defenders[0 .. ^2]
+      label = frame & ".defenders"
+      if tclEval2(script = "winfo exists " & label) == "0":
+        tclEval(script = "ttk::label " & label & " -text {" & defenders &
+            "} -wraplength " & $labelLength)
+        tclEval(script = "grid " & label & " -row " & $(guns.len + 5) & " -column 1 -columnspan 2 -sticky w")
+        tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
+      else:
+        tclEval(script = label & " configure -text {" & defenders & "}")
+  except:
+    tclEval(script = "bgerror {Can't show information about boarding party and defenders. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return
   tclEval(script = "update")
   var combatCanvas = mainPaned & ".combatframe.crew.canvas"
   tclEval(script = combatCanvas & " configure -scrollregion [list " &
@@ -297,17 +325,22 @@ proc updateCombatUi() =
       enemyInfo = enemyInfo & enemyStatus
     for module in game.enemy.ship.modules:
       if module.durability > 0:
-        case modulesList[module.protoIndex].mType
-        of armor:
-          enemyInfo = enemyInfo & " (armored)"
-        of gun:
-          enemyInfo = enemyInfo & " (gun)"
-        of batteringRam:
-          enemyInfo = enemyInfo & " (battering ram)"
-        of harpoonGun:
-          enemyInfo = enemyInfo & " (harpoon gun)"
-        else:
-          discard
+        try:
+          case modulesList[module.protoIndex].mType
+          of armor:
+            enemyInfo = enemyInfo & " (armored)"
+          of gun:
+            enemyInfo = enemyInfo & " (gun)"
+          of batteringRam:
+            enemyInfo = enemyInfo & " (battering ram)"
+          of harpoonGun:
+            enemyInfo = enemyInfo & " (harpoon gun)"
+          else:
+            discard
+        except:
+          tclEval(script = "bgerror {Can't show information about the enemy's ship. No proto module with index:" &
+              $module.protoIndex & "}")
+          return
   else:
     enemyInfo = enemyInfo & "Unknown"
   enemyInfo = enemyInfo & "\nSpeed: "
@@ -324,8 +357,12 @@ proc updateCombatUi() =
     else:
       discard
     if game.enemy.ship.speed != fullStop:
-      let speedDiff = realSpeed(ship = game.enemy.ship) - realSpeed(
-          ship = playerShip)
+      let speedDiff = try:
+          realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
+        except:
+          tclEval(script = "bgerror {Can't count the speed difference. Reason:" &
+              getCurrentExceptionMsg() & "}")
+          return
       if speedDiff > 250:
         enemyInfo = enemyInfo & " (much faster)"
       elif speedDiff > 0:
@@ -351,8 +388,13 @@ proc updateCombatUi() =
   # Show the enemy's ship damage info
   frame = mainPaned & ".combatframe.status.canvas.frame"
   tclResult = tclEval2(script = "grid size " & frame).split(" ")
-  rows = tclResult[1].parseInt()
-  deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+  try:
+    rows = tclResult[1].parseInt()
+    deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
+  except:
+    tclEval(script = "bgerror {Can't show the information about the enemy's ship's status. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return
   row = 1
   if endCombat:
     game.enemy.distance = 100
@@ -360,11 +402,15 @@ proc updateCombatUi() =
     if endCombat:
       module.durability = 0
     label = frame & ".lbl" & $row
-    tclEval(script = "ttk::label " & label & " -text {" & (
-        if game.enemy.distance > 1_000: getModuleType(
-        moduleIndex = module.protoIndex) else: modulesList[
-        module.protoIndex].name) & "}" & (if module.durability ==
-        0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
+    try:
+      tclEval(script = "ttk::label " & label & " -text {" & (
+          if game.enemy.distance > 1_000: getModuleType(
+          moduleIndex = module.protoIndex) else: modulesList[
+          module.protoIndex].name) & "}" & (if module.durability ==
+          0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
+    except:
+      tclEval(script = "bgerror {Can't create the label with enemy module info. Reason: " &
+          getCurrentExceptionMsg() & "}")
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
     let
