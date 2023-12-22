@@ -983,6 +983,7 @@ package body Ships.UI.Modules is
                  Create
                    (pathName => Module_Frame & ".ammoinfo",
                     options => "-wrap char -height 3 -width 15");
+               Ammo_Height: Integer;
             begin
                Add_Label
                  (Name => Module_Frame & ".ammolbl",
@@ -1109,21 +1110,21 @@ package body Ships.UI.Modules is
                      exit Find_Ammo_Loop;
                   end if;
                end loop Find_Ammo_Loop;
+               Ammo_Height :=
+                 Positive'Value
+                   (Count
+                      (TextWidget => Ammo_Text, Options => "-displaylines",
+                       Index1 => "0.0", Index2 => "end")) /
+                 Positive'Value
+                   (Metrics(Font => "InterfaceFont", Option => "-linespace")) -
+                 2;
+               if Ammo_Height < 1 then
+                  Ammo_Height := 1;
+               end if;
                configure
                  (Widgt => Ammo_Text,
                   options =>
-                    "-state disabled -height" &
-                    Positive'Image
-                      (Positive'Value
-                         (Count
-                            (TextWidget => Ammo_Text,
-                             Options => "-displaylines", Index1 => "0.0",
-                             Index2 => "end")) /
-                       Positive'Value
-                         (Metrics
-                            (Font => "InterfaceFont",
-                             Option => "-linespace")) -
-                       2));
+                    "-state disabled -height" & Positive'Image(Ammo_Height));
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Ammo_Text,
                   Options =>
