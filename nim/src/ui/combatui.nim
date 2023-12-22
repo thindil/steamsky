@@ -436,10 +436,32 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   updateCombatMessages()
 
+proc showCombatFrame(frameName: string) =
+  let
+    combatFrame = ".gameframe.paned.combatframe"
+    combatChildren = [".crew", ".damage", ".enemy", ".status", ".next"]
+    boardingChildren = [".left", ".right", ".next"]
+  var childFrame = tclEval2(script = "grid slaves " & combatFrame & " -row 0 -column 0")
+  if frameName == ".combat":
+    if childFrame == combatFrame & combatChildren[0]:
+      return
+    for child in boardingChildren:
+      tclEval(script = "grid remove " & child)
+    for child in combatChildren:
+      tclEval(script = "grid " & child)
+  else:
+    if childFrame == combatFrame & boardingChildren[0]:
+      return
+    for child in combatChildren:
+      tclEval(script = "grid remove " & child)
+    for child in boardingChildren:
+      tclEval(script = "grid " & child)
+
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   combatTurn()
   updateHeader()
+  let combatFrame = mainPaned & ".combatframe"
   if endCombat:
     for accel in generalAccelerators:
       tclEval(script = "bind . <" & accel & "> {}")
@@ -447,6 +469,9 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = closeButton & " -command {ShowSkyMap}")
     tclSetVar(varName = "gamestate", newValue = "general")
     tclEval(script = "grid " & closeButton & "-row 0 -column 1")
+    var frame = combatFrame & ".left"
+    if tclEval2(script = "winfo ismapped " & frame) == "1":
+      showCombatFrame(frameName = ".combat")
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
@@ -479,3 +504,6 @@ proc updateAdaCombatUi() {.raises: [], tags: [], exportc.} =
   except:
     echo getCurrentExceptionMsg()
     echo getStackTrace(getCurrentException())
+
+proc showAdaCombatFrame(frameName: cstring) {.raises: [], tags: [], exportc.} =
+  showCombatFrame($frameName)
