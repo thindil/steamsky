@@ -444,6 +444,9 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     for accel in generalAccelerators:
       tclEval(script = "bind . <" & accel & "> {}")
     updateCombatUi()
+    tclEval(script = closeButton & " -command {ShowSkyMap}")
+    tclSetVar(varName = "gamestate", newValue = "general")
+    tclEval(script = "grid " & closeButton & "-row 0 -column 1")
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
