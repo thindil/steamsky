@@ -436,7 +436,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   updateCombatMessages()
 
-proc showCombatFrame(frameName: string) =
+proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
   let
     combatFrame = ".gameframe.paned.combatframe"
     combatChildren = [".crew", ".damage", ".enemy", ".status", ".next"]
