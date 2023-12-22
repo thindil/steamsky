@@ -85,70 +85,12 @@ package body Combat.UI is
    -- SOURCE
    procedure Show_Combat_Frame(Frame_Name: String) is
       -- ****
---      Combat_Frame: constant Ttk_Frame :=
---        Get_Widget(pathName => ".gameframe.paned.combatframe");
---      Child_Frame: Ttk_Frame :=
---        Get_Widget
---          (pathName =>
---             Tcl.Tk.Ada.Grid.Grid_Slaves
---               (Master => Combat_Frame, Option => "-row 0 -column 0"));
---      Combat_Children: constant array(1 .. 5) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => ".crew"),
---         2 => To_Unbounded_String(Source => ".damage"),
---         3 => To_Unbounded_String(Source => ".enemy"),
---         4 => To_Unbounded_String(Source => ".status"),
---         5 => To_Unbounded_String(Source => ".next"));
---      Boarding_Children: constant array(1 .. 3) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => ".left"),
---         2 => To_Unbounded_String(Source => ".right"),
---         3 => To_Unbounded_String(Source => ".next"));
       procedure Show_Ada_Combat_Frame(F_Name: chars_ptr) with
          Import => True,
          Convention => C,
          External_Name => "showAdaCombatFrame";
    begin
       Show_Ada_Combat_Frame(F_Name => New_String(Str => Frame_Name));
---      if Frame_Name = ".combat" then
---         if Widget_Image(Win => Child_Frame) =
---           Combat_Frame & To_String(Source => Combat_Children(1)) then
---            return;
---         end if;
---         Hide_Boarding_UI_Loop :
---         for BoardingChild of Boarding_Children loop
---            Child_Frame :=
---              Get_Widget
---                (pathName =>
---                   Combat_Frame & To_String(Source => BoardingChild));
---            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Child_Frame);
---         end loop Hide_Boarding_UI_Loop;
---         Show_Combat_UI_Loop :
---         for CombatChild of Combat_Children loop
---            Child_Frame :=
---              Get_Widget
---                (pathName => Combat_Frame & To_String(Source => CombatChild));
---            Tcl.Tk.Ada.Grid.Grid(Slave => Child_Frame);
---         end loop Show_Combat_UI_Loop;
---      else
---         if Widget_Image(Win => Child_Frame) =
---           Combat_Frame & To_String(Source => Boarding_Children(1)) then
---            return;
---         end if;
---         Hide_Combat_UI_Loop :
---         for CombatChild of Combat_Children loop
---            Child_Frame :=
---              Get_Widget
---                (pathName => Combat_Frame & To_String(Source => CombatChild));
---            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Child_Frame);
---         end loop Hide_Combat_UI_Loop;
---         Show_Boarding_UI_Loop :
---         for BoardingChild of Boarding_Children loop
---            Child_Frame :=
---              Get_Widget
---                (pathName =>
---                   Combat_Frame & To_String(Source => BoardingChild));
---            Tcl.Tk.Ada.Grid.Grid(Slave => Child_Frame);
---         end loop Show_Boarding_UI_Loop;
---      end if;
    end Show_Combat_Frame;
 
    -- ****if* CUI/CUI.UpdateBoardingUI
