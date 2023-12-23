@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Coloring in-game messages in the combat screen
 - Crash when trying to show the player's ship's gun's info after assigning an
   ammo to it
+- Coloring messages outside the combat screen
 
 ## [9.4] - 2023-11-26
 
