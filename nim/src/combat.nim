@@ -24,7 +24,7 @@ import bases, crewinventory, config, game, game2, goals, events, log, maps,
 var
   enemyShipIndex*: Natural     ## The index of the enemy's ship's prototype
   factionName: string         ## The name of the enemy's faction (ship and its crew)
-  boardingOrders: seq[int]    ## The list of orders for the boarding party
+  boardingOrders*: seq[int]    ## The list of orders for the boarding party
   pilotOrder*: Natural = 0    ## The player's ship pilot order
   engineerOrder*: Natural     ## The player's ship engineer order
   endCombat*: bool = false     ## If true, the combat ends
