@@ -461,11 +461,15 @@ proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
     for child in boardingChildren:
       tclEval(script = "grid " & child)
 
+proc updateBoardingUi() =
+  discard
+
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   combatTurn()
   updateHeader()
   let combatFrame = mainPaned & ".combatframe"
+  var frame = combatFrame & ".crew"
   if endCombat:
     for accel in generalAccelerators:
       tclEval(script = "bind . <" & accel & "> {}")
@@ -473,9 +477,15 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = closeButton & " -command {ShowSkyMap}")
     tclSetVar(varName = "gamestate", newValue = "general")
     tclEval(script = "grid " & closeButton & "-row 0 -column 1")
-    var frame = combatFrame & ".left"
+    let frame = combatFrame & ".left"
     if tclEval2(script = "winfo ismapped " & frame) == "1":
       showCombatFrame(frameName = ".combat")
+    let nextButton = combatFrame & ".next"
+    tclEval(script = "grid remove " & nextButton)
+    return tclOk
+  if playerShip.crew[0].order == boarding and tclEval2(
+      script = "winfo ismapped " & frame) == "1":
+    updateBoardingUi()
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
