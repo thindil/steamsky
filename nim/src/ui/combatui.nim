@@ -499,6 +499,29 @@ proc updateBoardingUi() =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   ordersList.add(" {Back to the ship}")
   frame = frameName & ".left.canvas.frame"
+  tclResult = tclEval2(script = "grid size " & frame).split(" ")
+  rows = try:
+      tclResult[1].parseInt()
+    except:
+      1
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = frame)
+  var orderIndex = 1
+  for index, member in playerShip.crew:
+    if member.order != boarding:
+      continue
+    let button = frame & "name" & $(index + 1)
+    tclEval(script = "ttk::button " & button & " -text {" & member.name &
+        "} -command {ShowCombatInfo player " & $(index + 1) & "}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Show more information about the crew member.\"")
+    tclEval(script = "grid " & button & " -row " & $(index + 1) & " -padx {5 0}")
+    let progressBar = frame & "health" & $(index + 1)
+    tclEval(script = "ttk::progressbar " & progressBar & " -orient horizontal -value " & $member.health & " -length 150" & (if member.health > 74: " -style green.Horizontal.TProgressbar" elif member.health > 24: " -style yellow.Horizontal.TProgressbar" else: "-style Horizontal.TProgressbar"))
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"The crew member health\"")
+    tclEval(script = "grid " & progressBar & " -column 1 -row " & $(index + 1) & " -padx 5")
+    tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.left.scrolly")
+    let comboBox = frame & ".order" & $(index + 1)
+    tclEval(script = "ttk::combobox " & comboBox & " -values [list " & ordersList & "] -state readonly -width 15")
+    tclEval(script = comboBox & " current " & $boardingOrders[orderIndex])
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
