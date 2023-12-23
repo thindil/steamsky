@@ -983,7 +983,7 @@ package body Ships.UI.Modules is
                  Create
                    (pathName => Module_Frame & ".ammoinfo",
                     options => "-wrap char -height 3 -width 15");
-               Ammo_Height: Integer;
+               Ammo_Height: Integer := 1;
             begin
                Add_Label
                  (Name => Module_Frame & ".ammolbl",
