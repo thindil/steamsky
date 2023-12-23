@@ -437,6 +437,10 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   updateCombatMessages()
 
 proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
+  ## Switch between ship to ship combat and boarding UI. Hide the old UI
+  ## elements and show the new
+  ##
+  ## * frameName - the name of the UI's frame to show
   let
     combatFrame = ".gameframe.paned.combatframe"
     combatChildren = [".crew", ".damage", ".enemy", ".status", ".next"]
