@@ -462,7 +462,26 @@ proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
       tclEval(script = "grid " & child)
 
 proc updateBoardingUi() =
-  discard
+  let frameName = mainPaned & ".combatframe"
+  var frame = frameName & ".right.canvas.frame"
+  tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
+      frame & ".maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton .left.canvas.frame.maxmin}")
+  var
+    tclResult = tclEval2(script = "grid size " & frame).split(" ")
+    rows: Positive = try:
+        tclResult[1].parseInt()
+      except:
+        1
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = frame)
+  var ordersList = ""
+  for index, member in game.enemy.ship.crew:
+    ordersList.add("{Attack " & member.name & "} ")
+    let button = frame & "name" & $(index + 1)
+    tclEval(script = "ttk::button " & button & " -text {" & member.name &
+        "} -command {ShowCombatInfo enemy " & $(index + 1) & "}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Show more information about the enemy's crew member.\"")
+    tclEval(script = "grid " & button & " -row " & $(index + 1) & " -padx {5 0}")
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
