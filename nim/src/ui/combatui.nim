@@ -482,6 +482,23 @@ proc updateBoardingUi() =
         "} -command {ShowCombatInfo enemy " & $(index + 1) & "}")
     tclEval(script = "tooltip::tooltip " & button & " \"Show more information about the enemy's crew member.\"")
     tclEval(script = "grid " & button & " -row " & $(index + 1) & " -padx {5 0}")
+    let progressBar = frame & "health" & $(index + 1)
+    tclEval(script = "ttk::progressbar " & progressBar & " -orient horizontal -value " & $member.health & " -length 150" & (if member.health > 74: " -style green.Horizontal.TProgressbar" elif member.health > 24: " -style yellow.Horizontal.TProgressbar" else: "-style Horizontal.TProgressbar"))
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"Enemy's health\"")
+    tclEval(script = "grid " & progressBar & " -column 1 -row " & $(index + 1) & " -padx 5")
+    tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.right.scrolly")
+    let label = frame & ".order" & $(index + 1)
+    tclEval(script = "ttk::label " & label & " -text {" & ($member.order).capitalizeAscii & "}")
+    tclEval(script = "tooltip::tooltip " & label & " \"Enemy's current order.\"")
+    tclEval(script = "SetScrollbarBindings " & label & " $combatframe.right.scrolly")
+  tclEval(script = "update")
+  let combatCanvas = frameName & ".right.canvas"
+  tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(
+      script = combatCanvas & " bbox all") & "]")
+  tclEval(script = combatCanvas & " xview moveto 0.0")
+  tclEval(script = combatCanvas & " yview moveto 0.0")
+  ordersList.add(" {Back to the ship}")
+  frame = frameName & ".left.canvas.frame"
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
