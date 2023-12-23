@@ -78,7 +78,7 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
     loopStart = -10
 
   proc showMessage(message: MessageData) =
-    let tagNames = ["yellow", "green", "red", "blue", "cyan"]
+    let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.color == white:
       tclEval(script = messagesView & " insert end {" & message.message & "}")
     else:
