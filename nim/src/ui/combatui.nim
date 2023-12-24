@@ -477,12 +477,12 @@ proc updateBoardingUi() =
   var ordersList = ""
   for index, member in game.enemy.ship.crew:
     ordersList.add("{Attack " & member.name & "} ")
-    let button = frame & "name" & $(index + 1)
+    let button = frame & ".name" & $(index + 1)
     tclEval(script = "ttk::button " & button & " -text {" & member.name &
         "} -command {ShowCombatInfo enemy " & $(index + 1) & "}")
     tclEval(script = "tooltip::tooltip " & button & " \"Show more information about the enemy's crew member.\"")
     tclEval(script = "grid " & button & " -row " & $(index + 1) & " -padx {5 0}")
-    let progressBar = frame & "health" & $(index + 1)
+    let progressBar = frame & ".health" & $(index + 1)
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -value " & $member.health & " -length 150" & (
         if member.health >
@@ -515,12 +515,12 @@ proc updateBoardingUi() =
   for index, member in playerShip.crew:
     if member.order != boarding:
       continue
-    let button = frame & "name" & $(index + 1)
+    let button = frame & ".name" & $(index + 1)
     tclEval(script = "ttk::button " & button & " -text {" & member.name &
         "} -command {ShowCombatInfo player " & $(index + 1) & "}")
     tclEval(script = "tooltip::tooltip " & button & " \"Show more information about the crew member.\"")
     tclEval(script = "grid " & button & " -row " & $(index + 1) & " -padx {5 0}")
-    let progressBar = frame & "health" & $(index + 1)
+    let progressBar = frame & ".health" & $(index + 1)
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -value " & $member.health & " -length 150" & (
         if member.health >
