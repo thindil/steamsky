@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.5] - 2023-12-24
 
 ### Added
 - Colored version of icon for edit the player's ship's, crew members or ship's
