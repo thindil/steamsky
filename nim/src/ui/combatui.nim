@@ -450,16 +450,16 @@ proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
     if childFrame == combatFrame & combatChildren[0]:
       return
     for child in boardingChildren:
-      tclEval(script = "grid remove " & child)
+      tclEval(script = "grid remove " & combatFrame & child)
     for child in combatChildren:
-      tclEval(script = "grid " & child)
+      tclEval(script = "grid " & combatFrame & child)
   else:
     if childFrame == combatFrame & boardingChildren[0]:
       return
     for child in combatChildren:
-      tclEval(script = "grid remove " & child)
+      tclEval(script = "grid remove " & combatFrame & child)
     for child in boardingChildren:
-      tclEval(script = "grid " & child)
+      tclEval(script = "grid " & combatFrame & child)
 
 proc updateBoardingUi() =
   let frameName = mainPaned & ".combatframe"
