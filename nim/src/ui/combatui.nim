@@ -461,7 +461,7 @@ proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
     for child in boardingChildren:
       tclEval(script = "grid " & combatFrame & child)
 
-proc updateBoardingUi() =
+proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
   let frameName = mainPaned & ".combatframe"
   var frame = frameName & ".right.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
