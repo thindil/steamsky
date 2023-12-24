@@ -13,14 +13,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
+-- with Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -36,8 +36,8 @@ with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
@@ -97,241 +97,244 @@ package body Combat.UI is
    -- FUNCTION
    -- Update information about boarding party: remove old UI and create new elements
    -- SOURCE
-   procedure Update_Boarding_Ui is
+   procedure Update_Boarding_Ui with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaBoardingUi";
       -- ****
-      use GNAT.String_Split;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-      use Ada.Characters.Handling;
-      use Tiny_String;
-
-      Orders_List, Order_Name: Unbounded_String := Null_Unbounded_String;
-      Frame_Name: constant String := Main_Paned & ".combatframe";
-      Frame: Ttk_Frame :=
-        Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
-      Tokens: Slice_Set;
-      Rows: Natural;
-      Order_Index: Positive := 1;
-      --## rule off IMPROPER_INITIALIZATION
-      Progress_Bar: Ttk_ProgressBar;
-      Label: Ttk_Label;
-      Combo_Box: Ttk_ComboBox;
-      Combat_Canvas: Tk_Canvas;
-      Button: Ttk_Button;
-      --## rule on IMPROPER_INITIALIZATION
-   begin
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
-         Script => "{InvokeButton " & Frame & ".maxmin}");
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
-         Script =>
-           "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
-      Create
-        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
-      Show_Enemy_Crew_Loop :
-      for I in Enemy.Ship.Crew.Iterate loop
-         Append
-           (Source => Orders_List,
-            New_Item =>
-              "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) &
-              "} ");
-         Button :=
-           Create
-             (pathName =>
-                Frame & ".name" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-text {" & To_String(Source => Enemy.Ship.Crew(I).Name) &
-                "} -command {ShowCombatInfo enemy" &
-                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
-         Add
-           (Widget => Button,
-            Message => "Show more information about the enemy's crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx {5 0}");
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".health" &
-                Trim
-                  (Source =>
-                     Natural'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-orient horizontal -value " &
-                Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
-                (if Enemy.Ship.Crew(I).Health > 74 then
-                   " -style green.Horizontal.TProgressbar"
-                 elsif Enemy.Ship.Crew(I).Health > 24 then
-                   " -style yellow.Horizontal.TProgressbar"
-                 else " -style Horizontal.TProgressbar"));
-         Add(Widget => Progress_Bar, Message => "Enemy's health");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar,
-            Options =>
-              "-column 1 -row" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx 5");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Progress_Bar &
-              " $combatframe.right.scrolly");
-         Order_Name :=
-           To_Unbounded_String
-             (Source => Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
-         Replace_Slice
-           (Source => Order_Name, Low => 2,
-            High => Length(Source => Order_Name),
-            By =>
-              To_Lower
-                (Item =>
-                   Slice
-                     (Source => Order_Name, Low => 2,
-                      High => Length(Source => Order_Name))));
-         Label :=
-           Create
-             (pathName =>
-                Frame & ".order" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options => "-text {" & To_String(Source => Order_Name) & "}");
-         Add(Widget => Label, Message => "Enemy's current order.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label,
-            Options =>
-              "-column 2 -row" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx {0 5}");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
-      end loop Show_Enemy_Crew_Loop;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".right.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Append(Source => Orders_List, New_Item => " {Back to the ship}");
-      Frame.Name := New_String(Str => Frame_Name & ".left.canvas.frame");
-      Create
-        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
-      Show_Boarding_Party_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order /= BOARDING then
-            goto End_Of_Loop;
-         end if;
-         Button :=
-           Create
-             (pathName =>
-                Frame & ".name" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
-                "} -command {ShowCombatInfo player" &
-                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
-         Add
-           (Widget => Button,
-            Message => "Show more information about the crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx {5 0}");
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".health" &
-                Trim
-                  (Source =>
-                     Natural'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-orient horizontal -value " &
-                Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
-                (if Player_Ship.Crew(I).Health > 74 then
-                   " -style green.Horizontal.TProgressbar"
-                 elsif Player_Ship.Crew(I).Health > 24 then
-                   " -style yellow.Horizontal.TProgressbar"
-                 else " -style Horizontal.TProgressbar"));
-         Add(Widget => Progress_Bar, Message => "The crew member health.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Bar,
-            Options =>
-              "-column 1 -row" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx 5");
-         Tcl_Eval
-           (interp => Get_Context,
-            strng =>
-              "SetScrollbarBindings " & Progress_Bar &
-              " $combatframe.left.scrolly");
-         Combo_Box :=
-           Create
-             (pathName =>
-                Frame & ".order" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-values [list " & To_String(Source => Orders_List) &
-                "] -state readonly -width 15");
-         Current
-           (ComboBox => Combo_Box,
-            NewIndex => Natural'Image(Boarding_Orders(Order_Index)));
-         Bind
-           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
-            Script =>
-              "{SetBoardingOrder" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              Positive'Image(Order_Index) & "}");
-         Add(Widget => Combo_Box, Message => "The crew member current order.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Combo_Box,
-            Options =>
-              "-column 2 -row" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              " -padx {0 5}");
-         Order_Index := Order_Index + 1;
-         <<End_Of_Loop>>
-      end loop Show_Boarding_Party_Loop;
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".left.canvas");
-      configure
-        (Widgt => Combat_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Update_Messages;
-   end Update_Boarding_Ui;
+--      use GNAT.String_Split;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+--      use Ada.Characters.Handling;
+--      use Tiny_String;
+--
+--      Orders_List, Order_Name: Unbounded_String := Null_Unbounded_String;
+--      Frame_Name: constant String := Main_Paned & ".combatframe";
+--      Frame: Ttk_Frame :=
+--        Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
+--      Tokens: Slice_Set;
+--      Rows: Natural;
+--      Order_Index: Positive := 1;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Progress_Bar: Ttk_ProgressBar;
+--      Label: Ttk_Label;
+--      Combo_Box: Ttk_ComboBox;
+--      Combat_Canvas: Tk_Canvas;
+--      Button: Ttk_Button;
+--      --## rule on IMPROPER_INITIALIZATION
+--   begin
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 1) & ">",
+--         Script => "{InvokeButton " & Frame & ".maxmin}");
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence => "<" & Get_General_Accelerator(Index => 2) & ">",
+--         Script =>
+--           "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
+--      Create
+--        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
+--      Show_Enemy_Crew_Loop :
+--      for I in Enemy.Ship.Crew.Iterate loop
+--         Append
+--           (Source => Orders_List,
+--            New_Item =>
+--              "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) &
+--              "} ");
+--         Button :=
+--           Create
+--             (pathName =>
+--                Frame & ".name" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-text {" & To_String(Source => Enemy.Ship.Crew(I).Name) &
+--                "} -command {ShowCombatInfo enemy" &
+--                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+--         Add
+--           (Widget => Button,
+--            Message => "Show more information about the enemy's crew member.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button,
+--            Options =>
+--              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx {5 0}");
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".health" &
+--                Trim
+--                  (Source =>
+--                     Natural'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-orient horizontal -value " &
+--                Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
+--                (if Enemy.Ship.Crew(I).Health > 74 then
+--                   " -style green.Horizontal.TProgressbar"
+--                 elsif Enemy.Ship.Crew(I).Health > 24 then
+--                   " -style yellow.Horizontal.TProgressbar"
+--                 else " -style Horizontal.TProgressbar"));
+--         Add(Widget => Progress_Bar, Message => "Enemy's health");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Bar,
+--            Options =>
+--              "-column 1 -row" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx 5");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Progress_Bar &
+--              " $combatframe.right.scrolly");
+--         Order_Name :=
+--           To_Unbounded_String
+--             (Source => Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+--         Replace_Slice
+--           (Source => Order_Name, Low => 2,
+--            High => Length(Source => Order_Name),
+--            By =>
+--              To_Lower
+--                (Item =>
+--                   Slice
+--                     (Source => Order_Name, Low => 2,
+--                      High => Length(Source => Order_Name))));
+--         Label :=
+--           Create
+--             (pathName =>
+--                Frame & ".order" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options => "-text {" & To_String(Source => Order_Name) & "}");
+--         Add(Widget => Label, Message => "Enemy's current order.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label,
+--            Options =>
+--              "-column 2 -row" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx {0 5}");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
+--      end loop Show_Enemy_Crew_Loop;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".right.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Append(Source => Orders_List, New_Item => " {Back to the ship}");
+--      Frame.Name := New_String(Str => Frame_Name & ".left.canvas.frame");
+--      Create
+--        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
+--      Show_Boarding_Party_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         if Player_Ship.Crew(I).Order /= BOARDING then
+--            goto End_Of_Loop;
+--         end if;
+--         Button :=
+--           Create
+--             (pathName =>
+--                Frame & ".name" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
+--                "} -command {ShowCombatInfo player" &
+--                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+--         Add
+--           (Widget => Button,
+--            Message => "Show more information about the crew member.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button,
+--            Options =>
+--              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx {5 0}");
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".health" &
+--                Trim
+--                  (Source =>
+--                     Natural'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-orient horizontal -value " &
+--                Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
+--                (if Player_Ship.Crew(I).Health > 74 then
+--                   " -style green.Horizontal.TProgressbar"
+--                 elsif Player_Ship.Crew(I).Health > 24 then
+--                   " -style yellow.Horizontal.TProgressbar"
+--                 else " -style Horizontal.TProgressbar"));
+--         Add(Widget => Progress_Bar, Message => "The crew member health.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Bar,
+--            Options =>
+--              "-column 1 -row" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx 5");
+--         Tcl_Eval
+--           (interp => Get_Context,
+--            strng =>
+--              "SetScrollbarBindings " & Progress_Bar &
+--              " $combatframe.left.scrolly");
+--         Combo_Box :=
+--           Create
+--             (pathName =>
+--                Frame & ".order" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-values [list " & To_String(Source => Orders_List) &
+--                "] -state readonly -width 15");
+--         Current
+--           (ComboBox => Combo_Box,
+--            NewIndex => Natural'Image(Boarding_Orders(Order_Index)));
+--         Bind
+--           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+--            Script =>
+--              "{SetBoardingOrder" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              Positive'Image(Order_Index) & "}");
+--         Add(Widget => Combo_Box, Message => "The crew member current order.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Combo_Box,
+--            Options =>
+--              "-column 2 -row" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              " -padx {0 5}");
+--         Order_Index := Order_Index + 1;
+--         <<End_Of_Loop>>
+--      end loop Show_Boarding_Party_Loop;
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".left.canvas");
+--      configure
+--        (Widgt => Combat_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+--      Update_Messages;
+--   end Update_Boarding_Ui;
 
    -- ****if* CUI/CUI.Next_Turn_Command
    -- FUNCTION
