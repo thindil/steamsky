@@ -462,6 +462,8 @@ proc showCombatFrame(frameName: string) {.sideEffect, raises: [], tags: [].} =
       tclEval(script = "grid " & combatFrame & child)
 
 proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
+  ## Update the boarding combat UI, remove the old elements and add new,
+  ## depending on the information to show
   let frameName = mainPaned & ".combatframe"
   var frame = frameName & ".right.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
