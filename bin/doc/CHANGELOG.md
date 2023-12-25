@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Reading the player's ship's crew members' equipment from saved games
+
 ## [9.5] - 2023-12-24
 
 ### Added
