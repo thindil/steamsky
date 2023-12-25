@@ -550,8 +550,14 @@ proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
   updateCombatMessages()
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  combatTurn()
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].} =
+  try:
+    combatTurn()
+  except:
+    tclEval(script = "bgerror {Can't make next turn in combat, reason: " &
+        getCurrentExceptionMsg() & "}")
+    return
   updateHeader()
   let combatFrame = mainPaned & ".combatframe"
   var frame = combatFrame & ".crew"
