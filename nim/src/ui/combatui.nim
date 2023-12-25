@@ -601,7 +601,14 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     updateBoardingUi()
   return tclOk
 
-proc showCombatUi*(newCombat: bool = true) =
+proc showCombatUi*(newCombat: bool = true)
+
+proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  showCombatUi(newCombat = false)
+  return tclOk
+
+proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
   let combatFrame = mainPaned & ".combatframe"
@@ -619,6 +626,7 @@ proc showCombatUi*(newCombat: bool = true) =
         pilotOrder = 2
         engineerOrder = 3
         addCommand("NextTurn", nextTurnCommand)
+        addCommand("ShowCombatUI", showCombatUiCommand)
 
 # Temporary code for interfacing with Ada
 
