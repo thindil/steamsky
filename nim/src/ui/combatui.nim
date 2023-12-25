@@ -571,6 +571,17 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
   if playerShip.crew[0].order == boarding and tclEval2(
       script = "winfo ismapped " & frame) == "1":
     updateBoardingUi()
+    showCombatFrame(frameName = ".boarding")
+    return tclOk
+  if playerShip.crew[0].order != boarding and tclEval2(
+      script = "winfo ismapped " & frame) == "0":
+    updateCombatUi()
+    showCombatFrame(frameName = ".combat")
+    return tclOk
+  if tclEval2(script = "winfo ismapped " & frame) == "1":
+    updateCombatUi()
+  else:
+    updateBoardingUi()
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) =
