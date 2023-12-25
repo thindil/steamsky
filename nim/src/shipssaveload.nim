@@ -498,6 +498,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
     for item in crew.findAll("equipment"):
       member.equipment[(equipmentIndex - 1).EquipmentLocations] = item.attr(
           "index").parseInt - 1
+      equipmentIndex.inc
     member.homeBase = (if crew.attr("homebase").len > 0: crew.attr(
         "homebase").parseInt else: playerShip.homeBase)
     member.faction = (if crew.attr("faction").len > 0: crew.attr(
