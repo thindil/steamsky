@@ -604,8 +604,12 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showCombatUi*(newCombat: bool = true)
 
 proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  showCombatUi(newCombat = false)
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  try:
+    showCombatUi(newCombat = false)
+  except:
+    tclEval(script = "bgerror {Can't show the combat UI. Reason: " &
+        getCurrentExceptionMsg() & "}")
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
