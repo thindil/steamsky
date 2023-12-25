@@ -26,9 +26,8 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -37,7 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -45,23 +44,13 @@ with Events;
 with Factions;
 with Items;
 with Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with Messages; use Messages;
 with ShipModules;
 with Ships.Crew; use Ships.Crew;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Combat.UI is
-
-   -- ****if* CUI/CUI.Update_Messages
-   -- FUNCTION
-   -- Update in-game messages in combat
-   -- SOURCE
-   procedure Update_Messages with
-      Import => True,
-      Convention => C,
-      External_Name => "updateCombatAdaMessages";
-      -- ****
 
    -- ****if* CUI/CUI.Update_Combat_Ui
    -- FUNCTION
@@ -122,6 +111,9 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Maps.UI;
+
       Combat_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe", Interp => Interp);
       Frame: Ttk_Frame :=
@@ -243,6 +235,10 @@ package body Combat.UI is
         Main_Paned & ".combatframe.crew.canvas.frame";
       Faction: constant Faction_Record :=
         Get_Faction(Index => Player_Ship.Crew(1).Faction);
+      procedure Update_Messages with
+         Import => True,
+         Convention => C,
+         External_Name => "updateCombatAdaMessages";
    begin
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
@@ -385,9 +381,11 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use Tcl.Tklib.Ada.Autoscroll;
+      use Tcl.Tklib.Ada.Tooltip;
       use Tiny_String;
 
       Crew_Dialog: constant Ttk_Frame :=
@@ -929,6 +927,7 @@ package body Combat.UI is
       use GNAT.Directory_Operations;
       use Events;
       use Maps;
+      use Utils.UI;
       use Tiny_String;
 
       Combat_Frame: constant Ttk_Frame :=
