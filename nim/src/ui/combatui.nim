@@ -708,12 +708,21 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     comboBox = mainPaned & ".combatframe.left.canvas.frame.order" & $argv[1]
-    newOrder = tclEval2(script = comboBox & " current").parseInt + 1
-  boardingOrders[($argv[2]).parseInt] = if newOrder >
-      game.enemy.ship.crew.len: -1 else: newOrder
+    newOrder = try:
+        tclEval2(script = comboBox & " current").parseInt + 1
+      except:
+        tclEval(script = "bgerror {Can't get the boarding order for a crew member. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+  try:
+    boardingOrders[($argv[2]).parseInt] = if newOrder >
+        game.enemy.ship.crew.len: -1 else: newOrder
+  except:
+    tclEval(script = "bgerror {Can't set the boarding order for a crew member. Reason: " &
+        getCurrentExceptionMsg() & "}")
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
