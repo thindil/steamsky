@@ -624,13 +624,23 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     frameName = mainPaned & ".combatframe.crew.canvas.frame"
-    faction = factionsList[playerShip.crew[0].faction]
+    faction = try:
+        factionsList[playerShip.crew[0].faction]
+      except:
+        tclEval(script = "bgerror {Can't get the player's faction. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if argv[1] == "pilot":
     let comboBox = frameName & ".pilotorder"
-    pilotOrder = tclEval2(script = comboBox & " current").parseInt + 1
+    pilotOrder = try:
+        tclEval2(script = comboBox & " current").parseInt + 1
+      except:
+        tclEval(script = "bgerror {Can't get the pilot's order. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     if "sentientships" in faction.flags:
       addMessage(message = "Order for ship was set on: " & tclEval2(
           script = comboBox & " get"), mType = combatMessage)
@@ -640,7 +650,12 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
           " get"), mType = combatMessage)
   elif argv[1] == "engineer":
     let comboBox = frameName & ".engineerorder"
-    engineerOrder = tclEval2(script = comboBox & " current").parseInt + 1
+    engineerOrder = try:
+        tclEval2(script = comboBox & " current").parseInt + 1
+      except:
+        tclEval(script = "bgerror {Can't get the engineer's order. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     if "sentientships" in faction.flags:
       addMessage(message = "Order for ship was set on: " & tclEval2(
           script = comboBox & " get"), mType = combatMessage)
@@ -652,11 +667,26 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     let
       comboBox = frameName & ".gunorder" & $argv[1]
-      gunIndex = ($argv[1]).parseInt - 1
-    guns[gunIndex][2] = tclEval2(script = comboBox & " current").parseInt + 1
+      gunIndex = try:
+          ($argv[1]).parseInt - 1
+        except:
+          tclEval(script = "bgerror {Can't get the gun's index. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
+    guns[gunIndex][2] = try:
+        tclEval2(script = comboBox & " current").parseInt + 1
+      except:
+        tclEval(script = "bgerror {Can't set the gunners's order. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     guns[gunIndex][3] = (if tclEval2(script = comboBox & " current") ==
-        "0": 0 else: modulesList[playerShip.modules[guns[gunIndex][
-        1]].protoIndex].speed)
+      "0": 0 else:
+        try:
+          modulesList[playerShip.modules[guns[gunIndex][1]].protoIndex].speed
+        except:
+          tclEval(script = "bgerror {Can't set the gunners's shooting order. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk)
     addMessage(message = "Order for " & playerShip.crew[playerShip.modules[guns[
         gunIndex][1]].owner[0]].name & " was set on: " & tclEval2(
         script = comboBox &
