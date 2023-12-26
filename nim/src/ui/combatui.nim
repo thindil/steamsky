@@ -657,6 +657,11 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     guns[gunIndex][3] = (if tclEval2(script = comboBox & " current") ==
         "0": 0 else: modulesList[playerShip.modules[guns[gunIndex][
         1]].protoIndex].speed)
+    addMessage(message = "Order for " & playerShip.crew[playerShip.modules[guns[
+        gunIndex][1]].owner[0]].name & " was set on: " & tclEval2(
+        script = comboBox &
+        " get"), mType = combatMessage)
+  updateCombatMessages()
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
