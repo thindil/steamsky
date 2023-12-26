@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Reading the player's ship's crew members' equipment from saved games
+- Crash when trying to show information about the boarding party's combat
 
 ## [9.5] - 2023-12-24
 
