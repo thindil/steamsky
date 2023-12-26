@@ -489,7 +489,7 @@ proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
         " -orient horizontal -value " & $member.health & " -length 150" & (
         if member.health >
         74: " -style green.Horizontal.TProgressbar" elif member.health >
-        24: " -style yellow.Horizontal.TProgressbar" else: "-style Horizontal.TProgressbar"))
+        24: " -style yellow.Horizontal.TProgressbar" else: " -style Horizontal.TProgressbar"))
     tclEval(script = "tooltip::tooltip " & progressBar & " \"Enemy's health\"")
     tclEval(script = "grid " & progressBar & " -column 1 -row " & $(index + 1) & " -padx 5")
     tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.right.scrolly")
@@ -527,7 +527,7 @@ proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
         " -orient horizontal -value " & $member.health & " -length 150" & (
         if member.health >
         74: " -style green.Horizontal.TProgressbar" elif member.health >
-        24: " -style yellow.Horizontal.TProgressbar" else: "-style Horizontal.TProgressbar"))
+        24: " -style yellow.Horizontal.TProgressbar" else: " -style Horizontal.TProgressbar"))
     tclEval(script = "tooltip::tooltip " & progressBar & " \"The crew member health\"")
     tclEval(script = "grid " & progressBar & " -column 1 -row " & $(index + 1) & " -padx 5")
     tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.left.scrolly")
