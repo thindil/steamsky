@@ -707,6 +707,15 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCombatMessages()
   return tclOk
 
+proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    comboBox = mainPaned & ".combatframe.left.canvas.frame.order" & $argv[1]
+    newOrder = tclEval2(script = comboBox & " current").parseInt + 1
+  boardingOrders[($argv[2]).parseInt] = if newOrder >
+      game.enemy.ship.crew.len: -1 else: newOrder
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -727,6 +736,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("NextTurn", nextTurnCommand)
         addCommand("ShowCombatUI", showCombatUiCommand)
         addCommand("SetCombatOrder", setCombatOrderCommand)
+        addCommand("SetBoardingOrder", setBoardingOrderCommand)
 
 # Temporary code for interfacing with Ada
 
