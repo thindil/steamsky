@@ -709,6 +709,19 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the boarding order for the selected the player's ship's crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetBoardingOrder EnemyIndex
+  ## EnemyIndex parameter is the index of the enemy in the enemy ship crew
+  ## which will be set as target for the selected player ship crew member.
   let
     comboBox = mainPaned & ".combatframe.left.canvas.frame.order" & $argv[1]
     newOrder = try:
