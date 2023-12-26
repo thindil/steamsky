@@ -623,6 +623,23 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
         getCurrentExceptionMsg() & "}")
   return tclOk
 
+proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    frameName = mainPaned & ".combatframe.crew.canvas.frame"
+    faction = factionsList[playerShip.crew[0].faction]
+  if argv[1] == "pilot":
+    let comboBox = frameName & ".pilotorder"
+    pilotOrder = tclEval2(script = comboBox & " current ").parseInt + 1
+    if "sentientships" in faction.flags:
+      addMessage(message = "Order for ship was set on: " & tclEval2(
+          script = comboBox & " get"), mType = combatMessage)
+    else:
+      addMessage(message = "Order for " & playerShip.crew[findMember(
+          order = pilot)].name & " was set on: " & tclEval2(script = comboBox &
+          " get"), mType = combatMessage)
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -642,6 +659,7 @@ proc showCombatUi(newCombat: bool = true) =
         engineerOrder = 3
         addCommand("NextTurn", nextTurnCommand)
         addCommand("ShowCombatUI", showCombatUiCommand)
+        addCommand("SetCombatOrder", setCombatOrderCommand)
 
 # Temporary code for interfacing with Ada
 
