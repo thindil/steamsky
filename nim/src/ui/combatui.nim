@@ -625,6 +625,19 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the combat order for the selected the player's ship's crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetCombatOrder Position
+  ## Position argument can be pilot, engineer or number of the gun which
+  ## gunner will take a new combat order
   let
     frameName = mainPaned & ".combatframe.crew.canvas.frame"
     faction = try:
