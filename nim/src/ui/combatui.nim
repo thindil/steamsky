@@ -630,7 +630,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     faction = factionsList[playerShip.crew[0].faction]
   if argv[1] == "pilot":
     let comboBox = frameName & ".pilotorder"
-    pilotOrder = tclEval2(script = comboBox & " current ").parseInt + 1
+    pilotOrder = tclEval2(script = comboBox & " current").parseInt + 1
     if "sentientships" in faction.flags:
       addMessage(message = "Order for ship was set on: " & tclEval2(
           script = comboBox & " get"), mType = combatMessage)
@@ -638,6 +638,25 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
       addMessage(message = "Order for " & playerShip.crew[findMember(
           order = pilot)].name & " was set on: " & tclEval2(script = comboBox &
           " get"), mType = combatMessage)
+  elif argv[1] == "engineer":
+    let comboBox = frameName & ".engineerorder"
+    engineerOrder = tclEval2(script = comboBox & " current").parseInt + 1
+    if "sentientships" in faction.flags:
+      addMessage(message = "Order for ship was set on: " & tclEval2(
+          script = comboBox & " get"), mType = combatMessage)
+    else:
+      addMessage(message = "Order for " & playerShip.crew[findMember(
+          order = engineer)].name & " was set on: " & tclEval2(
+          script = comboBox &
+          " get"), mType = combatMessage)
+  else:
+    let
+      comboBox = frameName & ".gunorder" & $argv[1]
+      gunIndex = ($argv[1]).parseInt - 1
+    guns[gunIndex][2] = tclEval2(script = comboBox & " current").parseInt + 1
+    guns[gunIndex][3] = (if tclEval2(script = comboBox & " current") ==
+        "0": 0 else: modulesList[playerShip.modules[guns[gunIndex][
+        1]].protoIndex].speed)
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
