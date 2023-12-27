@@ -758,6 +758,22 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
 
   tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
   tclEval(script = "grid " & button & " -sticky w -row 0 -column 1")
+  tclEval(script = "grid " & buttonsFrame & " -columnspan 2 -sticky w")
+  let yScroll = crewDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll &
+      " -orien vertical -command [list " & crewDialog & ".canvas yview]")
+  let crewCanvas = crewDialog & ".canvas"
+  tclEval(script = "canvas " & crewCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  tclEval(script = "grid " & crewCanvas & " -sticky nwes -padx 5 -pady  5")
+  tclEval(script = "grid " & yScroll & " -sticky ns -padx {0 5} -pady {5 0} -row 2 -column 1")
+  let buttonsBox2 = crewDialog & ".buttons"
+  tclEval(script = "ttk::frame " & buttonsBox2)
+  tclEval(script = "grid " & buttonsBox2 & " -pady {0 5} -columnspan 2")
+  let acceptButton = crewDialog & ".buttons.button2"
+  tclEval(script = "ttk::button " & acceptButton &
+      " -text Assign -command {SetParty " & $argv[1] & "; CloseDialog " &
+      crewDialog & "} -image giveordericon -style Dialog.TButton")
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
