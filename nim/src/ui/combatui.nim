@@ -774,6 +774,27 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & acceptButton &
       " -text Assign -command {SetParty " & $argv[1] & "; CloseDialog " &
       crewDialog & "} -image giveordericon -style Dialog.TButton")
+  tclEval(script = "grid " & acceptButton & " -padx {5 2}")
+  let closeDialogButton = crewDialog & ".buttons.button"
+  tclEval(script = "ttk::button " & closeDialogButton &
+      " -text Cancel -command {CloseDialog " & crewDialog & "} -image cancelicon -style Dialog.TButton")
+  tclEval(script = "grid " & closeDialogButton & " -sticky w -row 0 -column 1")
+  tclEval(script = "focus " & closeDialogButton)
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  let
+    order = (if argv[1] == "boarding": boarding else: defend)
+    crewFrame = crewCanvas & ".frame"
+  var height = 10
+  for member in playerShip.crew:
+    let crewButton = crewFrame & ".crewbutton"
+    tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & "}")
+    if member.order == order:
+      tclSetVar(varName = crewButton, newValue = "1")
+    else:
+      tclSetVar(varName = crewButton, newValue = "0")
+    tclEval(script = "pack " & crewButton & " -anchor w")
+    height = height + tclEval2(script = "winfo reqheight " &
+        crewButton).parseInt
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
