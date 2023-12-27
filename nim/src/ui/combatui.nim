@@ -837,42 +837,93 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   let frameName = ".gameframe.paned.combatframe.crew.canvas.frame"
   var comboBox = ""
   if argv[1] == "pilot":
     comboBox = frameName & ".pilotcrew"
-    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    var crewIndex = try:
+        tclEval2(script = comboBox & " current").parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the pilot index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     if crewIndex > -1:
-      giveOrders(ship = playerShip, memberIndex = crewIndex, givenOrder = pilot)
+      try:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = pilot)
+      except:
+        tclEval(script = "bgerror {Can't give order to the pilot. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     else:
       crewIndex = findMember(order = pilot)
       if crewIndex > -1:
-        giveOrders(ship = playerShip, memberIndex = crewIndex,
-            givenOrder = rest)
+        try:
+          giveOrders(ship = playerShip, memberIndex = crewIndex,
+              givenOrder = rest)
+        except:
+          tclEval(script = "bgerror {Can't give rest order to the pilot. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
   elif argv[1] == "engineer":
     comboBox = frameName & ".engineercrew"
-    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    var crewIndex = try:
+        tclEval2(script = comboBox & " current").parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the engineer index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     if crewIndex > -1:
-      giveOrders(ship = playerShip, memberIndex = crewIndex,
-          givenOrder = engineer)
+      try:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = engineer)
+      except:
+        tclEval(script = "bgerror {Can't give order to the engineer. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     else:
       crewIndex = findMember(order = engineer)
       if crewIndex > -1:
-        giveOrders(ship = playerShip, memberIndex = crewIndex,
-            givenOrder = rest)
+        try:
+          giveOrders(ship = playerShip, memberIndex = crewIndex,
+              givenOrder = rest)
+        except:
+          tclEval(script = "bgerror {Can't give rest order to the engineer. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
   else:
     comboBox = frameName & ".guncrew" & $argv[2]
-    let gunIndex = ($argv[2]).parseInt - 1
-    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    let gunIndex = try:
+        ($argv[2]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the gun index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+    var crewIndex = try:
+          tclEval2(script = comboBox & " current").parseInt - 1
+        except:
+          tclEval(script = "bgerror {Can't get the gunner index. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
     if crewIndex > -1:
-      giveOrders(ship = playerShip, memberIndex = crewIndex,
-          givenOrder = gunner, moduleIndex = guns[gunIndex][1])
+      try:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = gunner, moduleIndex = guns[gunIndex][1])
+      except:
+        tclEval(script = "bgerror {Can't give order to the gunner. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     else:
       crewIndex = playerShip.modules[guns[gunIndex][1]].owner[0]
       if crewIndex > -1:
-        giveOrders(ship = playerShip, memberIndex = crewIndex,
-            givenOrder = rest)
+        try:
+          giveOrders(ship = playerShip, memberIndex = crewIndex,
+              givenOrder = rest)
+        except:
+          tclEval(script = "bgerror {Can't give rest order to the gunner. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
   updateCombatUi()
   return tclOk
 
