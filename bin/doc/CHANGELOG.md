@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash when the game is trying to create an enemy patrol at a friendly base
 - Crash when trying to show the player's ship's gun's info after assigning an
   ammo to it
+- Generating equipment for the player's and npc's ships' crew members
 
 ## [9.0.5] - 2023-12-10
 
