@@ -739,7 +739,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     crewDialog = createDialog(name = ".boadingdialog",
         title = "Assign a crew members to " & (if argv[1] ==
@@ -795,10 +795,19 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       tclSetVar(varName = crewButton, newValue = "0")
     tclEval(script = "pack " & crewButton & " -anchor w")
-    height = height + tclEval2(script = "winfo reqheight " &
-        crewButton).parseInt
-    if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
-      width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    height = try:
+        height + tclEval2(script = "winfo reqheight " & crewButton).parseInt
+      except:
+        tclEval(script = "bgerror {Can't set the height of the dialog. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+    try:
+      if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
+        width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    except:
+      tclEval(script = "bgerror {Can't set the width of the dialog. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     tclEval(script = "bind " & crewButton & " <Escape> {" & closeDialogButton & " invoke;break}")
     tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
         $(index + 1) & "];break}")
