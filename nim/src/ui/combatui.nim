@@ -784,9 +784,11 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     order = (if argv[1] == "boarding": boarding else: defend)
     crewFrame = crewCanvas & ".frame"
-  var height = 10
-  for member in playerShip.crew:
-    let crewButton = crewFrame & ".crewbutton"
+  var
+    height = 10
+    width = 250
+  for index, member in playerShip.crew:
+    let crewButton = crewFrame & ".crewbutton" & $(index + 1)
     tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & "}")
     if member.order == order:
       tclSetVar(varName = crewButton, newValue = "1")
@@ -795,6 +797,21 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "pack " & crewButton & " -anchor w")
     height = height + tclEval2(script = "winfo reqheight " &
         crewButton).parseInt
+    if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
+      width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    tclEval(script = "bind " & crewButton & " <Escape> {" & closeDialogButton & " invoke;break}")
+    tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
+        $(index + 1) & "];break}")
+  if height > 500:
+    height = 500
+  tclEval(script = crewCanvas & " create window 0 0 -anchor nw -window " & crewFrame)
+  tclEval(script = "update")
+  tclEval(script = crewCanvas & " configure -scrollregion [list " & tclEval2(
+      script = crewCanvas & " bbox all") & "] -height " & $height & " -width " & $width)
+  tclEval(script = "bind " & closeDialogButton & " <Escape> {" &
+      closeDialogButton & " invoke;break}")
+  tclEval(script = "bind " & closeDialogButton & " <Tab> {focus [GetActiveButton 0];break}")
+  showDialog(dialog = crewDialog, relativeY = 0.2)
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
