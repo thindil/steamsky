@@ -18,7 +18,7 @@
 import std/[os, math, strutils, tables]
 import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
     shipmodules, shipsmovement, tk, types]
-import coreui, mapsui, utilsui2
+import coreui, dialogs, mapsui, utilsui2
 
 proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
   ## Update the list of in-game messages in combat, delete old ones and show
@@ -738,6 +738,28 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
         getCurrentExceptionMsg() & "}")
   return tclOk
 
+proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    crewDialog = createDialog(name = ".boadingdialog",
+        title = "Assign a crew members to " & (if argv[1] ==
+        "boarding": "boarding party" else: "defenders"), titleWidth = 245)
+    buttonsFrame = crewDialog & ".selectframe"
+  tclEval(script = "ttk::frame " & buttonsFrame)
+  var button = buttonsFrame & ".selectallbutton"
+  tclEval(script = "ttk::button " & button &
+      " -image selectallicon -command {ToggleAllCombat select " & $argv[1] & "} -style Small.TButton")
+
+  tclEval(script = "tooltip::tooltip " & button & " \"Select all crew members.\"")
+  tclEval(script = "grid " & button & " -padx {5 2}")
+  button = buttonsFrame & ".unselectallbutton"
+  tclEval(script = "ttk::button " & button &
+      " -image unselectallicon -command {ToggleAllCombat unselect " & $argv[1] & "} -style Small.TButton")
+
+  tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
+  tclEval(script = "grid " & button & " -sticky w -row 0 -column 1")
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -759,6 +781,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("ShowCombatUI", showCombatUiCommand)
         addCommand("SetCombatOrder", setCombatOrderCommand)
         addCommand("SetBoardingOrder", setBoardingOrderCommand)
+        addCommand("SetCombatParty", setCombatPartyCommand)
 
 # Temporary code for interfacing with Ada
 
