@@ -299,7 +299,7 @@ proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData {.sideEff
   for i in weapon .. legs:
     if result.equipment[i] == -1:
       var equipmentItemIndex = 0
-      if getRandom(min = 1, max = 100) < 95:
+      if getRandom(min = 1, max = 100) > 95:
         let equipmentItemsList = case i
           of weapon:
             weaponsList
