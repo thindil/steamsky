@@ -836,6 +836,46 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = crewDialog, relativeY = 0.2)
   return tclOk
 
+proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let frameName = ".gameframe.paned.combatframe.crew.canvas.frame"
+  var comboBox = ""
+  if argv[1] == "pilot":
+    comboBox = frameName & ".pilotcrew"
+    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    if crewIndex > -1:
+      giveOrders(ship = playerShip, memberIndex = crewIndex, givenOrder = pilot)
+    else:
+      crewIndex = findMember(order = pilot)
+      if crewIndex > -1:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = rest)
+  elif argv[1] == "engineer":
+    comboBox = frameName & ".engineercrew"
+    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    if crewIndex > -1:
+      giveOrders(ship = playerShip, memberIndex = crewIndex,
+          givenOrder = engineer)
+    else:
+      crewIndex = findMember(order = engineer)
+      if crewIndex > -1:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = rest)
+  else:
+    comboBox = frameName & ".guncrew" & $argv[2]
+    let gunIndex = ($argv[2]).parseInt - 1
+    var crewIndex = tclEval2(script = comboBox & " current").parseInt - 1
+    if crewIndex > -1:
+      giveOrders(ship = playerShip, memberIndex = crewIndex,
+          givenOrder = gunner, moduleIndex = guns[gunIndex][1])
+    else:
+      crewIndex = playerShip.modules[guns[gunIndex][1]].owner[0]
+      if crewIndex > -1:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = rest)
+  updateCombatUi()
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -858,6 +898,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("SetCombatOrder", setCombatOrderCommand)
         addCommand("SetBoardingOrder", setBoardingOrderCommand)
         addCommand("SetCombatParty", setCombatPartyCommand)
+        addCommand("SetCombatPosition", setCombatPositionCommand)
 
 # Temporary code for interfacing with Ada
 
