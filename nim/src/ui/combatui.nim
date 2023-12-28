@@ -982,10 +982,34 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     column: Natural
     row: Natural
   let
-    combatFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "crew", column: 0, row: 0), FrameInfo(name: "damage", column: 0, row: 1), FrameInfo(name: "enemy", column: 1, row: 0), FrameInfo(name: "status", column: 1, row: 1)]
-    boardingFrames: array[1 .. 2, FrameInfo] = [FrameInfo(name: "left", column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0)]
+    combatFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "crew", column: 0,
+        row: 0), FrameInfo(name: "damage", column: 0, row: 1), FrameInfo(
+        name: "enemy", column: 1, row: 0), FrameInfo(name: "status", column: 1, row: 1)]
+    boardingFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "left",
+        column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0),
+        FrameInfo(name: "", column: 0, row: 0), FrameInfo(name: "", column: 0, row: 0)]
+    frames = (if argv[3] == "combat": combatFrames else: boardingFrames)
+    button = mainPaned & ".combatframe." & $argv[1] & ".canvas.frame.maxmin"
   if argv[2] == "show":
-    discard
+    for frameInfo in frames:
+      let frameName = mainPaned & ".combatframe." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid configure " & frameName & " -columnspan 2 -rowspan 2 -row 0 -column 0")
+      else:
+        tclEval(script = "grid remove " & frameName)
+    tclEval(script = button & " -image movemapdownicon -commnad {CombatMaxMix " &
+        $argv[1] & " hide " & $argv[3] & "}")
+  else:
+    for frameInfo in frames:
+      let frameName = mainPaned & ".combatframe." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid " & frameName)
+      else:
+        tclEval(script = "grid configure " & frameName &
+            " -columnspan 1 -rowspan 1 -column " & $frameInfo.column &
+            " -row " & $frameInfo.row)
+    tclEval(script = button & " -image movemapdownicon -commnad {CombatMaxMix " &
+        $argv[1] & " show " & $argv[3] & "}")
   return tclOk
 
 proc showCombatUi(newCombat: bool = true) =
