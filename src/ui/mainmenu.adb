@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -212,23 +212,31 @@ package body MainMenu is
       configure
         (Widgt => Combo_Box,
          options => "-values [list" & To_String(Source => Values) & "]");
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
+      if New_Game_Settings.Player_Faction /= To_Bounded_String(Source => "random") then
+         Set
+           (ComboBox => Combo_Box,
+            Value =>
+              To_String
+                (Source =>
+                   Get_Faction(Index => New_Game_Settings.Player_Faction).Name));
+      else
+         Set(ComboBox => Combo_Box, Value => "Random");
+      end if;
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Get_Career
-                  (Career_Index =>
-                     To_String(Source => New_Game_Settings.Player_Career))
-                  .Name));
+      if New_Game_Settings.Player_Career /= To_Unbounded_String(Source => "random") then
+         Set
+           (ComboBox => Combo_Box,
+            Value =>
+              To_String
+                (Source =>
+                   Get_Career
+                     (Career_Index =>
+                        To_String(Source => New_Game_Settings.Player_Career))
+                     .Name));
+      else
+         Set(ComboBox => Combo_Box, Value => "Random");
+      end if;
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set
         (ComboBox => Combo_Box,

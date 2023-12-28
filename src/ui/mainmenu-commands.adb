@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1063,24 +1063,32 @@ package body MainMenu.Commands is
       Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
       New_Game_Settings.Ship_Name :=
         To_Unbounded_String(Source => Get(Widgt => Text_Entry));
-      Find_Faction_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         Faction := Get_Faction(Number => I);
-         if Faction.Name =
-           To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
-            New_Game_Settings.Player_Faction := Get_Faction_Index(Number => I);
-            Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
-            Find_Career_Loop :
-            for J in Faction.Careers.Iterate loop
-               if Faction.Careers(J).Name =
-                 To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
-                  New_Game_Settings.Player_Career :=
-                    Careers_Container.Key(Position => J);
-                  exit Find_Faction_Loop;
-               end if;
-            end loop Find_Career_Loop;
-         end if;
-      end loop Find_Faction_Loop;
+      if Get(Widgt => Combo_Box) = "Random" then
+         New_Game_Settings.Player_Faction := To_Bounded_String(Source => "random");
+      else
+         Find_Faction_Loop :
+         for I in 1 .. Get_Factions_Amount loop
+            Faction := Get_Faction(Number => I);
+            if Faction.Name =
+              To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
+               New_Game_Settings.Player_Faction := Get_Faction_Index(Number => I);
+               Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
+               Find_Career_Loop :
+               for J in Faction.Careers.Iterate loop
+                  if Faction.Careers(J).Name =
+                    To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
+                     New_Game_Settings.Player_Career :=
+                       Careers_Container.Key(Position => J);
+                     exit Find_Faction_Loop;
+                  end if;
+               end loop Find_Career_Loop;
+            end if;
+         end loop Find_Faction_Loop;
+      end if;
+      Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
+      if Get(Widgt => Combo_Box) = "Random" then
+         New_Game_Settings.Player_Career := To_Unbounded_String(Source => "random");
+      end if;
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       New_Game_Settings.Starting_Base := To_Bounded_String(Source => "Any");
       Set_Starting_Base_Loop :
