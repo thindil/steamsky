@@ -941,8 +941,13 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let crewIndex = ($argv[2]).parseInt - 1
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let crewIndex = try:
+      ($argv[2]).parseInt - 1
+    except:
+      tclEval(script = "bgerror {Can't get the index of the crew member. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   var info = "Uses: "
   if argv[1] == "player":
     for item in playerShip.crew[crewIndex].equipment:
