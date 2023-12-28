@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Reading the player's ship's crew members' equipment from saved games
 - Crash when trying to show information about the boarding party's combat
 - Generating equipment for the player's and npc's ships' crew members
+- Setting random faction and career in the new game setting doesn't work
 
 ## [9.5] - 2023-12-24
 
