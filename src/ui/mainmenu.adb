@@ -213,26 +213,36 @@ package body MainMenu is
       configure
         (Widgt => Combo_Box,
          options => "-values [list" & To_String(Source => Values) & "]");
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Get_Faction
-                  (Index =>
-                     To_Bounded_String
-                       (Source => Get_String_Setting(Name => "playerFaction")))
-                  .Name));
+      if Get_String_Setting(Name => "playerFaction") /= "random" then
+         Set
+           (ComboBox => Combo_Box,
+            Value =>
+              To_String
+                (Source =>
+                   Get_Faction
+                     (Index =>
+                        To_Bounded_String
+                          (Source =>
+                             Get_String_Setting(Name => "playerFaction")))
+                     .Name));
+      else
+         Set(ComboBox => Combo_Box, Value => "Random");
+      end if;
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Get_Career
-                  (Career_Index => Get_String_Setting(Name => "playerCareer"))
-                  .Name));
+      if Get_String_Setting(Name => "playerCareer") /= "random" then
+         Set
+           (ComboBox => Combo_Box,
+            Value =>
+              To_String
+                (Source =>
+                   Get_Career
+                     (Career_Index =>
+                        Get_String_Setting(Name => "playerCareer"))
+                     .Name));
+      else
+         Set(ComboBox => Combo_Box, Value => "Random");
+      end if;
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set
         (ComboBox => Combo_Box,
