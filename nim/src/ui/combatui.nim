@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import ../[combat, config, crewinventory, game, maps, messages, shipscrew,
-    shipmodules, shipsmovement, tk, types]
+import ../[combat, config, crewinventory, game, items, maps, messages,
+    shipscrew, shipmodules, shipsmovement, tk, types]
 import coreui, dialogs, mapsui, utilsui2
 
 proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
@@ -940,6 +940,23 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCombatUi()
   return tclOk
 
+proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let crewIndex = ($argv[2]).parseInt - 1
+  var info = "Uses: "
+  if argv[1] == "player":
+    for item in playerShip.crew[crewIndex].equipment:
+      if item > -1:
+        info = info & "\n" & getItemName(item = playerShip.crew[
+            crewIndex].inventory[item])
+  else:
+    for item in game.enemy.ship.crew[crewIndex].equipment:
+      if item > -1:
+        info = info & "\n" & getItemName(item = game.enemy.ship.crew[
+            crewIndex].inventory[item])
+  showInfo(text = info, title = "More info")
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -963,6 +980,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("SetBoardingOrder", setBoardingOrderCommand)
         addCommand("SetCombatParty", setCombatPartyCommand)
         addCommand("SetCombatPosition", setCombatPositionCommand)
+        addCommand("ShowCombatInfo", showCombatInfoCommand)
 
 # Temporary code for interfacing with Ada
 
