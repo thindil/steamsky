@@ -976,7 +976,7 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   type FrameInfo = object
     name: string
     column: Natural
