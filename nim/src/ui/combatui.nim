@@ -977,6 +977,20 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Maximize or minimize the selected section of the combat UI
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## CombatMaxMin framename show|hide combat|boarding
+  ## Framename is name of the frame to maximize or minimize, show or hide is
+  ## the name of action to take, combat or boarding is the name of the combat
+  ## screen in which the section will be maximized or minimized
   type FrameInfo = object
     name: string
     column: Natural
