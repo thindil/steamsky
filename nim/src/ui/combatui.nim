@@ -942,6 +942,19 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show information about the selected mob in combat
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCombatInfo player|enemy index
+  ## Player or enemy means to show information about the mob from the player's
+  ## ship or the enemy's ship. Index is the index of the mob in the ship's crew
   let crewIndex = try:
       ($argv[2]).parseInt - 1
     except:
