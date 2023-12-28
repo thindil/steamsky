@@ -975,6 +975,19 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showInfo(text = info, title = "More info")
   return tclOk
 
+proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  type FrameInfo = object
+    name: string
+    column: Natural
+    row: Natural
+  let
+    combatFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "crew", column: 0, row: 0), FrameInfo(name: "damage", column: 0, row: 1), FrameInfo(name: "enemy", column: 1, row: 0), FrameInfo(name: "status", column: 1, row: 1)]
+    boardingFrames: array[1 .. 2, FrameInfo] = [FrameInfo(name: "left", column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0)]
+  if argv[2] == "show":
+    discard
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -999,6 +1012,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("SetCombatParty", setCombatPartyCommand)
         addCommand("SetCombatPosition", setCombatPositionCommand)
         addCommand("ShowCombatInfo", showCombatInfoCommand)
+        addCommand("CombatMaxMix", combatMaxMinCommand)
 
 # Temporary code for interfacing with Ada
 
