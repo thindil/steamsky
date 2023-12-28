@@ -838,6 +838,19 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set crew member position (pilot, engineer, gunner) in combat
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetCombatPosition position ?gunindex?
+  ## Position is the combat crew member position which will be set. For gunner
+  ## additional parameter is gunindex, index of the gun to take
   let frameName = ".gameframe.paned.combatframe.crew.canvas.frame"
   var comboBox = ""
   if argv[1] == "pilot":
