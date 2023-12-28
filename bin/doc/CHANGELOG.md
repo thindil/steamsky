@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to show the player's ship's gun's info after assigning an
   ammo to it
 - Generating equipment for the player's and npc's ships' crew members
+- Setting random faction and career in the new game setting doesn't work
 
 ## [9.0.5] - 2023-12-10
 
