@@ -1027,7 +1027,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   boardingOrders = @[]
   for index, member in playerShip.crew:
     tclSetVar(varName = ".boardingdialog.canvas.frame.crewbutton" & $(index +
