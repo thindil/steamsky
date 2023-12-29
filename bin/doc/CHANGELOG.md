@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Made the dialog with information about the player's ship's module wider
+
 ### Fixed
 - Reading the player's ship's crew members' equipment from saved games
 - Crash when trying to show information about the boarding party's combat
