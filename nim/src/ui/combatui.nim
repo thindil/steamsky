@@ -1050,17 +1050,27 @@ proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   boardingOrders = @[]
   let order = (if argv[1] == "boarding": boarding else: defend)
   for index, member in playerShip.crew:
     let selected = tclGetVar(varName = ".boardingdialog.canvas.frame.crewbutton" &
         $(index + 1)) == "1"
     if member.order == order and not selected:
-      giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      try:
+        giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      except:
+        tclEval(script = "bgerror {Can't give order to not selected crew member. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     elif selected and member.order != order:
-      giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
-          moduleIndex = -1)
+      try:
+        giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
+            moduleIndex = -1)
+      except:
+        tclEval(script = "bgerror {Can't give order to selected crew member. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
       if order == boarding:
         boardingOrders.add(0)
   updateCombatUi()
