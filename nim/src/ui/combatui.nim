@@ -1028,6 +1028,21 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Select or deselect all crew members in boarding and defending parties
+  ## setting
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ToggleAllCombat action order
+  ## Action is the action which will be performed. Possible values are
+  ## select or deselect. Order is the order to give to the player's ship
+  ## crew. Possible values are boarding and defending.
   boardingOrders = @[]
   for index, member in playerShip.crew:
     tclSetVar(varName = ".boardingdialog.canvas.frame.crewbutton" & $(index +
