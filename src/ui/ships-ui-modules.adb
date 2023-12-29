@@ -140,7 +140,7 @@ package body Ships.UI.Modules is
       Module_Text: constant Tk_Text :=
         Create
           (pathName => Module_Frame & ".info",
-           options => "-wrap char -height 5 -width 15");
+           options => "-wrap char -height 5 -width 30");
       Height: Positive := 10;
       Close_Dialog_Button: constant Ttk_Button :=
         Get_Widget(pathName => Module_Frame & ".button");
@@ -982,7 +982,7 @@ package body Ships.UI.Modules is
                Ammo_Text: constant Tk_Text :=
                  Create
                    (pathName => Module_Frame & ".ammoinfo",
-                    options => "-wrap char -height 3 -width 15");
+                    options => "-wrap char -height 5 -width 30");
                Ammo_Height: Integer;
             begin
                Add_Label
@@ -1420,7 +1420,7 @@ package body Ships.UI.Modules is
               Positive'Image(Width));
       end Set_Width_Block;
       Show_Dialog
-        (Dialog => Module_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
+        (Dialog => Module_Dialog, Relative_X => 0.12, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Module_Info_Command;
 
