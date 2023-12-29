@@ -1051,6 +1051,19 @@ proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set crew members in or out of boarding and defending party
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetParty order
+  ## Order is the order to give to the player's ship crew. Possible
+  ## values are boarding and defending.
   boardingOrders = @[]
   let order = (if argv[1] == "boarding": boarding else: defend)
   for index, member in playerShip.crew:
