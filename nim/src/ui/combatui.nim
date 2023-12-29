@@ -1102,20 +1102,41 @@ proc showCombatUi(newCombat: bool = true) =
           newCombat = false)
       if not combatStarted:
         return
-      if tclEval2(script = "winfo exists " & combatFrame) == "0":
-        tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
-        pilotOrder = 2
-        engineerOrder = 3
-        addCommand("NextTurn", nextTurnCommand)
-        addCommand("ShowCombatUI", showCombatUiCommand)
-        addCommand("SetCombatOrder", setCombatOrderCommand)
-        addCommand("SetBoardingOrder", setBoardingOrderCommand)
-        addCommand("SetCombatParty", setCombatPartyCommand)
-        addCommand("SetCombatPosition", setCombatPositionCommand)
-        addCommand("ShowCombatInfo", showCombatInfoCommand)
-        addCommand("CombatMaxMix", combatMaxMinCommand)
-        addCommand("ToggleAllCombat", toggleAllCombatCommand)
-        addCommand("SetParty", setPartyCommand)
+    if tclEval2(script = "winfo exists " & combatFrame) == "0":
+      tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
+      pilotOrder = 2
+      engineerOrder = 3
+      addCommand("NextTurn", nextTurnCommand)
+      addCommand("ShowCombatUI", showCombatUiCommand)
+      addCommand("SetCombatOrder", setCombatOrderCommand)
+      addCommand("SetBoardingOrder", setBoardingOrderCommand)
+      addCommand("SetCombatParty", setCombatPartyCommand)
+      addCommand("SetCombatPosition", setCombatPositionCommand)
+      addCommand("ShowCombatInfo", showCombatInfoCommand)
+      addCommand("CombatMaxMix", combatMaxMinCommand)
+      addCommand("ToggleAllCombat", toggleAllCombatCommand)
+      addCommand("SetParty", setPartyCommand)
+    else:
+      let
+        button = combatFrame & ".next"
+        enemyFrame = combatFrame & ".status"
+      tclEval(script = "grid " & button)
+      tclEval(script = "grid " & enemyFrame)
+    tclEval(script = closeButton & " configure -command ShowCombatUI")
+    tclSetVar(varName = "gamestate", newValue = "combat")
+    for member in playerShip.crew.mitems:
+      if member.order == rest and member.previousOrder in {pilot, engineer, gunner}:
+        member.order = member.previousOrder
+        member.orderTime = 15
+        addMessage(message = member.name & " back to work for combat.",
+            mType = orderMessage)
+  if playerShip.crew[0].order == boarding:
+    updateBoardingUi()
+    showCombatFrame(frameName = ".boarding")
+  else:
+    updateCombatUi()
+    showCombatFrame(frameName = ".combat")
+  showScreen(newScreenName = "combatframe")
 
 # Temporary code for interfacing with Ada
 
@@ -1134,3 +1155,10 @@ proc updateAdaBoardingUi() {.raises: [], tags: [], exportc.} =
   except:
     echo getCurrentExceptionMsg()
     echo getStackTrace(getCurrentException())
+
+proc showAdaCombatUi(newCombat: cint) {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    showCombatUi(newCombat = newCombat == 1)
+  except:
+    discard
+
