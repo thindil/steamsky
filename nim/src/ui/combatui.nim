@@ -1049,6 +1049,23 @@ proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
         1), newValue = (if argv[1] == "select": "1" else: "0"))
   return tclOk
 
+proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  boardingOrders = @[]
+  let order = (if argv[1] == "boarding": boarding else: defend)
+  for index, member in playerShip.crew:
+    let selected = tclGetVar(varName = ".boardingdialog.canvas.frame.crewbutton" &
+        $(index + 1)) == "1"
+    if member.order == order and not selected:
+      giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+    elif selected and member.order != order:
+      giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
+          moduleIndex = -1)
+      if order == boarding:
+        boardingOrders.add(0)
+  updateCombatUi()
+  return tclOk
+
 proc showCombatUi(newCombat: bool = true) =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
@@ -1075,6 +1092,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("ShowCombatInfo", showCombatInfoCommand)
         addCommand("CombatMaxMix", combatMaxMinCommand)
         addCommand("ToggleAllCombat", toggleAllCombatCommand)
+        addCommand("SetParty", setPartyCommand)
 
 # Temporary code for interfacing with Ada
 
