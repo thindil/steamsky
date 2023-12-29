@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Made the dialog with information about the player's ship's module wider
+
 ### Fixed
 - Crash when the game is trying to create an enemy patrol at a friendly base
 - Crash when trying to show the player's ship's gun's info after assigning an
