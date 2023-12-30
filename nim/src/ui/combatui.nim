@@ -576,9 +576,9 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     for accel in generalAccelerators:
       tclEval(script = "bind . <" & accel & "> {}")
     updateCombatUi()
-    tclEval(script = closeButton & " -command {ShowSkyMap}")
+    tclEval(script = closeButton & " configure -command {ShowSkyMap}")
     tclSetVar(varName = "gamestate", newValue = "general")
-    tclEval(script = "grid " & closeButton & "-row 0 -column 1")
+    tclEval(script = "grid " & closeButton & " -row 0 -column 1")
     let frame = combatFrame & ".left"
     if tclEval2(script = "winfo ismapped " & frame) == "1":
       showCombatFrame(frameName = ".combat")
@@ -1162,4 +1162,3 @@ proc showAdaCombatUi(newCombat: cint) {.raises: [], tags: [RootEffect], exportc.
     showCombatUi(newCombat = newCombat == 1)
   except:
     discard
-
