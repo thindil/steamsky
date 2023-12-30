@@ -241,6 +241,19 @@ proc tclSetResult*(value: string) =
   ## * result   - the new value for the Tcl result
   tclSetResult(getInterp(), value.cstring, 1)
 
+proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
+    dynlib: tclDllName, importc: "Tcl_EvalFile".}
+  ## Read the file and evaluate it as a Tcl script
+  ##
+  ## * interp   - the Tcl interpreter on which the result will be set
+  ## * fileName - the name of the file to read
+
+proc tclEvalFile*(fileName: string) =
+  ## Read the file and evaluate it as a Tcl script
+  ##
+  ## * fileName - the name of the file to read
+  tclEvalFile(getInterp(), fileName.cstring)
+
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
     AddingCommandError], tags: [].} =
   ## Add the selected Nim procedure as a Tcl command.
