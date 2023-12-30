@@ -754,7 +754,7 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Partytype is a type of party to set. Possible options are boarding or
   ## defenders
   let
-    crewDialog = createDialog(name = ".boadingdialog",
+    crewDialog = createDialog(name = ".boardingdialog",
         title = "Assign a crew members to " & (if argv[1] ==
         "boarding": "boarding party" else: "defenders"), titleWidth = 245)
     buttonsFrame = crewDialog & ".selectframe"
@@ -797,12 +797,13 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     order = (if argv[1] == "boarding": boarding else: defend)
     crewFrame = crewCanvas & ".frame"
+  tclEval(script = "ttk::frame " & crewFrame)
   var
     height = 10
     width = 250
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $(index + 1)
-    tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & "}")
+    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" & member.name & "}")
     if member.order == order:
       tclSetVar(varName = crewButton, newValue = "1")
     else:
@@ -1103,7 +1104,7 @@ proc showCombatUi(newCombat: bool = true) =
       if not combatStarted:
         return
     if tclEval2(script = "winfo exists " & combatFrame) == "0":
-      tclEval(script = "eval {" & dataDirectory & "ui" & DirSep & "combat.tcl}")
+      tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
       pilotOrder = 2
       engineerOrder = 3
       addCommand("NextTurn", nextTurnCommand)
