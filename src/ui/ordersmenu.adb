@@ -227,7 +227,7 @@ package body OrdersMenu is
       if Player_Ship.Speed = DOCKED then
          Add_Button
            (Name => ".undock", Label => "Undock", Command => "Docking",
-            Shortcut => "d", Underline => 0);
+            Shortcut => "d", Underline => 2);
          if Sky_Bases(Base_Index).Population > 0 then
             Add_Button
               (Name => ".escape", Label => "Escape",
