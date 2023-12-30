@@ -1117,7 +1117,7 @@ package body Ships.UI.Modules is
                        Index1 => "0.0", Index2 => "end")) /
                  Positive'Value
                    (Metrics(Font => "InterfaceFont", Option => "-linespace")) -
-                 2;
+                 1;
                if Ammo_Height < 1 then
                   Ammo_Height := 1;
                end if;
