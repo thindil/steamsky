@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Setting random faction and career in the new game setting doesn't work
 - Showing information about ammunition in the player's ship's module's info
   dialog
+- Keyboard shortcut for undocking from bases
 
 ## [9.0.5] - 2023-12-10
 
