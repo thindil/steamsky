@@ -13,9 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 package body Combat.UI is
 
    procedure Show_Combat_Ui(New_Combat: Boolean := True) is
