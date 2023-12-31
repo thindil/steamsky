@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about ammunition in the player's ship's module's info
   dialog
 - Keyboard shortcut for undocking from bases
+- Default keyboard shortcuts for moving the map
 
 ## [9.0.5] - 2023-12-10
 
