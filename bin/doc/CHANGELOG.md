@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.6] - 2023-12-31
 
 ### Changed
 - Made the dialog with information about the player's ship's module wider
