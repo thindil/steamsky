@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
     messages, missions2, shipscargo, shipscrew, tk, types]
-import dialogs, mapsui, shipsuicrew, shipsuimodules
+import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
     sideEffect, raises: [], tags: [].} =
@@ -303,6 +303,14 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       showMessage(text = message, title = "Error")
     centerX = playerShip.skyX
     centerY = playerShip.skyY
+    if startsCombat:
+      showCombatUi()
+    else:
+      showSkyMap()
+  elif answer == "quit":
+    gameSettings.messagesPosition = gameSettings.windowHeight - tclEval2(
+        script = mainPaned & " sashpos 0").parseInt
+    endGame(save = true)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
