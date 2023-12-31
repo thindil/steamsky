@@ -114,16 +114,6 @@ proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
   ##
   ## Returns tclOk if Tk initialized correctly, otherwise tclError
 
-proc tclEval(interp: PInterp; script: cstring): TclResults {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_Eval".}
-  ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
-  ## of the evaluation
-  ##
-  ## * interp - The Tcl interpreter on which the code will be evaluated
-  ## * script - The Tcl code which will be evaluated
-  ##
-  ## Returns tclOk if the code evaluated correctly, otherwise tclError
-
 proc tclEval*(interp: PInterp = getInterp();
     script: string): TclResults {.discardable.} =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
@@ -133,6 +123,8 @@ proc tclEval*(interp: PInterp = getInterp();
   ## * script - The Tcl code which will be evaluated
   ##
   ## Returns tclOk if the code evaluated correctly, otherwise tclError
+  proc tclEval(interp: PInterp; script: cstring): TclResults {.cdecl,
+      dynlib: tclDllName, importc: "Tcl_Eval".}
   return interp.tclEval(script = script.cstring)
 
 proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
@@ -177,33 +169,10 @@ proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
   ##
   ## Returns pointer for the newly created command
 
-proc tclGetVar(interp: PInterp; varName: cstring;
-    flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar".}
-  ## Get the value of the selected Tcl variable.
-  ##
-  ## * interp  - the Tcl interpreter from which the variable will be get
-  ## * varName - the name of the Tcl variable to get
-  ## * flags   - the flag related to what kind of variable to search
-  ##
-  ## Returns the value of the selected Tcl variable
-
 proc tclGetVar*(varName: string): string =
-  ## Get the value of the selected Tcl variable.
-  ##
-  ## * varName - the name of the Tcl variable to get
-  ##
-  ## Returns the value of the selected Tcl variable as a Nim string
+  proc tclGetVar(interp: PInterp; varName: cstring;
+      flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar".}
   return $tclGetVar(getInterp(), varName.cstring, 1)
-
-proc tclSetVar(interp: PInterp; varName, newValue: cstring;
-    flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar".}
-  ## Set the new value for the selected Tcl variable. If variable doesn't
-  ## exist, it will be created.
-  ##
-  ## * interp   - the Tcl interpreter on which the variable will be set
-  ## * varName  - the name of the Tcl variable to set
-  ## * newValue - the value of the Tcl variable
-  ## * flags    - the flag related to what kind of variable it will be
 
 proc tclSetVar*(varName, newValue: string) =
   ## Set the new value for the selected Tcl variable. If variable doesn't
@@ -211,47 +180,32 @@ proc tclSetVar*(varName, newValue: string) =
   ##
   ## * varName  - the name of the Tcl variable to set
   ## * newValue - the value of the Tcl variable
+  proc tclSetVar(interp: PInterp; varName, newValue: cstring;
+      flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar".}
   tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
-
-proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_UnsetVar".}
-  ## Remove the selected Tcl variable.
-  ##
-  ## * interp   - the Tcl interpreter on which the variable will be removed
-  ## * varName  - the name of the Tcl variable to remove
-  ## * flags    - the flag related to what kind of variable it is
 
 proc tclUnsetVar*(varName: string) =
   ## Remove the selected Tcl variable.
   ##
   ## * varName  - the name of the Tcl variable to remove
+  proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
+      dynlib: tclDllName, importc: "Tcl_UnsetVar".}
   tclUnsetVar(getInterp(), varName.cstring, 1)
-
-proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_SetResult".}
-  ## Set the new value for the Tcl result
-  ##
-  ## * interp   - the Tcl interpreter on which the result will be set
-  ## * result   - the new value for the Tcl result
-  ## * freeProc - the type of procedure used to free the result
 
 proc tclSetResult*(value: string) =
   ## Set the new value for the Tcl result on the current Tcl interpreter
   ##
   ## * result   - the new value for the Tcl result
+  proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
+      dynlib: tclDllName, importc: "Tcl_SetResult".}
   tclSetResult(getInterp(), value.cstring, 1)
-
-proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_EvalFile".}
-  ## Read the file and evaluate it as a Tcl script
-  ##
-  ## * interp   - the Tcl interpreter on which the result will be set
-  ## * fileName - the name of the file to read
 
 proc tclEvalFile*(fileName: string) =
   ## Read the file and evaluate it as a Tcl script
   ##
   ## * fileName - the name of the file to read
+  proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
+      dynlib: tclDllName, importc: "Tcl_EvalFile".}
   tclEvalFile(getInterp(), fileName.cstring)
 
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
