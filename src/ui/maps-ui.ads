@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2023 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -62,14 +62,14 @@ package Maps.UI is
       14 => To_Unbounded_String(Source => "KP_Divide"),
       15 => To_Unbounded_String(Source => "Shift-Return"),
       16 => To_Unbounded_String(Source => "Shift-h"),
-      17 => To_Unbounded_String(Source => "Shift-KP_7"),
-      18 => To_Unbounded_String(Source => "Shift-KP_8"),
-      19 => To_Unbounded_String(Source => "Shift-KP_9"),
-      20 => To_Unbounded_String(Source => "Shift-KP_4"),
-      21 => To_Unbounded_String(Source => "Shift-KP_6"),
-      22 => To_Unbounded_String(Source => "Shift-KP_1"),
-      23 => To_Unbounded_String(Source => "Shift-KP_2"),
-      24 => To_Unbounded_String(Source => "Shift-KP_3"),
+      17 => To_Unbounded_String(Source => "Shift-KP_Home"),
+      18 => To_Unbounded_String(Source => "Shift-KP_Up"),
+      19 => To_Unbounded_String(Source => "Shift-KP_Prior"),
+      20 => To_Unbounded_String(Source => "Shift-KP_Left"),
+      21 => To_Unbounded_String(Source => "Shift-KP_Right"),
+      22 => To_Unbounded_String(Source => "Shift-KP_End"),
+      23 => To_Unbounded_String(Source => "Shift-KP_Down"),
+      24 => To_Unbounded_String(Source => "Shift-KP_Next"),
       25 => To_Unbounded_String(Source => "Control-KP_Home"),
       26 => To_Unbounded_String(Source => "Control-KP_Up"),
       27 => To_Unbounded_String(Source => "Control-KP_Prior"),
