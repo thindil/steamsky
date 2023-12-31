@@ -601,7 +601,7 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     updateBoardingUi()
   return tclOk
 
-proc showCombatUi*(newCombat: bool = true)
+proc showCombatUi*(newCombat: bool = true) {.sideEffect, raises: [], tags: [RootEffect].}
 
 proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
@@ -803,7 +803,8 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     width = 250
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $(index + 1)
-    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" & member.name & "}")
+    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" &
+        member.name & "}")
     if member.order == order:
       tclSetVar(varName = crewButton, newValue = "1")
     else:
@@ -1095,28 +1096,38 @@ proc showCombatUi(newCombat: bool = true) =
   var combatStarted = false
   let combatFrame = mainPaned & ".combatframe"
   if newCombat:
-    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and enemyName !=
-        protoShipsList[eventsList[skyMap[playerShip.skyX][
-        playerShip.skyY].eventIndex].shipIndex].name:
-      combatStarted = startCombat(enemyIndex = eventsList[skyMap[
-          playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
-          newCombat = false)
-      if not combatStarted:
-        return
+    try:
+      if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+          enemyName != protoShipsList[eventsList[skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex].shipIndex].name:
+        combatStarted = startCombat(enemyIndex = eventsList[skyMap[
+            playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
+            newCombat = false)
+        if not combatStarted:
+          return
+    except:
+      tclEval(script = "bgerror {Can't start the combat. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return
     if tclEval2(script = "winfo exists " & combatFrame) == "0":
       tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
       pilotOrder = 2
       engineerOrder = 3
-      addCommand("NextTurn", nextTurnCommand)
-      addCommand("ShowCombatUI", showCombatUiCommand)
-      addCommand("SetCombatOrder", setCombatOrderCommand)
-      addCommand("SetBoardingOrder", setBoardingOrderCommand)
-      addCommand("SetCombatParty", setCombatPartyCommand)
-      addCommand("SetCombatPosition", setCombatPositionCommand)
-      addCommand("ShowCombatInfo", showCombatInfoCommand)
-      addCommand("CombatMaxMix", combatMaxMinCommand)
-      addCommand("ToggleAllCombat", toggleAllCombatCommand)
-      addCommand("SetParty", setPartyCommand)
+      try:
+        addCommand("NextTurn", nextTurnCommand)
+        addCommand("ShowCombatUI", showCombatUiCommand)
+        addCommand("SetCombatOrder", setCombatOrderCommand)
+        addCommand("SetBoardingOrder", setBoardingOrderCommand)
+        addCommand("SetCombatParty", setCombatPartyCommand)
+        addCommand("SetCombatPosition", setCombatPositionCommand)
+        addCommand("ShowCombatInfo", showCombatInfoCommand)
+        addCommand("CombatMaxMix", combatMaxMinCommand)
+        addCommand("ToggleAllCombat", toggleAllCombatCommand)
+        addCommand("SetParty", setPartyCommand)
+      except:
+        tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     else:
       let
         button = combatFrame & ".next"
