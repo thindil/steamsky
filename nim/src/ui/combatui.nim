@@ -602,6 +602,9 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatUi*(newCombat: bool = true) {.sideEffect, raises: [], tags: [RootEffect].}
+  ## Show the combat UI to the player
+  ##
+  ## * newCombat - if true, starts a new combat with an enemy's ship
 
 proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
