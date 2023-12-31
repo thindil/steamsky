@@ -35,11 +35,6 @@ package body Combat is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Ada_Enemy(N_Enemy: out Nim_Enemy_Record) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaEnemy";
-
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
       use Messages;
@@ -50,10 +45,13 @@ package body Combat is
          Import => True,
          Convention => C,
          External_Name => "startAdaCombat";
+      procedure Get_Ada_Enemy(N_Enemy: out Nim_Enemy_Record) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaEnemy";
    begin
       Set_Ship_In_Nim;
       Enemy_Ship_Index := Enemy_Index;
-      Boarding_Orders.Clear;
       Result :=
         Start_Ada_Combat
           (E_Index => Enemy_Index, N_Combat => (if New_Combat then 1 else 0));
@@ -63,30 +61,6 @@ package body Combat is
       Enemy.Distance := Nim_Enemy.Distance;
       Enemy.Loot := Nim_Enemy.Loot;
       Messages_Starts := Get_Last_Message_Index + 1;
-      Enemy.Guns.Clear;
-      Convert_Enemy_Guns_Loop :
-      for I in 0 .. 9 loop
-         exit Convert_Enemy_Guns_Loop when Nim_Enemy.Guns(I, 0) = -1;
-         Enemy.Guns.Append
-           (New_Item =>
-              (1 => Nim_Enemy.Guns(I, 0), 2 => Nim_Enemy.Guns(I, 1),
-               3 => Nim_Enemy.Guns(I, 2)));
-      end loop Convert_Enemy_Guns_Loop;
-      Guns.Clear;
-      Convert_Player_Guns_Loop :
-      for I in 0 .. 9 loop
-         exit Convert_Player_Guns_Loop when Nim_Enemy.Player_Guns(I, 0) = -1;
-         Guns.Append
-           (New_Item =>
-              (1 => Nim_Enemy.Player_Guns(I, 0),
-               2 => Nim_Enemy.Player_Guns(I, 1),
-               3 => Nim_Enemy.Player_Guns(I, 2)));
-      end loop Convert_Player_Guns_Loop;
-      Get_Ship_From_Nim(Ship => Enemy.Ship);
-      if Get_Pilot_Order = 0 then
-         Set_Pilot_Order(New_Order => 2);
-         Set_Engineer_Order(New_Order => 3);
-      end if;
       if Result = 1 then
          return True;
       end if;

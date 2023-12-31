@@ -53,20 +53,6 @@ package Combat is
      (Index_Type => Positive, Element_Type => Guns_Info_Array);
    -- ****
 
-   -- ****v* Combat/Combat.Guns
-   -- FUNCTION
-   -- List of guns installed on player ship
-   -- SOURCE
-   Guns: Guns_Container.Vector;
-   -- ****
-
-   -- ****v* Combat/Combat.Boarding_Orders
-   -- FUNCTION
-   -- List of orders for boarding party
-   -- SOURCE
-   Boarding_Orders: Integer_Container.Vector;
-   -- ****
-
    -- ****s* Combat/Combat.Enemy_Record
    -- FUNCTION
    -- Data structure for enemies
