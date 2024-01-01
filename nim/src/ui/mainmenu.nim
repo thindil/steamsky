@@ -15,8 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[config, tk]
+import std/[os, strutils]
+import ../[config, game, tk]
+
+var mainMenuFrame = ""
+
+proc createMainMenu*() =
+  let
+    uiDirectory = dataDirectory & "ui" & DirSep
+    iconPath = uiDirectory & "images" & DirSep & "icon.png"
+    mainWindow = "."
+  if not dirExists(iconPath):
+    tclEval(script = "wm withdraw " & mainWindow)
+    tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" & dataDirectory & "\" is the proper place where the game data files exists?} -icon error -type ok")
+    tclEval(script = "exit 1")
+    return
+  let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
 
 proc showMainMenu*() =
   let mainWindow = "."
