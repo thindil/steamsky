@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -116,7 +116,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
     if tooltipText.len > 0:
       tclEval(script = "tooltip::tooltip " & result.canvas & " -item " &
           backgroundId & " \"" & tooltipText & "\"")
-  tclEval(script = "SetScrollBarBindings " & result.canvas & " " &
+  tclEval(script = "SetScrollbarBindings " & result.canvas & " " &
       result.scrollbar)
   tclEval(script = "bind " & result.canvas & " <Up> {UpdateCurrentRow " &
       result.canvas & " lower}")
