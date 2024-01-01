@@ -19,9 +19,21 @@ import std/[os, osproc]
 import ../tk
 import dialogs
 
-proc openLinkCommand(clientData: cint; interp: PInterp; argc: cint;
+proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
         ReadIOEffect, ExecIOEffect, RootEffect].} =
+  ## Open the selected link in a proper program
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ##
+  ## Tcl:
+  ## OpenLink url
+  ## Url is link which will be opened
   let command = try:
         findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
           "macosx": "open" else: "xdg-open"))
