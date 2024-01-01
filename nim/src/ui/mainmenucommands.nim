@@ -50,3 +50,12 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
+
+# Temporary code for interfacing with Ada
+
+proc addAdaMainMenuCommands() {.raises: [], tags: [], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
+

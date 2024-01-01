@@ -1319,8 +1319,12 @@ package body MainMenu.Commands is
    end Sort_Saves_Command;
 
    procedure Add_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaMainMenuCommands";
    begin
-      Add_Command(Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
+      Add_Ada_Commands;
       Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
       Add_Command(Name => "ShowNews", Ada_Command => Show_News_Command'Access);
       Add_Command
