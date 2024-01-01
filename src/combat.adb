@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,22 +23,21 @@ with Bases;
 
 package body Combat is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
-   type Nim_Enemy_Record is record
-      Loot: Natural := 0;
-      Guns: Nim_Guns;
-      Player_Guns: Nim_Guns;
-      Distance: Natural := 10_000;
-      Harpoon_Duration: Natural := 0;
-      Enemy_Harpoon_Duration: Natural := 0;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Start_Combat
      (Enemy_Index: Positive; New_Combat: Boolean := True) return Boolean is
       use Messages;
 
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Guns is array(0 .. 9, 0 .. 2) of Integer;
+      type Nim_Enemy_Record is record
+         Loot: Natural := 0;
+         Guns: Nim_Guns;
+         Player_Guns: Nim_Guns;
+         Distance: Natural := 10_000;
+         Harpoon_Duration: Natural := 0;
+         Enemy_Harpoon_Duration: Natural := 0;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Enemy: Nim_Enemy_Record;
       Result: Integer;
       function Start_Ada_Combat(E_Index, N_Combat: Integer) return Integer with

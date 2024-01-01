@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -96,14 +96,6 @@ package Game is
    -- SOURCE
    package Natural_Container is new Vectors
      (Index_Type => Positive, Element_Type => Natural);
-   -- ****
-
-   -- ****t* Game/Game.Integer_Container
-   -- FUNCTION
-   -- Used to store Integer values as list
-   -- SOURCE
-   package Integer_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Integer);
    -- ****
 
    -- ****t* Game/Game.Attributes_Array
