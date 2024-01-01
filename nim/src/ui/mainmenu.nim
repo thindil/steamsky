@@ -17,6 +17,7 @@
 
 import std/[os, strutils]
 import ../[config, game, tk]
+import mainmenucommands
 
 var mainMenuFrame = ""
 
@@ -31,6 +32,7 @@ proc createMainMenu*() =
     tclEval(script = "exit 1")
     return
   let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
+  mainmenucommands.addCommands()
 
 proc showMainMenu*() =
   let mainWindow = "."
