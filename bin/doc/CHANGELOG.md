@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   dialog
 - Keyboard shortcut for undocking from bases
 - Default keyboard shortcuts for moving the map
+- Scrolling the player's ship modules and crew members lists with mouse wheel
 
 ## [9.5] - 2023-12-24
 
