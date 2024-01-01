@@ -72,7 +72,10 @@ var
       DirSep ## The directory where the saved games and logs are stored
   modsDirectory*: string = "data" & DirSep & "mods" &
       DirSep ## The directory where the game's modifications are stored
-  dataDirectory*: string = "data" & DirSep ## The directory where the game's data is stored
+  dataDirectory*: string = "data" & DirSep
+    ## The directory where the game's data is stored
+  docDirectory*: string = "doc" & DirSep
+    ## The directory where the game's documentation is stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string                       ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
