@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -75,6 +75,7 @@ type
     ## * showNumbers           - If true, show numbers for speed, skills, attributes, etc.
     ## * rightButton           - If true, use the right mouse button for show menus in various lists
     ## * listsLimit            - The amount of items displayed in various lists
+    ## * waitMinutes           - The amount of in-game minutes which pass when the player press Wait button
     autoRest*: bool
     undockSpeed*: ShipSpeed
     autoCenter*: bool
@@ -105,6 +106,7 @@ type
     showNumbers*: bool
     rightButton*: bool
     listsLimit*: Positive
+    waitMinutes*: Positive
 
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
@@ -161,7 +163,8 @@ const
     autoAskForEvents: false,
     showTooltips: true, showLastMessages: true, messagesPosition: 213,
     fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
-    topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25)
+    topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25,
+    waitMinutes: 1)
     ## The default setting for the game
 
   defaultNewGameSettings* = NewGameRecord(playerName: "Laeran",
@@ -302,6 +305,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
           gameSettings.rightButton = entry.value.parseAdaBool()
         of "ListsLimit":
           gameSettings.listsLimit = entry.value.parseInt().cint
+        of "WaitMunutes":
+          gameSettings.waitMinutes = entry.value.parseInt().cint
         else:
           discard
       of cfgError:
@@ -387,6 +392,7 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
   saveAdaBoolean(value = gameSettings.showNumbers, name = "ShowNumbers")
   saveAdaBoolean(value = gameSettings.rightButton, name = "RightButton")
   config.setSectionKey("", "ListsLimit", $gameSettings.listsLimit)
+  config.setSectionKey("", "WaitMinutes", $gameSettings.waitMinutes)
   config.writeConfig(saveDirectory & "game.cfg")
 
 # Temporary code for interfacing with Ada
@@ -497,6 +503,8 @@ proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc.}
     result = gameSettings.autoSave.ord.cint
   of "difficulty":
     result = newGameSettings.difficultyLevel.ord.cint
+  of "waitMinutes":
+    result = gameSettings.waitMinutes.cint
   else:
     result = 0
 
@@ -540,6 +548,8 @@ proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [], ex
     gameSettings.autoSave = value.AutoSaveTime
   of "difficulty":
     newGameSettings.difficultyLevel = value.DifficultyType
+  of "waitMinutes":
+    gameSettings.waitMinutes = value
   else:
     discard
 
