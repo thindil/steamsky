@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc]
-import ../tk
+import ../[game, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -46,6 +46,17 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
         parentFrame = ".", title = "Can't open the link.")
     return tclOk
   discard execCmd(command = command & " " & $argv[1])
+  return tclOk
+
+proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let textView = ".showfilemenu.text"
+  tclEval(script = textView & " configure -state normal")
+  tclEval(script = textView & " delete 1.0 end")
+  let fileName = $argv[1]
+  if fileExists(filename = docDirectory & fileName):
+    for line in fileName.lines:
+      tclEval(script = textView & " insert end {" & line & "}")
   return tclOk
 
 proc addCommands*() =
