@@ -111,51 +111,51 @@ package body MainMenu.Commands is
    -- Filename is the name of the file in the documentation directory which
    -- will be show
    -- SOURCE
-   function Show_File_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_File_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Text_View: constant Tk_Text :=
-        Get_Widget(pathName => ".showfilemenu.text", Interp => Interp);
-      Show_File: File_Type;
-      File_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
-   begin
-      configure(Widgt => Text_View, options => "-state normal");
-      Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
-      if Exists(Name => To_String(Source => Doc_Directory) & File_Name) then
-         Open
-           (File => Show_File, Mode => In_File,
-            Name => To_String(Source => Doc_Directory) & File_Name);
-         Load_File_Line_Loop :
-         while not End_Of_File(File => Show_File) loop
-            Insert
-              (TextWidget => Text_View, Index => "end",
-               Text => "{" & Get_Line(File => Show_File) & LF & "}");
-         end loop Load_File_Line_Loop;
-         Close(File => Show_File);
-      else
-         Insert
-           (TextWidget => Text_View, Index => "end",
-            Text =>
-              "{Can't find file to load. Did '" & File_Name &
-              "' file is in '" & To_String(Source => Doc_Directory) &
-              "' directory?}");
-      end if;
-      configure(Widgt => Text_View, options => "-state disabled");
-      Bind_To_Main_Window
-        (Interp => Interp, Sequence => "<Alt-b>",
-         Script => "{InvokeButton .showfilemenu.back}");
-      Bind_To_Main_Window
-        (Interp => Interp, Sequence => "<Escape>",
-         Script => "{InvokeButton .showfilemenu.back}");
-      return TCL_OK;
-   end Show_File_Command;
+--   function Show_File_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_File_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      Text_View: constant Tk_Text :=
+--        Get_Widget(pathName => ".showfilemenu.text", Interp => Interp);
+--      Show_File: File_Type;
+--      File_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
+--   begin
+--      configure(Widgt => Text_View, options => "-state normal");
+--      Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
+--      if Exists(Name => To_String(Source => Doc_Directory) & File_Name) then
+--         Open
+--           (File => Show_File, Mode => In_File,
+--            Name => To_String(Source => Doc_Directory) & File_Name);
+--         Load_File_Line_Loop :
+--         while not End_Of_File(File => Show_File) loop
+--            Insert
+--              (TextWidget => Text_View, Index => "end",
+--               Text => "{" & Get_Line(File => Show_File) & LF & "}");
+--         end loop Load_File_Line_Loop;
+--         Close(File => Show_File);
+--      else
+--         Insert
+--           (TextWidget => Text_View, Index => "end",
+--            Text =>
+--              "{Can't find file to load. Did '" & File_Name &
+--              "' file is in '" & To_String(Source => Doc_Directory) &
+--              "' directory?}");
+--      end if;
+--      configure(Widgt => Text_View, options => "-state disabled");
+--      Bind_To_Main_Window
+--        (Interp => Interp, Sequence => "<Alt-b>",
+--         Script => "{InvokeButton .showfilemenu.back}");
+--      Bind_To_Main_Window
+--        (Interp => Interp, Sequence => "<Escape>",
+--         Script => "{InvokeButton .showfilemenu.back}");
+--      return TCL_OK;
+--   end Show_File_Command;
 
    -- ****iv* MCommands/MCommands.AllNews
    -- FUNCTION
@@ -1325,7 +1325,6 @@ package body MainMenu.Commands is
          External_Name => "addAdaMainMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
       Add_Command(Name => "ShowNews", Ada_Command => Show_News_Command'Access);
       Add_Command
         (Name => "ShowHallOfFame",
