@@ -61,10 +61,17 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   if fileExists(filename = docDirectory & fileName):
     for line in fileName.lines:
       tclEval(script = textView & " insert end {" & line & "}")
+  else:
+    tclEval(script = textView & " insert end {Can't find file to load. Did '" &
+        fileName & "' file is in '" & docDirectory & "' directory?}")
+  tclEval(script = textView & " configure -state disabled")
+  tclEval(script = "bind . <Alt-b> {InvokeButton .showfilemenu.back}")
+  tclEval(script = "bind . <Escape> {InvokeButton .showfilemenu.back}")
   return tclOk
 
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
+  addCommand("ShowFile", showFileCommand)
 
 # Temporary code for interfacing with Ada
 
