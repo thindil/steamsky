@@ -87,6 +87,41 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind . <Escape> {InvokeButton .showfilemenu.back}")
   return tclOk
 
+var allNews: bool = false
+
+proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let allNewsButton = ".newsmenu.showall"
+  if argv[1] == "false":
+    allNews = false
+    tclEval(script = allNewsButton & " configure -text {Show all changes} -command {ShowNews true}")
+    tclEval(script = "tooltip::tooltip " & allNewsButton & " \"Show all changes to the game since previous big stable version\"")
+  else:
+    allNews = true
+    tclEval(script = allNewsButton & " configure -text {Show only newest changes} -command {ShowNews false}")
+    tclEval(script = "tooltip::tooltip " & allNewsButton & " \"Show only changes to the game since previous relese\"")
+  let textView = "newsmenu.text"
+  tclEval(script = textView & " configure -state normal")
+  tclEval(script = textView & " delete 1.0 end")
+  if fileExists(filename = docDirectory & "CHANGELOG.md"):
+    try:
+      var index = 0
+      for line in lines(docDirectory & "CHANGELOG.md"):
+        index.inc
+        if index < 6:
+          continue
+        if line.len > 1 and not allNews and line[0 .. 2] == "## ":
+          break
+        tclEval(script = textView & " insert end {" & line & "\n}")
+    except:
+      tclEval(script = "bgerror {Can't read file 'CHANGELOG.md'. Reason: " &
+          getCurrentExceptionMsg() & "}")
+  else:
+    tclEval(script = textView & " insert end {Can't find file to load. Did 'CHANGELOG.md' file is in '" &
+        docDirectory & "' directory?}")
+  tclEval(script = textView & " configure -state disabled")
+  return tclOk
+
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
