@@ -59,8 +59,8 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = textView & " delete 1.0 end")
   let fileName = $argv[1]
   if fileExists(filename = docDirectory & fileName):
-    for line in fileName.lines:
-      tclEval(script = textView & " insert end {" & line & "}")
+    for line in lines(docDirectory & fileName):
+      tclEval(script = textView & " insert end {" & line & "\n}")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did '" &
         fileName & "' file is in '" & docDirectory & "' directory?}")
