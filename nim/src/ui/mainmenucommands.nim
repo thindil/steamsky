@@ -53,14 +53,19 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    ReadDirEffect, ReadIOEffect].} =
   let textView = ".showfilemenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
   let fileName = $argv[1]
   if fileExists(filename = docDirectory & fileName):
-    for line in lines(docDirectory & fileName):
-      tclEval(script = textView & " insert end {" & line & "\n}")
+    try:
+      for line in lines(docDirectory & fileName):
+        tclEval(script = textView & " insert end {" & line & "\n}")
+    except:
+      tclEval(script = "bgerror {Can't read file '" & fileName & "'. Reason: " &
+          getCurrentExceptionMsg() & "}")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did '" &
         fileName & "' file is in '" & docDirectory & "' directory?}")
