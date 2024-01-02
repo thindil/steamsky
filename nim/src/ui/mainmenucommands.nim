@@ -55,6 +55,19 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     ReadDirEffect, ReadIOEffect].} =
+  ## Show the selected file content
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ##
+  ## Tcl:
+  ## ShowFile filename
+  ## Filename is the name of the file in the documentation directory which
+  ## will be show
   let textView = ".showfilemenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
