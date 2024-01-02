@@ -45,7 +45,11 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = "Can't open the link. Reason: no program to open it.",
         parentFrame = ".", title = "Can't open the link.")
     return tclOk
-  discard execCmd(command = command & " " & $argv[1])
+  try:
+    discard execCmd(command = command & " " & $argv[1])
+  except:
+    tclEval(script = "bgerror {Can't open the link. Reason: " &
+        getCurrentExceptionMsg() & "}")
   return tclOk
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
