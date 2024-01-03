@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc]
-import ../[game, tk]
+import ../[game, halloffame, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -136,10 +136,20 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = textView & " configure -state disabled")
   return tclOk
 
+proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let hofView = ".hofmenu.view"
+  tclEval(script = hofView & " delete [list [" & hofView & " children {}]]")
+  for index, entry in hallOfFameArray:
+    tclEval(script = hofView & " insert {} end -values [list " & $index & " " &
+        entry.name & " " & $entry.points & " " & entry.deathReason & "]")
+  return tclOk
+
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
   addCommand("ShowNews", showNewsCommand)
+  addCommand("ShowHallOfFame", showHallOfFameCommand)
 
 # Temporary code for interfacing with Ada
 
