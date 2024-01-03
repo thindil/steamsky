@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
--- with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.OS_Lib;
 with GNAT.String_Split;
@@ -45,7 +44,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
--- with Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with CoreUI;
@@ -95,98 +93,6 @@ package body MainMenu.Commands is
       end if;
       return TCL_OK;
    end Open_Link_Command;
-
-   -- ****iv* MCommands/MCommands.AllNews
-   -- FUNCTION
-   -- If true, show all news, not only from last version. Default is false
-   -- SOURCE
-   -- All_News: Boolean := False;
-   -- ****
-
-   -- ****o* MCommands/MCommands.Show_News_Command
-   -- FUNCTION
-   -- Show changes in the game, all or just recent
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowNews boolean
-   -- If boolean is true, show all news, otherwise only recent
-   -- SOURCE
---   function Show_News_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_News_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Tklib.Ada.Tooltip;
---
---      Text_View: constant Tk_Text :=
---        Get_Widget(pathName => ".newsmenu.text", Interp => Interp);
---      Changes_File: File_Type;
---      File_Text: Unbounded_String := Null_Unbounded_String;
---      All_News_Button: constant Ttk_Button :=
---        Get_Widget(pathName => ".newsmenu.showall", Interp => Interp);
---   begin
---      if CArgv.Arg(Argv => Argv, N => 1) = "false" then
---         All_News := False;
---         configure
---           (Widgt => All_News_Button,
---            options => "-text {Show all changes} -command {ShowNews true}");
---         Add
---           (Widget => All_News_Button,
---            Message =>
---              "Show all changes to the game since previous big stable version");
---      else
---         All_News := True;
---         configure
---           (Widgt => All_News_Button,
---            options =>
---              "-text {Show only newest changes} -command {ShowNews false}");
---         Add
---           (Widget => All_News_Button,
---            Message => "Show only changes to the game since previous relese");
---      end if;
---      configure(Widgt => Text_View, options => "-state normal");
---      Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
---      if Exists
---          (Name => To_String(Source => Doc_Directory) & "CHANGELOG.md") then
---         Open
---           (File => Changes_File, Mode => In_File,
---            Name => To_String(Source => Doc_Directory) & "CHANGELOG.md");
---         Set_Line(File => Changes_File, To => 6);
---         Load_Changes_File_Loop :
---         while not End_Of_File(File => Changes_File) loop
---            File_Text :=
---              To_Unbounded_String(Source => Get_Line(File => Changes_File));
---            if Length(Source => File_Text) > 1 and not All_News then
---               exit Load_Changes_File_Loop when Slice
---                   (Source => File_Text, Low => 1, High => 3) =
---                 "## ";
---            end if;
---            Insert
---              (TextWidget => Text_View, Index => "end",
---               Text => "{" & To_String(Source => File_Text) & LF & "}");
---         end loop Load_Changes_File_Loop;
---         Close(File => Changes_File);
---      else
---         Insert
---           (TextWidget => Text_View, Index => "end",
---            Text =>
---              "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
---              To_String(Source => Doc_Directory) & "' directory?}");
---      end if;
---      configure(Widgt => Text_View, options => "-state disabled");
---      return TCL_OK;
---   end Show_News_Command;
 
    -- ****o* MCommands/MCommands.Show_Hall_Of_Fame_Command
    -- FUNCTION
