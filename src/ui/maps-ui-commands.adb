@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -773,12 +773,12 @@ package body Maps.UI.Commands is
       elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then -- Move up/right
          Result := Move_Ship(X => 1, Y => -1, Message => Message);
       elsif CArgv.Arg(Argv => Argv, N => 1) =
-        "waitormove" then -- Move to destination or wait 1 game minute
+        "waitormove" then -- Move to destination or wait selected amount of time
          if Player_Ship.Destination_X = 0 and
            Player_Ship.Destination_Y = 0 then
             Result := 1;
-            Update_Game(Minutes => 1);
-            Wait_In_Place(Minutes => 1);
+            Update_Game(Minutes => Get_Integer_Setting(Name => "waitMinutes"));
+            Wait_In_Place(Minutes => Get_Integer_Setting(Name => "waitMinutes"));
          else
             Update_Coordinates;
             Result := Move_Ship(X => New_X, Y => New_Y, Message => Message);

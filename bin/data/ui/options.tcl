@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -257,7 +257,7 @@ grid [ttk::entry $moveoptions.left -width 15] -row 3 -column 1 -sticky w
 tooltip::tooltip $moveoptions.left \
    "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.left <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}] \
+grid [ttk::label $moveoptions.lbl5 -text {Wait in place or move 1 field:}] \
    -sticky w
 tooltip::tooltip $moveoptions.lbl5 \
    "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"

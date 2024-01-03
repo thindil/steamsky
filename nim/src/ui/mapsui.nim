@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,12 +20,10 @@ import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
 import coreui, dialogs, utilsui2
 
-
 var
   centerX*, centerY*: Positive ## Coordinates of the center point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
-
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   ## Update in-game header with information about time, state of the crew
@@ -271,7 +269,9 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "grid remove " & button)
     button = frameName & ".wait"
     tclEval(script = button & " configure -image waiticon")
-    tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
+    tclEval(script = "tooltip::tooltip " & button & " \"Wait " &
+        $gameSettings.waitMinutes & " minute" & (if gameSettings.waitMinutes >
+        1: "s" else: "") & ".\"")
     for buttonName in moveButtonsNames:
       button = frameName & "." & buttonName
       tclEval(script = button & " state disabled")
