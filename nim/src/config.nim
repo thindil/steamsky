@@ -305,7 +305,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
           gameSettings.rightButton = entry.value.parseAdaBool()
         of "ListsLimit":
           gameSettings.listsLimit = entry.value.parseInt().cint
-        of "WaitMunutes":
+        of "WaitMinutes":
           gameSettings.waitMinutes = entry.value.parseInt().cint
         else:
           discard
