@@ -92,6 +92,19 @@ var allNews: bool = false
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     ReadIOEffect, ReadDirEffect].} =
+  ## Show the list of changes in the game, all or just recent, since the last
+  ## release
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ##
+  ## Tcl:
+  ## ShowNews boolean
+  ## If boolean is true, show all news, otherwise only recent
   let allNewsButton = ".newsmenu.showall"
   if argv[1] == "false":
     allNews = false
