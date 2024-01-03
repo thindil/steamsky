@@ -100,7 +100,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     allNews = true
     tclEval(script = allNewsButton & " configure -text {Show only newest changes} -command {ShowNews false}")
     tclEval(script = "tooltip::tooltip " & allNewsButton & " \"Show only changes to the game since previous relese\"")
-  let textView = "newsmenu.text"
+  let textView = ".newsmenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
@@ -110,7 +110,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
         index.inc
         if index < 6:
           continue
-        if line.len > 1 and not allNews and line[0 .. 2] == "## ":
+        if (not allNews) and line.len > 1 and line[0 .. 2] == "## ":
           break
         tclEval(script = textView & " insert end {" & line & "\n}")
     except:
@@ -125,6 +125,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
+  addCommand("ShowNews", showNewsCommand)
 
 # Temporary code for interfacing with Ada
 
