@@ -90,7 +90,8 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
 var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    ReadIOEffect, ReadDirEffect].} =
   let allNewsButton = ".newsmenu.showall"
   if argv[1] == "false":
     allNews = false
