@@ -41,7 +41,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkTreeView;
+-- with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
@@ -54,7 +54,7 @@ with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad;
 with Goals;
-with HallOfFame;
+-- with HallOfFame;
 with Maps.UI;
 with Ships;
 with Table; use Table;
@@ -94,55 +94,55 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Open_Link_Command;
 
-   -- ****o* MCommands/MCommands.Show_Hall_Of_Fame_Command
-   -- FUNCTION
-   -- Show the Hall of Fame
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowHallOfFame
-   -- SOURCE
-   function Show_Hall_Of_Fame_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Hall_Of_Fame_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Widgets.TtkTreeView;
-      use HallOfFame;
-
-      Hof_View: constant Ttk_Tree_View :=
-        Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
-      Hall_Of_Fame: constant Hall_Of_Fame_List := Get_Hof_From_Nim;
-   begin
-      Delete
-        (TreeViewWidget => Hof_View,
-         ItemsList =>
-           "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") &
-           "]");
-      Load_Hall_Of_Fame_Loop :
-      for I in Hall_Of_Fame'Range loop
-         exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame(I).Name =
-           Null_Unbounded_String;
-         Insert
-           (TreeViewWidget => Hof_View,
-            Options =>
-              "{} end -values [list " & Positive'Image(I) & " " &
-              To_String(Source => Hall_Of_Fame(I).Name) & " " &
-              Natural'Image(Hall_Of_Fame(I).Points) & " " &
-              To_String(Source => Hall_Of_Fame(I).Death_Reason) & "]");
-      end loop Load_Hall_Of_Fame_Loop;
-      return TCL_OK;
-   end Show_Hall_Of_Fame_Command;
+--   -- ****o* MCommands/MCommands.Show_Hall_Of_Fame_Command
+--   -- FUNCTION
+--   -- Show the Hall of Fame
+--   -- PARAMETERS
+--   -- Client_Data - Custom data send to the command. Unused
+--   -- Interp      - Tcl interpreter in which command was executed.
+--   -- Argc        - Number of arguments passed to the command. Unused
+--   -- Argv        - Values of arguments passed to the command. Unused
+--   -- RESULT
+--   -- This function always return TCL_OK
+--   -- COMMANDS
+--   -- ShowHallOfFame
+--   -- SOURCE
+--   function Show_Hall_Of_Fame_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Hall_Of_Fame_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Widgets.TtkTreeView;
+--      use HallOfFame;
+--
+--      Hof_View: constant Ttk_Tree_View :=
+--        Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
+--      Hall_Of_Fame: constant Hall_Of_Fame_List := Get_Hof_From_Nim;
+--   begin
+--      Delete
+--        (TreeViewWidget => Hof_View,
+--         ItemsList =>
+--           "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") &
+--           "]");
+--      Load_Hall_Of_Fame_Loop :
+--      for I in Hall_Of_Fame'Range loop
+--         exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame(I).Name =
+--           Null_Unbounded_String;
+--         Insert
+--           (TreeViewWidget => Hof_View,
+--            Options =>
+--              "{} end -values [list " & Positive'Image(I) & " " &
+--              To_String(Source => Hall_Of_Fame(I).Name) & " " &
+--              Natural'Image(Hall_Of_Fame(I).Points) & " " &
+--              To_String(Source => Hall_Of_Fame(I).Death_Reason) & "]");
+--      end loop Load_Hall_Of_Fame_Loop;
+--      return TCL_OK;
+--   end Show_Hall_Of_Fame_Command;
 
    -- ****iv* MCommands/MCommands.LoadTable
    -- FUNCTION
@@ -1170,9 +1170,6 @@ package body MainMenu.Commands is
          External_Name => "addAdaMainMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowHallOfFame",
-         Ada_Command => Show_Hall_Of_Fame_Command'Access);
       Add_Command
         (Name => "ShowLoadGame", Ada_Command => Show_Load_Game_Command'Access);
       Add_Command

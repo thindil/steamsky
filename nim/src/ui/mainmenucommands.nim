@@ -141,6 +141,8 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   let hofView = ".hofmenu.view"
   tclEval(script = hofView & " delete [list [" & hofView & " children {}]]")
   for index, entry in hallOfFameArray:
+    if entry.points == 0:
+      break
     tclEval(script = hofView & " insert {} end -values [list " & $index & " " &
         entry.name & " " & $entry.points & " " & entry.deathReason & "]")
   return tclOk
