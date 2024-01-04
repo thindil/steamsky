@@ -137,7 +137,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let hofView = ".hofmenu.view"
   tclEval(script = hofView & " delete [list [" & hofView & " children {}]]")
   for index, entry in hallOfFameArray:
