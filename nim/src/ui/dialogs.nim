@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -165,10 +165,10 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
   if res == "showstats":
     tclEval(script = button & " configure -command {CloseDialog " &
-        questionDialog & "l ProcessQuestion mainmenu}")
+        questionDialog & "; ProcessQuestion mainmenu}")
     button = questionDialog & ".yesbutton"
     tclEval(script = button & " configure -command {CloseDialog " &
-        questionDialog & "l ProcessQuestion showstats}")
+        questionDialog & "; ProcessQuestion showstats}")
 
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
