@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc, strutils, times]
+import std/[os, osproc]
 import ../[game, halloffame, tk]
-import dialogs, table
+import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
@@ -158,75 +158,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
         entry.name & " " & $entry.points & " " & entry.deathReason & "]")
   return tclOk
 
-type SaveSortOrders = enum
-  playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
-
-var
-  loadTable: TableWidget
-  saveSortOrder = timeDesc
-
-proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  if loadTable.rowHeight == 1:
-    loadTable = createTable(parent = ".loadmenu.list", headers = @[
-        "Player name", "Ship name", "Last saved"], command = "SortSaves",
-        tooltipText = "Press mouse button to sort the saved games.")
-  else:
-    clearTable(table = loadTable)
-  type SaveRecord = object
-    playerName, shipName, saveTime, fileName: string
-  var saves: seq[SaveRecord]
-  for file in walkFiles(saveDirectory & "*.sav"):
-    let
-      (_, name, _) = splitFile(path = file)
-      parts = name.split('_')
-    if parts.len == 3:
-      saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
-          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
-          fileName: file))
-    else:
-      saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
-          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
-          fileName: file))
-
-  proc sortSaves(x, y: SaveRecord): int =
-    case saveSortOrder
-    of playerAsc:
-      if x.playerName < y.playerName:
-        return 1
-      else:
-        return -1
-    of playerDesc:
-      if x.playerName > y.playerName:
-        return 1
-      else:
-        return -1
-    of shipAsc:
-      if x.shipName < y.shipName:
-        return 1
-      else:
-        return -1
-    of shipDesc:
-      if x.shipName > y.shipName:
-        return 1
-      else:
-        return -1
-    of timeAsc:
-      if x.saveTime < y.saveTime:
-        return 1
-      else:
-        return -1
-    of timeDesc:
-      if x.saveTime > y.saveTime:
-        return 1
-      else:
-        return -1
-
-  echo saves
-  return tclOk
-
 proc addCommands*() =
-  discard showLoadGameCommand(0, getInterp(), 0, @[])
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
   addCommand("ShowNews", showNewsCommand)
