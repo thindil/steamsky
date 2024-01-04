@@ -17,7 +17,7 @@
 
 import std/[os, osproc]
 import ../[game, halloffame, tk]
-import dialogs
+import dialogs, table
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
@@ -158,7 +158,23 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
         entry.name & " " & $entry.points & " " & entry.deathReason & "]")
   return tclOk
 
+var loadTable: TableWidget
+
+proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if loadTable.rowHeight == 1:
+    loadTable = createTable(parent = ".loadmenu.list", headers = @["Player name", "Ship name", "Last saved"], command = "SortSaves", tooltipText = "Press mouse button to sort the saved games.")
+  else:
+    clearTable(table = loadTable)
+  type SaveRecord = object
+    playerName, shipName, saveTime, fileName: string
+  var saves: seq[SaveRecord]
+  for file in walkFiles(saveDirectory & "*.sav"):
+    echo file
+  return tclOk
+
 proc addCommands*() =
+  discard showLoadGameCommand(0, getInterp(), 0, @[])
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
   addCommand("ShowNews", showNewsCommand)
@@ -166,7 +182,7 @@ proc addCommands*() =
 
 # Temporary code for interfacing with Ada
 
-proc addAdaMainMenuCommands() {.raises: [], tags: [], exportc.} =
+proc addAdaMainMenuCommands() {.raises: [], tags: [RootEffect], exportc.} =
   try:
     addCommands()
   except:
