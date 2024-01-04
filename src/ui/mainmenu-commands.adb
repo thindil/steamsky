@@ -17,7 +17,7 @@ with Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Vectors;
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
@@ -236,6 +236,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Ada.Calendar.Time_Zones;
       use Ada.Containers;
+      use Ada.Directories;
       use GNAT.String_Split;
 
       Files: Search_Type;

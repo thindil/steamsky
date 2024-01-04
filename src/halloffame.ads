@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -73,9 +73,5 @@ package HallOfFame is
    -- SOURCE
    procedure Load_Hall_Of_Fame;
    -- ****
-
--- Temporary code to interact with Nim
-
-   function Get_Hof_From_Nim return Hall_Of_Fame_List;
 
 end HallOfFame;
