@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc]
+import std/[os, osproc, strutils]
 import ../[game, halloffame, tk]
 import dialogs, table
 
@@ -163,14 +163,25 @@ var loadTable: TableWidget
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   if loadTable.rowHeight == 1:
-    loadTable = createTable(parent = ".loadmenu.list", headers = @["Player name", "Ship name", "Last saved"], command = "SortSaves", tooltipText = "Press mouse button to sort the saved games.")
+    loadTable = createTable(parent = ".loadmenu.list", headers = @[
+        "Player name", "Ship name", "Last saved"], command = "SortSaves",
+        tooltipText = "Press mouse button to sort the saved games.")
   else:
     clearTable(table = loadTable)
   type SaveRecord = object
     playerName, shipName, saveTime, fileName: string
   var saves: seq[SaveRecord]
   for file in walkFiles(saveDirectory & "*.sav"):
-    echo file
+    let
+      (_, name, _) = splitFile(path = file)
+      parts = name.split('_')
+    if parts.len == 3:
+      saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
+          saveTime: $file.getLastModificationTime, fileName: file))
+    else:
+      saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
+          saveTime: $file.getLastModificationTime, fileName: file))
+  echo saves
   return tclOk
 
 proc addCommands*() =
