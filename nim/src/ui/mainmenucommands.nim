@@ -29,7 +29,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## * argc       - the amount of arguments entered for the command
   ## * argv       - the list of the command's arguments
   ##
-  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ## The procedure always return tclOk
   ##
   ## Tcl:
   ## OpenLink url
@@ -62,7 +62,7 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   ## * argc       - the amount of arguments entered for the command
   ## * argv       - the list of the command's arguments
   ##
-  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ## The procedure always return tclOk
   ##
   ## Tcl:
   ## ShowFile filename
@@ -100,7 +100,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## * argc       - the amount of arguments entered for the command
   ## * argv       - the list of the command's arguments
   ##
-  ## Returns tclOk if the canvas was resized, otherwise tclError
+  ## The procedure always return tclOk
   ##
   ## Tcl:
   ## ShowNews boolean
@@ -138,6 +138,17 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show the hall of fame screen
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowHallOfFame
   let hofView = ".hofmenu.view"
   tclEval(script = hofView & " delete [list [" & hofView & " children {}]]")
   for index, entry in hallOfFameArray:
