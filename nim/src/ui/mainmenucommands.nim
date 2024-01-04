@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc, strutils]
+import std/[os, osproc, strutils, times]
 import ../[game, halloffame, tk]
 import dialogs, table
 
@@ -158,7 +158,12 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
         entry.name & " " & $entry.points & " " & entry.deathReason & "]")
   return tclOk
 
-var loadTable: TableWidget
+type SaveSortOrders = enum
+  playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
+
+var
+  loadTable: TableWidget
+  saveSortOrder = timeDesc
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -177,10 +182,46 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
       parts = name.split('_')
     if parts.len == 3:
       saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
-          saveTime: $file.getLastModificationTime, fileName: file))
+          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
+          fileName: file))
     else:
       saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
-          saveTime: $file.getLastModificationTime, fileName: file))
+          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
+          fileName: file))
+
+  proc sortSaves(x, y: SaveRecord): int =
+    case saveSortOrder
+    of playerAsc:
+      if x.playerName < y.playerName:
+        return 1
+      else:
+        return -1
+    of playerDesc:
+      if x.playerName > y.playerName:
+        return 1
+      else:
+        return -1
+    of shipAsc:
+      if x.shipName < y.shipName:
+        return 1
+      else:
+        return -1
+    of shipDesc:
+      if x.shipName > y.shipName:
+        return 1
+      else:
+        return -1
+    of timeAsc:
+      if x.saveTime < y.saveTime:
+        return 1
+      else:
+        return -1
+    of timeDesc:
+      if x.saveTime > y.saveTime:
+        return 1
+      else:
+        return -1
+
   echo saves
   return tclOk
 
