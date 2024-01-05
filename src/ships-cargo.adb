@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,6 +26,8 @@ package body Ships.Cargo is
       Cargo_Index, Price: Natural := 0) is
       Nim_Cargo: Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
+      Old_Amount: constant Count_Type :=
+        Inventory_Container.Length(Container => Ship.Cargo);
       procedure Update_Ada_Cargo
         (P_Index, A, Dur, C_Index, P, Get_Player_Ship: Integer) with
          Import => True,
@@ -46,7 +48,14 @@ package body Ships.Cargo is
       Inventory_Container.Assign
         (Target => Ship.Cargo,
          Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
-      Set_Ada_Modules(Ship => Ship);
+      if Old_Amount > Inventory_Container.Length(Container => Ship.Cargo) then
+         Update_Ammo_Loop :
+         for Module of Ship.Modules loop
+            if Module.M_Type = GUN then
+               Module.Ammo_Index := 0;
+            end if;
+         end loop Update_Ammo_Loop;
+      end if;
    end Update_Cargo;
    --## rule on LOCAL_HIDING
 
