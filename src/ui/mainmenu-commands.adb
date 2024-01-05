@@ -41,7 +41,6 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
--- with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
@@ -54,7 +53,6 @@ with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad;
 with Goals;
--- with HallOfFame;
 with Maps.UI;
 with Ships;
 with Table; use Table;
@@ -356,25 +354,25 @@ package body MainMenu.Commands is
    -- DeleteGame file
    -- File is the name of the saved game to delete
    -- SOURCE
-   function Delete_Game_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Delete_Game_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-   begin
-      Tcl_SetVar
-        (interp => Interp, varName => "deletesave",
-         newValue => CArgv.Arg(Argv => Argv, N => 1));
-      Show_Question
-        (Question => "Are you sure you want delete this savegame?",
-         Result => "deletesave", In_Game => False);
-      return TCL_OK;
-   end Delete_Game_Command;
+--   function Delete_Game_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Delete_Game_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--   begin
+--      Tcl_SetVar
+--        (interp => Interp, varName => "deletesave",
+--         newValue => CArgv.Arg(Argv => Argv, N => 1));
+--      Show_Question
+--        (Question => "Are you sure you want delete this savegame?",
+--         Result => "deletesave", In_Game => False);
+--      return TCL_OK;
+--   end Delete_Game_Command;
 
    -- ****if* MCommands/MCommands.StartGame
    -- FUNCTION
@@ -1123,8 +1121,6 @@ package body MainMenu.Commands is
       Add_Ada_Commands;
       Add_Command
         (Name => "ShowLoadGame", Ada_Command => Show_Load_Game_Command'Access);
-      Add_Command
-        (Name => "DeleteGame", Ada_Command => Delete_Game_Command'Access);
       Add_Command(Name => "LoadGame", Ada_Command => Load_Game_Command'Access);
       Add_Command
         (Name => "SetFaction", Ada_Command => Set_Faction_Command'Access);
