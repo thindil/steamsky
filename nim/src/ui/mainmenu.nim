@@ -32,6 +32,17 @@ proc showMainMenu*()
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     ReadDirEffect, RootEffect].} =
+  ## Show the list of available saved games
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowLoadGame
   if loadTable.rowHeight == 1:
     loadTable = createTable(parent = ".loadmenu.list", headers = @[
         "Player name", "Ship name", "Last saved"], command = "SortSaves",
