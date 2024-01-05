@@ -15,13 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with Game;
 
 package body HallOfFame is
 
    procedure Load_Hall_Of_Fame is
       use Interfaces.C;
+      use Interfaces.C.Strings;
       use Game;
 
       --## rule off IMPROPER_INITIALIZATION
