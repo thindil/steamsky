@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, times]
 import ../[config, game, tk]
-import mainmenucommands, table, utilsui
+import mainmenucommands, table
 
 var mainMenuFrame = ""
 
