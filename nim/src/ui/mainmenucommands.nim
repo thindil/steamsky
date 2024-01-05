@@ -158,11 +158,19 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
         entry.name & " " & $entry.points & " " & entry.deathReason & "]")
   return tclOk
 
+proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  tclSetVar(varName = "deletesave", newValue = $argv[1])
+  showQuestion(question = "Are you sure you want delete this savegame?",
+      res = "deletesave", inGame = false)
+  return tclOk
+
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
   addCommand("ShowFile", showFileCommand)
   addCommand("ShowNews", showNewsCommand)
   addCommand("ShowHallOfFame", showHallOfFameCommand)
+  addCommand("DeleteGame", deleteGameCommand)
 
 # Temporary code for interfacing with Ada
 
