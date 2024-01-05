@@ -31,7 +31,8 @@ var
   saveSortOrder = timeDesc
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    ReadDirEffect, RootEffect].} =
   if loadTable.rowHeight == 1:
     loadTable = createTable(parent = ".loadmenu.list", headers = @[
         "Player name", "Ship name", "Last saved"], command = "SortSaves",
@@ -45,14 +46,21 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     let
       (_, name, _) = splitFile(path = file)
       parts = name.split('_')
-    if parts.len == 3:
-      saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
-          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
-          fileName: file))
-    else:
-      saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
-          saveTime: file.getLastModificationTime.format("yyyy-MM-dd hh:mm:ss"),
-          fileName: file))
+    try:
+      if parts.len == 3:
+        saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
+            saveTime: file.getLastModificationTime.format(
+                "yyyy-MM-dd hh:mm:ss"),
+            fileName: file))
+      else:
+        saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
+            saveTime: file.getLastModificationTime.format(
+                "yyyy-MM-dd hh:mm:ss"),
+            fileName: file))
+    except:
+      tclEval(script = "bgerror {Can't add information about the save file. Reason:" &
+          getCurrentExceptionMsg() & "}")
+      return
 
   proc sortSaves(x, y: SaveRecord): int =
     case saveSortOrder
@@ -108,7 +116,11 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind . <Alt-b> {}")
     tclEval(script = "bind . <Escape> {}")
     tclEval(script = "pack forget .loadmenu")
-    showMainMenu()
+    try:
+      showMainMenu()
+    except:
+      tclEval(script = "bgerror {Can't show the main menu. Reason: " &
+          getCurrentExceptionMsg() & "}")
   return tclOk
 
 proc createMainMenu*() =
