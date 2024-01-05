@@ -19,16 +19,15 @@ import std/[algorithm, os, strutils, times]
 import ../[config, game, tk]
 import mainmenucommands, table
 
-var mainMenuFrame = ""
-
-proc showMainMenu*()
-
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
 
 var
   loadTable: TableWidget
   saveSortOrder = timeDesc
+  mainMenuFrame = ""
+
+proc showMainMenu*()
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
