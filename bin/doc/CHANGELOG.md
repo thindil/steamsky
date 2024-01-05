@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Default keyboard shortcuts for moving the map
 - Scrolling the player's ship modules and crew members lists with mouse wheel
 - Showing the player's statistics after they death
+- Crash when updating any ship's cargo, ticket #98e4ec7bff
 
 ## [9.5] - 2023-12-24
 
