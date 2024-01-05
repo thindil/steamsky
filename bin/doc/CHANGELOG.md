@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when updating any ship's cargo, ticket #98e4ec7bff
+
 ## [9.0.6] - 2023-12-31
 
 ### Changed
