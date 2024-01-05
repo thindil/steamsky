@@ -159,7 +159,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   tclSetVar(varName = "deletesave", newValue = $argv[1])
   showQuestion(question = "Are you sure you want delete this savegame?",
       res = "deletesave", inGame = false)
