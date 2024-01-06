@@ -778,7 +778,8 @@ package body Maps.UI.Commands is
            Player_Ship.Destination_Y = 0 then
             Result := 1;
             Update_Game(Minutes => Get_Integer_Setting(Name => "waitMinutes"));
-            Wait_In_Place(Minutes => Get_Integer_Setting(Name => "waitMinutes"));
+            Wait_In_Place
+              (Minutes => Get_Integer_Setting(Name => "waitMinutes"));
          else
             Update_Coordinates;
             Result := Move_Ship(X => New_X, Y => New_Y, Message => Message);
@@ -1341,13 +1342,13 @@ package body Maps.UI.Commands is
       --## rule on IMPROPER_INITIALIZATION
       Game_Menu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
       procedure Add_Button
-        (Name, Label, Command: String; Shortcut: Unbounded_String;
+        (Name, Label, Command: String; Shortcut: String;
          Last: Boolean := False) is
          Button: constant Ttk_Button :=
            Create
              (pathName => Game_Menu & Name,
               options =>
-                "-text {" & Label & " [" & To_String(Source => Shortcut) &
+                "-text {" & Label & " [" & Shortcut &
                 "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
       begin
          if Last then
@@ -1367,7 +1368,7 @@ package body Maps.UI.Commands is
          Shortcuts.Append
            (New_Item =>
               (Button_Name => To_Unbounded_String(Source => Game_Menu & Name),
-               Shortcut => Shortcut));
+               Shortcut => To_Unbounded_String(Source => Shortcut)));
          Row := Row + 1;
       end Add_Button;
    begin
@@ -1379,49 +1380,56 @@ package body Maps.UI.Commands is
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
         (Name => ".shipinfo", Label => "Ship information",
-         Command => "ShowShipInfo", Shortcut => Menu_Accelerators(1));
+         Command => "ShowShipInfo",
+         Shortcut => Get_Menu_Accelerator(Index => 1));
       if State not in "combat" | "dead" then
          Add_Button
            (Name => ".shiporders", Label => "Ship orders",
-            Command => "ShowOrders", Shortcut => Menu_Accelerators(2));
+            Command => "ShowOrders",
+            Shortcut => Get_Menu_Accelerator(Index => 2));
       end if;
       if State /= "dead" then
          Add_Button
            (Name => ".crafting", Label => "Crafting",
-            Command => "ShowCrafting", Shortcut => Menu_Accelerators(3));
+            Command => "ShowCrafting",
+            Shortcut => Get_Menu_Accelerator(Index => 3));
       end if;
       Add_Button
         (Name => ".messages", Label => "Last messages",
-         Command => "ShowLastMessages", Shortcut => Menu_Accelerators(4));
+         Command => "ShowLastMessages",
+         Shortcut => Get_Menu_Accelerator(Index => 4));
       Add_Button
         (Name => ".knowledge", Label => "Knowledge lists",
-         Command => "ShowKnowledge", Shortcut => Menu_Accelerators(5));
+         Command => "ShowKnowledge",
+         Shortcut => Get_Menu_Accelerator(Index => 5));
       if State not in "combat" | "dead" then
          Add_Button
            (Name => ".wait", Label => "Wait orders", Command => "ShowWait",
-            Shortcut => Menu_Accelerators(6));
+            Shortcut => Get_Menu_Accelerator(Index => 6));
       end if;
       Add_Button
         (Name => ".stats", Label => "Game statistics", Command => "ShowStats",
-         Shortcut => Menu_Accelerators(7));
+         Shortcut => Get_Menu_Accelerator(Index => 7));
       if State /= "dead" then
          Add_Button
            (Name => ".help", Label => "Help", Command => "ShowHelp " & State,
-            Shortcut => Menu_Accelerators(8));
+            Shortcut => Get_Menu_Accelerator(Index => 8));
          Add_Button
            (Name => ".options", Label => "Game options",
-            Command => "ShowOptions", Shortcut => Menu_Accelerators(9));
+            Command => "ShowOptions",
+            Shortcut => Get_Menu_Accelerator(Index => 9));
          Add_Button
            (Name => ".quit", Label => "Quit from game", Command => "QuitGame",
-            Shortcut => Menu_Accelerators(10));
+            Shortcut => Get_Menu_Accelerator(Index => 10));
          Add_Button
            (Name => ".resign", Label => "Resign from game",
-            Command => "ResignGame", Shortcut => Menu_Accelerators(11));
+            Command => "ResignGame",
+            Shortcut => Get_Menu_Accelerator(Index => 11));
       end if;
       Add_Button
         (Name => ".close", Label => "Close",
-         Command => "CloseDialog " & Game_Menu,
-         Shortcut => To_Unbounded_String(Source => "Escape"), Last => True);
+         Command => "CloseDialog " & Game_Menu, Shortcut => "Escape",
+         Last => True);
       Add_Bindings_Block :
       declare
          --## rule off IMPROPER_INITIALIZATION
@@ -1480,8 +1488,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(Client_Data, Argc);
       Focused_Widget: constant Ttk_Frame :=
         Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
-      Menu_Commands: constant array
-        (Menu_Accelerators'Range) of Unbounded_String :=
+      Menu_Commands: constant array(1 .. 11) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "ShowShipInfo"),
          2 => To_Unbounded_String(Source => "ShowOrders"),
          3 => To_Unbounded_String(Source => "ShowCrafting"),
@@ -1499,8 +1506,8 @@ package body Maps.UI.Commands is
          return TCL_OK;
       end if;
       Invoke_Button_Loop :
-      for I in Menu_Accelerators'Range loop
-         if To_String(Source => Menu_Accelerators(I)) =
+      for I in 1 .. 11 loop
+         if Get_Menu_Accelerator(Index => I) =
            CArgv.Arg(Argv => Argv, N => 1) then
             Tcl_Eval
               (interp => Interp,

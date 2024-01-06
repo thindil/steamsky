@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -189,14 +189,22 @@ package body Help.UI is
          5 => Map_Accelerators(9), 6 => Map_Accelerators(10),
          7 => Map_Accelerators(11), 8 => Map_Accelerators(12),
          9 => Map_Accelerators(13), 10 => Map_Accelerators(14),
-         11 => Menu_Accelerators(1), 12 => Menu_Accelerators(2),
-         13 => Menu_Accelerators(3), 14 => Menu_Accelerators(4),
-         15 => Menu_Accelerators(5), 16 => Menu_Accelerators(6),
-         17 => Map_Accelerators(2), 18 => Menu_Accelerators(7),
-         19 => Menu_Accelerators(9), 20 => Menu_Accelerators(10),
-         21 => Menu_Accelerators(11), 22 => Map_Accelerators(1),
-         23 => Menu_Accelerators(8), 24 => Map_Accelerators(3),
-         25 => Map_Accelerators(4));
+         11 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 1)),
+         12 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 2)),
+         13 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 3)),
+         14 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 4)),
+         15 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 5)),
+         16 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 6)),
+         17 => Map_Accelerators(2),
+         18 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 7)),
+         19 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 9)),
+         20 =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 10)),
+         21 =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 11)),
+         22 => Map_Accelerators(1),
+         23 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 8)),
+         24 => Map_Accelerators(3), 25 => Map_Accelerators(4));
       --## rule off TYPE_INITIAL_VALUES
       type Font_Tag is record
          Tag: String(1 .. 1);

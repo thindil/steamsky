@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -74,47 +74,58 @@ package body GameOptions is
    -- SOURCE
    Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 1)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 1)),
          Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
          Config_Name => To_Unbounded_String(Source => "ShipInfo")),
       2 =>
-        (Shortcut => Menu_Accelerators(2),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 2)),
          Entry_Name => To_Unbounded_String(Source => ".menu.orders"),
          Config_Name => To_Unbounded_String(Source => "Orders")),
       3 =>
-        (Shortcut => Menu_Accelerators(3),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 3)),
          Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
          Config_Name => To_Unbounded_String(Source => "Crafting")),
       4 =>
-        (Shortcut => Menu_Accelerators(4),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 4)),
          Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
          Config_Name => To_Unbounded_String(Source => "LastMessages")),
       5 =>
-        (Shortcut => Menu_Accelerators(5),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 5)),
          Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
          Config_Name => To_Unbounded_String(Source => "Knowledge")),
       6 =>
-        (Shortcut => Menu_Accelerators(6),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 6)),
          Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
          Config_Name => To_Unbounded_String(Source => "WaitOrders")),
       7 =>
-        (Shortcut => Menu_Accelerators(7),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 7)),
          Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
          Config_Name => To_Unbounded_String(Source => "GameStats")),
       8 =>
-        (Shortcut => Menu_Accelerators(8),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 8)),
          Entry_Name => To_Unbounded_String(Source => ".menu.help"),
          Config_Name => To_Unbounded_String(Source => "Help")),
       9 =>
-        (Shortcut => Menu_Accelerators(9),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 9)),
          Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
          Config_Name => To_Unbounded_String(Source => "GameOptions")),
       10 =>
-        (Shortcut => Menu_Accelerators(10),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 10)),
          Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
          Config_Name => To_Unbounded_String(Source => "Quit")),
       11 =>
-        (Shortcut => Menu_Accelerators(11),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 11)),
          Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
          Config_Name => To_Unbounded_String(Source => "Resign")),
       12 =>
@@ -712,19 +723,18 @@ package body GameOptions is
       Options_Frame.Name :=
         New_String(Str => Widget_Image(Win => Options_Canvas) & ".options");
       Load_Menu_Accelerators_Loop :
-      for I in Menu_Accelerators'Range loop
-         Accels(I).Shortcut := Menu_Accelerators(I);
+      for I in 1 .. 11 loop
+         Accels(I).Shortcut :=
+           To_Unbounded_String(Source => Get_Menu_Accelerator(I));
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in Map_Accelerators'Range loop
-         Accels(I + Menu_Accelerators'Last).Shortcut := Map_Accelerators(I);
+         Accels(I + 11).Shortcut := Map_Accelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1).Shortcut :=
-        Full_Screen_Accel;
+      Accels(11 + Map_Accelerators'Last + 1).Shortcut := Full_Screen_Accel;
       Load_General_Accelerators_Loop :
       for I in 1 .. 4 loop
-         Accels(I + Menu_Accelerators'Last + Map_Accelerators'Last + 1)
-           .Shortcut :=
+         Accels(I + 11 + Map_Accelerators'Last + 1).Shortcut :=
            To_Unbounded_String(Source => Get_General_Accelerator(Index => I));
       end loop Load_General_Accelerators_Loop;
       Load_Accelerators_Loop :
@@ -1097,8 +1107,7 @@ package body GameOptions is
              (Str => Root_Name & To_String(Source => Accels(I).Entry_Name));
          --## rule off SIMPLIFIABLE_STATEMENTS
          if I < 12 then
-            Menu_Accelerators(I) :=
-              To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+            Set_Menu_Accelerator(Index => I, Value => Get(Widgt => Key_Entry));
             Bind_To_Main_Window
               (Interp => Get_Context,
                Sequence =>
@@ -1119,8 +1128,7 @@ package body GameOptions is
                          New_Item => "KeyPress-")) &
                  ">",
                Script =>
-                 "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) &
-                 "}");
+                 "{InvokeMenu " & Get_Menu_Accelerator(Index => I) & "}");
          elsif I < 49 then
             Map_Accelerators(I - 11) :=
               To_Unbounded_String(Source => Get(Widgt => Key_Entry));
@@ -1154,9 +1162,7 @@ package body GameOptions is
           (Str =>
              Root_Name &
              To_String
-               (Source =>
-                  Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
-                    .Entry_Name));
+               (Source => Accels(11 + Map_Accelerators'Last + 1).Entry_Name));
       Full_Screen_Accel :=
         To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
