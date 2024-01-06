@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[parsecfg, streams, strutils, tables]
 import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
 import coreui, dialogs, utilsui2
@@ -348,6 +348,23 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
         showQuestion(question = "You are dead. Would you like to see your game statistics?",
             res = "showstats")
     currentStory.showText = true
+
+var mapView = ""
+
+proc createGameUi*() =
+  let
+    gameFrame = ".gameframe"
+    paned = gameFrame & ".paned"
+  mapView = paned & ".mapframe.map"
+  var newStart = false
+  if tclEval2(script = "winfo exists " & mapView) == "0":
+    newStart = true
+    let fileName = saveDirectory & "keys.cfg"
+    var configFile = newFileStream(fileName)
+    if configFile != nil:
+      var parser: CfgParser
+      parser.open(configFile, fileName)
+      parser.close()
 
 # Temporary code for interfacing with Ada
 
