@@ -24,6 +24,20 @@ var
   centerX*, centerY*: Positive ## Coordinates of the center point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
+  mapView = ""
+  menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
+      "g", "F1", "p", "q", "x"]
+    ## The game menu keyboard shortcuts
+  mapAccelerators*: array[1 .. 37, string] = ["e", "v", "plus", "minus",
+      "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
+      "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
+      "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
+      "Shift-KP_Right", "Shift-KP_End", "Shift-KP_Down", "Shift-KP_Next",
+      "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
+      "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
+      "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
+      "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
+  fullScreenAccel* = "Control-f"
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   ## Update in-game header with information about time, state of the crew
@@ -349,22 +363,6 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
             res = "showstats")
     currentStory.showText = true
 
-var
-  mapView = ""
-  menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
-      "g", "F1", "p", "q", "x"]
-    ## The game menu keyboard shortcuts
-  mapAccelerators*: array[1 .. 37, string] = ["e", "v", "plus", "minus",
-      "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
-      "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
-      "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
-      "Shift-KP_Right", "Shift-KP_End", "Shift-KP_Down", "Shift-KP_Next",
-      "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
-      "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
-      "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
-      "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
-  fullScreenAccel* = "Control-f"
-
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -525,3 +523,9 @@ proc getAdaGeneralAccelerator(index: cint): cstring {.raises: [], tags: [], expo
 
 proc setAdaGeneralAccelerator(index: cint; value: cstring) {.raises: [], tags: [], exportc.} =
   generalAccelerators[index - 1] = $value
+
+proc getAdaMenuAccelerator(index: cint): cstring {.raises: [], tags: [], exportc.} =
+  return menuAccelerators[index].cstring
+
+proc setAdaMenuAccelerator(index: cint; value: cstring) {.raises: [], tags: [], exportc.} =
+  generalAccelerators[index] = $value

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -752,33 +752,44 @@ package body Maps.UI is
                    (Source => Raw_Data,
                     Count => Length(Source => Raw_Data) - Equal_Index - 1);
                if Field_Name = To_Unbounded_String(Source => "ShipInfo") then
-                  Menu_Accelerators(1) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 1, Value => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Orders") then
-                  Menu_Accelerators(2) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 2, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "Crafting") then
-                  Menu_Accelerators(3) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 3, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "LastMessages") then
-                  Menu_Accelerators(4) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 4, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "Knowledge") then
-                  Menu_Accelerators(5) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 5, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitOrders") then
-                  Menu_Accelerators(6) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 6, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameStats") then
-                  Menu_Accelerators(7) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 7, Value => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Help") then
-                  Menu_Accelerators(8) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 8, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameOptions") then
-                  Menu_Accelerators(9) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 9, Value => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Quit") then
-                  Menu_Accelerators(10) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 10, Value => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Resign") then
-                  Menu_Accelerators(11) := Value;
+                  Set_Menu_Accelerator
+                    (Index => 11, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameMenu") then
                   Map_Accelerators(1) := Value;
@@ -1035,7 +1046,7 @@ package body Maps.UI is
             Action => "attributes", Options => "-fullscreen 1");
       end if;
       Set_Accelerators_Loop :
-      for Accelerator of Menu_Accelerators loop
+      for Accelerator in 1 .. 11 loop
          Bind_To_Main_Window
            (Interp => Get_Context,
             Sequence =>
@@ -1043,15 +1054,23 @@ package body Maps.UI is
               To_String
                 (Source =>
                    Insert
-                     (Source => Accelerator,
+                     (Source =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Menu_Accelerator(Index => Accelerator)),
                       Before =>
                         Index
-                          (Source => Accelerator, Pattern => "-",
-                           Going => Backward) +
+                          (Source =>
+                             To_Unbounded_String
+                               (Source =>
+                                  Get_Menu_Accelerator(Index => Accelerator)),
+                           Pattern => "-", Going => Backward) +
                         1,
                       New_Item => "KeyPress-")) &
               ">",
-            Script => "{InvokeMenu " & To_String(Source => Accelerator) & "}");
+            Script =>
+              "{InvokeMenu " & Get_Menu_Accelerator(Index => Accelerator) &
+              "}");
       end loop Set_Accelerators_Loop;
       if Index
           (Source =>
@@ -1237,5 +1256,24 @@ package body Maps.UI is
    begin
       Set_Ada_General_Accelerator(I => Index, Val => New_String(Str => Value));
    end Set_General_Accelerator;
+
+   function Get_Menu_Accelerator(Index: Positive) return String is
+
+      function Get_Ada_Menu_Accelerator(I: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaMenuAccelerator";
+   begin
+      return Value(Item => Get_Ada_Menu_Accelerator(I => Index));
+   end Get_Menu_Accelerator;
+
+   procedure Set_Menu_Accelerator(Index: Positive; Value: String) is
+      procedure Set_Ada_Menu_Accelerator(I: Positive; Val: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaMenuAccelerator";
+   begin
+      Set_Ada_Menu_Accelerator(I => Index, Val => New_String(Str => Value));
+   end Set_Menu_Accelerator;
 
 end Maps.UI;

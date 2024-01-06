@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -22,24 +22,6 @@ with Ships; use Ships;
 -- SOURCE
 package Maps.UI is
 -- ****
-
-   -- ****v* MUI/MUI.MenuAccelerators
-   -- FUNCTION
-   -- Array with the game menu default accelerators
-   -- SOURCE
-   Menu_Accelerators: array(1 .. 11) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "s"),
-      2 => To_Unbounded_String(Source => "o"),
-      3 => To_Unbounded_String(Source => "r"),
-      4 => To_Unbounded_String(Source => "m"),
-      5 => To_Unbounded_String(Source => "k"),
-      6 => To_Unbounded_String(Source => "w"),
-      7 => To_Unbounded_String(Source => "g"),
-      8 => To_Unbounded_String(Source => "F1"),
-      9 => To_Unbounded_String(Source => "p"),
-      10 => To_Unbounded_String(Source => "q"),
-      11 => To_Unbounded_String(Source => "x"));
-   -- ****
 
    -- ****v* MUI/MUI.Map_Accelerators
    -- FUNCTION
@@ -152,6 +134,8 @@ package Maps.UI is
 
    function Get_General_Accelerator(Index: Positive) return String;
    procedure Set_General_Accelerator(Index: Positive; Value: String);
+   function Get_Menu_Accelerator(Index: Positive) return String;
+   procedure Set_Menu_Accelerator(Index: Positive; Value: String);
    procedure Get_Center_Point(X, Y: out Positive) with
       Import => True,
       Convention => C,

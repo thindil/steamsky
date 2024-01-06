@@ -74,7 +74,7 @@ package body GameOptions is
    -- SOURCE
    Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
-        (Shortcut => Menu_Accelerators(1),
+        (Shortcut => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 1)),
          Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
          Config_Name => To_Unbounded_String(Source => "ShipInfo")),
       2 =>
