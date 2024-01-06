@@ -363,6 +363,7 @@ var
       "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
       "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
+  fullScreenAccel* = "Control-f"
 
 proc createGameUi*() =
   let
@@ -410,6 +411,80 @@ proc createGameUi*() =
               menuAccelerators[11] = entry.value
             of "GameMenu":
               mapAccelerators[1] = entry.value
+            of "MapOptions":
+              mapAccelerators[2] = entry.value
+            of "ZoomInMap":
+              mapAccelerators[3] = entry.value
+            of "ZoomOutMap":
+              mapAccelerators[4] = entry.value
+            of "MoveUpLeft":
+              mapAccelerators[5] = entry.value
+            of "MoveUp":
+              mapAccelerators[6] = entry.value
+            of "MoveUpRight":
+              mapAccelerators[7] = entry.value
+            of "MoveLeft":
+              mapAccelerators[8] = entry.value
+            of "WaitInPlace":
+              mapAccelerators[10] = entry.value
+            of "MoveRight":
+              mapAccelerators[9] = entry.value
+            of "MoveDownLeft":
+              mapAccelerators[11] = entry.value
+            of "MoveDown":
+              mapAccelerators[12] = entry.value
+            of "MoveDownRight":
+              mapAccelerators[13] = entry.value
+            of "MoveTo":
+              mapAccelerators[14] = entry.value
+            of "CenterMap":
+              mapAccelerators[15] = entry.value
+            of "CenterMapOnHomeBase":
+              mapAccelerators[16] = entry.value
+            of "MoveMapUpLeft":
+              mapAccelerators[17] = entry.value
+            of "MoveMapUp":
+              mapAccelerators[18] = entry.value
+            of "MoveMapUpRight":
+              mapAccelerators[19] = entry.value
+            of "MoveMapLeft":
+              mapAccelerators[20] = entry.value
+            of "MoveMapRight":
+              mapAccelerators[21] = entry.value
+            of "MoveMapDownLeft":
+              mapAccelerators[22] = entry.value
+            of "MoveMapDown":
+              mapAccelerators[23] = entry.value
+            of "MoveMapDownRight":
+              mapAccelerators[24] = entry.value
+            of "MoveCursorUpLeft":
+              mapAccelerators[25] = entry.value
+            of "MoveCursorUp":
+              mapAccelerators[26] = entry.value
+            of "MoveCursorUpRight":
+              mapAccelerators[27] = entry.value
+            of "MoveCursorLeft":
+              mapAccelerators[28] = entry.value
+            of "MoveCursorRight":
+              mapAccelerators[29] = entry.value
+            of "MoveCursorDownLeft":
+              mapAccelerators[30] = entry.value
+            of "MoveCursorDown":
+              mapAccelerators[31] = entry.value
+            of "MoveCursorDownRight":
+              mapAccelerators[32] = entry.value
+            of "LeftClickMouse":
+              mapAccelerators[33] = entry.value
+            of "FullStop":
+              mapAccelerators[34] = entry.value
+            of "QuarterSpeed":
+              mapAccelerators[35] = entry.value
+            of "HalfSpeed":
+              mapAccelerators[36] = entry.value
+            of "FullSpeed":
+              mapAccelerators[37] = entry.value
+            of "FullScreen":
+              fullScreenAccel = entry.value
           of cfgError:
             echo entry.msg
       parser.close()
