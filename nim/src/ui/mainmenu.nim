@@ -52,25 +52,28 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   type SaveRecord = object
     playerName, shipName, saveTime, fileName: string
   var saves: seq[SaveRecord]
-  for file in walkFiles(saveDirectory & "*.sav"):
-    let
-      (_, name, _) = splitFile(path = file)
-      parts = name.split('_')
-    try:
-      if parts.len == 3:
-        saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
-            saveTime: file.getLastModificationTime.format(
-                "yyyy-MM-dd hh:mm:ss"),
-            fileName: file))
-      else:
-        saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
-            saveTime: file.getLastModificationTime.format(
-                "yyyy-MM-dd hh:mm:ss"),
-            fileName: file))
-    except:
-      tclEval(script = "bgerror {Can't add information about the save file. Reason:" &
-          getCurrentExceptionMsg() & "}")
-      return
+  try:
+    for file in walkFiles(saveDirectory & "*.sav"):
+      let
+        (_, name, _) = splitFile(path = file)
+        parts = name.split('_')
+      try:
+        if parts.len == 3:
+          saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
+              saveTime: file.getLastModificationTime.format(
+                  "yyyy-MM-dd hh:mm:ss"),
+              fileName: file))
+        else:
+          saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
+              saveTime: file.getLastModificationTime.format(
+                  "yyyy-MM-dd hh:mm:ss"),
+              fileName: file))
+      except:
+        tclEval(script = "bgerror {Can't add information about the save file. Reason:" &
+            getCurrentExceptionMsg() & "}")
+        return
+  except:
+    tclEval(script = "bgerror {Can't read saved games files. Reason: " & getCurrentExceptionMsg() & "}")
 
   proc sortSaves(x, y: SaveRecord): int =
     case saveSortOrder
