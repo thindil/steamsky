@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc]
-import ../[game, halloffame, tk]
+import std/[os, osproc, strutils]
+import ../[config, events, game, halloffame, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -176,6 +176,20 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   showQuestion(question = "Are you sure you want delete this savegame?",
       res = "deletesave", inGame = false)
   return tclOk
+
+proc startGame() =
+  let mainWindow = "."
+  var x: int = ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
+      gameSettings.windowWidth) / 2).int
+  if x < 0:
+    x = 0
+  var y: int = ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
+      gameSettings.windowHeight) / 2).int
+  if y < 0:
+    y = 0
+  tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
+      $gameSettings.windowHeight & "+" & $x & "+" & $y)
+  generateTraders()
 
 proc addCommands*() =
   addCommand("OpenLink", openLinkCommand)
