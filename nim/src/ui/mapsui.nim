@@ -349,7 +349,11 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
             res = "showstats")
     currentStory.showText = true
 
-var mapView = ""
+var
+  mapView = ""
+  menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
+      "g", "F1", "p", "q", "x"]
+    ## The game menu keyboard shortcuts
 
 proc createGameUi*() =
   let
@@ -364,6 +368,41 @@ proc createGameUi*() =
     if configFile != nil:
       var parser: CfgParser
       parser.open(configFile, fileName)
+      while true:
+        var entry = parser.next
+        case entry.kind
+          of cfgEof:
+            break
+          of cfgSectionStart, cfgOption:
+            discard
+          of cfgKeyValuePair:
+            case entry.key
+            of "ShipInfo":
+              menuAccelerators[1] = entry.value
+            of "Orders":
+              menuAccelerators[2] = entry.value
+            of "Crafting":
+              menuAccelerators[3] = entry.value
+            of "LastMessages":
+              menuAccelerators[4] = entry.value
+            of "Knowledge":
+              menuAccelerators[5] = entry.value
+            of "WaitOrders":
+              menuAccelerators[6] = entry.value
+            of "GameStats":
+              menuAccelerators[7] = entry.value
+            of "Help":
+              menuAccelerators[8] = entry.value
+            of "GameOptions":
+              menuAccelerators[9] = entry.value
+            of "Quit":
+              menuAccelerators[10] = entry.value
+            of "Resign":
+              menuAccelerators[11] = entry.value
+            of "GameMenu":
+              mapAccelerators[1] = entry.value
+          of cfgError:
+            echo entry.msg
       parser.close()
 
 # Temporary code for interfacing with Ada
