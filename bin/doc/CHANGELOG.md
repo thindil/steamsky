@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash when updating any ship's cargo, ticket #98e4ec7bff
+- Crash when trying to show the game statistics screen, ticket #5e4a10d944
 
 ## [9.0.6] - 2023-12-31
 
