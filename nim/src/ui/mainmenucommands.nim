@@ -160,6 +160,18 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Delete a saved game file
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## DeleteGame file
+  ## File is the name of the saved game to delete
   tclSetVar(varName = "deletesave", newValue = $argv[1])
   showQuestion(question = "Are you sure you want delete this savegame?",
       res = "deletesave", inGame = false)
