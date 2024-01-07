@@ -1245,11 +1245,13 @@ package body Maps.UI is
            To_String
              (Source =>
                 Insert
-                  (Source => To_Unbounded_String(Source => Get_Full_Screen_Accel),
+                  (Source =>
+                     To_Unbounded_String(Source => Get_Full_Screen_Accel),
                    Before =>
                      Index
-                       (Source => To_Unbounded_String(Source => Get_Full_Screen_Accel), Pattern => "-",
-                        Going => Backward) +
+                       (Source =>
+                          To_Unbounded_String(Source => Get_Full_Screen_Accel),
+                        Pattern => "-", Going => Backward) +
                      1,
                    New_Item => "KeyPress-")) &
            ">",

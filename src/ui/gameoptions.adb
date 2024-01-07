@@ -778,7 +778,8 @@ package body GameOptions is
          Accels(I + 11).Shortcut :=
            To_Unbounded_String(Source => Get_Map_Accelerator(Index => I));
       end loop Load_Map_Accelerators_Loop;
-      Accels(11 + 37 + 1).Shortcut := To_Unbounded_String(Source => Get_Full_Screen_Accel);
+      Accels(11 + 37 + 1).Shortcut :=
+        To_Unbounded_String(Source => Get_Full_Screen_Accel);
       Load_General_Accelerators_Loop :
       for I in 1 .. 4 loop
          Accels(I + 11 + 37 + 1).Shortcut :=
