@@ -734,7 +734,7 @@ package body GameOptions is
       Load_Menu_Accelerators_Loop :
       for I in 1 .. 11 loop
          Accels(I).Shortcut :=
-           To_Unbounded_String(Source => Get_Menu_Accelerator(I));
+           To_Unbounded_String(Source => Get_Menu_Accelerator(Index => I));
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in Map_Accelerators'Range loop
