@@ -48,10 +48,19 @@ project steamsky is
                "-gnaty3aAbCdefhIklnOprSux",
                "-gnatwe");
          when "release" =>
-            for Default_Switches ("ada") use ("-O2",
-               "-ffunction-sections",
-               "-fdata-sections",
-               "-s");
+            case OS is
+               when "Windows" =>
+                  for Default_Switches ("ada") use ("-O2",
+                     "-ffunction-sections",
+                     "-fdata-sections",
+                     "-s",
+                     "-flto");
+               when "Unix" =>
+                  for Default_Switches ("ada") use ("-O2",
+                     "-ffunction-sections",
+                     "-fdata-sections",
+                     "-s");
+            end case;
          when "analyze" =>
             for Default_Switches ("ada") use ("-pg",
                "-fprofile-arcs",
@@ -70,7 +79,7 @@ project steamsky is
             case OS is
                when "Windows" =>
                   for Default_Switches ("ada") use Release_Switches &
-                     "-mwindows";
+                     ("-mwindows", "-flto");
                when "Unix" =>
                   for Default_Switches ("ada") use Release_Switches &
                      "-Wl,-rpath,$ORIGIN/libs";
