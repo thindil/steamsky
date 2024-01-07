@@ -177,8 +177,16 @@ grid [ttk::combobox $goptions.autosave -state readonly \
    -row 14 -column 1 -sticky w
 tooltip::tooltip $goptions.autosave \
    {How often game should be automatically saved to disk.}
+grid [ttk::label $goptions.lbl16 -text {Wait time:}] -sticky w
+tooltip::tooltip $goptions.lbl16 \
+   {How much minutes will pass after press the Wait button.}
+grid [ttk::spinbox $goptions.waitinterval -from 1 -to 1440 -validate key \
+   -validatecommand {ValidateSpinbox %W %P {}} -width 6] -row 15 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.waitinterval \
+   "How much minutes will pass after press the Wait button.\nEnter value between 1 and 1440"
 SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
-for {set i 1} {$i < 16} {incr i} {
+for {set i 1} {$i < 17} {incr i} {
    SetScrollbarBindings $goptions.lbl$i .gameframe.paned.optionsframe.scrolly
 }
 # Movement keys options

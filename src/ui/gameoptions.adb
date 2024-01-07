@@ -511,7 +511,7 @@ package body GameOptions is
                 (Source =>
                    (if Get_Boolean_Setting(Name => "showNumbers") then "1"
                     else "0"))));
-      Spin_Box_Array: constant array(1 .. 10) of Widget_Data :=
+      Spin_Box_Array: constant array(1 .. 11) of Widget_Data :=
         (1 =>
            (Name =>
               To_Unbounded_String
@@ -598,7 +598,16 @@ package body GameOptions is
             Value =>
               To_Unbounded_String
                 (Source =>
-                   Natural'Image(Get_Integer_Setting(Name => "listsLimit")))));
+                   Natural'Image(Get_Integer_Setting(Name => "listsLimit")))),
+         11 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.waitinterval"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image
+                     (Get_Integer_Setting(Name => "waitMinutes")))));
       Combo_Box_Array: constant array(1 .. 4) of Widget_Data :=
         (1 =>
            (Name =>
@@ -992,6 +1001,10 @@ package body GameOptions is
         (Name => "savedMessages",
          Value =>
            Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages"));
+      Set_Integer_Setting
+        (Name => "waitMinutes",
+         Value =>
+           Get_Spinbox_Value(Spin_Box_Name => ".general.waitinterval"));
       Set_Messages_Order
         (Value =>
            Messages_Order_Type'Val
