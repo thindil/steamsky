@@ -1454,7 +1454,7 @@ package body Maps.UI.Commands is
             Bind
               (Widgt => Menu_Button,
                Sequence =>
-                 "<KeyPress-" & To_String(Source => Map_Accelerators(1)) & ">",
+                 "<KeyPress-" & Get_Map_Accelerator(Index => 1) & ">",
                Script => "{ShowGameMenu;break}");
          end loop Buttons_Loop;
       end Add_Bindings_Block;

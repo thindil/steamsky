@@ -948,12 +948,9 @@ package body Maps.UI is
                   Set_Map_Accelerator(Index => 27, Value => "Control-Prior");
                   Set_Map_Accelerator(Index => 28, Value => "Control-Left");
                   Set_Map_Accelerator(Index => 29, Value => "Control-Right");
-                  Map_Accelerators(30) :=
-                    To_Unbounded_String(Source => "Control-End");
-                  Map_Accelerators(31) :=
-                    To_Unbounded_String(Source => "Control-Down");
-                  Map_Accelerators(32) :=
-                    To_Unbounded_String(Source => "Control-Next");
+                  Set_Map_Accelerator(Index => 30, Value => "Control-End");
+                  Set_Map_Accelerator(Index => 31, Value => "Control-Down");
+                  Set_Map_Accelerator(Index => 32, Value => "Control-Next");
                end if;
          end Load_Keys_Block;
          Maps.UI.Commands.Add_Commands;
@@ -1124,7 +1121,7 @@ package body Maps.UI is
 
    procedure Set_Keys is
       Tcl_Commands_Array: constant array
-        (Map_Accelerators'Range) of Unbounded_String :=
+        (1 .. 37) of Unbounded_String :=
         (1 =>
            To_Unbounded_String
              (Source =>
@@ -1191,10 +1188,10 @@ package body Maps.UI is
               To_String
                 (Source =>
                    Insert
-                     (Source => Map_Accelerators(I),
+                     (Source => To_Unbounded_String(Source => Get_Map_Accelerator(Index => I)),
                       Before =>
                         Index
-                          (Source => Map_Accelerators(I), Pattern => "-",
+                          (Source => To_Unbounded_String(Source => Get_Map_Accelerator(Index => I)), Pattern => "-",
                            Going => Backward) +
                         1,
                       New_Item => "KeyPress-")) &
