@@ -184,11 +184,16 @@ package body Help.UI is
                           (Container => Skills_List, Index => Unarmed_Skill)
                           .Name))));
       Accel_Names: constant array(1 .. 25) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 5)), 2 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 6)),
-         3 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 7)), 4 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 8)),
-         5 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 9)), 6 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 10)),
-         7 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 11)), 8 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 12)),
-         9 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)), 10 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)),
+        (1 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 5)),
+         2 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 6)),
+         3 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 7)),
+         4 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 8)),
+         5 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 9)),
+         6 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 10)),
+         7 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 11)),
+         8 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 12)),
+         9 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)),
+         10 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)),
          11 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 1)),
          12 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 2)),
          13 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 3)),
@@ -204,7 +209,8 @@ package body Help.UI is
            To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 11)),
          22 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 1)),
          23 => To_Unbounded_String(Source => Get_Menu_Accelerator(Index => 8)),
-         24 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 3)), 25 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 4)));
+         24 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 3)),
+         25 => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 4)));
       --## rule off TYPE_INITIAL_VALUES
       type Font_Tag is record
          Tag: String(1 .. 1);

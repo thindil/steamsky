@@ -129,151 +129,188 @@ package body GameOptions is
          Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
          Config_Name => To_Unbounded_String(Source => "Resign")),
       12 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 1)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 1)),
          Entry_Name => To_Unbounded_String(Source => ".menu.menu"),
          Config_Name => To_Unbounded_String(Source => "GameMenu")),
       13 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 2)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 2)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapoptions"),
          Config_Name => To_Unbounded_String(Source => "MapOptions")),
       14 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 3)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 3)),
          Entry_Name => To_Unbounded_String(Source => ".map.zoomin"),
          Config_Name => To_Unbounded_String(Source => "ZoomInMap")),
       15 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 4)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 4)),
          Entry_Name => To_Unbounded_String(Source => ".map.zoomout"),
          Config_Name => To_Unbounded_String(Source => "ZoomOutMap")),
       16 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 5)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 5)),
          Entry_Name => To_Unbounded_String(Source => ".movement.upleft"),
          Config_Name => To_Unbounded_String(Source => "MoveUpLeft")),
       17 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 6)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 6)),
          Entry_Name => To_Unbounded_String(Source => ".movement.up"),
          Config_Name => To_Unbounded_String(Source => "MoveUp")),
       18 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 7)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 7)),
          Entry_Name => To_Unbounded_String(Source => ".movement.upright"),
          Config_Name => To_Unbounded_String(Source => "MoveUpRight")),
       19 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 8)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 8)),
          Entry_Name => To_Unbounded_String(Source => ".movement.left"),
          Config_Name => To_Unbounded_String(Source => "MoveLeft")),
       20 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 10)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 10)),
          Entry_Name => To_Unbounded_String(Source => ".movement.wait"),
          Config_Name => To_Unbounded_String(Source => "WaitInPlace")),
       21 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 9)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 9)),
          Entry_Name => To_Unbounded_String(Source => ".movement.right"),
          Config_Name => To_Unbounded_String(Source => "MoveRight")),
       22 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 11)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 11)),
          Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
          Config_Name => To_Unbounded_String(Source => "MoveDownRight")),
       23 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 12)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 12)),
          Entry_Name => To_Unbounded_String(Source => ".movement.down"),
          Config_Name => To_Unbounded_String(Source => "MoveDown")),
       24 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 13)),
          Entry_Name => To_Unbounded_String(Source => ".movement.downright"),
          Config_Name => To_Unbounded_String(Source => "MoveDownRight")),
       25 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 14)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 14)),
          Entry_Name => To_Unbounded_String(Source => ".movement.moveto"),
          Config_Name => To_Unbounded_String(Source => "MoveTo")),
       26 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 15)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 15)),
          Entry_Name => To_Unbounded_String(Source => ".map.center"),
          Config_Name => To_Unbounded_String(Source => "CenterMap")),
       27 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 16)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 16)),
          Entry_Name => To_Unbounded_String(Source => ".map.centerhomebase"),
          Config_Name => To_Unbounded_String(Source => "CenterMapOnHomeBase")),
       28 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 17)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 17)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapupleft"),
          Config_Name => To_Unbounded_String(Source => "MoveMapUpLeft")),
       29 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 18)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 18)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapup"),
          Config_Name => To_Unbounded_String(Source => "MoveMapUp")),
       30 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 19)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 19)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapupright"),
          Config_Name => To_Unbounded_String(Source => "MoveMapUpRight")),
       31 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 20)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 20)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapleft"),
          Config_Name => To_Unbounded_String(Source => "MoveMapLeft")),
       32 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 21)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 21)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapright"),
          Config_Name => To_Unbounded_String(Source => "MoveMapRight")),
       33 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 22)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 22)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapdownleft"),
          Config_Name => To_Unbounded_String(Source => "MoveMapDownLeft")),
       34 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 23)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 23)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapdown"),
          Config_Name => To_Unbounded_String(Source => "MoveMapDown")),
       35 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 24)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 24)),
          Entry_Name => To_Unbounded_String(Source => ".map.mapdownright"),
          Config_Name => To_Unbounded_String(Source => "MoveMapDownRight")),
       36 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 25)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 25)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursorupleft"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorUpLeft")),
       37 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 26)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 26)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursorup"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorUp")),
       38 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 27)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 27)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorUpRight")),
       39 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 28)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 28)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorLeft")),
       40 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 29)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 29)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursorright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorRight")),
       41 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 30)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 30)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDownLeft")),
       42 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 31)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 31)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDown")),
       43 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 32)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 32)),
          Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDownRight")),
       44 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 33)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 33)),
          Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"),
          Config_Name => To_Unbounded_String(Source => "LeftClickMouse")),
       45 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 34)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 34)),
          Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
          Config_Name => To_Unbounded_String(Source => "FullStop")),
       46 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 35)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 35)),
          Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
          Config_Name => To_Unbounded_String(Source => "QuarterSpeed")),
       47 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 36)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 36)),
          Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
          Config_Name => To_Unbounded_String(Source => "HalfSpeed")),
       48 =>
-        (Shortcut => To_Unbounded_String(Source => Get_Map_Accelerator(Index => 37)),
+        (Shortcut =>
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => 37)),
          Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
          Config_Name => To_Unbounded_String(Source => "FullSpeed")),
       49 =>
@@ -738,7 +775,8 @@ package body GameOptions is
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in 1 .. 37 loop
-         Accels(I + 11).Shortcut := To_Unbounded_String(Source => Get_Map_Accelerator(Index => I));
+         Accels(I + 11).Shortcut :=
+           To_Unbounded_String(Source => Get_Map_Accelerator(Index => I));
       end loop Load_Map_Accelerators_Loop;
       Accels(11 + 37 + 1).Shortcut := Full_Screen_Accel;
       Load_General_Accelerators_Loop :
@@ -1003,8 +1041,7 @@ package body GameOptions is
            Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages"));
       Set_Integer_Setting
         (Name => "waitMinutes",
-         Value =>
-           Get_Spinbox_Value(Spin_Box_Name => ".general.waitinterval"));
+         Value => Get_Spinbox_Value(Spin_Box_Name => ".general.waitinterval"));
       Set_Messages_Order
         (Value =>
            Messages_Order_Type'Val
@@ -1143,7 +1180,8 @@ package body GameOptions is
                Script =>
                  "{InvokeMenu " & Get_Menu_Accelerator(Index => I) & "}");
          elsif I < 49 then
-            Set_Map_Accelerator(Index => I - 11, Value => Get(Widgt => Key_Entry));
+            Set_Map_Accelerator
+              (Index => I - 11, Value => Get(Widgt => Key_Entry));
          elsif I = 49 then
             null;
          else
@@ -1172,9 +1210,7 @@ package body GameOptions is
       Key_Entry.Name :=
         New_String
           (Str =>
-             Root_Name &
-             To_String
-               (Source => Accels(11 + 37 + 1).Entry_Name));
+             Root_Name & To_String(Source => Accels(11 + 37 + 1).Entry_Name));
       Full_Screen_Accel :=
         To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
