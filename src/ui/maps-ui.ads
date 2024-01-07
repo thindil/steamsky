@@ -23,50 +23,6 @@ with Ships; use Ships;
 package Maps.UI is
 -- ****
 
-   -- ****v* MUI/MUI.Map_Accelerators
-   -- FUNCTION
-   -- Array with default map keyboard accelerators
-   -- SOURCE
-   Map_Accelerators: array(1 .. 37) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "e"),
-      2 => To_Unbounded_String(Source => "v"),
-      3 => To_Unbounded_String(Source => "plus"),
-      4 => To_Unbounded_String(Source => "minus"),
-      5 => To_Unbounded_String(Source => "KP_Home"),
-      6 => To_Unbounded_String(Source => "KP_Up"),
-      7 => To_Unbounded_String(Source => "KP_Prior"),
-      8 => To_Unbounded_String(Source => "KP_Left"),
-      9 => To_Unbounded_String(Source => "KP_Begin"),
-      10 => To_Unbounded_String(Source => "KP_Right"),
-      11 => To_Unbounded_String(Source => "KP_End"),
-      12 => To_Unbounded_String(Source => "KP_Down"),
-      13 => To_Unbounded_String(Source => "KP_Next"),
-      14 => To_Unbounded_String(Source => "KP_Divide"),
-      15 => To_Unbounded_String(Source => "Shift-Return"),
-      16 => To_Unbounded_String(Source => "Shift-h"),
-      17 => To_Unbounded_String(Source => "Shift-KP_Home"),
-      18 => To_Unbounded_String(Source => "Shift-KP_Up"),
-      19 => To_Unbounded_String(Source => "Shift-KP_Prior"),
-      20 => To_Unbounded_String(Source => "Shift-KP_Left"),
-      21 => To_Unbounded_String(Source => "Shift-KP_Right"),
-      22 => To_Unbounded_String(Source => "Shift-KP_End"),
-      23 => To_Unbounded_String(Source => "Shift-KP_Down"),
-      24 => To_Unbounded_String(Source => "Shift-KP_Next"),
-      25 => To_Unbounded_String(Source => "Control-KP_Home"),
-      26 => To_Unbounded_String(Source => "Control-KP_Up"),
-      27 => To_Unbounded_String(Source => "Control-KP_Prior"),
-      28 => To_Unbounded_String(Source => "Control-KP_Left"),
-      29 => To_Unbounded_String(Source => "Control-KP_Right"),
-      30 => To_Unbounded_String(Source => "Control-KP_End"),
-      31 => To_Unbounded_String(Source => "Control-KP_Down"),
-      32 => To_Unbounded_String(Source => "Control-KP_Next"),
-      33 => To_Unbounded_String(Source => "Control-Return"),
-      34 => To_Unbounded_String(Source => "Control-a"),
-      35 => To_Unbounded_String(Source => "Control-b"),
-      36 => To_Unbounded_String(Source => "Control-c"),
-      37 => To_Unbounded_String(Source => "Control-d"));
-   -- ****
-
    -- ****v* MUI/MUI.Full_Screen_Accel
    -- FUNCTION
    -- Keyboard shortcut for switching full screen mode
@@ -136,6 +92,8 @@ package Maps.UI is
    procedure Set_General_Accelerator(Index: Positive; Value: String);
    function Get_Menu_Accelerator(Index: Positive) return String;
    procedure Set_Menu_Accelerator(Index: Positive; Value: String);
+   function Get_Map_Accelerator(Index: Positive) return String;
+   procedure Set_Map_Accelerator(Index: Positive; Value: String);
    procedure Get_Center_Point(X, Y: out Positive) with
       Import => True,
       Convention => C,
