@@ -23,14 +23,6 @@ with Ships; use Ships;
 package Maps.UI is
 -- ****
 
-   -- ****v* MUI/MUI.Full_Screen_Accel
-   -- FUNCTION
-   -- Keyboard shortcut for switching full screen mode
-   -- SOURCE
-   Full_Screen_Accel: Unbounded_String :=
-     To_Unbounded_String(Source => "Control-f");
-   -- ****
-
    -- ****v* MUI/MUI.Default_Fonts_Sizes
    -- FUNCTION
    -- Default sizes of the game fonts
@@ -94,6 +86,8 @@ package Maps.UI is
    procedure Set_Menu_Accelerator(Index: Positive; Value: String);
    function Get_Map_Accelerator(Index: Positive) return String;
    procedure Set_Map_Accelerator(Index: Positive; Value: String);
+   function Get_Full_Screen_Accel return String;
+   procedure Set_Full_Screen_Accel(Value: String);
    procedure Get_Center_Point(X, Y: out Positive) with
       Import => True,
       Convention => C,

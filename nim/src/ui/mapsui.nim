@@ -535,3 +535,9 @@ proc getAdaMapAccelerator(index: cint): cstring {.raises: [], tags: [], exportc.
 
 proc setAdaMapAccelerator(index: cint; value: cstring) {.raises: [], tags: [], exportc.} =
   mapAccelerators[index] = $value
+
+proc getAdaFullScreenAccel(): cstring {.raises: [], tags: [], exportc.} =
+  return fullScreenAccel.cstring
+
+proc setAdaFullScreenAccel(value: cstring) {.raises: [], tags: [], exportc.} =
+  fullScreenAccel = $value

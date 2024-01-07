@@ -938,7 +938,7 @@ package body Maps.UI is
                     (Index => 37, Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullScreen") then
-                  Full_Screen_Accel := Value;
+                  Set_Full_Screen_Accel(Value => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeFirst") then
                   Set_General_Accelerator
@@ -1245,10 +1245,10 @@ package body Maps.UI is
            To_String
              (Source =>
                 Insert
-                  (Source => Full_Screen_Accel,
+                  (Source => To_Unbounded_String(Source => Get_Full_Screen_Accel),
                    Before =>
                      Index
-                       (Source => Full_Screen_Accel, Pattern => "-",
+                       (Source => To_Unbounded_String(Source => Get_Full_Screen_Accel), Pattern => "-",
                         Going => Backward) +
                      1,
                    New_Item => "KeyPress-")) &
@@ -1312,5 +1312,24 @@ package body Maps.UI is
    begin
       Set_Ada_Map_Accelerator(I => Index, Val => New_String(Str => Value));
    end Set_Map_Accelerator;
+
+   function Get_Full_Screen_Accel return String is
+
+      function Get_Ada_Full_Screen_Accel return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFullScreenAccel";
+   begin
+      return Value(Item => Get_Ada_Full_Screen_Accel);
+   end Get_Full_Screen_Accel;
+
+   procedure Set_Full_Screen_Accel(Value: String) is
+      procedure Set_Ada_Full_Screen_Accel(Val: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaFullScreenAccel";
+   begin
+      Set_Ada_Full_Screen_Accel(Val => New_String(Str => Value));
+   end Set_Full_Screen_Accel;
 
 end Maps.UI;

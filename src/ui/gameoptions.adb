@@ -314,7 +314,7 @@ package body GameOptions is
          Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
          Config_Name => To_Unbounded_String(Source => "FullSpeed")),
       49 =>
-        (Shortcut => Full_Screen_Accel,
+        (Shortcut => To_Unbounded_String(Source => Get_Full_Screen_Accel),
          Entry_Name =>
            To_Unbounded_String(Source => ".interface.fullscreenkey"),
          Config_Name => To_Unbounded_String(Source => "FullScreen")),
@@ -778,7 +778,7 @@ package body GameOptions is
          Accels(I + 11).Shortcut :=
            To_Unbounded_String(Source => Get_Map_Accelerator(Index => I));
       end loop Load_Map_Accelerators_Loop;
-      Accels(11 + 37 + 1).Shortcut := Full_Screen_Accel;
+      Accels(11 + 37 + 1).Shortcut := To_Unbounded_String(Source => Get_Full_Screen_Accel);
       Load_General_Accelerators_Loop :
       for I in 1 .. 4 loop
          Accels(I + 11 + 37 + 1).Shortcut :=
@@ -1211,8 +1211,7 @@ package body GameOptions is
         New_String
           (Str =>
              Root_Name & To_String(Source => Accels(11 + 37 + 1).Entry_Name));
-      Full_Screen_Accel :=
-        To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+      Set_Full_Screen_Accel(Value => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
       declare
          use Ada.Text_IO;
