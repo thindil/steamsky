@@ -528,4 +528,4 @@ proc getAdaMenuAccelerator(index: cint): cstring {.raises: [], tags: [], exportc
   return menuAccelerators[index].cstring
 
 proc setAdaMenuAccelerator(index: cint; value: cstring) {.raises: [], tags: [], exportc.} =
-  generalAccelerators[index] = $value
+  menuAccelerators[index] = $value
