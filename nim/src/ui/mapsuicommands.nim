@@ -43,7 +43,7 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let buttonsBox = mainPaned & ".mapframe.buttons"
   for i in 2 .. 11:
     let buttonName = buttonsBox & "." & buttonNames[i]
