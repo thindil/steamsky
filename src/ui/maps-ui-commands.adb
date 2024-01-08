@@ -82,34 +82,34 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- HideMapButtons
    -- SOURCE
-   function Hide_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Hide_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
-   begin
-      Button.Interp := Interp;
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      Hide_Buttons_Loop :
-      for I in 2 .. 13 loop
-         Button.Name :=
-           New_String
-             (Str =>
-                Main_Paned & ".mapframe.buttons." &
-                To_String(Source => Button_Names(I)));
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-      end loop Hide_Buttons_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      return TCL_OK;
-   end Hide_Map_Buttons_Command;
+--   function Hide_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Hide_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
+--   begin
+--      Button.Interp := Interp;
+--      --## rule off SIMPLIFIABLE_STATEMENTS
+--      Hide_Buttons_Loop :
+--      for I in 2 .. 13 loop
+--         Button.Name :=
+--           New_String
+--             (Str =>
+--                Main_Paned & ".mapframe.buttons." &
+--                To_String(Source => Button_Names(I)));
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+--      end loop Hide_Buttons_Loop;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--      return TCL_OK;
+--   end Hide_Map_Buttons_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Map_Buttons_Command
    -- FUNCTION
@@ -1556,10 +1556,12 @@ package body Maps.UI.Commands is
 
    procedure Add_Commands is
       use Utils.UI;
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaMapsCommands";
    begin
-      Add_Command
-        (Name => "HideMapButtons",
-         Ada_Command => Hide_Map_Buttons_Command'Access);
+      Add_Ada_Commands;
       Add_Command
         (Name => "ShowMapButtons",
          Ada_Command => Show_Map_Buttons_Command'Access);
