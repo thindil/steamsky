@@ -23,6 +23,17 @@ const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
 
 proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
+  ## Hide buttons used to move the map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## HideMapButtons
   for i in 2 .. 13:
     let buttonName = mainPaned & ".mapframe.buttons." & buttonNames[i]
     tclEval(script = "grid remove " & buttonName)
