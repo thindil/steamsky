@@ -54,20 +54,20 @@ with Utils.UI;
 
 package body Maps.UI.Commands is
 
-   Button_Names: constant array(1 .. 13) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "show"),
-      2 => To_Unbounded_String(Source => "nw"),
-      3 => To_Unbounded_String(Source => "n"),
-      4 => To_Unbounded_String(Source => "ne"),
-      5 => To_Unbounded_String(Source => "w"),
-      6 => To_Unbounded_String(Source => "wait"),
-      7 => To_Unbounded_String(Source => "e"),
-      8 => To_Unbounded_String(Source => "sw"),
-      9 => To_Unbounded_String(Source => "s"),
-      10 => To_Unbounded_String(Source => "se"),
-      11 => To_Unbounded_String(Source => "hide"),
-      12 => To_Unbounded_String(Source => "left"),
-      13 => To_Unbounded_String(Source => "right"));
+--   Button_Names: constant array(1 .. 13) of Unbounded_String :=
+--     (1 => To_Unbounded_String(Source => "show"),
+--      2 => To_Unbounded_String(Source => "nw"),
+--      3 => To_Unbounded_String(Source => "n"),
+--      4 => To_Unbounded_String(Source => "ne"),
+--      5 => To_Unbounded_String(Source => "w"),
+--      6 => To_Unbounded_String(Source => "wait"),
+--      7 => To_Unbounded_String(Source => "e"),
+--      8 => To_Unbounded_String(Source => "sw"),
+--      9 => To_Unbounded_String(Source => "s"),
+--      10 => To_Unbounded_String(Source => "se"),
+--      11 => To_Unbounded_String(Source => "hide"),
+--      12 => To_Unbounded_String(Source => "left"),
+--      13 => To_Unbounded_String(Source => "right"));
 
    -- ****o* MapCommands/MapCommands.Show_Map_Buttons_Command
    -- FUNCTION
@@ -82,47 +82,47 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ShowMapButtons
    -- SOURCE
-   function Show_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
-      Buttons_Box: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
-   begin
-      Button.Interp := Interp;
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      Show_Buttons_Loop :
-      for I in 2 .. 11 loop
-         Button.Name :=
-           New_String
-             (Str =>
-                Widget_Image(Win => Buttons_Box) & "." &
-                To_String(Source => Button_Names(I)));
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      end loop Show_Buttons_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      Button.Name :=
-        New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-      Button.Name :=
-        (if
-           Index
-             (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Buttons_Box),
-              Pattern => "-sticky es") =
-           0
-         then New_String(Str => Widget_Image(Win => Buttons_Box) & ".right")
-         else New_String(Str => Widget_Image(Win => Buttons_Box) & ".left"));
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      return TCL_OK;
-   end Show_Map_Buttons_Command;
+--   function Show_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Button: Ttk_Button; --## rule line off IMPROPER_INITIALIZATION
+--      Buttons_Box: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
+--   begin
+--      Button.Interp := Interp;
+--      --## rule off SIMPLIFIABLE_STATEMENTS
+--      Show_Buttons_Loop :
+--      for I in 2 .. 11 loop
+--         Button.Name :=
+--           New_String
+--             (Str =>
+--                Widget_Image(Win => Buttons_Box) & "." &
+--                To_String(Source => Button_Names(I)));
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--      end loop Show_Buttons_Loop;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      Button.Name :=
+--        New_String(Str => Widget_Image(Win => Buttons_Box) & ".show");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+--      Button.Name :=
+--        (if
+--           Index
+--             (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Buttons_Box),
+--              Pattern => "-sticky es") =
+--           0
+--         then New_String(Str => Widget_Image(Win => Buttons_Box) & ".right")
+--         else New_String(Str => Widget_Image(Win => Buttons_Box) & ".left"));
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--      return TCL_OK;
+--   end Show_Map_Buttons_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Map_Buttons_Command
    -- FUNCTION
@@ -1520,9 +1520,6 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowMapButtons",
-         Ada_Command => Show_Map_Buttons_Command'Access);
       Add_Command
         (Name => "MoveMapButtons",
          Ada_Command => Move_Map_Buttons_Command'Access);
