@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to set the amount of time to wait for the "Wait" button
+
 ### Changed
 - Made the dialog with information about the player's ship's module wider
 
