@@ -22,7 +22,7 @@ const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
     "wait", "e", "sw", "s", "se", "hide", "left", "right"]
 
 proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Hide buttons used to move the map
   ##
   ## * clientData - the additional data for the Tcl command
