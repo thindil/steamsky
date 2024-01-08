@@ -15,13 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[parsecfg, streams, tables]
+import std/[os, parsecfg, streams, tables]
 import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
-import coreui, dialogs, utilsui2
+import coreui, dialogs, mapsuicommands, utilsui2
 
 var
-  centerX*, centerY*: Positive ## Coordinates of the center point on the map
+  centerX*, centerY*: Positive  ## Coordinates of the center point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
   mapView = ""
@@ -484,8 +484,38 @@ proc createGameUi*() =
             of "FullScreen":
               fullScreenAccel = entry.value
           of cfgError:
-            echo entry.msg
+            tclEval(script = "bgerror {Can't set keyboard shortcuts. Reason: " &
+                entry.msg & "}")
       parser.close()
+    else:
+      if DirSep == '\\':
+        mapAccelerators[5] = "Home"
+        mapAccelerators[6] = "Up"
+        mapAccelerators[7] = "Prior"
+        mapAccelerators[8] = "Left"
+        mapAccelerators[9] = "Clear"
+        mapAccelerators[10] = "Right"
+        mapAccelerators[11] = "End"
+        mapAccelerators[12] = "Down"
+        mapAccelerators[13] = "Next"
+        mapAccelerators[14] = "slash"
+        mapAccelerators[17] = "Shift-Home"
+        mapAccelerators[18] = "Shift-Up"
+        mapAccelerators[19] = "Shift-Prior"
+        mapAccelerators[20] = "Shift-Left"
+        mapAccelerators[21] = "Shift-Right"
+        mapAccelerators[22] = "Shift-End"
+        mapAccelerators[23] = "Shift-Down"
+        mapAccelerators[24] = "Shift-Next"
+        mapAccelerators[25] = "Control-Home"
+        mapAccelerators[26] = "Control-Up"
+        mapAccelerators[27] = "Control-Prior"
+        mapAccelerators[28] = "Control-Left"
+        mapAccelerators[29] = "Control-Right"
+        mapAccelerators[30] = "Control-End"
+        mapAccelerators[31] = "Control-Down"
+        mapAccelerators[32] = "Control-Next"
+    mapsuicommands.addCommands()
 
 # Temporary code for interfacing with Ada
 
