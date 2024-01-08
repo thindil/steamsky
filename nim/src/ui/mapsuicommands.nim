@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
 import ../tk
 import coreui
 
@@ -41,8 +42,22 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & buttonName)
   return tclOk
 
+proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let buttonsBox = mainPaned & ".mapframe.buttons"
+  for i in 2 .. 11:
+    let buttonName = buttonsBox & "." & buttonNames[i]
+    tclEval(script = "grid " & buttonName)
+  var buttonName = buttonsBox & ".show"
+  tclEval(script = "grid remove " & buttonName)
+  buttonName = (if tclEval2(script = "grid info " & buttonsBox).contains(
+      "-sticky es"): buttonsBox & ".left" else: buttonsBox & ".right")
+  tclEval(script = "grid " & buttonName)
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
+  addCommand("ShowMapButtons", showMapButtonsCommand)
 
 # Temporary code for interfacing with Ada
 
