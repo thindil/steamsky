@@ -68,39 +68,39 @@ package body Maps.UI.Commands is
    -- MoveMapButtons buttonname
    -- Buttonname is the name of the button which was clicked
    -- SOURCE
-   function Move_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Move_Map_Buttons_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Buttons_Box: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
-      Button: Ttk_Button :=
-        Get_Widget
-          (pathName => Buttons_Box & "." & CArgv.Arg(Argv => Argv, N => 1),
-           Interp => Interp);
-   begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-      if CArgv.Arg(Argv => Argv, N => 1) = "left" then
-         Button.Name :=
-           New_String(Str => Widget_Image(Win => Buttons_Box) & ".right");
-         Tcl.Tk.Ada.Grid.Grid_Configure
-           (Slave => Buttons_Box, Options => "-sticky sw");
-      else
-         Button.Name :=
-           New_String(Str => Widget_Image(Win => Buttons_Box) & ".left");
-         Tcl.Tk.Ada.Grid.Grid_Configure
-           (Slave => Buttons_Box, Options => "-sticky se");
-      end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      return TCL_OK;
-   end Move_Map_Buttons_Command;
+--   function Move_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Move_Map_Buttons_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      Buttons_Box: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".mapframe.buttons", Interp => Interp);
+--      Button: Ttk_Button :=
+--        Get_Widget
+--          (pathName => Buttons_Box & "." & CArgv.Arg(Argv => Argv, N => 1),
+--           Interp => Interp);
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+--      if CArgv.Arg(Argv => Argv, N => 1) = "left" then
+--         Button.Name :=
+--           New_String(Str => Widget_Image(Win => Buttons_Box) & ".right");
+--         Tcl.Tk.Ada.Grid.Grid_Configure
+--           (Slave => Buttons_Box, Options => "-sticky sw");
+--      else
+--         Button.Name :=
+--           New_String(Str => Widget_Image(Win => Buttons_Box) & ".left");
+--         Tcl.Tk.Ada.Grid.Grid_Configure
+--           (Slave => Buttons_Box, Options => "-sticky se");
+--      end if;
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--      return TCL_OK;
+--   end Move_Map_Buttons_Command;
 
    -- ****o* MapCommands/MapCommands.Draw_Map_Command
    -- FUNCTION
@@ -1452,9 +1452,6 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "MoveMapButtons",
-         Ada_Command => Move_Map_Buttons_Command'Access);
       Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
       Add_Command
         (Name => "UpdateMapInfo",
