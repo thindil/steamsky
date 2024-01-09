@@ -15,7 +15,7 @@
 
 with Ada.Containers.Vectors;
 with Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -267,6 +267,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Strings.Fixed;
+
       Map_Info_Frame: constant Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".mapframe.info", Interp => Interp);
