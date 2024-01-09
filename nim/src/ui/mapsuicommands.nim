@@ -67,7 +67,7 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let buttonsBox = mainPaned & ".mapframe.buttons"
   var button = buttonsBox & "." & $argv[1]
   tclEval(script = "grid remove " & button)
