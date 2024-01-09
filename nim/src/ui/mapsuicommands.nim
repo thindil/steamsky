@@ -44,6 +44,17 @@ proc hideMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show buttons used to move the map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowMapButtons
   let buttonsBox = mainPaned & ".mapframe.buttons"
   for i in 2 .. 11:
     let buttonName = buttonsBox & "." & buttonNames[i]
