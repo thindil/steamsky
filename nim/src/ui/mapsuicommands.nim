@@ -66,9 +66,24 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & buttonName)
   return tclOk
 
+proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let buttonsBox = mainPaned & ".mapframe.buttons"
+  var button = buttonsBox & "." & $argv[1]
+  tclEval(script = "grid remove " & button)
+  if argv[1] == "left":
+    button = buttonsBox & ".right"
+    tclEval(script = "grid configure " & buttonsBox & " -sticky sw")
+  else:
+    button = buttonsBox & ".left"
+    tclEval(script = "grid configure " & buttonsBox & " -sticky se")
+  tclEval(script = "grid " & button)
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
+  addCommand("MoveMapButtons", moveMapButtonsCommand)
 
 # Temporary code for interfacing with Ada
 
