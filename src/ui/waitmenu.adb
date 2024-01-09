@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -21,10 +21,11 @@ with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with CoreUI;
@@ -44,7 +45,6 @@ package body WaitMenu is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Ada.Characters.Latin_1;
       use Tcl.Tk.Ada;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tklib.Ada.Tooltip;
       use Dialogs;
 
@@ -52,7 +52,7 @@ package body WaitMenu is
         Get_Widget(pathName => ".gameframe.wait", Interp => Interp);
       Button: Ttk_Button;
       Amount_Box: Ttk_SpinBox;
-      Amount_Label: Ttk_Label;
+      Amount_Combo: Ttk_ComboBox;
       Need_Healing, Need_Rest: Boolean := False;
       procedure Add_Button(Time: Positive) is
          use Ada.Strings;
@@ -137,14 +137,16 @@ package body WaitMenu is
       Add
         (Widget => Amount_Box,
          Message =>
-           "Wait in place for the selected amount of minutes:" & LF &
-           "from 1 to 1440 (the whole day)");
-      Amount_Label :=
+           "Wait in place for the selected amount of time:" & LF &
+           "from 1 to 1440");
+      Amount_Combo :=
         Create
           (pathName => Wait_Dialog & ".mins",
-           options => "-text minutes. -takefocus 0");
+           options =>
+             "-state readonly -values [list minutes hours days] -width 8");
+      Current(ComboBox => Amount_Combo, NewIndex => "0");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Amount_Label, Options => "-row 7 -column 2 -padx {0 5}");
+        (Slave => Amount_Combo, Options => "-row 7 -column 2 -padx {0 5}");
       Check_Crew_Rest_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Tired > 0 and
@@ -252,6 +254,8 @@ package body WaitMenu is
         Get_Widget(pathName => ".gameframe.wait.close", Interp => Interp);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".gameframe.wait.amount", Interp => Interp);
+      Amount_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".gameframe.wait.mins", Interp => Interp);
       Current_Frame: Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
@@ -305,8 +309,15 @@ package body WaitMenu is
          Update_Game(Minutes => Time_Needed);
          Wait_In_Place(Minutes => Time_Needed);
       elsif CArgv.Arg(Argv => Argv, N => 1) = "amount" then
-         Update_Game(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
-         Wait_In_Place(Minutes => Positive'Value(Get(Widgt => Amount_Box)));
+         Time_Needed := Positive'Value(Get(Widgt => Amount_Box));
+         if Current(ComboBox => Amount_Combo) = "1" then
+            Time_Needed := Time_Needed * 60;
+         end if;
+         if Current(ComboBox => Amount_Combo) = "2" then
+            Time_Needed := Time_Needed * 1440;
+         end if;
+         Update_Game(Minutes => Time_Needed);
+         Wait_In_Place(Minutes => Time_Needed);
       end if;
       Update_Header;
       Update_Messages;
