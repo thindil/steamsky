@@ -68,6 +68,18 @@ proc showMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Move buttons used to move the map to the right or left corner
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveMapButtons buttonname
+  ## Buttonname is the name of the button which was clicked
   let buttonsBox = mainPaned & ".mapframe.buttons"
   var button = buttonsBox & "." & $argv[1]
   tclEval(script = "grid remove " & button)
