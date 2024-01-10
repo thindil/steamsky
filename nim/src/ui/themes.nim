@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, parsecfg, streams, strutils, tables]
 import ../game
 
 type ThemeRecord* = object
@@ -322,4 +322,43 @@ proc loadThemes*() =
   var theme = defaultTheme
   themesList["steamsky"] = theme
   for themeDir in walkDirs(themesDirectory):
-    discard
+    for configName in walkPattern(themeDir & DirSep & "*.cfg"):
+      var configFile = newFileStream(filename = configName, mode = fmRead)
+      if configFile == nil:
+        continue
+      var parser: CfgParser
+      try:
+        parser.open(input = configFile, filename = configName)
+      except OSError, IOError, Exception:
+        echo "Can't initialize configuration file parser. Reason: " &
+            getCurrentExceptionMsg()
+        return
+      while true:
+        try:
+          let entry = parser.next()
+          case entry.kind
+          of cfgEof:
+            break
+          of cfgKeyValuePair, cfgOption:
+            case entry.key
+            of "Name":
+              theme.name = entry.value
+            of "FileName":
+              theme.fileName = themeDir & DirSep & entry.value
+            of "EnemyShipIcon":
+              theme.enemyShipIcon = entry.value.parseHexStr()
+            else:
+              discard
+          of cfgError:
+            echo entry.msg
+          of cfgSectionStart:
+            discard
+        except ValueError, OSError, IOError:
+          echo "Invalid data in the theme configuration file. Details: " &
+              getCurrentExceptionMsg()
+          continue
+      try:
+        parser.close()
+      except OSError, IOError, Exception:
+        echo "Can't close configuration file parser. Reason: " &
+            getCurrentExceptionMsg()
