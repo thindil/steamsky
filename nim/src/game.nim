@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -76,6 +76,8 @@ var
     ## The directory where the game's data is stored
   docDirectory*: string = "doc" & DirSep
     ## The directory where the game's documentation is stored
+  themesDirectory*: string = "data" & DirSep & "themes" &
+      DirSep ## The directory where the game's themes are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string                       ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
