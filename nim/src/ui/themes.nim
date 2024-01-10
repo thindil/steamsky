@@ -226,6 +226,8 @@ type ThemeRecord* = object
   dropColoredIcon*: string
   editColoredIcon*: string
 
+var themesList*: Table[string, ThemeRecord] ## The list of all available themes
+
 let
   defaultThemeIconPath = dataDirectory & "ui" & DirSep & "images" & DirSep &
       "ui" & DirSep
@@ -316,4 +318,8 @@ let
       dropColoredIcon: defaultThemeIconPath & "drop2.svg",
       editColoredIcon: defaultThemeIconPath & "edit2.svg")
 
-var themesList*: Table[string, ThemeRecord] ## The list of all available themes
+proc loadThemes*() =
+  var theme = defaultTheme
+  themesList["steamsky"] = theme
+  for themeDir in walkDirs(themesDirectory):
+    discard
