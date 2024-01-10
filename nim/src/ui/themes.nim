@@ -346,7 +346,13 @@ proc loadThemes*() =
             of "FileName":
               theme.fileName = themeDir & DirSep & entry.value
             of "EnemyShipIcon":
-              theme.enemyShipIcon = entry.value.parseHexStr()
+              theme.enemyShipIcon = entry.value.parseHexStr
+            of "attackOnBaseIcon":
+              theme.attackOnBaseIcon = entry.value.parseHexStr
+            of "DiseaseIcon":
+              theme.diseaseIcon = entry.value.parseHexStr
+            of "DoublePriceIcon":
+              theme.doublePriceIcon = entry.value.parseHexStr
             else:
               discard
           of cfgError:
