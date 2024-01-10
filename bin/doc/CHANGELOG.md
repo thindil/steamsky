@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to set the amount of time to wait for the "Wait" button
+- Ability to set the unit of time (minutes, hours or days) for custom waiting
+  time in the wait menu
 
 ### Changed
 - Made the dialog with information about the player's ship's module wider
