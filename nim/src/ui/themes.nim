@@ -558,3 +558,6 @@ proc loadThemes*() =
       theme = defaultTheme
       if gameSettings.interfaceTheme notin themesList:
         gameSettings.interfaceTheme = "steamsky"
+
+proc loadThemeImages*() =
+  const imagesNames = ["piloticon", "engineericon", "gunnericon", "crewtradericon", "repairicon", "norepairicon", "repairordericon", "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon", "cleanordericon", "manufactureicon", "nocrafticon", "nofuelicon", "nofoodicon", "lowfuelicon", "lowfoodicon", "nodrinksicon", "lowdrinksicon", "movemapupicon", "movemapdownicon", "movemaplefticon", "movemaprighticon", "overloadedicon", "arrowupicon", "arrowdownicon", "arrowlefticon", "arrowrighticon", "arrowuplefticon", "arrowuprighticon", "arrowdownrighticon", "arrowdownlefticon", "waiticon", "movestepicon", "movetoicon", "menuicon", "exiticon", "randomicon", "maleicon", "femaleicon", "editicon", "showicon", "cancelicon", "helpicon", "giveicon", "dropicon", "buyicon", "sellicon", "crafticon", "studyicon", "deconstructicon", "negotiateicon", "cargoicon"]
