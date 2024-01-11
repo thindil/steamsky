@@ -560,4 +560,24 @@ proc loadThemes*() =
         gameSettings.interfaceTheme = "steamsky"
 
 proc loadThemeImages*() =
-  const imagesNames = ["piloticon", "engineericon", "gunnericon", "crewtradericon", "repairicon", "norepairicon", "repairordericon", "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon", "cleanordericon", "manufactureicon", "nocrafticon", "nofuelicon", "nofoodicon", "lowfuelicon", "lowfoodicon", "nodrinksicon", "lowdrinksicon", "movemapupicon", "movemapdownicon", "movemaplefticon", "movemaprighticon", "overloadedicon", "arrowupicon", "arrowdownicon", "arrowlefticon", "arrowrighticon", "arrowuplefticon", "arrowuprighticon", "arrowdownrighticon", "arrowdownlefticon", "waiticon", "movestepicon", "movetoicon", "menuicon", "exiticon", "randomicon", "maleicon", "femaleicon", "editicon", "showicon", "cancelicon", "helpicon", "giveicon", "dropicon", "buyicon", "sellicon", "crafticon", "studyicon", "deconstructicon", "negotiateicon", "cargoicon"]
+  const imagesNames = ["piloticon", "engineericon", "gunnericon",
+      "crewtradericon", "repairicon", "norepairicon", "repairordericon",
+      "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon",
+      "cleanordericon", "manufactureicon", "nocrafticon", "nofuelicon",
+      "nofoodicon", "lowfuelicon", "lowfoodicon", "nodrinksicon",
+      "lowdrinksicon", "movemapupicon", "movemapdownicon", "movemaplefticon",
+      "movemaprighticon", "overloadedicon", "arrowupicon", "arrowdownicon",
+      "arrowlefticon", "arrowrighticon", "arrowuplefticon", "arrowuprighticon",
+      "arrowdownrighticon", "arrowdownlefticon", "waiticon", "movestepicon",
+      "movetoicon", "menuicon", "exiticon", "randomicon", "maleicon",
+      "femaleicon", "editicon", "showicon", "cancelicon", "helpicon",
+      "giveicon", "dropicon", "buyicon", "sellicon", "crafticon", "studyicon",
+      "deconstructicon", "negotiateicon", "cargoicon", "equipicon",
+      "unequipicon", "selectallicon", "unselectallicon", "giveordericon",
+      "nopiloticon", "noengineericon", "destinationicon", "inventoryicon",
+      "dismissicon", "goresticon", "repairpriorityicon", "upgradebuttonicon",
+      "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
+      "moveicon", "give2icon", "drop2icon", "edit2icon"]
+  let
+    theme = themesList[gameSettings.interfaceTheme]
+    imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon, theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon, theme.repairOrderIcon, theme.upgradeIcon, theme.noUpgradeIcon, theme.cleanIcon, theme.noCleanIcon, theme.cleanOrderIcon, theme.manufactureIcon, theme.noManufactureIcon, theme.noFuelIcon, theme.noFoodIcon, theme.lowFuelIcon, theme.lowFoodIcon, theme.noDrinksIcon, theme.lowDrinksIcon, theme.moveMapUpIcon, theme.moveMapDownIcon, theme.moveMapLeftIcon, theme.moveMapRightIcon, theme.overloadedIcon, theme.arrowUpIcon, theme.arrowDownIcon, theme.arrowLeftIcon, theme.arrowRightIcon, theme.arrowUpLeftIcon, theme.arrowUpRightIcon, theme.arrowDownRightIcon, theme.arrowDownLeftIcon, theme.waitIcon, theme.moveStepIcon, theme.moveToIcon, theme.menuIcon, theme.exitIcon, theme.randomIcon]
