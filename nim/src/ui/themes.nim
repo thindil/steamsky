@@ -353,6 +353,24 @@ proc loadThemes*() =
               theme.diseaseIcon = entry.value.parseHexStr
             of "DoublePriceIcon":
               theme.doublePriceIcon = entry.value.parseHexStr
+            of "FullDocksIcon":
+              theme.fullDocksIcon = entry.value.parseHexStr
+            of "EnemyPatrolIcon":
+              theme.enemyPatrolIcon = entry.value.parseHexStr
+            of "TraderIcon":
+              theme.traderIcon = entry.value.parseHexStr
+            of "FriendlyShipIcon":
+              theme.friendlyShipIcon = entry.value.parseHexStr
+            of "DeliverIcon":
+              theme.deliverIcon = entry.value.parseHexStr
+            of "DestroyIcon":
+              theme.destroyIcon = entry.value.parseHexStr
+            of "PatrolIcon":
+              theme.patrolIcon = entry.value.parseHexStr
+            of "ExploreIcon":
+              theme.exploreIcon = entry.value.parseHexStr
+            of "PassengerIcon":
+              theme.passengerIcon = entry.value.parseHexStr
             else:
               discard
           of cfgError:
