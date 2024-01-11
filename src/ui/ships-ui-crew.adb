@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1234,18 +1234,18 @@ package body Ships.UI.Crew is
          declare
             Priorities_Names: constant array
               (Member.Orders'Range) of Unbounded_String :=
-              (1 => To_Unbounded_String(Source => "Piloting"),
-               2 => To_Unbounded_String(Source => "Engineering"),
-               3 => To_Unbounded_String(Source => "Operating guns"),
-               4 => To_Unbounded_String(Source => "Repair ship"),
-               5 => To_Unbounded_String(Source => "Manufacturing"),
-               6 => To_Unbounded_String(Source => "Upgrading ship"),
-               7 => To_Unbounded_String(Source => "Talking in bases"),
-               8 => To_Unbounded_String(Source => "Healing wounded"),
-               9 => To_Unbounded_String(Source => "Cleaning ship"),
-               10 => To_Unbounded_String(Source => "Defend ship"),
-               11 => To_Unbounded_String(Source => "Board enemy ship"),
-               12 => To_Unbounded_String(Source => "Train skill"));
+              (1 => To_Unbounded_String(Source => "Piloting:"),
+               2 => To_Unbounded_String(Source => "Engineering:"),
+               3 => To_Unbounded_String(Source => "Operating guns:"),
+               4 => To_Unbounded_String(Source => "Repair ship:"),
+               5 => To_Unbounded_String(Source => "Manufacturing:"),
+               6 => To_Unbounded_String(Source => "Upgrading ship:"),
+               7 => To_Unbounded_String(Source => "Talking in bases:"),
+               8 => To_Unbounded_String(Source => "Healing wounded:"),
+               9 => To_Unbounded_String(Source => "Cleaning ship:"),
+               10 => To_Unbounded_String(Source => "Defend ship:"),
+               11 => To_Unbounded_String(Source => "Board enemy ship:"),
+               12 => To_Unbounded_String(Source => "Train skill:"));
             Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
          begin
             Load_Priorities_Loop :
