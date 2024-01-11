@@ -371,6 +371,54 @@ proc loadThemes*() =
               theme.exploreIcon = entry.value.parseHexStr
             of "PassengerIcon":
               theme.passengerIcon = entry.value.parseHexStr
+            of "PilotIcon":
+              theme.pilotIcon = entry.value.unixToNativePath
+            of "EngineerIcon":
+              theme.engineerIcon = entry.value.unixToNativePath
+            of "GunnerIcon":
+              theme.gunnerIcon = entry.value.unixToNativePath
+            of "CrewTraderIcon":
+              theme.crewTraderIcon = entry.value.unixToNativePath
+            of "RepairIcon":
+              theme.repairIcon = entry.value.unixToNativePath
+            of "NoRepairIcon":
+              theme.noRepairIcon = entry.value.unixToNativePath
+            of "RepairOrderIcon":
+              theme.repairOrderIcon = entry.value.unixToNativePath
+            of "UpgradeIcon":
+              theme.upgradeIcon = entry.value.unixToNativePath
+            of "NoUpgradeIcon":
+              theme.noUpgradeIcon = entry.value.unixToNativePath
+            of "CleanIcon":
+              theme.cleanIcon = entry.value.unixToNativePath
+            of "NoCleanIcon":
+              theme.noCleanIcon = entry.value.unixToNativePath
+            of "CleanOrderIcon":
+              theme.cleanOrderIcon = entry.value.unixToNativePath
+            of "ManufactureIcon":
+              theme.manufactureIcon = entry.value.unixToNativePath
+            of "NoManufactureIcon":
+              theme.noManufactureIcon = entry.value.unixToNativePath
+            of "MoveMapUpIcon":
+              theme.moveMapUpIcon = entry.value.unixToNativePath
+            of "MoveMapDownIcon":
+              theme.moveMapDownIcon = entry.value.unixToNativePath
+            of "MoveMapLeftIcon":
+              theme.moveMapLeftIcon = entry.value.unixToNativePath
+            of "MoveMapRightIcon":
+              theme.moveMapRightIcon = entry.value.unixToNativePath
+            of "NoFuelIcon":
+              theme.noFuelIcon = entry.value.unixToNativePath
+            of "LowFuelIcon":
+              theme.lowFuelIcon = entry.value.unixToNativePath
+            of "NoFoodIcon":
+              theme.noFoodIcon = entry.value.unixToNativePath
+            of "LowFoodIcon":
+              theme.lowFoodIcon = entry.value.unixToNativePath
+            of "NoDrinksIcon":
+              theme.noDrinksIcon = entry.value.unixToNativePath
+            of "LowDrinksIcon":
+              theme.lowDrinksIcon = entry.value.unixToNativePath
             else:
               discard
           of cfgError:
