@@ -419,6 +419,68 @@ proc loadThemes*() =
               theme.noDrinksIcon = entry.value.unixToNativePath
             of "LowDrinksIcon":
               theme.lowDrinksIcon = entry.value.unixToNativePath
+            of "NotVisitedBaseIcon":
+              theme.notVisitedBaseIcon = entry.value.parseHexStr
+            of "EmptyMapIcon":
+              theme.emptyMapIcon = entry.value.parseHexStr
+            of "TargetIcon":
+              theme.targetIcon = entry.value.parseHexStr
+            of "StoryIcon":
+              theme.storyIcon = entry.value.parseHexStr
+            of "OverloadedIcon":
+              theme.overloadedIcon = entry.value.unixToNativePath
+            of "ArrowUpIcon":
+              theme.arrowUpIcon = entry.value.unixToNativePath
+            of "ArrowDownIcon":
+              theme.arrowDownIcon = entry.value.unixToNativePath
+            of "ArrowLeftIcon":
+              theme.arrowLeftIcon = entry.value.unixToNativePath
+            of "ArrowRightIcon":
+              theme.arrowRightIcon = entry.value.unixToNativePath
+            of "ArrowUpLeftIcon":
+              theme.arrowUpLeftIcon = entry.value.unixToNativePath
+            of "ArrowUpRightIcon":
+              theme.arrowUpRightIcon = entry.value.unixToNativePath
+            of "ArrowDownLeftIcon":
+              theme.arrowDownIcon = entry.value.unixToNativePath
+            of "ArrowDownRightIcon":
+              theme.arrowDownRightIcon = entry.value.unixToNativePath
+            of "WaitIcon":
+              theme.waitIcon = entry.value.unixToNativePath
+            of "MoveStepIcon":
+              theme.moveStepIcon = entry.value.unixToNativePath
+            of "MoveToIcon":
+              theme.moveToIcon = entry.value.unixToNativePath
+            of "MenuIcon":
+              theme.menuIcon = entry.value.unixToNativePath
+            of "ExitIcon":
+              theme.exitIcon = entry.value.unixToNativePath
+            of "RandomIcon":
+              theme.randomIcon = entry.value.unixToNativePath
+            of "MaleIcon":
+              theme.maleIcon = entry.value.unixToNativePath
+            of "FemaleIcon":
+              theme.femaleIcon = entry.value.unixToNativePath
+            of "EditIcon":
+              theme.editIcon = entry.value.unixToNativePath
+            of "ShowIcon":
+              theme.showIcon = entry.value.unixToNativePath
+            of "CancelIcon":
+              theme.cancelIcon = entry.value.unixToNativePath
+            of "HelpIcon":
+              theme.helpIcon = entry.value.unixToNativePath
+            of "SpecialHelpColor":
+              theme.specialHelpColor = entry.value
+            of "UnderlineHelpColor":
+              theme.underlineHelpColor = entry.value
+            of "BoldHelpColor":
+              theme.boldHelpColor = entry.value
+            of "ItalicHelpColor":
+              theme.italicHelpColor = entry.value
+            of "GiveIcon":
+              theme.giveIcon = entry.value.unixToNativePath
+            of "DropIcon":
+              theme.dropIcon = entry.value.unixToNativePath
             else:
               discard
           of cfgError:
