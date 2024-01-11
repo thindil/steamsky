@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables]
-import ../[config, game]
+import ../[config, game, tk]
 
 type ThemeRecord* = object
   ## Data structure for themes settings
@@ -580,4 +580,33 @@ proc loadThemeImages*() =
       "moveicon", "give2icon", "drop2icon", "edit2icon"]
   let
     theme = themesList[gameSettings.interfaceTheme]
-    imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon, theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon, theme.repairOrderIcon, theme.upgradeIcon, theme.noUpgradeIcon, theme.cleanIcon, theme.noCleanIcon, theme.cleanOrderIcon, theme.manufactureIcon, theme.noManufactureIcon, theme.noFuelIcon, theme.noFoodIcon, theme.lowFuelIcon, theme.lowFoodIcon, theme.noDrinksIcon, theme.lowDrinksIcon, theme.moveMapUpIcon, theme.moveMapDownIcon, theme.moveMapLeftIcon, theme.moveMapRightIcon, theme.overloadedIcon, theme.arrowUpIcon, theme.arrowDownIcon, theme.arrowLeftIcon, theme.arrowRightIcon, theme.arrowUpLeftIcon, theme.arrowUpRightIcon, theme.arrowDownRightIcon, theme.arrowDownLeftIcon, theme.waitIcon, theme.moveStepIcon, theme.moveToIcon, theme.menuIcon, theme.exitIcon, theme.randomIcon]
+    imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon,
+        theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon,
+        theme.repairOrderIcon, theme.upgradeIcon, theme.noUpgradeIcon,
+        theme.cleanIcon, theme.noCleanIcon, theme.cleanOrderIcon,
+        theme.manufactureIcon, theme.noManufactureIcon, theme.noFuelIcon,
+        theme.noFoodIcon, theme.lowFuelIcon, theme.lowFoodIcon,
+        theme.noDrinksIcon, theme.lowDrinksIcon, theme.moveMapUpIcon,
+        theme.moveMapDownIcon, theme.moveMapLeftIcon, theme.moveMapRightIcon,
+        theme.overloadedIcon, theme.arrowUpIcon, theme.arrowDownIcon,
+        theme.arrowLeftIcon, theme.arrowRightIcon, theme.arrowUpLeftIcon,
+        theme.arrowUpRightIcon, theme.arrowDownRightIcon,
+        theme.arrowDownLeftIcon, theme.waitIcon, theme.moveStepIcon,
+        theme.moveToIcon, theme.menuIcon, theme.exitIcon, theme.randomIcon,
+        theme.maleIcon, theme.femaleIcon, theme.editIcon, theme.showIcon,
+        theme.cancelIcon, theme.helpIcon, theme.giveIcon, theme.dropIcon,
+        theme.buyIcon, theme.sellIcon, theme.craftIcon, theme.studyIcon,
+        theme.deconstructIcon, theme.negotiateIcon, theme.cargoIcon,
+        theme.equipIcon, theme.unequipIcon, theme.selectAllIcon,
+        theme.unselectAllIcon, theme.giveOrderIcon, theme.noPilotIcon,
+        theme.noEngineerIcon, theme.destinationIcon, theme.inventoryIcon,
+        theme.dismissIcon, theme.goRestIcon, theme.repairPriorityIcon,
+        theme.upgradeButtonIcon, theme.powerIcon, theme.assignCrewIcon,
+        theme.assignAmmoIcon, theme.buyDefaultIcon, theme.sellDefaultIcon,
+        theme.moveIcon, theme.giveColoredIcon, theme.dropColoredIcon,
+        theme.editColoredIcon]
+  for index, name in imagesNames:
+    tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
+        index] & "} -format {svg -scaletoheight " & $(
+        gameSettings.interfaceFontSize + 8) & "}")
+  tclEval(script = "ttk::theme::" & tclEval2(script = "ttk::style theme use"))
