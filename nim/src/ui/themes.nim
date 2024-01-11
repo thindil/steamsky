@@ -481,6 +481,64 @@ proc loadThemes*() =
               theme.giveIcon = entry.value.unixToNativePath
             of "DropIcon":
               theme.dropIcon = entry.value.unixToNativePath
+            of "BuyIcon":
+              theme.buyIcon = entry.value.unixToNativePath
+            of "SellIcon":
+              theme.sellIcon = entry.value.unixToNativePath
+            of "CraftIcon":
+              theme.craftIcon = entry.value.unixToNativePath
+            of "StudyIcon":
+              theme.studyIcon = entry.value.unixToNativePath
+            of "DeconstructIcon":
+              theme.deconstructIcon = entry.value.unixToNativePath
+            of "NegotiateIcon":
+              theme.negotiateIcon = entry.value.unixToNativePath
+            of "CargoIcon":
+              theme.cargoIcon = entry.value.unixToNativePath
+            of "EquipIcon":
+              theme.equipIcon = entry.value.unixToNativePath
+            of "UnequipIcon":
+              theme.unequipIcon = entry.value.unixToNativePath
+            of "SelectAllIcon":
+              theme.selectAllIcon = entry.value.unixToNativePath
+            of "UnselectAllIcon":
+              theme.unselectAllIcon = entry.value.unixToNativePath
+            of "GiveOrderIcon":
+              theme.giveOrderIcon = entry.value.unixToNativePath
+            of "NoPilotIcon":
+              theme.noPilotIcon = entry.value.unixToNativePath
+            of "NoEngineerIcon":
+              theme.noEngineerIcon = entry.value.unixToNativePath
+            of "DestinationIcon":
+              theme.destinationIcon = entry.value.unixToNativePath
+            of "InventoryIcon":
+              theme.inventoryIcon = entry.value.unixToNativePath
+            of "DismissIcon":
+              theme.dismissIcon = entry.value.unixToNativePath
+            of "GoRestIcon":
+              theme.goRestIcon = entry.value.unixToNativePath
+            of "repairPriorityIcon":
+              theme.repairPriorityIcon = entry.value.unixToNativePath
+            of "UpgradeButtonIcon":
+              theme.upgradeButtonIcon = entry.value.unixToNativePath
+            of "PowerIcon":
+              theme.powerIcon = entry.value.unixToNativePath
+            of "AssignCrewIcon":
+              theme.assignCrewIcon = entry.value.unixToNativePath
+            of "AssignAmmoIcon":
+              theme.assignAmmoIcon = entry.value.unixToNativePath
+            of "BuyDefaultIcon":
+              theme.buyDefaultIcon = entry.value.unixToNativePath
+            of "SellDefaultIcon":
+              theme.sellDefaultIcon = entry.value.unixToNativePath
+            of "MoveIcon":
+              theme.moveIcon = entry.value.unixToNativePath
+            of "GiveColoredIcon":
+              theme.giveColoredIcon = entry.value.unixToNativePath
+            of "DropColoredIcon":
+              theme.dropColoredIcon = entry.value.unixToNativePath
+            of "EditColoredIcon":
+              theme.editColoredIcon = entry.value.unixToNativePath
             else:
               discard
           of cfgError:
@@ -496,3 +554,5 @@ proc loadThemes*() =
       except OSError, IOError, Exception:
         echo "Can't close configuration file parser. Reason: " &
             getCurrentExceptionMsg()
+      themesList[themeDir.lastPathPart] = theme
+      theme = defaultTheme
