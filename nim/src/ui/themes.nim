@@ -609,4 +609,6 @@ proc loadThemeImages*() =
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
         gameSettings.interfaceFontSize + 8) & "}")
-  tclEval(script = "ttk::theme::" & tclEval2(script = "ttk::style theme use"))
+  tclEval(script = "ttk::theme::" & tclEval2(script = "ttk::style theme use") &
+      "::LoadImages " & theme.fileName.parentDir & " " & $(
+      gameSettings.interfaceFontSize + 8))
