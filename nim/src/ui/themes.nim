@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables]
-import ../game
+import ../[config, game]
 
 type ThemeRecord* = object
   ## Data structure for themes settings
@@ -556,3 +556,5 @@ proc loadThemes*() =
             getCurrentExceptionMsg()
       themesList[themeDir.lastPathPart] = theme
       theme = defaultTheme
+      if gameSettings.interfaceTheme notin themesList:
+        gameSettings.interfaceTheme = "steamsky"
