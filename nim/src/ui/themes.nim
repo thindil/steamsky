@@ -563,6 +563,7 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
         gameSettings.interfaceTheme = "steamsky"
 
 proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
+  ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
       "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon",
@@ -621,7 +622,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "::LoadImages " & theme.fileName.parentDir & " " & $(
       gameSettings.interfaceFontSize + 8))
 
-proc setTheme*() =
+proc setTheme*() {.sideEffect, raises: [], tags: [].} =
   loadThemeImages()
   tclEval(script = gameHeader & ".nofuel configure -image nofuelicon")
   tclEval(script = gameHeader & ".nofood configure -image nofoodicon")
@@ -672,3 +673,6 @@ proc loatAdaThemeImages() {.raises: [], tags: [], exportc.} =
     loadThemeImages()
   except:
     discard
+
+  proc setAdaTheme() {.raises: [], tags: [], exportc.} =
+    setTheme()
