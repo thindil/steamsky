@@ -562,7 +562,7 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
       if gameSettings.interfaceTheme notin themesList:
         gameSettings.interfaceTheme = "steamsky"
 
-proc loadThemeImages*() =
+proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
       "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon",
@@ -582,7 +582,12 @@ proc loadThemeImages*() =
       "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
       "moveicon", "give2icon", "drop2icon", "edit2icon"]
   let
-    theme = themesList[gameSettings.interfaceTheme]
+    theme = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        tclEval(script = "bgerror {Can't find theme '" &
+            gameSettings.interfaceTheme & "'}")
+        return
     imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon,
         theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon,
         theme.repairOrderIcon, theme.upgradeIcon, theme.noUpgradeIcon,
@@ -661,3 +666,9 @@ proc setTheme*() =
 proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, ReadDirEffect,
     ReadIOEffect, RootEffect], exportc.} =
   loadThemes()
+
+proc loatAdaThemeImages() {.raises: [], tags: [], exportc.} =
+  try:
+    loadThemeImages()
+  except:
+    discard
