@@ -17,6 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables]
 import ../[config, game, tk]
+import coreui
 
 type ThemeRecord* = object
   ## Data structure for themes settings
@@ -612,3 +613,32 @@ proc loadThemeImages*() =
   tclEval(script = "ttk::theme::" & tclEval2(script = "ttk::style theme use") &
       "::LoadImages " & theme.fileName.parentDir & " " & $(
       gameSettings.interfaceFontSize + 8))
+
+proc setTheme*() =
+  loadThemeImages()
+  tclEval(script = gameHeader & ".nofuel -image nofuelicon")
+  tclEval(script = gameHeader & ".nofood -image nofoodicon")
+  tclEval(script = gameHeader & ".nodrink -image nodrinkicon")
+  tclEval(script = gameHeader & ".overloaded -image overloadedicon")
+  tclEval(script = gameHeader & ".pilot -image piloticon")
+  tclEval(script = gameHeader & ".engineer -image engineericon")
+  tclEval(script = gameHeader & ".gunner -image gunnericon")
+  tclEval(script = gameHeader & ".talk -image crewtradericon")
+  tclEval(script = gameHeader & ".repairs -image repairicon")
+  tclEval(script = gameHeader & ".upgrade -image upgradeicon")
+  tclEval(script = gameHeader & ".clean -image cleanicon")
+  tclEval(script = gameHeader & ".crafting -image crafticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.show -image movemapupicon")
+  tclEval(script = mainPaned & ".mapframe.buttons.hide -image movemapdownicon")
+  tclEval(script = mainPaned & ".mapframe.buttons.left -image movemaplefticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.right -image movemaprighticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.n -image arrowupicon")
+  tclEval(script = mainPaned & ".controls.buttons.n -image arrowupicon")
+  tclEval(script = mainPaned & ".mapframe.buttons.s -image arrowdownicon")
+  tclEval(script = mainPaned & ".controls.buttons.s -image arrowdownicon")
+  tclEval(script = mainPaned & ".mapframe.buttons.w -image arrowlefticon")
+  tclEval(script = mainPaned & ".controls.buttons.w -image arrowlefticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.e -image arrowrighticon")
+  tclEval(script = mainPaned & ".controls.buttons.e -image arrowrighticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.nw -image arrowuplefticon")
+  tclEval(script = mainPaned & ".controls.buttons.nw -image arrowuplefticon")
