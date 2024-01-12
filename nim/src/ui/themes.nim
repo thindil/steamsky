@@ -623,6 +623,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       gameSettings.interfaceFontSize + 8))
 
 proc setTheme*() {.sideEffect, raises: [], tags: [].} =
+  ## Set images and buttons for the current game theme
   loadThemeImages()
   tclEval(script = gameHeader & ".nofuel configure -image nofuelicon")
   tclEval(script = gameHeader & ".nofood configure -image nofoodicon")
