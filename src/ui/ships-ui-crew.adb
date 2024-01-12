@@ -1060,15 +1060,29 @@ package body Ships.UI.Crew is
                                (Container => Member.Skills, Index => I)
                                .Index)
                           .Name) &
-                   ": " &
+                   ":}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-sticky w");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+            Member_Label :=
+              Create
+                (pathName =>
+                   Progress_Frame & ".label2" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options =>
+                   "-text {" &
                    Get_Skill_Level_Name
                      (Skill_Level =>
                         Skills_Container.Element
                           (Container => Member.Skills, Index => I)
                           .Level) &
-                   "}");
+                   "} -style Golden.TLabel");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky we");
+              (Slave => Member_Label,
+               Options => "-sticky we -column 2 -row 0 -padx {5 0}");
             Tcl_Eval
               (interp => Interp,
                strng =>
@@ -1095,7 +1109,7 @@ package body Ships.UI.Crew is
                  "Show detailed information about the selected skill.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
-               Options => "-column 1 -row 0 -padx {5 0}");
+               Options => "-column 2 -row 0 -padx {5 0} -sticky e");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Button & " invoke;break}");
