@@ -17,7 +17,7 @@
 
 import std/strutils
 import ../tk
-import coreui
+import coreui, themes
 
 const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
     "wait", "e", "sw", "s", "se", "hide", "left", "right"]

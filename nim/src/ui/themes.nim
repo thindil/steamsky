@@ -319,7 +319,8 @@ let
       dropColoredIcon: defaultThemeIconPath & "drop2.svg",
       editColoredIcon: defaultThemeIconPath & "edit2.svg")
 
-proc loadThemes*() =
+proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+    ReadDirEffect, ReadIOEffect, RootEffect].} =
   var theme = defaultTheme
   themesList["steamsky"] = theme
   for themeDir in walkDirs(themesDirectory):
@@ -653,3 +654,9 @@ proc setTheme*() =
   tclEval(script = mainPaned & ".mapframe.buttons.wait configure -image menuicon")
   tclEval(script = gameHeader & ".menubutton configure -image menuicon")
   tclEval(script = gameHeader & ".closebutton configure -image exiticon")
+
+# Temporary code for interfacing with Ada
+
+proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, ReadDirEffect,
+    ReadIOEffect, RootEffect], exportc.} =
+  loadThemes()
