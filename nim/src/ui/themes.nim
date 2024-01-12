@@ -321,6 +321,7 @@ let
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
     ReadDirEffect, ReadIOEffect, RootEffect].} =
+  ## Load all data of the game themes
   var theme = defaultTheme
   themesList["steamsky"] = theme
   for themeDir in walkDirs(themesDirectory):
