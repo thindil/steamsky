@@ -675,5 +675,92 @@ proc loatAdaThemeImages() {.raises: [], tags: [], exportc.} =
   except:
     discard
 
-  proc setAdaTheme() {.raises: [], tags: [], exportc.} =
-    setTheme()
+proc setAdaTheme() {.raises: [], tags: [], exportc.} =
+  setTheme()
+
+proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+  let theme = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        tclEval(script = "bgerror {Can't find theme '" &
+            gameSettings.interfaceTheme & "'}")
+        return
+  case $name
+  of "name":
+    return theme.name.cstring
+  of "fileName":
+    return theme.fileName.cstring
+  of "enemyShipIcon":
+    return theme.enemyShipIcon.cstring
+  of "attackOnBaseIcon":
+    return theme.attackOnBaseIcon.cstring
+  of "diseaseIcon":
+    return theme.diseaseIcon.cstring
+  of "doublePriceIcon":
+    return theme.doublePriceIcon.cstring
+  of "fullDocksIcon":
+    return theme.fullDocksIcon.cstring
+  of "enemyPatrolIcon":
+    return theme.enemyPatrolIcon.cstring
+  of "traderIcon":
+    return theme.traderIcon.cstring
+  of "friendlyShipIcon":
+    return theme.friendlyShipIcon.cstring
+  of "deliverIcon":
+    return theme.deliverIcon.cstring
+  of "destroyIcon":
+    return theme.destroyIcon.cstring
+  of "patrolIcon":
+    return theme.patrolIcon.cstring
+  of "exploreIcon":
+    return theme.exploreIcon.cstring
+  of "passengerIcon":
+    return theme.passengerIcon.cstring
+  of "pilotIcon":
+    return theme.pilotIcon.cstring
+  of "engineerIcon":
+    return theme.engineerIcon.cstring
+  of "gunnerIcon":
+    return theme.gunnerIcon.cstring
+  of "crewTraderIcon":
+    return theme.crewTraderIcon.cstring
+  of "repairIcon":
+    return theme.repairIcon.cstring
+  of "noRepairIcon":
+    return theme.noRepairIcon.cstring
+  of "cleanIcon":
+    return theme.cleanIcon.cstring
+  of "noCleanIcon":
+    return theme.noCleanIcon.cstring
+  of "cleanOrderIcon":
+    return theme.cleanOrderIcon.cstring
+  of "manufactureIcon":
+    return theme.manufactureIcon.cstring
+  of "noManufactureIcon":
+    return theme.noManufactureIcon.cstring
+  of "moveMapUpIcon":
+    return theme.moveMapUpIcon.cstring
+  of "moveMapDownIcon":
+    return theme.moveMapDownIcon.cstring
+  of "moveMapLeftIcon":
+    return theme.moveMapLeftIcon.cstring
+  of "moveMapRightIcon":
+    return theme.moveMapRightIcon.cstring
+  of "noFuelIcon":
+    return theme.noFuelIcon.cstring
+  of "lowFuelIcon":
+    return theme.lowFuelIcon.cstring
+  of "noFoodIcon":
+    return theme.noFoodIcon.cstring
+  of "lowFoodIcon":
+    return theme.lowFoodIcon.cstring
+  of "noDrinksIcon":
+    return theme.noDrinksIcon.cstring
+  of "lowDrinksIcon":
+    return theme.lowDrinksIcon.cstring
+  of "notVisitedBaseIcon":
+    return theme.notVisitedBaseIcon.cstring
+  of "playerShipIcon":
+    return theme.playerShipIcon.cstring
+  of "emptyMapIcon":
+    return theme.emptyMapIcon.cstring
