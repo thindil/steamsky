@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 with Ada.Strings.Maps;
 with Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
@@ -629,7 +629,6 @@ package body Themes is
    end Load_Themes;
 
    procedure Set_Theme is
-      use Interfaces.C.Strings;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -862,5 +861,14 @@ package body Themes is
            Positive'Image
              (Get_Integer_Setting(Name => "interfaceFontSize") + 8));
    end Load_Theme_Images;
+
+   function Get_Icon(Name: String) return String is
+      function Get_Ada_Icon(N: chars_ptr) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaIcon";
+   begin
+      return Value(Item => Get_Ada_Icon(N => New_String(Str => Name)));
+   end Get_Icon;
 
 end Themes;

@@ -850,3 +850,36 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
     return theme.noPilotIcon.cstring
   of "noEngineerIcon":
     return theme.noEngineerIcon.cstring
+  of "destinationIcon":
+    return theme.destinationIcon.cstring
+  of "inventoryIcon":
+    return theme.inventoryIcon.cstring
+  of "dismissIcon":
+    return theme.dismissIcon.cstring
+  of "goRestIcon":
+    return theme.goRestIcon.cstring
+  of "repairPriorityIcon":
+    return theme.repairPriorityIcon.cstring
+  of "upgradeButtonIcon":
+    return theme.upgradeButtonIcon.cstring
+  of "powerIcon":
+    return theme.powerIcon.cstring
+  of "assignCrewIcon":
+    return theme.assignCrewIcon.cstring
+  of "assignAmmoIcon":
+    return theme.assignAmmoIcon.cstring
+  of "buyDefaultIcon":
+    return theme.buyDefaultIcon.cstring
+  of "sellDefaultIcon":
+    return theme.sellDefaultIcon.cstring
+  of "moveIcon":
+    return theme.moveIcon.cstring
+  of "giveColoredIcon":
+    return theme.giveColoredIcon.cstring
+  of "dropColoredIcon":
+    return theme.dropColoredIcon.cstring
+  of "editColoredIcon":
+    return theme.editColoredIcon.cstring
+  else:
+    tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
+    return "".cstring

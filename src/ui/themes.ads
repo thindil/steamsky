@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -293,5 +293,9 @@ package Themes is
    -- SOURCE
    procedure Load_Theme_Images;
    -- ****
+
+-- Temporary code to interact with Nim
+
+   function Get_Icon(Name: String) return String;
 
 end Themes;
