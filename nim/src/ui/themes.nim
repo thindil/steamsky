@@ -557,10 +557,10 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
       except OSError, IOError, Exception:
         echo "Can't close configuration file parser. Reason: " &
             getCurrentExceptionMsg()
-      themesList[themeDir.lastPathPart] = theme
-      theme = defaultTheme
-      if gameSettings.interfaceTheme notin themesList:
-        gameSettings.interfaceTheme = "steamsky"
+    themesList[themeDir.lastPathPart] = theme
+    theme = defaultTheme
+  if gameSettings.interfaceTheme notin themesList:
+    gameSettings.interfaceTheme = "steamsky"
 
 proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
   ## Load all images of the current game theme
