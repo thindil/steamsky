@@ -100,13 +100,11 @@ package body Maps.UI is
    procedure Draw_Map is
       use Ada.Strings.UTF_Encoding.Wide_Strings;
 
-      Map_Char: Wide_Character := Wide_Character'Val(0);
+      Map_Char: Unbounded_String := Null_Unbounded_String;
       End_X, End_Y: Integer;
       Map_Height, Map_Width: Positive;
       Map_Tag: Unbounded_String := Null_Unbounded_String;
       Story_X, Story_Y: Natural := 1;
-      Current_Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Get_Interface_Theme));
       Preview: Boolean :=
         (if
            Tcl_GetVar(interp => Get_Context, varName => "mappreview")'Length >
@@ -166,41 +164,41 @@ package body Maps.UI is
          for X in Start_X .. End_X loop
             Map_Tag := Null_Unbounded_String;
             if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-               Map_Char := Current_Theme.Player_Ship_Icon;
+               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "playerShipIcon"));
             else
-               Map_Char := Current_Theme.Empty_Map_Icon;
+               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "emptyMapIcon"));
                Map_Tag :=
                  (if Sky_Map(X, Y).Visited then
                     To_Unbounded_String(Source => "black")
                   else To_Unbounded_String(Source => "unvisited gray"));
                if X = Player_Ship.Destination_X and
                  Y = Player_Ship.Destination_Y then
-                  Map_Char := Current_Theme.Target_Icon;
+                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "targetIcon"));
                   Map_Tag :=
                     (if Sky_Map(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String(Source => "unvisited"));
                elsif Get_Current_Story.Index /= Null_Unbounded_String
                  and then (X = Story_X and Y = Story_Y) then
-                  Map_Char := Current_Theme.Story_Icon;
+                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "storyIcon"));
                   Map_Tag := To_Unbounded_String(Source => "green");
                elsif Sky_Map(X, Y).Mission_Index > 0 then
                   case Get_Accepted_Mission
                     (Mission_Index => Sky_Map(X, Y).Mission_Index)
                     .M_Type is
                      when DELIVER =>
-                        Map_Char := Current_Theme.Deliver_Icon;
+                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
                         Map_Tag := To_Unbounded_String(Source => "yellow");
                      when DESTROY =>
-                        Map_Char := Current_Theme.Destroy_Icon;
+                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
                         Map_Tag := To_Unbounded_String(Source => "red");
                      when PATROL =>
-                        Map_Char := Current_Theme.Patrol_Icon;
+                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
                         Map_Tag := To_Unbounded_String(Source => "lime");
                      when EXPLORE =>
-                        Map_Char := Current_Theme.Explore_Icon;
+                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
                         Map_Tag := To_Unbounded_String(Source => "green");
                      when PASSENGER =>
-                        Map_Char := Current_Theme.Passenger_Icon;
+                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
                         Map_Tag := To_Unbounded_String(Source => "cyan");
                   end case;
                   if not Sky_Map(X, Y).Visited then
@@ -213,28 +211,28 @@ package body Maps.UI is
                      case Get_Event(Index => Sky_Map(X, Y).Event_Index)
                        .E_Type is
                         when ENEMYSHIP =>
-                           Map_Char := Current_Theme.Enemy_Ship_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyShipIcon"));
                            Map_Tag := To_Unbounded_String(Source => "red");
                         when ATTACKONBASE =>
-                           Map_Char := Current_Theme.Attack_On_Base_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "attackOnBaseIcon"));
                            Map_Tag := To_Unbounded_String(Source => "red2");
                         when ENEMYPATROL =>
-                           Map_Char := Current_Theme.Enemy_Patrol_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyPatrolIcon"));
                            Map_Tag := To_Unbounded_String(Source => "red3");
                         when DISEASE =>
-                           Map_Char := Current_Theme.Disease_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "diseaseIcon"));
                            Map_Tag := To_Unbounded_String(Source => "yellow");
                         when FULLDOCKS =>
-                           Map_Char := Current_Theme.Full_Docks_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "fullDocksIcon"));
                            Map_Tag := To_Unbounded_String(Source => "cyan");
                         when DOUBLEPRICE =>
-                           Map_Char := Current_Theme.Double_Price_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "priceIcon"));
                            Map_Tag := To_Unbounded_String(Source => "lime");
                         when TRADER =>
-                           Map_Char := Current_Theme.Trader_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "traderIcon"));
                            Map_Tag := To_Unbounded_String(Source => "green");
                         when FRIENDLYSHIP =>
-                           Map_Char := Current_Theme.Friendly_Ship_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "friendlyShipIcon"));
                            Map_Tag := To_Unbounded_String(Source => "green2");
                         when others =>
                            null;
@@ -244,15 +242,14 @@ package body Maps.UI is
                      Append(Source => Map_Tag, New_Item => " unvisited");
                   end if;
                elsif Sky_Map(X, Y).Base_Index > 0 then
-                  Map_Char := Current_Theme.Not_Visited_Base_Icon;
+                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "notVisitedBaseIcon"));
                   if Sky_Bases(Sky_Map(X, Y).Base_Index).Known then
                      if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year >
                        0 then
-                        Map_Char :=
-                          Get_Faction
+                        Map_Char := To_Unbounded_String(Source => Encode(Item => "" & Get_Faction
                             (Index =>
                                Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
-                            .Base_Icon;
+                            .Base_Icon));
                         Map_Tag :=
                           To_Unbounded_String
                             (Source =>
@@ -277,19 +274,19 @@ package body Maps.UI is
                   if Mission.Target_X = X and Mission.Target_Y = Y then
                      case Mission.M_Type is
                         when DELIVER =>
-                           Map_Char := Current_Theme.Deliver_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
                            Map_Tag := To_Unbounded_String(Source => "yellow");
                         when DESTROY =>
-                           Map_Char := Current_Theme.Destroy_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
                            Map_Tag := To_Unbounded_String(Source => "red");
                         when PATROL =>
-                           Map_Char := Current_Theme.Patrol_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
                            Map_Tag := To_Unbounded_String(Source => "lime");
                         when EXPLORE =>
-                           Map_Char := Current_Theme.Explore_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
                            Map_Tag := To_Unbounded_String(Source => "green");
                         when PASSENGER =>
-                           Map_Char := Current_Theme.Passenger_Icon;
+                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
                            Map_Tag := To_Unbounded_String(Source => "cyan");
                      end case;
                      if not Sky_Map(X, Y).Visited then
@@ -302,7 +299,7 @@ package body Maps.UI is
             Insert
               (TextWidget => Get_Map_View, Index => "end",
                Text =>
-                 Encode(Item => "" & Map_Char) & " [list " &
+                 To_String(Source => Map_Char) & " [list " &
                  To_String(Source => Map_Tag) & "]");
          end loop Draw_Map_X_Loop;
          if Y < End_Y then

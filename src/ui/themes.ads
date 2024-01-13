@@ -268,7 +268,7 @@ package Themes is
    -- FUNCTION
    -- List of all available themes
    -- SOURCE
-   Themes_List: Themes_Container.Map;
+--    Themes_List: Themes_Container.Map;
    -- ****
 
    -- ****f* Themes/Themes.Load_Themes
