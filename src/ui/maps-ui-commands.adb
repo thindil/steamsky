@@ -16,7 +16,6 @@
 with Ada.Containers.Vectors;
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CArgv; use CArgv;
@@ -77,7 +76,6 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Strings.UTF_Encoding.Wide_Strings;
       use Themes;
 
       Map_View: constant Tk_Text :=
@@ -86,12 +84,8 @@ package body Maps.UI.Commands is
       configure
         (Widgt => Map_View,
          options =>
-           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
-           Encode
-             (Item =>
-                "" &
-                Themes_List(To_String(Source => Get_Interface_Theme))
-                  .Empty_Map_Icon) &
+           "-width [expr [winfo width $mapview] / [font measure MapFont {" & Get_Icon(Name => "emptyMapIcon")
+            &
            "}]]");
       configure
         (Widgt => Map_View,

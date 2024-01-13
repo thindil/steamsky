@@ -494,8 +494,6 @@ package body Help.UI is
          else CArgv.Arg(Argv => Argv, N => 1));
       Help_View: constant Tk_Text :=
         Get_Widget(pathName => Paned & ".content.view", Interp => Interp);
-      Current_Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Get_Interface_Theme));
       Local_Help: Help_Data; --## rule line off IMPROPER_INITIALIZATION
       Help_Title: Unbounded_String := Null_Unbounded_String;
    begin
@@ -514,25 +512,22 @@ package body Help.UI is
         (TextWidget => Help_View, TagName => "special",
          Options =>
            "-foreground {" &
-           To_String(Source => Current_Theme.Special_Help_Color) &
+           Get_Icon(Name => "specialHelpColor") &
            "} -font BoldHelpFont");
       Tag_Configure
         (TextWidget => Help_View, TagName => "underline",
          Options =>
-           "-foreground {" &
-           To_String(Source => Current_Theme.Underline_Help_Color) &
+           "-foreground {" & Get_Icon(Name => "underlineHelpColor") &
            "} -font UnderlineHelpFont");
       Tag_Configure
         (TextWidget => Help_View, TagName => "bold",
          Options =>
-           "-foreground {" &
-           To_String(Source => Current_Theme.Bold_Help_Color) &
+           "-foreground {" & Get_Icon(Name => "boldHelpColor") &
            "} -font BoldHelpFont");
       Tag_Configure
         (TextWidget => Help_View, TagName => "italic",
          Options =>
-           "-foreground {" &
-           To_String(Source => Current_Theme.Italic_Help_Color) &
+           "-foreground {" & Get_Icon(Name => "italicHelpColor") &
            "} -font ItalicHelpFont");
       X :=
         (Positive'Value

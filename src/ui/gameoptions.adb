@@ -705,12 +705,7 @@ package body GameOptions is
                  Full_Name(Name => To_String(Source => Path_Label.Value)) &
                  " }");
          end loop Configure_Labels_Loop;
-         Load_Themes_Loop :
-         for Theme of Themes_List loop
-            Append
-              (Source => Local_Themes_List,
-               New_Item => " {" & Theme.Name & "}");
-         end loop Load_Themes_Loop;
+         Local_Themes_List := To_Unbounded_String(Source => Get_Themes_Names);
          Combo_Box_Widget.Name :=
            New_String
              (Str => Options_Frame & ".canvas.options.interface.theme");
@@ -760,10 +755,8 @@ package body GameOptions is
       Set
         (ComboBox => Combo_Box_Widget,
          Value =>
-           "{" &
-           To_String
-             (Source =>
-                Themes_List(To_String(Source => Get_Interface_Theme)).Name) &
+           "{" & Get_Icon(Name => "name")
+            &
            "}");
       Key_Entry.Interp := Interp;
       Options_Frame.Name :=
@@ -1051,16 +1044,7 @@ package body GameOptions is
         (Value =>
            Auto_Save_Type'Val
              (Get_Combobox_Value(Combo_Box_Name => ".general.autosave")));
-      Set_Theme_Loop :
-      for I in Themes_List.Iterate loop
-         if Themes_List(I).Name = Get(Widgt => Theme_Combo_Box) then
-            Set_Interface_Theme
-              (Value =>
-                 To_Unbounded_String
-                   (Source => Themes_Container.Key(Position => I)));
-            exit Set_Theme_Loop;
-         end if;
-      end loop Set_Theme_Loop;
+      Set_New_Theme(Name => Get(Widgt => Theme_Combo_Box));
       Theme_Use(ThemeName => To_String(Source => Get_Interface_Theme));
       Set_Theme;
       Map_View := Get_Widget(pathName => ".gameframe.paned.mapframe.map");
