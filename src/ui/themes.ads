@@ -275,24 +275,33 @@ package Themes is
    -- FUNCTION
    -- Load data for all themes
    -- SOURCE
-   procedure Load_Themes;
-   -- ****
+   procedure Load_Themes with
+      Import => True,
+      Convention => C,
+      External_Name => "loadAdaThemes";
+      -- ****
 
-   -- ****f* Themes/Themes.Set_Theme
-   -- FUNCTION
-   -- Set values for the current theme
-   -- SOURCE
-   procedure Set_Theme;
-   -- ****
+      -- ****f* Themes/Themes.Set_Theme
+      -- FUNCTION
+      -- Set values for the current theme
+      -- SOURCE
+   procedure Set_Theme with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaTheme";
+      -- ****
 
-   -- ****f* Themes/Themes.Load_Theme_Images
-   -- FUNCTION
-   -- Load all images for the selected the game's theme
-   -- HISTORY
-   -- 7.1 - Added
-   -- SOURCE
-   procedure Load_Theme_Images;
-   -- ****
+      -- ****f* Themes/Themes.Load_Theme_Images
+      -- FUNCTION
+      -- Load all images for the selected the game's theme
+      -- HISTORY
+      -- 7.1 - Added
+      -- SOURCE
+   procedure Load_Theme_Images with
+      Import => True,
+      Convention => C,
+      External_Name => "loadAdaThemeImages";
+      -- ****
 
 -- Temporary code to interact with Nim
 

@@ -672,7 +672,7 @@ proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, ReadDirEffect,
     ReadIOEffect, RootEffect], exportc.} =
   loadThemes()
 
-proc loatAdaThemeImages() {.raises: [], tags: [], exportc.} =
+proc loadAdaThemeImages() {.raises: [], tags: [], exportc.} =
   try:
     loadThemeImages()
   except:

@@ -13,21 +13,21 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Maps;
-with Ada.Text_IO;
-with Ada.Directories; use Ada.Directories;
+-- with Ada.Strings.Maps;
+-- with Ada.Text_IO;
+-- with Ada.Directories; use Ada.Directories;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Tcl.Ada;
-with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Image.Photo;
-with Tcl.Tk.Ada.TtkStyle;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Config; use Config;
-with CoreUI;
-with Game; use Game;
+-- with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+-- with Tcl.Ada;
+-- with Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Image.Photo;
+-- with Tcl.Tk.Ada.TtkStyle;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Config; use Config;
+-- with CoreUI;
+-- with Game; use Game;
 
 package body Themes is
 
@@ -37,830 +37,830 @@ package body Themes is
    -- HISTORY
    -- 7.1 - Added
    -- SOURCE
-   Default_Theme_Icons_Path: constant Unbounded_String :=
-     Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator & "ui" &
-     Dir_Separator;
+--   Default_Theme_Icons_Path: constant Unbounded_String :=
+--     Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator & "ui" &
+--     Dir_Separator;
    -- ****
 
    -- ****id* Themes/Themes.Default_Theme
    -- FUNCTION
    -- Default the game theme
    -- SOURCE
-   Default_Theme: constant Theme_Record :=
-     (Name => To_Unbounded_String(Source => "Default theme"),
-      File_Name =>
-        Data_Directory & Dir_Separator &
-        To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl"),
-      Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
-      Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
-      Disease_Icon => Wide_Character'Val(16#f5a6#),
-      Double_Price_Icon => Wide_Character'Val(16#f0d6#),
-      Full_Docks_Icon => Wide_Character'Val(16#f057#),
-      Enemy_Patrol_Icon => Wide_Character'Val(16#f51b#),
-      Trader_Icon => Wide_Character'Val(16#f197#),
-      Friendly_Ship_Icon => Wide_Character'Val(16#f197#),
-      Deliver_Icon => Wide_Character'Val(16#f53b#),
-      Destroy_Icon => Wide_Character'Val(16#fc6a#),
-      Patrol_Icon => Wide_Character'Val(16#f540#),
-      Explore_Icon => Wide_Character'Val(16#f707#),
-      Passenger_Icon => Wide_Character'Val(16#f183#),
-      Pilot_Icon => Default_Theme_Icons_Path & "pilot.svg",
-      Engineer_Icon => Default_Theme_Icons_Path & "engineer.svg",
-      Gunner_Icon => Default_Theme_Icons_Path & "gunner.svg",
-      Crew_Trader_Icon => Default_Theme_Icons_Path & "crewtrader.svg",
-      Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
-      No_Repair_Icon => Default_Theme_Icons_Path & "repair-empty.svg",
-      Repair_Order_Icon => Default_Theme_Icons_Path & "repair-order.svg",
-      Upgrade_Icon => Default_Theme_Icons_Path & "upgrade.svg",
-      No_Upgrade_Icon => Default_Theme_Icons_Path & "upgrade-empty.svg",
-      Clean_Icon => Default_Theme_Icons_Path & "clean.svg",
-      No_Clean_Icon => Default_Theme_Icons_Path & "clean-empty.svg",
-      Clean_Order_Icon => Default_Theme_Icons_Path & "clean-order.svg",
-      Manufacture_Icon => Default_Theme_Icons_Path & "craft.svg",
-      No_Manufacture_Icon => Default_Theme_Icons_Path & "craft-empty.svg",
-      Move_Map_Up_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
-      Move_Map_Down_Icon => Default_Theme_Icons_Path & "contract.svg",
-      Move_Map_Left_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
-      Move_Map_Right_Icon => Default_Theme_Icons_Path & "flip-right.svg",
-      No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
-      Low_Fuel_Icon => Default_Theme_Icons_Path & "lowfuel.svg",
-      No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
-      Low_Food_Icon => Default_Theme_Icons_Path & "lowfood.svg",
-      No_Drinks_Icon => Default_Theme_Icons_Path & "nodrinks.svg",
-      Low_Drinks_Icon => Default_Theme_Icons_Path & "lowdrinks.svg",
-      Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
-      Player_Ship_Icon => Wide_Character'Val(16#f135#),
-      Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
-      Target_Icon => Wide_Character'Val(16#f05b#),
-      Story_Icon => Wide_Character'Val(16#f059#),
-      Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg",
-      Arrow_Up_Icon => Default_Theme_Icons_Path & "arrow-up.svg",
-      Arrow_Down_Icon => Default_Theme_Icons_Path & "arrow-down.svg",
-      Arrow_Left_Icon => Default_Theme_Icons_Path & "arrow-left.svg",
-      Arrow_Right_Icon => Default_Theme_Icons_Path & "arrow-right.svg",
-      Arrow_Up_Left_Icon => Default_Theme_Icons_Path & "arrow-up-left.svg",
-      Arrow_Up_Right_Icon => Default_Theme_Icons_Path & "arrow-up-right.svg",
-      Arrow_Down_Right_Icon =>
-        Default_Theme_Icons_Path & "arrow-down-right.svg",
-      Arrow_Down_Left_Icon => Default_Theme_Icons_Path & "arrow-down-left.svg",
-      Wait_Icon => Default_Theme_Icons_Path & "wait.svg",
-      Move_Step_Icon => Default_Theme_Icons_Path & "movestep.svg",
-      Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg",
-      Menu_Icon => Default_Theme_Icons_Path & "menu.svg",
-      Exit_Icon => Default_Theme_Icons_Path & "exit.svg",
-      Random_Icon => Default_Theme_Icons_Path & "random.svg",
-      Male_Icon => Default_Theme_Icons_Path & "male.svg",
-      Female_Icon => Default_Theme_Icons_Path & "female.svg",
-      Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
-      Show_Icon => Default_Theme_Icons_Path & "show.svg",
-      Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
-      Help_Icon => Default_Theme_Icons_Path & "help.svg",
-      Special_Help_Color => To_Unbounded_String(Source => "yellow"),
-      Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"),
-      Bold_Help_Color => To_Unbounded_String(Source => "coral"),
-      Italic_Help_Color => To_Unbounded_String(Source => "lime"),
-      Give_Icon => Default_Theme_Icons_Path & "give.svg",
-      Drop_Icon => Default_Theme_Icons_Path & "drop.svg",
-      Buy_Icon => Default_Theme_Icons_Path & "buy.svg",
-      Sell_Icon => Default_Theme_Icons_Path & "sell.svg",
-      Craft_Icon => Default_Theme_Icons_Path & "craft-order.svg",
-      Study_Icon => Default_Theme_Icons_Path & "study.svg",
-      Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg",
-      Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg",
-      Cargo_Icon => Default_Theme_Icons_Path & "cargo.svg",
-      Equip_Icon => Default_Theme_Icons_Path & "equip.svg",
-      Unequip_Icon => Default_Theme_Icons_Path & "unequip.svg",
-      Select_All_Icon => Default_Theme_Icons_Path & "selectall.svg",
-      Unselect_All_Icon => Default_Theme_Icons_Path & "unselectall.svg",
-      Give_Order_Icon => Default_Theme_Icons_Path & "giveorder.svg",
-      No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg",
-      No_Engineer_Icon => Default_Theme_Icons_Path & "noengineer.svg",
-      Destination_Icon => Default_Theme_Icons_Path & "destination.svg",
-      Inventory_Icon => Default_Theme_Icons_Path & "inventory.svg",
-      Dismiss_Icon => Default_Theme_Icons_Path & "dismiss.svg",
-      Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg",
-      Repair_Priority_Icon => Default_Theme_Icons_Path & "repair-priority.svg",
-      Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg",
-      Power_Icon => Default_Theme_Icons_Path & "power.svg",
-      Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg",
-      Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg",
-      Buy_Default_Icon => Default_Theme_Icons_Path & "buy2.svg",
-      Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg",
-      Move_Icon => Default_Theme_Icons_Path & "cargo2.svg",
-      Give_Colored_Icon => Default_Theme_Icons_Path & "give2.svg",
-      Drop_Colored_Icon => Default_Theme_Icons_Path & "drop2.svg",
-      Edit_Colored_Icon => Default_Theme_Icons_Path & "edit2.svg");
+--   Default_Theme: constant Theme_Record :=
+--     (Name => To_Unbounded_String(Source => "Default theme"),
+--      File_Name =>
+--        Data_Directory & Dir_Separator &
+--        To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl"),
+--      Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
+--      Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
+--      Disease_Icon => Wide_Character'Val(16#f5a6#),
+--      Double_Price_Icon => Wide_Character'Val(16#f0d6#),
+--      Full_Docks_Icon => Wide_Character'Val(16#f057#),
+--      Enemy_Patrol_Icon => Wide_Character'Val(16#f51b#),
+--      Trader_Icon => Wide_Character'Val(16#f197#),
+--      Friendly_Ship_Icon => Wide_Character'Val(16#f197#),
+--      Deliver_Icon => Wide_Character'Val(16#f53b#),
+--      Destroy_Icon => Wide_Character'Val(16#fc6a#),
+--      Patrol_Icon => Wide_Character'Val(16#f540#),
+--      Explore_Icon => Wide_Character'Val(16#f707#),
+--      Passenger_Icon => Wide_Character'Val(16#f183#),
+--      Pilot_Icon => Default_Theme_Icons_Path & "pilot.svg",
+--      Engineer_Icon => Default_Theme_Icons_Path & "engineer.svg",
+--      Gunner_Icon => Default_Theme_Icons_Path & "gunner.svg",
+--      Crew_Trader_Icon => Default_Theme_Icons_Path & "crewtrader.svg",
+--      Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
+--      No_Repair_Icon => Default_Theme_Icons_Path & "repair-empty.svg",
+--      Repair_Order_Icon => Default_Theme_Icons_Path & "repair-order.svg",
+--      Upgrade_Icon => Default_Theme_Icons_Path & "upgrade.svg",
+--      No_Upgrade_Icon => Default_Theme_Icons_Path & "upgrade-empty.svg",
+--      Clean_Icon => Default_Theme_Icons_Path & "clean.svg",
+--      No_Clean_Icon => Default_Theme_Icons_Path & "clean-empty.svg",
+--      Clean_Order_Icon => Default_Theme_Icons_Path & "clean-order.svg",
+--      Manufacture_Icon => Default_Theme_Icons_Path & "craft.svg",
+--      No_Manufacture_Icon => Default_Theme_Icons_Path & "craft-empty.svg",
+--      Move_Map_Up_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
+--      Move_Map_Down_Icon => Default_Theme_Icons_Path & "contract.svg",
+--      Move_Map_Left_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
+--      Move_Map_Right_Icon => Default_Theme_Icons_Path & "flip-right.svg",
+--      No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
+--      Low_Fuel_Icon => Default_Theme_Icons_Path & "lowfuel.svg",
+--      No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
+--      Low_Food_Icon => Default_Theme_Icons_Path & "lowfood.svg",
+--      No_Drinks_Icon => Default_Theme_Icons_Path & "nodrinks.svg",
+--      Low_Drinks_Icon => Default_Theme_Icons_Path & "lowdrinks.svg",
+--      Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
+--      Player_Ship_Icon => Wide_Character'Val(16#f135#),
+--      Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
+--      Target_Icon => Wide_Character'Val(16#f05b#),
+--      Story_Icon => Wide_Character'Val(16#f059#),
+--      Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg",
+--      Arrow_Up_Icon => Default_Theme_Icons_Path & "arrow-up.svg",
+--      Arrow_Down_Icon => Default_Theme_Icons_Path & "arrow-down.svg",
+--      Arrow_Left_Icon => Default_Theme_Icons_Path & "arrow-left.svg",
+--      Arrow_Right_Icon => Default_Theme_Icons_Path & "arrow-right.svg",
+--      Arrow_Up_Left_Icon => Default_Theme_Icons_Path & "arrow-up-left.svg",
+--      Arrow_Up_Right_Icon => Default_Theme_Icons_Path & "arrow-up-right.svg",
+--      Arrow_Down_Right_Icon =>
+--        Default_Theme_Icons_Path & "arrow-down-right.svg",
+--      Arrow_Down_Left_Icon => Default_Theme_Icons_Path & "arrow-down-left.svg",
+--      Wait_Icon => Default_Theme_Icons_Path & "wait.svg",
+--      Move_Step_Icon => Default_Theme_Icons_Path & "movestep.svg",
+--      Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg",
+--      Menu_Icon => Default_Theme_Icons_Path & "menu.svg",
+--      Exit_Icon => Default_Theme_Icons_Path & "exit.svg",
+--      Random_Icon => Default_Theme_Icons_Path & "random.svg",
+--      Male_Icon => Default_Theme_Icons_Path & "male.svg",
+--      Female_Icon => Default_Theme_Icons_Path & "female.svg",
+--      Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
+--      Show_Icon => Default_Theme_Icons_Path & "show.svg",
+--      Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
+--      Help_Icon => Default_Theme_Icons_Path & "help.svg",
+--      Special_Help_Color => To_Unbounded_String(Source => "yellow"),
+--      Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"),
+--      Bold_Help_Color => To_Unbounded_String(Source => "coral"),
+--      Italic_Help_Color => To_Unbounded_String(Source => "lime"),
+--      Give_Icon => Default_Theme_Icons_Path & "give.svg",
+--      Drop_Icon => Default_Theme_Icons_Path & "drop.svg",
+--      Buy_Icon => Default_Theme_Icons_Path & "buy.svg",
+--      Sell_Icon => Default_Theme_Icons_Path & "sell.svg",
+--      Craft_Icon => Default_Theme_Icons_Path & "craft-order.svg",
+--      Study_Icon => Default_Theme_Icons_Path & "study.svg",
+--      Deconstruct_Icon => Default_Theme_Icons_Path & "deconstruct.svg",
+--      Negotiate_Icon => Default_Theme_Icons_Path & "negotiate.svg",
+--      Cargo_Icon => Default_Theme_Icons_Path & "cargo.svg",
+--      Equip_Icon => Default_Theme_Icons_Path & "equip.svg",
+--      Unequip_Icon => Default_Theme_Icons_Path & "unequip.svg",
+--      Select_All_Icon => Default_Theme_Icons_Path & "selectall.svg",
+--      Unselect_All_Icon => Default_Theme_Icons_Path & "unselectall.svg",
+--      Give_Order_Icon => Default_Theme_Icons_Path & "giveorder.svg",
+--      No_Pilot_Icon => Default_Theme_Icons_Path & "nopilot.svg",
+--      No_Engineer_Icon => Default_Theme_Icons_Path & "noengineer.svg",
+--      Destination_Icon => Default_Theme_Icons_Path & "destination.svg",
+--      Inventory_Icon => Default_Theme_Icons_Path & "inventory.svg",
+--      Dismiss_Icon => Default_Theme_Icons_Path & "dismiss.svg",
+--      Go_Rest_Icon => Default_Theme_Icons_Path & "gorest.svg",
+--      Repair_Priority_Icon => Default_Theme_Icons_Path & "repair-priority.svg",
+--      Upgrade_Button_Icon => Default_Theme_Icons_Path & "upgrade-button.svg",
+--      Power_Icon => Default_Theme_Icons_Path & "power.svg",
+--      Assign_Crew_Icon => Default_Theme_Icons_Path & "giveorder.svg",
+--      Assign_Ammo_Icon => Default_Theme_Icons_Path & "assignammo.svg",
+--      Buy_Default_Icon => Default_Theme_Icons_Path & "buy2.svg",
+--      Sell_Default_Icon => Default_Theme_Icons_Path & "sell2.svg",
+--      Move_Icon => Default_Theme_Icons_Path & "cargo2.svg",
+--      Give_Colored_Icon => Default_Theme_Icons_Path & "give2.svg",
+--      Drop_Colored_Icon => Default_Theme_Icons_Path & "drop2.svg",
+--      Edit_Colored_Icon => Default_Theme_Icons_Path & "edit2.svg");
    -- ****
 
-   procedure Load_Themes is
-      use Ada.Text_IO;
+--   procedure Load_Themes is
+--      use Ada.Text_IO;
+--
+--      Themes_Directories, Files: Search_Type;
+--      Found_Directory, Found_File: Directory_Entry_Type;
+--      Config_File: File_Type;
+--      Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
+--      Equal_Index: Natural := 0;
+--      Temp_Record: Theme_Record := Default_Theme;
+--      function Convert_Path
+--        (Old_Value: Unbounded_String) return Unbounded_String is
+--         use Ada.Strings.Maps;
+--      begin
+--         if Dir_Separator = '/' then
+--            return Old_Value;
+--         end if;
+--         return
+--           Translate
+--             (Source => Old_Value,
+--              Mapping => To_Mapping(From => "\", To => "/"));
+--      end Convert_Path;
+--   begin
+--      Themes_Container.Include
+--        (Container => Themes_List, Key => "steamsky", New_Item => Temp_Record);
+--      Start_Search
+--        (Search => Themes_Directories,
+--         Directory => To_String(Source => Themes_Directory), Pattern => "",
+--         Filter => (Directory => True, others => False));
+--      Load_Themes_Loop :
+--      while More_Entries(Search => Themes_Directories) loop
+--         Get_Next_Entry
+--           (Search => Themes_Directories, Directory_Entry => Found_Directory);
+--         if Simple_Name(Directory_Entry => Found_Directory) in "." | ".." then
+--            goto End_Of_Load_Themes_Loop;
+--         end if;
+--         Start_Search
+--           (Search => Files,
+--            Directory => Full_Name(Directory_Entry => Found_Directory),
+--            Pattern => "*.cfg");
+--         Load_Config_Loop :
+--         while More_Entries(Search => Files) loop
+--            Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
+--            Open
+--              (File => Config_File, Mode => In_File,
+--               Name => Full_Name(Directory_Entry => Found_File));
+--            Load_Config_Data_Loop :
+--            while not End_Of_File(File => Config_File) loop
+--               Raw_Data :=
+--                 To_Unbounded_String(Source => Get_Line(File => Config_File));
+--               if Length(Source => Raw_Data) = 0 then
+--                  goto End_Of_Load_Config_Loop;
+--               end if;
+--               Equal_Index := Index(Source => Raw_Data, Pattern => "=");
+--               Field_Name :=
+--                 Head(Source => Raw_Data, Count => Equal_Index - 2);
+--               Value :=
+--                 Tail
+--                   (Source => Raw_Data,
+--                    Count => Length(Source => Raw_Data) - Equal_Index - 1);
+--               if Field_Name = To_Unbounded_String(Source => "Name") then
+--                  Temp_Record.Name := Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "FileName") then
+--                  Temp_Record.File_Name :=
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Full_Name(Directory_Entry => Found_Directory) &
+--                         Dir_Separator) &
+--                    Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EnemyShipIcon") then
+--                  Temp_Record.Enemy_Ship_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "AttackOnBaseIcon") then
+--                  Temp_Record.Attack_On_Base_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DiseaseIcon") then
+--                  Temp_Record.Disease_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DoublePriceIcon") then
+--                  Temp_Record.Double_Price_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "FullDocksIcon") then
+--                  Temp_Record.Full_Docks_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EnemyPatrolIcon") then
+--                  Temp_Record.Enemy_Patrol_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "TraderIcon") then
+--                  Temp_Record.Trader_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "FriendlyShipIcon") then
+--                  Temp_Record.Friendly_Ship_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DeliverIcon") then
+--                  Temp_Record.Deliver_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DestroyIcon") then
+--                  Temp_Record.Destroy_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "PatrolIcon") then
+--                  Temp_Record.Patrol_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ExploreIcon") then
+--                  Temp_Record.Explore_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "PassengerIcon") then
+--                  Temp_Record.Passenger_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "PilotIcon") then
+--                  Temp_Record.Pilot_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EngineerIcon") then
+--                  Temp_Record.Engineer_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "GunnerIcon") then
+--                  Temp_Record.Gunner_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CrewTraderIcon") then
+--                  Temp_Record.Crew_Trader_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "RepairIcon") then
+--                  Temp_Record.Repair_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoRepairIcon") then
+--                  Temp_Record.No_Repair_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "RepairOrderIcon") then
+--                  Temp_Record.Repair_Order_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "UpgradeIcon") then
+--                  Temp_Record.Upgrade_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoUpgradeIcon") then
+--                  Temp_Record.No_Upgrade_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CleanIcon") then
+--                  Temp_Record.Clean_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoCleanIcon") then
+--                  Temp_Record.No_Clean_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CleanOrderIcon") then
+--                  Temp_Record.Clean_Order_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ManufactureIcon") then
+--                  Temp_Record.Manufacture_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoManufactureIcon") then
+--                  Temp_Record.No_Manufacture_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveMapUpIcon") then
+--                  Temp_Record.Move_Map_Up_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveMapDownIcon") then
+--                  Temp_Record.Move_Map_Down_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveMapLeftIcon") then
+--                  Temp_Record.Move_Map_Left_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveMapRightIcon") then
+--                  Temp_Record.Move_Map_Right_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoFuelIcon") then
+--                  Temp_Record.No_Fuel_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "LowFuelIcon") then
+--                  Temp_Record.Low_Fuel_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoFoodIcon") then
+--                  Temp_Record.No_Food_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "LowFoodIcon") then
+--                  Temp_Record.Low_Food_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoDrinksIcon") then
+--                  Temp_Record.No_Drinks_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "LowDrinksIcon") then
+--                  Temp_Record.Low_Drinks_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NotVisitedBaseIcon") then
+--                  Temp_Record.Not_Visited_Base_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EmptyMapIcon") then
+--                  Temp_Record.Empty_Map_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "TargetIcon") then
+--                  Temp_Record.Target_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "StoryIcon") then
+--                  Temp_Record.Story_Icon :=
+--                    Wide_Character'Val
+--                      (Natural'Value
+--                         ("16#" & To_String(Source => Value) & "#"));
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "OverloadedIcon") then
+--                  Temp_Record.Overloaded_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowUpIcon") then
+--                  Temp_Record.Arrow_Up_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowDownIcon") then
+--                  Temp_Record.Arrow_Down_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowLeftIcon") then
+--                  Temp_Record.Arrow_Left_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowRightIcon") then
+--                  Temp_Record.Arrow_Right_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowUpLeftIcon") then
+--                  Temp_Record.Arrow_Up_Left_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowUpRightIcon") then
+--                  Temp_Record.Arrow_Up_Right_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowDownRightIcon") then
+--                  Temp_Record.Arrow_Down_Right_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ArrowDownLeftIcon") then
+--                  Temp_Record.Arrow_Down_Left_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "WaitIcon") then
+--                  Temp_Record.Wait_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveStepIcon") then
+--                  Temp_Record.Move_Step_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveToIcon") then
+--                  Temp_Record.Move_To_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MemuIcon") then
+--                  Temp_Record.Menu_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ExitIcon") then
+--                  Temp_Record.Exit_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "RandomIcon") then
+--                  Temp_Record.Random_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MaleIcon") then
+--                  Temp_Record.Male_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "FemaleIcon") then
+--                  Temp_Record.Female_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EditIcon") then
+--                  Temp_Record.Edit_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ShowIcon") then
+--                  Temp_Record.Show_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CancelIcon") then
+--                  Temp_Record.Cancel_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "HelpIcon") then
+--                  Temp_Record.Help_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "SpecialHelpColor") then
+--                  Temp_Record.Special_Help_Color := Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "UnderlineHelpColor") then
+--                  Temp_Record.Underline_Help_Color := Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "BoldHelpColor") then
+--                  Temp_Record.Bold_Help_Color := Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "ItalicHelpColor") then
+--                  Temp_Record.Italic_Help_Color := Value;
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "GiveIcon") then
+--                  Temp_Record.Give_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DropIcon") then
+--                  Temp_Record.Drop_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name = To_Unbounded_String(Source => "BuyIcon") then
+--                  Temp_Record.Buy_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "SellIcon") then
+--                  Temp_Record.Sell_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CraftIcon") then
+--                  Temp_Record.Craft_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "StudyIcon") then
+--                  Temp_Record.Study_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DeconstructIcon") then
+--                  Temp_Record.Deconstruct_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NegotiateIcon") then
+--                  Temp_Record.Negotiate_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "CargoIcon") then
+--                  Temp_Record.Cargo_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EquipIcon") then
+--                  Temp_Record.Equip_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "UnequipIcon") then
+--                  Temp_Record.Unequip_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "SelectAllIcon") then
+--                  Temp_Record.Select_All_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "UnselectAllIcon") then
+--                  Temp_Record.Unselect_All_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "GiveOrderIcon") then
+--                  Temp_Record.Give_Order_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoPilotIcon") then
+--                  Temp_Record.No_Pilot_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "NoEngineerIcon") then
+--                  Temp_Record.No_Engineer_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DestinationIcon") then
+--                  Temp_Record.Destination_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "InventoryIcon") then
+--                  Temp_Record.Inventory_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DismissIcon") then
+--                  Temp_Record.Dismiss_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "GoRestIcon") then
+--                  Temp_Record.Go_Rest_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "RepairPriorityIcon") then
+--                  Temp_Record.Repair_Priority_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "UpgradeButtonIcon") then
+--                  Temp_Record.Upgrade_Button_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "PowerIcon") then
+--                  Temp_Record.Power_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "AssignCrewIcon") then
+--                  Temp_Record.Assign_Crew_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "AssignAmmoIcon") then
+--                  Temp_Record.Assign_Ammo_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "BuyDefaultIcon") then
+--                  Temp_Record.Buy_Default_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "SellDefaultIcon") then
+--                  Temp_Record.Sell_Default_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "MoveIcon") then
+--                  Temp_Record.Move_Icon := Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "GiveColoredIcon") then
+--                  Temp_Record.Give_Colored_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "DropColoredIcon") then
+--                  Temp_Record.Drop_Colored_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               elsif Field_Name =
+--                 To_Unbounded_String(Source => "EditColoredIcon") then
+--                  Temp_Record.Edit_Colored_Icon :=
+--                    Convert_Path(Old_Value => Value);
+--               end if;
+--               <<End_Of_Load_Config_Loop>>
+--            end loop Load_Config_Data_Loop;
+--            Close(File => Config_File);
+--            Themes_Container.Include
+--              (Container => Themes_List,
+--               Key => Simple_Name(Directory_Entry => Found_Directory),
+--               New_Item => Temp_Record);
+--            Temp_Record := Default_Theme;
+--         end loop Load_Config_Loop;
+--         End_Search(Search => Files);
+--         <<End_Of_Load_Themes_Loop>>
+--      end loop Load_Themes_Loop;
+--      End_Search(Search => Themes_Directories);
+--      if not Themes_List.Contains
+--          (Key => To_String(Source => Get_Interface_Theme)) then
+--         Set_Interface_Theme
+--           (Value => To_Unbounded_String(Source => "steamsky"));
+--      end if;
+--   end Load_Themes;
 
-      Themes_Directories, Files: Search_Type;
-      Found_Directory, Found_File: Directory_Entry_Type;
-      Config_File: File_Type;
-      Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
-      Equal_Index: Natural := 0;
-      Temp_Record: Theme_Record := Default_Theme;
-      function Convert_Path
-        (Old_Value: Unbounded_String) return Unbounded_String is
-         use Ada.Strings.Maps;
-      begin
-         if Dir_Separator = '/' then
-            return Old_Value;
-         end if;
-         return
-           Translate
-             (Source => Old_Value,
-              Mapping => To_Mapping(From => "\", To => "/"));
-      end Convert_Path;
-   begin
-      Themes_Container.Include
-        (Container => Themes_List, Key => "steamsky", New_Item => Temp_Record);
-      Start_Search
-        (Search => Themes_Directories,
-         Directory => To_String(Source => Themes_Directory), Pattern => "",
-         Filter => (Directory => True, others => False));
-      Load_Themes_Loop :
-      while More_Entries(Search => Themes_Directories) loop
-         Get_Next_Entry
-           (Search => Themes_Directories, Directory_Entry => Found_Directory);
-         if Simple_Name(Directory_Entry => Found_Directory) in "." | ".." then
-            goto End_Of_Load_Themes_Loop;
-         end if;
-         Start_Search
-           (Search => Files,
-            Directory => Full_Name(Directory_Entry => Found_Directory),
-            Pattern => "*.cfg");
-         Load_Config_Loop :
-         while More_Entries(Search => Files) loop
-            Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
-            Open
-              (File => Config_File, Mode => In_File,
-               Name => Full_Name(Directory_Entry => Found_File));
-            Load_Config_Data_Loop :
-            while not End_Of_File(File => Config_File) loop
-               Raw_Data :=
-                 To_Unbounded_String(Source => Get_Line(File => Config_File));
-               if Length(Source => Raw_Data) = 0 then
-                  goto End_Of_Load_Config_Loop;
-               end if;
-               Equal_Index := Index(Source => Raw_Data, Pattern => "=");
-               Field_Name :=
-                 Head(Source => Raw_Data, Count => Equal_Index - 2);
-               Value :=
-                 Tail
-                   (Source => Raw_Data,
-                    Count => Length(Source => Raw_Data) - Equal_Index - 1);
-               if Field_Name = To_Unbounded_String(Source => "Name") then
-                  Temp_Record.Name := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "FileName") then
-                  Temp_Record.File_Name :=
-                    To_Unbounded_String
-                      (Source =>
-                         Full_Name(Directory_Entry => Found_Directory) &
-                         Dir_Separator) &
-                    Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EnemyShipIcon") then
-                  Temp_Record.Enemy_Ship_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "AttackOnBaseIcon") then
-                  Temp_Record.Attack_On_Base_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DiseaseIcon") then
-                  Temp_Record.Disease_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DoublePriceIcon") then
-                  Temp_Record.Double_Price_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "FullDocksIcon") then
-                  Temp_Record.Full_Docks_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EnemyPatrolIcon") then
-                  Temp_Record.Enemy_Patrol_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "TraderIcon") then
-                  Temp_Record.Trader_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "FriendlyShipIcon") then
-                  Temp_Record.Friendly_Ship_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DeliverIcon") then
-                  Temp_Record.Deliver_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DestroyIcon") then
-                  Temp_Record.Destroy_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "PatrolIcon") then
-                  Temp_Record.Patrol_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ExploreIcon") then
-                  Temp_Record.Explore_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "PassengerIcon") then
-                  Temp_Record.Passenger_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "PilotIcon") then
-                  Temp_Record.Pilot_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EngineerIcon") then
-                  Temp_Record.Engineer_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "GunnerIcon") then
-                  Temp_Record.Gunner_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CrewTraderIcon") then
-                  Temp_Record.Crew_Trader_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "RepairIcon") then
-                  Temp_Record.Repair_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoRepairIcon") then
-                  Temp_Record.No_Repair_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "RepairOrderIcon") then
-                  Temp_Record.Repair_Order_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "UpgradeIcon") then
-                  Temp_Record.Upgrade_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoUpgradeIcon") then
-                  Temp_Record.No_Upgrade_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CleanIcon") then
-                  Temp_Record.Clean_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoCleanIcon") then
-                  Temp_Record.No_Clean_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CleanOrderIcon") then
-                  Temp_Record.Clean_Order_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ManufactureIcon") then
-                  Temp_Record.Manufacture_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoManufactureIcon") then
-                  Temp_Record.No_Manufacture_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveMapUpIcon") then
-                  Temp_Record.Move_Map_Up_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveMapDownIcon") then
-                  Temp_Record.Move_Map_Down_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveMapLeftIcon") then
-                  Temp_Record.Move_Map_Left_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveMapRightIcon") then
-                  Temp_Record.Move_Map_Right_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoFuelIcon") then
-                  Temp_Record.No_Fuel_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "LowFuelIcon") then
-                  Temp_Record.Low_Fuel_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoFoodIcon") then
-                  Temp_Record.No_Food_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "LowFoodIcon") then
-                  Temp_Record.Low_Food_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoDrinksIcon") then
-                  Temp_Record.No_Drinks_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "LowDrinksIcon") then
-                  Temp_Record.Low_Drinks_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NotVisitedBaseIcon") then
-                  Temp_Record.Not_Visited_Base_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EmptyMapIcon") then
-                  Temp_Record.Empty_Map_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "TargetIcon") then
-                  Temp_Record.Target_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "StoryIcon") then
-                  Temp_Record.Story_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "OverloadedIcon") then
-                  Temp_Record.Overloaded_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowUpIcon") then
-                  Temp_Record.Arrow_Up_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowDownIcon") then
-                  Temp_Record.Arrow_Down_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowLeftIcon") then
-                  Temp_Record.Arrow_Left_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowRightIcon") then
-                  Temp_Record.Arrow_Right_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowUpLeftIcon") then
-                  Temp_Record.Arrow_Up_Left_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowUpRightIcon") then
-                  Temp_Record.Arrow_Up_Right_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowDownRightIcon") then
-                  Temp_Record.Arrow_Down_Right_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ArrowDownLeftIcon") then
-                  Temp_Record.Arrow_Down_Left_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "WaitIcon") then
-                  Temp_Record.Wait_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveStepIcon") then
-                  Temp_Record.Move_Step_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveToIcon") then
-                  Temp_Record.Move_To_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MemuIcon") then
-                  Temp_Record.Menu_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ExitIcon") then
-                  Temp_Record.Exit_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "RandomIcon") then
-                  Temp_Record.Random_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MaleIcon") then
-                  Temp_Record.Male_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "FemaleIcon") then
-                  Temp_Record.Female_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EditIcon") then
-                  Temp_Record.Edit_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ShowIcon") then
-                  Temp_Record.Show_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CancelIcon") then
-                  Temp_Record.Cancel_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "HelpIcon") then
-                  Temp_Record.Help_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "SpecialHelpColor") then
-                  Temp_Record.Special_Help_Color := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "UnderlineHelpColor") then
-                  Temp_Record.Underline_Help_Color := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "BoldHelpColor") then
-                  Temp_Record.Bold_Help_Color := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "ItalicHelpColor") then
-                  Temp_Record.Italic_Help_Color := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "GiveIcon") then
-                  Temp_Record.Give_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DropIcon") then
-                  Temp_Record.Drop_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name = To_Unbounded_String(Source => "BuyIcon") then
-                  Temp_Record.Buy_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "SellIcon") then
-                  Temp_Record.Sell_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CraftIcon") then
-                  Temp_Record.Craft_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "StudyIcon") then
-                  Temp_Record.Study_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DeconstructIcon") then
-                  Temp_Record.Deconstruct_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NegotiateIcon") then
-                  Temp_Record.Negotiate_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "CargoIcon") then
-                  Temp_Record.Cargo_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EquipIcon") then
-                  Temp_Record.Equip_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "UnequipIcon") then
-                  Temp_Record.Unequip_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "SelectAllIcon") then
-                  Temp_Record.Select_All_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "UnselectAllIcon") then
-                  Temp_Record.Unselect_All_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "GiveOrderIcon") then
-                  Temp_Record.Give_Order_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoPilotIcon") then
-                  Temp_Record.No_Pilot_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "NoEngineerIcon") then
-                  Temp_Record.No_Engineer_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DestinationIcon") then
-                  Temp_Record.Destination_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "InventoryIcon") then
-                  Temp_Record.Inventory_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DismissIcon") then
-                  Temp_Record.Dismiss_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "GoRestIcon") then
-                  Temp_Record.Go_Rest_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "RepairPriorityIcon") then
-                  Temp_Record.Repair_Priority_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "UpgradeButtonIcon") then
-                  Temp_Record.Upgrade_Button_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "PowerIcon") then
-                  Temp_Record.Power_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "AssignCrewIcon") then
-                  Temp_Record.Assign_Crew_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "AssignAmmoIcon") then
-                  Temp_Record.Assign_Ammo_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "BuyDefaultIcon") then
-                  Temp_Record.Buy_Default_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "SellDefaultIcon") then
-                  Temp_Record.Sell_Default_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveIcon") then
-                  Temp_Record.Move_Icon := Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "GiveColoredIcon") then
-                  Temp_Record.Give_Colored_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "DropColoredIcon") then
-                  Temp_Record.Drop_Colored_Icon :=
-                    Convert_Path(Old_Value => Value);
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "EditColoredIcon") then
-                  Temp_Record.Edit_Colored_Icon :=
-                    Convert_Path(Old_Value => Value);
-               end if;
-               <<End_Of_Load_Config_Loop>>
-            end loop Load_Config_Data_Loop;
-            Close(File => Config_File);
-            Themes_Container.Include
-              (Container => Themes_List,
-               Key => Simple_Name(Directory_Entry => Found_Directory),
-               New_Item => Temp_Record);
-            Temp_Record := Default_Theme;
-         end loop Load_Config_Loop;
-         End_Search(Search => Files);
-         <<End_Of_Load_Themes_Loop>>
-      end loop Load_Themes_Loop;
-      End_Search(Search => Themes_Directories);
-      if not Themes_List.Contains
-          (Key => To_String(Source => Get_Interface_Theme)) then
-         Set_Interface_Theme
-           (Value => To_Unbounded_String(Source => "steamsky"));
-      end if;
-   end Load_Themes;
+--   procedure Set_Theme is
+--      use Tcl.Tk.Ada.Widgets;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use CoreUI;
+--
+--      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
+--      Button: Ttk_Button :=
+--        Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
+--   begin
+--      Load_Theme_Images;
+--      Label.Name := New_String(Str => Game_Header & ".nofuel");
+--      configure(Widgt => Label, options => "-image nofuelicon");
+--      Label.Name := New_String(Str => Game_Header & ".nofood");
+--      configure(Widgt => Label, options => "-image nofoodicon");
+--      Label.Name := New_String(Str => Game_Header & ".nodrink");
+--      configure(Widgt => Label, options => "-image nodrinksicon");
+--      Label.Name := New_String(Str => Game_Header & ".overloaded");
+--      configure(Widgt => Label, options => "-image overloadedicon");
+--      Label.Name := New_String(Str => Game_Header & ".pilot");
+--      configure(Widgt => Label, options => "-image piloticon");
+--      Label.Name := New_String(Str => Game_Header & ".engineer");
+--      configure(Widgt => Label, options => "-image engineericon");
+--      Label.Name := New_String(Str => Game_Header & ".gunner");
+--      configure(Widgt => Label, options => "-image gunnericon");
+--      Label.Name := New_String(Str => Game_Header & ".talk");
+--      configure(Widgt => Label, options => "-image crewtradericon");
+--      Label.Name := New_String(Str => Game_Header & ".repairs");
+--      configure(Widgt => Label, options => "-image repairicon");
+--      Label.Name := New_String(Str => Game_Header & ".upgrade");
+--      configure(Widgt => Label, options => "-image upgradeicon");
+--      Label.Name := New_String(Str => Game_Header & ".clean");
+--      configure(Widgt => Label, options => "-image cleanicon");
+--      Label.Name := New_String(Str => Game_Header & ".crafting");
+--      configure(Widgt => Label, options => "-image crafticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
+--      configure(Widgt => Button, options => "-image movemapupicon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.hide");
+--      configure(Widgt => Button, options => "-image movemapdownicon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.left");
+--      configure(Widgt => Button, options => "-image movemaplefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.right");
+--      configure(Widgt => Button, options => "-image movemaprighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.n");
+--      configure(Widgt => Button, options => "-image arrowupicon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.n");
+--      configure(Widgt => Button, options => "-image arrowupicon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.s");
+--      configure(Widgt => Button, options => "-image arrowdownicon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.s");
+--      configure(Widgt => Button, options => "-image arrowdownicon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.w");
+--      configure(Widgt => Button, options => "-image arrowlefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.w");
+--      configure(Widgt => Button, options => "-image arrowlefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.e");
+--      configure(Widgt => Button, options => "-image arrowrighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.e");
+--      configure(Widgt => Button, options => "-image arrowrighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.nw");
+--      configure(Widgt => Button, options => "-image arrowuplefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.nw");
+--      configure(Widgt => Button, options => "-image arrowuplefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.ne");
+--      configure(Widgt => Button, options => "-image arrowuprighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.ne");
+--      configure(Widgt => Button, options => "-image arrowuprighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.se");
+--      configure(Widgt => Button, options => "-image arrowdownrighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.se");
+--      configure(Widgt => Button, options => "-image arrowdownrighticon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.sw");
+--      configure(Widgt => Button, options => "-image arrowdownlefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.sw");
+--      configure(Widgt => Button, options => "-image arrowdownlefticon");
+--      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.wait");
+--      configure(Widgt => Button, options => "-image waiticon");
+--      Button.Name :=
+--        New_String(Str => Main_Paned & ".controls.buttons.box.moveto");
+--      configure(Widgt => Button, options => "-image movetoicon");
+--      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.wait");
+--      configure(Widgt => Button, options => "-image menuicon");
+--      Button.Name := New_String(Str => Game_Header & ".menubutton");
+--      configure(Widgt => Button, options => "-image menuicon");
+--      Button.Name := New_String(Str => Game_Header & ".closebutton");
+--      configure(Widgt => Button, options => "-image exiticon");
+--   end Set_Theme;
 
-   procedure Set_Theme is
-      use Tcl.Tk.Ada.Widgets;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use CoreUI;
-
-      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
-      Button: Ttk_Button :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
-   begin
-      Load_Theme_Images;
-      Label.Name := New_String(Str => Game_Header & ".nofuel");
-      configure(Widgt => Label, options => "-image nofuelicon");
-      Label.Name := New_String(Str => Game_Header & ".nofood");
-      configure(Widgt => Label, options => "-image nofoodicon");
-      Label.Name := New_String(Str => Game_Header & ".nodrink");
-      configure(Widgt => Label, options => "-image nodrinksicon");
-      Label.Name := New_String(Str => Game_Header & ".overloaded");
-      configure(Widgt => Label, options => "-image overloadedicon");
-      Label.Name := New_String(Str => Game_Header & ".pilot");
-      configure(Widgt => Label, options => "-image piloticon");
-      Label.Name := New_String(Str => Game_Header & ".engineer");
-      configure(Widgt => Label, options => "-image engineericon");
-      Label.Name := New_String(Str => Game_Header & ".gunner");
-      configure(Widgt => Label, options => "-image gunnericon");
-      Label.Name := New_String(Str => Game_Header & ".talk");
-      configure(Widgt => Label, options => "-image crewtradericon");
-      Label.Name := New_String(Str => Game_Header & ".repairs");
-      configure(Widgt => Label, options => "-image repairicon");
-      Label.Name := New_String(Str => Game_Header & ".upgrade");
-      configure(Widgt => Label, options => "-image upgradeicon");
-      Label.Name := New_String(Str => Game_Header & ".clean");
-      configure(Widgt => Label, options => "-image cleanicon");
-      Label.Name := New_String(Str => Game_Header & ".crafting");
-      configure(Widgt => Label, options => "-image crafticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
-      configure(Widgt => Button, options => "-image movemapupicon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.hide");
-      configure(Widgt => Button, options => "-image movemapdownicon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.left");
-      configure(Widgt => Button, options => "-image movemaplefticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.right");
-      configure(Widgt => Button, options => "-image movemaprighticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.n");
-      configure(Widgt => Button, options => "-image arrowupicon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.n");
-      configure(Widgt => Button, options => "-image arrowupicon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.s");
-      configure(Widgt => Button, options => "-image arrowdownicon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.s");
-      configure(Widgt => Button, options => "-image arrowdownicon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.w");
-      configure(Widgt => Button, options => "-image arrowlefticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.w");
-      configure(Widgt => Button, options => "-image arrowlefticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.e");
-      configure(Widgt => Button, options => "-image arrowrighticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.e");
-      configure(Widgt => Button, options => "-image arrowrighticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.nw");
-      configure(Widgt => Button, options => "-image arrowuplefticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.nw");
-      configure(Widgt => Button, options => "-image arrowuplefticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.ne");
-      configure(Widgt => Button, options => "-image arrowuprighticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.ne");
-      configure(Widgt => Button, options => "-image arrowuprighticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.se");
-      configure(Widgt => Button, options => "-image arrowdownrighticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.se");
-      configure(Widgt => Button, options => "-image arrowdownrighticon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.sw");
-      configure(Widgt => Button, options => "-image arrowdownlefticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.sw");
-      configure(Widgt => Button, options => "-image arrowdownlefticon");
-      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.wait");
-      configure(Widgt => Button, options => "-image waiticon");
-      Button.Name :=
-        New_String(Str => Main_Paned & ".controls.buttons.box.moveto");
-      configure(Widgt => Button, options => "-image movetoicon");
-      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.wait");
-      configure(Widgt => Button, options => "-image menuicon");
-      Button.Name := New_String(Str => Game_Header & ".menubutton");
-      configure(Widgt => Button, options => "-image menuicon");
-      Button.Name := New_String(Str => Game_Header & ".closebutton");
-      configure(Widgt => Button, options => "-image exiticon");
-   end Set_Theme;
-
-   procedure Load_Theme_Images is
-      use Tcl.Ada;
-      use Tcl.Tk.Ada;
-      use Tcl.Tk.Ada.Image.Photo;
-      use Tcl.Tk.Ada.TtkStyle;
-
-      Images_Names: constant array(Positive range <>) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "piloticon"),
-         2 => To_Unbounded_String(Source => "engineericon"),
-         3 => To_Unbounded_String(Source => "gunnericon"),
-         4 => To_Unbounded_String(Source => "crewtradericon"),
-         5 => To_Unbounded_String(Source => "repairicon"),
-         6 => To_Unbounded_String(Source => "norepairicon"),
-         7 => To_Unbounded_String(Source => "repairordericon"),
-         8 => To_Unbounded_String(Source => "upgradeicon"),
-         9 => To_Unbounded_String(Source => "noupgradeicon"),
-         10 => To_Unbounded_String(Source => "cleanicon"),
-         11 => To_Unbounded_String(Source => "nocleanicon"),
-         12 => To_Unbounded_String(Source => "cleanordericon"),
-         13 => To_Unbounded_String(Source => "manufactureicon"),
-         14 => To_Unbounded_String(Source => "nocrafticon"),
-         15 => To_Unbounded_String(Source => "nofuelicon"),
-         16 => To_Unbounded_String(Source => "nofoodicon"),
-         17 => To_Unbounded_String(Source => "lowfuelicon"),
-         18 => To_Unbounded_String(Source => "lowfoodicon"),
-         19 => To_Unbounded_String(Source => "nodrinksicon"),
-         20 => To_Unbounded_String(Source => "lowdrinksicon"),
-         21 => To_Unbounded_String(Source => "movemapupicon"),
-         22 => To_Unbounded_String(Source => "movemapdownicon"),
-         23 => To_Unbounded_String(Source => "movemaplefticon"),
-         24 => To_Unbounded_String(Source => "movemaprighticon"),
-         25 => To_Unbounded_String(Source => "overloadedicon"),
-         26 => To_Unbounded_String(Source => "arrowupicon"),
-         27 => To_Unbounded_String(Source => "arrowdownicon"),
-         28 => To_Unbounded_String(Source => "arrowlefticon"),
-         29 => To_Unbounded_String(Source => "arrowrighticon"),
-         30 => To_Unbounded_String(Source => "arrowuplefticon"),
-         31 => To_Unbounded_String(Source => "arrowuprighticon"),
-         32 => To_Unbounded_String(Source => "arrowdownrighticon"),
-         33 => To_Unbounded_String(Source => "arrowdownlefticon"),
-         34 => To_Unbounded_String(Source => "waiticon"),
-         35 => To_Unbounded_String(Source => "movestepicon"),
-         36 => To_Unbounded_String(Source => "movetoicon"),
-         37 => To_Unbounded_String(Source => "menuicon"),
-         38 => To_Unbounded_String(Source => "exiticon"),
-         39 => To_Unbounded_String(Source => "randomicon"),
-         40 => To_Unbounded_String(Source => "maleicon"),
-         41 => To_Unbounded_String(Source => "femaleicon"),
-         42 => To_Unbounded_String(Source => "editicon"),
-         43 => To_Unbounded_String(Source => "showicon"),
-         44 => To_Unbounded_String(Source => "cancelicon"),
-         45 => To_Unbounded_String(Source => "helpicon"),
-         46 => To_Unbounded_String(Source => "giveicon"),
-         47 => To_Unbounded_String(Source => "dropicon"),
-         48 => To_Unbounded_String(Source => "buyicon"),
-         49 => To_Unbounded_String(Source => "sellicon"),
-         50 => To_Unbounded_String(Source => "crafticon"),
-         51 => To_Unbounded_String(Source => "studyicon"),
-         52 => To_Unbounded_String(Source => "deconstructicon"),
-         53 => To_Unbounded_String(Source => "negotiateicon"),
-         54 => To_Unbounded_String(Source => "cargoicon"),
-         55 => To_Unbounded_String(Source => "equipicon"),
-         56 => To_Unbounded_String(Source => "unequipicon"),
-         57 => To_Unbounded_String(Source => "selectallicon"),
-         58 => To_Unbounded_String(Source => "unselectallicon"),
-         59 => To_Unbounded_String(Source => "giveordericon"),
-         60 => To_Unbounded_String(Source => "nopiloticon"),
-         61 => To_Unbounded_String(Source => "noengineericon"),
-         62 => To_Unbounded_String(Source => "destinationicon"),
-         63 => To_Unbounded_String(Source => "inventoryicon"),
-         64 => To_Unbounded_String(Source => "dismissicon"),
-         65 => To_Unbounded_String(Source => "goresticon"),
-         66 => To_Unbounded_String(Source => "repairpriorityicon"),
-         67 => To_Unbounded_String(Source => "upgradebuttonicon"),
-         68 => To_Unbounded_String(Source => "powericon"),
-         69 => To_Unbounded_String(Source => "assigncrewicon"),
-         70 => To_Unbounded_String(Source => "assignammoicon"),
-         71 => To_Unbounded_String(Source => "buy2icon"),
-         72 => To_Unbounded_String(Source => "sell2icon"),
-         73 => To_Unbounded_String(Source => "moveicon"),
-         74 => To_Unbounded_String(Source => "give2icon"),
-         75 => To_Unbounded_String(Source => "drop2icon"),
-         76 => To_Unbounded_String(Source => "edit2icon"));
-      Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
-      pragma Unreferenced(Tmp_Image);
-      Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Get_Interface_Theme));
-      Images_Files: constant array(Positive range <>) of Unbounded_String :=
-        (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon,
-         3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon,
-         5 => Theme.Repair_Icon, 6 => Theme.No_Repair_Icon,
-         7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon,
-         9 => Theme.No_Upgrade_Icon, 10 => Theme.Clean_Icon,
-         11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
-         13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
-         15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon,
-         17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon,
-         19 => Theme.No_Drinks_Icon, 20 => Theme.Low_Drinks_Icon,
-         21 => Theme.Move_Map_Up_Icon, 22 => Theme.Move_Map_Down_Icon,
-         23 => Theme.Move_Map_Left_Icon, 24 => Theme.Move_Map_Right_Icon,
-         25 => Theme.Overloaded_Icon, 26 => Theme.Arrow_Up_Icon,
-         27 => Theme.Arrow_Down_Icon, 28 => Theme.Arrow_Left_Icon,
-         29 => Theme.Arrow_Right_Icon, 30 => Theme.Arrow_Up_Left_Icon,
-         31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon,
-         33 => Theme.Arrow_Down_Left_Icon, 34 => Theme.Wait_Icon,
-         35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
-         37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
-         40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
-         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon, 45 => Theme.Help_Icon,
-         46 => Theme.Give_Icon, 47 => Theme.Drop_Icon, 48 => Theme.Buy_Icon,
-         49 => Theme.Sell_Icon, 50 => Theme.Craft_Icon, 51 => Theme.Study_Icon,
-         52 => Theme.Deconstruct_Icon, 53 => Theme.Negotiate_Icon,
-         54 => Theme.Cargo_Icon, 55 => Theme.Equip_Icon,
-         56 => Theme.Unequip_Icon, 57 => Theme.Select_All_Icon,
-         58 => Theme.Unselect_All_Icon, 59 => Theme.Give_Order_Icon,
-         60 => Theme.No_Pilot_Icon, 61 => Theme.No_Engineer_Icon,
-         62 => Theme.Destination_Icon, 63 => Theme.Inventory_Icon,
-         64 => Theme.Dismiss_Icon, 65 => Theme.Go_Rest_Icon,
-         66 => Theme.Repair_Priority_Icon, 67 => Theme.Upgrade_Button_Icon,
-         68 => Theme.Power_Icon, 69 => Theme.Assign_Crew_Icon,
-         70 => Theme.Assign_Ammo_Icon, 71 => Theme.Buy_Default_Icon,
-         72 => Theme.Sell_Default_Icon, 73 => Theme.Move_Icon,
-         74 => Theme.Give_Colored_Icon, 75 => Theme.Drop_Colored_Icon,
-         76 => Theme.Edit_Colored_Icon);
-   begin
-      Load_Images_Loop :
-      for I in Images_Names'Range loop
-         Tmp_Image :=
-           Create
-             (pathName => To_String(Source => Images_Names(I)),
-              options =>
-                "-file {" & To_String(Source => Images_Files(I)) &
-                "} -format {svg -scaletoheight" &
-                Positive'Image
-                  (Get_Integer_Setting(Name => "interfaceFontSize") + 8) &
-                "}");
-      end loop Load_Images_Loop;
-      Tcl_Eval
-        (interp => Get_Context,
-         strng =>
-           "ttk::theme::" & Theme_Use & "::LoadImages " &
-           Containing_Directory(Name => To_String(Source => Theme.File_Name)) &
-           Positive'Image
-             (Get_Integer_Setting(Name => "interfaceFontSize") + 8));
-   end Load_Theme_Images;
+--   procedure Load_Theme_Images is
+--      use Tcl.Ada;
+--      use Tcl.Tk.Ada;
+--      use Tcl.Tk.Ada.Image.Photo;
+--      use Tcl.Tk.Ada.TtkStyle;
+--
+--      Images_Names: constant array(Positive range <>) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "piloticon"),
+--         2 => To_Unbounded_String(Source => "engineericon"),
+--         3 => To_Unbounded_String(Source => "gunnericon"),
+--         4 => To_Unbounded_String(Source => "crewtradericon"),
+--         5 => To_Unbounded_String(Source => "repairicon"),
+--         6 => To_Unbounded_String(Source => "norepairicon"),
+--         7 => To_Unbounded_String(Source => "repairordericon"),
+--         8 => To_Unbounded_String(Source => "upgradeicon"),
+--         9 => To_Unbounded_String(Source => "noupgradeicon"),
+--         10 => To_Unbounded_String(Source => "cleanicon"),
+--         11 => To_Unbounded_String(Source => "nocleanicon"),
+--         12 => To_Unbounded_String(Source => "cleanordericon"),
+--         13 => To_Unbounded_String(Source => "manufactureicon"),
+--         14 => To_Unbounded_String(Source => "nocrafticon"),
+--         15 => To_Unbounded_String(Source => "nofuelicon"),
+--         16 => To_Unbounded_String(Source => "nofoodicon"),
+--         17 => To_Unbounded_String(Source => "lowfuelicon"),
+--         18 => To_Unbounded_String(Source => "lowfoodicon"),
+--         19 => To_Unbounded_String(Source => "nodrinksicon"),
+--         20 => To_Unbounded_String(Source => "lowdrinksicon"),
+--         21 => To_Unbounded_String(Source => "movemapupicon"),
+--         22 => To_Unbounded_String(Source => "movemapdownicon"),
+--         23 => To_Unbounded_String(Source => "movemaplefticon"),
+--         24 => To_Unbounded_String(Source => "movemaprighticon"),
+--         25 => To_Unbounded_String(Source => "overloadedicon"),
+--         26 => To_Unbounded_String(Source => "arrowupicon"),
+--         27 => To_Unbounded_String(Source => "arrowdownicon"),
+--         28 => To_Unbounded_String(Source => "arrowlefticon"),
+--         29 => To_Unbounded_String(Source => "arrowrighticon"),
+--         30 => To_Unbounded_String(Source => "arrowuplefticon"),
+--         31 => To_Unbounded_String(Source => "arrowuprighticon"),
+--         32 => To_Unbounded_String(Source => "arrowdownrighticon"),
+--         33 => To_Unbounded_String(Source => "arrowdownlefticon"),
+--         34 => To_Unbounded_String(Source => "waiticon"),
+--         35 => To_Unbounded_String(Source => "movestepicon"),
+--         36 => To_Unbounded_String(Source => "movetoicon"),
+--         37 => To_Unbounded_String(Source => "menuicon"),
+--         38 => To_Unbounded_String(Source => "exiticon"),
+--         39 => To_Unbounded_String(Source => "randomicon"),
+--         40 => To_Unbounded_String(Source => "maleicon"),
+--         41 => To_Unbounded_String(Source => "femaleicon"),
+--         42 => To_Unbounded_String(Source => "editicon"),
+--         43 => To_Unbounded_String(Source => "showicon"),
+--         44 => To_Unbounded_String(Source => "cancelicon"),
+--         45 => To_Unbounded_String(Source => "helpicon"),
+--         46 => To_Unbounded_String(Source => "giveicon"),
+--         47 => To_Unbounded_String(Source => "dropicon"),
+--         48 => To_Unbounded_String(Source => "buyicon"),
+--         49 => To_Unbounded_String(Source => "sellicon"),
+--         50 => To_Unbounded_String(Source => "crafticon"),
+--         51 => To_Unbounded_String(Source => "studyicon"),
+--         52 => To_Unbounded_String(Source => "deconstructicon"),
+--         53 => To_Unbounded_String(Source => "negotiateicon"),
+--         54 => To_Unbounded_String(Source => "cargoicon"),
+--         55 => To_Unbounded_String(Source => "equipicon"),
+--         56 => To_Unbounded_String(Source => "unequipicon"),
+--         57 => To_Unbounded_String(Source => "selectallicon"),
+--         58 => To_Unbounded_String(Source => "unselectallicon"),
+--         59 => To_Unbounded_String(Source => "giveordericon"),
+--         60 => To_Unbounded_String(Source => "nopiloticon"),
+--         61 => To_Unbounded_String(Source => "noengineericon"),
+--         62 => To_Unbounded_String(Source => "destinationicon"),
+--         63 => To_Unbounded_String(Source => "inventoryicon"),
+--         64 => To_Unbounded_String(Source => "dismissicon"),
+--         65 => To_Unbounded_String(Source => "goresticon"),
+--         66 => To_Unbounded_String(Source => "repairpriorityicon"),
+--         67 => To_Unbounded_String(Source => "upgradebuttonicon"),
+--         68 => To_Unbounded_String(Source => "powericon"),
+--         69 => To_Unbounded_String(Source => "assigncrewicon"),
+--         70 => To_Unbounded_String(Source => "assignammoicon"),
+--         71 => To_Unbounded_String(Source => "buy2icon"),
+--         72 => To_Unbounded_String(Source => "sell2icon"),
+--         73 => To_Unbounded_String(Source => "moveicon"),
+--         74 => To_Unbounded_String(Source => "give2icon"),
+--         75 => To_Unbounded_String(Source => "drop2icon"),
+--         76 => To_Unbounded_String(Source => "edit2icon"));
+--      Tmp_Image: Tk_Photo; --## rule line off IMPROPER_INITIALIZATION
+--      pragma Unreferenced(Tmp_Image);
+--      Theme: constant Theme_Record :=
+--        Themes_List(To_String(Source => Get_Interface_Theme));
+--      Images_Files: constant array(Positive range <>) of Unbounded_String :=
+--        (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon,
+--         3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon,
+--         5 => Theme.Repair_Icon, 6 => Theme.No_Repair_Icon,
+--         7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon,
+--         9 => Theme.No_Upgrade_Icon, 10 => Theme.Clean_Icon,
+--         11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
+--         13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
+--         15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon,
+--         17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon,
+--         19 => Theme.No_Drinks_Icon, 20 => Theme.Low_Drinks_Icon,
+--         21 => Theme.Move_Map_Up_Icon, 22 => Theme.Move_Map_Down_Icon,
+--         23 => Theme.Move_Map_Left_Icon, 24 => Theme.Move_Map_Right_Icon,
+--         25 => Theme.Overloaded_Icon, 26 => Theme.Arrow_Up_Icon,
+--         27 => Theme.Arrow_Down_Icon, 28 => Theme.Arrow_Left_Icon,
+--         29 => Theme.Arrow_Right_Icon, 30 => Theme.Arrow_Up_Left_Icon,
+--         31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon,
+--         33 => Theme.Arrow_Down_Left_Icon, 34 => Theme.Wait_Icon,
+--         35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
+--         37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
+--         40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
+--         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon, 45 => Theme.Help_Icon,
+--         46 => Theme.Give_Icon, 47 => Theme.Drop_Icon, 48 => Theme.Buy_Icon,
+--         49 => Theme.Sell_Icon, 50 => Theme.Craft_Icon, 51 => Theme.Study_Icon,
+--         52 => Theme.Deconstruct_Icon, 53 => Theme.Negotiate_Icon,
+--         54 => Theme.Cargo_Icon, 55 => Theme.Equip_Icon,
+--         56 => Theme.Unequip_Icon, 57 => Theme.Select_All_Icon,
+--         58 => Theme.Unselect_All_Icon, 59 => Theme.Give_Order_Icon,
+--         60 => Theme.No_Pilot_Icon, 61 => Theme.No_Engineer_Icon,
+--         62 => Theme.Destination_Icon, 63 => Theme.Inventory_Icon,
+--         64 => Theme.Dismiss_Icon, 65 => Theme.Go_Rest_Icon,
+--         66 => Theme.Repair_Priority_Icon, 67 => Theme.Upgrade_Button_Icon,
+--         68 => Theme.Power_Icon, 69 => Theme.Assign_Crew_Icon,
+--         70 => Theme.Assign_Ammo_Icon, 71 => Theme.Buy_Default_Icon,
+--         72 => Theme.Sell_Default_Icon, 73 => Theme.Move_Icon,
+--         74 => Theme.Give_Colored_Icon, 75 => Theme.Drop_Colored_Icon,
+--         76 => Theme.Edit_Colored_Icon);
+--   begin
+--      Load_Images_Loop :
+--      for I in Images_Names'Range loop
+--         Tmp_Image :=
+--           Create
+--             (pathName => To_String(Source => Images_Names(I)),
+--              options =>
+--                "-file {" & To_String(Source => Images_Files(I)) &
+--                "} -format {svg -scaletoheight" &
+--                Positive'Image
+--                  (Get_Integer_Setting(Name => "interfaceFontSize") + 8) &
+--                "}");
+--      end loop Load_Images_Loop;
+--      Tcl_Eval
+--        (interp => Get_Context,
+--         strng =>
+--           "ttk::theme::" & Theme_Use & "::LoadImages " &
+--           Containing_Directory(Name => To_String(Source => Theme.File_Name)) &
+--           Positive'Image
+--             (Get_Integer_Setting(Name => "interfaceFontSize") + 8));
+--   end Load_Theme_Images;
 
    function Get_Icon(Name: String) return String is
       function Get_Ada_Icon(N: chars_ptr) return chars_ptr with
