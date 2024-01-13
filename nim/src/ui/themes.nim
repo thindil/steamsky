@@ -324,241 +324,244 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
   ## Load all data of the game themes
   var theme = defaultTheme
   themesList["steamsky"] = theme
-  for themeDir in walkDirs(themesDirectory):
-    for configName in walkPattern(themeDir & DirSep & "*.cfg"):
-      var configFile = newFileStream(filename = configName, mode = fmRead)
-      if configFile == nil:
-        continue
-      var parser: CfgParser
-      try:
-        parser.open(input = configFile, filename = configName)
-      except OSError, IOError, Exception:
-        echo "Can't initialize configuration file parser. Reason: " &
-            getCurrentExceptionMsg()
-        return
-      while true:
-        try:
-          let entry = parser.next()
-          case entry.kind
-          of cfgEof:
-            break
-          of cfgKeyValuePair, cfgOption:
-            case entry.key
-            of "Name":
-              theme.name = entry.value
-            of "FileName":
-              theme.fileName = themeDir & DirSep & entry.value
-            of "EnemyShipIcon":
-              theme.enemyShipIcon = entry.value.parseHexStr
-            of "attackOnBaseIcon":
-              theme.attackOnBaseIcon = entry.value.parseHexStr
-            of "DiseaseIcon":
-              theme.diseaseIcon = entry.value.parseHexStr
-            of "DoublePriceIcon":
-              theme.doublePriceIcon = entry.value.parseHexStr
-            of "FullDocksIcon":
-              theme.fullDocksIcon = entry.value.parseHexStr
-            of "EnemyPatrolIcon":
-              theme.enemyPatrolIcon = entry.value.parseHexStr
-            of "TraderIcon":
-              theme.traderIcon = entry.value.parseHexStr
-            of "FriendlyShipIcon":
-              theme.friendlyShipIcon = entry.value.parseHexStr
-            of "DeliverIcon":
-              theme.deliverIcon = entry.value.parseHexStr
-            of "DestroyIcon":
-              theme.destroyIcon = entry.value.parseHexStr
-            of "PatrolIcon":
-              theme.patrolIcon = entry.value.parseHexStr
-            of "ExploreIcon":
-              theme.exploreIcon = entry.value.parseHexStr
-            of "PassengerIcon":
-              theme.passengerIcon = entry.value.parseHexStr
-            of "PilotIcon":
-              theme.pilotIcon = entry.value.unixToNativePath
-            of "EngineerIcon":
-              theme.engineerIcon = entry.value.unixToNativePath
-            of "GunnerIcon":
-              theme.gunnerIcon = entry.value.unixToNativePath
-            of "CrewTraderIcon":
-              theme.crewTraderIcon = entry.value.unixToNativePath
-            of "RepairIcon":
-              theme.repairIcon = entry.value.unixToNativePath
-            of "NoRepairIcon":
-              theme.noRepairIcon = entry.value.unixToNativePath
-            of "RepairOrderIcon":
-              theme.repairOrderIcon = entry.value.unixToNativePath
-            of "UpgradeIcon":
-              theme.upgradeIcon = entry.value.unixToNativePath
-            of "NoUpgradeIcon":
-              theme.noUpgradeIcon = entry.value.unixToNativePath
-            of "CleanIcon":
-              theme.cleanIcon = entry.value.unixToNativePath
-            of "NoCleanIcon":
-              theme.noCleanIcon = entry.value.unixToNativePath
-            of "CleanOrderIcon":
-              theme.cleanOrderIcon = entry.value.unixToNativePath
-            of "ManufactureIcon":
-              theme.manufactureIcon = entry.value.unixToNativePath
-            of "NoManufactureIcon":
-              theme.noManufactureIcon = entry.value.unixToNativePath
-            of "MoveMapUpIcon":
-              theme.moveMapUpIcon = entry.value.unixToNativePath
-            of "MoveMapDownIcon":
-              theme.moveMapDownIcon = entry.value.unixToNativePath
-            of "MoveMapLeftIcon":
-              theme.moveMapLeftIcon = entry.value.unixToNativePath
-            of "MoveMapRightIcon":
-              theme.moveMapRightIcon = entry.value.unixToNativePath
-            of "NoFuelIcon":
-              theme.noFuelIcon = entry.value.unixToNativePath
-            of "LowFuelIcon":
-              theme.lowFuelIcon = entry.value.unixToNativePath
-            of "NoFoodIcon":
-              theme.noFoodIcon = entry.value.unixToNativePath
-            of "LowFoodIcon":
-              theme.lowFoodIcon = entry.value.unixToNativePath
-            of "NoDrinksIcon":
-              theme.noDrinksIcon = entry.value.unixToNativePath
-            of "LowDrinksIcon":
-              theme.lowDrinksIcon = entry.value.unixToNativePath
-            of "NotVisitedBaseIcon":
-              theme.notVisitedBaseIcon = entry.value.parseHexStr
-            of "EmptyMapIcon":
-              theme.emptyMapIcon = entry.value.parseHexStr
-            of "TargetIcon":
-              theme.targetIcon = entry.value.parseHexStr
-            of "StoryIcon":
-              theme.storyIcon = entry.value.parseHexStr
-            of "OverloadedIcon":
-              theme.overloadedIcon = entry.value.unixToNativePath
-            of "ArrowUpIcon":
-              theme.arrowUpIcon = entry.value.unixToNativePath
-            of "ArrowDownIcon":
-              theme.arrowDownIcon = entry.value.unixToNativePath
-            of "ArrowLeftIcon":
-              theme.arrowLeftIcon = entry.value.unixToNativePath
-            of "ArrowRightIcon":
-              theme.arrowRightIcon = entry.value.unixToNativePath
-            of "ArrowUpLeftIcon":
-              theme.arrowUpLeftIcon = entry.value.unixToNativePath
-            of "ArrowUpRightIcon":
-              theme.arrowUpRightIcon = entry.value.unixToNativePath
-            of "ArrowDownLeftIcon":
-              theme.arrowDownIcon = entry.value.unixToNativePath
-            of "ArrowDownRightIcon":
-              theme.arrowDownRightIcon = entry.value.unixToNativePath
-            of "WaitIcon":
-              theme.waitIcon = entry.value.unixToNativePath
-            of "MoveStepIcon":
-              theme.moveStepIcon = entry.value.unixToNativePath
-            of "MoveToIcon":
-              theme.moveToIcon = entry.value.unixToNativePath
-            of "MenuIcon":
-              theme.menuIcon = entry.value.unixToNativePath
-            of "ExitIcon":
-              theme.exitIcon = entry.value.unixToNativePath
-            of "RandomIcon":
-              theme.randomIcon = entry.value.unixToNativePath
-            of "MaleIcon":
-              theme.maleIcon = entry.value.unixToNativePath
-            of "FemaleIcon":
-              theme.femaleIcon = entry.value.unixToNativePath
-            of "EditIcon":
-              theme.editIcon = entry.value.unixToNativePath
-            of "ShowIcon":
-              theme.showIcon = entry.value.unixToNativePath
-            of "CancelIcon":
-              theme.cancelIcon = entry.value.unixToNativePath
-            of "HelpIcon":
-              theme.helpIcon = entry.value.unixToNativePath
-            of "SpecialHelpColor":
-              theme.specialHelpColor = entry.value
-            of "UnderlineHelpColor":
-              theme.underlineHelpColor = entry.value
-            of "BoldHelpColor":
-              theme.boldHelpColor = entry.value
-            of "ItalicHelpColor":
-              theme.italicHelpColor = entry.value
-            of "GiveIcon":
-              theme.giveIcon = entry.value.unixToNativePath
-            of "DropIcon":
-              theme.dropIcon = entry.value.unixToNativePath
-            of "BuyIcon":
-              theme.buyIcon = entry.value.unixToNativePath
-            of "SellIcon":
-              theme.sellIcon = entry.value.unixToNativePath
-            of "CraftIcon":
-              theme.craftIcon = entry.value.unixToNativePath
-            of "StudyIcon":
-              theme.studyIcon = entry.value.unixToNativePath
-            of "DeconstructIcon":
-              theme.deconstructIcon = entry.value.unixToNativePath
-            of "NegotiateIcon":
-              theme.negotiateIcon = entry.value.unixToNativePath
-            of "CargoIcon":
-              theme.cargoIcon = entry.value.unixToNativePath
-            of "EquipIcon":
-              theme.equipIcon = entry.value.unixToNativePath
-            of "UnequipIcon":
-              theme.unequipIcon = entry.value.unixToNativePath
-            of "SelectAllIcon":
-              theme.selectAllIcon = entry.value.unixToNativePath
-            of "UnselectAllIcon":
-              theme.unselectAllIcon = entry.value.unixToNativePath
-            of "GiveOrderIcon":
-              theme.giveOrderIcon = entry.value.unixToNativePath
-            of "NoPilotIcon":
-              theme.noPilotIcon = entry.value.unixToNativePath
-            of "NoEngineerIcon":
-              theme.noEngineerIcon = entry.value.unixToNativePath
-            of "DestinationIcon":
-              theme.destinationIcon = entry.value.unixToNativePath
-            of "InventoryIcon":
-              theme.inventoryIcon = entry.value.unixToNativePath
-            of "DismissIcon":
-              theme.dismissIcon = entry.value.unixToNativePath
-            of "GoRestIcon":
-              theme.goRestIcon = entry.value.unixToNativePath
-            of "repairPriorityIcon":
-              theme.repairPriorityIcon = entry.value.unixToNativePath
-            of "UpgradeButtonIcon":
-              theme.upgradeButtonIcon = entry.value.unixToNativePath
-            of "PowerIcon":
-              theme.powerIcon = entry.value.unixToNativePath
-            of "AssignCrewIcon":
-              theme.assignCrewIcon = entry.value.unixToNativePath
-            of "AssignAmmoIcon":
-              theme.assignAmmoIcon = entry.value.unixToNativePath
-            of "BuyDefaultIcon":
-              theme.buyDefaultIcon = entry.value.unixToNativePath
-            of "SellDefaultIcon":
-              theme.sellDefaultIcon = entry.value.unixToNativePath
-            of "MoveIcon":
-              theme.moveIcon = entry.value.unixToNativePath
-            of "GiveColoredIcon":
-              theme.giveColoredIcon = entry.value.unixToNativePath
-            of "DropColoredIcon":
-              theme.dropColoredIcon = entry.value.unixToNativePath
-            of "EditColoredIcon":
-              theme.editColoredIcon = entry.value.unixToNativePath
-            else:
-              discard
-          of cfgError:
-            echo entry.msg
-          of cfgSectionStart:
-            discard
-        except ValueError, OSError, IOError:
-          echo "Invalid data in the theme configuration file. Details: " &
-              getCurrentExceptionMsg()
+  try:
+    for themeDir in walkDirs(themesDirectory):
+      for configName in walkPattern(themeDir & DirSep & "*.cfg"):
+        var configFile = newFileStream(filename = configName, mode = fmRead)
+        if configFile == nil:
           continue
-      try:
-        parser.close()
-      except OSError, IOError, Exception:
-        echo "Can't close configuration file parser. Reason: " &
-            getCurrentExceptionMsg()
-    themesList[themeDir.lastPathPart] = theme
-    theme = defaultTheme
+        var parser: CfgParser
+        try:
+          parser.open(input = configFile, filename = configName)
+        except OSError, IOError, Exception:
+          echo "Can't initialize configuration file parser. Reason: " &
+              getCurrentExceptionMsg()
+          return
+        while true:
+          try:
+            let entry = parser.next()
+            case entry.kind
+            of cfgEof:
+              break
+            of cfgKeyValuePair, cfgOption:
+              case entry.key
+              of "Name":
+                theme.name = entry.value
+              of "FileName":
+                theme.fileName = themeDir & DirSep & entry.value
+              of "EnemyShipIcon":
+                theme.enemyShipIcon = entry.value.parseHexStr
+              of "attackOnBaseIcon":
+                theme.attackOnBaseIcon = entry.value.parseHexStr
+              of "DiseaseIcon":
+                theme.diseaseIcon = entry.value.parseHexStr
+              of "DoublePriceIcon":
+                theme.doublePriceIcon = entry.value.parseHexStr
+              of "FullDocksIcon":
+                theme.fullDocksIcon = entry.value.parseHexStr
+              of "EnemyPatrolIcon":
+                theme.enemyPatrolIcon = entry.value.parseHexStr
+              of "TraderIcon":
+                theme.traderIcon = entry.value.parseHexStr
+              of "FriendlyShipIcon":
+                theme.friendlyShipIcon = entry.value.parseHexStr
+              of "DeliverIcon":
+                theme.deliverIcon = entry.value.parseHexStr
+              of "DestroyIcon":
+                theme.destroyIcon = entry.value.parseHexStr
+              of "PatrolIcon":
+                theme.patrolIcon = entry.value.parseHexStr
+              of "ExploreIcon":
+                theme.exploreIcon = entry.value.parseHexStr
+              of "PassengerIcon":
+                theme.passengerIcon = entry.value.parseHexStr
+              of "PilotIcon":
+                theme.pilotIcon = entry.value.unixToNativePath
+              of "EngineerIcon":
+                theme.engineerIcon = entry.value.unixToNativePath
+              of "GunnerIcon":
+                theme.gunnerIcon = entry.value.unixToNativePath
+              of "CrewTraderIcon":
+                theme.crewTraderIcon = entry.value.unixToNativePath
+              of "RepairIcon":
+                theme.repairIcon = entry.value.unixToNativePath
+              of "NoRepairIcon":
+                theme.noRepairIcon = entry.value.unixToNativePath
+              of "RepairOrderIcon":
+                theme.repairOrderIcon = entry.value.unixToNativePath
+              of "UpgradeIcon":
+                theme.upgradeIcon = entry.value.unixToNativePath
+              of "NoUpgradeIcon":
+                theme.noUpgradeIcon = entry.value.unixToNativePath
+              of "CleanIcon":
+                theme.cleanIcon = entry.value.unixToNativePath
+              of "NoCleanIcon":
+                theme.noCleanIcon = entry.value.unixToNativePath
+              of "CleanOrderIcon":
+                theme.cleanOrderIcon = entry.value.unixToNativePath
+              of "ManufactureIcon":
+                theme.manufactureIcon = entry.value.unixToNativePath
+              of "NoManufactureIcon":
+                theme.noManufactureIcon = entry.value.unixToNativePath
+              of "MoveMapUpIcon":
+                theme.moveMapUpIcon = entry.value.unixToNativePath
+              of "MoveMapDownIcon":
+                theme.moveMapDownIcon = entry.value.unixToNativePath
+              of "MoveMapLeftIcon":
+                theme.moveMapLeftIcon = entry.value.unixToNativePath
+              of "MoveMapRightIcon":
+                theme.moveMapRightIcon = entry.value.unixToNativePath
+              of "NoFuelIcon":
+                theme.noFuelIcon = entry.value.unixToNativePath
+              of "LowFuelIcon":
+                theme.lowFuelIcon = entry.value.unixToNativePath
+              of "NoFoodIcon":
+                theme.noFoodIcon = entry.value.unixToNativePath
+              of "LowFoodIcon":
+                theme.lowFoodIcon = entry.value.unixToNativePath
+              of "NoDrinksIcon":
+                theme.noDrinksIcon = entry.value.unixToNativePath
+              of "LowDrinksIcon":
+                theme.lowDrinksIcon = entry.value.unixToNativePath
+              of "NotVisitedBaseIcon":
+                theme.notVisitedBaseIcon = entry.value.parseHexStr
+              of "EmptyMapIcon":
+                theme.emptyMapIcon = entry.value.parseHexStr
+              of "TargetIcon":
+                theme.targetIcon = entry.value.parseHexStr
+              of "StoryIcon":
+                theme.storyIcon = entry.value.parseHexStr
+              of "OverloadedIcon":
+                theme.overloadedIcon = entry.value.unixToNativePath
+              of "ArrowUpIcon":
+                theme.arrowUpIcon = entry.value.unixToNativePath
+              of "ArrowDownIcon":
+                theme.arrowDownIcon = entry.value.unixToNativePath
+              of "ArrowLeftIcon":
+                theme.arrowLeftIcon = entry.value.unixToNativePath
+              of "ArrowRightIcon":
+                theme.arrowRightIcon = entry.value.unixToNativePath
+              of "ArrowUpLeftIcon":
+                theme.arrowUpLeftIcon = entry.value.unixToNativePath
+              of "ArrowUpRightIcon":
+                theme.arrowUpRightIcon = entry.value.unixToNativePath
+              of "ArrowDownLeftIcon":
+                theme.arrowDownIcon = entry.value.unixToNativePath
+              of "ArrowDownRightIcon":
+                theme.arrowDownRightIcon = entry.value.unixToNativePath
+              of "WaitIcon":
+                theme.waitIcon = entry.value.unixToNativePath
+              of "MoveStepIcon":
+                theme.moveStepIcon = entry.value.unixToNativePath
+              of "MoveToIcon":
+                theme.moveToIcon = entry.value.unixToNativePath
+              of "MenuIcon":
+                theme.menuIcon = entry.value.unixToNativePath
+              of "ExitIcon":
+                theme.exitIcon = entry.value.unixToNativePath
+              of "RandomIcon":
+                theme.randomIcon = entry.value.unixToNativePath
+              of "MaleIcon":
+                theme.maleIcon = entry.value.unixToNativePath
+              of "FemaleIcon":
+                theme.femaleIcon = entry.value.unixToNativePath
+              of "EditIcon":
+                theme.editIcon = entry.value.unixToNativePath
+              of "ShowIcon":
+                theme.showIcon = entry.value.unixToNativePath
+              of "CancelIcon":
+                theme.cancelIcon = entry.value.unixToNativePath
+              of "HelpIcon":
+                theme.helpIcon = entry.value.unixToNativePath
+              of "SpecialHelpColor":
+                theme.specialHelpColor = entry.value
+              of "UnderlineHelpColor":
+                theme.underlineHelpColor = entry.value
+              of "BoldHelpColor":
+                theme.boldHelpColor = entry.value
+              of "ItalicHelpColor":
+                theme.italicHelpColor = entry.value
+              of "GiveIcon":
+                theme.giveIcon = entry.value.unixToNativePath
+              of "DropIcon":
+                theme.dropIcon = entry.value.unixToNativePath
+              of "BuyIcon":
+                theme.buyIcon = entry.value.unixToNativePath
+              of "SellIcon":
+                theme.sellIcon = entry.value.unixToNativePath
+              of "CraftIcon":
+                theme.craftIcon = entry.value.unixToNativePath
+              of "StudyIcon":
+                theme.studyIcon = entry.value.unixToNativePath
+              of "DeconstructIcon":
+                theme.deconstructIcon = entry.value.unixToNativePath
+              of "NegotiateIcon":
+                theme.negotiateIcon = entry.value.unixToNativePath
+              of "CargoIcon":
+                theme.cargoIcon = entry.value.unixToNativePath
+              of "EquipIcon":
+                theme.equipIcon = entry.value.unixToNativePath
+              of "UnequipIcon":
+                theme.unequipIcon = entry.value.unixToNativePath
+              of "SelectAllIcon":
+                theme.selectAllIcon = entry.value.unixToNativePath
+              of "UnselectAllIcon":
+                theme.unselectAllIcon = entry.value.unixToNativePath
+              of "GiveOrderIcon":
+                theme.giveOrderIcon = entry.value.unixToNativePath
+              of "NoPilotIcon":
+                theme.noPilotIcon = entry.value.unixToNativePath
+              of "NoEngineerIcon":
+                theme.noEngineerIcon = entry.value.unixToNativePath
+              of "DestinationIcon":
+                theme.destinationIcon = entry.value.unixToNativePath
+              of "InventoryIcon":
+                theme.inventoryIcon = entry.value.unixToNativePath
+              of "DismissIcon":
+                theme.dismissIcon = entry.value.unixToNativePath
+              of "GoRestIcon":
+                theme.goRestIcon = entry.value.unixToNativePath
+              of "repairPriorityIcon":
+                theme.repairPriorityIcon = entry.value.unixToNativePath
+              of "UpgradeButtonIcon":
+                theme.upgradeButtonIcon = entry.value.unixToNativePath
+              of "PowerIcon":
+                theme.powerIcon = entry.value.unixToNativePath
+              of "AssignCrewIcon":
+                theme.assignCrewIcon = entry.value.unixToNativePath
+              of "AssignAmmoIcon":
+                theme.assignAmmoIcon = entry.value.unixToNativePath
+              of "BuyDefaultIcon":
+                theme.buyDefaultIcon = entry.value.unixToNativePath
+              of "SellDefaultIcon":
+                theme.sellDefaultIcon = entry.value.unixToNativePath
+              of "MoveIcon":
+                theme.moveIcon = entry.value.unixToNativePath
+              of "GiveColoredIcon":
+                theme.giveColoredIcon = entry.value.unixToNativePath
+              of "DropColoredIcon":
+                theme.dropColoredIcon = entry.value.unixToNativePath
+              of "EditColoredIcon":
+                theme.editColoredIcon = entry.value.unixToNativePath
+              else:
+                discard
+            of cfgError:
+              echo entry.msg
+            of cfgSectionStart:
+              discard
+          except ValueError, OSError, IOError:
+            echo "Invalid data in the theme configuration file. Details: " &
+                getCurrentExceptionMsg()
+            continue
+        try:
+          parser.close()
+        except OSError, IOError, Exception:
+          echo "Can't close configuration file parser. Reason: " &
+              getCurrentExceptionMsg()
+      themesList[themeDir.lastPathPart] = theme
+      theme = defaultTheme
+  except:
+    discard
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
 
