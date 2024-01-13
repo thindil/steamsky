@@ -886,3 +886,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
   else:
     tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
     return "".cstring
+
+proc getAdaThemesNames(): cstring {.raises: [], tags: [], exportc.} =
+  result = ""
+  for theme in themesList.keys:
+    result = ($result & " {" & theme & "}").cstring
