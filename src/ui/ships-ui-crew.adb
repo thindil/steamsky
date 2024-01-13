@@ -898,12 +898,23 @@ package body Ships.UI.Crew is
                         AttributesData_Container.Element
                           (Container => Attributes_List, Index => I)
                           .Name) &
-                   ": " &
+                   ":}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-sticky w");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+            Member_Label :=
+              Create
+                (pathName => Progress_Frame & ".label2",
+                 options =>
+                   "-text {" &
                    Get_Attribute_Level_Name
                      (Attribute_Level => Member.Attributes(I).Level) &
-                   "}");
+                   "} -style Golden.TLabel");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky we");
+              (Slave => Member_Label, Options => "-sticky we -column 1 -row 0 -padx {5 0}");
             Tcl_Eval
               (interp => Interp,
                strng =>
@@ -926,7 +937,7 @@ package body Ships.UI.Crew is
                  "Show detailed information about the selected attribute.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
-               Options => "-column 1 -row 0 -padx {5 0}");
+               Options => "-column 2 -row 0 -padx {5 0}");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Button & " invoke;break}");
@@ -1082,7 +1093,7 @@ package body Ships.UI.Crew is
                    "} -style Golden.TLabel");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label,
-               Options => "-sticky we -column 2 -row 0 -padx {5 0}");
+               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
             Tcl_Eval
               (interp => Interp,
                strng =>
@@ -1109,7 +1120,7 @@ package body Ships.UI.Crew is
                  "Show detailed information about the selected skill.");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
-               Options => "-column 2 -row 0 -padx {5 0} -sticky e");
+               Options => "-column 2 -row 0 -padx {5 0}");
             Bind
               (Widgt => Info_Button, Sequence => "<Escape>",
                Script => "{" & Close_Button & " invoke;break}");
