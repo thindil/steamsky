@@ -253,7 +253,7 @@ let
       cleanOrderIcon: defaultThemeIconPath & "clean-order.svg",
       manufactureIcon: defaultThemeIconPath & "craft.svg",
       noManufactureIcon: defaultThemeIconPath & "craft-empty.svg",
-      moveMapUpIcon: defaultThemeIconPath & "vertical-flog.svg",
+      moveMapUpIcon: defaultThemeIconPath & "vertical-flip.svg",
       moveMapDownIcon: defaultThemeIconPath & "contract.svg",
       moveMapLeftIcon: defaultThemeIconPath & "horizontal-flip.svg",
       moveMapRightIcon: defaultThemeIconPath & "flip-right.svg",
