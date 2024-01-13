@@ -880,4 +880,13 @@ package body Themes is
       return Value(Item => Get_Ada_Themes_Names);
    end Get_Themes_Names;
 
+   procedure Set_New_Theme(Name: String) is
+      procedure Set_Ada_New_Theme(N: chars_ptr) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaNewTheme";
+   begin
+      Set_Ada_New_Theme(N => New_String(Str => Name));
+   end Set_New_Theme;
+
 end Themes;

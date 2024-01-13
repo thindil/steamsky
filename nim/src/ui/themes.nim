@@ -889,5 +889,11 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
 
 proc getAdaThemesNames(): cstring {.raises: [], tags: [], exportc.} =
   result = ""
-  for theme in themesList.keys:
-    result = ($result & " {" & theme & "}").cstring
+  for theme in themesList.values:
+    result = ($result & " {" & theme.name & "}").cstring
+
+proc setAdaNewTheme(name: cstring) {.raises: [], tags: [], exportc.} =
+  for index, theme in themesList.pairs:
+    if theme.name == $name:
+      gameSettings.interfaceTheme = index
+      break
